@@ -9,3 +9,8 @@ node_modules
 .DS_Store
 *.log
 *.swp
+
+
+
+#pycharm
+.idea/
