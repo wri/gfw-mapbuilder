@@ -247,7 +247,7 @@ export default {
       group: 'Evolution de l\'occupation des sols',
       groupKey: layerKeys.GROUP_LCD,
       label: 'Perte en couvert arboré',
-      sublabel: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+      sublabel: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
       url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
       colormap: [[1, 219, 101, 152]],
       inputRange: [1, 15],
@@ -261,7 +261,7 @@ export default {
       group: 'Evolution de l\'occupation des sols',
       groupKey: layerKeys.GROUP_LCD,
       label: 'Gain en couvert arboré',
-      sublabel: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+      sublabel: '(12 ans, 30m, global, Hansen/UMD/Google/USGS/NASA)',
       url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012_map/MapServer',
       legendLayer: 1
     }, {
@@ -271,7 +271,7 @@ export default {
       group: 'Evolution de l\'occupation des sols',
       groupKey: layerKeys.GROUP_LCD,
       label: 'Feux actifs',
-      sublabel: '(daily, 1km, global, NASA)',
+      sublabel: '(journalier, 1km, global, NASA)',
       url: 'http://gis-potico.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer',
       layerIds: [0, 1, 2, 3]
     }, {
@@ -281,7 +281,7 @@ export default {
       group: 'Occupation des sols',
       groupKey: layerKeys.GROUP_LC,
       label: 'densité du couvert arboré',
-      sublabel: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+      sublabel: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
       url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
       colormap: [[1, 0, 179, 0]],
       inputRange: [30, 101],
@@ -300,7 +300,7 @@ export default {
       layerIds: [10],
       rasterId: '$523',
       bounds: [1, 20],
-      classes: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+      classes: ['Forêt dense humide', 'Forêt sub-montagnarde', 'Forêt d\'altitude', 'Forêt marécageuse', 'Mangrove', 'Mosaïque forêt-savane', 'Complexe rural et jeunes forêts secondaires', 'Forêt claire à savane boisée décidue', 'Savane boisée-Savane arborée', 'Savane arbustive', 'Savane herbeuse', 'Aquatic grassland', 'Savane herbeuse inondée', 'Végétation éparse', 'Mosaique cultures/végétation ( herbeuse ou arbustive )', 'Agriculture', 'Agriculture irriguée', 'Sols nus', 'Eléments anthropiques', 'Eaux de surface'],
       colors: ['#3B823D', '#7CA079', '#AAB785', '#355936', '#5BBCF8', '#8BB94B', '#F0F979', '#7B8840', '#CABA4F', '#D3A162', '#FDCA76', '#C1E5DC', '#7AD3AB', '#F3F3AF', '#F6988F', '#FFFFF0', '#FFFFF0', '#A7A7A7', '#F83D48', '#353C92']
     }, {
       id: 'IFL',
@@ -341,10 +341,10 @@ export default {
       order: 5,
       type: 'image',
       visible: false,
-      group: 'Dinámica de la Cobertura de la Tierra',
+      group: 'Dinámica de la Cobertura del Suelo',
       groupKey: layerKeys.GROUP_LCD,
       label: 'Pérdida de la cobertura arbórea',
-      sublabel: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+      sublabel: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
       url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
       colormap: [[1, 219, 101, 152]],
       inputRange: [1, 15],
@@ -355,20 +355,20 @@ export default {
       order: 6,
       type: 'tiled',
       visible: false,
-      group: 'Dinámica de la Cobertura de la Tierra',
+      group: 'Dinámica de la Cobertura del Suelo',
       groupKey: layerKeys.GROUP_LCD,
       label: 'Aumento de la cobertura arbórea',
-      sublabel: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+      sublabel: '(12 años, 30m, global, Hansen/UMD/Google/USGS/NASA)',
       url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012_map/MapServer',
       legendLayer: 1
     }, {
       id: 'ACTIVE_FIRES',
       order: 7,
       type: 'dynamic',
-      group: 'Dinámica de la Cobertura de la Tierra',
+      group: 'Dinámica de la Cobertura del Suelo',
       groupKey: layerKeys.GROUP_LCD,
       label: 'Incendios activos',
-      sublabel: '(daily, 1km, global, NASA)',
+      sublabel: '(diario, 1km, global, NASA)',
       url: 'http://gis-potico.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer',
       layerIds: [0, 1, 2, 3]
     }, {
@@ -377,8 +377,8 @@ export default {
       type: 'image',
       group: 'Cobertura vegetal',
       groupKey: layerKeys.GROUP_LC,
-      label: 'Tree cover density',
-      sublabel: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+      label: 'Densidad de follaje',
+      sublabel: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
       url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
       colormap: [[1, 0, 179, 0]],
       inputRange: [30, 101],
@@ -626,6 +626,103 @@ export default {
       visible: false,
       opacity: 0,
       layerIds: []
+    }],
+  zf: [{
+      id: 'TREE_COVER_LOSS',
+      order: 5,
+      type: 'image',
+      visible: false,
+      group: '土地覆盖动态数据',
+      groupKey: layerKeys.GROUP_LCD,
+      label: '森林覆盖损失',
+      sublabel: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+      url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+      colormap: [[1, 219, 101, 152]],
+      inputRange: [1, 15],
+      outputRange: [1],
+      legendLayer: 0
+    }, {
+      id: 'TREE_COVER_GAIN',
+      order: 6,
+      type: 'tiled',
+      visible: false,
+      group: '土地覆盖动态数据',
+      groupKey: layerKeys.GROUP_LCD,
+      label: '森林覆盖增加',
+      sublabel: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+      url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012_map/MapServer',
+      legendLayer: 1
+    }, {
+      id: 'ACTIVE_FIRES',
+      order: 7,
+      type: 'dynamic',
+      group: '土地覆盖动态数据',
+      groupKey: layerKeys.GROUP_LCD,
+      label: '活跃火点',
+      sublabel: '(每天更新, 1千米, 全球覆盖, 美国宇航局（NASA）)',
+      url: 'http://gis-potico.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer',
+      layerIds: [0, 1, 2, 3]
+    }, {
+      id: 'TREE_COVER',
+      order: 1,
+      type: 'image',
+      group: '土地覆盖',
+      groupKey: layerKeys.GROUP_LC,
+      label: '森林覆盖密度',
+      sublabel: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+      url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+      colormap: [[1, 0, 179, 0]], // colormap: [[1, 174, 203, 107]],
+      inputRange: [30, 101],
+      outputRange: [1],
+      visible: false,
+      opacity: 0.8,
+      legendLayer: 2
+    }, {
+      id: 'LAND_COVER',
+      order: 2,
+      type: 'dynamic',
+      group: '土地覆盖',
+      groupKey: layerKeys.GROUP_LC,
+      label: '土地覆盖',
+      url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+      layerIds: [10],
+      rasterId: '$523',
+      bounds: [1, 20],
+      classes: ['密集型潮湿森林', '亚山地森林', '山地森林', '土壤森林', '红树林', '森林-草地镶嵌区', '城郊混杂区的新兴次生林', '闭合、开放式落叶林地 ', '稀树草原', '灌木林', '草地', '水生草地', '沼泽草地', '稀疏植被区', '耕地和灌木植被镶嵌区)', '农业用地Agriculture', '灌溉农业用地 ', '裸地 ', '人工地及其相关区域 ', '水体'],
+      colors: ['#3B823D', '#7CA079', '#AAB785', '#355936', '#5BBCF8', '#8BB94B', '#F0F979', '#7B8840', '#CABA4F', '#D3A162', '#FDCA76', '#C1E5DC', '#7AD3AB', '#F3F3AF', '#F6988F', '#FFFFF0', '#FFFFF0', '#A7A7A7', '#F83D48', '#353C92']
+    }, {
+      id: 'IFL',
+      order: 3,
+      type: 'dynamic',
+      group: '土地覆盖',
+      groupKey: layerKeys.GROUP_LC,
+      label: '原生森林景观',
+      url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+      layerIds: [0]
+    }, {
+      id: 'AG_BIOMASS',
+      order: 4,
+      type: 'dynamic',
+      group: '土地覆盖',
+      groupKey: layerKeys.GROUP_LC,
+      label: '地上生物量',
+      url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+      layerIds: [1]
+    }, {
+      id: 'MASK',
+      order: 100,
+      type: 'dynamic',
+      url: 'http://gis.forest-atlas.org/arcgis/rest/services/country_masks/country_mask_global/MapServer',
+      opacity: 0.35,
+      layerIds: [0]
+    }, {
+      id: 'LEGEND_LAYER',
+      order: 101,
+      type: 'dynamic',
+      url: 'http://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+      visible: false,
+      opacity: 0,
+      layerIds: []
     }]
   },
   basemaps: {
@@ -754,6 +851,37 @@ export default {
       }
     },
 	id: {
+      'landsat': {
+        title: 'Landsat',
+        thumbnailUrl: 'http://www.globalforestwatch.org/assets/basemaps-s84b6feb159-b5c7519937c9732128e8b42b5865e7c2.png',
+        templateUrl: 'https://wri-tiles.s3.amazonaws.com/umd_landsat/2013/${level}/${row}/${col}.png',
+        years: [
+          '2000',
+          '2001',
+          '2002',
+          '2003',
+          '2004',
+          '2005',
+          '2006',
+          '2007',
+          '2008',
+          '2009',
+          '2010',
+          '2011',
+          '2012',
+          '2013'
+        ]
+      },
+      'wri_mono': {
+        title: 'WRI Mono',
+        thumbnailUrl: './css/images/wri_mono.png'
+      },
+      'wri_contextual': {
+        title: 'WRI Contextual',
+        thumbnailUrl: './css/images/wri_contextual.png'
+      }
+    },
+  zf: {
       'landsat': {
         title: 'Landsat',
         thumbnailUrl: 'http://www.globalforestwatch.org/assets/basemaps-s84b6feb159-b5c7519937c9732128e8b42b5865e7c2.png',
