@@ -1,7 +1,6 @@
 # Ignore the build and dist directories
 build
 dist
-!vendor/jquery/dist
 
 # Ignore these, just do it
 arcgis-modules.txt
