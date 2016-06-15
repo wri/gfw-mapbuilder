@@ -10,13 +10,14 @@ define(['exports'], function (exports) {
 
     //- General Settings
     // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
-    webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0', // 'de85e3fcc07948238aa6c1afd2a4ceb0',
+    // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
+    webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
     title: 'GFW Mapbuilder',
     subtitle: 'Make maps that matter',
     logoUrl: './css/images/gfw-logo.png',
     logoLinkUrl: 'http://www.gfw-mapbuilder.org/',
-    aboutLinkUrl: 'http://www.gfw-mapbuilder.org/',
-    downloadLinkUrl: 'http://data.globalforestwatch.org/',
+    aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
+    downloadLinkUrl: '', // http://data.globalforestwatch.org/
     printServiceUrl: 'http://gis.forest-atlas.org/arcgis/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
     maskServiceUrl: '', // e.g. http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_00_Africa/MapServer
     mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
@@ -29,7 +30,7 @@ define(['exports'], function (exports) {
     language: 'en',
     useAlternativeLanguage: false,
     alternativeWebmap: '',
-    alternativeLanguage: '',
+    alternativeLanguage: 'fr',
     alternativeLanguageTitle: 'GFW Mapbuilder',
     alternativeLanguageSubtitle: 'Make maps that matter',
     alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
@@ -59,6 +60,9 @@ define(['exports'], function (exports) {
     slopeClassColors: 'rgb(0, 0, 0);rgb(255, 235, 175);rgb(115, 115, 0);rgb(168, 0, 0);',
     treeCoverClassNames: 'No Data;<= 10%;10 - 30%;> 30%;',
     treeCoverClassColors: 'rgb(0, 0, 0);rgb(180, 215, 158);rgb(245, 245, 122);rgb(205, 170, 102);',
+
+    // Options not configurable from AGOL but can be from here
+    analyticsCode: 'UA-62288390-15',
 
     /**
     * Layer Config Options, [brackets] = optional
@@ -188,7 +192,20 @@ define(['exports'], function (exports) {
         visible: false,
         opacity: 0,
         layerIds: []
-      }],
+      }
+      // , {
+      //   id: 'CUSTOM_FEATURES',
+      //   order: 102,
+      //   type: 'feature',
+      //   definitionExpression: '1 = 2', // show no features from the service ever
+      //   mode: 0, // equals MODE_SNAPSHOT
+      //   // Prod Url
+      //   // url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1?token=TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
+      //   // Local Url
+      //   url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1?token=TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
+      //   visible: true
+      // }
+      ],
       fr: [{
         id: 'TREE_COVER_LOSS',
         order: 5,
