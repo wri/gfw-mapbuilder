@@ -68,6 +68,10 @@ define(['exports'], function (exports) {
 
     // Options not configurable from AGOL but can be from here
     analyticsCode: 'UA-62288390-15',
+    //- Localhost Token for BR
+    // userFeatureToken: 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
+    //- Production Token
+    userFeatureToken: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
     /**
     * Layer Config Options, [brackets] = optional
     * if type is anything other than graphic and the layer is not disabled, it must have a url
@@ -215,10 +219,6 @@ define(['exports'], function (exports) {
         definitionExpression: '1 = 2', // show no features from the service ever
         mode: 0, // equals MODE_SNAPSHOT
         url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1',
-        // Dev Token
-        // token: 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
-        // Prod Token
-        token: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
         visible: true
       }],
       fr: [{
@@ -331,7 +331,6 @@ define(['exports'], function (exports) {
         definitionExpression: '1 = 2', // show no features from the service ever
         mode: 0, // equals MODE_SNAPSHOT
         url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1',
-        token: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
         visible: true
       }],
       es: [{
@@ -444,7 +443,6 @@ define(['exports'], function (exports) {
         definitionExpression: '1 = 2', // show no features from the service ever
         mode: 0, // equals MODE_SNAPSHOT
         url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1',
-        token: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
         visible: true
       }],
       pt: [{
@@ -557,7 +555,6 @@ define(['exports'], function (exports) {
         definitionExpression: '1 = 2', // show no features from the service ever
         mode: 0, // equals MODE_SNAPSHOT
         url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1',
-        token: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
         visible: true
       }],
       id: [{
@@ -670,7 +667,6 @@ define(['exports'], function (exports) {
         definitionExpression: '1 = 2', // show no features from the service ever
         mode: 0, // equals MODE_SNAPSHOT
         url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1',
-        token: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
         visible: true
       }],
       zh: [{
@@ -783,7 +779,6 @@ define(['exports'], function (exports) {
         definitionExpression: '1 = 2', // show no features from the service ever
         mode: 0, // equals MODE_SNAPSHOT
         url: 'http://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1',
-        token: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
         visible: true
       }]
     },
