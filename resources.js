@@ -50,7 +50,7 @@ define(['exports'], function (exports) {
     webmapMenuName: 'Land Use',
     //- Restoration Module settings
     restorationModule: false,
-    restorationImageServer: 'http://gis-gfw.wri.org/arcgis/rest/services/country_data/ETH_Restoration/ImageServer',
+    restorationImageServer: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration/ImageServer',
     slopePotentialOptions: 'Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential',
     alternativeSlopePotentialOptions: 'Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential',
     slopePotentialColors: 'rgb(234,199,253);rgb(253,178,46);rgb(88,126,15);rgb(210,147,116);rgb(245,208,139);rgb(177,177,36);rgb(26,176,144);rgb(175,15,143);rgb(217,254,199);rgb(255,254,137);',
@@ -177,7 +177,7 @@ define(['exports'], function (exports) {
         technicalName: 'intact_forest_landscapes_change'
       },
       // {
-      //   id: 'OTHER', Testing GlobCover
+      //   id: 'OTHER', // Testing GlobCover
       //   order: 3,
       //   type: 'webtiled',
       //   group: 'Land Cover',
@@ -186,7 +186,6 @@ define(['exports'], function (exports) {
       //   url: 'http://wri-tiles.s3.amazonaws.com/global-landcover/${level}/${col}/${row}.png',
       //   technicalName: 'intact_forest_landscapes_change'
       // },
-
       {
         id: 'AG_BIOMASS',
         order: 4,
