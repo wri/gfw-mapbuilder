@@ -39,7 +39,7 @@ define(['exports'], function (exports) {
     alternativeNarrative: '',
     alternativeWebmapMenuName: 'Land Use',
     //- Documents Settings
-    includeDocumentsTab: true,
+    includeDocumentsTab: false,
     documentsDirectory: 'https://cmr.forest-atlas.org/resources/docs/',
     documentsMapserver: 'http://gis.forest-atlas.org/arcgis/rest/services/CMR/documents_administratifs/MapServer',
     //- Layers/Analysis Settings
