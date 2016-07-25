@@ -39,7 +39,7 @@ define(['exports'], function (exports) {
     alternativeNarrative: '',
     alternativeWebmapMenuName: 'Land Use',
     //- Documents Settings
-    includeDocumentsTab: false,
+    includeDocumentsTab: true,
     documentsDirectory: 'https://cmr.forest-atlas.org/resources/docs/',
     documentsMapserver: 'http://gis.forest-atlas.org/arcgis/rest/services/CMR/documents_administratifs/MapServer',
     //- Layers/Analysis Settings
@@ -68,6 +68,8 @@ define(['exports'], function (exports) {
     populationClassColors: 'rgb(0, 0, 0);rgb(255, 255, 128);rgb(250, 209, 85);rgb(242, 167, 46);rgb(173, 83, 19);rgb(107, 0, 0);',
 
     // Options not configurable from AGOL but can be from here
+    // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
+    sharinghost: 'http://www.arcgis.com',
     analyticsCode: 'UA-62288390-15',
     //- Localhost Token for BR
     // userFeatureToken: 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
