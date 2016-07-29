@@ -71,12 +71,10 @@ define(['exports'], function (exports) {
     // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
     sharinghost: 'http://www.arcgis.com',
     analyticsCode: 'UA-62288390-15',
-    userFeatureToken: {
-      //- Localhost Token for BR
-      'localhost': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
-      //- Production Token
-      'wri.github.io': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC'
-    },
+    //- Localhost Token for BR
+    // userFeatureToken: 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
+    //- Production Token
+    userFeatureToken: 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
     /**
     * Layer Config Options, [brackets] = optional
     * if type is anything other than graphic and the layer is not disabled, it must have a url
@@ -194,12 +192,12 @@ define(['exports'], function (exports) {
       {
         id: 'AG_BIOMASS',
         order: 4,
-        type: 'image',
+        type: 'dynamic',
         group: 'Land Cover',
         groupKey: 'GROUP_LC',
-        label: 'Aboveground Live Woody Biomass Density',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon/ImageServer',
-        legendLayer: 8,
+        label: 'Above ground biomass',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        layerIds: [1],
         technicalName: 'aboveground_biomass'
       }, {
         id: 'MASK',
@@ -306,12 +304,12 @@ define(['exports'], function (exports) {
       }, {
         id: 'AG_BIOMASS',
         order: 4,
-        type: 'image',
-        group: 'Land Cover',
+        type: 'dynamic',
+        group: 'Occupation des sols',
         groupKey: 'GROUP_LC',
-        label: 'Aboveground Live Woody Biomass Density',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon/ImageServer',
-        legendLayer: 8,
+        label: 'Biomasse aérienne',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        layerIds: [1],
         technicalName: 'aboveground_biomass'
       }, {
         id: 'MASK',
@@ -418,12 +416,12 @@ define(['exports'], function (exports) {
       }, {
         id: 'AG_BIOMASS',
         order: 4,
-        type: 'image',
-        group: 'Land Cover',
+        type: 'dynamic',
+        group: 'Cobertura vegetal',
         groupKey: 'GROUP_LC',
-        label: 'Aboveground Live Woody Biomass Density',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon/ImageServer',
-        legendLayer: 8,
+        label: 'Biomasa arriba del suelo',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        layerIds: [1],
         technicalName: 'aboveground_biomass'
       }, {
         id: 'MASK',
@@ -530,12 +528,12 @@ define(['exports'], function (exports) {
       }, {
         id: 'AG_BIOMASS',
         order: 4,
-        type: 'image',
+        type: 'dynamic',
         group: 'Land Cover',
         groupKey: 'GROUP_LC',
-        label: 'Aboveground Live Woody Biomass Density',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon/ImageServer',
-        legendLayer: 8,
+        label: 'Above ground biomass',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        layerIds: [1],
         technicalName: 'aboveground_biomass'
       }, {
         id: 'MASK',
@@ -642,12 +640,12 @@ define(['exports'], function (exports) {
       }, {
         id: 'AG_BIOMASS',
         order: 4,
-        type: 'image',
+        type: 'dynamic',
         group: 'Land Cover',
         groupKey: 'GROUP_LC',
-        label: 'Aboveground Live Woody Biomass Density',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon/ImageServer',
-        legendLayer: 8,
+        label: 'Above ground biomass',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        layerIds: [1],
         technicalName: 'aboveground_biomass'
       }, {
         id: 'MASK',
@@ -754,12 +752,12 @@ define(['exports'], function (exports) {
       }, {
         id: 'AG_BIOMASS',
         order: 4,
-        type: 'image',
-        group: 'Land Cover',
+        type: 'dynamic',
+        group: '土地覆盖',
         groupKey: 'GROUP_LC',
-        label: 'Aboveground Live Woody Biomass Density',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon/ImageServer',
-        legendLayer: 8,
+        label: '地上生物量',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        layerIds: [1],
         technicalName: 'aboveground_biomass'
       }, {
         id: 'MASK',
