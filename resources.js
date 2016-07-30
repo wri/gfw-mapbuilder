@@ -75,7 +75,7 @@ define(['exports'], function (exports) {
       //- Localhost Token for BR
       'localhost': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
       //- Production Token
-      'wri.github.io': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC'
+      'wri.github.io': 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM'
     },
     /**
     * Layer Config Options, [brackets] = optional
