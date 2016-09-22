@@ -55,7 +55,7 @@ define(['exports'], function (exports) {
     webmapMenuName: 'Land Use',
     //- Restoration Module settings
     restorationModule: false,
-    restorationImageServer: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer',
+    restorationImageServer: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module2/ImageServer', //'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer'
     slopePotentialOptions: 'Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential',
     alternativeSlopePotentialOptions: 'Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential',
     slopePotentialColors: 'rgb(234,199,253);rgb(253,178,46);rgb(88,126,15);rgb(210,147,116);rgb(245,208,139);rgb(177,177,36);rgb(26,176,144);rgb(175,15,143);rgb(217,254,199);rgb(255,254,137);',
@@ -70,6 +70,8 @@ define(['exports'], function (exports) {
     landCoverClassColors: 'rgb(0, 0, 0);rgb(0, 174, 0);rgb(255, 255, 0);rgb(255, 155, 190);rgb(0, 238, 238);rgb(255, 0, 0);rgb(255, 255, 188);',
     populationClassNames: 'No Data;<= 20;20 - 50;50 - 150;150 - 500;> 500;',
     populationClassColors: 'rgb(0, 0, 0);rgb(255, 255, 128);rgb(250, 209, 85);rgb(242, 167, 46);rgb(173, 83, 19);rgb(107, 0, 0);',
+    rainfallClassNames: 'No Data;Class 1;Class 2;Class 3;',
+    rainfallClassColors: 'rgb(0, 0, 0);rgb(255, 0, 0), rgb(0, 255, 0);rgb(0, 0, 255);',
     //- Include/Exclude various restoration analysis types
     restorationSlope: true, //- Main Slope Analysis
     restorationSlopePotential: true, //- Part of the various restoration options
@@ -121,7 +123,7 @@ define(['exports'], function (exports) {
     * @property {object=} layers[].label - Label for the layer in the UI
     * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
     * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
-    * @property {object=} popupInfo - Popup configuration for the layer if it is available
+    * @property {object=} popup - Popup configuration for the layer if it is available
     */
     layerPanel: {
       GROUP_WEBMAP: {
@@ -290,7 +292,12 @@ define(['exports'], function (exports) {
             zh: '(每天更新, 1千米, 全球覆盖, 美国宇航局（NASA))'
           },
           popup: {
-            content: '<div class="esriViewPopup"><div class="mainSection">' + '<div class="header">Active Fires</div>' + '<table class="attrTable">' + '<tr><td class="attrName">Brightness</td><td class="attrValue">${BRIGHTNESS}</td></tr>' + '<tr><td class="attrName">Confidence</td><td class="attrValue">${CONFIDENCE}</td></tr>' + '<tr><td class="attrName">Latitude</td><td class="attrValue">${LATITUDE}</td></tr>' + '<tr><td class="attrName">Longitude</td><td class="attrValue">${LONGITUDE}</td></tr>' + '<tr><td class="attrName">Acquisition Date</td><td class="attrValue">${ACQ_DATE:DateString(hideTime:true)}</td></tr>' + '<tr><td class="attrName">Acquisition Time</td><td class="attrValue">${ACQ_TIME}</td></tr>' + '</table>' + '</div></div>'
+            title: {
+              en: 'Active Fires'
+            },
+            content: {
+              en: [{ 'label': 'Brightness', 'fieldExpression': 'BRIGHTNESS' }, { 'label': 'Confidence', 'fieldExpression': 'CONFIDENCE' }, { 'label': 'Latitude', 'fieldExpression': 'LATITUDE' }, { 'label': 'Longitude', 'fieldExpression': 'LONGITUDE' }, { 'label': 'Acquisition Date', 'fieldExpression': 'ACQ_DATE:DateString(hideTime:true)' }, { 'label': 'Acquisition Time', 'fieldExpression': 'ACQ_TIME' }]
+            }
           }
         }]
       },
@@ -359,7 +366,14 @@ define(['exports'], function (exports) {
           layerIds: [10],
           rasterId: '$523',
           bounds: [1, 20],
-          classes: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+          classes: {
+            en: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+            fr: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+            es: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+            pt: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+            id: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
+            zh: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies']
+          },
           colors: ['#3B823D', '#7CA079', '#AAB785', '#355936', '#5BBCF8', '#8BB94B', '#F0F979', '#7B8840', '#CABA4F', '#D3A162', '#FDCA76', '#C1E5DC', '#7AD3AB', '#F3F3AF', '#F6988F', '#FFFFF0', '#FFFFF0', '#A7A7A7', '#F83D48', '#353C92'],
           label: {
             en: 'Land cover',
