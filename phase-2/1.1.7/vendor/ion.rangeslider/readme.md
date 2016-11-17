@@ -6,11 +6,9 @@ Ion.RangeSlider. Is an easy, flexible and responsive range slider with tons of o
 
 ***
 
-* Version: 2.1.2
+* Version: 2.1.4
 * <a href="http://ionden.com/a/plugins/ion.rangeSlider/en.html">Project page and demos</a>
-* <a href="http://ionden.com/a/plugins/ion.rangeSlider/ion.rangeSlider-2.1.2.zip">Download ZIP</a>
-
-[![](https://pledgie.com/campaigns/25694.png?skin_name=chrome)](https://pledgie.com/campaigns/25694)
+* <a href="http://ionden.com/a/plugins/ion.rangeSlider/ion.rangeSlider-2.1.4.zip">Download ZIP</a>
 
 ## Description
 * Ion.RangeSlider — cool, comfortable, responsive and easily customizable range slider
@@ -82,11 +80,6 @@ Or use the included PSD file and design a custom skin.
 ## Install with npm
 
 * npm install ion-rangeslider
-
-
-## Install with spm [![](http://spmjs.io/badge/ion-rangeslider)](http://spmjs.io/package/ion-rangeslider)
-
-* spm install ion-rangeslider
 
 
 ## Initialisation
@@ -254,7 +247,7 @@ If your are new in web development and you are not sure how to correctly install
             <td>prettify_separator<div><sup>data-prettify-separator</sup></div></td>
             <td>" "</td>
             <td>string</td>
-            <td>Set up your own separator for long numbers. 10 000, 10.000, 10-000 и т.п.</td>
+            <td>Set up your own separator for long numbers. 10 000, 10.000, 10-000, etc.</td>
         </tr>
         <tr class="options__new options__step">
             <td>prettify<div><sup>—</sup></div></td>
@@ -488,6 +481,10 @@ All plugins options are covered in demos.
 
 ***
 
-Support the plugin:
+#### Support Ion-series plugins development:
 
-[![](https://pledgie.com/campaigns/25694.png?skin_name=chrome)](https://pledgie.com/campaigns/25694)
+* Donate through Pledgie service: [![](https://pledgie.com/campaigns/25694.png?skin_name=chrome)](https://pledgie.com/campaigns/25694)
+
+* Donate direct to my Paypal account: https://www.paypal.me/IonDen
+
+* Donate direct to my Yandex.Money account: http://yasobe.ru/na/razrabotku
