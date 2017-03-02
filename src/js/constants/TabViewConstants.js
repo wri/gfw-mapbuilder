@@ -1,7 +1,0 @@
-export default {
-  INFO_WINDOW: 'INFO_WINDOW',
-  ANALYSIS: 'ANALYSIS',
-  LAYERS: 'LAYERS',
-  DOCUMENTS: 'DOCUMENTS',
-  MORE: 'MORE'
-};

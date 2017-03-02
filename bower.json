@@ -1,8 +1,0 @@
-{
-  "name": "forest_atlas_template",
-  "dependencies": {
-    "alt": "~0.18.1",
-    "react": "~0.14.6",
-    "babel-polyfill": "~0.0.1"
-  }
-}
