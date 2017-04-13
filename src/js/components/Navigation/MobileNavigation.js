@@ -18,9 +18,9 @@ export default class Navigation extends Component {
                        settings.labels[language].themes !== undefined;
 
     if (shouldRender) {
-      return settings.labels[language].themes.map((theme) => {
+      return settings.labels[language].themes.map((theme, counter) => {
         return (
-          <li className='mobile-menu__nav-link pointer'>
+          <li key={counter} className='mobile-menu__nav-link pointer'>
             <a target={settings.navLinksInNewTab ? '_blank' : '_self'} href={theme.url}>{theme.label}</a>
           </li>
         );

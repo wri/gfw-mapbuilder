@@ -71,7 +71,7 @@ strings.en.ANALYSIS_RESTORATION_ERROR = 'Area not meeting criteria for potential
 strings.en.ANALYSIS_GROUP_RESTORATION = 'Restoration potential for';
 strings.en.ANALYSIS_GROUP_SLOPE = 'Potential according to';
 strings.en.ANALYSIS_GROUP_OTHER = 'Other analysis';
-strings.en.ANALYSIS_GLAD_ALERT_NAME = 'Glad Alerts';
+strings.en.ANALYSIS_GLAD_ALERT_NAME = 'GLAD Alerts';
 strings.en.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I Alerts';
 strings.en.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
@@ -896,7 +896,7 @@ strings.id.ANALYSIS_RESTORATION_ERROR = 'Area not meeting criteria for potential
 strings.id.ANALYSIS_GROUP_RESTORATION = 'Restoration potential for';
 strings.id.ANALYSIS_GROUP_SLOPE = 'Potential according to';
 strings.id.ANALYSIS_GROUP_OTHER = 'Other analysis';
-strings.id.ANALYSIS_GLAD_ALERT_NAME = 'Glad Alerts';
+strings.id.ANALYSIS_GLAD_ALERT_NAME = 'GLAD Alerts';
 strings.id.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I Alerts';
 strings.id.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
@@ -1102,7 +1102,7 @@ strings.zh.ANALYSIS_RESTORATION_ERROR = '无数据 或者 区域不满足条件'
 strings.zh.ANALYSIS_GROUP_RESTORATION = '在生态修复可能性的层面';
 strings.zh.ANALYSIS_GROUP_SLOPE = '可能性原因';
 strings.zh.ANALYSIS_GROUP_OTHER = '其他分析';
-strings.zh.ANALYSIS_GLAD_ALERT_NAME = 'Glad Alerts';
+strings.zh.ANALYSIS_GLAD_ALERT_NAME = 'GLAD Alerts';
 strings.zh.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I Alerts';
 strings.zh.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',

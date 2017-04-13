@@ -85,9 +85,10 @@ export default {
   sharinghost: 'http://www.arcgis.com',
   analyticsCode: 'UA-62288390-15',
   userFeatureToken: {
-    //- Localhost token for BR office
     'localhost': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
+    //- Localhost token for BR office
     'alpha.blueraster.io': 'TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..',
+    'alpha.blueraster.io.s3.amazonaws.com': 'TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..',
     //- Github token
     'wri.github.io': 'TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM',
     //- Other production tokens
@@ -132,25 +133,33 @@ export default {
         en: 'Land Cover Dynamics',
         fr: 'Evolution de la couverture des sols',
         es: 'Dinámica de la Cobertura del Suelo',
-        pt: 'Land Cover Dynamics',
+        pt: 'Dinâmica de cobertura da terra ',
         id: 'Land Cover Dynamics',
         zh: '土地覆盖动态数据'
       },
       layers: [{
         order: 1,
         id: 'TREE_COVER_LOSS',
-        type: 'image',
-        url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+        type: 'loss', //image
+        // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+        // url: 'https://storage.googleapis.com/forma-public/Hansen14_15/tiles/1/30/{z}/{x}/{y}',
+        url: 'https://storage.googleapis.com/wri-public/Hansen14_15/tiles/hansen_world/v4.0/tc30/{z}/{x}/{y}.png',
+        // legendLayer: 7,
+        minYear: 1,
+        maxYear: 15,
+        // minDateValue: 15000,
+        // maxDateValue: 16365,
+        // confidence: [0, 1],
         technicalName: 'tree_cover_loss',
         legendLayer: 0,
-        colormap: [[1, 219, 101, 152]],
-        inputRange: [1, 15],
-        outputRange: [1],
+        // colormap: [[1, 219, 101, 152]],
+        // inputRange: [1, 15],
+        // outputRange: [1],
         label: {
           en: 'Tree cover loss',
           fr: 'Perte en couvert arboré',
           es: 'Pérdida de la cobertura arbórea',
-          pt: 'Tree cover loss',
+          pt: 'Perda de cobertura arbórea',
           id: 'Tree cover loss',
           zh: '森林覆盖损失'
         },
@@ -158,22 +167,23 @@ export default {
           en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+          pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
         }
       }, {
         order: 2,
         id: 'TREE_COVER_GAIN',
-        type: 'image',
-        url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
+        type: 'gain', //'image',
+        // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
+        url: 'http://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
         technicalName: 'tree_cover_gain',
         legendLayer: 1,
         label: {
           en: 'Tree cover gain',
           fr: 'Gain en couvert arboré',
           es: 'Aumento de la cobertura arbórea',
-          pt: 'Tree cover gain',
+          pt: 'Ganho de cobertura arbórea',
           id: 'Tree cover gain',
           zh: '森林覆盖增加'
         },
@@ -181,7 +191,7 @@ export default {
           en: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           fr: '(12 ans, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           es: '(12 años, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+          pt: '(12 anos, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           id: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
           zh: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
         }
@@ -195,16 +205,16 @@ export default {
         label: {
           en: 'SAD alerts',
           fr: 'Alertes SAD',
-          es: 'SAD alerts',
-          pt: 'SAD alerts',
+          es: 'Alertas SAD',
+          pt: 'Alertas SAD',
           id: 'SAD alerts',
           zh: 'SAD alerts'
         },
         sublabel: {
           en: '(monthly, 250m, Brazilian Amazon, Imazon)',
           fr: '(mensuel, 250m, Amazonie brésilienne, Imazon)',
-          es: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          pt: '(monthly, 250m, Brazilian Amazon, Imazon)',
+          es: '(mensual, 250m, Amazonia brasileña, Imazon)',
+          pt: '(mensal, 250m, Amazônia brasileira, Imazon)',
           id: '(monthly, 250m, Brazilian Amazon, Imazon)',
           zh: '(monthly, 250m, Brazilian Amazon, Imazon)'
         }
@@ -216,21 +226,21 @@ export default {
         technicalName: 'umd_landsat_alerts',
         legendLayer: 7,
         minDateValue: 15000,
-        maxDateValue: 16365,
+        maxDateValue: 999999,
         confidence: [0, 1],
         label: {
-          en: 'Glad Alerts',
-          fr: 'Alertes Glad',
-          es: 'Glad Alerts',
-          pt: 'Glad Alerts',
-          id: 'Glad Alerts',
-          zh: 'Glad Alerts'
+          en: 'GLAD Alerts',
+          fr: 'Alertes GLAD',
+          es: 'Alertas GLAD',
+          pt: 'Alertas GLAD',
+          id: 'GLAD Alerts',
+          zh: 'GLAD Alerts'
         },
         sublabel: {
           en: '(weekly, 30m, select countries, UMD/ GLAD)',
           fr: '(hebdomadaire, 30m, certains pays, UMD/ GLAD)',
-          es: '(weekly, 30m, select countries, UMD/ GLAD)',
-          pt: '(weekly, 30m, select countries, UMD/ GLAD)',
+          es: '(semanal, 30m, select countries, UMD/ GLAD)',
+          pt: '(semanal, 30m, select countries, UMD/ GLAD)',
           id: '(weekly, 30m, select countries, UMD/ GLAD)',
           zh: '(weekly, 30m, select countries, UMD/ GLAD)'
         }
@@ -250,16 +260,16 @@ export default {
         label: {
           en: 'Terra-I Alerts',
           fr: 'Alertes Terra-I',
-          es: 'Terra-I Alerts',
-          pt: 'Terra-I Alerts',
+          es: 'Alertas Terra-I',
+          pt: 'Alertas Terra-I',
           id: 'Terra-I Alerts',
           zh: 'Terra-I Alerts'
         },
         sublabel: {
           en: '(monthly, 250m, Latin America, CIAT)',
           fr: '(mensuel, 250m, Amérique Latine, CIAT)',
-          es: '(monthly, 250m, Latin America, CIAT)',
-          pt: '(monthly, 250m, Latin America, CIAT)',
+          es: '(mensual, 250m, Latin America, CIAT)',
+          pt: '(Mensal, 250m, Latin America, CIAT)',
           id: '(monthly, 250m, Latin America, CIAT)',
           zh: '(monthly, 250m, Latin America, CIAT)'
         }
@@ -274,15 +284,15 @@ export default {
           en: 'Active fires',
           fr: 'Feux actifs',
           es: 'Incendios activos',
-          pt: 'Active fires',
+          pt: 'Incêndios ativos',
           id: 'Active fires',
           zh: '活跃火点'
         },
         sublabel: {
           en: '(daily, 1km, global, NASA)',
           fr: '(journalier, 1km, global, NASA)',
-          es: '活跃火点',
-          pt: '(daily, 1km, global, NASA)',
+          es: '(Diaria, 1km, global, NASA)',
+          pt: '(Diária, 1km, global, NASA)',
           id: '(daily, 1km, global, NASA)',
           zh: '(每天更新, 1千米, 全球覆盖, 美国宇航局（NASA))'
         },
@@ -308,8 +318,8 @@ export default {
       label: {
         en: 'Land Cover',
         fr: 'Couverture des sols',
-        es: 'Cobertura vegetal',
-        pt: 'Land Cover',
+        es: 'Cobertura terrestre',
+        pt: 'Cobertura do Solo',
         id: 'Land Cover',
         zh: '土地覆盖'
       },
@@ -317,7 +327,7 @@ export default {
         order: 1,
         id: 'GLOB_MANGROVE',
         type: 'webtiled',
-        url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/23a7c3aea64174198a46c1fb4211023f:1467735931596/0/{level}/{col}/{row}.png',
+        url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
         subDomains: [0, 1, 2, 3],
         technicalName: 'global_mangroves',
         legendLayer: 11,
@@ -340,7 +350,7 @@ export default {
           en: 'Intact Forest Landscape',
           fr: 'Paysage forestier intact',
           es: 'Paisajes Forestales Intactos',
-          pt: 'Intact Forest Landscape',
+          pt: 'Paisagens Florestais Intactas',
           id: 'Intact Forest Landscape',
           zh: '原生森林景观'
         }
@@ -354,29 +364,29 @@ export default {
         label: {
           en: 'Aboveground Live Woody Biomass Density',
           fr: 'Densité de la biomasse aérienne vivante',
-          es: 'Aboveground Live Woody Biomass Density',
-          pt: 'Aboveground Live Woody Biomass Density',
+          es: 'Densidad de la biomasa viva en la superficie del suelo',
+          pt: 'Densidade de biomassa viva acima do solo',
           id: 'Aboveground Live Woody Biomass Density',
           zh: 'Aboveground Live Woody Biomass Density'
         }
       }, {
         order: 4,
         id: 'LAND_COVER',
-        type: 'dynamic',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        type: 'webtiled',
+        url: 'http://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
         technicalName: 'global_landcover',
-        layerIds: [10],
-        rasterId: '$523',
-        bounds: [1, 20],
+        legendLayer: 15,
+        rasterId: '$568',
+        bounds: [1, 16],
         classes: {
-          en: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
-          fr: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
-          es: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
-          pt: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
-          id: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies'],
-          zh: ['Dense moist forest', 'Submontane forest', 'Mountain forest', 'Edaphic forest', 'Mangrove', 'Forest-savanna mosaic', 'Rural complex and young secondary forest', 'Closed to open deciduous woodland', 'Savanna woodland-Tree savanna', 'Shrubland', 'Grassland', 'Aquatic grassland', 'Swamp grassland', 'Sparse vegetation', 'Mosaic cultivated areas/vegeatation( herbaceous or shrub)', 'Agriculture', 'Irrigated agriculture', 'Bare areas', 'Artificial surfaces and associated areas', 'Water Bodies']
+          en: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice']
         },
-        colors: ['#3B823D', '#7CA079', '#AAB785', '#355936', '#5BBCF8', '#8BB94B', '#F0F979', '#7B8840', '#CABA4F', '#D3A162', '#FDCA76', '#C1E5DC', '#7AD3AB', '#F3F3AF', '#F6988F', '#FFFFF0', '#FFFFF0', '#A7A7A7', '#F83D48', '#353C92'],
+        colors: ['#825D26', '#D1A969', '#DED6B4', '#157562', '#CC7A29', '#6DAD96', '#968635', '#C2B32F', '#6F7A53', '#96A36F', '#CDDB93', '#7DBDE8', '#0D63A1', '#F41E65', '#FFFFFF', '#DBDBDB'],
         label: {
           en: 'Land cover',
           fr: 'Couverture des sols',

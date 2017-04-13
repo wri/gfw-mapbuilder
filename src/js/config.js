@@ -7,8 +7,7 @@ const config = {
     options: {
       navigationMode: 'css-transforms',
       force3DTransforms: true,
-      showAttribution: false,
-      // smartNavigation: false,
+      // showAttribution: false,
       fadeOnZoom: true,
       slider: false,
       logo: false
@@ -20,15 +19,21 @@ const config = {
     'gis-potico.wri.org',
     'gis-treecover.wri.org',
     'api.globalforestwatch.org',
-    'production-api.globalforestwatch.org'
+    'production-api.globalforestwatch.org',
+    'production-api.globalforestwatch.org/v1/ogr',
+    'production-api.globalforestwatch.org/v1/ogr/convert'
+    // '23.20.101.147:443'
   ],
 
   // Note these will need to be copied in with the bulid script since they are not part of the main bundle
   assets: {
     jQuery: 'vendor/jquery/dist/jquery.min.js',
-    highcharts: '//code.highcharts.com/highcharts.js',
-    highchartsMore: '//code.highcharts.com/highcharts-more.js',
-    highchartsExports: '//code.highcharts.com/modules/exporting.js',
+    // highcharts: '//code.highcharts.com/highcharts.js',
+    // highchartsMore: '//code.highcharts.com/highcharts-more.js',
+    // highchartsExports: '//code.highcharts.com/modules/exporting.js',
+    highcharts: 'vendor/highcharts/highcharts.js',
+    highchartsMore: 'vendor/highcharts/highcharts-more.js',
+    highchartsExports: 'vendor/highcharts/modules/exporting.js',
     ionCSS: 'vendor/ion.rangeslider/css/ion.rangeSlider.css',
     ionSkinCSS: 'vendor/ion.rangeslider/css/ion.rangeSlider.skinNice.css',
     rangeSlider: 'vendor/ion.rangeslider/js/ion.rangeSlider.js',
@@ -38,7 +43,8 @@ const config = {
 
   urls: {
     metadataApi: 'http://api.globalforestwatch.org/metadata',
-    metadataXmlEndpoint: (itemId) => `http://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`
+    metadataXmlEndpoint: (itemId) => `http://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
+    agolItemEndpoint: (itemId) => `http://www.arcgis.com/sharing/rest/content/items/${itemId}`
   },
 
   upload: {
@@ -186,7 +192,8 @@ config.analysis[analysisKeys.GLAD_ALERTS] = {
   url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/glad_alerts_analysis/ImageServer',
   lockrasters: {
     '2015': 6,
-    '2016': 4
+    '2016': 4,
+    '2017': 9
   }
 };
 

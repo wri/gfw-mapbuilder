@@ -45,6 +45,7 @@ class MapStore {
     this.imazonEndMonth = 0;
     this.imazonStartYear = 0;
     this.imazonEndYear = 0;
+    this.iconLoading = '';
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -77,7 +78,8 @@ class MapStore {
       changeOpacity: layerActions.changeOpacity,
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
-      toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible
+      toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
+      showLoading: layerActions.showLoading
     });
   }
 
@@ -197,6 +199,10 @@ class MapStore {
     this.canopyDensity = payload.density;
   }
 
+  showLoading (layerInfo) {
+    this.iconLoading = layerInfo;
+  }
+
   toggleSearchModal (payload) {
     this.searchModalVisible = payload.visible;
   }
@@ -230,13 +236,17 @@ class MapStore {
     // Grab the id of the sublayer if it exists, else, grab the normal id
     const id = layer.subId ? layer.subId : layer.id;
     const info = layerInfoCache.get(id);
+
     if (info) {
       this.modalLayerInfo = info;
       this.layerModalVisible = true;
+      this.iconLoading = '';
+      this.emitChange();
     } else {
       layerInfoCache.fetch(layer).then(layerInfo => {
         this.modalLayerInfo = layerInfo;
         this.layerModalVisible = true;
+        this.iconLoading = '';
         this.emitChange();
       });
     }

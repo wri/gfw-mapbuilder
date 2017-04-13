@@ -3,8 +3,7 @@ html
   head
     title #{defaultTitle}
     include meta.jade
-    block styles
-      link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Fira+Sans:400,500,300')
+    block append styles
   body
     include svg.jade
     block content

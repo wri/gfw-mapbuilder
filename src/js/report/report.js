@@ -14,6 +14,7 @@ import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
 import request from 'utils/request';
+import arcgisUtils from 'esri/arcgis/utils';
 import all from 'dojo/promise/all';
 import Graphic from 'esri/graphic';
 import resources from 'resources';
@@ -124,6 +125,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         existingIds.push(layer.id);
       }
     });
+
     //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
     //- Make those updates here to the config as this will trickle down
     uniqueLayers.forEach(layer => {
@@ -136,6 +138,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     const esriLayers = uniqueLayers.filter(layer => layer && layer.visible && (layer.url || layer.type === 'graphic')).map((layer) => {
       return layerFactory(layer, language);
     });
+
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     // map.on('layers-add-result', result => {
@@ -157,19 +160,78 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
 const createMap = function createMap (params) {
   const { basemap } = params;
 
-  map = new Map('map', {
+  const options = {
     center: [-8.086, 21.085],
     basemap: basemap || 'topo',
     slider: false,
     logo: false,
     zoom: 2
+  };
+
+  arcgisUtils.createMap(params.webmap, 'map', { mapOptions: options }).then(response => {
+  //   // Add operational layers from the webmap to the array of layers from the config file.
+  //   const {itemData} = response.itemInfo;
+  //   this.addLayersToLayerPanel(settings, itemData.operationalLayers);
+
+  // map = new Map('map', {
+  //   center: [-8.086, 21.085],
+  //   basemap: basemap || 'topo',
+  //   slider: false,
+  //   logo: false,
+  //   zoom: 2
+  // });
+  map = response.map;
+
+  // map.on('load', () => {
+	map.disableKeyboardNavigation();
+	map.disableMapNavigation();
+	map.disableRubberBandZoom();
+	map.disablePan();
+  // });
+
+  all({
+    feature: getFeature(params),
+    info: getApplicationInfo(params)
+  }).always((featureResponse) => {
+    //- Bail if anything failed
+    if (featureResponse.error) {
+      throw featureResponse.error;
+    }
+
+    const { feature, info } = featureResponse;
+    //- Add Popup Info Now
+    addTitleAndAttributes(params, feature, info);
+    //- Need the map to be loaded to add graphics
+    if (map.loaded) {
+      setupMap(params, feature);
+    } else {
+      map.on('load', () => {
+        setupMap(params, feature);
+      });
+    }
+
+    //- Currently we do not support points, so if its a point, just bail
+    if (feature.geometry.type !== analysisKeys.GEOMETRY_POLYGON) {
+      return;
+    }
+
+    //- Add the settings to the params so we can omit layers or do other things if necessary
+    //- If no appid is provided, the value here is essentially resources.js
+    params.settings = info.settings;
+
+    //- Make sure highcharts is loaded before using it
+    if (window.highchartsPromise.isResolved()) {
+      runAnalysis(params, feature);
+    } else {
+      window.highchartsPromise.then(() => {
+        runAnalysis(params, feature);
+      });
+    }
   });
 
-  map.on('load', () => {
-		map.disableKeyboardNavigation();
-		map.disableMapNavigation();
-		map.disableRubberBandZoom();
-		map.disablePan();
+
+
+
 	});
 };
 
@@ -198,10 +260,18 @@ const generateRow = function generateRows (fieldName, fieldValue) {
 };
 
 const generateSlopeTable = function generateSlopeTable (labels, values) {
+  const roundedValues = [];
+  values.forEach(value => {
+    if (typeof value === 'number') {
+      value = Math.round(value / 100) * 100;
+    }
+    roundedValues.push(value);
+  });
+
   const fragment = document.createDocumentFragment();
   labels.forEach((label, index) => {
     fragment.appendChild(generateRow(label,
-      typeof values[index] === 'number' ? number.format(values[index]) : values[index]
+      typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
     ));
   });
   return fragment;
@@ -922,48 +992,11 @@ export default {
       }
       return ioArgs;
     });
+
     //- Create the map as soon as possible
     createMap(params);
     //- Get all the necessary info
-    all({
-      feature: getFeature(params),
-      info: getApplicationInfo(params)
-    }).always((response) => {
-      //- Bail if anything failed
-      if (response.error) {
-        throw response.error;
-      }
 
-      const { feature, info } = response;
-      //- Add Popup Info Now
-      addTitleAndAttributes(params, feature, info);
-      //- Need the map to be loaded to add graphics
-      if (map.loaded) {
-        setupMap(params, feature);
-      } else {
-        map.on('load', () => {
-          setupMap(params, feature);
-        });
-      }
-
-      //- Currently we do not support points, so if its a point, just bail
-      if (feature.geometry.type !== analysisKeys.GEOMETRY_POLYGON) {
-        return;
-      }
-
-      //- Add the settings to the params so we can omit layers or do other things if necessary
-      //- If no appid is provided, the value here is essentially resources.js
-      params.settings = info.settings;
-
-      //- Make sure highcharts is loaded before using it
-      if (window.highchartsPromise.isResolved()) {
-        runAnalysis(params, feature);
-      } else {
-        window.highchartsPromise.then(() => {
-          runAnalysis(params, feature);
-        });
-      }
-    });
   }
 
 };

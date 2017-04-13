@@ -1,6 +1,7 @@
 import dispatcher from 'js/dispatcher';
 import layerFactory from 'utils/layerFactory';
 import layerKeys from 'constants/LayerConstants';
+import Point from 'esri/geometry/Point';
 
 class MapActions {
   //- Action to notify the store the map has changed so we can rerender UI changes
@@ -21,6 +22,10 @@ class MapActions {
     return {
       type: evt.target.value
     };
+  }
+
+  centerAndZoomLatLng (lat, lng) {
+    brApp.map.centerAndZoom(new Point(lng, lat), 9);
   }
 
   //- Straight through dispatches, all have the following format
@@ -75,7 +80,7 @@ class MapActions {
       //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
       //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
       return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
+        layer.order = (layerPanel[groupName].order * 100) - (layer.order || index);
         return layer;
       }));
     }, []);
@@ -117,6 +122,9 @@ class MapActions {
           map.reorderLayer(map.getLayer(layer.id), layer.order);
         }
       });
+      if (map.getLayer('labels')) {
+        map.reorderLayer(map.getLayer('labels'), 200);
+      }
     });
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {

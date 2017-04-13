@@ -81,7 +81,7 @@ export default class LayerCheckbox extends Component {
     const {settings, map} = this.context;
     //- The layer could be in any of these two groups
     const lcLayers = settings.layerPanel.GROUP_LC ? settings.layerPanel.GROUP_LC.layers : [];
-    const lcdLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LC.layers : [];
+    const lcdLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LCD.layers : [];
     const layersConfig = lcLayers.concat(lcdLayers);
 
     const conf = utils.getObject(layersConfig, 'id', layerId);
@@ -111,6 +111,7 @@ export default class LayerCheckbox extends Component {
     const {layer} = this.props;
     if (layer.disabled) { return; }
     mapActions.showLayerInfo(layer);
+    layerActions.showLoading(layer.id);
   }
 
   toggleLayer () {
@@ -147,7 +148,7 @@ export default class LayerCheckbox extends Component {
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
-        <span className='info-icon pointer' onClick={this.showInfo.bind(this)}>
+        <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <svg><use xlinkHref="#shape-info" /></svg>
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}

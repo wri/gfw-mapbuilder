@@ -1,4 +1,26 @@
 // Loaded inline in html, image basepath is css/images/*.{jpg|png|svg}
+@-webkit-keyframes loader2 {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes loader2 {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+
 .layer-toggles
   border-bottom 1px solid $lightGray
   height 30px
@@ -253,6 +275,26 @@
   width 14px
   right 10px
   top 4px
+  &.iconLoading
+    font-size 18px
+    svg
+      -webkit-animation-name loader2
+      -webkit-animation-duration 1s
+      -webkit-animation-iteration-count infinite
+      -webkit-animation-timing-function cubic-bezier(0.645, 0.045, 0.355, 1)
+      -webkit-animation-direction normal
+      -webkit-animation-fill-mode none
+      -webkit-animation-delay 0s
+      -webkit-animation-play-state running
+      animation-name loader2
+      animation-duration 1s
+      animation-iteration-count infinite
+      animation-timing-function cubic-bezier(0.645, 0.045, 0.355, 1)
+      animation-direction normal
+      animation-fill-mode none
+      animation-delay 0s
+      animation-play-state running
+      z-index 11
 
 .info-icon svg
   position absolute

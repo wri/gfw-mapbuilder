@@ -9,17 +9,23 @@ export default class Modal extends Component {
     language: PropTypes.string.isRequired
   };
 
-  renderFromMetadataAPI (info) {
+  renderMetadata(info) {
     const {language} = this.context;
+    if(info.copyrightText && !info.license) {
+      info.license = info.copyrightText;
+    } else if(info.licenseInfo && !info.license) {
+      info.license = info.licenseInfo;
+    }
     return (
       <div className='layer-modal-content'>
         <div className='source-header'>
-          <h2 className='source-title'>{info.title}</h2>
+          <h2 className='source-title'>{!info.title ? info.name : info.title}</h2>
           <h3 className='source-subtitle'>{info.subtitle}</h3>
         </div>
         <div className='source-body'>
           <div className='source-table'>
             {!info.function ? null : this.tableMap(text[language].FUNCTION, info.function)}
+            {!info.description ? null : this.tableMap(text[language].DESCRIPTION, info.description)}
             {!info.resolution ? null : this.tableMap(text[language].RESOLUTION, info.resolution)}
             {!info.geographic_coverage ? null : this.tableMap(text[language].GEO_COVERAGE, info.geographic_coverage)}
             {!info.source ? null : this.tableMap(text[language].SOURCE, info.source)}
@@ -57,22 +63,7 @@ export default class Modal extends Component {
         }
       </div>
     );
-  }
 
-  renderFromMapService (info) {
-    const {language} = this.context;
-    return (
-      <div className='layer-modal-content'>
-        <div className='source-header'>
-          <h2 className='source-title'>{info.name}</h2>
-          <h3 className='source-subtitle'>{info.type}</h3>
-        </div>
-        <div className='source-table'>
-          {this.tableMap(text[language].DESCRIPTION, info.description || text[language].NO_INFO)}
-          {this.tableMap(text[language].CITATION, info.copyrightText || text[language].NO_INFO)}
-        </div>
-      </div>
-    );
   }
 
   tableMap (label, content) {
@@ -93,10 +84,19 @@ export default class Modal extends Component {
     const {info} = this.props;
     const theme = info && info.download_data ? '' : 'no-download';
     const content = !info ? <div className='no-info-available'>{text[language].NO_INFO}</div> :
-      (info.title ?
-        this.renderFromMetadataAPI(info) :
-        this.renderFromMapService(info)
-      );
+      // (info.title && info.hasOwnProperty('subtitle') ?
+      //   this.renderFromMetadataAPI(info) :
+      //   this.renderFromMapService(info)
+      // );
+      // (info.hasOwnProperty('description') && info.hasOwnProperty('citation') ?
+      //   this.renderFromMapService(info) :
+      //   this.renderFromMetadataAPI(info)
+      // );
+      this.renderMetadata(info);
+      // (info.hasOwnProperty('title') ?
+      //   this.renderFromMapService(info) :
+      //   this.renderFromMetadataAPI(info)
+      // );
 
     return (
       <ControlledModalWrapper onClose={this.close} theme={theme}>

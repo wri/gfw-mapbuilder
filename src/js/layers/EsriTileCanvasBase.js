@@ -107,6 +107,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
     if (this.options.id) { this.id = this.options.id; }
     //- Create a tile cache to optimize this layer
     this.tiles = {};
+    this.tileRequests = [];
     //- Store the position of the map, this is used to apply transforms
     this.position = { x: 0, y: 0 };
     //- Create an array of handles for events
@@ -185,6 +186,28 @@ export default declare('EsriTileCanvasBase', [Layer], {
     const tileInfos = getTileInfos(rowMin, colMin, rowMax, colMax, level);
     //- Fetch the tile and update the map
     tileInfos.forEach(tile => this._fetchTile(tile));
+
+    const tilesToDelete = [];
+
+    for (var c = 0; c < this._container.children.length; c++) {
+      var tileId = this._container.children[c].id;
+      tileId = tileId.split('_');
+      if (tileId.length > 0) {
+        tileId = tileId[2];
+        if (tileId) {
+          tileId = parseInt(tileId);
+          if (tileId !== level) {
+            console.log(tileId);
+            // this._container.children[c].remove();
+            tilesToDelete.push(this._container.children[c]);
+          }
+        }
+      }
+    }
+    tilesToDelete.forEach(tile => {
+      tile.remove();
+    });
+
   },
 
   /**
@@ -199,6 +222,12 @@ export default declare('EsriTileCanvasBase', [Layer], {
     this.position = { x: 0, y: 0 };
     this._container.innerHTML = '';
     this._container.style.transform = getTranslate(this.position);
+
+    for (var c = 0; c < this.tileRequests.length; c++) {
+      // console.log(this.tileRequests[c].abort);
+      this.tileRequests[c].abort();
+    }
+    this.tileRequests = [];
   },
 
   /**
@@ -258,7 +287,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
         z: tile.z,
         canvas,
         image,
-        id
+        id,
+        url: url
       };
 
       //- Cache the tile
@@ -283,25 +313,53 @@ export default declare('EsriTileCanvasBase', [Layer], {
     if (!canvas.parentElement) {
       const ctx = canvas.getContext('2d');
       //- Get the current position of the container to offset the tile position
-      canvas.style.transform = getTranslate({
-        x: Math.abs(this.position.x) + coords.x,
-        y: Math.abs(this.position.y) + coords.y
-      });
-      //- Scale the tile if we are past max zoom
-      if (data.z > this.options.maxZoom) {
-        const info = this._getSubrectangleInfo(data);
-        //- Stop image enhancement
-        ctx.imageSmoothingEnabled = false;
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.drawImage(data.image, info.sX, info.sY, info.sWidth, info.sHeight, 0, 0, tileSize, tileSize);
+      // canvas.style.transform = getTranslate({
+        //   x: this.position.x + coords.x,
+        //   y: this.position.y + coords.y
+        // });
+
+        let yTransfrom = Math.abs(this.position.y) + coords.y;
+        if (this.position.y > 0) {
+          yTransfrom = coords.y - this.position.y;
+        }
+        let xTransfrom = Math.abs(this.position.x) + coords.x;
+        if (this.position.x > 0) {
+          xTransfrom = coords.x - this.position.x;
+        }
+        canvas.style.transform = getTranslate({
+          x: xTransfrom,
+          y: yTransfrom
+        });
+
+      if (this.id === 'TREE_COVER_GAIN') {
+        const hardUrl = 'url(' + data.url + ')';
+        ctx.canvas.style.background = hardUrl;
+
+        // ctx.canvas.style.background = 'url(http://earthengine.google.org/static/hansen_2013/gain_alpha/3/7/5.png)';
       } else {
-        ctx.drawImage(data.image, 0, 0);
+        //- Scale the tile if we are past max zoom
+        if (data.z > this.options.maxZoom) {
+          const info = this._getSubrectangleInfo(data);
+          //- Stop image enhancement
+          ctx.imageSmoothingEnabled = false;
+          ctx.mozImageSmoothingEnabled = false;
+          ctx.drawImage(data.image, info.sX, info.sY, info.sWidth, info.sHeight, 0, 0, tileSize, tileSize);
+        } else {
+          ctx.drawImage(data.image, 0, 0);
+        }
+
+        const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
+        imageData.data.set(this.filter(imageData.data));
+        ctx.putImageData(imageData, 0, 0);
       }
 
-      const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
-      imageData.data.set(this.filter(imageData.data));
-      ctx.putImageData(imageData, 0, 0);
       this._container.appendChild(canvas);
+
+      const level = this._map.getLevel();
+
+      if (data.z === level) {
+        this._container.appendChild(canvas);
+      }
     }
   },
 

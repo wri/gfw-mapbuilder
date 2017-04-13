@@ -52,7 +52,7 @@ export default class LayerPanel extends Component {
       return groups[key];
     }).sort((a, b) => {
       //- Sort on configured order
-      return a.order > b.order;
+      return a.order - b.order;
     });
 
     return orderedGroups.map((group) => {
@@ -60,7 +60,7 @@ export default class LayerPanel extends Component {
       //- as not all basemaps are present in configuration
       const layers = group.key === LayerKeys.GROUP_BASEMAP ?
         this.renderBasemaps(group.layers) :
-        group.layers.sort((a, b) => a.order > b.order).map(this.checkboxMap, this);
+        group.layers.sort((a, b) => {return a.order - b.order}).map(this.checkboxMap, this);
 
       return (
         <LayerGroup
@@ -75,7 +75,7 @@ export default class LayerPanel extends Component {
   };
 
   checkboxMap (layer) {
-    const {activeLayers, dynamicLayers, ...props} = this.props;
+    const {activeLayers, dynamicLayers, iconLoading, ...props} = this.props;
     let childComponent;
 
     switch (layer.id) {
@@ -114,11 +114,11 @@ export default class LayerPanel extends Component {
     let checkbox;
     if (layer.subId) {
       const checked = (dynamicLayers[layer.id] && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1) || false;
-      checkbox = <LayerCheckbox key={layer.subId} layer={layer} subLayer={true} checked={checked}>
+      checkbox = <LayerCheckbox key={layer.subId} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1}>
+      checkbox = <LayerCheckbox key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }

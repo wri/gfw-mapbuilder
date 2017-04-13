@@ -2,6 +2,9 @@
 build
 dist
 
+# Keep the local copy of the ArcGIS JS API in git
+!/build/vendor/arcgis-api/**/*
+
 # Ignore these, just do it
 arcgis-modules.txt
 node_modules

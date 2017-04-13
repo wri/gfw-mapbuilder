@@ -88,7 +88,7 @@ const formatters = {
   gladAlerts: function (year, counts) {
     var results = [];
     for (let i = 0; i < counts.length; i++) {
-      results.push([new Date(year, 0, i).getTime(), counts[i] || 0]);
+      results.push([new Date(year, 0, i + 1).getTime(), counts[i] || 0]);
     }
     return results;
   },
@@ -294,11 +294,10 @@ export default {
     const promise = new Deferred();
     all([
       this.getMosaic(config.lockrasters['2015'], geometry, config.url),
-      this.getMosaic(config.lockrasters['2016'], geometry, config.url)
+      this.getMosaic(config.lockrasters['2016'], geometry, config.url),
+      this.getMosaic(config.lockrasters['2017'], geometry, config.url)
     ]).then(results => {
-      let alerts = [];
-      alerts = alerts.concat(formatters.gladAlerts('2015', results[0].counts));
-      alerts = alerts.concat(formatters.gladAlerts('2016', results[1].counts));
+      const alerts = this.cleanGlad(results);
       promise.resolve(alerts);
     });
     return promise;
@@ -384,25 +383,69 @@ export default {
   },
 
   getBiomassLoss: (geometry, canopyDensity) => {
+    const deferred = new Deferred();
     const geographic = webmercatorUtils.webMercatorToGeographic(geometry);
     const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
-    const content = {
-      type: 'geojson',
-      geojson: JSON.stringify(geojson),
-      dataset: 'biomass-loss',
-      period: '2001-01-01,2014-12-31',
-      begin: '2001-01-01',
-      end: '2014-12-31',
-      thresh: canopyDensity
+    // const content = {
+    //   type: 'geojson',
+    //   geojson: JSON.stringify(geojson),
+    //   dataset: 'biomass-loss',
+    //   period: '2001-01-01,2014-12-31',
+    //   begin: '2001-01-01',
+    //   end: '2014-12-31',
+    //   thresh: canopyDensity
+    // };
+
+    const geoStore = {
+      'geojson': {
+        'type': 'FeatureCollection',
+        'features': [{
+          'type': 'Feature',
+          'properties': {},
+          'geometry': geojson
+        }]
+      }
+    };
+    const content = JSON.stringify(geoStore);
+
+    const success = res => {
+      const biomassData = {
+        geostore: res.data.id,
+        period: '2001-01-01,2014-12-31',
+        thresh: canopyDensity
+      };
+      esriRequest({
+        url: 'https://production-api.globalforestwatch.org/biomass-loss',
+        callbackParamName: 'callback',
+        content: biomassData,
+        handleAs: 'json',
+        timeout: 30000
+      }, { usePost: false}).then(biomassResult => {
+        deferred.resolve(biomassResult || []);
+      }, err => {
+        console.error(err);
+        deferred.resolve([]);
+      });
     };
 
-    return esriRequest({
-      url: 'https://production-api.globalforestwatch.org/biomass-loss/wdpa/354010',
-      callbackParamName: 'callback',
-      content: content,
-      handleAs: 'json',
-      timeout: 30000
-    }, { usePost: false});
+    const http = new XMLHttpRequest();
+    const url = 'https://production-api.globalforestwatch.org/geostore';
+    const params = content;
+    http.open('POST', url, true);
+
+    http.setRequestHeader('Content-type', 'application/json');
+
+    http.onreadystatechange = () => {
+      if(http.readyState === 4 && http.status === 200) {
+        success(JSON.parse(http.responseText));
+      } else if (http.readyState === 4) {
+        deferred.resolve([]);
+      }
+    };
+    http.send(params);
+
+    return deferred;
+
   },
 
   getCrossedWithLoss: (config, lossConfig, geometry, options) => {
@@ -477,6 +520,35 @@ export default {
 
     computeHistogram(url, content, success, failure);
     return promise;
+  },
+
+  cleanGlad: (results) => {
+    let alerts = [];
+    results.forEach((result, j) => {
+      if (j !== results.length - 1) {
+        for (var k = result.counts.length; k < 366; k++) {
+          result.counts.push(0);
+        }
+      } else {
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const day = Math.floor(diff / oneDay);
+
+        const dayDiff = day - result.counts.length;
+
+        for (var l = 0; l < dayDiff; l++) {
+          result.counts.push(0);
+        }
+      }
+
+      let year = 2015 + j;
+      year = year.toString();
+      alerts = alerts.concat(formatters.gladAlerts(year, result.counts));
+    });
+
+    return alerts;
   },
 
   getRestoration: (url, rasterId, geometry, settings) => {

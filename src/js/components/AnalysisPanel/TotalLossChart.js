@@ -3,11 +3,21 @@ import React, {PropTypes, Component} from 'react';
 import charts from 'utils/charts';
 
 export default class TotalLossChart extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { isEmpty: false };
+  }
+
   componentDidMount() {
     const {labels, colors, counts, encoder, options, lossLabels} = this.props;
-    const element = this.refs.chart;
+    if(counts.length === 0) {
+      this.setState({ isEmpty: true });
+    } else {
+      this.setState({ isEmpty: false });
 
-    const chartInfo = charts.formatSeriesWithEncoder({
+      const element = this.refs.chart;
+      const chartInfo = charts.formatSeriesWithEncoder({
       isSimple: options.simple,
       encoder: encoder,
       counts: counts,
@@ -15,14 +25,18 @@ export default class TotalLossChart extends Component {
       colors: colors,
       Xs: encoder.A, // Loss Bounds
       Ys: encoder.B // Raster were crossing with
-    });
+      });
 
-    charts.makeTotalLossBarChart(element, lossLabels, chartInfo.colors, chartInfo.series);
+      charts.makeTotalLossBarChart(element, lossLabels, chartInfo.colors, chartInfo.series);
+    }
   }
 
   render () {
     return (
-      <div ref='chart'></div>
+      <div>
+        <div ref='chart'></div>
+        <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+      </div>
     );
   }
 }

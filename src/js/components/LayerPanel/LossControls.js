@@ -14,21 +14,21 @@ export default class LossControls extends Component {
   };
 
   componentDidMount () {
-    const url = 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear/ImageServer';
-    layerUtils.getLayerMetadata(url).then((results) => {
-      const min = results.minValues[0];
-      const max = results.maxValues[0];
+    // const url = 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear/ImageServer';
+    // layerUtils.getLayerMetadata(url).then((results) => {
+      const min = 1;
+      const max = 15;
       for ( let i = min; i <= max; i++ ) {
         lossOptions.push({ label: 2000 + i + '', value: i });
       }
       //- Update the defaults to be the last year
-      layerActions.updateLossTimeline({
+      layerActions.updateLossTimeline.defer({
         fromSelectedIndex: 0,
-        toSelectedIndex: lossOptions.length - 1
+        toSelectedIndex: 14
       });
       //- Set the options in the store so others can use it
-      layerActions.setLossOptions(lossOptions);
-    });
+      layerActions.setLossOptions.defer(lossOptions);
+    // });
   }
 
   componentDidUpdate (prevProps, prevState, prevContext) {
@@ -36,29 +36,43 @@ export default class LossControls extends Component {
     const {lossFromSelectIndex, lossToSelectIndex, canopyDensity} = this.props;
     const {map} = this.context;
 
-    if (this.props.lossOptions.length &&
-        (prevProps.lossFromSelectIndex !== lossFromSelectIndex ||
-        prevProps.lossToSelectIndex !== lossToSelectIndex ||
-        prevProps.canopyDensity !== canopyDensity)
-    ) {
-      this.updateLayer(map.getLayer(layerKeys.TREE_COVER_LOSS), lossFromSelectIndex, lossToSelectIndex, canopyDensity);
+    if (map.loaded) {
+      if (this.props.lossOptions.length &&
+        (prevProps.lossFromSelectIndex !== lossFromSelectIndex || prevProps.lossToSelectIndex !== lossToSelectIndex)
+        ) {
+          this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossFromSelectIndex, lossToSelectIndex);
+        }
+
+        if (this.props.lossOptions.length && (prevProps.canopyDensity !== canopyDensity)
+        ) {
+          this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
+        }
+
+        if (prevContext.map !== map) {
+          const signal = map.on('update-end', () => {
+            signal.remove();
+            this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossFromSelectIndex, lossToSelectIndex);
+          });
+        }
     }
 
-    if (prevContext.map !== map) {
-      const signal = map.on('update-end', () => {
-        signal.remove();
-        this.updateLayer(map.getLayer(layerKeys.TREE_COVER_LOSS), lossFromSelectIndex, lossToSelectIndex, canopyDensity);
-      });
-    }
   }
 
-  updateLayer (layer, fromIndex, toIndex, density) {
+  updateDates (layer, fromIndex, toIndex) {
     const fromYear = lossOptions[fromIndex].label;
     const toYear = lossOptions[toIndex].label;
-    const renderingRule = rasterFuncs.buildCanopyFunction(fromYear, toYear, density);
-    if (layer) {
-      layer.setRenderingRule(renderingRule);
-    }
+
+    layer.setDateRange(fromYear - 2000, toYear - 2000);
+  }
+
+  updateDensity (layer, density) {
+    const {lossFromSelectIndex, lossToSelectIndex} = this.props;
+    let baseUrl = 'https://storage.googleapis.com/wri-public/Hansen14_15/tiles/hansen_world/v4.0/tc';
+    baseUrl += density;
+    baseUrl += '/{z}/{x}/{y}.png';
+
+    layer.setUrl(baseUrl);
+    layer.setDateRange(lossFromSelectIndex, lossToSelectIndex);
   }
 
   render () {

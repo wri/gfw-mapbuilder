@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 0 */
 import IdentityManager from 'esri/IdentityManager';
 import {corsServers, assetUrls} from 'js/config';
-import {loadJS} from 'utils/loaders';
+import {loadJS, loadCSS } from 'utils/loaders';
 import esriConfig from 'esri/config';
 import report from 'report/report';
 import 'babel-polyfill';
@@ -17,14 +17,20 @@ const configureApp = () => {
 };
 
 const lazyloadAssets = () => {
-  window.highchartsPromise = loadJS(assetUrls.highcharts);
+
+  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/dijit/themes/tundra/tundra.css`);
+  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
+
+  const base = window._app.base ? window._app.base + '/' : '';
+
+  window.highchartsPromise = loadJS(base + assetUrls.highcharts);
   window.highchartsPromise.then(() => {
     Highcharts.setOptions({
       chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
       lang: { thousandsSep: ',' }
     });
   });
-  loadJS(assetUrls.highchartsMore);
+  loadJS(base + assetUrls.highchartsMore);
 };
 
 configureApp();

@@ -3,19 +3,32 @@ import React, {PropTypes, Component} from 'react';
 import charts from 'utils/charts';
 
 export default class BarChart extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { isEmpty: false };
+  }
+
   componentDidMount() {
     const {labels, colors, counts, name} = this.props;
-    let series = [{
-      name: name,
-      data: counts
-    }];
-
-    charts.makeSimpleBarChart(this.refs.chart, labels, colors, series);
+    if(counts.length === 0) {
+      this.setState({ isEmpty: true });
+    } else {
+      let series = [{
+        name: name,
+        data: counts
+      }];
+      this.setState({ isEmpty: false });
+      charts.makeSimpleBarChart(this.refs.chart, labels, colors, series);
+    }
   }
 
   render () {
     return (
-      <div ref='chart' className='analysis__chart-container'></div>
+      <div>
+        <div ref='chart' className='analysis__chart-container'></div>
+        <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+      </div>
     );
   }
 }

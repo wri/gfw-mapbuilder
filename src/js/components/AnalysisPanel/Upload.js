@@ -1,12 +1,19 @@
 import scaleUtils from 'esri/geometry/scaleUtils';
 import layerKeys from 'constants/LayerConstants';
 import geometryUtils from 'utils/geometryUtils';
-import graphicsUtils from 'esri/graphicsUtils';
+import Graphic from 'esri/graphic';
 import mapActions from 'actions/MapActions';
 import {uploadConfig} from 'js/config';
 import Loader from 'components/Loader';
 import request from 'utils/request';
 import text from 'js/languages';
+import esriRequest from 'esri/request';
+import geojsonUtil from 'utils/arcgis-to-geojson';
+import symbols from 'utils/symbols';
+import Polygon from 'esri/geometry/Polygon';
+import {attributes} from 'constants/AppConstants';
+import graphicsUtils from 'esri/graphicsUtils';
+
 import React, {
   Component,
   PropTypes
@@ -76,33 +83,59 @@ export default class Upload extends Component {
     const extent = scaleUtils.getExtentForScale(map, 40000);
     const type = isZip(file.name) ? TYPE.SHAPEFILE : TYPE.GEOJSON;
     const params = uploadConfig.shapefileParams(file.name, map.spatialReference, extent.getWidth(), map.width);
+    params.targetSr = {
+      latestWkid: 3857,
+      wkid: 102100
+    };
     const content = uploadConfig.shapefileContent(JSON.stringify(params), type);
 
     // the upload input needs to have the file associated to it
-    const input = this.refs.fileInput;
-    input.files = evt.dataTransfer.files;
+    const inputs = this.refs.fileInput;
 
-    request.upload(uploadConfig.portal, content, this.refs.upload).then((response) => {
-      this.setState({ isUploading: false });
-      if (response.featureCollection) {
-        const graphics = geometryUtils.generatePolygonsFromUpload(response.featureCollection);
-        const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
-        const layer = map.getLayer(layerKeys.USER_FEATURES);
-        if (layer) {
-          map.setExtent(graphicsExtent, true);
-          graphics.forEach((graphic) => {
-            layer.add(graphic);
-          });
+    if(evt.dataTransfer.files.length > 0)
+    {
+      var formData = new FormData();
+      formData.append('file', evt.dataTransfer.files[0], evt.dataTransfer.files[0].name);
+
+      var xhr = new XMLHttpRequest();
+      const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
+      xhr.open('POST', url, true);
+      xhr.onreadystatechange = () => {
+        if(xhr.readyState === 4 && xhr.status === 200) {
+          let response = geojsonUtil.geojsonToArcGIS(JSON.parse(xhr.responseText).data.attributes);
+          this.processGeojson(response);
+        } else if (xhr.readyState === 4) {
+          console.log("Error: shapefile not working");
         }
-      } else {
-        console.error('No feature collection present in the file');
-      }
-    }, (error) => {
-      this.setState({ isUploading: false });
-      console.error(error);
-    });
-
+      };
+      xhr.send(formData);
+    } else {
+      console.log('Error: file upload was unsuccessful');
+    }
   };
+
+  processGeojson = (esriJson) => {
+    let graphics = [];
+    esriJson.forEach(feature => {
+      graphics.push(new Graphic(
+          new Polygon(feature.geometry),
+          symbols.getCustomSymbol(),
+          {
+            ...feature.attributes,
+            source: attributes.SOURCE_UPLOAD
+          }
+      ));
+    });
+    const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
+    const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
+    if (layer) {
+      this.context.map.setExtent(graphicsExtent, true);
+      graphics.forEach((graphic) => {
+        layer.add(graphic);
+      });
+    }
+    this.setState({isUploading: false});
+  }
 
   renderInstructionList = (instruction, index) => {
     return (

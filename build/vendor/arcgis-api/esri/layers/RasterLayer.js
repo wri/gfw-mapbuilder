@@ -1,0 +1,2 @@
+//>>built
+define("esri/layers/RasterLayer","dojo/_base/declare dojo/_base/lang dojo/_base/connect dojo/_base/array dojo/sniff dojo/dom-construct dojo/dom-style dojo/number ../lang ../domUtils ./BaseRasterLayer ./ImageServiceLayerMixin ../SpatialReference ../geometry/Point".split(" "),function(a,d,e,f,g,h,k,l,m,n,b,c,p,q){return a([b,c],{declaredClass:"esri.layers.RasterLayer",constructor:function(a,b){this.pixelData=null;(null===this.format||void 0===this.format)&&this.setImageFormat("LERC",!0)}})});

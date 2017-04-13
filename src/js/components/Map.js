@@ -148,8 +148,7 @@ export default class Map extends Component {
         scalebarUnit: 'metric'
       });
 
-      const updateEnd = response.map.on('update-end', () => {
-        updateEnd.remove();
+      on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         //- Set the default basemap in the store
         const basemap = itemData && itemData.baseMap;
@@ -176,6 +175,8 @@ export default class Map extends Component {
           }
         });
       });
+      //- Set the map's extent to its current extent to trigger our update-end
+      response.map.setExtent(response.map.extent);
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));

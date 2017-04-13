@@ -76,7 +76,10 @@ export default class SadControls extends Component {
       if (map.getLayer && map.getLayer(layer.id)) {
         const definitionExpression = this.formatQuery(startYear, endYear, startMonth, endMonth);
         defs[2] = definitionExpression;
-        map.getLayer(layer.id).setLayerDefinitions(defs);
+        const sadLayer = map.getLayer(layer.id);
+        if (sadLayer) {
+          sadLayer.setLayerDefinitions(defs);
+        }
       }
     }
 
@@ -86,7 +89,10 @@ export default class SadControls extends Component {
         signal.remove();
         const definitionExpression = this.formatQuery(startYear, endYear, startMonth, endMonth);
         defs[2] = definitionExpression;
-        map.getLayer(layer.id).setLayerDefinitions(defs);
+        const sadLayer = map.getLayer(layer.id);
+        if (sadLayer) {
+          sadLayer.setLayerDefinitions(defs);
+        }
       });
     }
   }

@@ -18,6 +18,10 @@ class LayerActions {
     // }
   }
 
+  showLoading (layerId) {
+    return layerId;
+  }
+
   addSubLayer (info) {
     return info;
   }

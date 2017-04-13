@@ -17,6 +17,7 @@ html
         esri: '#{esriVersion}',
         base: '#{base}'
       };
+
       function makePath (base, path) {
         var position = base.length - 1;
         return !path ?
@@ -64,9 +65,45 @@ html
         callback: function () {require(['js/main']);}
       };
     //- PROD: if new modules are added, regenerate the JSAPI build
+    //- script.
+    //-   var _app = {
+    //-     cache: '#{version}',
+    //-     esri: '#{esriVersion}',
+    //-     base: '#{base}'
+    //-   };
+    //-
+    //-   function makePath (base, path) {
+    //-     var position = base.length - 1;
+    //-     return !path ?
+    //-       (base.indexOf('/', position) !== position ? base + '/' : base) :
+    //-       (base.indexOf('/', position) !== position ?
+    //-         base + '/' + path :
+    //-         base + path
+    //-       )
+    //-   }
+    //-   function getResourcePath (path) {
+    //-     var position = path.length - 1;
+    //-     return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
+    //-   }
+    //-   // Change this to '' if _app.base is a remote url
+    //-   var base = location.href.replace(/\/[^/]+$/, '');
+    //-   // Add trailing slash if it is not present
+    //-   base = makePath(base);
+    //-   // Add _app.base if it is present
+    //-   if (_app.base) { base = makePath(base, _app.base); }
+    //-
+    //-   function loadjsfile(filename, base) {
+    //-     const dojoInit = base + filename;
+    //-     const script = document.createElement('script');
+    //-     script.src = dojoInit;
+    //-     document.getElementsByTagName('head')[0].appendChild(script);
+    //-   }
+    //-
+    //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
     script(src='//my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.0/dojo/dojo.js', async)
     //- DEV: Use the normal JSAPI
-    //- script(src='//js.arcgis.com/#{esriVersion}/init.js', async)
+    //script(src='//js.arcgis.com/#{esriVersion}/init.js', async)
+    //- script(src='vendor/dojo/dojo.js', async)
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
