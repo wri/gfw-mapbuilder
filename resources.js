@@ -89,8 +89,9 @@ define(['exports'], function (exports) {
     alternativeSlopeDescription: 'Some explanatory text for this anlaysis',
     // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
     sharinghost: 'http://www.arcgis.com',
-    analyticsCode: 'UA-62288390-15',
+    analyticsCode: '',
     userFeatureToken: {
+      'localhost': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
       //- Localhost token for BR office
       'alpha.blueraster.io': 'TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..',
       'alpha.blueraster.io.s3.amazonaws.com': 'TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..',
@@ -145,13 +146,21 @@ define(['exports'], function (exports) {
         layers: [{
           order: 1,
           id: 'TREE_COVER_LOSS',
-          type: 'image',
-          url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+          type: 'loss', //image
+          // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+          // url: 'https://storage.googleapis.com/forma-public/Hansen14_15/tiles/1/30/{z}/{x}/{y}',
+          url: 'https://storage.googleapis.com/wri-public/Hansen14_15/tiles/hansen_world/v4.0/tc30/{z}/{x}/{y}.png',
+          // legendLayer: 7,
+          minYear: 1,
+          maxYear: 15,
+          // minDateValue: 15000,
+          // maxDateValue: 16365,
+          // confidence: [0, 1],
           technicalName: 'tree_cover_loss',
           legendLayer: 0,
-          colormap: [[1, 219, 101, 152]],
-          inputRange: [1, 15],
-          outputRange: [1],
+          // colormap: [[1, 219, 101, 152]],
+          // inputRange: [1, 15],
+          // outputRange: [1],
           label: {
             en: 'Tree cover loss',
             fr: 'Perte en couvert arboré',
@@ -171,8 +180,9 @@ define(['exports'], function (exports) {
         }, {
           order: 2,
           id: 'TREE_COVER_GAIN',
-          type: 'image',
-          url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
+          type: 'gain', //'image',
+          // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
+          url: 'http://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
           technicalName: 'tree_cover_gain',
           legendLayer: 1,
           label: {
@@ -222,7 +232,7 @@ define(['exports'], function (exports) {
           technicalName: 'umd_landsat_alerts',
           legendLayer: 7,
           minDateValue: 15000,
-          maxDateValue: 16365,
+          maxDateValue: 999999,
           confidence: [0, 1],
           label: {
             en: 'GLAD Alerts',
@@ -316,7 +326,7 @@ define(['exports'], function (exports) {
           order: 1,
           id: 'GLOB_MANGROVE',
           type: 'webtiled',
-          url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/23a7c3aea64174198a46c1fb4211023f:1467735931596/0/{level}/{col}/{row}.png',
+          url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
           subDomains: [0, 1, 2, 3],
           technicalName: 'global_mangroves',
           legendLayer: 11,
