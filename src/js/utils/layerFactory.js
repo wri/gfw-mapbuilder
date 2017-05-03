@@ -32,8 +32,11 @@ export default (layer, lang) => {
 
   const options = {};
   let esriLayer;
-
+  console.log(layer);
   switch (layer.type) {
+    case 'wfs':
+      console.log('tes');
+      break;
     case 'tiled':
       options.id = layer.id;
       options.visible = layer.visible || false;
