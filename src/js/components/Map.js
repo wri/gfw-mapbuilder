@@ -148,6 +148,7 @@ export default class Map extends Component {
       });
 
       on.once(response.map, 'update-end', () => {
+        console.log(response.map);
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         //- Set the default basemap in the store
         const basemap = itemData && itemData.baseMap;

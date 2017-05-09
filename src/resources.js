@@ -423,6 +423,33 @@ export default {
           id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
           zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
         }
+      }, {
+          order: 6,
+          id: 'TEST_COVER',
+          type: 'wfs',
+          url: 'http://139.255.83.75:3000/geoserver/smallholder_database/wfs',
+          technicalName: 'test_cover',
+          colormap: [[1, 0, 179, 0]],
+          inputRange: [30, 101],
+          outputRange: [1],
+          opacity: 0.8,
+          legendLayer: 2,
+          label: {
+            en: 'WFS',
+            fr: 'Densité du couvert arboré',
+            es: 'Densidad de follaje',
+            pt: 'Tree cover density',
+            id: 'Tree cover density',
+            zh: '森林覆盖密度'
+          },
+          sublabel: {
+            en: 'WFS',
+            fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
+          }
       }]
     },
     GROUP_BASEMAP: {

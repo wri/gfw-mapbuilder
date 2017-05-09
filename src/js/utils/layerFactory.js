@@ -6,6 +6,7 @@ import WebTiledLayer from 'esri/layers/WebTiledLayer';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import TerraILayer from 'js/layers/TerraILayer';
+import WFSLayer from 'esri/layers/WFSLayer';
 import GladLayer from 'js/layers/GladLayer';
 import TreeCoverLossLayer from 'js/layers/TreeCoverLossLayer';
 import TreeCoverGainLayer from 'js/layers/TreeCoverGainLayer';
@@ -32,9 +33,24 @@ export default (layer, lang) => {
 
   const options = {};
   let esriLayer;
-  console.log(layer);
   switch (layer.type) {
     case 'wfs':
+      options.id = layer.id;
+      options.visible = layer.visible || false;
+      options.url = 'http://139.255.83.75:3000/geoserver/smallholder_database/wfs?SERVICE=WFS&REQUEST=GetCapabilities';
+      options.name = 'bidang_smallholder';
+      // esriLayer = new WFSLayer(opts);
+      var opts = {
+        'url': 'https://ahocevar.com/geoserver/wfs?SERVICE=WFS&REQUEST=GetCapabilities',
+        'version': '1.1.0',
+        'name': 'usa:states',
+        'wkid': 4326
+      };
+      debugger;
+      esriLayer = new WFSLayer(opts);
+      esriLayer.setPolygonSymbol();
+      // esriLayer.fromJson(opts);
+      console.log(esriLayer);
       console.log('tes');
       break;
     case 'tiled':
