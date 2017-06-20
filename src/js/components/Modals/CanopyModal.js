@@ -21,10 +21,7 @@ export default class CanopyModal extends Component {
   };
 
   componentDidMount() {
-    let base = window._app.base ? window._app.base + '/' : '';
-    if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
-      base = base.substring(0, base.length - 1);
-    }
+    const base = window._app.base ? window._app.base + '/' : '';
     this.loadedSlider = false;
     // loadJS(base + assetUrls.jQuery);
     loadJS(base + assetUrls.rangeSlider).then(() => {

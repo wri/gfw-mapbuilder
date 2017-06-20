@@ -306,6 +306,8 @@ export default class Map extends Component {
       map
     } = this.state;
 
+    const { settings } = this.context;
+
     const timeSlider = webmapInfo && webmapInfo.widgets && webmapInfo.widgets.timeSlider;
     const timeWidgets = [];
 
@@ -330,7 +332,7 @@ export default class Map extends Component {
           <TabButtons {...this.state} />
           <TabView {...this.state} />
           <Legend {...this.state} />
-          <FooterInfos map={map} />
+          <FooterInfos hidden={settings.hideHeaderFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
             <use xlinkHref='#shape-crosshairs' />

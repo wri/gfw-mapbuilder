@@ -79,6 +79,11 @@
       "placeholder": "e.g. UA-XXXXX-Y"
     }, {
       "type": "boolean",
+      "fieldName": "hideHeaderFooter",
+      "tooltip": "This will hide the header and footer bar on the map",
+      "label": "Would you like to hide the header"
+    }, {
+      "type": "boolean",
       "fieldName": "includeSubscribeButton",
       "tooltip": "This will include the subscribe button in the info window and anlysis panel",
       "label": "Would you like include an subscribe button"
