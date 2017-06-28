@@ -10,7 +10,6 @@ export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
-  // logoUrl: window && window._app && window._app.base ? window._app.base + 'css/images/gfw-logo.png' : './css/images/gfw-logo.png',
   logoUrl: './css/images/gfw-logo.png',
   logoLinkUrl: 'http://www.gfw-mapbuilder.org/',
   aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
@@ -444,8 +443,7 @@ export default {
         }
       }, {
         id: 'wri_mono',
-        // thumbnailUrl: window && window._app && window._app.base ? window._app.base + 'css/images/wri_mono.png' : './css/images/wri_mono.png',
-        thumbnailUrl: 'css/images/wri_mono.png',
+        thumbnailUrl: './css/images/wri_mono.png',
         title: {
           en: 'WRI Mono',
           fr: 'WRI Mono',
@@ -456,8 +454,7 @@ export default {
         }
       }, {
         id: 'wri_contextual',
-        // thumbnailUrl: window && window._app && window._app.base ? window._app.base + 'css/images/wri_contextual.png' : './css/images/wri_contextual.png',
-        thumbnailUrl: 'css/images/wri_contextual.png',
+        thumbnailUrl: './css/images/wri_contextual.png',
         title: {
           en: 'WRI Contextual',
           fr: 'WRI Contextual',
