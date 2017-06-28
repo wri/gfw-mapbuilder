@@ -183,7 +183,7 @@ config.analysis[analysisKeys.MANGROVE_LOSS] = {
 
 config.analysis[analysisKeys.SAD_ALERTS] = {
   url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
-  outFields: ['date', 'data_type', 'st_area(shape)'],
+  outFields: ['date', 'data_type', 'shape_Area'],
   colors: {
     degrad: '#FA98B9',
     defor: '#F13689'

@@ -61,11 +61,12 @@ const formatters = {
     * }
     */
     features.forEach((feature) => {
+      const st_area = analysisConfig.SAD_ALERTS.outFields[2];
       date = new Date(feature.attributes.date);
       year = date.getFullYear();
       month = date.getMonth();
       type = feature.attributes.data_type;
-      area = feature.attributes['st_area(shape)'];
+      area = feature.attributes[st_area];
 
       if (bin[year] && bin[year][month] && bin[year][month][type]) {
         bin[year][month][type] += area;
