@@ -46,11 +46,6 @@ const LayersHelper = {
   * @return {string} Query String to use for Fires Filter
   */
   generateFiresQuery (filterValue) {
-    // The service only has data for the last week, so if filter is 7 days, just set to 1 = 1
-    if (filterValue >= 7) {
-      return '1 = 1';
-    }
-
     const date = new Date();
     // Set the date to filterValue amount of days before today
     date.setDate(date.getDate() - filterValue);
