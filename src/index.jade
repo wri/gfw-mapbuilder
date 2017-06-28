@@ -35,7 +35,6 @@ html
       var base = location.href.replace(/\/[^/]+$/, '');
       // Add trailing slash if it is not present
       base = makePath(base);
-
       // Add _app.base if it is present
       if (_app.base) { base = makePath(base, _app.base); }
       var dojoConfig = {
@@ -60,8 +59,7 @@ html
           ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill'],
           ['jquery', 'vendor/jquery/dist/jquery.min'],
           ['picker', 'vendor/pickadate/lib/compressed/picker'],
-          ['pickadate', 'vendor/pickadate/lib/compressed/picker.date'],
-          ['FileSaver', 'vendor/file-saver.js/FileSaver']
+          ['pickadate', 'vendor/pickadate/lib/compressed/picker.date']
         ],
         deps: ['dojo/domReady!'],
         callback: function () {require(['js/main']);}

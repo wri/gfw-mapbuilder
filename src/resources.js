@@ -10,7 +10,6 @@ export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
-  // logoUrl: window && window._app && window._app.base ? window._app.base + 'css/images/gfw-logo.png' : './css/images/gfw-logo.png',
   logoUrl: './css/images/gfw-logo.png',
   logoLinkUrl: 'http://www.gfw-mapbuilder.org/',
   aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
@@ -88,8 +87,7 @@ export default {
   userFeatureToken: {
     'localhost': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
     //- Localhost token for BR office
-    'staging.blueraster.com': 'TjEeQfPMtR-0kjqzTqIZ7ZcTy6iHPAbdZQNaAPNBXQHgKwP6t8xmE7d0w7Hsi4HfRgaWltqVI3Y7Bq8aT5unCg..',
-    'stg.blueraster.com.s3.amazonaws.com': 'TjEeQfPMtR-0kjqzTqIZ7Sa9KfzWWRNkafbsiNHsV_V5s2pM7zD73fKp37Sx5EoXGMyWy5s74Sgjr0XUHlpu6ufFZ5Uh9mvAQkfVUKA-3sA.',
+    'localhost': 'TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC',
     'alpha.blueraster.io': 'TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..',
     'alpha.blueraster.io.s3.amazonaws.com': 'TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..',
     //- Github token
@@ -452,8 +450,7 @@ export default {
         }
       }, {
         id: 'wri_mono',
-        // thumbnailUrl: window && window._app && window._app.base ? window._app.base + 'css/images/wri_mono.png' : './css/images/wri_mono.png',
-        thumbnailUrl: 'css/images/wri_mono.png',
+        thumbnailUrl: './css/images/wri_mono.png',
         title: {
           en: 'WRI Mono',
           fr: 'WRI Mono',
@@ -464,8 +461,7 @@ export default {
         }
       }, {
         id: 'wri_contextual',
-        // thumbnailUrl: window && window._app && window._app.base ? window._app.base + 'css/images/wri_contextual.png' : './css/images/wri_contextual.png',
-        thumbnailUrl: 'css/images/wri_contextual.png',
+        thumbnailUrl: './css/images/wri_contextual.png',
         title: {
           en: 'WRI Contextual',
           fr: 'WRI Contextual',

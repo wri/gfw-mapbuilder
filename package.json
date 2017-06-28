@@ -4,10 +4,10 @@
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
   "main": "gulpfile.js",
   "scripts": {
-    "start": "npm run babel -- -w & cp src/js/library.js build/js/library.js & gulp start & gulp serve",
-    "dist": "rm -rf dist; BABEL_ENV=production npm run babel; gulp production; gulp bundle;",
-    "dist-lib": "rm -rf dist; BABEL_ENV=production npm run babel; gulp production; gulp bundle-lib;",
+    "start": "npm run babel -- -w & gulp start & gulp serve",
+    "dist": "rm -rf dist; BABEL_ENV=production npm run babel; gulp production; gulp prerender; gulp bundle;",
     "babel": "babel src --out-dir build",
+    "bundle": "r.js -o rjs.main.js; r.js -o rjs.report.js;",
     "test": "eslint src/js/**/*.js",
     "prerender": "gulp prerender;",
     "postinstall": "bower install; cp ionOverride.js build/vendor/ion.rangeslider/js/ion.rangeSlider.js;"
@@ -49,7 +49,6 @@
     "gulp-jade": "^1.1.0",
     "gulp-minify-inline": "^0.1.1",
     "gulp-plumber": "^1.0.1",
-    "gulp-rename": "^1.2.2",
     "gulp-stylus": "^2.2.0",
     "jstransformer-stylus": "^1.0.0",
     "madge": "^1.3.2",
