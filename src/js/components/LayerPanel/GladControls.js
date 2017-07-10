@@ -37,11 +37,7 @@ export default class GladControls extends Component {
 
   componentDidMount () {
     //- Load the pickers css
-    let base = window._app.base ? window._app.base + '/' : '';
-    if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
-      base = base.substring(0, base.length - 1);
-    }
-
+    const base = window._app.base ? window._app.base + '/' : '';
     loadCSS(base + assetUrls.pickadateCSS);
     loadCSS(base + assetUrls.pickadateDateCSS);
     //- Create the date pickers

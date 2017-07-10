@@ -1,5 +1,4 @@
 import {createTracker} from 'utils/googleAnalytics';
-import lang from 'dojo/_base/lang';
 import appActions from 'actions/AppActions';
 import Header from 'components/Header';
 import AppStore from 'stores/AppStore';
@@ -79,17 +78,6 @@ export default class App extends Component {
       document.title = labels.title;
     }
   };
-
-  updateBasemapImages = (buildConfig) => {
-    let base = window._app.base ? window._app.base + '/' : '';
-    if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
-      base = base.substring(0, base.length - 1);
-    }
-    buildConfig.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
-      basemap.thumbnailUrl = base + basemap.thumbnailUrl;
-    });
-
-  }
 
   render () {
     return (
