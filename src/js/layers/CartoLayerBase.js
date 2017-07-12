@@ -165,7 +165,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
       });
 
       this.addLayer(esriJsonLayer, cartoTemplate, meta);
-      const dataInfo = {symbol: this.symbolDictionary, cartoTemplate: cartoTemplate};
+      const dataInfo = {symbol: this.symbolDictionary, geomType: geojson.features[0].geometry.type, cartoTemplate: cartoTemplate};
       resolve(dataInfo);
 
     }, () => {
@@ -252,10 +252,10 @@ export default declare('CartoLayer', [GraphicsLayer], {
             cartoLayers.forEach((layer) => {
               if(data.cartoTemplate === layer.id) {
                 layer.symbol = data.symbol;
+                layer.geomType = data.geomType;
               }
             });
           });
-          // layerActions.updateCartoSymbol(cartoLayers);
         });
         // Removing the first carto layer as it is the template
         cartoLayers.shift();
@@ -309,7 +309,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
   /**
   * Sets the parameters for the Carto polylines
   **/
-  setLineParams: function (cartoUser, esriObj, esriObjLineSymbol) {
+  setLineParams: function (cartoUser) {
     var line = new SimpleLineSymbol();
     line.setStyle(SimpleLineSymbol.STYLE_SOLID);
     line.setColor(new Color(cartoColor));
