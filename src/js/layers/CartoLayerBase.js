@@ -253,6 +253,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
               if(data.cartoTemplate === layer.id) {
                 layer.symbol = data.symbol;
                 layer.geomType = data.geomType;
+                layer.loaded = true;
               }
             });
           });

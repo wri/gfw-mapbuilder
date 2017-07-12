@@ -27,7 +27,7 @@ export default class CartoLegend extends React.Component {
     let label = '';
     let layerConf;
     let featureColour = '';
-    let featureSize = '';
+    let featureSize = '17px';
     let featureType = '';
 
     const layerGroups = this.props.settings.layerPanel;
@@ -48,7 +48,6 @@ export default class CartoLegend extends React.Component {
 
       featureColour = this.setColor(layerConf.symbol[geomType].color);
 
-
       switch(layerConf.geomType) {
         case ('Point'):
           featureType = 'legend-carto-point';
@@ -56,15 +55,13 @@ export default class CartoLegend extends React.Component {
           break;
         case ('MultiPolygon'):
           featureType = 'legend-carto-polygon';
-          featureSize = '17px';
           break;
         case ('PolyLine'):
           featureType = 'legend-carto-line';
-          featureSize = '17px';
           break;
       }
     }
-    console.log(this.state.visible);
+
     return (
       <div className={`parent-legend-carto-container ${bool}`} ref="myRef">
         <div className='label-container'>{label}</div>
