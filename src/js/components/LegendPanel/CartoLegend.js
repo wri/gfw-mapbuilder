@@ -1,40 +1,48 @@
-import MapStore from 'stores/MapStore';
+import utils from 'utils/AppUtils';
 import React from 'react';
 
 export default class CartoLegend extends React.Component {
 
   constructor (props) {
     super(props);
-    const {cartoSymbol} = MapStore.getState();
-    this.state = {
-      cartoSymbol: cartoSymbol
-    };
+    this.state = { visible: false };
   }
 
-  storeDidUpdate = () => {
-    const {cartoSymbol} = MapStore.getState();
-    if(cartoSymbol !== null) {
-      this.setState({ cartoSymbol: cartoSymbol });
+  componentDidUpdate(prevProps) {
+    if(this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
+      this.setState({ visible: true });
     }
-  };
-
-  componentDidMount() {
-    MapStore.listen(this.storeDidUpdate);
+    else if(this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
+      this.setState({ visible: false });
+    }
   }
 
   render () {
-    console.log(this.state.cartoSymbol);
-    if(!this.refs.myRef && this.state.cartoSymbol.length === 0){
-      return false;
+    let bool = '';
+    let label = '';
+    let layerConf;
+
+    const layerGroups = this.props.settings.layerPanel;
+    layerConf = utils.getObject(layerGroups.GROUP_CARTO.layers, 'id', this.props.layerId);
+
+    if(this.state.visible === false) {
+      bool = 'hidden';
+    } else {
+      bool = '';
+      label = layerConf.label[this.props.language];
     }
-    console.log(this.state.updateIcon);
+
     return (
-      <div className='legend-container' ref="myRef">
-        {this.props.title === 0 ? <div className='legend-unavailable'>No Legend</div> :
-          <div className='crowdsource-legend'>
-            {this.state[0].label.en + 'rrr'}
-          </div>
-        }
+      <div className={`parent-legend-container ${bool}`} ref="myRef">
+        <div className='label-container'>{label}</div>
+        <div className={`legend-container ${bool}`} ref="myRef">
+          {
+            this.props.title === 0 ? <div className='legend-unavailable'>No Legend</div> :
+            <div className='crowdsource-legend'>
+              {this.props.label}
+            </div>
+          }
+        </div>
       </div>
     );
   }

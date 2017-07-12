@@ -1,7 +1,7 @@
 import layerKeys from 'constants/LayerConstants';
 import React, {PropTypes, Component} from 'react';
 import mapActions from 'actions/MapActions';
-// import CartoLegend from 'components/LegendPanel/CartoLegend';
+import CartoLegend from 'components/LegendPanel/CartoLegend';
 import WebMapLegend from 'components/LegendPanel/WebMapLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
 import utils from 'utils/AppUtils';
@@ -122,21 +122,11 @@ export default class LegendPanel extends Component {
         childComponent = <LayerLegend url={urls.esriLegendService} settings={settings} visibleLayers={activeLayers} layerIds={layerDiv.layer.legendLayer} map={map} layerId={layerDiv.layer.id} language={language}/>;
         break;
       default:
-        if(layerDiv.layer.type === undefined && layerDiv.layer.arcgisProps && layerDiv.layer._basemapGalleryLayerType !== 'basemap') {
-          // console.log('done');
-        //   // return layerDiv;
-        //   layerDiv.layer.dynamicLayerInfos.map((layer) => {
-            // childComponent = <WebMapLegend url={layerDiv.layer.url} settings={settings} visibleLayers={activeLayers} map={map} layerId={layerDiv.layer.id} language={language}/>;
-        //     console.log('done');
-        //     return childComponent;
-        //   });
-        } else {
-          return false;
-        }
         // if(layerDiv.layer.type === 'CARTO') {
         //   childComponent = <CartoLegend title={layerDiv.layer.title}/>;
+        //   break;
         // } else {
-        // break;
+          return false;
         // }
     }
     return (
@@ -146,7 +136,7 @@ export default class LegendPanel extends Component {
     );
   }
 
-  webmapDiv = (childComponent, index) => {
+  createChildComponent = (childComponent, index) => {
     return (
       <div key={index}>
         <div>{childComponent}</div>
@@ -167,7 +157,9 @@ export default class LegendPanel extends Component {
       rootClasses += ' hidden';
     }
 
-    // Processing the webmap legend
+    /******************************
+     * Processing the webmap legend
+     ******************************/
     const webmapChildComponents = [];
     let legendComponents;
     const layerGroups = settings.layerPanel;
@@ -176,14 +168,29 @@ export default class LegendPanel extends Component {
     if(layers !== undefined && layers !== [] && layers !== '') {
       // Going through each webmap layer and creating a unique legend component
       layers.forEach((layer, index) => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId);
+        const subLayerConf = utils.getObject(layers, 'subId', layer.subId);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
         const childComponent = <WebMapLegend url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} settings={settings} visibleLayers={activeLayers} map={map} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId} language={language}/>;
-        webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+        webmapChildComponents.push(this.createChildComponent(childComponent, index + 1000));
       });
 
       legendComponents = legendLayers.map(this.createLegend);
       legendComponents = legendComponents.concat(webmapChildComponents);
+    } else {
+      legendComponents = legendLayers.map(this.createLegend);
+    }
+
+    const cartoChildComponents = [];
+    const cartoLayers = layerGroups.GROUP_CARTO.layers;
+
+    if(cartoLayers !== undefined && cartoLayers !== [] && cartoLayers !== '') {
+      // Going through each webmap layer and creating a unique legend component
+      cartoLayers.forEach((layer, index) => {
+        const subLayerConf = utils.getObject(cartoLayers, 'subId', layer.subId);
+        const childComponent = <CartoLegend layerId={layer.id} labels={subLayerConf.label[language]} settings={settings} visibleLayers={activeLayers} map={map} language={language}/>;
+        cartoChildComponents.push(this.createChildComponent(childComponent, index + 2000));
+      });
+      legendComponents = legendComponents.concat(cartoChildComponents);
     } else {
       legendComponents = legendLayers.map(this.createLegend);
     }

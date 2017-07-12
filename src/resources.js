@@ -456,6 +456,61 @@ export default {
         }
       }]
     },
+    GROUP_CARTO: {
+      order: 4,
+      label: {
+        en: 'Carto',
+        fr: 'Carto',
+        es: 'Carto',
+        pt: 'Carto',
+        id: 'Carto',
+        zh: 'Carto'
+      },
+      layers: [{
+          order: 1,
+          id: 'CARTO_TEMPLATE',
+          type: 'carto',
+          url: 'cartoLayer',
+          cartoUser: 'wri-01',
+          cartoIcon: 'M16,3.5c-4.142,0-7.5,3.358-7.5,7.5c0,4.143,7.5,18.121,7.5,18.121S23.5,15.143,23.5,11C23.5,6.858,20.143,3.5,16,3.5z M16,14.584c-1.979,0-3.584-1.604-3.584-3.584S14.021,7.416,16,7.416S19.584,9.021,19.584,11S17.979,14.584,16,14.584z',
+          cartoTemplateId: 'tpl_c4ffec3c_1e29_11e7_8fcd_0e05a8b3e3d7',
+          cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
+          cartoMetadataFields: {},
+          cartoColor: [68, 108, 179, 1],
+          cartoLayer: true,
+          colormap: [[1, 0, 179, 0]],
+          opacity: 0.8,
+          label: {
+            en: 'carto_layer_template',
+            fr: 'carto_layer_template',
+            es: 'carto_layer_template',
+            pt: 'carto_layer_template',
+            id: 'carto_layer_template',
+            zh: '森林覆盖密度'
+          },
+          sublabel: {
+            en: '(carto_layer)',
+            fr: '(carto_layer)',
+            es: '(carto_layer)',
+            pt: '(carto_layer)',
+            id: '(carto_layer)',
+            zh: '(carto_layer)'
+          },
+          popup: {
+            title: {
+              en: 'Carto Layer'
+            },
+            content: {
+              en: [
+                {'label': 'Basin', 'fieldExpression': 'basin_name'},
+                {'label': 'Borough', 'fieldExpression': 'borough'},
+                {'label': 'Place', 'fieldExpression': 'annoline1'},
+                {'label': 'Name', 'fieldExpression': 'name'}
+              ]
+            }
+          }
+        }]
+    },
     GROUP_BASEMAP: {
       order: 5,
       label: {

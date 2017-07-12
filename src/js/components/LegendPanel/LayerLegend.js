@@ -10,7 +10,6 @@ export default class LayerLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    debugger;
     if(this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
       this.setState({ visible: true });
     }
