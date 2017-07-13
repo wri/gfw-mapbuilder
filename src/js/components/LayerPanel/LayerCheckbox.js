@@ -98,6 +98,25 @@ export default class LayerCheckbox extends Component {
     }
   }
 
+  loadingSpinner() {
+    return (
+      <div className='carto-loading'>
+        <div className="sk-circle1 carto-loading-child"></div>
+        <div className="sk-circle2 carto-loading-child"></div>
+        <div className="sk-circle3 carto-loading-child"></div>
+        <div className="sk-circle4 carto-loading-child"></div>
+        <div className="sk-circle5 carto-loading-child"></div>
+        <div className="sk-circle6 carto-loading-child"></div>
+        <div className="sk-circle7 carto-loading-child"></div>
+        <div className="sk-circle8 carto-loading-child"></div>
+        <div className="sk-circle9 carto-loading-child"></div>
+        <div className="sk-circle10 carto-loading-child"></div>
+        <div className="sk-circle11 carto-loading-child"></div>
+        <div className="sk-circle12 carto-loading-child"></div>
+      </div>
+    );
+  }
+
   render() {
     let loaded = false;
     const {map, language} = this.context;
@@ -107,7 +126,7 @@ export default class LayerCheckbox extends Component {
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
     const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
     const {sublabel} = layer;
-    
+
     if (layer.type === 'carto') {
       if(layer.loaded === true) {
         loaded = true;
@@ -120,23 +139,11 @@ export default class LayerCheckbox extends Component {
 
     return (
       <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
-          {
-            cartoLoading === 'carto-loading' ?
-            <div className='carto-loading'>
-              <div className="sk-circle1 carto-loading-child"></div>
-              <div className="sk-circle2 carto-loading-child"></div>
-              <div className="sk-circle3 carto-loading-child"></div>
-              <div className="sk-circle4 carto-loading-child"></div>
-              <div className="sk-circle5 carto-loading-child"></div>
-              <div className="sk-circle6 carto-loading-child"></div>
-              <div className="sk-circle7 carto-loading-child"></div>
-              <div className="sk-circle8 carto-loading-child"></div>
-              <div className="sk-circle9 carto-loading-child"></div>
-              <div className="sk-circle10 carto-loading-child"></div>
-              <div className="sk-circle11 carto-loading-child"></div>
-              <div className="sk-circle12 carto-loading-child"></div>
-            </div> : <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
-          }
+        {
+          cartoLoading === 'carto-loading' ?
+          this.loadingSpinner() :
+          <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
+        }
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
