@@ -1,3 +1,4 @@
+// import mapActions from 'actions/MapActions';
 import SimpleMarkerSymbol from 'esri/symbols/SimpleMarkerSymbol';
 import webMercatorUtils from 'esri/geometry/webMercatorUtils';
 import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
@@ -6,7 +7,6 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import layerInfoCache from 'utils/layerInfoCache';
 import geojsonUtil from 'utils/arcgis-to-geojson';
 import layerUtils from 'utils/layerUtils';
-import mapActions from 'actions/MapActions';
 import Deferred from 'dojo/Deferred';
 import Graphic from 'esri/graphic';
 import request from 'dojo/request';
@@ -257,15 +257,14 @@ export default declare('CartoLayer', [GraphicsLayer], {
               }
             });
           });
-          mapActions.default.mapUpdated();
+          // Removing the first carto layer as it is the template
+          cartoLayers.shift();
+          const tempResources = resources;
+          tempResources.layerPanel.GROUP_CARTO.layers = cartoLayers;
+          this.cartoLayers = cartoLayers;
+          // this.loaded = true;
+          this.emit('onCartoLayerAdd');
         });
-        // Removing the first carto layer as it is the template
-        cartoLayers.shift();
-        const tempResources = resources;
-        tempResources.layerPanel.GROUP_CARTO.layers = cartoLayers;
-        this.cartoLayers = cartoLayers;
-        this.loaded = true;
-        this.emit('onCartoLayerAdd');
       });
     });
   },
