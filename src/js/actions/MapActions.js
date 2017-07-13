@@ -1,7 +1,6 @@
 import dispatcher from 'js/dispatcher';
 import layerFactory from 'utils/layerFactory';
 import layerKeys from 'constants/LayerConstants';
-// import CartoLayer from 'js/layers/CartoLayer';
 import appActions from 'actions/AppActions';
 import resources from 'resources';
 import Point from 'esri/geometry/Point';
@@ -9,7 +8,7 @@ import Point from 'esri/geometry/Point';
 class MapActions {
   //- Action to notify the store the map has changed so we can rerender UI changes
   //- if necessary
-  mapUpdated () { return {}; }
+  mapUpdated () { console.log('test'); return {}; }
 
   infoWindowUpdated ({target}) {
     return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;

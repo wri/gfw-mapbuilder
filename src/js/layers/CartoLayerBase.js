@@ -6,7 +6,7 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import layerInfoCache from 'utils/layerInfoCache';
 import geojsonUtil from 'utils/arcgis-to-geojson';
 import layerUtils from 'utils/layerUtils';
-import layerActions from 'actions/LayerActions';
+import mapActions from 'actions/MapActions';
 import Deferred from 'dojo/Deferred';
 import Graphic from 'esri/graphic';
 import request from 'dojo/request';
@@ -257,6 +257,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
               }
             });
           });
+          mapActions.default.mapUpdated();
         });
         // Removing the first carto layer as it is the template
         cartoLayers.shift();
