@@ -107,7 +107,7 @@ export default class LayerCheckbox extends Component {
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
     const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
     const {sublabel} = layer;
-    const cartoLoading = loaded ? '' : 'carto-loading';
+    
     if (layer.type === 'carto') {
       if(layer.loaded === true) {
         loaded = true;
@@ -115,6 +115,8 @@ export default class LayerCheckbox extends Component {
     } else {
       loaded = true;
     }
+
+    const cartoLoading = loaded ? '' : 'carto-loading';
 
     return (
       <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
@@ -133,7 +135,7 @@ export default class LayerCheckbox extends Component {
               <div className="sk-circle10 carto-loading-child"></div>
               <div className="sk-circle11 carto-loading-child"></div>
               <div className="sk-circle12 carto-loading-child"></div>
-            </div> : <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'></span>
+            </div> : <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
           }
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
