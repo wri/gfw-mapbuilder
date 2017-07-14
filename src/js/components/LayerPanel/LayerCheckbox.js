@@ -75,9 +75,10 @@ export default class LayerCheckbox extends Component {
     layerActions.showLoading(layer.id);
   }
 
-  toggleLayer () {
+  toggleLayer (disabled) {
+    if (disabled) { return false; }
     const {layer} = this.props;
-    if (layer.disabled) { return; }
+    if (layer.disabled) { return false; }
     if (layer.subId) {
       // TODO:  Update visible layers.
       if (this.props.checked) {
@@ -122,13 +123,16 @@ export default class LayerCheckbox extends Component {
     const {map, language} = this.context;
     const {layer} = this.props;
     const checked = this.props.checked ? 'active' : '';
-    const disabled = layer.disabled ? 'disabled' : '';
+    let disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
     const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
     const {sublabel} = layer;
 
+    // disabled = 'disabled';
     if (layer.type === 'carto') {
+      disabled = 'disabled';
       if(layer.loaded === true) {
+        disabled = '';
         loaded = true;
       }
     } else {
@@ -142,9 +146,9 @@ export default class LayerCheckbox extends Component {
         {
           cartoLoading === 'carto-loading' ?
           this.loadingSpinner() :
-          <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
+          <span onClick={this.toggleLayer.bind(this, disabled)} className='toggle-switch pointer' ><span /></span>
         }
-        <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
+        <span onClick={this.toggleLayer.bind(this, disabled)} className='layer-checkbox-label pointer'>
           {label}
         </span>
         <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>

@@ -171,7 +171,7 @@ class MapStore {
       }
     });
   }
-  
+
   changeActiveTab (payload) {
     this.activeTab = payload.id;
   }
