@@ -60,7 +60,7 @@ export default class LayerPanel extends Component {
       //- as not all basemaps are present in configuration
       const layers = group.key === LayerKeys.GROUP_BASEMAP ?
         this.renderBasemaps(group.layers) :
-        group.layers.sort((a, b) => {return a.order < b.order}).map(this.checkboxMap, this);
+        group.layers.sort((a, b) => { return a.order < b.order; }).map(this.checkboxMap, this);
 
       return (
         <LayerGroup

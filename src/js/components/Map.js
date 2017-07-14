@@ -303,7 +303,8 @@ export default class Map extends Component {
       layerModalVisible,
       modalLayerInfo,
       webmapInfo,
-      map
+      map,
+      activeLayers
     } = this.state;
 
     const { settings } = this.context;
@@ -331,7 +332,7 @@ export default class Map extends Component {
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          <Legend {...this.state} />
+          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
           <FooterInfos hidden={settings.hideHeaderFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>

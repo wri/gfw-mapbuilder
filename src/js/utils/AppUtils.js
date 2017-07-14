@@ -21,6 +21,26 @@ const utils = {
     return obj;
   },
 
+    /**
+  * Retrieve the object from a given array based on id and value
+  * Should be used for webmap layers
+  * @param {array} - items - Array to search
+  * @param {string} - field - Property of unique identifier in object
+  * @param {string} - field2 - Property of unique identifier in object
+  * @param {string} - value - value of the unique id
+  * @return {Any} - Return whatever object is matched
+  */
+  getWebMapObject: (items, field, field2, value) => {
+    let obj;
+    items.some((item) => {
+      if (item[field][field2] === value) {
+        obj = item;
+        return true;
+      }
+    });
+    return obj.layer;
+  },
+
   /**
   * Retrieve the object from a given array based on id and value
   * @param {array} - items - Array to search

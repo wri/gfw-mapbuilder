@@ -67,12 +67,14 @@ const LayersHelper = {
     // Layers have a visibleAtMapScale property which make this easy.
     if (layerInfo.esriLayer && layerInfo.esriLayer.loaded && !layerInfo.esriLayer.visibleAtMapScale) {
       visible = false;
+      layerInfo.visible = visible;
     }
     if (map && layerInfo.esriLayer) {
       // Explicitly check scale depencency for sub-layers in a dynamic map service.
       const scale = map.getScale();
       if (layerInfo.hasScaleDependency && ((scale > layerInfo.minScale && layerInfo.minScale !== 0) || scale < layerInfo.maxScale)) {
         visible = false;
+        layerInfo.visible = visible;
       }
     }
     return visible;

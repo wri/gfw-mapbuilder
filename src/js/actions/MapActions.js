@@ -1,12 +1,14 @@
 import dispatcher from 'js/dispatcher';
 import layerFactory from 'utils/layerFactory';
 import layerKeys from 'constants/LayerConstants';
+import appActions from 'actions/AppActions';
+import resources from 'resources';
 import Point from 'esri/geometry/Point';
 
 class MapActions {
   //- Action to notify the store the map has changed so we can rerender UI changes
   //- if necessary
-  mapUpdated () { return {}; }
+  mapUpdated () { console.log('test'); return {}; }
 
   infoWindowUpdated ({target}) {
     return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
@@ -112,8 +114,17 @@ class MapActions {
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
-      // Check for Errors
+      // Prepare the carto layer
+      var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
+      cartoLayers.forEach((cartoLayer) => {
+        cartoLayer.layer.on('onCartoLayerAdd', evt => {
+          const tempResources = resources;
+          tempResources.layerPanel.GROUP_CARTO.layers = evt.target.cartoLayers;
+          appActions.applySettings(tempResources);
+        });
+      });
 
+      // Check for Errors
       var layerErrors = addedLayers.filter(layer => layer.error);
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
@@ -128,7 +139,9 @@ class MapActions {
       }
       // Appending the mask to the end of the parent div to make sure mask is always on top of all layers
       var mask = document.getElementById('esri.Map_0_MASK');
-      mask.parentNode.appendChild(mask);
+      if(mask && mask.parentNode) {
+        mask.parentNode.appendChild(mask);
+      }
     });
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {

@@ -23,6 +23,7 @@ class MapStore {
     this.basemap = null;
     this.legendOpen = false;
     this.landsatVisible = false;
+    this.visibleLayers = [];
     this.dynamicLayers = {};
     this.activeAnalysisType = '';
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched

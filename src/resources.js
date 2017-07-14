@@ -154,7 +154,7 @@ export default {
         // maxDateValue: 16365,
         // confidence: [0, 1],
         technicalName: 'tree_cover_loss',
-        legendLayer: 0,
+        legendLayer: [0],
         // colormap: [[1, 219, 101, 152]],
         // inputRange: [1, 15],
         // outputRange: [1],
@@ -183,7 +183,7 @@ export default {
         // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
         url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
         technicalName: 'tree_cover_gain',
-        legendLayer: 1,
+        legendLayer: [1],
         label: {
           en: 'Tree cover gain',
           fr: 'Gain en couvert arboré',
@@ -233,7 +233,7 @@ export default {
         type: 'glad',
         url: 'https://wri-tiles.s3.amazonaws.com/glad_prod/tiles/{z}/{x}/{y}.png',
         technicalName: 'umd_landsat_alerts',
-        legendLayer: 7,
+        legendLayer: [7],
         minDateValue: 15000,
         maxDateValue: 999999,
         confidence: [0, 1],
@@ -261,7 +261,7 @@ export default {
         type: 'terra',
         url: 'https://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png',
         technicalName: 'terra_i_alerts',
-        legendLayer: 13,
+        legendLayer: [13],
         maxZoom: 10,
         minDateValue: 4000, //We know data starts in 2004
         // We are setting this way over max, the max date will get set set when TerraIControls mounts
@@ -292,7 +292,7 @@ export default {
         type: 'dynamic',
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
         technicalName: 'noaa18_fires',
-        layerIds: [0, 1, 2, 3],
+        layerIds: [8],
         label: {
           en: 'Active fires',
           fr: 'Feux actifs',
@@ -355,7 +355,7 @@ export default {
         url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
         subDomains: [0, 1, 2, 3],
         technicalName: 'global_mangroves',
-        legendLayer: 11,
+        legendLayer: [11],
         label: {
           en: 'Global Mangrove',
           fr: 'Global Mangrove',
@@ -387,7 +387,7 @@ export default {
         type: 'image',
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
         technicalName: 'aboveground_biomass',
-        legendLayer: 8,
+        legendLayer: [8],
         label: {
           en: 'Aboveground Live Woody Biomass Density',
           fr: 'Densité de la biomasse aérienne vivante',
@@ -403,7 +403,7 @@ export default {
         type: 'webtiled',
         url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
         technicalName: 'global_landcover',
-        legendLayer: 15,
+        legendLayer: [15],
         rasterId: '$568',
         bounds: [1, 16],
         classes: {
@@ -435,7 +435,7 @@ export default {
         inputRange: [30, 101],
         outputRange: [1],
         opacity: 0.8,
-        legendLayer: 2,
+      legendLayer: [2],
         label: {
           en: 'Tree cover density',
           fr: 'Densité du couvert arboré',
@@ -455,6 +455,61 @@ export default {
           ka: 'Georgian'
         }
       }]
+    },
+    GROUP_CARTO: {
+      order: 4,
+      label: {
+        en: 'Carto',
+        fr: 'Carto',
+        es: 'Carto',
+        pt: 'Carto',
+        id: 'Carto',
+        zh: 'Carto'
+      },
+      layers: [{
+          order: 1,
+          id: 'CARTO_TEMPLATE',
+          type: 'carto',
+          url: 'cartoLayer',
+          cartoUser: 'wri-01',
+          cartoIcon: 'M16,3.5c-4.142,0-7.5,3.358-7.5,7.5c0,4.143,7.5,18.121,7.5,18.121S23.5,15.143,23.5,11C23.5,6.858,20.143,3.5,16,3.5z M16,14.584c-1.979,0-3.584-1.604-3.584-3.584S14.021,7.416,16,7.416S19.584,9.021,19.584,11S17.979,14.584,16,14.584z',
+          cartoTemplateId: 'tpl_c4ffec3c_1e29_11e7_8fcd_0e05a8b3e3d7',
+          cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
+          cartoMetadataFields: {},
+          cartoColor: [68, 108, 179, 1],
+          cartoLayer: true,
+          colormap: [[1, 0, 179, 0]],
+          opacity: 0.8,
+          label: {
+            en: 'carto_layer_template',
+            fr: 'carto_layer_template',
+            es: 'carto_layer_template',
+            pt: 'carto_layer_template',
+            id: 'carto_layer_template',
+            zh: '森林覆盖密度'
+          },
+          sublabel: {
+            en: '(carto_layer)',
+            fr: '(carto_layer)',
+            es: '(carto_layer)',
+            pt: '(carto_layer)',
+            id: '(carto_layer)',
+            zh: '(carto_layer)'
+          },
+          popup: {
+            title: {
+              en: 'Carto Layer'
+            },
+            content: {
+              en: [
+                {'label': 'Basin', 'fieldExpression': 'basin_name'},
+                {'label': 'Borough', 'fieldExpression': 'borough'},
+                {'label': 'Place', 'fieldExpression': 'annoline1'},
+                {'label': 'Name', 'fieldExpression': 'name'}
+              ]
+            }
+          }
+        }]
     },
     GROUP_BASEMAP: {
       order: 5,

@@ -27,6 +27,7 @@ export default class Modal extends Component {
             {!info.function ? null : this.tableMap(text[language].FUNCTION, info.function)}
             {!info.description ? null : this.tableMap(text[language].DESCRIPTION, info.description)}
             {!info.resolution ? null : this.tableMap(text[language].RESOLUTION, info.resolution)}
+            {!info.tags ? null : this.tableMap('tags', info.tags)}
             {!info.geographic_coverage ? null : this.tableMap(text[language].GEO_COVERAGE, info.geographic_coverage)}
             {!info.source ? null : this.tableMap(text[language].SOURCE, info.source)}
             {!info.frequency_of_updates ? null : this.tableMap(text[language].FREQUENCY, info.frequency_of_updates)}

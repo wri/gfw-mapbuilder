@@ -1,9 +1,7 @@
-import layerKeys from 'constants/LayerConstants';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
-import utils from 'utils/AppUtils';
 import React, {
   Component,
   PropTypes
@@ -52,60 +50,23 @@ export default class LayerCheckbox extends Component {
 
   componentDidUpdate(prevProps) {
     const {map} = this.context;
+
     if (prevProps.checked !== this.props.checked) {
       if (this.props.checked) {
         if (this.props.subLayer) {
           showSubLayer(this.props.layer);
         } else {
           showLayer(map, this.props.layer.id);
-          //- If the legend layer is present, update it
-          this.updateLegendLayer(this.props.layer.id, { visible: true });
         }
       } else {
         if (this.props.subLayer) {
           hideSubLayer(this.props.layer);
         } else {
           hideLayer(map, this.props.layer.id);
-          //- If the legend layer is present, update it
-          this.updateLegendLayer(this.props.layer.id, { visible: false });
         }
       }
     }
   }
-
-  /**
-  * There is a dynamic layer with opacity set to 0, turn on or off its sub layers so they show up in the
-  * legend, this is great for image services or other layers that don't have a legend but need one
-  */
-  updateLegendLayer (layerId, options) {
-    const {settings, map} = this.context;
-    //- The layer could be in any of these two groups
-    const lcLayers = settings.layerPanel.GROUP_LC ? settings.layerPanel.GROUP_LC.layers : [];
-    const lcdLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LCD.layers : [];
-    const layersConfig = lcLayers.concat(lcdLayers);
-
-    const conf = utils.getObject(layersConfig, 'id', layerId);
-    if (conf && conf.legendLayer !== undefined) {
-      const layer = map.getLayer(layerKeys.LEGEND_LAYER);
-      const {visibleLayers} = layer;
-
-      if (options.visible) {
-        visibleLayers.push(conf.legendLayer);
-        layer.show();
-      } else {
-        visibleLayers.splice(visibleLayers.indexOf(conf.legendLayer), 1);
-        if (visibleLayers.length === 0) {
-          layer.hide();
-        }
-      }
-    }
-  }
-
-  // shouldComponentUpdate(nextProps) {
-  //   return nextProps.checked !== this.props.checked ||
-  //          nextProps.layer !== this.props.layer ||
-  //          !!this.props.children;
-  // }
 
   showInfo () {
     const {layer} = this.props;
@@ -114,38 +75,80 @@ export default class LayerCheckbox extends Component {
     layerActions.showLoading(layer.id);
   }
 
-  toggleLayer () {
+  toggleLayer (disabled) {
+    if (disabled) { return false; }
     const {layer} = this.props;
-    if (layer.disabled) { return; }
+    if (layer.disabled) { return false; }
     if (layer.subId) {
       // TODO:  Update visible layers.
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
+        layer.visible = false;
       } else {
         layerActions.addSubLayer(layer);
+        layer.visible = true;
       }
     } else {
       if (this.props.checked) {
+        layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
       } else {
+        layer.visible = true;
         layerActions.addActiveLayer(layer.id);
       }
     }
   }
 
+  loadingSpinner() {
+    return (
+      <div className='carto-loading'>
+        <div className="sk-circle1 carto-loading-child"></div>
+        <div className="sk-circle2 carto-loading-child"></div>
+        <div className="sk-circle3 carto-loading-child"></div>
+        <div className="sk-circle4 carto-loading-child"></div>
+        <div className="sk-circle5 carto-loading-child"></div>
+        <div className="sk-circle6 carto-loading-child"></div>
+        <div className="sk-circle7 carto-loading-child"></div>
+        <div className="sk-circle8 carto-loading-child"></div>
+        <div className="sk-circle9 carto-loading-child"></div>
+        <div className="sk-circle10 carto-loading-child"></div>
+        <div className="sk-circle11 carto-loading-child"></div>
+        <div className="sk-circle12 carto-loading-child"></div>
+      </div>
+    );
+  }
+
   render() {
+    let loaded = false;
     const {map, language} = this.context;
     const {layer} = this.props;
     const checked = this.props.checked ? 'active' : '';
-    const disabled = layer.disabled ? 'disabled' : '';
+    let disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
     const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
     const {sublabel} = layer;
 
+    // disabled = 'disabled';
+    if (layer.type === 'carto') {
+      disabled = 'disabled';
+      if(layer.loaded === true) {
+        disabled = '';
+        loaded = true;
+      }
+    } else {
+      loaded = true;
+    }
+
+    const cartoLoading = loaded ? '' : 'carto-loading';
+
     return (
       <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
-        <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
-        <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
+        {
+          cartoLoading === 'carto-loading' ?
+          this.loadingSpinner() :
+          <span onClick={this.toggleLayer.bind(this, disabled)} className='toggle-switch pointer' ><span /></span>
+        }
+        <span onClick={this.toggleLayer.bind(this, disabled)} className='layer-checkbox-label pointer'>
           {label}
         </span>
         <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
