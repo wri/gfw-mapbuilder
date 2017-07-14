@@ -57,10 +57,6 @@ class LayerActions {
     return {};
   }
 
-  updateCartoSymbol (symbol) {
-    return symbol;
-  }
-
 }
 
 export default dispatcher.createActions(LayerActions);

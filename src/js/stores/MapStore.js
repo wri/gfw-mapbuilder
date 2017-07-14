@@ -26,7 +26,6 @@ class MapStore {
     this.visibleLayers = [];
     this.dynamicLayers = {};
     this.activeAnalysisType = '';
-    this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
     this.lossToSelectIndex = 0;
     this.lossOptions = [];
@@ -81,8 +80,7 @@ class MapStore {
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
-      showLoading: layerActions.showLoading,
-      updateCartoSymbol: layerActions.updateCartoSymbol
+      showLoading: layerActions.showLoading
     });
   }
 
@@ -173,11 +171,7 @@ class MapStore {
       }
     });
   }
-
-  updateCartoSymbol (symbol) {
-    this.cartoSymbol = symbol;
-  }
-
+  
   changeActiveTab (payload) {
     this.activeTab = payload.id;
   }
