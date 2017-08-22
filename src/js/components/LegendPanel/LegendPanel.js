@@ -176,10 +176,19 @@ export default class LegendPanel extends Component {
     if(layers !== undefined && layers !== [] && layers !== '') {
       // Going through each webmap layer and creating a unique legend component
       layers.forEach((layer, index) => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId);
-        const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
-        webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+        if(layer.subId) {
+          // const subLayerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId);
+          // const subLayerConf = layer;
+          const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+          const childComponent = <WebMapLegend url={layerConf.url} labels={layer.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId}/>;
+          webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+        } else {
+          // const layerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId)
+          // const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+          const childComponent = <WebMapLegend url={layer.esriLayer.url} labels={layer.esriLayer.layerInfos['0'].name} visibility={layer.esriLayer.layerInfos['0'].defaultVisibility} visibleLayers={activeLayers} layerId={layer.esriLayer.layerInfos['0'].id}/>;
+          webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+        }
+
       });
 
       legendComponents = legendLayers.map(this.createLegend);

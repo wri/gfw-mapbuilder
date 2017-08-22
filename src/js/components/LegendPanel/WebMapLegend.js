@@ -19,7 +19,8 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidMount() {
-    Request.getLegendInfos(this.props.url, [this.props.layerSubIndex]).then(legendInfos => {
+    const layerID = this.props.layerSubIndex ? this.props.layerSubIndex : this.props.layerId;
+    Request.getLegendInfos(this.props.url, [layerID]).then(legendInfos => {
       if(this.refs.myRef) {
         this.setState({ legendInfos: legendInfos });
       }
