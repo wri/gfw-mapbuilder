@@ -252,6 +252,32 @@ const utils = {
       ++min;
     }
     return result;
+  },
+
+  formatNumber: (number) => {
+
+    const numberString = number.toString();
+
+    if (number >= 1000) {
+      const stringArray = [];
+      for (let i = 0; i < numberString.length; i++) {
+        stringArray.push(numberString[i]);
+      }
+      stringArray.reverse();
+      const stringWithExtras = [];
+
+      for (let i = 0; i < stringArray.length; i++) {
+        if (i !== 0 && i % 3 === 0) {
+          stringWithExtras.push(',');
+        }
+        stringWithExtras.push(stringArray[i]);
+      }
+      stringWithExtras.reverse();
+
+      return stringWithExtras.join('');
+    } else {
+      return numberString;
+    }
   }
 
 };
