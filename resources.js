@@ -32,8 +32,8 @@ define(['exports'], function (exports) {
     navLinksInNewTab: false,
     //- Language Settings
     language: 'en',
-    useAlternativeLanguage: false,
-    alternativeWebmap: '',
+    useAlternativeLanguage: true,
+    alternativeWebmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
     alternativeLanguage: 'fr',
     alternativeLanguageTitle: 'GFW Mapbuilder',
     alternativeLanguageSubtitle: 'Make maps that matter',
