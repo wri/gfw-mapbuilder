@@ -24,7 +24,7 @@ export default class SearchModal extends Component {
   componentDidUpdate(prevProps, prevState, prevContext) {
     const {map} = this.context;
     if (map.loaded && !prevContext.map.loaded) {
-      this.createSearchWidget(map);
+      // this.createSearchWidget(map);
     }
   }
 

@@ -1,6 +1,7 @@
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import TerraIControls from 'components/LayerPanel/TerraIControls';
 import LayerCheckbox from 'components/LayerPanel/LayerCheckbox';
+import LayerRadio from 'components/LayerPanel/LayerRadio';
 import FiresControls from 'components/LayerPanel/FiresControls';
 import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
@@ -59,9 +60,23 @@ export default class LayerPanel extends Component {
     return orderedGroups.map((group) => {
       //- Sort the layers and then render them, basemaps use a different function
       //- as not all basemaps are present in configuration
-      const layers = group.key === LayerKeys.GROUP_BASEMAP ?
+
+      let layers = [];
+
+      if (group.key === 'GROUP_LAND_MAPS') console.log(group);
+
+      // IF group.key is one of the ones we need radio buttons for run a new function this.createRadios (or something)
+      // and pass all of the layers to it. That way we can handle the radio selection in the component
+
+      if (group.key === LayerKeys.GROUP_INDIGENOUS_INDICATORS || group.key === LayerKeys.GROUP_COMMUNITY_INDICATORS) {
+        group.layers.sort((a, b) => b.order - a.order);
+        layers = this.createRadioGroup(group.layers);
+      } else {
+
+        layers = group.key === LayerKeys.GROUP_BASEMAP ?
         this.renderBasemaps(group.layers) :
-        group.layers.sort((a, b) => { return a.order < b.order; }).map(this.checkboxMap, this);
+        group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
+      }
 
       return (
         <LayerGroup
@@ -144,10 +159,10 @@ export default class LayerPanel extends Component {
         break;
       case LayerKeys.GLAD_ALERTS:
         childComponent = <GladControls layer={layer} startDate={gladStartDate} endDate={gladEndDate} />;
-      break;
+        break;
       case LayerKeys.TERRA_I_ALERTS:
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
-      break;
+        break;
       default:
         childComponent = null;
     }
@@ -156,7 +171,7 @@ export default class LayerPanel extends Component {
     if (layer.subId) {
       const checked = (dynamicLayers[layer.id] && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1) || false;
       checkbox = <LayerCheckbox key={layer.subId} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
-        {childComponent}
+      {childComponent}
       </LayerCheckbox>;
     } else {
       checkbox = <LayerCheckbox key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
@@ -164,6 +179,10 @@ export default class LayerPanel extends Component {
       </LayerCheckbox>;
     }
     return checkbox;
+  }
+
+  createRadioGroup = layers => {
+    return <LayerRadio layers={layers} />;
   }
 
   renderBasemaps = (configuredLayers) => {

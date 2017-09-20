@@ -209,9 +209,9 @@
     & .info-icon
       background $disabledBackground
   &.active
-    & > .toggle-switch
+    & > .toggle-switch, & > .radio-switch
       background $goldTheme
-    & > .toggle-switch span
+    & > .toggle-switch span, & > .radio-switch span
       left 9px
     &.loss .toggle-switch
       background $treeCoverLoss
@@ -234,7 +234,7 @@
     &.historic-loss .toggle-switch
       background $historicLoss
 
-.layer-checkbox-label
+.layer-checkbox-label, .layer-radio-label
   display inline-block
   vertical-align top
   padding-left 10px
@@ -267,6 +267,28 @@
   width 6px
   left 2px
   top 2px
+
+.layer-radio
+  padding-bottom 3px
+  margin-top 3px
+  &.disabled
+    & .layer-radio-label
+      color $disabledFont
+    & .info-icon
+      background $disabledBackground
+  &.active
+    & > .radio-switch
+      background $goldTheme
+
+.radio-switch
+  transition all 0.3s ease
+  background transparent
+  display inline-block
+  border 1px solid $disabledBackground
+  border-radius 5px
+  position relative
+  height 12px
+  width 12px
 
 .layer-info
   background-color $goldTheme

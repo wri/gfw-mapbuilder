@@ -7,7 +7,8 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  // webmap: 'ab72e9a99f4f49559f2449c9d74f7912',
+  webmap: '12a0ec903c78455dba606df034e209c9',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: './css/images/gfw-logo.png',
@@ -115,12 +116,12 @@ export default {
   */
   layerPanel: {
     GROUP_WEBMAP: {
-      order: 2,
+      order: 100,
       label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
       layers: [] // Will get filled in with layers from the webmap
     },
     GROUP_LCD: {
-      order: 1,
+      order: 7,
       label: {
         en: 'Land Cover Dynamics',
         fr: 'Evolution de la couverture des sols',
@@ -377,7 +378,7 @@ export default {
       }]
     },
     GROUP_LC: {
-      order: 3,
+      order: 5,
       label: {
         en: 'Land Cover',
         fr: 'Couverture des sols',
@@ -496,7 +497,7 @@ export default {
       }]
     },
     GROUP_BASEMAP: {
-      order: 5,
+      order: 8,
       label: {
         en: 'Basemap',
         fr: 'Basemap',
