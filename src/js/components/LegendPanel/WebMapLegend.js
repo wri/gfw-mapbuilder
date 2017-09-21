@@ -31,8 +31,11 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.url);
+    console.log(this.props.layerSubIndex);
     Request.getLegendInfos(this.props.url, [this.props.layerSubIndex]).then(legendInfos => {
       if(this.refs.myRef) {
+        console.log('ge;efsdf', legendInfos);
         this.setState({ legendInfos: legendInfos });
       }
     });

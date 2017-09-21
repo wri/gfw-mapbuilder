@@ -206,17 +206,24 @@ export default class LegendPanel extends Component {
     }
     if (layersFour !== undefined && layersFour !== [] && layersFour !== [-1] && layersFour !== '') {
       layersFour.forEach(layer => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_PRESSURES.layers, 'subId', layer.subId);
+        const subLayerConf = utils.getObject(layerGroups.GROUP_PRESSURES.layers, 'id', layer.id);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend key={subLayerConf.Id} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        let url = layerConf.url;
+        let layerSubIndex;
+        const lastChar = url.slice(-1);
+        if (!isNaN(parseInt(lastChar))) {
+          url = url.substring(0, url.length - 2);
+          layerSubIndex = parseInt(lastChar);
+        }
+        const childComponent = <WebMapLegend key={subLayerConf.Id} url={url} layerSubIndex={layerSubIndex} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(childComponent);
       });
     }
     if (layersFive !== undefined && layersFive !== [] && layersFive !== [-1] && layersFive !== '') {
       layersFive.forEach(layer => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'subId', layer.subId);
+        const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'id', layer.id);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(childComponent);
       });
     }
