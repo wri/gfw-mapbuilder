@@ -18,9 +18,23 @@ export default class LayerRadio extends Component {
   constructor(props) {
     super(props);
 
+    this.layer = brApp.map.getLayer('indicators_legal_security_8140');
     this.state = {
-      selected: ''
+      selected: this.layer.visibleLayers[0] || -1
     };
+  }
+
+  componentDidUpdate() {
+    // If the layer selected is not in layer.visibleLayers, it is in the other group.
+    // So we need to turn all layers in this group off.
+    // We also need to check that this doens't happen when all layers are already off,
+    // so we check that this.state.selected !== -1
+    if (this.layer.visibleLayers.indexOf(this.state.selected) === -1
+      && this.state.selected !== -1) {
+      this.setState({
+        selected: -1
+      });
+    }
   }
 
   showInfo (event) {
@@ -33,48 +47,43 @@ export default class LayerRadio extends Component {
   }
 
   toggleLayer (event) {
-    const value = event.target.getAttribute('value');
-    const selectedLayer = this.props.layers.filter(l => l.subId === value)[0];
-
-    if (selectedLayer.esriLayer.disabled) {return;}
+    const value = Number(event.target.getAttribute('value'));
+    const selectedLayer = this.props.layers.filter(l => l.subIndex === value)[0];
+    const selectedValue = selectedLayer.subIndex;
 
     if (this.state.selected === value) {
-      layerActions.removeSubLayer(selectedLayer);
-      selectedLayer.visible = false;
-      this.setState({
-        selected: ''
-      });
-      return;
-    }
+      this.layer.hide();
+      this.layer.setVisibleLayers([-1]);
 
-    layerActions.addSubLayer(selectedLayer);
-    selectedLayer.visible = true;
-    this.setState({
-      selected: value
-    });
+      this.setState({
+        selected: -1
+      });
+    } else {
+      this.layer.show();
+      this.layer.setVisibleLayers([selectedValue]);
+
+      this.setState({
+        selected: value
+      });
+    }
   }
 
   createRadioList = (layer, map, language) => {
 
-    const selected = this.state.selected === layer.subId ? 'active' : '';
+    const selected = this.state.selected === layer.subIndex ? 'active' : '';
     const disabled = layer.esriLayer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer.esriLayer) ? '' : 'hidden';
 
     return (
       <div key={layer.subId} className={`layer-radio relative ${selected} ${disabled} ${hidden}`} >
-        <span value={layer.subId} onClick={this.toggleLayer.bind(this)} className='radio-switch pointer'></span>
-        <span value={layer.subId} onClick={this.toggleLayer.bind(this)} className='layer-radio-label pointer'>
+        <span value={layer.subIndex} onClick={this.toggleLayer.bind(this)} className='radio-switch pointer'></span>
+        <span value={layer.subIndex} onClick={this.toggleLayer.bind(this)} className='layer-radio-label pointer'>
           {layer.label}
         </span>
         <span value={layer.subId} className={`info-icon pointer ${this.props.iconLoading === layer.esriLayer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <svg><use xlinkHref="#shape-info" /></svg>
         </span>
         {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[language]}</div>}
-        {!this.props.children ? null :
-          <div className={`layer-content-container flex ${selected ? '' : 'hidden'}`}>
-            {this.props.children}
-          </div>
-        }
         <LayerTransparency layer={layer} visible={this.props.selected}></LayerTransparency>
       </div>
     );

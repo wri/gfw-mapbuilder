@@ -41,7 +41,7 @@ const hideLayer = function hideLayer (map, layerId) {
   }
 };
 
-export default class LayerCheckbox extends Component {
+export default class NestedLayerCheckbox extends Component {
 
   static contextTypes = {
     language: PropTypes.string.isRequired,
@@ -77,7 +77,7 @@ export default class LayerCheckbox extends Component {
   }
 
   toggleLayer () {
-  
+
     const {layer} = this.props;
     if (layer.disabled) { return; }
     if (layer.subId) {
@@ -85,6 +85,7 @@ export default class LayerCheckbox extends Component {
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
         layer.visible = true;
+
       } else {
         layerActions.addSubLayer(layer);
         layer.visible = true;
@@ -99,9 +100,7 @@ export default class LayerCheckbox extends Component {
       }
     }
 
-    if (this.props.toggleLayer) {
-      this.props.toggleLayer();
-    }
+    this.props.toggleLayer();
   }
 
   render() {
@@ -135,7 +134,7 @@ export default class LayerCheckbox extends Component {
 
 }
 
-LayerCheckbox.propTypes = {
+NestedLayerCheckbox.propTypes = {
   layer: React.PropTypes.object.isRequired,
   checked: React.PropTypes.bool.isRequired
 };

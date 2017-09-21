@@ -2,6 +2,7 @@ import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import TerraIControls from 'components/LayerPanel/TerraIControls';
 import LayerCheckbox from 'components/LayerPanel/LayerCheckbox';
 import LayerRadio from 'components/LayerPanel/LayerRadio';
+import NestedGroup from 'components/LayerPanel/NestedGroup';
 import FiresControls from 'components/LayerPanel/FiresControls';
 import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
@@ -63,7 +64,47 @@ export default class LayerPanel extends Component {
 
       let layers = [];
 
-      if (group.key === 'GROUP_LAND_MAPS') console.log(group);
+      if (group.key === 'GROUP_LAND_MAPS') {
+
+        group.indigenous = [];
+        group.community = [];
+
+        group.layers.forEach(layer => {
+
+          if (layer.id === 'comm_comm_NotDocumented_9336'
+            || layer.id === 'comm_comm_Documented_4717') { // if this is the community group and IS acknowledged by govt
+              // group.community.push({
+              //   acknowledgedByGovt: true,
+              //   layer: layer
+              // });
+              layer.acknowledgedByGovt = true;
+              layer.indigenousOrCommunity = 'community';
+            } else if (layer.id === 'comm_comm_CustomaryTenure_6877') { // if this is the community group and NOT acknowledged by govt
+              // group.community.push({
+              //   acknowledgedByGovt: false,
+              //   layer: layer
+              // });
+              layer.acknowledgedByGovt = false;
+              layer.indigenousOrCommunity = 'community';
+            } else if (layer.id === 'comm_ind_CustomaryTenure_8127'
+              || layer.id === 'comm_ind_FormalLandClaim_2392') { // if this is the indigenous group and NOT acknowledged by govt
+                // group.indigenous.push({
+                //   acknowledgedByGovt: false,
+                //   layer: layer
+                // });
+                layer.acknowledgedByGovt = false;
+                layer.indigenousOrCommunity = 'indigenous';
+            } else if (layer.id === 'comm_ind_NotDocumented_2683'
+              || layer.id === 'comm_ind_Documented_8219') { // if this is the indigenous group and IS acknowledged by govt
+                // group.indigenous.push({
+                //   acknowledgedByGovt: true,
+                //   layer: layer
+                // });
+                layer.acknowledgedByGovt = true;
+                layer.indigenousOrCommunity = 'indigenous';
+            }
+        });
+      }
 
       // IF group.key is one of the ones we need radio buttons for run a new function this.createRadios (or something)
       // and pass all of the layers to it. That way we can handle the radio selection in the component
@@ -71,8 +112,9 @@ export default class LayerPanel extends Component {
       if (group.key === LayerKeys.GROUP_INDIGENOUS_INDICATORS || group.key === LayerKeys.GROUP_COMMUNITY_INDICATORS) {
         group.layers.sort((a, b) => b.order - a.order);
         layers = this.createRadioGroup(group.layers);
+      } else if (group.key === 'GROUP_LAND_MAPS') {
+        layers = <NestedGroup layers={group.layers} />;
       } else {
-
         layers = group.key === LayerKeys.GROUP_BASEMAP ?
         this.renderBasemaps(group.layers) :
         group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
