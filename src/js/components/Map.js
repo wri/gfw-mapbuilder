@@ -346,6 +346,7 @@ export default class Map extends Component {
         if (layer.id === 'comm_comm_CustomaryTenure_6877'
           || layer.id === 'comm_comm_NotDocumented_9336'
           || layer.id === 'comm_comm_Documented_4717'
+          || layer.id === 'comm_comm_FormalLandClaim_5585'
           || layer.id === 'comm_ind_CustomaryTenure_8127'
           || layer.id === 'comm_ind_FormalLandClaim_2392'
           || layer.id === 'comm_ind_NotDocumented_2683'
