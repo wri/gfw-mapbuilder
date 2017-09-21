@@ -9,8 +9,6 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-
-    // console.log('innn', this.props);
     if (this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
 
       if (this.props.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer') {
@@ -32,7 +30,7 @@ export default class WebMapLegend extends React.Component {
 
   componentDidMount() {
     Request.getLegendInfos(this.props.url, [this.props.layerSubIndex]).then(legendInfos => {
-      if(this.refs.myRef) {
+      if (this.refs.myRef) {
         this.setState({ legendInfos: legendInfos });
       }
     });

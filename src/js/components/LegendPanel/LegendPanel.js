@@ -213,10 +213,21 @@ export default class LegendPanel extends Component {
         const lastChar = url.slice(-1);
         if (!isNaN(parseInt(lastChar))) {
           url = url.substring(0, url.length - 2);
-          layerSubIndex = parseInt(lastChar);
         }
+
+        if (subLayerConf.label.indexOf('Mining') > -1) {
+          layerSubIndex = 0;
+        } else if (subLayerConf.label.indexOf('Managed') > -1) {
+          layerSubIndex = 3;
+        } else if (subLayerConf.label.indexOf('Oil') > -1) {
+          layerSubIndex = 1;
+        } else if (subLayerConf.label.indexOf('Major') > -1) {
+          layerSubIndex = 0;
+        }
+
         const childComponent = <WebMapLegend key={subLayerConf.Id} url={url} layerSubIndex={layerSubIndex} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(childComponent);
+
       });
     }
     if (layersFive !== undefined && layersFive !== [] && layersFive !== [-1] && layersFive !== '') {
