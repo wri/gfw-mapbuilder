@@ -1,5 +1,6 @@
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
+import LayerActions from 'actions/LayerActions';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import React, {
@@ -29,11 +30,19 @@ export default class LayerRadio extends Component {
     // So we need to turn all layers in this group off.
     // We also need to check that this doens't happen when all layers are already off,
     // so we check that this.state.selected !== -1
-    if (this.layer.visibleLayers.indexOf(this.state.selected) === -1
-      && this.state.selected !== -1) {
-      this.setState({
-        selected: -1
-      });
+    if (this.props.dynamicLayers.hasOwnProperty(this.layer.id)) {
+
+      if (this.props.dynamicLayers[this.layer.id].indexOf(this.state.selected) === -1
+        && this.state.selected !== -1) {
+        this.setState({
+          selected: -1
+        });
+      }
+    }
+
+    if (!this.props.dynamicLayers.hasOwnProperty(this.layer.id) || this.props.dynamicLayers[this.layer.id].length === 0) {
+      this.layer.hide();
+      this.layer.setVisibleLayers([-1]);
     }
   }
 
@@ -54,13 +63,19 @@ export default class LayerRadio extends Component {
     if (this.state.selected === value) {
       this.layer.hide();
       this.layer.setVisibleLayers([-1]);
+      LayerActions.removeSubLayer(selectedLayer);
 
       this.setState({
         selected: -1
       });
     } else {
+      if (this.props.dynamicLayers[this.layer.id].length > 0) {
+        const sublayerToRemove = this.props.layers.filter(l => l.subIndex === this.props.dynamicLayers[this.layer.id][0])[0];
+        LayerActions.removeSubLayer(sublayerToRemove);
+      }
       this.layer.show();
       this.layer.setVisibleLayers([selectedValue]);
+      LayerActions.addSubLayer(selectedLayer);
 
       this.setState({
         selected: value
@@ -84,7 +99,7 @@ export default class LayerRadio extends Component {
           <svg><use xlinkHref="#shape-info" /></svg>
         </span>
         {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[language]}</div>}
-        <LayerTransparency layer={layer} visible={this.props.selected}></LayerTransparency>
+        <LayerTransparency layer={layer} visible={this.state.selected === layer.subIndex}></LayerTransparency>
       </div>
     );
   }

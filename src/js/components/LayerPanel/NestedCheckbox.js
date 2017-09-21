@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LayerCheckbox from './LayerCheckbox';
+import LayerActions from 'actions/LayerActions';
 
 export default class NestedCheckbox extends Component {
 
@@ -18,9 +19,11 @@ export default class NestedCheckbox extends Component {
       if (this.state.groupChecked) {
         layer.esriLayer.hide();
         layer.visible = false;
+        LayerActions.removeActiveLayer(layer.id);
       } else {
         layer.esriLayer.show();
         layer.visible = true;
+        LayerActions.addActiveLayer(layer.id);
       }
     });
 
@@ -47,14 +50,14 @@ export default class NestedCheckbox extends Component {
   renderTree = layer => {
     return (
       <div key={layer.id} style={{ left: '30px', position: 'relative', paddingRight: '30px' }}>
-        <LayerCheckbox layer={layer} checked={layer.visible} toggleLayer={this.toggleLayer}/>
+        <LayerCheckbox layer={layer} checked={this.props.activeLayers.indexOf(layer.id) > -1} toggleLayer={this.toggleLayer}/>
       </div>
     );
   }
 
   render() {
     const { groupLabel, layers } = this.props;
-    const checked = this.state.groupChecked ? 'active' : '';
+    const checked = this.props.checked ? 'active' : '';
 
     return (
       <div>
