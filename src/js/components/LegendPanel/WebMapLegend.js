@@ -10,32 +10,11 @@ export default class WebMapLegend extends React.Component {
 
   componentDidUpdate(prevProps) {
 
+    // console.log('innn', this.props);
     if (this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
-      // console.log(this.props);
-      // const layerId = this.props.visibleLayers.filter(visibleLayer => visibleLayer === this.props.layerId);
-      // console.log(layerId);
-      // if (layerId && layerId.length === 1) {
-      //   if (layerId[0].slice(-2) === '_' + this.props.layerSubIndex) {
-      //     console.log(layerId[0].substring(layerId[0].length - 2, 0));
-      //     const ll = brApp.map.getLayer(layerId[0].substring(layerId[0].length - 2, 0));
-      //     console.log(ll.visible);
-      //     console.log(ll.visibleLayers);
-      //     if (ll.visible && ll.visibleLayers !== [-1]) {
-      //       console.log('vissss', ll.id);
-      //       this.setState({ visible: true });
-      //     }
-      //   }
-      //
-      //   // if (brApp.map.getLayer(this.props.layerId).visible === true) {
-      //   //   this.setState({ visible: true });
-      //   // }
-      // }
 
       if (this.props.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer') {
         const indicatorsLayer = brApp.map.getLayer('indicators_legal_security_8140');
-        // console.log(this.props);
-        // debugger
-        //TODO: This never turns back on! --> Our radio buttons don't fire our LegendPanel!!
         if (indicatorsLayer.visible && indicatorsLayer.visibleLayers !== [-1]) {
           this.setState({ visible: true });
         }
@@ -43,6 +22,10 @@ export default class WebMapLegend extends React.Component {
         this.setState({ visible: true });
       }
     } else if (this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
+      this.setState({ visible: false });
+    } else if (this.props.visibility === true && prevProps.visibility === false && !this.props.layerId) {
+      this.setState({ visible: true });
+    } else if (this.props.visibility === false && prevProps.visibility === true && !this.props.layerId) {
       this.setState({ visible: false });
     }
   }

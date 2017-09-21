@@ -246,11 +246,9 @@ export default class LegendPanel extends Component {
     // }
     if (layersFive !== undefined && layersFive !== [] && layersFive !== [-1] && layersFive !== '') {
       layersFive.forEach((layer, index) => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'subId', layer.subId);
+        const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'id', layer.id);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        // console.log('layer.visible', layer.visible);
-        // console.log(layer.visibleLayers);
-        const childComponent = <WebMapLegend url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        const childComponent = <WebMapLegend url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(this.webmapDiv(childComponent, layer.id + layer.subId + index + 1000));
       });
 
