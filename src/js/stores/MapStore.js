@@ -7,9 +7,12 @@ import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
+import analysisUtils from 'utils/analysisUtils';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
 import all from 'dojo/promise/all';
+
+let isRegistering = false;
 
 class MapStore {
 
@@ -202,7 +205,16 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        this.activeTab = tabKeys.INFO_WINDOW;
+        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
+          isRegistering = true;
+          analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
+            selectedFeature.attributes.geostoreId = res.data.id;
+            this.activeTab = tabKeys.INFO_WINDOW;
+            isRegistering = false;
+          });
+        } else {
+          this.activeTab = tabKeys.INFO_WINDOW;
+        }
       }
     }
   }
