@@ -112,7 +112,11 @@ export default class Map extends Component {
       prevState.basemap !== basemap ||
       prevState.map !== map
     ) {
-      basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+      if (!prevState.basemap) {
+        basemapUtils.updateBasemap(map, 'osm', settings.layerPanel.GROUP_BASEMAP.layers);
+      } else {
+        basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+      }
     }
   }
 
