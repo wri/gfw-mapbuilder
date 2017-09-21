@@ -73,33 +73,17 @@ export default class LayerPanel extends Component {
 
           if (layer.id === 'comm_comm_NotDocumented_9336'
             || layer.id === 'comm_comm_Documented_4717') { // if this is the community group and IS acknowledged by govt
-              // group.community.push({
-              //   acknowledgedByGovt: true,
-              //   layer: layer
-              // });
               layer.acknowledgedByGovt = true;
               layer.indigenousOrCommunity = 'community';
             } else if (layer.id === 'comm_comm_CustomaryTenure_6877') { // if this is the community group and NOT acknowledged by govt
-              // group.community.push({
-              //   acknowledgedByGovt: false,
-              //   layer: layer
-              // });
               layer.acknowledgedByGovt = false;
               layer.indigenousOrCommunity = 'community';
             } else if (layer.id === 'comm_ind_CustomaryTenure_8127'
               || layer.id === 'comm_ind_FormalLandClaim_2392') { // if this is the indigenous group and NOT acknowledged by govt
-                // group.indigenous.push({
-                //   acknowledgedByGovt: false,
-                //   layer: layer
-                // });
                 layer.acknowledgedByGovt = false;
                 layer.indigenousOrCommunity = 'indigenous';
             } else if (layer.id === 'comm_ind_NotDocumented_2683'
               || layer.id === 'comm_ind_Documented_8219') { // if this is the indigenous group and IS acknowledged by govt
-                // group.indigenous.push({
-                //   acknowledgedByGovt: true,
-                //   layer: layer
-                // });
                 layer.acknowledgedByGovt = true;
                 layer.indigenousOrCommunity = 'indigenous';
             }
@@ -110,7 +94,7 @@ export default class LayerPanel extends Component {
       // and pass all of the layers to it. That way we can handle the radio selection in the component
 
       if (group.key === LayerKeys.GROUP_INDIGENOUS_INDICATORS || group.key === LayerKeys.GROUP_COMMUNITY_INDICATORS) {
-        group.layers.sort((a, b) => b.order - a.order);
+        group.layers.sort((a, b) => a.subIndex - b.subIndex).map(this.createRadioGroup, this);
         layers = this.createRadioGroup(group.layers);
       } else if (group.key === 'GROUP_LAND_MAPS') {
         layers = <NestedGroup layers={group.layers} />;
