@@ -6,6 +6,12 @@ const closeSymbolCode = 9660,
 
 export default class LayerGroup extends React.Component {
 
+  componentDidMount() {
+    if (this.props.groupKey === 'GROUP_INDIGENOUS_LANDS_HELD') {
+      mapActions.openTOCAccordion(this.props.groupKey);
+    }
+  }
+
   render() {
     const {activeTOCGroup, groupKey} = this.props;
     const active = activeTOCGroup === groupKey;
