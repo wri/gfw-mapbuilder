@@ -99,6 +99,9 @@ export default class LayerPanel extends Component {
         layers = this.createRadioGroup(group.layers);
       } else if (group.key === 'GROUP_LAND_MAPS') {
         layers = <NestedGroup layers={group.layers} activeLayers={this.props.activeLayers} />;
+      } else if (group.key === 'GROUP_INDIGENOUS_LANDS_HELD') {
+        group.layers.sort((a, b) => b.subIndex - a.subIndex);
+        layers = this.createRadioGroup(group.layers);
       } else {
         layers = group.key === LayerKeys.GROUP_BASEMAP ?
         this.renderBasemaps(group.layers) :

@@ -87,6 +87,7 @@ class MapStore {
       toggleLegendVisible: mapActions.toggleLegendVisible,
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
+      removeAllSubLayers: layerActions.removeAllSubLayers,
       changeViirsFiresTimeline: layerActions.changeViirsFiresTimeline,
       changeModisFiresTimeline: layerActions.changeModisFiresTimeline,
       addAll: layerActions.addAll,
@@ -147,6 +148,13 @@ class MapStore {
       this.dynamicLayers[info.id].splice(subLayerIndex, 1);
     }
     this.removeActiveLayer(info.subId);
+  }
+
+  removeAllSubLayers(info) {
+    this.dynamicLayers[info.id] = [];
+    info.visibleLayers.forEach(id => {
+      this.removeActiveLayer(`${info.id}_${id}`);
+    });
   }
 
   addAll () {
