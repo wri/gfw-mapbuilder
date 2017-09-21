@@ -143,17 +143,7 @@ export default class LegendPanel extends Component {
         // }
     }
     return (
-      <div key={index}>
         <div>{childComponent}</div>
-      </div>
-    );
-  }
-
-  webmapDiv = (childComponent, index) => {
-    return (
-      <div key={index}>
-        <div>{childComponent}</div>
-      </div>
     );
   }
 
@@ -172,24 +162,78 @@ export default class LegendPanel extends Component {
 
     // Processing the webmap legend
     const webmapChildComponents = [];
-    let legendComponents;
+    let legendComponents = [];
     const layerGroups = settings.layerPanel;
-    const layers = layerGroups.GROUP_WEBMAP.layers;
+    // const layers = layerGroups.GROUP_WEBMAP.layers;
+    const layers = layerGroups.GROUP_INDIGENOUS_INDICATORS.layers;
 
-    if(layers !== undefined && layers !== [] && layers !== '') {
-      // Going through each webmap layer and creating a unique legend component
-      layers.forEach((layer, index) => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId);
+    const layersTwo = layerGroups.GROUP_COMMUNITY_INDICATORS.layers;
+    const layersThree = layerGroups.GROUP_INDIGENOUS_LANDS_HELD.layers;
+    const layersFour = layerGroups.GROUP_PRESSURES.layers;
+    const layersFive = layerGroups.GROUP_LAND_MAPS.layers;
+
+    if (layers !== undefined && layers !== [] && layers !== [-1] && layers !== '') {
+      layers.forEach(layer => {
+        const subLayerConf = utils.getObject(layerGroups.GROUP_INDIGENOUS_INDICATORS.layers, 'subId', layer.subId);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
-        webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+        const visible = layer.esriLayer.visible && layer.esriLayer.visibleLayers.indexOf(subLayerConf.subIndex) > -1;
+        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        webmapChildComponents.push(childComponent);
       });
-
-      legendComponents = legendLayers.map(this.createLegend);
-      legendComponents = legendComponents.concat(webmapChildComponents);
-    } else {
-      legendComponents = legendLayers.map(this.createLegend);
     }
+    if (layersTwo !== undefined && layersTwo !== [] && layersTwo !== [-1] && layersTwo !== '') {
+      layersTwo.forEach(layer => {
+        const subLayerConf = utils.getObject(layerGroups.GROUP_COMMUNITY_INDICATORS.layers, 'subId', layer.subId);
+        const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        webmapChildComponents.push(childComponent);
+      });
+    }
+    if (layersThree !== undefined && layersThree !== [] && layersThree !== [-1] && layersThree !== '') {
+      layersThree.forEach(layer => {
+        const subLayerConf = utils.getObject(layerGroups.GROUP_INDIGENOUS_LANDS_HELD.layers, 'subId', layer.subId);
+        const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        webmapChildComponents.push(childComponent);
+      });
+    }
+    if (layersFour !== undefined && layersFour !== [] && layersFour !== [-1] && layersFour !== '') {
+      layersFour.forEach(layer => {
+        const subLayerConf = utils.getObject(layerGroups.GROUP_PRESSURES.layers, 'id', layer.id);
+        const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+        let url = layerConf.url;
+        let layerSubIndex;
+        const lastChar = url.slice(-1);
+        if (!isNaN(parseInt(lastChar))) {
+          url = url.substring(0, url.length - 2);
+        }
+
+        if (subLayerConf.label.indexOf('Mining') > -1) {
+          layerSubIndex = 0;
+        } else if (subLayerConf.label.indexOf('Managed') > -1) {
+          layerSubIndex = 3;
+        } else if (subLayerConf.label.indexOf('Oil') > -1) {
+          layerSubIndex = 1;
+        } else if (subLayerConf.label.indexOf('Major') > -1) {
+          layerSubIndex = 0;
+        }
+
+        const childComponent = <WebMapLegend key={subLayerConf.Id} url={url} layerSubIndex={layerSubIndex} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerId={subLayerConf.subId}/>;
+        webmapChildComponents.push(childComponent);
+
+      });
+    }
+    if (layersFive !== undefined && layersFive !== [] && layersFive !== [-1] && layersFive !== '') {
+      layersFive.forEach(layer => {
+        const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'id', layer.id);
+        const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+        const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
+        webmapChildComponents.push(childComponent);
+      });
+    }
+
+    legendComponents = legendComponents.concat(legendLayers.map(this.createLegend));
+    legendComponents = legendComponents.concat(webmapChildComponents);
 
     return (
       <div className={rootClasses}>

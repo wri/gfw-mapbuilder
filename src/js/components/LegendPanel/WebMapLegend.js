@@ -9,18 +9,28 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
 
-    if(this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
+      if (this.props.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer') {
+        const indicatorsLayer = brApp.map.getLayer('indicators_legal_security_8140');
+        if (indicatorsLayer.visible && indicatorsLayer.visibleLayers !== [-1]) {
+          this.setState({ visible: true });
+        }
+      } else {
+        this.setState({ visible: true });
+      }
+    } else if (this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
+      this.setState({ visible: false });
+    } else if (this.props.visibility === true && prevProps.visibility === false && !this.props.layerId) {
       this.setState({ visible: true });
-    }
-    else if(this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
+    } else if (this.props.visibility === false && prevProps.visibility === true && !this.props.layerId) {
       this.setState({ visible: false });
     }
   }
 
   componentDidMount() {
     Request.getLegendInfos(this.props.url, [this.props.layerSubIndex]).then(legendInfos => {
-      if(this.refs.myRef) {
+      if (this.refs.myRef) {
         this.setState({ legendInfos: legendInfos });
       }
     });
@@ -28,9 +38,9 @@ export default class WebMapLegend extends React.Component {
 
   itemMapper (item, index) {
     return (
-      <div className='legend-row' key={index}>
+      <div className='legend-row' key={index + item.url}>
         <img className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
-        <div className='legend-label' key={index}>{item.label}</div>
+        <div className='legend-label'>{item.label}</div>
       </div>
     );
   }

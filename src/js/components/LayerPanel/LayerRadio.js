@@ -18,8 +18,12 @@ export default class LayerRadio extends Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
+    props.layers.forEach(layer => {
+      layer.visible = false;
+    });
 
-    this.layer = brApp.map.getLayer('indicators_legal_security_8140');
+    this.layer = brApp.map.getLayer(props.layers[0].id);
     this.state = {
       selected: this.layer.visibleLayers[0] || -1
     };
@@ -60,7 +64,7 @@ export default class LayerRadio extends Component {
     const selectedLayer = this.props.layers.filter(l => l.subIndex === value)[0];
     const selectedValue = selectedLayer.subIndex;
 
-    if (this.state.selected === value) {
+    if (this.props.dynamicLayers[this.layer.id].indexOf(selectedValue) > -1) {
       this.layer.hide();
       this.layer.setVisibleLayers([-1]);
       LayerActions.removeSubLayer(selectedLayer);
@@ -70,8 +74,7 @@ export default class LayerRadio extends Component {
       });
     } else {
       if (this.props.dynamicLayers[this.layer.id].length > 0) {
-        const sublayerToRemove = this.props.layers.filter(l => l.subIndex === this.props.dynamicLayers[this.layer.id][0])[0];
-        LayerActions.removeSubLayer(sublayerToRemove);
+        LayerActions.removeAllSubLayers(this.layer);
       }
       this.layer.show();
       this.layer.setVisibleLayers([selectedValue]);

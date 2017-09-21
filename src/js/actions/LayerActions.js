@@ -30,6 +30,10 @@ class LayerActions {
     return info;
   }
 
+  removeAllSubLayers (info) {
+    return info;
+  }
+
   changeViirsFiresTimeline (selectedIndex) {
     return selectedIndex;
   }

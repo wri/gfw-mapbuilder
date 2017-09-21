@@ -31,7 +31,7 @@ import React, {
   PropTypes
 } from 'react';
 
-let scalebar, paramsApplied = false;
+let scalebar, paramsApplied = false, mapLoaded = false, legendReady = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -112,7 +112,11 @@ export default class Map extends Component {
       prevState.basemap !== basemap ||
       prevState.map !== map
     ) {
-      basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+      if (!prevState.basemap) {
+        basemapUtils.updateBasemap(map, 'osm', settings.layerPanel.GROUP_BASEMAP.layers);
+      } else {
+        basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+      }
     }
   }
 
@@ -404,13 +408,21 @@ export default class Map extends Component {
                         timeInfo={getTimeInfo(layer)} />);
     }
 
+    if (map.loaded === true && mapLoaded === false) {
+      mapLoaded = true;
+      on.once(map, 'layers-add-result', layersss => {
+        legendReady = true;
+        this.forceUpdate();
+      });
+    }
+
     return (
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
+          {legendReady ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
