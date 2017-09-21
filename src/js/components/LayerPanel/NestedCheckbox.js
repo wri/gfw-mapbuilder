@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import NestedLayerCheckbox from './NestedLayerCheckbox';
 import LayerCheckbox from './LayerCheckbox';
 
 export default class NestedCheckbox extends Component {
