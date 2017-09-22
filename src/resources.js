@@ -439,6 +439,15 @@ export default {
         }
       }, {
         order: 4,
+        id: 'SOIL_CARBON',
+        type: 'webtiled',
+        url: 'https://s3.amazonaws.com/wri-tiles/hwsd/{level}/{col}/{row}.png',
+        metadataUrl: 'https://production-api.globalforestwatch.org/v1/gfw-metadata/soil_organic_carbon',
+        label: {
+          en: 'Soil Organic Carbon'
+        }
+      }, {
+        order: 5,
         id: 'LAND_COVER',
         type: 'webtiled',
         url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
@@ -466,7 +475,7 @@ export default {
           ka: 'მიწის საფარი'
         }
       }, {
-        order: 5,
+        order: 6,
         id: 'TREE_COVER',
         type: 'image',
         url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
