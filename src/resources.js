@@ -445,7 +445,29 @@ export default {
         metadataUrl: 'https://production-api.globalforestwatch.org/v1/gfw-metadata/soil_organic_carbon',
         label: {
           en: 'Soil Organic Carbon'
-        }
+        },
+        legend: [
+          {
+            label: '0 - 20',
+            color: '#DDCEB8'
+          },
+          {
+            label: '20 - 65',
+            color: '#b39465'
+          },
+          {
+            label: '65 - 160',
+            color: '#8e6d3f'
+          },
+          {
+            label: '160 - 425',
+            color: '#60461F'
+          },
+          {
+            label: '>425',
+            color: '#211503'
+          }
+        ]
       }, {
         order: 5,
         id: 'LAND_COVER',
