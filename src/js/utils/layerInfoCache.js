@@ -263,6 +263,11 @@ export default {
         _cache[subId] = results;
         promise.resolve(results);
       });
+    } else if (layer.metadataUrl) {
+      getMetadataTask(layer.metadataUrl).then(results => {
+        _cache[layer.id] = results;
+        promise.resolve(results);
+      });
     } else if (layer.cartoLayer) {
       const {subId} = layer;
       url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);

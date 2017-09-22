@@ -37,7 +37,6 @@ export default class LayerTransparency extends Component {
       if (timer) { clearTimeout(timer); }
       timer = setTimeout(function () {
         mapLayer.setLayerDrawingOptions(options);
-        console.log(layer.subId);
       }, TIMER_DURATION);
       this.setState({ opacity: value });
     }

@@ -18,12 +18,12 @@ export default class LayerRadio extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     props.layers.forEach(layer => {
       layer.visible = false;
     });
 
     this.layer = brApp.map.getLayer(props.layers[0].id);
+    LayerActions.removeAllSubLayers(this.layer);
     this.state = {
       selected: this.layer.visibleLayers[0] || -1
     };

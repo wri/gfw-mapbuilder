@@ -171,6 +171,7 @@ export default class LegendPanel extends Component {
     const layersThree = layerGroups.GROUP_INDIGENOUS_LANDS_HELD.layers;
     const layersFour = layerGroups.GROUP_PRESSURES.layers;
     const layersFive = layerGroups.GROUP_LAND_MAPS.layers;
+    const soilLayer = layerGroups.GROUP_LC.layers.filter(l => l.id === 'SOIL_CARBON')[0];
 
     if (layers !== undefined && layers !== [] && layers !== [-1] && layers !== '') {
       layers.forEach(layer => {
@@ -230,6 +231,10 @@ export default class LegendPanel extends Component {
         const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(childComponent);
       });
+    }
+    if (soilLayer) {
+      const childComponent = <WebMapLegend key={soilLayer.id} legendConfig={soilLayer.legend} labels={'Soil Organic Carbon'} visibility={activeLayers.indexOf('SOIL_CARBON') > -1} visibleLayers={activeLayers} />;
+      webmapChildComponents.push(childComponent);
     }
 
     legendComponents = legendComponents.concat(legendLayers.map(this.createLegend));
