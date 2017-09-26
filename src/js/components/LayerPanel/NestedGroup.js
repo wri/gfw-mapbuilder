@@ -37,10 +37,10 @@ export default class NestedGroup extends Component {
       }
     });
 
-    this.indigenousAcknowledged.sort((a, b) => a.order - b.order);
-    this.indigenousNotAcknowledged.sort((a, b) => a.order - b.order);
-    this.communityAcknowledged.sort((a, b) => a.order - b.order);
-    this.communityNotAcknowledged.sort((a, b) => a.order - b.order);
+    this.indigenousAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    this.indigenousNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    this.communityAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    this.communityNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
   }
 
   render() {

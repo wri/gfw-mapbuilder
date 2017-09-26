@@ -75,22 +75,22 @@ export default class LayerPanel extends Component {
             || layer.id === 'comm_comm_Documented_4717') { // if this is the community group and IS acknowledged by govt
             layer.acknowledgedByGovt = true;
             layer.indigenousOrCommunity = 'community';
-            layer.order = layer.id === 'comm_comm_Documented_4717' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
+            layer.panelOrder = layer.id === 'comm_comm_Documented_4717' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
           } else if (layer.id === 'comm_comm_CustomaryTenure_6877'
             || layer.id === 'comm_comm_FormalLandClaim_5585') { // if this is the community group and NOT acknowledged by govt
             layer.acknowledgedByGovt = false;
             layer.indigenousOrCommunity = 'community';
-            layer.order = layer.id === 'comm_comm_FormalLandClaim_5585' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
+            layer.panelOrder = layer.id === 'comm_comm_FormalLandClaim_5585' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
           } else if (layer.id === 'comm_ind_CustomaryTenure_8127'
             || layer.id === 'comm_ind_FormalLandClaim_2392') { // if this is the indigenous group and NOT acknowledged by govt
             layer.acknowledgedByGovt = false;
             layer.indigenousOrCommunity = 'indigenous';
-            layer.order = layer.id === 'comm_ind_FormalLandClaim_2392' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
+            layer.panelOrder = layer.id === 'comm_ind_FormalLandClaim_2392' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
           } else if (layer.id === 'comm_ind_NotDocumented_2683'
             || layer.id === 'comm_ind_Documented_8219') { // if this is the indigenous group and IS acknowledged by govt
             layer.acknowledgedByGovt = true;
             layer.indigenousOrCommunity = 'indigenous';
-            layer.order = layer.id === 'comm_ind_Documented_8219' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
+            layer.panelOrder = layer.id === 'comm_ind_Documented_8219' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
           }
         });
       }
