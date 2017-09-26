@@ -23,7 +23,7 @@ export default class LayerRadio extends Component {
     });
 
     this.layer = brApp.map.getLayer(props.layers[0].id);
-    LayerActions.removeAllSubLayers(this.layer);
+    LayerActions.removeAllSubLayers.defer(this.layer);
     this.state = {
       selected: this.layer.visibleLayers[0] || -1
     };
