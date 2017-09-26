@@ -23,6 +23,7 @@ export default class NestedGroup extends Component {
     props.layers.forEach(layer => {
       if (layer.indigenousOrCommunity === 'indigenous') {
         if (layer.acknowledgedByGovt === true) {
+          
           this.indigenousAcknowledged.push(layer);
         } else {
           this.indigenousNotAcknowledged.push(layer);
@@ -35,6 +36,11 @@ export default class NestedGroup extends Component {
         }
       }
     });
+
+    this.indigenousAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    this.indigenousNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    this.communityAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    this.communityNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
   }
 
   render() {
