@@ -102,6 +102,7 @@ export default class LayerRadio extends Component {
           <svg><use xlinkHref="#shape-info" /></svg>
         </span>
         {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[language]}</div>}
+        {!layer.sublabelQuestion ? null : <div className={`${this.state.selected === layer.subIndex ? '' : 'hidden'} sublabel-question`}>{layer.sublabelQuestion}</div>}
         <LayerTransparency layer={layer} visible={this.state.selected === layer.subIndex}></LayerTransparency>
       </div>
     );
