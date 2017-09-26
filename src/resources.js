@@ -123,7 +123,7 @@ export default {
     GROUP_LCD: {
       order: 7,
       label: {
-        en: 'Land Cover Dynamics',
+        en: 'Land Cover Change',
         fr: 'Evolution de la couverture des sols',
         es: 'Dinámica de la Cobertura del Suelo',
         pt: 'Dinâmica de cobertura da terra ',
@@ -193,194 +193,12 @@ export default {
           zh: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
           ka: '(12 წელიწადი, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
         }
-      }, {
-        order: 3,
-        id: 'IMAZON_SAD',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer',
-        technicalName: 'imazon_sad',
-        layerIds: [2],
-        label: {
-          en: 'SAD alerts',
-          fr: 'Alertes SAD',
-          es: 'Alertas SAD',
-          pt: 'Alertas SAD',
-          id: 'SAD alerts',
-          zh: 'SAD alerts',
-          ka: 'SAD შეტყობინებები'
-        },
-        sublabel: {
-          en: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          fr: '(mensuel, 250m, Amazonie brésilienne, Imazon)',
-          es: '(mensual, 250m, Amazonia brasileña, Imazon)',
-          pt: '(mensal, 250m, Amazônia brasileira, Imazon)',
-          id: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          zh: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          ka: '(ყოველთვიური, 250მ, ბრაზილიის ამაზონია, Imazon)'
-        }
-      }, {
-        order: 4,
-        id: 'GLAD_ALERTS',
-        type: 'glad',
-        url: 'https://wri-tiles.s3.amazonaws.com/glad_prod/tiles/{z}/{x}/{y}.png',
-        technicalName: 'umd_landsat_alerts',
-        legendLayer: [7],
-        minDateValue: 15000,
-        maxDateValue: 999999,
-        confidence: [0, 1],
-        label: {
-          en: 'GLAD Alerts',
-          fr: 'Alertes GLAD',
-          es: 'Alertas GLAD',
-          pt: 'Alertas GLAD',
-          id: 'GLAD Alerts',
-          zh: 'GLAD Alerts',
-          ka: 'GLAD შეტყობინებები'
-        },
-        sublabel: {
-          en: '(weekly, 30m, select countries, UMD/ GLAD)',
-          fr: '(hebdomadaire, 30m, certains pays, UMD/ GLAD)',
-          es: '(semanal, 30m, select countries, UMD/ GLAD)',
-          pt: '(semanal, 30m, select countries, UMD/ GLAD)',
-          id: '(weekly, 30m, select countries, UMD/ GLAD)',
-          zh: '(weekly, 30m, select countries, UMD/ GLAD)',
-          ka: '(ყოველკვირეული, 30მ, აარჩიეთ ქვეყნები, UMD/ GLAD)'
-        }
-      }, {
-        order: 5,
-        id: 'TERRA_I_ALERTS',
-        type: 'terra',
-        url: 'https://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png',
-        technicalName: 'terra_i_alerts',
-        legendLayer: [13],
-        maxZoom: 10,
-        minDateValue: 4000, //We know data starts in 2004
-        // We are setting this way over max, the max date will get set set when TerraIControls mounts
-        // We set this over max so all data is visible by default, and it will update the dates when available
-        maxDateValue: 20000,
-        imageServer: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
-        label: {
-          en: 'Terra-I Alerts',
-          fr: 'Alertes Terra-I',
-          es: 'Alertas Terra-I',
-          pt: 'Alertas Terra-I',
-          id: 'Terra-I Alerts',
-          zh: 'Terra-I Alerts',
-          ka: 'Terra-I შეტყობინებები'
-        },
-        sublabel: {
-          en: '(monthly, 250m, Latin America, CIAT)',
-          fr: '(mensuel, 250m, Amérique Latine, CIAT)',
-          es: '(mensual, 250m, Latin America, CIAT)',
-          pt: '(Mensal, 250m, Latin America, CIAT)',
-          id: '(monthly, 250m, Latin America, CIAT)',
-          zh: '(monthly, 250m, Latin America, CIAT)',
-          ka: '(ყოველთვიური, 250მ, ლათინური ამერიკა, CIAT)'
-        }
-      }, {
-        order: 6,
-        id: 'VIIRS_ACTIVE_FIRES',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
-        technicalName: 'viirs_fires',
-        layerIds: [8],
-        label: {
-          en: 'VIIRS Active Fires',
-          fr: 'Feux actifs',
-          es: 'Incendios activos',
-          pt: 'Incêndios ativos',
-          id: 'Active fires',
-          zh: '活跃火点',
-          ka: 'VIIRS აქტიური ხანძრები'
-        },
-        sublabel: {
-          en: '(daily, 375m, global, NASA)',
-          fr: '(journalier, 375m, global, NASA)',
-          es: '(Diaria, 375m, global, NASA)',
-          pt: '(Diária, 375m, global, NASA)',
-          id: '(daily, 375m, global, NASA)',
-          zh: '(每天更新, 375米, 全球覆盖, 美国宇航局（NASA))',
-          ka: '(ყოველდღიური, 375მ, გლობალური, NASA)'
-        },
-        popup: {
-          title: {
-            en: 'Active Fires'
-          },
-          content: {
-            en: [
-              { 'label': 'Brightness', 'fieldExpression': 'BRIGHTNESS' },
-              { 'label': 'Confidence', 'fieldExpression': 'CONFIDENCE' },
-              { 'label': 'Latitude', 'fieldExpression': 'LATITUDE' },
-              { 'label': 'Longitude', 'fieldExpression': 'LONGITUDE' },
-              { 'label': 'Acquisition Date', 'fieldExpression': 'ACQ_DATE:DateString(hideTime:true)' },
-              { 'label': 'Acquisition Time', 'fieldExpression': 'ACQ_TIME' }
-            ]
-          },
-          sublabel: {
-            en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-            ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-          }
-        }
-      }, {
-        order: 7,
-        id: 'MODIS_ACTIVE_FIRES',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
-        technicalName: 'firms_active_fires',
-        layerIds: [9],
-        label: {
-          en: 'MODIS Active Fires',
-          fr: 'Feux actifs',
-          es: 'Incendios activos',
-          pt: 'Incêndios ativos',
-          id: 'Active fires',
-          zh: '活跃火点',
-          ka: 'MODIS აქტიური ხანძრები'
-        },
-        sublabel: {
-          en: '(daily, 1km, global, NASA)',
-          fr: '(journalier, 1km, global, NASA)',
-          es: '(Diaria, 1km, global, NASA)',
-          pt: '(Diária, 1km, global, NASA)',
-          id: '(daily, 1km, global, NASA)',
-          zh: '(每天更新, 1千米, 全球覆盖, 美国宇航局（NASA))',
-          ka: '(ყოველდღიური, 1კმ, გლობალური, NASA)'
-        },
-        popup: {
-          title: {
-            en: 'Active Fires'
-          },
-          content: {
-            en: [
-              { 'label': 'Brightness', 'fieldExpression': 'BRIGHTNESS' },
-              { 'label': 'Confidence', 'fieldExpression': 'CONFIDENCE' },
-              { 'label': 'Latitude', 'fieldExpression': 'LATITUDE' },
-              { 'label': 'Longitude', 'fieldExpression': 'LONGITUDE' },
-              { 'label': 'Acquisition Date', 'fieldExpression': 'ACQ_DATE:DateString(hideTime:true)' },
-              { 'label': 'Acquisition Time', 'fieldExpression': 'ACQ_TIME' }
-            ]
-          },
-          sublabel: {
-            en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-            ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-          }
-        }
       }]
     },
     GROUP_LC: {
       order: 5,
       label: {
-        en: 'Land Cover',
+        en: 'Assets',
         fr: 'Couverture des sols',
         es: 'Cobertura terrestre',
         pt: 'Cobertura do Solo',
@@ -429,7 +247,7 @@ export default {
         technicalName: 'aboveground_biomass',
         legendLayer: [8],
         label: {
-          en: 'Aboveground Live Woody Biomass Density',
+          en: 'Aboveground Live Woody Biomass Density (Carbon)',
           fr: 'Densité de la biomasse aérienne vivante',
           es: 'Densidad de la biomasa viva en la superficie del suelo',
           pt: 'Densidade de biomassa viva acima do solo',
