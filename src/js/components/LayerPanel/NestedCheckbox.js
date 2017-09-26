@@ -12,6 +12,14 @@ export default class NestedCheckbox extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.checked !== this.props.checked) {
+      this.setState({
+        groupChecked: this.props.checked
+      });
+    }
+  }
+
 
   toggleGroup = () => {
 
