@@ -380,7 +380,7 @@ export default {
     GROUP_LC: {
       order: 5,
       label: {
-        en: 'Land Cover',
+        en: 'Assets',
         fr: 'Couverture des sols',
         es: 'Cobertura terrestre',
         pt: 'Cobertura do Solo',
@@ -429,7 +429,7 @@ export default {
         technicalName: 'aboveground_biomass',
         legendLayer: [8],
         label: {
-          en: 'Aboveground Live Woody Biomass Density',
+          en: 'Aboveground Live Woody Biomass Density (Carbon)',
           fr: 'Densité de la biomasse aérienne vivante',
           es: 'Densidad de la biomasa viva en la superficie del suelo',
           pt: 'Densidade de biomassa viva acima do solo',
