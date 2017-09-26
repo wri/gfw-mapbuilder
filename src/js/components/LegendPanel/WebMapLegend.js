@@ -83,7 +83,7 @@ export default class WebMapLegend extends React.Component {
           {this.state.legendInfos === null
             ?
             <div className='crowdsource-legend'>
-              {this.props.legendConfig.map(this.customLegend, this)}
+              {this.props.legendConfig ? this.props.legendConfig.map(this.customLegend, this) : null}
             </div>
             : ''
           }
