@@ -755,49 +755,6 @@ const runAnalysis = function runAnalysis (params, feature) {
     const node = document.getElementById('intact-loss');
     node.remove();
   }
-  if (settings.viirsFires) {
-    //- Fires Analysis
-    performAnalysis({
-      type: analysisKeys.VIIRS_FIRES,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      viirsFrom: viirsFrom,
-      viirsTo: viirsTo
-    }).then((results) => {
-      document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
-      document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
-      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
-      document.getElementById('viirs-badge').classList.remove('hidden');
-    });
-  } else {
-    const node = document.getElementById('viirs-badge');
-    node.remove();
-  }
-
-  if (settings.modisFires) {
-    //- Fires Analysis
-    performAnalysis({
-      type: analysisKeys.MODIS_FIRES,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      modisFrom: modisFrom,
-      modisTo: modisTo
-    }).then((results) => {
-      document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__modis-count').innerHTML = results.fireCount;
-      document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
-      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
-      document.getElementById('modis-badge').classList.remove('hidden');
-    });
-  } else {
-    const node = document.getElementById('modis-badge');
-    node.remove();
-  }
 
   //- Mangroves Loss
   if (settings.mangroves) {
@@ -833,82 +790,6 @@ const runAnalysis = function runAnalysis (params, feature) {
 
   } else {
     const node = document.getElementById('mangroves');
-    node.remove();
-  }
-
-  //- SAD Alerts
-  if (settings.sadAlerts) {
-    performAnalysis({
-      type: analysisKeys.SAD_ALERTS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const node = document.getElementById('sad-alerts');
-      const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
-      const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
-      const {alerts} = results;
-      const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
-      if (categories.length) {
-        //- Tell the second series to use the second axis
-        series[0].yAxis = 1;
-        charts.makeDualAxisTimeSeriesChart(node, { series, categories });
-      } else {
-        node.remove();
-      }
-    });
-
-  } else {
-    const node = document.getElementById('sad-alerts');
-    node.remove();
-  }
-
-  //- GLAD Alerts
-  if (settings.gladAlerts) {
-    performAnalysis({
-      type: analysisKeys.GLAD_ALERTS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      geostoreId: feature.geostoreId,
-      gladFrom: new Date(gladFrom),
-      gladTo: new Date(gladTo)
-    }).then((results) => {
-      const node = document.getElementById('glad-alerts');
-      const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
-      if (results.length) {
-        charts.makeTimeSeriesCharts(node, { data: results, name });
-      } else {
-        node.remove();
-      }
-    });
-  } else {
-    const node = document.getElementById('glad-alerts');
-    node.remove();
-  }
-
-  //- Terra-I Alerts
-  if (settings.terraIAlerts) {
-    performAnalysis({
-      type: analysisKeys.TERRA_I_ALERTS,
-      geometry: geographic,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      terraIFrom: new Date(terraIFrom),
-      terraITo: new Date(terraITo)
-    }).then((results) => {
-      const node = document.getElementById('terrai-alerts');
-      const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
-      charts.makeTimeSeriesCharts(node, {
-        data: results,
-        name: name
-      });
-    });
-  } else {
-    const node = document.getElementById('terrai-alerts');
     node.remove();
   }
 

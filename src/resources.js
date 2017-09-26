@@ -11,8 +11,8 @@ export default {
   // webmap: '12a0ec903c78455dba606df034e209c9',
   title: 'LandMark',
   subtitle: 'Make maps that matter',
-  logoUrl: 'http://www.landmarkmap.org/wp-content/uploads/2015/10/landmark-beta-logo@2x.png',
-  logoLinkUrl: 'https://landmarkmap.org',
+  logoUrl: 'http://blueraster-users.s3.amazonaws.com/cphang/photos/landmark-blue-logo.png',
+  logoLinkUrl: 'http://landmarkmap.org',
   aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
   downloadLinkUrl: '', // http://data.globalforestwatch.org/
   printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
@@ -41,15 +41,15 @@ export default {
   //documentsMapserver: 'https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer',
   //- Layers/Analysis Settings
   iso: '',
-  viirsFires: true,
-  modisFires: true,
+  viirsFires: false,
+  modisFires: false,
   intactForests: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
-  sadAlerts: true,
-  gladAlerts: true,
-  terraIAlerts: true,
+  sadAlerts: false,
+  gladAlerts: false,
+  terraIAlerts: false,
   webmapMenuName: 'Land Use',
   //- Restoration Module settings
   restorationModule: false,
