@@ -84,7 +84,7 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params) {
-    const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
+    const {tcLossFrom, tcLossTo, tcd} = params;
 
     //- Organize and order the layers before adding them to the map
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -139,12 +139,8 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       return layerFactory(layer, language);
     });
 
-    // Set the date range for the loss and glad layers
+    // Set the date range for the loss layers
     const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
-    const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
-    const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
-    const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-    const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
 
     if (lossLayer && lossLayer.setDateRange) {
       const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
@@ -152,28 +148,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       const toYear = yearsArray[tcLossTo];
 
       lossLayer.setDateRange(fromYear - 2000, toYear - 2000);
-    }
-
-    if (gladLayer && gladLayer.setDateRange) {
-      const julianFrom = appUtils.getJulianDate(gladFrom);
-      const julianTo = appUtils.getJulianDate(gladTo);
-
-      gladLayer.setDateRange(julianFrom, julianTo);
-    }
-
-    if (terraILayer && terraILayer.setDateRange) {
-      const julianFrom = appUtils.getJulianDate(terraIFrom);
-      const julianTo = appUtils.getJulianDate(terraITo);
-
-      terraILayer.setDateRange(julianFrom, julianTo);
-    }
-
-    if (viirsFiresLayer) {
-      layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer);
-    }
-
-    if (modisFiresLayer) {
-      layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
     }
 
     map.addLayers(esriLayers);
@@ -563,7 +537,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LCD.layers : [];
   const layerConf = appUtils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
   const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-  const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, viirsFrom, viirsTo, modisFrom, modisTo } = params;
+  const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo } = params;
   const geographic = webmercatorUtils.geographicToWebMercator(feature.geometry);
   //- Only Analyze layers in the analysis
   if (appUtils.containsObject(lcdLayers, 'id', layerKeys.TREE_COVER_LOSS)) {
