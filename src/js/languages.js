@@ -101,7 +101,7 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.LC_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Aboveground Live Woody Biomass loss',
+  { label: 'Aboveground Live Woody Biomass loss (Carbon)',
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -111,26 +111,6 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
   },
   { label: 'Global mangrove loss',
     value: analysisKeys.MANGROVE_LOSS,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'SAD alerts',
-    value: analysisKeys.SAD_ALERTS,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'GLAD alerts',
-    value: analysisKeys.GLAD_ALERTS,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'Terra-I alerts',
-    value: analysisKeys.TERRA_I_ALERTS,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'VIIRS fires',
-    value: analysisKeys.VIIRS_FIRES,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'MODIS fires',
-    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Land cover composition',

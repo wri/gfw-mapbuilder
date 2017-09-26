@@ -9,10 +9,10 @@ export default {
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
   webmap: 'ab72e9a99f4f49559f2449c9d74f7912',
   // webmap: '12a0ec903c78455dba606df034e209c9',
-  title: 'GFW Mapbuilder',
+  title: 'LandMark',
   subtitle: 'Make maps that matter',
-  logoUrl: './css/images/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  logoUrl: 'http://www.landmarkmap.org/wp-content/uploads/2015/10/landmark-beta-logo@2x.png',
+  logoLinkUrl: 'https://landmarkmap.org',
   aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
   downloadLinkUrl: '', // http://data.globalforestwatch.org/
   printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
