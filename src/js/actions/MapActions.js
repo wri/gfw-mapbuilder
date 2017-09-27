@@ -2,6 +2,7 @@ import dispatcher from 'js/dispatcher';
 import layerFactory from 'utils/layerFactory';
 import layerKeys from 'constants/LayerConstants';
 // import CartoLayer from 'js/layers/CartoLayer';
+import esriConfig from 'esri/config';
 import appActions from 'actions/AppActions';
 import resources from 'resources';
 import Point from 'esri/geometry/Point';
@@ -105,6 +106,17 @@ class MapActions {
     uniqueLayers.forEach(layer => {
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
+
+    uniqueLayers.push({
+      id: 'indigenous_FormalClaimFeature',
+      url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/1',
+      minScale: 4700000,
+      maxScale: 0,
+      visible: true,
+      type: 'feature'
+    });
+
+
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
@@ -114,6 +126,7 @@ class MapActions {
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
+      console.log('result', result);
       const addedLayers = result.layers;
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);

@@ -12,6 +12,7 @@ import TreeCoverLossLayer from 'js/layers/TreeCoverLossLayer';
 import TreeCoverGainLayer from 'js/layers/TreeCoverGainLayer';
 import layerUtils from 'utils/layerUtils';
 import layerKeys from 'constants/LayerConstants';
+
 import {errors} from 'js/config';
 
 /**
@@ -92,9 +93,12 @@ export default (layer, lang) => {
       if (layer.id === layerKeys.USER_FEATURES) {
         esriLayer = new GraphicsLayer(options);
       } else {
+        console.log('options', options);
         if (layer.mode !== undefined) { options.mode = layer.mode; } // mode could be 0, must check against undefined
         if (layer.definitionExpression) { options.definitionExpression = layer.definitionExpression; }
         if (layer.popup) { options.infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang); }
+        if (layer.minScale) { options.minScale = layer.minScale; }
+        if (layer.maxScale) { options.maxScale = layer.maxScale; }
         esriLayer = new FeatureLayer(layer.url, options);
       }
       esriLayer.legendLayer = layer.legendLayer || null;

@@ -21,7 +21,7 @@ export default {
   mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   narrative: '',
   includeSubscribeButton: false,
-  hideHeader: false,
+  hideHeader: true,
   hideFooter: false,
   includeMyGFWLogin: false,
   navLinksInNewTab: false,

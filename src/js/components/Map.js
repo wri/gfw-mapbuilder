@@ -177,8 +177,6 @@ export default class Map extends Component {
           }
         });
       });
-      //- Set the map's extent to its current extent to trigger our update-end
-      response.map.setExtent(response.map.extent);
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));
