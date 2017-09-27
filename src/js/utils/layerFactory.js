@@ -93,7 +93,6 @@ export default (layer, lang) => {
       if (layer.id === layerKeys.USER_FEATURES) {
         esriLayer = new GraphicsLayer(options);
       } else {
-        console.log('options', options);
         if (layer.mode !== undefined) { options.mode = layer.mode; } // mode could be 0, must check against undefined
         if (layer.definitionExpression) { options.definitionExpression = layer.definitionExpression; }
         if (layer.popup) { options.infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang); }
