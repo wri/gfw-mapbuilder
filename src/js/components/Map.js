@@ -184,7 +184,7 @@ export default class Map extends Component {
                 break;
               case 'comm_comm_FormalLandClaim_5585':
                 featurePointLayer = response.map.getLayer('community_FormalClaimFeature1');
-                featurePolyLayer = response.map.getLayer('indigenous_FormalClaimFeature0');
+                featurePolyLayer = response.map.getLayer('community_FormalClaimFeature0');
 
                 break;
               case 'comm_comm_CustomaryTenure_6877':
