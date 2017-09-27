@@ -136,6 +136,93 @@ export default class Map extends Component {
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
       response.map.on('zoom-end', mapActions.mapUpdated);
+      // on layer add
+      // if layer is one of our nested layers
+      // set visibility-change listener to toggle corresponding feature layers
+
+      const landMapLayerIds = [
+        'comm_ind_Documented_8219',
+        'comm_ind_NotDocumented_2683',
+        'comm_ind_FormalLandClaim_2392',
+        'comm_ind_CustomaryTenure_8127',
+        'comm_comm_Documented_4717',
+        'comm_comm_NotDocumented_9336',
+        'comm_comm_FormalLandClaim_5585',
+        'comm_comm_CustomaryTenure_6877'
+      ];
+
+      response.map.layerIds.forEach(id => {
+        if (landMapLayerIds.indexOf(id) > -1) {
+          const layer = response.map.getLayer(id);
+
+          layer.on('visibility-change', result => {
+
+            let featurePointLayer;
+            let featurePolyLayer;
+            const visible = result.visible;
+
+            switch (result.target.id) {
+              case 'comm_ind_FormalLandClaim_2392':
+              featurePointLayer = response.map.getLayer('indigenous_FormalClaimFeature1');
+              featurePolyLayer = response.map.getLayer('indigenous_FormalClaimFeature0');
+
+                break;
+              case 'comm_ind_CustomaryTenure_8127':
+                featurePointLayer = response.map.getLayer('indigenous_CustomaryFeature1');
+                featurePolyLayer = response.map.getLayer('indigenous_CustomaryFeature0');
+
+                break;
+              case 'comm_ind_Documented_8219':
+                featurePointLayer = response.map.getLayer('indigenous_DocumentedFeature1');
+                featurePolyLayer = response.map.getLayer('indigenous_DocumentedFeature0');
+
+                break;
+              case 'comm_ind_NotDocumented_2683':
+                featurePointLayer = response.map.getLayer('indigenous_NotDocumentedFeature1');
+                featurePolyLayer = response.map.getLayer('indigenous_NotDocumentedFeature0');
+
+                break;
+              case 'comm_comm_FormalLandClaim_5585':
+                featurePointLayer = response.map.getLayer('community_FormalClaimFeature1');
+                featurePolyLayer = response.map.getLayer('community_FormalClaimFeature0');
+
+                break;
+              case 'comm_comm_CustomaryTenure_6877':
+                featurePointLayer = response.map.getLayer('community_CustomaryFeature1');
+                featurePolyLayer = response.map.getLayer('community_CustomaryFeature0');
+
+                break;
+              case 'comm_comm_Documented_4717':
+                featurePointLayer = response.map.getLayer('community_DocumentedFeature1');
+                featurePolyLayer = response.map.getLayer('community_DocumentedFeature0');
+
+                break;
+              case 'comm_comm_NotDocumented_9336':
+                featurePointLayer = response.map.getLayer('community_NotDocumentedFeature1');
+                featurePolyLayer = response.map.getLayer('community_NotDocumentedFeature0');
+
+                break;
+              default:
+            }
+            if (visible) {
+              if (featurePointLayer) {
+                featurePointLayer.show();
+              }
+              if (featurePolyLayer) {
+                featurePolyLayer.show();
+              }
+            } else {
+              if (featurePointLayer) {
+                featurePointLayer.hide();
+              }
+              if (featurePolyLayer) {
+                featurePolyLayer.hide();
+              }
+            }
+          });
+        }
+      });
+
 
       //- Add a scalebar
       scalebar = new Scalebar({
@@ -177,8 +264,6 @@ export default class Map extends Component {
           }
         });
       });
-      //- Set the map's extent to its current extent to trigger our update-end
-      response.map.setExtent(response.map.extent);
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));
