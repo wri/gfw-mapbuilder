@@ -267,7 +267,7 @@ class MapActions {
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
-      console.log('result', result);
+
       const addedLayers = result.layers;
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
