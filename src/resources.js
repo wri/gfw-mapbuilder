@@ -9,10 +9,10 @@ export default {
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
   webmap: 'ab72e9a99f4f49559f2449c9d74f7912',
   // webmap: '12a0ec903c78455dba606df034e209c9',
-  title: 'GFW Mapbuilder',
+  title: 'LandMark',
   subtitle: 'Make maps that matter',
-  logoUrl: './css/images/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  logoUrl: 'http://blueraster-users.s3.amazonaws.com/cphang/photos/landmark-blue-logo.png',
+  logoLinkUrl: 'http://landmarkmap.org',
   aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
   downloadLinkUrl: '', // http://data.globalforestwatch.org/
   printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
@@ -41,15 +41,15 @@ export default {
   //documentsMapserver: 'https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer',
   //- Layers/Analysis Settings
   iso: '',
-  viirsFires: true,
-  modisFires: true,
+  viirsFires: false,
+  modisFires: false,
   intactForests: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
-  sadAlerts: true,
-  gladAlerts: true,
-  terraIAlerts: true,
+  sadAlerts: false,
+  gladAlerts: false,
+  terraIAlerts: false,
   webmapMenuName: 'Land Use',
   //- Restoration Module settings
   restorationModule: false,

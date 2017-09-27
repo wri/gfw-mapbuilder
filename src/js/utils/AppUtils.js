@@ -141,17 +141,7 @@ const utils = {
       activeSlopeClass,
       activeLayers,
       tcLossFrom,
-      tcLossTo,
-      gladFrom,
-      gladTo,
-      terraIFrom,
-      terraITo,
-      viirsFiresSelectIndex,
-      modisFiresSelectIndex,
-      viirsStartDate,
-      viirsEndDate,
-      modisStartDate,
-      modisEndDate
+      tcLossTo
     } = options;
     const labels = settings.labels[lang];
     const query = {
@@ -166,17 +156,7 @@ const utils = {
       lang: lang,
       activeLayers: activeLayers,
       tcLossFrom: tcLossFrom,
-      tcLossTo: tcLossTo,
-      gladFrom: gladFrom,
-      gladTo: gladTo,
-      terraIFrom: terraIFrom,
-      terraITo: terraITo,
-      viirsFiresSelectIndex: viirsFiresSelectIndex,
-      modisFiresSelectIndex: modisFiresSelectIndex,
-      viirsStartDate: viirsStartDate,
-      viirsEndDate: viirsEndDate,
-      modisStartDate: modisStartDate,
-      modisEndDate: modisEndDate
+      tcLossTo: tcLossTo
     };
 
     if (appid) {

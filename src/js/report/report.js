@@ -84,7 +84,7 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params) {
-    const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
+    const {tcLossFrom, tcLossTo, tcd} = params;
 
     //- Organize and order the layers before adding them to the map
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -139,12 +139,8 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       return layerFactory(layer, language);
     });
 
-    // Set the date range for the loss and glad layers
+    // Set the date range for the loss layers
     const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
-    const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
-    const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
-    const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-    const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
 
     if (lossLayer && lossLayer.setDateRange) {
       const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
@@ -152,28 +148,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       const toYear = yearsArray[tcLossTo];
 
       lossLayer.setDateRange(fromYear - 2000, toYear - 2000);
-    }
-
-    if (gladLayer && gladLayer.setDateRange) {
-      const julianFrom = appUtils.getJulianDate(gladFrom);
-      const julianTo = appUtils.getJulianDate(gladTo);
-
-      gladLayer.setDateRange(julianFrom, julianTo);
-    }
-
-    if (terraILayer && terraILayer.setDateRange) {
-      const julianFrom = appUtils.getJulianDate(terraIFrom);
-      const julianTo = appUtils.getJulianDate(terraITo);
-
-      terraILayer.setDateRange(julianFrom, julianTo);
-    }
-
-    if (viirsFiresLayer) {
-      layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer);
-    }
-
-    if (modisFiresLayer) {
-      layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
     }
 
     map.addLayers(esriLayers);
@@ -563,7 +537,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LCD.layers : [];
   const layerConf = appUtils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
   const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-  const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, viirsFrom, viirsTo, modisFrom, modisTo } = params;
+  const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo } = params;
   const geographic = webmercatorUtils.geographicToWebMercator(feature.geometry);
   //- Only Analyze layers in the analysis
   if (appUtils.containsObject(lcdLayers, 'id', layerKeys.TREE_COVER_LOSS)) {
@@ -755,49 +729,6 @@ const runAnalysis = function runAnalysis (params, feature) {
     const node = document.getElementById('intact-loss');
     node.remove();
   }
-  if (settings.viirsFires) {
-    //- Fires Analysis
-    performAnalysis({
-      type: analysisKeys.VIIRS_FIRES,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      viirsFrom: viirsFrom,
-      viirsTo: viirsTo
-    }).then((results) => {
-      document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
-      document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
-      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
-      document.getElementById('viirs-badge').classList.remove('hidden');
-    });
-  } else {
-    const node = document.getElementById('viirs-badge');
-    node.remove();
-  }
-
-  if (settings.modisFires) {
-    //- Fires Analysis
-    performAnalysis({
-      type: analysisKeys.MODIS_FIRES,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      modisFrom: modisFrom,
-      modisTo: modisTo
-    }).then((results) => {
-      document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__modis-count').innerHTML = results.fireCount;
-      document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
-      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
-      document.getElementById('modis-badge').classList.remove('hidden');
-    });
-  } else {
-    const node = document.getElementById('modis-badge');
-    node.remove();
-  }
 
   //- Mangroves Loss
   if (settings.mangroves) {
@@ -833,82 +764,6 @@ const runAnalysis = function runAnalysis (params, feature) {
 
   } else {
     const node = document.getElementById('mangroves');
-    node.remove();
-  }
-
-  //- SAD Alerts
-  if (settings.sadAlerts) {
-    performAnalysis({
-      type: analysisKeys.SAD_ALERTS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const node = document.getElementById('sad-alerts');
-      const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
-      const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
-      const {alerts} = results;
-      const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
-      if (categories.length) {
-        //- Tell the second series to use the second axis
-        series[0].yAxis = 1;
-        charts.makeDualAxisTimeSeriesChart(node, { series, categories });
-      } else {
-        node.remove();
-      }
-    });
-
-  } else {
-    const node = document.getElementById('sad-alerts');
-    node.remove();
-  }
-
-  //- GLAD Alerts
-  if (settings.gladAlerts) {
-    performAnalysis({
-      type: analysisKeys.GLAD_ALERTS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      geostoreId: feature.geostoreId,
-      gladFrom: new Date(gladFrom),
-      gladTo: new Date(gladTo)
-    }).then((results) => {
-      const node = document.getElementById('glad-alerts');
-      const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
-      if (results.length) {
-        charts.makeTimeSeriesCharts(node, { data: results, name });
-      } else {
-        node.remove();
-      }
-    });
-  } else {
-    const node = document.getElementById('glad-alerts');
-    node.remove();
-  }
-
-  //- Terra-I Alerts
-  if (settings.terraIAlerts) {
-    performAnalysis({
-      type: analysisKeys.TERRA_I_ALERTS,
-      geometry: geographic,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      terraIFrom: new Date(terraIFrom),
-      terraITo: new Date(terraITo)
-    }).then((results) => {
-      const node = document.getElementById('terrai-alerts');
-      const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
-      charts.makeTimeSeriesCharts(node, {
-        data: results,
-        name: name
-      });
-    });
-  } else {
-    const node = document.getElementById('terrai-alerts');
     node.remove();
   }
 
