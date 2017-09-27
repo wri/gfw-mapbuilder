@@ -155,8 +155,6 @@ export default class Map extends Component {
         if (landMapLayerIds.indexOf(id) > -1) {
           const layer = response.map.getLayer(id);
 
-          layer.setMaxScale(4600000);
-
           layer.on('visibility-change', result => {
 
             let featurePointLayer;
