@@ -167,14 +167,6 @@ class MapStore {
   }
 
   removeAll () {
-    // this.activeLayers.forEach(layerId => {
-    //   if (layerId === 'USER_FEATURES') return;
-
-    //   const layer = this.allLayers.filter(l => l.id === layerId);
-
-    //   if (layer) layer.visible = false;
-    // });
-
     this.activeLayers = [];
     //- Reset the webmap layers
     Object.keys(this.dynamicLayers).forEach((layerId) => {
