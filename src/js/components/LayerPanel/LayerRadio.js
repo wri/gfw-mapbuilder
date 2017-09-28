@@ -94,7 +94,6 @@ export default class LayerRadio extends Component {
       const layer = brApp.map.getLayer(id);
 
       if (this.props.dynamicLayers[id].length > 0) {
-        console.log('FIRED');
         LayerActions.removeAllSubLayers(layer);
         layer.hide();
         layer.setVisibleLayers([-1]);
