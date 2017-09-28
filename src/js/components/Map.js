@@ -374,7 +374,8 @@ export default class Map extends Component {
 
     settings.exclusiveRadioGroups = [
       'GROUP_INDIGENOUS_LANDS_HELD',
-      'GROUP_INDIGENOUS_INDICATORS'
+      'GROUP_INDIGENOUS_INDICATORS',
+      'GROUP_COMMUNITY_INDICATORS'
     ];
 
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both

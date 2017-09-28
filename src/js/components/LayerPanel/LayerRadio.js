@@ -24,9 +24,37 @@ export default class LayerRadio extends Component {
 
     this.layer = brApp.map.getLayer(props.layers[0].id);
     LayerActions.removeAllSubLayers.defer(this.layer);
+
     this.state = {
-      selected: this.layer.visibleLayers[0] || -1
+      selected: this.layer.visibleLayers[0] || -1,
+      exclusiveLayerIds: []
     };
+  }
+
+  componentDidMount() {
+    // Get the list of unique layer ids that we need to turn off when a radio button is toggled on
+    const { settings } = this.context;
+    const { layerPanel } = settings;
+
+    const exclusiveLayerIds = settings.exclusiveRadioGroups
+    .reduce((result, currentVal) => {
+
+      return [
+        ...result,
+        ...layerPanel[currentVal].layers.map(l => l.id)
+        ];
+    }, [])
+    .filter(id => id !== this.layer.id);
+
+    const uniqueIds = [];
+    exclusiveLayerIds.forEach(id => {
+      if (uniqueIds.indexOf(id) === -1) uniqueIds.push(id);
+      return;
+    });
+
+    this.setState({
+      exclusiveLayerIds: uniqueIds
+    });
   }
 
   componentDidUpdate() {
@@ -61,26 +89,16 @@ export default class LayerRadio extends Component {
 
   toggleLayer (event) {
 
-    const { settings } = this.context;
-    const { layerPanel } = settings;
-
-    const exclusiveLayerIds = settings.exclusiveRadioGroups
-    .reduce((result, currentVal) => {
-
-      return [
-        ...result,
-        ...new Set(layerPanel[currentVal].layers.map(l => l.id))
-        ];
-      }, [])
-      .filter(id => id !== this.layer.id);
-
-    exclusiveLayerIds.forEach(id => {
+    this.state.exclusiveLayerIds.forEach(id => {
 
       const layer = brApp.map.getLayer(id);
 
-      LayerActions.removeAllSubLayers(layer);
-      layer.hide();
-      layer.setVisibleLayers([-1]);
+      if (this.props.dynamicLayers[id].length > 0) {
+        console.log('FIRED');
+        LayerActions.removeAllSubLayers(layer);
+        layer.hide();
+        layer.setVisibleLayers([-1]);
+      }
     });
 
     const value = Number(event.target.getAttribute('value'));
