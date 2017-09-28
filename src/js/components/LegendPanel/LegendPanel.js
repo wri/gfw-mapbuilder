@@ -181,7 +181,7 @@ export default class LegendPanel extends Component {
       layersFive.forEach(layer => {
         const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'id', layer.id);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
+        const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={activeLayers.indexOf(layerConf.id) > -1} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
         landsHeldLegends.push({order: subLayerConf.order, childComponent});
       });
       landsHeldLegends.sort((a, b) => a.order - b.order);
@@ -191,7 +191,7 @@ export default class LegendPanel extends Component {
       layersThree.forEach(layer => {
         const subLayerConf = utils.getObject(layerGroups.GROUP_INDIGENOUS_LANDS_HELD.layers, 'subId', layer.subId);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={activeLayers.indexOf(layerConf.id) > -1} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(childComponent);
       });
     }
@@ -208,7 +208,8 @@ export default class LegendPanel extends Component {
       layersTwo.forEach(layer => {
         const subLayerConf = utils.getObject(layerGroups.GROUP_COMMUNITY_INDICATORS.layers, 'subId', layer.subId);
         const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
+        const visible = layer.esriLayer.visible && layer.esriLayer.visibleLayers.indexOf(subLayerConf.subIndex) > -1;
+        const childComponent = <WebMapLegend key={subLayerConf.subId} url={layerConf.url} labels={subLayerConf.label} visibility={visible} visibleLayers={activeLayers} layerSubIndex={subLayerConf.subIndex} layerId={subLayerConf.subId}/>;
         webmapChildComponents.push(childComponent);
       });
     }
@@ -238,7 +239,7 @@ export default class LegendPanel extends Component {
           layerSubIndex = 0;
         }
 
-        const childComponent = <WebMapLegend key={subLayerConf.Id} url={url} layerSubIndex={layerSubIndex} labels={subLayerConf.label} visibility={layer.visible} visibleLayers={activeLayers} layerId={subLayerConf.subId}/>;
+        const childComponent = <WebMapLegend key={subLayerConf.Id} url={url} layerSubIndex={layerSubIndex} labels={subLayerConf.label} visibility={activeLayers.indexOf(layerConf.id) > -1} visibleLayers={activeLayers} layerId={subLayerConf.subId}/>;
         legendComponents.push(childComponent);
       });
     }
