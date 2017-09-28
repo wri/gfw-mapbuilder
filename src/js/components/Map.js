@@ -335,7 +335,8 @@ export default class Map extends Component {
         19: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?',
         20: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?',
         21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
-      }
+      },
+      isRadioGroup: true
     };
 
     settings.layerPanel.GROUP_COMMUNITY_INDICATORS = {
@@ -351,7 +352,8 @@ export default class Map extends Component {
       label: {
         en: 'Percent of Country Held by Indigenous Peoples and Communities'
       },
-      layers: []
+      layers: [],
+      isRadioGroup: true
     };
 
     settings.layerPanel.GROUP_LAND_MAPS = {
@@ -369,6 +371,12 @@ export default class Map extends Component {
       },
       layers: []
     };
+
+    settings.exclusiveRadioGroups = [
+      'GROUP_INDIGENOUS_LANDS_HELD',
+      'GROUP_INDIGENOUS_INDICATORS'
+    ];
+
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both
     // languages so the original webmap works in both views
     const saveLayersInOtherLang = (

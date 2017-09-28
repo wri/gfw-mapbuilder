@@ -60,6 +60,29 @@ export default class LayerRadio extends Component {
   }
 
   toggleLayer (event) {
+
+    const { settings } = this.context;
+    const { layerPanel } = settings;
+
+    const exclusiveLayerIds = settings.exclusiveRadioGroups
+    .reduce((result, currentVal) => {
+
+      return [
+        ...result,
+        ...new Set(layerPanel[currentVal].layers.map(l => l.id))
+        ];
+      }, [])
+      .filter(id => id !== this.layer.id);
+
+    exclusiveLayerIds.forEach(id => {
+
+      const layer = brApp.map.getLayer(id);
+
+      LayerActions.removeAllSubLayers(layer);
+      layer.hide();
+      layer.setVisibleLayers([-1]);
+    });
+
     const value = Number(event.target.getAttribute('value'));
     const selectedLayer = this.props.layers.filter(l => l.subIndex === value)[0];
     const selectedValue = selectedLayer.subIndex;
