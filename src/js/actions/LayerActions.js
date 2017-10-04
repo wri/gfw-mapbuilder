@@ -30,7 +30,11 @@ class LayerActions {
     return info;
   }
 
-  changeFiresTimeline (selectedIndex) {
+  changeViirsFiresTimeline (selectedIndex) {
+    return selectedIndex;
+  }
+
+  changeModisFiresTimeline (selectedIndex) {
     return selectedIndex;
   }
 
@@ -39,6 +43,42 @@ class LayerActions {
       from: data.fromSelectedIndex,
       to: data.toSelectedIndex
     };
+  }
+
+  shouldResetSlider(bool) {
+    return bool;
+  }
+
+  updateGladStartDate (startDate) {
+    return startDate;
+  }
+
+  updateGladEndDate (endDate) {
+    return endDate;
+  }
+
+  updateTerraIStartDate (startDate) {
+    return startDate;
+  }
+
+  updateTerraIEndDate (endDate) {
+    return endDate;
+  }
+
+  updateViirsStartDate (startDate) {
+    return startDate;
+  }
+
+  updateViirsEndDate (endDate) {
+    return endDate;
+  }
+
+  updateModisStartDate (startDate) {
+    return startDate;
+  }
+
+  updateModisEndDate (endDate) {
+    return endDate;
   }
 
   setLossOptions (lossOptionsData) {

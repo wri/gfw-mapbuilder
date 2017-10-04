@@ -20,6 +20,7 @@ import Scalebar from 'esri/dijit/Scalebar';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
+import analysisUtils from 'utils/analysisUtils';
 import MapStore from 'stores/MapStore';
 import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
@@ -84,16 +85,6 @@ export default class Map extends Component {
 
   componentDidMount() {
     MapStore.listen(this.storeDidUpdate);
-
-    // I only need the token and url for config items, so language does not matter
-    const USER_FEATURES_CONFIG = utils.getObject(resources.layerPanel.extraLayers, 'id', layerKeys.USER_FEATURES);
-    // Make sure all requests that use tokens have them
-    esriRequest.setRequestPreCallback((ioArgs) => {
-      if (ioArgs.url.search(USER_FEATURES_CONFIG.url) > -1) {
-        ioArgs.content.token = resources.userFeatureToken[location.hostname];
-      }
-      return ioArgs;
-    });
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -171,7 +162,14 @@ export default class Map extends Component {
         userFeaturesLayer.on('click', (evt) => {
           if (evt.graphic && evt.graphic.attributes) {
             evt.stopPropagation();
-            response.map.infoWindow.setFeatures([evt.graphic]);
+            if (!evt.graphic.attributes.geostoreId) {
+              analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
+                evt.graphic.attributes.geostoreId = res.data.id;
+                response.map.infoWindow.setFeatures([evt.graphic]);
+              });
+            } else {
+              response.map.infoWindow.setFeatures([evt.graphic]);
+            }
           }
         });
       });
@@ -285,7 +283,7 @@ export default class Map extends Component {
 
     //- Set up the group labels and group layers
     settings.layerPanel.GROUP_WEBMAP.layers = layers;
-    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language].webmapMenuName;
+    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
 
     if (saveLayersInOtherLang) {
       settings.layerPanel.GROUP_WEBMAP.label[settings.alternativeLanguage] = settings.labels[settings.alternativeLanguage].webmapMenuName;
@@ -333,7 +331,7 @@ export default class Map extends Component {
           <TabButtons {...this.state} />
           <TabView {...this.state} />
           {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
-          <FooterInfos hidden={settings.hideHeaderFooter} map={map} />
+          <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
             <use xlinkHref='#shape-crosshairs' />

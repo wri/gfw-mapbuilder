@@ -435,28 +435,28 @@ export default {
 		let index, data;
 		//- Simple means that the layer does not have many classes and is a binary raster,
 		//- it used a simplified rendering rule to fetch the data and does not need the encoder
-		if (isSimple) {
+		if (isSimple && counts.some(value => value !== 0)) {
 			series.push({
 				'name': labels[0],
 				'data': counts.slice(1)
-			});
+      });
 			outputColors.push(colors[0]);
 		} else {
 			for (let i = 0; i < Ys.length; i++) {
 				data = [];
 				for (let j = 0; j < Xs.length; j++) {
-					index = encoder.encode(Xs[j], Ys[i]);
+          index = encoder.encode(Xs[j], Ys[i]);
 					data.push(counts[index] || 0);
-				}
+        }
 				if (data.some((value) => value !== 0)) {
 					series.push({
 						'name': labels[i],
 						'data': data
 					});
 					outputColors.push(colors[i]);
-				}
+        }
 			}
-		}
+    }
 
 		return {
 			series: series,

@@ -6,38 +6,55 @@ export default class TotalLossChart extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { isEmpty: false };
+    this.state = { isEmpty: false, isError: false };
   }
 
   componentDidMount() {
-    const {labels, colors, counts, encoder, options, lossLabels} = this.props;
-    if(counts.length === 0) {
-      this.setState({ isEmpty: true });
+    const { labels, colors, counts, encoder, options, lossLabels, results } = this.props;
+
+    if (typeof results === 'object' && results.hasOwnProperty('error')) {
+      this.setState({ isError: true });
     } else {
-      this.setState({ isEmpty: false });
+      this.setState({ isError: false });
+      if (counts.length === 0 || !counts.some(value => value !== 0)) {
+        this.setState({ isEmpty: true });
+      } else {
+        this.setState({ isEmpty: false });
 
-      const element = this.refs.chart;
-      const chartInfo = charts.formatSeriesWithEncoder({
-      isSimple: options.simple,
-      encoder: encoder,
-      counts: counts,
-      labels: labels,
-      colors: colors,
-      Xs: encoder.A, // Loss Bounds
-      Ys: encoder.B // Raster were crossing with
-      });
+        const element = this.refs.chart;
+        const chartInfo = charts.formatSeriesWithEncoder({
+          isSimple: options.simple,
+          encoder: encoder,
+          counts: counts,
+          labels: labels,
+          colors: colors,
+          Xs: encoder.A, // Loss Bounds
+          Ys: encoder.B // Raster were crossing with
+        });
 
-      charts.makeTotalLossBarChart(element, lossLabels, chartInfo.colors, chartInfo.series);
+        charts.makeTotalLossBarChart(element, lossLabels, chartInfo.colors, chartInfo.series);
+      }
     }
   }
 
   render () {
-    return (
-      <div>
-        <div ref='chart'></div>
-        <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
-      </div>
-    );
+    const { isError } = this.state;
+    const { results } = this.props;
+
+    if (isError) {
+      return (
+        <div className='data-error'>
+          <h5>{results.message}</h5>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div ref='chart'></div>
+          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+        </div>
+      );
+    }
   }
 }
 

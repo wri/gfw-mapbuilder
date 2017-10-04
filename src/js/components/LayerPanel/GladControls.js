@@ -1,19 +1,9 @@
 import ToggleSwitch from 'components/Shared/ToggleSwitch';
 import React, {Component, PropTypes} from 'react';
-import {loadCSS} from 'utils/loaders';
-import {assetUrls} from 'js/config';
+import layerActions from 'actions/LayerActions';
+import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import 'pickadate';
-
-const day = 1000 * 60 * 60 * 24;
-const getJulianDate = function getJulianDate (timestamp) {
-  const newDate = new Date(timestamp);
-  const year = new Date(newDate.getFullYear(), 0, 0);
-  const currentDay = Math.ceil((newDate - year) / day);
-  //- Year should be 15000 or 16000
-  const julianYear = (newDate.getFullYear() - 2000) * 1000;
-  return julianYear + currentDay;
-};
 
 export default class GladControls extends Component {
 
@@ -26,27 +16,17 @@ export default class GladControls extends Component {
     super(props);
     //- Defaults
     this.min = new Date('2015', 0, 1);
-    this.max = Date.now();
+    this.max = new Date();
 
     this.state = {
-      unconfirmed: false,
-      startDate: this.min,
-      endDate: this.max
+      unconfirmed: false
     };
   }
 
   componentDidMount () {
-    //- Load the pickers css
-    let base = window._app.base ? window._app.base + '/' : '';
-    if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
-      base = base.substring(0, base.length - 1);
-    }
-
-    loadCSS(base + assetUrls.pickadateCSS);
-    loadCSS(base + assetUrls.pickadateDateCSS);
     //- Create the date pickers
     const {fromCalendar, toCalendar} = this.refs;
-    const {startDate, endDate} = this.state;
+    const {startDate, endDate} = this.props;
     //- Starting date
     this.fromPicker = $(fromCalendar).pickadate({
       today: 'Jump to today',
@@ -73,10 +53,18 @@ export default class GladControls extends Component {
     }).pickadate('picker');
   }
 
+  componentDidUpdate(prevProps) {
+    if ((Date.parse(prevProps.startDate) !== Date.parse(this.props.startDate)) || (Date.parse(prevProps.endDate) !== Date.parse(this.props.endDate))) {
+      this.updateDateRange();
+      this.toPicker.set('select', this.props.endDate);
+      this.fromPicker.set('select', this.props.startDate);
+    }
+  }
+
   didSetStartDate = ({select}) => {
     if (select) {
-      this.setState({ startDate: new Date(select) });
-      this.updateDateRange();
+      const startDate = new Date(select);
+      layerActions.updateGladStartDate.defer(startDate);
       if (this.fromPicker && this.toPicker) {
         this.toPicker.set('min', this.fromPicker.get('select'));
       }
@@ -85,8 +73,8 @@ export default class GladControls extends Component {
 
   didSetEndDate = ({select}) => {
     if (select) {
-      this.setState({ endDate: new Date(select) });
-      this.updateDateRange();
+      const endDate = new Date(select);
+      layerActions.updateGladEndDate.defer(endDate);
       if (this.fromPicker && this.toPicker) {
         this.fromPicker.set('max', this.toPicker.get('select'));
       }
@@ -102,11 +90,10 @@ export default class GladControls extends Component {
   };
 
   updateDateRange = () => {
-    const {startDate, endDate} = this.state;
+    const {startDate, endDate, layer} = this.props;
     const {map} = this.context;
-    const {layer} = this.props;
-    const julianFrom = getJulianDate(startDate);
-    const julianTo = getJulianDate(endDate);
+    const julianFrom = utils.getJulianDate(startDate);
+    const julianTo = utils.getJulianDate(endDate);
     if (map.getLayer) {
       map.getLayer(layer.id).setDateRange(julianFrom, julianTo);
     }

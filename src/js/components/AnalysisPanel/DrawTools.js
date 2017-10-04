@@ -45,12 +45,13 @@ export default class DrawTools extends Component {
     this.toolbar.on('draw-end', (evt) => {
       this.deactivate();
       // Add graphic to map and set as active feature
-      const graphic = geometryUtils.generateDrawnPolygon(evt.geometry);
-      const layer = map.getLayer(layerKeys.USER_FEATURES);
-      if (layer) {
-        layer.add(graphic);
-        map.infoWindow.setFeatures([graphic]);
-      }
+      geometryUtils.generateDrawnPolygon(evt.geometry).then(graphic => {
+        const layer = map.getLayer(layerKeys.USER_FEATURES);
+        if (layer) {
+          layer.add(graphic);
+          map.infoWindow.setFeatures([graphic]);
+        }
+      });
     });
   };
 

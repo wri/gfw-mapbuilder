@@ -43,14 +43,16 @@ const configureApp = () => {
 * When deploying to specific versions, this must be used for all relative paths
 */
 const lazyloadAssets = () => {
+  const base = window._app.base ? window._app.base + '/' : '';
+
   loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/google-fira.css`);
   loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/app.css`);
   // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/dijit/themes/tundra/tundra.css`);
   // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
   loadCSS(`https://js.arcgis.com/${window._app.esri}/dijit/themes/tundra/tundra.css`);
   loadCSS(`https://js.arcgis.com/${window._app.esri}/esri/css/esri.css`);
-
-  const base = window._app.base ? window._app.base + '/' : '';
+  loadCSS(base + assetUrls.pickadateCSS);
+  loadCSS(base + assetUrls.pickadateDateCSS);
 
   loadJS(base + assetUrls.highcharts).then(() => {
     //- Set default Options for Highcharts

@@ -45,11 +45,16 @@ block append content
     div.results-container#sad-alerts
     div.results-container#glad-alerts
     div.results-container#terrai-alerts
-    div.results-container.results__fires-badge.hidden#fires-badge
-      div.results__fires-pre
-      div.results__fires-count
-      div.results__fires-active
-      div.results__fires-post
+    div.results-container.results__fires-badge.hidden#viirs-badge
+      div.results__viirs-pre
+      div.results__viirs-count
+      div.results__viirs-active
+      div.results__viirs-post
+    div.results-container.results__fires-badge.hidden#modis-badge
+      div.results__modis-pre
+      div.results__modis-count
+      div.results__modis-active
+      div.results__modis-post
     div.results-container#lc-composition
 block append esri-script
   script.
@@ -85,6 +90,7 @@ block append esri-script
         { name: 'js', location: makePath(base, 'js')},
         { name: 'vendor', location: makePath(base, 'vendor')},
         { name: 'utils', location: makePath(base, 'js/utils')},
+        { name: 'helpers', location: makePath(base, 'js/helpers')},
         { name: 'report', location: makePath(base, 'js/report')},
         //- { name: 'stores', location: base + 'js/stores' },
         //- { name: 'actions', location: base + 'js/actions' },

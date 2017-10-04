@@ -1,24 +1,478 @@
 doctype
 html
-  body.tundra
-    include jade/svg.jade
-    #root
-    div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='http://alpha.blueraster.io.s3.amazonaws.com/gfw-mapbuilder/library-load-dist/1.1.10/js/library.js')
-    
-    script.
-      var customApp = new MapBuilder({
-        el: 'root',
-        config: {
-          language: 'en',
-          title: 'Lucas Fake Application',
-          labels: {
-            en: {
-              title: 'New TITLE for our Application from our config',
-              subtitle: 'New subbb'
-            }
-          }
-        },
-        version: "#{version}"//,
-        //base: "#{base}"
-      });
+	body.tundra
+		include jade/svg.jade
+		#root
+		div#share-modal.modal-wrapper.hidden
+		script(id='library-load' src='http://alpha.blueraster.io.s3.amazonaws.com/gfw-mapbuilder/library-load-dist/1.1.12.js')
+		// https://library.gfw-mapbuilder.org/1.1.12.js
+		// https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.1.12.js
+		
+		script.
+			var customApp = new MapBuilder({
+				el: 'root',
+				config: {
+						"webmap": "f9699bbb3324448fb9cc1085c918fa25",
+						"title": "GFW Mapbuilder (french)",
+						"subtitle": "French subtitle",
+						"logoUrl": "https://my.gfw-mapbuilder.org/img/gfw-logo.png",
+						"logoLinkUrl": "https://www.gfw-mapbuilder.org/",
+						"aboutLinkUrl": "",
+						"downloadLinkUrl": "",
+						"printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
+						"maskServiceUrl": "",
+						"mapThemeIds": "",
+						"mapThemes": "",
+						"narrative": "Here the french narrative",
+						"includeSubscribeButton": false,
+						"includeMyGFWLogin": false,
+						"navLinksInNewTab": false,
+						"language": "fr",
+						"useAlternativeLanguage": true,
+						"alternativeWebmap": "b514d31339954ba9a0c5822135bc2001",
+						"alternativeLanguage": "en",
+						"alternativeLanguageTitle": "GFW Mapbuilder (english)",
+						"alternativeLanguageSubtitle": "English subtitle",
+						"alternativeMapThemes": "",
+						"alternativeNarrative": "English narrative",
+						"alternativeWebmapMenuName": "English Menu Name",
+						"includeDocumentsTab": true,
+						"documentsDirectory": "https://cmr.forest-atlas.org/resources/docs/",
+						"documentsMapserver": "https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer",
+						"iso": "COD",
+						"activeFires": true,
+						"intactForests": true,
+						"aboveGroundBiomass": true,
+						"landCover": false,
+						"mangroves": false,
+						"sadAlerts": false,
+						"gladAlerts": true,
+						"terraIAlerts": false,
+						"webmapMenuName": "French Menu Name",
+						"restorationModule": false,
+						"restorationImageServer": "https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module2/ImageServer",
+						"slopePotentialOptions": "Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential",
+						"alternativeSlopePotentialOptions": "Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential",
+						"slopePotentialColors": "rgb(234,199,253);rgb(253,178,46);rgb(88,126,15);rgb(210,147,116);rgb(245,208,139);rgb(177,177,36);rgb(26,176,144);rgb(175,15,143);rgb(217,254,199);rgb(255,254,137);",
+						"restorationOptions": "establishing natural forest outside of cropland;restocking of degraded natural forest;agri-silviculture and agro-silvo-pastoralism;silvo-pastoralism;woodlot;commercial plantation on bare soil and shrubland;commercial plantation as buffer zone to national forest priority areas and protected areas;tree-based buffer zone along rivers, lakes and reservoirs;",
+						"alternativeRestorationOptions": "establishing natural forest outside of cropland;restocking of degraded natural forest;agri-silviculture and agro-silvo-pastoralism;silvo-pastoralism;woodlot;commercial plantation on bare soil and shrubland;commercial plantation as buffer zone to national forest priority areas and protected areas;tree-based buffer zone along rivers, lakes and reservoirs;",
+						"restorationOptionsRasterIds": "9;10;6;11;13;8;7;12;",
+						"slopeClassNames": "No Data;<= 30%;30 - 60%;> 60%;",
+						"slopeClassColors": "rgb(0, 0, 0);rgb(255, 235, 175);rgb(115, 115, 0);rgb(168, 0, 0);",
+						"treeCoverClassNames": "No Data;<= 10%;10 - 30%;> 30%;",
+						"treeCoverClassColors": "rgb(0, 0, 0);rgb(180, 215, 158);rgb(245, 245, 122);rgb(205, 170, 102);",
+						"landCoverClassNames": "No Data;Forestland;Grassland;Cropland;Wetland and Waterbodies;Settlement;Bare soil;",
+						"landCoverClassColors": "rgb(0, 0, 0);rgb(0, 174, 0);rgb(255, 255, 0);rgb(255, 155, 190);rgb(0, 238, 238);rgb(255, 0, 0);rgb(255, 255, 188);",
+						"populationClassNames": "No Data;<= 20;20 - 50;50 - 150;150 - 500;> 500;",
+						"populationClassColors": "rgb(0, 0, 0);rgb(255, 255, 128);rgb(250, 209, 85);rgb(242, 167, 46);rgb(173, 83, 19);rgb(107, 0, 0);",
+						"rainfallClassNames": "No Data;Class 1;Class 2;Class 3;",
+						"rainfallClassColors": "rgb(0, 0, 0);rgb(255, 0, 0), rgb(0, 255, 0);rgb(0, 0, 255);",
+						"restorationSlope": true,
+						"restorationSlopePotential": true,
+						"restorationTreeCover": true,
+						"restorationLandCover": true,
+						"restorationPopulation": true,
+						"restorationRainfall": true,
+						"restorationChartDescription": "Some explanatory text for this anlaysis",
+						"restorationTableDescription": "Some explanatory text for this anlaysis",
+						"slopeDescription": "Some explanatory text for this anlaysis",
+						"alternativeRestorationChartDescription": "Some explanatory text for this anlaysis",
+						"alternativeRestorationTableDescription": "Some explanatory text for this anlaysis",
+						"alternativeSlopeDescription": "Some explanatory text for this anlaysis",
+						"sharinghost": "https://www.arcgis.com",
+						"analyticsCode": "UA-62288390-15",
+						"userFeatureToken": {
+								"localhost": "TjEeQfPMtR-0kjqzTqIZ7R-NAzGK1Z2sEQo6Dzt17O42DeIlaAxdqeg7GPMANVcC",
+								//- Localhost token for BR office
+								"staging.blueraster.com": "TjEeQfPMtR-0kjqzTqIZ7ZcTy6iHPAbdZQNaAPNBXQHgKwP6t8xmE7d0w7Hsi4HfRgaWltqVI3Y7Bq8aT5unCg..",
+								"stg.blueraster.com.s3.amazonaws.com": "TjEeQfPMtR-0kjqzTqIZ7Sa9KfzWWRNkafbsiNHsV_V5s2pM7zD73fKp37Sx5EoXGMyWy5s74Sgjr0XUHlpu6ufFZ5Uh9mvAQkfVUKA-3sA.",
+								"alpha.blueraster.io": "TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..",
+								"alpha.blueraster.io.s3.amazonaws.com": "TjEeQfPMtR-0kjqzTqIZ7dagw25IJzDP02-D9WnUmPbMjcX-0zyr-9A_I9IqrImwJOwVpL_5qxPZAT-heBZ4RQ..",
+								//- Github token
+								"wri.github.io": "TjEeQfPMtR-0kjqzTqIZ7cl-o01RHvmC7tVmcyLHrT3-TfMZbwysm9txFEib56OM",
+								//- Other production tokens
+								"my.gfw-mapbuilder.org": "8KiqcmKgUGK1iReXwjfOi0sCeJRiYKqRes6ntHJn5u2NFbgyri_cWB2i9WqjhAIt",
+								"wri-sites.s3-website-us-east-1.amazonaws.com": "Nf_zOJfFogItxMAsdY01Y6PYDgjxr20igxJqCkHZqSr3m-w3OsxLgHirlnpCeMCozsiL_qip08UDNbSQAzD8TjJapWcOzsQSzeGmL-h9Ss8.",
+								"geo.forest-atlas.org": "MH4OCCO98pTLKP8_VfL-m1KKAMmfcmQhgg1Qcr-Y0w1QPfWwuwTVALbEBZZ0OHsgrGq3nV3tiVhT-W_I7kFUiw.."
+						},
+						"layerPanel": {
+								"GROUP_WEBMAP": {
+										"order": 2,
+										"label": {},
+										"layers": []
+								},
+								"GROUP_LCD": {
+										"order": 1,
+										"label": {
+												"en": "Land Cover Change Dynamics",
+												"fr": "Evolution de la couverture des sols",
+												"es": "DinÃƒÂ¡mica de la Cobertura del Suelo",
+												"pt": "Land Cover Dynamics",
+												"id": "Land Cover Dynamics",
+												"zh": "Ã¥Å“Å¸Ã¥Å“Â°Ã¨Â¦â€&nbsp;Ã§â€ºâ€“Ã¥Å&nbsp;Â¨Ã¦â‚¬ÂÃ¦â€¢Â°Ã¦ÂÂ®"
+										},
+										"layers": [{
+												"order": 1,
+												"id": "TREE_COVER_LOSS",
+												"type": "image",
+												"url": "https://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer",
+												"technicalName": "tree_cover_loss",
+												"legendLayer": 0,
+												"colormap": [
+														[1, 219, 101, 152]
+												],
+												"inputRange": [1, 15],
+												"outputRange": [1],
+												"label": {
+														"en": "Tree cover loss",
+														"fr": "Perte en couvert arborÃƒÂ©",
+														"es": "PÃƒÂ©rdida de la cobertura arbÃƒÂ³rea",
+														"pt": "Tree cover loss",
+														"id": "Tree cover loss",
+														"zh": "Ã¦Â£Â®Ã¦Å¾â€”Ã¨Â¦â€&nbsp;Ã§â€ºâ€“Ã¦ÂÅ¸Ã¥Â¤Â±"
+												},
+												"sublabel": {
+														"en": "(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"fr": "(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"es": "(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"pt": "(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"id": "(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"zh": "(Ã¦Â¯ÂÃ¥Â¹Â´Ã¦â€ºÂ´Ã¦â€“Â°, 30Ã§Â±Â³, Ã¥â€¦Â¨Ã§ÂÆ’Ã¨Â¦â€&nbsp;Ã§â€ºâ€“, Ã¦Â±â€°Ã¦Â£Â®/Ã©Â©Â¬Ã©â€¡Å’Ã¥â€¦Â°Ã¥Â¤Â§Ã¥Â&shy;Â¦/Ã¨Â°Â·Ã¦Â&shy;Å’/Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Å“Â°Ã¨Â´Â¨Ã¦Âµâ€¹Ã©â€¡ÂÃ¥Â±â‚¬(USGS)/Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Â®â€¡Ã¨Ë†ÂªÃ¥Â±â‚¬(NASA))"
+												}
+										}, {
+												"order": 2,
+												"id": "TREE_COVER_GAIN",
+												"type": "image",
+												"url": "https://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer",
+												"technicalName": "tree_cover_gain",
+												"legendLayer": 1,
+												"label": {
+														"en": "Tree cover gain",
+														"fr": "Gain en couvert arborÃƒÂ©",
+														"es": "Aumento de la cobertura arbÃƒÂ³rea",
+														"pt": "Tree cover gain",
+														"id": "Tree cover gain",
+														"zh": "Ã¦Â£Â®Ã¦Å¾â€”Ã¨Â¦â€&nbsp;Ã§â€ºâ€“Ã¥Â¢Å¾Ã¥Å&nbsp; "
+												},
+												"sublabel": {
+														"en": "(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"fr": "(12 ans, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"es": "(12 aÃƒÂ±os, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"pt": "(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"id": "(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"zh": "(12 Ã¥Â¹Â´, 30Ã§Â±Â³, Ã¥â€¦Â¨Ã§ÂÆ’Ã¨Â¦â€&nbsp;Ã§â€ºâ€“, Ã¦Â±â€°Ã¦Â£Â®/Ã©Â©Â¬Ã©â€¡Å’Ã¥â€¦Â°Ã¥Â¤Â§Ã¥Â&shy;Â¦/Ã¨Â°Â·Ã¦Â&shy;Å’/Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Å“Â°Ã¨Â´Â¨Ã¦Âµâ€¹Ã©â€¡ÂÃ¥Â±â‚¬(USGS)/Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Â®â€¡Ã¨Ë†ÂªÃ¥Â±â‚¬(NASA))"
+												}
+										}, {
+												"order": 3,
+												"id": "IMAZON_SAD",
+												"type": "dynamic",
+												"url": "https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer",
+												"technicalName": "imazon_sad",
+												"layerIds": [2],
+												"label": {
+														"en": "SAD alerts",
+														"fr": "Alertes SAD",
+														"es": "SAD alerts",
+														"pt": "SAD alerts",
+														"id": "SAD alerts",
+														"zh": "SAD alerts"
+												},
+												"sublabel": {
+														"en": "(monthly, 250m, Brazilian Amazon, Imazon)",
+														"fr": "(mensuel, 250m, Amazonie brÃƒÂ©silienne, Imazon)",
+														"es": "(monthly, 250m, Brazilian Amazon, Imazon)",
+														"pt": "(monthly, 250m, Brazilian Amazon, Imazon)",
+														"id": "(monthly, 250m, Brazilian Amazon, Imazon)",
+														"zh": "(monthly, 250m, Brazilian Amazon, Imazon)"
+												}
+										}, {
+												"order": 4,
+												"id": "GLAD_ALERTS",
+												"type": "glad",
+												"url": "https://wri-tiles.s3.amazonaws.com/glad_prod/tiles/{z}/{x}/{y}.png",
+												"technicalName": "umd_landsat_alerts",
+												"legendLayer": 7,
+												"minDateValue": 15000,
+												"maxDateValue": 16365,
+												"confidence": [0, 1],
+												"label": {
+														"en": "Glad Alerts",
+														"fr": "Alertes Glad",
+														"es": "Glad Alerts",
+														"pt": "Glad Alerts",
+														"id": "Glad Alerts",
+														"zh": "Glad Alerts"
+												},
+												"sublabel": {
+														"en": "(weekly, 30m, select countries, UMD/ GLAD)",
+														"fr": "(hebdomadaire, 30m, certains pays, UMD/ GLAD)",
+														"es": "(weekly, 30m, select countries, UMD/ GLAD)",
+														"pt": "(weekly, 30m, select countries, UMD/ GLAD)",
+														"id": "(weekly, 30m, select countries, UMD/ GLAD)",
+														"zh": "(weekly, 30m, select countries, UMD/ GLAD)"
+												}
+										}, {
+												"order": 5,
+												"id": "TERRA_I_ALERTS",
+												"type": "terra",
+												"url": "https://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png",
+												"technicalName": "terra_i_alerts",
+												"legendLayer": 13,
+												"maxZoom": 10,
+												"minDateValue": 4000,
+												"maxDateValue": 20000,
+												"imageServer": "https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer",
+												"label": {
+														"en": "Terra-I Alerts",
+														"fr": "Alertes Terra-I",
+														"es": "Terra-I Alerts",
+														"pt": "Terra-I Alerts",
+														"id": "Terra-I Alerts",
+														"zh": "Terra-I Alerts"
+												},
+												"sublabel": {
+														"en": "(monthly, 250m, Latin America, CIAT)",
+														"fr": "(mensuel, 250m, AmÃƒÂ©rique Latine, CIAT)",
+														"es": "(monthly, 250m, Latin America, CIAT)",
+														"pt": "(monthly, 250m, Latin America, CIAT)",
+														"id": "(monthly, 250m, Latin America, CIAT)",
+														"zh": "(monthly, 250m, Latin America, CIAT)"
+												}
+										}, {
+												"order": 6,
+												"id": "VIIRS_ACTIVE_FIRES",
+												"type": "dynamic",
+												"url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer",
+												"technicalName": "noaa18_fires",
+												"layerIds": [0, 1, 2, 3],
+												"label": {
+														"en": "Active fires",
+														"fr": "Feux actifs",
+														"es": "Incendios activos",
+														"pt": "Active fires",
+														"id": "Active fires",
+														"zh": "Ã¦Â´Â»Ã¨Â·Æ’Ã§ÂÂ«Ã§â€šÂ¹"
+												},
+												"sublabel": {
+														"en": "(daily, 1km, global, NASA)",
+														"fr": "(journalier, 1km, global, NASA)",
+														"es": "Ã¦Â´Â»Ã¨Â·Æ’Ã§ÂÂ«Ã§â€šÂ¹",
+														"pt": "(daily, 1km, global, NASA)",
+														"id": "(daily, 1km, global, NASA)",
+														"zh": "(Ã¦Â¯ÂÃ¥Â¤Â©Ã¦â€ºÂ´Ã¦â€“Â°, 1Ã¥ÂÆ’Ã§Â±Â³, Ã¥â€¦Â¨Ã§ÂÆ’Ã¨Â¦â€&nbsp;Ã§â€ºâ€“, Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Â®â€¡Ã¨Ë†ÂªÃ¥Â±â‚¬Ã¯Â¼Ë†NASA))"
+												},
+												"popup": {
+														"title": {
+																"en": "Active Fires"
+														},
+														"content": {
+																"en": [{
+																		"label": "Brightness",
+																		"fieldExpression": "BRIGHTNESS"
+																}, {
+																		"label": "Confidence",
+																		"fieldExpression": "CONFIDENCE"
+																}, {
+																		"label": "Latitude",
+																		"fieldExpression": "LATITUDE"
+																}, {
+																		"label": "Longitude",
+																		"fieldExpression": "LONGITUDE"
+																}, {
+																		"label": "Acquisition Date",
+																		"fieldExpression": "ACQ_DATE:DateString(hideTime:true)"
+																}, {
+																		"label": "Acquisition Time",
+																		"fieldExpression": "ACQ_TIME"
+																}]
+														}
+												}
+										}]
+								},
+								"GROUP_LC": {
+										"order": 3,
+										"label": {
+												"en": "Land Cover",
+												"fr": "Couverture des sols",
+												"es": "Cobertura vegetal",
+												"pt": "Land Cover",
+												"id": "Land Cover",
+												"zh": "Ã¥Å“Å¸Ã¥Å“Â°Ã¨Â¦â€&nbsp;Ã§â€ºâ€“"
+										},
+										"layers": [{
+												"order": 1,
+												"id": "GLOB_MANGROVE",
+												"type": "webtiled",
+												"url": "https://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/23a7c3aea64174198a46c1fb4211023f:1467735931596/0/{level}/{col}/{row}.png",
+												"subDomains": [0, 1, 2, 3],
+												"technicalName": "global_mangroves",
+												"legendLayer": 11,
+												"label": {
+														"en": "Global Mangrove",
+														"fr": "Global Mangrove",
+														"es": "Global Mangrove",
+														"pt": "Global Mangrove",
+														"id": "Global Mangrove",
+														"zh": "Global Mangrove"
+												}
+										}, {
+												"order": 2,
+												"id": "IFL",
+												"type": "dynamic",
+												"url": "https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer",
+												"technicalName": "intact_forest_landscapes_change",
+												"layerIds": [0],
+												"label": {
+														"en": "Intact Forest Landscape",
+														"fr": "Paysage forestier intact",
+														"es": "Paisajes Forestales Intactos",
+														"pt": "Intact Forest Landscape",
+														"id": "Intact Forest Landscape",
+														"zh": "Ã¥Å½Å¸Ã§â€Å¸Ã¦Â£Â®Ã¦Å¾â€”Ã¦â„¢Â¯Ã¨Â§â€š"
+												}
+										}, {
+												"order": 3,
+												"id": "AG_BIOMASS",
+												"type": "image",
+												"url": "https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer",
+												"technicalName": "aboveground_biomass",
+												"legendLayer": 8,
+												"label": {
+														"en": "Aboveground Live Woody Biomass Density",
+														"fr": "DensitÃƒÂ© de la biomasse aÃƒÂ©rienne vivante",
+														"es": "Aboveground Live Woody Biomass Density",
+														"pt": "Aboveground Live Woody Biomass Density",
+														"id": "Aboveground Live Woody Biomass Density",
+														"zh": "Aboveground Live Woody Biomass Density"
+												}
+										}, {
+												"order": 4,
+												"id": "LAND_COVER",
+												"type": "dynamic",
+												"url": "https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer",
+												"technicalName": "global_landcover",
+												"layerIds": [10],
+												"rasterId": "$523",
+												"bounds": [1, 20],
+												"classes": {
+														"en": ["Dense moist forest", "Submontane forest", "Mountain forest", "Edaphic forest", "Mangrove", "Forest-savanna mosaic", "Rural complex and young secondary forest", "Closed to open deciduous woodland", "Savanna woodland-Tree savanna", "Shrubland", "Grassland", "Aquatic grassland", "Swamp grassland", "Sparse vegetation", "Mosaic cultivated areas/vegeatation( herbaceous or shrub)", "Agriculture", "Irrigated agriculture", "Bare areas", "Artificial surfaces and associated areas", "Water Bodies"],
+														"fr": ["Dense moist forest", "Submontane forest", "Mountain forest", "Edaphic forest", "Mangrove", "Forest-savanna mosaic", "Rural complex and young secondary forest", "Closed to open deciduous woodland", "Savanna woodland-Tree savanna", "Shrubland", "Grassland", "Aquatic grassland", "Swamp grassland", "Sparse vegetation", "Mosaic cultivated areas/vegeatation( herbaceous or shrub)", "Agriculture", "Irrigated agriculture", "Bare areas", "Artificial surfaces and associated areas", "Water Bodies"],
+														"es": ["Dense moist forest", "Submontane forest", "Mountain forest", "Edaphic forest", "Mangrove", "Forest-savanna mosaic", "Rural complex and young secondary forest", "Closed to open deciduous woodland", "Savanna woodland-Tree savanna", "Shrubland", "Grassland", "Aquatic grassland", "Swamp grassland", "Sparse vegetation", "Mosaic cultivated areas/vegeatation( herbaceous or shrub)", "Agriculture", "Irrigated agriculture", "Bare areas", "Artificial surfaces and associated areas", "Water Bodies"],
+														"pt": ["Dense moist forest", "Submontane forest", "Mountain forest", "Edaphic forest", "Mangrove", "Forest-savanna mosaic", "Rural complex and young secondary forest", "Closed to open deciduous woodland", "Savanna woodland-Tree savanna", "Shrubland", "Grassland", "Aquatic grassland", "Swamp grassland", "Sparse vegetation", "Mosaic cultivated areas/vegeatation( herbaceous or shrub)", "Agriculture", "Irrigated agriculture", "Bare areas", "Artificial surfaces and associated areas", "Water Bodies"],
+														"id": ["Dense moist forest", "Submontane forest", "Mountain forest", "Edaphic forest", "Mangrove", "Forest-savanna mosaic", "Rural complex and young secondary forest", "Closed to open deciduous woodland", "Savanna woodland-Tree savanna", "Shrubland", "Grassland", "Aquatic grassland", "Swamp grassland", "Sparse vegetation", "Mosaic cultivated areas/vegeatation( herbaceous or shrub)", "Agriculture", "Irrigated agriculture", "Bare areas", "Artificial surfaces and associated areas", "Water Bodies"],
+														"zh": ["Dense moist forest", "Submontane forest", "Mountain forest", "Edaphic forest", "Mangrove", "Forest-savanna mosaic", "Rural complex and young secondary forest", "Closed to open deciduous woodland", "Savanna woodland-Tree savanna", "Shrubland", "Grassland", "Aquatic grassland", "Swamp grassland", "Sparse vegetation", "Mosaic cultivated areas/vegeatation( herbaceous or shrub)", "Agriculture", "Irrigated agriculture", "Bare areas", "Artificial surfaces and associated areas", "Water Bodies"]
+												},
+												"colors": ["#3B823D", "#7CA079", "#AAB785", "#355936", "#5BBCF8", "#8BB94B", "#F0F979", "#7B8840", "#CABA4F", "#D3A162", "#FDCA76", "#C1E5DC", "#7AD3AB", "#F3F3AF", "#F6988F", "#FFFFF0", "#FFFFF0", "#A7A7A7", "#F83D48", "#353C92"],
+												"label": {
+														"en": "Land cover",
+														"fr": "Couverture des sols",
+														"es": "Cobertura vegetal",
+														"pt": "Land cover",
+														"id": "Land cover",
+														"zh": "Ã¥Å“Å¸Ã¥Å“Â°Ã¨Â¦â€&nbsp;Ã§â€ºâ€“"
+												}
+										}, {
+												"order": 5,
+												"id": "TREE_COVER",
+												"type": "image",
+												"url": "https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer",
+												"technicalName": "tree_cover",
+												"colormap": [
+														[1, 0, 179, 0]
+												],
+												"inputRange": [30, 101],
+												"outputRange": [1],
+												"opacity": 0.8,
+												"legendLayer": 2,
+												"label": {
+														"en": "Tree cover density",
+														"fr": "DensitÃƒÂ© du couvert arborÃƒÂ©",
+														"es": "Densidad de follaje",
+														"pt": "Tree cover density",
+														"id": "Tree cover density",
+														"zh": "Ã¦Â£Â®Ã¦Å¾â€”Ã¨Â¦â€&nbsp;Ã§â€ºâ€“Ã¥Â¯â€&nbsp;Ã¥ÂºÂ¦"
+												},
+												"sublabel": {
+														"en": "(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)",
+														"fr": "(annÃƒÂ©e 2000, 30m global, Hansen/UMD/Google/USGS/NASA)",
+														"es": "(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)",
+														"pt": "(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)",
+														"id": "(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)",
+														"zh": "(2000Ã¥Â¹Â´, 30Ã§Â±Â³ Ã¥â€¦Â¨Ã§ÂÆ’Ã¨Â¦â€&nbsp;Ã§â€ºâ€“, Ã¦Â±â€°Ã¦Â£Â®/Ã©Â©Â¬Ã©â€¡Å’Ã¥â€¦Â°Ã¥Â¤Â§Ã¥Â&shy;Â¦/Ã¨Â°Â·Ã¦Â&shy;Å’/Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Å“Â°Ã¨Â´Â¨Ã¦Âµâ€¹Ã©â€¡ÂÃ¥Â±â‚¬(USGS)/Ã§Â¾Å½Ã¥â€ºÂ½Ã¥Â®â€¡Ã¨Ë†ÂªÃ¥Â±â‚¬(NASA))"
+												}
+										}]
+								},
+								"GROUP_BASEMAP": {
+										"order": 4,
+										"label": {
+												"en": "Basemap",
+												"fr": "Basemap",
+												"es": "Basemap",
+												"pt": "Basemap",
+												"id": "Basemap",
+												"zh": "Basemap"
+										},
+										"layers": [{
+												"id": "landsat",
+												"thumbnailUrl": "https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png",
+												"templateUrl": "https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png",
+												"years": ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+												"title": {
+														"en": "Landsat",
+														"fr": "Landsat",
+														"es": "Landsat",
+														"pt": "Landsat",
+														"id": "Landsat",
+														"zh": "Landsat"
+												}
+										}, {
+												"id": "wri_mono",
+												"thumbnailUrl": "css/images/wri_mono.png",
+												"title": {
+														"en": "WRI Mono",
+														"fr": "WRI Mono",
+														"es": "WRI Mono",
+														"pt": "WRI Mono",
+														"id": "WRI Mono",
+														"zh": "WRI Mono"
+												}
+										}, {
+												"id": "wri_contextual",
+												"thumbnailUrl": "css/images/wri_contextual.png",
+												"title": {
+														"en": "WRI Contextual",
+														"fr": "WRI Contextual",
+														"es": "WRI Contextual",
+														"pt": "WRI Contextual",
+														"id": "WRI Contextual",
+														"zh": "WRI Contextual"
+												}
+										}]
+								},
+								"extraLayers": [{
+										"id": "MASK",
+										"type": "dynamic",
+										"order": 10000,
+										"url": "https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer",
+										"opacity": 0.35,
+										"layerIds": [0]
+								}, {
+										"id": "LEGEND_LAYER",
+										"type": "dynamic",
+										"url": "https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer",
+										"visible": false,
+										"opacity": 0,
+										"layerIds": []
+								}, {
+										"id": "USER_FEATURES",
+										"type": "feature",
+										"definitionExpression": "1 = 2",
+										"mode": 0,
+										"url": "https://gis-gfw.wri.org/arcgis/rest/services/user_features/FeatureServer/1",
+										"visible": true
+								}]
+						}
+				},
+				version: "1.1.12" //,
+				//base: ""
+			});

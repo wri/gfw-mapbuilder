@@ -15,18 +15,17 @@ export default class MobileMenu extends Component {
       settings
     } = this.context;
 
-    let {labels} = settings,
-        title, subtitle;
+    const {labels} = settings;
+    let title = '';
+    let subtitle = '';
 
     if (labels) {
-      let text = labels[language];
-      title = text.title;
-      subtitle = text.subtitle;
-    } else {
-      title = '';
-      subtitle = '';
+      const text = labels[language];
+      if (text) {
+        title = text.title;
+        subtitle = text.subtitle;
+      }
     }
-
 
     return (
       <div className='mobile-menu'>

@@ -6,28 +6,45 @@ export default class SlopeBarChart extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { isEmpty: false };
+    this.state = { isEmpty: false, isError: false };
   }
 
   componentDidMount() {
-    const {labels, colors, counts, tooltips} = this.props;
-    if(counts.length === 0) {
-      this.setState({ isEmpty: true });
+    const { labels, colors, counts, tooltips, results } = this.props;
+
+    if (typeof results === 'object' && results.hasOwnProperty('error')) {
+      this.setState({ isError: true });
     } else {
-      this.setState({ isEmpty: false });
-      const element = this.refs.chart;
-      const series = [{ data: counts }];
-      charts.makeSlopeBarChart(element, labels, colors, tooltips, series);
+      this.setState({ isError: false });
+      if (counts.length === 0) {
+        this.setState({ isEmpty: true });
+      } else {
+        this.setState({ isEmpty: false });
+        const element = this.refs.chart;
+        const series = [{ data: counts }];
+        charts.makeSlopeBarChart(element, labels, colors, tooltips, series);
+      }
     }
   }
 
-  render () {
-    return (
-      <div>
-        <div ref='chart' id='slope-breakdown' className='analysis__chart-container'></div>
-        <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
-      </div>
-    );
+  render() {
+    const { isError } = this.state;
+    const { results } = this.props;
+
+    if (isError) {
+      return (
+        <div className='data-error'>
+          <h5>{results.message}</h5>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div ref='chart' id='slope-breakdown' className='analysis__chart-container'></div>
+          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+        </div>
+      );
+    }
   }
 }
 

@@ -15,13 +15,41 @@ export default class ReportSubscribeButtons extends Component {
   printReport = () => {
     const { map, settings, language } = this.context;
     const selectedFeature = map.infoWindow && map.infoWindow.getSelectedFeature();
-    const {canopyDensity, activeSlopeClass, activeLayers} = mapStore.getState();
+    const {
+      canopyDensity,
+      activeSlopeClass,
+      activeLayers,
+      lossFromSelectIndex,
+      lossToSelectIndex,
+      gladStartDate,
+      gladEndDate,
+      terraIStartDate,
+      terraIEndDate,
+      viirsFiresSelectIndex,
+      modisFiresSelectIndex,
+      viirsStartDate,
+      viirsEndDate,
+      modisStartDate,
+      modisEndDate
+    } = mapStore.getState();
 
     if (selectedFeature) {
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
         activeLayers: activeLayers,
+        tcLossFrom: lossFromSelectIndex,
+        tcLossTo: lossToSelectIndex,
+        gladFrom: gladStartDate,
+        gladTo: gladEndDate,
+        terraIFrom: terraIStartDate,
+        terraITo: terraIEndDate,
+        viirsStartDate,
+        viirsEndDate,
+        modisStartDate,
+        modisEndDate,
+        viirsFiresSelectIndex,
+        modisFiresSelectIndex,
         activeSlopeClass,
         selectedFeature,
         canopyDensity,
@@ -31,7 +59,6 @@ export default class ReportSubscribeButtons extends Component {
       if (params.appid) {
         payload.appid = params.appid;
       }
-
       appUtils.generateReport(payload);
     }
 

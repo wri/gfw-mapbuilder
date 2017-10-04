@@ -79,9 +79,14 @@
       "placeholder": "e.g. UA-XXXXX-Y"
     }, {
       "type": "boolean",
-      "fieldName": "hideHeaderFooter",
-      "tooltip": "This will hide the header and footer bar on the map",
+      "fieldName": "hideHeader",
+      "tooltip": "This will hide the header bar on the map",
       "label": "Would you like to hide the header"
+    }, {
+      "type": "boolean",
+      "fieldName": "hideFooter",
+      "tooltip": "This will hide the footer bar on the map",
+      "label": "Would you like to hide the footer"
     }, {
       "type": "boolean",
       "fieldName": "includeSubscribeButton",
@@ -413,7 +418,8 @@
     "narrative": "Explore the this map to discover ...",
     "analyticsCode": "",
     "includeSubscribeButton": false,
-    "hideHeaderFooter": false,
+    "hideHeader": false,
+    "hideFooter": false,
     "includeMyGFWLogin": false,
     "navLinksInNewTab": false,
 

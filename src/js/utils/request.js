@@ -26,16 +26,19 @@ const request = {
       callbackParamName: 'callback',
       content: { f: 'json' }
     }).then(res => {
-      if (res && res.layers && res.layers.length > 0) {
+      if (layerIds && typeof layerIds === 'number') {
+        layerIds = [layerIds];
+      }
+      if (layerIds && res && res.layers && res.layers.length > 0) {
         const layers = res.layers.filter(layer => layerIds.indexOf(layer.layerId) > -1);
         const legendInfos = layers.length === 1 ? layers[0].legend : layers.map(layer => layer.legend);
         const legendLength = legendInfos.length;
         legendInfos.map( (legendInfo, index) => {
           if(legendInfo.label === '') {
-            // In case we have multiple sub-labels 
+            // In case we have multiple sub-labels
             if(layers[index] && legendLength === 1) {
               legendInfo.label = layers[index].layerName;
-            } else if (legendLength === 1) { 
+            } else if (legendLength === 1) {
               legendInfo.label = layers[0].layerName;
             }
           }
@@ -63,17 +66,19 @@ const request = {
       callbackParamName: 'callback',
       content: { f: 'json' }
     }).then(res => {
-      if (res && res.layers && res.layers.length > 0) {
-        // console.log("layersIds (should not be 6: ", layerIds);
+      if (layerIds && typeof layerIds === 'number') {
+        layerIds = [layerIds];
+      }
+      if (layerIds && res && res.layers && res.layers.length > 0) {
         const layers = res.layers.filter(layer => layerIds.indexOf(layer.layerId) > -1);
         const legendInfos = layers.length === 1 ? layers[0].legend : layers.map(layer => layer.legend);
         const legendLength = legendInfos.length;
         legendInfos.map( (legendInfo, index) => {
           if(legendInfo.label === '') {
-            // In case we have multiple sub-labels 
+            // In case we have multiple sub-labels
             if(layers[index] && legendLength === 1) {
               legendInfo.label = layers[index].layerName;
-            } else if (legendLength === 1) { 
+            } else if (legendLength === 1) {
               legendInfo.label = layers[0].layerName;
             }
           }

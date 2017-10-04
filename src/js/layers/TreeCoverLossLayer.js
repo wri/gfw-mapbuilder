@@ -23,10 +23,10 @@ export default declare('TreeCoverLossLayer', [TileCanvasLayer], {
           data[i + 3] = values.intensity;
           // Make the pixel pink for HANSEN alerts
 
-          data[i] = 153; // R
+          data[i] = 153; // B
           data[i + 1] = values.intensity;
-          data[i + 2] = 220; // B
-          data[i + 3] = 0;
+          data[i + 2] = 220; // R
+          data[i + 3] = 102; // G
         } else {
           // Hide the pixel
           data[i + 3] = 0;

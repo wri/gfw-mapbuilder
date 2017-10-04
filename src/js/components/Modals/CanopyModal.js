@@ -1,12 +1,11 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import layerKeys from 'constants/LayerConstants';
-import rasterFuncs from 'utils/rasterFunctions';
 import {modalText, assetUrls} from 'js/config';
 import {loadJS, loadCSS} from 'utils/loaders';
 import mapActions from 'actions/MapActions';
 import mapStore from 'stores/MapStore';
-import utils from 'utils/AppUtils';
 import text from 'js/languages';
+import layersHelper from 'helpers/LayersHelper';
 import React, {
   Component,
   PropTypes
@@ -70,48 +69,22 @@ export default class CanopyModal extends Component {
       }
     }
     //- Set the default canopy density when the map loads
-    const {map} = this.context;
+    const {map, settings} = this.context;
     if (!prevContext.map.loaded && map.loaded) {
       const {canopyDensity} = mapStore.getState();
       //- Wait for layers to load
       const signal = map.on('update-end', () => {
         signal.remove(); //- Remove the event so it does not continue ot fire
-        this.updateTreeCoverDefinitions(canopyDensity);
-        this.updateAGBiomassLayer(canopyDensity);
+        layersHelper.updateTreeCoverDefinitions(canopyDensity, map, settings.layerPanel);
+        layersHelper.updateAGBiomassLayer(canopyDensity, map);
       });
     }
   }
 
-  updateTreeCoverDefinitions = (density) => {
-    const {map, settings} = this.context;
-    if (map.loaded) {
-      //- Get the layer config, I am hardcoding en becuase I do not need anything language specific, just its config
-      const lcGroupLayers = settings.layerPanel.GROUP_LC ? settings.layerPanel.GROUP_LC.layers : [];
-      const layerConfig = utils.getObject(lcGroupLayers, 'id', layerKeys.TREE_COVER);
-      const layer = map.getLayer(layerKeys.TREE_COVER);
-
-      if (layer && layerConfig) {
-        const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
-        layer.setRenderingRule(renderingRule);
-      }
-    }
-  };
-
-  updateAGBiomassLayer = (density) => {
-    const {map} = this.context;
-    if (map.loaded) {
-      const layer = map.getLayer(layerKeys.AG_BIOMASS);
-      const mosaicRule = rasterFuncs.getBiomassMosaicRule(density);
-
-      if (layer) {
-        layer.setMosaicRule(mosaicRule);
-      }
-    }
-  };
-
   sliderChanged = (data) => {
-    this.updateTreeCoverDefinitions(data.from_value);
-    this.updateAGBiomassLayer(data.from_value);
+    const {map, settings} = this.context;
+    layersHelper.updateTreeCoverDefinitions(data.from_value, map, settings.layerPanel);
+    layersHelper.updateAGBiomassLayer(data.from_value, map);
     //- Update the store, this will allow any other components interested in this information to react
     mapActions.updateCanopyDensity(data.from_value);
   };

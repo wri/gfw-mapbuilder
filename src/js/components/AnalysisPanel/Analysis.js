@@ -53,18 +53,44 @@ export default class Analysis extends Component {
       activeTab,
       activeAnalysisType,
       canopyDensity,
-      activeSlopeClass
+      activeSlopeClass,
+      lossFromSelectIndex,
+      lossToSelectIndex,
+      gladStartDate,
+      gladEndDate,
+      terraIStartDate,
+      terraIEndDate,
+      viirsFiresSelectIndex,
+      modisFiresSelectIndex,
+      viirsStartDate,
+      viirsEndDate,
+      modisStartDate,
+      modisEndDate
     } = this.props;
 
-    if (selectedFeature && activeAnalysisType && activeTab === tabKeys.ANALYSIS) {
-      request.getRawGeometry(selectedFeature).then((geometry) => {
+    if (selectedFeature && activeAnalysisType === 'TC_LOSS_GAIN' && activeTab === tabKeys.ANALYSIS) {
+      request.getRawGeometry(selectedFeature).then(geometry => {
+
         performAnalysis({
           type: activeAnalysisType,
           geometry: geometry,
+          geostoreId: selectedFeature.attributes.geostoreId,
           canopyDensity: canopyDensity,
           activeSlopeClass: activeSlopeClass,
           settings: settings,
-          language: language
+          language: language,
+          tcLossFrom: lossFromSelectIndex,
+          tcLossTo: lossToSelectIndex,
+          gladFrom: gladStartDate,
+          gladTo: gladEndDate,
+          terraIFrom: terraIStartDate,
+          terraITo: terraIEndDate,
+          viirsFiresSelectIndex: viirsFiresSelectIndex,
+          modisFiresSelectIndex: modisFiresSelectIndex,
+          viirsFrom: viirsStartDate,
+          viirsTo: viirsEndDate,
+          modisFrom: modisStartDate,
+          modisTo: modisEndDate
         }).then((results) => {
           this.setState({ results: results, isLoading: false });
         }, () => {
@@ -82,7 +108,19 @@ export default class Analysis extends Component {
       activeTab,
       activeAnalysisType,
       canopyDensity,
-      activeSlopeClass
+      activeSlopeClass,
+      lossFromSelectIndex,
+      lossToSelectIndex,
+      gladStartDate,
+      gladEndDate,
+      terraIStartDate,
+      terraIEndDate,
+      viirsFiresSelectIndex,
+      modisFiresSelectIndex,
+      viirsStartDate,
+      viirsEndDate,
+      modisStartDate,
+      modisEndDate
     } = nextProps;
 
     //- Only rerun the analysis if one of these things changes
@@ -97,15 +135,28 @@ export default class Analysis extends Component {
       activeAnalysisType !== ''
     ) {
       this.setState(getDefaultState());
-      const {settings, language} = this.context;
-      request.getRawGeometry(selectedFeature).then((geometry) => {
+      const { settings, language } = this.context;
+      request.getRawGeometry(selectedFeature).then(geometry => {
         performAnalysis({
           type: activeAnalysisType,
           geometry: geometry,
+          geostoreId: selectedFeature.attributes.geostoreId,
           canopyDensity: canopyDensity,
           activeSlopeClass: activeSlopeClass,
           settings: settings,
-          language: language
+          language: language,
+          tcLossFrom: lossFromSelectIndex,
+          tcLossTo: lossToSelectIndex,
+          gladFrom: gladStartDate,
+          gladTo: gladEndDate,
+          terraIFrom: terraIStartDate,
+          terraITo: terraIEndDate,
+          viirsFiresSelectIndex: viirsFiresSelectIndex,
+          modisFiresSelectIndex: modisFiresSelectIndex,
+          viirsFrom: viirsStartDate,
+          viirsTo: viirsEndDate,
+          modisFrom: modisStartDate,
+          modisTo: modisEndDate
         }).then((results) => {
           this.setState({ results: results, isLoading: false });
         }, () => {
@@ -115,30 +166,37 @@ export default class Analysis extends Component {
     }
   }
 
-  renderResults = (type, results, language) => {
+  renderResults = (type, results, language, lossFromSelectIndex, lossToSelectIndex, viirsFrom, viirsTo, modisFrom, modisTo) => {
     const {settings} = this.context;
     const layerGroups = settings.layerPanel;
     const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
     const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
     let labels, layerConf, colors;
     switch (type) {
-      case analysisKeys.FIRES:
-        return <FiresBadge count={results.fireCount} />;
+      case analysisKeys.VIIRS_FIRES:
+        return <FiresBadge results={results} count={results.fireCount} from={viirsFrom.toLocaleDateString()} to={viirsTo.toLocaleDateString()} />;
+      case analysisKeys.MODIS_FIRES:
+        return <FiresBadge count={results.fireCount} from={modisFrom.toLocaleDateString()} to={modisTo.toLocaleDateString()} />;
       case analysisKeys.TC_LOSS_GAIN:
-        return <LossGainBadge lossCounts={results.lossCounts} gainCounts={results.gainCounts} />;
+        return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
         layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
         return <CompositionPieChart
+          results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
           counts={results.counts}
           colors={layerConf.colors}
           labels={layerConf.classes[language]} />;
       case analysisKeys.TC_LOSS:
+
+        labels = lossLabels.slice(lossFromSelectIndex, lossToSelectIndex + 1);
+
         return <BarChart
           name={text[language].ANALYSIS_TC_CHART_NAME}
           counts={results.counts}
           colors={analysisConfig[type].colors}
-          labels={lossLabels} />;
+          labels={labels}
+          results={results}/>;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}
@@ -163,6 +221,7 @@ export default class Analysis extends Component {
         })();
         colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
         return <TotalLossChart
+          results={results}
           counts={results.counts}
           encoder={results.encoder}
           options={results.options}
@@ -175,10 +234,11 @@ export default class Analysis extends Component {
         colors = settings.slopeAnalysisPotentialColors;
         const tooltips = settings.labels[language].slopeAnalysisPotentialOptions;
         //- Need a new chart to handle these values correctly
-        return <SlopeBarChart counts={counts} colors={colors} labels={labels} tooltips={tooltips} />;
+        return <SlopeBarChart results={results} counts={counts} colors={colors} labels={labels} tooltips={tooltips} />;
       case analysisKeys.SAD_ALERTS:
         const {alerts} = results;
         return <SadAlertsChart
+          results={results}
           alerts={alerts}
           colors={analysisConfig[type].colors}
           names={text[language].ANALYSIS_SAD_ALERT_NAMES} />;
@@ -193,14 +253,14 @@ export default class Analysis extends Component {
   };
 
   render () {
-    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass} = this.props;
+    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
     const {results, isLoading, error} = this.state;
     const {language, settings} = this.context;
     let chart, title, slopeSelect;
 
     // If we have results, show a chart
     if (results) {
-      chart = this.renderResults(activeAnalysisType, results, language);
+      chart = this.renderResults(activeAnalysisType, results, language, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate);
     }
 
     // If we have the restoration module, add in the slope select

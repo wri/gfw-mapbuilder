@@ -94,7 +94,10 @@ export default class LegendPanel extends Component {
       case 'IMAZON_SAD':
         childComponent = <LayerLegend url={layerDiv.layer.url} visibleLayers={activeLayers} layerIds={layerDiv.layer.layerIds} layerId={layerDiv.layer.id}/>;
         break;
-      case 'ACTIVE_FIRES':
+      case 'VIIRS_ACTIVE_FIRES':
+        childComponent = <LayerLegend url={layerDiv.layer.url} visibleLayers={activeLayers} layerIds={layerDiv.layer.layerIds} layerId={layerDiv.layer.id}/>;
+        break;
+      case 'MODIS_ACTIVE_FIRES':
         childComponent = <LayerLegend url={layerDiv.layer.url} visibleLayers={activeLayers} layerIds={layerDiv.layer.layerIds} layerId={layerDiv.layer.id}/>;
         break;
       case 'GLOB_MANGROVE':

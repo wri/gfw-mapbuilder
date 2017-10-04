@@ -8,11 +8,12 @@ import layerActions from 'actions/LayerActions';
 import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
 import {layerPanelText} from 'js/config';
+import request from 'utils/request';
+import all from 'dojo/promise/all';
 
 class MapStore {
 
   constructor () {
-
     //- Default is closed, using any value as default will cause an ugly
     //- appearance on mobile when loading, set the default in TabButtons componentWillReceiveProps
     //- the default may change based on device, and content available from AGOL
@@ -28,8 +29,20 @@ class MapStore {
     this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
     this.lossToSelectIndex = 0;
+    this.resetSlider = false;
+    this.gladStartDate = new Date('2015', 0, 1);
+    this.gladEndDate = new Date();
+    this.terraIStartDate = {};
+    this.terraIEndDate = {};
+    this.viirsStartDate = new Date();
+    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
+    this.viirsEndDate = new Date();
+    this.modisStartDate = new Date();
+    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
+    this.modisEndDate = new Date();
     this.lossOptions = [];
-    this.firesSelectIndex = layerPanelText.firesOptions.length - 1;
+    this.viirsFiresSelectIndex = layerPanelText.firesOptions.length - 1;
+    this.modisFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.tableOfContentsVisible = true;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
@@ -71,11 +84,21 @@ class MapStore {
       toggleLegendVisible: mapActions.toggleLegendVisible,
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
-      changeFiresTimeline: layerActions.changeFiresTimeline,
+      changeViirsFiresTimeline: layerActions.changeViirsFiresTimeline,
+      changeModisFiresTimeline: layerActions.changeModisFiresTimeline,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
       setLossOptions: layerActions.setLossOptions,
+      shouldResetSlider: layerActions.shouldResetSlider,
       updateLossTimeline: layerActions.updateLossTimeline,
+      updateGladStartDate: layerActions.updateGladStartDate,
+      updateGladEndDate: layerActions.updateGladEndDate,
+      updateTerraIStartDate: layerActions.updateTerraIStartDate,
+      updateTerraIEndDate: layerActions.updateTerraIEndDate,
+      updateViirsStartDate: layerActions.updateViirsStartDate,
+      updateViirsEndDate: layerActions.updateViirsEndDate,
+      updateModisStartDate: layerActions.updateModisStartDate,
+      updateModisEndDate: layerActions.updateModisEndDate,
       changeOpacity: layerActions.changeOpacity,
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
@@ -138,6 +161,35 @@ class MapStore {
     Object.keys(this.dynamicLayers).forEach((layerId) => {
       this.dynamicLayers[layerId] = [];
     });
+
+    //- Reset all layer filters
+    //- Loss
+    this.resetSlider = true;
+
+    //- Canopy
+    this.canopyDensity = 30;
+
+    //- SAD
+    this.imazonStartMonth = 0;
+    this.imazonEndMonth = 0;
+    this.imazonStartYear = 0;
+    this.imazonEndYear = 0;
+
+    //- GLAD
+    this.gladStartDate = new Date('2015', 0, 1);
+    this.gladEndDate = new Date();
+
+    //- FIRES
+    this.viirsStartDate = new Date();
+    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
+    this.viirsEndDate = new Date();
+    this.modisStartDate = new Date();
+    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
+    this.modisEndDate = new Date();
+
+    //-Terra I
+    this.terraIStartDate = {};
+    this.terraIEndDate = {};
   }
 
   mapUpdated () {}
@@ -225,8 +277,16 @@ class MapStore {
     this.lossOptions = lossOptionsData;
   }
 
-  changeFiresTimeline (firesSelectIndex) {
-    this.firesSelectIndex = firesSelectIndex;
+  shouldResetSlider(bool) {
+    this.resetSlider = bool;
+  }
+
+  changeViirsFiresTimeline (viirsFiresSelectIndex) {
+    this.viirsFiresSelectIndex = viirsFiresSelectIndex;
+  }
+
+  changeModisFiresTimeline (viirsFiresSelectIndex) {
+    this.modisFiresSelectIndex = viirsFiresSelectIndex;
   }
 
   updateActiveSlopeClass (newSlopeClass) {
@@ -236,6 +296,38 @@ class MapStore {
   updateLossTimeline (payload) {
     this.lossFromSelectIndex = payload.from;
     this.lossToSelectIndex = payload.to;
+  }
+
+  updateGladStartDate (startDate) {
+    this.gladStartDate = startDate;
+  }
+
+  updateGladEndDate (endDate) {
+    this.gladEndDate = endDate;
+  }
+
+  updateTerraIStartDate (startDate) {
+    this.terraIStartDate = startDate;
+  }
+
+  updateTerraIEndDate (endDate) {
+    this.terraIEndDate = endDate;
+  }
+
+  updateViirsStartDate (startDate) {
+    this.viirsStartDate = startDate;
+  }
+
+  updateViirsEndDate (endDate) {
+    this.viirsEndDate = endDate;
+  }
+
+  updateModisStartDate (startDate) {
+    this.modisStartDate = startDate;
+  }
+
+  updateModisEndDate (endDate) {
+    this.modisEndDate = endDate;
   }
 
   showLayerInfo (layer) {
