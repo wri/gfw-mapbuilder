@@ -34,7 +34,7 @@ export default class LossControls extends Component {
       //- Update the defaults to be the last year
       layerActions.updateLossTimeline.defer({
         fromSelectedIndex: 0,
-        toSelectedIndex: 14
+        toSelectedIndex: 15
       });
       //- Set the options in the store so others can use it
       layerActions.setLossOptions.defer(lossOptions);

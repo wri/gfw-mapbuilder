@@ -81,6 +81,7 @@ export default function performAnalysis (options) {
       });
       break;
     case analysisKeys.LC_LOSS:
+      console.log(analysisConfig);
       analysisUtils.getCrossedWithLoss({
         id: landCoverConfig.rasterId,
         bounds: landCoverConfig.bounds
