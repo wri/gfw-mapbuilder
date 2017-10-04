@@ -10,11 +10,12 @@ export default class WebMapLegend extends React.Component {
 
   componentDidUpdate(prevProps) {
 
-    if(this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
-      this.setState({ visible: true });
-    }
-    else if(this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
-      this.setState({ visible: false });
+    if (prevProps.visibility !== this.props.visibility) {
+      this.setState(prevState => {
+        return {
+          visible: !prevState.visible
+        };
+      });
     }
   }
 

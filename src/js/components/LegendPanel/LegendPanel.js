@@ -3,6 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import mapActions from 'actions/MapActions';
 // import CartoLegend from 'components/LegendPanel/CartoLegend';
 import WebMapLegend from 'components/LegendPanel/WebMapLegend';
+import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
 import utils from 'utils/AppUtils';
 import {urls} from 'js/config';
@@ -179,17 +180,24 @@ export default class LegendPanel extends Component {
     if(layers !== undefined && layers !== [] && layers !== '') {
       // Going through each webmap layer and creating a unique legend component
       layers.forEach((layer, index) => {
-        if(layer.subId) {
+        if (layer.subId) {
           // const subLayerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId);
           // const subLayerConf = layer;
           const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-          const childComponent = <WebMapLegend url={layerConf.url} labels={layer.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId}/>;
+          const childComponent = <WebMapLegend url={layerConf.url} labels={layer.label} visibility={layer.visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId} />;
           webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
         } else {
-          // const layerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId)
-          // const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-          const childComponent = <WebMapLegend url={layer.esriLayer.url} labels={layer.esriLayer.layerInfos['0'].name} visibility={layer.esriLayer.layerInfos['0'].defaultVisibility} visibleLayers={activeLayers} layerId={layer.esriLayer.layerInfos['0'].id}/>;
-          webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+          const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
+          let childComponent;
+          if (layerConf.type === 'Feature Layer') {
+            childComponent = <WebMapFeatureLayerLegend layer={layerConf} visibility={activeLayers.indexOf(layerConf.id) > -1 && layerConf.visibleAtMapScale} visibleLayers={activeLayers} />;
+          } else {
+            if (layerConf.layerInfos && layerConf.layerInfos.length > 0) {
+              layerConf.layerId = layerConf.layerInfos[0].id;
+            }
+            childComponent = <WebMapLegend url={layerConf.url} labels={layer.label} visibility={activeLayers.indexOf(layer.id) > -1} visibleLayers={activeLayers} layerId={layerConf.layerId} />;
+          }
+            webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
         }
 
       });
