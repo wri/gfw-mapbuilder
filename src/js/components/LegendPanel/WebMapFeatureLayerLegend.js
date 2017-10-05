@@ -13,7 +13,8 @@ export default class WebMapFeatureLayerLegend extends React.Component {
 
     this.borderStyleMap = {
       dash: 'dashed',
-      solid: 'solid'
+      solid: 'solid',
+      none: 'none'
     };
 
     this.state = { visible: this.props.visibility };
@@ -56,7 +57,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       style.height = '0';
 
       const border = symbol.outline;
-      if (border) {
+      if (border.style !== 'none') {
         style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
       }
 
@@ -69,7 +70,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
 
       const border = symbol.outline;
 
-      if (border) {
+      if (border.style !== 'none') {
         style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
       }
 
