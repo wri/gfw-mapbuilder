@@ -27,14 +27,14 @@ export default class LossControls extends Component {
     // const url = 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear/ImageServer';
     // layerUtils.getLayerMetadata(url).then((results) => {
       const min = 1;
-      const max = 15;
+      const max = 16;
       for ( let i = min; i <= max; i++ ) {
         lossOptions.push({ label: 2000 + i + '', value: i });
       }
       //- Update the defaults to be the last year
       layerActions.updateLossTimeline.defer({
         fromSelectedIndex: 0,
-        toSelectedIndex: 14
+        toSelectedIndex: 15
       });
       //- Set the options in the store so others can use it
       layerActions.setLossOptions.defer(lossOptions);
