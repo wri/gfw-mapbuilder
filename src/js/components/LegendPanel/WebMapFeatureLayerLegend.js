@@ -56,7 +56,9 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       style.height = '0';
 
       const border = symbol.outline;
-      style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+      if (border) {
+        style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+      }
 
       symbolDOMElement = <div style={style} className='legend-symbol'></div>;
     }
@@ -66,7 +68,10 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       style.backgroundColor = symbol.color === null ? 'transparent' : `rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${symbol.color.a}) `;
 
       const border = symbol.outline;
-      style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+
+      if (border) {
+        style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+      }
 
       symbolDOMElement = <div style={style} className='legend-symbol'></div>;
     }
