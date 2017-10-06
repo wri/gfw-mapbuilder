@@ -896,6 +896,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
+      geostoreId: feature.geostoreId,
       language: lang,
       terraIFrom: new Date(terraIFrom),
       terraITo: new Date(terraITo)
