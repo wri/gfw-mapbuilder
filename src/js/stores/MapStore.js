@@ -9,6 +9,7 @@ import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
+import analysisUtils from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
 
 class MapStore {
@@ -202,6 +203,12 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
+        if (!selectedFeature.isRegistering) {
+          selectedFeature.isRegistering = true;
+          analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
+            selectedFeature.attributes.geostoreId = res.data.id;
+          });
+        }
         this.activeTab = tabKeys.INFO_WINDOW;
       }
     }
