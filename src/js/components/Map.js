@@ -16,6 +16,7 @@ import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
+import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
@@ -175,6 +176,32 @@ export default class Map extends Component {
       });
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);
+
+      on(response.map, 'zoom-end', evt => {
+        console.log('evt', evt);
+        const scale = response.map.getScale();
+        const layerGroups = settings.layerPanel;
+        const webmapLayers = layerGroups.GROUP_WEBMAP.layers;
+        console.log('webmapLayers', webmapLayers);
+        webmapLayers.forEach(laya => {
+          if (laya.hasScaleDependency && laya.maxScale <= scale && laya.minScale >= scale) {
+            console.log(laya);
+            const mapLayer = response.map.getLayer(laya.id);
+            if (mapLayer.visible) { //nahh check state.activeLayers ?
+              mapLayer.show();
+              layerActions.addSubLayer(laya);
+            }
+            console.log(mapLayer.visible);
+          } else if (laya.hasScaleDependency) {
+            // if (mapLayer.visible) {
+            //   layerActions.addSubLayer(laya);
+            // }
+            // mapLayer.hide();
+            layerActions.removeSubLayer(laya);
+          }
+        });
+      });
+
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));
