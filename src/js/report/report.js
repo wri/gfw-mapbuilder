@@ -129,13 +129,13 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
     //- Make those updates here to the config as this will trickle down
     uniqueLayers.forEach(layer => {
-      layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
+      layer.visible = activeLayers.indexOf(layer.id) > -1;
     });
 
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
-    const esriLayers = uniqueLayers.filter(layer => layer && layer.visible && (layer.url || layer.type === 'graphic')).map((layer) => {
+    const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic')).map((layer) => {
       return layerFactory(layer, language);
     });
 
@@ -329,6 +329,10 @@ const setupMap = function setupMap (params, feature) {
 
     map.addLayer(currentLayer);
   }
+
+  // we must split into an array to prevent 'TREE_COVER_LOSS' from matching 'TREE_COVER'
+  // when using indexOf. With strings this will match
+  params.activeLayers = params.activeLayers.split(',');
 
   createLayers(resources.layerPanel, params.activeLayers, params.lang, params);
 
