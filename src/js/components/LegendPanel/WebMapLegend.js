@@ -28,32 +28,26 @@ export default class WebMapLegend extends React.Component {
     });
   }
 
-  itemMapper (item, index) {
+  itemMapper (item) {
     return (
-      <div className='legend-row' key={index}>
+      <div className='legend-row' key={item.url}>
         <img className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
-        <div className='legend-label' key={index}>{item.label}</div>
+        <div className='legend-label'>{item.label}</div>
       </div>
     );
   }
 
   render () {
-    let bool = '';
-    let label;
-
-    if(this.state.visible === false) {
-      bool = 'hidden';
-    } else {
-      label = this.props.labels;
-    }
+    const { visible, legendInfos } = this.state;
+    const label = this.props.labels;
 
     return (
-      <div className={`parent-legend-container ${bool}`} ref="myRef">
+      <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref="myRef">
         <div className='label-container'>{label}</div>
-        <div className={`legend-container ${bool}`}>
-          {this.state.legendInfos.length === 0 ? '' :
+        <div className='legend-container'>
+          {legendInfos.length === 0 ? '' :
             <div className='crowdsource-legend'>
-              {this.state.legendInfos.map(this.itemMapper, this)}
+              {legendInfos.map(this.itemMapper, this)}
             </div>
           }
         </div>

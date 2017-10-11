@@ -177,30 +177,29 @@ export default class Map extends Component {
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);
 
-      on(response.map, 'zoom-end', evt => {
-        console.log('evt', evt);
-        const scale = response.map.getScale();
-        const layerGroups = settings.layerPanel;
-        const webmapLayers = layerGroups.GROUP_WEBMAP.layers;
-        console.log('webmapLayers', webmapLayers);
-        webmapLayers.forEach(laya => {
-          if (laya.hasScaleDependency && laya.maxScale <= scale && laya.minScale >= scale) {
-            console.log(laya);
-            const mapLayer = response.map.getLayer(laya.id);
-            if (mapLayer.visible) { //nahh check state.activeLayers ?
-              mapLayer.show();
-              layerActions.addSubLayer(laya);
-            }
-            console.log(mapLayer.visible);
-          } else if (laya.hasScaleDependency) {
-            // if (mapLayer.visible) {
-            //   layerActions.addSubLayer(laya);
-            // }
-            // mapLayer.hide();
-            layerActions.removeSubLayer(laya);
-          }
-        });
-      });
+      // on(response.map, 'zoom-end', evt => {
+
+      //   const scale = response.map.getScale();
+      //   const layerGroups = settings.layerPanel;
+      //   const webmapLayers = layerGroups.GROUP_WEBMAP.layers;
+
+      //   webmapLayers.forEach(laya => {
+
+      //     if (laya.hasScaleDependency && laya.minScale !== 0) {
+      //       if (laya.maxScale <= scale && laya.minScale >= scale) {
+      //         if (this.state.dynamicLayers[laya.id].indexOf(laya.subIndex) === -1 && laya.esriLayer.visibleLayers.indexOf(laya.subIndex) > -1) {
+      //           console.log('add', laya);
+      //           layerActions.addSubLayer(laya);
+      //         }
+      //       } else {
+      //         if (this.state.dynamicLayers[laya.id].indexOf(laya.subIndex) > -1 && laya.esriLayer.visibleLayers.indexOf(laya.subIndex) === -1) {
+      //           console.log('remove', laya);
+      //           layerActions.removeSubLayer(laya);
+      //         }
+      //       }
+      //     }
+      //   });
+      // });
 
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
@@ -262,7 +261,7 @@ export default class Map extends Component {
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
-        layer.resourceInfo.layers.forEach((sublayer) => {
+        layer.resourceInfo.layers.forEach((sublayer, idx) => {
           const visible = layer.layerObject.visibleLayers.indexOf(sublayer.id) > -1;
           const scaleDependency = (sublayer.minScale > 0 || sublayer.maxScale > 0);
           const layerInfo = {
@@ -275,6 +274,7 @@ export default class Map extends Component {
             label: sublayer.name,
             opacity: 1,
             visible: visible,
+            order: sublayer.order || idx + 1,
             esriLayer: layer.layerObject
           };
           dynamicLayers.push(layerInfo);
@@ -357,7 +357,7 @@ export default class Map extends Component {
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
+          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} dynamicLayers={this.state.dynamicLayers} /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>

@@ -150,17 +150,9 @@ export default class LegendPanel extends Component {
     );
   }
 
-  webmapDiv = (childComponent, index) => {
-    return (
-      <div key={index}>
-        <div>{childComponent}</div>
-      </div>
-    );
-  }
-
   render () {
-    const {tableOfContentsVisible, legendOpen, activeLayers} = this.props;
-    const {language, settings } = this.context;
+    const {tableOfContentsVisible, legendOpen, activeLayers, dynamicLayers} = this.props;
+    const {language, settings, map } = this.context;
 
     const legendLayers = this.getLayersForLegend();
 
@@ -179,25 +171,40 @@ export default class LegendPanel extends Component {
 
     if (layers !== undefined && layers !== [] && layers !== '') {
       // Going through each webmap layer and creating a unique legend component
-      layers.forEach((layer, index) => {
+      layers.forEach(layer => {
         if (layer.subId) {
-          // const subLayerConf = utils.getObject(layerGroups.GROUP_WEBMAP.layers, 'subId', layer.subId);
-          // const subLayerConf = layer;
+
+          const scale = map.getScale();
+          let visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1;
+          if (layer.hasScaleDependency) {
+
+            visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale && layer.maxScale <= scale;
+
+            if (layer.minScale === 0) {
+              visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.maxScale <= scale;
+            }
+
+            if (layer.maxScale === 0) {
+              visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale;
+            }
+          }
+
           const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-          const childComponent = <WebMapLegend url={layerConf.url} labels={layer.label} visibility={activeLayers.indexOf(layer.subId) > -1 && layer.esriLayer.visibleAtMapScale} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId} />;
-          webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+          const childComponent = <WebMapLegend key={layer.subId} url={layerConf.url} labels={layer.label} visibility={visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId} />;
+
+          webmapChildComponents.push(childComponent);
         } else {
           const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
           let childComponent;
           if (layerConf.type === 'Feature Layer') {
-            childComponent = <WebMapFeatureLayerLegend layer={layerConf} visibility={activeLayers.indexOf(layerConf.id) > -1 && layerConf.visibleAtMapScale} visibleLayers={activeLayers} />;
+            childComponent = <WebMapFeatureLayerLegend key={layerConf.id} layer={layerConf} visibility={activeLayers.indexOf(layerConf.id) > -1 && layerConf.visibleAtMapScale} visibleLayers={activeLayers} />;
           } else {
             if (layerConf.layerInfos && layerConf.layerInfos.length > 0) {
               layerConf.layerId = layerConf.layerInfos[0].id;
             }
-            childComponent = <WebMapLegend url={layerConf.url} labels={layer.label} visibility={activeLayers.indexOf(layer.id) > -1} visibleLayers={activeLayers} layerId={layerConf.layerId} />;
+            childComponent = <WebMapLegend key={layer.id} url={layerConf.url} labels={layer.label} visibility={activeLayers.indexOf(layer.id) > -1} visibleLayers={activeLayers} layerId={layerConf.layerId} />;
           }
-            webmapChildComponents.push(this.webmapDiv(childComponent, index + 1000));
+            webmapChildComponents.push(childComponent);
         }
 
       });
