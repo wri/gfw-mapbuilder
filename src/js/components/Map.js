@@ -177,30 +177,6 @@ export default class Map extends Component {
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);
 
-      // on(response.map, 'zoom-end', evt => {
-
-      //   const scale = response.map.getScale();
-      //   const layerGroups = settings.layerPanel;
-      //   const webmapLayers = layerGroups.GROUP_WEBMAP.layers;
-
-      //   webmapLayers.forEach(laya => {
-
-      //     if (laya.hasScaleDependency && laya.minScale !== 0) {
-      //       if (laya.maxScale <= scale && laya.minScale >= scale) {
-      //         if (this.state.dynamicLayers[laya.id].indexOf(laya.subIndex) === -1 && laya.esriLayer.visibleLayers.indexOf(laya.subIndex) > -1) {
-      //           console.log('add', laya);
-      //           layerActions.addSubLayer(laya);
-      //         }
-      //       } else {
-      //         if (this.state.dynamicLayers[laya.id].indexOf(laya.subIndex) > -1 && laya.esriLayer.visibleLayers.indexOf(laya.subIndex) === -1) {
-      //           console.log('remove', laya);
-      //           layerActions.removeSubLayer(laya);
-      //         }
-      //       }
-      //     }
-      //   });
-      // });
-
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));
