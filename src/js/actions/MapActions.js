@@ -89,7 +89,7 @@ class MapActions {
         return layer;
       }));
     }, []);
-    console.log(layers);
+
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
 
