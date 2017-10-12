@@ -89,7 +89,11 @@ export default class App extends Component {
       base = base.substring(0, base.length - 1);
     }
     buildConfig.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
-      basemap.thumbnailUrl = base + basemap.thumbnailUrl;
+      if (basemap.thumbnailUrl.indexOf('http') > -1) {
+        basemap.thumbnailUrl = basemap.thumbnailUrl;
+      } else {
+        basemap.thumbnailUrl = base + basemap.thumbnailUrl;
+      }
     });
 
   }

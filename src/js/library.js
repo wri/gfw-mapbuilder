@@ -91,7 +91,7 @@ var MapBuilder = function(args){
       document.getElementsByTagName('head')[0].appendChild(script);
     }
 
-    loadjsfile('https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.0/dojo/dojo.js');
+    loadjsfile('https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js');
 
     /*eslint-disable */
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

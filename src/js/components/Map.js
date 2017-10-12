@@ -16,6 +16,7 @@ import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
+import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
@@ -175,6 +176,7 @@ export default class Map extends Component {
       });
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);
+
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));
@@ -235,7 +237,7 @@ export default class Map extends Component {
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
-        layer.resourceInfo.layers.forEach((sublayer) => {
+        layer.resourceInfo.layers.forEach((sublayer, idx) => {
           const visible = layer.layerObject.visibleLayers.indexOf(sublayer.id) > -1;
           const scaleDependency = (sublayer.minScale > 0 || sublayer.maxScale > 0);
           const layerInfo = {
@@ -248,6 +250,7 @@ export default class Map extends Component {
             label: sublayer.name,
             opacity: 1,
             visible: visible,
+            order: sublayer.order || idx + 1,
             esriLayer: layer.layerObject
           };
           dynamicLayers.push(layerInfo);
@@ -330,7 +333,7 @@ export default class Map extends Component {
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
+          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} dynamicLayers={this.state.dynamicLayers} /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>

@@ -63,6 +63,8 @@ const libraryMain = {
     loadCSS(cssPath + 'app.css');
     loadCSS('https://js.arcgis.com/3.17/dijit/themes/tundra/tundra.css');
     loadCSS('https://js.arcgis.com/3.17/esri/css/esri.css');
+    loadCSS(basePath + assetUrls.pickadateCSS);
+    loadCSS(basePath + assetUrls.pickadateDateCSS);
     // loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/critical.css`);
     // loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/google-fira.css`);
     // loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/app.css`);
