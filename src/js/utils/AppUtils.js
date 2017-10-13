@@ -133,7 +133,6 @@ const utils = {
   },
 
   geometrySuccess: (response, options) => {
-    console.log(options, response);
     const {
       settings,
       lang,
