@@ -84,29 +84,29 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params) {
-    const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
 
-    //- Organize and order the layers before adding them to the map
-    let layers = Object.keys(layerPanel).filter((groupName) => {
-      //- remove basemaps and extra layers, extra layers will be added later and basemaps
-      //- handled differently elsewhere
-      return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
-    }).sort((a, b) => {
-      //- Sort the groups based on their order property
-      return layerPanel[a].order < layerPanel[b].order;
-    }).reduce((list, groupName) => {
-      //- Flatten them into a single list but before that,
-      //- Multiple the order by 100 so I can sort them more easily below, this is because there
-      //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
-      //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-      return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
-        return layer;
-      }));
-    }, []);
+  //- Organize and order the layers before adding them to the map
+  let layers = Object.keys(layerPanel).filter((groupName) => {
+    //- remove basemaps and extra layers, extra layers will be added later and basemaps
+    //- handled differently elsewhere
+    return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
+  }).sort((a, b) => {
+    //- Sort the groups based on their order property
+    return layerPanel[a].order < layerPanel[b].order;
+  }).reduce((list, groupName) => {
+    //- Flatten them into a single list but before that,
+    //- Multiple the order by 100 so I can sort them more easily below, this is because there
+    //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
+    //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
+    return list.concat(layerPanel[groupName].layers.map((layer, index) => {
+      layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
+      return layer;
+    }));
+  }, []);
 
-    //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);
+  //- Add the extra layers now that all the others have been sorted
+  layers = layers.concat(layerPanel.extraLayers);
 
     //- remove custom features from the layersToAdd if we don't need it to avoid AGOL Auth
     layers.forEach((layer, i) => {
@@ -199,7 +199,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         }
       });
     });
-
 };
 
 const createMap = function createMap (params) {
@@ -311,6 +310,29 @@ const setupMap = function setupMap (params, feature) {
   const graphicExtent = graphic.geometry.getExtent();
   map.setExtent(graphicExtent, true);
   map.graphics.add(graphic);
+
+  const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
+
+  if (hasGraphicsLayers) {
+    map.graphicsLayerIds.forEach(id => {
+      const layer = map.getLayer(id);
+      if (params.activeLayers.indexOf(id) === -1) {
+        layer.hide();
+      }
+    });
+  }
+
+  map.layerIds.forEach(id => {
+
+    const layer = map.getLayer(id);
+    if (params.hasOwnProperty(id)) {
+
+      let layersVisible = params[id].split(',').map(layerIndex => Number(layerIndex));
+      if (!layersVisible.length) layersVisible = [-1];
+
+      layer.setVisibleLayers(layersVisible);
+    }
+  });
   //- Add the layer to the map
   //- TODO: Old method adds a dynamic layer, this needs to be able to handle all layer types eventually,
   //- Update the layer factory to be more flexible
@@ -629,7 +651,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const configuredColors = layerConf.colors;
       const labels = layerConf.classes[lang];
       const node = document.getElementById('lc-loss');
-      const { counts, encoder } = results;
+      const { counts, encoder, error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const Xs = encoder.A;
       const Ys = encoder.B;
       const chartInfo = charts.formatSeriesWithEncoder({
@@ -735,7 +763,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const configuredColors = analysisConfig[analysisKeys.INTACT_LOSS].colors;
       const labels = text[lang].ANALYSIS_IFL_LABELS;
       const node = document.getElementById('intact-loss');
-      const { counts, encoder } = results;
+      const { counts, encoder, error } = results;
+      
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const Xs = encoder.A;
       const Ys = encoder.B;
       const chartInfo = charts.formatSeriesWithEncoder({

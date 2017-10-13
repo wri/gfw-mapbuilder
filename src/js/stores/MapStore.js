@@ -216,7 +216,9 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
+    console.log(layers);
     this.activeLayers = layers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
+    console.log(this.activeLayers);
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {

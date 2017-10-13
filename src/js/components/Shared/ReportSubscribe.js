@@ -19,6 +19,7 @@ export default class ReportSubscribeButtons extends Component {
       canopyDensity,
       activeSlopeClass,
       activeLayers,
+      dynamicLayers,
       lossFromSelectIndex,
       lossToSelectIndex,
       gladStartDate,
@@ -37,7 +38,8 @@ export default class ReportSubscribeButtons extends Component {
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
-        activeLayers: activeLayers,
+        activeLayers,
+        dynamicLayers,
         tcLossFrom: lossFromSelectIndex,
         tcLossTo: lossToSelectIndex,
         gladFrom: gladStartDate,

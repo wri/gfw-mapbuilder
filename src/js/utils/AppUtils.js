@@ -133,6 +133,7 @@ const utils = {
   },
 
   geometrySuccess: (response, options) => {
+    console.log(options, response);
     const {
       settings,
       lang,
@@ -140,6 +141,7 @@ const utils = {
       appid,
       activeSlopeClass,
       activeLayers,
+      dynamicLayers,
       tcLossFrom,
       tcLossTo,
       gladFrom,
@@ -178,6 +180,13 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate
     };
+
+
+    // We need the dynamic layers but we can encode nested objects, so we will pass them in to query like this:
+    // layerId: array of visible layers
+    for (const key in dynamicLayers) {
+      query[key] = dynamicLayers[key];
+    }
 
     if (appid) {
       query.appid = appid;
