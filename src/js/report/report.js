@@ -318,7 +318,9 @@ const setupMap = function setupMap (params, feature) {
       const layer = map.getLayer(id);
       if (params.activeLayers.indexOf(id) === -1) {
         layer.hide();
+        return;
       }
+      layer.show();
     });
   }
 
@@ -618,7 +620,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       const tcLossNode = document.getElementById('tc-loss');
       const series = [{ name: name, data: lossCounts }];
 
-      if (results.lossCounts && results.lossCounts.length) {
+      if (results.lossCounts && results.lossCounts.length && results.lossCounts.some(c => c > 0)) {
         const chartLabels = lossLabels.slice(tcLossFrom, tcLossTo + 1);
         charts.makeSimpleBarChart(tcLossNode, chartLabels, colors, series);
       } else {
@@ -691,6 +693,13 @@ const runAnalysis = function runAnalysis (params, feature) {
     }).then((results) => {
       const node = document.getElementById('lc-composition');
 
+      const { error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       if (results.counts && results.counts.length) {
         const series = charts.formatCompositionAnalysis({
           colors: layerConf.colors,
@@ -732,6 +741,11 @@ const runAnalysis = function runAnalysis (params, feature) {
         carbonName: 'MtCO2'
       });
 
+      if (!series.some(s => s.data.some(d => d > 0))) {
+        node.remove();
+        return;
+      }
+
       charts.makeBiomassLossChart(node, {
         series,
         categories: labels
@@ -769,7 +783,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       const labels = text[lang].ANALYSIS_IFL_LABELS;
       const node = document.getElementById('intact-loss');
       const { counts, encoder, error } = results;
-      
+
       if (error) {
         node.remove();
         return;
@@ -809,11 +823,20 @@ const runAnalysis = function runAnalysis (params, feature) {
       viirsFrom: viirsFrom,
       viirsTo: viirsTo
     }).then((results) => {
+
+      const node = document.getElementById('viirs-badge');
+
+      const { error } = results;
+      if (error) {
+        node.remove();
+        return;
+      }
+
       document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
       document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
       document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
-      document.getElementById('viirs-badge').classList.remove('hidden');
+      node.classList.remove('hidden');
     });
   } else {
     const node = document.getElementById('viirs-badge');
@@ -831,11 +854,20 @@ const runAnalysis = function runAnalysis (params, feature) {
       modisFrom: modisFrom,
       modisTo: modisTo
     }).then((results) => {
+
+      const node = document.getElementById('modis-badge');
+
+      const { error } = results;
+      if (error) {
+        node.remove();
+        return;
+      }
+
       document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__modis-count').innerHTML = results.fireCount;
       document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
       document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
-      document.getElementById('modis-badge').classList.remove('hidden');
+      node.classList.remove('hidden');
     });
   } else {
     const node = document.getElementById('modis-badge');
@@ -891,7 +923,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const node = document.getElementById('sad-alerts');
       const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
       const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
-      const {alerts} = results;
+      const {alerts, error} = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
       if (categories.length) {
         //- Tell the second series to use the second axis
@@ -921,11 +959,14 @@ const runAnalysis = function runAnalysis (params, feature) {
     }).then((results) => {
       const node = document.getElementById('glad-alerts');
       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
-      if (results.length) {
-        charts.makeTimeSeriesCharts(node, { data: results, name });
-      } else {
+
+      const { error } = results;
+      if (error || results.length === 0) {
         node.remove();
+        return;
       }
+
+      charts.makeTimeSeriesCharts(node, { data: results, name });
     });
   } else {
     const node = document.getElementById('glad-alerts');
@@ -946,10 +987,14 @@ const runAnalysis = function runAnalysis (params, feature) {
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
-      charts.makeTimeSeriesCharts(node, {
-        data: results,
-        name: name
-      });
+
+      const { error } = results;
+      if (error || results.length === 0) {
+        node.remove();
+        return;
+      }
+
+      charts.makeTimeSeriesCharts(node, { data: results, name });
     });
   } else {
     const node = document.getElementById('terrai-alerts');
