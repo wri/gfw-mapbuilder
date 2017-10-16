@@ -85,7 +85,6 @@ export default class TerraIControls extends Component {
       //ensure the startDate is an empty object and not a Date Object
       if ((prevProps.startDate !== this.props.startDate && this.props.startDate.constructor === Object)
       && prevProps.endDate !== this.props.endDate && this.props.endDate.constructor === Object) {
-        console.log(prevProps.startDate, this.props.startDate);
         this.fromPicker.set('select', this.state.min);
         this.toPicker.set('select', this.state.max);
       }
