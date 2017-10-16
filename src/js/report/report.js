@@ -324,11 +324,16 @@ const setupMap = function setupMap (params, feature) {
 
   map.layerIds.forEach(id => {
 
-    const layer = map.getLayer(id);
     if (params.hasOwnProperty(id)) {
 
-      let layersVisible = params[id].split(',').map(layerIndex => Number(layerIndex));
-      if (!layersVisible.length) layersVisible = [-1];
+      const layer = map.getLayer(id);
+
+      if (!params[id].length) {
+        layer.setVisibleLayers([-1]);
+        return;
+      }
+
+      const layersVisible = params[id].split(',').map(layerIndex => Number(layerIndex));
 
       layer.setVisibleLayers(layersVisible);
     }

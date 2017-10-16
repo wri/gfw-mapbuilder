@@ -51,7 +51,7 @@ const lazyloadAssets = () => {
   // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
   loadCSS(`https://js.arcgis.com/${window._app.esri}/dijit/themes/tundra/tundra.css`);
   loadCSS(`https://js.arcgis.com/${window._app.esri}/esri/css/esri.css`);
-  loadCSS(`${window._app.base ? window._app.base + '/' : ''}assetUrls.pickadateCSS`);
+  loadCSS(base + assetUrls.pickadateCSS);
   loadCSS(base + assetUrls.pickadateDateCSS);
 
   loadJS(base + assetUrls.highcharts).then(() => {
