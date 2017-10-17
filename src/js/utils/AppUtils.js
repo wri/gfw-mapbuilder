@@ -140,6 +140,7 @@ const utils = {
       appid,
       activeSlopeClass,
       activeLayers,
+      dynamicLayers,
       tcLossFrom,
       tcLossTo,
       gladFrom,
@@ -178,6 +179,13 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate
     };
+
+
+    // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:
+    // layerId: array of visible layers
+    for (const key in dynamicLayers) {
+      query[key] = dynamicLayers[key];
+    }
 
     if (appid) {
       query.appid = appid;

@@ -29,7 +29,6 @@ export default class TerraIControls extends Component {
     const {layer} = this.props;
 
     if (map.loaded && !this.initialized) {
-      this.initialized = true;
       //- Fetch the max date for these requests
       var xhr = new XMLHttpRequest();
       xhr.addEventListener('load', () => {
@@ -45,6 +44,7 @@ export default class TerraIControls extends Component {
         const max = new Date(((maxDateValue / 1000) + 2000).toString(), 0, maxDateValue % 1000);
         layerActions.updateTerraIStartDate(min);
         layerActions.updateTerraIEndDate(max);
+        this.initialized = true;
         this.setState({min, max});
         //- Create the date pickers
         const {fromTerraCalendar, toTerraCalendar} = this.refs;
@@ -79,11 +79,15 @@ export default class TerraIControls extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    //ensure the startDate is an empty object and not a Date Object
-    if ((prevProps.startDate !== this.props.startDate && this.props.startDate.constructor === Object)
+
+    if (this.initialized) {
+
+      //ensure the startDate is an empty object and not a Date Object
+      if ((prevProps.startDate !== this.props.startDate && this.props.startDate.constructor === Object)
       && prevProps.endDate !== this.props.endDate && this.props.endDate.constructor === Object) {
-      this.fromPicker.set('select', this.state.min);
-      this.toPicker.set('select', this.state.max);
+        this.fromPicker.set('select', this.state.min);
+        this.toPicker.set('select', this.state.max);
+      }
     }
   }
 

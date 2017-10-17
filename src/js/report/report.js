@@ -84,29 +84,29 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params) {
-    const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
 
-    //- Organize and order the layers before adding them to the map
-    let layers = Object.keys(layerPanel).filter((groupName) => {
-      //- remove basemaps and extra layers, extra layers will be added later and basemaps
-      //- handled differently elsewhere
-      return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
-    }).sort((a, b) => {
-      //- Sort the groups based on their order property
-      return layerPanel[a].order < layerPanel[b].order;
-    }).reduce((list, groupName) => {
-      //- Flatten them into a single list but before that,
-      //- Multiple the order by 100 so I can sort them more easily below, this is because there
-      //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
-      //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-      return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
-        return layer;
-      }));
-    }, []);
+  //- Organize and order the layers before adding them to the map
+  let layers = Object.keys(layerPanel).filter((groupName) => {
+    //- remove basemaps and extra layers, extra layers will be added later and basemaps
+    //- handled differently elsewhere
+    return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
+  }).sort((a, b) => {
+    //- Sort the groups based on their order property
+    return layerPanel[a].order < layerPanel[b].order;
+  }).reduce((list, groupName) => {
+    //- Flatten them into a single list but before that,
+    //- Multiple the order by 100 so I can sort them more easily below, this is because there
+    //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
+    //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
+    return list.concat(layerPanel[groupName].layers.map((layer, index) => {
+      layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
+      return layer;
+    }));
+  }, []);
 
-    //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);
+  //- Add the extra layers now that all the others have been sorted
+  layers = layers.concat(layerPanel.extraLayers);
 
     //- remove custom features from the layersToAdd if we don't need it to avoid AGOL Auth
     layers.forEach((layer, i) => {
@@ -199,7 +199,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         }
       });
     });
-
 };
 
 const createMap = function createMap (params) {
@@ -311,6 +310,36 @@ const setupMap = function setupMap (params, feature) {
   const graphicExtent = graphic.geometry.getExtent();
   map.setExtent(graphicExtent, true);
   map.graphics.add(graphic);
+
+  const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
+
+  if (hasGraphicsLayers) {
+    map.graphicsLayerIds.forEach(id => {
+      const layer = map.getLayer(id);
+      if (params.activeLayers.indexOf(id) === -1) {
+        layer.hide();
+        return;
+      }
+      layer.show();
+    });
+  }
+
+  map.layerIds.forEach(id => {
+
+    if (params.hasOwnProperty(id)) {
+
+      const layer = map.getLayer(id);
+
+      if (!params[id].length) {
+        layer.setVisibleLayers([-1]);
+        return;
+      }
+
+      const layersVisible = params[id].split(',').map(layerIndex => Number(layerIndex));
+
+      layer.setVisibleLayers(layersVisible);
+    }
+  });
   //- Add the layer to the map
   //- TODO: Old method adds a dynamic layer, this needs to be able to handle all layer types eventually,
   //- Update the layer factory to be more flexible
@@ -591,7 +620,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       const tcLossNode = document.getElementById('tc-loss');
       const series = [{ name: name, data: lossCounts }];
 
-      if (results.lossCounts && results.lossCounts.length) {
+      if (results.lossCounts && results.lossCounts.length && results.lossCounts.some(c => c > 0)) {
         const chartLabels = lossLabels.slice(tcLossFrom, tcLossTo + 1);
         charts.makeSimpleBarChart(tcLossNode, chartLabels, colors, series);
       } else {
@@ -629,7 +658,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const configuredColors = layerConf.colors;
       const labels = layerConf.classes[lang];
       const node = document.getElementById('lc-loss');
-      const { counts, encoder } = results;
+      const { counts, encoder, error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const Xs = encoder.A;
       const Ys = encoder.B;
       const chartInfo = charts.formatSeriesWithEncoder({
@@ -657,6 +692,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       language: lang
     }).then((results) => {
       const node = document.getElementById('lc-composition');
+
+      const { error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
 
       if (results.counts && results.counts.length) {
         const series = charts.formatCompositionAnalysis({
@@ -699,6 +741,11 @@ const runAnalysis = function runAnalysis (params, feature) {
         carbonName: 'MtCO2'
       });
 
+      if (!series.some(s => s.data.some(d => d > 0))) {
+        node.remove();
+        return;
+      }
+
       charts.makeBiomassLossChart(node, {
         series,
         categories: labels
@@ -735,7 +782,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const configuredColors = analysisConfig[analysisKeys.INTACT_LOSS].colors;
       const labels = text[lang].ANALYSIS_IFL_LABELS;
       const node = document.getElementById('intact-loss');
-      const { counts, encoder } = results;
+      const { counts, encoder, error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const Xs = encoder.A;
       const Ys = encoder.B;
       const chartInfo = charts.formatSeriesWithEncoder({
@@ -770,11 +823,20 @@ const runAnalysis = function runAnalysis (params, feature) {
       viirsFrom: viirsFrom,
       viirsTo: viirsTo
     }).then((results) => {
+
+      const node = document.getElementById('viirs-badge');
+
+      const { error } = results;
+      if (error) {
+        node.remove();
+        return;
+      }
+
       document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
       document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
       document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
-      document.getElementById('viirs-badge').classList.remove('hidden');
+      node.classList.remove('hidden');
     });
   } else {
     const node = document.getElementById('viirs-badge');
@@ -792,11 +854,20 @@ const runAnalysis = function runAnalysis (params, feature) {
       modisFrom: modisFrom,
       modisTo: modisTo
     }).then((results) => {
+
+      const node = document.getElementById('modis-badge');
+
+      const { error } = results;
+      if (error) {
+        node.remove();
+        return;
+      }
+
       document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__modis-count').innerHTML = results.fireCount;
       document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
       document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
-      document.getElementById('modis-badge').classList.remove('hidden');
+      node.classList.remove('hidden');
     });
   } else {
     const node = document.getElementById('modis-badge');
@@ -852,7 +923,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const node = document.getElementById('sad-alerts');
       const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
       const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
-      const {alerts} = results;
+      const {alerts, error} = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
       if (categories.length) {
         //- Tell the second series to use the second axis
@@ -882,11 +959,14 @@ const runAnalysis = function runAnalysis (params, feature) {
     }).then((results) => {
       const node = document.getElementById('glad-alerts');
       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
-      if (results.length) {
-        charts.makeTimeSeriesCharts(node, { data: results, name });
-      } else {
+
+      const { error } = results;
+      if (error || results.length === 0) {
         node.remove();
+        return;
       }
+
+      charts.makeTimeSeriesCharts(node, { data: results, name });
     });
   } else {
     const node = document.getElementById('glad-alerts');
@@ -907,10 +987,14 @@ const runAnalysis = function runAnalysis (params, feature) {
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
-      charts.makeTimeSeriesCharts(node, {
-        data: results,
-        name: name
-      });
+
+      const { error } = results;
+      if (error || results.length === 0) {
+        node.remove();
+        return;
+      }
+
+      charts.makeTimeSeriesCharts(node, { data: results, name });
     });
   } else {
     const node = document.getElementById('terrai-alerts');
