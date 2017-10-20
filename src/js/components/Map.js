@@ -333,7 +333,7 @@ export default class Map extends Component {
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} dynamicLayers={this.state.dynamicLayers} /> : null}
+          {map.loaded ? <Legend allLayers={this.state.allLayers} tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} dynamicLayers={this.state.dynamicLayers} /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
