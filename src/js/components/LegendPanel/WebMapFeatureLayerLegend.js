@@ -8,7 +8,8 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     this.symbolTypeMap = {
       simplefillsymbol: 'fill',
       simplelinesymbol: 'line',
-      picturemarkersymbol: 'image'
+      picturemarkersymbol: 'image',
+      simplemarkersymbol: 'circle'
     };
 
     this.borderStyleMap = {
@@ -39,12 +40,11 @@ export default class WebMapFeatureLayerLegend extends React.Component {
         const symbol = info.symbol;
           this.createSymbolStyles(symbol, container, idx, info);
       });
-    } else {
-      this.createSymbolStyles(renderer.getSymbol(), container);
+      return container;
     }
-    return (
-      container
-    );
+
+    this.createSymbolStyles(renderer.getSymbol(), container);
+    return container;
   }
 
   createSymbolStyles = (symbol, container, idx, info) => {
@@ -52,35 +52,40 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     let symbolDOMElement;
     const symbolType = this.symbolTypeMap[symbol.type];
 
-    if (symbolType === 'line') {
-      // give the div a height of 0, so it appears as a line
-      style.height = '0';
+    switch (symbolType) {
+      case 'line': {
+        style.height = '0'; // give the div a height of 0, so it appears as a line
 
-      const border = symbol.outline;
-      if (border.style !== 'none') {
-        style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+        const border = symbol.outline;
+        if (border.style !== 'none') {
+          style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+        }
+
+        symbolDOMElement = <div style={style} className='legend-symbol'></div>;
+        break;
       }
 
-      symbolDOMElement = <div style={style} className='legend-symbol'></div>;
+      case 'fill':
+      case 'circle':
+        style.backgroundColor = symbol.color === null ? 'transparent' : `rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${symbol.color.a}) `;
+
+        const border = symbol.outline;
+
+        if (border.style !== 'none') {
+          style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+        }
+
+        symbolDOMElement = <div style={style} className={`legend-symbol ${symbolType === 'circle' ? 'circle' : ''}`}></div>;
+        break;
+
+      case 'image':
+        symbolDOMElement = <img style={style} className='legend-symbol' src={symbol.url} />;
+        break;
+
+      default:
+        break;
     }
 
-    if (symbolType === 'fill') {
-
-      style.backgroundColor = symbol.color === null ? 'transparent' : `rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${symbol.color.a}) `;
-
-      const border = symbol.outline;
-
-      if (border.style !== 'none') {
-        style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
-      }
-
-      symbolDOMElement = <div style={style} className='legend-symbol'></div>;
-    }
-
-    if (symbolType === 'image') {
-
-      symbolDOMElement = <img style={style} className='legend-symbol' src={symbol.url} />;
-    }
 
     container.push(
       <div key={idx ? idx : null} className='legend-container'>
@@ -91,7 +96,6 @@ export default class WebMapFeatureLayerLegend extends React.Component {
   }
 
   render () {
-
     return (
       <div className={`parent-legend-container ${this.state.visible ? '' : 'hidden'}`} ref="myRef">
         <div className='label-container'>{this.props.layer.arcgisProps.title}</div>
