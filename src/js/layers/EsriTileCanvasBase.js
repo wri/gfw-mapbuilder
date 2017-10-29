@@ -330,7 +330,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
           y: yTransfrom
         });
 
-      if (this.id === 'TREE_COVER_GAIN') {
+      if (this.id === 'TREE_COVER_GAIN' && this._map.getZoom() < 12) {
         const hardUrl = 'url(' + data.url + ')';
         ctx.canvas.style.background = hardUrl;
 
