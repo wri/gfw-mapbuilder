@@ -29,14 +29,20 @@
 .parent-legend-container
   margin 10px 0
   font-weight bold
+  .label-container
+    margin-bottom 5px
   .legend-container
     font-weight normal
     display flex
-    align-items center
+    align-items flex-start
     .legend-symbol
+      position relative
+      top 2px
       margin-right 10px
       height 15px
       width 15px
+      &.circle
+        border-radius 50%
 
 .legend-layers
   overflow-y auto

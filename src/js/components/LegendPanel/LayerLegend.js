@@ -32,9 +32,9 @@ export default class LayerLegend extends React.Component {
 
   itemMapper (item, index) {
     return (
-      <div className='legend-row' key={index}>
-        <img className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
-        <div className='legend-label' key={index}>{item.label}</div>
+      <div className='legend-container' key={index}>
+        <img className='legend-symbol' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
+        <div>{item.label}</div>
       </div>
     );
   }
@@ -61,13 +61,9 @@ export default class LayerLegend extends React.Component {
     return (
       <div className={`parent-legend-container ${bool}`} ref="myRef">
         <div className='label-container'>{label}</div>
-        <div className={`legend-container ${bool}`}>
-          {this.state.legendInfos.length === 0 ? '' :
-            <div className='crowdsource-legend'>
-              {this.state.legendInfos.map(this.itemMapper, this)}
-            </div>
-          }
-        </div>
+        {this.state.legendInfos.length === 0 ? '' :
+          this.state.legendInfos.map(this.itemMapper)
+        }
       </div>
     );
   }
