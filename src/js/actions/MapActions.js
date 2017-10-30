@@ -134,11 +134,7 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
-      uniqueLayers.forEach((layer) => {
-        if (map.getLayer(layer.id) && layer.order) {
-          map.reorderLayer(map.getLayer(layer.id), layer.order);
-        }
-      });
+
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);
       }
