@@ -24,9 +24,39 @@ export default class LayerRadio extends Component {
 
     this.layer = brApp.map.getLayer(props.layers[0].id);
     LayerActions.removeAllSubLayers.defer(this.layer);
+
     this.state = {
-      selected: this.layer.visibleLayers[0] || -1
+      selected: this.layer.visibleLayers[0] || -1,
+      exclusiveLayerIds: []
     };
+  }
+
+  componentDidMount() {
+    const { settings } = this.context;
+    const { layerPanel } = settings;
+
+    // Get the list of unique layer ids that we need to turn off when a radio button is toggled on
+    const exclusiveLayerIds = settings.exclusiveRadioGroups
+    .reduce((result, groupId) => {
+      return [
+        ...result,
+        ...layerPanel[groupId].layers.map(l => l.id) // l.id is the same for all sublayers in each group
+        ];
+    }, [])
+    .filter(id => id !== this.layer.id);
+
+    // after the reduce, we end up with an array of ids that are repeated for each sublayer in each group
+    // so we need to filter them down to the unique ids
+    const uniqueIds = [];
+    exclusiveLayerIds.forEach(id => {
+      if (uniqueIds.indexOf(id) === -1) {
+        uniqueIds.push(id);
+      }
+    });
+
+    this.setState({
+      exclusiveLayerIds: uniqueIds
+    });
   }
 
   componentDidUpdate() {
@@ -60,6 +90,18 @@ export default class LayerRadio extends Component {
   }
 
   toggleLayer (event) {
+
+    this.state.exclusiveLayerIds.forEach(id => {
+
+      const layer = brApp.map.getLayer(id);
+
+      if (this.props.dynamicLayers[id].length > 0) {
+        LayerActions.removeAllSubLayers(layer);
+        layer.hide();
+        layer.setVisibleLayers([-1]);
+      }
+    });
+
     const value = Number(event.target.getAttribute('value'));
     const selectedLayer = this.props.layers.filter(l => l.subIndex === value)[0];
     const selectedValue = selectedLayer.subIndex;
