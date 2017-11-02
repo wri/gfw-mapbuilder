@@ -422,7 +422,12 @@ export default {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(biomassResult => {
-      deferred.resolve(biomassResult || []);
+      if (!biomassResult) deferred.resolve({});
+
+      const totalBiomass = biomassResult.data.attributes.biomass;
+      const averageBiomass = biomassResult.data.attributes.biomass / biomassResult.data.attributes.areaHa;
+
+      deferred.resolve({ totalBiomass, averageBiomass});
     }, err => {
       console.error(err);
       deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });
