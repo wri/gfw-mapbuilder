@@ -72,6 +72,8 @@ strings.en.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.en.ANALYSIS_TOTAL_GAIN_LABEL = 'Total tree cover gained';
 strings.en.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.en.ANALYSIS_SLOPE_OPTION = 'Option #';
+strings.en.ANALYSIS_TOTAL_BIOMASS_LABEL = 'Total aboveground live woody biomass';
+strings.en.ANALYSIS_AVERAGE_BIOMASS_LABEL = 'Average aboveground live woody biomass';
 strings.en.SLOPE_SELECT_LABEL = 'Choose slope percent:';
 strings.en.ANALYSIS_RESTORATION_ERROR = 'Area not meeting criteria for potential/No data';
 strings.en.ANALYSIS_GROUP_RESTORATION = 'Restoration potential for';
@@ -99,6 +101,10 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
   },
   { label: 'Land cover loss',
     value: analysisKeys.LC_LOSS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'Aboveground Live Woody Biomass (Carbon)',
+    value: analysisKeys.TOTAL_BIOMASS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Aboveground Live Woody Biomass loss (Carbon)',

@@ -10,6 +10,7 @@ import SlopeSelect from 'components/AnalysisPanel/SlopeClassSelect';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
+import BiomassBadge from 'components/AnalysisPanel/BiomassBadge';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -197,12 +198,14 @@ export default class Analysis extends Component {
           colors={analysisConfig[type].colors}
           labels={labels}
           results={results}/>;
+      case analysisKeys.TOTAL_BIOMASS:
+        return <BiomassBadge results={results} />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}
           labels={analysisConfig[type].labels}
           colors={analysisConfig[type].colors}
-          />;
+        />;
       case analysisKeys.LC_LOSS:
       case analysisKeys.INTACT_LOSS:
       case analysisKeys.MANGROVE_LOSS:

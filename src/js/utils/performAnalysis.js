@@ -98,6 +98,9 @@ export default function performAnalysis (options) {
       // const generalizedGeometry = GeometryEngine.generalize(geometry, 10, true, 'miles');
       analysisUtils.getBiomassLoss(geostoreId, canopyDensity, language).then(promise.resolve, promise.reject);
     break;
+    case analysisKeys.TOTAL_BIOMASS:
+      analysisUtils.getTotalBiomass(geostoreId, canopyDensity, language).then(promise.resolve, promise.reject);
+    break;
     case analysisKeys.INTACT_LOSS:
       analysisUtils.getCrossedWithLoss(config, analysisConfig[analysisKeys.TC_LOSS], geometry, {
         canopyDensity: canopyDensity,
