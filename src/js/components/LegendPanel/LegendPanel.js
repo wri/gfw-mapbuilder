@@ -179,11 +179,11 @@ export default class LegendPanel extends Component {
 
     if (layersFive !== undefined && layersFive !== [] && layersFive !== [-1] && layersFive !== '') {
       const indigenousLegends = [],
-            communityLegends = [];
-      const indigenousAcknowledged = [];
-      const indigenousNotAcknowledged = [];
-      const communityAcknowledged = [];
-      const communityNotAcknowledged = [];
+            communityLegends = [],
+            indigenousAcknowledged = [],
+            indigenousNotAcknowledged = [],
+            communityAcknowledged = [],
+            communityNotAcknowledged = [];
 
       layerGroups.GROUP_LAND_MAPS.layers.forEach(layer => {
         if (layer.indigenousOrCommunity === 'indigenous') {
