@@ -3,6 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import mapActions from 'actions/MapActions';
 // import CartoLegend from 'components/LegendPanel/CartoLegend';
 import WebMapLegend from 'components/LegendPanel/WebMapLegend';
+import NestedLegend from 'components/LegendPanel/NestedLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
 import utils from 'utils/AppUtils';
 import {urls} from 'js/config';
@@ -165,7 +166,7 @@ export default class LegendPanel extends Component {
     }
 
     // Processing the webmap legend
-    let webmapChildComponents = [];
+    const webmapChildComponents = [];
     let legendComponents = [];
     const layerGroups = settings.layerPanel;
     // const layers = layerGroups.GROUP_WEBMAP.layers;
@@ -177,15 +178,61 @@ export default class LegendPanel extends Component {
     const layersFive = layerGroups.GROUP_LAND_MAPS.layers;
 
     if (layersFive !== undefined && layersFive !== [] && layersFive !== [-1] && layersFive !== '') {
-      const landsHeldLegends = [];
-      layersFive.forEach(layer => {
-        const subLayerConf = utils.getObject(layerGroups.GROUP_LAND_MAPS.layers, 'id', layer.id);
-        const layerConf = utils.getWebMapObject(legendLayers, 'layer', 'id', layer.id);
-        const childComponent = <WebMapLegend key={layerConf.id} url={layerConf.url} labels={subLayerConf.label} visibility={activeLayers.indexOf(layerConf.id) > -1} visibleLayers={activeLayers} layerSubIndex={1} layerId={subLayerConf.subId}/>;
-        landsHeldLegends.push({order: subLayerConf.order, childComponent});
+      const indigenousLegends = [],
+            communityLegends = [],
+            indigenousAcknowledged = [],
+            indigenousNotAcknowledged = [],
+            communityAcknowledged = [],
+            communityNotAcknowledged = [];
+
+      layerGroups.GROUP_LAND_MAPS.layers.forEach(layer => {
+        if (layer.indigenousOrCommunity === 'indigenous') {
+          if (layer.acknowledgedByGovt === true) {
+
+            indigenousAcknowledged.push(layer);
+          } else {
+            indigenousNotAcknowledged.push(layer);
+          }
+        } else {
+          if (layer.acknowledgedByGovt === true) {
+            communityAcknowledged.push(layer);
+          } else {
+            communityNotAcknowledged.push(layer);
+          }
+        }
       });
-      landsHeldLegends.sort((a, b) => a.order - b.order);
-      webmapChildComponents = webmapChildComponents.concat(landsHeldLegends.map(l => l.childComponent));
+
+      indigenousAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+      indigenousNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+      communityAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+      communityNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+
+      indigenousLegends.push(
+        <NestedLegend groupLabel='Acknowledged By Government' layerGroup={indigenousAcknowledged} activeLayers={activeLayers} />,
+        <NestedLegend groupLabel='Not Acknowledged By Government' layerGroup={indigenousNotAcknowledged} activeLayers={activeLayers} />
+      );
+
+      communityLegends.push(
+        <NestedLegend groupLabel='Acknowledged By Government' layerGroup={communityAcknowledged} activeLayers={activeLayers} />,
+        <NestedLegend groupLabel='Not Acknowledged By Government' layerGroup={communityNotAcknowledged} activeLayers={activeLayers} />
+      );
+
+      const indigenousVisible = indigenousAcknowledged.concat(indigenousNotAcknowledged).some(l => l.visible);
+      const communityVisible = communityAcknowledged.concat(communityNotAcknowledged).some(l => l.visible);
+
+      const childComponent = (
+        <div>
+          <div className={indigenousVisible ? '' : 'hidden'}>
+            <h3>Indigenous Lands</h3>
+            {indigenousLegends}
+          </div>
+          <div className={communityVisible ? '' : 'hidden'}>
+            <h3>Community Lands</h3>
+            {communityLegends}
+          </div>
+        </div>
+      );
+      webmapChildComponents.push(childComponent);
     }
     if (layersThree !== undefined && layersThree !== [] && layersThree !== [-1] && layersThree !== '') {
       layersThree.forEach(layer => {
