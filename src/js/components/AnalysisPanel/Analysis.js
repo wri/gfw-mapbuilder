@@ -197,9 +197,14 @@ export default class Analysis extends Component {
           colors={analysisConfig[type].colors}
           labels={labels}
           results={results}/>;
+      case analysisKeys.TOTAL_BIOMASS:
+        return <BiomassBadge results={results} />;
       case analysisKeys.BIO_LOSS:
-        console.log(results);
-        return <BiomassBadge resutls={results} />;
+        return <BiomassChart
+          payload={results}
+          labels={analysisConfig[type].labels}
+          colors={analysisConfig[type].colors}
+        />;
       case analysisKeys.LC_LOSS:
       case analysisKeys.INTACT_LOSS:
       case analysisKeys.MANGROVE_LOSS:

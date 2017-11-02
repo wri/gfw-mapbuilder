@@ -20,15 +20,19 @@ const BiomassBadge = (props, context) => {
 
     return (
       <div className='results__biomass'>
-        <div className='results__loss-badge'>
-          <div className='results__biomass--label'>{text[language].ANALYSIS_TOTAL_BIOMASS_LABEL}</div>
-          <span className='results__loss--count'>{utils.formatNumber(totalBiomass)}</span>
-          <span className='results__loss--unit'>MgC</span>
+        <div className='results__total-biomass-badge'>
+          <div className='results__total-biomass--label'>{text[language].ANALYSIS_TOTAL_BIOMASS_LABEL}</div>
+          <div className='results__total-biomass--count-container'>
+            <span className='results__total-biomass--count'>{utils.formatNumber(totalBiomass)}</span>
+            <span className='results__total-biomass--unit'>MgC</span>
+          </div>
         </div>
-        <div className='results__gain-badge'>
-          <div className='results__biomass--label'>{text[language].ANALYSIS_AVERAGE_BIOMASS_LABEL}</div>
-          <span className='results__gain--count'>{utils.formatNumber(averageBiomass)}</span>
-          <span className='results__gain--unit'>MgC/Ha</span>
+        <div className='results__average-biomass-badge'>
+          <div className='results__average-biomass--label'>{text[language].ANALYSIS_AVERAGE_BIOMASS_LABEL}</div>
+          <div className='results__total-biomass--count-container'>
+            <span className='results__average-biomass--count'>{utils.formatNumber(averageBiomass)}</span>
+            <span className='results__average-biomass--unit'>MgC/Ha</span>
+          </div>
         </div>
       </div>
     );
