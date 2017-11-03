@@ -72,7 +72,7 @@ export default class WebMapLegend extends React.Component {
 
     return (
       <div className={`parent-legend-container ${bool}`} ref="myRef">
-        <div className='label-container'>{label}</div>
+        <div className={`label-container ${label ? '' : 'hidden'}`}><strong>{label}</strong></div>
         <div className={`legend-container ${bool}`}>
           {this.state.legendInfos === null || this.state.legendInfos.length === 0
             ? '' :
