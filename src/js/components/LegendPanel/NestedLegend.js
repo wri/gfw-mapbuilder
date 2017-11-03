@@ -8,7 +8,7 @@ export const NestedLegend = ({ groupLabel, layerGroup, activeLayers }) => {
 
   return (
     <div className={`nested-legend-group ${groupVisible ? '' : 'hidden'}`}>
-      <h4>{groupLabel}</h4>
+      <div className='nested-group-label'><strong>{groupLabel}</strong></div>
       {layerGroup.map(l => {
         return <WebMapLegend
           key={l.id}
