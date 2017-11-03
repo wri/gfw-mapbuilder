@@ -414,7 +414,8 @@ export default class Map extends Component {
             label: sublayer.name,
             opacity: 1,
             visible: visible,
-            esriLayer: layer.layerObject
+            esriLayer: layer.layerObject,
+            itemId: layer.itemId
           };
           if (layer.id === 'indicators_legal_security_8140' && sublayer.id < 11) {
             layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
