@@ -140,9 +140,7 @@ define(['exports'], function (exports) {
           order: 1,
           id: 'TREE_COVER_LOSS',
           type: 'loss', //image
-          // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
-          // url: 'https://storage.googleapis.com/forma-public/Hansen14_15/tiles/1/30/{z}/{x}/{y}',
-          url: 'https://storage.googleapis.com/wri-public/Hansen15/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
+          url: 'http://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
           // legendLayer: 7,
           minYear: 1,
           maxYear: 15,
