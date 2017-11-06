@@ -5,7 +5,6 @@ import mapActions from 'actions/MapActions';
 import WebMapLegend from 'components/LegendPanel/WebMapLegend';
 import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
-import utils from 'utils/AppUtils';
 import {urls} from 'js/config';
 import text from 'js/languages';
 
@@ -42,57 +41,97 @@ export default class LegendPanel extends Component {
     return filteredLayers;
   }
 
-  createLegend = layerDiv => {
+  createLegend = layer => {
     let childComponent;
 
     const {activeLayers} = this.props;
 
-    switch(layerDiv.id) {
+    switch(layer.id) {
       case 'IFL':
-        childComponent = <LayerLegend key={layerDiv.id} url={layerDiv.url} visibleLayers={activeLayers} layerIds={layerDiv.layerIds} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
         break;
       case 'IMAZON_SAD':
-        childComponent = <LayerLegend key={layerDiv.id} url={layerDiv.url} visibleLayers={activeLayers} layerIds={layerDiv.layerIds} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
         break;
       case 'VIIRS_ACTIVE_FIRES':
-        childComponent = <LayerLegend key={layerDiv.id} url={layerDiv.url} visibleLayers={activeLayers} layerIds={layerDiv.layerIds} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
         break;
       case 'MODIS_ACTIVE_FIRES':
-        childComponent = <LayerLegend key={layerDiv.id} url={layerDiv.url} visibleLayers={activeLayers} layerIds={layerDiv.layerIds} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
         break;
       case 'GLOB_MANGROVE':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'AG_BIOMASS':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'TERRA_I_ALERTS':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'GLAD_ALERTS':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'TREE_COVER_GAIN':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'TREE_COVER_LOSS':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'LAND_COVER':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       case 'TREE_COVER':
-        childComponent = <LayerLegend key={layerDiv.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layerDiv.legendLayer} layerId={layerDiv.id}/>;
+        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
         break;
       default:
-        break;
+        childComponent = this.createWebmapLegend(layer);
     }
     return childComponent;
   }
 
+  createWebmapLegend = layer => {
+    const { activeLayers, dynamicLayers } = this.props;
+    const { map } = this.context;
+
+    if (layer.subId) {
+      const scale = map.getScale();
+      let visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1;
+
+      if (layer.hasScaleDependency) {
+        visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale && layer.maxScale <= scale;
+
+        if (layer.minScale === 0) {
+          visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.maxScale <= scale;
+        }
+
+        if (layer.maxScale === 0) {
+          visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale;
+        }
+      }
+
+      const esriLayer = layer.esriLayer;
+
+      return <WebMapLegend key={layer.subId} url={esriLayer.url} labels={layer.label} visibility={visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId} />;
+
+
+    } else {
+      const esriLayer = layer.esriLayer;
+
+      if (esriLayer.type === 'Feature Layer') {
+        return <WebMapFeatureLayerLegend key={esriLayer.id} layer={esriLayer} visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale} visibleLayers={activeLayers} />;
+      } else {
+        if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
+          esriLayer.layerId = esriLayer.layerInfos[0].id;
+        }
+
+        return <WebMapLegend key={layer.id} url={esriLayer.url} labels={layer.label} visibility={activeLayers.indexOf(layer.id) > -1} visibleLayers={activeLayers} layerId={esriLayer.layerId} />;
+      }
+    }
+  }
+
   render () {
-    const {tableOfContentsVisible, legendOpen, activeLayers, dynamicLayers, allLayers} = this.props;
-    const {language, settings, map } = this.context;
+    const {tableOfContentsVisible, legendOpen, allLayers} = this.props;
+    const { language } = this.context;
 
     const legendLayers = this.getLayersForLegend(allLayers).sort((a, b) => b.order - a.order);
     const legendComponents = legendLayers.map(this.createLegend);
@@ -102,59 +141,6 @@ export default class LegendPanel extends Component {
     //- Hide the legend if the TOC is not visible (eye button)
     if (!tableOfContentsVisible) {
       rootClasses += ' hidden';
-    }
-
-    // Processing the webmap legend
-    const layerGroups = settings.layerPanel;
-    const layers = layerGroups.GROUP_WEBMAP.layers;
-
-    if (legendLayers.length > 0 && layers !== undefined && layers !== [] && layers !== '') {
-      // Going through each webmap layer and creating a unique legend component
-
-      layers.forEach(layer => {
-        if (layer.subId) {
-          const scale = map.getScale();
-          let visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1;
-
-          if (layer.hasScaleDependency) {
-            visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale && layer.maxScale <= scale;
-
-            if (layer.minScale === 0) {
-              visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.maxScale <= scale;
-            }
-
-            if (layer.maxScale === 0) {
-              visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale;
-            }
-          }
-
-          const layerConf = utils.getObject(legendLayers, 'id', layer.id);
-          const esriLayer = layerConf.esriLayer;
-
-          const childComponent = <WebMapLegend key={layer.subId} url={esriLayer.url} labels={layer.label} visibility={visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId} />;
-
-          const panelLocation = legendLayers.indexOf(layerConf);
-          legendComponents.splice(panelLocation, 0, childComponent);
-        } else {
-          const layerConf = utils.getObject(legendLayers, 'id', layer.id);
-          const esriLayer = layerConf.esriLayer;
-
-          let childComponent;
-
-          if (esriLayer.type === 'Feature Layer') {
-            childComponent = <WebMapFeatureLayerLegend key={esriLayer.id} layer={esriLayer} visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale} visibleLayers={activeLayers} />;
-          } else {
-            if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
-              esriLayer.layerId = esriLayer.layerInfos[0].id;
-            }
-
-            childComponent = <WebMapLegend key={layer.id} url={esriLayer.url} labels={layer.label} visibility={activeLayers.indexOf(layer.id) > -1} visibleLayers={activeLayers} layerId={esriLayer.layerId} />;
-          }
-
-          const panelLocation = legendLayers.indexOf(layerConf);
-          legendComponents.splice(panelLocation, 0, childComponent);
-        }
-      });
     }
 
     return (
