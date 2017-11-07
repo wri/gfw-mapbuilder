@@ -5,7 +5,7 @@ export default class WebMapLegend extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = { legendInfos: [], visible: this.props.visibility };
+    this.state = { legendInfos: [], visible: props.visibility, opacity: props.defaultOpacity };
   }
 
   componentDidUpdate(prevProps) {
@@ -16,6 +16,10 @@ export default class WebMapLegend extends React.Component {
           visible: !prevState.visible
         };
       });
+    }
+
+    if (this.props.legendOpacity.layerId === this.props.layerId && this.props.legendOpacity.value !== prevProps.legendOpacity.value) {
+      this.setState({ opacity: this.props.legendOpacity.value });
     }
   }
 
@@ -29,10 +33,10 @@ export default class WebMapLegend extends React.Component {
     });
   }
 
-  itemMapper (item) {
+  itemMapper = (item) => {
     return (
       <div className='legend-row' key={item.url}>
-        <img className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
+        <img style={{'opacity': this.state.opacity}} className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
         <div className='legend-label'>{item.label}</div>
       </div>
     );
