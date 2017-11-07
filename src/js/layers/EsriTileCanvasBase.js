@@ -193,11 +193,18 @@ export default declare('EsriTileCanvasBase', [Layer], {
       var tileId = this._container.children[c].id;
       tileId = tileId.split('_');
       if (tileId.length > 0) {
-        tileId = tileId[2];
-        if (tileId) {
-          tileId = parseInt(tileId);
-          if (tileId !== level) {
+        let tileIdLevel = tileId[3];
+        if (tileIdLevel) {
+          tileIdLevel = parseInt(tileIdLevel);
+          if (tileIdLevel !== level) {
             // this._container.children[c].remove();
+            tilesToDelete.push(this._container.children[c]);
+          }
+        }
+        let tileIdThresh = tileId[0];
+        if (tileIdThresh) {
+          tileIdThresh = parseInt(tileIdThresh);
+          if (tileIdThresh !== parseInt(this.options.url.split('tc')[1].substr(0, 2))) {
             tilesToDelete.push(this._container.children[c]);
           }
         }
@@ -258,43 +265,42 @@ export default declare('EsriTileCanvasBase', [Layer], {
     const id = this._getId(tile);
     let url;
     //- Don't fetch the image if we already have it
-    if (this.tiles[id]) {
-      this._drawTile(this.tiles[id]);
+    if (!this.tiles.hasOwnProperty(id)) {
+      //- If we are past max zoom, get the parent tile
+      if (tile.z > this.options.maxZoom) {
+        const steps = this._getZoomSteps(tile.z);
+        const x = Math.floor(tile.x / Math.pow(2, steps));
+        const y = Math.floor(tile.y / Math.pow(2, steps));
+        url = this._getUrl({ x, y, z: this.options.maxZoom });
+      } else {
+        url = this._getUrl(tile);
+      }
+
+      this._fetchImage(url, (image) => {
+        const canvas = document.createElement('canvas');
+        canvas.height = this.options.tileSize;
+        canvas.width = this.options.tileSize;
+        canvas.style.position = 'absolute';
+        canvas.setAttribute('id', id);
+
+        const data = {
+          x: tile.x,
+          y: tile.y,
+          z: tile.z,
+          canvas,
+          image,
+          id,
+          url: url
+        };
+
+        //- Cache the tile
+        this.tiles[id] = data;
+        //- Render the tile
+        this._drawTile(data);
+      });
       return;
     }
-
-    //- If we are past max zoom, get the parent tile
-    if (tile.z > this.options.maxZoom) {
-      const steps = this._getZoomSteps(tile.z);
-      const x = Math.floor(tile.x / Math.pow(2, steps));
-      const y = Math.floor(tile.y / Math.pow(2, steps));
-      url = this._getUrl({ x, y, z: this.options.maxZoom });
-    } else {
-      url = this._getUrl(tile);
-    }
-
-    this._fetchImage(url, (image) => {
-      const canvas = document.createElement('canvas');
-      canvas.height = this.options.tileSize;
-      canvas.width = this.options.tileSize;
-      canvas.style.position = 'absolute';
-      canvas.setAttribute('id', id);
-
-      const data = {
-        x: tile.x,
-        y: tile.y,
-        z: tile.z,
-        canvas,
-        image,
-        id,
-        url: url
-      };
-
-      //- Cache the tile
-      this.tiles[id] = data;
-      //- Render the tile
-      this._drawTile(data);
-    });
+    this._drawTile(this.tiles[id]);
   },
 
   /**
@@ -396,7 +402,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @return {string} id for the tile
   */
   _getId: function _getId (tile) {
-    return `${tile.x}_${tile.y}_${tile.z}`;
+    const tcd = this.options.url.split('tc')[1].substr(0, 2);
+    return `${tcd}_${tile.x}_${tile.y}_${tile.z}`;
   },
 
   /**

@@ -33,7 +33,7 @@ export default declare('TreeCoverLossLayer', [TileCanvasLayer], {
 
   setUrl: function (url) {
     this.options.url = url;
-    // this.refresh();
+    this.show();
   },
 
   // Filter Data Method

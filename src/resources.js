@@ -137,7 +137,7 @@ export default {
         url: 'http://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
         // legendLayer: 7,
         minYear: 1,
-        maxYear: 15,
+        maxYear: 16,
         // minDateValue: 15000,
         // maxDateValue: 16365,
         // confidence: [0, 1],
