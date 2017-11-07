@@ -34,7 +34,7 @@ define(['exports'], function (exports) {
     language: 'en',
     useAlternativeLanguage: true,
     alternativeWebmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
-    alternativeLanguage: 'fr',
+    alternativeLanguage: 'ka',
     alternativeLanguageTitle: 'GFW Mapbuilder',
     alternativeLanguageSubtitle: 'Make maps that matter',
     alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
