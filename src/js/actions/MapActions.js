@@ -114,7 +114,7 @@ class MapActions {
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers.filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
       return layerFactory(layer, language);
-    });
+    }).sort((a, b) => a.order - b.order);
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
