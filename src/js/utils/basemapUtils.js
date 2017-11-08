@@ -113,6 +113,10 @@ export default {
         if (!arcgisBasemap && url.indexOf('natgeo') > -1) {
           arcgisBasemap = 'national-geographic';
         }
+
+        if (!arcgisBasemap && url.indexOf('world-imagery') > -1) {
+          arcgisBasemap = 'satellite';
+        }
       });
 
       //- Check to see if this is a WRI basemap
