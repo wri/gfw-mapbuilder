@@ -280,7 +280,7 @@ export default {
 			},
 			series: series
 		}, callback);
-	},
+  },
 
 	makeTimeSeriesCharts: (el, options) => {
 		const {data, name} = options;

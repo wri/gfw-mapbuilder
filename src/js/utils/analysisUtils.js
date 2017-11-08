@@ -424,10 +424,38 @@ export default {
     }, { usePost: false }).then(biomassResult => {
       if (!biomassResult) deferred.resolve({});
 
-      const totalBiomass = biomassResult.data.attributes.biomass;
-      const averageBiomass = biomassResult.data.attributes.biomass / biomassResult.data.attributes.areaHa;
+      const aboveground = biomassResult.data.attributes.biomass;
 
-      deferred.resolve({ totalBiomass, averageBiomass});
+      deferred.resolve({ aboveground });
+    }, err => {
+      console.error(err);
+      deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });
+    });
+
+    return deferred;
+  },
+
+  getAverageBiomass: function (geostoreId, canopyDensity, language) {
+    const deferred = new Deferred();
+    const biomassConfig = analysisConfig[analysisKeys.BIO_LOSS];
+
+    const biomassData = {
+      geostore: geostoreId,
+      period: `${biomassConfig.startDate}-01-01,${biomassConfig.endDate}-12-31`,
+      thresh: canopyDensity
+    };
+    esriRequest({
+      url: biomassConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: biomassData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(biomassResult => {
+      if (!biomassResult) deferred.resolve({});
+
+      const aboveground = biomassResult.data.attributes.biomass / biomassResult.data.attributes.areaHa;
+
+      deferred.resolve({ aboveground });
     }, err => {
       console.error(err);
       deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });
