@@ -424,9 +424,10 @@ export default {
     }, { usePost: false }).then(biomassResult => {
       if (!biomassResult) deferred.resolve({});
 
-      const aboveground = biomassResult.data.attributes.biomass;
+      const abovegroundCarbon = biomassResult.data.attributes.biomass / 2;
+      const belowgroundCarbon = abovegroundCarbon * 0.26;
 
-      deferred.resolve({ aboveground });
+      deferred.resolve({ abovegroundCarbon, belowgroundCarbon });
     }, err => {
       console.error(err);
       deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });
@@ -453,9 +454,13 @@ export default {
     }, { usePost: false }).then(biomassResult => {
       if (!biomassResult) deferred.resolve({});
 
-      const aboveground = biomassResult.data.attributes.biomass / biomassResult.data.attributes.areaHa;
+      const analyzedArea = biomassResult.data.attributes.areaHa;
+      const abovegroundCarbon = biomassResult.data.attributes.biomass / 2;
 
-      deferred.resolve({ aboveground });
+      const averageAboveground = abovegroundCarbon / analyzedArea;
+      const averageBelowground = (abovegroundCarbon * 0.26) / analyzedArea;
+
+      deferred.resolve({ averageAboveground, averageBelowground });
     }, err => {
       console.error(err);
       deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });

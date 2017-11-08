@@ -201,16 +201,16 @@ export default class Analysis extends Component {
       case analysisKeys.TOTAL_CARBON:
         return <CarbonChart
           results={results}
-          aboveground={results.aboveground}
-          belowground={results.belowground}
-          suffix={' mgC'}
+          aboveground={results.abovegroundCarbon}
+          belowground={results.belowgroundCarbon}
+          suffix={' MgC'}
         />;
       case analysisKeys.AVERAGE_CARBON:
         return <CarbonChart
           results={results}
-          aboveground={results.aboveground}
-          belowground={results.belowground}
-          suffix={' mgC/Ha'}
+          aboveground={results.averageAboveground}
+          belowground={results.averageBelowground}
+          suffix={' MgC/Ha'}
         />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart

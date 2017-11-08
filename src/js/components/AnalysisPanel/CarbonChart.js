@@ -16,7 +16,7 @@ export default class CarbonChart extends Component {
       this.setState({ isError: true });
     } else {
       const aboveground = this.props.aboveground;
-      const belowground = aboveground * 0.4;
+      const belowground = this.props.belowground;
       const total = aboveground + belowground;
 
       if (aboveground === 0 && belowground === 0) {
@@ -36,7 +36,7 @@ export default class CarbonChart extends Component {
             pie: {
               dataLabels: {
                 enabled: true,
-                distance: -30,
+                distance: -35,
                 style: {
                   fontSize: '18px',
                   textOutline: 'none',
@@ -55,12 +55,12 @@ export default class CarbonChart extends Component {
               data: [
                 {
                   y: Number(aboveground.toFixed(2)),
-                  color: 'green',
+                  color: '#5CCEF8',
                   name: 'Aboveground'
                 },
                 {
                   y: Number(belowground.toFixed(2)),
-                  color: 'magenta',
+                  color: '#50AC58',
                   name: 'Belowground'
                 }
               ],
