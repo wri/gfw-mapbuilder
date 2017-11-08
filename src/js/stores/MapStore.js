@@ -61,6 +61,7 @@ class MapStore {
     this.imazonStartYear = 0;
     this.imazonEndYear = 0;
     this.iconLoading = '';
+    this.legendOpacity = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -359,12 +360,9 @@ class MapStore {
     }
   }
 
-  changeOpacity (parameters) {
-    const layer = this.allLayers.filter(l => l.id === parameters.layerId);
-    console.log('MapStore >>> found a layer?', layer, parameters.layerId);
-    if ( layer[0] ) {
-      layer[0].opacity = parseFloat(parameters.value);
-    }
+  changeOpacity (payload) {
+    // payload = { layerId: <string>, value: <number> }
+    this.legendOpacity = payload;
   }
 
   changeBasemap (basemap) {

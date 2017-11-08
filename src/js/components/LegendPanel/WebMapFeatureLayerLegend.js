@@ -18,7 +18,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       none: 'none'
     };
 
-    this.state = { visible: this.props.visibility };
+    this.state = { visible: props.visibility, opacity: props.layer.opacity || 1 };
   }
 
   componentDidUpdate(prevProps) {
@@ -28,6 +28,10 @@ export default class WebMapFeatureLayerLegend extends React.Component {
           visible: !prevState.visible
         };
       });
+    }
+
+    if (this.props.legendOpacity.layerId === this.props.layer.id && this.props.legendOpacity.value !== prevProps.legendOpacity.value) {
+      this.setState({ opacity: this.props.legendOpacity.value });
     }
   }
 
@@ -49,6 +53,8 @@ export default class WebMapFeatureLayerLegend extends React.Component {
 
   createSymbolStyles = (symbol, container, idx, info) => {
     const style = {};
+    style.opacity = this.state.opacity;
+
     let symbolDOMElement;
     const symbolType = this.symbolTypeMap[symbol.type];
 

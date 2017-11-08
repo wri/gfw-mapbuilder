@@ -44,44 +44,140 @@ export default class LegendPanel extends Component {
   createLegend = layer => {
     let childComponent;
 
-    const {activeLayers} = this.props;
+    const {activeLayers, legendOpacity} = this.props;
 
     switch(layer.id) {
       case 'IFL':
-        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'IMAZON_SAD':
-        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'VIIRS_ACTIVE_FIRES':
-        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'MODIS_ACTIVE_FIRES':
-        childComponent = <LayerLegend key={layer.id} url={layer.url} visibleLayers={activeLayers} layerIds={layer.layerIds} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'GLOB_MANGROVE':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'AG_BIOMASS':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'TERRA_I_ALERTS':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'GLAD_ALERTS':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'TREE_COVER_GAIN':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'TREE_COVER_LOSS':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'LAND_COVER':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       case 'TREE_COVER':
-        childComponent = <LayerLegend key={layer.id} url={urls.esriLegendService} visibleLayers={activeLayers} layerIds={layer.legendLayer} layerId={layer.id}/>;
+        childComponent = <LayerLegend
+          key={layer.id}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />;
         break;
       default:
         childComponent = this.createWebmapLegend(layer);
@@ -90,7 +186,7 @@ export default class LegendPanel extends Component {
   }
 
   createWebmapLegend = layer => {
-    const { activeLayers, dynamicLayers } = this.props;
+    const { activeLayers, dynamicLayers, legendOpacity } = this.props;
     const { map } = this.context;
 
     if (layer.subId) {
@@ -111,20 +207,45 @@ export default class LegendPanel extends Component {
 
       const esriLayer = layer.esriLayer;
 
-      return <WebMapLegend key={layer.subId} url={esriLayer.url} labels={layer.label} visibility={visible} visibleLayers={activeLayers} layerSubIndex={layer.subIndex} layerId={layer.subId} />;
+      return <WebMapLegend
+        key={layer.subId}
+        url={esriLayer.url}
+        labels={layer.label}
+        visibility={visible}
+        visibleLayers={activeLayers}
+        layerSubIndex={layer.subIndex}
+        layerId={layer.subId}
+        legendOpacity={legendOpacity}
+        defaultOpacity={esriLayer.opacity || 1}
+      />;
 
 
     } else {
       const esriLayer = layer.esriLayer;
 
       if (esriLayer.type === 'Feature Layer') {
-        return <WebMapFeatureLayerLegend key={esriLayer.id} layer={esriLayer} visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale} visibleLayers={activeLayers} />;
+        return <WebMapFeatureLayerLegend
+          key={esriLayer.id}
+          layer={esriLayer}
+          visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
+          visibleLayers={activeLayers}
+          legendOpacity={legendOpacity}
+        />;
       } else {
         if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
           esriLayer.layerId = esriLayer.layerInfos[0].id;
         }
 
-        return <WebMapLegend key={layer.id} url={esriLayer.url} labels={layer.label} visibility={activeLayers.indexOf(layer.id) > -1} visibleLayers={activeLayers} layerId={esriLayer.layerId} />;
+        return <WebMapLegend
+          key={layer.id}
+          url={esriLayer.url}
+          labels={layer.label}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerId={esriLayer.layerId}
+          legendOpacity={legendOpacity}
+          defaultOpacity={esriLayer.opacity || 1}
+        />;
       }
     }
   }
@@ -167,5 +288,4 @@ export default class LegendPanel extends Component {
       </div>
     );
   }
-
 }

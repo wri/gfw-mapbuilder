@@ -85,8 +85,8 @@ class LayerActions {
     return lossOptionsData;
   }
 
-  changeOpacity (parameters) {
-    return parameters;
+  changeOpacity (payload) {
+    return payload;
   }
 
   addAll () {
