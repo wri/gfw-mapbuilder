@@ -455,6 +455,11 @@ export default {
     return deferred;
   },
 
+  getEncoder: (config, lossConfig) => {
+    const encoder = new Encoder(lossConfig.bounds, config.bounds);
+    return encoder;
+  },
+
   getCrossedWithLoss: (config, lossConfig, geometry, options) => {
     const promise = new Deferred();
     const {imageService, pixelSize} = analysisConfig;

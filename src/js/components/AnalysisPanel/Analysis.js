@@ -221,6 +221,7 @@ export default class Analysis extends Component {
           }
         })();
         colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
+
         return <TotalLossChart
           results={results}
           counts={results.counts}
