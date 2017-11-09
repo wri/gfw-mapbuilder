@@ -54,22 +54,17 @@ export default function performAnalysis (options) {
         if (typeof response === 'object' && response.hasOwnProperty('error')) {
           promise.resolve({ error: response.error, message: text[language].ANALYSIS_ERROR_LAND_COVER_COMPOSITION});
         } else {
-          console.log('response', response);
           const data = {
-            counts: [],
-            colors: [],
-            classes: []
+            counts: []
           };
           response.data.attributes.histogram.forEach(histo => {
             if (!data[histo.className]) {
               data[histo.className] = 0;
-              data.classes.push(histo.className);
             }
             histo.result.forEach(year => {
               data[histo.className] += year.result;
             });
-            data.counts.push(Math.round(data[histo.className] * 100) / 100);//Math.round(num * 100) / 100
-            // data.colors.push('#' + (Math.random().toString(16) + '000000').substring(2, 8));
+            data.counts.push(Math.round(data[histo.className] * 100) / 100);
           });
           promise.resolve(data);
         }

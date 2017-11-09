@@ -187,7 +187,7 @@ export default class Analysis extends Component {
           name={text[language].ANALYSIS_LCC_CHART_NAME}
           counts={results.counts}
           colors={layerConf.colors}
-          labels={results.classes} />;
+          labels={layerConf.classes[language]} />;
       case analysisKeys.TC_LOSS:
 
         labels = lossLabels.slice(lossFromSelectIndex, lossToSelectIndex + 1);
