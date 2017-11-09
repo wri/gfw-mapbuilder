@@ -50,7 +50,31 @@ export default function performAnalysis (options) {
       analysisUtils.getFireCount(config.url, geometry, modisFrom, modisTo, language).then(promise.resolve);
     break;
     case analysisKeys.LCC:
-      analysisUtils.getMosaic(language, landCoverConfig.rasterId, geometry).then(promise.resolve);
+      analysisUtils.getLandCover(geostoreId, 'gfw-landcover-2015').then(response => {
+        if (typeof response === 'object' && response.hasOwnProperty('error')) {
+          promise.resolve({ error: response.error, message: text[language].ANALYSIS_ERROR_LAND_COVER_COMPOSITION});
+        } else {
+          console.log('response', response);
+          const data = {
+            counts: [],
+            colors: [],
+            classes: []
+          };
+          response.data.attributes.histogram.forEach(histo => {
+            if (!data[histo.className]) {
+              data[histo.className] = 0;
+              data.classes.push(histo.className);
+            }
+            histo.result.forEach(year => {
+              data[histo.className] += year.result;
+            });
+            data.counts.push(Math.round(data[histo.className] * 100) / 100);//Math.round(num * 100) / 100
+            // data.colors.push('#' + (Math.random().toString(16) + '000000').substring(2, 8));
+          });
+          promise.resolve(data);
+        }
+      });
+      // analysisUtils.getMosaic(language, landCoverConfig.rasterId, geometry).then(promise.resolve);
     break;
     case analysisKeys.TC_LOSS:
       analysisUtils.getCountsWithDensity(geostoreId, canopyDensity, tcLossFrom, tcLossTo).then(response => {
