@@ -181,16 +181,12 @@ export default class Analysis extends Component {
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
         layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
-        const customColors = layerConf.colors;
-        for (var j = 0; j < results.classes.length - customColors.length; j++) {
-          customColors.push('#' + (Math.random().toString(16) + '000000').substring(2, 8));
-        } //This random color generator is the difference between the classes in our ArcGIS layer & the microservice analysis results
 
         return <CompositionPieChart
           results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
           counts={results.counts}
-          colors={customColors}
+          colors={layerConf.colors}
           labels={results.classes} />;
       case analysisKeys.TC_LOSS:
 
