@@ -370,7 +370,6 @@ export default {
     const deferred = new Deferred();
     const tcLossGainConfig = analysisConfig[analysisKeys.TC_LOSS_GAIN];
     const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
-
     const lossGainData = {
       geostore: geostoreId,
       period: `${yearsArray[tcLossFrom]}-01-01,${yearsArray[tcLossTo]}-12-31`,

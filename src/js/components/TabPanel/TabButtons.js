@@ -141,7 +141,7 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
+          {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <use xlinkHref="#icon-analysis" />
             </svg>
@@ -149,7 +149,16 @@ export default class TabButtons extends Component {
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].ANALYZE}
             </span>
-          </li>
+          </li> ||
+          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)} analysis-disabled`} data-value={ANALYSIS}>
+            <svg className='svg-icon'>
+              <use xlinkHref="#icon-analysis" />
+            </svg>
+            <span className='tab-tooltip'>Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily</span>
+            <span className='tab-buttons__tab-label mobile-show'>
+              {text[language].ANALYZE}
+            </span>
+          </li>}
           {!settings.includeDocumentsTab ? null :
             <li className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`} data-value={DOCUMENTS} onClick={this.changeTab}>
               <svg className='svg-icon'>
