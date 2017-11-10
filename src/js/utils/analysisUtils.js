@@ -84,11 +84,24 @@ const formatters = {
       alerts: bin
     };
   },
-  gladAlerts: function (year, counts, startDate = 1) {
-    var results = [];
 
-    for (let i = startDate; i < counts.length; i++) {
-      results.push([new Date(year, 0, i).getTime(), counts[i] || 0]);
+  alerts: function (data) {
+    const results = [];
+
+    data.forEach(d => {
+      results.push([new Date(d.alert_date).getTime(), d.count || 0]);
+    });
+
+    const dateZero = new Date(data[0].alert_date);
+    const dateEnd = new Date(data[data.length - 1].alert_date);
+
+    for (let i = 1; i < 11; i++) {
+      const newDate = new Date(dateZero.getTime() - ((24 * 60 * 60 * 1000) * i));
+      results.unshift([newDate.getTime(), 0]);
+    }
+    for (let i = 1; i < 11; i++) {
+      const newDate = new Date(dateEnd.getTime() + ((24 * 60 * 60 * 1000) * i));
+      results.push([newDate.getTime(), 0]);
     }
 
     return results;
@@ -313,7 +326,7 @@ export default {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(gladResult => {
-      const alerts = this.cleanAlerts(gladResult.data.attributes);
+      const alerts = formatters.alerts(gladResult.data.attributes.value);
       promise.resolve(alerts || []);
     }, err => {
       console.error(err);
@@ -343,7 +356,7 @@ export default {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(terraIResult => {
-      const alerts = this.cleanAlerts(terraIResult.data.attributes);
+      const alerts = formatters.alerts(terraIResult.data.attributes.value);
       promise.resolve(alerts || []);
     }, err => {
       console.error(err);
