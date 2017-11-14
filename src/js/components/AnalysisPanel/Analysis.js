@@ -198,19 +198,17 @@ export default class Analysis extends Component {
           colors={analysisConfig[type].colors}
           labels={labels}
           results={results}/>;
-      case analysisKeys.TOTAL_CARBON:
+      case analysisKeys.CARBON:
         return <CarbonChart
           results={results}
           aboveground={results.abovegroundCarbon}
           belowground={results.belowgroundCarbon}
-          suffix={' MgC'}
-        />;
-      case analysisKeys.AVERAGE_CARBON:
-        return <CarbonChart
-          results={results}
-          aboveground={results.averageAboveground}
-          belowground={results.averageBelowground}
-          suffix={' MgC/Ha'}
+          total={results.total}
+          averageAboveground={results.averageAboveground}
+          averageBelowground={results.averageBelowground}
+          averageTotal={results.averageTotal}
+          totalSuffix={' MgC'}
+          averageSuffix={' MgC/Ha'}
         />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart

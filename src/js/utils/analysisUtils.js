@@ -406,7 +406,7 @@ export default {
     return promise;
   },
 
-  getTotalBiomass: function (geostoreId, canopyDensity, language) {
+  getTotalAndAverageCarbon: function (geostoreId, canopyDensity, language) {
     const deferred = new Deferred();
     const biomassConfig = analysisConfig[analysisKeys.BIO_LOSS];
 
@@ -426,41 +426,15 @@ export default {
 
       const abovegroundCarbon = biomassResult.data.attributes.biomass / 2;
       const belowgroundCarbon = abovegroundCarbon * 0.26;
-
-      deferred.resolve({ abovegroundCarbon, belowgroundCarbon });
-    }, err => {
-      console.error(err);
-      deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });
-    });
-
-    return deferred;
-  },
-
-  getAverageBiomass: function (geostoreId, canopyDensity, language) {
-    const deferred = new Deferred();
-    const biomassConfig = analysisConfig[analysisKeys.BIO_LOSS];
-
-    const biomassData = {
-      geostore: geostoreId,
-      period: `${biomassConfig.startDate}-01-01,${biomassConfig.endDate}-12-31`,
-      thresh: canopyDensity
-    };
-    esriRequest({
-      url: biomassConfig.analysisUrl,
-      callbackParamName: 'callback',
-      content: biomassData,
-      handleAs: 'json',
-      timeout: 30000
-    }, { usePost: false }).then(biomassResult => {
-      if (!biomassResult) deferred.resolve({});
+      const total = abovegroundCarbon + belowgroundCarbon;
 
       const analyzedArea = biomassResult.data.attributes.areaHa;
-      const abovegroundCarbon = biomassResult.data.attributes.biomass / 2;
 
       const averageAboveground = abovegroundCarbon / analyzedArea;
-      const averageBelowground = (abovegroundCarbon * 0.26) / analyzedArea;
+      const averageBelowground = belowgroundCarbon / analyzedArea;
+      const averageTotal = total / analyzedArea;
 
-      deferred.resolve({ averageAboveground, averageBelowground });
+      deferred.resolve({ abovegroundCarbon, belowgroundCarbon, averageAboveground, averageBelowground, total, averageTotal });
     }, err => {
       console.error(err);
       deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });

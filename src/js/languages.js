@@ -103,12 +103,8 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.LC_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Total Carbon Stored In Trees',
-    value: analysisKeys.TOTAL_CARBON,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'Average Carbon Stored In Trees',
-    value: analysisKeys.AVERAGE_CARBON,
+  { label: 'Carbon Stored In Trees',
+    value: analysisKeys.CARBON,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Aboveground Live Woody Biomass loss (Carbon)',
