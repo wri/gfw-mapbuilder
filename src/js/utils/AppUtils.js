@@ -215,7 +215,15 @@ const utils = {
   */
   generateReport: (options) => {
     const { selectedFeature } = options;
-    utils.registerGeom(selectedFeature, utils.geometrySuccess, utils.geometryFailure, options);
+    if (selectedFeature.attributes.geostoreId) {
+      utils.geometrySuccess({
+        data: {
+          id: selectedFeature.attributes.geostoreId
+        }
+      }, options);
+    } else {
+      utils.registerGeom(selectedFeature, utils.geometrySuccess, utils.geometryFailure, options);
+    }
   },
 
   /**
