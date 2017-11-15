@@ -63,6 +63,7 @@ class MapStore {
     this.imazonStartYear = 0;
     this.imazonEndYear = 0;
     this.iconLoading = '';
+    this.analysisDisabled = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -108,7 +109,8 @@ class MapStore {
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
       showLoading: layerActions.showLoading,
-      updateCartoSymbol: layerActions.updateCartoSymbol
+      updateCartoSymbol: layerActions.updateCartoSymbol,
+      toggleAnalysisTab: mapActions.toggleAnalysisTab
     });
   }
 
@@ -215,9 +217,10 @@ class MapStore {
       } else {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
+          mapActions.toggleAnalysisTab.defer(true);
           analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
             selectedFeature.attributes.geostoreId = res.data.id;
-            this.activeTab = tabKeys.INFO_WINDOW;
+            mapActions.toggleAnalysisTab(false);
             isRegistering = false;
           });
         } else {
@@ -225,6 +228,10 @@ class MapStore {
         }
       }
     }
+  }
+
+  toggleAnalysisTab(bool) {
+    this.analysisDisabled = bool;
   }
 
   createLayers (payload) {
