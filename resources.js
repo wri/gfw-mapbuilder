@@ -25,10 +25,10 @@ define(['exports'], function (exports) {
     mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
     mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
     narrative: '',
-    includeSubscribeButton: false,
+    includeSubscribeButton: true,
     hideHeader: false,
     hideFooter: false,
-    includeMyGFWLogin: false,
+    includeMyGFWLogin: true,
     navLinksInNewTab: false,
     //- Language Settings
     language: 'en',
