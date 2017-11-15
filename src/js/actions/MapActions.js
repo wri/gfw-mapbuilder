@@ -151,6 +151,10 @@ class MapActions {
     };
   }
 
+  toggleAnalysisTab(bool) {
+    return bool;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);
