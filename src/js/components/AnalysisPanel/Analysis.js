@@ -181,6 +181,7 @@ export default class Analysis extends Component {
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
         layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+
         return <CompositionPieChart
           results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
@@ -220,6 +221,7 @@ export default class Analysis extends Component {
           }
         })();
         colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
+
         return <TotalLossChart
           results={results}
           counts={results.counts}
