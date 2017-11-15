@@ -170,8 +170,8 @@ const utils = {
       tcLossTo: tcLossTo,
       gladFrom: gladFrom,
       gladTo: gladTo,
-      terraIFrom: terraIFrom,
-      terraITo: terraITo,
+      terraIFrom: terraIFrom.constructor === Date ? terraIFrom : '',
+      terraITo: terraITo.constructor === Date ? terraITo : '',
       viirsFiresSelectIndex: viirsFiresSelectIndex,
       modisFiresSelectIndex: modisFiresSelectIndex,
       viirsStartDate: viirsStartDate,
@@ -215,7 +215,15 @@ const utils = {
   */
   generateReport: (options) => {
     const { selectedFeature } = options;
-    utils.registerGeom(selectedFeature, utils.geometrySuccess, utils.geometryFailure, options);
+    if (selectedFeature.attributes.geostoreId) {
+      utils.geometrySuccess({
+        data: {
+          id: selectedFeature.attributes.geostoreId
+        }
+      }, options);
+    } else {
+      utils.registerGeom(selectedFeature, utils.geometrySuccess, utils.geometryFailure, options);
+    }
   },
 
   /**
