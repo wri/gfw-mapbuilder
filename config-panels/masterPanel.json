@@ -79,6 +79,16 @@
       "placeholder": "e.g. UA-XXXXX-Y"
     }, {
       "type": "boolean",
+      "fieldName": "hideHeader",
+      "tooltip": "This will hide the header bar on the map",
+      "label": "Would you like to hide the header"
+    }, {
+      "type": "boolean",
+      "fieldName": "hideFooter",
+      "tooltip": "This will hide the footer bar on the map",
+      "label": "Would you like to hide the footer"
+    }, {
+      "type": "boolean",
       "fieldName": "includeSubscribeButton",
       "tooltip": "This will include the subscribe button in the info window and anlysis panel",
       "label": "Would you like include an subscribe button"
@@ -106,7 +116,8 @@
         { "value": "fr", "label": "French" },
         { "value": "es", "label": "Spanish" },
         { "value": "id", "label": "Indonesian" },
-        { "value": "zh", "label": "Chinese" }
+        { "value": "zh", "label": "Chinese" },
+        { "value": "ka", "label": "Georgian" }
       ]
     }, {
       "type": "boolean",
@@ -129,7 +140,8 @@
         { "value": "en", "label": "English" },
         { "value": "es", "label": "Spanish" },
         { "value": "id", "label": "Indonesian" },
-        { "value": "zh", "label": "Chinese" }
+        { "value": "zh", "label": "Chinese" },
+        { "value": "ka", "label": "Georgian" }
       ]
     }, {
       "type": "string",
@@ -399,13 +411,15 @@
     "logoLinkUrl": "http://www.gfw-mapbuilder.org",
     "aboutLinkUrl": "http://www.gfw-mapbuilder.org",
     "downloadLinkUrl": "http://data.globalforestwatch.org/",
-    "printServiceUrl": "http://gis.forest-atlas.org/arcgis/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
+    "printServiceUrl": "https://gis.forest-atlas.org/arcgis/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
     "maskServiceUrl": "",
     "mapThemeIds": "",
     "mapThemes": "",
     "narrative": "Explore the this map to discover ...",
     "analyticsCode": "",
     "includeSubscribeButton": false,
+    "hideHeader": false,
+    "hideFooter": false,
     "includeMyGFWLogin": false,
     "navLinksInNewTab": false,
 

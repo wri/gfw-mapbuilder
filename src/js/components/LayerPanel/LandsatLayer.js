@@ -25,9 +25,13 @@ export default class LandsatLayer extends Component {
 
   render () {
     const classes = this.props.active ? 'layer-basemap selected' : 'layer-basemap';
+    const imgStyles = {
+      backgroundImage: `url('${this.props.icon}')`,
+      backgroundRepeat: 'no-repeat'
+    };
     return (
       <div className={classes}>
-        <span className='layer-basemap-icon landsat' onClick={this.toggle}></span>
+        <span style={imgStyles} className='layer-basemap-icon landsat' onClick={this.toggle}></span>
         <span className='layer-basemap-label' onClick={this.toggle}>{this.props.label}</span>
         <div className='relative'>
           <select className='pointer' onChange={this.changeYear.bind(this)} value={this.state.yearSelected}>

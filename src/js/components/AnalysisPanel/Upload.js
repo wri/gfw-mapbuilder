@@ -1,12 +1,19 @@
 import scaleUtils from 'esri/geometry/scaleUtils';
 import layerKeys from 'constants/LayerConstants';
-import geometryUtils from 'utils/geometryUtils';
-import graphicsUtils from 'esri/graphicsUtils';
+import Graphic from 'esri/graphic';
 import mapActions from 'actions/MapActions';
 import {uploadConfig} from 'js/config';
 import Loader from 'components/Loader';
-import request from 'utils/request';
 import text from 'js/languages';
+import geojsonUtil from 'utils/arcgis-to-geojson';
+import symbols from 'utils/symbols';
+import Polygon from 'esri/geometry/Polygon';
+import {attributes} from 'constants/AppConstants';
+import graphicsUtils from 'esri/graphicsUtils';
+import ProjectParameters from 'esri/tasks/ProjectParameters';
+import GeometryService from 'esri/tasks/GeometryService';
+import SpatialReference from 'esri/SpatialReference';
+
 import React, {
   Component,
   PropTypes
@@ -74,35 +81,76 @@ export default class Upload extends Component {
     mapActions.toggleAnalysisModal({ visible: false });
 
     const extent = scaleUtils.getExtentForScale(map, 40000);
-    const type = isZip(file.name) ? TYPE.SHAPEFILE : TYPE.GEOJSON;
     const params = uploadConfig.shapefileParams(file.name, map.spatialReference, extent.getWidth(), map.width);
-    const content = uploadConfig.shapefileContent(JSON.stringify(params), type);
+    params.targetSr = {
+      latestWkid: 3857,
+      wkid: 102100
+    };
 
-    // the upload input needs to have the file associated to it
-    const input = this.refs.fileInput;
-    input.files = evt.dataTransfer.files;
+    if(evt.dataTransfer.files.length > 0)
+    {
+      var formData = new FormData();
+      formData.append('file', evt.dataTransfer.files[0], evt.dataTransfer.files[0].name);
 
-    request.upload(uploadConfig.portal, content, this.refs.upload).then((response) => {
-      this.setState({ isUploading: false });
-      if (response.featureCollection) {
-        const graphics = geometryUtils.generatePolygonsFromUpload(response.featureCollection);
-        const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
-        const layer = map.getLayer(layerKeys.USER_FEATURES);
-        if (layer) {
-          map.setExtent(graphicsExtent, true);
-          graphics.forEach((graphic) => {
-            layer.add(graphic);
-          });
+      var xhr = new XMLHttpRequest();
+      const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
+      xhr.open('POST', url, true);
+      xhr.onreadystatechange = () => {
+        if(xhr.readyState === 4 && xhr.status === 200) {
+          const response = geojsonUtil.geojsonToArcGIS(JSON.parse(xhr.responseText).data.attributes);
+          this.processGeojson(response);
+        } else if (xhr.readyState === 4) {
+          console.log('Error: shapefile not working');
         }
-      } else {
-        console.error('No feature collection present in the file');
-      }
-    }, (error) => {
-      this.setState({ isUploading: false });
-      console.error(error);
-    });
-
+      };
+      xhr.send(formData);
+    } else {
+      console.log('Error: file upload was unsuccessful');
+    }
   };
+
+  processGeojson = (esriJson) => {
+    const graphics = [];
+    esriJson.forEach(feature => {
+      graphics.push(new Graphic(
+          new Polygon(feature.geometry),
+          symbols.getCustomSymbol(),
+          {
+            ...feature.attributes,
+            source: attributes.SOURCE_UPLOAD
+          }
+      ));
+    });
+    const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
+    const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
+    if (layer) {
+      this.context.map.setExtent(graphicsExtent, true);
+
+      const geometryService = new GeometryService('https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+      var params = new ProjectParameters();
+
+      // Set the projection of the geometry for the image server
+      params.outSR = new SpatialReference(102100);
+      params.geometries = [];
+
+      graphics.forEach(feature => {
+        params.geometries.push(feature.geometry);
+      });
+
+      // update the graphics geometry with the new projected geometry
+      const successfullyProjected = (geometries) => {
+        graphics.forEach((graphic, i) => {
+          graphic.geometry = geometries[i];
+          layer.add(graphic);
+        });
+      };
+      const failedToProject = (err) => {
+        console.log('Failed to project the geometry: ', err);
+      };
+      geometryService.project(params).then(successfullyProjected, failedToProject);
+    }
+    this.setState({isUploading: false});
+  }
 
   renderInstructionList = (instruction, index) => {
     return (

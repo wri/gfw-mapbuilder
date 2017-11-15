@@ -2,6 +2,7 @@
 import App from 'components/App';
 import ShareModal from 'components/Modals/ShareModal';
 import IdentityManager from 'esri/IdentityManager';
+import arcgisPortal from 'esri/arcgis/Portal';
 import {corsServers, assetUrls} from 'js/config';
 import {loadJS, loadCSS } from 'utils/loaders';
 import generateCSV from 'utils/csvUtils';
@@ -42,19 +43,26 @@ const configureApp = () => {
 * When deploying to specific versions, this must be used for all relative paths
 */
 const lazyloadAssets = () => {
-  loadCSS('http://fonts.googleapis.com/css?family=Fira+Sans:400,500,300');
+  const base = window._app.base ? window._app.base + '/' : '';
+
+  loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/google-fira.css`);
   loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/app.css`);
+  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/dijit/themes/tundra/tundra.css`);
+  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
   loadCSS(`https://js.arcgis.com/${window._app.esri}/dijit/themes/tundra/tundra.css`);
   loadCSS(`https://js.arcgis.com/${window._app.esri}/esri/css/esri.css`);
-  loadJS(assetUrls.highcharts).then(() => {
+  loadCSS(base + assetUrls.pickadateCSS);
+  loadCSS(base + assetUrls.pickadateDateCSS);
+
+  loadJS(base + assetUrls.highcharts).then(() => {
     //- Set default Options for Highcharts
     Highcharts.setOptions({
       chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
       lang: { thousandsSep: ',' }
     });
   });
-  loadJS(assetUrls.highchartsMore);
-  loadJS(assetUrls.highchartsExports).then(() => {
+  loadJS(base + assetUrls.highchartsMore);
+  loadJS(base + assetUrls.highchartsExports).then(() => {
     //- Add CSV Exporting as an option
     Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push({
       text: 'Download CSV',
@@ -70,4 +78,9 @@ const initializeApp = () => {
 
 configureApp();
 lazyloadAssets();
+// const portal = new arcgisPortal.Portal('http://ags104.blueraster.io/portal');
+// portal.signIn().then(loggedInUser => {
+//   console.log(loggedInUser);
+//   console.log(loggedInUser.portal.defaultBasemap);
 initializeApp();
+// });

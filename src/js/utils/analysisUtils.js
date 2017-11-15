@@ -2,12 +2,15 @@ import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import geojsonUtil from 'utils/arcgis-to-geojson';
 import QueryTask from 'esri/tasks/QueryTask';
 import {analysisConfig} from 'js/config';
+import analysisKeys from 'constants/AnalysisConstants';
 import esriRequest from 'esri/request';
 import Query from 'esri/tasks/query';
 import Deferred from 'dojo/Deferred';
 import utils from 'utils/AppUtils';
 import lang from 'dojo/_base/lang';
 import all from 'dojo/promise/all';
+import layersHelper from 'helpers/LayersHelper';
+import text from 'js/languages';
 
 const INVALID_IMAGE_SIZE = 'The requested image exceeds the size limit.';
 const OP_MULTIPLY = 3;
@@ -41,11 +44,6 @@ const getSlopeInputOutputValues = function (value) {
 * Group of formatting functions for results
 */
 const formatters = {
-  fires: (response) => {
-    return {
-      fireCount: response.features ? response.features.length : 0
-    };
-  },
   sadAlerts: (response) => {
     let date, month, year, type, area;
     const {features} = response;
@@ -61,11 +59,12 @@ const formatters = {
     * }
     */
     features.forEach((feature) => {
+      const st_area = analysisConfig.SAD_ALERTS.outFields[2];
       date = new Date(feature.attributes.date);
       year = date.getFullYear();
       month = date.getMonth();
       type = feature.attributes.data_type;
-      area = feature.attributes['st_area(shape)'];
+      area = feature.attributes[st_area];
 
       if (bin[year] && bin[year][month] && bin[year][month][type]) {
         bin[year][month][type] += area;
@@ -85,11 +84,26 @@ const formatters = {
       alerts: bin
     };
   },
-  gladAlerts: function (year, counts) {
-    var results = [];
-    for (let i = 0; i < counts.length; i++) {
-      results.push([new Date(year, 0, i).getTime(), counts[i] || 0]);
+
+  alerts: function (data) {
+    const results = [];
+
+    data.forEach(d => {
+      results.push([new Date(d.alert_date).getTime(), d.count || 0]);
+    });
+
+    const dateZero = new Date(data[0].alert_date);
+    const dateEnd = new Date(data[data.length - 1].alert_date);
+
+    for (let i = 1; i < 11; i++) {
+      const newDate = new Date(dateZero.getTime() - ((24 * 60 * 60 * 1000) * i));
+      results.unshift([newDate.getTime(), 0]);
     }
+    for (let i = 1; i < 11; i++) {
+      const newDate = new Date(dateEnd.getTime() + ((24 * 60 * 60 * 1000) * i));
+      results.push([newDate.getTime(), 0]);
+    }
+
     return results;
   },
   terraIAlerts: function (counts) {
@@ -161,7 +175,7 @@ const computeHistogram = (url, content, success, fail) => {
   if (content.renderingRule) { content.renderingRule = JSON.stringify(content.renderingRule); }
   if (content.mosaicRule) { content.mosaicRule = JSON.stringify(content.mosaicRule); }
   //- Set some defaults if they are not set
-  content.geometryType = content.goemetryType || 'esriGeometryPolygon';
+  content.geometryType = content.geometryType || 'esriGeometryPolygon';
   content.f = content.f || 'json';
 
   if (success && fail) {
@@ -255,18 +269,20 @@ export default {
   /**
   * Fetch and format fire results
   */
-  getFireCount: (url, geometry) => {
+  getFireCount: (url, geometry, startDate, endDate, language) => {
     const queryTask = new QueryTask(url);
     const promise = new Deferred();
     const query = new Query();
+    const layerDef = layersHelper.generateFiresQuery(startDate, endDate);
     query.geometry = geometry;
     query.returnGeometry = false;
     query.outFields = [''];
-    query.where = '1 = 1';
-    queryTask.execute(query).then(function (response) {
-      promise.resolve(formatters.fires(response));
+    query.where = layerDef;
+    queryTask.executeForCount(query).then(function (response) {
+      promise.resolve({fireCount: response});
     }, (error) => {
-      promise.resolve(formatters.fires(error));
+      console.error(error);
+      promise.resolve({error: error, message: text[language].ANALYSIS_ERROR_FIRE_COUNT});
     });
     return promise;
   },
@@ -274,7 +290,7 @@ export default {
   /**
   * Get SAD Alerts and format results
   */
-  getSADAlerts: (config, geometry) => {
+  getSADAlerts: (config, geometry, language) => {
     const queryTask = new QueryTask(config.url);
     const promise = new Deferred();
     const query = new Query();
@@ -285,79 +301,99 @@ export default {
     queryTask.execute(query).then(function (response) {
       promise.resolve(formatters.sadAlerts(response));
     }, (error) => {
-      promise.resolve(formatters.sadAlerts(error));
+      console.error(error);
+      promise.resolve({error: error, message: text[language].ANALYSIS_ERROR_SAD});
     });
     return promise;
   },
 
-  getGLADAlerts: function (config, geometry) {
+  getGLADAlerts: function (config, geostoreId, gladFrom, gladTo, language) {
     const promise = new Deferred();
-    all([
-      this.getMosaic(config.lockrasters['2015'], geometry, config.url),
-      this.getMosaic(config.lockrasters['2016'], geometry, config.url)
-    ]).then(results => {
-      let alerts = [];
-      alerts = alerts.concat(formatters.gladAlerts('2015', results[0].counts));
-      alerts = alerts.concat(formatters.gladAlerts('2016', results[1].counts));
-      promise.resolve(alerts);
+    const gladConfig = analysisConfig[analysisKeys.GLAD_ALERTS];
+    const startDate = gladFrom.toISOString().split('T')[0];
+    const endDate = gladTo.toISOString().split('T')[0];
+
+    const gladData = {
+      geostore: geostoreId,
+      period: `${startDate},${endDate}`,
+      aggregate_values: 'True',
+      aggregate_by: 'day'
+    };
+    esriRequest({
+      url: gladConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: gladData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(gladResult => {
+      const alerts = formatters.alerts(gladResult.data.attributes.value);
+      promise.resolve(alerts || []);
+    }, err => {
+      console.error(err);
+      promise.resolve({ error: err, message: text[language].ANALYSIS_ERROR_GLAD });
     });
+
     return promise;
   },
 
-  getTerraIAlerts: function (config, geometry) {
+  getTerraIAlerts: function (config, geostoreId, terraIFrom, terraITo, language) {
+
     const promise = new Deferred();
-    const content = {
-      geometry: geometry
-    };
+    const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
+    const startDate = terraIFrom.toISOString().split('T')[0];
+    const endDate = terraITo.toISOString().split('T')[0];
 
-    const success = ({histograms}) => {
-      const counts = histograms && histograms.length && histograms[0].counts || [];
-      promise.resolve(formatters.terraIAlerts(counts));
+    const terraIData = {
+      geostore: geostoreId,
+      period: `${startDate},${endDate}`,
+      aggregate_values: 'True',
+      aggregate_by: 'day'
     };
+    esriRequest({
+      url: terraIConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: terraIData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(terraIResult => {
+      const alerts = formatters.alerts(terraIResult.data.attributes.value);
+      promise.resolve(alerts || []);
+    }, err => {
+      console.error(err);
+      promise.resolve({ error: err, message: text[language].ANALYSIS_ERROR_TERRA_I });
+    });
 
-    const failure = (error) => {
-      if (errorIsInvalidImageSize(error) && content.pixelSize !== 500) {
-        content.pixelSize = 500;
-        computeHistogram(config.url, content, success, failure);
-      } else {
-        promise.resolve(error);
-      }
-    };
-
-    computeHistogram(config.url, content, success, failure);
     return promise;
   },
 
-  getCountsWithDensity: (rasterId, geometry, canopyDensity) => {
-    const promise = new Deferred();
-    const tcd = analysisConfig.tcd;
-    const densityRule = rules.remap(tcd.id, tcd.inputRanges(canopyDensity), tcd.outputValues);
-    const {imageService, pixelSize} = analysisConfig;
+  getCountsWithDensity: function (geostoreId, canopyDensity, tcLossFrom, tcLossTo) {
+    const deferred = new Deferred();
+    const tcLossGainConfig = analysisConfig[analysisKeys.TC_LOSS_GAIN];
+    const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
 
-    const content = {
-      pixelSize: pixelSize,
-      geometry: geometry,
-      renderingRule: rules.arithmetic(densityRule, rasterId, OP_MULTIPLY)
+    const lossGainData = {
+      geostore: geostoreId,
+      period: `${yearsArray[tcLossFrom]}-01-01,${yearsArray[tcLossTo]}-12-31`,
+      thresh: canopyDensity,
+      aggregate_values: false
     };
+    esriRequest({
+      url: tcLossGainConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: lossGainData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(lossGainResult => {
+      deferred.resolve(lossGainResult || []);
+    }, err => {
+      console.error(err);
+      deferred.resolve({ error: err });
+    });
 
-    const success = (response) => {
-      promise.resolve(formatters.getCounts(response, content.pixelSize));
-    };
-
-    const failure = (error) => {
-      if (errorIsInvalidImageSize(error) && content.pixelSize !== 500) {
-        content.pixelSize = 500;
-        computeHistogram(imageService, content, success, failure);
-      } else {
-        promise.resolve(error);
-      }
-    };
-
-    computeHistogram(imageService, content, success, failure);
-    return promise;
+    return deferred;
   },
 
-  getMosaic: (lockRaster, geometry, url) => {
+  getMosaic: (language, lockRaster, geometry, url) => {
     const promise = new Deferred();
     const {imageService, pixelSize} = analysisConfig;
     const content = {
@@ -375,7 +411,7 @@ export default {
         content.pixelSize = 500;
         computeHistogram(url || imageService, content, success, failure);
       } else {
-        promise.resolve(error);
+        promise.resolve({error: error, message: text[language].ANALYSIS_ERROR_LAND_COVER_COMPOSITION});
       }
     };
 
@@ -383,26 +419,29 @@ export default {
     return promise;
   },
 
-  getBiomassLoss: (geometry, canopyDensity) => {
-    const geographic = webmercatorUtils.webMercatorToGeographic(geometry);
-    const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
-    const content = {
-      type: 'geojson',
-      geojson: JSON.stringify(geojson),
-      dataset: 'biomass-loss',
-      period: '2001-01-01,2014-12-31',
-      begin: '2001-01-01',
-      end: '2014-12-31',
+  getBiomassLoss: function (geostoreId, canopyDensity, language) {
+    const deferred = new Deferred();
+    const biomassConfig = analysisConfig[analysisKeys.BIO_LOSS];
+
+    const biomassData = {
+      geostore: geostoreId,
+      period: `${biomassConfig.startDate}-01-01,${biomassConfig.endDate}-12-31`,
       thresh: canopyDensity
     };
-
-    return esriRequest({
-      url: 'https://production-api.globalforestwatch.org/biomass-loss/wdpa/354010',
+    esriRequest({
+      url: biomassConfig.analysisUrl,
       callbackParamName: 'callback',
-      content: content,
+      content: biomassData,
       handleAs: 'json',
       timeout: 30000
-    }, { usePost: false});
+    }, { usePost: false }).then(biomassResult => {
+      deferred.resolve(biomassResult || []);
+    }, err => {
+      console.error(err);
+      deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });
+    });
+
+    return deferred;
   },
 
   getCrossedWithLoss: (config, lossConfig, geometry, options) => {
@@ -433,7 +472,8 @@ export default {
         content.pixelSize = 500;
         computeHistogram(imageService, content, success, failure);
       } else {
-        promise.resolve(error);
+        console.error(error);
+        promise.resolve({ error });
       }
     };
 
@@ -441,7 +481,43 @@ export default {
     return promise;
   },
 
-  getSlope: (url, slopeValue, raster, restorationId, geometry) => {
+  registerGeom: (geometry) => {
+    const deferred = new Deferred();
+    const geographic = webmercatorUtils.webMercatorToGeographic(geometry);
+    const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
+
+    const geoStore = {
+      'geojson': {
+        'type': 'FeatureCollection',
+        'features': [{
+          'type': 'Feature',
+          'properties': {},
+          'geometry': geojson
+        }]
+      }
+    };
+
+    const content = JSON.stringify(geoStore);
+
+    const http = new XMLHttpRequest();
+    const url = analysisConfig.apiUrl;
+    const params = content;
+
+    http.open('POST', url, true);
+    http.setRequestHeader('Content-type', 'application/json');
+
+    http.onreadystatechange = () => {
+      if (http.readyState === 4 && http.status === 200) {
+        deferred.resolve(JSON.parse(http.responseText));
+      } else if (http.readyState === 4) {
+        deferred.resolve({ error: 'There was an error while registering the shape in the geostore', status: http.status });
+      }
+    };
+    http.send(params);
+    return deferred;
+  },
+
+  getSlope: (url, slopeValue, raster, restorationId, geometry, language) => {
     const values = getSlopeInputOutputValues(slopeValue);
     const {pixelSize} = analysisConfig;
     const promise = new Deferred();
@@ -471,12 +547,91 @@ export default {
         content.pixelSize = 500;
         computeHistogram(url, content, success, failure);
       } else {
-        promise.resolve(error);
+        promise.resolve({ error, message: text[language].ANALYSIS_ERROR_SLOPE });
       }
     };
 
     computeHistogram(url, content, success, failure);
     return promise;
+  },
+
+  cleanAlerts: (results) => {
+    let alerts = [];
+    const sortedYears = Object.keys(results)
+      .filter(key => !isNaN(Number(key)))
+      .map(year => Number(year))
+      .sort((a, b) => a - b);
+
+    sortedYears.forEach((year, index) => {
+        const alertsTmp = [];
+        const sortedKeys = results[year] ? Object.keys(results[year]).map(key => Number(key)) : [];
+
+        if (sortedKeys.length === 0) { return; }
+
+        if (sortedYears.length === 1) { // if there is only one year selected we need start and end dates
+          const firstAlertOfYear = sortedKeys.sort((a, b) => a - b)[0];
+          const startDate = firstAlertOfYear - 10;
+          const lastAlertOfYear = sortedKeys.sort((a, b) => b - a)[0];
+          const endDate = lastAlertOfYear + 10;
+
+          for (let i = 0; i <= endDate; i++) {
+
+            if (results[year].hasOwnProperty(i)) {
+              alertsTmp.push(results[year][i]);
+            } else {
+              alertsTmp.push(0);
+            }
+          }
+
+          alerts = alerts.concat(formatters.gladAlerts(year, alertsTmp, startDate));
+
+        } else { // if there is more than one year
+
+          if (index === 0) { // if it's the first year
+
+            const firstAlertOfYear = sortedKeys.sort((a, b) => a - b)[0];
+            const startDate = firstAlertOfYear - 10;
+
+            for (let j = 0; j < 365; j++) {
+              if (results[year].hasOwnProperty(j)) {
+                alertsTmp.push(results[year][j]);
+              } else {
+                alertsTmp.push(0);
+              }
+            }
+
+            alerts = alerts.concat(formatters.gladAlerts(year, alertsTmp, startDate));
+
+          } else if (index === sortedYears.length - 1) { // if it's the last year
+
+            const lastAlertOfYear = sortedKeys.sort((a, b) => b - a)[0];
+            const endDate = lastAlertOfYear + 10;
+
+            for (let k = 0; k <= endDate; k++) {
+              if (results[year].hasOwnProperty(k)) {
+                alertsTmp.push(results[year][k]);
+              } else {
+                alertsTmp.push(0);
+              }
+            }
+
+            alerts = alerts.concat(formatters.gladAlerts(year, alertsTmp));
+
+          } else { // if it's any year other than the first or last
+
+            for (let l = 0; l < 365; l++) {
+              if (results[year].hasOwnProperty(l)) {
+                alertsTmp.push(results[year][l]);
+              } else {
+                alertsTmp.push(0);
+              }
+            }
+
+            alerts = alerts.concat(formatters.gladAlerts(year, alertsTmp));
+          }
+        }
+    });
+    return alerts;
   },
 
   getRestoration: (url, rasterId, geometry, settings) => {

@@ -6,7 +6,7 @@
     "logoUrl": "http://my.gfw-mapbuilder.org.s3.amazonaws.com/v1.0beta/css/images/gfw-logo.png",
     "logoLinkUrl": "http://www.gfw-mapbuilder.org",
     "aboutLinkUrl": "http://www.gfw-mapbuilder.org",
-    "printServiceUrl": "http://gis.forest-atlas.org/arcgis/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
+    "printServiceUrl": "https://gis.forest-atlas.org/arcgis/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
     "narrative": "Explore the this map to discover ...",
     "iso": "",
     "activeFires": true,

@@ -13,7 +13,7 @@ export default class LayerToggles extends Component {
 
     return (
       <div className='layer-toggles'>
-        <span>Layers</span>
+        <span>{text[language].LAYERS}</span>
         <span onClick={this.clearAll.bind(this)} className='right small'>{text[language].CLEAR_ALL}</span>
         <span onClick={this.selectAll.bind(this)} className='right small'>{text[language].SELECT_ALL}</span>
       </div>

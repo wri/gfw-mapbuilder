@@ -8,11 +8,13 @@ import layerActions from 'actions/LayerActions';
 import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
 import {layerPanelText} from 'js/config';
+import request from 'utils/request';
+import analysisUtils from 'utils/analysisUtils';
+import all from 'dojo/promise/all';
 
 class MapStore {
 
   constructor () {
-
     //- Default is closed, using any value as default will cause an ugly
     //- appearance on mobile when loading, set the default in TabButtons componentWillReceiveProps
     //- the default may change based on device, and content available from AGOL
@@ -25,10 +27,23 @@ class MapStore {
     this.landsatVisible = false;
     this.dynamicLayers = {};
     this.activeAnalysisType = '';
+    this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
     this.lossToSelectIndex = 0;
+    this.resetSlider = false;
+    this.gladStartDate = new Date('2015', 0, 1);
+    this.gladEndDate = new Date();
+    this.terraIStartDate = {};
+    this.terraIEndDate = {};
+    this.viirsStartDate = new Date();
+    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
+    this.viirsEndDate = new Date();
+    this.modisStartDate = new Date();
+    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
+    this.modisEndDate = new Date();
     this.lossOptions = [];
-    this.firesSelectIndex = layerPanelText.firesOptions.length - 1;
+    this.viirsFiresSelectIndex = layerPanelText.firesOptions.length - 1;
+    this.modisFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.tableOfContentsVisible = true;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
@@ -45,6 +60,8 @@ class MapStore {
     this.imazonEndMonth = 0;
     this.imazonStartYear = 0;
     this.imazonEndYear = 0;
+    this.iconLoading = '';
+    this.legendOpacity = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -69,15 +86,27 @@ class MapStore {
       toggleLegendVisible: mapActions.toggleLegendVisible,
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
-      changeFiresTimeline: layerActions.changeFiresTimeline,
+      changeViirsFiresTimeline: layerActions.changeViirsFiresTimeline,
+      changeModisFiresTimeline: layerActions.changeModisFiresTimeline,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
       setLossOptions: layerActions.setLossOptions,
+      shouldResetSlider: layerActions.shouldResetSlider,
       updateLossTimeline: layerActions.updateLossTimeline,
+      updateGladStartDate: layerActions.updateGladStartDate,
+      updateGladEndDate: layerActions.updateGladEndDate,
+      updateTerraIStartDate: layerActions.updateTerraIStartDate,
+      updateTerraIEndDate: layerActions.updateTerraIEndDate,
+      updateViirsStartDate: layerActions.updateViirsStartDate,
+      updateViirsEndDate: layerActions.updateViirsEndDate,
+      updateModisStartDate: layerActions.updateModisStartDate,
+      updateModisEndDate: layerActions.updateModisEndDate,
       changeOpacity: layerActions.changeOpacity,
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
-      toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible
+      toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
+      showLoading: layerActions.showLoading,
+      updateCartoSymbol: layerActions.updateCartoSymbol
     });
   }
 
@@ -134,6 +163,35 @@ class MapStore {
     Object.keys(this.dynamicLayers).forEach((layerId) => {
       this.dynamicLayers[layerId] = [];
     });
+
+    //- Reset all layer filters
+    //- Loss
+    this.resetSlider = true;
+
+    //- Canopy
+    this.canopyDensity = 30;
+
+    //- SAD
+    this.imazonStartMonth = 0;
+    this.imazonEndMonth = 0;
+    this.imazonStartYear = 0;
+    this.imazonEndYear = 0;
+
+    //- GLAD
+    this.gladStartDate = new Date('2015', 0, 1);
+    this.gladEndDate = new Date();
+
+    //- FIRES
+    this.viirsStartDate = new Date();
+    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
+    this.viirsEndDate = new Date();
+    this.modisStartDate = new Date();
+    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
+    this.modisEndDate = new Date();
+
+    //-Terra I
+    this.terraIStartDate = {};
+    this.terraIEndDate = {};
   }
 
   mapUpdated () {}
@@ -146,6 +204,12 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
+        if (!selectedFeature.isRegistering) {
+          selectedFeature.isRegistering = true;
+          analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
+            selectedFeature.attributes.geostoreId = res.data.id;
+          });
+        }
         this.activeTab = tabKeys.INFO_WINDOW;
       }
     }
@@ -153,7 +217,9 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
+
     this.activeLayers = layers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
+
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -167,6 +233,10 @@ class MapStore {
         }
       }
     });
+  }
+
+  updateCartoSymbol (symbol) {
+    this.cartoSymbol = symbol;
   }
 
   changeActiveTab (payload) {
@@ -197,6 +267,10 @@ class MapStore {
     this.canopyDensity = payload.density;
   }
 
+  showLoading (layerInfo) {
+    this.iconLoading = layerInfo;
+  }
+
   toggleSearchModal (payload) {
     this.searchModalVisible = payload.visible;
   }
@@ -213,8 +287,16 @@ class MapStore {
     this.lossOptions = lossOptionsData;
   }
 
-  changeFiresTimeline (firesSelectIndex) {
-    this.firesSelectIndex = firesSelectIndex;
+  shouldResetSlider(bool) {
+    this.resetSlider = bool;
+  }
+
+  changeViirsFiresTimeline (viirsFiresSelectIndex) {
+    this.viirsFiresSelectIndex = viirsFiresSelectIndex;
+  }
+
+  changeModisFiresTimeline (viirsFiresSelectIndex) {
+    this.modisFiresSelectIndex = viirsFiresSelectIndex;
   }
 
   updateActiveSlopeClass (newSlopeClass) {
@@ -226,28 +308,61 @@ class MapStore {
     this.lossToSelectIndex = payload.to;
   }
 
+  updateGladStartDate (startDate) {
+    this.gladStartDate = startDate;
+  }
+
+  updateGladEndDate (endDate) {
+    this.gladEndDate = endDate;
+  }
+
+  updateTerraIStartDate (startDate) {
+    this.terraIStartDate = startDate;
+  }
+
+  updateTerraIEndDate (endDate) {
+    this.terraIEndDate = endDate;
+  }
+
+  updateViirsStartDate (startDate) {
+    this.viirsStartDate = startDate;
+  }
+
+  updateViirsEndDate (endDate) {
+    this.viirsEndDate = endDate;
+  }
+
+  updateModisStartDate (startDate) {
+    this.modisStartDate = startDate;
+  }
+
+  updateModisEndDate (endDate) {
+    this.modisEndDate = endDate;
+  }
+
   showLayerInfo (layer) {
     // Grab the id of the sublayer if it exists, else, grab the normal id
     const id = layer.subId ? layer.subId : layer.id;
     const info = layerInfoCache.get(id);
+
     if (info) {
       this.modalLayerInfo = info;
       this.layerModalVisible = true;
+      this.iconLoading = '';
+      this.emitChange();
     } else {
       layerInfoCache.fetch(layer).then(layerInfo => {
         this.modalLayerInfo = layerInfo;
         this.layerModalVisible = true;
+        this.iconLoading = '';
         this.emitChange();
       });
     }
   }
 
-  changeOpacity (parameters) {
-    const layer = this.allLayers.filter(l => l.id === parameters.layerId);
-    console.log('MapStore >>> found a layer?', layer, parameters.layerId);
-    if ( layer[0] ) {
-      layer[0].opacity = parseFloat(parameters.value);
-    }
+  changeOpacity (payload) {
+    // payload = { layerId: <string>, value: <number> }
+    this.legendOpacity = payload;
   }
 
   changeBasemap (basemap) {

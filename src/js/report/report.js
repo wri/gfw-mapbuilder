@@ -1,32 +1,34 @@
 import DynamicLayer from 'esri/layers/ArcGISDynamicMapServiceLayer';
 import ImageParameters from 'esri/layers/ImageParameters';
+import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import analysisKeys from 'constants/AnalysisConstants';
 import performAnalysis from 'utils/performAnalysis';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
 import {getUrlParams} from 'utils/params';
-import {analysisConfig} from 'js/config';
+import {analysisConfig, layerPanelText} from 'js/config';
 import layerFactory from 'utils/layerFactory';
+import geojsonUtil from 'utils/arcgis-to-geojson';
 import esriRequest from 'esri/request';
 import template from 'utils/template';
 import appUtils from 'utils/AppUtils';
 import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
-import request from 'utils/request';
+import arcgisUtils from 'esri/arcgis/utils';
 import all from 'dojo/promise/all';
 import Graphic from 'esri/graphic';
 import resources from 'resources';
 import charts from 'utils/charts';
 import number from 'dojo/number';
 import text from 'js/languages';
-import Map from 'esri/map';
+import layersHelper from 'helpers/LayersHelper';
 
 let map;
 
 const getWebmapInfo = function getWebmapInfo (webmap) {
   return esriRequest({
-    url: `http://www.arcgis.com/sharing/rest/content/items/${webmap}/data?f=json`,
+    url: `https://www.arcgis.com/sharing/rest/content/items/${webmap}/data?f=json`,
     callbackParamName: 'callback'
   });
 };
@@ -50,70 +52,69 @@ const getApplicationInfo = function getApplicationInfo (params) {
       error: new Error('Missing Webmap Id. We need atleast one.')
     });
   }
-
   return promise;
 };
 
 const getFeature = function getFeature (params) {
-  const { idvalue, service, layerid } = params;
+  const { idvalue } = params;
   const promise = new Deferred();
-  if (idvalue && service && layerid) {
-    //- This assumes id field is object id, if thats not the case, will need a different request method
-    request.queryTaskById(`${service}/${layerid}`, idvalue).then((results) => {
-      const feature = results.features[0];
-      if (feature) {
-        promise.resolve({
-          attributes: feature.attributes,
-          geometry: feature.geometry,
-          title: params.custom ? feature.attributes.title : feature.attributes[results.displayFieldName],
-          isCustom: params.custom
-        });
-      } else {
-        promise.reject({ error: new Error('Unable to query for feature. Check the configuration.') });
-      }
-      if (brApp.debug) { console.log('getFeature: ', results); }
+  if (idvalue) {
+    esriRequest({
+      url: 'https://production-api.globalforestwatch.org/v1/geostore/' + idvalue,
+      callbackParamName: 'callback',
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false}).then(geostoreResult => {
+      const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+      promise.resolve({
+        attributes: geostoreResult.data.attributes,
+        geostoreId: geostoreResult.data.id,
+        geometry: new Polygon(esriJson),
+        title: 'Custom Analysis',
+        isCustom: true // TODO MAKE SURE NOT TO HARD CODE THAT IN
+      });
+    }, err => {
+      console.error(err);
+      promise.resolve([]);
     });
   } else {
     promise.reject({ error: new Error('Unable to retrieve feature.') });
   }
-
   return promise;
 };
 
-const createLayers = function createLayers (layerPanel, activeLayers, language, service) {
-    //- Organize and order the layers before adding them to the map
-    let layers = Object.keys(layerPanel).filter((groupName) => {
-      //- remove basemaps and extra layers, extra layers will be added later and basemaps
-      //- handled differently elsewhere
-      return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
-    }).sort((a, b) => {
-      //- Sort the groups based on their order property
-      return layerPanel[a].order < layerPanel[b].order;
-    }).reduce((list, groupName) => {
-      //- Flatten them into a single list but before that,
-      //- Multiple the order by 100 so I can sort them more easily below, this is because there
-      //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
-      //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-      return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
-        return layer;
-      }));
-    }, []);
+const createLayers = function createLayers (layerPanel, activeLayers, language, params) {
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
 
-    //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);
+  //- Organize and order the layers before adding them to the map
+  let layers = Object.keys(layerPanel).filter((groupName) => {
+    //- remove basemaps and extra layers, extra layers will be added later and basemaps
+    //- handled differently elsewhere
+    return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
+  }).sort((a, b) => {
+    //- Sort the groups based on their order property
+    return layerPanel[a].order < layerPanel[b].order;
+  }).reduce((list, groupName) => {
+    //- Flatten them into a single list but before that,
+    //- Multiple the order by 100 so I can sort them more easily below, this is because there
+    //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
+    //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
+    return list.concat(layerPanel[groupName].layers.map((layer, index) => {
+      layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
+      return layer;
+    }));
+  }, []);
+
+  //- Add the extra layers now that all the others have been sorted
+  layers = layers.concat(layerPanel.extraLayers);
 
     //- remove custom features from the layersToAdd if we don't need it to avoid AGOL Auth
-    const USER_FEATURES_CONFIG = appUtils.getObject(resources.layerPanel.extraLayers, 'id', layerKeys.USER_FEATURES);
-    const custom = USER_FEATURES_CONFIG.url.search(service) > -1;
-    if (custom === false) {
-      layers.forEach((layer, i) => {
-        if (layer.id === 'USER_FEATURES') {
-          layers.splice(i, 1);
-          return;
-        }
-      });
-    }
+    layers.forEach((layer, i) => {
+      if (layer.id === 'USER_FEATURES') {
+        layers.splice(i, 1);
+        return;
+      }
+    });
 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];
@@ -124,52 +125,135 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         existingIds.push(layer.id);
       }
     });
+
     //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
     //- Make those updates here to the config as this will trickle down
     uniqueLayers.forEach(layer => {
-      layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
+      layer.visible = activeLayers.indexOf(layer.id) > -1;
     });
 
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
-    const esriLayers = uniqueLayers.filter(layer => layer && layer.visible && (layer.url || layer.type === 'graphic')).map((layer) => {
+    const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic')).map((layer) => {
       return layerFactory(layer, language);
     });
-    map.addLayers(esriLayers);
-    // If there is an error with a particular layer, handle that here
-    // map.on('layers-add-result', result => {
-    //   const addedLayers = result.layers;
-    //   // Check for Errors
-    //   var layerErrors = addedLayers.filter(layer => layer.error);
-    //   if (layerErrors.length > 0) { console.error(layerErrors); }
-    //   //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
-    //   //- layers wont be sorted, they always show on top
-    //   uniqueLayers.forEach((layer) => {
-    //     if (map.getLayer(layer.id) && layer.order) {
-    //       map.reorderLayer(map.getLayer(layer.id), layer.order);
-    //     }
-    //   });
-    // });
 
+    // Set the date range for the loss and glad layers
+    const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
+    const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
+    const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
+    const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
+    const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
+
+    if (lossLayer && lossLayer.setDateRange) {
+      const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
+      const fromYear = yearsArray[tcLossFrom];
+      const toYear = yearsArray[tcLossTo];
+
+      lossLayer.setDateRange(fromYear - 2000, toYear - 2000);
+    }
+
+    if (gladLayer && gladLayer.setDateRange) {
+      const julianFrom = appUtils.getJulianDate(gladFrom);
+      const julianTo = appUtils.getJulianDate(gladTo);
+
+      gladLayer.setDateRange(julianFrom, julianTo);
+    }
+
+    if (terraILayer && terraILayer.setDateRange) {
+      const julianFrom = appUtils.getJulianDate(terraIFrom);
+      const julianTo = appUtils.getJulianDate(terraITo);
+
+      terraILayer.setDateRange(julianFrom, julianTo);
+    }
+
+    if (viirsFiresLayer) {
+      layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer);
+    }
+
+    if (modisFiresLayer) {
+      layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
+    }
+
+    map.addLayers(esriLayers);
+
+    layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
+    layersHelper.updateAGBiomassLayer(tcd, map);
+
+    if (map.getZoom() > 9) {
+      map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
+    }
+
+    // If there is an error with a particular layer, handle that here
+    map.on('layers-add-result', result => {
+      const addedLayers = result.layers;
+      // Check for Errors
+      var layerErrors = addedLayers.filter(layer => layer.error);
+      if (layerErrors.length > 0) { console.error(layerErrors); }
+      //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
+      //- layers wont be sorted, they always show on top
+      uniqueLayers.forEach((layer) => {
+        if (map.getLayer(layer.id) && layer.order) {
+          map.reorderLayer(map.getLayer(layer.id), layer.order);
+        }
+      });
+    });
 };
 
 const createMap = function createMap (params) {
   const { basemap } = params;
 
-  map = new Map('map', {
+  const options = {
     center: [-8.086, 21.085],
     basemap: basemap || 'topo',
     slider: false,
     logo: false,
     zoom: 2
-  });
+  };
 
-  map.on('load', () => {
-		map.disableKeyboardNavigation();
-		map.disableMapNavigation();
-		map.disableRubberBandZoom();
-		map.disablePan();
+  arcgisUtils.createMap(params.webmap, 'map', { mapOptions: options }).then(response => {
+    map = response.map;
+
+    map.disableKeyboardNavigation();
+    map.disableMapNavigation();
+    map.disableRubberBandZoom();
+    map.disablePan();
+
+    all({
+      feature: getFeature(params),
+      info: getApplicationInfo(params)
+    }).always((featureResponse) => {
+      //- Bail if anything failed
+      if (featureResponse.error) {
+        throw featureResponse.error;
+      }
+
+      const { feature, info } = featureResponse;
+      //- Add Popup Info Now
+      addTitleAndAttributes(params, feature, info);
+      //- Need the map to be loaded to add graphics
+      if (map.loaded) {
+        setupMap(params, feature);
+      } else {
+        map.on('load', () => {
+          setupMap(params, feature);
+        });
+      }
+
+      //- Add the settings to the params so we can omit layers or do other things if necessary
+      //- If no appid is provided, the value here is essentially resources.js
+      params.settings = info.settings;
+
+      //- Make sure highcharts is loaded before using it
+      if (window.highchartsPromise.isResolved()) {
+        runAnalysis(params, feature);
+      } else {
+        window.highchartsPromise.then(() => {
+          runAnalysis(params, feature);
+        });
+      }
+    });
 	});
 };
 
@@ -198,10 +282,18 @@ const generateRow = function generateRows (fieldName, fieldValue) {
 };
 
 const generateSlopeTable = function generateSlopeTable (labels, values) {
+  const roundedValues = [];
+  values.forEach(value => {
+    if (typeof value === 'number') {
+      value = Math.round(value / 100) * 100;
+    }
+    roundedValues.push(value);
+  });
+
   const fragment = document.createDocumentFragment();
   labels.forEach((label, index) => {
     fragment.appendChild(generateRow(label,
-      typeof values[index] === 'number' ? number.format(values[index]) : values[index]
+      typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
     ));
   });
   return fragment;
@@ -215,8 +307,39 @@ const setupMap = function setupMap (params, feature) {
   const { service, visibleLayers } = params;
   //- Add a graphic to the map
   const graphic = new Graphic(new Polygon(feature.geometry), symbols.getCustomSymbol());
-  map.setExtent(graphic.geometry.getExtent(), true);
+  const graphicExtent = graphic.geometry.getExtent();
+  map.setExtent(graphicExtent, true);
   map.graphics.add(graphic);
+
+  const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
+
+  if (hasGraphicsLayers) {
+    map.graphicsLayerIds.forEach(id => {
+      const layer = map.getLayer(id);
+      if (params.activeLayers.indexOf(id) === -1) {
+        layer.hide();
+        return;
+      }
+      layer.show();
+    });
+  }
+
+  map.layerIds.forEach(id => {
+
+    if (params.hasOwnProperty(id)) {
+
+      const layer = map.getLayer(id);
+
+      if (!params[id].length) {
+        layer.setVisibleLayers([-1]);
+        return;
+      }
+
+      const layersVisible = params[id].split(',').map(layerIndex => Number(layerIndex));
+
+      layer.setVisibleLayers(layersVisible);
+    }
+  });
   //- Add the layer to the map
   //- TODO: Old method adds a dynamic layer, this needs to be able to handle all layer types eventually,
   //- Update the layer factory to be more flexible
@@ -236,7 +359,11 @@ const setupMap = function setupMap (params, feature) {
     map.addLayer(currentLayer);
   }
 
-  createLayers(resources.layerPanel, params.activeLayers, params.lang, params.service);
+  // we must split into an array to prevent 'TREE_COVER_LOSS' from matching 'TREE_COVER'
+  // when using indexOf. With strings this will match
+  params.activeLayers = params.activeLayers.split(',');
+
+  createLayers(resources.layerPanel, params.activeLayers, params.lang, params);
 
 };
 
@@ -466,12 +593,12 @@ const makeRestorationAnalysisCharts = function makeRestorationAnalysisCharts (re
 
 const runAnalysis = function runAnalysis (params, feature) {
   const lcLayers = resources.layerPanel.GROUP_LC ? resources.layerPanel.GROUP_LC.layers : [];
-  const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LC.layers : [];
+  const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LCD.layers : [];
   const layerConf = appUtils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
   const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-  const { tcd, lang, settings, activeSlopeClass } = params;
+  const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, viirsFrom, viirsTo, modisFrom, modisTo } = params;
+  const geographic = webmercatorUtils.geographicToWebMercator(feature.geometry);
   //- Only Analyze layers in the analysis
-
   if (appUtils.containsObject(lcdLayers, 'id', layerKeys.TREE_COVER_LOSS)) {
     //- Loss/Gain Analysis
     performAnalysis({
@@ -479,26 +606,30 @@ const runAnalysis = function runAnalysis (params, feature) {
       geometry: feature.geometry,
       settings: settings,
       canopyDensity: tcd,
-      language: lang
+      language: lang,
+      geostoreId: feature.geostoreId,
+      tcLossFrom: tcLossFrom,
+      tcLossTo: tcLossTo
     }).then((results) => {
-      const {lossCounts = [], gainCounts = []} = results;
-      const totalLoss = lossCounts.reduce((a, b) => a + b, 0);
-      const totalGain = gainCounts.reduce((a, b) => a + b, 0);
+      const {lossCounts = [], gainTotal, lossTotal} = results;
+      const totalLoss = lossTotal;
+      const totalGain = gainTotal;
       //- Generate chart for Tree Cover Loss
       const name = text[lang].ANALYSIS_TC_CHART_NAME;
       const colors = analysisConfig[analysisKeys.TC_LOSS].colors;
       const tcLossNode = document.getElementById('tc-loss');
-      const series = [{ name: name, data: results.lossCounts }];
+      const series = [{ name: name, data: lossCounts }];
 
-      if (results.lossCounts && results.lossCounts.length) {
-        charts.makeSimpleBarChart(tcLossNode, lossLabels, colors, series);
+      if (results.lossCounts && results.lossCounts.length && results.lossCounts.some(c => c > 0)) {
+        const chartLabels = lossLabels.slice(tcLossFrom, tcLossTo + 1);
+        charts.makeSimpleBarChart(tcLossNode, chartLabels, colors, series);
       } else {
         tcLossNode.remove();
       }
       //- Generate content for Loss and Gain Badges
       //- Loss
       document.querySelector('#total-loss-badge .results__loss-gain--label').innerHTML = text[lang].ANALYSIS_TOTAL_LOSS_LABEL;
-      document.querySelector('#total-loss-badge .results__loss-gain--range').innerHTML = text[lang].ANALYSIS_TOTAL_LOSS_RANGE;
+      document.querySelector('#total-loss-badge .results__loss-gain--range').innerHTML = `${lossLabels[tcLossFrom]} &ndash; ${lossLabels[tcLossTo]}`;
       document.querySelector('.results__loss--count').innerHTML = totalLoss;
       document.getElementById('total-loss-badge').classList.remove('hidden');
       //- Gain
@@ -517,10 +648,9 @@ const runAnalysis = function runAnalysis (params, feature) {
   }
 
   if (settings.landCover && layerConf) {
-    //- Land Cover with Loss Analysis
     performAnalysis({
       type: analysisKeys.LC_LOSS,
-      geometry: feature.geometry,
+      geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -528,7 +658,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const configuredColors = layerConf.colors;
       const labels = layerConf.classes[lang];
       const node = document.getElementById('lc-loss');
-      const { counts, encoder } = results;
+      const { counts, encoder, error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const Xs = encoder.A;
       const Ys = encoder.B;
       const chartInfo = charts.formatSeriesWithEncoder({
@@ -550,12 +686,19 @@ const runAnalysis = function runAnalysis (params, feature) {
     //- Land Cover Composition Analysis
     performAnalysis({
       type: analysisKeys.LCC,
-      geometry: feature.geometry,
+      geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
       language: lang
     }).then((results) => {
       const node = document.getElementById('lc-composition');
+
+      const { error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
 
       if (results.counts && results.counts.length) {
         const series = charts.formatCompositionAnalysis({
@@ -584,7 +727,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       geometry: feature.geometry,
       settings: settings,
       canopyDensity: tcd,
-      language: lang
+      language: lang,
+      geostoreId: feature.geostoreId
     }).then((results) => {
       const { labels, colors } = analysisConfig[analysisKeys.BIO_LOSS];
       const { data } = results;
@@ -596,6 +740,11 @@ const runAnalysis = function runAnalysis (params, feature) {
         lossName: text[lang].ANALYSIS_CARBON_LOSS,
         carbonName: 'MtCO2'
       });
+
+      if (!series.some(s => s.data.some(d => d > 0))) {
+        node.remove();
+        return;
+      }
 
       charts.makeBiomassLossChart(node, {
         series,
@@ -615,24 +764,6 @@ const runAnalysis = function runAnalysis (params, feature) {
         content.add();
 
       });
-      // const { counts, encoder } = results;
-      // const Xs = encoder.A;
-      // const Ys = encoder.B;
-      // const chartInfo = charts.formatSeriesWithEncoder({
-      //   encoder: encoder,
-      //   counts: counts,
-      //   labels: labels,
-      //   colors: colors,
-      //   Xs: Xs,
-      //   Ys: Ys
-      // });
-      //
-      // if (chartInfo.series && chartInfo.series.length) {
-      //   charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
-      // } else {
-      //   node.remove();
-      // }
-
     });
   } else {
     const node = document.getElementById('bio-loss');
@@ -643,7 +774,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     //- Intact Forest with Loss Analysis
     performAnalysis({
       type: analysisKeys.INTACT_LOSS,
-      geometry: feature.geometry,
+      geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -651,7 +782,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const configuredColors = analysisConfig[analysisKeys.INTACT_LOSS].colors;
       const labels = text[lang].ANALYSIS_IFL_LABELS;
       const node = document.getElementById('intact-loss');
-      const { counts, encoder } = results;
+      const { counts, encoder, error } = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const Xs = encoder.A;
       const Ys = encoder.B;
       const chartInfo = charts.formatSeriesWithEncoder({
@@ -675,24 +812,65 @@ const runAnalysis = function runAnalysis (params, feature) {
     const node = document.getElementById('intact-loss');
     node.remove();
   }
-
-  if (settings.activeFires) {
+  if (settings.viirsFires) {
     //- Fires Analysis
     performAnalysis({
-      type: analysisKeys.FIRES,
+      type: analysisKeys.VIIRS_FIRES,
       geometry: feature.geometry,
       settings: settings,
       canopyDensity: tcd,
-      language: lang
+      language: lang,
+      viirsFrom: viirsFrom,
+      viirsTo: viirsTo
     }).then((results) => {
-      document.querySelector('.results__fires-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__fires-count').innerHTML = results.fireCount;
-      document.querySelector('.results__fires-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE;
-      document.querySelector('.results__fires-post').innerHTML = text[lang].ANALYSIS_FIRES_POST;
-      document.getElementById('fires-badge').classList.remove('hidden');
+
+      const node = document.getElementById('viirs-badge');
+
+      const { error } = results;
+      if (error) {
+        node.remove();
+        return;
+      }
+
+      document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
+      document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
+      document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
+      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
+      node.classList.remove('hidden');
     });
   } else {
-    const node = document.getElementById('fires-badge');
+    const node = document.getElementById('viirs-badge');
+    node.remove();
+  }
+
+  if (settings.modisFires) {
+    //- Fires Analysis
+    performAnalysis({
+      type: analysisKeys.MODIS_FIRES,
+      geometry: feature.geometry,
+      settings: settings,
+      canopyDensity: tcd,
+      language: lang,
+      modisFrom: modisFrom,
+      modisTo: modisTo
+    }).then((results) => {
+
+      const node = document.getElementById('modis-badge');
+
+      const { error } = results;
+      if (error) {
+        node.remove();
+        return;
+      }
+
+      document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
+      document.querySelector('.results__modis-count').innerHTML = results.fireCount;
+      document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
+      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
+      node.classList.remove('hidden');
+    });
+  } else {
+    const node = document.getElementById('modis-badge');
     node.remove();
   }
 
@@ -700,7 +878,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   if (settings.mangroves) {
     performAnalysis({
       type: analysisKeys.MANGROVE_LOSS,
-      geometry: feature.geometry,
+      geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -745,7 +923,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       const node = document.getElementById('sad-alerts');
       const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
       const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
-      const {alerts} = results;
+      const {alerts, error} = results;
+
+      if (error) {
+        node.remove();
+        return;
+      }
+
       const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
       if (categories.length) {
         //- Tell the second series to use the second axis
@@ -768,15 +952,21 @@ const runAnalysis = function runAnalysis (params, feature) {
       geometry: feature.geometry,
       settings: settings,
       canopyDensity: tcd,
-      language: lang
+      language: lang,
+      geostoreId: feature.geostoreId,
+      gladFrom: new Date(gladFrom),
+      gladTo: new Date(gladTo)
     }).then((results) => {
       const node = document.getElementById('glad-alerts');
       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
-      if (results.length) {
-        charts.makeTimeSeriesCharts(node, { data: results, name });
-      } else {
+
+      const { error } = results;
+      if (error || results.length === 0) {
         node.remove();
+        return;
       }
+
+      charts.makeTimeSeriesCharts(node, { data: results, name });
     });
   } else {
     const node = document.getElementById('glad-alerts');
@@ -787,17 +977,24 @@ const runAnalysis = function runAnalysis (params, feature) {
   if (settings.terraIAlerts) {
     performAnalysis({
       type: analysisKeys.TERRA_I_ALERTS,
-      geometry: feature.geometry,
+      geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
-      language: lang
+      geostoreId: feature.geostoreId,
+      language: lang,
+      terraIFrom: new Date(terraIFrom),
+      terraITo: new Date(terraITo)
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
-      charts.makeTimeSeriesCharts(node, {
-        data: results,
-        name: name
-      });
+
+      const { error } = results;
+      if (error || results.length === 0) {
+        node.remove();
+        return;
+      }
+
+      charts.makeTimeSeriesCharts(node, { data: results, name });
     });
   } else {
     const node = document.getElementById('terrai-alerts');
@@ -907,63 +1104,20 @@ export default {
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
     if (brApp.debug) { console.log(params); }
+
     //- Add Title, Subtitle, and logo right away
     addHeaderContent(params);
-    // Get the config for the user features layer in case we need it
-    const USER_FEATURES_CONFIG = appUtils.getObject(resources.layerPanel.extraLayers, 'id', layerKeys.USER_FEATURES);
-    //- Augment params and add a custom attribute if this is from the user_features layer
-    params.custom = USER_FEATURES_CONFIG.url.search(params.service) > -1;
+    //- Convert stringified dates back to date objects for analysis
+    const { viirsStartDate, viirsEndDate, modisStartDate, modisEndDate } = params;
+    params.viirsFrom = new Date(viirsStartDate);
+    params.viirsTo = new Date(viirsEndDate);
+    params.modisFrom = new Date(modisStartDate);
+    params.modisTo = new Date(modisEndDate);
 
-    //- Setup the Request Pre Callback to handle tokens for tokenized services
-    esriRequest.setRequestPreCallback((ioArgs) => {
-      // Add token for user features service
-      if (ioArgs.url.search(params.service) > -1 && params.custom) {
-        ioArgs.content.token = resources.userFeatureToken[location.hostname];
-      }
-      return ioArgs;
-    });
     //- Create the map as soon as possible
     createMap(params);
     //- Get all the necessary info
-    all({
-      feature: getFeature(params),
-      info: getApplicationInfo(params)
-    }).always((response) => {
-      //- Bail if anything failed
-      if (response.error) {
-        throw response.error;
-      }
 
-      const { feature, info } = response;
-      //- Add Popup Info Now
-      addTitleAndAttributes(params, feature, info);
-      //- Need the map to be loaded to add graphics
-      if (map.loaded) {
-        setupMap(params, feature);
-      } else {
-        map.on('load', () => {
-          setupMap(params, feature);
-        });
-      }
-
-      //- Currently we do not support points, so if its a point, just bail
-      if (feature.geometry.type !== analysisKeys.GEOMETRY_POLYGON) {
-        return;
-      }
-
-      //- Add the settings to the params so we can omit layers or do other things if necessary
-      //- If no appid is provided, the value here is essentially resources.js
-      params.settings = info.settings;
-
-      //- Make sure highcharts is loaded before using it
-      if (window.highchartsPromise.isResolved()) {
-        runAnalysis(params, feature);
-      } else {
-        window.highchartsPromise.then(() => {
-          runAnalysis(params, feature);
-        });
-      }
-    });
   }
 
 };

@@ -16,10 +16,12 @@ import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
+import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
+import analysisUtils from 'utils/analysisUtils';
 import MapStore from 'stores/MapStore';
 import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
@@ -84,16 +86,6 @@ export default class Map extends Component {
 
   componentDidMount() {
     MapStore.listen(this.storeDidUpdate);
-
-    // I only need the token and url for config items, so language does not matter
-    const USER_FEATURES_CONFIG = utils.getObject(resources.layerPanel.extraLayers, 'id', layerKeys.USER_FEATURES);
-    // Make sure all requests that use tokens have them
-    esriRequest.setRequestPreCallback((ioArgs) => {
-      if (ioArgs.url.search(USER_FEATURES_CONFIG.url) > -1) {
-        ioArgs.content.token = resources.userFeatureToken[location.hostname];
-      }
-      return ioArgs;
-    });
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -148,8 +140,7 @@ export default class Map extends Component {
         scalebarUnit: 'metric'
       });
 
-      const updateEnd = response.map.on('update-end', () => {
-        updateEnd.remove();
+      on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         //- Set the default basemap in the store
         const basemap = itemData && itemData.baseMap;
@@ -172,10 +163,20 @@ export default class Map extends Component {
         userFeaturesLayer.on('click', (evt) => {
           if (evt.graphic && evt.graphic.attributes) {
             evt.stopPropagation();
-            response.map.infoWindow.setFeatures([evt.graphic]);
+            if (!evt.graphic.attributes.geostoreId) {
+              analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
+                evt.graphic.attributes.geostoreId = res.data.id;
+                response.map.infoWindow.setFeatures([evt.graphic]);
+              });
+            } else {
+              response.map.infoWindow.setFeatures([evt.graphic]);
+            }
           }
         });
       });
+      //- Set the map's extent to its current extent to trigger our update-end
+      response.map.setExtent(response.map.extent);
+
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
         this.applyStateFromUrl(response.map, getUrlParams(location.search));
@@ -236,7 +237,7 @@ export default class Map extends Component {
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
-        layer.resourceInfo.layers.forEach((sublayer) => {
+        layer.resourceInfo.layers.forEach((sublayer, idx) => {
           const visible = layer.layerObject.visibleLayers.indexOf(sublayer.id) > -1;
           const scaleDependency = (sublayer.minScale > 0 || sublayer.maxScale > 0);
           const layerInfo = {
@@ -249,6 +250,7 @@ export default class Map extends Component {
             label: sublayer.name,
             opacity: 1,
             visible: visible,
+            order: sublayer.order || idx + 1,
             esriLayer: layer.layerObject
           };
           dynamicLayers.push(layerInfo);
@@ -284,7 +286,7 @@ export default class Map extends Component {
 
     //- Set up the group labels and group layers
     settings.layerPanel.GROUP_WEBMAP.layers = layers;
-    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language].webmapMenuName;
+    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
 
     if (saveLayersInOtherLang) {
       settings.layerPanel.GROUP_WEBMAP.label[settings.alternativeLanguage] = settings.labels[settings.alternativeLanguage].webmapMenuName;
@@ -302,8 +304,11 @@ export default class Map extends Component {
       layerModalVisible,
       modalLayerInfo,
       webmapInfo,
-      map
+      map,
+      activeLayers
     } = this.state;
+
+    const { settings } = this.context;
 
     const timeSlider = webmapInfo && webmapInfo.widgets && webmapInfo.widgets.timeSlider;
     const timeWidgets = [];
@@ -328,8 +333,15 @@ export default class Map extends Component {
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          <Legend {...this.state} />
-          <FooterInfos map={map} />
+          {map.loaded ? <Legend
+              allLayers={this.state.allLayers}
+              tableOfContentsVisible={this.state.tableOfContentsVisible}
+              activeLayers={activeLayers}
+              legendOpen={this.state.legendOpen}
+              dynamicLayers={this.state.dynamicLayers}
+              legendOpacity={this.state.legendOpacity}
+            /> : null}
+          <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
             <use xlinkHref='#shape-crosshairs' />

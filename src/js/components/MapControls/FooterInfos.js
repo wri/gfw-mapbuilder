@@ -39,8 +39,11 @@ export default class FooterInfos extends Component {
 
   render () {
     const {longitude, latitude} = this.state;
+
+    const { hidden } = this.props;
+
     return (
-      <div className='footer-info'>
+      <div className={`${hidden ? 'hidden' : ''} footer-info`}>
         <div className='footer-info_coords'>
           Lat/Long: {latitude}/{longitude}
         </div>

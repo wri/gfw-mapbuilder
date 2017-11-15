@@ -1,6 +1,6 @@
 .legend-panel
   flex-direction column
-  overflow hidden
+  overflow-y auto
   display flex
   background #fff
   bottom 50px
@@ -23,6 +23,26 @@
 .legend-collapsed
   cursor pointer
   width 100px
+  height 30px
+  overflow-y hidden
+
+.parent-legend-container
+  margin 10px 0
+  font-weight bold
+  .label-container
+    margin-bottom 5px
+  .legend-container
+    font-weight normal
+    display flex
+    align-items flex-start
+    .legend-symbol
+      position relative
+      top 2px
+      margin-right 10px
+      height 15px
+      width 15px
+      &.circle
+        border-radius 50%
 
 .legend-layers
   overflow-y auto
@@ -32,6 +52,14 @@
 
 .esriLegendLayer
   font-size 13px
+
+.legend-row
+  display flex
+
+.legend-label
+  margin-left 10px
+  font-size 13px
+  margin-top 2px
 
 @media (max-width: $mobileBreak)
   .legend-panel

@@ -1,14 +1,13 @@
 import analysisKeys from 'constants/AnalysisConstants';
 
-const analysisImageService = 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
+const analysisImageService = 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
 
 const config = {
   map: {
     options: {
       navigationMode: 'css-transforms',
       force3DTransforms: true,
-      showAttribution: false,
-      // smartNavigation: false,
+      // showAttribution: false,
       fadeOnZoom: true,
       slider: false,
       logo: false
@@ -20,15 +19,23 @@ const config = {
     'gis-potico.wri.org',
     'gis-treecover.wri.org',
     'api.globalforestwatch.org',
-    'production-api.globalforestwatch.org'
+    'alpha.blueraster.io',
+    'staging.blueraster.io',
+    'stg.blueraster.com.s3.amazonaws.com',
+    'production-api.globalforestwatch.org',
+    'production-api.globalforestwatch.org/v1/ogr',
+    'production-api.globalforestwatch.org/v1/ogr/convert'
   ],
 
   // Note these will need to be copied in with the bulid script since they are not part of the main bundle
   assets: {
     jQuery: 'vendor/jquery/dist/jquery.min.js',
-    highcharts: '//code.highcharts.com/highcharts.js',
-    highchartsMore: '//code.highcharts.com/highcharts-more.js',
-    highchartsExports: '//code.highcharts.com/modules/exporting.js',
+    // highcharts: '//code.highcharts.com/highcharts.js',
+    // highchartsMore: '//code.highcharts.com/highcharts-more.js',
+    // highchartsExports: '//code.highcharts.com/modules/exporting.js',
+    highcharts: 'vendor/highcharts/highcharts.js',
+    highchartsMore: 'vendor/highcharts/highcharts-more.js',
+    highchartsExports: 'vendor/highcharts/modules/exporting.js',
     ionCSS: 'vendor/ion.rangeslider/css/ion.rangeSlider.css',
     ionSkinCSS: 'vendor/ion.rangeslider/css/ion.rangeSlider.skinNice.css',
     rangeSlider: 'vendor/ion.rangeslider/js/ion.rangeSlider.js',
@@ -37,12 +44,17 @@ const config = {
   },
 
   urls: {
-    metadataApi: 'http://api.globalforestwatch.org/metadata',
-    metadataXmlEndpoint: (itemId) => `http://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`
+    metadataApi: 'https://gis-gfw.wri.org/metadata',
+    metadataXmlEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
+    agolItemEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}`,
+    cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
+    cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=GeoJSON&q=${queryString}&api_key=${cartoApiKey}`,
+    cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
+    esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
   },
 
   upload: {
-    portal: 'http://www.arcgis.com/sharing/rest/content/features/generate',
+    portal: 'https://www.arcgis.com/sharing/rest/content/features/generate',
     shapefileParams: (name, spatialReference, extentWidth, mapWidth) => {
       return {
         'name': name,
@@ -143,6 +155,7 @@ const config = {
   //- Analysis for individual layers are defined below so we can use common keys
   //- Generic/Modules config is here
   analysis: {
+    apiUrl: 'https://production-api.globalforestwatch.org/v1/geostore',
     imageService: analysisImageService,
     pixelSize: 100,
     tcd: {
@@ -174,8 +187,8 @@ config.analysis[analysisKeys.MANGROVE_LOSS] = {
 };
 
 config.analysis[analysisKeys.SAD_ALERTS] = {
-  url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
-  outFields: ['date', 'data_type', 'st_area(shape)'],
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
+  outFields: ['date', 'data_type', 'shape_Area'],
   colors: {
     degrad: '#FA98B9',
     defor: '#F13689'
@@ -183,15 +196,20 @@ config.analysis[analysisKeys.SAD_ALERTS] = {
 };
 
 config.analysis[analysisKeys.GLAD_ALERTS] = {
-  url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/glad_alerts_analysis/ImageServer',
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/glad_alerts_analysis/ImageServer',
   lockrasters: {
     '2015': 6,
-    '2016': 4
-  }
+    '2016': 4,
+    '2017': 9
+  },
+  analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+  startDate: '2015',
+  endDate: new Date().getFullYear()
 };
 
 config.analysis[analysisKeys.TERRA_I_ALERTS] = {
-  url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer'
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
+  analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
 };
 
 config.analysis[analysisKeys.BIO_LOSS] = {
@@ -213,7 +231,10 @@ config.analysis[analysisKeys.BIO_LOSS] = {
   colors: {
     loss: '#FF6699',
     carbon: '#BEBCC2'
-  }
+  },
+  analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
+  startDate: '2001',
+  endDate: '2014'
 };
 
 config.analysis[analysisKeys.SLOPE] = {
@@ -228,19 +249,24 @@ config.analysis[analysisKeys.SLOPE] = {
 
 config.analysis[analysisKeys.TC_LOSS_GAIN] = {
   lossRaster: '$530',
-  gainRaster: '$527'
+  gainRaster: '$527',
+  analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain'
 };
 
 config.analysis[analysisKeys.TC_LOSS] = {
   id: '$530',
   colors: ['#cf5188'],
   // TODO: Generate these dynamically
-  bounds: [1, 14],
-  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014]
+  bounds: [1, 15],
+  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
 };
 
-config.analysis[analysisKeys.FIRES] = {
-  url: 'http://gis-potico.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer/4'
+config.analysis[analysisKeys.VIIRS_FIRES] = {
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8'
+};
+
+config.analysis[analysisKeys.MODIS_FIRES] = {
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
 };
 
 export const mapConfig = config.map;

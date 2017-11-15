@@ -4,6 +4,7 @@ var prerender = require('react-prerender');
 var gulpPlumber = require('gulp-plumber');
 var browserSync = require('browser-sync');
 var imagemin = require('gulp-imagemin');
+var rename = require('gulp-rename');
 var requirejs = require('requirejs');
 var locals = require('./src/locals');
 var stylus = require('gulp-stylus');
@@ -30,18 +31,21 @@ var config = {
   },
   jade: {
     watch: ['src/**/*.jade', 'build/css/critical.css'],
-    src: ['src/index.jade', 'src/report.jade'],
+    src: ['src/index.jade', 'src/report.jade', 'src/example.jade', 'src/external.jade'],
     build: 'build',
     dist: 'dist'
   },
   stylus: {
     watch: 'src/css/**/*.styl',
-    src: ['src/css/critical.styl', 'src/css/app.styl', 'src/css/report.styl'],
+    src: ['src/css/critical.styl', 'src/css/app.styl', 'src/css/report.styl', 'src/css/google-fira.styl', 'src/css/tundra.css'],
     build: 'build/css',
-    dist: 'dist/' + version + '/css'
+    dist: 'dist/' + version + '/css',
+    fontSrc: ['src/css/fonts/**/*.ttf', 'src/css/fonts/**/*.woff', 'src/css/fonts/**/*.woff2'],
+    fontBuild: 'build/css/fonts',
+    fontDist: 'dist/' + version + '/css/fonts'
   },
   server: {
-    files: ['build/**/*.html', 'build/**/*.js', 'build/**/*.css'],
+    files: ['build/**/*.html', 'build/**/*.js', 'build/**/*.css', '!build/js/library.js', '!src/js/library.js'],
     port: process.env.PORT || 3000,
     baseDir: 'build'
   },
@@ -50,7 +54,19 @@ var config = {
     jquery: { src: 'build/vendor/jquery/dist/jquery.min.js', dest: 'dist/' + version + '/vendor/jquery/dist/'},
     ion: { src: 'build/vendor/ion.rangeslider/**/*', dest: 'dist/' + version + '/vendor/ion.rangeslider/'},
     resource: { src: 'build/resources.js', dest: 'dist/'},
-    pickadate: { src: 'build/vendor/pickadate/**/*', dest: 'dist/' + version + '/vendor/pickadate/'}
+    pickadate: { src: 'build/vendor/pickadate/**/*', dest: 'dist/' + version + '/vendor/pickadate/'},
+    highcharts: { src: 'build/vendor/highcharts/**/*', dest: 'dist/' + version + '/vendor/highcharts/'},
+    esri: { src: 'build/vendor/arcgis-api/esri/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/esri/'},
+    dojo: { src: 'build/vendor/arcgis-api/dojo/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/dojo/'},
+    dojox: { src: 'build/vendor/arcgis-api/dojox/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/dojox/'},
+    dstore: { src: 'build/vendor/arcgis-api/dstore/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/dstore/'},
+    dijit: { src: 'build/vendor/arcgis-api/dijit/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/dijit/'},
+    dgrid: { src: 'build/vendor/arcgis-api/dgrid/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/dgrid/'},
+    moment: { src: 'build/vendor/arcgis-api/esri/moment/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/moment'},
+    putSelector: { src: 'build/vendor/arcgis-api/esri/put-selector/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/put-selector'},
+    xstyle: { src: 'build/vendor/arcgis-api/esri/xstyle/**/*', dest: 'dist/' + version + '/vendor/arcgis-api/xstyle'},
+    library: { src: 'build/js/library.js', dest: 'dist/'},
+    libraryMain: { src: 'build/js/libraryMain.js', dest: 'dist/' + version + '/js'}
   }
 };
 
@@ -60,6 +76,16 @@ gulp.task('stylus-build', function () {
     .pipe(stylus({ linenos: true }))
     .pipe(autoprefixer())
     .pipe(gulp.dest(config.stylus.build));
+});
+
+gulp.task('stylus-move', function () {
+  return gulp.src(config.stylus.fontSrc)
+    .pipe(gulp.dest(config.stylus.fontBuild));
+});
+
+gulp.task('stylus-move-dist', function () {
+  return gulp.src(config.stylus.fontSrc)
+    .pipe(gulp.dest(config.stylus.fontDist));
 });
 
 gulp.task('stylus-dist', function () {
@@ -74,6 +100,7 @@ gulp.task('stylus-watch', function () {
 });
 
 gulp.task('jade-build', function () {
+  locals.version = version;
   return gulp.src(config.jade.src)
     .pipe(plumber())
     .pipe(jade({ pretty: true, locals: locals }))
@@ -118,8 +145,34 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(config.copy.resource.dest));
   gulp.src(config.copy.pickadate.src)
     .pipe(gulp.dest(config.copy.pickadate.dest));
+  gulp.src(config.copy.highcharts.src)
+    .pipe(gulp.dest(config.copy.highcharts.dest));
+  gulp.src(config.copy.library.src)
+    .pipe(rename(version + '.js'))
+    .pipe(gulp.dest(config.copy.library.dest));
+  // gulp.src(config.copy.libraryMain.src)
+  //   .pipe(gulp.dest(config.copy.libraryMain.dest));
+  // gulp.src(config.copy.esri.src)
+  //   .pipe(gulp.dest(config.copy.esri.dest));
+  // gulp.src(config.copy.dojo.src)
+  //   .pipe(gulp.dest(config.copy.dojo.dest));
+  // gulp.src(config.copy.dojox.src)
+  //   .pipe(gulp.dest(config.copy.dojox.dest));
+  // gulp.src(config.copy.dstore.src)
+  //   .pipe(gulp.dest(config.copy.dstore.dest));
+  // gulp.src(config.copy.dijit.src)
+  //   .pipe(gulp.dest(config.copy.dijit.dest));
+  // gulp.src(config.copy.dgrid.src)
+  //   .pipe(gulp.dest(config.copy.dgrid.dest));
+  // gulp.src(config.copy.moment.src)
+  //   .pipe(gulp.dest(config.copy.moment.dest));
+  // gulp.src(config.copy.putSelector.src)
+  //   .pipe(gulp.dest(config.copy.putSelector.dest));
+  // gulp.src(config.copy.xstyle.src)
+  //   .pipe(gulp.dest(config.copy.xstyle.dest));
 });
 
+ //We might have to take our prerender due to the fact that we're no longer using #root be default
 gulp.task('prerender', function () {
   var htmlFile = path.join(__dirname, 'dist/index.html'),
       component = 'js/components/App',
@@ -127,7 +180,7 @@ gulp.task('prerender', function () {
       requirejsProfile = {
         buildProfile: path.join(__dirname, 'rjs.main.js'),
         map: {
-          ignorePatterns: [/esri\//, /dojo\//, /dijit\//, /pickadate/],
+          ignorePatterns: [/esri\//, /dojo\//, /dijit\//, /pickadate/, /layers\//],
           moduleRoot: path.join(__dirname, 'build/js'),
           remapModule: 'js/config'
         }
@@ -148,8 +201,25 @@ gulp.task('bundle', function (cb) {
   // Update the name in the build profile
   mainProfile.out = 'dist/' + version + '/js/main.js';
   reportProfile.out = 'dist/' + version + '/js/reportMain.js';
+
   // Generate the bundles
   requirejs.optimize(mainProfile, function () {
+    requirejs.optimize(reportProfile, function () {
+      cb();
+    });
+  });
+});
+
+gulp.task('bundle-lib', function (cb) {
+  // Load in the profiles
+  var libProfile = eval(fs.readFileSync(path.join(__dirname, 'rjs.lib.js'), 'utf-8'));
+  var reportProfile = eval(fs.readFileSync(path.join(__dirname, 'rjs.report.js'), 'utf-8'));
+  // Update the name in the build profile
+
+  reportProfile.out = 'dist/' + version + '/js/reportMain.js';
+  libProfile.out = 'dist/' + version + '/js/libraryMain.js';
+  // Generate the bundles
+  requirejs.optimize(libProfile, function () {
     requirejs.optimize(reportProfile, function () {
       cb();
     });
@@ -170,5 +240,5 @@ gulp.task('browser-sync', function () {
 });
 
 gulp.task('serve', ['browser-sync']);
-gulp.task('start', ['stylus-build', 'jade-build', 'imagemin-build', 'stylus-watch', 'jade-watch']);
-gulp.task('production', ['stylus-dist', 'jade-dist', 'imagemin-dist', 'copy']);
+gulp.task('start', ['stylus-build', 'stylus-move', 'jade-build', 'imagemin-build', 'stylus-watch', 'jade-watch']);
+gulp.task('production', ['stylus-dist', 'stylus-move-dist', 'jade-dist', 'imagemin-dist', 'copy']);

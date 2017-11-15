@@ -18,9 +18,9 @@ const createPrintWidget = function createPrintWidget (settings, map, language, n
   const options = {
     scalebarUnit: 'Kilometers',
     customTextElements: [{
-      'title': settings.labels[language].title
+      'title': settings.labels[language] ? settings.labels[language].title : ''
     }, {
-      'subtitle': settings.labels[language].subtitle
+      'subtitle': settings.labels[language] ? settings.labels[language].subtitle : ''
     }]
   };
 

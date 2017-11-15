@@ -3,27 +3,58 @@ import React, {PropTypes, Component} from 'react';
 import charts from 'utils/charts';
 
 export default class TotalLossChart extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { isEmpty: false, isError: false };
+  }
+
   componentDidMount() {
-    const {labels, colors, counts, encoder, options, lossLabels} = this.props;
-    const element = this.refs.chart;
+    const { labels, colors, counts, encoder, options, lossLabels, results } = this.props;
 
-    const chartInfo = charts.formatSeriesWithEncoder({
-      isSimple: options.simple,
-      encoder: encoder,
-      counts: counts,
-      labels: labels,
-      colors: colors,
-      Xs: encoder.A, // Loss Bounds
-      Ys: encoder.B // Raster were crossing with
-    });
+    if (typeof results === 'object' && results.hasOwnProperty('error')) {
+      this.setState({ isError: true });
+    } else {
+      this.setState({ isError: false });
+      if (counts.length === 0 || !counts.some(value => value !== 0)) {
+        this.setState({ isEmpty: true });
+      } else {
+        this.setState({ isEmpty: false });
 
-    charts.makeTotalLossBarChart(element, lossLabels, chartInfo.colors, chartInfo.series);
+        const element = this.refs.chart;
+        const chartInfo = charts.formatSeriesWithEncoder({
+          isSimple: options.simple,
+          encoder: encoder,
+          counts: counts,
+          labels: labels,
+          colors: colors,
+          Xs: encoder.A, // Loss Bounds
+          Ys: encoder.B // Raster were crossing with
+        });
+
+        charts.makeTotalLossBarChart(element, lossLabels, chartInfo.colors, chartInfo.series);
+      }
+    }
   }
 
   render () {
-    return (
-      <div ref='chart'></div>
-    );
+    const { isError } = this.state;
+    const { results } = this.props;
+
+    if (isError) {
+      return (
+        <div className='data-error'>
+          <h5>{results.message}</h5>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div ref='chart'></div>
+          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+        </div>
+      );
+    }
   }
 }
 

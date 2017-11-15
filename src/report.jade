@@ -4,8 +4,10 @@ block append styles
   style
     :stylus
       @require 'css/report'
+      
+  link(rel='stylesheet', href='https://js.arcgis.com/#{esriVersion}/esri/css/esri.css')
+  link(rel='stylesheet', href='https://js.arcgis.com/#{esriVersion}/dijit/themes/tundra/tundra.css')
 
-  link(rel='stylesheet', href='http://js.arcgis.com/#{esriVersion}/esri/css/esri.css')
 
 block append content
   div.report.inner
@@ -43,11 +45,16 @@ block append content
     div.results-container#sad-alerts
     div.results-container#glad-alerts
     div.results-container#terrai-alerts
-    div.results-container.results__fires-badge.hidden#fires-badge
-      div.results__fires-pre
-      div.results__fires-count
-      div.results__fires-active
-      div.results__fires-post
+    div.results-container.results__fires-badge.hidden#viirs-badge
+      div.results__viirs-pre
+      div.results__viirs-count
+      div.results__viirs-active
+      div.results__viirs-post
+    div.results-container.results__fires-badge.hidden#modis-badge
+      div.results__modis-pre
+      div.results__modis-count
+      div.results__modis-active
+      div.results__modis-post
     div.results-container#lc-composition
 block append esri-script
   script.
@@ -71,7 +78,6 @@ block append esri-script
     }
     // Change this to '' if _app.base is a remote url
     var base = location.href.replace(/\/[^/]+$/, '');
-    // var base = 'http://s3.amazonaws.com/summertop/gfw-mapbuilder/0.1.26';
     // Add trailing slash if it is not present
     base = makePath(base);
     // Add _app.base if it is present
@@ -84,6 +90,7 @@ block append esri-script
         { name: 'js', location: makePath(base, 'js')},
         { name: 'vendor', location: makePath(base, 'vendor')},
         { name: 'utils', location: makePath(base, 'js/utils')},
+        { name: 'helpers', location: makePath(base, 'js/helpers')},
         { name: 'report', location: makePath(base, 'js/report')},
         //- { name: 'stores', location: base + 'js/stores' },
         //- { name: 'actions', location: base + 'js/actions' },
@@ -100,10 +107,47 @@ block append esri-script
       deps: ['dojo/domReady!'],
       callback: function () {require(['js/reportMain']);}
     };
+    
+  //- script.
+  //-   var _app = {
+  //-     cache: '#{version}',
+  //-     esri: '#{esriVersion}',
+  //-     base: '#{base}'
+  //-   };
+  //- 
+  //-   function makePath (base, path) {
+  //-     var position = base.length - 1;
+  //-     return !path ?
+  //-       (base.indexOf('/', position) !== position ? base + '/' : base) :
+  //-       (base.indexOf('/', position) !== position ?
+  //-         base + '/' + path :
+  //-         base + path
+  //-       )
+  //-   }
+  //-   function getResourcePath (path) {
+  //-     var position = path.length - 1;
+  //-     return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
+  //-   }
+  //-   // Change this to '' if _app.base is a remote url
+  //-   var base = location.href.replace(/\/[^/]+$/, '');
+  //-   // Add trailing slash if it is not present
+  //-   base = makePath(base);
+  //-   // Add _app.base if it is present
+  //-   if (_app.base) { base = makePath(base, _app.base); }
+  //-   
+  //-   function loadjsfile(filename, base) {
+  //-     const dojoInit = base + filename;
+  //-     const script = document.createElement('script');
+  //-     script.src = dojoInit;
+  //-     document.getElementsByTagName('head')[0].appendChild(script);
+  //-   }
+  //-   
+  //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
   //- PROD: if new modules are added, regenerate the JSAPI build
-  script(src='//my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.0/dojo/dojo.js', async)
+  script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
   //- DEV: Use the normal JSAPI
   //- script(src='//js.arcgis.com/#{esriVersion}/init.js', async)
+  //- script(src='/vendor/dojo/dojo.js', async)
   script.
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

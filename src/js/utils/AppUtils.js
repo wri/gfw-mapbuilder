@@ -1,6 +1,6 @@
-import layerKeys from 'constants/LayerConstants';
+import geojsonUtil from 'utils/arcgis-to-geojson';
+import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import {toQuerystring} from 'utils/params';
-import resources from 'resources';
 
 const utils = {
   /**
@@ -19,6 +19,26 @@ const utils = {
       }
     });
     return obj;
+  },
+
+    /**
+  * Retrieve the object from a given array based on id and value
+  * Should be used for webmap layers
+  * @param {array} - items - Array to search
+  * @param {string} - field - Property of unique identifier in object
+  * @param {string} - field2 - Property of unique identifier in object
+  * @param {string} - value - value of the unique id
+  * @return {Any} - Return whatever object is matched
+  */
+  getWebMapObject: (items, field, field2, value) => {
+    let obj;
+    items.some((item) => {
+      if (item[field][field2] === value) {
+        obj = item;
+        return true;
+      }
+    });
+    return obj.layer;
   },
 
   /**
@@ -80,6 +100,110 @@ const utils = {
     return JSON.parse(JSON.stringify(sourceObject));
   },
 
+  registerGeom: (feature, success, failure, options) => {
+    const geographic = webmercatorUtils.webMercatorToGeographic(feature.geometry);
+    const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
+    const geoStore = {
+      'geojson': {
+        'type': 'FeatureCollection',
+        'features': [{
+          'type': 'Feature',
+          'properties': {},
+          'geometry': geojson
+        }]
+      }
+    };
+    const content = JSON.stringify(geoStore);
+
+    const http = new XMLHttpRequest();
+    const url = 'https://production-api.globalforestwatch.org/v1/geostore';
+    const params = content;
+    http.open('POST', url, true);
+
+    http.setRequestHeader('Content-type', 'application/json');
+
+    http.onreadystatechange = () => {
+      if(http.readyState === 4 && http.status === 200) {
+        success(JSON.parse(http.responseText), options);
+      } else if (http.readyState === 4) {
+        failure(http);
+      }
+    };
+    http.send(params);
+  },
+
+  geometrySuccess: (response, options) => {
+    const {
+      settings,
+      lang,
+      canopyDensity,
+      appid,
+      activeSlopeClass,
+      activeLayers,
+      dynamicLayers,
+      tcLossFrom,
+      tcLossTo,
+      gladFrom,
+      gladTo,
+      terraIFrom,
+      terraITo,
+      viirsFiresSelectIndex,
+      modisFiresSelectIndex,
+      viirsStartDate,
+      viirsEndDate,
+      modisStartDate,
+      modisEndDate
+    } = options;
+    const labels = settings.labels[lang];
+    const query = {
+      title: labels.title,
+      subtitle: labels.subtitle,
+      logoUrl: settings.logoUrl,
+      logoLinkUrl: settings.logoLinkUrl,
+      activeSlopeClass: activeSlopeClass,
+      webmap: settings.webmap,
+      idvalue: response.data.id,
+      tcd: canopyDensity,
+      lang: lang,
+      activeLayers: activeLayers,
+      tcLossFrom: tcLossFrom,
+      tcLossTo: tcLossTo,
+      gladFrom: gladFrom,
+      gladTo: gladTo,
+      terraIFrom: terraIFrom.constructor === Date ? terraIFrom : '',
+      terraITo: terraITo.constructor === Date ? terraITo : '',
+      viirsFiresSelectIndex: viirsFiresSelectIndex,
+      modisFiresSelectIndex: modisFiresSelectIndex,
+      viirsStartDate: viirsStartDate,
+      viirsEndDate: viirsEndDate,
+      modisStartDate: modisStartDate,
+      modisEndDate: modisEndDate
+    };
+
+
+    // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:
+    // layerId: array of visible layers
+    for (const key in dynamicLayers) {
+      query[key] = dynamicLayers[key];
+    }
+
+    if (appid) {
+      query.appid = appid;
+    }
+
+    const path = toQuerystring(query);
+    if (window._app.base === window._app.cache) {
+      window.open(`report.html?${path}`);
+    } else {
+      const appBase = window._app.base.split(window._app.cache)[0];
+      window.open(`${appBase}report.html?${path}`);
+    }
+  },
+
+  geometryFailure: (err) => {
+    console.log(err);
+  },
+
   /**
   * @param {object} options
   * @property {object} options.selectedFeature - Selected feature should come from infoWindow.getSelectedFeature()
@@ -90,96 +214,16 @@ const utils = {
   * @property {number} options.activeSlopeClass - Current Slope setting, only relevant for slope analysis
   */
   generateReport: (options) => {
-    /** webmap or appid
-    * Other Params possibly needed
-    ** basemap - basemap to use, default is topo
-    ** visibleLayers - visible layers of dynamic layer selected feature belongs too, default is all
-    */
-
-
-    const { selectedFeature, settings, lang, canopyDensity, appid, activeSlopeClass, activeLayers } = options;
-    const USER_FEATURES_CONFIG = utils.getObject(resources.layerPanel.extraLayers, 'id', layerKeys.USER_FEATURES);
-    //- Is this a custom feature or a feature from the webmap
-    const layer = selectedFeature._layer;
-    //- NOTE: LAYER ID FOR REPORT
-    //- Depending on how they created the layer in AGOL, there may be different ways to parse these values
-    const getLayerId = function getLayerId () {
-      return layer.source ? layer.source.mapLayerId : layer.layerId;
-    };
-
-    if (layer.id === USER_FEATURES_CONFIG.id) {
-      layer.applyEdits([selectedFeature], null, null, (res) => {
-        if (res.length) {
-          const idvalue = res[0].objectId;
-          const layerid = getLayerId(layer);
-          const layerName = layer.id;
-          const service = layer.url.slice(0, layer.url.lastIndexOf('/'));
-          const labels = settings.labels[lang];
-          const query = {
-            title: labels.title,
-            subtitle: labels.subtitle,
-            logoUrl: settings.logoUrl,
-            logoLinkUrl: settings.logoLinkUrl,
-            activeSlopeClass: activeSlopeClass,
-            webmap: settings.webmap,
-            idvalue: idvalue,
-            service: service,
-            layerid: layerid,
-            layerName: layerName,
-            tcd: canopyDensity,
-            lang: lang,
-            activeLayers: activeLayers
-          };
-
-          if (appid) {
-            query.appid = appid;
-          }
-
-          const path = toQuerystring(query);
-          window.open(`report.html?${path}`);
-        } else {
-          console.error('Unable to save feature at this time');
+    const { selectedFeature } = options;
+    if (selectedFeature.attributes.geostoreId) {
+      utils.geometrySuccess({
+        data: {
+          id: selectedFeature.attributes.geostoreId
         }
-      }, (err) => { console.error(err); });
-    } else if (layer.url) { //- from service
-      const objectIdField = layer.objectIdField;
-      const idvalue = selectedFeature.attributes[objectIdField];
-      const layerid = getLayerId(layer);
-      const layerName = layer.id;
-      //- NOTE: SERVICE URL FOR REPORT
-      //- This may need more testing, the report needs only the service url, see the following:
-      //- http://gis..../MapServer and not http://gis..../MapServer/8
-      //- http://gis..../MapServer and not http://gis..../MapServer/dynamicServer
-      //- These can also vary by how they are created in AGOL
-      const service = layer.url.slice(0, layer.url.lastIndexOf('/'));
-      const labels = settings.labels[lang];
-
-      const query = {
-        title: labels.title,
-        subtitle: labels.subtitle,
-        logoUrl: settings.logoUrl,
-        logoLinkUrl: settings.logoLinkUrl,
-        activeSlopeClass: activeSlopeClass,
-        webmap: settings.webmap,
-        idvalue: idvalue,
-        service: service,
-        layerid: layerid,
-        layerName: layerName,
-        tcd: canopyDensity,
-        lang: lang,
-        activeLayers: activeLayers
-      };
-
-      if (appid) {
-        query.appid = appid;
-      }
-
-      const path = toQuerystring(query);
-
-      window.open(`report.html?${path}`);
-
+      }, options);
+    } else {
+      utils.registerGeom(selectedFeature, utils.geometrySuccess, utils.geometryFailure, options);
     }
-
   },
 
   /**
@@ -224,6 +268,32 @@ const utils = {
       ++min;
     }
     return result;
+  },
+
+  formatNumber: (number) => {
+
+    const numberString = number.toString();
+
+    if (number >= 1000) {
+      const stringArray = [];
+      for (let i = 0; i < numberString.length; i++) {
+        stringArray.push(numberString[i]);
+      }
+      stringArray.reverse();
+      const stringWithExtras = [];
+
+      for (let i = 0; i < stringArray.length; i++) {
+        if (i !== 0 && i % 3 === 0) {
+          stringWithExtras.push(',');
+        }
+        stringWithExtras.push(stringArray[i]);
+      }
+      stringWithExtras.reverse();
+
+      return stringWithExtras.join('');
+    } else {
+      return numberString;
+    }
   }
 
 };

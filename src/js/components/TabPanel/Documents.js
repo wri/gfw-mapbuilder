@@ -59,7 +59,7 @@ class DocumentResults extends Component {
     }
 
     //- Use this URL in Equatorial Guinea for Testing
-    // const url = 'http://gis.forest-atlas.org/arcgis/rest/services/GAB/documents_administratifs/MapServer';
+    // const url = 'https://gis.forest-atlas.org/arcgis/rest/services/GAB/documents_administratifs/MapServer';
     // request.queryTaskByGeometry(`${service}/${layerId}`, selectedFeature.geometry).then((results) => {
     //   let {features} = results;
     //   let docs = [], attributes;
