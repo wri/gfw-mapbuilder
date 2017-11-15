@@ -223,11 +223,11 @@ export default class LegendPanel extends Component {
       const childComponent = (
         <div>
           <div className={indigenousVisible ? '' : 'hidden'}>
-            <div><strong>Indigenous Lands</strong></div>
+            <div className='nested-heading'><strong>Indigenous Lands</strong></div>
             {indigenousLegends}
           </div>
           <div className={communityVisible ? '' : 'hidden'}>
-            <div><strong>Community Lands</strong></div>
+            <div className='nested-heading'><strong>Community Lands</strong></div>
             {communityLegends}
           </div>
         </div>

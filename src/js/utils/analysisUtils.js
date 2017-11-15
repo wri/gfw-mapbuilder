@@ -406,7 +406,7 @@ export default {
     return promise;
   },
 
-  getTotalBiomass: function (geostoreId, canopyDensity, language) {
+  getTotalAndAverageCarbon: function (geostoreId, canopyDensity, language) {
     const deferred = new Deferred();
     const biomassConfig = analysisConfig[analysisKeys.BIO_LOSS];
 
@@ -424,10 +424,17 @@ export default {
     }, { usePost: false }).then(biomassResult => {
       if (!biomassResult) deferred.resolve({});
 
-      const totalBiomass = biomassResult.data.attributes.biomass;
-      const averageBiomass = biomassResult.data.attributes.biomass / biomassResult.data.attributes.areaHa;
+      const abovegroundCarbon = biomassResult.data.attributes.biomass / 2;
+      const belowgroundCarbon = abovegroundCarbon * 0.26;
+      const total = abovegroundCarbon + belowgroundCarbon;
 
-      deferred.resolve({ totalBiomass, averageBiomass});
+      const analyzedArea = biomassResult.data.attributes.areaHa;
+
+      const averageAboveground = abovegroundCarbon / analyzedArea;
+      const averageBelowground = belowgroundCarbon / analyzedArea;
+      const averageTotal = total / analyzedArea;
+
+      deferred.resolve({ abovegroundCarbon, belowgroundCarbon, averageAboveground, averageBelowground, total, averageTotal });
     }, err => {
       console.error(err);
       deferred.resolve({ error: err, message: text[language].ANALYSIS_ERROR_BIO_LOSS });

@@ -54,10 +54,10 @@ export default class NestedGroup extends Component {
 
     return (
       <div>
-        <span>Indigenous Lands &mdash; traditional or customary rights</span>
+        <span className='nested-heading'><strong>Indigenous Lands &mdash; traditional or customary rights</strong></span>
         <NestedCheckbox groupLabel={'Acknowledged by government'} layers={this.indigenousAcknowledged} activeLayers={activeLayers} checked={IAChecked} />
         <NestedCheckbox groupLabel={'Not acknowledged by government'} layers={this.indigenousNotAcknowledged} activeLayers={activeLayers} checked={INAChecked} />
-        <span>Community Lands &mdash; traditional or customary rights</span>
+        <span className='nested-heading'><strong>Community Lands &mdash; traditional or customary rights</strong></span>
         <NestedCheckbox groupLabel={'Acknowledged by government'} layers={this.communityAcknowledged} activeLayers={activeLayers} checked={CAChecked} />
         <NestedCheckbox groupLabel={'Not acknowledged by government'} layers={this.communityNotAcknowledged} activeLayers={activeLayers} checked={CNAChecked} />
       </div>

@@ -10,7 +10,7 @@ import SlopeSelect from 'components/AnalysisPanel/SlopeClassSelect';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
-import BiomassBadge from 'components/AnalysisPanel/BiomassBadge';
+import CarbonChart from 'components/AnalysisPanel/CarbonChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -198,8 +198,18 @@ export default class Analysis extends Component {
           colors={analysisConfig[type].colors}
           labels={labels}
           results={results}/>;
-      case analysisKeys.TOTAL_BIOMASS:
-        return <BiomassBadge results={results} />;
+      case analysisKeys.CARBON:
+        return <CarbonChart
+          results={results}
+          aboveground={results.abovegroundCarbon}
+          belowground={results.belowgroundCarbon}
+          total={results.total}
+          averageAboveground={results.averageAboveground}
+          averageBelowground={results.averageBelowground}
+          averageTotal={results.averageTotal}
+          totalSuffix={' MgC'}
+          averageSuffix={' MgC/Ha'}
+        />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}

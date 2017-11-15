@@ -103,8 +103,8 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.LC_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Aboveground Live Woody Biomass (Carbon)',
-    value: analysisKeys.TOTAL_BIOMASS,
+  { label: 'Carbon Stored In Trees',
+    value: analysisKeys.CARBON,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Aboveground Live Woody Biomass loss (Carbon)',
