@@ -355,11 +355,11 @@ strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'VIIRS fires',
+  { label: 'VIIRS აქტიური ხანძრები',
     value: analysisKeys.VIIRS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'MODIS fires',
+  { label: 'MODIS აქტიური ხანძრები',
     value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -584,11 +584,11 @@ strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'VIIRS fires',
+  { label: 'VIIRS Feux actifs',
     value: analysisKeys.VIIRS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'MODIS fires',
+  { label: 'MODIS Feux actifs',
     value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -814,11 +814,11 @@ strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'VIIRS fires',
+  { label: 'VIIRS Incendios activos',
     value: analysisKeys.VIIRS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'MODIS fires',
+  { label: 'MODIS Incendios activos',
     value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -1043,11 +1043,11 @@ strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'VIIRS fires',
+  { label: 'VIIRS Focos de incêndio ativos',
     value: analysisKeys.VIIRS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'MODIS fires',
+  { label: 'MODIS Focos de incêndio ativos',
     value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
