@@ -119,6 +119,8 @@ class MapActions {
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
+      const addedLayerIds = addedLayers.map(l => l.layer.id);
+      const addedLayersCopy = addedLayers.map(l => l.layer);
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
@@ -134,6 +136,21 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
+
+      uniqueLayers.forEach(l => {
+        if (addedLayerIds.indexOf(l.id) === -1) {
+          addedLayersCopy.push(l);
+        }
+      });
+
+      addedLayersCopy.forEach((l, i) => {
+        if (addedLayerIds.indexOf(l.id) === -1) {
+          console.log(l.id);
+          map.reorderLayer(l, i);
+        }
+      });
+
+
 
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);
