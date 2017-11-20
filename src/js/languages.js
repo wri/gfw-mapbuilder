@@ -355,8 +355,12 @@ strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'აქტიური ხანძრები',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'მიწის საფარის შემადგენლობა',
@@ -580,8 +584,12 @@ strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Feux actifs',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Occupation du sol',
@@ -806,8 +814,12 @@ strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Incendios activos',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Composición de la cobertura del suelo',
@@ -1031,8 +1043,12 @@ strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Focos de incêndio ativos',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Composicao da cobertura do solo',
@@ -1256,8 +1272,12 @@ strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Active fires',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Land cover composition',
@@ -1481,8 +1501,12 @@ strings.zh.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: '活跃火点',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: '土地覆盖组成',
