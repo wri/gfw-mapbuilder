@@ -146,12 +146,9 @@ class MapActions {
       // then reorder the webmap layers so that they draw on top of every other layer
       addedLayersCopy.forEach((l, i) => {
         if (addedLayerIds.indexOf(l.id) === -1) {
-          console.log(l.id);
           map.reorderLayer(l, i);
         }
       });
-
-
 
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);
