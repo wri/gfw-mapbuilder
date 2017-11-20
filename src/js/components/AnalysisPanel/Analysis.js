@@ -13,6 +13,7 @@ import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
+import VegaChart from 'components/AnalysisPanel/VegaChart';
 import analysisKeys from 'constants/AnalysisConstants';
 import performAnalysis from 'utils/performAnalysis';
 import {attributes} from 'constants/AppConstants';
@@ -44,7 +45,10 @@ export default class Analysis extends Component {
     settings: PropTypes.object.isRequired
   };
 
-  state = getDefaultState();
+  state = {
+    error: false,
+    results: undefined
+  };
 
   componentDidMount() {
     const {settings, language} = this.context;
@@ -246,9 +250,18 @@ export default class Analysis extends Component {
         return <TimeSeriesChart data={results} name={text[language].ANALYSIS_GLAD_ALERT_NAME} />;
       case analysisKeys.TERRA_I_ALERTS:
         return <TimeSeriesChart data={results} name={text[language].ANALYSIS_TERRA_I_ALERT_NAME} />;
+      // case 'custom':
+      //   results.data.attributes.widgetConfig.width = 220;
+      //   return <VegaChart config={results.data.attributes.widgetConfig} />;
+      // case 'custom2':
+      //   return <VegaChart config={results.data.attributes.widgetConfig} />;
       default:
       //- This should only be the restoration analysis, since its value is a plain rasterId
-        return <RestorationCharts results={results} />;
+        // return <RestorationCharts results={results} />;
+
+
+        // TESTING CUSTOM ANALYSIS
+        return <VegaChart config={results.data.attributes.widgetConfig} />;
     }
   };
 

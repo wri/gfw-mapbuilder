@@ -99,6 +99,9 @@ export default class AnalysisTypeSelect extends Component {
       });
     }
 
+    options = options.concat(settings.customAnalysisModules);
+    console.log(options, settings.customAnalysisModules);
+
     return options;
   }
 

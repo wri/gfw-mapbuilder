@@ -633,6 +633,36 @@ export default {
     return alerts;
   },
 
+  getCustomAnalysis: (config, geostoreId) => {
+    const promise = new Deferred();
+
+    let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}`;
+
+    widgetUrl += `?queryUrl=${config.queryUrl}`;
+
+    if (config.params.length > 0) {
+      config.params.forEach(p => {
+        widgetUrl += `&${p.key}=${p.value}`;
+      });
+    }
+
+    widgetUrl += `&geostore=${geostoreId}`;
+
+    esriRequest({
+      url: widgetUrl,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(result => {
+      console.log(result);
+
+      promise.resolve(result);
+    }, err => {
+      promise.resolve({ error: err});
+    });
+
+    return promise;
+  },
+
   getRestoration: (url, rasterId, geometry, settings) => {
     const promise = new Deferred();
     const {pixelSize, restoration} = analysisConfig;

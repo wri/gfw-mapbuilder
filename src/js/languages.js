@@ -85,6 +85,10 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  { label: 'Select...',
+    value: '',
+    group: ''
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE

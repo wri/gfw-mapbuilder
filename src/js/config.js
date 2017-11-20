@@ -24,7 +24,8 @@ const config = {
     'stg.blueraster.com.s3.amazonaws.com',
     'production-api.globalforestwatch.org',
     'production-api.globalforestwatch.org/v1/ogr',
-    'production-api.globalforestwatch.org/v1/ogr/convert'
+    'production-api.globalforestwatch.org/v1/ogr/convert',
+    'api.resourcewatch.org'
   ],
 
   // Note these will need to be copied in with the bulid script since they are not part of the main bundle
