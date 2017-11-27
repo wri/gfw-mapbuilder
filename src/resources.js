@@ -94,6 +94,19 @@ export default {
 
   customAnalysisModules: [
     {
+      value: 'glad-alerts',
+      label: 'GLAD Alerts',
+      group: 'custom',
+      widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+      queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+      params: [
+        {
+          key: 'aggregate_values',
+          value: 'false'
+        }
+      ]
+    },
+    {
       value: 'custom',
       label: 'Custom Analysis Module!',
       group: 'custom',
@@ -153,6 +166,7 @@ export default {
       layers: [] // Will get filled in with layers from the webmap
     },
     GROUP_LCD: {
+      grouptype: 'default',
       order: 1,
       label: {
         en: 'Land Cover Dynamics',
@@ -408,6 +422,7 @@ export default {
       }]
     },
     GROUP_LC: {
+      grouptype: 'default',
       order: 3,
       label: {
         en: 'Land Cover',
@@ -527,6 +542,7 @@ export default {
       }]
     },
     GROUP_BASEMAP: {
+      groupType: 'basemap',
       order: 5,
       label: {
         en: 'Basemap',
@@ -576,6 +592,12 @@ export default {
           ka: 'WRI Contextual'
         }
       }]
+    },
+    GROUP_NESTED_EXAMPLE: {
+      groupType: 'nested'
+    },
+    GROUP_RADIO_EXAMPLE: {
+      groupType: 'radio'
     },
     extraLayers: [{
       id: 'MASK',
