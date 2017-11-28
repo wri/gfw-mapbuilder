@@ -107,7 +107,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
   render () {
     return (
       <div className={`parent-legend-container ${this.state.visible ? '' : 'hidden'}`} ref="myRef">
-        <div className='label-container'>{this.props.layer.arcgisProps.title}</div>
+        <div className='label-container'><strong>{this.props.layer.arcgisProps.title}</strong></div>
         {this.createLegendSymbol(this.props.layer.renderer)}
       </div>
     );
