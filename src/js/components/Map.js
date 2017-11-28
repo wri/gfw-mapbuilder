@@ -462,9 +462,9 @@ export default class Map extends Component {
         };
 
         if (layer.id === 'mining_cached_8843'
-          || layer.id === 'land_use_1483'
-          || layer.id === 'land_use_5422'
-          || layer.id === 'infrastructure_9418') {
+          || layer.id === 'land_use_8897'
+          || layer.id === 'land_use_6484'
+          || layer.id === 'infrastructure_7561') {
             groupPressures.push(layerInfo);
           }
 
