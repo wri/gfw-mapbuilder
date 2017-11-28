@@ -76,7 +76,7 @@ export default class CarbonChart extends Component {
                   return ((this.y / total) * 100).toFixed(2) + '%';
                 }
               },
-              size: '75%',
+              size: '170',
               innerSize: '35%',
               id: 'total-biomass'
             }
@@ -86,22 +86,23 @@ export default class CarbonChart extends Component {
               {
                 html: `Total: ${utils.formatNumber(Math.round(total))} ${this.props.totalSuffix}`,
                 style: {
-                  top: '205px',
-                  left: '40px',
-                  fontSize: '16px',
-                  color: '#6f6f6f'
+                  top: '220px',
+                  left: '50%',
+                  fontSize: '16px'
                 }
               },
               {
                 html: `Average: ${utils.formatNumber(Math.round(averageTotal))} ${this.props.averageSuffix}`,
                 style: {
-                  top: '230px',
-                  left: '40px',
-                  fontSize: '16px',
-                  color: '#6f6f6f'
+                  top: '240px',
+                  left: '50%',
+                  fontSize: '16px'
                 }
               }
-            ]
+            ],
+            style: {
+              color: '#6f6f6f'
+            }
           },
           legend: {
             layout: 'vertical',
@@ -124,8 +125,8 @@ export default class CarbonChart extends Component {
       );
     } else {
       return (
-        <div>
-          <div ref={(chart) => {this.totalChart = chart;}} className='analysis__carbon-chart-container total' />
+        <div className='analysis__carbon-container flex'>
+          <div ref={(chart) => {this.totalChart = chart;}} className='analysis__carbon-chart-container' />
           <div id='chartError' className={`chart-error ${isEmpty ? '' : ' hidden'}`}>No data available.</div>
         </div>
       );

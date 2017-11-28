@@ -375,7 +375,7 @@ export default class Map extends Component {
         layers.unshift(layerInfo);
       }
     });
-  
+
     const groupKeys = Object.keys(settings.layerPanel)
       .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
     const exclusiveLayerIds = [];
@@ -386,7 +386,7 @@ export default class Map extends Component {
           let groupLayers = [];
           const groupSublayers = [];
           group.layers.forEach(l => {
-            if (group.isExclusive) exclusiveLayerIds.push(l.id);
+            exclusiveLayerIds.push(l.id);
             if (l.includedSublayers) { // this is a dynamic layer
               layers.forEach(webmapLayer => {
                 if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
