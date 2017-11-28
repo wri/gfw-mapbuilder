@@ -30,6 +30,9 @@
   padding 0 5px
   display flex
 
+.app-header__nav-link.login-open
+  background gray
+
 .app-header__theme-list
 .app-header__language-list
   border-top 3px solid $goldTheme
@@ -51,6 +54,42 @@
 .app-header__nav-link--map-themes:hover .app-header__theme-list
 .app-header__nav-link--language:hover .app-header__language-list
     display block
+
+.login-modal
+  position absolute
+  right 10px
+  z-index 100
+  top 50px
+  min-width 400px
+  max-width 400px
+  background white
+  padding 40px
+  p
+    color #333
+    font-size 14px
+    text-transform none
+  a
+    color #97bd3d
+    display inline
+  .subscribe-method
+    text-align center
+    margin-top 20px
+    color white
+  ul span
+    color white
+
+.twitter-box
+  background #598dca
+
+.facebook-box
+  background #39579b
+
+.google-box
+  background #da4735
+
+.subscription-authentication
+  padding-left 0
+  list-style none
 
 .app-header__theme
 .app-header__language

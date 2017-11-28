@@ -22,7 +22,7 @@ export default {
   includeSubscribeButton: false,
   hideHeader: false,
   hideFooter: false,
-  includeMyGFWLogin: false,
+  includeMyGFWLogin: true,
   navLinksInNewTab: false,
   //- Language Settings
   language: 'en',
