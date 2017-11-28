@@ -116,11 +116,13 @@ export default {
   */
   layerPanel: {
     GROUP_WEBMAP: {
+      groupType: 'webmap',
       order: 100,
       label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
       layers: [] // Will get filled in with layers from the webmap
     },
     GROUP_LCD: {
+      groupType: 'default',
       order: 7,
       label: {
         en: 'Land Cover Change',
@@ -196,6 +198,7 @@ export default {
       }]
     },
     GROUP_LC: {
+      groupType: 'default',
       order: 5,
       label: {
         en: 'Assets',
@@ -346,6 +349,7 @@ export default {
       }]
     },
     GROUP_BASEMAP: {
+      groupType: 'basemap',
       order: 8,
       label: {
         en: 'Basemap',
@@ -395,6 +399,175 @@ export default {
           ka: 'WRI Contextual'
         }
       }]
+    },
+    GROUP_PRESSURES: {
+      groupType: 'checkbox',
+      order: 6,
+      label: {
+        en: 'Pressures'
+      },
+      layers: [
+        {
+          id: 'mining_cached_8843',
+          order: 1
+        },
+        {
+          id: 'land_use_8897',
+          order: 2
+        },
+        {
+          id: 'land_use_6484',
+          order: 3
+        },
+        {
+          id: 'infrastructure_7561',
+          order: 4
+        }
+      ]
+    },
+    GROUP_INDIGENOUS_INDICATORS: {
+      groupType: 'radio',
+      isExclusive: true,
+      order: 3,
+      label: {
+        en: 'Indicators of the Legal Security of Indigenous Lands'
+      },
+      layers: [
+        {
+          id: 'indicators_legal_security_8140',
+          order: 1,
+          includedSublayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          sublayerLabel: {
+            0: 'The average score for the 10 indicators of the legal security of indigenous lands.',
+            1: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?',
+            2: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?',
+            3: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?',
+            4: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?',
+            5: 'Does the law recognize Indigenous peoples as the legal authority over the land?',
+            6: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?',
+            7: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?',
+            8: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?',
+            9: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?',
+            10: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?'
+          }
+        }
+      ]
+    },
+    GROUP_COMMUNITY_INDICATORS: {
+      groupType: 'radio',
+      isExclusive: true,
+      order: 4,
+      label: {
+        en: 'Indicators of the Legal Security of Community Lands'
+      },
+      layers: [
+        {
+          id: 'indicators_legal_security_8140',
+          order: 1,
+          includedSublayers: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+          sublayerLabel: {
+            11: 'The average score for the 10 indicators of the legal security of community lands.',
+            12: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?',
+            13: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?',
+            14: 'Does the law require the government to provide communities with a formal title and map to their land?',
+            15: 'Does the law recognize the community as a legal person for the purposes of land ownership?',
+            16: 'Does the law recognize the community as the legal authority over the land?',
+            17: 'Do the law and formal title recognize that community land rights may be held in perpetuity?',
+            18: 'Does the law require the consent of communities before government or an outsider may acquire their land?',
+            19: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?',
+            20: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?',
+            21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
+          }
+        }
+      ]
+    },
+    GROUP_PERCENT_LANDS_HELD: {
+      groupType: 'radio',
+      isExclusive: true,
+      order: 2,
+      label: {
+        en: 'Percent of Country Held by Indigenous Peoples and Communities'
+      },
+      layers: [
+        {
+          id: 'percent_IP_community_lands_1264',
+          order: 1,
+          includedSublayers: [0, 1, 2]
+        }
+      ]
+    },
+    GROUP_LAND_MAPS: {
+      groupType: 'nested',
+      order: 1,
+      label: {
+        en: 'Indigenous & Community Land Maps'
+      },
+      layers: [
+        {
+          order: 1,
+          label: {
+            en: 'Indigenous Lands - Acknowledged by Government'
+          },
+          nestedLayers: [
+            {
+              id: 'comm_ind_Documented_8219',
+              order: 1
+            },
+            {
+              id: 'comm_ind_NotDocumented_2683',
+              order: 2
+            }
+          ]
+        },
+        {
+          order: 2,
+          label: {
+            en: 'Indigenous Lands - Not acknowledged by Government'
+          },
+          nestedLayers: [
+            {
+              id: 'comm_ind_FormalLandClaim_2392',
+              order: 1
+            },
+            {
+              id: 'comm_ind_CustomaryTenure_8127',
+              order: 2
+            }
+          ]
+        },
+        {
+          order: 3,
+          label: {
+            en: 'Community Lands - Acknowledged by Government'
+          },
+          nestedLayers: [
+            {
+              id: 'comm_comm_Documented_4717',
+              order: 1
+            },
+            {
+              id: 'comm_comm_NotDocumented_9336',
+              order: 2
+            }
+          ]
+        },
+        {
+          order: 4,
+          label: {
+            en: 'Community Lands - Not acknowledged by Government'
+          },
+          nestedLayers: [
+            {
+              id: 'comm_comm_FormalLandClaim_5585',
+              order: 1
+            },
+            {
+              id: 'comm_comm_CustomaryTenure_6877',
+              order: 2
+            }
+          ]
+        }
+      ]
     },
     extraLayers: [{
       id: 'MASK',

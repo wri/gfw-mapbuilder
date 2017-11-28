@@ -32,18 +32,10 @@ export default class LayerRadio extends Component {
   }
 
   componentDidMount() {
-    const { settings } = this.context;
-    const { layerPanel } = settings;
 
     // Get the list of unique layer ids that we need to turn off when a radio button is toggled on
-    const exclusiveLayerIds = settings.exclusiveRadioGroups
-    .reduce((result, groupId) => {
-      return [
-        ...result,
-        ...layerPanel[groupId].layers.map(l => l.id) // l.id is the same for all sublayers in each group
-        ];
-    }, [])
-    .filter(id => id !== this.layer.id);
+    const exclusiveLayerIds = this.props.exclusiveLayerIds
+      .filter(id => id !== this.layer.id);
 
     // after the reduce, we end up with an array of ids that are repeated for each sublayer in each group
     // so we need to filter them down to the unique ids

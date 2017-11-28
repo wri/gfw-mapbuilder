@@ -11,7 +11,7 @@ export default class LayerLegend extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = { legendInfos: [], visible: false };
+    this.state = { legendInfos: [], visible: false, opacity: 1 };
   }
 
   componentDidUpdate(prevProps) {
@@ -19,6 +19,10 @@ export default class LayerLegend extends React.Component {
       this.setState({ visible: true });
     } else if(this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
       this.setState({ visible: false });
+    }
+
+    if (this.props.legendOpacity.layerId === this.props.layerId && this.props.legendOpacity.value !== prevProps.legendOpacity.value) {
+      this.setState({ opacity: this.props.legendOpacity.value });
     }
   }
 
@@ -30,10 +34,10 @@ export default class LayerLegend extends React.Component {
     });
   }
 
-  itemMapper (item, index) {
+  itemMapper = (item, index) => {
     return (
       <div className='legend-row' key={index}>
-        <img className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
+        <img style={{'opacity': this.state.opacity}} className='legend-symbol' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
         <div className='legend-label' key={index}>{item.label}</div>
       </div>
     );
