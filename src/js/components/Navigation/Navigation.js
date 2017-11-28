@@ -18,14 +18,22 @@ export default class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userSubscriptions: [],
       isLoggedIn: false,
-      loginsDisplayed: false
+      loginsDisplayed: false,
+      optionsDisplayed: false
     };
   }
 
   componentDidMount () {
     this.checkLoggedIn().then(res => {
       console.log('res', res);
+      if (res) {
+        console.log('logged in!!!');
+        this.setState({
+          isLoggedIn: true
+        });
+      }
     }, err => {
       console.log('err', err);
     });
@@ -33,20 +41,35 @@ export default class Navigation extends Component {
 
   checkLoggedIn = () => {
     console.log('checkLoggedIn');
-    const promise = new Deferred();
-    esriRequest({
-      url: 'https://production-api.globalforestwatch.org/auth/check-logged',
-      callbackParamName: 'callback',
-      handleAs: 'json',
-      timeout: 30000
-    }, { usePost: false}).then(res => {
-      console.error('res', res);
-      promise.resolve(true);
-    }, err => {
-      console.error('err', err);
-      promise.resolve(false);
-    });
-    return promise;
+    return new Promise((resolve, reject) => {
+        $.ajax({
+          url: 'https://production-api.globalforestwatch.org/auth/check-logged',
+          dataType: 'json',
+          xhrFields: {
+            withCredentials: true
+          },
+          success: (response) => {
+            resolve(response);
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+      });
+    // const promise = new Deferred();
+    // esriRequest({
+    //   url: 'https://production-api.globalforestwatch.org/auth/check-logged',
+    //   callbackParamName: 'callback',
+    //   handleAs: 'json',
+    //   timeout: 30000
+    // }, { usePost: false}).then(res => {
+    //   console.error('res', res);
+    //   promise.resolve(true);
+    // }, err => {
+    //   console.error('err', err);
+    //   promise.resolve(false);
+    // });
+    // return promise;
   }
 
   renderMapThemes = (language, settings) => {
@@ -59,7 +82,6 @@ export default class Navigation extends Component {
   };
 
   displayLogins = () => { //TODO: No hardcoding text -- get proper language forEach!
-    console.log('displayLogins');
     return <div className="steps current login-modal">
             <header>
               <p>
@@ -94,10 +116,97 @@ export default class Navigation extends Component {
           </div>;
   }
 
+  displayOptions = () => { //TODO: No hardcoding text -- get proper language forEach!
+    return <div className="options-modal">
+
+            <ul className="more-list">
+
+              <li className="gfw-api-option">
+                <p onClick={this.getSubscriptions}>
+                  My Subscriptions
+                </p>
+              </li>
+
+              <li className="gfw-api-option">
+                <a href="https://production-api.globalforestwatch.org/my_gfw/stories">
+                  My Stories
+                </a>
+              </li>
+
+              <li className="gfw-api-option">
+                <a href="https://production-api.globalforestwatch.org/my_gfw">
+                  My Profile
+                </a>
+              </li>
+
+              <li className="gfw-api-option">
+                <p onClick={this.logOut}>
+                  Log Out
+                </p>
+              </li>
+            </ul>
+          </div>;
+  }
+
+  getSubscriptions = () => {
+    console.log('getSubscriptions', this.state);
+    $.ajax({
+      url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
+      dataType: 'json',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: (response) => {
+        console.log('resp', response);
+        this.setState({
+          userSubscriptions: response.data
+        });
+      },
+      error: (error) => {
+        console.log('err', error);
+        this.setState({
+          userSubscriptions: []
+        });
+      }
+    });
+    // esriRequest({
+    //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + this.state.userData.id,
+    //   callbackParamName: 'callback',
+    //   handleAs: 'json',
+    //   timeout: 30000
+    // }, { usePost: false}).then(res => {
+    //   console.error('res', res);
+    // }, err => {
+    //   console.error('err', err);
+    // });
+  }
+
+  logOut = () => {
+    console.log('logout', this.state);
+    $.ajax({
+      url: 'https://production-api.globalforestwatch.org/auth/logout',
+      dataType: 'json',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: () => {
+        window.location.reload();
+      },
+      error: () => {
+        window.location.reload();
+      }
+    });
+  }
+
   login = () => {
-    console.log('login!');
     this.setState({
       loginsDisplayed: !this.state.loginsDisplayed
+    });
+  }
+
+  toggleOptions = () => {
+    this.setState({
+      optionsDisplayed: !this.state.optionsDisplayed
     });
   }
 
@@ -112,6 +221,7 @@ export default class Navigation extends Component {
     const target = settings.navLinksInNewTab ? '_blank' : '_self';
 
     const loginInfo = this.displayLogins();
+    const options = this.displayOptions();
 
     return (
       <nav className='app-header__nav'>
@@ -135,7 +245,7 @@ export default class Navigation extends Component {
               </a>
             </li>
           }
-          {!settings.includeMyGFWLogin ? null :
+          {settings.includeMyGFWLogin && !this.state.isLoggedIn ?
             <li onClick={this.login} className={`app-header__nav-link pointer ${this.state.loginsDisplayed ? 'login-open' : ''}`}>
               <a target={target}>
                 <svg className='svg-icon__nav'>
@@ -143,11 +253,20 @@ export default class Navigation extends Component {
                 </svg>
                 {text[language].NAV_MY_GFW}
               </a>
-            </li>
+            </li> : settings.includeMyGFWLogin && this.state.isLoggedIn ?
+            <li onClick={this.toggleOptions} className={`app-header__nav-link pointer ${this.state.loginsDisplayed ? 'login-open' : ''}`}>
+              <a target={target}>
+                <svg className='svg-icon__nav'>
+                  <use xlinkHref="#icon-mygfw" /> //TODO: Make this look correct!
+                </svg>
+                MY GFW!
+              </a>
+            </li> : null
           }
           {LanguageComponent}
         </ul>
         {this.state.loginsDisplayed ? loginInfo : null}
+        {this.state.optionsDisplayed ? options : null}
       </nav>
     );
   }
