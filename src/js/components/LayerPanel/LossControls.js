@@ -122,7 +122,7 @@ export default class LossControls extends Component {
     baseUrl += '/{z}/{x}/{y}.png';
 
     layer.setUrl(baseUrl);
-    layer.setDateRange(lossFromSelectIndex, lossToSelectIndex);
+    layer.setDateRange(lossOptions[lossFromSelectIndex].value, lossOptions[lossToSelectIndex].value);
   }
 
   startVisualization = () => {
