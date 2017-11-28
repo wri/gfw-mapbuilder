@@ -42,6 +42,7 @@ class MapStore {
     this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
     this.modisEndDate = new Date();
     this.lossOptions = [];
+    this.userSubscriptions = [];
     this.viirsFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.modisFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.tableOfContentsVisible = true;
@@ -51,6 +52,7 @@ class MapStore {
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
     this.layerModalVisible = false;
+    this.subscriptionModalVisible = false;
     this.canopyDensity = 30;
     this.activeSlopeClass = null;
     this.modalLayerInfo = '';
@@ -76,10 +78,12 @@ class MapStore {
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
       toggleLayerModal: mapActions.toggleLayerModal,
+      toggleSubscriptionModal: mapActions.toggleSubscriptionModal,
+      updateCanopyDensity: mapActions.updateCanopyDensity,
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
       openTOCAccordion: mapActions.openTOCAccordion,
-      updateCanopyDensity: mapActions.updateCanopyDensity,
+      setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
       updateActiveSlopeClass: mapActions.updateActiveSlopeClass,
       addActiveLayer: layerActions.addActiveLayer,
@@ -271,8 +275,16 @@ class MapStore {
     this.layerModalVisible = payload.visible;
   }
 
+  toggleSubscriptionModal (payload) {
+    this.subscriptionModalVisible = payload.visible;
+  }
+
   updateCanopyDensity (payload) {
     this.canopyDensity = payload.density;
+  }
+
+  setUserSubscriptions (subscriptions) {
+    this.userSubscriptions = subscriptions;
   }
 
   showLoading (layerInfo) {

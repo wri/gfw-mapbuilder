@@ -42,11 +42,16 @@ class MapActions {
   toggleSearchModal = (data) => data;
   toggleCanopyModal = (data) => data;
   toggleLayerModal = (data) => data;
+  toggleSubscriptionModal = (data) => data;
   toggleTOCVisible = (data) => data;
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
+
+  setUserSubscriptions (subscriptions) {
+    return subscriptions;
+  }
 
   updateImazonAlertSettings (type, value) {
     return { type, value };

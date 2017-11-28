@@ -2,6 +2,7 @@ import LanguageToggle from 'components/Navigation/LanguageToggle';
 import MapThemes from 'components/Navigation/MapThemes';
 import Deferred from 'dojo/Deferred';
 import esriRequest from 'esri/request';
+import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {
   Component,
@@ -158,9 +159,11 @@ export default class Navigation extends Component {
       },
       success: (response) => {
         console.log('resp', response);
-        this.setState({
-          userSubscriptions: response.data
-        });
+        // this.setState({
+        //   userSubscriptions: response.data
+        // });
+        mapActions.setUserSubscriptions(response.data);
+        mapActions.toggleSubscriptionModal({ visible: true });
       },
       error: (error) => {
         console.log('err', error);
