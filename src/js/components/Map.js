@@ -330,8 +330,6 @@ export default class Map extends Component {
                         timeInfo={getTimeInfo(layer)} />);
     }
 
-    console.log('subscriptionModalVisible', subscriptionModalVisible);
-
     return (
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>

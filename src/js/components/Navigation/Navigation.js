@@ -151,27 +151,32 @@ export default class Navigation extends Component {
 
   getSubscriptions = () => {
     console.log('getSubscriptions', this.state);
-    $.ajax({
-      url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
-      dataType: 'json',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: (response) => {
-        console.log('resp', response);
-        // this.setState({
-        //   userSubscriptions: response.data
-        // });
-        mapActions.setUserSubscriptions(response.data);
-        mapActions.toggleSubscriptionModal({ visible: true });
-      },
-      error: (error) => {
-        console.log('err', error);
-        this.setState({
-          userSubscriptions: []
-        });
-      }
-    });
+    if (this.state.userSubscriptions.length === 0) {
+      $.ajax({
+        url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
+        dataType: 'json',
+        xhrFields: {
+          withCredentials: true
+        },
+        success: (response) => {
+          console.log('resp', response);
+          this.setState({
+            userSubscriptions: response.data
+          });
+          mapActions.setUserSubscriptions(response.data);
+          mapActions.toggleSubscriptionModal({ visible: true });
+        },
+        error: (error) => {
+          console.log('err', error);
+          this.setState({
+            userSubscriptions: []
+          });
+        }
+      });
+    } else {
+      mapActions.setUserSubscriptions(this.state.userSubscriptions);
+      mapActions.toggleSubscriptionModal({ visible: true });
+    }
     // esriRequest({
     //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + this.state.userData.id,
     //   callbackParamName: 'callback',
