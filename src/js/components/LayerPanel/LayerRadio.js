@@ -135,7 +135,7 @@ export default class LayerRadio extends Component {
         <span value={layer.subId} className={`info-icon pointer ${this.props.iconLoading === layer.esriLayer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <svg><use xlinkHref="#shape-info" /></svg>
         </span>
-        {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[language]}</div>}
+        {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[layer.subIndex][language]}</div>}
         {!layer.sublabelQuestion ? null : <div className={`${this.state.selected === layer.subIndex ? '' : 'hidden'} sublabel-question`}>{layer.sublabelQuestion}</div>}
         <LayerTransparency layer={layer} visible={this.state.selected === layer.subIndex}></LayerTransparency>
       </div>

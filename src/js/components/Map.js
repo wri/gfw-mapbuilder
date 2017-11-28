@@ -375,12 +375,7 @@ export default class Map extends Component {
         layers.unshift(layerInfo);
       }
     });
-
-    layers.forEach(l => {
-      // l.visible === true && layerActions.addActiveLayer(l.id)
-      console.log(l.visible);
-    });
-
+  
     const groupKeys = Object.keys(settings.layerPanel)
       .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
     const exclusiveLayerIds = [];

@@ -437,18 +437,40 @@ export default {
           id: 'indicators_legal_security_8140',
           order: 1,
           includedSublayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          sublayerLabel: {
-            0: 'The average score for the 10 indicators of the legal security of indigenous lands.',
-            1: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?',
-            2: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?',
-            3: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?',
-            4: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?',
-            5: 'Does the law recognize Indigenous peoples as the legal authority over the land?',
-            6: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?',
-            7: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?',
-            8: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?',
-            9: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?',
-            10: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?'
+          sublabel: {
+            0: {
+              en: 'The average score for the 10 indicators of the legal security of indigenous lands.'
+            },
+            1: {
+              en: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?'
+            },
+            2: {
+              en: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?'
+            },
+            3: {
+              en: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?'
+            },
+            4: {
+              en: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?'
+            },
+            5: {
+              en: 'Does the law recognize Indigenous peoples as the legal authority over the land?'
+            },
+            6: {
+              en: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?'
+            },
+            7: {
+              en: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?'
+            },
+            8: {
+              en: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?'
+            },
+            9: {
+              en: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?'
+            },
+            10: {
+              en: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?'
+            }
           }
         }
       ]
@@ -465,18 +487,40 @@ export default {
           id: 'indicators_legal_security_8140',
           order: 1,
           includedSublayers: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
-          sublayerLabel: {
-            11: 'The average score for the 10 indicators of the legal security of community lands.',
-            12: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?',
-            13: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?',
-            14: 'Does the law require the government to provide communities with a formal title and map to their land?',
-            15: 'Does the law recognize the community as a legal person for the purposes of land ownership?',
-            16: 'Does the law recognize the community as the legal authority over the land?',
-            17: 'Do the law and formal title recognize that community land rights may be held in perpetuity?',
-            18: 'Does the law require the consent of communities before government or an outsider may acquire their land?',
-            19: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?',
-            20: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?',
-            21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
+          sublabel: {
+            11: {
+              en: 'The average score for the 10 indicators of the legal security of community lands.'
+            },
+            12: {
+              en: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?'
+            },
+            13: {
+              en: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?'
+            },
+            14: {
+              en: 'Does the law require the government to provide communities with a formal title and map to their land?'
+            },
+            15: {
+              en: 'Does the law recognize the community as a legal person for the purposes of land ownership?'
+            },
+            16: {
+              en: 'Does the law recognize the community as the legal authority over the land?'
+            },
+            17: {
+              en: 'Do the law and formal title recognize that community land rights may be held in perpetuity?'
+            },
+            18: {
+              en: 'Does the law require the consent of communities before government or an outsider may acquire their land?'
+            },
+            19: {
+              en: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?'
+            },
+            20: {
+              en: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?'
+            },
+            21: {
+              en: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
+            }
           }
         }
       ]
