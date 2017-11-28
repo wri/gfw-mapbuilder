@@ -20,8 +20,10 @@ export default class SubscriptionModal extends Component {
     return (
       <div key={j} className='source-row'>
         <p>{subscription.attributes.name}</p>
-        <p>{subscription.attributes.createdAt}</p>
-        <p id={subscription.attributes.params.geostore} onClick={this.showSubscription}>View on the map!</p>
+        <p>Date of subscription: {subscription.attributes.createdAt}</p>
+        <p>Data sets:</p>
+        <p>{subscription.attributes.datasets.toString()}</p>
+        <p className='dataset-zoom' id={subscription.attributes.params.geostore} onClick={this.showSubscription}>View on the map!</p>
       </div>
     );
   }
