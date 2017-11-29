@@ -88,7 +88,28 @@ export default {
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
 
-
+  /**
+   * Custom Analysis Module Configuration
+   * This section provides the opportunity to define additional custom analysis modules.
+   * The modules are dependent on gfw widgets registered to the GFW API, so if you would
+   * like to define a custom module, you must first create a widget and register it.
+   *
+   * (we probably will NOT use the value property. we will just loop through all analysisModules
+   * and create a dropdown option for each if they have all of the required properties. maybe they have an order to sort them? This also
+   * means that all of the standard analyses will get their own entry in this array.)
+   * @property {string} value - a unique value for this analysis module
+   * @property {string} label - the label for the analysis in the dropdown
+   * @property {string} group - what group this analysis belongs to (maybe this is how we can differentiate
+   * the 'standard' analyses any thing with group 'standard' will not be required to have a widget
+   * until we get widgets for all of them)
+   * @property {string} widgetId - the widgetId from the gfw-api
+   * @property {string} queryUrl - the url to query for the analysis data
+   * @property {object[]} params - any params to pass along with the query url
+   * @property {string} params[].key - query param key
+   * @property {string} params[].value - query param value
+   *
+   * (geostore is automatically appended with each request)
+   */
 
 
 
