@@ -12,54 +12,34 @@ export default class NestedGroup extends Component {
     map: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
+  renderNestedCheckbox = layerGroup => {
+    const { language } = this.context;
+    const { activeLayers } = this.props;
 
-    this.indigenousAcknowledged = [];
-    this.indigenousNotAcknowledged = [];
-    this.communityAcknowledged = [];
-    this.communityNotAcknowledged = [];
+    const checked = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
 
-    props.layers.forEach(layer => {
-      if (layer.indigenousOrCommunity === 'indigenous') {
-        if (layer.acknowledgedByGovt === true) {
-          
-          this.indigenousAcknowledged.push(layer);
-        } else {
-          this.indigenousNotAcknowledged.push(layer);
-        }
-      } else {
-        if (layer.acknowledgedByGovt === true) {
-          this.communityAcknowledged.push(layer);
-        } else {
-          this.communityNotAcknowledged.push(layer);
-        }
-      }
-    });
-
-    this.indigenousAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-    this.indigenousNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-    this.communityAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-    this.communityNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
+    return (
+      <NestedCheckbox
+        key={layerGroup.nestedLayers[0].id}
+        groupLabel={layerGroup.label[language]}
+        layers={layerGroup.nestedLayers}
+        activeLayers={activeLayers}
+        checked={checked}
+      />
+    );
   }
 
   render() {
 
-    const {activeLayers} = this.props;
-
-    const IAChecked = this.indigenousAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-    const INAChecked = this.indigenousNotAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-    const CAChecked = this.communityAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-    const CNAChecked = this.communityNotAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-
     return (
       <div>
-        <span className='nested-heading'><strong>Indigenous Lands &mdash; traditional or customary rights</strong></span>
-        <NestedCheckbox groupLabel={'Acknowledged by government'} layers={this.indigenousAcknowledged} activeLayers={activeLayers} checked={IAChecked} />
-        <NestedCheckbox groupLabel={'Not acknowledged by government'} layers={this.indigenousNotAcknowledged} activeLayers={activeLayers} checked={INAChecked} />
+        {this.props.layers.map(this.renderNestedCheckbox)}
+        {/*<span className='nested-heading'><strong>Indigenous Lands &mdash; traditional or customary rights</strong></span>
+        <NestedCheckbox groupLabel={'Acknowledged by government'} layers={this.indigenousAcknowledged} activeLayers={activeLayers} checked={this.props.layers.some(layer => activeLayers.indexOf(layer.id) > -1)} />
+        <NestedCheckbox groupLabel={'Not acknowledged by government'} layers={this.indigenousNotAcknowledged} activeLayers={activeLayers} checked={some(layer => activeLayers.indexOf(layer.id) > -1)} />
         <span className='nested-heading'><strong>Community Lands &mdash; traditional or customary rights</strong></span>
-        <NestedCheckbox groupLabel={'Acknowledged by government'} layers={this.communityAcknowledged} activeLayers={activeLayers} checked={CAChecked} />
-        <NestedCheckbox groupLabel={'Not acknowledged by government'} layers={this.communityNotAcknowledged} activeLayers={activeLayers} checked={CNAChecked} />
+        <NestedCheckbox groupLabel={'Acknowledged by government'} layers={this.communityAcknowledged} activeLayers={activeLayers} checked={some(layer => activeLayers.indexOf(layer.id) > -1)} />
+        <NestedCheckbox groupLabel={'Not acknowledged by government'} layers={this.communityNotAcknowledged} activeLayers={activeLayers} checked={some(layer => activeLayers.indexOf(layer.id) > -1)} />*/}
       </div>
     );
   }

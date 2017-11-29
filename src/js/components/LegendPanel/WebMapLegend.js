@@ -5,33 +5,28 @@ export default class WebMapLegend extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = { legendInfos: [], visible: this.props.visibility };
+    this.state = { legendInfos: [], visible: this.props.visibility, opacity: props.defaultOpacity };
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.visibleLayers.indexOf(this.props.layerId) > -1 && prevProps.visibleLayers.indexOf(this.props.layerId) === -1) {
 
-      if (this.props.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer') {
-        const indicatorsLayer = brApp.map.getLayer('indicators_legal_security_8140');
-        if (indicatorsLayer.visible && indicatorsLayer.visibleLayers !== [-1]) {
-          this.setState({ visible: true });
-        }
-      } else {
-        this.setState({ visible: true });
-      }
-    } else if (this.props.visibleLayers.indexOf(this.props.layerId) === -1 && prevProps.visibleLayers.indexOf(this.props.layerId) > -1) {
-      this.setState({ visible: false });
-    } else if (this.props.visibility === true && prevProps.visibility === false && !this.props.layerId) {
-      this.setState({ visible: true });
-    } else if (this.props.visibility === false && prevProps.visibility === true && !this.props.layerId) {
-      this.setState({ visible: false });
+    if (prevProps.visibility !== this.props.visibility) {
+      this.setState(prevState => {
+        return {
+          visible: !prevState.visible
+         };
+       });
+     }
+
+    if (this.props.legendOpacity.layerId === this.props.layerId && this.props.legendOpacity.value !== prevProps.legendOpacity.value) {
+      this.setState({ opacity: this.props.legendOpacity.value });
     }
   }
 
   componentDidMount() {
 
     if (this.props.url) {
-      
+
       Request.getLegendInfos(this.props.url, [this.props.layerSubIndex]).then(legendInfos => {
         if (this.refs.myRef) {
           this.setState({ legendInfos: legendInfos });
@@ -51,10 +46,10 @@ export default class WebMapLegend extends React.Component {
     );
   }
 
-  itemMapper (item, index) {
+  itemMapper = (item, index) => {
     return (
       <div className='legend-row' key={index + item.url}>
-        <img className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
+        <img style={{'opacity': this.state.opacity}} className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
         <div className='legend-label'>{item.label}</div>
       </div>
     );

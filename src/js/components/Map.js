@@ -16,6 +16,7 @@ import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
+import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
@@ -303,80 +304,8 @@ export default class Map extends Component {
   };
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
-    const {language} = this.context, layers = [];
-    // Remove any already existing webmap layers
-    // settings.layerPanel.GROUP_WEBMAP.layers = [];
-    settings.layerPanel.GROUP_INDIGENOUS_INDICATORS = {
-      order: 3,
-      label: {
-        en: 'Indicators of the Legal Security of Indigenous Lands'
-      },
-      layers: [],
-      questionMap: { // key: layerInfo.subIndex, value: question string
-        0: 'The average score for the 10 indicators of the legal security of indigenous lands.',
-        1: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?',
-        2: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?',
-        3: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?',
-        4: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?',
-        5: 'Does the law recognize Indigenous peoples as the legal authority over the land?',
-        6: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?',
-        7: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?',
-        8: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?',
-        9: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?',
-        10: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?',
-        11: 'The average score for the 10 indicators of the legal security of community lands.',
-        12: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?',
-        13: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?',
-        14: 'Does the law require the government to provide communities with a formal title and map to their land?',
-        15: 'Does the law recognize the community as a legal person for the purposes of land ownership?',
-        16: 'Does the law recognize the community as the legal authority over the land?',
-        17: 'Do the law and formal title recognize that community land rights may be held in perpetuity?',
-        18: 'Does the law require the consent of communities before government or an outsider may acquire their land?',
-        19: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?',
-        20: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?',
-        21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
-      },
-      isRadioGroup: true
-    };
-
-    settings.layerPanel.GROUP_COMMUNITY_INDICATORS = {
-      order: 4,
-      label: {
-        en: 'Indicators of the Legal Security of Community Lands'
-      },
-      layers: []
-    };
-
-    settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD = {
-      order: 2,
-      label: {
-        en: 'Percent of Country Held by Indigenous Peoples and Communities'
-      },
-      layers: [],
-      isRadioGroup: true
-    };
-
-    settings.layerPanel.GROUP_LAND_MAPS = {
-      order: 1,
-      label: {
-        en: 'Indigenous & Community Land Maps'
-      },
-      layers: []
-    };
-
-    settings.layerPanel.GROUP_PRESSURES = {
-      order: 6,
-      label: {
-        en: 'Pressures'
-      },
-      layers: []
-    };
-
-    settings.exclusiveRadioGroups = [
-      'GROUP_INDIGENOUS_LANDS_HELD',
-      'GROUP_INDIGENOUS_INDICATORS',
-      'GROUP_COMMUNITY_INDICATORS'
-    ];
+    const {language} = this.context;
+    let layers = [];
 
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both
     // languages so the original webmap works in both views
@@ -393,11 +322,7 @@ export default class Map extends Component {
     * they show up in the correct location, which is why they have different logic for adding them to
     * the list than any other layers, push them in an array, then unshift in reverse order
     */
-    const groupIndigenousIndicators = [];
-    const groupCommunityIndicators = [];
-    const groupIndigenousLandsHeld = [];
-    const groupLandMaps = [];
-    const groupPressures = [];
+
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
@@ -417,24 +342,10 @@ export default class Map extends Component {
             esriLayer: layer.layerObject,
             itemId: layer.itemId
           };
-          if (layer.id === 'indicators_legal_security_8140' && sublayer.id < 11) {
-            layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
-            groupIndigenousIndicators.push(layerInfo);
-          } else if (layer.id === 'indicators_legal_security_8140' && sublayer.id >= 11) {
-            layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
-            groupCommunityIndicators.push(layerInfo);
-          } else if (layer.id === 'percent_IP_community_lands_1264') {
-            groupIndigenousLandsHeld.push(layerInfo);
-          }
+
+          dynamicLayers.push(layerInfo);
         });
-        //   if (layer.esriLayer.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer' && sublayer.id < 11) {
-        //     indigenousLayers.push(layerInfo);
-        //   } else if (layer.esriLayer.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer' && sublayer.id >= 11) {
-        //     communityLayers.push(layerInfo);
-        //   } else {
-        //     dynamicLayers.push(layerInfo);
-        //   }
-        // });
+
         // Push the dynamic layers into the array in their current order
         for (let i = dynamicLayers.length - 1; i >= 0; i--) {
           layers.unshift(dynamicLayers[i]);
@@ -461,34 +372,81 @@ export default class Map extends Component {
           itemId: layer.itemId
         };
 
-        if (layer.id === 'mining_cached_8843'
-          || layer.id === 'land_use_8897'
-          || layer.id === 'land_use_6484'
-          || layer.id === 'infrastructure_7561') {
-            groupPressures.push(layerInfo);
-          }
-
-        if (layer.id === 'comm_comm_CustomaryTenure_6877'
-          || layer.id === 'comm_comm_NotDocumented_9336'
-          || layer.id === 'comm_comm_Documented_4717'
-          || layer.id === 'comm_comm_FormalLandClaim_5585'
-          || layer.id === 'comm_ind_CustomaryTenure_8127'
-          || layer.id === 'comm_ind_FormalLandClaim_2392'
-          || layer.id === 'comm_ind_NotDocumented_2683'
-          || layer.id === 'comm_ind_Documented_8219') {
-            groupLandMaps.push(layerInfo);
-          }
         layers.unshift(layerInfo);
       }
     });
 
-    //- Set up the group labels and group layers
-    settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.layers = groupIndigenousIndicators;
-    settings.layerPanel.GROUP_COMMUNITY_INDICATORS.layers = groupCommunityIndicators;
-    settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD.layers = groupIndigenousLandsHeld;
-    settings.layerPanel.GROUP_PRESSURES.layers = groupPressures;
-    settings.layerPanel.GROUP_LAND_MAPS.layers = groupLandMaps;
-    // settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
+    const groupKeys = Object.keys(settings.layerPanel)
+      .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
+    const exclusiveLayerIds = [];
+    groupKeys.forEach(groupKey => {
+      const group = settings.layerPanel[groupKey];
+      switch (group.groupType) {
+        case 'radio': {
+          let groupLayers = [];
+          const groupSublayers = [];
+          group.layers.forEach(l => {
+            exclusiveLayerIds.push(l.id);
+            if (l.includedSublayers) { // this is a dynamic layer
+              layers.forEach(webmapLayer => {
+                if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                  groupSublayers.push({
+                    ...webmapLayer,
+                    ...l
+                  });
+                }
+              });
+              groupLayers = groupLayers.concat(groupSublayers);
+              return;
+            }
+
+            const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+            layers = [
+              ...layers.slice(0, layers.indexOf(mapLayer)),
+              ...layers.slice(layers.indexOf(mapLayer) + 1)
+            ];
+            groupLayers.push({
+              ...mapLayer,
+              ...l
+            });
+          });
+          group.layers = groupLayers;
+          break;
+        }
+        case 'checkbox':
+          group.layers = group.layers.map(l => {
+            const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+            layers = [
+              ...layers.slice(0, layers.indexOf(mapLayer)),
+              ...layers.slice(layers.indexOf(mapLayer) + 1)
+            ];
+            return {
+              ...mapLayer,
+              ...l
+            };
+          });
+          break;
+        case 'nested':
+          group.layers.forEach(nestedGroup => {
+            nestedGroup.nestedLayers = nestedGroup.nestedLayers.map(l => {
+
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+              layers = [
+                ...layers.slice(0, layers.indexOf(mapLayer)),
+                ...layers.slice(layers.indexOf(mapLayer) + 1)
+              ];
+              return {
+                ...mapLayer,
+                ...l
+              };
+            });
+          });
+        break;
+        default:
+      }
+    });
+
+    mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
 
     // if (saveLayersInOtherLang) {
     //   settings.layerPanel.GROUP_WEBMAP.label[settings.alternativeLanguage] = settings.labels[settings.alternativeLanguage].webmapMenuName;
@@ -542,8 +500,15 @@ export default class Map extends Component {
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
-          <TabView {...this.state} />
-          {legendReady ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
+          {map.loaded && <TabView {...this.state} />}
+          {legendReady ? <Legend
+            allLayers={this.state.allLayers}
+            tableOfContentsVisible={this.state.tableOfContentsVisible}
+            activeLayers={activeLayers}
+            legendOpen={this.state.legendOpen}
+            dynamicLayers={this.state.dynamicLayers}
+            legendOpacity={this.state.legendOpacity}
+          /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>

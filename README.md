@@ -30,7 +30,7 @@ npm run dist
 ```
 
 ### Configuring
-This application has a general `src/js/config.js` file that contains things controlled by the developers.  There is also a `resources.js` file which contains more configurations.  However the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application.  You can control things like the layers in the accordion, their source urls, their order on the map  and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis.  Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
+This application has a general [`config.js`][config.js] file that contains things controlled by the developers.  There is also a [`resources.js`][resources.js] file which contains more configurations.  However the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application.  You can control things like the layers in the accordion, their source urls, their order on the map  and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis.  Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
 
 #### Configuring Layers and Accordions
 The layers and the accordion are now more easily configurable via the `resources.js` file. Layers that you want to appear on the map but not in the accordion should be placed under `extraLayers`.  The configuration structure is as follows:
@@ -97,6 +97,104 @@ Properties for the groups and layers are described in detail in the resources fi
     * `label` - An object of keys representing various languages, this is the label that shows in the UI
     * `sublabel` -  An object of keys representing various languages, this is the sublabel that shows in the UI
     * `popup` - See below for more explanation and an example of how to use this
+
+#### Adding Additional Groups
+We are now supporting the ability to add additional group accordions to the layer panel. To add a new group, simply add another entry into the layerPanel object (described above in the ['Configuring' section](#configuring)). Below is an example group that you can copy and paste into the layerPanel object and edit to the configuration that you need. Follow any instructions/suggestions in the commented lines (preceded by `//`), then be sure to delete any commented lines before you save. Any properties that are commented out are optional, you may safely delete those if they are not needed for your group (exceptions will be noted below).
+
+```javascript
+// Change the group name to something descriptive and unique. It should be all caps with words separated by underscores.
+GROUP_NAME: {
+  // Properties must not be duplicated. One groupType is required. Choose one and uncomment it, then delete the others.
+  // groupType: 'checkbox',
+  // groupType: 'radio',
+  // groupType: 'nested',
+  
+  // Edit the order of this group and the other groups. This determines the order they appear in the layer panel.
+  order: 1,
+  label: {
+    // Edit the group label, this can be anything you want it to be
+    en: 'Group Label',
+    // Optionally add labels for additional languages (see the section on Strings and Translations below).
+    // fr: 'Label for French Language'
+  },
+  layers: [
+    // Uncomment the layer item under the corresponding groupType that you selected earlier, then duplicate for any additional layers in this group.
+
+    // CHECKBOX
+    // {
+    //   Required - the layer id generated from your AGOL webmap
+    //   id: 'layer_id_1234',
+
+    //   Required - the order that you would like this layer to appear within the group accordion section (1 will appear ABOVE 2)
+    //   order: 1,
+
+    //   Optional - sublabel for the layer
+    //   sublabel: {
+    //     en: 'Layer sublabel',
+    //     fr: 'Sublabel for French Language'
+    //   }
+    // }
+
+    // RADIO
+    // {
+    //   Required - the layer id generated from your AGOL webmap
+    //   id: 'layer_id_1234',
+
+    //   Required - the order that you would like this layer to appear within the group accordion section
+    //   order: 1,
+
+    //   If this is a MapServiceLayer you must include the following property. This lets the application know which sublayers you would like included in this group.
+    //   includedSublayers: [0, 1, 2, 3],
+
+    //   Optional - the sublabel for the layer.
+    //   sublabel: {
+    //     en: 'Layer Sublabel',
+    //     fr: 'Sublabel for French Language'
+    //   }
+    //   Note: If this is a MapServiceLayer, the sublayer that the sublabel belongs to must be specified.
+    //   sublabel: {
+    //     0: {
+    //       en: 'Sublayer 0 Sublabel',
+    //       fr: 'Sublayer 0 Sublabel for French Language'
+    //     },
+    //     1: {
+    //       en: 'Sublayer 1 Sublabel',
+    //       fr: 'Sublayer 1 Sublabel for French Language'
+    //     }
+    //   }
+    // }
+
+    // NESTED
+    // {
+    //   Required - the order that you would like this layer grouping to appear within the group accordion section
+    //   order: 1,
+
+    //   Required - the label of the nested layer grouping
+    //   label: {
+    //     en: 'Nested grouping label',
+    //     fr: 'Nested grouping label for French Language'
+    //   },
+
+    //   Required - the layers that will appear in this grouping
+    //   nestedLayers: [
+    //     {
+    //       Required - the layer id generated from your AGOL webmap
+    //       id: 'layer_id_1234',
+
+    //       Required - the order that you would like this layer to appear within the nested grouping
+    //       order: 1,
+
+    //       Optional - sublabel for the layer
+    //       sublabel: {
+    //         en: 'Layer sublabel',
+    //         fr: 'Sublabel for French Language'
+    //       }
+    //     }
+    //   ]
+    // }
+  ]
+},
+```
 
 #### Configuring Popups for layers not in Webmaps
 This is currently only supported for dynamic layers and feature layers.  A popup configuration has some elements it must contain to keep the styling looking appropriate and they are outlined below. Here is an example layer configuration that contains a popup configuration (NOTE the addition of `popup` at the bottom):
@@ -191,3 +289,6 @@ The other location is the `src/js/resources.js` file.  There are `layers` and `b
 
 ### Contributing
 [See CONTRIBUTING.md](CONTRIBUTING.md)
+
+[config.js]: /src/js/config.js
+[resources.js]: /src/resources.js

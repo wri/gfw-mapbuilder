@@ -64,6 +64,8 @@ class MapStore {
     this.imazonEndYear = 0;
     this.iconLoading = '';
     this.analysisDisabled = false;
+    this.exclusiveLayerIds = [];
+    this.legendOpacity = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -110,7 +112,8 @@ class MapStore {
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
       showLoading: layerActions.showLoading,
       updateCartoSymbol: layerActions.updateCartoSymbol,
-      toggleAnalysisTab: mapActions.toggleAnalysisTab
+      toggleAnalysisTab: mapActions.toggleAnalysisTab,
+      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds
     });
   }
 
@@ -236,7 +239,13 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
-    this.activeLayers = layers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
+    const reducedLayers = layers.reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+    this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -377,12 +386,9 @@ class MapStore {
     }
   }
 
-  changeOpacity (parameters) {
-    const layer = this.allLayers.filter(l => l.id === parameters.layerId);
-    console.log('MapStore >>> found a layer?', layer, parameters.layerId);
-    if ( layer[0] ) {
-      layer[0].opacity = parseFloat(parameters.value);
-    }
+  changeOpacity (payload) {
+    // payload = { layerId: <string>, value: <number> }
+    this.legendOpacity = payload;
   }
 
   changeBasemap (basemap) {
@@ -420,6 +426,10 @@ class MapStore {
         this.imazonEndYear = value;
       break;
     }
+  }
+
+  updateExclusiveRadioIds (ids) {
+    this.exclusiveLayerIds = ids;
   }
 
 }

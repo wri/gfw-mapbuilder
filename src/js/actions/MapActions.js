@@ -309,6 +309,10 @@ class MapActions {
     return bool;
   }
 
+  updateExclusiveRadioIds(arr) {
+    return arr;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

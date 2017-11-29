@@ -32,18 +32,10 @@ export default class LayerRadio extends Component {
   }
 
   componentDidMount() {
-    const { settings } = this.context;
-    const { layerPanel } = settings;
 
     // Get the list of unique layer ids that we need to turn off when a radio button is toggled on
-    const exclusiveLayerIds = settings.exclusiveRadioGroups
-    .reduce((result, groupId) => {
-      return [
-        ...result,
-        ...layerPanel[groupId].layers.map(l => l.id) // l.id is the same for all sublayers in each group
-        ];
-    }, [])
-    .filter(id => id !== this.layer.id);
+    const exclusiveLayerIds = this.props.exclusiveLayerIds
+      .filter(id => id !== this.layer.id);
 
     // after the reduce, we end up with an array of ids that are repeated for each sublayer in each group
     // so we need to filter them down to the unique ids
@@ -143,7 +135,7 @@ export default class LayerRadio extends Component {
         <span value={layer.subId} className={`info-icon pointer ${this.props.iconLoading === layer.esriLayer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <svg><use xlinkHref="#shape-info" /></svg>
         </span>
-        {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[language]}</div>}
+        {!layer.sublabel ? null : <div className='layer-checkbox-sublabel'>{layer.sublabel[layer.subIndex][language]}</div>}
         {!layer.sublabelQuestion ? null : <div className={`${this.state.selected === layer.subIndex ? '' : 'hidden'} sublabel-question`}>{layer.sublabelQuestion}</div>}
         <LayerTransparency layer={layer} visible={this.state.selected === layer.subIndex}></LayerTransparency>
       </div>

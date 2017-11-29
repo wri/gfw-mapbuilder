@@ -1,5 +1,6 @@
 import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import React, {Component, PropTypes} from 'react';
+import layerActions from 'actions/layerActions';
 
 /**
 * Timer to prevent too many requests
@@ -29,6 +30,10 @@ export default class LayerTransparency extends Component {
     // Bail if this is a dynamic layer or of the layer is not found
     if (mapLayer && layer.subIndex === undefined) {
       mapLayer.setOpacity(value);
+      layerActions.changeOpacity({
+        layerId: layer.id,
+        value
+      });
       this.setState({ opacity: value });
     } else if (mapLayer && layer.subIndex !== undefined) {
       const options = mapLayer.layerDrawingOptions || [];
@@ -38,6 +43,10 @@ export default class LayerTransparency extends Component {
       timer = setTimeout(function () {
         mapLayer.setLayerDrawingOptions(options);
       }, TIMER_DURATION);
+      layerActions.changeOpacity({
+        layerId: layer.id,
+        value
+      });
       this.setState({ opacity: value });
     }
   };
