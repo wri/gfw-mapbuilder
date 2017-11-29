@@ -43,6 +43,7 @@ class MapActions {
   toggleCanopyModal = (data) => data;
   toggleLayerModal = (data) => data;
   toggleSubscriptionsModal = (data) => data;
+  toggleSubscribeModal = (data) => data;
   toggleTOCVisible = (data) => data;
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;

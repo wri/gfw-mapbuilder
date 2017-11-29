@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import {getUrlParams} from 'utils/params';
 import mapStore from 'stores/MapStore';
 import appUtils from 'utils/AppUtils';
+import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 
 export default class ReportSubscribeButtons extends Component {
@@ -66,6 +67,10 @@ export default class ReportSubscribeButtons extends Component {
 
   };
 
+  toggleSubscribe = () => {
+    mapActions.toggleSubscribeModal({ visible: true });
+  }
+
   render () {
     const { language } = this.context;
 
@@ -79,7 +84,7 @@ export default class ReportSubscribeButtons extends Component {
           {text[language].PRINT_REPORT}
         </button>
         {!isLoggedIn ? null :
-          <button className='fa-button gold'>
+          <button className='fa-button gold' onClick={this.toggleSubscribe}>
             {text[language].SUBSCRIBE}
           </button>
         }

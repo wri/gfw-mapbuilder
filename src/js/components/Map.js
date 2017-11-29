@@ -8,6 +8,7 @@ import TimeWidget from 'components/MapControls/TimeWidget';
 import CanopyModal from 'components/Modals/CanopyModal';
 import LayerModal from 'components/Modals/LayerModal';
 import SubscriptionsModal from 'components/Modals/SubscriptionsModal';
+import SubscribeModal from 'components/Modals/SubscribeModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
 import SearchModal from 'components/Modals/SearchModal';
@@ -305,6 +306,7 @@ export default class Map extends Component {
       layerModalVisible,
       userSubscriptions,
       subscriptionsModalVisible,
+      subscribeModalVisible,
       modalLayerInfo,
       webmapInfo,
       map,
@@ -367,6 +369,9 @@ export default class Map extends Component {
         </div>
         <div className={`subscription-modal-container modal-wrapper ${subscriptionsModalVisible ? '' : 'hidden'}`}>
           <SubscriptionsModal userSubscriptions={userSubscriptions} />
+        </div>
+        <div className={`subscription-modal-container modal-wrapper ${subscribeModalVisible ? '' : 'hidden'}`}>
+          <SubscribeModal userSubscriptions={userSubscriptions} />
         </div>
       </div>
     );
