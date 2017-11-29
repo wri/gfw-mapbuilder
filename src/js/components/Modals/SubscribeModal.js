@@ -8,6 +8,16 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 
+const initialState = {
+  currentStep: 1,
+  activeLanguage: 'English', //TODO: Get from context!
+  email: '',
+  aoiName: '',
+  viirsAlerts: false,
+  treeCoverAlerts: true,
+  warnings: false
+};
+
 export default class SubscribeModal extends Component {
 
   static contextTypes = {
@@ -17,15 +27,7 @@ export default class SubscribeModal extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      currentStep: 1,
-      activeLanguage: 'English', //TODO: Get from context!
-      email: '',
-      aoiName: '',
-      viirsAlerts: false,
-      treeCoverAlerts: true,
-      warnings: false
-    };
+    this.state = initialState;
   }
 
   updateEmail = evt => {
@@ -78,11 +80,32 @@ export default class SubscribeModal extends Component {
     });
   }
 
+  refreshSubscriptions = () => {
+    $.ajax({
+      url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
+      dataType: 'json',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: (response) => {
+        console.log('resp', response);
+        this.setState(initialState);
+        mapActions.toggleSubscribeModal({ visible: false });
+        mapActions.setUserSubscriptions(response.data);
+        mapActions.toggleSubscriptionsModal({ visible: true });
+      },
+      error: (error) => {
+        console.log('err', error);
+        this.setState({
+          userSubscriptions: []
+        });
+      }
+    });
+  }
+
   save = () => {
     const { email, aoiName, viirsAlerts, treeCoverAlerts } = this.state;
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-
-    console.log(this.state);
 
     if (email && aoiName && selectedFeature && (viirsAlerts || treeCoverAlerts)) {
       const datasets = [];
@@ -112,7 +135,6 @@ export default class SubscribeModal extends Component {
         }
       };
 
-      console.log('jsonData', jsonData);
       $.ajax({
         url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
         dataType: 'json',
@@ -122,7 +144,7 @@ export default class SubscribeModal extends Component {
           withCredentials: true
         },
         success: (response) => {
-          console.log('resss', response);
+          console.log('response', response);
           this.setState({
             currentStep: 0,
             warnings: false,
@@ -183,7 +205,7 @@ export default class SubscribeModal extends Component {
           <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
         </div>
         <div className='subscription-sub-buttons'>
-          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.next}>OK!</button> : null }
+          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>OK!</button> : null }
           {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>Back</button> : null }
           {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>Next</button> : null }
           {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>Save</button> : null }
