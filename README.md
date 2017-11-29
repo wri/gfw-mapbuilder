@@ -112,11 +112,10 @@ GROUP_NAME: {
   // Edit the order of this group and the other groups. This determines the order they appear in the layer panel.
   order: 1,
   label: {
+    // Edit the group label, this can be anything you want it to be
+    en: 'Group Label',
     // Optionally add labels for additional languages (see the section on Strings and Translations below).
     // fr: 'Label for French Language'
-
-    // Edit the group label, this can be anything you want it to be
-    en: 'Group Label'
   },
   layers: [
     // Uncomment the layer item under the corresponding groupType that you selected earlier, then duplicate for any additional layers in this group.
@@ -126,12 +125,13 @@ GROUP_NAME: {
     //   Required - the layer id generated from your AGOL webmap
     //   id: 'layer_id_1234',
 
-    //   Required - the order that you would like this layer to appear within the group accordion section
+    //   Required - the order that you would like this layer to appear within the group accordion section (1 will appear ABOVE 2)
     //   order: 1,
 
     //   Optional - sublabel for the layer
     //   sublabel: {
-    //     en: 'Layer sublabel'
+    //     en: 'Layer sublabel',
+    //     fr: 'Sublabel for French Language'
     //   }
     // }
 
@@ -148,15 +148,18 @@ GROUP_NAME: {
 
     //   Optional - the sublabel for the layer.
     //   sublabel: {
-    //     en: 'Layer Sublabel'
+    //     en: 'Layer Sublabel',
+    //     fr: 'Sublabel for French Language'
     //   }
     //   Note: If this is a MapServiceLayer, the sublayer that the sublabel belongs to must be specified.
     //   sublabel: {
     //     0: {
-    //       en: 'Sublayer 0 Sublabel'
+    //       en: 'Sublayer 0 Sublabel',
+    //       fr: 'Sublayer 0 Sublabel for French Language'
     //     },
     //     1: {
-    //       en: 'Sublayer 1 Sublabel'
+    //       en: 'Sublayer 1 Sublabel',
+    //       fr: 'Sublayer 1 Sublabel for French Language'
     //     }
     //   }
     // }
@@ -168,7 +171,8 @@ GROUP_NAME: {
 
     //   Required - the label of the nested layer grouping
     //   label: {
-    //     en: 'Nested grouping label'
+    //     en: 'Nested grouping label',
+    //     fr: 'Nested grouping label for French Language'
     //   },
 
     //   Required - the layers that will appear in this grouping
@@ -182,7 +186,8 @@ GROUP_NAME: {
 
     //       Optional - sublabel for the layer
     //       sublabel: {
-    //         en: 'Layer sublabel'
+    //         en: 'Layer sublabel',
+    //         fr: 'Sublabel for French Language'
     //       }
     //     }
     //   ]
