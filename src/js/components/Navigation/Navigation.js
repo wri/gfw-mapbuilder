@@ -162,7 +162,7 @@ export default class Navigation extends Component {
             userSubscriptions: response.data
           });
           mapActions.setUserSubscriptions(response.data);
-          mapActions.toggleSubscriptionModal({ visible: true });
+          mapActions.toggleSubscriptionsModal({ visible: true });
         },
         error: (error) => {
           console.log('err', error);
@@ -173,7 +173,7 @@ export default class Navigation extends Component {
       });
     } else {
       mapActions.setUserSubscriptions(this.state.userSubscriptions);
-      mapActions.toggleSubscriptionModal({ visible: true });
+      mapActions.toggleSubscriptionsModal({ visible: true });
     }
     // esriRequest({
     //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + this.state.userData.id,

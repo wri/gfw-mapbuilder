@@ -8,7 +8,7 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 
-export default class SubscriptionModal extends Component {
+export default class SubscriptionsModal extends Component {
 
   static contextTypes = {
     language: PropTypes.string.isRequired,
@@ -48,14 +48,14 @@ export default class SubscriptionModal extends Component {
       const graphicExtent = graphic.geometry.getExtent();
       this.context.map.setExtent(graphicExtent, true);
       this.context.map.graphics.add(graphic);
-      mapActions.toggleSubscriptionModal({ visible: false });
+      mapActions.toggleSubscriptionsModal({ visible: false });
     }, err => {
       console.error(err);
     });
   }
 
   close = () => {
-    mapActions.toggleSubscriptionModal({ visible: false });
+    mapActions.toggleSubscriptionsModal({ visible: false });
   };
 
   render () {
