@@ -26,37 +26,41 @@ export default class Navigation extends Component {
     };
   }
 
-  componentDidMount () {
-    this.checkLoggedIn().then(res => {
-      console.log('res', res);
-      if (res) {
-        console.log('logged in!!!');
-        this.setState({
-          isLoggedIn: true
+  componentDidUpdate(prevProps, prevState, prevContext) {
+    const {settings} = this.context;
+
+    if (prevContext.settings.includeMyGFWLogin !== settings.includeMyGFWLogin) {
+      if (settings.includeMyGFWLogin) {
+        this.checkLoggedIn().then(res => {
+          if (res) {
+            this.setState({
+              isLoggedIn: true
+            });
+            mapActions.toggleLogin(true);
+          }
+        }, err => {
+          console.log('err', err);
         });
       }
-    }, err => {
-      console.log('err', err);
-    });
+    }
   }
 
   checkLoggedIn = () => {
-    console.log('checkLoggedIn');
     return new Promise((resolve, reject) => {
-        $.ajax({
-          url: 'https://production-api.globalforestwatch.org/auth/check-logged',
-          dataType: 'json',
-          xhrFields: {
-            withCredentials: true
-          },
-          success: (response) => {
-            resolve(response);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
+      $.ajax({
+        url: 'https://production-api.globalforestwatch.org/auth/check-logged',
+        dataType: 'json',
+        xhrFields: {
+          withCredentials: true
+        },
+        success: (response) => {
+          resolve(response);
+        },
+        error: (error) => {
+          reject(error);
+        }
       });
+    });
     // const promise = new Deferred();
     // esriRequest({
     //   url: 'https://production-api.globalforestwatch.org/auth/check-logged',
@@ -84,73 +88,67 @@ export default class Navigation extends Component {
 
   displayLogins = () => { //TODO: No hardcoding text -- get proper language forEach!
     return <div className="steps current login-modal">
-            <header>
-              <p>
-                Log in is required so you can return to Global Forest Watch
-                to view, manage, and delete your subscriptions.
-                Questions? <a className="contact-link" href="mailto:gfw@wri.org">Contact us</a>.
-              </p>
-            </header>
+      <header>
+        <p>
+          Log in is required so you can return to Global Forest Watch
+          to view, manage, and delete your subscriptions.
+          Questions? <a className="contact-link" href="mailto:gfw@wri.org">Contact us</a>.
+        </p>
+      </header>
 
-            <ul className="subscription-authentication">
-              <li className="subscribe-method twitter-box">
-                <a href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw" className="-twitter">
-                  <svg className="svg-icon"><use xlinkHref="#icon-twitter"></use></svg>
-                  Log in with Twitter
-                </a>
-              </li>
+      <ul className="subscription-authentication">
+        <li className="subscribe-method twitter-box">
+          <a href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw" className="-twitter">
+            <svg className="svg-icon"><use xlinkHref="#icon-twitter"></use></svg>
+            Log in with Twitter
+          </a>
+        </li>
 
-              <li className="subscribe-method facebook-box">
-                <a href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw" className="-facebook">
-                  <svg className="svg-icon"><use xlinkHref="#icon-facebook"></use></svg>
-                  Log in with Facebook
-                </a>
-              </li>
+        <li className="subscribe-method facebook-box">
+          <a href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw" className="-facebook">
+            <svg className="svg-icon"><use xlinkHref="#icon-facebook"></use></svg>
+            Log in with Facebook
+          </a>
+        </li>
 
-              <li className="subscribe-method google-box">
-                <a href="https://production-api.globalforestwatch.org/auth/google?applications=gfw" className="-google">
-                  <svg className="svg-icon"><use xlinkHref="#icon-googleplus"></use></svg>
-                  Log in with Google
-                </a>
-              </li>
-            </ul>
-          </div>;
+        <li className="subscribe-method google-box">
+          <a href="https://production-api.globalforestwatch.org/auth/google?applications=gfw" className="-google">
+            <svg className="svg-icon"><use xlinkHref="#icon-googleplus"></use></svg>
+            Log in with Google
+          </a>
+        </li>
+      </ul>
+    </div>;
   }
 
   displayOptions = () => { //TODO: No hardcoding text -- get proper language forEach!
     return <div className="options-modal">
-
-            <ul className="more-list">
-
-              <li className="gfw-api-option">
-                <p onClick={this.getSubscriptions}>
-                  My Subscriptions
-                </p>
-              </li>
-
-              <li className="gfw-api-option">
-                <a href="https://production-api.globalforestwatch.org/my_gfw/stories">
-                  My Stories
-                </a>
-              </li>
-
-              <li className="gfw-api-option">
-                <a href="https://production-api.globalforestwatch.org/my_gfw">
-                  My Profile
-                </a>
-              </li>
-
-              <li className="gfw-api-option">
-                <p onClick={this.logOut}>
-                  Log Out
-                </p>
-              </li>
-            </ul>
-          </div>;
+      <ul className="more-list">
+        <li className="gfw-api-option">
+          <p onClick={this.getSubscriptions}>
+            My Subscriptions
+          </p>
+        </li>
+        <li className="gfw-api-option">
+          <a href="https://production-api.globalforestwatch.org/my_gfw/stories">
+            My Stories
+          </a>
+        </li>
+        <li className="gfw-api-option">
+          <a href="https://production-api.globalforestwatch.org/my_gfw">
+            My Profile
+          </a>
+        </li>
+        <li className="gfw-api-option">
+          <p onClick={this.logOut}>
+            Log Out
+          </p>
+        </li>
+      </ul>
+    </div>;
   }
 
   getSubscriptions = () => {
-    console.log('getSubscriptions', this.state);
     if (this.state.userSubscriptions.length === 0) {
       $.ajax({
         url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
