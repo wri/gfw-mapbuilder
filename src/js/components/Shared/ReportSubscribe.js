@@ -67,14 +67,18 @@ export default class ReportSubscribeButtons extends Component {
   };
 
   render () {
-    const { language, settings } = this.context;
+    const { language } = this.context;
+
+    const {
+      isLoggedIn
+    } = mapStore.getState();
 
     return (
       <div className='report-sub-buttons'>
         <button className='fa-button gold' onClick={this.printReport}>
           {text[language].PRINT_REPORT}
         </button>
-        {!settings.includeSubscribeButton ? null :
+        {!isLoggedIn ? null :
           <button className='fa-button gold'>
             {text[language].SUBSCRIBE}
           </button>

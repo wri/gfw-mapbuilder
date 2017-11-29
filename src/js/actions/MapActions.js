@@ -49,6 +49,8 @@ class MapActions {
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
 
+  toggleLogin = (data) => data;
+
   setUserSubscriptions (subscriptions) {
     return subscriptions;
   }
