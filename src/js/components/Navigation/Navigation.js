@@ -1,7 +1,5 @@
 import LanguageToggle from 'components/Navigation/LanguageToggle';
 import MapThemes from 'components/Navigation/MapThemes';
-import Deferred from 'dojo/Deferred';
-import esriRequest from 'esri/request';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {
@@ -86,62 +84,59 @@ export default class Navigation extends Component {
     return shouldRender ? <MapThemes themes={settings.labels[language].themes} target={target} /> : undefined;
   };
 
-  displayLogins = () => { //TODO: No hardcoding text -- get proper language forEach!
-    return <div className="steps current login-modal">
+  displayLogins = () => {
+    const { language } = this.context;
+    return <div className="login-modal">
       <header>
-        <p>
-          Log in is required so you can return to Global Forest Watch
-          to view, manage, and delete your subscriptions.
-          Questions? <a className="contact-link" href="mailto:gfw@wri.org">Contact us</a>.
+        <p>{text[language].NAV_LOGIN_REQUIRED}
+          <a className="contact-link" href="mailto:gfw@wri.org">{text[language].NAV_CONTACT_US}</a>.
         </p>
       </header>
 
       <ul className="subscription-authentication">
         <li className="subscribe-method twitter-box">
           <a href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw" className="-twitter">
-            <svg className="svg-icon"><use xlinkHref="#icon-twitter"></use></svg>
-            Log in with Twitter
+            {text[language].NAV_TWITTER}
           </a>
         </li>
 
         <li className="subscribe-method facebook-box">
           <a href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw" className="-facebook">
-            <svg className="svg-icon"><use xlinkHref="#icon-facebook"></use></svg>
-            Log in with Facebook
+            {text[language].NAV_FACEBOOK}
           </a>
         </li>
 
         <li className="subscribe-method google-box">
           <a href="https://production-api.globalforestwatch.org/auth/google?applications=gfw" className="-google">
-            <svg className="svg-icon"><use xlinkHref="#icon-googleplus"></use></svg>
-            Log in with Google
+            {text[language].NAV_GOOGLE}
           </a>
         </li>
       </ul>
     </div>;
   }
 
-  displayOptions = () => { //TODO: No hardcoding text -- get proper language forEach!
+  displayOptions = () => {
+    const { language } = this.context;
     return <div className="options-modal">
       <ul className="more-list">
         <li className="gfw-api-option">
           <p onClick={this.getSubscriptions}>
-            My Subscriptions
+            {text[language].NAV_SUBSCRIPTIONS}
           </p>
         </li>
         <li className="gfw-api-option">
           <a href="https://production-api.globalforestwatch.org/my_gfw/stories">
-            My Stories
+            {text[language].NAV_STORIES}
           </a>
         </li>
         <li className="gfw-api-option">
           <a href="https://production-api.globalforestwatch.org/my_gfw">
-            My Profile
+            {text[language].NAV_PROFILE}
           </a>
         </li>
         <li className="gfw-api-option">
           <p onClick={this.logOut}>
-            Log Out
+            {text[language].NAV_LOGOUT}
           </p>
         </li>
       </ul>
@@ -257,15 +252,15 @@ export default class Navigation extends Component {
                 <svg className='svg-icon__nav'>
                   <use xlinkHref="#icon-h-mygfw" />
                 </svg>
-                {text[language].NAV_MY_GFW}
+                {text[language].NAV_MY_GFW_LOGIN}
               </a>
             </li> : settings.includeMyGFWLogin && this.state.isLoggedIn ?
-            <li onClick={this.toggleOptions} className={`app-header__nav-link pointer ${this.state.loginsDisplayed ? 'login-open' : ''}`}>
+            <li onClick={this.toggleOptions} className={`app-header__nav-link pointer ${this.state.optionsDisplayed ? 'options-open' : ''}`}>
               <a target={target}>
                 <svg className='svg-icon__nav'>
                   <use xlinkHref="#icon-mygfw" /> //TODO: Make this look correct!
                 </svg>
-                MY GFW!
+                {text[language].NAV_MY_GFW}
               </a>
             </li> : null
           }
