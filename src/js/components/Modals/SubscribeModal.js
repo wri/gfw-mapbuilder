@@ -15,6 +15,11 @@ const initialState = {
   aoiName: '',
   viirsAlerts: false,
   treeCoverAlerts: true,
+  gladAlerts: false,
+  sadAlerts: false,
+  formaAlerts: false,
+  terraI: false,
+  prodes: false,
   warnings: false
 };
 
@@ -59,6 +64,36 @@ export default class SubscribeModal extends Component {
   updateLoss = () => {
     this.setState({
       treeCoverAlerts: !this.state.treeCoverAlerts
+    });
+  }
+
+  updateGLAD = () => {
+    this.setState({
+      gladAlerts: !this.state.gladAlerts
+    });
+  }
+
+  updateSAD = () => {
+    this.setState({
+      sadAlerts: !this.state.sadAlerts
+    });
+  }
+
+  updateForma = () => {
+    this.setState({
+      formaAlerts: !this.state.formaAlerts
+    });
+  }
+
+  updateTerraI = () => {
+    this.setState({
+      terraI: !this.state.terraI
+    });
+  }
+
+  updateProdes = () => {
+    this.setState({
+      prodes: !this.state.prodes
     });
   }
 
@@ -202,8 +237,28 @@ export default class SubscribeModal extends Component {
           <h3 className='step-title'>{text[language].SUBSCRIBE_ALERTS_TITLE}</h3>
           <p>{text[language].SUBSCRIBE_ALERTS_SELECT}</p>
           <div className='alert-checkbox'>
-            {text[language].SUBSCRIBE_ALERTS_VIIRS}<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} name="datasets" id="viirs-active-fires" />
-            {text[language].SUBSCRIBE_ALERTS_TCL}<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} name="datasets" id="umd-loss-gain" />
+            <div className='custom-checkbox'>
+              {text[language].SUBSCRIBE_ALERTS_VIIRS}<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+            </div>
+            <div className='custom-checkbox'>
+              {text[language].SUBSCRIBE_ALERTS_TCL}<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+            </div>
+
+            <div className='custom-checkbox'>
+              GLAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+            </div>
+            <div className='custom-checkbox'>
+              SAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+            </div>
+            <div className='custom-checkbox'>
+              FORMA alerts data<input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+            </div>
+            <div className='custom-checkbox'>
+              Terra-i tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+            </div>
+            <div className='custom-checkbox'>
+              PRODES deforestation data<input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+            </div>
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 2 ? '' : 'hidden'}`}>
