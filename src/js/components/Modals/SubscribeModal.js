@@ -109,15 +109,39 @@ export default class SubscribeModal extends Component {
 
     if (email && aoiName && selectedFeature && (viirsAlerts || treeCoverAlerts)) {
       const datasets = [];
+      let lang;
       if (viirsAlerts) {
         datasets.push('viirs-active-fires');
       }
       if (treeCoverAlerts) {
         datasets.push('umd-loss-gain');
       }
+      switch (this.state.activeLanguage) {
+        case 'English':
+          lang = 'en';
+          break;
+        case '中文':
+          lang = 'zh';
+          break;
+        case 'Français':
+          lang = 'fr';
+          break;
+        case 'Bahasa Indonesia':
+          lang = 'id';
+          break;
+        case 'Português (Brasil)':
+          lang = 'pt';
+          break;
+        case 'Español (Mexico)':
+          lang = 'es';
+          break;
+        default:
+          lang = 'en';
+      }
+
       const jsonData = {
         datasets: datasets,
-        language: this.state.activeLanguage === 'English' ? 'en' : 'sp', //TODO: Switch statement over all of our possibilities
+        language: lang,
         name: aoiName,
         params: {
           geostore: selectedFeature.attributes.geostoreId,
@@ -163,37 +187,34 @@ export default class SubscribeModal extends Component {
   }
 
   render () {
-    // const {language} = this.context;
-    const langs = ['English', 'Spanish']; //TODO: Get from resources or config!
+    const {language} = this.context;
+    const langs = ['English', '中文', 'Français', 'Bahasa Indonesia', 'Português (Brasil)', 'Español (Mexico)']; //TODO: Get from resources or config!
 
     return (
       <ControlledModalWrapper onClose={this.close}>
         <div className={`subscribe-step ${this.state.currentStep === 0 ? '' : 'hidden'}`}>
-          <h3>Subscription saved!</h3>
+          <h3>{text[language].SUBSCRIBE_SAVED_TITLE}</h3>
           <p>
-              This subscription has been added to your profile. <strong>Please
-              check your email and click on the link to confirm your
-              subscription.</strong> Visit your <a href="http://www.globalforestwatch.org/my_gfw/subscriptions" target='_blank'>saved subscriptions</a> to manage them.
-            </p>
+            {text[language].SUBSCRIBE_SAVED_DESC}<strong>{text[language].SUBSCRIBE_SAVED_DESC_STRONG}</strong> {text[language].SUBSCRIBE_SAVED_DESC_END} <a href="http://www.globalforestwatch.org/my_gfw/subscriptions" target='_blank'>{text[language].SUBSCRIBE_SAVED_LINK}</a>{text[language].SUBSCRIBE_SAVED_END}
+          </p>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 1 ? '' : 'hidden'}`}>
-          <p>Forest change alerts</p>
-          <p>Select the forest change alerts you would like to receive</p>
+          <h3 className='step-title'>{text[language].SUBSCRIBE_ALERTS_TITLE}</h3>
+          <p>{text[language].SUBSCRIBE_ALERTS_SELECT}</p>
           <div className='alert-checkbox'>
-            VIIRS active fire alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} name="datasets" id="viirs-active-fires" />
-            Tree cover loss data<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} name="datasets" id="umd-loss-gain" />
-
+            {text[language].SUBSCRIBE_ALERTS_VIIRS}<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} name="datasets" id="viirs-active-fires" />
+            {text[language].SUBSCRIBE_ALERTS_TCL}<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} name="datasets" id="umd-loss-gain" />
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 2 ? '' : 'hidden'}`}>
-          <p>Subscribe to alerts</p>
-          <p>Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.</p>
+          <h3 className='step-title'>{text[language].SUBSCRIBE_EMAIL_TITLE}</h3>
+          <p>{text[language].SUBSCRIBE_EMAIL}</p>
           <div className='alert-checkbox'>
             <input className="alert-input" placeholder='Enter email' onChange={this.updateEmail} />
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
-          <p>Name your subscription</p>
+          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
           <div className='alert-checkbox'>
             <p>Name</p>
             <input className="subscription-name" placeholder='Area name' onChange={this.updateAreaName} />

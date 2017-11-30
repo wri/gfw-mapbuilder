@@ -59,20 +59,6 @@ export default class Navigation extends Component {
         }
       });
     });
-    // const promise = new Deferred();
-    // esriRequest({
-    //   url: 'https://production-api.globalforestwatch.org/auth/check-logged',
-    //   callbackParamName: 'callback',
-    //   handleAs: 'json',
-    //   timeout: 30000
-    // }, { usePost: false}).then(res => {
-    //   console.error('res', res);
-    //   promise.resolve(true);
-    // }, err => {
-    //   console.error('err', err);
-    //   promise.resolve(false);
-    // });
-    // return promise;
   }
 
   renderMapThemes = (language, settings) => {
@@ -125,12 +111,12 @@ export default class Navigation extends Component {
           </p>
         </li>
         <li className="gfw-api-option">
-          <a href="https://production-api.globalforestwatch.org/my_gfw/stories">
+          <a href="http://www.globalforestwatch.org/my_gfw/stories" target='_blank'>
             {text[language].NAV_STORIES}
           </a>
         </li>
         <li className="gfw-api-option">
-          <a href="https://production-api.globalforestwatch.org/my_gfw">
+          <a href="http://www.globalforestwatch.org/my_gfw" target='_blank'>
             {text[language].NAV_PROFILE}
           </a>
         </li>
@@ -170,16 +156,6 @@ export default class Navigation extends Component {
       mapActions.setUserSubscriptions(this.state.userSubscriptions);
       mapActions.toggleSubscriptionsModal({ visible: true });
     }
-    // esriRequest({
-    //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + this.state.userData.id,
-    //   callbackParamName: 'callback',
-    //   handleAs: 'json',
-    //   timeout: 30000
-    // }, { usePost: false}).then(res => {
-    //   console.error('res', res);
-    // }, err => {
-    //   console.error('err', err);
-    // });
   }
 
   logOut = () => {
