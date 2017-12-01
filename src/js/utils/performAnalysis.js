@@ -37,6 +37,8 @@ export default function performAnalysis (options) {
     modisTo
   } = options;
   const restorationUrl = settings && settings.restorationImageServer;
+  const concessionUrl = settings && settings.concessionsMapServer;
+  const concessionIds = settings && settings.concessionIds;
   const landCoverConfig = settings && settings.layerPanel && settings.layerPanel.GROUP_LC ?
     utils.getObject(settings.layerPanel.GROUP_LC.layers, 'id', layerKeys.LAND_COVER) : {};
   const config = analysisConfig[type];
@@ -100,6 +102,9 @@ export default function performAnalysis (options) {
     break;
     case analysisKeys.CARBON:
       analysisUtils.getTotalAndAverageCarbon(geostoreId, canopyDensity, language).then(promise.resolve, promise.reject);
+    break;
+    case analysisKeys.COMMODITIES:
+      analysisUtils.getCommodities(concessionUrl, concessionIds, geometry).then(promise.resolve, promise.reject);
     break;
     case analysisKeys.INTACT_LOSS:
       analysisUtils.getCrossedWithLoss(config, analysisConfig[analysisKeys.TC_LOSS], geometry, {

@@ -11,6 +11,7 @@ import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import CarbonChart from 'components/AnalysisPanel/CarbonChart';
+import CommoditiesChart from 'components/AnalysisPanel/CommoditiesChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -207,6 +208,15 @@ export default class Analysis extends Component {
           averageAboveground={results.averageAboveground}
           averageBelowground={results.averageBelowground}
           averageTotal={results.averageTotal}
+          totalSuffix={' MgC'}
+          averageSuffix={' MgC/Ha'}
+        />;
+      case analysisKeys.COMMODITIES:
+        return <CommoditiesChart
+          results={results}
+          oilPalm={results.oilPalm}
+          mining={results.mining}
+          managedForests={results.managedForests}
           totalSuffix={' MgC'}
           averageSuffix={' MgC/Ha'}
         />;
