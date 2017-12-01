@@ -64,6 +64,25 @@ export default class ReportSubscribeButtons extends Component {
 
   };
 
+  launchLandmarkAnalysis = () => {
+    const { map } = this.context;
+    const selectedFeature = map.infoWindow && map.infoWindow.getSelectedFeature();
+
+    const payload = {
+      features: [selectedFeature],
+      csv: ['Luke']
+    };
+
+    const openWindow = window.open('/map/analysis/');
+
+    if (!openWindow || typeof openWindow === 'undefined') {
+      alert('Turn off your pop-up blocker!');
+      openWindow.payload = payload;
+    } else {
+      openWindow.payload = payload;
+    }
+  }
+
   render () {
     const { language, settings } = this.context;
 
@@ -73,8 +92,8 @@ export default class ReportSubscribeButtons extends Component {
           {text[language].PRINT_REPORT}
         </button>
         {!settings.includeSubscribeButton ? null :
-          <button className='fa-button gold'>
-            {text[language].SUBSCRIBE}
+          <button className='fa-button gold' onClick={this.launchLandmarkAnalysis}>
+            Indigenous Lands Report
           </button>
         }
       </div>
