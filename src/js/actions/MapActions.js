@@ -130,134 +130,134 @@ class MapActions {
     };
 
     const convertToFeatureLayers = [
-      // {
-      //   id: 'indigenous_FormalClaimFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_FormalClaimFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_CustomaryFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_CustomaryFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_DocumentedFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_ind_Documented_8219'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_DocumentedFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_ind_Documented_8219'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_NotDocumentedFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'indigenous_NotDocumentedFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_FormalClaimFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_FormalClaimFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_CustomaryFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_CustomaryFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_DocumentedFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_Documented_4717'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_DocumentedFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_Documented_4717'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_NotDocumentedFeature0',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/0',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
-      //   type: 'feature'
-      // },
-      // {
-      //   id: 'community_NotDocumentedFeature1',
-      //   url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/1',
-      //   minScale: 4600000,
-      //   maxScale: 0,
-      //   visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
-      //   type: 'feature'
-      // }
+      {
+        id: 'indigenous_FormalClaimFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_FormalClaimFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_CustomaryFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_CustomaryFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_DocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_Documented_8219'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_DocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_Documented_8219'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_NotDocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_NotDocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        type: 'feature'
+      },
+      {
+        id: 'community_FormalClaimFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
+        type: 'feature'
+      },
+      {
+        id: 'community_FormalClaimFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
+        type: 'feature'
+      },
+      {
+        id: 'community_CustomaryFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
+        type: 'feature'
+      },
+      {
+        id: 'community_CustomaryFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
+        type: 'feature'
+      },
+      {
+        id: 'community_DocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_Documented_4717'),
+        type: 'feature'
+      },
+      {
+        id: 'community_DocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_Documented_4717'),
+        type: 'feature'
+      },
+      {
+        id: 'community_NotDocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        type: 'feature'
+      },
+      {
+        id: 'community_NotDocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        type: 'feature'
+      }
     ];
 
     uniqueLayers = uniqueLayers.concat(convertToFeatureLayers);

@@ -1,4 +1,5 @@
 export default {
+
     //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
 
     //- General Settings
