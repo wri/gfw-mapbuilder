@@ -14,7 +14,6 @@ export default class CommoditiesChart extends Component {
   }
 
   componentDidMount() {
-    console.log('props', this.props);
     if (typeof this.props.results === 'object' && this.props.results.hasOwnProperty('error')) {
       this.setState({ isError: true });
     } else {
@@ -49,9 +48,6 @@ export default class CommoditiesChart extends Component {
               showInLegend: true,
               center: ['50%', '35%']
             }
-          },
-          tooltip: {
-            valueSuffix: this.props.totalSuffix
           },
           series: [
             {

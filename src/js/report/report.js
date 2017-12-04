@@ -767,6 +767,23 @@ const runAnalysis = function runAnalysis (params, feature) {
     node.remove();
   }
 
+  //Commodities Analysis
+  //analysisUtils.getCommodities(concessionUrl, concessionIds, geometry).then(promise.resolve, promise.reject);
+  performAnalysis({
+    type: analysisKeys.COMMODITIES,
+    geometry: geographic,
+    settings: settings,
+    language: lang
+  }).then((results) => {
+    const node = document.getElementById('commodities');
+
+    if (results.managedForests > 0 || results.mining > 0 || results.oilPalm > 0) {
+      charts.makeCommoditiesPieChart(node, results);
+    } else {
+      node.remove();
+    }
+  });
+
   if (settings.restorationModule) {
     const infos = settings && settings.labels && settings.labels[lang] && settings.labels[lang].restorationOptions || [];
     // Analyze each configured restoration option

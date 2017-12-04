@@ -217,8 +217,6 @@ export default class Analysis extends Component {
           oilPalm={results.oilPalm}
           mining={results.mining}
           managedForests={results.managedForests}
-          totalSuffix={' MgC'}
-          averageSuffix={' MgC/Ha'}
         />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart

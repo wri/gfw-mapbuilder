@@ -75,6 +75,89 @@ export default {
 		});
 	},
 
+	makeCommoditiesPieChart: (el, data) => {
+
+		const oilPalm = data.oilPalm;
+		const mining = data.mining;
+		const managedForests = data.managedForests;
+		Highcharts.chart(el, {
+			chart: {
+				type: 'pie'
+			},
+			credits: {
+				enabled: false
+			},
+			title: {
+				text: null
+			},
+			plotOptions: {
+				pie: {
+					dataLabels: {
+						enabled: false,
+						distance: -30,
+						style: {
+							fontSize: '18px',
+							textOutline: 'none',
+							fontWeight: 'normal'
+						}
+					},
+					showInLegend: true,
+					center: ['50%', '35%']
+				}
+			},
+			series: [
+				{
+					name: 'Total',
+					data: [
+						{
+							y: Number(oilPalm),
+							color: '#5CCEF8',
+							name: 'Oil palm concessions'
+						},
+						{
+							y: Number(mining),
+							color: '#50AC58',
+							name: 'Mining concessions'
+						},
+						{
+							y: Number(managedForests),
+							color: '#1cca1c',
+							name: 'Managed forest concessions '
+						}
+					],
+					dataLabels: {
+						formatter: function() {
+							return this.y;
+						}
+					},
+					size: '170',
+					innerSize: '35%',
+					id: 'total-comm'
+				}
+			],
+			labels: {
+				items: [
+					{
+						html: `Total: ${(oilPalm + mining + managedForests)} concessions`,
+						style: {
+							top: '220px',
+							left: '50%',
+							fontSize: '16px'
+						}
+					}
+				],
+				style: {
+					color: '#6f6f6f'
+				}
+			},
+			legend: {
+				layout: 'vertical',
+				y: -21
+			}
+		});
+
+	},
+
 	/**
 	* Generate a stacked bar chart for the restoration analysis
 	* @param {HTML Element} el
