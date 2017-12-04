@@ -111,11 +111,6 @@ export default class Navigation extends Component {
           </p>
         </li>
         <li className="gfw-api-option">
-          <a href="http://www.globalforestwatch.org/my_gfw/stories" target='_blank'>
-            {text[language].NAV_STORIES}
-          </a>
-        </li>
-        <li className="gfw-api-option">
           <a href="http://www.globalforestwatch.org/my_gfw" target='_blank'>
             {text[language].NAV_PROFILE}
           </a>

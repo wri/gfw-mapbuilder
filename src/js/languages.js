@@ -26,7 +26,7 @@ strings.en.NAV_FACEBOOK = 'Log in with Facebook';
 strings.en.NAV_GOOGLE = 'Log in with Google';
 strings.en.NAV_SUBSCRIPTIONS = 'My Subscriptions';
 strings.en.NAV_STORIES = 'My Stories';
-strings.en.NAV_PROFILE = 'My Profile';
+strings.en.NAV_PROFILE = 'My GFW Profile';
 strings.en.NAV_LOGOUT = 'Log Out';
 
 strings.en.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
@@ -279,7 +279,7 @@ strings.ka.NAV_FACEBOOK = 'Log in with Facebook';
 strings.ka.NAV_GOOGLE = 'Log in with Google';
 strings.ka.NAV_SUBSCRIPTIONS = '';
 strings.ka.NAV_STORIES = 'My Stories';
-strings.ka.NAV_PROFILE = 'My Profile';
+strings.ka.NAV_PROFILE = 'My GFW Profile';
 strings.ka.NAV_LOGOUT = 'Log Out';
 
 strings.ka.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
