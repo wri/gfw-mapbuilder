@@ -1,6 +1,6 @@
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
-import RadioButton from 'js/components/LayerPanel/RadioButton';
+import RadioButton from './RadioButton';
 import React, {
   Component,
   PropTypes

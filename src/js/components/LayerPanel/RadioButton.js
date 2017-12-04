@@ -1,5 +1,5 @@
 import React from 'react';
-import LayerTransparency from 'js/components/LayerPanel/LayerTransparency';
+import LayerTransparency from './LayerTransparency';
 import layerActions from 'actions/LayerActions';
 
 const RadioButton = ({
