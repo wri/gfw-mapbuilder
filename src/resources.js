@@ -1,7 +1,7 @@
 export default {
-
+  
     //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
-
+  
     //- General Settings
     // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
     // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
@@ -77,7 +77,7 @@ export default {
     restorationLandCover: true,
     restorationPopulation: true,
     restorationRainfall: true,
-
+  
     // Options not configurable from AGOL but can be from here
     restorationChartDescription: 'Some explanatory text for this anlaysis',
     restorationTableDescription: 'Some explanatory text for this anlaysis',
@@ -88,7 +88,7 @@ export default {
     // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
     sharinghost: 'https://www.arcgis.com',
     analyticsCode: '',
-
+  
     /**
     * Layer panel configuration, anything with an = is optional, {object=}
     * Order at the group level controls the order of the accordions, the top most accordion's layers
