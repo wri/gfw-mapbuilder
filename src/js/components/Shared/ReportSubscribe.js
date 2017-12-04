@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import analysisKeys from 'constants/AnalysisConstants';
 import {getUrlParams} from 'utils/params';
 import mapStore from 'stores/MapStore';
+import IdentifyTask from 'esri/tasks/IdentifyTask';
+import IdentifyParameters from 'esri/tasks/IdentifyParameters';
 import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 
@@ -65,23 +67,82 @@ export default class ReportSubscribeButtons extends Component {
 
   };
 
+  getTextContent = graphic => {
+    const gisArea = graphic.feature.attributes.Area_GIS && graphic.feature.attributes.Area_GIS !== 'Null' ? parseFloat(graphic.feature.attributes.Area_GIS).toFixed(2) : '0.00';
+    if (graphic.feature.attributes.Identity === 'Indigenous (self-identified)') {
+        graphic.feature.attributes.Identity = 'Indigenous';
+    }
+    if (graphic.feature.attributes.Identity === 'Non-indigenous (self-identified)') {
+        graphic.feature.attributes.Identity = 'Community';
+    }
+    if (graphic.feature.attributes.Form_Rec === 'Officially recognized (by law or decree)') {
+        graphic.feature.attributes.Form_Rec = 'Officially recognized';
+    }
+
+    const fieldValues = [graphic.feature.attributes.Country, graphic.feature.attributes.Name, graphic.feature.attributes.Identity, graphic.feature.attributes.Form_Rec, graphic.feature.attributes.Doc_Status, gisArea];
+    brApp.csv += fieldValues.join(',') + '\n';
+  }
+
   launchLandmarkAnalysis = () => {
     const { map } = this.context;
     const selectedFeature = map.infoWindow && map.infoWindow.getSelectedFeature();
 
-    const payload = {
-      features: [selectedFeature],
-      csv: ['Luke']
-    };
+    this.props.setLoader({
+      isLoading: true
+    });
 
-    const openWindow = window.open('/map/analysis/');
+    const identifyTask = new IdentifyTask('http://gis.wri.org/arcgis/rest/services/LandMark/comm_analysis/MapServer');
+    const params = new IdentifyParameters();
 
-    if (!openWindow || typeof openWindow === 'undefined') {
-      alert('Turn off your pop-up blocker!');
-      openWindow.payload = payload;
-    } else {
-      openWindow.payload = payload;
-    }
+    params.tolerance = 3;
+    params.returnGeometry = false;
+    params.layerIds = [0, 1];
+    params.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
+    params.mapExtent = brApp.map.extent;
+    params.width = brApp.map.width;
+    params.height = brApp.map.height;
+    params.geometry = selectedFeature.geometry;
+
+    identifyTask.execute(params, value => {
+      console.log('value', value);
+      if (value.features.length > 0) {
+        console.log('feats', value.features);
+
+        const fields = ['Country', 'Name', 'Identity', 'Recognition Status', 'Documentation Status', 'GIS Area'];
+
+        brApp.csv = fields.join(',') + '\n';
+
+        for (let i = 0; i < value.features.length; i++) {
+          this.getTextContent(value.features[i]);
+        }
+
+        const payload = {
+          features: value.features,
+          csv: brApp.csv
+        };
+        console.log('payload', payload);
+      } else {
+        //send the above component an error saying you have no feats!
+        console.log('faillll, no feats');
+      }
+    }, error => {
+      console.log('faillll, err', error);
+    });
+
+    // const payload = {
+    //   features: [selectedFeature],
+    //   csv: ['Luke']
+    // };
+
+
+    // const openWindow = window.open('/map/analysis/');
+    //
+    // if (!openWindow || typeof openWindow === 'undefined') {
+    //   alert('Turn off your pop-up blocker!');
+    //   openWindow.payload = payload;
+    // } else {
+    //   openWindow.payload = payload;
+    // }
   }
 
   render () {

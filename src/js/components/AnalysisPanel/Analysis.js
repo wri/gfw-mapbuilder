@@ -275,6 +275,14 @@ export default class Analysis extends Component {
     }
   };
 
+  setLoader = loadingObj => { //isLoading and possibly error
+    this.setState(loadingObj);
+    // this.setState({
+    //   isLoading: false,
+    //   error: true
+    // });
+  }
+
   render () {
     const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
     const {results, isLoading, error} = this.state;
@@ -340,7 +348,7 @@ export default class Analysis extends Component {
           }
         </div>
         <div className='analysis-results__footer'>
-          <ReportSubscribeButtons />
+          <ReportSubscribeButtons setLoader={this.setLoader} />
         </div>
       </div>
     );
