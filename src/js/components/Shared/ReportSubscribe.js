@@ -91,7 +91,7 @@ export default class ReportSubscribeButtons extends Component {
       isLoading: true
     });
 
-    const identifyTask = new IdentifyTask('http://gis.wri.org/arcgis/rest/services/LandMark/comm_analysis/MapServer');
+    const identifyTask = new IdentifyTask('http://gis.wri.org/server/rest/services/LandMark/comm_analysis/MapServer');
     const params = new IdentifyParameters();
 
     params.tolerance = 3;
@@ -103,46 +103,44 @@ export default class ReportSubscribeButtons extends Component {
     params.height = brApp.map.height;
     params.geometry = selectedFeature.geometry;
 
-    identifyTask.execute(params, value => {
-      console.log('value', value);
-      if (value.features.length > 0) {
-        console.log('feats', value.features);
+    identifyTask.execute(params, features => {
+      this.props.setLoader({
+        isLoading: false,
+        error: false
+      });
 
+      if (features.length > 0) {
         const fields = ['Country', 'Name', 'Identity', 'Recognition Status', 'Documentation Status', 'GIS Area'];
 
         brApp.csv = fields.join(',') + '\n';
 
-        for (let i = 0; i < value.features.length; i++) {
-          this.getTextContent(value.features[i]);
+        for (let i = 0; i < features.length; i++) {
+          this.getTextContent(features[i]);
         }
 
         const payload = {
-          features: value.features,
+          features: features,
           csv: brApp.csv
         };
         console.log('payload', payload);
-      } else {
-        //send the above component an error saying you have no feats!
-        console.log('faillll, no feats');
+
+        const openWindow = window.open('/map/analysis/');
+
+        if (!openWindow || typeof openWindow === 'undefined') {
+          alert('Turn off your pop-up blocker!');
+          openWindow.payload = payload;
+        } else {
+          openWindow.payload = payload;
+        }
       }
     }, error => {
-      console.log('faillll, err', error);
+      console.log('err', error);
+      this.props.setLoader({
+        isLoading: false,
+        error: true
+      });
     });
 
-    // const payload = {
-    //   features: [selectedFeature],
-    //   csv: ['Luke']
-    // };
-
-
-    // const openWindow = window.open('/map/analysis/');
-    //
-    // if (!openWindow || typeof openWindow === 'undefined') {
-    //   alert('Turn off your pop-up blocker!');
-    //   openWindow.payload = payload;
-    // } else {
-    //   openWindow.payload = payload;
-    // }
   }
 
   render () {

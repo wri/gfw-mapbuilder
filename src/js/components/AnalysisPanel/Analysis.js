@@ -277,10 +277,6 @@ export default class Analysis extends Component {
 
   setLoader = loadingObj => { //isLoading and possibly error
     this.setState(loadingObj);
-    // this.setState({
-    //   isLoading: false,
-    //   error: true
-    // });
   }
 
   render () {
