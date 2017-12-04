@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import analysisKeys from 'constants/AnalysisConstants';
 import {getUrlParams} from 'utils/params';
 import mapStore from 'stores/MapStore';
 import appUtils from 'utils/AppUtils';
@@ -84,18 +85,17 @@ export default class ReportSubscribeButtons extends Component {
   }
 
   render () {
-    const { language, settings } = this.context;
+    const { language } = this.context;
+    const { activeAnalysisType } = mapStore.getState();
 
     return (
       <div className='report-sub-buttons'>
         <button className='fa-button gold' onClick={this.printReport}>
           {text[language].PRINT_REPORT}
         </button>
-        {!settings.includeSubscribeButton ? null :
-          <button className='fa-button gold' onClick={this.launchLandmarkAnalysis}>
-            Indigenous Lands Report
-          </button>
-        }
+        <button className={`fa-button gold ${activeAnalysisType === analysisKeys.COMMODITIES ? '' : ' hidden'}`} onClick={this.launchLandmarkAnalysis}>
+          Indigenous Lands Report
+        </button>
       </div>
     );
   }
