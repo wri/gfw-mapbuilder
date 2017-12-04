@@ -1,7 +1,7 @@
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import TerraIControls from 'components/LayerPanel/TerraIControls';
 import LayerCheckbox from 'components/LayerPanel/LayerCheckbox';
-import LayerRadio from 'components/LayerPanel/LayerRadio';
+import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
 import FiresControls from 'components/LayerPanel/FiresControls';
 import LossControls from 'components/LayerPanel/LossControls';
@@ -66,11 +66,20 @@ export default class LayerPanel extends Component {
 
       switch (group.groupType) {
         case 'radio': {
-          layers = this.createRadioGroup(group.layers);
+          layers = <RadioGroup
+            layers={group.layers}
+            activeLayers={this.props.activeLayers}
+            dynamicLayers={this.props.dynamicLayers}
+            exclusiveLayerIds={this.props.exclusiveLayerIds}
+          />;
           break;
         }
         case 'nested':
-          layers = <NestedGroup layers={group.layers} activeLayers={this.props.activeLayers} />;
+          layers = <NestedGroup
+            layers={group.layers}
+            activeLayers={this.props.activeLayers}
+            dynamicLayers={this.props.dynamicLayers}
+          />;
           break;
         case 'basemap':
           layers = this.renderBasemaps(group.layers);
@@ -180,10 +189,6 @@ export default class LayerPanel extends Component {
       </LayerCheckbox>;
     }
     return checkbox;
-  }
-
-  createRadioGroup = layers => {
-    return <LayerRadio layers={layers} dynamicLayers={this.props.dynamicLayers} exclusiveLayerIds={this.props.exclusiveLayerIds} />;
   }
 
   renderBasemaps = (configuredLayers) => {

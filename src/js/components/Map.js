@@ -352,6 +352,15 @@ export default class Map extends Component {
         }
       } else if (layer.layerType === 'ArcGISFeatureLayer' && layer.featureCollection && layer.featureCollection.layers) {
         layer.featureCollection.layers.forEach((sublayer) => {
+
+          // We don't want to do this, but we have to...
+          // A user will NEVER know this sublayer.id
+          // The user enters the layer.id in resources.js which DOES NOT
+          // equal the sublayer.id. This messes up the whole app.
+          if (sublayer.id.indexOf(layer.id) > -1) {
+            sublayer.id = layer.id;
+          }
+
           const layerInfo = {
             id: sublayer.id,
             label: sublayer.title,
@@ -378,7 +387,7 @@ export default class Map extends Component {
 
     const groupKeys = Object.keys(settings.layerPanel)
       .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
-    const exclusiveLayerIds = [];
+    let exclusiveLayerIds = [];
     groupKeys.forEach(groupKey => {
       const group = settings.layerPanel[groupKey];
       switch (group.groupType) {
@@ -386,7 +395,6 @@ export default class Map extends Component {
           let groupLayers = [];
           const groupSublayers = [];
           group.layers.forEach(l => {
-            exclusiveLayerIds.push(l.id);
             if (l.includedSublayers) { // this is a dynamic layer
               layers.forEach(webmapLayer => {
                 if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
@@ -397,6 +405,7 @@ export default class Map extends Component {
                 }
               });
               groupLayers = groupLayers.concat(groupSublayers);
+              exclusiveLayerIds = exclusiveLayerIds.concat(...groupLayers.map(l2 => l2.subId));
               return;
             }
 
@@ -409,6 +418,7 @@ export default class Map extends Component {
               ...mapLayer,
               ...l
             });
+            exclusiveLayerIds.push(l.id);
           });
           group.layers = groupLayers;
           break;
