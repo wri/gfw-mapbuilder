@@ -71,6 +71,7 @@ class MapActions {
 
   createLayers (map, layerPanel, activeLayers, language) {
     //- Organize and order the layers before adding them to the map
+    let maxOrder = 0;
     let layers = Object.keys(layerPanel).filter((groupName) => {
       //- remove basemaps and extra layers, extra layers will be added later and basemaps
       //- handled differently elsewhere
@@ -78,13 +79,16 @@ class MapActions {
     }).sort((a, b) => {
       //- Sort the groups based on their order property
       return layerPanel[a].order < layerPanel[b].order;
-    }).reduce((list, groupName) => {
+    }).reduce((list, groupName, groupIndex) => {
       //- Flatten them into a single list but before that,
       //- Multiple the order by 100 so I can sort them more easily below, this is because there
       //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
       //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
+      if (groupIndex === 0) {
+        maxOrder = layerPanel[groupName].order;
+      }
       return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = ((10 - layerPanel[groupName].order) * 100) - (layer.order || index);
+        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
         return layer;
       }));
     }, []);

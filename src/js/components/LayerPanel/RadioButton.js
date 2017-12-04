@@ -25,6 +25,9 @@ const RadioButton = ({
 
     if (selected) {
       layerActions.removeActiveLayer(id);
+      if (layer.includedSublayers) {
+        layerActions.removeSubLayer(layer);
+      }
       return;
     }
 
