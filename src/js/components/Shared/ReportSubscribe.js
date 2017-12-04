@@ -149,12 +149,16 @@ export default class ReportSubscribeButtons extends Component {
 
     return (
       <div className='report-sub-buttons'>
-        <button className='fa-button gold' onClick={this.printReport}>
-          {text[language].PRINT_REPORT}
-        </button>
-        <button className={`fa-button gold ${activeAnalysisType === analysisKeys.COMMODITIES ? '' : ' hidden'}`} onClick={this.launchLandmarkAnalysis}>
+        <div className='report-sub-button'>
+          <button className='fa-button gold' onClick={this.printReport}>
+            {text[language].PRINT_REPORT}
+          </button>
+        </div>
+        <div className='report-sub-button'>
+          <button className={`fa-button gold ${activeAnalysisType === analysisKeys.COMMODITIES ? '' : ' hidden'}`} onClick={this.launchLandmarkAnalysis}>
           Indigenous Lands Report
-        </button>
+          </button>
+        </div>
       </div>
     );
   }
