@@ -1,42 +1,19 @@
 import React from 'react';
 import LayerTransparency from './LayerTransparency';
-import layerActions from 'actions/LayerActions';
 
 const RadioButton = ({
-  turnTheseOff,
   selected,
   id,
   label,
   iconLoading,
   sublabel,
   layer,
-  showInfo
+  showInfo,
+  toggleLayer
 }) => {
 
-  const toggleLayer = () => {
-    // turn off all layers with id in the turnTheseOff array
-    turnTheseOff.forEach(i => {
-      layerActions.removeActiveLayer(i);
-    });
-
-    if (layer.includedSublayers) {
-      layerActions.removeAllSubLayers(layer.esriLayer);
-    }
-
-    if (selected) {
-      layerActions.removeActiveLayer(id);
-      if (layer.includedSublayers) {
-        layerActions.removeSubLayer(layer);
-      }
-      return;
-    }
-
-    if (layer.includedSublayers) {
-      layerActions.addSubLayer(layer);
-      return;
-    }
-
-    layerActions.addActiveLayer(id);
+  const handleToggleLayer = () => {
+    toggleLayer(layer);
   };
 
   const handleShowInfo = () => {
@@ -45,8 +22,8 @@ const RadioButton = ({
 
   return (
     <div className={`layer-radio relative ${selected}`} >
-      <span onClick={toggleLayer} className='radio-switch pointer'></span>
-      <span onClick={toggleLayer} className='layer-radio-label pointer'>
+      <span onClick={handleToggleLayer} className='radio-switch pointer'></span>
+      <span onClick={handleToggleLayer} className='layer-radio-label pointer'>
         {label}
       </span>
       <span className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`} onClick={handleShowInfo}>

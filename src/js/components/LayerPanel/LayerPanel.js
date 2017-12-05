@@ -67,10 +67,10 @@ export default class LayerPanel extends Component {
       switch (group.groupType) {
         case 'radio': {
           layers = <RadioGroup
-            layers={group.layers}
+            allLayers={this.props.allLayers}
+            groupLayers={group.layers}
+            allRadioLayers={this.props.allLayers.filter(l => this.props.exclusiveLayerIds.indexOf(l.id) > -1)}
             activeLayers={this.props.activeLayers}
-            dynamicLayers={this.props.dynamicLayers}
-            exclusiveLayerIds={this.props.exclusiveLayerIds}
           />;
           break;
         }

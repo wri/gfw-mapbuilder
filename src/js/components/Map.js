@@ -387,7 +387,7 @@ export default class Map extends Component {
 
     const groupKeys = Object.keys(settings.layerPanel)
       .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
-    let exclusiveLayerIds = [];
+    const exclusiveLayerIds = [];
     groupKeys.forEach(groupKey => {
       const group = settings.layerPanel[groupKey];
       switch (group.groupType) {
@@ -405,7 +405,7 @@ export default class Map extends Component {
                 }
               });
               groupLayers = groupLayers.concat(groupSublayers);
-              exclusiveLayerIds = exclusiveLayerIds.concat(...groupLayers.map(l2 => l2.subId));
+              exclusiveLayerIds.indexOf(l.id) === -1 && exclusiveLayerIds.push(l.id);
               return;
             }
 

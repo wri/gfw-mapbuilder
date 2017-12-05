@@ -20,55 +20,58 @@ export default class RadioGroup extends Component {
     layerActions.showLoading(layer.id);
   }
 
+  toggleLayer = (layer) => {
+    const { allRadioLayers } = this.props;
+
+    const layersAlreadyHidden = [];
+
+    allRadioLayers.forEach(l => {
+      if (l.id === layer.id) {
+        l.subId && layerActions.removeAllSubLayers(l.esriLayer);
+        return;
+      }
+      if (layersAlreadyHidden.indexOf(l.id) > -1) return;
+
+      l.esriLayer.hide();
+      layerActions.removeActiveLayer(l.id);
+      l.subId && layerActions.removeAllSubLayers(l.esriLayer);
+      layersAlreadyHidden.push(l.id);
+    });
+
+    if (layer.hasOwnProperty('subId')) {
+      layerActions.setSubLayers(layer.id, layer.subIndex);
+      layer.esriLayer.setVisibleLayers([layer.subIndex]);
+      layer.esriLayer.show();
+      return;
+    }
+
+    layerActions.addActiveLayer(layer.id);
+    layer.esriLayer.show();
+  }
+
   renderRadioButton = layer => {
     const { language } = this.context;
-    const turnTheseOff = this.props.exclusiveLayerIds.filter(id => layer.subId ? layer.subId !== id : layer.id !== id);
     const selected = this.props.activeLayers.indexOf(layer.subId || layer.id) > -1 ? 'active' : '';
     const sublabel = layer.sublabel && (layer.sublabel[language] || layer.sublabel[layer.subIndex][language]);
 
     return <RadioButton
       key={layer.subId || layer.id}
-      turnTheseOff={turnTheseOff}
       selected={selected}
       label={layer.label}
       sublabel={sublabel}
       id={layer.subId || layer.id}
       layer={layer}
       showInfo={this.showInfo}
+      toggleLayer={this.toggleLayer}
     />;
   }
 
   render() {
-    const {layers} = this.props;
-
-    layers.forEach(l => {
-      if (l.includedSublayers) {
-        l.esriLayer.show();
-
-        if (this.props.dynamicLayers[l.esriLayer.id] && this.props.dynamicLayers[l.esriLayer.id].indexOf(l.subIndex) > -1) {
-          l.esriLayer.setVisibleLayers([l.subIndex]);
-        }
-
-        if (this.props.dynamicLayers[l.esriLayer.id] && this.props.dynamicLayers[l.esriLayer.id].length === 0) {
-          l.esriLayer.hide();
-        }
-      } else {
-        if (this.props.activeLayers.indexOf(l.id) > -1) {
-          l.esriLayer.show();
-          layers.forEach(layer => {
-            if (layer.id !== l.id) {
-              layer.esriLayer.hide();
-            }
-          });
-        } else {
-          l.esriLayer.hide();
-        }
-      }
-    });
+    const { groupLayers } = this.props;
 
     return (
       <div>
-        {layers.map(this.renderRadioButton)}
+        {groupLayers.map(this.renderRadioButton)}
       </div>
     );
   }
@@ -76,5 +79,5 @@ export default class RadioGroup extends Component {
 }
 
 RadioGroup.propTypes = {
-  layers: React.PropTypes.array.isRequired
+  groupLayers: React.PropTypes.array.isRequired
 };
