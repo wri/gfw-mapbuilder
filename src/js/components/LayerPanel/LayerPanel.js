@@ -24,6 +24,8 @@ import React, {
   PropTypes
 } from 'react';
 
+let hasNotRun = true;
+
 export default class LayerPanel extends Component {
 
   static contextTypes = {
@@ -46,10 +48,12 @@ export default class LayerPanel extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.activeLayers !== prevProps.activeLayers
-      && this.props.activeLayers.filter(id => id !== 'USER_FEATURES').length > 0) {
+      && this.props.activeLayers.filter(id => id !== 'USER_FEATURES').length > 0
+      && hasNotRun) {
+        hasNotRun = false;
         const { layerPanel } = this.context.settings;
+        const groupsWithLayersTurnedOn = [];
         Object.keys(layerPanel).filter(key => key !== 'GROUP_BASEMAP' && key !== 'extraLayers').forEach(k => {
-          const groupsWithLayersTurnedOn = [];
           layerPanel[k].hasOwnProperty('layers') && layerPanel[k].layers.forEach(l => {
             let idToCheck = '';
             if (l.hasOwnProperty('nestedLayers')) {
@@ -63,10 +67,10 @@ export default class LayerPanel extends Component {
               groupsWithLayersTurnedOn.push(k);
             }
           });
-          if (groupsWithLayersTurnedOn.length > 0) {
-            mapActions.openTOCAccordion.defer(groupsWithLayersTurnedOn[0]);
-          }
         });
+        if (groupsWithLayersTurnedOn.length > 0) {
+          mapActions.openTOCAccordion.defer(groupsWithLayersTurnedOn[0]);
+        }
     }
   }
 
