@@ -53,14 +53,6 @@ const LayersHelper = {
     return 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
   },
 
-  changeOpacity (parameters) {
-    const layer = brApp.map.getLayer(parameters.layerId);
-    if ( layer ) {
-      // TODO:  check that value is >= 0 and <= 1.
-      layer.setOpacity(parameters.value);
-    }
-  },
-
   isLayerVisible (map, layerInfo) {
     // Non-webmap layers, always assume visible.
     let visible = true;
