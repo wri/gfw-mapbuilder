@@ -9,6 +9,7 @@ import GladControls from 'components/LayerPanel/GladControls';
 import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import layerActions from 'actions/LayerActions';
+import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
 import WRIBasemapLayer from 'components/LayerPanel/WRIBasemapLayer';
 import LandsatLayer from 'components/LayerPanel/LandsatLayer';
@@ -22,6 +23,8 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+
+let hasNotRun = true;
 
 export default class LayerPanel extends Component {
 
@@ -42,6 +45,34 @@ export default class LayerPanel extends Component {
   //     </LayerGroup>
   //   );
   // };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.activeLayers !== prevProps.activeLayers
+      && this.props.activeLayers.filter(id => id !== 'USER_FEATURES').length > 0
+      && hasNotRun) {
+        hasNotRun = false;
+        const { layerPanel } = this.context.settings;
+        const groupsWithLayersTurnedOn = [];
+        Object.keys(layerPanel).filter(key => key !== 'GROUP_BASEMAP' && key !== 'extraLayers').forEach(k => {
+          layerPanel[k].hasOwnProperty('layers') && layerPanel[k].layers.forEach(l => {
+            let idToCheck = '';
+            if (l.hasOwnProperty('nestedLayers')) {
+              l.nestedLayers.forEach(nl => {
+                idToCheck = nl.subId || nl.id;
+              });
+            } else {
+              idToCheck = l.subId || l.id;
+            }
+            if (this.props.activeLayers.indexOf(idToCheck) > -1 && groupsWithLayersTurnedOn.indexOf(k) === -1) {
+              groupsWithLayersTurnedOn.push(k);
+            }
+          });
+        });
+        if (groupsWithLayersTurnedOn.length > 0) {
+          mapActions.openTOCAccordion.defer(groupsWithLayersTurnedOn[0]);
+        }
+    }
+  }
 
   renderLayerGroups = (groups, language) => {
     //- Make an array, filter it, then sort by order
