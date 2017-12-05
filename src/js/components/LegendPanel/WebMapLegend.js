@@ -14,11 +14,12 @@ export default class WebMapLegend extends React.Component {
       this.setState(prevState => {
         return {
           visible: !prevState.visible
-         };
-       });
-     }
-
+        };
+      });
+    }
+    console.log(this.props.layerId);
     if (this.props.legendOpacity.layerId === this.props.layerId && this.props.legendOpacity.value !== prevProps.legendOpacity.value) {
+      debugger;
       this.setState({ opacity: this.props.legendOpacity.value });
     }
   }
