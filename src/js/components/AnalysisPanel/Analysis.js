@@ -201,8 +201,8 @@ export default class Analysis extends Component {
       case analysisKeys.CARBON:
         return <CarbonChart
           results={results}
-          aboveground={results.abovegroundCarbon}
-          belowground={results.belowgroundCarbon}
+          abovegroundCarbon={results.abovegroundCarbon}
+          belowgroundCarbon={results.belowgroundCarbon}
           total={results.total}
           averageAboveground={results.averageAboveground}
           averageBelowground={results.averageBelowground}
