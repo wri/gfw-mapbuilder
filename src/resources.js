@@ -45,6 +45,7 @@ export default {
     modisFires: false,
     intactForests: true,
     aboveGroundBiomass: true,
+    carbonStoredInTrees: true,
     landCover: true,
     mangroves: false,
     sadAlerts: false,

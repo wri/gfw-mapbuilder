@@ -693,6 +693,26 @@ const runAnalysis = function runAnalysis (params, feature) {
     node.remove();
   }
 
+  if (settings.carbonStoredInTrees) {
+    performAnalysis({
+      type: analysisKeys.CARBON,
+      geometry: feature.geometry,
+      settings: settings,
+      language: lang,
+      geostoreId: feature.geostoreId
+    }).then(results => {
+      const node = document.getElementById('carbon-chart');
+      charts.makeCarbonInTreesChart(node, {
+        ...results,
+        totalSuffix: ' MgC',
+        averageSuffix: ' MgC/Ha'
+      });
+    });
+  } else {
+    const node = document.getElementById('carbon-chart');
+    node.remove();
+  }
+
   if (settings.intactForests) {
     //- Intact Forest with Loss Analysis
     performAnalysis({
