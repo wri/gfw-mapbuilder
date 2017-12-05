@@ -34,6 +34,13 @@ class LayerActions {
     return info;
   }
 
+  setSubLayers (id, ...subIndexes) {
+    return {
+      id,
+      subIndexes
+    };
+  }
+
   changeViirsFiresTimeline (selectedIndex) {
     return selectedIndex;
   }
