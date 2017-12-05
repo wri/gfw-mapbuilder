@@ -21,32 +21,49 @@ export default class RadioGroup extends Component {
   }
 
   toggleLayer = (layer) => {
-    const { allRadioLayers } = this.props;
+    const { allRadioLayers, activeLayers } = this.props;
 
     const layersAlreadyHidden = [];
 
     allRadioLayers.forEach(l => {
       if (l.id === layer.id) {
+        // The following syntax is equivalent to:
+        // if (l.subId) {
+        //   layerActions.removeAllSubLayers(l.esriLayer);
+        // }
+        // it may be used frequently throughout this app.
+        // It is additionally used in our jsx to render something based
+        // on a condition. This works nicely with react since react doesn't
+        // render a 'false' value
         l.subId && layerActions.removeAllSubLayers(l.esriLayer);
         return;
       }
-      if (layersAlreadyHidden.indexOf(l.id) > -1) return;
+      if (layersAlreadyHidden.indexOf(l.id) > -1) {
+        return;
+      }
 
       l.esriLayer.hide();
-      layerActions.removeActiveLayer(l.id);
+      layerActions.removeActiveLayer(l.subId || l.id);
       l.subId && layerActions.removeAllSubLayers(l.esriLayer);
       layersAlreadyHidden.push(l.id);
     });
 
+    // If the item you clicked is already on
+    // turn it off and return from the fucntion.
+    if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
+      layer.esriLayer.hide();
+      layerActions.removeActiveLayer(layer.subId || layer.id);
+      layer.subId && layerActions.removeAllSubLayers(layer.esriLayer);
+      return;
+    }
+
     if (layer.hasOwnProperty('subId')) {
       layerActions.setSubLayers(layer.id, layer.subIndex);
       layer.esriLayer.setVisibleLayers([layer.subIndex]);
-      layer.esriLayer.show();
       return;
     }
 
     layerActions.addActiveLayer(layer.id);
-    layer.esriLayer.show();
   }
 
   renderRadioButton = layer => {
@@ -67,7 +84,26 @@ export default class RadioGroup extends Component {
   }
 
   render() {
-    const { groupLayers } = this.props;
+    const { groupLayers, dynamicLayers, activeLayers } = this.props;
+
+    groupLayers.forEach(layer => {
+      if (layer.subId) {
+        if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
+          layer.esriLayer.show();
+          return;
+        }
+
+        layer.esriLayer.hide();
+        return;
+      }
+
+      if (activeLayers.indexOf(layer.id) > -1) {
+        layer.esriLayer.show();
+        return;
+      }
+
+      layer.esriLayer.hide();
+    });
 
     return (
       <div>
