@@ -152,75 +152,96 @@ export default class Map extends Component {
         'comm_comm_CustomaryTenure_6877'
       ];
 
+      function handleLayerEvents(data) {
+        let featurePointLayer;
+        let featurePolyLayer;
+        const visible = data.visible || data.target.visible;
+        const opacity = data.opacity || data.target.opacity;
+
+        switch (data.target.id) {
+          case 'comm_ind_FormalLandClaim_2392':
+          featurePointLayer = response.map.getLayer('indigenous_FormalClaimFeature1');
+          featurePolyLayer = response.map.getLayer('indigenous_FormalClaimFeature0');
+
+            break;
+          case 'comm_ind_CustomaryTenure_8127':
+            featurePointLayer = response.map.getLayer('indigenous_CustomaryFeature1');
+            featurePolyLayer = response.map.getLayer('indigenous_CustomaryFeature0');
+
+            break;
+          case 'comm_ind_Documented_8219':
+            featurePointLayer = response.map.getLayer('indigenous_DocumentedFeature1');
+            featurePolyLayer = response.map.getLayer('indigenous_DocumentedFeature0');
+
+            break;
+          case 'comm_ind_NotDocumented_2683':
+            featurePointLayer = response.map.getLayer('indigenous_NotDocumentedFeature1');
+            featurePolyLayer = response.map.getLayer('indigenous_NotDocumentedFeature0');
+
+            break;
+          case 'comm_comm_FormalLandClaim_5585':
+            featurePointLayer = response.map.getLayer('community_FormalClaimFeature1');
+            featurePolyLayer = response.map.getLayer('community_FormalClaimFeature0');
+
+            break;
+          case 'comm_comm_CustomaryTenure_6877':
+            featurePointLayer = response.map.getLayer('community_CustomaryFeature1');
+            featurePolyLayer = response.map.getLayer('community_CustomaryFeature0');
+
+            break;
+          case 'comm_comm_Documented_4717':
+            featurePointLayer = response.map.getLayer('community_DocumentedFeature1');
+            featurePolyLayer = response.map.getLayer('community_DocumentedFeature0');
+
+            break;
+          case 'comm_comm_NotDocumented_9336':
+            featurePointLayer = response.map.getLayer('community_NotDocumentedFeature1');
+            featurePolyLayer = response.map.getLayer('community_NotDocumentedFeature0');
+
+            break;
+          default:
+        }
+        // Handle visibility
+        if (visible) {
+          if (featurePointLayer) {
+            featurePointLayer.show();
+          }
+          if (featurePolyLayer) {
+            featurePolyLayer.show();
+          }
+        } else {
+          if (featurePointLayer) {
+            featurePointLayer.hide();
+          }
+          if (featurePolyLayer) {
+            featurePolyLayer.hide();
+          }
+        }
+
+        // Handle opacity
+        if (opacity) {
+          if (featurePointLayer) {
+            featurePointLayer.setOpacity(opacity);
+          }
+          if (featurePolyLayer) {
+            featurePolyLayer.setOpacity(opacity);
+          }
+        } else {
+          if (featurePointLayer) {
+            featurePointLayer.setOpacity(opacity);
+          }
+          if (featurePolyLayer) {
+            featurePolyLayer.setOpacity(opacity);
+          }
+        }
+      }
+
       response.map.layerIds.forEach(id => {
         if (landMapLayerIds.indexOf(id) > -1) {
           const layer = response.map.getLayer(id);
 
-          layer.on('visibility-change', result => {
-
-            let featurePointLayer;
-            let featurePolyLayer;
-            const visible = result.visible;
-
-            switch (result.target.id) {
-              case 'comm_ind_FormalLandClaim_2392':
-              featurePointLayer = response.map.getLayer('indigenous_FormalClaimFeature1');
-              featurePolyLayer = response.map.getLayer('indigenous_FormalClaimFeature0');
-
-                break;
-              case 'comm_ind_CustomaryTenure_8127':
-                featurePointLayer = response.map.getLayer('indigenous_CustomaryFeature1');
-                featurePolyLayer = response.map.getLayer('indigenous_CustomaryFeature0');
-
-                break;
-              case 'comm_ind_Documented_8219':
-                featurePointLayer = response.map.getLayer('indigenous_DocumentedFeature1');
-                featurePolyLayer = response.map.getLayer('indigenous_DocumentedFeature0');
-
-                break;
-              case 'comm_ind_NotDocumented_2683':
-                featurePointLayer = response.map.getLayer('indigenous_NotDocumentedFeature1');
-                featurePolyLayer = response.map.getLayer('indigenous_NotDocumentedFeature0');
-
-                break;
-              case 'comm_comm_FormalLandClaim_5585':
-                featurePointLayer = response.map.getLayer('community_FormalClaimFeature1');
-                featurePolyLayer = response.map.getLayer('community_FormalClaimFeature0');
-
-                break;
-              case 'comm_comm_CustomaryTenure_6877':
-                featurePointLayer = response.map.getLayer('community_CustomaryFeature1');
-                featurePolyLayer = response.map.getLayer('community_CustomaryFeature0');
-
-                break;
-              case 'comm_comm_Documented_4717':
-                featurePointLayer = response.map.getLayer('community_DocumentedFeature1');
-                featurePolyLayer = response.map.getLayer('community_DocumentedFeature0');
-
-                break;
-              case 'comm_comm_NotDocumented_9336':
-                featurePointLayer = response.map.getLayer('community_NotDocumentedFeature1');
-                featurePolyLayer = response.map.getLayer('community_NotDocumentedFeature0');
-
-                break;
-              default:
-            }
-            if (visible) {
-              if (featurePointLayer) {
-                featurePointLayer.show();
-              }
-              if (featurePolyLayer) {
-                featurePolyLayer.show();
-              }
-            } else {
-              if (featurePointLayer) {
-                featurePointLayer.hide();
-              }
-              if (featurePolyLayer) {
-                featurePolyLayer.hide();
-              }
-            }
-          });
+          layer.on('visibility-change', handleLayerEvents);
+          layer.on('opacity-change', handleLayerEvents);
         }
       });
 

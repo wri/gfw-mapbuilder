@@ -183,7 +183,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        visible: getVisibleLayers('comm_ind_NotDocumented_2683'),
         type: 'feature'
       },
       {
@@ -191,7 +191,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        visible: getVisibleLayers('comm_ind_NotDocumented_2683'),
         type: 'feature'
       },
       {
