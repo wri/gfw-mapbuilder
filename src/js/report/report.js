@@ -117,8 +117,17 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     });
 
     //- make sure there's only one entry for each dynamic layer
-    const uniqueLayers = [];
+    let uniqueLayers = [];
     const existingIds = [];
+    const reducedLayers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    layers = layers.filter(l => l.url).concat(reducedLayers);
+
     layers.forEach(layer => {
       if (existingIds.indexOf(layer.id) === -1) {
         uniqueLayers.push(layer);
@@ -132,9 +141,171 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
 
+    const landMapLayerIds = [
+      'comm_ind_Documented_8219',
+      'comm_ind_NotDocumented_2683',
+      'comm_ind_FormalLandClaim_2392',
+      'comm_ind_CustomaryTenure_8127',
+      'comm_comm_Documented_4717',
+      'comm_comm_NotDocumented_9336',
+      'comm_comm_FormalLandClaim_5585',
+      'comm_comm_CustomaryTenure_6877'
+    ];
+
+    const landMapFeatureLayerMap = {
+      comm_ind_Documented_8219: ['indigenous_DocumentedFeature0', 'indigenous_DocumentedFeature1'],
+      comm_ind_NotDocumented_2683: ['indigenous_NotDocumentedFeature0', 'indigenous_NotDocumentedFeature1'],
+      comm_ind_FormalLandClaim_2392: ['indigenous_FormalClaimFeature0', 'indigenous_FormalClaimFeature1'],
+      comm_ind_CustomaryTenure_8127: ['indigenous_CustomaryFeature0', 'indigenous_CustomaryFeature1'],
+      comm_comm_Documented_4717: ['community_DocumentedFeature0', 'community_DocumentedFeature1'],
+      comm_comm_NotDocumented_9336: ['community_NotDocumentedFeature0', 'community_NotDocumentedFeature1'],
+      comm_comm_FormalLandClaim_5585: ['community_FormalClaimFeature0', 'community_FormalClaimFeature1'],
+      comm_comm_CustomaryTenure_6877: ['community_CustomaryFeature0', 'community_CustomaryFeature1']
+    };
+
+    const landMapLayers = [];
+    landMapLayerIds.forEach(id => landMapLayers.push(map.getLayer(id)));
+
+    const getVisibleLayers = id => {
+      return activeLayers.indexOf(id) > -1;
+    };
+
+    const convertToFeatureLayers = [
+      {
+        id: 'indigenous_FormalClaimFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_FormalClaimFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_CustomaryFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_CustomaryFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_DocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_Documented_8219'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_DocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_Documented_8219'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_NotDocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_NotDocumented_2683'),
+        type: 'feature'
+      },
+      {
+        id: 'indigenous_NotDocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_ind_NotDocumented_2683'),
+        type: 'feature'
+      },
+      {
+        id: 'community_FormalClaimFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
+        type: 'feature'
+      },
+      {
+        id: 'community_FormalClaimFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
+        type: 'feature'
+      },
+      {
+        id: 'community_CustomaryFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
+        type: 'feature'
+      },
+      {
+        id: 'community_CustomaryFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
+        type: 'feature'
+      },
+      {
+        id: 'community_DocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_Documented_4717'),
+        type: 'feature'
+      },
+      {
+        id: 'community_DocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_Documented_4717'),
+        type: 'feature'
+      },
+      {
+        id: 'community_NotDocumentedFeature0',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/0',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        type: 'feature'
+      },
+      {
+        id: 'community_NotDocumentedFeature1',
+        url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/1',
+        minScale: 4600000,
+        maxScale: 0,
+        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        type: 'feature'
+      }
+    ];
+
+    uniqueLayers = uniqueLayers.concat(convertToFeatureLayers);
+
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
-    //- return an arcgis layer for each config object
+    //- return an arcgis layer for each config
     const esriLayers = uniqueLayers.filter(layer => layer && layer.visible && (layer.url || layer.type === 'graphic')).map((layer) => {
       return layerFactory(layer, language);
     });
@@ -151,6 +322,30 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     }
 
     map.addLayers(esriLayers);
+
+    reducedLayers.forEach(layer => {
+      const mapLayer = map.getLayer(layer.id);
+      mapLayer.hide();
+      activeLayers.split(',').forEach(id => {
+        if (id.indexOf(layer.id) > -1) {
+          if (layer.hasOwnProperty('includedSublayers')) {
+            const subIndex = parseInt(id.substr(layer.id.length + 1));
+            mapLayer.setVisibleLayers([subIndex]);
+            mapLayer.show();
+            return;
+          }
+          if (landMapFeatureLayerMap.hasOwnProperty(layer.id)) {
+            const feature1 = map.getLayer(landMapFeatureLayerMap[layer.id][0]);
+            const feature2 = map.getLayer(landMapFeatureLayerMap[layer.id][1]);
+            feature1.show();
+            feature2.show();
+            mapLayer.show();
+            return;
+          }
+          mapLayer.show();
+        }
+      });
+    });
 
     layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
     layersHelper.updateAGBiomassLayer(tcd, map);
@@ -173,7 +368,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         }
       });
     });
-
 };
 
 const createMap = function createMap (params) {
