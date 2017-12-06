@@ -76,84 +76,76 @@ export default {
 	},
 
 	makeCommoditiesPieChart: (el, data) => {
-
 		const oilPalm = data.oilPalm;
 		const mining = data.mining;
 		const managedForests = data.managedForests;
+
+		const colors = ['#FDDB61', '#8E6E63', '#475961'];
+    const names = ['Oil palm concessions', 'Mining concessions', 'Managed forest concessions'];
 		Highcharts.chart(el, {
 			chart: {
-				type: 'pie'
-			},
-			credits: {
-				enabled: false
-			},
-			title: {
-				text: null
-			},
-			plotOptions: {
-				pie: {
-					dataLabels: {
-						enabled: false,
-						distance: -30,
-						style: {
-							fontSize: '18px',
-							textOutline: 'none',
-							fontWeight: 'normal'
-						}
-					},
-					showInLegend: true,
-					center: ['50%', '35%']
-				}
-			},
-			series: [
-				{
-					name: 'Total',
+        type: 'bar'
+      },
+      title: {
+        text: ''//'Total Concessions ' + (oilPalm + mining + managedForests)
+      },
+      xAxis: {
+        categories: names,
+        allowDecimals: false
+      },
+      yAxis: {
+        allowDecimals: false
+      },
+      plotOptions: {
+        series: {
+          events: {
+            legendItemClick: function (x) {
+              var i = this.index - 1;
+              var series = this.chart.series[0];
+              var point = series.points[i];
+
+              if (point.oldY === undefined) {
+								point.oldY = point.y;
+							}
+
+              point.update({y: point.y !== null ? null : point.oldY});
+            }
+          }
+        }
+      },
+      legend: {
+        labelFormatter: function(){
+          return names[this.index - 1];
+        }
+      },
+      series: [
+        {
+          pointWidth: 55,
+          color: colors[0],
+          showInLegend: false,
 					data: [
 						{
 							y: Number(oilPalm),
-							color: '#5CCEF8',
+							color: '#FDDB61',
 							name: 'Oil palm concessions'
 						},
 						{
 							y: Number(mining),
-							color: '#50AC58',
+							color: '#8E6E63',
 							name: 'Mining concessions'
 						},
 						{
 							y: Number(managedForests),
-							color: '#1cca1c',
+							color: '#475961',
 							name: 'Managed forest concessions '
 						}
-					],
-					dataLabels: {
-						formatter: function() {
-							return this.y;
-						}
-					},
-					size: '170',
-					innerSize: '35%',
-					id: 'total-comm'
-				}
-			],
-			labels: {
-				items: [
-					{
-						html: `Total: ${(oilPalm + mining + managedForests)} concessions`,
-						style: {
-							top: '220px',
-							left: '50%',
-							fontSize: '16px'
-						}
-					}
-				],
-				style: {
-					color: '#6f6f6f'
-				}
-			},
-			legend: {
-				layout: 'vertical',
-				y: -21
-			}
+					]
+        },
+        {color: '#FDDB61'},
+        {color: '#8E6E63'},
+        {color: '#475961'}
+      ]
+
 		});
 
 	},
