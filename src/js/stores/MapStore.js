@@ -396,7 +396,6 @@ class MapStore {
 
   changeOpacity (payload) {
     // payload = { layerId: <string>, value: <number> }
-    console.log(payload);
     this.legendOpacity = payload;
   }
 

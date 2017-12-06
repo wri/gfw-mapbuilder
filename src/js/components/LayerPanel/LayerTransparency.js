@@ -37,16 +37,14 @@ export default class LayerTransparency extends Component {
       this.setState({ opacity: value });
     } else if (mapLayer && layer.subIndex !== undefined) {
       const options = mapLayer.layerDrawingOptions || [];
-      console.log(mapLayer);
       // Transparency is the reverse of other layers, 0.25 opacity = transparency of value 75
       options[layer.subIndex] = new LayerDrawingOptions({ transparency: 100 - (value * 100) });
       if (timer) { clearTimeout(timer); }
       timer = setTimeout(function () {
         mapLayer.setLayerDrawingOptions(options);
       }, TIMER_DURATION);
-      console.log(layer);
       layerActions.changeOpacity({
-        layerId: layer.id,
+        layerId: layer.subId,
         value
       });
       this.setState({ opacity: value });

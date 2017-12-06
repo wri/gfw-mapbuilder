@@ -184,6 +184,7 @@ export default class LegendPanel extends Component {
           key={soilLayerConfig.id}
           legendConfig={soilLayerConfig.legend}
           labels={'Soil Organic Carbon'}
+          layerId={soilLayerConfig.id}
           visibility={activeLayers.indexOf('SOIL_CARBON') > -1}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
