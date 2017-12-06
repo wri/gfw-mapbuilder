@@ -1,7 +1,7 @@
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import TerraIControls from 'components/LayerPanel/TerraIControls';
 import LayerCheckbox from 'components/LayerPanel/LayerCheckbox';
-import LayerRadio from 'components/LayerPanel/LayerRadio';
+import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
 import FiresControls from 'components/LayerPanel/FiresControls';
 import LossControls from 'components/LayerPanel/LossControls';
@@ -9,6 +9,7 @@ import GladControls from 'components/LayerPanel/GladControls';
 import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import layerActions from 'actions/LayerActions';
+import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
 import WRIBasemapLayer from 'components/LayerPanel/WRIBasemapLayer';
 import LandsatLayer from 'components/LayerPanel/LandsatLayer';
@@ -22,6 +23,8 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+
+let hasNotRun = true;
 
 export default class LayerPanel extends Component {
 
@@ -42,6 +45,34 @@ export default class LayerPanel extends Component {
   //     </LayerGroup>
   //   );
   // };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.activeLayers !== prevProps.activeLayers
+      && this.props.activeLayers.filter(id => id !== 'USER_FEATURES').length > 0
+      && hasNotRun) {
+        hasNotRun = false;
+        const { layerPanel } = this.context.settings;
+        const groupsWithLayersTurnedOn = [];
+        Object.keys(layerPanel).filter(key => key !== 'GROUP_BASEMAP' && key !== 'extraLayers').forEach(k => {
+          layerPanel[k].hasOwnProperty('layers') && layerPanel[k].layers.forEach(l => {
+            let idToCheck = '';
+            if (l.hasOwnProperty('nestedLayers')) {
+              l.nestedLayers.forEach(nl => {
+                idToCheck = nl.subId || nl.id;
+              });
+            } else {
+              idToCheck = l.subId || l.id;
+            }
+            if (this.props.activeLayers.indexOf(idToCheck) > -1 && groupsWithLayersTurnedOn.indexOf(k) === -1) {
+              groupsWithLayersTurnedOn.push(k);
+            }
+          });
+        });
+        if (groupsWithLayersTurnedOn.length > 0) {
+          mapActions.openTOCAccordion.defer(groupsWithLayersTurnedOn[0]);
+        }
+    }
+  }
 
   renderLayerGroups = (groups, language) => {
     //- Make an array, filter it, then sort by order
@@ -66,11 +97,21 @@ export default class LayerPanel extends Component {
 
       switch (group.groupType) {
         case 'radio': {
-          layers = this.createRadioGroup(group.layers);
+          layers = <RadioGroup
+            allLayers={this.props.allLayers}
+            groupLayers={group.layers}
+            allRadioLayers={this.props.allLayers.filter(l => this.props.exclusiveLayerIds.indexOf(l.id) > -1)}
+            activeLayers={this.props.activeLayers}
+            dynamicLayers={this.props.dynamicLayers}
+          />;
           break;
         }
         case 'nested':
-          layers = <NestedGroup layers={group.layers} activeLayers={this.props.activeLayers} />;
+          layers = <NestedGroup
+            layers={group.layers}
+            activeLayers={this.props.activeLayers}
+            dynamicLayers={this.props.dynamicLayers}
+          />;
           break;
         case 'basemap':
           layers = this.renderBasemaps(group.layers);
@@ -180,10 +221,6 @@ export default class LayerPanel extends Component {
       </LayerCheckbox>;
     }
     return checkbox;
-  }
-
-  createRadioGroup = layers => {
-    return <LayerRadio layers={layers} dynamicLayers={this.props.dynamicLayers} exclusiveLayerIds={this.props.exclusiveLayerIds} />;
   }
 
   renderBasemaps = (configuredLayers) => {

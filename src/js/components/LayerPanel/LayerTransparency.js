@@ -1,6 +1,6 @@
 import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import React, {Component, PropTypes} from 'react';
-import layerActions from 'actions/layerActions';
+import layerActions from 'actions/LayerActions';
 
 /**
 * Timer to prevent too many requests
@@ -44,7 +44,7 @@ export default class LayerTransparency extends Component {
         mapLayer.setLayerDrawingOptions(options);
       }, TIMER_DURATION);
       layerActions.changeOpacity({
-        layerId: layer.id,
+        layerId: layer.subId,
         value
       });
       this.setState({ opacity: value });

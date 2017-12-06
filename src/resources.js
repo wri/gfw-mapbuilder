@@ -138,536 +138,548 @@ export default {
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
-      layers: [{
-        order: 1,
-        id: 'TREE_COVER_LOSS',
-        type: 'loss', //image
-        // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
-        // url: 'https://storage.googleapis.com/forma-public/Hansen14_15/tiles/1/30/{z}/{x}/{y}',
-        url: 'https://storage.googleapis.com/wri-public/Hansen15/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
-        // legendLayer: 7,
-        minYear: 1,
-        maxYear: 15,
-        // minDateValue: 15000,
-        // maxDateValue: 16365,
-        // confidence: [0, 1],
-        technicalName: 'tree_cover_loss',
-        legendLayer: [0],
-        // colormap: [[1, 219, 101, 152]],
-        // inputRange: [1, 15],
-        // outputRange: [1],
+      GROUP_LCD: {
+        groupType: 'default',
+        order: 7,
         label: {
-          en: 'Tree cover loss',
-          fr: 'Perte en couvert arboré',
-          es: 'Pérdida de la cobertura arbórea',
-          pt: 'Perda de cobertura arbórea',
-          id: 'Tree cover loss',
-          zh: '森林覆盖损失',
-          ka: 'ხის ვარჯის კარგვა'
+          en: 'Land Cover Change',
+          fr: 'Evolution de la couverture des sols',
+          es: 'Dinámica de la Cobertura del Suelo',
+          pt: 'Dinâmica de cobertura da terra ',
+          id: 'Land Cover Dynamics',
+          zh: '土地覆盖动态数据',
+          ka: 'მიწის საფარის დინამიკა'
         },
-        sublabel: {
-          en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
-      }, {
-        order: 2,
-        id: 'TREE_COVER_GAIN',
-        type: 'gain', //'image',
-        // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
-        url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
-        technicalName: 'tree_cover_gain',
-        legendLayer: [1],
-        label: {
-          en: 'Tree cover gain',
-          fr: 'Gain en couvert arboré',
-          es: 'Aumento de la cobertura arbórea',
-          pt: 'Ganho de cobertura arbórea',
-          id: 'Tree cover gain',
-          zh: '森林覆盖增加',
-          ka: 'ხის ვარჯის ნამატი'
-        },
-        sublabel: {
-          en: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(12 ans, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(12 años, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(12 anos, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(12 წელიწადი, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
-      }]
-    },
-    GROUP_LC: {
-      groupType: 'default',
-      order: 5,
-      label: {
-        en: 'Assets',
-        fr: 'Couverture des sols',
-        es: 'Cobertura terrestre',
-        pt: 'Cobertura do Solo',
-        id: 'Land Cover',
-        zh: '土地覆盖',
-        ka: 'მიწის საფარი'
-      },
-      layers: [{
-        order: 1,
-        id: 'GLOB_MANGROVE',
-        type: 'webtiled',
-        url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
-        subDomains: [0, 1, 2, 3],
-        technicalName: 'global_mangroves',
-        legendLayer: [11],
-        label: {
-          en: 'Global Mangrove',
-          fr: 'Global Mangrove',
-          es: 'Global Mangrove',
-          pt: 'Global Mangrove',
-          id: 'Global Mangrove',
-          zh: 'Global Mangrove',
-          ka: 'გლობალური მანგრები'
-        }
-      }, {
-        order: 2,
-        id: 'IFL',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
-        technicalName: 'intact_forest_landscapes_change',
-        layerIds: [0],
-        label: {
-          en: 'Intact Forest Landscape',
-          fr: 'Paysage forestier intact',
-          es: 'Paisajes Forestales Intactos',
-          pt: 'Paisagens Florestais Intactas',
-          id: 'Intact Forest Landscape',
-          zh: '原生森林景观',
-          ka: 'ხელუხლებელი ტყის ლანდშაფტი'
-        }
-      }, {
-        order: 3,
-        id: 'AG_BIOMASS',
-        type: 'image',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
-        technicalName: 'aboveground_biomass',
-        legendLayer: [8],
-        label: {
-          en: 'Aboveground Live Woody Biomass Density (Carbon)',
-          fr: 'Densité de la biomasse aérienne vivante',
-          es: 'Densidad de la biomasa viva en la superficie del suelo',
-          pt: 'Densidade de biomassa viva acima do solo',
-          id: 'Aboveground Live Woody Biomass Density',
-          zh: 'Aboveground Live Woody Biomass Density',
-          ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
-        }
-      }, {
-        order: 4,
-        id: 'SOIL_CARBON',
-        type: 'webtiled',
-        url: 'https://s3.amazonaws.com/wri-tiles/hwsd/{level}/{col}/{row}.png',
-        metadataUrl: 'https://production-api.globalforestwatch.org/v1/gfw-metadata/soil_organic_carbon',
-        label: {
-          en: 'Soil Organic Carbon'
-        },
-        legend: [
-          {
-            label: '0 - 20',
-            color: '#DDCEB8'
+        layers: [{
+          order: 1,
+          id: 'TREE_COVER_LOSS',
+          type: 'loss', //image
+          // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+          // url: 'https://storage.googleapis.com/forma-public/Hansen14_15/tiles/1/30/{z}/{x}/{y}',
+          url: 'https://storage.googleapis.com/wri-public/Hansen15/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
+          // legendLayer: 7,
+          minYear: 1,
+          maxYear: 15,
+          // minDateValue: 15000,
+          // maxDateValue: 16365,
+          // confidence: [0, 1],
+          technicalName: 'tree_cover_loss',
+          legendLayer: [0],
+          // colormap: [[1, 219, 101, 152]],
+          // inputRange: [1, 15],
+          // outputRange: [1],
+          label: {
+            en: 'Tree cover loss',
+            fr: 'Perte en couvert arboré',
+            es: 'Pérdida de la cobertura arbórea',
+            pt: 'Perda de cobertura arbórea',
+            id: 'Tree cover loss',
+            zh: '森林覆盖损失',
+            ka: 'ხის ვარჯის კარგვა'
           },
-          {
-            label: '20 - 65',
-            color: '#b39465'
-          },
-          {
-            label: '65 - 160',
-            color: '#8e6d3f'
-          },
-          {
-            label: '160 - 425',
-            color: '#60461F'
-          },
-          {
-            label: '>425',
-            color: '#211503'
+          sublabel: {
+            en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+            ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
-        ]
-      }, {
+        }, {
+          order: 2,
+          id: 'TREE_COVER_GAIN',
+          type: 'gain', //'image',
+          // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
+          url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
+          technicalName: 'tree_cover_gain',
+          legendLayer: [1],
+          label: {
+            en: 'Tree cover gain',
+            fr: 'Gain en couvert arboré',
+            es: 'Aumento de la cobertura arbórea',
+            pt: 'Ganho de cobertura arbórea',
+            id: 'Tree cover gain',
+            zh: '森林覆盖增加',
+            ka: 'ხის ვარჯის ნამატი'
+          },
+          sublabel: {
+            en: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            fr: '(12 ans, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            es: '(12 años, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            pt: '(12 anos, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            id: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            zh: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+            ka: '(12 წელიწადი, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
+          }
+        }]
+      },
+      GROUP_LC: {
+        groupType: 'default',
         order: 5,
-        id: 'LAND_COVER',
-        type: 'webtiled',
-        url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
-        technicalName: 'global_landcover',
-        legendLayer: [15],
-        rasterId: '$568',
-        bounds: [1, 16],
-        classes: {
-          en: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-        },
-        colors: ['#825D26', '#D1A969', '#DED6B4', '#157562', '#CC7A29', '#6DAD96', '#968635', '#C2B32F', '#6F7A53', '#96A36F', '#CDDB93', '#7DBDE8', '#0D63A1', '#F41E65', '#FFFFFF', '#DBDBDB'],
         label: {
-          en: 'Land Cover',
+          en: 'Assets',
           fr: 'Couverture des sols',
-          es: 'Cobertura vegetal',
-          pt: 'Land cover',
-          id: 'Land cover',
+          es: 'Cobertura terrestre',
+          pt: 'Cobertura do Solo',
+          id: 'Land Cover',
           zh: '土地覆盖',
           ka: 'მიწის საფარი'
-        }
-      }, {
-        order: 6,
-        id: 'TREE_COVER',
-        type: 'image',
-        url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
-        technicalName: 'tree_cover',
-        colormap: [[1, 0, 179, 0]],
-        inputRange: [30, 101],
-        outputRange: [1],
-        opacity: 0.8,
-      legendLayer: [2],
-        label: {
-          en: 'Tree cover density',
-          fr: 'Densité du couvert arboré',
-          es: 'Densidad de follaje',
-          pt: 'Tree cover density',
-          id: 'Tree cover density',
-          zh: '森林覆盖密度',
-          ka: 'ხის ვარჯის სიხშირე'
         },
-        sublabel: {
-          en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
-      }]
-    },
-    GROUP_BASEMAP: {
-      groupType: 'basemap',
-      order: 8,
-      label: {
-        en: 'Basemap',
-        fr: 'Basemap',
-        es: 'Basemap',
-        pt: 'Basemap',
-        id: 'Basemap',
-        zh: 'Basemap',
-        ka: 'საბაზო რუკა'
-      },
-      layers: [{
-        id: 'landsat',
-        thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png',
-        templateUrl: 'https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png',
-        years: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'],
-        title: {
-          en: 'Landsat',
-          fr: 'Landsat',
-          es: 'Landsat',
-          pt: 'Landsat',
-          id: 'Landsat',
-          zh: 'Landsat',
-          ka: 'Landsat'
-        }
-      }, {
-        id: 'wri_mono',
-        thumbnailUrl: './css/images/wri_mono.png',
-        title: {
-          en: 'WRI Mono',
-          fr: 'WRI Mono',
-          es: 'WRI Mono',
-          pt: 'WRI Mono',
-          id: 'WRI Mono',
-          zh: 'WRI Mono',
-          ka: 'WRI Mono'
-        }
-      }, {
-        id: 'wri_contextual',
-        thumbnailUrl: './css/images/wri_contextual.png',
-        title: {
-          en: 'WRI Contextual',
-          fr: 'WRI Contextual',
-          es: 'WRI Contextual',
-          pt: 'WRI Contextual',
-          id: 'WRI Contextual',
-          zh: 'WRI Contextual',
-          ka: 'WRI Contextual'
-        }
-      }]
-    },
-    /**
-     * CUSTOM GROUPS
-     * Add your custom groups below. The custom groups are similar to the groups defined above.
-     * They are an object defined with a unique key (this key MUST be unique).
-     * There are three (3) group types that you may choose from:
-     *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
-     *               With this group type, more than one layer may be on at a time
-     *
-     *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
-     *            Only one layer may be on at a time within the same group
-     *            You may optionally choose to turn this group off when any other radio group is selected
-     *
-     *    nested - This group allows for layers to be grouped further within a layer panel
-     *
-     * COMMON GROUP PROPERTIES
-     * @property {string} groupType - the group type, one of checkbox, radio, nested
-     * @property {number} order - the order of the group in the layer panel
-     * @property {object} label - the label for the group in the layer panel
-     * @property {object[]} layers - the layers to be placed in the group
-     * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
-     * @property {number} layers[].order - the order of the layer within the group
-     * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
-     *
-     * RADIO GROUP PROPERTIES
-     * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
-     * sublayers you would like to include in the group. This property is required, so if you
-     * wish to include all sublayers, you must still provide this property with all sublayers
-     * @property {object} sublabel - for a dynamic layer the sublabel property must specify
-     * which sublayer the sublabel belongs to
-     *
-     * NESTED GROUP PROPERTIES
-     * @property {number} layers[].order - the order of the nested group within the panel group
-     * @property {object} layers[].label - the label for the nested group
-     * @property {object[]} layers[].nestedLayers - the layers for the nested group
-    */
-    GROUP_PRESSURES: {
-      groupType: 'checkbox',
-      order: 6,
-      label: {
-        en: 'Pressures'
-      },
-      layers: [
-        {
-          id: 'mining_cached_8843',
-          order: 1
-        },
-        {
-          id: 'land_use_8897',
-          order: 2
-        },
-        {
-          id: 'land_use_6484',
-          order: 3
-        },
-        {
-          id: 'infrastructure_7561',
-          order: 4
-        }
-      ]
-    },
-    GROUP_INDIGENOUS_INDICATORS: {
-      groupType: 'radio',
-      order: 3,
-      label: {
-        en: 'Indicators of the Legal Security of Indigenous Lands'
-      },
-      layers: [
-        {
-          id: 'indicators_legal_security_8140',
+        layers: [{
           order: 1,
-          includedSublayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          sublabel: {
-            0: {
-              en: 'The average score for the 10 indicators of the legal security of indigenous lands.'
-            },
-            1: {
-              en: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?'
-            },
-            2: {
-              en: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?'
-            },
-            3: {
-              en: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?'
-            },
-            4: {
-              en: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?'
-            },
-            5: {
-              en: 'Does the law recognize Indigenous peoples as the legal authority over the land?'
-            },
-            6: {
-              en: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?'
-            },
-            7: {
-              en: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?'
-            },
-            8: {
-              en: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?'
-            },
-            9: {
-              en: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?'
-            },
-            10: {
-              en: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?'
-            }
-          }
-        }
-      ]
-    },
-    GROUP_COMMUNITY_INDICATORS: {
-      groupType: 'radio',
-      order: 4,
-      label: {
-        en: 'Indicators of the Legal Security of Community Lands'
-      },
-      layers: [
-        {
-          id: 'indicators_legal_security_8140',
-          order: 1,
-          includedSublayers: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
-          sublabel: {
-            11: {
-              en: 'The average score for the 10 indicators of the legal security of community lands.'
-            },
-            12: {
-              en: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?'
-            },
-            13: {
-              en: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?'
-            },
-            14: {
-              en: 'Does the law require the government to provide communities with a formal title and map to their land?'
-            },
-            15: {
-              en: 'Does the law recognize the community as a legal person for the purposes of land ownership?'
-            },
-            16: {
-              en: 'Does the law recognize the community as the legal authority over the land?'
-            },
-            17: {
-              en: 'Do the law and formal title recognize that community land rights may be held in perpetuity?'
-            },
-            18: {
-              en: 'Does the law require the consent of communities before government or an outsider may acquire their land?'
-            },
-            19: {
-              en: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?'
-            },
-            20: {
-              en: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?'
-            },
-            21: {
-              en: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
-            }
-          }
-        }
-      ]
-    },
-    GROUP_PERCENT_LANDS_HELD: {
-      groupType: 'radio',
-      order: 2,
-      label: {
-        en: 'Percent of Country Held by Indigenous Peoples and Communities'
-      },
-      layers: [
-        {
-          id: 'percent_IP_community_lands_1264',
-          order: 1,
-          includedSublayers: [0, 1, 2]
-        }
-      ]
-    },
-    GROUP_LAND_MAPS: {
-      groupType: 'nested',
-      order: 1,
-      label: {
-        en: 'Indigenous & Community Land Maps'
-      },
-      layers: [
-        {
-          order: 1,
+          id: 'GLOB_MANGROVE',
+          type: 'webtiled',
+          url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
+          subDomains: [0, 1, 2, 3],
+          technicalName: 'global_mangroves',
+          legendLayer: [11],
           label: {
-            en: 'Indigenous Lands - Acknowledged by Government'
-          },
-          nestedLayers: [
-            {
-              id: 'comm_ind_Documented_8219',
-              order: 1
-            },
-            {
-              id: 'comm_ind_NotDocumented_2683',
-              order: 2
-            }
-          ]
-        },
-        {
+            en: 'Global Mangrove',
+            fr: 'Global Mangrove',
+            es: 'Global Mangrove',
+            pt: 'Global Mangrove',
+            id: 'Global Mangrove',
+            zh: 'Global Mangrove',
+            ka: 'გლობალური მანგრები'
+          }
+        }, {
           order: 2,
+          id: 'IFL',
+          type: 'dynamic',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+          technicalName: 'intact_forest_landscapes_change',
+          layerIds: [0],
           label: {
-            en: 'Indigenous Lands - Not acknowledged by Government'
-          },
-          nestedLayers: [
-            {
-              id: 'comm_ind_FormalLandClaim_2392',
-              order: 1
-            },
-            {
-              id: 'comm_ind_CustomaryTenure_8127',
-              order: 2
-            }
-          ]
-        },
-        {
+            en: 'Intact Forest Landscape',
+            fr: 'Paysage forestier intact',
+            es: 'Paisajes Forestales Intactos',
+            pt: 'Paisagens Florestais Intactas',
+            id: 'Intact Forest Landscape',
+            zh: '原生森林景观',
+            ka: 'ხელუხლებელი ტყის ლანდშაფტი'
+          }
+        }, {
           order: 3,
+          id: 'AG_BIOMASS',
+          type: 'image',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
+          technicalName: 'aboveground_biomass',
+          legendLayer: [8],
           label: {
-            en: 'Community Lands - Acknowledged by Government'
-          },
-          nestedLayers: [
-            {
-              id: 'comm_comm_Documented_4717',
-              order: 1
-            },
-            {
-              id: 'comm_comm_NotDocumented_9336',
-              order: 2
-            }
-          ]
-        },
-        {
+            en: 'Aboveground Live Woody Biomass Density (Carbon)',
+            fr: 'Densité de la biomasse aérienne vivante',
+            es: 'Densidad de la biomasa viva en la superficie del suelo',
+            pt: 'Densidade de biomassa viva acima do solo',
+            id: 'Aboveground Live Woody Biomass Density',
+            zh: 'Aboveground Live Woody Biomass Density',
+            ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
+          }
+        }, {
           order: 4,
+          id: 'SOIL_CARBON',
+          type: 'webtiled',
+          url: 'https://s3.amazonaws.com/wri-tiles/hwsd/{level}/{col}/{row}.png',
+          metadataUrl: 'https://production-api.globalforestwatch.org/v1/gfw-metadata/soil_organic_carbon',
           label: {
-            en: 'Community Lands - Not acknowledged by Government'
+            en: 'Soil Organic Carbon'
           },
-          nestedLayers: [
+          legend: [
             {
-              id: 'comm_comm_FormalLandClaim_5585',
-              order: 1
+              label: '0 - 20',
+              color: '#DDCEB8'
             },
             {
-              id: 'comm_comm_CustomaryTenure_6877',
-              order: 2
+              label: '20 - 65',
+              color: '#b39465'
+            },
+            {
+              label: '65 - 160',
+              color: '#8e6d3f'
+            },
+            {
+              label: '160 - 425',
+              color: '#60461F'
+            },
+            {
+              label: '>425',
+              color: '#211503'
             }
           ]
-        }
-      ]
-    },
-    extraLayers: [{
-      id: 'MASK',
-      type: 'dynamic',
-      order: 10000,
-      url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-      opacity: 0.35,
-      layerIds: [0]
-    }, {
-      id: 'LEGEND_LAYER',
-      type: 'dynamic',
-      url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-      visible: false,
-      opacity: 0,
-      layerIds: []
-    }, {
-      id: 'USER_FEATURES',
-      type: 'graphic',
-      visible: true
-    }]
-  }
-};
+        }, {
+          order: 5,
+          id: 'LAND_COVER',
+          type: 'webtiled',
+          url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
+          technicalName: 'global_landcover',
+          legendLayer: [15],
+          rasterId: '$568',
+          bounds: [1, 16],
+          classes: {
+            en: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
+          },
+          colors: ['#825D26', '#D1A969', '#DED6B4', '#157562', '#CC7A29', '#6DAD96', '#968635', '#C2B32F', '#6F7A53', '#96A36F', '#CDDB93', '#7DBDE8', '#0D63A1', '#F41E65', '#FFFFFF', '#DBDBDB'],
+          label: {
+            en: 'Land Cover',
+            fr: 'Couverture des sols',
+            es: 'Cobertura vegetal',
+            pt: 'Land cover',
+            id: 'Land cover',
+            zh: '土地覆盖',
+            ka: 'მიწის საფარი'
+          }
+        }, {
+          order: 6,
+          id: 'TREE_COVER',
+          type: 'image',
+          url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+          technicalName: 'tree_cover',
+          colormap: [[1, 0, 179, 0]],
+          inputRange: [30, 101],
+          outputRange: [1],
+          opacity: 0.8,
+        legendLayer: [2],
+          label: {
+            en: 'Tree cover density',
+            fr: 'Densité du couvert arboré',
+            es: 'Densidad de follaje',
+            pt: 'Tree cover density',
+            id: 'Tree cover density',
+            zh: '森林覆盖密度',
+            ka: 'ხის ვარჯის სიხშირე'
+          },
+          sublabel: {
+            en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+            ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
+          }
+        }]
+      },
+      GROUP_BASEMAP: {
+        groupType: 'basemap',
+        order: 8,
+        label: {
+          en: 'Basemap',
+          fr: 'Basemap',
+          es: 'Basemap',
+          pt: 'Basemap',
+          id: 'Basemap',
+          zh: 'Basemap',
+          ka: 'საბაზო რუკა'
+        },
+        layers: [{
+          id: 'landsat',
+          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png',
+          templateUrl: 'https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png',
+          years: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'],
+          title: {
+            en: 'Landsat',
+            fr: 'Landsat',
+            es: 'Landsat',
+            pt: 'Landsat',
+            id: 'Landsat',
+            zh: 'Landsat',
+            ka: 'Landsat'
+          }
+        }, {
+          id: 'wri_mono',
+          thumbnailUrl: './css/images/wri_mono.png',
+          title: {
+            en: 'WRI Mono',
+            fr: 'WRI Mono',
+            es: 'WRI Mono',
+            pt: 'WRI Mono',
+            id: 'WRI Mono',
+            zh: 'WRI Mono',
+            ka: 'WRI Mono'
+          }
+        }, {
+          id: 'wri_contextual',
+          thumbnailUrl: './css/images/wri_contextual.png',
+          title: {
+            en: 'WRI Contextual',
+            fr: 'WRI Contextual',
+            es: 'WRI Contextual',
+            pt: 'WRI Contextual',
+            id: 'WRI Contextual',
+            zh: 'WRI Contextual',
+            ka: 'WRI Contextual'
+          }
+        }]
+      },
+      /**
+       * CUSTOM GROUPS
+       * Add your custom groups below. The custom groups are similar to the groups defined above.
+       * They are an object defined with a unique key (this key MUST be unique).
+       * There are three (3) group types that you may choose from:
+       *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
+       *               With this group type, more than one layer may be on at a time
+       *
+       *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
+       *            Only one layer may be on at a time within the same group
+       *            You may optionally choose to turn this group off when any other radio group is selected
+       *
+       *    nested - This group allows for layers to be grouped further within a layer panel
+       *
+       * COMMON GROUP PROPERTIES
+       * @property {string} groupType - the group type, one of checkbox, radio, nested
+       * @property {number} order - the order of the group in the layer panel
+       * @property {object} label - the label for the group in the layer panel
+       * @property {object[]} layers - the layers to be placed in the group
+       * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
+       * @property {number} layers[].order - the order of the layer within the group
+       * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
+       *
+       * RADIO GROUP PROPERTIES
+       * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
+       * sublayers you would like to include in the group. This property is required, so if you
+       * wish to include all sublayers, you must still provide this property with all sublayers
+       * @property {object} sublabel - for a dynamic layer the sublabel property must specify
+       * which sublayer the sublabel belongs to
+       *
+       * NESTED GROUP PROPERTIES
+       * @property {number} layers[].order - the order of the nested group within the panel group
+       * @property {object} layers[].label - the label for the nested group
+       * @property {object[]} layers[].nestedLayers - the layers for the nested group
+      */
+      GROUP_PRESSURES: {
+        groupType: 'checkbox',
+        order: 6,
+        label: {
+          en: 'Pressures'
+        },
+        layers: [
+          {
+            id: 'mining_cached_8843',
+            order: 1
+          },
+          {
+            id: 'land_use_8897',
+            order: 2
+          },
+          {
+            id: 'land_use_6484',
+            order: 3
+          },
+          {
+            id: 'infrastructure_7561',
+            order: 4
+          }
+        ]
+      },
+      GROUP_INDIGENOUS_INDICATORS: {
+        groupType: 'radio',
+        order: 3,
+        label: {
+          en: 'Indicators of the Legal Security of Indigenous Lands'
+        },
+        layers: [
+          {
+            id: 'indicators_legal_security_8140',
+            order: 1,
+            includedSublayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            sublabel: {
+              0: {
+                en: 'The average score for the 10 indicators of the legal security of indigenous lands.'
+              },
+              1: {
+                en: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?'
+              },
+              2: {
+                en: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?'
+              },
+              3: {
+                en: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?'
+              },
+              4: {
+                en: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?'
+              },
+              5: {
+                en: 'Does the law recognize Indigenous peoples as the legal authority over the land?'
+              },
+              6: {
+                en: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?'
+              },
+              7: {
+                en: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?'
+              },
+              8: {
+                en: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?'
+              },
+              9: {
+                en: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?'
+              },
+              10: {
+                en: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?'
+              }
+            }
+          }
+        ]
+      },
+      GROUP_COMMUNITY_INDICATORS: {
+        groupType: 'radio',
+        order: 4,
+        label: {
+          en: 'Indicators of the Legal Security of Community Lands'
+        },
+        layers: [
+          {
+            id: 'indicators_legal_security_8140',
+            order: 1,
+            includedSublayers: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+            sublabel: {
+              11: {
+                en: 'The average score for the 10 indicators of the legal security of community lands.'
+              },
+              12: {
+                en: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?'
+              },
+              13: {
+                en: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?'
+              },
+              14: {
+                en: 'Does the law require the government to provide communities with a formal title and map to their land?'
+              },
+              15: {
+                en: 'Does the law recognize the community as a legal person for the purposes of land ownership?'
+              },
+              16: {
+                en: 'Does the law recognize the community as the legal authority over the land?'
+              },
+              17: {
+                en: 'Do the law and formal title recognize that community land rights may be held in perpetuity?'
+              },
+              18: {
+                en: 'Does the law require the consent of communities before government or an outsider may acquire their land?'
+              },
+              19: {
+                en: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?'
+              },
+              20: {
+                en: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?'
+              },
+              21: {
+                en: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
+              }
+            }
+          }
+        ]
+      },
+      GROUP_PERCENT_LANDS_HELD: {
+        groupType: 'radio',
+        order: 2,
+        label: {
+          en: 'Percent of Country Held by Indigenous Peoples and Communities'
+        },
+        layers: [
+          {
+            id: 'percent_IP_community_lands_1264',
+            order: 1,
+            includedSublayers: [0, 1, 2]
+          }
+        ]
+      },
+      GROUP_LAND_MAPS: {
+        groupType: 'nested',
+        order: 1,
+        label: {
+          en: 'Indigenous & Community Land Maps'
+        },
+        layers: [
+          {
+            order: 1,
+            label: {
+              en: 'Indigenous Lands - Acknowledged by Government'
+            },
+            nestedLayers: [
+              {
+                id: 'comm_ind_Documented_8219',
+                order: 1
+              },
+              {
+                id: 'comm_ind_NotDocumented_2683',
+                order: 2
+              }
+            ]
+          },
+          {
+            order: 2,
+            label: {
+              en: 'Indigenous Lands - Not acknowledged by Government'
+            },
+            nestedLayers: [
+              {
+                id: 'comm_ind_FormalLandClaim_2392',
+                order: 1
+              },
+              {
+                id: 'comm_ind_CustomaryTenure_8127',
+                order: 2
+              }
+            ]
+          },
+          {
+            order: 3,
+            label: {
+              en: 'Community Lands - Acknowledged by Government'
+            },
+            nestedLayers: [
+              {
+                id: 'comm_comm_Documented_4717',
+                order: 1
+              },
+              {
+                id: 'comm_comm_NotDocumented_9336',
+                order: 2
+              }
+            ]
+          },
+          {
+            order: 4,
+            label: {
+              en: 'Community Lands - Not acknowledged by Government'
+            },
+            nestedLayers: [
+              {
+                id: 'comm_comm_FormalLandClaim_5585',
+                order: 1
+              },
+              {
+                id: 'comm_comm_CustomaryTenure_6877',
+                order: 2
+              }
+            ]
+          }
+        ]
+      },
+      extraLayers: [{
+        id: 'MASK',
+        type: 'dynamic',
+        order: 10000,
+        url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+        opacity: 0.35,
+        layerIds: [0]
+      }, {
+        id: 'LEGEND_LAYER',
+        type: 'dynamic',
+        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+        visible: false,
+        opacity: 0,
+        layerIds: []
+      }, {
+        id: 'USER_FEATURES',
+        type: 'graphic',
+        visible: true
+      }]
+    }
+  };

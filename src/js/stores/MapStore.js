@@ -91,6 +91,7 @@ class MapStore {
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
       removeAllSubLayers: layerActions.removeAllSubLayers,
+      setSubLayers: layerActions.setSubLayers,
       changeViirsFiresTimeline: layerActions.changeViirsFiresTimeline,
       changeModisFiresTimeline: layerActions.changeModisFiresTimeline,
       addAll: layerActions.addAll,
@@ -157,8 +158,15 @@ class MapStore {
 
   removeAllSubLayers(info) {
     this.dynamicLayers[info.id] = [];
-    info.visibleLayers.forEach(id => {
-      this.removeActiveLayer(`${info.id}_${id}`);
+    info.layerInfos.forEach(i => {
+      this.removeActiveLayer(`${info.id}_${i.id}`);
+    });
+  }
+
+  setSubLayers(info) {
+    this.dynamicLayers[info.id] = [...info.subIndexes];
+    info.subIndexes.forEach(i => {
+      this.addActiveLayer(`${info.id}_${i}`);
     });
   }
 

@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: 0 */
 import analysisKeys from 'constants/AnalysisConstants';
 import number from 'dojo/number';
+import utils from 'utils/AppUtils';
 /**
 * Module to help in generating charts and also in formatting data for the charts
 * Formatting functions should start with formatXXXX and return series and optionally colors
@@ -432,7 +433,99 @@ export default {
 			},
 			series: series
 		});
-	},
+  },
+
+  makeCarbonInTreesChart(el, options) {
+    const {
+      abovegroundCarbon,
+      belowgroundCarbon,
+      total,
+      averageTotal,
+      totalSuffix,
+      averageSuffix
+    } = options;
+    const chart = new Highcharts.Chart(el, {
+      chart: {
+        type: 'pie'
+      },
+      credits: {
+        enabled: false
+      },
+      title: {
+        text: null
+      },
+      plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: true,
+            distance: -30,
+            style: {
+              fontSize: '18px',
+              textOutline: 'none',
+              fontWeight: 'normal'
+            }
+          },
+          showInLegend: true,
+          center: ['50%', '35%']
+        }
+      },
+      tooltip: {
+        valueSuffix: totalSuffix
+      },
+      series: [
+        {
+          name: 'Total',
+          data: [
+            {
+              y: Number(abovegroundCarbon.toFixed(2)),
+              color: '#5CCEF8',
+              name: 'Aboveground Carbon'
+            },
+            {
+              y: Number(belowgroundCarbon.toFixed(2)),
+              color: '#50AC58',
+              name: 'Belowground Carbon'
+            }
+          ],
+          dataLabels: {
+            formatter: function() {
+              return ((this.y / total) * 100).toFixed(2) + '%';
+            }
+          },
+          size: '170',
+          innerSize: '35%',
+          id: 'total-biomass'
+        }
+      ],
+      labels: {
+        items: [
+          {
+            html: `Total: ${utils.formatNumber(Math.round(total))} ${totalSuffix}`,
+            style: {
+              top: '220px',
+              left: '50%',
+              fontSize: '16px'
+            }
+          },
+          {
+            html: `Average: ${utils.formatNumber(Math.round(averageTotal))} ${averageSuffix}`,
+            style: {
+              top: '240px',
+              left: '50%',
+              fontSize: '16px'
+            }
+          }
+        ],
+        style: {
+          color: '#6f6f6f'
+        }
+      },
+      legend: {
+        layout: 'vertical',
+        y: -21
+      }
+    });
+  },
 
 	/**
 	* @typedef BiomassSeries

@@ -14,9 +14,9 @@ export default class WebMapLegend extends React.Component {
       this.setState(prevState => {
         return {
           visible: !prevState.visible
-         };
-       });
-     }
+        };
+      });
+    }
 
     if (this.props.legendOpacity.layerId === this.props.layerId && this.props.legendOpacity.value !== prevProps.legendOpacity.value) {
       this.setState({ opacity: this.props.legendOpacity.value });
@@ -40,7 +40,7 @@ export default class WebMapLegend extends React.Component {
   customLegend(item, index) {
     return (
       <div className='legend-row' key={index}>
-        <div className='legend-icon' style={{backgroundColor: item.color}}></div>
+        <div className='legend-icon' style={{backgroundColor: item.color, opacity: this.state.opacity}}></div>
         <div className='legend-label'>{item.label}</div>
       </div>
     );
@@ -49,7 +49,7 @@ export default class WebMapLegend extends React.Component {
   itemMapper = (item, index) => {
     return (
       <div className='legend-row' key={index + item.url}>
-        <img style={{'opacity': this.state.opacity}} className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
+        <img style={{opacity: this.state.opacity}} className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
         <div className='legend-label'>{item.label}</div>
       </div>
     );
