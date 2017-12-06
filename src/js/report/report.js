@@ -305,7 +305,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
 
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
-    //- return an arcgis layer for each config
+    //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers.filter(layer => layer && layer.visible && (layer.url || layer.type === 'graphic')).map((layer) => {
       return layerFactory(layer, language);
     });
