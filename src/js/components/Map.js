@@ -219,20 +219,11 @@ export default class Map extends Component {
         }
 
         // Handle opacity
-        if (opacity) {
-          if (featurePointLayer) {
-            featurePointLayer.setOpacity(opacity);
-          }
-          if (featurePolyLayer) {
-            featurePolyLayer.setOpacity(opacity);
-          }
-        } else {
-          if (featurePointLayer) {
-            featurePointLayer.setOpacity(opacity);
-          }
-          if (featurePolyLayer) {
-            featurePolyLayer.setOpacity(opacity);
-          }
+        if (featurePointLayer) {
+          featurePointLayer.setOpacity(opacity);
+        }
+        if (featurePolyLayer) {
+          featurePolyLayer.setOpacity(opacity);
         }
       }
 
