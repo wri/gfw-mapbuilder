@@ -82,11 +82,9 @@ export default class SubscriptionsModal extends Component {
   }
 
   deleteSubscription = (evt, subscription) => {
-    console.log('subscription', subscription);
 
     $.ajax({
       url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
-      // dataType: 'json',
       type: 'DELETE',
       xhrFields: {
         withCredentials: true
@@ -96,7 +94,6 @@ export default class SubscriptionsModal extends Component {
         const remainingSubscriptions = this.props.userSubscriptions.filter(subsc => subsc.id !== response.data.id);
 
         mapActions.setUserSubscriptions(remainingSubscriptions);
-        // mapActions.toggleSubscriptionsModal({ visible: true });
       },
       error: (error) => {
         console.log('err', error);
@@ -109,7 +106,6 @@ export default class SubscriptionsModal extends Component {
   };
 
   render () {
-    // const {language} = this.context;
     const {userSubscriptions} = this.props;
 
     return (

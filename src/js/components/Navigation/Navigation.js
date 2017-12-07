@@ -148,7 +148,6 @@ export default class Navigation extends Component {
         }
       });
     } else {
-      mapActions.setUserSubscriptions(this.state.userSubscriptions);
       mapActions.toggleSubscriptionsModal({ visible: true });
     }
   }
