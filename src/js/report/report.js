@@ -4,16 +4,7 @@ import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import analysisKeys from 'constants/AnalysisConstants';
 import performAnalysis from 'utils/performAnalysis';
 import layerKeys from 'constants/LayerConstants';
-import {
-  INDIGENOUS_DOCUMENTED,
-  INDIGENOUS_NOT_DOCUMENTED,
-  INDIGENOUS_FORMAL_CLAIM,
-  INDIGENOUS_CUSTOMARY,
-  COMMUNITY_DOCUMENTED,
-  COMMUNITY_NOT_DOCUMENTED,
-  COMMUNITY_FORMAL_CLAIM,
-  COMMUNITY_CUSTOMARY
-} from 'constants/LandmarkConstants';
+import landmarkLayers from 'constants/LandmarkConstants';
 import Polygon from 'esri/geometry/Polygon';
 import {getUrlParams} from 'utils/params';
 import {analysisConfig, layerPanelText} from 'js/config';
@@ -152,26 +143,25 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     });
 
     const landMapLayerIds = [
-      INDIGENOUS_DOCUMENTED,
-      INDIGENOUS_NOT_DOCUMENTED,
-      INDIGENOUS_FORMAL_CLAIM,
-      INDIGENOUS_CUSTOMARY,
-      COMMUNITY_DOCUMENTED,
-      COMMUNITY_NOT_DOCUMENTED,
-      COMMUNITY_FORMAL_CLAIM,
-      COMMUNITY_CUSTOMARY
+      landmarkLayers.INDIGENOUS_DOCUMENTED,
+      landmarkLayers.INDIGENOUS_NOT_DOCUMENTED,
+      landmarkLayers.INDIGENOUS_FORMAL_CLAIM,
+      landmarkLayers.INDIGENOUS_CUSTOMARY,
+      landmarkLayers.COMMUNITY_DOCUMENTED,
+      landmarkLayers.COMMUNITY_NOT_DOCUMENTED,
+      landmarkLayers.COMMUNITY_FORMAL_CLAIM,
+      landmarkLayers.COMMUNITY_CUSTOMARY
     ];
 
     const landMapFeatureLayerMap = {};
-
-      landMapFeatureLayerMap[INDIGENOUS_DOCUMENTED] = ['indigenous_DocumentedFeature0', 'indigenous_DocumentedFeature1'];
-      landMapFeatureLayerMap[INDIGENOUS_NOT_DOCUMENTED] = ['indigenous_NotDocumentedFeature0', 'indigenous_NotDocumentedFeature1'];
-      landMapFeatureLayerMap[INDIGENOUS_FORMAL_CLAIM] = ['indigenous_FormalClaimFeature0', 'indigenous_FormalClaimFeature1'];
-      landMapFeatureLayerMap[INDIGENOUS_CUSTOMARY] = ['indigenous_CustomaryFeature0', 'indigenous_CustomaryFeature1'];
-      landMapFeatureLayerMap[COMMUNITY_DOCUMENTED] = ['community_DocumentedFeature0', 'community_DocumentedFeature1'];
-      landMapFeatureLayerMap[COMMUNITY_NOT_DOCUMENTED] = ['community_NotDocumentedFeature0', 'community_NotDocumentedFeature1'];
-      landMapFeatureLayerMap[COMMUNITY_FORMAL_CLAIM] = ['community_FormalClaimFeature0', 'community_FormalClaimFeature1'];
-      landMapFeatureLayerMap[COMMUNITY_CUSTOMARY] = ['community_CustomaryFeature0', 'community_CustomaryFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.INDIGENOUS_DOCUMENTED] = ['indigenous_DocumentedFeature0', 'indigenous_DocumentedFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.INDIGENOUS_NOT_DOCUMENTED] = ['indigenous_NotDocumentedFeature0', 'indigenous_NotDocumentedFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.INDIGENOUS_FORMAL_CLAIM] = ['indigenous_FormalClaimFeature0', 'indigenous_FormalClaimFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.INDIGENOUS_CUSTOMARY] = ['indigenous_CustomaryFeature0', 'indigenous_CustomaryFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.COMMUNITY_DOCUMENTED] = ['community_DocumentedFeature0', 'community_DocumentedFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.COMMUNITY_NOT_DOCUMENTED] = ['community_NotDocumentedFeature0', 'community_NotDocumentedFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.COMMUNITY_FORMAL_CLAIM] = ['community_FormalClaimFeature0', 'community_FormalClaimFeature1'];
+    landMapFeatureLayerMap[landmarkLayers.COMMUNITY_CUSTOMARY] = ['community_CustomaryFeature0', 'community_CustomaryFeature1'];
 
     const landMapLayers = [];
     landMapLayerIds.forEach(id => landMapLayers.push(map.getLayer(id)));
@@ -186,7 +176,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_FORMAL_CLAIM),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -194,7 +184,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_FORMAL_CLAIM),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -202,7 +192,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_CUSTOMARY),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -210,7 +200,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_CUSTOMARY),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -218,7 +208,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -226,7 +216,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -234,7 +224,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_NOT_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_NOT_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -242,7 +232,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(INDIGENOUS_NOT_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_NOT_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -250,7 +240,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_FORMAL_CLAIM),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -258,7 +248,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_FORMAL_CLAIM),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -266,7 +256,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_CUSTOMARY),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -274,7 +264,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_CUSTOMARY),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -282,7 +272,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -290,7 +280,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -298,7 +288,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_NOT_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_NOT_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -306,7 +296,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers(COMMUNITY_NOT_DOCUMENTED),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_NOT_DOCUMENTED),
         type: 'feature'
       }
     ];
