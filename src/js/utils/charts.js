@@ -85,6 +85,7 @@ export default {
     const names = ['Oil palm concessions', 'Mining concessions', 'Managed forest concessions'];
 		Highcharts.chart(el, {
 			chart: {
+				height: 300,
         type: 'bar'
       },
       title: {
@@ -121,7 +122,7 @@ export default {
       },
       series: [
         {
-          pointWidth: 55,
+          pointWidth: 25,
           color: colors[0],
           showInLegend: false,
 					data: [
