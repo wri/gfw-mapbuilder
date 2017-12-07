@@ -95,48 +95,36 @@ export default {
   analyticsCode: '',
 
   /**
-  * Layer panel configuration, anything with an = is optional, {object=}
-  * Order at the group level controls the order of the accordions, the top most accordion's layers
-  * will also be the top most layers on the map. The order in the layer level controls how those layers
-  * are organized within their own group
-  ** @name layerPanel
-  ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
-  ** and values are string labels
-  * @property {object=} label - Label for the group in the layer panel
-  * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
-  * @property {object[]=} layers - Layers placed in the various accordions
-  * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
-  * @property {number} layers[].order - Order of this layer in this section only
-  * @property {string} layers[].id - Must be a unique id for the layer
-  * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
-  ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
-  * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
-  * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
-  * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
-  * @property {string} layers[].url - URL for the service
-  * @property {object=} layers[].label - Label for the layer in the UI
-  * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
-  * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
-  * @property {object=} popup - Popup configuration for the layer if it is available
-  */
-  layerPanel: {
-    GROUP_WEBMAP: {
-      groupType: 'webmap',
-      order: 100,
-      label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
-      layers: [] // Will get filled in with layers from the webmap
-    },
-    GROUP_LCD: {
-      groupType: 'default',
-      order: 7,
-      label: {
-        en: 'Land Cover Change',
-        fr: 'Evolution de la couverture des sols',
-        es: 'Dinámica de la Cobertura del Suelo',
-        pt: 'Dinâmica de cobertura da terra ',
-        id: 'Land Cover Dynamics',
-        zh: '土地覆盖动态数据',
-        ka: 'მიწის საფარის დინამიკა'
+    * Layer panel configuration, anything with an = is optional, {object=}
+    * Order at the group level controls the order of the accordions, the top most accordion's layers
+    * will also be the top most layers on the map. The order in the layer level controls how those layers
+    * are organized within their own group
+    ** @name layerPanel
+    ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
+    ** and values are string labels
+    * @property {object=} label - Label for the group in the layer panel
+    * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
+    * @property {object[]=} layers - Layers placed in the various accordions
+    * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
+    * @property {number} layers[].order - Order of this layer in this section only
+    * @property {string} layers[].id - Must be a unique id for the layer
+    * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
+    ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
+    * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
+    * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
+    * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
+    * @property {string} layers[].url - URL for the service
+    * @property {object=} layers[].label - Label for the layer in the UI
+    * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
+    * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
+    * @property {object=} popup - Popup configuration for the layer if it is available
+    */
+    layerPanel: {
+      GROUP_WEBMAP: {
+        groupType: 'webmap',
+        order: 100,
+        label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
+        layers: [] // Will get filled in with layers from the webmap
       },
       GROUP_LCD: {
         groupType: 'default',
