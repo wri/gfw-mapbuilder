@@ -124,7 +124,7 @@ export default class ReportSubscribeButtons extends Component {
         };
         console.log('payload', payload);
 
-        const openWindow = window.open('/map/analysis/');
+        const openWindow = window.open('/map/country-profile/');
 
         if (!openWindow || typeof openWindow === 'undefined') {
           alert('Turn off your pop-up blocker!');
