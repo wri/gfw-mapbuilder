@@ -123,6 +123,7 @@ export default {
       series: [
         {
           pointWidth: 25,
+					groupPadding: .5,
           color: colors[0],
           showInLegend: false,
 					data: [
