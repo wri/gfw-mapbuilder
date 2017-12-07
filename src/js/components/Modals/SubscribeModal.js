@@ -139,10 +139,11 @@ export default class SubscribeModal extends Component {
   }
 
   save = () => {
-    const { email, aoiName, viirsAlerts, treeCoverAlerts } = this.state;
+    const { email, aoiName, viirsAlerts, treeCoverAlerts, gladAlerts, sadAlerts, formaAlerts, terraI, prodes } = this.state;
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
 
-    if (email && aoiName && selectedFeature && (viirsAlerts || treeCoverAlerts)) {
+    if (email && aoiName && selectedFeature && (viirsAlerts || treeCoverAlerts || gladAlerts || sadAlerts || formaAlerts || terraI || prodes)) {
+
       const datasets = [];
       let lang;
       if (viirsAlerts) {
@@ -150,6 +151,21 @@ export default class SubscribeModal extends Component {
       }
       if (treeCoverAlerts) {
         datasets.push('umd-loss-gain');
+      }
+      if (gladAlerts) {
+        datasets.push('glad-alerts');
+      }
+      if (sadAlerts) {
+        datasets.push('sad-alerts');
+      }
+      if (formaAlerts) {
+        datasets.push('forma-alerts');
+      }
+      if (terraI) {
+        datasets.push('terrai-alerts');
+      }
+      if (prodes) {
+        datasets.push('prodes-loss');
       }
       switch (this.state.activeLanguage) {
         case 'English':
