@@ -103,7 +103,7 @@ export default function performAnalysis (options) {
     case analysisKeys.CARBON:
       analysisUtils.getTotalAndAverageCarbon(geostoreId, canopyDensity, language).then(promise.resolve, promise.reject);
     break;
-    case analysisKeys.COMMODITIES:
+    case analysisKeys.CONCESSIONS:
       analysisUtils.getCommodities(concessionUrl, concessionIds, geometry).then(promise.resolve, promise.reject);
     break;
     case analysisKeys.INTACT_LOSS:

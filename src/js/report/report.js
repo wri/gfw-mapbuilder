@@ -981,10 +981,9 @@ const runAnalysis = function runAnalysis (params, feature) {
     node.remove();
   }
 
-  //Commodities Analysis
-  //analysisUtils.getCommodities(concessionUrl, concessionIds, geometry).then(promise.resolve, promise.reject);
+  //Concessions Analysis
   performAnalysis({
-    type: analysisKeys.COMMODITIES,
+    type: analysisKeys.CONCESSIONS,
     geometry: geographic,
     settings: settings,
     language: lang

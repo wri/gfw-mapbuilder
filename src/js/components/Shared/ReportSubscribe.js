@@ -155,7 +155,7 @@ export default class ReportSubscribeButtons extends Component {
           </button>
         </div>
         <div className='report-sub-button'>
-          <button className={`fa-button gold ${activeAnalysisType === analysisKeys.COMMODITIES ? '' : ' hidden'}`} onClick={this.launchLandmarkAnalysis}>
+          <button className={`fa-button gold ${activeAnalysisType === analysisKeys.CONCESSIONS ? '' : ' hidden'}`} onClick={this.launchLandmarkAnalysis}>
           Indigenous Lands Report
           </button>
         </div>

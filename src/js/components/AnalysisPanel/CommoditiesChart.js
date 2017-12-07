@@ -29,14 +29,16 @@ export default class CommoditiesChart extends Component {
         const names = ['Oil palm concessions', 'Mining concessions', 'Managed forest concessions'];
         Highcharts.chart(this.commChart, {
           chart: {
+            height: 300,
             type: 'bar'
           },
           title: {
-            text: ''//'Total Concessions ' + (oilPalm + mining + managedForests)
+            text: 'Total Concessions: ' + (oilPalm + mining + managedForests)
           },
           xAxis: {
             categories: names,
-            allowDecimals: false
+            allowDecimals: false,
+            label: 'count'
           },
           yAxis: {
             allowDecimals: false
@@ -65,7 +67,7 @@ export default class CommoditiesChart extends Component {
           },
           series: [
             {
-              pointWidth: 55,
+              pointWidth: 25,
               color: colors[0],
               showInLegend: false,
               data: [
@@ -89,7 +91,22 @@ export default class CommoditiesChart extends Component {
             {color: '#FDDB61'},
             {color: '#8E6E63'},
             {color: '#475961'}
-          ]
+          ]//,
+          // labels: {
+          //   items: [
+          //     {
+          //       html: `Total: ${utils.formatNumber(oilPalm + mining + managedForests)} concessions`,
+          //       style: {
+          //         top: '220px',
+          //         left: '50%',
+          //         fontSize: '16px'
+          //       }
+          //     }
+          //   ],
+          //   style: {
+          //     color: '#6f6f6f'
+          //   }
+          // }
 
         });
       }

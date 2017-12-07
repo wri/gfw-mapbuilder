@@ -211,7 +211,7 @@ export default class Analysis extends Component {
           totalSuffix={' MgC'}
           averageSuffix={' MgC/Ha'}
         />;
-      case analysisKeys.COMMODITIES:
+      case analysisKeys.CONCESSIONS:
         return <CommoditiesChart
           results={results}
           oilPalm={results.oilPalm}

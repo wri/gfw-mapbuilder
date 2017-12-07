@@ -107,8 +107,8 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.CARBON,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Commodities',
-    value: analysisKeys.COMMODITIES,
+  { label: 'Concessions',
+    value: analysisKeys.CONCESSIONS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Aboveground Live Woody Biomass loss (Carbon)',
