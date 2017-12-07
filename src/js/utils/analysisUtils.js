@@ -422,7 +422,9 @@ export default {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(biomassResult => {
-      if (!biomassResult) deferred.resolve({});
+      if (!biomassResult) {
+        deferred.resolve({});
+      }
 
       const abovegroundCarbon = biomassResult.data.attributes.biomass / 2;
       const belowgroundCarbon = abovegroundCarbon * 0.26;
@@ -441,6 +443,37 @@ export default {
     });
 
     return deferred;
+  },
+
+  getCommodities: (url, concessionIds, geometry) => {
+    const promise = new Deferred();
+    const query = new Query();
+    query.geometry = geometry;
+    query.returnGeometry = false;
+    query.outFields = [''];
+
+    const oilPalmQT = new QueryTask(`${url}/${concessionIds.oilPalm}`);
+    const miningQT = new QueryTask(`${url}/${concessionIds.mining}`);
+    const managedForestsQT = new QueryTask(`${url}/${concessionIds.managedForests}`);
+
+    const promises = {};
+    promises.oilPalm = oilPalmQT.executeForCount(query);
+    promises.mining = miningQT.executeForCount(query);
+    promises.managedForests = managedForestsQT.executeForCount(query);
+
+    all(promises).always((results) => {
+      if (!results.error) {
+        promise.resolve({
+          oilPalm: results.oilPalm,
+          mining: results.mining,
+          managedForests: results.managedForests
+        });
+      } else {
+        promise.resolve(results);
+      }
+    });
+
+    return promise;
   },
 
   getBiomassLoss: function (geostoreId, canopyDensity, language) {

@@ -11,6 +11,7 @@ import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import CarbonChart from 'components/AnalysisPanel/CarbonChart';
+import CommoditiesChart from 'components/AnalysisPanel/CommoditiesChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -210,6 +211,13 @@ export default class Analysis extends Component {
           totalSuffix={' MgC'}
           averageSuffix={' MgC/Ha'}
         />;
+      case analysisKeys.CONCESSIONS:
+        return <CommoditiesChart
+          results={results}
+          oilPalm={results.oilPalm}
+          mining={results.mining}
+          managedForests={results.managedForests}
+        />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}
@@ -264,6 +272,10 @@ export default class Analysis extends Component {
         return <RestorationCharts results={results} />;
     }
   };
+
+  setLoader = loadingObj => { //isLoading and possibly error
+    this.setState(loadingObj);
+  }
 
   render () {
     const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
@@ -330,7 +342,7 @@ export default class Analysis extends Component {
           }
         </div>
         <div className='analysis-results__footer'>
-          <ReportSubscribeButtons />
+          <ReportSubscribeButtons setLoader={this.setLoader} />
         </div>
       </div>
     );

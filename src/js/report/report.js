@@ -981,6 +981,25 @@ const runAnalysis = function runAnalysis (params, feature) {
     node.remove();
   }
 
+  //Concessions Analysis
+  performAnalysis({
+    type: analysisKeys.CONCESSIONS,
+    geometry: geographic,
+    settings: settings,
+    language: lang
+  }).then((results) => {
+    const node = document.getElementById('commodities');
+
+    if (results.managedForests > 0 || results.mining > 0 || results.oilPalm > 0) {
+      charts.makeCommoditiesPieChart(node, results);
+      document.querySelector('#commodities-badge .results__commodities--label').innerHTML = 'Total Concessions';
+      document.querySelector('.results__commodities--count').innerHTML = results.managedForests + results.mining + results.oilPalm;
+      document.getElementById('commodities-badge').classList.remove('hidden');
+    } else {
+      node.remove();
+    }
+  });
+
   if (settings.restorationModule) {
     const infos = settings && settings.labels && settings.labels[lang] && settings.labels[lang].restorationOptions || [];
     // Analyze each configured restoration option
