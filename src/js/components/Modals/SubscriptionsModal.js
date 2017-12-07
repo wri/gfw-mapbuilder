@@ -8,6 +8,8 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
 export default class SubscriptionsModal extends Component {
 
   static contextTypes = {
@@ -15,21 +17,46 @@ export default class SubscriptionsModal extends Component {
     map: PropTypes.object.isRequired
   };
 
-
   subscriptionMap = (subscription, j) => {
+    const date = new Date(subscription.attributes.createdAt);
+    const dayOfWeek = days[ date.getDay() ];
+    let dd = date.getDate();
+    let months = date.getMonth() + 1;
+    let min = date.getMinutes();
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    if (months < 10) {
+        months = '0' + months;
+    }
+    if (min < 10) {
+        min = '0' + min;
+    }
+
+    const endDateString = `${dayOfWeek}, ${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
     return (
       <div key={j} className='source-row'>
+        <div className='delete-row'>
+          <button onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
+            <svg className='svg-icon'><use xlinkHref="#icon-analysis-remove" /></svg><span className='delete-row-label'>Delete</span>
+          </button>
+        </div>
+        <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'>
+          <button className='btn-delete-subscription'>
+            <svg className='svg-icon'><use xlinkHref="#shape-world" /></svg>
+          </button>
+        </div>
         <p>{subscription.attributes.name}</p>
-        <p>Date of subscription: {subscription.attributes.createdAt}</p>
+        <p>Date of subscription: {endDateString}</p>
         <p>Data sets:</p>
         <p>{subscription.attributes.datasets.toString()}</p>
-        <p className='dataset-zoom' id={subscription.attributes.params.geostore} onClick={this.showSubscription}>View on the map!</p>
       </div>
     );
   }
 
-  showSubscription = evt => {
-    const id = evt.target.id;
+  showSubscription = (evt, subscription) => {
+    const id = subscription.attributes.params.geostore;
     esriRequest({
       url: 'https://production-api.globalforestwatch.org/v1/geostore/' + id,
       callbackParamName: 'callback',
@@ -51,6 +78,29 @@ export default class SubscriptionsModal extends Component {
       mapActions.toggleSubscriptionsModal({ visible: false });
     }, err => {
       console.error(err);
+    });
+  }
+
+  deleteSubscription = (evt, subscription) => {
+    console.log('subscription', subscription);
+
+    $.ajax({
+      url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
+      // dataType: 'json',
+      type: 'DELETE',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: (response) => {
+        console.log('resppp', response);
+        const remainingSubscriptions = this.props.userSubscriptions.filter(subsc => subsc.id !== response.data.id);
+
+        mapActions.setUserSubscriptions(remainingSubscriptions);
+        // mapActions.toggleSubscriptionsModal({ visible: true });
+      },
+      error: (error) => {
+        console.log('err', error);
+      }
     });
   }
 
