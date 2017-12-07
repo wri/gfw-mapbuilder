@@ -1,6 +1,7 @@
 import dispatcher from 'js/dispatcher';
 import layerFactory from 'utils/layerFactory';
 import layerKeys from 'constants/LayerConstants';
+import landmarkLayers from 'constants/LandmarkConstants';
 // import CartoLayer from 'js/layers/CartoLayer';
 import esriConfig from 'esri/config';
 import appActions from 'actions/AppActions';
@@ -110,16 +111,15 @@ class MapActions {
     uniqueLayers.forEach(layer => {
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
-
     const landMapLayerIds = [
-      'comm_ind_Documented_8219',
-      'comm_ind_NotDocumented_2683',
-      'comm_ind_FormalLandClaim_2392',
-      'comm_ind_CustomaryTenure_8127',
-      'comm_comm_Documented_4717',
-      'comm_comm_NotDocumented_9336',
-      'comm_comm_FormalLandClaim_5585',
-      'comm_comm_CustomaryTenure_6877'
+      landmarkLayers.INDIGENOUS_DOCUMENTED,
+      landmarkLayers.INDIGENOUS_NOT_DOCUMENTED,
+      landmarkLayers.INDIGENOUS_FORMAL_CLAIM,
+      landmarkLayers.INDIGENOUS_CUSTOMARY,
+      landmarkLayers.COMMUNITY_DOCUMENTED,
+      landmarkLayers.COMMUNITY_NOT_DOCUMENTED,
+      landmarkLayers.COMMUNITY_FORMAL_CLAIM,
+      landmarkLayers.COMMUNITY_CUSTOMARY
     ];
 
     const landMapLayers = [];
@@ -135,7 +135,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -143,7 +143,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_FormalLandClaim/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_ind_FormalLandClaim_2392'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -151,7 +151,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -159,7 +159,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_CustomaryTenure/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_ind_CustomaryTenure_8127'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -167,7 +167,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_ind_Documented_8219'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -175,7 +175,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_Documented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_ind_Documented_8219'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -183,7 +183,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_NOT_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -191,7 +191,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_ind_NotDocumented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        visible: getVisibleLayers(landmarkLayers.INDIGENOUS_NOT_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -199,7 +199,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -207,7 +207,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_FormalLandClaim/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_FormalLandClaim_5585'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_FORMAL_CLAIM),
         type: 'feature'
       },
       {
@@ -215,7 +215,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -223,7 +223,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_CustomaryTenure/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_CustomaryTenure_6877'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_CUSTOMARY),
         type: 'feature'
       },
       {
@@ -231,7 +231,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_Documented_4717'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -239,7 +239,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_Documented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_Documented_4717'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -247,7 +247,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/0',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_NOT_DOCUMENTED),
         type: 'feature'
       },
       {
@@ -255,7 +255,7 @@ class MapActions {
         url: 'http://gis.wri.org/server/rest/services/LandMark/comm_comm_NotDocumented/MapServer/1',
         minScale: 4600000,
         maxScale: 0,
-        visible: getVisibleLayers('comm_comm_NotDocumented_9336'),
+        visible: getVisibleLayers(landmarkLayers.COMMUNITY_NOT_DOCUMENTED),
         type: 'feature'
       }
     ];

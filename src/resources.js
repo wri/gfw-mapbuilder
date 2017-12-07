@@ -130,7 +130,7 @@ export default {
         groupType: 'default',
         order: 7,
         label: {
-          en: 'Land Cover Change',
+          en: 'Land Cover & Change',
           fr: 'Evolution de la couverture des sols',
           es: 'Dinámica de la Cobertura del Suelo',
           pt: 'Dinâmica de cobertura da terra ',
@@ -139,7 +139,7 @@ export default {
           ka: 'მიწის საფარის დინამიკა'
         },
         layers: [{
-          order: 1,
+          order: 3,
           id: 'TREE_COVER_LOSS',
           type: 'loss', //image
           // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
@@ -175,7 +175,7 @@ export default {
             ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
         }, {
-          order: 2,
+          order: 4,
           id: 'TREE_COVER_GAIN',
           type: 'gain', //'image',
           // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
@@ -199,6 +199,64 @@ export default {
             id: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
             zh: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
             ka: '(12 წელიწადი, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
+          }
+        },
+        {
+          order: 1,
+          id: 'LAND_COVER',
+          type: 'webtiled',
+          url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
+          technicalName: 'global_landcover',
+          legendLayer: [15],
+          rasterId: '$568',
+          bounds: [1, 16],
+          classes: {
+            en: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+            ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
+          },
+          colors: ['#825D26', '#D1A969', '#DED6B4', '#157562', '#CC7A29', '#6DAD96', '#968635', '#C2B32F', '#6F7A53', '#96A36F', '#CDDB93', '#7DBDE8', '#0D63A1', '#F41E65', '#FFFFFF', '#DBDBDB'],
+          label: {
+            en: 'Land Cover',
+            fr: 'Couverture des sols',
+            es: 'Cobertura vegetal',
+            pt: 'Land cover',
+            id: 'Land cover',
+            zh: '土地覆盖',
+            ka: 'მიწის საფარი'
+          }
+        }, {
+          order: 2,
+          id: 'TREE_COVER',
+          type: 'image',
+          url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+          technicalName: 'tree_cover',
+          colormap: [[1, 0, 179, 0]],
+          inputRange: [30, 101],
+          outputRange: [1],
+          opacity: 0.8,
+        legendLayer: [2],
+          label: {
+            en: 'Tree cover density',
+            fr: 'Densité du couvert arboré',
+            es: 'Densidad de follaje',
+            pt: 'Tree cover density',
+            id: 'Tree cover density',
+            zh: '森林覆盖密度',
+            ka: 'ხის ვარჯის სიხშირე'
+          },
+          sublabel: {
+            en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+            pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+            zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+            ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
         }]
       },
@@ -294,63 +352,6 @@ export default {
               color: '#211503'
             }
           ]
-        }, {
-          order: 5,
-          id: 'LAND_COVER',
-          type: 'webtiled',
-          url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
-          technicalName: 'global_landcover',
-          legendLayer: [15],
-          rasterId: '$568',
-          bounds: [1, 16],
-          classes: {
-            en: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-            fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-            es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-            pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-            id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-            zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-            ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-          },
-          colors: ['#825D26', '#D1A969', '#DED6B4', '#157562', '#CC7A29', '#6DAD96', '#968635', '#C2B32F', '#6F7A53', '#96A36F', '#CDDB93', '#7DBDE8', '#0D63A1', '#F41E65', '#FFFFFF', '#DBDBDB'],
-          label: {
-            en: 'Land Cover',
-            fr: 'Couverture des sols',
-            es: 'Cobertura vegetal',
-            pt: 'Land cover',
-            id: 'Land cover',
-            zh: '土地覆盖',
-            ka: 'მიწის საფარი'
-          }
-        }, {
-          order: 6,
-          id: 'TREE_COVER',
-          type: 'image',
-          url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
-          technicalName: 'tree_cover',
-          colormap: [[1, 0, 179, 0]],
-          inputRange: [30, 101],
-          outputRange: [1],
-          opacity: 0.8,
-        legendLayer: [2],
-          label: {
-            en: 'Tree cover density',
-            fr: 'Densité du couvert arboré',
-            es: 'Densidad de follaje',
-            pt: 'Tree cover density',
-            id: 'Tree cover density',
-            zh: '森林覆盖密度',
-            ka: 'ხის ვარჯის სიხშირე'
-          },
-          sublabel: {
-            en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-            ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
-          }
         }]
       },
       GROUP_BASEMAP: {
