@@ -8,7 +8,6 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export default class SubscriptionsModal extends Component {
 
@@ -19,7 +18,6 @@ export default class SubscriptionsModal extends Component {
 
   subscriptionMap = (subscription, j) => {
     const date = new Date(subscription.attributes.createdAt);
-    const dayOfWeek = days[ date.getDay() ];
     let dd = date.getDate();
     let months = date.getMonth() + 1;
     let min = date.getMinutes();
@@ -34,23 +32,23 @@ export default class SubscriptionsModal extends Component {
         min = '0' + min;
     }
 
-    const endDateString = `${dayOfWeek}, ${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
+    const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
     return (
       <div key={j} className='source-row subscribe-row'>
         <div className='delete-row'>
-          <button onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
+          <button title='Delete subscription' onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
             <svg className='svg-icon'><use xlinkHref="#icon-analysis-remove" /></svg><span className='delete-row-label'>Delete</span>
           </button>
         </div>
         <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'>
-          <button className='btn-delete-subscription'>
+          <button title='Show on map' className='btn-delete-subscription'>
             <svg className='svg-icon'><use xlinkHref="#shape-world" /></svg>
           </button>
         </div>
-        <p>{subscription.attributes.name}</p>
-        <p>Date of subscription: {endDateString}</p>
-        <p>Data sets:</p>
-        <p>{subscription.attributes.datasets.toString()}</p>
+        <p className='name-row'>{subscription.attributes.name}</p>
+        <p className='other-row'>Date of subscription: {endDateString}</p>
+        <p className='other-row'>Data sets:</p>
+        <p className='other-row'>{subscription.attributes.datasets.toString()}</p>
       </div>
     );
   }
@@ -82,6 +80,7 @@ export default class SubscriptionsModal extends Component {
   }
 
   deleteSubscription = (evt, subscription) => {
+    //TODO: Add confirm popup!
 
     $.ajax({
       url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
