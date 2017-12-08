@@ -36,7 +36,7 @@ export default class SubscriptionsModal extends Component {
 
     const endDateString = `${dayOfWeek}, ${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
     return (
-      <div key={j} className='source-row'>
+      <div key={j} className='source-row subscribe-row'>
         <div className='delete-row'>
           <button onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
             <svg className='svg-icon'><use xlinkHref="#icon-analysis-remove" /></svg><span className='delete-row-label'>Delete</span>

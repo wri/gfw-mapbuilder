@@ -156,7 +156,7 @@ export default class SubscribeModal extends Component {
         datasets.push('glad-alerts');
       }
       if (sadAlerts) {
-        datasets.push('sad-alerts');
+        datasets.push('imazon-alerts');
       }
       if (formaAlerts) {
         datasets.push('forma-alerts');
