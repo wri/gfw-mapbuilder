@@ -53,7 +53,7 @@ export default class LandingModal extends React.Component {
             </div>
             <div onClick={this.handleClick} className='landing-modal-checkbox-container pointer'>
               <input type='checkbox' checked={this.state.checked} />
-              <span>&nbsp;Don't show this dialog again</span>
+              <span>&nbsp;Don&apos;t show this dialog again</span>
             </div>
             </div>
         </article>
