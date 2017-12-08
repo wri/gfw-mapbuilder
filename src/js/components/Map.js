@@ -6,6 +6,7 @@ import AnalysisModal from 'components/Modals/AnalysisModal';
 import Controls from 'components/MapControls/ControlPanel';
 import TimeWidget from 'components/MapControls/TimeWidget';
 import CanopyModal from 'components/Modals/CanopyModal';
+import LandingModal from 'components/Modals/LandingModal';
 import LayerModal from 'components/Modals/LayerModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
@@ -32,6 +33,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import cookie from 'dojo/cookie';
 
 let scalebar, paramsApplied = false, mapLoaded = false, legendReady = false;
 
@@ -518,6 +520,8 @@ export default class Map extends Component {
       });
     }
 
+    const hideLandingModal = cookie('showLandingModal') === 'false';
+
     return (
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
@@ -550,6 +554,9 @@ export default class Map extends Component {
         <div className={`canopy-modal-container modal-wrapper ${canopyModalVisible ? '' : 'hidden'}`}>
           <CanopyModal />
         </div>
+        {!hideLandingModal && <div className={`landing-modal-container modal-wrapper`}>
+            <LandingModal />
+        </div>}
         <div className={`layer-modal-container modal-wrapper ${layerModalVisible ? '' : 'hidden'}`}>
           <LayerModal info={modalLayerInfo} />
         </div>
