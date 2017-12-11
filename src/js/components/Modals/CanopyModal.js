@@ -1,5 +1,5 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
-import layerKeys from 'constants/LayerConstants';
+import {getUrlParams} from 'utils/params';
 import {modalText, assetUrls} from 'js/config';
 import {loadJS, loadCSS} from 'utils/loaders';
 import mapActions from 'actions/MapActions';
@@ -25,8 +25,37 @@ export default class CanopyModal extends Component {
       base = base.substring(0, base.length - 1);
     }
     this.loadedSlider = false;
-    // loadJS(base + assetUrls.jQuery);
     loadJS(base + assetUrls.rangeSlider).then(() => {
+      const params = getUrlParams(location.search);
+      let fromNode = 5;
+      if (params.c) {
+        switch (params.c) {
+          case '10':
+            fromNode = 1;
+            break;
+          case '15':
+            fromNode = 2;
+            break;
+          case '20':
+            fromNode = 3;
+            break;
+          case '25':
+            fromNode = 4;
+            break;
+          case '30':
+            fromNode = 5;
+            break;
+          case '50':
+            fromNode = 6;
+            break;
+          case '75':
+            fromNode = 7;
+            break;
+          default:
+            fromNode = 5;
+        }
+      }
+
       if ($('#tree-cover-slider').ionRangeSlider) {
         $('#tree-cover-slider').ionRangeSlider({
           type: 'double',
@@ -37,7 +66,7 @@ export default class CanopyModal extends Component {
           from_min: 1,
           from_max: 7,
           grid: true,
-          from: 5,
+          from: fromNode, //5,
           onFinish: this.sliderChanged,
           prettify: value => (value + '%')
         });

@@ -1,5 +1,5 @@
 export function prepareStateForShare (options) {
-  const {map, settings, language, basemap, activeLayers, activeTab} = options;
+  const {map, settings, language, basemap, activeLayers, activeTab, canopyDensity} = options;
   const shareState = {};
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
@@ -12,6 +12,7 @@ export function prepareStateForShare (options) {
   shareState.b = basemap;
   shareState.a = activeLayers;
   shareState.t = activeTab;
+  shareState.c = canopyDensity;
   console.log(shareState);
   return shareState;
 }

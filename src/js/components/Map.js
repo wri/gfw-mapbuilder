@@ -208,7 +208,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t} = params;
+    const {x, y, z, l, b, t, c} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -232,6 +232,10 @@ export default class Map extends Component {
 
     if (t) {
       mapActions.changeActiveTab(t);
+    }
+
+    if (c) {
+      mapActions.updateCanopyDensity(c);
     }
   };
 

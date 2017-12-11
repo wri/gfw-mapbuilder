@@ -33,7 +33,7 @@ export default class ControlPanel extends Component {
 
   share = () => {
     const {map, language, settings} = this.context;
-    const {activeLayers, activeTab} = this.props;
+    const {activeLayers, activeTab, canopyDensity} = this.props;
     console.log(this.props);
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
@@ -41,7 +41,8 @@ export default class ControlPanel extends Component {
       settings: settings,
       basemap: basemapUtils.getBasemap(),
       activeLayers: activeLayers,
-      activeTab: activeTab
+      activeTab: activeTab,
+      canopyDensity: canopyDensity
     })));
   };
 
