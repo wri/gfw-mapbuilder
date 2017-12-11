@@ -9,6 +9,7 @@ import CanopyModal from 'components/Modals/CanopyModal';
 import LayerModal from 'components/Modals/LayerModal';
 import SubscriptionsModal from 'components/Modals/SubscriptionsModal';
 import SubscribeModal from 'components/Modals/SubscribeModal';
+import ConfirmModal from 'components/Modals/ConfirmModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
 import SearchModal from 'components/Modals/SearchModal';
@@ -307,6 +308,8 @@ export default class Map extends Component {
       userSubscriptions,
       subscriptionsModalVisible,
       subscribeModalVisible,
+      confirmModalVisible,
+      subscriptionToDelete,
       modalLayerInfo,
       webmapInfo,
       map,
@@ -372,6 +375,9 @@ export default class Map extends Component {
         </div>
         <div className={`subscription-modal-container modal-wrapper ${subscribeModalVisible ? '' : 'hidden'}`}>
           <SubscribeModal userSubscriptions={userSubscriptions} />
+        </div>
+        <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
+          <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
       </div>
     );

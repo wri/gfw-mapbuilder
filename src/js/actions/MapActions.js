@@ -44,6 +44,7 @@ class MapActions {
   toggleLayerModal = (data) => data;
   toggleSubscriptionsModal = (data) => data;
   toggleSubscribeModal = (data) => data;
+  toggleConfirmModal = (data) => data;
   toggleTOCVisible = (data) => data;
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;
@@ -51,6 +52,10 @@ class MapActions {
   toggleMobileTimeWidgetVisible = () => { return {}; };
 
   toggleLogin = (data) => data;
+
+  deleteSubscription (subscription) {
+    return subscription;
+  }
 
   setUserSubscriptions (subscriptions) {
     return subscriptions;

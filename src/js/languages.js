@@ -42,6 +42,10 @@ strings.en.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.en.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.en.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.en.SUBSCRIBE_NAME = 'Name your subscription';
+strings.en.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.en.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.en.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.en.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.en.NAV_LANGUAGE = 'Select Language';
 //- Documents
 strings.en.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
@@ -295,6 +299,10 @@ strings.ka.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.ka.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.ka.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.ka.SUBSCRIBE_NAME = 'Name your subscription';
+strings.ka.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.ka.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.ka.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.ka.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.ka.NAV_LANGUAGE = 'Select Language';
 strings.ka.NAV_LANGUAGE = 'ენის არჩევა';
 //- Documents
@@ -550,6 +558,10 @@ strings.fr.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.fr.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.fr.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.fr.SUBSCRIBE_NAME = 'Name your subscription';
+strings.fr.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.fr.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.fr.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.fr.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.fr.NAV_LANGUAGE = 'Select Language';
 strings.fr.NAV_LANGUAGE = 'Choisir Langue';
 //- Documents
@@ -805,6 +817,10 @@ strings.es.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.es.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.es.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.es.SUBSCRIBE_NAME = 'Name your subscription';
+strings.es.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.es.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.es.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.es.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.es.NAV_LANGUAGE = 'Select Language';
 strings.es.NAV_LANGUAGE = 'Seleccionar idioma';
 //- Documents
@@ -1059,6 +1075,10 @@ strings.pt.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.pt.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.pt.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.pt.SUBSCRIBE_NAME = 'Name your subscription';
+strings.pt.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.pt.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.pt.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.pt.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.pt.NAV_LANGUAGE = 'Select Language';
 strings.pt.NAV_LANGUAGE = 'Selecionar Idioma';
 //- Documents
@@ -1313,6 +1333,10 @@ strings.id.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.id.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.id.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.id.SUBSCRIBE_NAME = 'Name your subscription';
+strings.id.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.id.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.id.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.id.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.id.NAV_LANGUAGE = 'Select Language';
 strings.id.NAV_LANGUAGE = 'Select Language';
 //- Documents
@@ -1567,6 +1591,10 @@ strings.zh.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
 strings.zh.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.zh.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
 strings.zh.SUBSCRIBE_NAME = 'Name your subscription';
+strings.zh.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.zh.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.zh.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.zh.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.zh.NAV_LANGUAGE = 'Select Language';
 strings.zh.NAV_LANGUAGE = '选择语言';
 //- Documents

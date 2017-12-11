@@ -1,11 +1,6 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
-import esriRequest from 'esri/request';
-import geojsonUtil from 'utils/arcgis-to-geojson';
-import symbols from 'utils/symbols';
-import Polygon from 'esri/geometry/Polygon';
-import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 
 const initialState = {

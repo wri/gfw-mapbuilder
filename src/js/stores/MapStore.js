@@ -54,6 +54,7 @@ class MapStore {
     this.layerModalVisible = false;
     this.subscriptionsModalVisible = false;
     this.subscribeModalVisible = false;
+    this.confirmModalVisible = false;
     this.isLoggedIn = false;
     this.canopyDensity = 30;
     this.activeSlopeClass = null;
@@ -66,6 +67,7 @@ class MapStore {
     this.imazonEndYear = 0;
     this.iconLoading = '';
     this.legendOpacity = {};
+    this.subscriptionToDelete = {};
     this.analysisDisabled = false;
 
     this.bindListeners({
@@ -82,7 +84,9 @@ class MapStore {
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
+      toggleConfirmModal: mapActions.toggleConfirmModal,
       toggleLogin: mapActions.toggleLogin,
+      deleteSubscription: mapActions.deleteSubscription,
       updateCanopyDensity: mapActions.updateCanopyDensity,
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
@@ -287,8 +291,16 @@ class MapStore {
     this.subscribeModalVisible = payload.visible;
   }
 
+  toggleConfirmModal (payload) {
+    this.confirmModalVisible = payload.visible;
+  }
+
   toggleLogin (loggedIn) {
     this.isLoggedIn = loggedIn;
+  }
+
+  deleteSubscription (payload) {
+    this.subscriptionToDelete = payload;
   }
 
   updateCanopyDensity (payload) {
