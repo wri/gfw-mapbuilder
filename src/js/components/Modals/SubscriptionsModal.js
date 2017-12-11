@@ -47,10 +47,76 @@ export default class SubscriptionsModal extends Component {
         </div>
         <p className='name-row'>{subscription.attributes.name}</p>
         <p className='other-row'>Date of subscription: {endDateString}</p>
-        <p className='other-row'>Data sets:</p>
-        <p className='other-row'>{subscription.attributes.datasets.toString()}</p>
+        <div className='other-row'>Data sets: <span>{subscription.attributes.datasets.map(dataset => this.listDataset(dataset, subscription, subscription.attributes.datasets.length))}</span></div>
       </div>
     );
+  }
+
+  listDataset = (dataset, subscription, length) => {
+    let datasetName;
+    switch (dataset) {
+      case 'viirs-active-fires':
+        datasetName = 'VIIRS active fires alerts';
+        break;
+      case 'umd-loss-gain':
+        datasetName = 'Tree cover loss data';
+        break;
+      case 'glad-alerts':
+        datasetName = 'GLAD tree cover loss alerts';
+        break;
+      case 'imazon-alerts':
+        datasetName = 'SAD tree cover loss alerts';
+        break;
+      case 'forma-alerts':
+        datasetName = 'FORMA active clearing alerts data';
+        break;
+      case 'terrai-alerts':
+        datasetName = 'Terra-i tree cover loss alerts';
+        break;
+      case 'prodes-loss':
+        datasetName = 'PRODES deforestation data';
+        break;
+      default:
+        break;
+    }
+    if (length > 1) {
+      return <p key={dataset}>{datasetName} <svg onClick={() => this.updateSubscription(dataset, subscription)} className='svg-icon delete-dataset'><use xlinkHref="#icon-analysis-remove" /></svg></p>;
+    } else {
+      return <p key={dataset}>{datasetName}</p>;
+    }
+  }
+
+  updateSubscription = (dataset, subscription) => {
+    subscription.attributes.datasets.splice(subscription.attributes.datasets.indexOf(dataset), 1);
+
+    const jsonData = {
+      datasets: subscription.attributes.datasets
+    };
+
+    $.ajax({
+      url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
+      type: 'PATCH',
+      dataType: 'json',
+      data: JSON.stringify(jsonData),
+      contentType: 'application/json',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: (response) => {
+        const updateSubscriptions = this.props.userSubscriptions.map(subsc => {
+          if (response.data.id === subsc.id) {
+            return response.data;
+          } else {
+            return subsc;
+          }
+        });
+
+        mapActions.setUserSubscriptions(updateSubscriptions);
+      },
+      error: (error) => {
+        console.log('err', error);
+      }
+    });
   }
 
   showSubscription = (evt, subscription) => {
