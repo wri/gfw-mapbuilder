@@ -17,7 +17,7 @@ export default class RadioGroup extends Component {
   showInfo = (layer) => {
 
     mapActions.showLayerInfo(layer);
-    layerActions.showLoading(layer.id);
+    layerActions.showLoading(layer.subId);
   }
 
   toggleLayer = (layer) => {
@@ -70,7 +70,6 @@ export default class RadioGroup extends Component {
     const { language } = this.context;
     const selected = this.props.activeLayers.indexOf(layer.subId || layer.id) > -1 ? 'active' : '';
     const sublabel = layer.sublabel && (layer.sublabel[language] || layer.sublabel[layer.subIndex][language]);
-
     return <RadioButton
       key={layer.subId || layer.id}
       selected={selected}
@@ -79,6 +78,7 @@ export default class RadioGroup extends Component {
       id={layer.subId || layer.id}
       layer={layer}
       showInfo={this.showInfo}
+      iconLoading={this.props.iconLoading}
       toggleLayer={this.toggleLayer}
     />;
   }

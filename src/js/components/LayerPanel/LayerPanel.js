@@ -103,6 +103,7 @@ export default class LayerPanel extends Component {
             allRadioLayers={this.props.allLayers.filter(l => this.props.exclusiveLayerIds.indexOf(l.id) > -1)}
             activeLayers={this.props.activeLayers}
             dynamicLayers={this.props.dynamicLayers}
+            iconLoading={this.props.iconLoading}
           />;
           break;
         }
