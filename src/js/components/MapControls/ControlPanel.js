@@ -2,6 +2,7 @@ import {prepareStateForShare} from 'utils/shareUtils';
 import modalActions from 'actions/ModalActions';
 import mapActions from 'actions/MapActions';
 import {toQuerystring} from 'utils/params';
+import basemapUtils from 'utils/basemapUtils';
 import text from 'js/languages';
 import React, {
   Component,
@@ -32,10 +33,15 @@ export default class ControlPanel extends Component {
 
   share = () => {
     const {map, language, settings} = this.context;
+    const {activeLayers, activeTab} = this.props;
+    console.log(this.props);
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
       language: language,
-      settings: settings
+      settings: settings,
+      basemap: basemapUtils.getBasemap(),
+      activeLayers: activeLayers,
+      activeTab: activeTab
     })));
   };
 

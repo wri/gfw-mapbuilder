@@ -16,6 +16,7 @@ const landsatLayerId = 'LANDSAT';
 
 let customBasemapLayer;
 let customLabelLayer;
+let activeBasemap;
 
 export default {
 
@@ -27,6 +28,8 @@ export default {
   * arcgis layers, just call setBasemap, this will unhide the layer if necessary
   */
   updateBasemap (map, basemap, customBasemaps) {
+    console.log('new bmm', basemap);
+    activeBasemap = basemap;
     //- Remove custom basemap layer if it exists
     if (customBasemapLayer) {
       map.removeLayer(customBasemapLayer);
@@ -67,6 +70,10 @@ export default {
       this.addLandsatBasemap(map, landsatConfig);
     }
 
+  },
+
+  getBasemap() {
+    return activeBasemap;
   },
 
   addWRILayer (map, mapboxId) {

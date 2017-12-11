@@ -15,6 +15,7 @@ class ModalStore {
   }
 
   updateBitlyUrl (bitlyUrl) {
+    console.log(bitlyUrl);
     this.bitlyUrl = bitlyUrl;
   }
 

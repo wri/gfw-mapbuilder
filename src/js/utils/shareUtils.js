@@ -1,5 +1,5 @@
 export function prepareStateForShare (options) {
-  const {map, settings, language} = options;
+  const {map, settings, language, basemap, activeLayers, activeTab} = options;
   const shareState = {};
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
@@ -9,5 +9,9 @@ export function prepareStateForShare (options) {
   shareState.y = center.getLatitude().toFixed(2);
   shareState.z = map.getLevel();
   shareState.l = language;
+  shareState.b = basemap;
+  shareState.a = activeLayers;
+  shareState.t = activeTab;
+  console.log(shareState);
   return shareState;
 }

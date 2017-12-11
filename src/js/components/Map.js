@@ -144,7 +144,10 @@ export default class Map extends Component {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         //- Set the default basemap in the store
         const basemap = itemData && itemData.baseMap;
-        basemapUtils.prepareDefaultBasemap(response.map, basemap.baseMapLayers);
+        const params = getUrlParams(location.search);
+        // if (!params.b) {
+        //   basemapUtils.prepareDefaultBasemap(response.map, basemap.baseMapLayers);
+        // }
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -195,10 +198,16 @@ export default class Map extends Component {
   };
 
   applyStateFromUrl = (map, params) => {
+    console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l} = params;
+    const {x, y, z, l, b} = params;
 
     const langKeys = Object.keys(settings.labels);
+
+    //TODO: If we have a '#' at the start of our location.search, this won't work properly --> Our params come back as an empty object!
+    // so check our 'getUrlParams' function
+
+    //What else: basemap, active map layers, menu tab (layerList vs analysis vs info), layerParams (date/time, forest cover, etc)
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
@@ -212,6 +221,10 @@ export default class Map extends Component {
     } else if (l && langKeys.indexOf(l) > -1) {
       appActions.setLanguage.defer(l);
     }
+
+    // if (b) {
+    //   basemapUtils.updateBasemap(map, b, settings.layerPanel.GROUP_BASEMAP.layers);
+    // }
 
   };
 
