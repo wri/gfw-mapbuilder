@@ -145,9 +145,17 @@ export default class Map extends Component {
         //- Set the default basemap in the store
         const basemap = itemData && itemData.baseMap;
         const params = getUrlParams(location.search);
-        // if (!params.b) {
-        //   basemapUtils.prepareDefaultBasemap(response.map, basemap.baseMapLayers);
-        // }
+        basemapUtils.prepareDefaultBasemap(response.map, basemap.baseMapLayers, params);
+        if (params.b) {
+          mapActions.changeBasemap(params.b);
+        }
+        if (params.a) {
+          const layerIds = params.a.split(',');
+          layerIds.forEach(layerId => {
+            // TODO: Confirm this with layerIds and subId's!
+            layerActions.addActiveLayer(layerId);
+          });
+        }
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -200,7 +208,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b} = params;
+    const {x, y, z, l, b, t} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -222,10 +230,9 @@ export default class Map extends Component {
       appActions.setLanguage.defer(l);
     }
 
-    // if (b) {
-    //   basemapUtils.updateBasemap(map, b, settings.layerPanel.GROUP_BASEMAP.layers);
-    // }
-
+    if (t) {
+      mapActions.changeActiveTab(t);
+    }
   };
 
   addLayersToLayerPanel = (settings, operationalLayers) => {

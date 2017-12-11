@@ -61,7 +61,7 @@ const LayersHelper = {
       visible = false;
       layerInfo.visible = visible;
     }
-    if (map && layerInfo.esriLayer) {
+    if (map && map.getScale && layerInfo.esriLayer) {
       // Explicitly check scale depencency for sub-layers in a dynamic map service.
       const scale = map.getScale();
       if (layerInfo.hasScaleDependency && ((scale > layerInfo.minScale && layerInfo.minScale !== 0) || scale < layerInfo.maxScale)) {
