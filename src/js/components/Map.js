@@ -411,6 +411,10 @@ export default class Map extends Component {
             if (l.includedSublayers) { // this is a dynamic layer
               layers.forEach(webmapLayer => {
                 if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                  if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {
+                    webmapLayer.activateWithAllLayers = true;
+                    webmapLayer.groupOrder = group.order;
+                  }
                   groupSublayers.push({
                     ...webmapLayer,
                     ...l
