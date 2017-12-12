@@ -8,7 +8,7 @@ export default function ControlledModalWrapper (props) {
   return (
     <div className='modal-container'>
       <div className='modal-background' onClick={props.onClose} />
-      <article className='modal shadow'>
+      <article className='modal-boxaa shadow'>
         <div title='close' className='close-icon pointer' onClick={props.onClose} >
           <svg>
             <use xlinkHref="#shape-close" />

@@ -44,8 +44,9 @@ export default class LossControls extends Component {
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
       base = base.substring(0, base.length - 1);
     }
+    base = base.replace('map/', 'map-app/');
 
-    loadJS(base + assetUrls.rangeSlider).then(() => {
+    // loadJS(base + assetUrls.rangeSlider).then(() => {
       // initialize the slider
       if ($('#loss-slider').ionRangeSlider) {
         $('#loss-slider').ionRangeSlider({
@@ -63,9 +64,9 @@ export default class LossControls extends Component {
           end: lossOptions[this.lossSlider.result.to].label
         });
       }
-    });
-    loadCSS(base + assetUrls.ionCSS);
-    loadCSS(base + assetUrls.ionSkinCSS);
+    // });
+    // loadCSS(base + assetUrls.ionCSS);
+    // loadCSS(base + assetUrls.ionSkinCSS);
   }
 
   componentDidUpdate (prevProps, prevState, prevContext) {

@@ -164,11 +164,12 @@ const utils = {
     }
 
     const path = toQuerystring(query);
+    window._app.base = window._app.base.replace('map/', 'map-app/');
     if (window._app.base === window._app.cache) {
-      window.open(`report.html?${path}`);
+      window.open(`/map-app/report.html?${path}`);
     } else {
-      const appBase = window._app.base.split(window._app.cache)[0];
-      window.open(`${appBase}report.html?${path}`);
+      // const appBase = window._app.base.split(window._app.cache)[0];
+      window.open(`/map-app/report.html?${path}`);
     }
   },
 

@@ -1,6 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {loadCSS} from 'utils/loaders';
-import {assetUrls} from 'js/config';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import layerActions from 'actions/LayerActions';

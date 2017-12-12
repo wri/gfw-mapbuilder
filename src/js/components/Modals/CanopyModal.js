@@ -24,9 +24,10 @@ export default class CanopyModal extends Component {
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
       base = base.substring(0, base.length - 1);
     }
+    base = base.replace('map/', 'map-app/');
     this.loadedSlider = false;
     // loadJS(base + assetUrls.jQuery);
-    loadJS(base + assetUrls.rangeSlider).then(() => {
+    // loadJS(base + assetUrls.rangeSlider).then(() => {
       if ($('#tree-cover-slider').ionRangeSlider) {
         $('#tree-cover-slider').ionRangeSlider({
           type: 'double',
@@ -44,9 +45,9 @@ export default class CanopyModal extends Component {
         this.loadedSlider = true;
       }
 
-    }, console.error);
-    loadCSS(base + assetUrls.ionCSS);
-    loadCSS(base + assetUrls.ionSkinCSS);
+    // }, console.error);
+    // loadCSS(base + assetUrls.ionCSS);
+    // loadCSS(base + assetUrls.ionSkinCSS);
   }
 
   componentDidUpdate(prevProps, prevState, prevContext) {

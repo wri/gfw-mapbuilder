@@ -31,7 +31,7 @@ export default class ModalWrapper extends React.Component {
     return (
       <div className='modal-container'>
         <div className='modal-background' onClick={::this.close} />
-        <article className='modal shadow'>
+        <article className='modal-boxaa shadow'>
           <div title='close' className='close-icon pointer' onClick={::this.close} >
             <svg><use xlinkHref="#shape-close" /></svg>
           </div>
