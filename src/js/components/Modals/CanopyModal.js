@@ -26,35 +26,7 @@ export default class CanopyModal extends Component {
     }
     this.loadedSlider = false;
     loadJS(base + assetUrls.rangeSlider).then(() => {
-      const params = getUrlParams(location.search);
-      let fromNode = 5;
-      if (params.c) {
-        switch (params.c) {
-          case '10':
-            fromNode = 1;
-            break;
-          case '15':
-            fromNode = 2;
-            break;
-          case '20':
-            fromNode = 3;
-            break;
-          case '25':
-            fromNode = 4;
-            break;
-          case '30':
-            fromNode = 5;
-            break;
-          case '50':
-            fromNode = 6;
-            break;
-          case '75':
-            fromNode = 7;
-            break;
-          default:
-            fromNode = 5;
-        }
-      }
+      const fromNode = this.getDensity();
 
       if ($('#tree-cover-slider').ionRangeSlider) {
         $('#tree-cover-slider').ionRangeSlider({
@@ -81,6 +53,7 @@ export default class CanopyModal extends Component {
   componentDidUpdate(prevProps, prevState, prevContext) {
     if (this.loadedSlider === false) {
       if ($('#tree-cover-slider').ionRangeSlider) {
+        const fromNode = this.getDensity();
         $('#tree-cover-slider').ionRangeSlider({
           type: 'double',
           values: modalText.canopy.slider,
@@ -90,7 +63,7 @@ export default class CanopyModal extends Component {
           from_min: 1,
           from_max: 7,
           grid: true,
-          from: 5,
+          from: fromNode, //5,
           onFinish: this.sliderChanged,
           prettify: value => (value + '%')
         });
@@ -108,6 +81,39 @@ export default class CanopyModal extends Component {
         layersHelper.updateAGBiomassLayer(canopyDensity, map);
       });
     }
+  }
+
+  getDensity = () => {
+    let fromNode = 5;
+    const params = getUrlParams(location.search);
+    if (params.c) {
+      switch (params.c) {
+        case '10':
+          fromNode = 1;
+          break;
+        case '15':
+          fromNode = 2;
+          break;
+        case '20':
+          fromNode = 3;
+          break;
+        case '25':
+          fromNode = 4;
+          break;
+        case '30':
+          fromNode = 5;
+          break;
+        case '50':
+          fromNode = 6;
+          break;
+        case '75':
+          fromNode = 7;
+          break;
+        default:
+          fromNode = 5;
+      }
+    }
+    return fromNode;
   }
 
   sliderChanged = (data) => {
