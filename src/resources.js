@@ -52,8 +52,8 @@ export default {
   webmapMenuName: 'Land Use',
   //- Restoration Module settings
   restorationModule: false,
-  restorationImageServer: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module3/ImageServer', //'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer'
-  concessionsMapServer: 'https://gis-gfw.wri.org/arcgis/rest/services/land_use/MapServer',
+  restorationImageServer: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module3/ImageServer', //'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer'
+  concessionsMapServer: 'http://gis-gfw.wri.org/arcgis/rest/services/land_use/MapServer',
   concessionIds: {
     oilPalm: 1,
     mining: 2,
@@ -293,7 +293,7 @@ export default {
           order: 2,
           id: 'IFL',
           type: 'dynamic',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+          url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
           technicalName: 'intact_forest_landscapes_change',
           layerIds: [0],
           label: {
@@ -309,7 +309,7 @@ export default {
           order: 3,
           id: 'AG_BIOMASS',
           type: 'image',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
+          url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
           technicalName: 'aboveground_biomass',
           legendLayer: [8],
           label: {
@@ -661,7 +661,7 @@ export default {
       }, {
         id: 'LEGEND_LAYER',
         type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+        url: 'http://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
         visible: false,
         opacity: 0,
         layerIds: []

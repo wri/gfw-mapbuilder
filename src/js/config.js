@@ -1,6 +1,6 @@
 import analysisKeys from 'constants/AnalysisConstants';
 
-const analysisImageService = 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
+const analysisImageService = 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
 
 const config = {
   map: {
@@ -45,13 +45,13 @@ const config = {
   },
 
   urls: {
-    metadataApi: 'https://gis-gfw.wri.org/metadata',
+    metadataApi: 'http://gis-gfw.wri.org/metadata',
     metadataXmlEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
     agolItemEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}`,
     cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
     cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=GeoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
-    esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
+    esriLegendService: 'http://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
   },
 
   upload: {
@@ -188,7 +188,7 @@ config.analysis[analysisKeys.MANGROVE_LOSS] = {
 };
 
 config.analysis[analysisKeys.SAD_ALERTS] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
+  url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
   outFields: ['date', 'data_type', 'shape_Area'],
   colors: {
     degrad: '#FA98B9',
@@ -197,7 +197,7 @@ config.analysis[analysisKeys.SAD_ALERTS] = {
 };
 
 config.analysis[analysisKeys.GLAD_ALERTS] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/glad_alerts_analysis/ImageServer',
+  url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/glad_alerts_analysis/ImageServer',
   lockrasters: {
     '2015': 6,
     '2016': 4,
@@ -209,7 +209,7 @@ config.analysis[analysisKeys.GLAD_ALERTS] = {
 };
 
 config.analysis[analysisKeys.TERRA_I_ALERTS] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
+  url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
   analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
 };
 
@@ -263,11 +263,11 @@ config.analysis[analysisKeys.TC_LOSS] = {
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8'
+  url: 'http://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8'
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
+  url: 'http://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
 };
 
 export const mapConfig = config.map;
