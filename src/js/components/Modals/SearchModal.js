@@ -98,13 +98,15 @@ export default class SearchModal extends Component {
 
     return (
       <ControlledModalWrapper onClose={this.onClose}>
-        <div className='deg-box'>
-          <span>Lat:</span><input ref='decimalDegreeLat' type='number' className='deg-input' id='deg-lat' name='deg-lat' />
+        <div className='flex deg-search-container'>
+          <div className='deg-box'>
+            <span>Lat:</span><input ref='decimalDegreeLat' type='number' className='deg-input' id='deg-lat' name='deg-lat' />
+          </div>
+          <div className='deg-box'>
+            <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
+          </div>
+          <button className='search-submit-button fa-button gold' onClick={this.decimalDegreeSearch}>Search</button>
         </div>
-        <div className='deg-box'>
-          <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
-        </div>
-        <button className='search-submit-button fa-button gold' onClick={this.decimalDegreeSearch}>Search</button>
         <div className='search-widget-label'>
           {text[language].SEARCH_WIDGET_TITLE}
         </div>
