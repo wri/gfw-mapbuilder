@@ -12,6 +12,7 @@ import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import CarbonChart from 'components/AnalysisPanel/CarbonChart';
 import CommoditiesChart from 'components/AnalysisPanel/CommoditiesChart';
+import RedirectChart from 'components/AnalysisPanel/RedirectChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -219,6 +220,8 @@ export default class Analysis extends Component {
           mining={results.mining}
           managedForests={results.managedForests}
         />;
+      case analysisKeys.INTERSECTION_LANDS:
+        return <RedirectChart redirectUrl='/country-profiles/' />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}

@@ -145,18 +145,12 @@ export default class ReportSubscribeButtons extends Component {
 
   render () {
     const { language } = this.context;
-    const { activeAnalysisType } = mapStore.getState();
 
     return (
       <div className='report-sub-buttons'>
         <div className='report-sub-button'>
           <button className='fa-button gold' onClick={this.printReport}>
             {text[language].PRINT_REPORT}
-          </button>
-        </div>
-        <div className='report-sub-button'>
-          <button className={`fa-button gold ${activeAnalysisType === analysisKeys.CONCESSIONS ? '' : ' hidden'}`} onClick={this.launchLandmarkAnalysis}>
-          Indigenous Lands Report
           </button>
         </div>
       </div>
