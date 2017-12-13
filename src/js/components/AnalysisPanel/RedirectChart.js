@@ -3,28 +3,53 @@ import React, { Component } from 'react';
 
 export default class RedirectChart extends Component {
 
+  constructor(props){
+    super(props);
+
+    this.state = {
+      isEmpty: false,
+      isError: false
+    };
+  }
+
   componentDidMount() {
-    const openWindow = window.open(this.props.redirectUrl);
-    console.log('openWindow', openWindow);
-    console.log('this.props.payload', this.props.payload);
 
-    if (!openWindow || typeof openWindow === 'undefined') {
-      alert('Turn off your pop-up blocker!');
-      openWindow.payload = this.props.payload;
+    if (this.props.payload.features && this.props.payload.features.length === 0) {
+      this.setState({
+        isEmpty: true
+      });
+    } else if (!this.props.payload || !this.props.payload.features) {
+      this.setState({
+        isError: true
+      });
     } else {
-      openWindow.payload = this.props.payload;
-    }
+      const openWindow = window.open(this.props.redirectUrl);
+      console.log('openWindow', openWindow);
+      console.log('this.props.payload', this.props.payload);
 
-    if (!openWindow || typeof openWindow === 'undefined') {
-      alert('Turn off your pop-up blocker!');
+      if (!openWindow || typeof openWindow === 'undefined') {
+        alert('Turn off your pop-up blocker!');
+      } else {
+        openWindow.payload = this.props.payload;
+      }
     }
   }
 
   render() {
-    return (
-      <div className='analysis__carbon-container flex'>
-        <div className='chart-error'>View results in new tab</div>
-      </div>
-    );
+    const { isError, isEmpty } = this.state;
+    if (isError) {
+      return (
+        <div className='data-error'>
+          <h5>Error fetching the data</h5>
+        </div>
+      );
+    } else {
+      return (
+        <div className='analysis__carbon-container flex'>
+          <div className={`chart-error ${isEmpty ? 'hidden' : ' '}`}>View results in new tab</div>
+          <div id='chartError' className={`chart-error ${isEmpty ? '' : ' hidden'}`}>No data available.</div>
+        </div>
+      );
+    }
   }
 }

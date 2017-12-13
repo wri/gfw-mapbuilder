@@ -496,6 +496,11 @@ export default {
         console.log('payload', payload);
         promise.resolve(payload);
 
+      } else {
+        promise.resolve({
+          features: [],
+          csv: []
+        });
       }
     }, error => {
       console.log('err', error);

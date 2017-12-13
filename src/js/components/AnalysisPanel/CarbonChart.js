@@ -16,13 +16,13 @@ export default class CarbonChart extends Component {
     if (typeof this.props.results === 'object' && this.props.results.hasOwnProperty('error')) {
       this.setState({ isError: true });
     } else {
-      const aboveground = this.props.aboveground;
-      const belowground = this.props.belowground;
+      const abovegroundCarbon = this.props.abovegroundCarbon;
+      const belowgroundCarbon = this.props.belowgroundCarbon;
       const averageAboveground = this.props.averageAboveground;
       const averageBelowground = this.props.averageBelowground;
       const total = this.props.total;
 
-      if (aboveground === 0 && belowground === 0 && averageAboveground === 0 && averageBelowground === 0) {
+      if (abovegroundCarbon === 0 && belowgroundCarbon === 0 && averageAboveground === 0 && averageBelowground === 0) {
         this.setState({ isEmpty: true, loading: false });
       } else {
         total > 0 && charts.makeCarbonInTreesChart(this.totalChart, this.props);
