@@ -60,7 +60,7 @@ export default class AnalysisTypeSelect extends Component {
         case analysisKeys.BIO_LOSS:
           return settings.aboveGroundBiomass;
         case analysisKeys.LC_LOSS:
-          return settings.landCover;
+          return false;
         case analysisKeys.LCC:
           return settings.landCover;
         case analysisKeys.VIIRS_FIRES:

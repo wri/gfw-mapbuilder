@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 * Should be wrapped in a component with relative or absolute position
 */
 export default function ControlledModalWrapper (props) {
-  const contentClass = `mapbuilder-modal-content custom-scroll ${props.theme ? props.theme : ''}`;
+  const contentClass = `mapbuilder-modal-content ${props.theme ? props.theme : ''}`;
   return (
     <div className='modal-container'>
       <div className='modal-background' onClick={props.onClose} />

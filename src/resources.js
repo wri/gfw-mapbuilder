@@ -45,7 +45,7 @@ export default {
   intactForests: true,
   aboveGroundBiomass: true,
   carbonStoredInTrees: true,
-  landCover: false,
+  landCover: true,
   mangroves: false,
   sadAlerts: false,
   gladAlerts: false,
