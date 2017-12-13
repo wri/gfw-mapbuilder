@@ -216,9 +216,6 @@ export default class Analysis extends Component {
       case analysisKeys.CONCESSIONS:
         return <CommoditiesChart
           results={results}
-          oilPalm={results.oilPalm}
-          mining={results.mining}
-          managedForests={results.managedForests}
         />;
       case analysisKeys.INTERSECTION_LANDS:
         return <RedirectChart redirectUrl='/country-profiles/' />;

@@ -76,7 +76,7 @@ export default {
 		});
 	},
 
-	makeCommoditiesPieChart: (el, data) => {
+	makeCommoditiesPieChart: (el, data, showTitle = true) => {
 		const oilPalm = data.oilPalm;
 		const mining = data.mining;
 		const managedForests = data.managedForests;
@@ -88,8 +88,11 @@ export default {
 				height: 300,
         type: 'bar'
       },
+      credits: {
+        enabled: false
+      },
       title: {
-        text: ''//'Total Concessions ' + (oilPalm + mining + managedForests)
+        text: showTitle ? 'Total Concessions: ' + (oilPalm + mining + managedForests) : ''
       },
       xAxis: {
         categories: names,
@@ -124,7 +127,6 @@ export default {
         {
           pointWidth: 25,
 					groupPadding: .5,
-          color: colors,
           showInLegend: false,
 					data: [
 						{
