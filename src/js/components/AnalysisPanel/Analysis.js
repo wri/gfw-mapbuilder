@@ -218,7 +218,10 @@ export default class Analysis extends Component {
           results={results}
         />;
       case analysisKeys.INTERSECTION_LANDS:
-        return <RedirectChart redirectUrl='/country-profiles/' />;
+        return <RedirectChart
+        payload={results}
+        redirectUrl='/map-app/analysis/analysis.html'
+        />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}

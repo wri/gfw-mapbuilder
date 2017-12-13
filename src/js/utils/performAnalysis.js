@@ -107,7 +107,7 @@ export default function performAnalysis (options) {
       analysisUtils.getCommodities(concessionUrl, concessionIds, geometry).then(promise.resolve, promise.reject);
     break;
     case analysisKeys.INTERSECTION_LANDS:
-      promise.resolve({});
+      analysisUtils.getCommoditiesAnalysis(geometry).then(promise.resolve, promise.reject);
     break;
     case analysisKeys.INTACT_LOSS:
       analysisUtils.getCrossedWithLoss(config, analysisConfig[analysisKeys.TC_LOSS], geometry, {
