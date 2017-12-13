@@ -221,7 +221,7 @@ export default class Analysis extends Component {
           managedForests={results.managedForests}
         />;
       case analysisKeys.INTERSECTION_LANDS:
-        return <RedirectChart />;
+        return <RedirectChart redirectUrl='/country-profiles/' />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}

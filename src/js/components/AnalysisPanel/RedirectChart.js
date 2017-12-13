@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 export default class RedirectChart extends Component {
 
   componentDidMount() {
-    const openWindow = window.open('/country-profiles/');
+    const openWindow = window.open(this.props.redirectUrl);
     console.log('openWindow', openWindow);
 
     if (!openWindow || typeof openWindow === 'undefined') {
