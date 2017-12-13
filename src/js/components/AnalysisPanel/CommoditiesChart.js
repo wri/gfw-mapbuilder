@@ -21,7 +21,7 @@ export default class CommoditiesChart extends Component {
       const mining = this.props.mining;
       const managedForests = this.props.managedForests;
 
-      if (oilPalm === 0 && mining === 0 && managedForests === 0) {
+      if ((oilPalm === 0 && mining === 0 && managedForests === 0) || (!oilPalm && !mining && !managedForests)) {
         this.setState({ isEmpty: true, loading: false });
       } else {
 

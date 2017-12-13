@@ -12,6 +12,7 @@ import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import CarbonChart from 'components/AnalysisPanel/CarbonChart';
 import CommoditiesChart from 'components/AnalysisPanel/CommoditiesChart';
+import RedirectChart from 'components/AnalysisPanel/RedirectChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -173,6 +174,7 @@ export default class Analysis extends Component {
     const layerGroups = settings.layerPanel;
     const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
     const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
+    const lcdLayers = layerGroups.GROUP_LCD ? layerGroups.GROUP_LCD.layers : [];
     let labels, layerConf, colors;
     switch (type) {
       case analysisKeys.VIIRS_FIRES:
@@ -182,7 +184,7 @@ export default class Analysis extends Component {
       case analysisKeys.TC_LOSS_GAIN:
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
-        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+        layerConf = utils.getObject(lcdLayers, 'id', layerKeys.LAND_COVER);
         return <CompositionPieChart
           results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
@@ -218,6 +220,8 @@ export default class Analysis extends Component {
           mining={results.mining}
           managedForests={results.managedForests}
         />;
+      case analysisKeys.INTERSECTION_LANDS:
+        return <RedirectChart redirectUrl='/country-profiles/' />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
           payload={results}
@@ -227,7 +231,7 @@ export default class Analysis extends Component {
       case analysisKeys.LC_LOSS:
       case analysisKeys.INTACT_LOSS:
       case analysisKeys.MANGROVE_LOSS:
-        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+        layerConf = utils.getObject(lcdLayers, 'id', layerKeys.LAND_COVER);
         labels = (function () {
           switch (type) {
             case analysisKeys.LC_LOSS:

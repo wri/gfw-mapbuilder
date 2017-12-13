@@ -111,6 +111,10 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.CONCESSIONS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
+  { label: 'Intersection of indigenous & community lands',
+    value: analysisKeys.INTERSECTION_LANDS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Carbon loss',
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER

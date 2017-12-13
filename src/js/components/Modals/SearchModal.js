@@ -18,69 +18,67 @@ export default class SearchModal extends Component {
     map: PropTypes.object.isRequired
   };
 
-  componentDidUpdate() {
-    this.createSearchWidget();
-  }
   componentDidUpdate(prevProps, prevState, prevContext) {
-    const {map} = this.context;
-    if (map.loaded && !prevContext.map.loaded) {
-      // this.createSearchWidget(map);
+    const {map, webmapInfo, language} = this.context;
+    const layers = webmapInfo.operationalLayers;
+    let sources = [];
+
+    if (map.loaded && !prevContext.map.loaded && webmapInfo) {
+      this.createSearchWidget(map);
+
+      if (this.searchWidget) {
+        if (layers && layers.length) {
+          layers.forEach(layer => {
+            // If this is a dynamic layer
+            if (layer.layerType === esriType.DYNAMIC) {
+              // If we have layer infos in a dynamic layer, push each one into the sources array
+              if (layer.layerObject && layer.layerObject.layerInfos && layer.layerObject.layerInfos.length) {
+                sources = sources.concat(layer.layerObject.layerInfos.map((info) => ({
+                  featureLayer: new FeatureLayer(`${layer.url}/${info.id}`, {
+                    infoTemplate: new InfoTemplate('', `<div class="search__info-window-callout">${text[language].SEARCH_CLICK_FOR_MORE}</div>`)
+                  }),
+                  name: info.name,
+                  maxResults: 6,
+                  maxSuggestions: 6,
+                  enableSuggestions: true,
+                  minCharacters: 2,
+                  outFields: ['*'],
+                  exactMatch: false,
+                  placeholder: info.name
+                })));
+              }
+            } else if (layer.layerType === esriType.FEATURE) {
+              if (layer.layerObject) {
+                sources.push({
+                  featureLayer: layer.layerObject,
+                  name: layer.title,
+                  maxResults: 6,
+                  maxSuggestions: 6,
+                  enableSuggestions: true,
+                  minCharacters: 2,
+                  outFields: ['*'],
+                  exactMatch: false,
+                  placeholder: layer.title
+                });
+              }
+            }
+          });
+        }
+        const defaultSources = this.searchWidget.get('sources');
+        sources = sources.concat(defaultSources);
+        this.searchWidget.set('sources', sources);
+      }
     }
   }
 
   createSearchWidget = (map) => {
-    const {webmapInfo, language} = this.context;
-    const layers = webmapInfo.operationalLayers;
-    let sources = [];
-
-    if (layers && layers.length) {
-      layers.forEach(layer => {
-        // If this is a dynamic layer
-        if (layer.layerType === esriType.DYNAMIC) {
-          // If we have layer infos in a dynamic layer, push each one into the sources array
-          if (layer.layerObject && layer.layerObject.layerInfos && layer.layerObject.layerInfos.length) {
-            sources = sources.concat(layer.layerObject.layerInfos.map((info) => ({
-              featureLayer: new FeatureLayer(`${layer.url}/${info.id}`, {
-                infoTemplate: new InfoTemplate('', `<div class="search__info-window-callout">${text[language].SEARCH_CLICK_FOR_MORE}</div>`)
-              }),
-              name: info.name,
-              maxResults: 6,
-              maxSuggestions: 6,
-              enableSuggestions: true,
-              minCharacters: 2,
-              outFields: ['*'],
-              exactMatch: false,
-              placeholder: info.name
-            })));
-          }
-        } else if (esriType.FEATURE) {
-          if (layer.layerObject) {
-            sources.push({
-              featureLayer: layer.layerObject,
-              name: layer.title,
-              maxResults: 6,
-              maxSuggestions: 6,
-              enableSuggestions: true,
-              minCharacters: 2,
-              outFields: ['*'],
-              exactMatch: false,
-              placeholder: layer.title
-            });
-          }
-        }
-      });
-    }
-
-    const searchWidget = new Search({
+    this.searchWidget = new Search({
       map: map,
       enableHighlight: false,
       showInfoWindowOnSelect: true
     }, this.refs.searchNode);
 
-    const defaultSources = searchWidget.get('sources');
-    sources = sources.concat(defaultSources);
-    searchWidget.set('sources', sources);
-    searchWidget.startup();
+    this.searchWidget.startup();
   };
 
   decimalDegreeSearch = () => {
