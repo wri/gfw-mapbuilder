@@ -17,7 +17,7 @@ export default class Modal extends Component {
       info.license = info.licenseInfo;
     }
     return (
-      <div className='layer-modal-content'>
+      <div className='layer-mapbuilder-modal-content'>
         <div className='source-header'>
           <h2 className='source-title'>{!info.title ? info.name : info.title}</h2>
           <h3 className='source-subtitle'>{info.subtitle}</h3>

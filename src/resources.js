@@ -139,7 +139,7 @@ export default {
           ka: 'მიწის საფარის დინამიკა'
         },
         layers: [{
-          order: 3,
+          order: 1,
           id: 'TREE_COVER_LOSS',
           type: 'loss', //image
           // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
@@ -175,7 +175,7 @@ export default {
             ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
         }, {
-          order: 4,
+          order: 2,
           id: 'TREE_COVER_GAIN',
           type: 'gain', //'image',
           // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
@@ -202,7 +202,7 @@ export default {
           }
         },
         {
-          order: 1,
+          order: 4,
           id: 'LAND_COVER',
           type: 'webtiled',
           url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
@@ -230,7 +230,7 @@ export default {
             ka: 'მიწის საფარი'
           }
         }, {
-          order: 2,
+          order: 3,
           id: 'TREE_COVER',
           type: 'image',
           url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
