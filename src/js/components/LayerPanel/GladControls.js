@@ -3,7 +3,8 @@ import React, {Component, PropTypes} from 'react';
 import layerActions from 'actions/LayerActions';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
-import 'pickadate';
+// import 'pickadate';
+import $ from 'jquery';
 
 export default class GladControls extends Component {
 

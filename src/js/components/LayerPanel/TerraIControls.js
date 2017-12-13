@@ -4,7 +4,8 @@ import {assetUrls} from 'js/config';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import layerActions from 'actions/LayerActions';
-import 'pickadate';
+// import 'pickadate';
+import $ from 'jquery';
 
 /**
 * Same function that is in the layer, but the layer is not always loaded when the data is back from the server

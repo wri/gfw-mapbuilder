@@ -4,6 +4,7 @@ import utils from 'utils/AppUtils';
 import {loadJS, loadCSS} from 'utils/loaders';
 import {assetUrls} from 'js/config';
 import React, { Component, PropTypes } from 'react';
+import $ from 'jquery';
 
 const lossOptions = [];
 
@@ -45,7 +46,7 @@ export default class LossControls extends Component {
       base = base.substring(0, base.length - 1);
     }
 
-    loadJS(base + assetUrls.rangeSlider).then(() => {
+    // loadJS(base + assetUrls.rangeSlider).then(() => {
       // initialize the slider
       if ($('#loss-slider').ionRangeSlider) {
         $('#loss-slider').ionRangeSlider({
@@ -63,9 +64,9 @@ export default class LossControls extends Component {
           end: lossOptions[this.lossSlider.result.to].label
         });
       }
-    });
-    loadCSS(base + assetUrls.ionCSS);
-    loadCSS(base + assetUrls.ionSkinCSS);
+    // });
+    // loadCSS(base + assetUrls.ionCSS);
+    // loadCSS(base + assetUrls.ionSkinCSS);
   }
 
   componentDidUpdate (prevProps, prevState, prevContext) {

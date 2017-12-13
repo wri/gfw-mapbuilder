@@ -2,6 +2,7 @@ import LayersHelper from 'helpers/LayersHelper';
 import React, {PropTypes} from 'react';
 import text from 'js/languages';
 import 'pickadate';
+import $ from 'jquery';
 
 export default class FiresControls extends React.Component {
 

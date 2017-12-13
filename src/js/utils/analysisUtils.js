@@ -211,14 +211,14 @@ class Encoder {
   }
 
   /* Helper function */
-  fromBounds = (bounds) => {
+  fromBounds (bounds) {
     const result = [], end = bounds[1];
     let current = bounds[0];
     for (;current <= end; current++) {
       result.push(current);
     }
     return result;
-  };
+  }
 
   /* Main Functions */
   //- Get a unique value for two inputs

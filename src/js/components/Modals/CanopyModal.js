@@ -10,6 +10,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import $ from 'jquery';
 
 export default class CanopyModal extends Component {
 
@@ -26,7 +27,6 @@ export default class CanopyModal extends Component {
     }
     this.loadedSlider = false;
     // loadJS(base + assetUrls.jQuery);
-    loadJS(base + assetUrls.rangeSlider).then(() => {
       if ($('#tree-cover-slider').ionRangeSlider) {
         $('#tree-cover-slider').ionRangeSlider({
           type: 'double',
@@ -43,10 +43,8 @@ export default class CanopyModal extends Component {
         });
         this.loadedSlider = true;
       }
-
-    }, console.error);
-    loadCSS(base + assetUrls.ionCSS);
-    loadCSS(base + assetUrls.ionSkinCSS);
+    // loadCSS(base + assetUrls.ionCSS);
+    // loadCSS(base + assetUrls.ionSkinCSS);
   }
 
   componentDidUpdate(prevProps, prevState, prevContext) {

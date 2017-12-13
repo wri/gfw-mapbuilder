@@ -1,21 +1,19 @@
 doctype
 html
   head
-    title #{defaultTitle}
-    include jade/meta.jade
-    style
-      :stylus
-        @require 'css/critical'
+    title %DEFAULT_TITLE%
+    include jade/meta.pug
+    link(rel='stylesheet', href='%CRITICAL_CSS%')
   body.tundra
-    include jade/svg.jade
+    include jade/svg.pug
     #root
     div#layer-modal.modal-wrapper.hidden
     div#share-modal.modal-wrapper.hidden
     script.
       var _app = {
-        cache: '#{version}',
-        esri: '#{esriVersion}',
-        base: '#{base}'
+        cache: %META_VERSION%,
+        esri: %ESRI_VERSION%,
+        base: ''
       };
 
       function makePath (base, path) {
@@ -41,30 +39,31 @@ html
       var dojoConfig = {
         parseOnLoad: false,
         async: true,
-        packages: [
-          { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, ''))},
-          { name: 'js', location: makePath(base, 'js')},
-          { name: 'vendor', location: makePath(base, 'vendor')},
-          { name: 'utils', location: makePath(base, 'js/utils')},
-          { name: 'stores', location: makePath(base, 'js/stores')},
-          { name: 'actions', location: makePath(base, 'js/actions')},
-          { name: 'constants', location: makePath(base, 'js/constants')},
-          { name: 'components', location: makePath(base, 'js/components')},
-          { name: 'helpers', location: makePath(base, 'js/helpers')}
-        ],
+        //- packages: [
+        //-   { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, ''))},
+        //-   { name: 'js', location: makePath(base, 'js')},
+        //-   { name: 'vendor', location: makePath(base, 'vendor')},
+        //-   { name: 'utils', location: makePath(base, 'js/utils')},
+        //-   { name: 'stores', location: makePath(base, 'js/stores')},
+        //-   { name: 'actions', location: makePath(base, 'js/actions')},
+        //-   { name: 'constants', location: makePath(base, 'js/constants')},
+        //-   { name: 'components', location: makePath(base, 'js/components')},
+        //-   { name: 'helpers', location: makePath(base, 'js/helpers')}
+        //- ],
         aliases: [
-          ['resources', 'root/resources'],
-          ['alt', 'vendor/alt/dist/alt.min'],
-          ['react', 'vendor/react/react'],
-          ['react-dom', 'vendor/react/react-dom'],
-          ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill'],
-          ['jquery', 'vendor/jquery/dist/jquery.min'],
-          ['picker', 'vendor/pickadate/lib/compressed/picker'],
-          ['pickadate', 'vendor/pickadate/lib/compressed/picker.date'],
-          ['FileSaver', 'vendor/file-saver.js/FileSaver']
+          ['resources', 'resources'],
+          ['alt', 'alt/dist/alt.min'],
+          ['react', 'react/react'],
+          ['react-dom', 'react/react-dom'],
+          ['babel-polyfill', 'babel-polyfill/browser-polyfill'],
+          ['picker', 'pickadate/lib/compressed/picker'],
+          ['pickadate', 'pickadate/lib/compressed/picker.date'],
+          ['FileSaver', 'file-saver.js/FileSaver']
         ],
         deps: ['dojo/domReady!'],
-        callback: function () {require(['js/main']);}
+        callback: function () {
+          require(['%APP_JS%']);
+          }
       };
     //- PROD: if new modules are added, regenerate the JSAPI build
     //- script.
@@ -104,7 +103,7 @@ html
     //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
     script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
     //- DEV: Use the normal JSAPI
-    //script(src='//js.arcgis.com/#{esriVersion}/init.js', async)
+    //script(src='//js.arcgis.com/3.22/init.js', async)
     //- script(src='vendor/dojo/dojo.js', async)
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
