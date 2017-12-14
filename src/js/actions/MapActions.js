@@ -314,7 +314,6 @@ class MapActions {
         return prevArray.concat(currentItem);
       }, []);
       reducedLayers.sort((a, b) => a.drawingOrder - b.drawingOrder).forEach((l, idx) => {
-        console.log(l.id, idx, l);
         map.reorderLayer(map.getLayer(l.id), idx + 1);
       });
       if (map.getLayer('labels')) {
