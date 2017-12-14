@@ -31,9 +31,13 @@ export default class ControlPanel extends Component {
     mapActions.toggleSearchModal({ visible: true });
   };
 
+  formatDate = d => {
+    return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear();
+  }
+
   share = () => {
     const {map, language, settings} = this.context;
-    const {activeLayers, activeTab, canopyDensity} = this.props;
+    const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate} = this.props;
     console.log(this.props);
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
@@ -42,6 +46,8 @@ export default class ControlPanel extends Component {
       basemap: basemapUtils.getBasemap(),
       activeLayers: activeLayers,
       activeTab: activeTab,
+      gladStartDate: this.formatDate(gladStartDate),
+      gladEndDate: this.formatDate(gladEndDate),
       canopyDensity: canopyDensity
     })));
   };

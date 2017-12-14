@@ -1,5 +1,5 @@
 export function prepareStateForShare (options) {
-  const {map, settings, language, basemap, activeLayers, activeTab, canopyDensity} = options;
+  const {map, settings, language, basemap, activeLayers, activeTab, gladStartDate, gladEndDate, canopyDensity} = options;
   const shareState = {};
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
@@ -13,6 +13,8 @@ export function prepareStateForShare (options) {
   shareState.a = activeLayers;
   shareState.t = activeTab;
   shareState.c = canopyDensity;
+  shareState.gs = gladStartDate;
+  shareState.ge = gladEndDate;
   console.log(shareState);
   return shareState;
 }

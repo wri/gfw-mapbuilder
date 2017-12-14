@@ -208,7 +208,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t, c} = params;
+    const {x, y, z, l, b, t, c, gs, ge} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -236,6 +236,14 @@ export default class Map extends Component {
 
     if (c) {
       mapActions.updateCanopyDensity(c);
+    }
+
+    if (gs) {
+      layerActions.updateGladStartDate(new Date(gs));
+    }
+
+    if (ge) {
+      layerActions.updateGladEndDate(new Date(ge));
     }
   };
 
