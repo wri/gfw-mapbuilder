@@ -4,6 +4,7 @@ html
     title %DEFAULT_TITLE%
     include jade/meta.pug
     link(rel='stylesheet', href='%CRITICAL_CSS%')
+    link(rel='stylesheet', href='%APP_CSS%')
   body.tundra
     include jade/svg.pug
     #root
@@ -39,17 +40,17 @@ html
       var dojoConfig = {
         parseOnLoad: false,
         async: true,
-        //- packages: [
-        //-   { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, ''))},
-        //-   { name: 'js', location: makePath(base, 'js')},
-        //-   { name: 'vendor', location: makePath(base, 'vendor')},
-        //-   { name: 'utils', location: makePath(base, 'js/utils')},
-        //-   { name: 'stores', location: makePath(base, 'js/stores')},
-        //-   { name: 'actions', location: makePath(base, 'js/actions')},
-        //-   { name: 'constants', location: makePath(base, 'js/constants')},
-        //-   { name: 'components', location: makePath(base, 'js/components')},
-        //-   { name: 'helpers', location: makePath(base, 'js/helpers')}
-        //- ],
+        packages: [
+          { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, ''))},
+          { name: 'js', location: makePath(base, 'js')},
+          { name: 'vendor', location: makePath(base, 'vendor')},
+          { name: 'utils', location: makePath(base, 'js/utils')},
+          { name: 'stores', location: makePath(base, 'js/stores')},
+          { name: 'actions', location: makePath(base, 'js/actions')},
+          { name: 'constants', location: makePath(base, 'js/constants')},
+          { name: 'components', location: makePath(base, 'js/components')},
+          { name: 'helpers', location: makePath(base, 'js/helpers')}
+        ],
         aliases: [
           ['resources', 'resources'],
           ['alt', 'alt/dist/alt.min'],
@@ -101,6 +102,8 @@ html
     //-   }
     //-
     //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
+
+    script(src='%JQUERY%')
     script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
     //- DEV: Use the normal JSAPI
     //script(src='//js.arcgis.com/3.22/init.js', async)

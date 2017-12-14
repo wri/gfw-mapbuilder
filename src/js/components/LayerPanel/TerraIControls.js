@@ -4,7 +4,9 @@ import {assetUrls} from 'js/config';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import layerActions from 'actions/LayerActions';
-// import 'pickadate';
+import 'vendors/pickadate/lib/picker.date';
+import 'vendors/pickadate/lib/themes/classic.css';
+import 'vendors/pickadate/lib/themes/classic.date.css';
 import $ from 'jquery';
 
 /**

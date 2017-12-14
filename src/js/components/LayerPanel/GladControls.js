@@ -3,7 +3,9 @@ import React, {Component, PropTypes} from 'react';
 import layerActions from 'actions/LayerActions';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
-// import 'pickadate';
+import 'vendors/pickadate/lib/picker.date';
+import 'vendors/pickadate/lib/themes/classic.css';
+import 'vendors/pickadate/lib/themes/classic.date.css';
 import $ from 'jquery';
 
 export default class GladControls extends Component {

@@ -54,6 +54,7 @@
     "css-loader": "^0.28.7",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.15.0",
+    "extract-loader": "^1.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "gulp": "^3.9.0",
@@ -71,11 +72,13 @@
     "madge": "^1.6.0",
     "pug-html-loader": "^1.1.5",
     "pug-loader": "^2.3.0",
+    "rc-slider": "^8.5.0",
     "react-prerender": "0.0.3",
     "requirejs": "^2.3.3",
     "style-loader": "^0.19.0",
     "stylus-loader": "^3.0.1",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7"
   }
 }

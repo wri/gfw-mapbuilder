@@ -7,11 +7,16 @@ const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const packageJSON = require('./package.json');
 
 module.exports = {
-  entry: {
-    app: path.join(__dirname, 'src/js/main.js'),
-    report: path.join(__dirname, 'src/js/reportMain.js')
-    // lib: path.join(__dirname, 'src/js/libraryMain.js')
-  },
+  // entry: {
+  //   app: path.join(__dirname, 'src/js/main.js'),
+  //   report: path.join(__dirname, 'src/js/reportMain.js')
+  //   // lib: path.join(__dirname, 'src/js/libraryMain.js')
+  // },
+  entry: [
+    path.join(__dirname, 'src/js/main.js'),
+    path.join(__dirname, 'src/css/app.styl'),
+    path.join(__dirname, 'src/css/critical.styl')
+  ],
   output: {
     filename: 'js/[name].js',
     path: path.join(__dirname, 'webpackBuild'),
@@ -31,7 +36,8 @@ module.exports = {
       helpers: path.join(__dirname, 'src/js/helpers'),
       report: path.join(__dirname, 'src/js/report'),
       resources: path.join(__dirname, 'src/resources'),
-      pickadate$: path.join(__dirname, 'vendors/pickadate/lib/picker.date.js')
+      images: path.join(__dirname, 'src/css/images')
+      // pickadate$: path.join(__dirname, 'vendors/pickadate/lib/picker.date.js')
       // FileSaver: path.join(__dirname, 'vendors/file-saver.js/FileSaver.js'),
       // jquery: path.join(__dirname, 'vendors/jquery/dist/jquery.min.js'),
       // picker: path.join(__dirname, 'vendors/pickadate/lib/compressed/picker'),
@@ -46,9 +52,7 @@ module.exports = {
       {
         test: /\.pug$/,
         use: [
-          {
-            loader: 'html-loader'
-          },
+          { loader: 'html-loader' },
           {
             loader: 'pug-html-loader',
             options: {
@@ -76,10 +80,20 @@ module.exports = {
       },
       {
         test: /\.styl$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'stylus-loader']
-        })
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].css',
+              outputPath: 'css/'
+            }
+          },
+          { loader: 'extract-loader' },
+          {
+            loader: 'css-loader'
+          },
+          { loader: 'stylus-loader' }
+        ]
       },
       {
         test: /\.css$/,
@@ -91,7 +105,16 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: ['file-loader']
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              publicPath: '../',
+              outputPath: 'css/images/'
+            }
+          }
+        ]
       }
     ]
   },
@@ -99,15 +122,12 @@ module.exports = {
     new InterpolateHtmlPlugin({
       META_VERSION: JSON.stringify(packageJSON.version),
       APP_CSS: 'css/app.css',
-      // CRITICAL_CSS: 'css/critical.css',
-      APP_JS: 'js/app',
+      CRITICAL_CSS: 'css/critical.css',
+      JQUERY: 'jquery/dist/jquery.min.js',
+      APP_JS: 'js/main',
       REPORT_JS: 'js/report',
       DEFAULT_TITLE: 'GFW Mapbuilder',
       ESRI_VERSION: '3.22'
-    }),
-    new ExtractTextPlugin({
-      filename: 'css/[name].css',
-      disable: false
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.pug'),

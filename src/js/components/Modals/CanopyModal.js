@@ -6,6 +6,9 @@ import mapActions from 'actions/MapActions';
 import mapStore from 'stores/MapStore';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
+import 'vendors/ion.rangeslider/js/ion.rangeSlider.js';
+import 'vendors/ion.rangeslider/css/ion.rangeSlider.css';
+import 'vendors/ion.rangeslider/css/ion.rangeSlider.skinNice.css';
 import React, {
   Component,
   PropTypes

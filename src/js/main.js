@@ -10,8 +10,6 @@ import esriConfig from 'esri/config';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import 'babel-polyfill';
-import 'css/critical.styl';
-import 'css/app.styl';
 // import 'ionCSS';
 // import 'ionSkinCSS';
 // import 'rangeSlider';
