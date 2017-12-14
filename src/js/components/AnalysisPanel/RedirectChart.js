@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import mapActions from 'actions/MapActions';
 
 export default class RedirectChart extends Component {
 
@@ -28,6 +28,7 @@ export default class RedirectChart extends Component {
       console.log('this.props.payload', this.props.payload);
 
       if (!openWindow || typeof openWindow === 'undefined') {
+        mapActions.setAnalysisType('default');
         alert("Please turn off your browser's popup blocker and run the analysis again");
       } else {
         openWindow.payload = this.props.payload;

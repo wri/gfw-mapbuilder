@@ -7,7 +7,7 @@ import all from 'dojo/promise/all';
 import text from 'js/languages';
 
 const STATS = {
-  url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
   field: 'date',
   outFields: ['date']
 };

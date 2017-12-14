@@ -87,6 +87,11 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: 'default'
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -99,11 +104,7 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TC_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Land cover loss',
-    value: analysisKeys.LC_LOSS,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'Carbon stored in trees',
+  { label: 'Carbon Stored In Trees',
     value: analysisKeys.CARBON,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },

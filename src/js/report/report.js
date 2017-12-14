@@ -759,7 +759,7 @@ const runAnalysis = function runAnalysis (params, feature) {
         const chartLabels = lossLabels.slice(tcLossFrom, tcLossTo + 1);
         charts.makeSimpleBarChart(tcLossNode, chartLabels, colors, series);
       } else {
-        tcLossNode.remove();
+        tcLossNode.parentNode.removeChild(tcLossNode);
       }
       //- Generate content for Loss and Gain Badges
       //- Loss
@@ -777,9 +777,9 @@ const runAnalysis = function runAnalysis (params, feature) {
     const lossChart = document.getElementById('tc-loss');
     const lossBadge = document.getElementById('total-loss-badge');
     const gainBadge = document.getElementById('total-gain-badge');
-    lossChart.remove();
-    lossBadge.remove();
-    gainBadge.remove();
+    lossChart.parentNode.removeChild(lossChart);
+    lossBadge.parentNode.removeChild(lossBadge);
+    gainBadge.parentNode.removeChild(gainBadge);
   }
 
   if (settings.landCover && layerConf) {
@@ -808,7 +808,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       // if (chartInfo.series && chartInfo.series.length) {
       //   charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
       // } else {
-        node.remove();
+        node.parentNode.removeChild(node);
       // }
     // });
 
@@ -832,14 +832,14 @@ const runAnalysis = function runAnalysis (params, feature) {
 
         charts.makeCompositionPieChart(lccNode, series);
       } else {
-        lccNode.remove();
+        lccNode.parentNode.removeChild(lccNode);
       }
     });
   } else {
     const lossNode = document.getElementById('lc-loss');
     const compositionNode = document.getElementById('lc-composition');
-    lossNode.remove();
-    compositionNode.remove();
+    lossNode.parentNode.removeChild(lossNode);
+    compositionNode.parentNode.removeChild(compositionNode);
   }
 
   if (settings.aboveGroundBiomass) {
@@ -884,7 +884,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     });
   } else {
     const node = document.getElementById('bio-loss');
-    node.remove();
+    node.parentNode.removeChild(node);
   }
 
   if (settings.carbonStoredInTrees) {
@@ -904,7 +904,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     });
   } else {
     const node = document.getElementById('carbon-chart');
-    node.remove();
+    node.parentNode.removeChild(node);
   }
 
   if (settings.intactForests) {
@@ -935,13 +935,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       if (chartInfo.series && chartInfo.series.length && chartInfo.series[0].data.length) {
         charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
       } else {
-        node.remove();
+        node.parentNode.removeChild(node);
       }
 
     });
   } else {
     const node = document.getElementById('intact-loss');
-    node.remove();
+    node.parentNode.removeChild(node);
   }
 
   //- Mangroves Loss
@@ -972,13 +972,13 @@ const runAnalysis = function runAnalysis (params, feature) {
       if (chartInfo.series && chartInfo.series.length && chartInfo.series[0].data.length) {
         charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
       } else {
-        node.remove();
+        node.parentNode.removeChild(node);
       }
     });
 
   } else {
     const node = document.getElementById('mangroves');
-    node.remove();
+    node.parentNode.removeChild(node);
   }
 
   //Concessions Analysis
@@ -996,7 +996,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__commodities--count').innerHTML = results.managedForests + results.mining + results.oilPalm;
       document.getElementById('commodities-badge').classList.remove('hidden');
     } else {
-      node.remove();
+      node.parentNode.removeChild(node);
     }
   });
 
@@ -1058,11 +1058,11 @@ const runAnalysis = function runAnalysis (params, feature) {
       });
     } else {
       const element = document.getElementById('slope');
-      if (element) { element.remove(); }
+      if (element) { element.parentNode.removeChild(element); }
     }
   } else {
     const node = document.getElementById('restoration');
-    node.remove();
+    node.parentNode.removeChild(node);
   }
 
 };

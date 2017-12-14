@@ -142,6 +142,8 @@ export default function performAnalysis (options) {
     case analysisKeys.TERRA_I_ALERTS:
       analysisUtils.getTerraIAlerts(config, geostoreId, terraIFrom, terraITo, language).then(promise.resolve);
     break;
+    case 'default':
+      return null;
     default:
       //- This should only be the restoration analysis, since analysisType is a rasterId
       analysisUtils.getRestoration(restorationUrl, type, geometry, settings).then(promise.resolve);
