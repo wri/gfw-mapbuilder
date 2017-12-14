@@ -783,34 +783,34 @@ const runAnalysis = function runAnalysis (params, feature) {
   }
 
   if (settings.landCover && layerConf) {
-    performAnalysis({
-      type: analysisKeys.LC_LOSS,
-      geometry: geographic,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const configuredColors = layerConf.colors;
-      const labels = layerConf.classes[lang];
+    // performAnalysis({
+    //   type: analysisKeys.LC_LOSS,
+    //   geometry: geographic,
+    //   settings: settings,
+    //   canopyDensity: tcd,
+    //   language: lang
+    // }).then((results) => {
+    //   const configuredColors = layerConf.colors;
+    //   const labels = layerConf.classes[lang];
       const node = document.getElementById('lc-loss');
-      const { counts, encoder } = results;
-      const Xs = encoder.A;
-      const Ys = encoder.B;
-      const chartInfo = charts.formatSeriesWithEncoder({
-        colors: configuredColors,
-        encoder: encoder,
-        counts: counts,
-        labels: labels,
-        Xs: Xs,
-        Ys: Ys
-      });
+      // const { counts, encoder } = results;
+      // const Xs = encoder.A;
+      // const Ys = encoder.B;
+      // const chartInfo = charts.formatSeriesWithEncoder({
+      //   colors: configuredColors,
+      //   encoder: encoder,
+      //   counts: counts,
+      //   labels: labels,
+      //   Xs: Xs,
+      //   Ys: Ys
+      // });
 
-      if (chartInfo.series && chartInfo.series.length) {
-        charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
-      } else {
+      // if (chartInfo.series && chartInfo.series.length) {
+      //   charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
+      // } else {
         node.remove();
-      }
-    });
+      // }
+    // });
 
     //- Land Cover Composition Analysis
     performAnalysis({
@@ -820,7 +820,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       language: lang
     }).then((results) => {
-      const node = document.getElementById('lc-composition');
+      const lccNode = document.getElementById('lc-composition');
 
       if (results.counts && results.counts.length) {
         const series = charts.formatCompositionAnalysis({
@@ -830,9 +830,9 @@ const runAnalysis = function runAnalysis (params, feature) {
           counts: results.counts
         });
 
-        charts.makeCompositionPieChart(node, series);
+        charts.makeCompositionPieChart(lccNode, series);
       } else {
-        node.remove();
+        lccNode.remove();
       }
     });
   } else {
