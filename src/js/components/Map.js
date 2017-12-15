@@ -194,7 +194,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le, ism, iem, isy, iey} = params;
+    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le, ism, iem, isy, iey, vs, ve, ms, me} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -243,6 +243,16 @@ export default class Map extends Component {
       mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(iey));
     }
 
+    if (vs && ve) {
+      layerActions.updateViirsStartDate(new Date(vs));
+      layerActions.updateViirsEndDate(new Date(ve));
+    }
+
+    if (ms && me) {
+      layerActions.updateModisStartDate(new Date(ms));
+      layerActions.updateModisEndDate(new Date(me));
+    }
+
   };
 
   /**
@@ -272,6 +282,16 @@ export default class Map extends Component {
     if (params.te) {
       layerActions.updateTerraIEndDate(new Date(params.te));
     }
+
+    // if (params.vs && params.ve) {
+    //   layerActions.updateViirsStartDate(new Date(params.vs));
+    //   layerActions.updateViirsEndDate(new Date(params.ve));
+    // }
+    //
+    // if (params.ms && params.me) {
+    //   layerActions.updateModisStartDate(new Date(params.ms));
+    //   layerActions.updateModisEndDate(new Date(params.me));
+    // }
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {

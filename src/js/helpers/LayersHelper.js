@@ -32,13 +32,16 @@ const LayersHelper = {
   * @param {boolean} dontRefresh - Whether or not to not fetch a new image
   */
   updateFiresLayerDefinitions (startDate, endDate, layer, dontRefresh) {
-    const queryString = this.generateFiresQuery(startDate, endDate);
-    const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-    const defs = [];
+    if (brApp.map) {
+      const queryString = this.generateFiresQuery(startDate, endDate);
+      console.log('queryStringqueryStringqueryStringqueryString', queryString);
+      const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
+      const defs = [];
 
-    if (firesLayer) {
-      firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-      firesLayer.setLayerDefinitions(defs, dontRefresh);
+      if (firesLayer) {
+        firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+        firesLayer.setLayerDefinitions(defs, dontRefresh);
+      }
     }
   },
 

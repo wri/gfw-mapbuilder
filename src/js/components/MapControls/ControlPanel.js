@@ -39,7 +39,9 @@ export default class ControlPanel extends Component {
     const {map, language, settings} = this.context;
     const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate,
       terraIStartDate, terraIEndDate, lossToSelectIndex, lossFromSelectIndex,
-      imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear} = this.props;
+      imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear,
+      viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
+    } = this.props;
     console.log(this.props);
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
@@ -58,6 +60,10 @@ export default class ControlPanel extends Component {
       imazonEndMonth: imazonEndMonth,
       imazonStartYear: imazonStartYear,
       imazonEndYear: imazonEndYear,
+      viirsStartDate: this.formatDate(viirsStartDate),
+      viirsEndDate: this.formatDate(viirsEndDate),
+      modisStartDate: this.formatDate(modisStartDate),
+      modisEndDate: this.formatDate(modisEndDate),
       canopyDensity: canopyDensity
     })));
   };
