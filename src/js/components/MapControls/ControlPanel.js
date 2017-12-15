@@ -37,7 +37,7 @@ export default class ControlPanel extends Component {
 
   share = () => {
     const {map, language, settings} = this.context;
-    const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate, terraIStartDate, terraIEndDate} = this.props;
+    const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate, terraIStartDate, terraIEndDate, lossToSelectIndex, lossFromSelectIndex} = this.props;
     console.log(this.props);
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
@@ -50,6 +50,8 @@ export default class ControlPanel extends Component {
       gladEndDate: this.formatDate(gladEndDate),
       terraIStartDate: this.formatDate(terraIStartDate),
       terraIEndDate: this.formatDate(terraIEndDate),
+      lossToSelectIndex: lossToSelectIndex,
+      lossFromSelectIndex: lossFromSelectIndex,
       canopyDensity: canopyDensity
     })));
   };

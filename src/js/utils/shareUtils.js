@@ -1,5 +1,6 @@
 export function prepareStateForShare (options) {
-  const {map, settings, language, basemap, activeLayers, activeTab, gladStartDate, gladEndDate, canopyDensity, terraIStartDate, terraIEndDate} = options;
+  const {map, settings, language, basemap, activeLayers, activeTab, gladStartDate,
+    gladEndDate, canopyDensity, terraIStartDate, terraIEndDate, lossFromSelectIndex, lossToSelectIndex} = options;
   const shareState = {};
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
@@ -13,10 +14,21 @@ export function prepareStateForShare (options) {
   shareState.a = activeLayers;
   shareState.t = activeTab;
   shareState.c = canopyDensity;
-  shareState.gs = gladStartDate;
-  shareState.ge = gladEndDate;
-  shareState.ts = terraIStartDate;
-  shareState.te = terraIEndDate;
+
+  //TODO: Find out a way to Not share our params if they are default to avoid clutter & uncessary action dispatches!
+  //TODO: Should we make this cutdown or keep layerParams for layers that aren't turned on?
+  if (activeLayers.indexOf('GLAD_ALERTS') > -1) {
+    shareState.gs = gladStartDate;
+    shareState.ge = gladEndDate;
+  }
+  if (activeLayers.indexOf('TERRA_I_ALERTS') > -1) {
+    shareState.ts = terraIStartDate;
+    shareState.te = terraIEndDate;
+  }
+  if (activeLayers.indexOf('TREE_COVER_LOSS') > -1) {
+    shareState.ls = lossFromSelectIndex;
+    shareState.le = lossToSelectIndex;
+  }
   console.log(shareState);
   return shareState;
 }

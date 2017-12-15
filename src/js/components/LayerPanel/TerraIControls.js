@@ -91,13 +91,7 @@ export default class TerraIControls extends Component {
         this.toPicker.set('select', this.state.max);
       } else if ((prevProps.startDate.getTime() !== startDate.getTime() && startDate.constructor === Date && prevProps)
       || (prevProps.endDate.getTime() !== endDate.getTime() && endDate.constructor === Date && prevProps)) {
-        console.log('changed');
-        console.log('startDate', startDate);
-        console.log('endDate', endDate);
         this.updateDateRange(startDate, endDate);
-        //TODO: Set local state w/o triggering many more updates!
-        // this.fromPicker.set('select', this.state.min);
-        // this.toPicker.set('select', this.state.max);
         if (prevProps.startDate.getTime() !== startDate.getTime()) {
           layerActions.updateTerraIStartDate.defer(startDate);
           this.fromPicker.set('select', startDate);
@@ -114,7 +108,6 @@ export default class TerraIControls extends Component {
   didSetStartDate = ({select}) => {
     if (select) {
       const startDate = new Date(select);
-      console.log('startDate', startDate);
       layerActions.updateTerraIStartDate.defer(startDate);
       this.updateDateRange(startDate, this.props.endDate);
       if (this.fromPicker && this.toPicker) {
@@ -126,7 +119,6 @@ export default class TerraIControls extends Component {
   didSetEndDate = ({select}) => {
     if (select) {
       const endDate = new Date(select);
-      console.log('endDate', endDate);
       layerActions.updateTerraIEndDate.defer(endDate);
       this.updateDateRange(this.props.startDate, endDate);
       if (this.fromPicker && this.toPicker) {

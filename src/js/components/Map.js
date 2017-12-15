@@ -92,6 +92,8 @@ export default class Map extends Component {
     const {settings, language} = this.context;
     const {activeWebmap} = this.props;
     const {basemap, map} = this.state;
+
+    console.log('map', map);
     // If the webmap is retrieved from AGOL or the resources file, or it changes
     if (
       prevProps.activeWebmap === undefined && activeWebmap ||
@@ -109,10 +111,7 @@ export default class Map extends Component {
       this.createMap(activeWebmap, options);
     }
 
-    if (
-      prevState.basemap !== basemap ||
-      prevState.map !== map
-    ) {
+    if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
     }
   }
@@ -195,7 +194,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t, c, gs, ge, ts, te} = params;
+    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -231,6 +230,14 @@ export default class Map extends Component {
     if (ge) {
       layerActions.updateGladEndDate(new Date(ge));
     }
+
+    if (ls && le) {
+      layerActions.updateLossTimeline({
+        fromSelectedIndex: parseInt(ls),
+        toSelectedIndex: parseInt(le)
+      });
+    }
+
 
     // if (ts) {
     //   console.log('new tss', ts); //TODO: Do this after the component has mounted or the layer has added!
