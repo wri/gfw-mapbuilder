@@ -29,7 +29,7 @@ export default {
   useAlternativeLanguage: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
-  alternativeLanguageTitle: 'GFW Mapbuilder',
+  alternativeLanguageTitle: 'LandMark',
   alternativeLanguageSubtitle: 'Make maps that matter',
   alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   alternativeNarrative: '',
