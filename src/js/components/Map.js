@@ -142,20 +142,7 @@ export default class Map extends Component {
 
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        //- Set the default basemap in the store
-        const basemap = itemData && itemData.baseMap;
-        const params = getUrlParams(location.search);
-        basemapUtils.prepareDefaultBasemap(response.map, basemap.baseMapLayers, params);
-        if (params.b) {
-          mapActions.changeBasemap(params.b);
-        }
-        if (params.a) {
-          const layerIds = params.a.split(',');
-          layerIds.forEach(layerId => {
-            // TODO: Confirm this with layerIds and subId's!
-            layerActions.addActiveLayer(layerId);
-          });
-        }
+        this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -208,7 +195,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t, c, gs, ge} = params;
+    const {x, y, z, l, b, t, c, gs, ge, ts, te} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -241,11 +228,48 @@ export default class Map extends Component {
     if (gs) {
       layerActions.updateGladStartDate(new Date(gs));
     }
-
     if (ge) {
       layerActions.updateGladEndDate(new Date(ge));
     }
+
+    // if (ts) {
+    //   console.log('new tss', ts); //TODO: Do this after the component has mounted or the layer has added!
+    //   layerActions.updateTerraIStartDate(new Date(ts));
+    // }
+    // if (te) {
+    //   console.log('new tee', te); //TODO: Do this after the component has mounted or the layer has added!
+    //   layerActions.updateTerraIEndDate(new Date(te));
+    // }
   };
+
+  /**
+  * NOTE: We are applying state here for certain properties because of the timing of these actions: certain things
+  * like terrai & basemaps need to be set After our map has been loaded or layers have been added
+  */
+  applyLayerStateFromUrl = (map, itemData) => {
+    const basemap = itemData && itemData.baseMap;
+    const params = getUrlParams(location.search);
+
+    //- Set the default basemap in the store
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
+
+    if (params.b) {
+      mapActions.changeBasemap(params.b);
+    }
+    if (params.a) {
+      const layerIds = params.a.split(',');
+      layerIds.forEach(layerId => {
+        // TODO: Confirm this with layerIds and subId's!
+        layerActions.addActiveLayer(layerId);
+      });
+    }
+    if (params.ts) {
+      layerActions.updateTerraIStartDate(new Date(params.ts));
+    }
+    if (params.te) {
+      layerActions.updateTerraIEndDate(new Date(params.te));
+    }
+  }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
     const {language} = this.context, layers = [];
