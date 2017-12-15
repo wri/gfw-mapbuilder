@@ -18,6 +18,7 @@ import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
+import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
@@ -93,7 +94,6 @@ export default class Map extends Component {
     const {activeWebmap} = this.props;
     const {basemap, map} = this.state;
 
-    console.log('map', map);
     // If the webmap is retrieved from AGOL or the resources file, or it changes
     if (
       prevProps.activeWebmap === undefined && activeWebmap ||
@@ -194,14 +194,12 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
+    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le, ism, iem, isy, iey} = params;
 
     const langKeys = Object.keys(settings.labels);
 
     //TODO: If we have a '#' at the start of our location.search, this won't work properly --> Our params come back as an empty object!
     // so check our 'getUrlParams' function
-
-    //What else: basemap, active map layers, menu tab (layerList vs analysis vs info), layerParams (date/time, forest cover, etc)
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
@@ -238,15 +236,13 @@ export default class Map extends Component {
       });
     }
 
+    if (ism && iem && isy && iey) {
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_MONTH, parseInt(ism));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_MONTH, parseInt(iem));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, parseInt(isy));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(iey));
+    }
 
-    // if (ts) {
-    //   console.log('new tss', ts); //TODO: Do this after the component has mounted or the layer has added!
-    //   layerActions.updateTerraIStartDate(new Date(ts));
-    // }
-    // if (te) {
-    //   console.log('new tee', te); //TODO: Do this after the component has mounted or the layer has added!
-    //   layerActions.updateTerraIEndDate(new Date(te));
-    // }
   };
 
   /**

@@ -1,6 +1,7 @@
 export function prepareStateForShare (options) {
   const {map, settings, language, basemap, activeLayers, activeTab, gladStartDate,
-    gladEndDate, canopyDensity, terraIStartDate, terraIEndDate, lossFromSelectIndex, lossToSelectIndex} = options;
+    gladEndDate, canopyDensity, terraIStartDate, terraIEndDate, lossFromSelectIndex, lossToSelectIndex,
+  imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear} = options;
   const shareState = {};
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
@@ -28,6 +29,12 @@ export function prepareStateForShare (options) {
   if (activeLayers.indexOf('TREE_COVER_LOSS') > -1) {
     shareState.ls = lossFromSelectIndex;
     shareState.le = lossToSelectIndex;
+  }
+  if (activeLayers.indexOf('TERRA_I_ALERTS') > -1) {
+    shareState.ism = imazonStartMonth;
+    shareState.iem = imazonEndMonth;
+    shareState.isy = imazonStartYear;
+    shareState.iey = imazonEndYear;
   }
   console.log(shareState);
   return shareState;
