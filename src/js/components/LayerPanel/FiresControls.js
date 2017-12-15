@@ -90,10 +90,6 @@ export default class FiresControls extends React.Component {
     return <option key={index} value={item.value}>{item.label}</option>;
   }
 
-  changeFiresTimeline = (evt) => {
-    this.props.selectChangeAction(evt.target.selectedIndex);
-  }
-
   render () {
     const {language} = this.context;
 

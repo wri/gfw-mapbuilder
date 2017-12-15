@@ -84,10 +84,8 @@ export default class LayerPanel extends Component {
       gladEndDate,
       terraIStartDate,
       terraIEndDate,
-      viirsFiresSelectIndex,
       viirsStartDate,
       viirsEndDate,
-      modisFiresSelectIndex,
       modisStartDate,
       modisEndDate,
       ...props} = this.props;
@@ -100,8 +98,6 @@ export default class LayerPanel extends Component {
           loaded={props.loaded}
           layer={layer}
           language={language}
-          firesSelectIndex={viirsFiresSelectIndex}
-          selectChangeAction={layerActions.changeViirsFiresTimeline}
           updateStartDate={layerActions.updateViirsStartDate}
           updateEndDate={layerActions.updateViirsEndDate}
           startDate={viirsStartDate}
@@ -114,8 +110,6 @@ export default class LayerPanel extends Component {
           loaded={props.loaded}
           layer={layer}
           language={language}
-          firesSelectIndex={modisFiresSelectIndex}
-          selectChangeAction={layerActions.changeModisFiresTimeline}
           updateStartDate={layerActions.updateModisStartDate}
           updateEndDate={layerActions.updateModisEndDate}
           startDate={modisStartDate}

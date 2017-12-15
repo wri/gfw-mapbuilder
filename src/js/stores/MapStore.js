@@ -42,8 +42,6 @@ class MapStore {
     this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
     this.modisEndDate = new Date();
     this.lossOptions = [];
-    this.viirsFiresSelectIndex = layerPanelText.firesOptions.length - 1;
-    this.modisFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.tableOfContentsVisible = true;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
@@ -87,8 +85,6 @@ class MapStore {
       toggleLegendVisible: mapActions.toggleLegendVisible,
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
-      changeViirsFiresTimeline: layerActions.changeViirsFiresTimeline,
-      changeModisFiresTimeline: layerActions.changeModisFiresTimeline,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
       setLossOptions: layerActions.setLossOptions,
@@ -297,14 +293,6 @@ class MapStore {
 
   shouldResetSlider(bool) {
     this.resetSlider = bool;
-  }
-
-  changeViirsFiresTimeline (viirsFiresSelectIndex) {
-    this.viirsFiresSelectIndex = viirsFiresSelectIndex;
-  }
-
-  changeModisFiresTimeline (viirsFiresSelectIndex) {
-    this.modisFiresSelectIndex = viirsFiresSelectIndex;
   }
 
   updateActiveSlopeClass (newSlopeClass) {

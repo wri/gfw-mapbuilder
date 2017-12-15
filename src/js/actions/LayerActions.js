@@ -30,14 +30,6 @@ class LayerActions {
     return info;
   }
 
-  changeViirsFiresTimeline (selectedIndex) {
-    return selectedIndex;
-  }
-
-  changeModisFiresTimeline (selectedIndex) {
-    return selectedIndex;
-  }
-
   updateLossTimeline (data) {
     return {
       from: data.fromSelectedIndex,
