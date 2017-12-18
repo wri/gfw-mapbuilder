@@ -34,7 +34,6 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate, endDate, layer, dontRefresh) {
     if (brApp.map) {
       const queryString = this.generateFiresQuery(startDate, endDate);
-      console.log('queryStringqueryStringqueryStringqueryString', queryString);
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
       const defs = [];
 
