@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 
 const packageJSON = require('./package.json');
@@ -115,6 +114,16 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(woff|woff2|ttf|)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            publicPath: '../',
+            outputPath: 'css/fonts/'
+          }
+        }
       }
     ]
   },

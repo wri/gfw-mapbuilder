@@ -4,7 +4,9 @@ import utils from 'utils/AppUtils';
 import {loadJS, loadCSS} from 'utils/loaders';
 import {assetUrls} from 'js/config';
 import React, { Component, PropTypes } from 'react';
-import Slider from 'rc-slider/lib/Slider';
+import Slider from 'rc-slider';
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
 import 'rc-slider/assets/index.css';
 // import 'vendors/ion.rangeslider/js/ion.rangeSlider.js';
 // import 'vendors/ion.rangeslider/css/ion.rangeSlider.css';
@@ -14,11 +16,11 @@ import 'rc-slider/assets/index.css';
 const lossOptions = [];
 
 export default class LossControls extends Component {
-  // static contextTypes = {
-  //   language: PropTypes.string.isRequired,
-  //   map: PropTypes.object.isRequired,
-  //   settings: PropTypes.object.isRequired
-  // };
+  static contextTypes = {
+    language: PropTypes.string.isRequired,
+    map: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -75,6 +77,14 @@ export default class LossControls extends Component {
   //   // loadCSS(base + assetUrls.ionSkinCSS);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { map } = this.context;
+
+    if (prevState.start !== this.state.start || prevState.end !== this.state.end) {
+      this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), this.state.start, this.state.end);
+    }
+  }
+
   // componentDidUpdate (prevProps, prevState, prevContext) {
   //   //- If the options are ready and something has changed
   //   const {lossFromSelectIndex, lossToSelectIndex, canopyDensity, resetSlider} = this.props;
@@ -112,11 +122,12 @@ export default class LossControls extends Component {
   //   clearInterval(this.state.timer);
   // }
 
-  // updateDates (layer, fromYear, toYear) {
-  //   if (layer && layer.setDateRange) {
-  //     layer.setDateRange(fromYear - 2000, toYear - 2000);
-  //   }
-  // }
+  updateDates (layer, fromYear, toYear) {
+    if (layer && layer.setDateRange) {
+      console.log(fromYear, toYear);
+      layer.setDateRange(fromYear, toYear);
+    }
+  }
 
   // updateDensity (layer, density) {
   //   const {lossFromSelectIndex, lossToSelectIndex} = this.props;
@@ -213,6 +224,17 @@ export default class LossControls extends Component {
   //   });
   // }
 
+  handleSliderChange = sliderValues => {
+    this.setState({
+      start: sliderValues[0],
+      end: sliderValues[1]
+    });
+    layerActions.updateLossTimeline({
+      fromSelectedIndex: sliderValues[0],
+      toSelectedIndex: sliderValues[1]
+    });
+  }
+
   render () {
     const {start, end} = this.state;
     const disabled = start === end;
@@ -229,7 +251,13 @@ export default class LossControls extends Component {
     return (
       <div className='timeline-container loss'>
         <div className='slider-tooltip' ref='sliderTooltip'></div>
-        <Slider />
+        <Range
+          min={0}
+          max={lossOptions.length - 1}
+          defaultValue={[0, lossOptions.length - 1]}
+          allowCross={false}
+          onChange={this.handleSliderChange}
+        />
         <div
           id="lossPlayButton"
           className={`${this.state.playing ? ' hidden' : ''}`}

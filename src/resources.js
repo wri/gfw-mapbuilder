@@ -1,7 +1,5 @@
 export default {
-
   //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
-
   //- General Settings
   // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
@@ -10,7 +8,7 @@ export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
-  logoUrl: './css/images/gfw-logo.png',
+  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
   logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
   aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
   downloadLinkUrl: '', // http://data.globalforestwatch.org/
@@ -520,7 +518,8 @@ export default {
         }
       }, {
         id: 'wri_mono',
-        thumbnailUrl: './css/images/wri_mono.png',
+        thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
+        // thumbnailUrl: './css/images/wri_mono.png',
         title: {
           en: 'WRI Mono',
           fr: 'WRI Mono',
@@ -532,7 +531,8 @@ export default {
         }
       }, {
         id: 'wri_contextual',
-        thumbnailUrl: './css/images/wri_contextual.png',
+        thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
+        // thumbnailUrl: './css/images/wri_contextual.png',
         title: {
           en: 'WRI Contextual',
           fr: 'WRI Contextual',
