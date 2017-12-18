@@ -18,6 +18,7 @@ import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
+import Edit from 'esri/toolbars/edit';
 import on from 'dojo/on';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
@@ -32,7 +33,7 @@ import React, {
   PropTypes
 } from 'react';
 
-let scalebar, paramsApplied = false;
+let scalebar, paramsApplied, editingEnabled = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -161,7 +162,8 @@ export default class Map extends Component {
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
         userFeaturesLayer.on('click', (evt) => {
-          if (evt.graphic && evt.graphic.attributes) {
+          if (evt.graphic && evt.graphic.attributes && !editingEnabled) {
+            console.log('we in');
             evt.stopPropagation();
             if (!evt.graphic.attributes.geostoreId) {
               analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
@@ -171,6 +173,28 @@ export default class Map extends Component {
             } else {
               response.map.infoWindow.setFeatures([evt.graphic]);
             }
+          }
+        });
+
+        const editToolbar = new Edit(response.map);
+        editToolbar.on('deactivate', function(evt) {
+          if (evt.info.isModified) {
+            analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
+              evt.graphic.attributes.geostoreId = res.data.id;
+              response.map.infoWindow.setFeatures([evt.graphic]);
+            });
+          }
+        });
+
+        userFeaturesLayer.on('dbl-click', evt => { //TODO: Why is our userFeaturesLayer.on('click' firing twice before this?!
+          evt.stopPropagation();
+          evt.preventDefault();
+          if (editingEnabled) {
+            editingEnabled = false;
+            editToolbar.deactivate();
+          } else {
+            editingEnabled = true;
+            editToolbar.activate(Edit.EDIT_VERTICES, evt.graphic);
           }
         });
       });
