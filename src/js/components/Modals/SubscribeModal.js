@@ -137,6 +137,8 @@ export default class SubscribeModal extends Component {
     const { email, aoiName, viirsAlerts, treeCoverAlerts, gladAlerts, sadAlerts, formaAlerts, terraI, prodes } = this.state;
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
 
+    console.log('state', this.state);
+
     if (email && aoiName && selectedFeature && (viirsAlerts || treeCoverAlerts || gladAlerts || sadAlerts || formaAlerts || terraI || prodes)) {
 
       const datasets = [];
@@ -276,14 +278,14 @@ export default class SubscribeModal extends Component {
           <h3 className='step-title'>{text[language].SUBSCRIBE_EMAIL_TITLE}</h3>
           <p>{text[language].SUBSCRIBE_EMAIL}</p>
           <div className='alert-checkbox'>
-            <input className="alert-input" placeholder='Enter email' onChange={this.updateEmail} />
+            <input className="alert-input" placeholder='Enter email' value={this.state.email} onChange={this.updateEmail} />
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
           <div className='alert-checkbox'>
             <p>Name</p>
-            <input className="subscription-name" placeholder='Area name' onChange={this.updateAreaName} />
+            <input className="subscription-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
             <p>Receive Alert Emails In...</p>
             <select className='language-selector' onChange={this.changeLanguage} value={this.state.activeLanguage}>
               {langs.map(this.optionMapper)}
