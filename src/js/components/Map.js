@@ -194,7 +194,7 @@ export default class Map extends Component {
   applyStateFromUrl = (map, params) => {
     console.log(params);
     const {settings} = this.context;
-    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le, ism, iem, isy, iey} = params;
+    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
 
     const langKeys = Object.keys(settings.labels);
 
@@ -236,13 +236,6 @@ export default class Map extends Component {
       });
     }
 
-    if (ism && iem && isy && iey) {
-      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_MONTH, parseInt(ism));
-      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_MONTH, parseInt(iem));
-      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, parseInt(isy));
-      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(iey));
-    }
-
   };
 
   /**
@@ -281,6 +274,13 @@ export default class Map extends Component {
     if (params.ms && params.me) {
       layerActions.updateModisStartDate(new Date(params.ms));
       layerActions.updateModisEndDate(new Date(params.me));
+    }
+
+    if (params.ism && params.iem && params.isy && params.iey) {
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_MONTH, parseInt(params.ism));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_MONTH, parseInt(params.iem));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, parseInt(params.isy));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(params.iey));
     }
   }
 

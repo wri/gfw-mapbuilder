@@ -35,7 +35,7 @@ export function prepareStateForShare (options) {
     shareState.le = lossToSelectIndex;
   }
 
-  if (activeLayers.indexOf('TERRA_I_ALERTS') > -1) {
+  if (activeLayers.indexOf('IMAZON_SAD') > -1) {
     shareState.ism = imazonStartMonth;
     shareState.iem = imazonEndMonth;
     shareState.isy = imazonStartYear;
