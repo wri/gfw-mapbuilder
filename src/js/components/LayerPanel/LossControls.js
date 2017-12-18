@@ -1,17 +1,12 @@
 import layerActions from 'actions/LayerActions';
 import layerKeys from 'constants/LayerConstants';
 import utils from 'utils/AppUtils';
-import {loadJS, loadCSS} from 'utils/loaders';
-import {assetUrls} from 'js/config';
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
 import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
-import 'rc-slider/assets/index.css';
-// import 'vendors/ion.rangeslider/js/ion.rangeSlider.js';
-// import 'vendors/ion.rangeslider/css/ion.rangeSlider.css';
-// import 'vendors/ion.rangeslider/css/ion.rangeSlider.skinNice.css';
-// import $ from 'jquery';
 
 const lossOptions = [];
 
@@ -26,7 +21,11 @@ export default class LossControls extends Component {
     super(props);
 
     this.state = {
-      playing: false
+      playing: false,
+      sliderValue: [],
+      sliderMarks: {},
+      holdSliderValueWhenPlaying: [],
+      holdSliderMarksWhenPlaying: {}
     };
   }
 
@@ -34,210 +33,177 @@ export default class LossControls extends Component {
 
     // const url = 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear/ImageServer';
     // layerUtils.getLayerMetadata(url).then((results) => {
-      const min = 1;
-      const max = 16;
-      for ( let i = min; i <= max; i++ ) {
-        lossOptions.push({ label: 2000 + i + '', value: i });
+    const min = 1;
+    const max = 16;
+    for ( let i = min; i <= max; i++ ) {
+      lossOptions.push({ label: 2000 + i + '', value: i });
+    }
+    //- Update the defaults to be the last year
+    layerActions.updateLossTimeline.defer({
+      fromSelectedIndex: 0,
+      toSelectedIndex: 15
+    });
+    //- Set the options in the store so others can use it
+    layerActions.setLossOptions.defer(lossOptions);
+    this.setState({
+      sliderValue: [lossOptions[0].value, lossOptions[lossOptions.length - 1].value],
+      sliderMarks: {
+        1: <small>{lossOptions[0].label}</small>,
+        3: <small>{lossOptions[2].label}</small>,
+        5: <small>{lossOptions[4].label}</small>,
+        7: <small>{lossOptions[6].label}</small>,
+        9: <small>{lossOptions[8].label}</small>,
+        11: <small>{lossOptions[10].label}</small>,
+        13: <small>{lossOptions[12].label}</small>,
+        15: <small>{lossOptions[14].label}</small>
       }
-      //- Update the defaults to be the last year
-      layerActions.updateLossTimeline.defer({
-        fromSelectedIndex: 0,
-        toSelectedIndex: 15
-      });
-      //- Set the options in the store so others can use it
-      layerActions.setLossOptions.defer(lossOptions);
-    // });
-
-  //   let base = window._app.base ? window._app.base + '/' : '';
-  //   if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
-  //     base = base.substring(0, base.length - 1);
-  //   }
-
-  //   // loadJS(base + assetUrls.rangeSlider).then(() => {
-  //     // initialize the slider
-  //     if ($('#loss-slider').ionRangeSlider) {
-  //       $('#loss-slider').ionRangeSlider({
-  //         type: 'double',
-  //         values: lossOptions.map(option => option.label),
-  //         grid: true,
-  //         grid_snap: true,
-  //         hide_min_max: true,
-  //         prettify_enabled: false,
-  //         onFinish: this.sliderChanged
-  //       });
-  //       this.lossSlider = $('#loss-slider');
-  //       console.log(this.lossSlider.data('ionRangeSlider'));
-  //       this.setState({
-  //         start: lossOptions[this.lossSlider.result.from].label,
-  //         end: lossOptions[this.lossSlider.result.to].label
-  //       });
-  //     }
-  //   // });
-  //   // loadCSS(base + assetUrls.ionCSS);
-  //   // loadCSS(base + assetUrls.ionSkinCSS);
+    });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState, prevContext) {
     const { map } = this.context;
 
-    if (prevState.start !== this.state.start || prevState.end !== this.state.end) {
-      this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), this.state.start, this.state.end);
+    if (map.getLayer && prevState.sliderValue !== this.state.sliderValue) {
+      this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), this.state.sliderValue[0], this.state.sliderValue[1]);
     }
-  }
 
   // componentDidUpdate (prevProps, prevState, prevContext) {
   //   //- If the options are ready and something has changed
-  //   const {lossFromSelectIndex, lossToSelectIndex, canopyDensity, resetSlider} = this.props;
-  //   const fromYear = lossOptions[lossFromSelectIndex].label;
-  //   const toYear = lossOptions[lossToSelectIndex].label;
+    const {canopyDensity, resetSlider} = this.props;
+    const {sliderValue} = this.state;
+    const fromYear = sliderValue[0];
+    const toYear = sliderValue[1];
   //   const {map} = this.context;
 
-  //   if (map.loaded) {
+    if (map.loaded) {
 
-  //       if (this.props.lossOptions.length) {
-  //         if (prevProps.canopyDensity !== canopyDensity) {
-  //           this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
-  //         }
-  //         if (resetSlider) {
-  //           this.lossSlider.update({
-  //             from: 0,
-  //             to: lossOptions.length - 1
-  //           });
-  //           layerActions.shouldResetSlider(false);
-  //           this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossOptions[0].label, lossOptions[lossOptions.length - 1].label);
-  //         }
-  //       }
+      if (this.props.lossOptions.length) {
+        if (prevProps.canopyDensity !== canopyDensity) {
+          this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
+        }
+        if (resetSlider) {
+          layerActions.shouldResetSlider(false);
+          this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossOptions[0].label, lossOptions[lossOptions.length - 1].label);
+          this.setState({sliderValue: [lossOptions[0].value, lossOptions[lossOptions.length - 1].value]})
+        }
 
-  //       if (prevContext.map !== map) {
-  //         const signal = map.on('update-end', () => {
-  //           signal.remove();
-  //           this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
-  //         });
-  //       }
-  //   }
+        if (prevContext.map !== map) {
+          const signal = map.on('update-end', () => {
+            signal.remove();
+            this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
+          });
+        }
+      }
+    }
+  }
 
-  // }
-
-  // componentWillUnmount () {
-  //   clearInterval(this.state.timer);
-  // }
+  componentWillUnmount () {
+    if (this.timer) clearInterval(this.timer);
+  }
 
   updateDates (layer, fromYear, toYear) {
     if (layer && layer.setDateRange) {
-      console.log(fromYear, toYear);
       layer.setDateRange(fromYear, toYear);
     }
   }
 
-  // updateDensity (layer, density) {
-  //   const {lossFromSelectIndex, lossToSelectIndex} = this.props;
-  //   const { settings } = this.context;
-  //   const layerGroups = settings.layerPanel;
-  //   const layerConf = utils.getObject(layerGroups.GROUP_LCD.layers, 'id', this.props.layerId);
-  //   let baseUrl = layerConf.url;
-  //   baseUrl = baseUrl.split('tc')[0] + 'tc';
-  //   baseUrl += density;
-  //   baseUrl += '/{z}/{x}/{y}.png';
+  updateDensity (layer, density) {
+    const {lossFromSelectIndex, lossToSelectIndex} = this.props;
+    const { settings } = this.context;
+    const layerGroups = settings.layerPanel;
+    const layerConf = utils.getObject(layerGroups.GROUP_LCD.layers, 'id', this.props.layerId);
+    let baseUrl = layerConf.url;
+    baseUrl = baseUrl.split('tc')[0] + 'tc';
+    baseUrl += density;
+    baseUrl += '/{z}/{x}/{y}.png';
 
-  //   layer.setUrl(baseUrl);
-  //   layer.setDateRange(lossOptions[lossFromSelectIndex].value, lossOptions[lossToSelectIndex].value);
-  // }
+    layer.setUrl(baseUrl);
+    layer.setDateRange(lossOptions[lossFromSelectIndex].value, lossOptions[lossToSelectIndex].value);
+  }
 
-  // startVisualization = () => {
-  //   const lossSlider = this.lossSlider;
-  //   const layer = this.context.map.getLayer(layerKeys.TREE_COVER_LOSS);
-  //   const start = lossOptions[this.lossSlider.result.from].label - 2000;
-  //   const stop = lossOptions[this.lossSlider.result.to].label - 2000;
-  //   const p_step = lossSlider.coords.p_step;
-  //   const p_handle = lossSlider.coords.p_handle;
-  //   const p = p_step - (p_step / p_handle); // Width of one step of the slider (percent)
-  //   const tooltip = this.refs.sliderTooltip;
-  //   const tooltipValue = lossSlider.result.from_value;
-  //   let range = start;
-  //   let barWidth = 0;
-  //   let tooltipHtml = tooltipValue;
+  startVisualization = () => {
+    const { sliderValue, sliderMarks } = this.state;
+    const layer = this.context.map.getLayer(layerKeys.TREE_COVER_LOSS);
+    const start = sliderValue[0];
+    let currentValue = start;
+    const stop = sliderValue[1];
 
-  //   lossSlider.update({
-  //     to_fixed: true,
-  //     from_fixed: true,
-  //     hide_from_to: true
-  //   });
-  //   // Set an interval to increase the date range every second, then start over when at max range
+    const visualizeLoss = () => {
+      if (currentValue === stop + 1) {
+        currentValue = start;
+      }
 
-  //   const visualizeLoss = () => {
+      layer.setDateRange(start, currentValue);
+      const nextMark = currentValue % 2 === 0 ? currentValue + 1 : currentValue + 2;
+      const prevMark = currentValue % 2 === 0 ? currentValue - 1 : currentValue - 2;
+      const shouldHideNextMark = nextMark <= lossOptions[lossOptions.length - 1].value;
+      const shouldHidePrevMark = prevMark >= lossOptions[0].value;
 
-  //     const sliderBar = document.querySelector('.irs-bar');
+      this.setState({
+        sliderValue: [start, currentValue],
+        sliderMarks: {
+          ...sliderMarks,
+          ...(shouldHidePrevMark ? {[prevMark]: {
+            style: {
+              display: 'none'
+            }
+          }} : {}),
+          [currentValue]: {
+            style: {
+              color: '#F0AB00'
+            },
+            label: <small>{lossOptions[currentValue - 1].label}</small>
+          },
+          ...(shouldHideNextMark ? {[nextMark]: {
+            style: {
+              display: 'none'
+            }
+          }} : {})
+        }
+      });
+      currentValue++;
+    };
 
-  //     if (range === stop + 1) {
-  //       range = start;
-  //       barWidth = 0;
-  //       tooltipHtml = tooltipValue;
-  //     }
+    this.timer = setInterval(visualizeLoss, 1000);
 
-  //     layer.setDateRange(start, range);
-  //     sliderBar.style.width = `${barWidth}%`;
-  //     const rect = sliderBar.getBoundingClientRect();
-  //     tooltip.style.left = `${rect.left + rect.width - 69}px`; //TODO Figure out a better way to calculate all of the correct values for bar and tooltip
-  //     tooltip.innerHTML = tooltipHtml;
-  //     tooltip.style.display = 'block';
-  //     range++;
-  //     barWidth += p; // increase barWidth by one step length each iteration
-  //     tooltipHtml++;
-  //   };
-
-  //   const timer = setInterval(visualizeLoss, 1000);
-
-  //   this.setState({playing: true, timer});
-  // }
-
-  // stopVisualization = () => {
-  //   const fromYear = lossOptions[this.lossSlider.result.from].label;
-  //   const toYear = lossOptions[this.lossSlider.result.to].label;
-  //   this.refs.sliderTooltip.style.display = 'none';
-
-  //   const layer = this.context.map.getLayer(layerKeys.TREE_COVER_LOSS);
-
-  //   clearInterval(this.state.timer);
-  //   layer.setDateRange(fromYear - 2000, toYear - 2000);
-  //   this.lossSlider.update({
-  //     to_fixed: false,
-  //     from_fixed: false,
-  //     hide_from_to: false
-  //   });
-  //   layerActions.updateLossTimeline({
-  //     fromSelectedIndex: this.lossSlider.result.from,
-  //     toSelectedIndex: this.lossSlider.result.to
-  //   });
-  //   this.setState({playing: false, timer: null});
-  // }
-
-  // sliderChanged = (data) => {
-  //   const { map } = this.context;
-  //   this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), data.from_value, data.to_value);
-  //   layerActions.updateLossTimeline({
-  //     fromSelectedIndex: this.lossSlider.result.from,
-  //     toSelectedIndex: this.lossSlider.result.to
-  //   });
-  //   this.setState({
-  //     start: lossOptions[this.lossSlider.result.from].label,
-  //     end: lossOptions[this.lossSlider.result.to].label
-  //   });
-  // }
-
-  handleSliderChange = sliderValues => {
     this.setState({
-      start: sliderValues[0],
-      end: sliderValues[1]
+      playing: true,
+      holdSliderValueWhenPlaying: sliderValue,
+      holdSliderMarksWhenPlaying: sliderMarks
     });
+  }
+
+  stopVisualization = () => {
+    const { holdSliderValueWhenPlaying, holdSliderMarksWhenPlaying } = this.state;
+    const fromYear = holdSliderValueWhenPlaying[0];
+    const toYear = holdSliderValueWhenPlaying[1];
+
+    const layer = this.context.map.getLayer(layerKeys.TREE_COVER_LOSS);
+
+    clearInterval(this.timer);
+    layer.setDateRange(fromYear, toYear);
     layerActions.updateLossTimeline({
-      fromSelectedIndex: sliderValues[0],
-      toSelectedIndex: sliderValues[1]
+      fromSelectedIndex: fromYear,
+      toSelectedIndex: toYear
+    });
+    this.setState({
+      playing: false,
+      sliderValue: holdSliderValueWhenPlaying,
+      sliderMarks: holdSliderMarksWhenPlaying
+    });
+  }
+
+  handleSliderChange = sliderValue => {
+    this.setState({sliderValue});
+    layerActions.updateLossTimeline({
+      fromSelectedIndex: sliderValue[0],
+      toSelectedIndex: sliderValue[1]
     });
   }
 
   render () {
-    const {start, end} = this.state;
-    const disabled = start === end;
+    const {sliderValue, sliderMarks, playing} = this.state;
+    const disabled = sliderValue[0] === sliderValue[1];
     const disabledStyles = {
       opacity: '.5',
       color: '#aaa',
@@ -250,24 +216,31 @@ export default class LossControls extends Component {
 
     return (
       <div className='timeline-container loss'>
-        <div className='slider-tooltip' ref='sliderTooltip'></div>
         <Range
-          min={0}
-          max={lossOptions.length - 1}
-          defaultValue={[0, lossOptions.length - 1]}
+          min={lossOptions[0].value}
+          max={lossOptions[lossOptions.length - 1].value}
+          value={sliderValue}
+          disabled={playing}
           allowCross={false}
           onChange={this.handleSliderChange}
+          tipFormatter={value => 2000 + value}
+          dots={true}
+          marks={sliderMarks}
+          trackStyle={[{backgroundColor: '#F0AB00', width: '40%'}]}
+          handleStyle={[{borderColor: '#F0AB00'}]}
+          dotStyle={{border: '1px solid #e9e9e9'}}
+          activeDotStyle={{border: '1px solid #F0AB00'}}
         />
         <div
           id="lossPlayButton"
-          className={`${this.state.playing ? ' hidden' : ''}`}
+          className={`${playing ? ' hidden' : ''}`}
           style={disabled ? disabledStyles : {}}
           onClick={disabled ? null : this.startVisualization}
           title={disabled ? 'Please select a range to view animation' : ''}
         >
           &#9658;
         </div>
-        <div id="lossPauseButton" className={`${this.state.playing ? '' : ' hidden'}`} onClick={this.stopVisualization}>&#10074;&#10074;</div>
+        <div id="lossPauseButton" className={`${playing ? '' : ' hidden'}`} onClick={this.stopVisualization}>&#10074;&#10074;</div>
       </div>
     );
   }
