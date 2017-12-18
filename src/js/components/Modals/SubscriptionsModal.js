@@ -8,6 +8,8 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 
+const datasets = ['viirs-active-fires', 'umd-loss-gain', 'glad-alerts', 'imazon-alerts', 'forma-alerts', 'terrai-alerts', 'prodes-loss'];
+
 
 export default class SubscriptionsModal extends Component {
 
@@ -46,13 +48,13 @@ export default class SubscriptionsModal extends Component {
           </button>
         </div>
         <p className='name-row'>{subscription.attributes.name}</p>
-        <p className='other-row'>Date of subscription: {endDateString}</p>
-        <div className='other-row'>Data sets: <span>{subscription.attributes.datasets.map(dataset => this.listDataset(dataset, subscription, subscription.attributes.datasets.length))}</span></div>
+        <p className='other-row date-created'>Created on {endDateString}</p>
+        <div className='other-row'>Data sets: <span>{datasets.map(dataset => this.listDataset(dataset, subscription))}</span></div>
       </div>
     );
   }
 
-  listDataset = (dataset, subscription, length) => {
+  listDataset = (dataset, subscription) => {
     let datasetName;
     switch (dataset) {
       case 'viirs-active-fires':
@@ -68,7 +70,7 @@ export default class SubscriptionsModal extends Component {
         datasetName = 'SAD tree cover loss alerts';
         break;
       case 'forma-alerts':
-        datasetName = 'FORMA active clearing alerts data';
+        datasetName = 'FORMA active clearing alerts';
         break;
       case 'terrai-alerts':
         datasetName = 'Terra-i tree cover loss alerts';
@@ -79,19 +81,21 @@ export default class SubscriptionsModal extends Component {
       default:
         break;
     }
-    if (length > 1) {
-      return <p key={dataset}>{datasetName} <svg onClick={() => this.updateSubscription(dataset, subscription)} className='svg-icon delete-dataset'><use xlinkHref="#icon-analysis-remove" /></svg></p>;
-    } else {
-      return <p key={dataset}>{datasetName}</p>;
-    }
+
+    return <p key={dataset}>{datasetName} <span onClick={() => this.updateSubscription(dataset, subscription)} className={`toggle-switch-subscription pointer ${subscription.attributes.datasets.indexOf(dataset) === -1 ? '' : 'active-subscription'}`}><span /></span></p>;
   }
 
   updateSubscription = (dataset, subscription) => {
-    subscription.attributes.datasets.splice(subscription.attributes.datasets.indexOf(dataset), 1);
+    const jsonData = {};
+    const index = subscription.attributes.datasets.indexOf(dataset);
 
-    const jsonData = {
-      datasets: subscription.attributes.datasets
-    };
+    if (index === -1) {
+      subscription.attributes.datasets.push(dataset);
+      jsonData.datasets = subscription.attributes.datasets;
+    } else {
+      subscription.attributes.datasets.splice(index, 1);
+      jsonData.datasets = subscription.attributes.datasets;
+    }
 
     $.ajax({
       url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
