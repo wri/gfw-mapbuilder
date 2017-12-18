@@ -59,7 +59,8 @@ export default class LayerTransparency extends Component {
           max="1"
           step="0.01"
           value={this.state.opacity}
-          onChange={this.updateOpacity} />
+          onChange={this.updateOpacity}
+          onMouseUp={this.updateOpacity} />
         <div>Transparency</div>
       </div>
     );
