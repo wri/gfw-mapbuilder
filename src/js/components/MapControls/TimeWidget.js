@@ -2,7 +2,6 @@ import TimeSlider from 'esri/dijit/TimeSlider';
 import mapActions from 'actions/MapActions';
 import TimeExtent from 'esri/TimeExtent';
 import React, {Component} from 'react';
-import $ from 'jquery';
 
 /**
 * Make a date object for time extent using a year, date should be Dec 31 for the given year

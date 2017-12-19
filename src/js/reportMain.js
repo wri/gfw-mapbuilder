@@ -22,15 +22,6 @@ const lazyloadAssets = () => {
   // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
 
   const base = window._app.base ? window._app.base + '/' : '';
-
-  // window.highchartsPromise = loadJS(base + assetUrls.highcharts);
-  // window.highchartsPromise.then(() => {
-  //   Highcharts.setOptions({
-  //     chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
-  //     lang: { thousandsSep: ',' }
-  //   });
-  // });
-  // loadJS(base + assetUrls.highchartsMore);
 };
 
 configureApp();

@@ -1,13 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import {loadCSS} from 'utils/loaders';
-import {assetUrls} from 'js/config';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import layerActions from 'actions/LayerActions';
-import 'vendors/pickadate/lib/picker.date';
-import 'vendors/pickadate/lib/themes/classic.css';
-import 'vendors/pickadate/lib/themes/classic.date.css';
-import $ from 'jquery';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 
 /**
 * Same function that is in the layer, but the layer is not always loaded when the data is back from the server
@@ -24,8 +21,12 @@ export default class TerraIControls extends Component {
     map: PropTypes.object.isRequired
   };
 
-  initialized = false;
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.initialized = false;
+    this.state = {};
+  }
 
   componentWillUpdate () {
     const {map} = this.context;
@@ -43,83 +44,44 @@ export default class TerraIControls extends Component {
           mapLayer.setDateRange(layer.minDateValue, maxDateValue);
         }
         //- Get date in normal JS Date format
-        const min = new Date(((layer.minDateValue / 1000) + 2000).toString(), 0, 1);
-        const max = new Date(((maxDateValue / 1000) + 2000).toString(), 0, maxDateValue % 1000);
+        const min = moment(new Date(((layer.minDateValue / 1000) + 2000).toString(), 0, 1));
+        const max = moment(new Date(((maxDateValue / 1000) + 2000).toString(), 0, maxDateValue % 1000));
         layerActions.updateTerraIStartDate(min);
         layerActions.updateTerraIEndDate(max);
         this.initialized = true;
-        this.setState({min, max});
-        //- Create the date pickers
-        const {fromTerraCalendar, toTerraCalendar} = this.refs;
-        //- Starting date
-        this.fromPicker = $(fromTerraCalendar).pickadate({
-          today: 'Jump to today',
-          min: min,
-          max: max,
-          selectYears: max.getFullYear() - min.getFullYear(),
-          selectMonths: true,
-          closeOnSelect: true,
-          klass: { picker: 'picker__top' },
-          onSet: this.didSetStartDate,
-          onStart: function () { this.set('select', min);}
-        }).pickadate('picker');
-        //- Ending date
-        this.toPicker = $(toTerraCalendar).pickadate({
-          today: 'Jump to today',
-          min: min,
-          max: max,
-          selectYears: max.getFullYear() - min.getFullYear(),
-          selectMonths: true,
-          closeOnSelect: true,
-          klass: { picker: 'picker__top' },
-          onSet: this.didSetEndDate,
-          onStart: function () { this.set('select', max); }
-        }).pickadate('picker');
+        this.setState({
+          min,
+          max,
+          startDate: min,
+          endDate: max
+        });
       });
       xhr.open('GET', `${layer.imageServer}?f=json`, true);
       xhr.send();
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
 
     if (this.initialized) {
-
-      //ensure the startDate is an empty object and not a Date Object
-      if ((prevProps.startDate !== this.props.startDate && this.props.startDate.constructor === Object)
-      && prevProps.endDate !== this.props.endDate && this.props.endDate.constructor === Object) {
-        this.fromPicker.set('select', this.state.min);
-        this.toPicker.set('select', this.state.max);
+      if (prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
+      this.updateDateRange(this.state.startDate, this.state.endDate);
       }
     }
   }
 
-  didSetStartDate = ({select}) => {
-    if (select) {
-      const startDate = new Date(select);
-      layerActions.updateTerraIStartDate(startDate);
-      this.updateDateRange(startDate, this.props.endDate);
-      if (this.fromPicker && this.toPicker) {
-        this.toPicker.set('min', this.fromPicker.get('select'));
-      }
-    }
-  };
+  handleStartChange = (startDate) => {
+    layerActions.updateTerraIStartDate(startDate);
+    this.setState({ startDate });
+  }
 
-  didSetEndDate = ({select}) => {
-    if (select) {
-      const endDate = new Date(select);
-      layerActions.updateTerraIEndDate(endDate);
-      this.updateDateRange(this.props.startDate, endDate);
-      if (this.fromPicker && this.toPicker) {
-        this.fromPicker.set('max', this.toPicker.get('select'));
-      }
-    }
-  };
+  handleEndChange = (endDate) => {
+    layerActions.updateTerraIEndDate(endDate);
+    this.setState({ endDate });
+  }
 
   updateDateRange = (startDate, endDate) => {
     const {layer} = this.props;
-    startDate = startDate.constructor === Date ? startDate : this.state.min;
-    endDate = endDate.constructor === Date ? endDate : this.state.max;
     const {map} = this.context;
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
@@ -128,7 +90,10 @@ export default class TerraIControls extends Component {
     }
   };
 
+
+
   render () {
+    const { startDate, endDate, min, max } = this.state;
     const {language} = this.context;
 
     return (
@@ -136,14 +101,66 @@ export default class TerraIControls extends Component {
         <div className='terra-i-controls__calendars'>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
-            <input className='fa-button sml white pointer' type='text' ref='fromTerraCalendar' />
+            <DatePicker
+              customInput={<StartButton />}
+              popperPlacement="top-end"
+              popperModifiers={{
+                offset: {
+                  enabled: true,
+                  offset: '30px'
+                }
+              }}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              todayButton='Jump to today'
+              minDate={min}
+              maxDate={endDate}
+              selected={startDate}
+              onChange={this.handleStartChange}
+            />
           </div>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
-            <input className='fa-button sml white pointer' type='text' ref='toTerraCalendar' />
+            <DatePicker
+              customInput={<EndButton />}
+              popperPlacement="top-end"
+              popperModifiers={{
+                offset: {
+                  enabled: true,
+                  offset: '30px'
+                }
+              }}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              todayButton='Jump to today'
+              minDate={startDate}
+              maxDate={max}
+              selected={endDate}
+              onChange={this.handleEndChange}
+            />
           </div>
         </div>
       </div>
     );
   }
 }
+
+const StartButton = ({ onClick, value }) => (
+  <button
+    className='fa-button sml white pointer'
+    onClick={onClick}
+  >
+    {value}
+  </button>
+);
+
+const EndButton = ({ onClick, value }) => (
+  <button
+    className='fa-button sml white pointer'
+    onClick={onClick}
+  >
+    {value}
+  </button>
+);

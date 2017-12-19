@@ -37,7 +37,7 @@ export default class CustomFeatureControl extends Component {
     return (
       <div className='custom-feature__header'>
         <input className='custom-feature__input' type='text' value={this.state.title} onChange={this.editName} />
-        <div className='custom-feature__delete pointer' onClick={this.deleteFeature}>{text[language].DELETE}</div>
+        <div className='custom-feature__delete pointer-custom' onClick={this.deleteFeature}>{text[language].DELETE}</div>
       </div>
     );
   }

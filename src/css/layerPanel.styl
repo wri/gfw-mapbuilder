@@ -258,6 +258,7 @@
   position relative
   height 10px
   width 17px
+  margin-top 5px
 
 .toggle-switch span
   transition all 0.3s ease
@@ -351,11 +352,12 @@
 .glad-controls__calendars
 .terra-i-controls__calendars
   display table
+  width 100%
 
 .glad-controls__calendars--row
 .terra-i-controls__calendars--row
   display table-row
-  & input
+  & button
   & label
     display table-cell
     font-size 12px
@@ -408,3 +410,6 @@
 .rc-slider-handle
   &:active
     box-shadow 0 0 5px $goldTheme !important
+
+.react-datepicker__triangle
+  left 100px !important

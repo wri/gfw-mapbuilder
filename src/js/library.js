@@ -66,10 +66,6 @@ var MapBuilder = function(args){
         ['react', 'vendor/react/react'],
         ['react-dom', 'vendor/react/react-dom'],
         ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill'],
-        ['jquery', 'vendor/jquery/dist/jquery.min'],
-        ['picker', 'vendor/pickadate/lib/compressed/picker'],
-        ['pickadate', 'vendor/pickadate/lib/compressed/picker.date'],
-        ['FileSaver', 'vendor/file-saver.js/FileSaver']
       ],
       deps: ['dojo/ready'],
       callback: function () {

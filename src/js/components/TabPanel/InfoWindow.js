@@ -77,7 +77,7 @@ export default class InfoWindow extends Component {
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
           <div className='feature-controls'>
             <span>{count} features selected.</span>
-            <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer'>
+            <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
               <use xlinkHref="#shape-close" />
             </svg>
             <span className={`arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`} onClick={this.next}>Next</span>

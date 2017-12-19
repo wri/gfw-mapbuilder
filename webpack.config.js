@@ -7,12 +7,13 @@ const packageJSON = require('./package.json');
 
 module.exports = {
   // entry: {
-  //   app: path.join(__dirname, 'src/js/main.js'),
+  //   main: path.join(__dirname, 'src/js/main.js'),
   //   report: path.join(__dirname, 'src/js/reportMain.js')
-  //   // lib: path.join(__dirname, 'src/js/libraryMain.js')
+    // lib: path.join(__dirname, 'src/js/libraryMain.js')
   // },
   entry: [
     path.join(__dirname, 'src/js/main.js'),
+    // path.join(__dirname, 'src/js/reportMain.js'),
     path.join(__dirname, 'src/css/app.styl'),
     path.join(__dirname, 'src/css/critical.styl')
   ],
@@ -36,13 +37,6 @@ module.exports = {
       report: path.join(__dirname, 'src/js/report'),
       resources: path.join(__dirname, 'src/resources'),
       images: path.join(__dirname, 'src/css/images')
-      // pickadate$: path.join(__dirname, 'vendors/pickadate/lib/picker.date.js')
-      // FileSaver: path.join(__dirname, 'vendors/file-saver.js/FileSaver.js'),
-      // jquery: path.join(__dirname, 'vendors/jquery/dist/jquery.min.js'),
-      // picker: path.join(__dirname, 'vendors/pickadate/lib/compressed/picker'),
-      // rangeSlider: path.join(__dirname, 'vendors/ion.rangeslider/js/ion.rangeSlider.js'),
-      // ionCSS: path.join(__dirname, 'vendors/ion.rangeslider/css/ion.rangeSlider.css'),
-      // ionSkinCSS: path.join(__dirname, 'vendors/ion.rangeslider/css/ion.rangeSlider.skinNice.css')
     }
   },
   devtool: 'cheap-eval-source-map',
@@ -51,6 +45,13 @@ module.exports = {
       {
         test: /\.pug$/,
         use: [
+          // {
+          //   loader: 'file-loader',
+          //   options: {
+          //     name: '[name].html'
+          //   }
+          // },
+          // { loader: 'extract-loader' },
           { loader: 'html-loader' },
           {
             loader: 'pug-html-loader',
@@ -136,12 +137,20 @@ module.exports = {
       APP_JS: 'js/main',
       REPORT_JS: 'js/report',
       DEFAULT_TITLE: 'GFW Mapbuilder',
-      ESRI_VERSION: '3.22'
+      ESRI_VERSION: '3.20'
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.pug'),
       inject: false
     }),
+    // new HtmlWebpackPlugin({
+    //   template: path.join(__dirname, 'src/report.pug'),
+    //   inject: false
+    // }),
+    // new HtmlWebpackPlugin({
+    //   template: path.join(__dirname, 'src/external.pug'),
+    //   inject: false
+    // }),
     new CopyWebpackPlugin([
       {
         from: path.join(__dirname, 'vendors'),
