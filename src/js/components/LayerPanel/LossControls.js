@@ -67,13 +67,10 @@ export default class LossControls extends Component {
       this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), this.state.sliderValue[0], this.state.sliderValue[1]);
     }
 
-  // componentDidUpdate (prevProps, prevState, prevContext) {
-  //   //- If the options are ready and something has changed
     const {canopyDensity, resetSlider} = this.props;
     const {sliderValue} = this.state;
     const fromYear = sliderValue[0];
     const toYear = sliderValue[1];
-  //   const {map} = this.context;
 
     if (map.loaded) {
 
@@ -108,7 +105,6 @@ export default class LossControls extends Component {
   }
 
   updateDensity (layer, density) {
-    const {lossFromSelectIndex, lossToSelectIndex} = this.props;
     const { settings } = this.context;
     const layerGroups = settings.layerPanel;
     const layerConf = utils.getObject(layerGroups.GROUP_LCD.layers, 'id', this.props.layerId);
@@ -118,7 +114,6 @@ export default class LossControls extends Component {
     baseUrl += '/{z}/{x}/{y}.png';
 
     layer.setUrl(baseUrl);
-    layer.setDateRange(lossOptions[lossFromSelectIndex].value, lossOptions[lossToSelectIndex].value);
   }
 
   startVisualization = () => {
@@ -226,7 +221,7 @@ export default class LossControls extends Component {
           tipFormatter={value => 2000 + value}
           dots={true}
           marks={sliderMarks}
-          trackStyle={[{backgroundColor: '#F0AB00', width: '40%'}]}
+          trackStyle={[{backgroundColor: '#F0AB00'}]}
           handleStyle={[{borderColor: '#F0AB00'}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
           activeDotStyle={{border: '1px solid #F0AB00'}}

@@ -357,7 +357,7 @@ export default class Map extends Component {
           <SearchModal />
         </div>
         <div className={`canopy-modal-container modal-wrapper ${canopyModalVisible ? '' : 'hidden'}`}>
-          <CanopyModal />
+          <CanopyModal canopyDensity={this.state.canopyDensity} />
         </div>
         <div className={`layer-modal-container modal-wrapper ${layerModalVisible ? '' : 'hidden'}`}>
           <LayerModal info={modalLayerInfo} />
