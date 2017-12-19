@@ -90,7 +90,7 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
     label: 'Select analysis...',
     value: 'default',
-    group: 'default'
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Slope',
     value: analysisKeys.SLOPE,

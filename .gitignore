@@ -2,6 +2,7 @@
 build
 dist
 vendors
+webpackBuild
 
 # Ignore these, just do it
 arcgis-modules.txt
