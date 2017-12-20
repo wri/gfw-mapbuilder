@@ -23,22 +23,19 @@ export default class LossControls extends Component {
   }
 
   componentDidMount () {
+    const min = 1;
+    const max = 16;
+    for ( let i = min; i <= max; i++ ) {
+      lossOptions.push({ label: 2000 + i + '', value: i });
+    }
 
-    // const url = 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear/ImageServer';
-    // layerUtils.getLayerMetadata(url).then((results) => {
-      const min = 1;
-      const max = 16;
-      for ( let i = min; i <= max; i++ ) {
-        lossOptions.push({ label: 2000 + i + '', value: i });
-      }
-      //- Update the defaults to be the last year
-      layerActions.updateLossTimeline.defer({
-        fromSelectedIndex: 0,
-        toSelectedIndex: 15
-      });
-      //- Set the options in the store so others can use it
-      layerActions.setLossOptions.defer(lossOptions);
-    // });
+    //- Update the defaults to be the last year
+    layerActions.updateLossTimeline({
+      fromSelectedIndex: min - 1, //0,
+      toSelectedIndex: max - 1 //15
+    });
+    //- Set the options in the store so others can use it
+    layerActions.setLossOptions(lossOptions);
 
     let base = window._app.base ? window._app.base + '/' : '';
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
@@ -49,6 +46,8 @@ export default class LossControls extends Component {
       // initialize the slider
       if ($('#loss-slider').ionRangeSlider) {
         $('#loss-slider').ionRangeSlider({
+          from: this.props.lossFromSelectIndex,
+          to: this.props.lossToSelectIndex,
           type: 'double',
           values: lossOptions.map(option => option.label),
           grid: true,
@@ -58,9 +57,10 @@ export default class LossControls extends Component {
           onFinish: this.sliderChanged
         });
         this.lossSlider = $('#loss-slider').data('ionRangeSlider');
+
         this.setState({
-          start: lossOptions[this.lossSlider.result.from].label,
-          end: lossOptions[this.lossSlider.result.to].label
+          start: lossOptions[this.props.lossFromSelectIndex].label,
+          end: lossOptions[this.props.lossToSelectIndex].label,
         });
       }
     });
@@ -89,9 +89,16 @@ export default class LossControls extends Component {
             layerActions.shouldResetSlider(false);
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossOptions[0].label, lossOptions[lossOptions.length - 1].label);
           }
+          if (prevProps.lossFromSelectIndex !== lossFromSelectIndex || prevProps.lossToSelectIndex !== lossToSelectIndex) {
+            this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
+            this.lossSlider && this.lossSlider.update({
+              from: lossFromSelectIndex,
+              to: lossToSelectIndex
+            });
+          }
         }
 
-        if (prevContext.map !== map) {
+        if (prevContext.map !== map && Object.keys(prevContext.map).length !== 0) {
           const signal = map.on('update-end', () => {
             signal.remove();
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
