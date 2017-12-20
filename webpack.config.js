@@ -6,17 +6,21 @@ const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const packageJSON = require('./package.json');
 
 module.exports = {
-  // entry: {
-  //   main: path.join(__dirname, 'src/js/main.js'),
-  //   report: path.join(__dirname, 'src/js/reportMain.js')
+  entry: {
+    main: [
+      path.join(__dirname, 'src/js/main.js'),
+      path.join(__dirname, 'src/css/app.styl'),
+      path.join(__dirname, 'src/css/critical.styl')
+    ],
+    report: path.join(__dirname, 'src/js/reportMain.js')
     // lib: path.join(__dirname, 'src/js/libraryMain.js')
-  // },
-  entry: [
-    path.join(__dirname, 'src/js/main.js'),
-    // path.join(__dirname, 'src/js/reportMain.js'),
-    path.join(__dirname, 'src/css/app.styl'),
-    path.join(__dirname, 'src/css/critical.styl')
-  ],
+  },
+  // entry: [
+  //   path.join(__dirname, 'src/js/main.js'),
+  //   // path.join(__dirname, 'src/js/reportMain.js'),
+  //   path.join(__dirname, 'src/css/app.styl'),
+  //   path.join(__dirname, 'src/css/critical.styl')
+  // ],
   output: {
     filename: 'js/[name].js',
     path: path.join(__dirname, 'webpackBuild'),
@@ -45,13 +49,6 @@ module.exports = {
       {
         test: /\.pug$/,
         use: [
-          // {
-          //   loader: 'file-loader',
-          //   options: {
-          //     name: '[name].html'
-          //   }
-          // },
-          // { loader: 'extract-loader' },
           { loader: 'html-loader' },
           {
             loader: 'pug-html-loader',
@@ -143,10 +140,11 @@ module.exports = {
       template: path.join(__dirname, 'src/index.pug'),
       inject: false
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.join(__dirname, 'src/report.pug'),
-    //   inject: false
-    // }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src/report.pug'),
+      filename: 'report.html',
+      inject: false
+    }),
     // new HtmlWebpackPlugin({
     //   template: path.join(__dirname, 'src/external.pug'),
     //   inject: false

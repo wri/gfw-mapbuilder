@@ -21,6 +21,7 @@ import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
 import Loader from 'components/Loader';
 // import Deferred from 'dojo/Deferred';
+import moment from 'moment';
 import request from 'utils/request';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
@@ -87,10 +88,10 @@ export default class Analysis extends Component {
           terraITo: terraIEndDate,
           viirsFiresSelectIndex: viirsFiresSelectIndex,
           modisFiresSelectIndex: modisFiresSelectIndex,
-          viirsFrom: viirsStartDate,
-          viirsTo: viirsEndDate,
-          modisFrom: modisStartDate,
-          modisTo: modisEndDate
+          viirsFrom: moment(viirsStartDate),
+          viirsTo: moment(viirsEndDate),
+          modisFrom: moment(modisStartDate),
+          modisTo: moment(modisEndDate)
         }).then((results) => {
           this.setState({ results: results, isLoading: false });
         }, () => {
@@ -153,10 +154,10 @@ export default class Analysis extends Component {
           terraITo: terraIEndDate,
           viirsFiresSelectIndex: viirsFiresSelectIndex,
           modisFiresSelectIndex: modisFiresSelectIndex,
-          viirsFrom: viirsStartDate,
-          viirsTo: viirsEndDate,
-          modisFrom: modisStartDate,
-          modisTo: modisEndDate
+          viirsFrom: moment(viirsStartDate),
+          viirsTo: moment(viirsEndDate),
+          modisFrom: moment(modisStartDate),
+          modisTo: moment(modisEndDate)
         }).then((results) => {
           this.setState({ results: results, isLoading: false });
         }, () => {

@@ -23,6 +23,7 @@ import charts from 'utils/charts';
 import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
+import moment from 'moment';
 
 let map;
 
@@ -246,13 +247,13 @@ const createMap = function createMap (params) {
       params.settings = info.settings;
 
       //- Make sure highcharts is loaded before using it
-      if (window.highchartsPromise.isResolved()) {
-        runAnalysis(params, feature);
-      } else {
-        window.highchartsPromise.then(() => {
+      // if (window.highchartsPromise.isResolved()) {
+      //   runAnalysis(params, feature);
+      // } else {
+        // window.highchartsPromise.then(() => {
           runAnalysis(params, feature);
-        });
-      }
+        // });
+      // }
     });
 	});
 };
@@ -954,8 +955,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       language: lang,
       geostoreId: feature.geostoreId,
-      gladFrom: new Date(gladFrom),
-      gladTo: new Date(gladTo)
+      gladFrom: moment(new Date(gladFrom)),
+      gladTo: moment(new Date(gladTo))
     }).then((results) => {
       const node = document.getElementById('glad-alerts');
       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
@@ -982,8 +983,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       geostoreId: feature.geostoreId,
       language: lang,
-      terraIFrom: new Date(terraIFrom),
-      terraITo: new Date(terraITo)
+      terraIFrom: moment(new Date(terraIFrom)),
+      terraITo: moment(new Date(terraITo))
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
@@ -1109,10 +1110,10 @@ export default {
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis
     const { viirsStartDate, viirsEndDate, modisStartDate, modisEndDate } = params;
-    params.viirsFrom = new Date(viirsStartDate);
-    params.viirsTo = new Date(viirsEndDate);
-    params.modisFrom = new Date(modisStartDate);
-    params.modisTo = new Date(modisEndDate);
+    params.viirsFrom = moment(new Date(viirsStartDate));
+    params.viirsTo = moment(new Date(viirsEndDate));
+    params.modisFrom = moment(new Date(modisStartDate));
+    params.modisTo = moment(new Date(modisEndDate));
 
     //- Create the map as soon as possible
     createMap(params);
