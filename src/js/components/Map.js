@@ -221,21 +221,6 @@ export default class Map extends Component {
     if (c) {
       mapActions.updateCanopyDensity(c);
     }
-
-    if (gs) {
-      layerActions.updateGladStartDate(new Date(gs));
-    }
-    if (ge) {
-      layerActions.updateGladEndDate(new Date(ge));
-    }
-
-    if (ls && le) {
-      layerActions.updateLossTimeline({
-        fromSelectedIndex: parseInt(ls),
-        toSelectedIndex: parseInt(le)
-      });
-    }
-
   };
 
   /**
@@ -259,21 +244,32 @@ export default class Map extends Component {
         layerActions.addActiveLayer(layerId);
       });
     }
-    if (params.ts) {
-      layerActions.updateTerraIStartDate(new Date(params.ts));
+
+    if (params.ls && params.le) {
+      layerActions.updateLossTimeline({
+        fromSelectedIndex: parseInt(params.ls),
+        toSelectedIndex: parseInt(params.le)
+      });
     }
-    if (params.te) {
-      layerActions.updateTerraIEndDate(new Date(params.te));
+
+    if (params.ts && params.te) {
+      layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
+      layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
+    }
+
+    if (params.gs && params.ge) {
+      layerActions.updateGladStartDate(new Date(params.gs.replace(/-/g, '/')));
+      layerActions.updateGladEndDate(new Date(params.ge.replace(/-/g, '/')));
     }
 
     if (params.vs && params.ve) {
-      layerActions.updateViirsStartDate(new Date(params.vs));
-      layerActions.updateViirsEndDate(new Date(params.ve));
+      layerActions.updateViirsStartDate(new Date(params.vs.replace(/-/g, '/')));
+      layerActions.updateViirsEndDate(new Date(params.ve.replace(/-/g, '/')));
     }
 
     if (params.ms && params.me) {
-      layerActions.updateModisStartDate(new Date(params.ms));
-      layerActions.updateModisEndDate(new Date(params.me));
+      layerActions.updateModisStartDate(new Date(params.ms.replace(/-/g, '/')));
+      layerActions.updateModisEndDate(new Date(params.me.replace(/-/g, '/')));
     }
 
     if (params.ism && params.iem && params.isy && params.iey) {
