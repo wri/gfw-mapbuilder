@@ -42,7 +42,7 @@ export default class ControlPanel extends Component {
       imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear,
       viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
     } = this.props;
-    console.log(this.props);
+
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
       language: language,

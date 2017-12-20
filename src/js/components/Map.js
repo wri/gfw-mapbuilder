@@ -192,7 +192,6 @@ export default class Map extends Component {
   };
 
   applyStateFromUrl = (map, params) => {
-    console.log(params);
     const {settings} = this.context;
     const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
 
