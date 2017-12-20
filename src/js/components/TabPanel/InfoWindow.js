@@ -15,16 +15,24 @@ export default class InfoWindow extends Component {
   };
 
   previous = () => {
-    this.props.map.infoWindow.selectPrevious();
+    this.context.map.infoWindow.selectPrevious();
   };
 
   next = () => {
-    this.props.map.infoWindow.selectNext();
+    this.context.map.infoWindow.selectNext();
   };
 
   clearFeatures = () => {
     const {map} = this.context;
-    map.infoWindow.clearFeatures();
+    const features = map.infoWindow.features;
+    const selectedIndex = map.infoWindow.selectedIndex;
+
+    const newFeatures = [
+      ...features.slice(0, selectedIndex),
+      ...features.slice(selectedIndex + 1)
+    ];
+
+    map.infoWindow.setFeatures(newFeatures);
   };
 
   renderInstructionList = (instruction, index) => {
