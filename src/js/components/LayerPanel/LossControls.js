@@ -61,8 +61,6 @@ export default class LossControls extends Component {
         this.setState({
           start: lossOptions[this.props.lossFromSelectIndex].label,
           end: lossOptions[this.props.lossToSelectIndex].label,
-          min,
-          max
         });
       }
     });
@@ -101,7 +99,6 @@ export default class LossControls extends Component {
         }
 
         if (prevContext.map !== map && Object.keys(prevContext.map).length !== 0) {
-          console.log(prevContext.map, map);
           const signal = map.on('update-end', () => {
             signal.remove();
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
