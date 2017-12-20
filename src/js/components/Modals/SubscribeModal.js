@@ -118,7 +118,6 @@ export default class SubscribeModal extends Component {
         withCredentials: true
       },
       success: (response) => {
-        console.log('resp', response);
         this.setState(initialState);
         mapActions.toggleSubscribeModal({ visible: false });
         mapActions.setUserSubscriptions(response.data);
@@ -136,8 +135,6 @@ export default class SubscribeModal extends Component {
   save = () => {
     const { email, aoiName, viirsAlerts, treeCoverAlerts, gladAlerts, sadAlerts, formaAlerts, terraI, prodes } = this.state;
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-
-    console.log('state', this.state);
 
     if (email && aoiName && selectedFeature && (viirsAlerts || treeCoverAlerts || gladAlerts || sadAlerts || formaAlerts || terraI || prodes)) {
 
@@ -215,8 +212,7 @@ export default class SubscribeModal extends Component {
         xhrFields: {
           withCredentials: true
         },
-        success: (response) => {
-          console.log('response', response);
+        success: () => {
           this.setState({
             currentStep: 0,
             warnings: false,
@@ -224,7 +220,7 @@ export default class SubscribeModal extends Component {
           });
         },
         error: (error) => {
-          console.log('errr', error);
+          console.log('err', error);
         }
       });
     } else {

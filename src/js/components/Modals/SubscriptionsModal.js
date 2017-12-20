@@ -150,28 +150,8 @@ export default class SubscriptionsModal extends Component {
   }
 
   deleteSubscription = (evt, subscription) => {
-    //TODO: Add confirm popup!
-    // mapActions.toggleSubscriptionsModal({ visible: false });
     mapActions.toggleConfirmModal({ visible: true });
-
     mapActions.deleteSubscription(subscription);
-
-    // $.ajax({
-    //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
-    //   type: 'DELETE',
-    //   xhrFields: {
-    //     withCredentials: true
-    //   },
-    //   success: (response) => {
-    //     console.log('resppp', response);
-    //     const remainingSubscriptions = this.props.userSubscriptions.filter(subsc => subsc.id !== response.data.id);
-    //
-    //     mapActions.setUserSubscriptions(remainingSubscriptions);
-    //   },
-    //   error: (error) => {
-    //     console.log('err', error);
-    //   }
-    // });
   }
 
   close = () => {

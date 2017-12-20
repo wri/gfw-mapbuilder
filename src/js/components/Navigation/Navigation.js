@@ -133,7 +133,6 @@ export default class Navigation extends Component {
           withCredentials: true
         },
         success: (response) => {
-          console.log('resp', response);
           this.setState({
             userSubscriptions: response.data
           });
@@ -153,7 +152,6 @@ export default class Navigation extends Component {
   }
 
   logOut = () => {
-    console.log('logout', this.state);
     $.ajax({
       url: 'https://production-api.globalforestwatch.org/auth/logout',
       dataType: 'json',
