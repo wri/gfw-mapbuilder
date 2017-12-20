@@ -30,12 +30,12 @@ export default class LossControls extends Component {
     }
 
     //- Update the defaults to be the last year
-    layerActions.updateLossTimeline.defer({
+    layerActions.updateLossTimeline({
       fromSelectedIndex: min - 1, //0,
       toSelectedIndex: max - 1 //15
     });
     //- Set the options in the store so others can use it
-    layerActions.setLossOptions.defer(lossOptions);
+    layerActions.setLossOptions(lossOptions);
 
     let base = window._app.base ? window._app.base + '/' : '';
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
@@ -60,7 +60,7 @@ export default class LossControls extends Component {
 
         this.setState({
           start: lossOptions[this.props.lossFromSelectIndex].label,
-          end: lossOptions[this.props.lossToSelectIndex].label
+          end: lossOptions[this.props.lossToSelectIndex].label,
         });
       }
     });
@@ -89,9 +89,16 @@ export default class LossControls extends Component {
             layerActions.shouldResetSlider(false);
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossOptions[0].label, lossOptions[lossOptions.length - 1].label);
           }
+          if (prevProps.lossFromSelectIndex !== lossFromSelectIndex || prevProps.lossToSelectIndex !== lossToSelectIndex) {
+            this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
+            this.lossSlider && this.lossSlider.update({
+              from: lossFromSelectIndex,
+              to: lossToSelectIndex
+            });
+          }
         }
 
-        if (prevContext.map !== map) {
+        if (prevContext.map !== map && Object.keys(prevContext.map).length !== 0) {
           const signal = map.on('update-end', () => {
             signal.remove();
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
