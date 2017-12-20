@@ -133,7 +133,7 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Intact forest loss',
+  { label: 'Intact forest landscape',
     value: analysisKeys.INTACT_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -1425,7 +1425,7 @@ strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Intact forest loss',
+  { label: 'Intact forest landscape',
     value: analysisKeys.INTACT_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },

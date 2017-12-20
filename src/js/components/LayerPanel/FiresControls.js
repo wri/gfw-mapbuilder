@@ -3,6 +3,9 @@ import React, {PropTypes} from 'react';
 import text from 'js/languages';
 import 'pickadate';
 
+let startCount = 0;
+
+let endCount = 0;
 export default class FiresControls extends React.Component {
 
   static contextTypes = {
@@ -22,8 +25,11 @@ export default class FiresControls extends React.Component {
     //- Create the date pickers
     const { fromCalendar, toCalendar } = this.refs;
     const { startDate, endDate } = this.props;
+
     //- Starting date
     this.fromPicker = $(fromCalendar).pickadate({
+      // from: this.props.lossFromSelectIndex,
+      // to: this.props.lossToSelectIndex,
       today: 'Jump to today',
       min: this.min,
       max: this.max,
@@ -50,15 +56,23 @@ export default class FiresControls extends React.Component {
 
   componentDidUpdate(prevProps, prevState, prevContext) {
 
-    if ((Date.parse(prevProps.startDate) !== Date.parse(this.props.startDate)) || (Date.parse(prevProps.endDate) !== Date.parse(this.props.endDate))) {
-      this.toPicker.set('select', this.props.endDate);
-      this.fromPicker.set('select', this.props.startDate);
+    const { startDate, endDate } = this.props;
+
+    if (prevProps.startDate.getTime() !== startDate.getTime() || prevProps.endDate.getTime() !== endDate.getTime()) {
+      if (prevProps.startDate.getTime() !== startDate.getTime()) {
+        this.fromPicker.set('select', this.props.startDate);
+      }
+
+      if (prevProps.endDate.getTime() !== endDate.getTime()) {
+        this.toPicker.set('select', this.props.endDate);
+      }
+
       LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer);
     }
 
     // Anytime the map changes to a new map, update that here
     const {map} = this.context;
-    if (prevContext.map !== map) {
+    if (prevContext.map !== map && prevContext.map.loaded) {
       const signal = map.on('update-end', () => {
         signal.remove();
         LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer);
@@ -88,10 +102,6 @@ export default class FiresControls extends React.Component {
 
   optionsMap(item, index) {
     return <option key={index} value={item.value}>{item.label}</option>;
-  }
-
-  changeFiresTimeline = (evt) => {
-    this.props.selectChangeAction(evt.target.selectedIndex);
   }
 
   render () {

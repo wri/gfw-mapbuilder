@@ -81,12 +81,24 @@ export default class TerraIControls extends Component {
   componentDidUpdate(prevProps) {
 
     if (this.initialized) {
-
+      const { startDate, endDate } = this.props;
       //ensure the startDate is an empty object and not a Date Object
-      if ((prevProps.startDate !== this.props.startDate && this.props.startDate.constructor === Object)
-      && prevProps.endDate !== this.props.endDate && this.props.endDate.constructor === Object) {
+      if ((prevProps.startDate !== startDate && startDate.constructor === Object)
+      && prevProps.endDate !== endDate && endDate.constructor === Object) {
         this.fromPicker.set('select', this.state.min);
         this.toPicker.set('select', this.state.max);
+      } else if ((prevProps.startDate.getTime() !== startDate.getTime() && startDate.constructor === Date && prevProps)
+      || (prevProps.endDate.getTime() !== endDate.getTime() && endDate.constructor === Date && prevProps)) {
+        this.updateDateRange(startDate, endDate);
+        if (prevProps.startDate.getTime() !== startDate.getTime()) {
+          layerActions.updateTerraIStartDate.defer(startDate);
+          this.fromPicker.set('select', startDate);
+        }
+
+        if (prevProps.endDate.getTime() !== endDate.getTime()) {
+          layerActions.updateTerraIEndDate.defer(endDate);
+          this.toPicker.set('select', endDate);
+        }
       }
     }
   }
@@ -94,7 +106,7 @@ export default class TerraIControls extends Component {
   didSetStartDate = ({select}) => {
     if (select) {
       const startDate = new Date(select);
-      layerActions.updateTerraIStartDate(startDate);
+      layerActions.updateTerraIStartDate.defer(startDate);
       this.updateDateRange(startDate, this.props.endDate);
       if (this.fromPicker && this.toPicker) {
         this.toPicker.set('min', this.fromPicker.get('select'));
@@ -105,7 +117,7 @@ export default class TerraIControls extends Component {
   didSetEndDate = ({select}) => {
     if (select) {
       const endDate = new Date(select);
-      layerActions.updateTerraIEndDate(endDate);
+      layerActions.updateTerraIEndDate.defer(endDate);
       this.updateDateRange(this.props.startDate, endDate);
       if (this.fromPicker && this.toPicker) {
         this.fromPicker.set('max', this.toPicker.get('select'));

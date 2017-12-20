@@ -32,13 +32,15 @@ const LayersHelper = {
   * @param {boolean} dontRefresh - Whether or not to not fetch a new image
   */
   updateFiresLayerDefinitions (startDate, endDate, layer, dontRefresh) {
-    const queryString = this.generateFiresQuery(startDate, endDate);
-    const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-    const defs = [];
+    if (brApp.map) {
+      const queryString = this.generateFiresQuery(startDate, endDate);
+      const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
+      const defs = [];
 
-    if (firesLayer) {
-      firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-      firesLayer.setLayerDefinitions(defs, dontRefresh);
+      if (firesLayer) {
+        firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+        firesLayer.setLayerDefinitions(defs, dontRefresh);
+      }
     }
   },
 
@@ -53,14 +55,6 @@ const LayersHelper = {
     return 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
   },
 
-  changeOpacity (parameters) {
-    const layer = brApp.map.getLayer(parameters.layerId);
-    if ( layer ) {
-      // TODO:  check that value is >= 0 and <= 1.
-      layer.setOpacity(parameters.value);
-    }
-  },
-
   isLayerVisible (map, layerInfo) {
     // Non-webmap layers, always assume visible.
     let visible = true;
@@ -69,7 +63,7 @@ const LayersHelper = {
       visible = false;
       layerInfo.visible = visible;
     }
-    if (map && layerInfo.esriLayer) {
+    if (map && map.getScale && layerInfo.esriLayer) {
       // Explicitly check scale depencency for sub-layers in a dynamic map service.
       const scale = map.getScale();
       if (layerInfo.hasScaleDependency && ((scale > layerInfo.minScale && layerInfo.minScale !== 0) || scale < layerInfo.maxScale)) {
