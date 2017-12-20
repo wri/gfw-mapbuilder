@@ -59,8 +59,8 @@ block append content
 block append esri-script
   script.
     var _app = {
-        cache: require('%META_VERSION%'),
-        esri: require('%ESRI_VERSION%'),
+        cache: %META_VERSION%,
+        esri: %ESRI_VERSION%,
         base: ''
     };
     function makePath (base, path) {
@@ -105,7 +105,7 @@ block append esri-script
         ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill']
       ],
       deps: ['dojo/domReady!'],
-      callback: function () {require(['js/reportMain']);}
+      callback: function () {require(['%REPORT_JS%']);}
     };
     
   //- script.
@@ -146,7 +146,7 @@ block append esri-script
   //- PROD: if new modules are added, regenerate the JSAPI build
   script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
   //- DEV: Use the normal JSAPI
-  script(src=`//js.arcgis.com/${require('%ESRI_VERSION%')}/init.js`, async)
+  //- script(src=`//js.arcgis.com/${%ESRI_VERSION%}/init.js`, async)
   //- script(src='/vendor/dojo/dojo.js', async)
   script.
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
