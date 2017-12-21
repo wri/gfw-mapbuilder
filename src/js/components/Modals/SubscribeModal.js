@@ -111,24 +111,30 @@ export default class SubscribeModal extends Component {
   }
 
   refreshSubscriptions = () => {
-    $.ajax({
-      url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
-      dataType: 'json',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: (response) => {
-        this.setState(initialState);
-        mapActions.toggleSubscribeModal({ visible: false });
-        mapActions.setUserSubscriptions(response.data);
-        mapActions.toggleSubscriptionsModal({ visible: true });
-      },
-      error: (error) => {
-        console.log('err', error);
+    fetch(
+      'https://production-api.globalforestwatch.org/v1/subscriptions',
+      {
+        credentials: 'include'
+      }
+    ).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
         this.setState({
           userSubscriptions: []
         });
       }
+
+      response.json().then(json => {
+        if (hasError) {
+          console.error(json);
+          return;
+        }
+        this.setState(initialState);
+        mapActions.toggleSubscribeModal({ visible: false });
+        mapActions.setUserSubscriptions(response.data);
+        mapActions.toggleSubscriptionsModal({ visible: true });
+      });
     });
   }
 
@@ -204,25 +210,51 @@ export default class SubscribeModal extends Component {
         }
       };
 
-      $.ajax({
-        url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
-        dataType: 'json',
-        method: 'POST',
-        data: jsonData,
-        xhrFields: {
-          withCredentials: true
-        },
-        success: () => {
+      fetch(
+        'https://production-api.globalforestwatch.org/v1/subscriptions',
+        {
+          method: 'POST',
+          body: JSON.stringify(jsonData),
+          credentials: 'include'
+        }
+      ).then(response => {
+        let hasError = false;
+        if (response.status !== 200) {
+          hasError = true;
+        }
+
+        response.json().then(json => {
+          if (hasError) {
+            console.error(json);
+            return;
+          }
           this.setState({
             currentStep: 0,
             warnings: false,
             success: true
           });
-        },
-        error: (error) => {
-          console.log('err', error);
-        }
+        });
       });
+
+      // $.ajax({
+      //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
+      //   dataType: 'json',
+      //   method: 'POST',
+      //   data: jsonData,
+      //   xhrFields: {
+      //     withCredentials: true
+      //   },
+      //   success: () => {
+      //     this.setState({
+      //       currentStep: 0,
+      //       warnings: false,
+      //       success: true
+      //     });
+      //   },
+      //   error: (error) => {
+      //     console.log('err', error);
+      //   }
+      // });
     } else {
       this.setState({
         warnings: true

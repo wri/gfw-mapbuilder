@@ -45,18 +45,21 @@ export default class Navigation extends Component {
 
   checkLoggedIn = () => {
     return new Promise((resolve, reject) => {
-      $.ajax({
-        url: 'https://production-api.globalforestwatch.org/auth/check-logged',
-        dataType: 'json',
-        xhrFields: {
-          withCredentials: true
-        },
-        success: (response) => {
-          resolve(response);
-        },
-        error: (error) => {
-          reject(error);
-        }
+      fetch(
+        'https://production-api.globalforestwatch.org/auth/check-logged',
+        {credentials: 'include'}
+      ).then(response => {
+          let hasError = false;
+          if (response.status !== 200) {
+            hasError = true;
+          }
+          response.json().then(json => {
+            if (hasError) {
+              reject(json);
+              return;
+            }
+            resolve(json);
+        });
       });
     });
   }
@@ -126,25 +129,22 @@ export default class Navigation extends Component {
 
   getSubscriptions = () => {
     if (this.state.userSubscriptions.length === 0) {
-      $.ajax({
-        url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
-        dataType: 'json',
-        xhrFields: {
-          withCredentials: true
-        },
-        success: (response) => {
-          this.setState({
-            userSubscriptions: response.data
-          });
-          mapActions.setUserSubscriptions(response.data);
-          mapActions.toggleSubscriptionsModal({ visible: true });
-        },
-        error: (error) => {
-          console.log('err', error);
+      fetch(
+        'https://production-api.globalforestwatch.org/v1/subscriptions',
+        {credentials: 'include'}
+      ).then(response => {
+        if (response.status !== 200) {
           this.setState({
             userSubscriptions: []
           });
         }
+        response.json().then(json => {
+          this.setState({
+            userSubscriptions: json.data
+          });
+          mapActions.setUserSubscriptions(json.data);
+          mapActions.toggleSubscriptionsModal({ visible: true });
+        });
       });
     } else {
       mapActions.toggleSubscriptionsModal({ visible: true });
@@ -152,18 +152,11 @@ export default class Navigation extends Component {
   }
 
   logOut = () => {
-    $.ajax({
-      url: 'https://production-api.globalforestwatch.org/auth/logout',
-      dataType: 'json',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: () => {
-        window.location.reload();
-      },
-      error: () => {
-        window.location.reload();
-      }
+    fetch(
+      'https://production-api.globalforestwatch.org/auth/logout',
+      {credentials: 'include'}
+    ).then(() => {
+      window.location.reload();
     });
   }
 
