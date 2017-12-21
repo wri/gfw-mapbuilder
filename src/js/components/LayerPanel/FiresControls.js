@@ -5,6 +5,9 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
+let startCount = 0;
+
+let endCount = 0;
 export default class FiresControls extends React.Component {
 
   static contextTypes = {
@@ -33,7 +36,7 @@ export default class FiresControls extends React.Component {
 
     // Anytime the map changes to a new map, update that here
     const {map} = this.context;
-    if (prevContext.map !== map) {
+    if (prevContext.map !== map && prevContext.map.loaded) {
       const signal = map.on('update-end', () => {
         signal.remove();
         LayersHelper.updateFiresLayerDefinitions(this.state.startDate, this.state.endDate, this.props.layer);
@@ -47,10 +50,6 @@ export default class FiresControls extends React.Component {
 
   handleEndChange = (endDate) => {
     this.setState({ endDate });
-  }
-
-  changeFiresTimeline = (startDate, endDate, layer) => {
-    LayersHelper.updateFiresLayerDefinitions(startDate, endDate, layer);
   }
 
   render () {

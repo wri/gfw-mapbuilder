@@ -30,6 +30,11 @@ export default class LossControls extends Component {
   }
 
   componentDidMount () {
+    const min = 1;
+    const max = 16;
+    for ( let i = min; i <= max; i++ ) {
+      lossOptions.push({ label: 2000 + i + '', value: i });
+    }
 
     // const url = 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear/ImageServer';
     // layerUtils.getLayerMetadata(url).then((results) => {
@@ -84,7 +89,7 @@ export default class LossControls extends Component {
           this.setState({sliderValue: [lossOptions[0].value, lossOptions[lossOptions.length - 1].value]})
         }
 
-        if (prevContext.map !== map) {
+        if (prevContext.map !== map && Object.keys(prevContext.map).length !== 0) {
           const signal = map.on('update-end', () => {
             signal.remove();
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);

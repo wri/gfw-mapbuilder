@@ -42,11 +42,24 @@ class MapActions {
   toggleSearchModal = (data) => data;
   toggleCanopyModal = (data) => data;
   toggleLayerModal = (data) => data;
+  toggleSubscriptionsModal = (data) => data;
+  toggleSubscribeModal = (data) => data;
+  toggleConfirmModal = (data) => data;
   toggleTOCVisible = (data) => data;
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
+
+  toggleLogin = (data) => data;
+
+  deleteSubscription (subscription) {
+    return subscription;
+  }
+
+  setUserSubscriptions (subscriptions) {
+    return subscriptions;
+  }
 
   updateImazonAlertSettings (type, value) {
     return { type, value };
@@ -134,6 +147,11 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
+
+      // create an array (addedLayersCopy) where the largest indexes are the webmap layers
+      uniqueLayers.reverse().forEach((l, i) => {
+        map.reorderLayer(l, i);
+      });
 
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);

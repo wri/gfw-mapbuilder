@@ -250,7 +250,7 @@
   line-height 12px
   font-size 11px
 
-.toggle-switch
+.toggle-switch, .toggle-switch-subscription
   transition all 0.3s ease
   background $lightGray
   display inline-block
@@ -260,7 +260,7 @@
   width 17px
   margin-top 5px
 
-.toggle-switch span
+.toggle-switch span, .toggle-switch-subscription span
   transition all 0.3s ease
   border-radius 50%
   position absolute
@@ -269,6 +269,16 @@
   width 6px
   left 2px
   top 2px
+
+.toggle-switch-subscription
+  float right
+  margin-left 10px
+  margin-top 4px
+
+.toggle-switch-subscription.active-subscription
+  background $goldTheme
+.toggle-switch-subscription.active-subscription span
+  left 9px
 
 .layer-info
   background-color $goldTheme

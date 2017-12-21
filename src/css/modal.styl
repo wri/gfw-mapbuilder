@@ -192,6 +192,22 @@
   margin 5px 10px
   width 280px
 
+.dataset-zoom
+  cursor pointer
+
+.dataset-list
+  display inline-block
+
+.step-title
+  font-size 24px
+  margin 0 auto
+  color #555555
+  text-align center
+
+.custom-checkbox
+  display inline-block
+  width 50%
+
 //- Layer modal specific styling
 .layer-modal-container .modal-content:not(.no-download)
   margin-bottom 60px
@@ -222,6 +238,9 @@
 .source-table
   border-top 1px solid $lightGrayBorder
 
+.name-row
+  font-weight bold
+
 .source-row
   border-bottom 1px solid $lightGrayBorder
   display table
@@ -229,6 +248,15 @@
   margin 0
   &:nth-child(even)
     background #F2F2F3
+  &.subscribe-row
+    padding 5px
+  .other-row
+    font-size 15px
+    &.date-created
+      font-style italic
+    p
+      margin-top 8px
+      margin-bottom 8px
 
 .source-row dt
 .source-row dd
@@ -248,6 +276,35 @@
   border-left 1px solid $lightGrayBorder
   padding-left 15px
   font-size 13px
+
+.source-row .btn-delete-subscription
+  -webkit-appearance none
+  border 1px solid transparent
+  background none
+  outline none
+  box-shadow none
+  text-align center
+  cursor pointer
+  text-decoration none
+  font-family "Fira GFW Sans", "Fira Sans"
+  font-feature-settings "liga" 0
+  display -webkit-box
+  display -ms-flexbox
+  display flex
+  -webkit-box-pack justify
+  -ms-flex-pack justify
+  justify-content space-between
+  -webkit-box-align center
+  -ms-flex-align center
+  align-items center
+  font-size 14px
+
+.delete-row, .map-row
+  float right
+  padding 10px 0
+
+.delete-row-label
+  padding-top 3px
 
 .source-summary
   margin-top 20px
@@ -365,3 +422,6 @@
     border 0
     font-size 16px
     margin-left 5px
+
+.delete-header
+  text-align center
