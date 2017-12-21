@@ -132,8 +132,6 @@ class MapActions {
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
-      const addedLayerIds = addedLayers.map(l => l.layer.id);
-      const addedLayersCopy = addedLayers.map(l => l.layer);
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
