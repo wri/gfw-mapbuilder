@@ -151,16 +151,8 @@ class MapActions {
       //- layers wont be sorted, they always show on top
 
       // create an array (addedLayersCopy) where the largest indexes are the webmap layers
-      uniqueLayers.forEach(l => {
-        if (addedLayerIds.indexOf(l.id) === -1) {
-          addedLayersCopy.push(l);
-        }
-      });
-      // then reorder the webmap layers so that they draw on top of every other layer
-      addedLayersCopy.forEach((l, i) => {
-        if (addedLayerIds.indexOf(l.id) === -1) {
-          map.reorderLayer(l, i);
-        }
+      uniqueLayers.reverse().forEach((l, i) => {
+        map.reorderLayer(l, i);
       });
 
       if (map.getLayer('labels')) {
