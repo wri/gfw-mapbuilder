@@ -1,10 +1,7 @@
 extends jade/layout.pug
 
 block append styles
-  style
-    :stylus
-      @require 'css/report'
-      
+  link(rel='stylesheet', href='%REPORT_CSS%')
   link(rel='stylesheet', href='https://js.arcgis.com/%ESRI_VERSION%/esri/css/esri.css')
   link(rel='stylesheet', href='https://js.arcgis.com/%ESRI_VERSION%/dijit/themes/tundra/tundra.css')
 

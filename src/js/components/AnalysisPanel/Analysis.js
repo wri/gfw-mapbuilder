@@ -175,9 +175,9 @@ export default class Analysis extends Component {
     let labels, layerConf, colors;
     switch (type) {
       case analysisKeys.VIIRS_FIRES:
-        return <FiresBadge results={results} count={results.fireCount} from={viirsFrom.toLocaleDateString()} to={viirsTo.toLocaleDateString()} />;
+        return <FiresBadge results={results} count={results.fireCount} from={viirsFrom} to={viirsTo} />;
       case analysisKeys.MODIS_FIRES:
-        return <FiresBadge count={results.fireCount} from={modisFrom.toLocaleDateString()} to={modisTo.toLocaleDateString()} />;
+        return <FiresBadge count={results.fireCount} from={modisFrom} to={modisTo} />;
       case analysisKeys.TC_LOSS_GAIN:
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:

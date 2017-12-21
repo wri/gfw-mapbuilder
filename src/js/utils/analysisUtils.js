@@ -340,8 +340,9 @@ export default {
 
     const promise = new Deferred();
     const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
-    const startDate = terraIFrom.toISOString().split('T')[0];
-    const endDate = terraITo.toISOString().split('T')[0];
+    console.log(terraIFrom);
+    const startDate = terraIFrom;
+    const endDate = terraITo;
 
     const terraIData = {
       geostore: geostoreId,

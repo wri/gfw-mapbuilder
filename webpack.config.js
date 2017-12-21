@@ -12,15 +12,12 @@ module.exports = {
       path.join(__dirname, 'src/css/app.styl'),
       path.join(__dirname, 'src/css/critical.styl')
     ],
-    report: path.join(__dirname, 'src/js/reportMain.js')
+    report: [
+      path.join(__dirname, 'src/js/reportMain.js'),
+      path.join(__dirname, 'src/css/report.styl')
+    ]
     // lib: path.join(__dirname, 'src/js/libraryMain.js')
   },
-  // entry: [
-  //   path.join(__dirname, 'src/js/main.js'),
-  //   // path.join(__dirname, 'src/js/reportMain.js'),
-  //   path.join(__dirname, 'src/css/app.styl'),
-  //   path.join(__dirname, 'src/css/critical.styl')
-  // ],
   output: {
     filename: 'js/[name].js',
     path: path.join(__dirname, 'webpackBuild'),
@@ -130,6 +127,7 @@ module.exports = {
       META_VERSION: JSON.stringify(packageJSON.version),
       APP_CSS: 'css/app.css',
       CRITICAL_CSS: 'css/critical.css',
+      REPORT_CSS: 'css/report.css',
       JQUERY: 'jquery/dist/jquery.min.js',
       APP_JS: 'js/main',
       REPORT_JS: 'js/report',
