@@ -30,12 +30,12 @@ export default class LossControls extends Component {
     }
 
     //- Update the defaults to be the last year
-    layerActions.updateLossTimeline({
+    layerActions.updateLossTimeline.defer({
       fromSelectedIndex: min - 1, //0,
       toSelectedIndex: max - 1 //15
     });
     //- Set the options in the store so others can use it
-    layerActions.setLossOptions(lossOptions);
+    layerActions.setLossOptions.defer(lossOptions);
 
     let base = window._app.base ? window._app.base + '/' : '';
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
@@ -60,7 +60,7 @@ export default class LossControls extends Component {
 
         this.setState({
           start: lossOptions[this.props.lossFromSelectIndex].label,
-          end: lossOptions[this.props.lossToSelectIndex].label,
+          end: lossOptions[this.props.lossToSelectIndex].label
         });
       }
     });
@@ -203,7 +203,7 @@ export default class LossControls extends Component {
   sliderChanged = (data) => {
     const { map } = this.context;
     this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), data.from_value, data.to_value);
-    layerActions.updateLossTimeline({
+    layerActions.updateLossTimeline.defer({
       fromSelectedIndex: this.lossSlider.result.from,
       toSelectedIndex: this.lossSlider.result.to
     });
