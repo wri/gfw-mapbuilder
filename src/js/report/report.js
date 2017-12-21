@@ -651,6 +651,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   if (settings.landCover && layerConf) {
     performAnalysis({
       type: analysisKeys.LC_LOSS,
+      geostoreId: feature.geostoreId,
       geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
@@ -983,8 +984,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       geostoreId: feature.geostoreId,
       language: lang,
-      terraIFrom: moment(new Date(terraIFrom)),
-      terraITo: moment(new Date(terraITo))
+      terraIFrom: terraIFrom,
+      terraITo: terraITo
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;

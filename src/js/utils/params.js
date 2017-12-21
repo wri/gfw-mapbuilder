@@ -27,6 +27,9 @@ export function toQuerystring(json, noEncode) {
   const errorMsg = 'You should not be converting nested objects as they wont encode properly. Try making it a string first.';
   const result = [];
   for (const key in json) {
+    if (json[key] && json[key].constructor === Date) {
+      json[key] = json[key].toLocaleDateString();
+    }
     if (Object.prototype.toString.call(json[key]) === '[object Object]') {
       throw new Error(errorMsg);
     }
