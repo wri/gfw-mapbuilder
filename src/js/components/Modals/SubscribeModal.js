@@ -132,7 +132,7 @@ export default class SubscribeModal extends Component {
         }
         this.setState(initialState);
         mapActions.toggleSubscribeModal({ visible: false });
-        mapActions.setUserSubscriptions(response.data);
+        mapActions.setUserSubscriptions(json.data);
         mapActions.toggleSubscriptionsModal({ visible: true });
       });
     });
@@ -214,8 +214,11 @@ export default class SubscribeModal extends Component {
         'https://production-api.globalforestwatch.org/v1/subscriptions',
         {
           method: 'POST',
-          body: JSON.stringify(jsonData),
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
         }
       ).then(response => {
         let hasError = false;
@@ -235,26 +238,6 @@ export default class SubscribeModal extends Component {
           });
         });
       });
-
-      // $.ajax({
-      //   url: 'https://production-api.globalforestwatch.org/v1/subscriptions',
-      //   dataType: 'json',
-      //   method: 'POST',
-      //   data: jsonData,
-      //   xhrFields: {
-      //     withCredentials: true
-      //   },
-      //   success: () => {
-      //     this.setState({
-      //       currentStep: 0,
-      //       warnings: false,
-      //       success: true
-      //     });
-      //   },
-      //   error: (error) => {
-      //     console.log('err', error);
-      //   }
-      // });
     } else {
       this.setState({
         warnings: true
