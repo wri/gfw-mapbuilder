@@ -19,10 +19,9 @@ export default {
   mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
   mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   narrative: '',
-  includeSubscribeButton: false,
   hideHeader: false,
   hideFooter: false,
-  includeMyGFWLogin: false,
+  includeMyGFWLogin: true,
   navLinksInNewTab: false,
   //- Language Settings
   language: 'en',
@@ -137,7 +136,7 @@ export default {
         url: 'http://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
         // legendLayer: 7,
         minYear: 1,
-        maxYear: 15,
+        maxYear: 16,
         // minDateValue: 15000,
         // maxDateValue: 16365,
         // confidence: [0, 1],
@@ -444,7 +443,7 @@ export default {
         rasterId: '$568',
         bounds: [1, 16],
         classes: {
-          en: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
           fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
           es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
           pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
@@ -452,7 +451,7 @@ export default {
           zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
           ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
         },
-        colors: ['#825D26', '#D1A969', '#DED6B4', '#157562', '#CC7A29', '#6DAD96', '#968635', '#C2B32F', '#6F7A53', '#96A36F', '#CDDB93', '#7DBDE8', '#0D63A1', '#F41E65', '#FFFFFF', '#DBDBDB'],
+        colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
         label: {
           en: 'Land Cover',
           fr: 'Couverture des sols',

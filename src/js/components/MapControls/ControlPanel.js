@@ -2,6 +2,7 @@ import {prepareStateForShare} from 'utils/shareUtils';
 import modalActions from 'actions/ModalActions';
 import mapActions from 'actions/MapActions';
 import {toQuerystring} from 'utils/params';
+import basemapUtils from 'utils/basemapUtils';
 import text from 'js/languages';
 import React, {
   Component,
@@ -30,12 +31,40 @@ export default class ControlPanel extends Component {
     mapActions.toggleSearchModal({ visible: true });
   };
 
+  formatDate = d => {
+    return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear();
+  }
+
   share = () => {
     const {map, language, settings} = this.context;
+    const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate,
+      terraIStartDate, terraIEndDate, lossToSelectIndex, lossFromSelectIndex,
+      imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear,
+      viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
+    } = this.props;
+
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
       language: language,
-      settings: settings
+      settings: settings,
+      basemap: basemapUtils.getBasemap(),
+      activeLayers: activeLayers,
+      activeTab: activeTab,
+      gladStartDate: this.formatDate(gladStartDate),
+      gladEndDate: this.formatDate(gladEndDate),
+      terraIStartDate: this.formatDate(terraIStartDate),
+      terraIEndDate: this.formatDate(terraIEndDate),
+      lossToSelectIndex: lossToSelectIndex,
+      lossFromSelectIndex: lossFromSelectIndex,
+      imazonStartMonth: imazonStartMonth,
+      imazonEndMonth: imazonEndMonth,
+      imazonStartYear: imazonStartYear,
+      imazonEndYear: imazonEndYear,
+      viirsStartDate: this.formatDate(viirsStartDate),
+      viirsEndDate: this.formatDate(viirsEndDate),
+      modisStartDate: this.formatDate(modisStartDate),
+      modisEndDate: this.formatDate(modisEndDate),
+      canopyDensity: canopyDensity
     })));
   };
 

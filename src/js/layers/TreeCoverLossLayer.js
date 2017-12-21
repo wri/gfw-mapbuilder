@@ -33,12 +33,12 @@ export default declare('TreeCoverLossLayer', [TileCanvasLayer], {
 
   setUrl: function (url) {
     this.options.url = url;
-    // this.refresh();
+    this.show();
   },
 
   // Filter Data Method
-  filter: function(data) {
-    const z = brApp.map.getZoom();
+  filter: function(data, zoom) {
+    const z = zoom;
 
     for (let i = 0; i < data.length; i += 4) {
       // Decode the rgba/pixel so I can filter on date ranges
