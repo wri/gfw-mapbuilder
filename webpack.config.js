@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const packageJSON = require('./package.json');
 
@@ -21,8 +22,7 @@ module.exports = {
   output: {
     filename: 'js/[name].js',
     path: path.join(__dirname, 'webpackBuild'),
-    libraryTarget: 'amd',
-    devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
+    libraryTarget: 'amd'
   },
   resolve: {
     alias: {
@@ -40,7 +40,6 @@ module.exports = {
       images: path.join(__dirname, 'src/css/images')
     }
   },
-  devtool: 'cheap-eval-source-map',
   module: {
     rules: [
       {
@@ -134,6 +133,7 @@ module.exports = {
       DEFAULT_TITLE: 'GFW Mapbuilder',
       ESRI_VERSION: '3.20'
     }),
+    new UglifyJSPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.pug'),
       inject: false
