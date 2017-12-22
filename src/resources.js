@@ -391,7 +391,7 @@ export default {
           }
         }, {
           id: 'wri_mono',
-          thumbnailUrl: '//landmark.blueraster.io/map-app/1.1.13/css/images/wri_mono.png',
+          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
           title: {
             en: 'WRI Mono',
             fr: 'WRI Mono',
@@ -403,7 +403,7 @@ export default {
           }
         }, {
           id: 'wri_contextual',
-          thumbnailUrl: '//landmark.blueraster.io/map-app/1.1.13/css/images/wri_contextual.png',
+          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
           title: {
             en: 'WRI Contextual',
             fr: 'WRI Contextual',
