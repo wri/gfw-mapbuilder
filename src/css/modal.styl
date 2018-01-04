@@ -35,7 +35,7 @@
   position absolute
   height 40px
   width 40px
-  right 0
+  right 5px
   top 0
   & svg
     transform translate(-50%, -50%)
@@ -54,8 +54,8 @@
   text-align center
   font-size 21px
 
-.modal-content
-  padding 20px 30px 20px 20px
+.mapbuilder-modal-content
+  padding 20px
   overflow-x hidden
   max-height 450px
   overflow-y auto
@@ -73,7 +73,7 @@
   width 320px
   & .analysis-instructions__separator
     display none
-  & .modal-content
+  & .mapbuilder-modal-content
     max-height 100%
 
 @media (min-width: $mobileBreak)
@@ -84,7 +84,7 @@
 
 //- Share Modal
 #share-modal
-  & .modal-content
+  & .mapbuilder-modal-content
     width 300px
   & .share-instructions
     padding-bottom 10px
@@ -127,26 +127,27 @@
   height 40px
   & input
     border 1px solid $lightGrayBorder
+    display inline-block !important
     text-align center
     font-size 13px
     height 100%
-    width 70%
+    width 70% !important
+    border-radius 0 !important
   & button
     text-transform uppercase
     -webkit-appearance none
     text-align center
-    line-height 38px
     border-radius 0
     font-weight 500
     font-size 14px
     outline none
-    height 100%
+    height 34px
     width 30%
     padding 0
 
 //- Canopy Modal specific styling
 .canopy-modal-container
-  & .modal-content
+  & .mapbuilder-modal-content
     width 340px
   & .irs-line-left
   & .irs-line-right
@@ -171,7 +172,7 @@
 
 //- Landing Modal specific styling
 .landing-modal-container
-  & .modal-content
+  & .mapbuilder-modal-content
     width 400px
   & .landing-modal-header
     height: 40px
@@ -183,6 +184,7 @@
   & .close-icon
     background-color #055d7d
     fill #2fa3d9
+    right 0
   & a
     color #2fa3d9
   & .landing-modal-checkbox-container
@@ -212,10 +214,10 @@
   width 280px
 
 //- Layer modal specific styling
-.layer-modal-container .modal-content:not(.no-download)
+.layer-modal-container .mapbuilder-modal-content:not(.no-download)
   margin-bottom 60px
 
-.layer-modal-content
+.layer-mapbuilder-modal-content
   width 500px
   & p
     line-height 1.5
@@ -287,6 +289,8 @@
 
 .source-learn-more
   margin 20px 0 0
+  justify-content center
+  align-items center
 
 .source-learn-more-link
   text-transform uppercase
@@ -301,10 +305,13 @@
   background-color white
   position absolute
   display flex
+  justify-content center
+  align-items center
   height 60px
   width 100%
   bottom 0
   left 0
+  padding 0 20px
 
 .source-download
   text-decoration none
@@ -335,52 +342,56 @@
 //- Search Modal
 .search-widget-label
   padding 10px 0
-
-.deg-box
-  display inline-block
-  -webkit-justify-content space-between
-  justify-content space-between
+.deg-search-container
+  height 95px
   align-items center
-  -webkit-align-items center
-  // width 50%
+  .deg-box
+    display inline-block
+    -webkit-justify-content space-between
+    justify-content space-between
+    align-items center
+    -webkit-align-items center
+    // width 50%
 
-.deg-box span
-  width auto
+  .deg-box span
+    width auto
 
-.deg-box input.deg-input
-  max-width 90px
-  text-align left
-  margin 13px 0 9px 5px
-  padding 0
-  text-align left
-  outline 0
-  border none
-  border-bottom 1px solid #555555
-  font-size 18px
-  border-radius 0
-  font-family inherit
+  .deg-box input.deg-input
+    max-width 90px
+    text-align left
+    margin 13px 0 9px 5px
+    padding 0
+    text-align left
+    outline 0
+    border none
+    border-bottom 1px solid #555555
+    font-size 18px
+    border-radius 0
+    font-family inherit
 
-.deg-box .gfw-btn
-  background #e5e5df
-  position relative
-  display inline-block
-  z-index 1
-  padding 0px 12px
-  border-radius 40px
-  font-size 14px
-  text-decoration none
-  height 36px
-  line-height 36px
-  text-align center
-  font-weight 500
-  white-space nowrap
-  -webkit-transition background 0.15s linear
-  -moz-transition background 0.15s linear
-  -o-transition background 0.15s linear
-  transition background 0.15s linear
+  .deg-box .gfw-btn
+    background #e5e5df
+    position relative
+    display inline-block
+    z-index 1
+    padding 0px 12px
+    border-radius 40px
+    font-size 14px
+    text-decoration none
+    height 36px
+    line-height 36px
+    text-align center
+    font-weight 500
+    white-space nowrap
+    -webkit-transition background 0.15s linear
+    -moz-transition background 0.15s linear
+    -o-transition background 0.15s linear
+    transition background 0.15s linear
 
-.search-submit-button
-  &.fa-button
-    border 0
-    font-size 16px
-    margin-left 5px
+  .search-submit-button
+    &.fa-button
+      border 0
+      font-size 16px
+      margin-left 5px
+      position relative
+      top 12px

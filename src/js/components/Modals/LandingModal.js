@@ -37,7 +37,7 @@ export default class LandingModal extends React.Component {
 
   render() {
     const {theme} = this.props;
-    const contentClass = `modal-content custom-scroll ${theme ? theme : ''}`;
+    const contentClass = `mapbuilder-modal-content custom-scroll ${theme ? theme : ''}`;
 
     return (
       <div className='modal-container'>

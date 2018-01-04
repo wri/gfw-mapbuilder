@@ -12,6 +12,7 @@ import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import CarbonChart from 'components/AnalysisPanel/CarbonChart';
 import CommoditiesChart from 'components/AnalysisPanel/CommoditiesChart';
+import RedirectChart from 'components/AnalysisPanel/RedirectChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -31,13 +32,13 @@ import React, {
   PropTypes
 } from 'react';
 
-const getDefaultState = function () {
-  return {
-    error: false,
-    isLoading: true,
-    results: undefined
-  };
-};
+// const getDefaultState = function () {
+//   return {
+//     error: false,
+//     isLoading: false,
+//     results: undefined
+//   };
+// };
 
 export default class Analysis extends Component {
 
@@ -46,61 +47,65 @@ export default class Analysis extends Component {
     settings: PropTypes.object.isRequired
   };
 
-  state = getDefaultState();
-
-  componentDidMount() {
-    const {settings, language} = this.context;
-    const {
-      selectedFeature,
-      activeTab,
-      activeAnalysisType,
-      canopyDensity,
-      activeSlopeClass,
-      lossFromSelectIndex,
-      lossToSelectIndex,
-      gladStartDate,
-      gladEndDate,
-      terraIStartDate,
-      terraIEndDate,
-      viirsFiresSelectIndex,
-      modisFiresSelectIndex,
-      viirsStartDate,
-      viirsEndDate,
-      modisStartDate,
-      modisEndDate
-    } = this.props;
-
-    if (selectedFeature && activeAnalysisType === 'TC_LOSS_GAIN' && activeTab === tabKeys.ANALYSIS) {
-      request.getRawGeometry(selectedFeature).then(geometry => {
-
-        performAnalysis({
-          type: activeAnalysisType,
-          geometry: geometry,
-          geostoreId: selectedFeature.attributes.geostoreId,
-          canopyDensity: canopyDensity,
-          activeSlopeClass: activeSlopeClass,
-          settings: settings,
-          language: language,
-          tcLossFrom: lossFromSelectIndex,
-          tcLossTo: lossToSelectIndex,
-          gladFrom: gladStartDate,
-          gladTo: gladEndDate,
-          terraIFrom: terraIStartDate,
-          terraITo: terraIEndDate,
-          viirsFiresSelectIndex: viirsFiresSelectIndex,
-          modisFiresSelectIndex: modisFiresSelectIndex,
-          viirsFrom: viirsStartDate,
-          viirsTo: viirsEndDate,
-          modisFrom: modisStartDate,
-          modisTo: modisEndDate
-        }).then((results) => {
-          this.setState({ results: results, isLoading: false });
-        }, () => {
-          this.setState({ isLoading: false, error: true });
-        });
-      });
-    }
+  state = {
+    error: false,
+    isLoading: false
   }
+
+  // componentDidMount() {
+  //   const {settings, language} = this.context;
+  //   const {
+  //     selectedFeature,
+  //     activeTab,
+  //     activeAnalysisType,
+  //     canopyDensity,
+  //     activeSlopeClass,
+  //     lossFromSelectIndex,
+  //     lossToSelectIndex,
+  //     gladStartDate,
+  //     gladEndDate,
+  //     terraIStartDate,
+  //     terraIEndDate,
+  //     viirsFiresSelectIndex,
+  //     modisFiresSelectIndex,
+  //     viirsStartDate,
+  //     viirsEndDate,
+  //     modisStartDate,
+  //     modisEndDate
+  //   } = this.props;
+
+  //   if (selectedFeature && activeAnalysisType !== 'default' && activeTab === tabKeys.ANALYSIS) {
+  //     this.setState({isLoading: true});
+  //     request.getRawGeometry(selectedFeature).then(geometry => {
+
+  //       performAnalysis({
+  //         type: activeAnalysisType,
+  //         geometry: geometry,
+  //         geostoreId: selectedFeature.attributes.geostoreId,
+  //         canopyDensity: canopyDensity,
+  //         activeSlopeClass: activeSlopeClass,
+  //         settings: settings,
+  //         language: language,
+  //         tcLossFrom: lossFromSelectIndex,
+  //         tcLossTo: lossToSelectIndex,
+  //         gladFrom: gladStartDate,
+  //         gladTo: gladEndDate,
+  //         terraIFrom: terraIStartDate,
+  //         terraITo: terraIEndDate,
+  //         viirsFiresSelectIndex: viirsFiresSelectIndex,
+  //         modisFiresSelectIndex: modisFiresSelectIndex,
+  //         viirsFrom: viirsStartDate,
+  //         viirsTo: viirsEndDate,
+  //         modisFrom: modisStartDate,
+  //         modisTo: modisEndDate
+  //       }).then((results) => {
+  //         this.setState({ results: results, isLoading: false });
+  //       }, () => {
+  //         this.setState({ isLoading: false, error: true });
+  //       });
+  //     });
+  //   }
+  // }
 
   //- Test this as it will need to be tweaked, ideally when we receive new props,
   //- We want to reset state to default before our render pass
@@ -134,9 +139,10 @@ export default class Analysis extends Component {
       activeSlopeClass !== this.props.activeSlopeClass
       ) &&
       activeTab === tabKeys.ANALYSIS &&
-      activeAnalysisType !== ''
+      activeAnalysisType !== '' &&
+      activeAnalysisType !== 'default'
     ) {
-      this.setState(getDefaultState());
+      this.setState({isLoading: true, results: null, isError: false});
       const { settings, language } = this.context;
       request.getRawGeometry(selectedFeature).then(geometry => {
         performAnalysis({
@@ -173,6 +179,7 @@ export default class Analysis extends Component {
     const layerGroups = settings.layerPanel;
     const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
     const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
+    const lcdLayers = layerGroups.GROUP_LCD ? layerGroups.GROUP_LCD.layers : [];
     let labels, layerConf, colors;
     switch (type) {
       case analysisKeys.VIIRS_FIRES:
@@ -182,7 +189,7 @@ export default class Analysis extends Component {
       case analysisKeys.TC_LOSS_GAIN:
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
-        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+        layerConf = utils.getObject(lcdLayers, 'id', layerKeys.LAND_COVER);
         return <CompositionPieChart
           results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
@@ -214,9 +221,11 @@ export default class Analysis extends Component {
       case analysisKeys.CONCESSIONS:
         return <CommoditiesChart
           results={results}
-          oilPalm={results.oilPalm}
-          mining={results.mining}
-          managedForests={results.managedForests}
+        />;
+      case analysisKeys.INTERSECTION_LANDS:
+        return <RedirectChart
+        payload={results}
+        redirectUrl='/map-app/analysis/analysis.html'
         />;
       case analysisKeys.BIO_LOSS:
         return <BiomassChart
@@ -227,7 +236,7 @@ export default class Analysis extends Component {
       case analysisKeys.LC_LOSS:
       case analysisKeys.INTACT_LOSS:
       case analysisKeys.MANGROVE_LOSS:
-        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+        layerConf = utils.getObject(lcdLayers, 'id', layerKeys.LAND_COVER);
         labels = (function () {
           switch (type) {
             case analysisKeys.LC_LOSS:
@@ -267,6 +276,8 @@ export default class Analysis extends Component {
         return <TimeSeriesChart data={results} name={text[language].ANALYSIS_GLAD_ALERT_NAME} />;
       case analysisKeys.TERRA_I_ALERTS:
         return <TimeSeriesChart data={results} name={text[language].ANALYSIS_TERRA_I_ALERT_NAME} />;
+      case 'default':
+        return null;
       default:
       //- This should only be the restoration analysis, since its value is a plain rasterId
         return <RestorationCharts results={results} />;

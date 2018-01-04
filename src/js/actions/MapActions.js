@@ -23,10 +23,8 @@ class MapActions {
     };
   }
 
-  setAnalysisType (evt) {
-    return {
-      type: evt.target.value
-    };
+  setAnalysisType (value) {
+    return value;
   }
 
   centerAndZoomLatLng (lat, lng) {
@@ -136,7 +134,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_FORMAL_CLAIM),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_FormalClaimFeature1',
@@ -144,7 +143,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_FORMAL_CLAIM),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_CustomaryFeature0',
@@ -152,7 +152,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_CUSTOMARY),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_CustomaryFeature1',
@@ -160,7 +161,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_CUSTOMARY),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_DocumentedFeature0',
@@ -168,7 +170,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_DocumentedFeature1',
@@ -176,7 +179,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_NotDocumentedFeature0',
@@ -184,7 +188,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_NOT_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'indigenous_NotDocumentedFeature1',
@@ -192,7 +197,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.INDIGENOUS_NOT_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_FormalClaimFeature0',
@@ -200,7 +206,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_FORMAL_CLAIM),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_FormalClaimFeature1',
@@ -208,7 +215,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_FORMAL_CLAIM),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_CustomaryFeature0',
@@ -216,7 +224,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_CUSTOMARY),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_CustomaryFeature1',
@@ -224,7 +233,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_CUSTOMARY),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_DocumentedFeature0',
@@ -232,7 +242,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_DocumentedFeature1',
@@ -240,7 +251,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_NotDocumentedFeature0',
@@ -248,7 +260,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_NOT_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       },
       {
         id: 'community_NotDocumentedFeature1',
@@ -256,7 +269,8 @@ class MapActions {
         minScale: 4600000,
         maxScale: 0,
         visible: getVisibleLayers(landmarkLayers.COMMUNITY_NOT_DOCUMENTED),
-        type: 'feature'
+        type: 'feature',
+        drawingOrder: 3
       }
     ];
 
@@ -288,10 +302,19 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
-      uniqueLayers.forEach((layer) => {
-        if (map.getLayer(layer.id) && layer.order) {
-          map.reorderLayer(map.getLayer(layer.id), layer.order);
+      // uniqueLayers.forEach((layer) => {
+      //   if (map.getLayer(layer.id) && layer.order) {
+      //     map.reorderLayer(map.getLayer(layer.id), layer.order);
+      //   }
+      // });
+      const reducedLayers = uniqueLayers.reduce((prevArray, currentItem) => {
+        if (currentItem.hasOwnProperty('nestedLayers')) {
+          return prevArray.concat(...currentItem.nestedLayers);
         }
+        return prevArray.concat(currentItem);
+      }, []);
+      reducedLayers.sort((a, b) => a.drawingOrder - b.drawingOrder).forEach((l, idx) => {
+        map.reorderLayer(map.getLayer(l.id), idx + 1);
       });
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);

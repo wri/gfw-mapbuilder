@@ -1,6 +1,8 @@
 import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import geojsonUtil from 'utils/arcgis-to-geojson';
 import QueryTask from 'esri/tasks/QueryTask';
+import IdentifyTask from 'esri/tasks/IdentifyTask';
+import IdentifyParameters from 'esri/tasks/IdentifyParameters';
 import {analysisConfig} from 'js/config';
 import analysisKeys from 'constants/AnalysisConstants';
 import esriRequest from 'esri/request';
@@ -443,6 +445,70 @@ export default {
     });
 
     return deferred;
+  },
+
+  getCommoditiesAnalysis: (geometry) => {
+    const promise = new Deferred();
+
+    const identifyTask = new IdentifyTask('http://gis.wri.org/server/rest/services/LandMark/comm_analysis/MapServer');
+    const params = new IdentifyParameters();
+
+    params.tolerance = 3;
+    params.returnGeometry = false;
+    params.layerIds = [0, 1];
+    params.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
+    params.mapExtent = brApp.map.extent;
+    params.width = brApp.map.width;
+    params.height = brApp.map.height;
+    params.geometry = geometry;
+
+    function getTextContent(graphic) {
+      const gisArea = graphic.feature.attributes.Area_GIS && graphic.feature.attributes.Area_GIS !== 'Null' ? parseFloat(graphic.feature.attributes.Area_GIS).toFixed(2) : '0.00';
+      if (graphic.feature.attributes.Identity === 'Indigenous (self-identified)') {
+          graphic.feature.attributes.Identity = 'Indigenous';
+      }
+      if (graphic.feature.attributes.Identity === 'Non-indigenous (self-identified)') {
+          graphic.feature.attributes.Identity = 'Community';
+      }
+      if (graphic.feature.attributes.Form_Rec === 'Officially recognized (by law or decree)') {
+          graphic.feature.attributes.Form_Rec = 'Officially recognized';
+      }
+
+      const fieldValues = [graphic.feature.attributes.Country, graphic.feature.attributes.Name, graphic.feature.attributes.Identity, graphic.feature.attributes.Form_Rec, graphic.feature.attributes.Doc_Status, gisArea];
+      brApp.csv += fieldValues.join(',') + '\n';
+    }
+
+    identifyTask.execute(params, features => {
+
+      if (features.length > 0) {
+        const fields = ['Country', 'Name', 'Identity', 'Recognition Status', 'Documentation Status', 'GIS Area'];
+
+        brApp.csv = fields.join(',') + '\n';
+
+        for (let i = 0; i < features.length; i++) {
+          getTextContent(features[i]);
+        }
+
+        const payload = {
+          features: features,
+          csv: brApp.csv
+        };
+        console.log('payload', payload);
+        promise.resolve(payload);
+
+      } else {
+        promise.resolve({
+          features: [],
+          csv: []
+        });
+      }
+    }, error => {
+      console.log('err', error);
+      promise.resolve(false);
+
+    });
+
+    return promise;
   },
 
   getCommodities: (url, concessionIds, geometry) => {

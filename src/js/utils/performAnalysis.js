@@ -39,8 +39,8 @@ export default function performAnalysis (options) {
   const restorationUrl = settings && settings.restorationImageServer;
   const concessionUrl = settings && settings.concessionsMapServer;
   const concessionIds = settings && settings.concessionIds;
-  const landCoverConfig = settings && settings.layerPanel && settings.layerPanel.GROUP_LC ?
-    utils.getObject(settings.layerPanel.GROUP_LC.layers, 'id', layerKeys.LAND_COVER) : {};
+  const landCoverConfig = settings && settings.layerPanel && settings.layerPanel.GROUP_LCD ?
+    utils.getObject(settings.layerPanel.GROUP_LCD.layers, 'id', layerKeys.LAND_COVER) : {};
   const config = analysisConfig[type];
   const promise = new Deferred();
 
@@ -106,6 +106,9 @@ export default function performAnalysis (options) {
     case analysisKeys.CONCESSIONS:
       analysisUtils.getCommodities(concessionUrl, concessionIds, geometry).then(promise.resolve, promise.reject);
     break;
+    case analysisKeys.INTERSECTION_LANDS:
+      analysisUtils.getCommoditiesAnalysis(geometry).then(promise.resolve, promise.reject);
+    break;
     case analysisKeys.INTACT_LOSS:
       analysisUtils.getCrossedWithLoss(config, analysisConfig[analysisKeys.TC_LOSS], geometry, {
         canopyDensity: canopyDensity,
@@ -139,6 +142,8 @@ export default function performAnalysis (options) {
     case analysisKeys.TERRA_I_ALERTS:
       analysisUtils.getTerraIAlerts(config, geostoreId, terraIFrom, terraITo, language).then(promise.resolve);
     break;
+    case 'default':
+      return null;
     default:
       //- This should only be the restoration analysis, since analysisType is a rasterId
       analysisUtils.getRestoration(restorationUrl, type, geometry, settings).then(promise.resolve);

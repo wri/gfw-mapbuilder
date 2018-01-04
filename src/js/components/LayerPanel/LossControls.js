@@ -82,7 +82,7 @@ export default class LossControls extends Component {
           if (prevProps.canopyDensity !== canopyDensity) {
             this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
           }
-          if (resetSlider) {
+          if (resetSlider && this.lossSlider) {
             this.lossSlider.update({
               from: 0,
               to: lossOptions.length - 1

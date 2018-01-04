@@ -26,7 +26,7 @@ export default class BasicModal extends React.Component {
     return (
       <ModalWrapper>
         <div className='modal-title'>{this.state.title}</div>
-        <div className='modal-content' dangerouslySetInnerHTML={{ __html: this.state.text }}/>
+        <div className='mapbuilder-modal-content' dangerouslySetInnerHTML={{ __html: this.state.text }}/>
       </ModalWrapper>
     );
   }

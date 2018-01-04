@@ -26,7 +26,7 @@ export default class ModalWrapper extends React.Component {
 
   render() {
     const {theme, children} = this.props;
-    const contentClass = `modal-content custom-scroll ${theme ? theme : ''}`;
+    const contentClass = `mapbuilder-modal-content ${theme ? theme : ''}`;
 
     return (
       <div className='modal-container'>

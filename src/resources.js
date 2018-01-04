@@ -29,7 +29,7 @@ export default {
   useAlternativeLanguage: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
-  alternativeLanguageTitle: 'GFW Mapbuilder',
+  alternativeLanguageTitle: 'LandMark',
   alternativeLanguageSubtitle: 'Make maps that matter',
   alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   alternativeNarrative: '',
@@ -44,6 +44,7 @@ export default {
   modisFires: false,
   intactForests: true,
   aboveGroundBiomass: true,
+  carbonStoredInTrees: true,
   landCover: true,
   mangroves: false,
   sadAlerts: false,
@@ -52,7 +53,7 @@ export default {
   webmapMenuName: 'Land Use',
   //- Restoration Module settings
   restorationModule: false,
-  restorationImageServer: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module3/ImageServer', //'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer'
+  restorationImageServer: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module3/ImageServer', //'https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer'
   concessionsMapServer: 'https://gis-gfw.wri.org/arcgis/rest/services/land_use/MapServer',
   concessionIds: {
     oilPalm: 1,
@@ -139,7 +140,8 @@ export default {
           ka: 'მიწის საფარის დინამიკა'
         },
         layers: [{
-          order: 3,
+          order: 1,
+          drawingOrder: 4,
           id: 'TREE_COVER_LOSS',
           type: 'loss', //image
           // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
@@ -175,7 +177,8 @@ export default {
             ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
         }, {
-          order: 4,
+          order: 2,
+          drawingOrder: 4,
           id: 'TREE_COVER_GAIN',
           type: 'gain', //'image',
           // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
@@ -202,7 +205,8 @@ export default {
           }
         },
         {
-          order: 1,
+          order: 4,
+          drawingOrder: 2,
           id: 'LAND_COVER',
           type: 'webtiled',
           url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
@@ -230,7 +234,8 @@ export default {
             ka: 'მიწის საფარი'
           }
         }, {
-          order: 2,
+          order: 3,
+          drawingOrder: 2,
           id: 'TREE_COVER',
           type: 'image',
           url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
@@ -274,6 +279,7 @@ export default {
         },
         layers: [{
           order: 1,
+          drawingOrder: 2,
           id: 'GLOB_MANGROVE',
           type: 'webtiled',
           url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
@@ -291,6 +297,7 @@ export default {
           }
         }, {
           order: 2,
+          drawingOrder: 2,
           id: 'IFL',
           type: 'dynamic',
           url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
@@ -307,6 +314,7 @@ export default {
           }
         }, {
           order: 3,
+          drawingOrder: 2,
           id: 'AG_BIOMASS',
           type: 'image',
           url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
@@ -323,6 +331,7 @@ export default {
           }
         }, {
           order: 4,
+          drawingOrder: 2,
           id: 'SOIL_CARBON',
           type: 'webtiled',
           url: 'https://s3.amazonaws.com/wri-tiles/hwsd/{level}/{col}/{row}.png',
@@ -382,7 +391,7 @@ export default {
           }
         }, {
           id: 'wri_mono',
-          thumbnailUrl: '//landmark.blueraster.io/map-app/1.1.13/css/images/wri_mono.png',
+          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
           title: {
             en: 'WRI Mono',
             fr: 'WRI Mono',
@@ -394,7 +403,7 @@ export default {
           }
         }, {
           id: 'wri_contextual',
-          thumbnailUrl: '//landmark.blueraster.io/map-app/1.1.13/css/images/wri_contextual.png',
+          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
           title: {
             en: 'WRI Contextual',
             fr: 'WRI Contextual',
@@ -450,19 +459,23 @@ export default {
         layers: [
           {
             id: 'mining_cached_8843',
-            order: 1
+            order: 1,
+            drawingOrder: 4
           },
           {
             id: 'land_use_8897',
-            order: 2
+            order: 2,
+            drawingOrder: 4
           },
           {
             id: 'land_use_6484',
-            order: 3
+            order: 3,
+            drawingOrder: 4
           },
           {
             id: 'infrastructure_7561',
-            order: 4
+            order: 4,
+            drawingOrder: 4
           }
         ]
       },
@@ -476,6 +489,7 @@ export default {
           {
             id: 'indicators_legal_security_8140',
             order: 1,
+            drawingOrder: 1,
             includedSublayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             sublabel: {
               0: {
@@ -525,6 +539,7 @@ export default {
           {
             id: 'indicators_legal_security_8140',
             order: 1,
+            drawingOrder: 1,
             includedSublayers: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
             sublabel: {
               11: {
@@ -574,6 +589,7 @@ export default {
           {
             id: 'percent_IP_community_lands_1264',
             order: 1,
+            drawingOrder: 1,
             includedSublayers: [0, 1, 2]
           }
         ]
@@ -593,11 +609,13 @@ export default {
             nestedLayers: [
               {
                 id: 'comm_ind_Documented_8219',
-                order: 1
+                order: 1,
+                drawingOrder: 3
               },
               {
                 id: 'comm_ind_NotDocumented_2683',
-                order: 2
+                order: 2,
+                drawingOrder: 3
               }
             ]
           },
@@ -609,11 +627,13 @@ export default {
             nestedLayers: [
               {
                 id: 'comm_ind_FormalLandClaim_2392',
-                order: 1
+                order: 1,
+                drawingOrder: 3
               },
               {
                 id: 'comm_ind_CustomaryTenure_8127',
-                order: 2
+                order: 2,
+                drawingOrder: 3
               }
             ]
           },
@@ -625,11 +645,13 @@ export default {
             nestedLayers: [
               {
                 id: 'comm_comm_Documented_4717',
-                order: 1
+                order: 1,
+                drawingOrder: 3
               },
               {
                 id: 'comm_comm_NotDocumented_9336',
-                order: 2
+                order: 2,
+                drawingOrder: 3
               }
             ]
           },
@@ -641,11 +663,13 @@ export default {
             nestedLayers: [
               {
                 id: 'comm_comm_FormalLandClaim_5585',
-                order: 1
+                order: 1,
+                drawingOrder: 3
               },
               {
                 id: 'comm_comm_CustomaryTenure_6877',
-                order: 2
+                order: 2,
+                drawingOrder: 3
               }
             ]
           }

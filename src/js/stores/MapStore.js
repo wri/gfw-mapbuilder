@@ -171,12 +171,27 @@ class MapStore {
   }
 
   addAll () {
-    this.activeLayers = this.allLayers.map(l => l.id);
-    this.allLayers.forEach((layer) => {
-      if (layer.subId) {
-        this.dynamicLayers[layer.id] = layer.esriLayer.layerInfos.map(lyr => lyr.id);
+    const allActiveLayers = [];
+    const allDynamicLayers = {};
+    const radioGroupOrders = this.allLayers.filter(l => l.activateWithAllLayers).map(l => l.groupOrder);
+    const reducedLayers = this.allLayers.reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
       }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    reducedLayers.forEach(l => {
+      if (l.subId && l.activateWithAllLayers && l.groupOrder === Math.min(...radioGroupOrders)) {
+        allActiveLayers.push(l.subId);
+        allDynamicLayers[l.id] = [l.subIndex];
+        return;
+      }
+      allActiveLayers.push(l.id);
     });
+
+    this.activeLayers = allActiveLayers;
+    this.dynamicLayers = allDynamicLayers;
   }
 
   removeAll () {
@@ -278,7 +293,7 @@ class MapStore {
   }
 
   setAnalysisType (payload) {
-    this.activeAnalysisType = payload.type;
+    this.activeAnalysisType = payload;
   }
 
   toggleAnalysisModal (payload) {
