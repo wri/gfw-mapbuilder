@@ -29,6 +29,7 @@ export default class CustomFeatureControl extends Component {
     map.infoWindow.clearFeatures();
     const layer = map.getLayer(layerKeys.USER_FEATURES);
     layer.remove(feature);
+    brApp.map.graphics.clear();
   };
 
   render () {
