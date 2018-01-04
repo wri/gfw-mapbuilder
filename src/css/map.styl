@@ -18,6 +18,16 @@
   bottom 5px
   z-index 5
 
+.map .esriMeasurement
+  text-align center
+  margin-top 15px
+
+.map .esriMeasurement .esriMeasurementSeparator
+  display none
+
+.esriMeasurement .esriToggleButton .dijitButtonNode
+  width inherit !important
+
 //@media (min-width: $mobileBreak)
 //  .esriScalebar
 //    left 50% !important
@@ -25,3 +35,5 @@
 @media (max-width: $mobileBreak)
   .map .esriScalebar
     bottom 55px
+  .esriMeasurement .dijitInline
+    padding 3px

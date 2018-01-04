@@ -21,8 +21,10 @@ import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
+import Measurement from 'esri/dijit/Measurement';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
+import dom from 'dojo/dom';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
@@ -36,7 +38,7 @@ import React, {
   PropTypes
 } from 'react';
 
-let scalebar, paramsApplied = false;
+let scalebar, paramsApplied, measurement = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -109,6 +111,7 @@ export default class Map extends Component {
         options.extent = map.extent;
         map.destroy();
         scalebar.destroy();
+        measurement.destroy();
       }
 
       this.createMap(activeWebmap, options);
@@ -141,6 +144,12 @@ export default class Map extends Component {
         map: response.map,
         scalebarUnit: 'metric'
       });
+
+      //- Add a measurement widget
+      measurement = new Measurement({
+        map: response.map
+      }, dom.byId('measurement-container'));
+      measurement.startup();
 
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
