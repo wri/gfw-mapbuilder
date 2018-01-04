@@ -45,6 +45,7 @@ class MapStore {
     this.viirsFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.modisFiresSelectIndex = layerPanelText.firesOptions.length - 1;
     this.tableOfContentsVisible = true;
+    this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
     this.printModalVisible = false;
@@ -78,6 +79,7 @@ class MapStore {
       toggleLayerModal: mapActions.toggleLayerModal,
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
+      toggleEditing: mapActions.toggleEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       updateCanopyDensity: mapActions.updateCanopyDensity,
       changeBasemap: mapActions.changeBasemap,
@@ -285,6 +287,10 @@ class MapStore {
 
   toggleTOCVisible (payload) {
     this.tableOfContentsVisible = payload.visible;
+  }
+
+  toggleEditing () {
+    this.editingEnabled = !this.editingEnabled;
   }
 
   openTOCAccordion (groupKey) {

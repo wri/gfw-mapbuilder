@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import {getUrlParams} from 'utils/params';
 import mapStore from 'stores/MapStore';
+import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 
