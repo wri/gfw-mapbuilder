@@ -2,6 +2,7 @@ import {attributes, esriType} from 'constants/AppConstants';
 import tabKeys from 'constants/TabViewConstants';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
 
 //- Parse Keys for easier access
@@ -41,7 +42,10 @@ export default class TabButtons extends Component {
     if (!initialTabSet && map.loaded) {
       const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
       const activeTab = window && window.innerWidth > 950 ? (narrative ? NARRATIVE : LAYERS) : '';
-      mapActions.changeActiveTab.defer(activeTab);
+      const params = getUrlParams(location.search);
+      if (!params.t) {
+        mapActions.changeActiveTab.defer(activeTab);
+      }
       initialTabSet = true;
     }
     /**

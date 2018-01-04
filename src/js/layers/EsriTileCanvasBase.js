@@ -365,7 +365,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
         }
 
         const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
-        imageData.data.set(this.filter(imageData.data));
+        imageData.data.set(this.filter(imageData.data, data.z));
         ctx.putImageData(imageData, 0, 0);
       }
 
@@ -478,7 +478,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
       }
 
       const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
-      imageData.data.set(this.filter(imageData.data));
+      imageData.data.set(this.filter(imageData.data, tile.z));
       ctx.putImageData(imageData, 0, 0);
     });
   },
