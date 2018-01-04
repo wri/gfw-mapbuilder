@@ -37,7 +37,7 @@ export default class Navigation extends Component {
             mapActions.toggleLogin(true);
           }
         }, err => {
-          console.log('err', err);
+          console.log('user not logged in', err);
         });
       }
     }

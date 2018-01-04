@@ -1,3 +1,4 @@
+import moment from 'moment';
 /**
 * Convert a paramterized string to an object
 * @param {string} querystring - Query string to be expanded into an object
@@ -28,7 +29,7 @@ export function toQuerystring(json, noEncode) {
   const result = [];
   for (const key in json) {
     if (json[key] && json[key].constructor === Date) {
-      json[key] = json[key].toLocaleDateString();
+      json[key] = json[key].toISOString();
     }
     if (Object.prototype.toString.call(json[key]) === '[object Object]') {
       throw new Error(errorMsg);

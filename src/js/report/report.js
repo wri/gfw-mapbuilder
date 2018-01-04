@@ -825,7 +825,6 @@ const runAnalysis = function runAnalysis (params, feature) {
       viirsFrom: viirsFrom,
       viirsTo: viirsTo
     }).then((results) => {
-
       const node = document.getElementById('viirs-badge');
 
       const { error } = results;
@@ -837,7 +836,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
       document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
-      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom}<br/>${text[lang].TIMELINE_END}${viirsTo}`;
+      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${viirsTo.format('MM/DD/YYYY')}`;
       node.classList.remove('hidden');
     });
   } else {
@@ -868,7 +867,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__modis-count').innerHTML = results.fireCount;
       document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
-      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom}<br/>${text[lang].TIMELINE_END}${modisTo}`;
+      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${modisTo.format('MM/DD/YYYY')}`;
       node.classList.remove('hidden');
     });
   } else {
