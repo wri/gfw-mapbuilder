@@ -148,10 +148,10 @@ module.exports = {
     //   inject: false
     // }),
     new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, 'vendors'),
-        to: path.join(__dirname, 'webpackBuild')
-      },
+      // {
+      //   from: path.join(__dirname, 'vendors'),
+      //   to: path.join(__dirname, 'webpackBuild')
+      // },
       {
         from: path.join(__dirname, 'src/resources.js'),
         to: path.join(__dirname, 'webpackBuild')
