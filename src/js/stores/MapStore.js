@@ -44,6 +44,7 @@ class MapStore {
     this.lossOptions = [];
     this.userSubscriptions = [];
     this.tableOfContentsVisible = true;
+    this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
     this.printModalVisible = false;
@@ -88,6 +89,7 @@ class MapStore {
       updateCanopyDensity: mapActions.updateCanopyDensity,
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
+      toggleEditing: mapActions.toggleEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -317,6 +319,10 @@ class MapStore {
 
   toggleTOCVisible (payload) {
     this.tableOfContentsVisible = payload.visible;
+  }
+
+  toggleEditing () {
+    this.editingEnabled = !this.editingEnabled;
   }
 
   openTOCAccordion (groupKey) {

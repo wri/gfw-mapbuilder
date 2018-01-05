@@ -48,6 +48,7 @@ class MapActions {
   toggleTOCVisible = (data) => data;
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;
+  toggleEditing = () => { return {}; };
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
 

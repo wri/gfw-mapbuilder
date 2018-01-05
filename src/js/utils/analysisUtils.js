@@ -92,16 +92,18 @@ const formatters = {
       results.push([new Date(d.alert_date).getTime(), d.count || 0]);
     });
 
-    const dateZero = new Date(data[0].alert_date);
-    const dateEnd = new Date(data[data.length - 1].alert_date);
+    if (results.length > 0) {
+      const dateZero = new Date(data[0].alert_date);
+      const dateEnd = new Date(data[data.length - 1].alert_date);
 
-    for (let i = 1; i < 11; i++) {
-      const newDate = new Date(dateZero.getTime() - ((24 * 60 * 60 * 1000) * i));
-      results.unshift([newDate.getTime(), 0]);
-    }
-    for (let i = 1; i < 11; i++) {
-      const newDate = new Date(dateEnd.getTime() + ((24 * 60 * 60 * 1000) * i));
-      results.push([newDate.getTime(), 0]);
+      for (let i = 1; i < 11; i++) {
+        const newDate = new Date(dateZero.getTime() - ((24 * 60 * 60 * 1000) * i));
+        results.unshift([newDate.getTime(), 0]);
+      }
+      for (let i = 1; i < 11; i++) {
+        const newDate = new Date(dateEnd.getTime() + ((24 * 60 * 60 * 1000) * i));
+        results.push([newDate.getTime(), 0]);
+      }
     }
 
     return results;
