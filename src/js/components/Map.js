@@ -7,6 +7,9 @@ import Controls from 'components/MapControls/ControlPanel';
 import TimeWidget from 'components/MapControls/TimeWidget';
 import CanopyModal from 'components/Modals/CanopyModal';
 import LayerModal from 'components/Modals/LayerModal';
+import SubscriptionsModal from 'components/Modals/SubscriptionsModal';
+import SubscribeModal from 'components/Modals/SubscribeModal';
+import ConfirmModal from 'components/Modals/ConfirmModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
 import SearchModal from 'components/Modals/SearchModal';
@@ -19,7 +22,10 @@ import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
+import Measurement from 'esri/dijit/Measurement';
+import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
+import dom from 'dojo/dom';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
@@ -33,7 +39,8 @@ import React, {
   PropTypes
 } from 'react';
 
-let scalebar, paramsApplied, editToolbar;
+
+let scalebar, paramsApplied, editToolbar, measurement = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -93,6 +100,7 @@ export default class Map extends Component {
     const {settings, language} = this.context;
     const {activeWebmap} = this.props;
     const {basemap, map, editingEnabled} = this.state;
+
     // If the webmap is retrieved from AGOL or the resources file, or it changes
     if (
       prevProps.activeWebmap === undefined && activeWebmap ||
@@ -106,15 +114,13 @@ export default class Map extends Component {
         map.destroy();
         scalebar.destroy();
         editToolbar.destroy();
+        measurement.destroy();
       }
 
       this.createMap(activeWebmap, options);
     }
 
-    if (
-      prevState.basemap !== basemap ||
-      prevState.map !== map
-    ) {
+    if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
     }
 
@@ -153,11 +159,15 @@ export default class Map extends Component {
         scalebarUnit: 'metric'
       });
 
+      //- Add a measurement widget
+      measurement = new Measurement({
+        map: response.map
+      }, dom.byId('measurement-container'));
+      measurement.startup();
+
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        //- Set the default basemap in the store
-        const basemap = itemData && itemData.baseMap;
-        basemapUtils.prepareDefaultBasemap(response.map, basemap.baseMapLayers);
+        this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -219,9 +229,12 @@ export default class Map extends Component {
 
   applyStateFromUrl = (map, params) => {
     const {settings} = this.context;
-    const {x, y, z, l} = params;
+    const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
 
     const langKeys = Object.keys(settings.labels);
+
+    //TODO: If we have a '#' at the start of our location.search, this won't work properly --> Our params come back as an empty object!
+    // so check our 'getUrlParams' function
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
@@ -236,7 +249,71 @@ export default class Map extends Component {
       appActions.setLanguage.defer(l);
     }
 
+    if (t) {
+      mapActions.changeActiveTab(t);
+    }
+
+    if (c) {
+      mapActions.updateCanopyDensity(c);
+    }
   };
+
+  /**
+  * NOTE: We are applying state here for certain properties because of the timing of these actions: certain things
+  * like terrai & basemaps need to be set After our map has been loaded or layers have been added
+  */
+  applyLayerStateFromUrl = (map, itemData) => {
+    const basemap = itemData && itemData.baseMap;
+    const params = getUrlParams(location.search);
+
+    //- Set the default basemap in the store
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
+
+    if (params.b) {
+      mapActions.changeBasemap(params.b);
+    }
+    if (params.a) {
+      const layerIds = params.a.split(',');
+      layerIds.forEach(layerId => {
+        // TODO: Confirm this with layerIds and subId's!
+        layerActions.addActiveLayer(layerId);
+      });
+    }
+
+    if (params.ls && params.le) {
+      layerActions.updateLossTimeline({
+        fromSelectedIndex: parseInt(params.ls),
+        toSelectedIndex: parseInt(params.le)
+      });
+    }
+
+    if (params.ts && params.te) {
+      layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
+      layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
+    }
+
+    if (params.gs && params.ge) {
+      layerActions.updateGladStartDate(new Date(params.gs.replace(/-/g, '/')));
+      layerActions.updateGladEndDate(new Date(params.ge.replace(/-/g, '/')));
+    }
+
+    if (params.vs && params.ve) {
+      layerActions.updateViirsStartDate(new Date(params.vs.replace(/-/g, '/')));
+      layerActions.updateViirsEndDate(new Date(params.ve.replace(/-/g, '/')));
+    }
+
+    if (params.ms && params.me) {
+      layerActions.updateModisStartDate(new Date(params.ms.replace(/-/g, '/')));
+      layerActions.updateModisEndDate(new Date(params.me.replace(/-/g, '/')));
+    }
+
+    if (params.ism && params.iem && params.isy && params.iey) {
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_MONTH, parseInt(params.ism));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_MONTH, parseInt(params.iem));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, parseInt(params.isy));
+      mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(params.iey));
+    }
+  }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
     const {language} = this.context, layers = [];
@@ -325,6 +402,11 @@ export default class Map extends Component {
       searchModalVisible,
       canopyModalVisible,
       layerModalVisible,
+      userSubscriptions,
+      subscriptionsModalVisible,
+      subscribeModalVisible,
+      confirmModalVisible,
+      subscriptionToDelete,
       modalLayerInfo,
       webmapInfo,
       map,
@@ -384,6 +466,15 @@ export default class Map extends Component {
         </div>
         <div className={`layer-modal-container modal-wrapper ${layerModalVisible ? '' : 'hidden'}`}>
           <LayerModal info={modalLayerInfo} />
+        </div>
+        <div className={`subscription-modal-container modal-wrapper ${subscriptionsModalVisible ? '' : 'hidden'}`}>
+          <SubscriptionsModal userSubscriptions={userSubscriptions} />
+        </div>
+        <div className={`subscription-modal-container modal-wrapper ${subscribeModalVisible ? '' : 'hidden'}`}>
+          <SubscribeModal userSubscriptions={userSubscriptions} />
+        </div>
+        <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
+          <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
       </div>
     );
