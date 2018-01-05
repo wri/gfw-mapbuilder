@@ -32,7 +32,12 @@ export default class InfoWindow extends Component {
       ...features.slice(selectedIndex + 1)
     ];
 
+    map.infoWindow.clearFeatures();
+    map.infoWindow.hide();
+
     map.infoWindow.setFeatures(newFeatures);
+    map.infoWindow.show();
+    map.infoWindow.select(0);
   };
 
   renderInstructionList = (instruction, index) => {
