@@ -264,8 +264,8 @@ export default class Map extends Component {
     }
 
     if (params.ts && params.te) {
-      layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
-      layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
+      layerActions.updateTerraIStartDate.defer(new Date(params.ts.replace(/-/g, '/')));
+      layerActions.updateTerraIEndDate.defer(new Date(params.te.replace(/-/g, '/')));
     }
 
     if (params.gs && params.ge) {
