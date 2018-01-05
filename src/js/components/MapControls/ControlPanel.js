@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import {toQuerystring} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import text from 'js/languages';
+import moment from 'moment';
 import React, {
   Component,
   PropTypes
@@ -32,7 +33,10 @@ export default class ControlPanel extends Component {
   };
 
   formatDate = d => {
-    return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear();
+    if (d.constructor === Date) {
+      d = moment(d);
+    }
+    return (d.month() + 1) + '-' + d.date() + '-' + d.year();
   }
 
   share = () => {

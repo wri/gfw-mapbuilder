@@ -31,6 +31,7 @@ import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
 import resources from 'resources';
+import moment from 'moment';
 import React, {
   Component,
   PropTypes
@@ -255,8 +256,10 @@ export default class Map extends Component {
     }
 
     if (params.ts && params.te) {
-      layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
-      layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
+      layerActions.updateTerraIStartDate(moment(`${params.ts.split('-')[2]}/${params.ts.split('-')[0]}/${params.ts.split('-')[1]}}`));
+      // layerActions.updateTerraIEndDate(moment(params.te.replace(/-/g, '/')));
+      // layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
+      // layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
     }
 
     if (params.gs && params.ge) {
