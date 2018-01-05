@@ -2,6 +2,7 @@ import {attributes, esriType} from 'constants/AppConstants';
 import tabKeys from 'constants/TabViewConstants';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
 
 //- Parse Keys for easier access
@@ -10,6 +11,7 @@ const {
   LAYERS,
   ANALYSIS,
   INFO_WINDOW,
+  MEASUREMENT,
   NARRATIVE,
   MORE
 } = tabKeys;
@@ -40,7 +42,10 @@ export default class TabButtons extends Component {
     if (!initialTabSet && map.loaded) {
       const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
       const activeTab = window && window.innerWidth > 950 ? (narrative ? NARRATIVE : LAYERS) : '';
-      mapActions.changeActiveTab.defer(activeTab);
+      const params = getUrlParams(location.search);
+      if (!params.t) {
+        mapActions.changeActiveTab.defer(activeTab);
+      }
       initialTabSet = true;
     }
     /**
@@ -139,6 +144,15 @@ export default class TabButtons extends Component {
             <span className='tab-tooltip'>{text[language].DATA}</span>
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].DATA}
+            </span>
+          </li>
+          <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
+            <svg className='svg-icon'>
+              <use xlinkHref="#icon-measure" />
+            </svg>
+            <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
+            <span className='tab-buttons__tab-label mobile-show'>
+              {text[language].MEASUREMENT}
             </span>
           </li>
           {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>

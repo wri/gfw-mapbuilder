@@ -94,7 +94,7 @@ export default class GladControls extends Component {
     const {map} = this.context;
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
-    if (map.getLayer) {
+    if (map.getLayer && map.getLayer(layer.id)) {
       map.getLayer(layer.id).setDateRange(julianFrom, julianTo);
     }
   };

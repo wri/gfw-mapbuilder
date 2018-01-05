@@ -3,7 +3,7 @@
   align-items center
   display flex
 
-.report-sub-buttons button
+.report-sub-buttons button, .subscription-sub-buttons button
   text-transform uppercase
   -webkit-appearance none
   font-weight 500
@@ -15,3 +15,16 @@
   border none
   &:active
     box-shadow 0 0 2px $darkGray
+
+
+.subscription-sub-buttons button
+  justify-content right
+  align-items right
+  display flex
+  float left
+
+.subscription-sub-buttons button:last-of-type
+  justify-content left
+  align-items left
+  display flex
+  float right

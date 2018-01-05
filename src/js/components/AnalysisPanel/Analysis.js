@@ -60,8 +60,6 @@ export default class Analysis extends Component {
       gladEndDate,
       terraIStartDate,
       terraIEndDate,
-      viirsFiresSelectIndex,
-      modisFiresSelectIndex,
       viirsStartDate,
       viirsEndDate,
       modisStartDate,
@@ -85,8 +83,6 @@ export default class Analysis extends Component {
           gladTo: gladEndDate,
           terraIFrom: terraIStartDate,
           terraITo: terraIEndDate,
-          viirsFiresSelectIndex: viirsFiresSelectIndex,
-          modisFiresSelectIndex: modisFiresSelectIndex,
           viirsFrom: viirsStartDate,
           viirsTo: viirsEndDate,
           modisFrom: modisStartDate,
@@ -115,8 +111,6 @@ export default class Analysis extends Component {
       gladEndDate,
       terraIStartDate,
       terraIEndDate,
-      viirsFiresSelectIndex,
-      modisFiresSelectIndex,
       viirsStartDate,
       viirsEndDate,
       modisStartDate,
@@ -151,8 +145,6 @@ export default class Analysis extends Component {
           gladTo: gladEndDate,
           terraIFrom: terraIStartDate,
           terraITo: terraIEndDate,
-          viirsFiresSelectIndex: viirsFiresSelectIndex,
-          modisFiresSelectIndex: modisFiresSelectIndex,
           viirsFrom: viirsStartDate,
           viirsTo: viirsEndDate,
           modisFrom: modisStartDate,
@@ -181,6 +173,7 @@ export default class Analysis extends Component {
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
         layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+
         return <CompositionPieChart
           results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
@@ -220,6 +213,7 @@ export default class Analysis extends Component {
           }
         })();
         colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
+
         return <TotalLossChart
           results={results}
           counts={results.counts}
@@ -253,7 +247,7 @@ export default class Analysis extends Component {
   };
 
   render () {
-    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
+    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate, editingEnabled} = this.props;
     const {results, isLoading, error} = this.state;
     const {language, settings} = this.context;
     let chart, title, slopeSelect;
@@ -285,7 +279,7 @@ export default class Analysis extends Component {
     ) {
       title = (
         <div className='analysis-results__title'>
-          <CustomFeatureControl feature={selectedFeature} />
+          <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
         </div>
       );
     } else {
