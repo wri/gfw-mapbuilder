@@ -200,8 +200,8 @@ class MapStore {
     this.modisEndDate = new Date();
 
     //-Terra I
-    this.terraIStartDate = {};
-    this.terraIEndDate = {};
+    this.terraIStartDate = new Date('2004', 0, 1);
+    this.terraIEndDate = new Date('2016', 7, 12);
   }
 
   mapUpdated () {}
