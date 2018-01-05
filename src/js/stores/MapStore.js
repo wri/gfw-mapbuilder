@@ -33,8 +33,8 @@ class MapStore {
     this.resetSlider = false;
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();
-    this.terraIStartDate = {};
-    this.terraIEndDate = {};
+    this.terraIStartDate = new Date('2004', 0, 1);
+    this.terraIEndDate = new Date('2016', 7, 12);
     this.viirsStartDate = new Date();
     this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
     this.viirsEndDate = new Date();
@@ -44,6 +44,7 @@ class MapStore {
     this.lossOptions = [];
     this.userSubscriptions = [];
     this.tableOfContentsVisible = true;
+    this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
     this.printModalVisible = false;
@@ -88,6 +89,7 @@ class MapStore {
       updateCanopyDensity: mapActions.updateCanopyDensity,
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
+      toggleEditing: mapActions.toggleEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -200,8 +202,8 @@ class MapStore {
     this.modisEndDate = new Date();
 
     //-Terra I
-    this.terraIStartDate = {};
-    this.terraIEndDate = {};
+    this.terraIStartDate = new Date('2004', 0, 1);
+    this.terraIEndDate = new Date('2016', 7, 12);
   }
 
   mapUpdated () {}
@@ -317,6 +319,10 @@ class MapStore {
 
   toggleTOCVisible (payload) {
     this.tableOfContentsVisible = payload.visible;
+  }
+
+  toggleEditing () {
+    this.editingEnabled = !this.editingEnabled;
   }
 
   openTOCAccordion (groupKey) {

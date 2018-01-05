@@ -6,14 +6,6 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
-/**
-* Same function that is in the layer, but the layer is not always loaded when the data is back from the server
-*/
-const getJulianDateFromGridCode = function getJulianDateFromGridCode (gridCode) {
-  const {year, day} = utils.getDateFromGridCode(gridCode);
-  return ((year % 2000) * 1000) + day;
-};
-
 export default class TerraIControls extends Component {
 
   static contextTypes = {
@@ -21,43 +13,39 @@ export default class TerraIControls extends Component {
     map: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-
-    this.initialized = false;
-    this.state = {};
-  }
+  initialized = false;
+  state = {};
 
   componentWillUpdate () {
     const {map} = this.context;
-    const {layer} = this.props;
+    const {min, max} = this.state;
 
     if (map.loaded && !this.initialized) {
+      this.initialized = true;
       //- Fetch the max date for these requests
       var xhr = new XMLHttpRequest();
-      xhr.addEventListener('load', () => {
-        const mapLayer = map.getLayer(layer.id);
-        const data = JSON.parse(xhr.response);
-        const maxDateValue = getJulianDateFromGridCode(data.maxValues[0]);
+      // xhr.addEventListener('load', () => {
+      //   const mapLayer = map.getLayer(layer.id);
+      //   const data = JSON.parse(xhr.response);
+      //   const maxDateValue = getJulianDateFromGridCode(data.maxValues[0]);
         //- Update the layer if ready, if not it will get updated on first set
-        if (mapLayer) {
-          mapLayer.setDateRange(layer.minDateValue, maxDateValue);
-        }
+        // if (mapLayer) {
+        //   mapLayer.setDateRange(layer.minDateValue, maxDateValue);
+        // }
         //- Get date in normal JS Date format
-        const min = moment(new Date(((layer.minDateValue / 1000) + 2000).toString(), 0, 1));
-        const max = moment(new Date(((maxDateValue / 1000) + 2000).toString(), 0, maxDateValue % 1000));
-        layerActions.updateTerraIStartDate(min);
-        layerActions.updateTerraIEndDate(max);
-        this.initialized = true;
+        const min = moment(new Date('2004', 0, 1));
+        const max = moment(new Date('2016', 7, 12));
+      //   layerActions.updateTerraIStartDate(min);
+      //   layerActions.updateTerraIEndDate(max);
         this.setState({
           min,
           max,
           startDate: min,
           endDate: max
         });
-      });
-      xhr.open('GET', `${layer.imageServer}?f=json`, true);
-      xhr.send();
+      // });
+      // xhr.open('GET', `${layer.imageServer}?f=json`, true);
+      // xhr.send();
     }
   }
 

@@ -21,8 +21,11 @@ import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
+import Edit from 'esri/toolbars/edit';
+import Measurement from 'esri/dijit/Measurement';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
+import dom from 'dojo/dom';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
@@ -37,7 +40,8 @@ import React, {
   PropTypes
 } from 'react';
 
-let scalebar, paramsApplied = false;
+
+let scalebar, paramsApplied, editToolbar, measurement = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -96,7 +100,7 @@ export default class Map extends Component {
   componentDidUpdate (prevProps, prevState) {
     const {settings, language} = this.context;
     const {activeWebmap} = this.props;
-    const {basemap, map} = this.state;
+    const {basemap, map, editingEnabled} = this.state;
 
     // If the webmap is retrieved from AGOL or the resources file, or it changes
     if (
@@ -110,6 +114,8 @@ export default class Map extends Component {
         options.extent = map.extent;
         map.destroy();
         scalebar.destroy();
+        editToolbar.destroy();
+        measurement.destroy();
       }
 
       this.createMap(activeWebmap, options);
@@ -117,6 +123,17 @@ export default class Map extends Component {
 
     if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+    }
+
+    if (prevState.editingEnabled !== editingEnabled) {
+      if (!editingEnabled) {
+        editToolbar.deactivate();
+      } else {
+        if (map.infoWindow && map.infoWindow.getSelectedFeature) {
+          const selectedFeature = map.infoWindow.getSelectedFeature();
+          editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
+        }
+      }
     }
   }
 
@@ -143,6 +160,12 @@ export default class Map extends Component {
         scalebarUnit: 'metric'
       });
 
+      //- Add a measurement widget
+      measurement = new Measurement({
+        map: response.map
+      }, dom.byId('measurement-container'));
+      measurement.startup();
+
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         this.applyLayerStateFromUrl(response.map, itemData);
@@ -162,7 +185,7 @@ export default class Map extends Component {
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
         userFeaturesLayer.on('click', (evt) => {
-          if (evt.graphic && evt.graphic.attributes) {
+          if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
             evt.stopPropagation();
             if (!evt.graphic.attributes.geostoreId) {
               analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
@@ -172,6 +195,16 @@ export default class Map extends Component {
             } else {
               response.map.infoWindow.setFeatures([evt.graphic]);
             }
+          }
+        });
+
+        editToolbar = new Edit(response.map);
+        editToolbar.on('deactivate', function(evt) {
+          if (evt.info.isModified) {
+            analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
+              evt.graphic.attributes.geostoreId = res.data.id;
+              response.map.infoWindow.setFeatures([evt.graphic]);
+            });
           }
         });
       });
@@ -256,10 +289,8 @@ export default class Map extends Component {
     }
 
     if (params.ts && params.te) {
-      layerActions.updateTerraIStartDate(moment(`${params.ts.split('-')[2]}/${params.ts.split('-')[0]}/${params.ts.split('-')[1]}}`));
-      // layerActions.updateTerraIEndDate(moment(params.te.replace(/-/g, '/')));
-      // layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
-      // layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
+      layerActions.updateTerraIStartDate.defer(new Date(params.ts.replace(/-/g, '/')));
+      layerActions.updateTerraIEndDate.defer(new Date(params.te.replace(/-/g, '/')));
     }
 
     if (params.gs && params.ge) {
