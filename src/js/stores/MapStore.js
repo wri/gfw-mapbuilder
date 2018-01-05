@@ -33,8 +33,8 @@ class MapStore {
     this.resetSlider = false;
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();
-    this.terraIStartDate = {};
-    this.terraIEndDate = {};
+    this.terraIStartDate = new Date('2004', 0, 1);
+    this.terraIEndDate = new Date('2016', 7, 12);
     this.viirsStartDate = new Date();
     this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
     this.viirsEndDate = new Date();

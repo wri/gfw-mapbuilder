@@ -1,19 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import {loadCSS} from 'utils/loaders';
-import {assetUrls} from 'js/config';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import layerActions from 'actions/LayerActions';
 import 'pickadate';
-
-/**
-* Same function that is in the layer, but the layer is not always loaded when the data is back from the server
-*/
-const getJulianDateFromGridCode = function getJulianDateFromGridCode (gridCode) {
-  const {year, day} = utils.getDateFromGridCode(gridCode);
-  return ((year % 2000) * 1000) + day;
-};
-
 export default class TerraIControls extends Component {
 
   static contextTypes = {
@@ -22,83 +11,65 @@ export default class TerraIControls extends Component {
   };
 
   initialized = false;
-  state = {};
+  state = {
+    min: new Date('2004', 0, 1),
+    max: new Date('2016', 7, 12)
+  };
 
   componentWillUpdate () {
     const {map} = this.context;
-    const {layer} = this.props;
+    const {min, max} = this.state;
 
     if (map.loaded && !this.initialized) {
-      //- Fetch the max date for these requests
-      var xhr = new XMLHttpRequest();
-      xhr.addEventListener('load', () => {
-        const mapLayer = map.getLayer(layer.id);
-        const data = JSON.parse(xhr.response);
-        const maxDateValue = getJulianDateFromGridCode(data.maxValues[0]);
-        //- Update the layer if ready, if not it will get updated on first set
-        if (mapLayer) {
-          mapLayer.setDateRange(layer.minDateValue, maxDateValue);
-        }
-        //- Get date in normal JS Date format
-        const min = new Date(((layer.minDateValue / 1000) + 2000).toString(), 0, 1);
-        const max = new Date(((maxDateValue / 1000) + 2000).toString(), 0, maxDateValue % 1000);
-        layerActions.updateTerraIStartDate(min);
-        layerActions.updateTerraIEndDate(max);
-        this.initialized = true;
-        this.setState({min, max});
-        //- Create the date pickers
-        const {fromTerraCalendar, toTerraCalendar} = this.refs;
-        //- Starting date
-        this.fromPicker = $(fromTerraCalendar).pickadate({
-          today: 'Jump to today',
-          min: min,
-          max: max,
-          selectYears: max.getFullYear() - min.getFullYear(),
-          selectMonths: true,
-          closeOnSelect: true,
-          klass: { picker: 'picker__top' },
-          onSet: this.didSetStartDate,
-          onStart: function () { this.set('select', min);}
-        }).pickadate('picker');
-        //- Ending date
-        this.toPicker = $(toTerraCalendar).pickadate({
-          today: 'Jump to today',
-          min: min,
-          max: max,
-          selectYears: max.getFullYear() - min.getFullYear(),
-          selectMonths: true,
-          closeOnSelect: true,
-          klass: { picker: 'picker__top' },
-          onSet: this.didSetEndDate,
-          onStart: function () { this.set('select', max); }
-        }).pickadate('picker');
-      });
-      xhr.open('GET', `${layer.imageServer}?f=json`, true);
-      xhr.send();
+      this.initialized = true;
+      //- Create the date pickers
+      const {fromTerraCalendar, toTerraCalendar} = this.refs;
+      //- Starting date
+      this.fromPicker = $(fromTerraCalendar).pickadate({
+        today: 'Jump to today',
+        min: min,
+        max: max,
+        selectYears: max.getFullYear() - min.getFullYear(),
+        selectMonths: true,
+        closeOnSelect: true,
+        klass: { picker: 'picker__top' },
+        onSet: this.didSetStartDate,
+        onStart: function () { this.set('select', min);}
+      }).pickadate('picker');
+      //- Ending date
+      this.toPicker = $(toTerraCalendar).pickadate({
+        today: 'Jump to today',
+        min: min,
+        max: max,
+        selectYears: max.getFullYear() - min.getFullYear(),
+        selectMonths: true,
+        closeOnSelect: true,
+        klass: { picker: 'picker__top' },
+        onSet: this.didSetEndDate,
+        onStart: function () { this.set('select', max); }
+      }).pickadate('picker');
     }
   }
 
   componentDidUpdate(prevProps) {
 
-    if (this.initialized) {
+    if (this.initialized && prevProps.endDate.getTime) {
       const { startDate, endDate } = this.props;
       //ensure the startDate is an empty object and not a Date Object
       if ((prevProps.startDate !== startDate && startDate.constructor === Object)
       && prevProps.endDate !== endDate && endDate.constructor === Object) {
         this.fromPicker.set('select', this.state.min);
         this.toPicker.set('select', this.state.max);
-      } else if ((prevProps.startDate.getTime() !== startDate.getTime() && startDate.constructor === Date && prevProps)
-      || (prevProps.endDate.getTime() !== endDate.getTime() && endDate.constructor === Date && prevProps)) {
-        this.updateDateRange(startDate, endDate);
-        if (prevProps.startDate.getTime() !== startDate.getTime()) {
-          layerActions.updateTerraIStartDate.defer(startDate);
-          this.fromPicker.set('select', startDate);
-        }
+      }
 
-        if (prevProps.endDate.getTime() !== endDate.getTime()) {
-          layerActions.updateTerraIEndDate.defer(endDate);
-          this.toPicker.set('select', endDate);
-        }
+      if (prevProps.startDate.getTime() !== startDate.getTime()) {
+        this.fromPicker.set('select', startDate);
+        this.updateDateRange(startDate, this.toPicker.get('select').obj);
+      }
+
+      if (prevProps.endDate.getTime() !== endDate.getTime()) {
+        this.toPicker.set('select', endDate);
+        this.updateDateRange(this.fromPicker.get('select').obj, endDate);
       }
     }
   }
@@ -107,9 +78,8 @@ export default class TerraIControls extends Component {
     if (select) {
       const startDate = new Date(select);
       layerActions.updateTerraIStartDate.defer(startDate);
-      this.updateDateRange(startDate, this.props.endDate);
       if (this.fromPicker && this.toPicker) {
-        this.toPicker.set('min', this.fromPicker.get('select'));
+        this.toPicker.set('min', this.fromPicker.get('select').obj);
       }
     }
   };
@@ -118,17 +88,14 @@ export default class TerraIControls extends Component {
     if (select) {
       const endDate = new Date(select);
       layerActions.updateTerraIEndDate.defer(endDate);
-      this.updateDateRange(this.props.startDate, endDate);
       if (this.fromPicker && this.toPicker) {
-        this.fromPicker.set('max', this.toPicker.get('select'));
+        this.fromPicker.set('max', this.toPicker.get('select').obj);
       }
     }
   };
 
   updateDateRange = (startDate, endDate) => {
     const {layer} = this.props;
-    startDate = startDate.constructor === Date ? startDate : this.state.min;
-    endDate = endDate.constructor === Date ? endDate : this.state.max;
     const {map} = this.context;
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
