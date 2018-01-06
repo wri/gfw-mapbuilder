@@ -37,26 +37,6 @@ test('resources has the required properties', () => {
   expect(resources).toHaveProperty('layerPanel.extraLayers');
   expect(resources.layerPanel.extraLayers).toBeInstanceOf(Array); //gets concat'ed somewhere!
 
-
-  // // Deep referencing using dot notation
-  // expect(resources).toHaveProperty('kitchen.area', 20);
-  // expect(resources).toHaveProperty('kitchen.amenities', [
-  //   'oven',
-  //   'stove',
-  //   'washer',
-  // ]);
-  //
-  // expect(resources).not.toHaveProperty('kitchen.open');
-  //
-  // // Deep referencing using an array containing the keyPath
-  // expect(resources).toHaveProperty(['kitchen', 'area'], 20);
-  // expect(resources).toHaveProperty(
-  //   ['kitchen', 'amenities'],
-  //   ['oven', 'stove', 'washer'],
-  // );
-  // expect(resources).toHaveProperty(['kitchen', 'amenities', 0], 'oven');
-  //
-  // expect(resources).not.toHaveProperty(['kitchen', 'open']);
 });
 
 describe('resources layer spec', () => {
@@ -67,6 +47,7 @@ describe('resources layer spec', () => {
       expect(layer).toHaveProperty('type');
       expect(layer).toHaveProperty('url');
       expect(layer).toHaveProperty('label');
+      expect(layer.label).toHaveProperty(resources.language);
     });
   });
 
@@ -76,6 +57,7 @@ describe('resources layer spec', () => {
       expect(layer).toHaveProperty('type');
       expect(layer).toHaveProperty('url');
       expect(layer).toHaveProperty('label');
+      expect(layer.label).toHaveProperty(resources.language);
     });
   });
 
