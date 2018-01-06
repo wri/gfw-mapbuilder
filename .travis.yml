@@ -1,0 +1,5 @@
+language: node
+
+notifications:
+  email: false
+  slack: blueraster:ovUrQK7bHVKMilBj8fSc25qb
