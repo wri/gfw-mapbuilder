@@ -1,5 +1,8 @@
 language: node
 
+install:
+  - npm install
+
 notifications:
   email: false
   slack: blueraster:ovUrQK7bHVKMilBj8fSc25qb
