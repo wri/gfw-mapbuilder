@@ -1,6 +1,5 @@
 import React from 'react';
 import Loader from 'components/Loader';
-// import Loader from './src/js/components/Loader';
 import renderer from 'react-test-renderer';
 
 describe('resources layer spec', () => {
