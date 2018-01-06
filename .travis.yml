@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - 6.11.4
 
+install:
+  - npm install
+
 notifications:
   email: false
   slack: blueraster:ovUrQK7bHVKMilBj8fSc25qb
