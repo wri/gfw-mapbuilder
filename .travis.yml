@@ -1,8 +1,5 @@
 language: node_js
 
-install:
-  - yarn
-
 notifications:
   email: false
   slack: blueraster:ovUrQK7bHVKMilBj8fSc25qb
