@@ -58,3 +58,31 @@ test('resources has the required properties', () => {
   //
   // expect(resources).not.toHaveProperty(['kitchen', 'open']);
 });
+
+describe('resources layer spec', () => {
+
+  resources.layerPanel.GROUP_LCD.layers.forEach((layer) => {
+    it(`the ${layer.id} layer has the properties we need`, () => {
+      expect(layer).toHaveProperty('id');
+      expect(layer).toHaveProperty('type');
+      expect(layer).toHaveProperty('url');
+      expect(layer).toHaveProperty('label');
+    });
+  });
+
+  resources.layerPanel.GROUP_LC.layers.forEach((layer) => {
+    it(`the ${layer.id} layer has the properties we need`, () => {
+      expect(layer).toHaveProperty('id');
+      expect(layer).toHaveProperty('type');
+      expect(layer).toHaveProperty('url');
+      expect(layer).toHaveProperty('label');
+    });
+  });
+
+  resources.layerPanel.GROUP_BASEMAP.layers.forEach((layer) => {
+    it(`the ${layer.id} basemap layer has the properties we need`, () => {
+      expect(layer).toHaveProperty('id');
+      expect(layer).toHaveProperty('thumbnailUrl');
+    });
+  });
+});
