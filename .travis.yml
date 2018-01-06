@@ -3,7 +3,7 @@ node_js:
   - 6.11.4
 
 install:
-  - npm install
+  - yarn
 
 notifications:
   email: false
