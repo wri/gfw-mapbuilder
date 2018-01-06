@@ -1,13 +1,8 @@
 import resources from 'resources';
-// console.log(resources);
-
-test('adds 1 + 2 to equal 3', () => {
- expect(1).toBe(1);
-});
 
 
 test('resources has the required properties', () => {
-  // Simple Referencing
+
   expect(resources).toHaveProperty('webmap');
   expect(resources).toHaveProperty('title', 'GFW Mapbuilder');
   expect(resources).toHaveProperty('language');
@@ -24,18 +19,23 @@ test('resources has the required properties', () => {
   expect(resources).toHaveProperty('layerPanel.GROUP_WEBMAP');
   expect(resources).toHaveProperty('layerPanel.GROUP_WEBMAP.label');
   expect(resources).toHaveProperty('layerPanel.GROUP_WEBMAP.layers');
+  expect(resources.layerPanel.GROUP_WEBMAP.layers).toBeInstanceOf(Array);
   expect(resources.layerPanel.GROUP_WEBMAP.layers).toHaveLength(0);
 
   expect(resources).toHaveProperty('layerPanel.GROUP_LCD'); //we Are checking for these layers in LossControls & LayerLegend
   expect(resources).toHaveProperty('layerPanel.GROUP_LCD.layers');
+  expect(resources.layerPanel.GROUP_LCD.layers).toBeInstanceOf(Array);
 
   expect(resources).toHaveProperty('layerPanel.GROUP_LC'); //same thing
   expect(resources).toHaveProperty('layerPanel.GROUP_LC.layers');
+  expect(resources.layerPanel.GROUP_LC.layers).toBeInstanceOf(Array);
 
   expect(resources).toHaveProperty('layerPanel.GROUP_BASEMAP'); //same thing
   expect(resources).toHaveProperty('layerPanel.GROUP_BASEMAP.layers');
+  expect(resources.layerPanel.GROUP_BASEMAP.layers).toBeInstanceOf(Array);
 
-  expect(resources).toHaveProperty('layerPanel.extraLayers'); //same thing
+  expect(resources).toHaveProperty('layerPanel.extraLayers');
+  expect(resources.layerPanel.extraLayers).toBeInstanceOf(Array); //gets concat'ed somewhere!
 
 
   // // Deep referencing using dot notation
