@@ -1,0 +1,8 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+machine:
+  timezone: America/New_York
+  node:
+    version: 6
