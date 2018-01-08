@@ -1,6 +1,7 @@
 import layerKeys from 'constants/LayerConstants';
 import rasterFuncs from 'utils/rasterFunctions';
 import utils from 'utils/AppUtils';
+import moment, { isMoment } from 'moment';
 
 const LayersHelper = {
 
@@ -50,6 +51,13 @@ const LayersHelper = {
   * @return {string} Query String to use for Fires Filter
   */
   generateFiresQuery (startDate, endDate) {
+    if (!isMoment(startDate)) {
+      startDate = moment(startDate);
+    }
+
+    if (!isMoment(endDate)) {
+      endDate = moment(endDate);
+    }
     const start = `${startDate.year()}-${startDate.month() + 1}-${startDate.date()} ${startDate.hours()}:${startDate.minutes()}:${startDate.seconds()}`;
     const end = `${endDate.year()}-${endDate.month() + 1}-${endDate.date()} ${endDate.hours()}:${endDate.minutes()}:${endDate.seconds()}`;
     return 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';

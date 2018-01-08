@@ -21,14 +21,12 @@ export default class GladControls extends Component {
     this.max = moment(new Date());
 
     this.state = {
-      unconfirmed: false,
-      startDate: this.min,
-      endDate: this.max
+      unconfirmed: false
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if ((Date.parse(prevState.startDate) !== Date.parse(this.state.startDate)) || (Date.parse(prevState.endDate) !== Date.parse(this.state.endDate))) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
       this.updateDateRange();
     }
   }
@@ -43,28 +41,27 @@ export default class GladControls extends Component {
 
   updateDateRange = () => {
     const { layer } = this.props;
-    const { startDate, endDate } = this.state;
+    const { startDate, endDate } = this.props;
     const { map } = this.context;
 
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
-    layerActions.updateGladStartDate(startDate);
-    layerActions.updateGladEndDate(endDate);
     if (map.getLayer && map.getLayer(layer.id)) {
       map.getLayer(layer.id).setDateRange(julianFrom, julianTo);
     }
   };
 
   handleStartChange = (startDate) => {
-    this.setState({ startDate });
+    layerActions.updateGladStartDate(startDate);
   }
 
   handleEndChange = (endDate) => {
-    this.setState({ endDate });
+    layerActions.updateGladEndDate(endDate);
   }
 
   render () {
-    const {unconfirmed, startDate, endDate} = this.state;
+    const {startDate, endDate} = this.props;
+    const {unconfirmed} = this.state;
     const {language} = this.context;
 
     return (
@@ -73,7 +70,7 @@ export default class GladControls extends Component {
         <div className='glad-controls__calendars'>
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
-            <DatePicker
+            {startDate && <DatePicker
               customInput={<StartButton />}
               popperPlacement="top-end"
               popperModifiers={{
@@ -87,14 +84,14 @@ export default class GladControls extends Component {
               dropdownMode="select"
               todayButton='Jump to today'
               minDate={this.min}
-              maxDate={endDate}
-              selected={startDate}
+              maxDate={moment(endDate)}
+              selected={moment(startDate)}
               onChange={this.handleStartChange}
-            />
+            />}
           </div>
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
-            <DatePicker
+            {endDate && <DatePicker
               customInput={<EndButton />}
               popperPlacement="top-end"
               popperModifiers={{
@@ -107,11 +104,11 @@ export default class GladControls extends Component {
               showYearDropdown
               dropdownMode="select"
               todayButton='Jump to today'
-              minDate={startDate}
+              minDate={moment(startDate)}
               maxDate={this.max}
-              selected={endDate}
+              selected={moment(endDate)}
               onChange={this.handleEndChange}
-            />
+            />}
           </div>
         </div>
       </div>

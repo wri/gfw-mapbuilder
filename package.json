@@ -10,7 +10,6 @@
     "babel": "babel src --out-dir build",
     "test": "eslint src/js/**/*.js",
     "prerender": "gulp prerender;",
-    "postinstall": "bower install; cp ionOverride.js build/vendor/ion.rangeslider/js/ion.rangeSlider.js;",
     "build": "rm -rf webpackBuild; webpack"
   },
   "repository": {

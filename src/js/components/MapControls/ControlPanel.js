@@ -36,7 +36,7 @@ export default class ControlPanel extends Component {
     if (d.constructor === Date) {
       d = moment(d);
     }
-    return (d.month() + 1) + '-' + d.date() + '-' + d.year();
+    return (d.month() + 1) + '-' + d.date() + '-' + d.year() + ' ' + d.hours() + ':' + d.minutes() + ':' + d.seconds();
   }
 
   share = () => {

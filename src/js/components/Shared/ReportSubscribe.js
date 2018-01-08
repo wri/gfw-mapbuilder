@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import {getUrlParams} from 'utils/params';
 import mapStore from 'stores/MapStore';
-import appUtils from 'utils/AppUtils';
 import mapActions from 'actions/MapActions';
+import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 
 export default class ReportSubscribeButtons extends Component {

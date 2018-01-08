@@ -248,7 +248,7 @@ export default class Analysis extends Component {
   };
 
   render () {
-    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
+    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate, editingEnabled} = this.props;
     const {results, isLoading, error} = this.state;
     const {language, settings} = this.context;
     let chart, title, slopeSelect;
@@ -280,7 +280,7 @@ export default class Analysis extends Component {
     ) {
       title = (
         <div className='analysis-results__title'>
-          <CustomFeatureControl feature={selectedFeature} />
+          <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
         </div>
       );
     } else {
