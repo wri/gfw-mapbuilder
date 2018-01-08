@@ -25,37 +25,25 @@ export default class TerraIControls extends Component {
       const max = moment(new Date('2016', 7, 12));
       this.setState({
         min,
-        max,
-        startDate: min,
-        endDate: max
+        max
       });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-
+  componentDidUpdate(prevProps) {
     if (this.initialized) {
       if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
-        this.setState({
-          startDate: moment(this.props.startDate),
-          endDate: moment(this.props.endDate)
-        });
-      }
-
-      if (prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
-        this.updateDateRange(this.state.startDate, this.state.endDate);
+        this.updateDateRange(this.props.startDate, this.props.endDate);
       }
     }
   }
 
   handleStartChange = (startDate) => {
     layerActions.updateTerraIStartDate(startDate);
-    this.setState({ startDate });
   }
 
   handleEndChange = (endDate) => {
     layerActions.updateTerraIEndDate(endDate);
-    this.setState({ endDate });
   }
 
   updateDateRange = (startDate, endDate) => {
@@ -68,10 +56,9 @@ export default class TerraIControls extends Component {
     }
   };
 
-
-
   render () {
-    const { startDate, endDate, min, max } = this.state;
+    const { startDate, endDate } = this.props;
+    const { min, max } = this.state;
     const {language} = this.context;
 
     return (
@@ -79,7 +66,7 @@ export default class TerraIControls extends Component {
         <div className='terra-i-controls__calendars'>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
-            <DatePicker
+            {startDate && <DatePicker
               customInput={<StartButton />}
               popperPlacement="top-end"
               popperModifiers={{
@@ -93,14 +80,14 @@ export default class TerraIControls extends Component {
               dropdownMode="select"
               todayButton='Jump to today'
               minDate={min}
-              maxDate={endDate}
-              selected={startDate}
+              maxDate={moment(endDate)}
+              selected={moment(startDate)}
               onChange={this.handleStartChange}
-            />
+            />}
           </div>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
-            <DatePicker
+            {endDate && <DatePicker
               customInput={<EndButton />}
               popperPlacement="top-end"
               popperModifiers={{
@@ -113,11 +100,11 @@ export default class TerraIControls extends Component {
               showYearDropdown
               dropdownMode="select"
               todayButton='Jump to today'
-              minDate={startDate}
+              minDate={moment(startDate)}
               maxDate={max}
-              selected={endDate}
+              selected={moment(endDate)}
               onChange={this.handleEndChange}
-            />
+            />}
           </div>
         </div>
       </div>

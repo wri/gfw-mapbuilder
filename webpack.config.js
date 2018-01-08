@@ -133,7 +133,7 @@ module.exports = {
       DEFAULT_TITLE: 'GFW Mapbuilder',
       ESRI_VERSION: '3.20'
     }),
-    new UglifyJSPlugin(),
+    // new UglifyJSPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/index.pug'),
       inject: false
