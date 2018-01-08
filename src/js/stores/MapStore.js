@@ -362,7 +362,6 @@ class MapStore {
   }
 
   updateViirsStartDate (startDate) {
-    console.log('change');
     this.viirsStartDate = startDate;
   }
 

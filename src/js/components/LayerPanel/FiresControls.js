@@ -21,26 +21,13 @@ export default class FiresControls extends React.Component {
     this.min = props.layer.id === 'VIIRS_ACTIVE_FIRES' ? moment(new Date('2016', 0, 8)) : moment(new Date('2012', 0, 1));
     const max = new Date();
     this.max = moment(max);
-    // const startDate = moment(max).subtract(1, 'days');
-    // this.state = {
-    //   startDate: startDate,
-    //   endDate: this.max
-    // };
   }
 
   componentDidUpdate(prevProps, prevState, prevContext) {
 
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
       LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer);
-      // this.setState({
-      //   startDate: moment(this.props.startDate),
-      //   endDate: moment(this.props.endDate)
-      // });
     }
-
-    // if (prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
-    //   LayersHelper.updateFiresLayerDefinitions(this.state.startDate, this.state.endDate, this.props.layer);
-    // }
 
     // Anytime the map changes to a new map, update that here
     const {map} = this.context;
