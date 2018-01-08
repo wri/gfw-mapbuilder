@@ -28,8 +28,17 @@ export default class GladControls extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if ((Date.parse(prevState.startDate) !== Date.parse(this.state.startDate)) || (Date.parse(prevState.endDate) !== Date.parse(this.state.endDate))) {
+    if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
+      this.setState({
+        startDate: moment(this.props.startDate),
+        endDate: moment(this.props.endDate)
+      });
+    }
+    if (prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
       this.updateDateRange();
+      console.log(this.state.startDate, this.state.endDate);
+      layerActions.updateGladStartDate(this.state.startDate);
+      layerActions.updateGladEndDate(this.state.endDate);
     }
   }
 
@@ -48,8 +57,6 @@ export default class GladControls extends Component {
 
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
-    layerActions.updateGladStartDate(startDate);
-    layerActions.updateGladEndDate(endDate);
     if (map.getLayer && map.getLayer(layer.id)) {
       map.getLayer(layer.id).setDateRange(julianFrom, julianTo);
     }

@@ -92,7 +92,7 @@ const formatters = {
       data.forEach(d => {
         results.push([new Date(d.alert_date).getTime(), d.count || 0]);
       });
-
+    }
     if (results.length > 0) {
       const dateZero = new Date(data[0].alert_date);
       const dateEnd = new Date(data[data.length - 1].alert_date);

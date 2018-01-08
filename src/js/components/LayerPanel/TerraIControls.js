@@ -18,42 +18,32 @@ export default class TerraIControls extends Component {
 
   componentWillUpdate () {
     const {map} = this.context;
-    const {min, max} = this.state;
 
     if (map.loaded && !this.initialized) {
       this.initialized = true;
-      //- Fetch the max date for these requests
-      var xhr = new XMLHttpRequest();
-      // xhr.addEventListener('load', () => {
-      //   const mapLayer = map.getLayer(layer.id);
-      //   const data = JSON.parse(xhr.response);
-      //   const maxDateValue = getJulianDateFromGridCode(data.maxValues[0]);
-        //- Update the layer if ready, if not it will get updated on first set
-        // if (mapLayer) {
-        //   mapLayer.setDateRange(layer.minDateValue, maxDateValue);
-        // }
-        //- Get date in normal JS Date format
-        const min = moment(new Date('2004', 0, 1));
-        const max = moment(new Date('2016', 7, 12));
-      //   layerActions.updateTerraIStartDate(min);
-      //   layerActions.updateTerraIEndDate(max);
-        this.setState({
-          min,
-          max,
-          startDate: min,
-          endDate: max
-        });
-      // });
-      // xhr.open('GET', `${layer.imageServer}?f=json`, true);
-      // xhr.send();
+      const min = moment(new Date('2004', 0, 1));
+      const max = moment(new Date('2016', 7, 12));
+      this.setState({
+        min,
+        max,
+        startDate: min,
+        endDate: max
+      });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
 
     if (this.initialized) {
+      if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
+        this.setState({
+          startDate: moment(this.props.startDate),
+          endDate: moment(this.props.endDate)
+        });
+      }
+
       if (prevState.startDate !== this.state.startDate || prevState.endDate !== this.state.endDate) {
-      this.updateDateRange(this.state.startDate, this.state.endDate);
+        this.updateDateRange(this.state.startDate, this.state.endDate);
       }
     }
   }
