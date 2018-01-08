@@ -23,6 +23,7 @@ import charts from 'utils/charts';
 import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
+import moment from 'moment';
 
 let map;
 
@@ -246,13 +247,13 @@ const createMap = function createMap (params) {
       params.settings = info.settings;
 
       //- Make sure highcharts is loaded before using it
-      if (window.highchartsPromise.isResolved()) {
-        runAnalysis(params, feature);
-      } else {
-        window.highchartsPromise.then(() => {
+      // if (window.highchartsPromise.isResolved()) {
+      //   runAnalysis(params, feature);
+      // } else {
+        // window.highchartsPromise.then(() => {
           runAnalysis(params, feature);
-        });
-      }
+        // });
+      // }
     });
 	});
 };
@@ -650,6 +651,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   if (settings.landCover && layerConf) {
     performAnalysis({
       type: analysisKeys.LC_LOSS,
+      geostoreId: feature.geostoreId,
       geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
@@ -823,7 +825,6 @@ const runAnalysis = function runAnalysis (params, feature) {
       viirsFrom: viirsFrom,
       viirsTo: viirsTo
     }).then((results) => {
-
       const node = document.getElementById('viirs-badge');
 
       const { error } = results;
@@ -835,7 +836,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
       document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
-      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
+      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${viirsTo.format('MM/DD/YYYY')}`;
       node.classList.remove('hidden');
     });
   } else {
@@ -866,7 +867,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__modis-count').innerHTML = results.fireCount;
       document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
-      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
+      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${modisTo.format('MM/DD/YYYY')}`;
       node.classList.remove('hidden');
     });
   } else {
@@ -954,8 +955,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       language: lang,
       geostoreId: feature.geostoreId,
-      gladFrom: new Date(gladFrom),
-      gladTo: new Date(gladTo)
+      gladFrom: moment(new Date(gladFrom)),
+      gladTo: moment(new Date(gladTo))
     }).then((results) => {
       const node = document.getElementById('glad-alerts');
       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
@@ -982,8 +983,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       geostoreId: feature.geostoreId,
       language: lang,
-      terraIFrom: new Date(terraIFrom),
-      terraITo: new Date(terraITo)
+      terraIFrom: terraIFrom,
+      terraITo: terraITo
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
@@ -1109,10 +1110,10 @@ export default {
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis
     const { viirsStartDate, viirsEndDate, modisStartDate, modisEndDate } = params;
-    params.viirsFrom = new Date(viirsStartDate);
-    params.viirsTo = new Date(viirsEndDate);
-    params.modisFrom = new Date(modisStartDate);
-    params.modisTo = new Date(modisEndDate);
+    params.viirsFrom = moment(new Date(viirsStartDate));
+    params.viirsTo = moment(new Date(viirsEndDate));
+    params.modisFrom = moment(new Date(modisStartDate));
+    params.modisTo = moment(new Date(modisEndDate));
 
     //- Create the map as soon as possible
     createMap(params);

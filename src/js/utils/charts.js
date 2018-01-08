@@ -1,6 +1,10 @@
 /* eslint no-unused-vars: 0 */
 import analysisKeys from 'constants/AnalysisConstants';
 import number from 'dojo/number';
+import Highcharts from 'highcharts';
+import enableExporting from 'highcharts/modules/exporting';
+
+enableExporting(Highcharts);
 /**
 * Module to help in generating charts and also in formatting data for the charts
 * Formatting functions should start with formatXXXX and return series and optionally colors

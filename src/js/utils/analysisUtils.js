@@ -87,11 +87,12 @@ const formatters = {
 
   alerts: function (data) {
     const results = [];
+    if (data.length > 0) {
 
-    data.forEach(d => {
-      results.push([new Date(d.alert_date).getTime(), d.count || 0]);
-    });
-
+      data.forEach(d => {
+        results.push([new Date(d.alert_date).getTime(), d.count || 0]);
+      });
+    }
     if (results.length > 0) {
       const dateZero = new Date(data[0].alert_date);
       const dateEnd = new Date(data[data.length - 1].alert_date);
@@ -105,7 +106,6 @@ const formatters = {
         results.push([newDate.getTime(), 0]);
       }
     }
-
     return results;
   },
   terraIAlerts: function (counts) {
@@ -213,14 +213,14 @@ class Encoder {
   }
 
   /* Helper function */
-  fromBounds = (bounds) => {
+  fromBounds (bounds) {
     const result = [], end = bounds[1];
     let current = bounds[0];
     for (;current <= end; current++) {
       result.push(current);
     }
     return result;
-  };
+  }
 
   /* Main Functions */
   //- Get a unique value for two inputs
@@ -281,6 +281,7 @@ export default {
     query.outFields = [''];
     query.where = layerDef;
     queryTask.executeForCount(query).then(function (response) {
+      console.log(url, query, response);
       promise.resolve({fireCount: response});
     }, (error) => {
       console.error(error);
@@ -342,8 +343,9 @@ export default {
 
     const promise = new Deferred();
     const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
-    const startDate = terraIFrom.toISOString().split('T')[0];
-    const endDate = terraITo.toISOString().split('T')[0];
+    console.log(terraIFrom);
+    const startDate = terraIFrom;
+    const endDate = terraITo;
 
     const terraIData = {
       geostore: geostoreId,

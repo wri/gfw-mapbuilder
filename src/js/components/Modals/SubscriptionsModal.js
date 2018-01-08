@@ -97,29 +97,37 @@ export default class SubscriptionsModal extends Component {
       jsonData.datasets = subscription.attributes.datasets;
     }
 
-    $.ajax({
-      url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + subscription.id,
-      type: 'PATCH',
-      dataType: 'json',
-      data: JSON.stringify(jsonData),
-      contentType: 'application/json',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: (response) => {
+    fetch(
+      `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}`,
+      {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+      }
+    ).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
+      }
+
+      response.json().then(json => {
+        if (hasError) {
+          console.error(json);
+          return;
+        }
         const updateSubscriptions = this.props.userSubscriptions.map(subsc => {
-          if (response.data.id === subsc.id) {
-            return response.data;
+          if (json.data.id === subsc.id) {
+            return json.data;
           } else {
             return subsc;
           }
         });
 
         mapActions.setUserSubscriptions(updateSubscriptions);
-      },
-      error: (error) => {
-        console.log('err', error);
-      }
+      });
     });
   }
 

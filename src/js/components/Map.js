@@ -34,6 +34,7 @@ import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
 import resources from 'resources';
+import moment from 'moment';
 import React, {
   Component,
   PropTypes
@@ -462,7 +463,7 @@ export default class Map extends Component {
           <SearchModal />
         </div>
         <div className={`canopy-modal-container modal-wrapper ${canopyModalVisible ? '' : 'hidden'}`}>
-          <CanopyModal />
+          <CanopyModal canopyDensity={this.state.canopyDensity} />
         </div>
         <div className={`layer-modal-container modal-wrapper ${layerModalVisible ? '' : 'hidden'}`}>
           <LayerModal info={modalLayerInfo} />

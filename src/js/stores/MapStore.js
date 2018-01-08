@@ -9,6 +9,7 @@ import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
+import moment from 'moment';
 import analysisUtils from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
 
@@ -35,12 +36,10 @@ class MapStore {
     this.gladEndDate = new Date();
     this.terraIStartDate = new Date('2004', 0, 1);
     this.terraIEndDate = new Date('2016', 7, 12);
-    this.viirsStartDate = new Date();
-    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
-    this.viirsEndDate = new Date();
-    this.modisStartDate = new Date();
-    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
-    this.modisEndDate = new Date();
+    this.viirsStartDate = moment(new Date()).subtract(1, 'day');
+    this.viirsEndDate = moment(new Date());
+    this.modisStartDate = moment(new Date()).subtract(1, 'day');
+    this.modisEndDate = moment(new Date());
     this.lossOptions = [];
     this.userSubscriptions = [];
     this.tableOfContentsVisible = true;

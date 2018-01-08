@@ -14,21 +14,28 @@ export default class ConfirmModal extends Component {
 
   delete = () => {
     if (this.props.subscriptionToDelete.id) {
-      $.ajax({
-        url: 'https://production-api.globalforestwatch.org/v1/subscriptions/' + this.props.subscriptionToDelete.id,
-        type: 'DELETE',
-        xhrFields: {
-          withCredentials: true
-        },
-        success: (response) => {
-          const remainingSubscriptions = this.props.userSubscriptions.filter(subsc => subsc.id !== response.data.id);
+      fetch(
+        `https://production-api.globalforestwatch.org/v1/subscriptions/${this.props.subscriptionToDelete.id}`,
+        {
+          method: 'DELETE',
+          credentials: 'include'
+        }
+      ).then(response => {
+        let hasError = false;
+        if (response.status !== 200) {
+          hasError = true;
+        }
+
+        response.json().then(json => {
+          if (hasError) {
+            console.error(json);
+            return;
+          }
+          const remainingSubscriptions = this.props.userSubscriptions.filter(subsc => subsc.id !== json.data.id);
           mapActions.setUserSubscriptions(remainingSubscriptions);
           mapActions.toggleConfirmModal({ visible: false });
           mapActions.deleteSubscription({});
-        },
-        error: (error) => {
-          console.log('err', error);
-        }
+        });
       });
     }
   }
