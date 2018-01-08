@@ -9,35 +9,35 @@ const packageJSON = require('./package.json');
 module.exports = {
   entry: {
     main: [
-      path.join(__dirname, 'src/js/main.js'),
-      path.join(__dirname, 'src/css/app.styl'),
-      path.join(__dirname, 'src/css/critical.styl')
+      path.resolve(__dirname, 'src/js/main.js'),
+      path.resolve(__dirname, 'src/css/app.styl'),
+      path.resolve(__dirname, 'src/css/critical.styl')
     ],
     report: [
-      path.join(__dirname, 'src/js/reportMain.js'),
-      path.join(__dirname, 'src/css/report.styl')
+      path.resolve(__dirname, 'src/js/reportMain.js'),
+      path.resolve(__dirname, 'src/css/report.styl')
     ]
-    // lib: path.join(__dirname, 'src/js/libraryMain.js')
+    // lib: path.resolve(__dirname, 'src/js/libraryMain.js')
   },
   output: {
     filename: 'js/[name].js',
-    path: path.join(__dirname, 'webpackBuild'),
+    path: path.resolve(__dirname, 'webpackBuild'),
     libraryTarget: 'amd'
   },
   resolve: {
     alias: {
-      js: path.join(__dirname, 'src/js'),
-      css: path.join(__dirname, 'src/css'),
-      vendors: path.join(__dirname, 'vendors'),
-      utils: path.join(__dirname, 'src/js/utils'),
-      components: path.join(__dirname, 'src/js/components'),
-      stores: path.join(__dirname, 'src/js/stores'),
-      actions: path.join(__dirname, 'src/js/actions'),
-      constants: path.join(__dirname, 'src/js/constants'),
-      helpers: path.join(__dirname, 'src/js/helpers'),
-      report: path.join(__dirname, 'src/js/report'),
-      resources: path.join(__dirname, 'src/resources'),
-      images: path.join(__dirname, 'src/css/images')
+      js: path.resolve(__dirname, 'src/js'),
+      css: path.resolve(__dirname, 'src/css'),
+      vendors: path.resolve(__dirname, 'vendors'),
+      utils: path.resolve(__dirname, 'src/js/utils'),
+      components: path.resolve(__dirname, 'src/js/components'),
+      stores: path.resolve(__dirname, 'src/js/stores'),
+      actions: path.resolve(__dirname, 'src/js/actions'),
+      constants: path.resolve(__dirname, 'src/js/constants'),
+      helpers: path.resolve(__dirname, 'src/js/helpers'),
+      report: path.resolve(__dirname, 'src/js/report'),
+      resources: path.resolve(__dirname, 'src/resources'),
+      images: path.resolve(__dirname, 'src/css/images')
     }
   },
   module: {
@@ -58,10 +58,10 @@ module.exports = {
         test: /\.js$/,
         exclude: [
           /node_modules/,
-          path.join(__dirname, 'vendors'),
-          path.join(__dirname, 'build'),
-          path.join(__dirname, 'src/js/library.js'),
-          path.join(__dirname, 'src/js/resources.js')
+          path.resolve(__dirname, 'vendors'),
+          path.resolve(__dirname, 'build'),
+          path.resolve(__dirname, 'src/js/library.js'),
+          path.resolve(__dirname, 'src/js/resources.js')
         ],
         use: {
           loader: 'babel-loader',
@@ -135,26 +135,22 @@ module.exports = {
     }),
     new UglifyJSPlugin(),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src/index.pug'),
+      template: path.resolve(__dirname, 'src/index.pug'),
       inject: false
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src/report.pug'),
+      template: path.resolve(__dirname, 'src/report.pug'),
       filename: 'report.html',
       inject: false
     }),
     // new HtmlWebpackPlugin({
-    //   template: path.join(__dirname, 'src/external.pug'),
+    //   template: path.resolve(__dirname, 'src/external.pug'),
     //   inject: false
     // }),
     new CopyWebpackPlugin([
-      // {
-      //   from: path.join(__dirname, 'vendors'),
-      //   to: path.join(__dirname, 'webpackBuild')
-      // },
       {
-        from: path.join(__dirname, 'src/resources.js'),
-        to: path.join(__dirname, 'webpackBuild')
+        from: path.resolve(__dirname, 'src/resources.js'),
+        to: path.resolve(__dirname, 'webpackBuild')
       }
     ])
   ],

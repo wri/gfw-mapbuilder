@@ -5,6 +5,38 @@ html
     include jade/meta.pug
     link(rel='stylesheet', href='%CRITICAL_CSS%')
     link(rel='stylesheet', href='%APP_CSS%')
+    style(type="text/css").
+      @font-face {
+        font-family: 'Fira Sans';
+        src: url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff2') format('woff2'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.ttf') format('ttf'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff') format('woff'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff2') format('woff2'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.ttf') format('ttf'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+      
+      .layer-transparency input[type=range]::-webkit-slider-thumb {
+        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+      }
+      
+      .layer-transparency input[type=range]::-moz-range-thumb {
+        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+      }
+      
+      .layer-transparency input[type=range]::-ms-thumb {
+        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+      }
+      
+      .tree-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
+      }
+      
+      .forest-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
+      }
   body.tundra
     include jade/svg.pug
     #root
