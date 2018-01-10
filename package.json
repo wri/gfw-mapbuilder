@@ -7,7 +7,8 @@
     "start": "node devServer.js",
     "dist-lib": "rm -rf dist; BABEL_ENV=production npm run babel; gulp production; gulp bundle-lib;",
     "test": "eslint src/js/**/*.js",
-    "build": "rm -rf webpackBuild; webpack"
+    "build": "rm -rf webpackBuild; webpack",
+    "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js"
   },
   "repository": {
     "type": "git",

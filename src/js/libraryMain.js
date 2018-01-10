@@ -10,8 +10,8 @@ import React from 'react';
 import 'babel-polyfill';
 
 const libraryMain = {
-
   startup: () => {
+    console.log('getting into library Main ');
     // TODO: load critical in our startup!
 
     if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }

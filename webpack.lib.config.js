@@ -5,22 +5,19 @@ const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const packageJSON = require('./package.json');
+const version = packageJSON.version;
 
 module.exports = {
   entry: {
-    main: [
-      path.resolve(__dirname, 'src/js/main.js'),
-      path.resolve(__dirname, 'src/css/app.styl'),
-      path.resolve(__dirname, 'src/css/critical.styl')
-    ],
     report: [
       path.resolve(__dirname, 'src/js/reportMain.js'),
       path.resolve(__dirname, 'src/css/report.styl')
-    ]
+    ],
+    libraryMain: path.resolve(__dirname, 'src/js/libraryMain.js')
   },
   output: {
-    filename: 'js/[name].js',
-    path: path.resolve(__dirname, 'webpackBuild'),
+    filename: `${version}/js/[name].js`,
+    path: path.resolve(__dirname, 'libBuild'),
     libraryTarget: 'amd'
   },
   resolve: {
@@ -77,7 +74,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].css',
-              outputPath: 'css/'
+              outputPath: `${version}/css/`
             }
           },
           { loader: 'extract-loader' },
@@ -103,7 +100,7 @@ module.exports = {
             options: {
               name: '[name].[ext]',
               publicPath: '../',
-              outputPath: 'css/images/'
+              outputPath: `${version}/css/images/`
             }
           }
         ]
@@ -114,7 +111,7 @@ module.exports = {
           loader: 'file-loader',
           options: {
             publicPath: '../',
-            outputPath: 'css/fonts/'
+            outputPath: `${version}/css/fonts/`
           }
         }
       }
@@ -122,12 +119,12 @@ module.exports = {
   },
   plugins: [
     new InterpolateHtmlPlugin({
-      META_VERSION: JSON.stringify(packageJSON.version),
-      APP_CSS: 'css/app.css',
-      CRITICAL_CSS: 'css/critical.css',
-      REPORT_CSS: 'css/report.css',
+      META_VERSION: JSON.stringify(version),
+      APP_CSS: `${version}/css/app.css`,
+      CRITICAL_CSS: `${version}/css/critical.css`,
+      REPORT_CSS: `${version}/css/report.css`,
       APP_JS: 'js/main',
-      REPORT_JS: 'js/report',
+      REPORT_JS: `${version}/js/report`,
       DEFAULT_TITLE: 'GFW Mapbuilder',
       ESRI_VERSION: '3.20'
     }),
@@ -141,10 +138,20 @@ module.exports = {
       filename: 'report.html',
       inject: false
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'src/external.pug'),
+      filename: 'external.html',
+      inject: false
+    }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, 'src/resources.js'),
-        to: path.resolve(__dirname, 'webpackBuild')
+        to: path.resolve(__dirname, 'libBuild')
+      },
+      {
+        from: path.resolve(__dirname, 'src/js/library.js'),
+        to: path.resolve(__dirname, `libBuild/${version}.js`),
+        toType: 'file'
       }
     ])
   ],
