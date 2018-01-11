@@ -281,7 +281,6 @@ export default {
     query.outFields = [''];
     query.where = layerDef;
     queryTask.executeForCount(query).then(function (response) {
-      console.log(url, query, response);
       promise.resolve({fireCount: response});
     }, (error) => {
       console.error(error);
