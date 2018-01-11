@@ -113,6 +113,7 @@ export default class Map extends Component {
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
+        editToolbar.refresh();
         scalebar.destroy();
       }
 
