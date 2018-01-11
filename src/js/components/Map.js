@@ -41,7 +41,7 @@ import React, {
 } from 'react';
 
 
-let scalebar, paramsApplied, editToolbar, measurement = false;
+let scalebar, paramsApplied, editToolbar = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -114,8 +114,6 @@ export default class Map extends Component {
         options.extent = map.extent;
         map.destroy();
         scalebar.destroy();
-        editToolbar.destroy();
-        measurement.destroy();
       }
 
       this.createMap(activeWebmap, options);
@@ -159,12 +157,6 @@ export default class Map extends Component {
         map: response.map,
         scalebarUnit: 'metric'
       });
-
-      //- Add a measurement widget
-      measurement = new Measurement({
-        map: response.map
-      }, dom.byId('measurement-container'));
-      measurement.startup();
 
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
@@ -438,7 +430,7 @@ export default class Map extends Component {
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
-          <TabView {...this.state} />
+          <TabView {...this.state} activeWebmap={this.props.activeWebmap} />
           {map.loaded ? <Legend
               allLayers={this.state.allLayers}
               tableOfContentsVisible={this.state.tableOfContentsVisible}

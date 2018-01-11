@@ -5,46 +5,82 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
-  title: 'GFW Mapbuilder',
-  subtitle: 'Make maps that matter',
-  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
-  aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
-  downloadLinkUrl: '', // http://data.globalforestwatch.org/
-  printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
-  maskServiceUrl: '', // e.g. http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_00_Africa/MapServer
-  mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
-  mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-  narrative: '',
-  hideHeader: false,
-  hideFooter: false,
-  includeMyGFWLogin: true,
-  navLinksInNewTab: false,
-  //- Language Settings
-  language: 'en',
-  useAlternativeLanguage: false,
-  alternativeWebmap: '',
-  alternativeLanguage: 'fr',
-  alternativeLanguageTitle: 'GFW Mapbuilder',
-  alternativeLanguageSubtitle: 'Make maps that matter',
-  alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-  alternativeNarrative: '',
-  alternativeWebmapMenuName: 'Land Use',
-  //- Documents Settings
-  includeDocumentsTab: false,
-  //- Layers/Analysis Settings
-  iso: '',
-  viirsFires: true,
-  modisFires: true,
-  intactForests: true,
-  aboveGroundBiomass: true,
-  landCover: true,
-  mangroves: false,
-  sadAlerts: true,
-  gladAlerts: true,
-  terraIAlerts: true,
-  webmapMenuName: 'Land Use',
+  // webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  // title: 'GFW Mapbuilder',
+  // subtitle: 'Make maps that matter',
+  // logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
+  // logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  // aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
+  // downloadLinkUrl: '', // http://data.globalforestwatch.org/
+  // printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+  // maskServiceUrl: '', // e.g. http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_00_Africa/MapServer
+  // mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
+  // mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+  // narrative: '',
+  // hideHeader: false,
+  // hideFooter: false,
+  // includeMyGFWLogin: true,
+  // navLinksInNewTab: false,
+  // //- Language Settings
+  // language: 'en',
+  // useAlternativeLanguage: false,
+  // alternativeWebmap: '',
+  // alternativeLanguage: 'fr',
+  // alternativeLanguageTitle: 'GFW Mapbuilder',
+  // alternativeLanguageSubtitle: 'Make maps that matter',
+  // alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+  // alternativeNarrative: '',
+  // alternativeWebmapMenuName: 'Land Use',
+  // //- Documents Settings
+  // includeDocumentsTab: false,
+  // //- Layers/Analysis Settings
+  // iso: '',
+  // viirsFires: true,
+  // modisFires: true,
+  // intactForests: true,
+  // aboveGroundBiomass: true,
+  // landCover: true,
+  // mangroves: false,
+  // sadAlerts: true,
+  // gladAlerts: true,
+  // terraIAlerts: true,
+  // webmapMenuName: 'Land Use',
+  "webmap": "f9699bbb3324448fb9cc1085c918fa25",
+            "title": "GFW Mapbuilder (french)",
+            "subtitle": "French subtitle",
+            "logoUrl": "https://my.gfw-mapbuilder.org/img/gfw-logo.png",
+            "logoLinkUrl": "https://www.gfw-mapbuilder.org/",
+            "aboutLinkUrl": "",
+            "downloadLinkUrl": "",
+            "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
+            "maskServiceUrl": "",
+            "mapThemeIds": "",
+            "mapThemes": "",
+            "narrative": "Here the french narrative",
+            "includeMyGFWLogin": false,
+            "navLinksInNewTab": false,
+            "language": "fr",
+            "useAlternativeLanguage": true,
+            "alternativeWebmap": "b514d31339954ba9a0c5822135bc2001",
+            "alternativeLanguage": "en",
+            "alternativeLanguageTitle": "GFW Mapbuilder (english)",
+            "alternativeLanguageSubtitle": "English subtitle",
+            "alternativeMapThemes": "",
+            "alternativeNarrative": "English narrative",
+            "alternativeWebmapMenuName": "English Menu Name",
+            "includeDocumentsTab": true,
+            "documentsDirectory": "https://cmr.forest-atlas.org/resources/docs/",
+            "documentsMapserver": "https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer",
+            "iso": "COD",
+            "activeFires": true,
+            "intactForests": true,
+            "aboveGroundBiomass": true,
+            "landCover": false,
+            "mangroves": false,
+            "sadAlerts": false,
+            "gladAlerts": true,
+            "terraIAlerts": false,
+            "webmapMenuName": "French Menu Name",
   //- Include/Exclude various restoration analysis types
   restorationSlope: true, //- Main Slope Analysis
   restorationSlopePotential: true, //- Part of the various restoration options

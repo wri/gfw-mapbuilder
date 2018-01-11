@@ -3,6 +3,7 @@ import LayerPanel from 'components/LayerPanel/LayerPanel';
 import MobileMenu from 'components/TabPanel/MobileMenu';
 import LayerToggles from 'components/LayerPanel/LayerToggles';
 import InfoWindow from 'components/TabPanel/InfoWindow';
+import Measurement from 'components/TabPanel/Measurement';
 import Documents from 'components/TabPanel/Documents';
 import mapActions from 'actions/MapActions';
 import tabKeys from 'constants/TabViewConstants';
@@ -89,7 +90,7 @@ export default class TabView extends Component {
             <svg><use xlinkHref="#shape-close" /></svg>
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].MEASUREMENT}</h3>
-          <div id='measurement-container'></div>
+          <Measurement activeWebmap={this.props.activeWebmap} />
         </div>
         <div className={this.getClassName(ANALYSIS)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
