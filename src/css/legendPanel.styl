@@ -28,13 +28,14 @@
 
 .parent-legend-container
   margin 10px 0
-  font-weight bold
+  font-weight normal
   .label-container
+    font-size 13px
     margin-bottom 5px
   .legend-container
     font-weight normal
     display flex
-    align-items flex-start
+    align-items center
     .legend-symbol
       position relative
       top 2px
@@ -43,6 +44,9 @@
       width 15px
       &.circle
         border-radius 50%
+      &.image
+        height auto
+        width auto
 
 .legend-layers
   overflow-y auto
@@ -60,6 +64,15 @@
   margin-left 10px
   font-size 13px
   margin-top 2px
+
+.nested-legend-group
+  margin: 5px 0 10px 15px
+  .nested-group-label
+    margin-bottom 5px
+    font-size 13px
+
+.nested-heading
+  font-size 13px
 
 @media (max-width: $mobileBreak)
   .legend-panel
