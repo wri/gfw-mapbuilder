@@ -120,6 +120,14 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];
     const existingIds = [];
+    const reducedLayers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    layers = layers.filter(l => l.url).concat(reducedLayers);
     layers.forEach(layer => {
       if (existingIds.indexOf(layer.id) === -1) {
         uniqueLayers.push(layer);
@@ -178,6 +186,22 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     }
 
     map.addLayers(esriLayers);
+
+    reducedLayers.forEach(layer => {
+      const mapLayer = map.getLayer(layer.id);
+      mapLayer.hide();
+      activeLayers.split(',').forEach(id => {
+        if (id.indexOf(layer.id) > -1) {
+          if (layer.hasOwnProperty('includedSublayers')) {
+            const subIndex = parseInt(id.substr(layer.id.length + 1));
+            mapLayer.setVisibleLayers([subIndex]);
+            mapLayer.show();
+            return;
+          }
+          mapLayer.show();
+        }
+      });
+    });
 
     layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
     layersHelper.updateAGBiomassLayer(tcd, map);
