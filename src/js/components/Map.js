@@ -462,6 +462,17 @@ export default class Map extends Component {
       }
     });
 
+    // the only layers left are non-configured layers
+    // add them the the GROUP_WEBMAP layer group
+    const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
+    webmapGroup.layers = layers;
+    if (!webmapGroup.label.hasOwnProperty(language)) {
+      if (settings.alternativeLanguage === language) {
+        webmapGroup.label[language] = settings.alternativeWebmapMenuName;
+      }
+      webmapGroup.label[language] = settings.webmapMenuName;
+    }
+
     mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
   };
 
