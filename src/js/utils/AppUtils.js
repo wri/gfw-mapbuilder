@@ -269,7 +269,7 @@ const utils = {
 
   formatNumber: (number) => {
 
-    const numberString = number.toString();
+    const numberString = Math.round(number).toString();
 
     if (number >= 1000) {
       const stringArray = [];
