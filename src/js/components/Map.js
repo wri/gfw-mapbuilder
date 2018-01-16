@@ -504,9 +504,9 @@ export default class Map extends Component {
                         timeInfo={getTimeInfo(layer)} />);
     }
 
-    if (map.loaded === true && mapLoaded === false) {
+    if (map.loaded === true && !mapLoaded) {
       mapLoaded = true;
-      on.once(map, 'layers-add-result', layersss => {
+      on.once(map, 'layers-add-result', layers => {
         legendReady = true;
         this.forceUpdate();
       });

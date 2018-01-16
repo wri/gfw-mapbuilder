@@ -54,19 +54,21 @@ export default class LayerPanel extends Component {
         const { layerPanel } = this.context.settings;
         const groupsWithLayersTurnedOn = [];
         Object.keys(layerPanel).filter(key => key !== 'GROUP_BASEMAP' && key !== 'extraLayers').forEach(k => {
-          layerPanel[k].hasOwnProperty('layers') && layerPanel[k].layers.forEach(l => {
-            let idToCheck = '';
-            if (l.hasOwnProperty('nestedLayers')) {
-              l.nestedLayers.forEach(nl => {
-                idToCheck = nl.subId || nl.id;
-              });
-            } else {
-              idToCheck = l.subId || l.id;
-            }
-            if (this.props.activeLayers.indexOf(idToCheck) > -1 && groupsWithLayersTurnedOn.indexOf(k) === -1) {
-              groupsWithLayersTurnedOn.push(k);
-            }
-          });
+          if (layerPanel[k].hasOwnProperty('layers')) {
+            layerPanel[k].layers.forEach(l => {
+              let idToCheck = '';
+              if (l.hasOwnProperty('nestedLayers')) {
+                l.nestedLayers.forEach(nl => {
+                  idToCheck = nl.subId || nl.id;
+                });
+              } else {
+                idToCheck = l.subId || l.id;
+              }
+              if (this.props.activeLayers.indexOf(idToCheck) > -1 && groupsWithLayersTurnedOn.indexOf(k) === -1) {
+                groupsWithLayersTurnedOn.push(k);
+              }
+            });
+          }
         });
         if (groupsWithLayersTurnedOn.length > 0) {
           mapActions.openTOCAccordion.defer(groupsWithLayersTurnedOn[0]);

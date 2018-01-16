@@ -11,7 +11,6 @@ import analysisUtils from 'utils/analysisUtils';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
 import moment from 'moment';
-import analysisUtils from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
 
 let isRegistering = false;
