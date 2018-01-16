@@ -14,6 +14,7 @@ const showSubLayer = function showSubLayer (layerItem) {
     esriLayer.visibleLayers.push(subIndex);
   }
   esriLayer.setVisibleLayers(esriLayer.visibleLayers);
+  if (esriLayer.visible === false) { esriLayer.show(); }
 };
 
 const hideSubLayer = function hideSubLayer (layerItem) {
@@ -79,7 +80,6 @@ export default class LayerCheckbox extends Component {
     const {layer} = this.props;
     if (layer.disabled) { return; }
     if (layer.subId) {
-      // TODO:  Update visible layers.
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
         layer.visible = false;
