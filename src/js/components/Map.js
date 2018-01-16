@@ -42,6 +42,7 @@ import React, {
 
 
 let scalebar, paramsApplied, editToolbar, measurement = false;
+let mapLoaded, legendReady = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -317,9 +318,9 @@ export default class Map extends Component {
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
-    const {language} = this.context, layers = [];
-    // Remove any already existing webmap layers
-    settings.layerPanel.GROUP_WEBMAP.layers = [];
+    const {language} = this.context;
+    let layers = [];
+
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both
     // languages so the original webmap works in both views
     const saveLayersInOtherLang = (
@@ -352,10 +353,12 @@ export default class Map extends Component {
             opacity: 1,
             visible: visible,
             order: sublayer.order || idx + 1,
-            esriLayer: layer.layerObject
+            esriLayer: layer.layerObject,
+            itemId: layer.itemId
           };
           dynamicLayers.push(layerInfo);
         });
+
         // Push the dynamic layers into the array in their current order
         for (let i = dynamicLayers.length - 1; i >= 0; i--) {
           layers.unshift(dynamicLayers[i]);
@@ -385,13 +388,81 @@ export default class Map extends Component {
       }
     });
 
-    //- Set up the group labels and group layers
-    settings.layerPanel.GROUP_WEBMAP.layers = layers;
-    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
+    const groupKeys = Object.keys(settings.layerPanel)
+      .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
+    const exclusiveLayerIds = [];
+    groupKeys.forEach(groupKey => {
+      const group = settings.layerPanel[groupKey];
+      switch (group.groupType) {
+        case 'radio': {
+          let groupLayers = [];
+          const groupSublayers = [];
+          group.layers.forEach(l => {
+            if (l.includedSublayers) { // this is a dynamic layer
+              layers.forEach(webmapLayer => {
+                if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                  if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {
+                    webmapLayer.activateWithAllLayers = true;
+                    webmapLayer.groupOrder = group.order;
+                  }
+                  groupSublayers.push({
+                    ...webmapLayer,
+                    ...l
+                  });
+                }
+              });
+              groupLayers = groupLayers.concat(groupSublayers);
+              if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
+              return;
+            }
+            const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+            layers = [
+              ...layers.slice(0, layers.indexOf(mapLayer)),
+              ...layers.slice(layers.indexOf(mapLayer) + 1)
+            ];
+            groupLayers.push({
+              ...mapLayer,
+              ...l
+            });
+            exclusiveLayerIds.push(l.id);
+          });
+          group.layers = groupLayers;
+          break;
+        }
+        case 'checkbox':
+          group.layers = group.layers.map(l => {
+            const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+            layers = [
+              ...layers.slice(0, layers.indexOf(mapLayer)),
+              ...layers.slice(layers.indexOf(mapLayer) + 1)
+            ];
+            return {
+              ...mapLayer,
+              ...l
+            };
+          });
+          break;
+        case 'nested':
+          group.layers.forEach(nestedGroup => {
+            nestedGroup.nestedLayers = nestedGroup.nestedLayers.map(l => {
 
-    if (saveLayersInOtherLang) {
-      settings.layerPanel.GROUP_WEBMAP.label[settings.alternativeLanguage] = settings.labels[settings.alternativeLanguage].webmapMenuName;
-    }
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+              layers = [
+                ...layers.slice(0, layers.indexOf(mapLayer)),
+                ...layers.slice(layers.indexOf(mapLayer) + 1)
+              ];
+              return {
+                ...mapLayer,
+                ...l
+              };
+            });
+          });
+        break;
+        default:
+      }
+    });
+
+    mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
   };
 
   render () {
@@ -433,20 +504,28 @@ export default class Map extends Component {
                         timeInfo={getTimeInfo(layer)} />);
     }
 
+    if (map.loaded === true && mapLoaded === false) {
+      mapLoaded = true;
+      on.once(map, 'layers-add-result', layersss => {
+        legendReady = true;
+        this.forceUpdate();
+      });
+    }
+
     return (
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
-          <TabView {...this.state} />
-          {map.loaded ? <Legend
-              allLayers={this.state.allLayers}
-              tableOfContentsVisible={this.state.tableOfContentsVisible}
-              activeLayers={activeLayers}
-              legendOpen={this.state.legendOpen}
-              dynamicLayers={this.state.dynamicLayers}
-              legendOpacity={this.state.legendOpacity}
-            /> : null}
+          {map.loaded && <TabView {...this.state} />}
+          {legendReady ? <Legend
+            allLayers={this.state.allLayers}
+            tableOfContentsVisible={this.state.tableOfContentsVisible}
+            activeLayers={activeLayers}
+            legendOpen={this.state.legendOpen}
+            dynamicLayers={this.state.dynamicLayers}
+            legendOpacity={this.state.legendOpacity}
+          /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
