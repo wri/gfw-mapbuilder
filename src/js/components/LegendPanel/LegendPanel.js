@@ -180,7 +180,11 @@ export default class LegendPanel extends Component {
         />;
         break;
       default:
-        childComponent = this.createWebmapLegend(layer);
+        if (layer.hasOwnProperty('nestedLayers')) {
+          childComponent = this.createNestedLegendGroups(layer);
+        } else {
+          childComponent = this.createWebmapLegend(layer);
+        }
     }
     return childComponent;
   }
@@ -248,6 +252,107 @@ export default class LegendPanel extends Component {
         />;
       }
     }
+  }
+
+  createWebmapLegend = layer => {
+    const { activeLayers, dynamicLayers, legendOpacity } = this.props;
+    const { map } = this.context;
+
+    if (layer.subId) {
+      const scale = map.getScale();
+      let visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1;
+
+      if (layer.hasScaleDependency) {
+        visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale && layer.maxScale <= scale;
+
+        if (layer.minScale === 0) {
+          visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.maxScale <= scale;
+        }
+
+        if (layer.maxScale === 0) {
+          visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale;
+        }
+      }
+
+      const esriLayer = layer.esriLayer;
+
+      return <WebMapLegend
+        key={layer.subId}
+        url={esriLayer.url}
+        labels={layer.label}
+        visibility={visible}
+        visibleLayers={activeLayers}
+        layerSubIndex={layer.subIndex}
+        layerId={layer.subId}
+        legendOpacity={legendOpacity}
+        defaultOpacity={esriLayer.opacity || 1}
+      />;
+
+
+    } else {
+      const esriLayer = layer.esriLayer;
+
+      if (esriLayer.type === 'Feature Layer') {
+        return <WebMapFeatureLayerLegend
+          key={esriLayer.id}
+          layer={esriLayer}
+          visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
+          visibleLayers={activeLayers}
+          legendOpacity={legendOpacity}
+          defaultOpacity={esriLayer.opacity || 1}
+        />;
+      } else {
+        if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
+          esriLayer.layerId = esriLayer.layerInfos[0].id;
+        }
+
+        return <WebMapLegend
+          key={layer.id}
+          url={esriLayer.url}
+          labels={layer.label}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerId={layer.id}
+          layerSubIndex={esriLayer.layerId}
+          legendOpacity={legendOpacity}
+          defaultOpacity={esriLayer.opacity || 1}
+        />;
+      }
+    }
+  }
+
+  createNestedLegendGroups = layerGroup => {
+    const { activeLayers, legendOpacity } = this.props;
+    const { language } = this.context;
+    const nestedComponents = [];
+
+    layerGroup.nestedLayers.forEach(layer => {
+      // This is what we will use for mapbuilder
+      // nestedComponents.push(this.createWebmapLegend(layer));
+
+      // We need this custom (without labels) for landmark since they have layers that are named the same.
+      nestedComponents.push(
+        <WebMapLegend
+          key={layer.id}
+          url={layer.esriLayer.url}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerSubIndex={1}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          defaultOpacity={layer.opacity || 1}
+        />
+      );
+    });
+
+    const groupVisible = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
+
+    return (
+      <div key={layerGroup.order} className={`nested-legend-group${groupVisible ? '' : ' hidden'}`}>
+        <div className='nested-group-label'><strong>{layerGroup.label[language]}</strong></div>
+        {nestedComponents}
+      </div>
+    );
   }
 
   render () {
