@@ -112,7 +112,12 @@ class MapActions {
     }, []);
 
     //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);
+    layers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []).concat(layerPanel.extraLayers);
 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];

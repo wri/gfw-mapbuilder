@@ -330,28 +330,10 @@ export default class LegendPanel extends Component {
   }
 
   createNestedLegendGroups = layerGroup => {
-    const { activeLayers, legendOpacity } = this.props;
+    const { activeLayers } = this.props;
     const { language } = this.context;
-    const nestedComponents = [];
 
-    layerGroup.nestedLayers.forEach(layer => {
-      // This is what we will use for mapbuilder
-      // nestedComponents.push(this.createWebmapLegend(layer));
-
-      // We need this custom (without labels) for landmark since they have layers that are named the same.
-      nestedComponents.push(
-        <WebMapLegend
-          key={layer.id}
-          url={layer.esriLayer.url}
-          visibility={activeLayers.indexOf(layer.id) > -1}
-          visibleLayers={activeLayers}
-          layerSubIndex={1}
-          layerId={layer.id}
-          legendOpacity={legendOpacity}
-          defaultOpacity={layer.opacity || 1}
-        />
-      );
-    });
+    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createWebmapLegend(layer)));
 
     const groupVisible = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
 
@@ -366,9 +348,10 @@ export default class LegendPanel extends Component {
   render () {
     const {tableOfContentsVisible, legendOpen, allLayers} = this.props;
     const { language } = this.context;
+    let legendComponents = null;
 
     const legendLayers = this.getLayersForLegend(allLayers).sort((a, b) => b.order - a.order);
-    const legendComponents = legendLayers.map(this.createLegend);
+    legendComponents = legendLayers.map(this.createLegend);
 
     let rootClasses = legendOpen ? 'legend-panel map-component shadow' : 'legend-panel map-component shadow legend-collapsed';
 

@@ -354,7 +354,7 @@ export default {
       }]
     },
     GROUP_EP: {
-      groupType: 'radio',
+      groupType: 'nested',
       order: 4,
       label: {
         en: 'Land Cover Dynamics',
@@ -367,42 +367,50 @@ export default {
       layers: [
         {
           order: 1,
-          id: 'ANP_Federal',
-          type: 'feature',
-          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
-          legendLayer: [6],
           label: {
-            es: 'ANP Federal'
+            es: 'NESTED GROUPS!!'
           },
-          sublabel: {
-            es: 'Conanp, 2017'
-          }
-        },
-        {
-          order: 2,
-          id: 'ANP_Estatal',
-          type: 'feature',
-          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
-          legendLayer: [5],
-          label: {
-            es: 'ANP Estatal'
-          },
-          sublabel: {
-            es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-          }
-        },
-        {
-          order: 3,
-          id: 'ANP_Mpal',
-          type: 'feature',
-          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
-          legendLayer: [4],
-          label: {
-            es: 'ANP Municipal'
-          },
-          sublabel: {
-            es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-          }
+          nestedLayers: [
+            {
+              order: 1,
+              id: 'ANP_Federal',
+              type: 'feature',
+              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
+              legendLayer: [6],
+              label: {
+                es: 'ANP Federal'
+              },
+              sublabel: {
+                es: 'Conanp, 2017'
+              }
+            },
+            {
+              order: 2,
+              id: 'ANP_Estatal',
+              type: 'feature',
+              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
+              legendLayer: [5],
+              label: {
+                es: 'ANP Estatal'
+              },
+              sublabel: {
+                es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+              }
+            },
+            {
+              order: 3,
+              id: 'ANP_Mpal',
+              type: 'feature',
+              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
+              legendLayer: [4],
+              label: {
+                es: 'ANP Municipal'
+              },
+              sublabel: {
+                es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+              }
+            }
+          ]
         }
       ]
     },
