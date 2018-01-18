@@ -72,7 +72,7 @@ export default class NestedCheckbox extends Component {
         <div className={`layer-checkbox relative ${checked}`}>
           <span onClick={this.toggleGroup} className='toggle-switch pointer'><span /></span>
           <span onClick={this.toggleGroup} className='layer-checkbox-label pointer'>
-            {groupLabel}
+            <strong>{groupLabel}</strong>
           </span>
           {layers.map(this.renderTree)}
         </div>

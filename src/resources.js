@@ -366,9 +366,9 @@ export default {
       },
       layers: [
         {
-          order: 1,
+          order: 2,
           label: {
-            es: 'NESTED GROUPS!!'
+            es: 'NESTED GROUP1!!'
           },
           nestedLayers: [
             {

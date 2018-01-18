@@ -453,8 +453,10 @@ export default class Map extends Component {
           break;
         case 'nested':
           group.layers.forEach(nestedGroup => {
+            if (!nestedGroup.hasOwnProperty('nestedLayers')) {
+              throw new Error(`nested groups must contain a 'nestedLayers' property. You may have made a configuration error. Check the 'resources.js' file`);
+            }
             nestedGroup.nestedLayers = nestedGroup.nestedLayers.map(l => {
-
               const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
               layers = [
                 ...layers.slice(0, layers.indexOf(mapLayer)),
