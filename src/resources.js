@@ -5,7 +5,8 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  webmap: 'b70ffba69536467388a62c064b41e4f2',
+  // webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
@@ -22,7 +23,7 @@ export default {
   includeMyGFWLogin: true,
   navLinksInNewTab: false,
   //- Language Settings
-  language: 'en',
+  language: 'es',
   useAlternativeLanguage: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
@@ -91,7 +92,7 @@ export default {
   */
   layerPanel: {
     GROUP_WEBMAP: {
-      groupType: 'checkbox',
+      // groupType: 'checkbox',
       order: 2,
       label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
       layers: [] // Will get filled in with layers from the webmap
@@ -352,6 +353,59 @@ export default {
         }
       }]
     },
+    GROUP_EP: {
+      groupType: 'checkbox',
+      order: 4,
+      label: {
+        en: 'Land Cover Dynamics',
+        fr: 'Evolution de la couverture des sols',
+        es: 'Áreas naturales protegidas',
+        pt: 'Dinâmica de cobertura da terra ',
+        id: 'Land Cover Dynamics',
+        zh: '土地覆盖动态数据'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'ANP_Federal',
+          type: 'feature',
+          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
+          legendLayer: [6],
+          label: {
+            es: 'ANP Federal'
+          },
+          sublabel: {
+            es: 'Conanp, 2017'
+          }
+        },
+        {
+          order: 2,
+          id: 'ANP_Estatal',
+          type: 'feature',
+          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
+          legendLayer: [5],
+          label: {
+            es: 'ANP Estatal'
+          },
+          sublabel: {
+            es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+          }
+        },
+        {
+          order: 3,
+          id: 'ANP_Mpal',
+          type: 'feature',
+          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
+          legendLayer: [4],
+          label: {
+            es: 'ANP Municipal'
+          },
+          sublabel: {
+            es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+          }
+        }
+      ]
+    },
     GROUP_LC: {
       groupType: 'default',
       order: 3,
@@ -451,7 +505,7 @@ export default {
         inputRange: [30, 101],
         outputRange: [1],
         opacity: 0.8,
-      legendLayer: [2],
+        legendLayer: [2],
         label: {
           en: 'Tree cover density',
           fr: 'Densité du couvert arboré',

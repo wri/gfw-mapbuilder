@@ -34,18 +34,6 @@ export default class LayerPanel extends Component {
     map: PropTypes.object.isRequired
   };
 
-  // renderLayerGroup = (group, layers) => {
-  //   return (
-  //     <LayerGroup
-  //       key={group.key}
-  //       groupKey={group.key}
-  //       label={group.label}
-  //       {...this.props}>
-  //       {layers.map(this.checkboxMap(group.key), this)}
-  //     </LayerGroup>
-  //   );
-  // };
-
   componentDidUpdate(prevProps) {
     if (this.props.activeLayers !== prevProps.activeLayers
       && this.props.activeLayers.filter(id => id !== 'USER_FEATURES').length > 0
@@ -81,7 +69,7 @@ export default class LayerPanel extends Component {
     const orderedGroups = Object.keys(groups).filter((key) => {
       //- extraLayers show on the map but not here, if no layers are configured
       //- don't add the group
-      return key !== 'extraLayers' && groups[key].layers.length;
+      return key !== 'extraLayers';
     }).map(key => {
       //- Add a key to it for React
       groups[key].key = key;

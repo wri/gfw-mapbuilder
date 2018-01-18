@@ -73,26 +73,27 @@ import RadioButton from './RadioButton';
   }
 
   render() {
+
     const { groupLayers, dynamicLayers, activeLayers } = this.props;
+    console.log(groupLayers);
+    // groupLayers.forEach(layer => {
+    //   if (layer.subId) {
+    //     if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
+    //       layer.esriLayer.show();
+    //       return;
+    //     }
 
-    groupLayers.forEach(layer => {
-      if (layer.subId) {
-        if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
-          layer.esriLayer.show();
-          return;
-        }
+    //     layer.esriLayer.hide();
+    //     return;
+    //   }
 
-        layer.esriLayer.hide();
-        return;
-      }
+    //   if (activeLayers.indexOf(layer.id) > -1) {
+    //     layer.esriLayer.show();
+    //     return;
+    //   }
 
-      if (activeLayers.indexOf(layer.id) > -1) {
-        layer.esriLayer.show();
-        return;
-      }
-
-      layer.esriLayer.hide();
-    });
+    //   layer.esriLayer.hide();
+    // });
 
     return (
       <div>

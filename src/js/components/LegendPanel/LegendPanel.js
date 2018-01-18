@@ -180,7 +180,15 @@ export default class LegendPanel extends Component {
         />;
         break;
       default:
-        if (layer.hasOwnProperty('nestedLayers')) {
+        if (layer.type === 'feature') {
+          childComponent = <WebMapFeatureLayerLegend
+            key={layer.id}
+            layer={layer}
+            visibility={activeLayers.indexOf(layer.id) > -1 && layer.visibleAtMapScale}
+            visibleLayers={activeLayers}
+            legendOpacity={legendOpacity}
+          />;
+        } else if (layer.hasOwnProperty('nestedLayers')) {
           childComponent = this.createNestedLegendGroups(layer);
         } else {
           childComponent = this.createWebmapLegend(layer);

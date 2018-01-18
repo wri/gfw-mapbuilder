@@ -168,6 +168,14 @@ class MapActions {
         mask.parentNode.appendChild(mask);
       }
     });
+
+    layers = layers.map(l => {
+      // skip if we already have an esriLayer
+      if (l.hasOwnProperty('esriLayer')) { return l; }
+      const esriLayer = esriLayers.filter(el => el.id === l.id)[0] || {};
+      l.esriLayer = esriLayer;
+      return l;
+    });
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {
       layers,
