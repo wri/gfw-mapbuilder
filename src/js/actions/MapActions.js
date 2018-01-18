@@ -91,28 +91,29 @@ class MapActions {
       return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
     }).sort((a, b) => {
       //- Sort the groups based on their order property
-      return layerPanel[a].order - layerPanel[b].order;
+      return layerPanel[b].order - layerPanel[a].order;
     }).reduce((list, groupName, groupIndex) => {
       //- Flatten them into a single list but before that,
       //- Multiple the order by 100 so I can sort them more easily below, this is because there
       //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
       //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
       if (groupIndex === 0) {
-        maxOrder = layerPanel[groupName].order;
+        maxOrder = layerPanel[groupName].order + 1;
       }
-      return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
 
-        // TODO: Figure out if we need this bit
-        // if (layer.order < 100) {
-        //   layer.order = ((10 - layerPanel[groupName].order) * 100) - (layer.order);
-        // }
+      const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
+        if (layer.hasOwnProperty('nestedLayers')) {
+          layer.order = (maxOrder - layerPanel[groupName].order) * 100;
+        }
+        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
         return layer;
-      }));
+      });
+
+      return list.concat(orderedGroups);
     }, []);
 
     //- Add the extra layers now that all the others have been sorted
-    layers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+    layers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
       }
