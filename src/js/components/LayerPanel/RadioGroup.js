@@ -59,10 +59,12 @@ import RadioButton from './RadioButton';
     const { language } = this.context;
     const selected = this.props.activeLayers.indexOf(layer.subId || layer.id) > -1 ? 'active' : '';
     const sublabel = layer.sublabel && (layer.sublabel[language] || layer.sublabel[layer.subIndex][language]);
+    const label = layer.label && (layer.label[language]
+        || layer.label[layer.subIndex][language]);
     return <RadioButton
       key={layer.subId || layer.id}
       selected={selected}
-      label={layer.label}
+      label={label}
       sublabel={sublabel}
       id={layer.subId || layer.id}
       layer={layer}
@@ -72,28 +74,34 @@ import RadioButton from './RadioButton';
     />;
   }
 
+  handleLayerVisibility = (groupLayers, dynamicLayers, activeLayers) => {
+    groupLayers.forEach(layer => {
+      if (layer.subId) {
+        if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
+          layer.esriLayer.show();
+          return;
+        }
+
+        layer.esriLayer.hide();
+        return;
+      }
+
+      if (activeLayers.indexOf(layer.id) > -1) {
+        layer.esriLayer.show();
+        return;
+      }
+
+      layer.esriLayer.hide();
+    });
+
+  }
+
   render() {
 
     const { groupLayers, dynamicLayers, activeLayers } = this.props;
-    console.log(groupLayers);
-    // groupLayers.forEach(layer => {
-    //   if (layer.subId) {
-    //     if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
-    //       layer.esriLayer.show();
-    //       return;
-    //     }
-
-    //     layer.esriLayer.hide();
-    //     return;
-    //   }
-
-    //   if (activeLayers.indexOf(layer.id) > -1) {
-    //     layer.esriLayer.show();
-    //     return;
-    //   }
-
-    //   layer.esriLayer.hide();
-    // });
+    if (groupLayers.length && groupLayers.every(l => l.hasOwnProperty('esriLayer'))) {
+      this.handleLayerVisibility(groupLayers, dynamicLayers, activeLayers);
+    }
 
     return (
       <div>

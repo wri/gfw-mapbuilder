@@ -43,13 +43,16 @@
 .layer-category
   margin 10px
 
-.layer-category-label
+.layer-category-label-container
+  display flex
   border-bottom 1px solid $darkGray
   text-transform uppercase
   font-weight 500
   font-size 15px
   color $darkGray
   padding 5px 0
+  .layer-category-label
+    width 92%
   & > span
     text-overflow ellipsis
     display inline-block
@@ -303,6 +306,7 @@ div.legend-icon
   border 1px solid $disabledBackground
   border-radius 5px
   position relative
+  top 4px
   height 12px
   width 12px
 

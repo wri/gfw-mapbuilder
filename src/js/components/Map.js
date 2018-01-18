@@ -407,7 +407,7 @@ export default class Map extends Component {
           let groupLayers = [];
           const groupSublayers = [];
           group.layers.forEach(l => {
-            if (l.includedSublayers) { // this is a dynamic layer
+            if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
               layers.forEach(webmapLayer => {
                 if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
                   if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {

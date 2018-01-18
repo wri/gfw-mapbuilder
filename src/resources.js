@@ -354,7 +354,7 @@ export default {
       }]
     },
     GROUP_EP: {
-      groupType: 'checkbox',
+      groupType: 'radio',
       order: 4,
       label: {
         en: 'Land Cover Dynamics',
