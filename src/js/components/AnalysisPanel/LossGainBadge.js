@@ -30,8 +30,6 @@ const LossGainBadge = (props, context) => {
             <span className='results__loss--count'>{utils.formatNumber(lossTotal)}</span>
             <span className='results__loss--unit'>Ha</span>
           </div>
-          <span className='results__loss--count'>{utils.formatNumber(lossTotal)}</span>
-          <span className='results__loss--unit'>Ha</span>
         </div>
         <div className='results__gain-badge'>
           <div className='results__loss-gain--label'>{text[language].ANALYSIS_TOTAL_GAIN_LABEL}</div>
@@ -40,8 +38,6 @@ const LossGainBadge = (props, context) => {
             <span className='results__gain--count'>{utils.formatNumber(gainTotal)}</span>
             <span className='results__gain--unit'>Ha</span>
           </div>
-          <span className='results__gain--count'>{utils.formatNumber(gainTotal)}</span>
-          <span className='results__gain--unit'>Ha</span>
         </div>
       </div>
     );
