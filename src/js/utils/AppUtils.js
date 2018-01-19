@@ -174,7 +174,7 @@ const utils = {
       viirsEndDate: viirsEndDate,
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
-      customFeatureTitle: options.selectedFeature.attributes.title
+      customFeatureTitle: options.selectedFeature.attributes.title || ''
     };
 
 

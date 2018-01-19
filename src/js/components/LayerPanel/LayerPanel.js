@@ -80,6 +80,7 @@ export default class LayerPanel extends Component {
     });
 
     return orderedGroups.map((group) => {
+      if (group.layers.length === 0) { return null; }
       group.layers = group.layers.sort((a, b) => b.order - a.order);
       //- Sort the layers and then render them, basemaps use a different function
       //- as not all basemaps are present in configuration
