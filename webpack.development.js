@@ -12,7 +12,13 @@ module.exports = (PATHS) => {
     }),
 
     // Load Sass Module
-    parts.loadStyl({ include: PATHS.src }),
+    parts.loadStyl({
+      include: PATHS.src,
+      options: {
+        name: '[name].css',
+        outputPath: `${PATHS.assets}/css/`
+      }
+    }),
 
     // Load Images
     parts.loadImages(),

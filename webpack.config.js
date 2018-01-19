@@ -14,7 +14,7 @@ module.exports = (env) => {
     src: path.resolve(__dirname, 'src'),
     build: path.resolve(__dirname, 'webpackBuild'),
     index: __dirname,
-    assets: this.build
+    assets: './'
   };
 
   // Default to development webpack unless production is specified

@@ -350,7 +350,7 @@ export default class Map extends Component {
             itemId: layer.itemId
           };
           dynamicLayers.push(layerInfo);
-          if (layerInfo.visible) { layerActions.addSubLayer(layerInfo); }
+          // if (layerInfo.visible) { layerActions.addSubLayer(layerInfo); }
         });
 
         // Push the dynamic layers into the array in their current order

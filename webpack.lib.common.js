@@ -3,6 +3,99 @@
 const packageJSON = require('./package.json');
 const version = packageJSON.version;
 
+// module.exports = {
+//   entry: {
+//     report: [
+//       path.resolve(__dirname, 'src/js/reportMain.js'),
+//       path.resolve(__dirname, 'src/css/report.styl')
+//     ],
+//     libraryMain: path.resolve(__dirname, 'src/js/libraryMain.js')
+//   },
+//   output: {
+//     filename: `${version}/js/[name].js`,
+//     path: path.resolve(__dirname, 'libBuild'),
+//     libraryTarget: 'amd'
+//   },
+//   module: {
+//     rules: [
+//       {
+//         test: /\.js$/,
+//         exclude: [
+//           /node_modules/,
+//           path.resolve(__dirname, 'vendors'),
+//           path.resolve(__dirname, 'build'),
+//           path.resolve(__dirname, 'src/js/library.js'),
+//           path.resolve(__dirname, 'src/js/resources.js')
+//         ],
+//         use: {
+//           loader: 'babel-loader',
+//           options: {
+//             presets: ['es2015', 'react', 'stage-0'],
+//             plugins: ['transform-es2015-modules-amd']
+//           }
+//         }
+//       },
+//       {
+//         test: /\.styl$/,
+//         use: [
+//           {
+//             loader: 'file-loader',
+//             options: {
+//               name: '[name].css',
+//               outputPath: `${version}/css/`
+//             }
+//           },
+//           { loader: 'extract-loader' },
+//           {
+//             loader: 'css-loader'
+//           },
+//           { loader: 'stylus-loader' }
+//         ]
+//       },
+//       {
+//         test: /\.css$/,
+//         use: ['style-loader', 'css-loader']
+//       },
+//       {
+//         test: /\.(svg)$/,
+//         use: ['url-loader']
+//       },
+//       {
+//         test: /\.(png|jpg|gif)$/,
+//         use: [
+//           {
+//             loader: 'file-loader',
+//             options: {
+//               name: '[name].[ext]',
+//               publicPath: '../',
+//               outputPath: `${version}/css/images/`
+//             }
+//           }
+//         ]
+//       },
+//       {
+//         test: /\.(woff|woff2|ttf|)$/,
+//         use: {
+//           loader: 'file-loader',
+//           options: {
+//             publicPath: '../',
+//             outputPath: `${version}/css/fonts/`
+//           }
+//         }
+//       }
+//     ]
+//   ],
+//   externals: [
+//     function (context, request, callback) {
+//       if (/^dojo/.test(request) || /^dojox/.test(request) || /^dijit/.test(request) || /^esri/.test(request)) {
+//         callback(null, 'amd ' + request);
+//       } else {
+//         callback();
+//       }
+//     }
+//   ]
+// };
+
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
@@ -21,11 +114,7 @@ module.exports = (PATHS) => {
           path.resolve(__dirname, 'src/js/reportMain.js'),
           path.resolve(__dirname, 'src/css/report.styl')
         ],
-        libraryMain: [
-          path.resolve(__dirname, 'src/js/libraryMain.js'),
-          path.resolve(__dirname, 'src/css/app.styl'),
-          path.resolve(__dirname, 'src/css/critical.styl')
-        ]
+        libraryMain: path.resolve(__dirname, 'src/js/libraryMain.js')
       },
       output: {
         filename: `${version}/js/[name].js`,
