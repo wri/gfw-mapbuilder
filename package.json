@@ -2,10 +2,9 @@
   "name": "forest_atlas_template",
   "version": "1.1.14",
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
-  "main": "gulpfile.js",
+  "main": "webpack.config.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
-    "dist-lib": "rm -rf dist; BABEL_ENV=production npm run babel; gulp production; gulp bundle-lib;",
     "test": "eslint src/js/**/*.js",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
