@@ -5,6 +5,7 @@ import layerKeys from 'constants/LayerConstants';
 import appActions from 'actions/AppActions';
 import resources from 'resources';
 import Point from 'esri/geometry/Point';
+import AppUtils from '../utils/AppUtils';
 
 class MapActions {
   //- Action to notify the store the map has changed so we can rerender UI changes
@@ -102,9 +103,6 @@ class MapActions {
       }
 
       const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-        if (layer.hasOwnProperty('nestedLayers')) {
-          layer.order = (maxOrder - layerPanel[groupName].order) * 100;
-        }
         layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
         return layer;
       });
@@ -113,22 +111,24 @@ class MapActions {
     }, []);
 
     //- Add the extra layers now that all the others have been sorted
-    layers = layers.reduce((prevArray, currentItem) => {
+    layers = layers.concat(layerPanel.extraLayers);
+
+    //- make sure there's only one entry for each dynamic layer
+    const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
       }
       return prevArray.concat(currentItem);
-    }, []).concat(layerPanel.extraLayers);
-
-    //- make sure there's only one entry for each dynamic layer
+    }, []);
     const uniqueLayers = [];
     const existingIds = [];
-    layers.forEach(layer => {
-      if (existingIds.indexOf(layer.id) === -1) {
-        uniqueLayers.push(layer);
-        existingIds.push(layer.id);
-      }
-    });
+    reducedLayers
+      .forEach(layer => {
+        if (existingIds.indexOf(layer.id) === -1) {
+          uniqueLayers.push(layer);
+          existingIds.push(layer.id);
+        }
+      });
     //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
     //- Make those updates here to the config as this will trickle down
     uniqueLayers.forEach(layer => {
@@ -137,9 +137,10 @@ class MapActions {
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
-    const esriLayers = uniqueLayers.filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
-      return layerFactory(layer, language);
-    }).sort((a, b) => a.order - b.order);
+    const esriLayers = uniqueLayers
+      .filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
+        return layerFactory(layer, language);
+      }).sort((a, b) => a.order - b.order);
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
@@ -160,7 +161,6 @@ class MapActions {
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
 
-      // create an array (addedLayersCopy) where the largest indexes are the webmap layers
       uniqueLayers.reverse().forEach((l, i) => {
         map.reorderLayer(l, i);
       });
@@ -175,12 +175,22 @@ class MapActions {
       }
     });
 
-    layers = layers.map(l => {
-      // skip if we already have an esriLayer
-      if (l.hasOwnProperty('esriLayer')) { return l; }
-      const esriLayer = esriLayers.filter(el => el.id === l.id)[0] || {};
-      l.esriLayer = esriLayer;
-      return l;
+    // go through the esriLayers and replace the corresponding item in layers
+    esriLayers.forEach(el => {
+      let layerToReplace = AppUtils.getObject(layers, 'id', el.id);
+      let layerToReplaceIndex = layers.indexOf(layerToReplace);
+
+      if (layerToReplace === undefined) { // this must be one of the nestedLayers
+        layers.filter(l => l.hasOwnProperty('nestedLayers')).forEach(ng => {
+          layerToReplace = AppUtils.getObject(ng.nestedLayers, 'id', el.id);
+          if (layerToReplace === undefined) { return; } // it's a different nested layer, so get out
+          layerToReplaceIndex = ng.nestedLayers.indexOf(layerToReplace);
+          ng.nestedLayers[layerToReplaceIndex] = el;
+          return;
+        });
+        return;
+      }
+      layers[layerToReplaceIndex] = el;
     });
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {

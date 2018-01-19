@@ -39,6 +39,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import AppUtils from '../utils/AppUtils';
 
 
 let scalebar, paramsApplied, editToolbar, measurement = false;
@@ -388,15 +389,6 @@ export default class Map extends Component {
       }
     });
 
-    const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
-    webmapGroup.layers = layers;
-    if (!webmapGroup.label.hasOwnProperty(language)) {
-      if (settings.alternativeLanguage === language) {
-        webmapGroup.label[language] = settings.alternativeWebmapMenuName;
-      }
-      webmapGroup.label[language] = settings.webmapMenuName;
-    }
-
     const groupKeys = Object.keys(settings.layerPanel)
       .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
     const exclusiveLayerIds = [];
@@ -406,7 +398,8 @@ export default class Map extends Component {
         case 'radio': {
           let groupLayers = [];
           const groupSublayers = [];
-          group.layers.forEach(l => {
+          const layersFromWebmap = group.layers.filter(l => !l.url);
+          layersFromWebmap.forEach(l => {
             if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
               layers.forEach(webmapLayer => {
                 if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
@@ -415,63 +408,107 @@ export default class Map extends Component {
                     webmapLayer.groupOrder = group.order;
                   }
                   groupSublayers.push({
-                    ...webmapLayer,
-                    ...l
+                    ...l,
+                    ...webmapLayer
                   });
                 }
               });
               groupLayers = groupLayers.concat(groupSublayers);
-              if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
-              return;
-            }
-            const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
-            layers = [
-              ...layers.slice(0, layers.indexOf(mapLayer)),
-              ...layers.slice(layers.indexOf(mapLayer) + 1)
-            ];
-            groupLayers.push({
-              ...mapLayer,
-              ...l
-            });
-            exclusiveLayerIds.push(l.id);
-          });
-          group.layers = groupLayers;
-          break;
-        }
-        case 'checkbox':
-          group.layers = group.layers.map(l => {
-            const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
-            layers = [
-              ...layers.slice(0, layers.indexOf(mapLayer)),
-              ...layers.slice(layers.indexOf(mapLayer) + 1)
-            ];
-            return {
-              ...mapLayer,
-              ...l
-            };
-          });
-          break;
-        case 'nested':
-          group.layers.forEach(nestedGroup => {
-            if (!nestedGroup.hasOwnProperty('nestedLayers')) {
-              throw new Error(`nested groups must contain a 'nestedLayers' property. You may have made a configuration error. Check the 'resources.js' file`);
-            }
-            nestedGroup.nestedLayers = nestedGroup.nestedLayers.map(l => {
+            } else { // this is not a dynamic layer
               const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
               layers = [
                 ...layers.slice(0, layers.indexOf(mapLayer)),
                 ...layers.slice(layers.indexOf(mapLayer) + 1)
               ];
+              groupLayers.push({
+                ...l,
+                ...mapLayer
+              });
+            }
+          });
+
+          groupLayers.forEach(gl => {
+            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
+            group.layers = [
+              ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
+              gl,
+              ...group.layers.slice(group.layers.indexOf(layerConfigToReplace) + 1)
+            ];
+          });
+
+          group.layers.forEach(l => {
+            if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
+          });
+          break;
+        }
+        case 'checkbox': {
+          const layersFromWebmap = group.layers.filter(l => !l.url)
+            .map(l => {
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+
+              layers = [
+                ...layers.slice(0, layers.indexOf(mapLayer)),
+                ...layers.slice(layers.indexOf(mapLayer) + 1)
+              ];
               return {
-                ...mapLayer,
-                ...l
+                ...l,
+                ...mapLayer
               };
             });
+
+          layersFromWebmap.forEach(lfw => {
+            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', lfw.id);
+            group.layers = [
+              ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
+              lfw,
+              ...group.layers.slice(group.layers.indexOf(layerConfigToReplace) + 1)
+            ];
           });
+          break;
+        }
+        case 'nested': {
+          group.layers.forEach(nestedGroup => {
+            if (!nestedGroup.hasOwnProperty('nestedLayers')) {
+              throw new Error(`nested groups must contain a 'nestedLayers' property. You may have made a configuration error. Check the 'resources.js' file`);
+            }
+            const layersFromWebmap = nestedGroup.nestedLayers.filter(nl => !nl.url)
+            .map(l => {
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+
+              layers = [
+                ...layers.slice(0, layers.indexOf(mapLayer)),
+                ...layers.slice(layers.indexOf(mapLayer) + 1)
+              ];
+
+              return {
+                ...l,
+                ...mapLayer
+              };
+            });
+
+            layersFromWebmap.forEach(nl => {
+              const layerConfigToReplace = AppUtils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
+              nestedGroup.nestedLayers = [
+                ...nestedGroup.nestedLayers.slice(0, nestedGroup.nestedLayers.indexOf(layerConfigToReplace)),
+                nl,
+                ...nestedGroup.nestedLayers.slice(nestedGroup.nestedLayers.indexOf(layerConfigToReplace) + 1)
+              ];
+            });
+          });
+        }
         break;
         default:
       }
     });
+
+    const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
+    webmapGroup.layers = layers;
+    if (!webmapGroup.label.hasOwnProperty(language)) {
+      if (settings.alternativeLanguage === language) {
+        webmapGroup.label[language] = settings.alternativeWebmapMenuName;
+      }
+      webmapGroup.label[language] = settings.webmapMenuName;
+    }
 
     mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
   };

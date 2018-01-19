@@ -80,11 +80,11 @@ export default class LayerPanel extends Component {
     });
 
     return orderedGroups.map((group) => {
+      group.layers = group.layers.sort((a, b) => b.order - a.order);
       //- Sort the layers and then render them, basemaps use a different function
       //- as not all basemaps are present in configuration
 
       let layers = [];
-
       switch (group.groupType) {
         case 'radio': {
           layers = <RadioGroup
@@ -108,7 +108,7 @@ export default class LayerPanel extends Component {
           layers = this.renderBasemaps(group.layers);
           break;
         default:
-          layers = group.layers.sort((a, b) => b.order - a.order).map(this.checkboxMap);
+          layers = group.layers.map(this.checkboxMap);
       }
 
       return (

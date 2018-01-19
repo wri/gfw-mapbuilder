@@ -20,8 +20,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
 
     this.state = {
       visible: props.visibility,
-      opacity: props.layer.opacity || 1,
-      title: props.layer.arcgisProps ? props.layer.arcgisProps.title : props.layer.esriLayer.name
+      opacity: props.layer.opacity || 1
     };
   }
 
@@ -113,7 +112,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
   render () {
     return (
       <div className={`parent-legend-container ${this.state.visible ? '' : 'hidden'}`} ref="myRef">
-        <div className='label-container'><strong>{this.state.title}</strong></div>
+        <div className='label-container'><strong>{this.props.label}</strong></div>
         {this.createLegendSymbol(this.props.layer.renderer || this.props.layer.esriLayer.renderer)}
       </div>
     );

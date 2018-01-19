@@ -126,6 +126,7 @@ export default (layer, lang) => {
       }
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'graphic':
       options.id = layer.id;

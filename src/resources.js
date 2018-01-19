@@ -397,8 +397,16 @@ export default {
                 es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
               }
             },
+          ]
+        },
+        {
+          order: 1,
+          label: {
+            es: 'Nested group 1 (for real)'
+          },
+          nestedLayers: [
             {
-              order: 3,
+              order: 1,
               id: 'ANP_Mpal',
               type: 'feature',
               url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
@@ -408,6 +416,13 @@ export default {
               },
               sublabel: {
                 es: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+              }
+            },
+            {
+              order: 2,
+              id: 'GestionForestal_capas_4094',
+              label: {
+                es: 'From the webmap'
               }
             }
           ]

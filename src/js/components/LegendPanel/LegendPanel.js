@@ -183,6 +183,7 @@ export default class LegendPanel extends Component {
         if (layer.hasOwnProperty('nestedLayers')) {
           childComponent = this.createNestedLegendGroups(layer);
         } else if (layer.type === 'feature') {
+          console.log('layer', layer);
           childComponent = <WebMapFeatureLayerLegend
             key={layer.id}
             layer={layer}
@@ -199,7 +200,7 @@ export default class LegendPanel extends Component {
 
   createWebmapLegend = layer => {
     const { activeLayers, dynamicLayers, legendOpacity } = this.props;
-    const { map } = this.context;
+    const { map, language } = this.context;
 
     if (layer.subId) {
       const scale = map.getScale();
@@ -217,12 +218,12 @@ export default class LegendPanel extends Component {
         }
       }
 
-      const esriLayer = layer.esriLayer;
+      const esriLayer = layer.esriLayer || layer;
 
       return <WebMapLegend
         key={layer.subId}
         url={esriLayer.url}
-        labels={layer.label}
+        labels={layer.label[language]}
         visibility={visible}
         visibleLayers={activeLayers}
         layerSubIndex={layer.subIndex}
@@ -233,12 +234,13 @@ export default class LegendPanel extends Component {
 
 
     } else {
-      const esriLayer = layer.esriLayer;
+      const esriLayer = layer.esriLayer || layer;
 
       if (esriLayer.type === 'Feature Layer') {
         return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
+          label={layer.label[language] || layer.label}
           visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
@@ -251,7 +253,7 @@ export default class LegendPanel extends Component {
         return <WebMapLegend
           key={layer.id}
           url={esriLayer.url}
-          labels={layer.label}
+          labels={layer.label[language]}
           visibility={activeLayers.indexOf(layer.id) > -1}
           visibleLayers={activeLayers}
           layerId={esriLayer.layerId}
