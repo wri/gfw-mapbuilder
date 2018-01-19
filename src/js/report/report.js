@@ -71,7 +71,7 @@ const getFeature = function getFeature (params) {
         attributes: geostoreResult.data.attributes,
         geostoreId: geostoreResult.data.id,
         geometry: new Polygon(esriJson),
-        title: params.customFeatureTitle || 'Custom Analysis',
+        title: params.customFeatureTitle,
         isCustom: true // TODO MAKE SURE NOT TO HARD CODE THAT IN
       });
     }, err => {
