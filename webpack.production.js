@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const parts = require('./webpack.parts');
@@ -8,7 +9,13 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 // Webpack configuration for production
 module.exports = (PATHS) => {
   return merge([
-    parts.loadStyl({ include: PATHS.src }),
+    parts.loadStyl({
+      include: PATHS.src,
+      options: {
+        name: '[name].css',
+        outputPath: `${PATHS.assets}/css/`
+      }
+    }),
 
     // Load Images
     parts.loadImages({

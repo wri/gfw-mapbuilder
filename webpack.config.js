@@ -13,7 +13,8 @@ module.exports = (env) => {
   const PATHS = {
     src: path.resolve(__dirname, 'src'),
     build: path.resolve(__dirname, 'webpackBuild'),
-    index: __dirname
+    index: __dirname,
+    assets: this.build
   };
 
   // Default to development webpack unless production is specified

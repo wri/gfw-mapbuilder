@@ -66,7 +66,7 @@ exports.uglifyJavaScript = () => ({
 });
 
 // Styl Loader
-exports.loadStyl = ({ include, exclude } = {}) => ({
+exports.loadStyl = ({ include, exclude, options } = {}) => ({
   module: {
     rules: [
       {
@@ -74,10 +74,7 @@ exports.loadStyl = ({ include, exclude } = {}) => ({
         use: [
           {
             loader: 'file-loader',
-            options: {
-              name: '[name].css',
-              outputPath: 'css/'
-            }
+            options
           },
           { loader: 'extract-loader' },
           {
