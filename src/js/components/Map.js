@@ -358,6 +358,7 @@ export default class Map extends Component {
             itemId: layer.itemId
           };
           dynamicLayers.push(layerInfo);
+          if (layerInfo.visible) { layerActions.addSubLayer(layerInfo); }
         });
 
         // Push the dynamic layers into the array in their current order
@@ -375,6 +376,7 @@ export default class Map extends Component {
             itemId: layer.itemId
           };
           layers.unshift(layerInfo);
+          if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
       } else {
         const layerInfo = {
@@ -386,6 +388,7 @@ export default class Map extends Component {
           itemId: layer.itemId
         };
         layers.unshift(layerInfo);
+        if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
     });
 
