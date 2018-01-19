@@ -41,9 +41,8 @@ import React, {
 } from 'react';
 import AppUtils from '../utils/AppUtils';
 
-
-let scalebar, paramsApplied, editToolbar, measurement = false;
 let mapLoaded, legendReady = false;
+let scalebar, paramsApplied, editToolbar = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -115,9 +114,8 @@ export default class Map extends Component {
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
+        editToolbar.refresh();
         scalebar.destroy();
-        editToolbar.destroy();
-        measurement.destroy();
       }
 
       this.createMap(activeWebmap, options);
@@ -161,12 +159,6 @@ export default class Map extends Component {
         map: response.map,
         scalebarUnit: 'metric'
       });
-
-      //- Add a measurement widget
-      measurement = new Measurement({
-        map: response.map
-      }, dom.byId('measurement-container'));
-      measurement.startup();
 
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
@@ -568,7 +560,7 @@ export default class Map extends Component {
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
-          {map.loaded && <TabView {...this.state} />}
+          {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
           {legendReady ? <Legend
             allLayers={this.state.allLayers}
             tableOfContentsVisible={this.state.tableOfContentsVisible}
