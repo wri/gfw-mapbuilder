@@ -92,6 +92,7 @@ export default class LayerCheckbox extends Component {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
       } else {
+        console.log(layer);
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
       }
@@ -104,7 +105,10 @@ export default class LayerCheckbox extends Component {
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
-    const label = layer.label ? layer.label[language] ? layer.label[language] : layer.label : '';
+    let label = layer.label ? layer.label[language] ? layer.label[language] : layer.label : '';
+    if (typeof label === 'object') {
+      label = '';
+    }
     const {sublabel} = layer;
 
     return (

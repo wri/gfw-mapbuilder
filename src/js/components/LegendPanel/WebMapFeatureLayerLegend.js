@@ -110,9 +110,15 @@ export default class WebMapFeatureLayerLegend extends React.Component {
   }
 
   render () {
+    const { language } = this.context;
+    let label = this.props.label ? this.props.label[language] ? this.props.label[language] : this.props.label : '';
+
+    if (typeof label === 'object') {
+      label = '';
+    }
     return (
       <div className={`parent-legend-container ${this.state.visible ? '' : 'hidden'}`} ref="myRef">
-        <div className='label-container'><strong>{this.props.label}</strong></div>
+        <div className='label-container'><strong>{label}</strong></div>
         {this.createLegendSymbol(this.props.layer.renderer || this.props.layer.esriLayer.renderer)}
       </div>
     );

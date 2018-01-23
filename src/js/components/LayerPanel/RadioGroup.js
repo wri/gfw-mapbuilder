@@ -11,6 +11,47 @@ import RadioButton from './RadioButton';
     map: PropTypes.object.isRequired
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = { groupLayers: [] };
+  }
+
+  componentDidMount() {
+    const { language } = this.context;
+    const { groupLayers } = this.props;
+
+    groupLayers.map((layer) => {
+
+      const sublabel = layer.sublabel || '';
+
+      if (sublabel.constructor === Object || !sublabel[language]) {
+        layer.sublabel = '';
+        console.error(
+          'you have not provided a sublabel on layer with id: '
+          + layer.id
+          + ' for the currently configured language: '
+          + language
+        );
+      }
+
+      const label = layer.label || '';
+
+      if (label.constructor === Object || !label[language]) {
+        layer.label = '';
+        console.error(
+          'you have not provided a label on layer with id: '
+          + layer.id
+          + ' for the currently configured language: '
+          + language
+        );
+      }
+
+      return layer;
+    });
+
+    this.setState({ groupLayers });
+  }
   showInfo = (layer) => {
 
     mapActions.showLayerInfo(layer);
@@ -56,16 +97,13 @@ import RadioButton from './RadioButton';
   }
 
   renderRadioButton = layer => {
-    const { language } = this.context;
     const selected = this.props.activeLayers.indexOf(layer.subId || layer.id) > -1 ? 'active' : '';
-    const sublabel = layer.sublabel && (layer.sublabel[language] || layer.sublabel[layer.subIndex][language]);
-    const label = layer.label && (layer.label[language]
-        || layer.label[layer.subIndex][language]);
+
     return <RadioButton
       key={layer.subId || layer.id}
       selected={selected}
-      label={label}
-      sublabel={sublabel}
+      label={layer.label}
+      sublabel={layer.sublabel}
       id={layer.subId || layer.id}
       layer={layer}
       showInfo={this.showInfo}
@@ -78,30 +116,44 @@ import RadioButton from './RadioButton';
     groupLayers.forEach(layer => {
       if (layer.subId) {
         if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
-          layer.esriLayer.show();
+          if (layer.esriLayer) {
+            layer.esriLayer.show();
+          } else if (layer.show) {
+            layer.show();
+          }
           return;
         }
 
-        layer.esriLayer.hide();
+        if (layer.esriLayer) {
+          layer.esriLayer.hide();
+        } else if (layer.hide) {
+          layer.hide();
+        }
         return;
       }
 
       if (activeLayers.indexOf(layer.id) > -1) {
-        layer.esriLayer.show();
+        if (layer.esriLayer) {
+          layer.esriLayer.show();
+        } else if (layer.showLoading) {
+          layer.show();
+        }
         return;
       }
 
-      layer.esriLayer.hide();
+      if (layer.esriLayer) {
+        layer.esriLayer.hide();
+      } else if (layer.hide) {
+        layer.hide();
+      }
     });
-
   }
 
   render() {
 
-    const { groupLayers, dynamicLayers, activeLayers } = this.props;
-    if (groupLayers.length && groupLayers.every(l => l.hasOwnProperty('esriLayer'))) {
-      this.handleLayerVisibility(groupLayers, dynamicLayers, activeLayers);
-    }
+    const { dynamicLayers, activeLayers } = this.props;
+    const { groupLayers } = this.state;
+    this.handleLayerVisibility(groupLayers, dynamicLayers, activeLayers);
 
     return (
       <div>

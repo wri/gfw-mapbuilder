@@ -112,12 +112,12 @@ module.exports = (PATHS) => {
       }
     },
     // Lint JavaScript Module
-    parts.lintJavaScript({
-      include: PATHS.src,
-      options: {
-        emitWarning: true
-      }
-    }),
+    // parts.lintJavaScript({
+    //   include: PATHS.src,
+    //   options: {
+    //     emitWarning: true
+    //   }
+    // }),
 
     // Transpile JavaScript
     parts.loadJavaScript({ include: PATHS.src }),
