@@ -5,8 +5,7 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  // webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
-  webmap: 'b70ffba69536467388a62c064b41e4f2',
+  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
@@ -92,7 +91,6 @@ export default {
   */
   layerPanel: {
     GROUP_WEBMAP: {
-      // groupType: 'checkbox',
       order: 2,
       label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
       layers: [] // Will get filled in with layers from the webmap
@@ -353,167 +351,6 @@ export default {
         }
       }]
     },
-    // GROUP_EP: {
-    //   groupType: 'radio',
-    //   order: 4,
-    //   label: {
-    //     en: 'TEST FEATURES',
-    //     fr: 'Evolution de la couverture des sols',
-    //     es: 'Áreas naturales protegidas',
-    //     pt: 'Dinâmica de cobertura da terra ',
-    //     id: 'Land Cover Dynamics',
-    //     zh: '土地覆盖动态数据'
-    //   },
-    //   layers: [
-    //     {
-    //       order: 4,
-    //       id: 'ANP_Federal',
-    //       type: 'feature',
-    //       url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
-    //       legendLayer: [6],
-    //       label: {
-    //         en: 'ANP Federal'
-    //       },
-    //       sublabel: {
-    //         en: 'Conanp, 2017'
-    //       }
-    //     },
-    //     {
-    //       order: 2,
-    //       id: 'ANP_Estatal',
-    //       type: 'feature',
-    //       url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
-    //       legendLayer: [5],
-    //       label: {
-    //         en: 'ANP Estatal'
-    //       },
-    //       sublabel: {
-    //         en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-    //       }
-    //     },
-    //     {
-    //       order: 3,
-    //       id: 'ANP_Mpal',
-    //       type: 'feature',
-    //       url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
-    //       legendLayer: [4],
-    //       label: {
-    //         en: 'ANP Municipal'
-    //       },
-    //       sublabel: {
-    //         en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-    //       }
-    //     },
-    //     {
-    //       order: 1,
-    //       id: 'GestionForestal_capas_4094',
-    //       label: {
-    //         en: 'From the webmap'
-    //       },
-    //       sublabel: {
-    //         en: 'sublabel from webmap'
-    //       }
-    //     }
-    //   ]
-    // },
-    GROUP_EP: {
-      groupType: 'nested',
-      order: 4,
-      label: {
-        en: 'TEST FEATURES',
-        fr: 'Evolution de la couverture des sols',
-        es: 'Áreas naturales protegidas',
-        pt: 'Dinâmica de cobertura da terra ',
-        id: 'Land Cover Dynamics',
-        zh: '土地覆盖动态数据'
-      },
-      layers: [
-        {
-          label: {
-            en: 'NESTED GROUP!'
-          },
-          order: 2,
-          nestedLayers: [
-            {
-              order: 2,
-              id: 'ANP_Federal',
-              type: 'feature',
-              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
-              legendLayer: [6],
-              label: {
-                es: 'ANP Federal'
-              },
-              sublabel: {
-                en: 'Conanp, 2017'
-              },
-              popup: {
-                title: {
-                  en: 'Active Fires'
-                },
-                content: {
-                  en: [
-                    { 'label': 'ESTADOS', 'fieldExpression': 'ESTADOS' }
-                  ]
-                },
-                sublabel: {
-                  en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-                  fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-                  es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-                  pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-                  id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-                  zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-                  ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-                }
-              }
-            },
-            {
-              order: 1,
-              id: 'ANP_Estatal',
-              type: 'feature',
-              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
-              legendLayer: [5],
-              label: {
-                en: 'ANP Estatal'
-              },
-              sublabel: {
-                en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-              }
-            },
-          ]
-        },
-        {
-          label: {
-            en: 'nested group FIRST'
-          },
-          order: 1,
-          nestedLayers: [
-            {
-              order: 2,
-              id: 'ANP_Mpal',
-              type: 'feature',
-              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
-              legendLayer: [4],
-              label: {
-                en: 'ANP Municipal'
-              },
-              sublabel: {
-                en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-              }
-            },
-            {
-              order: 1,
-              id: 'GestionForestal_capas_4094',
-              label: {
-                en: 'From the webmap'
-              },
-              sublabel: {
-                en: 'sublabel from webmap'
-              }
-            }
-          ]
-        }
-      ]
-    },
     GROUP_LC: {
       groupType: 'default',
       order: 3,
@@ -688,6 +525,43 @@ export default {
         }
       }]
     },
+
+    /**
+    * CUSTOM GROUPS
+    * Add your custom groups below. The custom groups are similar to the groups defined above.
+    * They are an object defined with a unique key (this key MUST be unique).
+    * There are three (3) group types that you may choose from:
+    *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
+    *               With this group type, more than one layer may be on at a time
+    *
+    *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
+    *            Only one layer may be on at a time within the same group
+    *            You may optionally choose to turn this group off when any other radio group is selected
+    *
+    *    nested - This group allows for layers to be grouped further within a layer panel
+    *
+    * COMMON GROUP PROPERTIES
+    * @property {string} groupType - the group type, one of checkbox, radio, nested
+    * @property {number} order - the order of the group in the layer panel
+    * @property {object} label - the label for the group in the layer panel
+    * @property {object[]} layers - the layers to be placed in the group
+    * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
+    * @property {number} layers[].order - the order of the layer within the group
+    * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
+    *
+    * RADIO GROUP PROPERTIES
+    * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
+    * sublayers you would like to include in the group. This property is required, so if you
+    * wish to include all sublayers, you must still provide this property with all sublayers
+    * @property {object} sublabel - for a dynamic layer the sublabel property must specify
+    * which sublayer the sublabel belongs to
+    *
+    * NESTED GROUP PROPERTIES
+    * @property {number} layers[].order - the order of the nested group within the panel group
+    * @property {object} layers[].label - the label for the nested group
+    * @property {object[]} layers[].nestedLayers - the layers for the nested group
+    */
+
     extraLayers: [
       {
         id: 'MASK',
@@ -695,57 +569,22 @@ export default {
         order: 10000,
         url:
           'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-        opacity: 0.35,
-        layerIds: [0]
-      },
-      {
-        id: 'LEGEND_LAYER',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-        visible: false,
-        opacity: 0,
-        layerIds: []
-      },
-      {
-        id: 'USER_FEATURES',
-        type: 'graphic',
-        visible: true
-      }
-    ]
-    /**
-     * CUSTOM GROUPS
-     * Add your custom groups below. The custom groups are similar to the groups defined above.
-     * They are an object defined with a unique key (this key MUST be unique).
-     * There are three (3) group types that you may choose from:
-     *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
-     *               With this group type, more than one layer may be on at a time
-     *
-     *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
-     *            Only one layer may be on at a time within the same group
-     *            You may optionally choose to turn this group off when any other radio group is selected
-     *
-     *    nested - This group allows for layers to be grouped further within a layer panel
-     *
-     * COMMON GROUP PROPERTIES
-     * @property {string} groupType - the group type, one of checkbox, radio, nested
-     * @property {number} order - the order of the group in the layer panel
-     * @property {object} label - the label for the group in the layer panel
-     * @property {object[]} layers - the layers to be placed in the group
-     * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
-     * @property {number} layers[].order - the order of the layer within the group
-     * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
-     *
-     * RADIO GROUP PROPERTIES
-     * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
-     * sublayers you would like to include in the group. This property is required, so if you
-     * wish to include all sublayers, you must still provide this property with all sublayers
-     * @property {object} sublabel - for a dynamic layer the sublabel property must specify
-     * which sublayer the sublabel belongs to
-     *
-     * NESTED GROUP PROPERTIES
-     * @property {number} layers[].order - the order of the nested group within the panel group
-     * @property {object} layers[].label - the label for the nested group
-     * @property {object[]} layers[].nestedLayers - the layers for the nested group
-     */
+          opacity: 0.35,
+          layerIds: [0]
+        },
+        {
+          id: 'LEGEND_LAYER',
+          type: 'dynamic',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+          visible: false,
+          opacity: 0,
+          layerIds: []
+        },
+        {
+          id: 'USER_FEATURES',
+          type: 'graphic',
+          visible: true
+        }
+      ]
   }
 };
