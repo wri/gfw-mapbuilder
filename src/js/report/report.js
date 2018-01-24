@@ -189,18 +189,20 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
 
     reducedLayers.forEach(layer => {
       const mapLayer = map.getLayer(layer.id);
-      mapLayer.hide();
-      activeLayers.split(',').forEach(id => {
-        if (id.indexOf(layer.id) > -1) {
-          if (layer.hasOwnProperty('includedSublayers')) {
-            const subIndex = parseInt(id.substr(layer.id.length + 1));
-            mapLayer.setVisibleLayers([subIndex]);
+      if (mapLayer) {
+        mapLayer.hide();
+        activeLayers.forEach(id => {
+          if (id.indexOf(layer.id) > -1) {
+            if (layer.hasOwnProperty('includedSublayers')) {
+              const subIndex = parseInt(id.substr(layer.id.length + 1));
+              mapLayer.setVisibleLayers([subIndex]);
+              mapLayer.show();
+              return;
+            }
             mapLayer.show();
-            return;
           }
-          mapLayer.show();
-        }
-      });
+        });
+      }
     });
 
     layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
