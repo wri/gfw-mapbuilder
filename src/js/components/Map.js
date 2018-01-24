@@ -470,19 +470,19 @@ export default class Map extends Component {
               throw new Error(`nested groups must contain a 'nestedLayers' property. You may have made a configuration error. Check the 'resources.js' file`);
             }
             const layersFromWebmap = nestedGroup.nestedLayers.filter(nl => !nl.url)
-            .map(l => {
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+              .map(l => {
+                const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
 
-              layers = [
-                ...layers.slice(0, layers.indexOf(mapLayer)),
-                ...layers.slice(layers.indexOf(mapLayer) + 1)
-              ];
+                layers = [
+                  ...layers.slice(0, layers.indexOf(mapLayer)),
+                  ...layers.slice(layers.indexOf(mapLayer) + 1)
+                ];
 
-              return {
-                ...l,
-                ...mapLayer
-              };
-            });
+                return {
+                  ...l,
+                  ...mapLayer
+                };
+              });
 
             layersFromWebmap.forEach(nl => {
               const layerConfigToReplace = AppUtils.getObject(nestedGroup.nestedLayers, 'id', nl.id);

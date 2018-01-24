@@ -366,7 +366,7 @@ export default {
       },
       layers: [
         {
-          order: 1,
+          order: 4,
           id: 'ANP_Federal',
           type: 'feature',
           url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
@@ -379,7 +379,7 @@ export default {
           }
         },
         {
-          order: 3,
+          order: 2,
           id: 'ANP_Estatal',
           type: 'feature',
           url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
@@ -392,7 +392,7 @@ export default {
           }
         },
         {
-          order: 2,
+          order: 3,
           id: 'ANP_Mpal',
           type: 'feature',
           url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
@@ -405,7 +405,7 @@ export default {
           }
         },
         {
-          order: 4,
+          order: 1,
           id: 'GestionForestal_capas_4094',
           label: {
             en: 'From the webmap'
@@ -416,6 +416,85 @@ export default {
         }
       ]
     },
+    // GROUP_EP: {
+    //   groupType: 'nested',
+    //   order: 4,
+    //   label: {
+    //     en: 'TEST FEATURES',
+    //     fr: 'Evolution de la couverture des sols',
+    //     es: 'Áreas naturales protegidas',
+    //     pt: 'Dinâmica de cobertura da terra ',
+    //     id: 'Land Cover Dynamics',
+    //     zh: '土地覆盖动态数据'
+    //   },
+    //   layers: [
+    //     {
+    //       label: {
+    //         en: 'NESTED GROUP!'
+    //       },
+    //       order: 2,
+    //       nestedLayers: [
+    //         {
+    //           order: 2,
+    //           id: 'ANP_Federal',
+    //           type: 'feature',
+    //           url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
+    //           legendLayer: [6],
+    //           label: {
+    //             en: 'ANP Federal'
+    //           },
+    //           sublabel: {
+    //             en: 'Conanp, 2017'
+    //           }
+    //         },
+    //         {
+    //           order: 1,
+    //           id: 'ANP_Estatal',
+    //           type: 'feature',
+    //           url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
+    //           legendLayer: [5],
+    //           label: {
+    //             en: 'ANP Estatal'
+    //           },
+    //           sublabel: {
+    //             en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+    //           }
+    //         },
+    //       ]
+    //     },
+    //     {
+    //       label: {
+    //         en: 'nested group FIRST'
+    //       },
+    //       order: 1,
+    //       nestedLayers: [
+    //         {
+    //           order: 2,
+    //           id: 'ANP_Mpal',
+    //           type: 'feature',
+    //           url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
+    //           legendLayer: [4],
+    //           label: {
+    //             en: 'ANP Municipal'
+    //           },
+    //           sublabel: {
+    //             en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+    //           }
+    //         },
+    //         {
+    //           order: 1,
+    //           id: 'GestionForestal_capas_4094',
+    //           label: {
+    //             en: 'From the webmap'
+    //           },
+    //           sublabel: {
+    //             en: 'sublabel from webmap'
+    //           }
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // },
     GROUP_LC: {
       groupType: 'default',
       order: 3,

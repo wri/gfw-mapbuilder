@@ -183,7 +183,6 @@ export default class LegendPanel extends Component {
         if (layer.hasOwnProperty('nestedLayers')) {
           childComponent = this.createNestedLegendGroups(layer);
         } else if (layer.type === 'feature') {
-          console.log('layer', layer);
           childComponent = <WebMapFeatureLayerLegend
             key={layer.id}
             layer={layer}

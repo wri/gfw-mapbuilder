@@ -92,7 +92,6 @@ export default class LayerCheckbox extends Component {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
       } else {
-        console.log(layer);
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
       }

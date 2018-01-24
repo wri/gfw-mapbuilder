@@ -30,7 +30,6 @@ export default class NestedGroup extends Component {
   }
 
   render() {
-
     return (
       <div>
         {this.props.layers.map(this.renderNestedCheckbox)}

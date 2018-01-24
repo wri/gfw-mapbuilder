@@ -342,7 +342,7 @@ export default {
 
     const promise = new Deferred();
     const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
-    console.log(terraIFrom);
+
     const startDate = terraIFrom;
     const endDate = terraITo;
 

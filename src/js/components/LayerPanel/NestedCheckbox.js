@@ -22,14 +22,13 @@ export default class NestedCheckbox extends Component {
 
 
   toggleGroup = () => {
-
     this.props.layers.forEach(layer => {
       if (this.state.groupChecked) {
-        layer.esriLayer ? layer.esriLayer.hide() : layer.hide();
+        layer.esriLayer.hide();
         layer.visible = false;
         LayerActions.removeActiveLayer(layer.id);
       } else {
-        layer.esriLayer ? layer.esriLayer.show() : layer.show();
+        layer.esriLayer.show();
         layer.visible = true;
         LayerActions.addActiveLayer(layer.id);
       }
