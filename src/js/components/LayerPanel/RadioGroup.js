@@ -11,47 +11,6 @@ import RadioButton from './RadioButton';
     map: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = { groupLayers: [] };
-  }
-
-  componentDidMount() {
-    const { language } = this.context;
-    const { groupLayers } = this.props;
-
-    groupLayers.map((layer) => {
-
-      const sublabel = layer.sublabel || '';
-
-      if (sublabel.constructor === Object || !sublabel[language]) {
-        layer.sublabel = '';
-        console.error(
-          'you have not provided a sublabel on layer with id: '
-          + layer.id
-          + ' for the currently configured language: '
-          + language
-        );
-      }
-
-      const label = layer.label || '';
-
-      if (label.constructor === Object || !label[language]) {
-        layer.label = '';
-        console.error(
-          'you have not provided a label on layer with id: '
-          + layer.id
-          + ' for the currently configured language: '
-          + language
-        );
-      }
-
-      return layer;
-    });
-
-    this.setState({ groupLayers });
-  }
   showInfo = (layer) => {
 
     mapActions.showLayerInfo(layer);
@@ -65,7 +24,7 @@ import RadioButton from './RadioButton';
 
     allRadioLayers.forEach(l => {
       if (l.id === layer.id) {
-        if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer); }
+        if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer || l); }
         return;
       }
       if (layersAlreadyHidden.indexOf(l.id) > -1) {
@@ -74,7 +33,7 @@ import RadioButton from './RadioButton';
 
       l.esriLayer.hide();
       layerActions.removeActiveLayer(l.subId || l.id);
-      if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer); }
+      if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer || l); }
       layersAlreadyHidden.push(l.id);
     });
 
@@ -83,7 +42,7 @@ import RadioButton from './RadioButton';
     if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
       layer.esriLayer.hide();
       layerActions.removeActiveLayer(layer.subId || layer.id);
-      if (layer.subId) { layerActions.removeAllSubLayers(layer.esriLayer); }
+      if (layer.subId) { layerActions.removeAllSubLayers(layer.esriLayer || layer); }
       return;
     }
 
@@ -98,12 +57,11 @@ import RadioButton from './RadioButton';
 
   renderRadioButton = layer => {
     const selected = this.props.activeLayers.indexOf(layer.subId || layer.id) > -1 ? 'active' : '';
-
     return <RadioButton
       key={layer.subId || layer.id}
       selected={selected}
-      label={layer.label}
-      sublabel={layer.sublabel}
+      label={layer.label[this.context.language]}
+      sublabel={layer.sublabel[this.context.language]}
       id={layer.subId || layer.id}
       layer={layer}
       showInfo={this.showInfo}
@@ -114,45 +72,30 @@ import RadioButton from './RadioButton';
 
   handleLayerVisibility = (groupLayers, dynamicLayers, activeLayers) => {
     groupLayers.forEach(layer => {
+      if (!layer.esriLayer) { return; }
       if (layer.subId) {
         if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
-          if (layer.esriLayer) {
-            layer.esriLayer.show();
-          } else if (layer.show) {
-            layer.show();
-          }
+          layer.esriLayer.show();
           return;
         }
 
-        if (layer.esriLayer) {
-          layer.esriLayer.hide();
-        } else if (layer.hide) {
-          layer.hide();
-        }
+        layer.esriLayer.hide();
         return;
       }
 
       if (activeLayers.indexOf(layer.id) > -1) {
-        if (layer.esriLayer) {
-          layer.esriLayer.show();
-        } else if (layer.showLoading) {
-          layer.show();
-        }
+        layer.esriLayer.show();
         return;
       }
 
-      if (layer.esriLayer) {
-        layer.esriLayer.hide();
-      } else if (layer.hide) {
-        layer.hide();
-      }
+      layer.esriLayer.hide();
     });
   }
 
   render() {
 
     const { dynamicLayers, activeLayers } = this.props;
-    const { groupLayers } = this.state;
+    const { groupLayers } = this.props;
     this.handleLayerVisibility(groupLayers, dynamicLayers, activeLayers);
 
     return (

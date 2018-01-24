@@ -342,7 +342,10 @@ export default class Map extends Component {
             hasScaleDependency: scaleDependency,
             maxScale: sublayer.maxScale,
             minScale: sublayer.minScale,
-            label: sublayer.name,
+            // we are assuming the webmap language correctly matches the app settings
+            label: {
+              [language]: sublayer.name,
+            },
             opacity: 1,
             visible: visible,
             order: sublayer.order || idx + 1,
@@ -361,7 +364,10 @@ export default class Map extends Component {
         layer.featureCollection.layers.forEach((sublayer) => {
           const layerInfo = {
             id: sublayer.id,
-            label: sublayer.title,
+            // we are assuming the webmap language correctly matches the app settings
+            label: {
+              [language]: sublayer.title
+            },
             opacity: sublayer.opacity,
             visible: layer.visibility,
             esriLayer: sublayer.layerObject,
@@ -373,7 +379,10 @@ export default class Map extends Component {
       } else {
         const layerInfo = {
           id: layer.id,
-          label: layer.title,
+          // we are assuming the webmap language correctly matches the app settings
+          label: {
+            [language]: layer.title
+          },
           opacity: layer.opacity,
           visible: layer.visibility,
           esriLayer: layer.layerObject,
@@ -410,11 +419,9 @@ export default class Map extends Component {
               });
               groupLayers = groupLayers.concat(groupSublayers);
             } else { // this is not a dynamic layer
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
-              layers = [
-                ...layers.slice(0, layers.indexOf(mapLayer)),
-                ...layers.slice(layers.indexOf(mapLayer) + 1)
-              ];
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
+              layers.splice(layers.indexOf(mapLayer), 1);
+
               groupLayers.push({
                 ...l,
                 ...mapLayer
@@ -424,11 +431,7 @@ export default class Map extends Component {
 
           groupLayers.forEach(gl => {
             const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
-            group.layers = [
-              ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
-              gl,
-              ...group.layers.slice(group.layers.indexOf(layerConfigToReplace) + 1)
-            ];
+            group.layers.splice(group.layers.indexOf(layerConfigToReplace), 1, gl);
           });
 
           group.layers.forEach(l => {

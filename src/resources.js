@@ -354,10 +354,10 @@ export default {
       }]
     },
     GROUP_EP: {
-      groupType: 'nested',
+      groupType: 'radio',
       order: 4,
       label: {
-        en: 'Land Cover Dynamics',
+        en: 'TEST FEATURES',
         fr: 'Evolution de la couverture des sols',
         es: 'Áreas naturales protegidas',
         pt: 'Dinâmica de cobertura da terra ',
@@ -366,68 +366,53 @@ export default {
       },
       layers: [
         {
-          label: {
-            en: 'NESTED GROUP!',
-          },
           order: 1,
-          nestedLayers: [
-
-            {
-              order: 1,
-              id: 'ANP_Federal',
-              type: 'feature',
-              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
-              legendLayer: [6],
-              label: {
-                en: 'ANP Federal'
-              },
-              sublabel: {
-                en: 'Conanp, 2017'
-              }
-            },
-            {
-              order: 3,
-              id: 'ANP_Estatal',
-              type: 'feature',
-              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
-              legendLayer: [5],
-              label: {
-                en: 'ANP ntatal'
-              },
-              sublabel: {
-                en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-              }
-            },
-          ]
+          id: 'ANP_Federal',
+          type: 'feature',
+          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/6',
+          legendLayer: [6],
+          label: {
+            en: 'ANP Federal'
+          },
+          sublabel: {
+            en: 'Conanp, 2017'
+          }
         },
         {
+          order: 3,
+          id: 'ANP_Estatal',
+          type: 'feature',
+          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/5',
+          legendLayer: [5],
           label: {
-            en: 'NESTED GROUP22'
+            en: 'ANP Estatal'
           },
+          sublabel: {
+            en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+          }
+        },
+        {
           order: 2,
-          nestedLayers: [
-
-            {
-              order: 2,
-              id: 'ANP_Mpal',
-              type: 'feature',
-              url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
-              legendLayer: [4],
-              label: {
-                en: 'ANP Municipal'
-              },
-              sublabel: {
-                en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
-              }
-            },
-            {
-              order: 4,
-              id: 'GestionForestal_capas_4094',
-              label: {
-                en: 'From the webmap'
-              }
-            }
-          ]
+          id: 'ANP_Mpal',
+          type: 'feature',
+          url: 'https://services8.arcgis.com/eKfMF9FsKXNLZJMY/ArcGIS/rest/services/ANPyOtrasCapas/FeatureServer/4',
+          legendLayer: [4],
+          label: {
+            en: 'ANP Municipal'
+          },
+          sublabel: {
+            en: 'Bezaury-Creel, J.E, et al. 2017. TNC/CONABIO'
+          }
+        },
+        {
+          order: 4,
+          id: 'GestionForestal_capas_4094',
+          label: {
+            en: 'From the webmap'
+          },
+          sublabel: {
+            en: 'sublabel from webmap'
+          }
         }
       ]
     },

@@ -192,6 +192,37 @@ class MapActions {
       }
       layers[layerToReplaceIndex] = el;
     });
+
+    // Replace context.settings.layerPanel layers with the newly configured esriLayers
+    Object.keys(layerPanel)
+      .filter(groupKey => (
+        // filter out the groups we don't need
+        groupKey !== layerKeys.GROUP_BASEMAP
+        && groupKey !== layerKeys.GROUP_WEBMAP
+        && groupKey !== layerKeys.EXTRA_LAYERS
+      ))
+      .forEach(group => {
+        layerPanel[group].layers.map(l => {
+          // for each layer, replace with the configured layer in 'layers'
+          if (l.hasOwnProperty('nestedLayers')) { // this is a nested group
+            l.nestedLayers.map(nl => {
+              const nestedLayer = AppUtils.getObject(layers, 'id', nl.id);
+              nl.esriLayer = nestedLayer;
+              return nl;
+            });
+            return l;
+          }
+
+          // if this is not a nested layer
+          // make sure it is not a webmap layer
+          // (don't replace layers without a url property)
+          if (l.url) {
+            const layer = AppUtils.getObject(layers, 'id', l.id);
+            l.esriLayer = layer;
+          }
+          return l;
+        });
+      });
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {
       layers,

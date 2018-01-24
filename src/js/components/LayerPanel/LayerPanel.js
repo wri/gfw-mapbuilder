@@ -65,6 +65,13 @@ export default class LayerPanel extends Component {
   }
 
   renderLayerGroups = (groups, language) => {
+    const allRadioLayers = [];
+    Object.keys(groups)
+      .filter(groupKey => groups[groupKey].groupType === 'radio')
+      .forEach(radioGroup => {
+        allRadioLayers.push(...groups[radioGroup].layers);
+      });
+
     //- Make an array, filter it, then sort by order
     const orderedGroups = Object.keys(groups).filter((key) => {
       //- extraLayers show on the map but not here, if no layers are configured
@@ -90,7 +97,7 @@ export default class LayerPanel extends Component {
         case 'radio': {
           layers = <RadioGroup
             groupLayers={group.layers}
-            allRadioLayers={this.props.allLayers.filter(l => this.props.exclusiveLayerIds.indexOf(l.id) > -1)}
+            allRadioLayers={allRadioLayers.filter(l => this.props.exclusiveLayerIds.indexOf(l.id) > -1)}
             activeLayers={this.props.activeLayers}
             dynamicLayers={this.props.dynamicLayers}
             iconLoading={this.props.iconLoading}
