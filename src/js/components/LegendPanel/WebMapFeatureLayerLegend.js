@@ -110,8 +110,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
   }
 
   render () {
-    const { language } = this.context;
-    let label = this.props.label ? this.props.label[language] ? this.props.label[language] : this.props.label : '';
+    let { label } = this.props;
 
     if (typeof label === 'object') {
       label = '';

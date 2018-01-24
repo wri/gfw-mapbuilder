@@ -24,7 +24,7 @@ import RadioButton from './RadioButton';
 
     allRadioLayers.forEach(l => {
       if (l.id === layer.id) {
-        if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer || l); }
+        if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer); }
         return;
       }
       if (layersAlreadyHidden.indexOf(l.id) > -1) {
@@ -33,7 +33,7 @@ import RadioButton from './RadioButton';
 
       l.esriLayer.hide();
       layerActions.removeActiveLayer(l.subId || l.id);
-      if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer || l); }
+      if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer); }
       layersAlreadyHidden.push(l.id);
     });
 
@@ -42,7 +42,7 @@ import RadioButton from './RadioButton';
     if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
       layer.esriLayer.hide();
       layerActions.removeActiveLayer(layer.subId || layer.id);
-      if (layer.subId) { layerActions.removeAllSubLayers(layer.esriLayer || layer); }
+      if (layer.subId) { layerActions.removeAllSubLayers(layer.esriLayer); }
       return;
     }
 

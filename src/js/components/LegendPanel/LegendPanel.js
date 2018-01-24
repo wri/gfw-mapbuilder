@@ -45,6 +45,7 @@ export default class LegendPanel extends Component {
     let childComponent;
 
     const {activeLayers, legendOpacity} = this.props;
+    const { language } = this.context;
 
     switch(layer.id) {
       case 'IFL':
@@ -186,6 +187,7 @@ export default class LegendPanel extends Component {
           childComponent = <WebMapFeatureLayerLegend
             key={layer.id}
             layer={layer}
+            label={layer.label[language] || layer.label}
             visibility={activeLayers.indexOf(layer.id) > -1 && layer.visibleAtMapScale}
             visibleLayers={activeLayers}
             legendOpacity={legendOpacity}
