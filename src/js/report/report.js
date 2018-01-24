@@ -5,6 +5,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 import performAnalysis from 'utils/performAnalysis';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
+import Point from 'esri/geometry/Point';
 import {getUrlParams} from 'utils/params';
 import {analysisConfig, layerPanelText} from 'js/config';
 import layerFactory from 'utils/layerFactory';
@@ -70,7 +71,7 @@ const getFeature = function getFeature (params) {
       promise.resolve({
         attributes: geostoreResult.data.attributes,
         geostoreId: geostoreResult.data.id,
-        geometry: new Polygon(esriJson),
+        geometry: geostoreResult.data.attributes.geojson.features[0].geometry.type === 'Point' ? new Point(esriJson) : new Polygon(esriJson),
         title: params.customFeatureTitle,
         isCustom: true // TODO MAKE SURE NOT TO HARD CODE THAT IN
       });
@@ -333,9 +334,14 @@ const generateSlopeTable = function generateSlopeTable (labels, values) {
 const setupMap = function setupMap (params, feature) {
   const { service, visibleLayers } = params;
   //- Add a graphic to the map
-  const graphic = new Graphic(new Polygon(feature.geometry), symbols.getCustomSymbol());
+  const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
   const graphicExtent = graphic.geometry.getExtent();
-  map.setExtent(graphicExtent, true);
+
+  if (graphicExtent) {
+    map.setExtent(graphicExtent, true);
+  } else {
+    map.centerAndZoom(new Point(graphic.geometry), 15);
+  }
   map.graphics.add(graphic);
 
   const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
@@ -715,6 +721,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     performAnalysis({
       type: analysisKeys.LCC,
       geometry: geographic,
+      geostoreId: feature.geostoreId,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -803,6 +810,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     performAnalysis({
       type: analysisKeys.INTACT_LOSS,
       geometry: geographic,
+      geostoreId: feature.geostoreId,
       settings: settings,
       canopyDensity: tcd,
       language: lang
