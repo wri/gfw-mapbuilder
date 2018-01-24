@@ -94,8 +94,7 @@ import RadioButton from './RadioButton';
 
   render() {
 
-    const { dynamicLayers, activeLayers } = this.props;
-    const { groupLayers } = this.props;
+    const { dynamicLayers, activeLayers, groupLayers } = this.props;
     this.handleLayerVisibility(groupLayers, dynamicLayers, activeLayers);
 
     return (
