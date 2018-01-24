@@ -118,6 +118,7 @@ export default (layer, lang) => {
     case 'feature':
       options.id = layer.id;
       options.visible = layer.visible || false;
+      options.outFields = ['*'];
       if (layer.id === layerKeys.USER_FEATURES) {
         esriLayer = new GraphicsLayer(options);
       } else {
