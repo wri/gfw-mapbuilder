@@ -92,7 +92,8 @@ const formatters = {
       data.forEach(d => {
         results.push([new Date(d.alert_date).getTime(), d.count || 0]);
       });
-
+    }
+    if (results.length > 0) {
       const dateZero = new Date(data[0].alert_date);
       const dateEnd = new Date(data[data.length - 1].alert_date);
 
@@ -280,7 +281,6 @@ export default {
     query.outFields = [''];
     query.where = layerDef;
     queryTask.executeForCount(query).then(function (response) {
-      console.log(url, query, response);
       promise.resolve({fireCount: response});
     }, (error) => {
       console.error(error);
@@ -342,7 +342,7 @@ export default {
 
     const promise = new Deferred();
     const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
-    console.log(terraIFrom);
+
     const startDate = terraIFrom;
     const endDate = terraITo;
 

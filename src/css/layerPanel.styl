@@ -43,22 +43,28 @@
 .layer-category
   margin 10px
 
-.layer-category-label
+.layer-category-label-container
+  display flex
   border-bottom 1px solid $darkGray
   text-transform uppercase
   font-weight 500
   font-size 15px
   color $darkGray
   padding 5px 0
+  .layer-category-label
+    width 92%
   & > span
     text-overflow ellipsis
     display inline-block
     white-space nowrap
     overflow hidden
     max-width 90%
+    font-size 13px
 
 .layer-category-content
   margin-left 10px
+  .nested-heading
+    font-size 13px
 
 .layer-category-content.closed
   display none
@@ -69,6 +75,12 @@
   line-height 25px
   font-size 9px
   float right
+
+.sublabel-question
+  color $lightGray
+  font-size 0.75em
+  width 90%
+  margin 1% 0 0 9%
 
 .active-layer-count
   margin-left 5px
@@ -101,9 +113,14 @@
     display flex
     width 100%
 
-.legend-icon
+img.legend-icon
   width 20px
   height 20px
+
+div.legend-icon
+  width 18px
+  height 18px
+  margin 2px
 
 .water-stress-legend .no-data-labels div:nth-child(2)
 .water-stress-legend .no-data-labels img:nth-child(4)
@@ -235,7 +252,7 @@
     &.historic-loss .toggle-switch
       background $historicLoss
 
-.layer-checkbox-label
+.layer-checkbox-label, .layer-radio-label
   display inline-block
   vertical-align top
   padding-left 10px
@@ -269,6 +286,29 @@
   width 6px
   left 2px
   top 2px
+
+.layer-radio
+  padding-bottom 3px
+  margin-top 3px
+  &.disabled
+    & .layer-radio-label
+      color $disabledFont
+    & .info-icon
+      background $disabledBackground
+  &.active
+    & > .radio-switch
+      background $goldTheme
+
+.radio-switch
+  transition all 0.3s ease
+  background transparent
+  display inline-block
+  border 1px solid $disabledBackground
+  border-radius 5px
+  position relative
+  top 4px
+  height 12px
+  width 12px
 
 .toggle-switch-subscription
   float right

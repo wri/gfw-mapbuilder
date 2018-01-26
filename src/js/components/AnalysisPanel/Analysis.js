@@ -247,8 +247,12 @@ export default class Analysis extends Component {
     }
   };
 
+  setLoader = loadingObj => { //isLoading and possibly error
+    this.setState(loadingObj);
+  }
+
   render () {
-    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
+    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate, editingEnabled} = this.props;
     const {results, isLoading, error} = this.state;
     const {language, settings} = this.context;
     let chart, title, slopeSelect;
@@ -280,7 +284,7 @@ export default class Analysis extends Component {
     ) {
       title = (
         <div className='analysis-results__title'>
-          <CustomFeatureControl feature={selectedFeature} />
+          <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
         </div>
       );
     } else {
@@ -312,7 +316,7 @@ export default class Analysis extends Component {
           }
         </div>
         <div className='analysis-results__footer'>
-          <ReportSubscribeButtons />
+          <ReportSubscribeButtons setLoader={this.setLoader} />
         </div>
       </div>
     );

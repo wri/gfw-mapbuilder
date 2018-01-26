@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import {getUrlParams} from 'utils/params';
 import mapStore from 'stores/MapStore';
-import appUtils from 'utils/AppUtils';
 import mapActions from 'actions/MapActions';
+import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
+import moment from 'moment';
 
 export default class ReportSubscribeButtons extends Component {
 
@@ -43,12 +44,12 @@ export default class ReportSubscribeButtons extends Component {
         tcLossTo: lossToSelectIndex,
         gladFrom: gladStartDate,
         gladTo: gladEndDate,
-        terraIFrom: terraIStartDate.format('YYYY-MM-DD'),
-        terraITo: terraIEndDate.format('YYYY-MM-DD'),
-        viirsStartDate,
-        viirsEndDate,
-        modisStartDate,
-        modisEndDate,
+        terraIFrom: moment(terraIStartDate).format('YYYY-MM-DD'),
+        terraITo: moment(terraIEndDate).format('YYYY-MM-DD'),
+        viirsStartDate: moment(viirsStartDate).format('YYYY-MM-DD HH:mm:ss'),
+        viirsEndDate: moment(viirsEndDate).format('YYYY-MM-DD HH:mm:ss'),
+        modisStartDate: moment(modisStartDate).format('YYYY-MM-DD HH:mm:ss'),
+        modisEndDate: moment(modisEndDate).format('YYYY-MM-DD HH:mm:ss'),
         activeSlopeClass,
         selectedFeature,
         canopyDensity,

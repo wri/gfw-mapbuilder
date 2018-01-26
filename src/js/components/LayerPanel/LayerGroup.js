@@ -12,8 +12,8 @@ export default class LayerGroup extends React.Component {
 
     return (
       <div className='layer-category'>
-        <div className='layer-category-label pointer' onClick={this.toggle} title={this.props.label}>
-          {this.props.label}
+        <div className='layer-category-label-container pointer' onClick={this.toggle} title={this.props.label}>
+          <div className='layer-category-label'>{this.props.label}</div>
           <span className='layer-category-caret'>{String.fromCharCode(active ? closeSymbolCode : openSymbolCode)}</span>
         </div>
         <div className={`layer-category-content ${active ? '' : 'closed'}`}>{this.props.children}</div>

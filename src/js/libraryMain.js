@@ -8,10 +8,12 @@ import esriConfig from 'esri/config';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import 'babel-polyfill';
+import '../css/critical.styl';
+import '../css/app.styl';
 
 const libraryMain = {
-
   startup: () => {
+    console.log('getting into library Main ');
     // TODO: load critical in our startup!
 
     if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }

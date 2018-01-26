@@ -25,8 +25,6 @@ export default class ShareModal extends React.Component {
       bitlyUrl: newState.bitlyUrl,
       copyText: modalText.share.copyButton
     });
-
-    console.log(newState);
   }
 
   copyShare () {

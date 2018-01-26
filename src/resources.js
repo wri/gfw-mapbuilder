@@ -33,8 +33,6 @@ export default {
   alternativeWebmapMenuName: 'Land Use',
   //- Documents Settings
   includeDocumentsTab: false,
-  //documentsDirectory: 'https://cmr.forest-atlas.org/resources/docs/',
-  //documentsMapserver: 'https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer',
   //- Layers/Analysis Settings
   iso: '',
   viirsFires: true,
@@ -47,25 +45,6 @@ export default {
   gladAlerts: true,
   terraIAlerts: true,
   webmapMenuName: 'Land Use',
-  //- Restoration Module settings
-  restorationModule: false,
-  restorationImageServer: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module3/ImageServer', //'http://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module/ImageServer'
-  slopePotentialOptions: 'Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential',
-  alternativeSlopePotentialOptions: 'Potential for commercial plantation on bare soil and shrubland only;Potential for agri-silviculture and agro-silvo-pastoralism, and woodlot;Potential for establishing natural forest only;Potential for restocking degraded natural forest only;Potential for woodlot only;Potential for silvo-pastoralism only;Potential for tree-buffer zone along rivers, lakes and reservoirs only;Potential for commercial plantation as buffer zone around (NF)PAs;Two restoration options identified as having potential;Three or more restoration options identified as having potential',
-  slopePotentialColors: 'rgb(234,199,253);rgb(253,178,46);rgb(88,126,15);rgb(210,147,116);rgb(245,208,139);rgb(177,177,36);rgb(26,176,144);rgb(175,15,143);rgb(217,254,199);rgb(255,254,137);',
-  restorationOptions: 'establishing natural forest outside of cropland;restocking of degraded natural forest;agri-silviculture and agro-silvo-pastoralism;silvo-pastoralism;woodlot;commercial plantation on bare soil and shrubland;commercial plantation as buffer zone to national forest priority areas and protected areas;tree-based buffer zone along rivers, lakes and reservoirs;',
-  alternativeRestorationOptions: 'establishing natural forest outside of cropland;restocking of degraded natural forest;agri-silviculture and agro-silvo-pastoralism;silvo-pastoralism;woodlot;commercial plantation on bare soil and shrubland;commercial plantation as buffer zone to national forest priority areas and protected areas;tree-based buffer zone along rivers, lakes and reservoirs;',
-  restorationOptionsRasterIds: '9;10;6;11;13;8;7;12;',
-  slopeClassNames: 'No Data;<= 30%;30 - 60%;> 60%;',
-  slopeClassColors: 'rgb(0, 0, 0);rgb(255, 235, 175);rgb(115, 115, 0);rgb(168, 0, 0);',
-  treeCoverClassNames: 'No Data;<= 10%;10 - 30%;> 30%;',
-  treeCoverClassColors: 'rgb(0, 0, 0);rgb(180, 215, 158);rgb(245, 245, 122);rgb(205, 170, 102);',
-  landCoverClassNames: 'No Data;Forestland;Grassland;Cropland;Wetland and Waterbodies;Settlement;Bare soil;',
-  landCoverClassColors: 'rgb(0, 0, 0);rgb(0, 174, 0);rgb(255, 255, 0);rgb(255, 155, 190);rgb(0, 238, 238);rgb(255, 0, 0);rgb(255, 255, 188);',
-  populationClassNames: 'No Data;<= 20;20 - 50;50 - 150;150 - 500;> 500;',
-  populationClassColors: 'rgb(0, 0, 0);rgb(255, 255, 128);rgb(250, 209, 85);rgb(242, 167, 46);rgb(173, 83, 19);rgb(107, 0, 0);',
-  rainfallClassNames: 'No Data;Class 1;Class 2;Class 3;',
-  rainfallClassColors: 'rgb(0, 0, 0);rgb(255, 0, 0), rgb(0, 255, 0);rgb(0, 0, 255);',
   //- Include/Exclude various restoration analysis types
   restorationSlope: true, //- Main Slope Analysis
   restorationSlopePotential: true, //- Part of the various restoration options
@@ -117,6 +96,7 @@ export default {
       layers: [] // Will get filled in with layers from the webmap
     },
     GROUP_LCD: {
+      groupType: 'default',
       order: 1,
       label: {
         en: 'Land Cover Dynamics',
@@ -372,6 +352,7 @@ export default {
       }]
     },
     GROUP_LC: {
+      groupType: 'default',
       order: 3,
       label: {
         en: 'Land Cover',
@@ -469,7 +450,7 @@ export default {
         inputRange: [30, 101],
         outputRange: [1],
         opacity: 0.8,
-      legendLayer: [2],
+        legendLayer: [2],
         label: {
           en: 'Tree cover density',
           fr: 'Densité du couvert arboré',
@@ -491,7 +472,8 @@ export default {
       }]
     },
     GROUP_BASEMAP: {
-      order: 5,
+      groupType: 'basemap',
+      order: 200,
       label: {
         en: 'Basemap',
         fr: 'Basemap',
@@ -543,24 +525,66 @@ export default {
         }
       }]
     },
-    extraLayers: [{
-      id: 'MASK',
-      type: 'dynamic',
-      order: 10000,
-      url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-      opacity: 0.35,
-      layerIds: [0]
-    }, {
-      id: 'LEGEND_LAYER',
-      type: 'dynamic',
-      url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-      visible: false,
-      opacity: 0,
-      layerIds: []
-    }, {
-      id: 'USER_FEATURES',
-      type: 'graphic',
-      visible: true
-    }]
+
+    /**
+    * CUSTOM GROUPS
+    * Add your custom groups below. The custom groups are similar to the groups defined above.
+    * They are an object defined with a unique key (this key MUST be unique).
+    * There are three (3) group types that you may choose from:
+    *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
+    *               With this group type, more than one layer may be on at a time
+    *
+    *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
+    *            Only one layer may be on at a time within the same group
+    *            You may optionally choose to turn this group off when any other radio group is selected
+    *
+    *    nested - This group allows for layers to be grouped further within a layer panel
+    *
+    * COMMON GROUP PROPERTIES
+    * @property {string} groupType - the group type, one of checkbox, radio, nested
+    * @property {number} order - the order of the group in the layer panel
+    * @property {object} label - the label for the group in the layer panel
+    * @property {object[]} layers - the layers to be placed in the group
+    * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
+    * @property {number} layers[].order - the order of the layer within the group
+    * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
+    *
+    * RADIO GROUP PROPERTIES
+    * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
+    * sublayers you would like to include in the group. This property is required, so if you
+    * wish to include all sublayers, you must still provide this property with all sublayers
+    * @property {object} sublabel - for a dynamic layer the sublabel property must specify
+    * which sublayer the sublabel belongs to
+    *
+    * NESTED GROUP PROPERTIES
+    * @property {number} layers[].order - the order of the nested group within the panel group
+    * @property {object} layers[].label - the label for the nested group
+    * @property {object[]} layers[].nestedLayers - the layers for the nested group
+    */
+
+    extraLayers: [
+      {
+        id: 'MASK',
+        type: 'dynamic',
+        order: 10000,
+        url:
+          'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+          opacity: 0.35,
+          layerIds: [0]
+        },
+        {
+          id: 'LEGEND_LAYER',
+          type: 'dynamic',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+          visible: false,
+          opacity: 0,
+          layerIds: []
+        },
+        {
+          id: 'USER_FEATURES',
+          type: 'graphic',
+          visible: true
+        }
+      ]
   }
 };

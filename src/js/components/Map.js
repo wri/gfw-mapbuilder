@@ -21,8 +21,11 @@ import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
+import Edit from 'esri/toolbars/edit';
+import Measurement from 'esri/dijit/Measurement';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
+import dom from 'dojo/dom';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
@@ -36,8 +39,10 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import AppUtils from '../utils/AppUtils';
 
-let scalebar, paramsApplied = false;
+let mapLoaded, legendReady = false;
+let scalebar, paramsApplied, editToolbar = false;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -96,7 +101,7 @@ export default class Map extends Component {
   componentDidUpdate (prevProps, prevState) {
     const {settings, language} = this.context;
     const {activeWebmap} = this.props;
-    const {basemap, map} = this.state;
+    const {basemap, map, editingEnabled} = this.state;
 
     // If the webmap is retrieved from AGOL or the resources file, or it changes
     if (
@@ -109,6 +114,7 @@ export default class Map extends Component {
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
+        editToolbar.refresh();
         scalebar.destroy();
       }
 
@@ -117,6 +123,17 @@ export default class Map extends Component {
 
     if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+    }
+
+    if (prevState.editingEnabled !== editingEnabled) {
+      if (!editingEnabled) {
+        editToolbar.deactivate();
+      } else {
+        if (map.infoWindow && map.infoWindow.getSelectedFeature) {
+          const selectedFeature = map.infoWindow.getSelectedFeature();
+          editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
+        }
+      }
     }
   }
 
@@ -162,7 +179,7 @@ export default class Map extends Component {
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
         userFeaturesLayer.on('click', (evt) => {
-          if (evt.graphic && evt.graphic.attributes) {
+          if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
             evt.stopPropagation();
             if (!evt.graphic.attributes.geostoreId) {
               analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
@@ -172,6 +189,16 @@ export default class Map extends Component {
             } else {
               response.map.infoWindow.setFeatures([evt.graphic]);
             }
+          }
+        });
+
+        editToolbar = new Edit(response.map);
+        editToolbar.on('deactivate', function(evt) {
+          if (evt.info.isModified) {
+            analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
+              evt.graphic.attributes.geostoreId = res.data.id;
+              response.map.infoWindow.setFeatures([evt.graphic]);
+            });
           }
         });
       });
@@ -256,10 +283,8 @@ export default class Map extends Component {
     }
 
     if (params.ts && params.te) {
-      layerActions.updateTerraIStartDate(moment(`${params.ts.split('-')[2]}/${params.ts.split('-')[0]}/${params.ts.split('-')[1]}}`));
-      // layerActions.updateTerraIEndDate(moment(params.te.replace(/-/g, '/')));
-      // layerActions.updateTerraIStartDate(new Date(params.ts.replace(/-/g, '/')));
-      // layerActions.updateTerraIEndDate(new Date(params.te.replace(/-/g, '/')));
+      layerActions.updateTerraIStartDate.defer(new Date(params.ts.replace(/-/g, '/')));
+      layerActions.updateTerraIEndDate.defer(new Date(params.te.replace(/-/g, '/')));
     }
 
     if (params.gs && params.ge) {
@@ -286,9 +311,9 @@ export default class Map extends Component {
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
-    const {language} = this.context, layers = [];
-    // Remove any already existing webmap layers
-    settings.layerPanel.GROUP_WEBMAP.layers = [];
+    const {language} = this.context;
+    let layers = [];
+
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both
     // languages so the original webmap works in both views
     const saveLayersInOtherLang = (
@@ -317,14 +342,20 @@ export default class Map extends Component {
             hasScaleDependency: scaleDependency,
             maxScale: sublayer.maxScale,
             minScale: sublayer.minScale,
-            label: sublayer.name,
+            // we are assuming the webmap language correctly matches the app settings
+            label: {
+              [language]: sublayer.name,
+            },
             opacity: 1,
             visible: visible,
             order: sublayer.order || idx + 1,
-            esriLayer: layer.layerObject
+            esriLayer: layer.layerObject,
+            itemId: layer.itemId
           };
           dynamicLayers.push(layerInfo);
+          // if (layerInfo.visible) { layerActions.addSubLayer(layerInfo); }
         });
+
         // Push the dynamic layers into the array in their current order
         for (let i = dynamicLayers.length - 1; i >= 0; i--) {
           layers.unshift(dynamicLayers[i]);
@@ -333,34 +364,151 @@ export default class Map extends Component {
         layer.featureCollection.layers.forEach((sublayer) => {
           const layerInfo = {
             id: sublayer.id,
-            label: sublayer.title,
+            // we are assuming the webmap language correctly matches the app settings
+            label: {
+              [language]: sublayer.title
+            },
             opacity: sublayer.opacity,
             visible: layer.visibility,
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
           layers.unshift(layerInfo);
+          if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
       } else {
         const layerInfo = {
           id: layer.id,
-          label: layer.title,
+          // we are assuming the webmap language correctly matches the app settings
+          label: {
+            [language]: layer.title
+          },
           opacity: layer.opacity,
           visible: layer.visibility,
           esriLayer: layer.layerObject,
           itemId: layer.itemId
         };
         layers.unshift(layerInfo);
+        if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
     });
 
-    //- Set up the group labels and group layers
-    settings.layerPanel.GROUP_WEBMAP.layers = layers;
-    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
+    const groupKeys = Object.keys(settings.layerPanel)
+      .filter(g => g !== layerKeys.EXTRA_LAYERS && g !== layerKeys.GROUP_BASEMAP);
+    const exclusiveLayerIds = [];
+    groupKeys.forEach(groupKey => {
+      const group = settings.layerPanel[groupKey];
+      switch (group.groupType) {
+        case 'radio': {
+          let groupLayers = [];
+          const groupSublayers = [];
+          const layersFromWebmap = group.layers.filter(l => !l.url);
+          layersFromWebmap.forEach(l => {
+            if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
+              layers.forEach(webmapLayer => {
+                if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                  if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {
+                    webmapLayer.activateWithAllLayers = true;
+                    webmapLayer.groupOrder = group.order;
+                  }
+                  groupSublayers.push({
+                    ...l,
+                    ...webmapLayer
+                  });
+                }
+              });
+              groupLayers = groupLayers.concat(groupSublayers);
+            } else { // this is not a dynamic layer
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
+              layers.splice(layers.indexOf(mapLayer), 1);
 
-    if (saveLayersInOtherLang) {
-      settings.layerPanel.GROUP_WEBMAP.label[settings.alternativeLanguage] = settings.labels[settings.alternativeLanguage].webmapMenuName;
+              groupLayers.push({
+                ...l,
+                ...mapLayer
+              });
+            }
+          });
+
+          groupLayers.forEach(gl => {
+            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
+            group.layers.splice(group.layers.indexOf(layerConfigToReplace), 1, gl);
+          });
+
+          group.layers.forEach(l => {
+            if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
+          });
+          break;
+        }
+        case 'checkbox': {
+          const layersFromWebmap = group.layers.filter(l => !l.url)
+            .map(l => {
+              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+
+              layers = [
+                ...layers.slice(0, layers.indexOf(mapLayer)),
+                ...layers.slice(layers.indexOf(mapLayer) + 1)
+              ];
+              return {
+                ...l,
+                ...mapLayer
+              };
+            });
+
+          layersFromWebmap.forEach(lfw => {
+            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', lfw.id);
+            group.layers = [
+              ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
+              lfw,
+              ...group.layers.slice(group.layers.indexOf(layerConfigToReplace) + 1)
+            ];
+          });
+          break;
+        }
+        case 'nested': {
+          group.layers.forEach(nestedGroup => {
+            if (!nestedGroup.hasOwnProperty('nestedLayers')) {
+              throw new Error(`nested groups must contain a 'nestedLayers' property. You may have made a configuration error. Check the 'resources.js' file`);
+            }
+            const layersFromWebmap = nestedGroup.nestedLayers.filter(nl => !nl.url)
+              .map(l => {
+                const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+
+                layers = [
+                  ...layers.slice(0, layers.indexOf(mapLayer)),
+                  ...layers.slice(layers.indexOf(mapLayer) + 1)
+                ];
+
+                return {
+                  ...l,
+                  ...mapLayer
+                };
+              });
+
+            layersFromWebmap.forEach(nl => {
+              const layerConfigToReplace = AppUtils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
+              nestedGroup.nestedLayers = [
+                ...nestedGroup.nestedLayers.slice(0, nestedGroup.nestedLayers.indexOf(layerConfigToReplace)),
+                nl,
+                ...nestedGroup.nestedLayers.slice(nestedGroup.nestedLayers.indexOf(layerConfigToReplace) + 1)
+              ];
+            });
+          });
+        }
+        break;
+        default:
+      }
+    });
+
+    const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
+    webmapGroup.layers = layers;
+    if (!webmapGroup.label.hasOwnProperty(language)) {
+      if (settings.alternativeLanguage === language) {
+        webmapGroup.label[language] = settings.alternativeWebmapMenuName;
+      }
+      webmapGroup.label[language] = settings.webmapMenuName;
     }
+
+    mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
   };
 
   render () {
@@ -402,20 +550,28 @@ export default class Map extends Component {
                         timeInfo={getTimeInfo(layer)} />);
     }
 
+    if (map.loaded === true && !mapLoaded) {
+      mapLoaded = true;
+      on.once(map, 'layers-add-result', layers => {
+        legendReady = true;
+        this.forceUpdate();
+      });
+    }
+
     return (
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
-          <TabView {...this.state} />
-          {map.loaded ? <Legend
-              allLayers={this.state.allLayers}
-              tableOfContentsVisible={this.state.tableOfContentsVisible}
-              activeLayers={activeLayers}
-              legendOpen={this.state.legendOpen}
-              dynamicLayers={this.state.dynamicLayers}
-              legendOpacity={this.state.legendOpacity}
-            /> : null}
+          {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
+          {legendReady ? <Legend
+            allLayers={this.state.allLayers}
+            tableOfContentsVisible={this.state.tableOfContentsVisible}
+            activeLayers={activeLayers}
+            legendOpen={this.state.legendOpen}
+            dynamicLayers={this.state.dynamicLayers}
+            legendOpacity={this.state.legendOpacity}
+          /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>

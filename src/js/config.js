@@ -24,7 +24,8 @@ const config = {
     'stg.blueraster.com.s3.amazonaws.com',
     'production-api.globalforestwatch.org',
     'production-api.globalforestwatch.org/v1/ogr',
-    'production-api.globalforestwatch.org/v1/ogr/convert'
+    'production-api.globalforestwatch.org/v1/ogr/convert',
+    'gis.wri.org'
   ],
 
   urls: {

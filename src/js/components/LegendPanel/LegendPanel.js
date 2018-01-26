@@ -45,6 +45,7 @@ export default class LegendPanel extends Component {
     let childComponent;
 
     const {activeLayers, legendOpacity} = this.props;
+    const { language } = this.context;
 
     switch(layer.id) {
       case 'IFL':
@@ -180,14 +181,27 @@ export default class LegendPanel extends Component {
         />;
         break;
       default:
-        childComponent = this.createWebmapLegend(layer);
+        if (layer.hasOwnProperty('nestedLayers')) {
+          childComponent = this.createNestedLegendGroups(layer);
+        } else if (layer.type === 'feature') {
+          childComponent = <WebMapFeatureLayerLegend
+            key={layer.id}
+            layer={layer}
+            label={layer.label[language] || layer.label}
+            visibility={activeLayers.indexOf(layer.id) > -1 && layer.visibleAtMapScale}
+            visibleLayers={activeLayers}
+            legendOpacity={legendOpacity}
+          />;
+        } else {
+          childComponent = this.createWebmapLegend(layer);
+        }
     }
     return childComponent;
   }
 
   createWebmapLegend = layer => {
     const { activeLayers, dynamicLayers, legendOpacity } = this.props;
-    const { map } = this.context;
+    const { map, language } = this.context;
 
     if (layer.subId) {
       const scale = map.getScale();
@@ -205,12 +219,12 @@ export default class LegendPanel extends Component {
         }
       }
 
-      const esriLayer = layer.esriLayer;
+      const esriLayer = layer.esriLayer || layer;
 
       return <WebMapLegend
         key={layer.subId}
         url={esriLayer.url}
-        labels={layer.label}
+        labels={layer.label[language]}
         visibility={visible}
         visibleLayers={activeLayers}
         layerSubIndex={layer.subIndex}
@@ -221,12 +235,13 @@ export default class LegendPanel extends Component {
 
 
     } else {
-      const esriLayer = layer.esriLayer;
+      const esriLayer = layer.esriLayer || layer;
 
       if (esriLayer.type === 'Feature Layer') {
         return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
+          label={layer.label[language] || layer.label}
           visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
@@ -239,7 +254,7 @@ export default class LegendPanel extends Component {
         return <WebMapLegend
           key={layer.id}
           url={esriLayer.url}
-          labels={layer.label}
+          labels={layer.label[language]}
           visibility={activeLayers.indexOf(layer.id) > -1}
           visibleLayers={activeLayers}
           layerId={esriLayer.layerId}
@@ -248,6 +263,22 @@ export default class LegendPanel extends Component {
         />;
       }
     }
+  }
+
+  createNestedLegendGroups = layerGroup => {
+    const { activeLayers } = this.props;
+    const { language } = this.context;
+
+    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createWebmapLegend(layer)));
+
+    const groupVisible = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
+
+    return (
+      <div key={layerGroup.order} className={`nested-legend-group${groupVisible ? '' : ' hidden'}`}>
+        <div className='nested-group-label'><strong>{layerGroup.label[language]}</strong></div>
+        {nestedComponents}
+      </div>
+    );
   }
 
   render () {

@@ -7,10 +7,13 @@ import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
+import analysisUtils from 'utils/analysisUtils';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
-import analysisUtils from 'utils/analysisUtils';
+import moment from 'moment';
 import all from 'dojo/promise/all';
+
+let isRegistering = false;
 
 class MapStore {
 
@@ -33,17 +36,16 @@ class MapStore {
     this.resetSlider = false;
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();
-    this.terraIStartDate = {};
-    this.terraIEndDate = {};
-    this.viirsStartDate = new Date();
-    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
-    this.viirsEndDate = new Date();
-    this.modisStartDate = new Date();
-    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
-    this.modisEndDate = new Date();
+    this.terraIStartDate = new Date('2004', 0, 1);
+    this.terraIEndDate = new Date('2016', 7, 12);
+    this.viirsStartDate = moment(new Date()).subtract(1, 'day');
+    this.viirsEndDate = moment(new Date());
+    this.modisStartDate = moment(new Date()).subtract(1, 'day');
+    this.modisEndDate = moment(new Date());
     this.lossOptions = [];
     this.userSubscriptions = [];
     this.tableOfContentsVisible = true;
+    this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
     this.printModalVisible = false;
@@ -64,6 +66,7 @@ class MapStore {
     this.imazonStartYear = 0;
     this.imazonEndYear = 0;
     this.iconLoading = '';
+    this.exclusiveLayerIds = [];
     this.legendOpacity = {};
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
@@ -88,6 +91,7 @@ class MapStore {
       updateCanopyDensity: mapActions.updateCanopyDensity,
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
+      toggleEditing: mapActions.toggleEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -97,6 +101,8 @@ class MapStore {
       toggleLegendVisible: mapActions.toggleLegendVisible,
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
+      removeAllSubLayers: layerActions.removeAllSubLayers,
+      setSubLayers: layerActions.setSubLayers,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
       setLossOptions: layerActions.setLossOptions,
@@ -116,7 +122,8 @@ class MapStore {
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
       showLoading: layerActions.showLoading,
       updateCartoSymbol: layerActions.updateCartoSymbol,
-      toggleAnalysisTab: mapActions.toggleAnalysisTab
+      toggleAnalysisTab: mapActions.toggleAnalysisTab,
+      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds
     });
   }
 
@@ -158,13 +165,43 @@ class MapStore {
     this.removeActiveLayer(info.subId);
   }
 
-  addAll () {
-    this.activeLayers = this.allLayers.map(l => l.id);
-    this.allLayers.forEach((layer) => {
-      if (layer.subId) {
-        this.dynamicLayers[layer.id] = layer.esriLayer.layerInfos.map(lyr => lyr.id);
-      }
+  removeAllSubLayers(info) {
+    this.dynamicLayers[info.id] = [];
+    info.layerInfos.forEach(i => {
+      this.removeActiveLayer(`${info.id}_${i.id}`);
     });
+  }
+
+  setSubLayers(info) {
+    this.dynamicLayers[info.id] = [...info.subIndexes];
+    info.subIndexes.forEach(i => {
+      this.addActiveLayer(`${info.id}_${i}`);
+    });
+  }
+
+  addAll () {
+    const allActiveLayers = [];
+    const allDynamicLayers = {};
+    const radioGroupOrders = this.allLayers.filter(l => l.activateWithAllLayers).map(l => l.groupOrder);
+
+    const reducedLayers = this.allLayers.reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    reducedLayers.forEach(l => {
+      if (l.subId && l.activateWithAllLayers && l.groupOrder === Math.min(...radioGroupOrders)) {
+        allActiveLayers.push(l.subId);
+        allDynamicLayers[l.id] = [l.subIndex];
+        return;
+      }
+      allActiveLayers.push(l.id);
+    });
+
+    this.activeLayers = allActiveLayers;
+    this.dynamicLayers = allDynamicLayers;
   }
 
   removeAll () {
@@ -200,8 +237,8 @@ class MapStore {
     this.modisEndDate = new Date();
 
     //-Terra I
-    this.terraIStartDate = {};
-    this.terraIEndDate = {};
+    this.terraIStartDate = new Date('2004', 0, 1);
+    this.terraIEndDate = new Date('2016', 7, 12);
   }
 
   mapUpdated () {}
@@ -214,15 +251,17 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        if (!selectedFeature.isRegistering) {
-          selectedFeature.isRegistering = true;
+        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
+          isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
           analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
             selectedFeature.attributes.geostoreId = res.data.id;
             mapActions.toggleAnalysisTab(false);
+            isRegistering = false;
           });
+        } else {
+          this.activeTab = tabKeys.INFO_WINDOW;
         }
-        this.activeTab = tabKeys.INFO_WINDOW;
       }
     }
   }
@@ -233,9 +272,13 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
-
-    this.activeLayers = layers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
-
+    const reducedLayers = layers.reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+    this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -317,6 +360,10 @@ class MapStore {
 
   toggleTOCVisible (payload) {
     this.tableOfContentsVisible = payload.visible;
+  }
+
+  toggleEditing () {
+    this.editingEnabled = !this.editingEnabled;
   }
 
   openTOCAccordion (groupKey) {
@@ -434,6 +481,9 @@ class MapStore {
     }
   }
 
+  updateExclusiveRadioIds (ids) {
+    this.exclusiveLayerIds = ids;
+  }
 }
 
 export default dispatcher.createStore(MapStore, 'MapStore');

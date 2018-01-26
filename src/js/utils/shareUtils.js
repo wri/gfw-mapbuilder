@@ -51,6 +51,6 @@ export function prepareStateForShare (options) {
     shareState.ms = modisStartDate;
     shareState.me = modisEndDate;
   }
-  console.log(shareState);
+
   return shareState;
 }

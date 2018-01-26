@@ -30,6 +30,17 @@ class LayerActions {
     return info;
   }
 
+  removeAllSubLayers (info) {
+    return info;
+    }
+  
+  setSubLayers (id, ...subIndexes) {
+    return {
+      id,
+      subIndexes
+    };
+  }
+
   updateLossTimeline (data) {
     return {
       from: data.fromSelectedIndex,
