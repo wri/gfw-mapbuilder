@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import {getUrlParams} from 'utils/params';
+import layerKeys from 'constants/LayerConstants';
 import mapStore from 'stores/MapStore';
 import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
@@ -35,8 +36,11 @@ export default class ReportSubscribeButtons extends Component {
     } = mapStore.getState();
 
     if (selectedFeature) {
+
       const params = getUrlParams(location.href);
       const payload = {
+        // layerId (if we have one)
+        // OBJECTID (if we have a layerId)
         lang: language,
         activeLayers,
         dynamicLayers,
@@ -58,6 +62,11 @@ export default class ReportSubscribeButtons extends Component {
 
       if (params.appid) {
         payload.appid = params.appid;
+      }
+
+      if (selectedFeature._layer && selectedFeature._layer.id && selectedFeature._layer.id !== layerKeys.USER_FEATURES) {
+        payload.layerId = selectedFeature._layer.id;
+        payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes.OBJECTID : null;
       }
       appUtils.generateReport(payload);
     }
