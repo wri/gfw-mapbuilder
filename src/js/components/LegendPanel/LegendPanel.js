@@ -52,6 +52,7 @@ export default class LegendPanel extends Component {
       case 'IFL':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -63,6 +64,7 @@ export default class LegendPanel extends Component {
       case 'IMAZON_SAD':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -74,6 +76,7 @@ export default class LegendPanel extends Component {
       case 'VIIRS_ACTIVE_FIRES':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -85,6 +88,7 @@ export default class LegendPanel extends Component {
       case 'MODIS_ACTIVE_FIRES':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -96,6 +100,7 @@ export default class LegendPanel extends Component {
       case 'GLOB_MANGROVE':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -107,6 +112,7 @@ export default class LegendPanel extends Component {
       case 'AG_BIOMASS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -118,6 +124,7 @@ export default class LegendPanel extends Component {
       case 'TERRA_I_ALERTS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -129,6 +136,7 @@ export default class LegendPanel extends Component {
       case 'GLAD_ALERTS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -140,6 +148,7 @@ export default class LegendPanel extends Component {
       case 'TREE_COVER_GAIN':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -151,6 +160,7 @@ export default class LegendPanel extends Component {
       case 'TREE_COVER_LOSS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -162,6 +172,7 @@ export default class LegendPanel extends Component {
       case 'LAND_COVER':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -173,6 +184,7 @@ export default class LegendPanel extends Component {
       case 'TREE_COVER':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
