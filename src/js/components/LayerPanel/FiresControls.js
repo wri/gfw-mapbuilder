@@ -52,19 +52,12 @@ export default class FiresControls extends React.Component {
     const {language} = this.context;
 
     return (
-      <div className='relative fires'>
+      <div className='fires'>
         <div className='glad-controls__calendars'>
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
             <DatePicker
               customInput={<StartButton />}
-              popperPlacement="top-end"
-              popperModifiers={{
-                offset: {
-                  enabled: true,
-                  offset: '30px'
-                }
-              }}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -79,13 +72,6 @@ export default class FiresControls extends React.Component {
             <label>{text[language].TIMELINE_END}</label>
             <DatePicker
               customInput={<EndButton />}
-              popperPlacement="top-end"
-              popperModifiers={{
-                offset: {
-                  enabled: true,
-                  offset: '30px'
-                }
-              }}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"

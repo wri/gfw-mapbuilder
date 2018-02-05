@@ -72,13 +72,6 @@ export default class GladControls extends Component {
             <label>{text[language].TIMELINE_START}</label>
             {startDate && <DatePicker
               customInput={<StartButton />}
-              popperPlacement="top-end"
-              popperModifiers={{
-                offset: {
-                  enabled: true,
-                  offset: '30px'
-                }
-              }}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -93,13 +86,6 @@ export default class GladControls extends Component {
             <label>{text[language].TIMELINE_END}</label>
             {endDate && <DatePicker
               customInput={<EndButton />}
-              popperPlacement="top-end"
-              popperModifiers={{
-                offset: {
-                  enabled: true,
-                  offset: '30px'
-                }
-              }}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
