@@ -281,7 +281,7 @@ export default class LegendPanel extends Component {
     const { activeLayers } = this.props;
     const { language } = this.context;
 
-    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createWebmapLegend(layer)));
+    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createLegend(layer)));
 
     const groupVisible = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
 

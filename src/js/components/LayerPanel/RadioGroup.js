@@ -60,8 +60,8 @@ import RadioButton from './RadioButton';
     return <RadioButton
       key={layer.subId || layer.id}
       selected={selected}
-      label={layer.label[this.context.language]}
-      sublabel={layer.sublabel[this.context.language]}
+      label={layer.label ? layer.label[this.context.language] : ''}
+      sublabel={layer.sublabel ? layer.sublabel[this.context.language] : ''}
       id={layer.subId || layer.id}
       layer={layer}
       showInfo={this.showInfo}

@@ -39,9 +39,9 @@ export default class WebMapLegend extends React.Component {
     });
   }
 
-  itemMapper = (item) => {
+  itemMapper = (item, idx) => {
     return (
-      <div className='legend-row' key={item.url}>
+      <div className='legend-row' key={item.url + idx}>
         <img style={{'opacity': this.state.opacity}} className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
         <div className='legend-label'>{item.label}</div>
       </div>
