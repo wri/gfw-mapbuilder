@@ -3,6 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import mapActions from 'actions/MapActions';
 // import CartoLegend from 'components/LegendPanel/CartoLegend';
 import WebMapLegend from 'components/LegendPanel/WebMapLegend';
+import WMSLegend from 'components/LegendPanel/WMSLegend';
 import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
 import {urls} from 'js/config';
@@ -245,6 +246,17 @@ export default class LegendPanel extends Component {
           visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
+        />;
+      } else if (esriLayer.type === 'wms') {
+        return <WMSLegend
+          key={layer.id}
+          url={esriLayer.url}
+          labels={layer.label[language]}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerName={esriLayer.layerInfos[0].name}
+          legendOpacity={legendOpacity}
+          defaultOpacity={esriLayer.opacity || 1}
         />;
       } else {
         if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {

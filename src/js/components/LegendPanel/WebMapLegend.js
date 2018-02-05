@@ -24,9 +24,15 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidMount() {
-    const layerID = typeof this.props.layerSubIndex !== 'undefined' ? this.props.layerSubIndex : this.props.layerId;
-    const url = this.props.url.replace(/\d+$/, '');
-    Request.getLegendInfos(url, [layerID]).then(legendInfos => {
+    const {
+      url,
+      layerSubIndex,
+      layerId,
+    } = this.props;
+
+    const layerID = typeof layerSubIndex !== 'undefined' ? layerSubIndex : layerId;
+    const requestUrl = url.replace(/\d+$/, '');
+    Request.getLegendInfos(requestUrl, [layerID]).then(legendInfos => {
       if(this.refs.myRef) {
         this.setState({ legendInfos: legendInfos });
       }

@@ -23,7 +23,7 @@ import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
 import Measurement from 'esri/dijit/Measurement';
-import {actionTypes} from 'constants/AppConstants';
+import {actionTypes, attributes as sources} from 'constants/AppConstants';
 import on from 'dojo/on';
 import dom from 'dojo/dom';
 import {getUrlParams} from 'utils/params';
@@ -33,13 +33,19 @@ import MapStore from 'stores/MapStore';
 import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
+import WMSLayerInfo from 'esri/layers/WMSLayerInfo';
+import WMSLayer from 'esri/layers/WMSLayer';
+import Extent from 'esri/geometry/Extent';
+import Graphic from 'esri/graphic';
+import InfoTemplate from 'esri/InfoTemplate';
+import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
 import React, {
   Component,
   PropTypes
 } from 'react';
-import AppUtils from '../utils/AppUtils';
+import { getWMSFeatureInfo } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -117,7 +123,6 @@ export default class Map extends Component {
         editToolbar.refresh();
         scalebar.destroy();
       }
-
       this.createMap(activeWebmap, options);
     }
 
@@ -152,6 +157,23 @@ export default class Map extends Component {
       response.map.graphics.clear();
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
+      // response.map.infoWindow.on('show', (evt) => {
+      //   console.log('show');
+      //   mapActions.infoWindowUpdated(evt);
+      // });
+      // response.map.infoWindow.on('hide', (evt) => {
+      //   console.log('hide', evt.target);
+      //   debugger;
+      //   mapActions.infoWindowUpdated(evt);
+      // });
+      // response.map.infoWindow.on('set-features', (evt) => {
+      //   console.log('set-features');
+      //   mapActions.infoWindowUpdated(evt);
+      // });
+      // response.map.infoWindow.on('selection-change', (evt) => {
+      //   console.log('selection-change');
+      //   mapActions.infoWindowUpdated(evt);
+      // });
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
@@ -175,6 +197,41 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        // Get WMS Features on click
+        response.map.on('click', (evt) => {
+          if (this.state.drawButtonActive) {
+            // don't run this function if we are drawing a custom shape
+            return;
+          }
+          // getWMSFeatureInfo(evt, 'http://cartocritica.mx/geoserver/Tenencia/wms', 'Tenencia:NucleosAgrarios_2015nov', response.map.extent).then((features) => {
+          getWMSFeatureInfo(evt, 'https://ahocevar.com/geoserver/wms', 'topp:states', response.map.extent).then((features) => {
+            const layer = response.map.getLayer(layerKeys.USER_FEATURES);
+            const wmsGraphics = [];
+            if (Array.isArray(features) && features.length > 0) {
+
+              features.forEach((feature) => {
+                const { attributes, geometry } = feature;
+
+                if (layer) {
+                  const graphic = new Graphic(
+                    geometry,
+                    symbols.getCustomSymbol(),
+                    {
+                      ...attributes,
+                    },
+                    new InfoTemplate({
+                      title: 'what up',
+                      content: '<div class=\'custom-feature__content\'>Temp Id: 4</div>'
+                    })
+                  );
+                  wmsGraphics.push(graphic);
+                }
+              });
+              response.map.infoWindow.setFeatures(wmsGraphics);
+            }
+          });
+        });
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -430,7 +487,7 @@ export default class Map extends Component {
           });
 
           groupLayers.forEach(gl => {
-            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
+            const layerConfigToReplace = utils.getObject(group.layers, 'id', gl.id);
             group.layers.splice(group.layers.indexOf(layerConfigToReplace), 1, gl);
           });
 
@@ -455,7 +512,7 @@ export default class Map extends Component {
             });
 
           layersFromWebmap.forEach(lfw => {
-            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', lfw.id);
+            const layerConfigToReplace = utils.getObject(group.layers, 'id', lfw.id);
             group.layers = [
               ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
               lfw,
@@ -485,7 +542,7 @@ export default class Map extends Component {
               });
 
             layersFromWebmap.forEach(nl => {
-              const layerConfigToReplace = AppUtils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
+              const layerConfigToReplace = utils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
               nestedGroup.nestedLayers = [
                 ...nestedGroup.nestedLayers.slice(0, nestedGroup.nestedLayers.indexOf(layerConfigToReplace)),
                 nl,
@@ -579,7 +636,7 @@ export default class Map extends Component {
           </svg>
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
-          <AnalysisModal />
+          <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />

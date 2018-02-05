@@ -469,6 +469,20 @@ export default {
           zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
           ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
         }
+      }, {
+        order: 3,
+        // id: 'WMS_NUCLEOS_AGRARIOS',
+        id: 'WMS_STATES',
+        type: 'wms',
+        // url: 'http://cartocritica.mx/geoserver/Tenencia/wms',
+        url: 'https://ahocevar.com/geoserver/wms',
+        layerName: 'topp:states',
+        // layerName: 'Tenencia:NucleosAgrarios_2015nov',
+        visible: true,
+        label: {
+          // en: 'Nucleos Agrarios'
+          en: 'States'
+        }
       }]
     },
     GROUP_BASEMAP: {
@@ -523,7 +537,7 @@ export default {
           zh: 'WRI Contextual',
           ka: 'WRI Contextual'
         }
-      }]
+      }],
     },
 
     /**

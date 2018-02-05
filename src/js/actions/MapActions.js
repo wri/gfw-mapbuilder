@@ -222,6 +222,10 @@ class MapActions {
     return arr;
   }
 
+  activateDrawButton(bool) {
+    return bool;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

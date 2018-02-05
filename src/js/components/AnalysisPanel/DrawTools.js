@@ -57,7 +57,7 @@ export default class DrawTools extends Component {
 
   draw = () => {
     // if active, toggle it off
-    if (this.state.drawButtonActive) {
+    if (this.props.drawButtonActive) {
       this.deactivate();
     } else {
       this.activate();
@@ -69,7 +69,7 @@ export default class DrawTools extends Component {
   activate = () => {
     const {map} = this.context;
     this.toolbar.activate(Draw.POLYGON);
-    this.setState({ drawButtonActive: true });
+    mapActions.activateDrawButton(true);
     // Disable popups while this is active, this function is only available to webmaps when usePopupManager is true
     map.setInfoWindowOnClick(false);
   };
@@ -77,7 +77,7 @@ export default class DrawTools extends Component {
   deactivate = () => {
     const {map} = this.context;
     this.toolbar.deactivate();
-    this.setState({ drawButtonActive: false });
+    mapActions.activateDrawButton(false);
     // Reconnect the popups, this function is only available to webmaps when usePopupManager is true
     map.setInfoWindowOnClick(true);
   };
