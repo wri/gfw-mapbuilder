@@ -45,7 +45,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
-import { getWMSFeatureInfo } from 'utils/wmsUtils';
+import { wmsClick, getWMSFeatureInfo } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -204,33 +204,54 @@ export default class Map extends Component {
             // don't run this function if we are drawing a custom shape
             return;
           }
-          // getWMSFeatureInfo(evt, 'http://cartocritica.mx/geoserver/Tenencia/wms', 'Tenencia:NucleosAgrarios_2015nov', response.map.extent).then((features) => {
-          getWMSFeatureInfo(evt, 'https://ahocevar.com/geoserver/wms', 'topp:states', response.map.extent).then((features) => {
-            const layer = response.map.getLayer(layerKeys.USER_FEATURES);
-            const wmsGraphics = [];
-            if (Array.isArray(features) && features.length > 0) {
+          console.log(brApp.map.layerIds);
+          console.log(brApp.map.getLayer('TectonicPlates_9582'));
+          const wmsLayers = brApp.map.layerIds
+            .filter(id => id.toLowerCase().indexOf('wms') > -1)
+            .map(wmsId => brApp.map.getLayer(wmsId))
+            .filter(layer => layer.visible);
+          console.log(wmsLayers);
 
-              features.forEach((feature) => {
-                const { attributes, geometry } = feature;
+          if (wmsLayers.length) {
+            wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
+              console.log(responses);
+              const layer = brApp.map.getLayer(layerKeys.USER_FEATURES);
+              const wmsGraphics = [];
+              Object.keys(responses).forEach(layerId => {
+                if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
+                  responses[layerId].forEach((feature) => {
+                    console.log(feature);
+                    const { attributes, geometry } = feature;
 
-                if (layer) {
-                  const graphic = new Graphic(
-                    geometry,
-                    symbols.getCustomSymbol(),
-                    {
-                      ...attributes,
-                    },
-                    new InfoTemplate({
-                      title: 'what up',
-                      content: '<div class=\'custom-feature__content\'>Temp Id: 4</div>'
-                    })
-                  );
-                  wmsGraphics.push(graphic);
+                    if (layer) {
+
+                      const graphic = new Graphic(
+                        geometry,
+                        symbols.getCustomSymbol(),
+                        {
+                          ...attributes,
+                        },
+                        new InfoTemplate({
+                          title: '${id}',
+                          content: '<div class=\'custom-feature__content\'>Temp Id: ${id}</div>'
+                        })
+                      );
+                      wmsGraphics.push(graphic);
+                    }
+                  });
+                  brApp.map.infoWindow.setFeatures(wmsGraphics);
+                } else {
+                  console.error('error:', responses[layerId].error);
                 }
               });
-              response.map.infoWindow.setFeatures(wmsGraphics);
-            }
-          });
+            });
+          }
+
+          // getWMSFeatureInfo(evt, 'http://cartocritica.mx/geoserver/Tenencia/wms', 'Tenencia:NucleosAgrarios_2015nov', response.map.extent).then((features) => {
+        //   getWMSFeatureInfo(evt, 'https://ahocevar.com/geoserver/wms', 'topp:states', response.map.extent).then((features) => {
+        //     const layer = response.map.getLayer(layerKeys.USER_FEATURES);
+        //     const wmsGraphics = [];
+        //   });
         });
 
         //- Add click event for user-features layer
@@ -442,7 +463,10 @@ export default class Map extends Component {
           },
           opacity: layer.opacity,
           visible: layer.visibility,
-          esriLayer: layer.layerObject,
+          esriLayer: {
+            ...layer.layerObject,
+            type: layer.layerType,
+          },
           itemId: layer.itemId
         };
         layers.unshift(layerInfo);

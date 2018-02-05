@@ -259,10 +259,11 @@ export default class LegendPanel extends Component {
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
         />;
-      } else if (esriLayer.type === 'wms') {
+      } else if (esriLayer.type.toLowerCase() === 'wms') {
         return <WMSLegend
           key={layer.id}
           url={esriLayer.url}
+          version={esriLayer.version}
           labels={layer.label[language]}
           visibility={activeLayers.indexOf(layer.id) > -1}
           visibleLayers={activeLayers}

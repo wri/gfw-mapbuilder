@@ -5,7 +5,12 @@ export default class WMSLegend extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = { legendInfo: '', visible: props.visibility, opacity: props.defaultOpacity };
+    this.state = {
+      legendInfo: '',
+      visible: props.visibility,
+      opacity: props.defaultOpacity,
+      error: ''
+    };
   }
 
   componentDidUpdate(prevProps) {
@@ -27,11 +32,15 @@ export default class WMSLegend extends React.Component {
     const {
       url,
       layerName,
+      version,
     } = this.props;
 
-    getWMSLegendGraphic(url, layerName).then((res) => {
+    getWMSLegendGraphic(url, layerName, version).then((res) => {
       if (typeof res === 'object') {
-        this.setState({ legendInfo: null });
+        this.setState({
+          legendInfo: null,
+          error: res.error,
+        });
         return;
       }
       this.setState({ legendInfo: res });
@@ -39,12 +48,12 @@ export default class WMSLegend extends React.Component {
   }
 
   render () {
-    const { visible, legendInfo } = this.state;
+    const { visible, legendInfo, error } = this.state;
     const label = this.props.labels;
 
     const legend = legendInfo
-      ? <img style={{'opacity': this.state.opacity}} title={label} src={legendInfo} />
-      : <div>Legend Not Available for layer: {label}</div>;
+      ? <img style={{ opacity: this.state.opacity }} title={label} src={legendInfo} />
+      : <div style={{ color: 'red', fontSize: '12px' }}>Legend Not Available: {error}</div>;
 
     return (
       <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref="myRef">

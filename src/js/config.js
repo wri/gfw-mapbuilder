@@ -26,8 +26,6 @@ const config = {
     'production-api.globalforestwatch.org/v1/ogr',
     'production-api.globalforestwatch.org/v1/ogr/convert',
     'gis.wri.org',
-    'cartocritica.mx',
-    'ahocevar.com',
   ],
 
   urls: {
