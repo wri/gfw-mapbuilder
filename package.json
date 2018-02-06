@@ -5,7 +5,8 @@
   "main": "webpack.config.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
-    "test": "eslint src/js/**/*.js",
+    "lint": "eslint src/js/**/*.js",
+    "test": "jest --no-cache",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
     "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js --env production"
@@ -27,20 +28,51 @@
     "url": "https://github.com/wri/forest_atlas_template/issues"
   },
   "homepage": "https://github.com/wri/forest_atlas_template#readme",
+  "jest": {
+    "verbose": true,
+    "globals": {
+      "NODE_ENV": "test"
+    },
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/config/__mocks__/object.js",
+      "\\.(jpe?g|png|gif|svg)$": "<rootDir>/config/__mocks__/object.js",
+      "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
+      "esri/config": "<rootDir>/config/__mocks__/config.js",
+      "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
+      "^esri(.*)$": "<rootDir>/config/__mocks__/object.js",
+      "^dijit(.*)$": "<rootDir>/config/__mocks__/object.js",
+      "^components(.*)$": "<rootDir>/src/js/components$1"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "bower_components",
+      "src"
+    ]
+  },
   "dependencies": {
     "alt": "^0.18.6",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
+    "babel-jest": "^22.0.4",
     "babel-plugin-transform-es2015-modules-amd": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "highcharts": "^6.0.4",
+    "jest": "^22.0.4",
     "moment": "^2.20.0",
     "pug": "^2.0.0-rc.4",
     "react": "^15.6.2",
-    "react-dom": "^15.6.2"
+    "react-dom": "^15.6.2",
+    "react-test-renderer": "^15"
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0-beta6",
