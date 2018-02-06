@@ -224,7 +224,14 @@ export default class Map extends Component {
                     const { attributes, geometry } = feature;
 
                     if (layer) {
-
+                      let infoTemplateContent = '<div class="esriViewPopup"><div class="mainSection">';
+                      infoTemplateContent + Object.keys(attributes).map(attr => {
+                        return (
+                          '<div class="esriViewPopup"><div class="mainSection">'
+                          +
+                          + '</table></div></div>'
+                        );
+                      });
                       const graphic = new Graphic(
                         geometry,
                         symbols.getCustomSymbol(),
@@ -233,7 +240,9 @@ export default class Map extends Component {
                         },
                         new InfoTemplate({
                           title: '${id}',
-                          content: '<div class=\'custom-feature__content\'>Temp Id: ${id}</div>'
+                          content: (() => {
+                            '<div class=\'custom-feature__content\'>Temp Id: ${id}</div>'
+                          })()
                         })
                       );
                       wmsGraphics.push(graphic);
