@@ -2,6 +2,8 @@
 build
 dist
 !**/vendor/jquery/dist
+webpackBuild
+libBuild
 
 # Ignore these, just do it
 arcgis-modules.txt
