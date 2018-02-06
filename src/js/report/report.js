@@ -5,6 +5,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 import performAnalysis from 'utils/performAnalysis';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
+import Point from 'esri/geometry/Point';
 import {getUrlParams} from 'utils/params';
 import {analysisConfig, layerPanelText} from 'js/config';
 import layerFactory from 'utils/layerFactory';
@@ -70,8 +71,8 @@ const getFeature = function getFeature (params) {
       promise.resolve({
         attributes: geostoreResult.data.attributes,
         geostoreId: geostoreResult.data.id,
-        geometry: new Polygon(esriJson),
-        title: params.customFeatureTitle || 'Custom Analysis',
+        geometry: geostoreResult.data.attributes.geojson.features[0].geometry.type === 'Point' ? new Point(esriJson) : new Polygon(esriJson),
+        title: params.customFeatureTitle,
         isCustom: true // TODO MAKE SURE NOT TO HARD CODE THAT IN
       });
     }, err => {
@@ -120,6 +121,14 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];
     const existingIds = [];
+    const reducedLayers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    layers = layers.filter(l => l.url).concat(reducedLayers);
     layers.forEach(layer => {
       if (existingIds.indexOf(layer.id) === -1) {
         uniqueLayers.push(layer);
@@ -178,6 +187,24 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     }
 
     map.addLayers(esriLayers);
+
+    reducedLayers.forEach(layer => {
+      const mapLayer = map.getLayer(layer.id);
+      if (mapLayer) {
+        mapLayer.hide();
+        activeLayers.forEach(id => {
+          if (id.indexOf(layer.id) > -1) {
+            if (layer.hasOwnProperty('includedSublayers')) {
+              const subIndex = parseInt(id.substr(layer.id.length + 1));
+              mapLayer.setVisibleLayers([subIndex]);
+              mapLayer.show();
+              return;
+            }
+            mapLayer.show();
+          }
+        });
+      }
+    });
 
     layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
     layersHelper.updateAGBiomassLayer(tcd, map);
@@ -307,9 +334,14 @@ const generateSlopeTable = function generateSlopeTable (labels, values) {
 const setupMap = function setupMap (params, feature) {
   const { service, visibleLayers } = params;
   //- Add a graphic to the map
-  const graphic = new Graphic(new Polygon(feature.geometry), symbols.getCustomSymbol());
+  const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
   const graphicExtent = graphic.geometry.getExtent();
-  map.setExtent(graphicExtent, true);
+
+  if (graphicExtent) {
+    map.setExtent(graphicExtent, true);
+  } else {
+    map.centerAndZoom(new Point(graphic.geometry), 15);
+  }
   map.graphics.add(graphic);
 
   const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
@@ -689,6 +721,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     performAnalysis({
       type: analysisKeys.LCC,
       geometry: geographic,
+      geostoreId: feature.geostoreId,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -777,6 +810,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     performAnalysis({
       type: analysisKeys.INTACT_LOSS,
       geometry: geographic,
+      geostoreId: feature.geostoreId,
       settings: settings,
       canopyDensity: tcd,
       language: lang

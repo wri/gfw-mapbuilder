@@ -6,7 +6,10 @@ import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
 import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
+import RadioGroup from 'components/LayerPanel/RadioGroup';
+import NestedGroup from 'components/LayerPanel/NestedGroup';
 import layerActions from 'actions/LayerActions';
+import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
 import WRIBasemapLayer from 'components/LayerPanel/WRIBasemapLayer';
 import LandsatLayer from 'components/LayerPanel/LandsatLayer';
@@ -21,6 +24,8 @@ import React, {
   PropTypes
 } from 'react';
 
+let hasNotRun = true;
+
 export default class LayerPanel extends Component {
 
   static contextTypes = {
@@ -29,24 +34,49 @@ export default class LayerPanel extends Component {
     map: PropTypes.object.isRequired
   };
 
-  // renderLayerGroup = (group, layers) => {
-  //   return (
-  //     <LayerGroup
-  //       key={group.key}
-  //       groupKey={group.key}
-  //       label={group.label}
-  //       {...this.props}>
-  //       {layers.map(this.checkboxMap(group.key), this)}
-  //     </LayerGroup>
-  //   );
-  // };
+  componentDidUpdate(prevProps) {
+    if (this.props.activeLayers !== prevProps.activeLayers
+      && this.props.activeLayers.filter(id => id !== 'USER_FEATURES').length > 0
+      && hasNotRun) {
+        hasNotRun = false;
+        const { layerPanel } = this.context.settings;
+        const groupsWithLayersTurnedOn = [];
+        Object.keys(layerPanel).filter(key => key !== 'GROUP_BASEMAP' && key !== 'extraLayers').forEach(k => {
+          if (layerPanel[k].hasOwnProperty('layers')) {
+            layerPanel[k].layers.forEach(l => {
+              let idToCheck = '';
+              if (l.hasOwnProperty('nestedLayers')) {
+                l.nestedLayers.forEach(nl => {
+                  idToCheck = nl.subId || nl.id;
+                });
+              } else {
+                idToCheck = l.subId || l.id;
+              }
+              if (this.props.activeLayers.indexOf(idToCheck) > -1 && groupsWithLayersTurnedOn.indexOf(k) === -1) {
+                groupsWithLayersTurnedOn.push(k);
+              }
+            });
+          }
+        });
+        if (groupsWithLayersTurnedOn.length > 0) {
+          mapActions.openTOCAccordion.defer(groupsWithLayersTurnedOn[0]);
+        }
+    }
+  }
 
   renderLayerGroups = (groups, language) => {
+    const allRadioLayers = [];
+    Object.keys(groups)
+      .filter(groupKey => groups[groupKey].groupType === 'radio')
+      .forEach(radioGroup => {
+        allRadioLayers.push(...groups[radioGroup].layers);
+      });
+
     //- Make an array, filter it, then sort by order
     const orderedGroups = Object.keys(groups).filter((key) => {
       //- extraLayers show on the map but not here, if no layers are configured
       //- don't add the group
-      return key !== 'extraLayers' && groups[key].layers.length;
+      return key !== 'extraLayers';
     }).map(key => {
       //- Add a key to it for React
       groups[key].key = key;
@@ -57,11 +87,36 @@ export default class LayerPanel extends Component {
     });
 
     return orderedGroups.map((group) => {
+      if (group.layers.length === 0) { return null; }
+      group.layers = group.layers.sort((a, b) => b.order - a.order);
       //- Sort the layers and then render them, basemaps use a different function
       //- as not all basemaps are present in configuration
-      const layers = group.key === LayerKeys.GROUP_BASEMAP ?
-        this.renderBasemaps(group.layers) :
-        group.layers.sort((a, b) => b.order - a.order).map(this.checkboxMap, this);
+
+      let layers = [];
+      switch (group.groupType) {
+        case 'radio': {
+          layers = <RadioGroup
+            groupLayers={group.layers}
+            allRadioLayers={allRadioLayers.filter(l => this.props.exclusiveLayerIds.indexOf(l.id) > -1)}
+            activeLayers={this.props.activeLayers}
+            dynamicLayers={this.props.dynamicLayers}
+            iconLoading={this.props.iconLoading}
+          />;
+          break;
+        }
+        case 'nested':
+          layers = <NestedGroup
+            layers={group.layers}
+            activeLayers={this.props.activeLayers}
+            dynamicLayers={this.props.dynamicLayers}
+          />;
+          break;
+        case 'basemap':
+          layers = this.renderBasemaps(group.layers);
+          break;
+        default:
+          layers = group.layers.map(this.checkboxMap);
+      }
 
       return (
         <LayerGroup
@@ -75,7 +130,7 @@ export default class LayerPanel extends Component {
     });
   };
 
-  checkboxMap (layer) {
+  checkboxMap = (layer) => {
     const {
       activeLayers,
       dynamicLayers,

@@ -174,7 +174,7 @@ const utils = {
       viirsEndDate: viirsEndDate,
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
-      customFeatureTitle: options.selectedFeature.attributes.title
+      customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis'
     };
 
 
@@ -269,7 +269,7 @@ const utils = {
 
   formatNumber: (number) => {
 
-    const numberString = number.toString();
+    const numberString = Math.round(number).toString();
 
     if (number >= 1000) {
       const stringArray = [];

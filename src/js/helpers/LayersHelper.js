@@ -67,9 +67,11 @@ const LayersHelper = {
     // Non-webmap layers, always assume visible.
     let visible = true;
     // Layers have a visibleAtMapScale property which make this easy.
-    if (layerInfo.esriLayer && layerInfo.esriLayer.loaded && !layerInfo.esriLayer.visibleAtMapScale) {
-      visible = false;
-      layerInfo.visible = visible;
+    if (layerInfo.esriLayer && layerInfo.esriLayer.loaded) {
+      if (layerInfo.esriLayer.hasOwnProperty('visibleAtMapScale') && !layerInfo.esriLayer.visibleAtMapScale) {
+        visible = false;
+        layerInfo.visible = visible;
+      }
     }
     if (map && map.getScale && layerInfo.esriLayer) {
       // Explicitly check scale depencency for sub-layers in a dynamic map service.

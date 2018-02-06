@@ -455,8 +455,8 @@ strings.ka.DESCRIPTION = 'აღწერა';
 //- Miscellaneous
 strings.ka.PRINT_BUTTON_LABEL = 'აარჩიეთ ბეჭდვის ფორმატი';
 strings.ka.PRINT_REPORT = 'ანგარიშის ბეჭდვა';
-strings.en.EDIT_SAVE = 'Save';
-strings.en.EDIT_EDIT = 'Edit';
+strings.ka.EDIT_SAVE = 'Save';
+strings.ka.EDIT_EDIT = 'Edit';
 strings.ka.SUBSCRIBE = 'გამოწერა';
 strings.ka.LAYERS = 'ფენები';
 strings.ka.DATA = 'მონაცემები';
@@ -716,8 +716,8 @@ strings.fr.DESCRIPTION = 'description';
 //- Miscellaneous
 strings.fr.PRINT_BUTTON_LABEL = 'Choisissez un format d\'impression';
 strings.fr.PRINT_REPORT = 'Imprimer le Rapport';
-strings.en.EDIT_SAVE = 'Save';
-strings.en.EDIT_EDIT = 'Edit';
+strings.fr.EDIT_SAVE = 'Save';
+strings.fr.EDIT_EDIT = 'Edit';
 strings.fr.SUBSCRIBE = 'S\'abonner';
 strings.fr.LAYERS = 'Couches';
 strings.fr.DATA = 'Données';
@@ -978,8 +978,8 @@ strings.es.DESCRIPTION = 'Descripción';
 //- Miscellaneous
 strings.es.PRINT_BUTTON_LABEL = 'Elegir diseño de página';
 strings.es.PRINT_REPORT = 'Imprimir Informe';
-strings.en.EDIT_SAVE = 'Save';
-strings.en.EDIT_EDIT = 'Edit';
+strings.es.EDIT_SAVE = 'Save';
+strings.es.EDIT_EDIT = 'Edit';
 strings.es.SUBSCRIBE = 'Subscribirse';
 strings.es.LAYERS = 'Capas';
 strings.es.DATA = 'Datos';
@@ -1239,8 +1239,8 @@ strings.pt.DESCRIPTION = 'Descrição';
 //- Miscellaneous
 strings.pt.PRINT_BUTTON_LABEL = 'Escolher saída de impressão.';
 strings.pt.PRINT_REPORT = 'Imprimir Relatório';
-strings.en.EDIT_SAVE = 'Save';
-strings.en.EDIT_EDIT = 'Edit';
+strings.pt.EDIT_SAVE = 'Save';
+strings.pt.EDIT_EDIT = 'Edit';
 strings.pt.SUBSCRIBE = 'Inscrever-se';
 strings.pt.LAYERS = 'Camadas';
 strings.pt.DATA = 'Dados';
@@ -1500,8 +1500,8 @@ strings.id.DESCRIPTION = 'description';
 //- Miscellaneous
 strings.id.PRINT_BUTTON_LABEL = 'Choose a print output';
 strings.id.PRINT_REPORT = 'Print Report';
-strings.en.EDIT_SAVE = 'Save';
-strings.en.EDIT_EDIT = 'Edit';
+strings.id.EDIT_SAVE = 'Save';
+strings.id.EDIT_EDIT = 'Edit';
 strings.id.SUBSCRIBE = 'Subscribe';
 strings.id.LAYERS = 'Layers';
 strings.id.DATA = 'Data';
@@ -1761,8 +1761,8 @@ strings.zh.DESCRIPTION = '说明';
 //- Miscellaneous
 strings.zh.PRINT_BUTTON_LABEL = '选择打印模板';
 strings.zh.PRINT_REPORT = '打印报告';
-strings.en.EDIT_SAVE = 'Save';
-strings.en.EDIT_EDIT = 'Edit';
+strings.zh.EDIT_SAVE = 'Save';
+strings.zh.EDIT_EDIT = 'Edit';
 strings.zh.SUBSCRIBE = '订阅';
 strings.zh.SEARCH = '搜寻';
 strings.zh.LAYERS = '图层';

@@ -281,7 +281,6 @@ export default {
     query.outFields = [''];
     query.where = layerDef;
     queryTask.executeForCount(query).then(function (response) {
-      console.log(url, query, response);
       promise.resolve({fireCount: response});
     }, (error) => {
       console.error(error);
@@ -343,7 +342,7 @@ export default {
 
     const promise = new Deferred();
     const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
-    console.log(terraIFrom);
+
     const startDate = terraIFrom;
     const endDate = terraITo;
 

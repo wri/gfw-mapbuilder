@@ -7,11 +7,13 @@ import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import dispatcher from 'js/dispatcher';
 import LayersHelper from 'helpers/LayersHelper';
+import analysisUtils from 'utils/analysisUtils';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
 import moment from 'moment';
-import analysisUtils from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
+
+let isRegistering = false;
 
 class MapStore {
 
@@ -64,6 +66,7 @@ class MapStore {
     this.imazonStartYear = 0;
     this.imazonEndYear = 0;
     this.iconLoading = '';
+    this.exclusiveLayerIds = [];
     this.legendOpacity = {};
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
@@ -98,6 +101,8 @@ class MapStore {
       toggleLegendVisible: mapActions.toggleLegendVisible,
       addSubLayer: layerActions.addSubLayer,
       removeSubLayer: layerActions.removeSubLayer,
+      removeAllSubLayers: layerActions.removeAllSubLayers,
+      setSubLayers: layerActions.setSubLayers,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
       setLossOptions: layerActions.setLossOptions,
@@ -117,7 +122,8 @@ class MapStore {
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
       showLoading: layerActions.showLoading,
       updateCartoSymbol: layerActions.updateCartoSymbol,
-      toggleAnalysisTab: mapActions.toggleAnalysisTab
+      toggleAnalysisTab: mapActions.toggleAnalysisTab,
+      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds
     });
   }
 
@@ -159,13 +165,43 @@ class MapStore {
     this.removeActiveLayer(info.subId);
   }
 
-  addAll () {
-    this.activeLayers = this.allLayers.map(l => l.id);
-    this.allLayers.forEach((layer) => {
-      if (layer.subId) {
-        this.dynamicLayers[layer.id] = layer.esriLayer.layerInfos.map(lyr => lyr.id);
-      }
+  removeAllSubLayers(info) {
+    this.dynamicLayers[info.id] = [];
+    info.layerInfos.forEach(i => {
+      this.removeActiveLayer(`${info.id}_${i.id}`);
     });
+  }
+
+  setSubLayers(info) {
+    this.dynamicLayers[info.id] = [...info.subIndexes];
+    info.subIndexes.forEach(i => {
+      this.addActiveLayer(`${info.id}_${i}`);
+    });
+  }
+
+  addAll () {
+    const allActiveLayers = [];
+    const allDynamicLayers = {};
+    const radioGroupOrders = this.allLayers.filter(l => l.activateWithAllLayers).map(l => l.groupOrder);
+
+    const reducedLayers = this.allLayers.reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    reducedLayers.forEach(l => {
+      if (l.subId && l.activateWithAllLayers && l.groupOrder === Math.min(...radioGroupOrders)) {
+        allActiveLayers.push(l.subId);
+        allDynamicLayers[l.id] = [l.subIndex];
+        return;
+      }
+      allActiveLayers.push(l.id);
+    });
+
+    this.activeLayers = allActiveLayers;
+    this.dynamicLayers = allDynamicLayers;
   }
 
   removeAll () {
@@ -215,15 +251,17 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        if (!selectedFeature.isRegistering) {
-          selectedFeature.isRegistering = true;
+        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
+          isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
           analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
             selectedFeature.attributes.geostoreId = res.data.id;
             mapActions.toggleAnalysisTab(false);
+            isRegistering = false;
           });
+        } else {
+          this.activeTab = tabKeys.INFO_WINDOW;
         }
-        this.activeTab = tabKeys.INFO_WINDOW;
       }
     }
   }
@@ -234,9 +272,13 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
-
-    this.activeLayers = layers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
-
+    const reducedLayers = layers.reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+    this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -439,6 +481,9 @@ class MapStore {
     }
   }
 
+  updateExclusiveRadioIds (ids) {
+    this.exclusiveLayerIds = ids;
+  }
 }
 
 export default dispatcher.createStore(MapStore, 'MapStore');
