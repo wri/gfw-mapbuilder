@@ -20,17 +20,6 @@ export default class AnalysisTypeSelect extends Component {
     // Get options for the select
     const options = this.prepareOptions(context.language);
     this.state = { options };
-    // Set the default analysis type
-    // If we have restoration module, make it the first element in those options
-    // let index = 0;
-    // if (context.settings.restorationModule) {
-    //   options.some((item, i) => {
-    //     if (item.group === analysisKeys.ANALYSIS_GROUP_RESTORATION) {
-    //       index = i;
-    //       return true;
-    //     }
-    //   });
-    // }
 
     mapActions.setAnalysisType.defer('default');
   }
