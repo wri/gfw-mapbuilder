@@ -6,7 +6,7 @@ import WebTiledLayer from 'esri/layers/WebTiledLayer';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import TerraILayer from 'js/layers/TerraILayer';
-// import CartoLayer from 'js/layers/CartoLayer';
+import CartoLayer from 'js/layers/CartoLayer';
 import GladLayer from 'js/layers/GladLayer';
 import TreeCoverLossLayer from 'js/layers/TreeCoverLossLayer';
 import TreeCoverGainLayer from 'js/layers/TreeCoverGainLayer';
@@ -36,11 +36,10 @@ export default (layer, lang) => {
   let esriLayer;
 
   switch (layer.type) {
-    // case 'carto_template':
-    //   options.id = layer.id;
-    //   esriLayer = new CartoLayer(layer);
-    //   esriLayer.queryBuilder();
-    // break;
+    case 'carto':
+      esriLayer = new CartoLayer(layer);
+      esriLayer.queryBuilder();
+    break;
     case 'tiled':
       options.id = layer.id;
       options.visible = layer.visible || false;

@@ -257,6 +257,15 @@ export default {
         });
       });
     } else if (layer.esriLayer) {
+      if (layer.type === 'carto') {
+        const {subId, id} = layer;
+        url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
+        const cartoMeta = getCartoMetadata(url);
+        cartoMeta.then(results => {
+          _cache[subId || id] = JSON.parse(results);
+          promise.resolve(reduceCarto(JSON.parse(results)));
+        });
+      }
       const {esriLayer, subIndex, subId} = layer;
       url = `${esriLayer.url}/${subIndex !== undefined ? subIndex : ''}`;
       getServiceInfoTask(url).then(results => {
@@ -268,15 +277,7 @@ export default {
         _cache[layer.id] = results;
         promise.resolve(results);
       });
-      } else if (layer.cartoLayer) {
-      const {subId} = layer;
-      url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
-      const cartoMeta = getCartoMetadata(url);
-      cartoMeta.then(results => {
-        _cache[subId] = JSON.parse(results);
-        promise.resolve(reduceCarto(JSON.parse(results)));
-      });
-    } else {
+      } else {
       promise.resolve();
     }
     return promise;

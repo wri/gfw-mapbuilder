@@ -312,8 +312,8 @@ export default declare('CartoLayer', [GraphicsLayer], {
   setLineParams: function (cartoUser, esriObj, esriObjLineSymbol) {
     var line = new SimpleLineSymbol();
     line.setStyle(SimpleLineSymbol.STYLE_SOLID);
-    line.setColor(new Color(cartoColor));
-    line.setWidth(cartoLineWidth);
+    line.setColor(new Color(esriObjLineSymbol.color));
+    line.setWidth(esriObjLineSymbol.width);
 
     const params = {
       user: cartoUser,
