@@ -22,19 +22,17 @@ export default class AnalysisTypeSelect extends Component {
     this.state = { options };
     // Set the default analysis type
     // If we have restoration module, make it the first element in those options
-    let index = 0;
-    if (context.settings.restorationModule) {
-      options.some((item, i) => {
-        if (item.group === analysisKeys.ANALYSIS_GROUP_RESTORATION) {
-          index = i;
-          return true;
-        }
-      });
-    }
+    // let index = 0;
+    // if (context.settings.restorationModule) {
+    //   options.some((item, i) => {
+    //     if (item.group === analysisKeys.ANALYSIS_GROUP_RESTORATION) {
+    //       index = i;
+    //       return true;
+    //     }
+    //   });
+    // }
 
-    mapActions.setAnalysisType.defer({
-      target: { value: options[index].value }
-    });
+    mapActions.setAnalysisType.defer('default');
   }
 
   componentWillReceiveProps (nextProps, nextContext) {
@@ -106,6 +104,9 @@ export default class AnalysisTypeSelect extends Component {
     return (option, index) => {
       // If this option is not a member of the correct group, dont render it
       if (option.group !== group) { return null; }
+      if (option.value === 'default') {
+        return <option key={index} disabled={this.props.activeAnalysisType !== 'default'} value={option.value}>{option.label}</option>;
+      }
       return <option key={index} value={option.value}>{option.label}</option>;
     };
   };
@@ -119,6 +120,10 @@ export default class AnalysisTypeSelect extends Component {
       </optgroup>
     );
   };
+
+  handleChange = e => {
+    mapActions.setAnalysisType(e.target.value);
+  }
 
   render () {
     const {activeAnalysisType} = this.props;
@@ -145,7 +150,7 @@ export default class AnalysisTypeSelect extends Component {
         <select
           value={activeAnalysisType}
           className='analysis-results__select pointer'
-          onChange={mapActions.setAnalysisType}>
+          onChange={this.handleChange}>
           {optionElements}
         </select>
         <div className='analysis-results__select-style'>
