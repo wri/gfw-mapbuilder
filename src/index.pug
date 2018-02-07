@@ -44,7 +44,7 @@ html
       var _app = {
         cache: %META_VERSION%,
         esri: %ESRI_VERSION%,
-        base: 'https://my.gfw-mapbuilder.org/v1.1.15'
+        base: ''
       };
 
       function loadCSS (url, head) {
@@ -71,8 +71,7 @@ html
         return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
       }
       // Change this to '' if _app.base is a remote url
-      //- var base = location.href.replace(/\/[^/]+$/, '');
-      var base = '';
+      var base = location.href.replace(/\/[^/]+$/, '');
       // Add trailing slash if it is not present
       base = makePath(base);
 
