@@ -31,14 +31,6 @@ import React, {
   PropTypes
 } from 'react';
 
-const getDefaultState = function () {
-  return {
-    error: false,
-    isLoading: true,
-    results: undefined
-  };
-};
-
 export default class Analysis extends Component {
 
   static contextTypes = {
@@ -48,58 +40,8 @@ export default class Analysis extends Component {
 
   state = {
     error: false,
-    results: undefined
+    isLoading: false
   };
-
-  componentDidMount() {
-    const {settings, language} = this.context;
-    const {
-      selectedFeature,
-      activeTab,
-      activeAnalysisType,
-      canopyDensity,
-      activeSlopeClass,
-      lossFromSelectIndex,
-      lossToSelectIndex,
-      gladStartDate,
-      gladEndDate,
-      terraIStartDate,
-      terraIEndDate,
-      viirsStartDate,
-      viirsEndDate,
-      modisStartDate,
-      modisEndDate
-    } = this.props;
-
-    if (selectedFeature && activeAnalysisType === 'TC_LOSS_GAIN' && activeTab === tabKeys.ANALYSIS) {
-      request.getRawGeometry(selectedFeature).then(geometry => {
-
-        performAnalysis({
-          type: activeAnalysisType,
-          geometry: geometry,
-          geostoreId: selectedFeature.attributes.geostoreId,
-          canopyDensity: canopyDensity,
-          activeSlopeClass: activeSlopeClass,
-          settings: settings,
-          language: language,
-          tcLossFrom: lossFromSelectIndex,
-          tcLossTo: lossToSelectIndex,
-          gladFrom: gladStartDate,
-          gladTo: gladEndDate,
-          terraIFrom: terraIStartDate,
-          terraITo: terraIEndDate,
-          viirsFrom: moment(viirsStartDate),
-          viirsTo: moment(viirsEndDate),
-          modisFrom: moment(modisStartDate),
-          modisTo: moment(modisEndDate)
-        }).then((results) => {
-          this.setState({ results: results, isLoading: false });
-        }, () => {
-          this.setState({ isLoading: false, error: true });
-        });
-      });
-    }
-  }
 
   //- Test this as it will need to be tweaked, ideally when we receive new props,
   //- We want to reset state to default before our render pass
@@ -131,9 +73,11 @@ export default class Analysis extends Component {
       activeSlopeClass !== this.props.activeSlopeClass
       ) &&
       activeTab === tabKeys.ANALYSIS &&
-      activeAnalysisType !== ''
+      activeAnalysisType !== '' &&
+      activeAnalysisType !== 'default'
     ) {
-      this.setState(getDefaultState());
+      // this.setState(getDefaultState());
+      this.setState({isLoading: true, results: null, isError: false});
       const { settings, language } = this.context;
       request.getRawGeometry(selectedFeature).then(geometry => {
         performAnalysis({
@@ -250,13 +194,15 @@ export default class Analysis extends Component {
       //   return <VegaChart config={results.data.attributes.widgetConfig} />;
       // case 'custom2':
       //   return <VegaChart config={results.data.attributes.widgetConfig} />;
+      case 'default':
+        return null;
       default:
       //- This should only be the restoration analysis, since its value is a plain rasterId
-        // return <RestorationCharts results={results} />;
+        return <RestorationCharts results={results} />;
 
 
         // TESTING CUSTOM ANALYSIS
-        return <VegaChart config={results.data.attributes.widgetConfig} />;
+        // return <VegaChart config={results.data.attributes.widgetConfig} />;
     }
   };
 

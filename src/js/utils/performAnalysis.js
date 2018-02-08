@@ -169,14 +169,16 @@ export default function performAnalysis (options) {
     //   analysisUtils.getCustomAnalysis(settings.customAnalysisModules.filter(a => a.value === 'custom2')[0], geostoreId).then(promise.resolve);
     // break;
 
+    case 'default':
+      return null;
     default:
       // //- This should only be the restoration analysis, since analysisType is a rasterId
-      // analysisUtils.getRestoration(restorationUrl, type, geometry, settings).then(promise.resolve);
+      analysisUtils.getRestoration(restorationUrl, type, geometry, settings).then(promise.resolve);
 
 
       // TESTING CUSTOM ANALYSIS
-      const customAnalysisModule = settings.customAnalysisModules.filter(a => a.value === type)[0];
-      analysisUtils.getCustomAnalysis(customAnalysisModule, geostoreId).then(promise.resolve);
+      // const customAnalysisModule = settings.customAnalysisModules.filter(a => a.value === type)[0];
+      // analysisUtils.getCustomAnalysis(customAnalysisModule, geostoreId).then(promise.resolve);
     break;
   }
 
