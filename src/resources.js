@@ -90,45 +90,85 @@ export default {
 
 
   customAnalysisModules: [
+    // {
+    //   value: 'glad-alerts',
+    //   label: 'GLAD Alerts',
+    //   group: 'custom',
+    //   widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+    //   queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+    //   params: [
+    //     {
+    //       key: 'aggregate_values',
+    //       value: 'false'
+    //     }
+    //   ]
+    // },
+    // {
+    //   value: 'custom',
+    //   label: 'Custom Analysis Module!',
+    //   group: 'custom',
+    //   widgetId: '786b82bb-bf60-489d-b4b6-893d9bf7c2c5',
+    //   queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+    //   params: [
+    //     {
+    //       key: 'aggregate_values',
+    //       value: 'false'
+    //     }
+    //   ]
+    // },
+    // {
+    //   value: 'custom2',
+    //   label: 'Custom Analysis Module2!',
+    //   group: 'custom',
+    //   widgetId: '42756e3f-2c35-4d28-a221-47b0751380f7',
+    //   queryUrl: 'https://api.resourcewatch.org/query/cb833538-4fb0-4261-a9d0-125175624f29',
+    //   params: [
+    //     {
+    //       key: 'sql',
+    //       value: 'SELECT%20sum(rs_tl_c)%20%20as%20x,%20rs_tl_c%20as%20y%20FROM%20river_basins%20where%20rs_tl_c%20!=%2010%20group%20by%20rs_tl_c%20order%20by%20y%20asc'
+    //     }
+    //   ]
+    // }
     {
-      value: 'glad-alerts',
-      label: 'GLAD Alerts',
-      group: 'custom',
-      widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
-      queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-      params: [
-        {
-          key: 'aggregate_values',
-          value: 'false'
-        }
-      ]
+      analysisId: 'TC_LOSS',
+      label: 'Tree Cover Loss',
+      analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
+      params: 'none'
+      // params: [
+      //   {
+      //     name: 'period',
+      //     inputType: 'rangeSlider',
+      //     bounds: [2001, 2016],
+      //     // step: 5,
+      //     label: {
+      //       en: 'Select range for analysis'
+      //     }
+      //   },
+      //   {
+      //     name: 'thresh',
+      //     type: 'tcd',
+      //     label: {
+      //       en: 'Select tree cover density: '
+      //     }
+      //   }
+      // ],
     },
-    {
-      value: 'custom',
-      label: 'Custom Analysis Module!',
-      group: 'custom',
-      widgetId: '786b82bb-bf60-489d-b4b6-893d9bf7c2c5',
-      queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-      params: [
-        {
-          key: 'aggregate_values',
-          value: 'false'
-        }
-      ]
-    },
-    {
-      value: 'custom2',
-      label: 'Custom Analysis Module2!',
-      group: 'custom',
-      widgetId: '42756e3f-2c35-4d28-a221-47b0751380f7',
-      queryUrl: 'https://api.resourcewatch.org/query/cb833538-4fb0-4261-a9d0-125175624f29',
-      params: [
-        {
-          key: 'sql',
-          value: 'SELECT%20sum(rs_tl_c)%20%20as%20x,%20rs_tl_c%20as%20y%20FROM%20river_basins%20where%20rs_tl_c%20!=%2010%20group%20by%20rs_tl_c%20order%20by%20y%20asc'
-        }
-      ]
-    }
+    // {
+    //   analysisId: 'GLAD_ALERTS',
+    //   label: 'GLAD Alerts',
+    //   analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+    //   analysisUIElements: [
+    //     {
+    //       type: 'datepicker',
+    //       label: 'Select start date for analysis'
+    //     },
+    //     {
+    //       type: 'datepicker',
+    //       label: 'Select end date for analysis'
+    //     },
+    //     { type: 'tcd' }
+    //   ]
+    // }
   ],
 
   /**

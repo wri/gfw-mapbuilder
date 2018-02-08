@@ -29,7 +29,7 @@ class MapStore {
     this.legendOpen = false;
     this.landsatVisible = false;
     this.dynamicLayers = {};
-    this.activeAnalysisType = '';
+    this.activeAnalysisType = 'default';
     this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
     this.lossToSelectIndex = 0;

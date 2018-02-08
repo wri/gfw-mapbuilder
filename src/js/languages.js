@@ -111,6 +111,10 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
   defor: 'Deforestation'
 };
+
+strings.en.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.en.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
