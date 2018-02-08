@@ -1,6 +1,9 @@
 # Ignore the build and dist directories
 build
 dist
+vendors
+webpackBuild
+libBuild
 
 # Ignore these, just do it
 arcgis-modules.txt

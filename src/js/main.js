@@ -45,30 +45,8 @@ const configureApp = () => {
 const lazyloadAssets = () => {
   const base = window._app.base ? window._app.base + '/' : '';
 
-  loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/google-fira.css`);
-  loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/app.css`);
-  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/dijit/themes/tundra/tundra.css`);
-  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
-  loadCSS(`https://js.arcgis.com/${window._app.esri}/dijit/themes/tundra/tundra.css`);
-  loadCSS(`https://js.arcgis.com/${window._app.esri}/esri/css/esri.css`);
-  loadCSS(base + assetUrls.pickadateCSS);
-  loadCSS(base + assetUrls.pickadateDateCSS);
-
-  loadJS(base + assetUrls.highcharts).then(() => {
-    //- Set default Options for Highcharts
-    Highcharts.setOptions({
-      chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
-      lang: { thousandsSep: ',' }
-    });
-  });
-  loadJS(base + assetUrls.highchartsMore);
-  loadJS(base + assetUrls.highchartsExports).then(() => {
-    //- Add CSV Exporting as an option
-    Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push({
-      text: 'Download CSV',
-      onclick: generateCSV
-    });
-  });
+  loadCSS(`https://js.arcgis.com/3.20/dijit/themes/tundra/tundra.css`);
+  loadCSS(`https://js.arcgis.com/3.20/esri/css/esri.css`);
 };
 
 const initializeApp = () => {

@@ -3,6 +3,7 @@ import LayerPanel from 'components/LayerPanel/LayerPanel';
 import MobileMenu from 'components/TabPanel/MobileMenu';
 import LayerToggles from 'components/LayerPanel/LayerToggles';
 import InfoWindow from 'components/TabPanel/InfoWindow';
+import Measurement from 'components/TabPanel/Measurement';
 import Documents from 'components/TabPanel/Documents';
 import mapActions from 'actions/MapActions';
 import tabKeys from 'constants/TabViewConstants';
@@ -17,6 +18,7 @@ const {
   LAYERS,
   ANALYSIS,
   INFO_WINDOW,
+  MEASUREMENT,
   NARRATIVE,
   MORE
 } = tabKeys;
@@ -42,6 +44,7 @@ export default class TabView extends Component {
       activeTab === LAYERS ||
       activeTab === ANALYSIS ||
       activeTab === INFO_WINDOW ||
+      activeTab === MEASUREMENT ||
       activeTab === NARRATIVE ||
       activeTab === MORE
     ) && tableOfContentsVisible ? '' : 'hidden';
@@ -81,6 +84,13 @@ export default class TabView extends Component {
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].DATA}</h3>
           <InfoWindow map={map} />
+        </div>
+        <div className={this.getClassName(MEASUREMENT)}>
+          <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
+            <svg><use xlinkHref="#shape-close" /></svg>
+          </div>
+          <h3 className='tab-view__mobile-header mobile-show'>{text[language].MEASUREMENT}</h3>
+          <Measurement activeWebmap={this.props.activeWebmap} />
         </div>
         <div className={this.getClassName(ANALYSIS)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >

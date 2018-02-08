@@ -8,10 +8,5 @@
       "sourceMaps": "inline"
     }
   },
-  "presets": ["react", "es2015", "stage-0"],
-  "ignore": [
-    "build",
-    "node_modules",
-    "src/js/library.js"
-  ]
+  "presets": ["es2015", "react", "stage-0"]
 }

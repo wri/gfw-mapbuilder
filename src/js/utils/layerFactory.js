@@ -47,6 +47,7 @@ export default (layer, lang) => {
       esriLayer = new TiledLayer(layer.url, options);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'webtiled':
       options.id = layer.id;
@@ -55,6 +56,7 @@ export default (layer, lang) => {
       esriLayer = new WebTiledLayer(layer.url, options);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'image':
       options.id = layer.id;
@@ -63,6 +65,7 @@ export default (layer, lang) => {
       esriLayer = new ImageLayer(layer.url, options);
       esriLayer.order = layer.order;
       esriLayer.legendLayer = layer.legendLayer || null;
+      esriLayer.label = layer.label;
     break;
     case 'dynamic':
       // Create some image parameters
@@ -81,24 +84,54 @@ export default (layer, lang) => {
         const template = layerUtils.makeInfoTemplate(layer.popup, lang);
         layer.layerIds.forEach((id) => { options.infoTemplates[id] = { infoTemplate: template }; });
       }
+
       esriLayer = new DynamicLayer(layer.url, options);
+
+      if (layer.id === 'VIIRS_ACTIVE_FIRES' || layer.id === 'MODIS_ACTIVE_FIRES') {
+        const today = new Date();
+        const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+
+        let month = yesterday.getUTCMonth() + 1;
+        let day = yesterday.getUTCDate();
+        const year = yesterday.getUTCFullYear();
+
+        month = month.toString();
+        day = day.toString();
+
+        if (month.length === 1) {
+          month = '0' + month;
+        }
+        if (day.length === 1) {
+          day = '0' + day;
+        }
+
+        const defaultDefExpression = "ACQ_DATE > date'" + year + '-' + month + '-' + day + "'";
+        const layerDefinitions = [];
+        esriLayer.visibleLayers.forEach(val => { layerDefinitions[val] = defaultDefExpression; });
+        esriLayer.setLayerDefinitions(layerDefinitions);
+      }
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.layerIds = layer.layerIds;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'feature':
       options.id = layer.id;
       options.visible = layer.visible || false;
+      options.outFields = ['*'];
       if (layer.id === layerKeys.USER_FEATURES) {
         esriLayer = new GraphicsLayer(options);
       } else {
         if (layer.mode !== undefined) { options.mode = layer.mode; } // mode could be 0, must check against undefined
         if (layer.definitionExpression) { options.definitionExpression = layer.definitionExpression; }
         if (layer.popup) { options.infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang); }
+        if (layer.minScale) { options.minScale = layer.minScale; }
+        if (layer.maxScale) { options.maxScale = layer.maxScale; }
         esriLayer = new FeatureLayer(layer.url, options);
       }
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'graphic':
       options.id = layer.id;
@@ -107,6 +140,7 @@ export default (layer, lang) => {
       esriLayer = new GraphicsLayer(options);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'glad':
       options.id = layer.id;
@@ -118,6 +152,7 @@ export default (layer, lang) => {
       esriLayer = new GladLayer(options);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'loss':
       options.id = layer.id;
@@ -128,6 +163,7 @@ export default (layer, lang) => {
       esriLayer = new TreeCoverLossLayer(options);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'gain':
       options.id = layer.id;
@@ -136,12 +172,14 @@ export default (layer, lang) => {
       esriLayer = new TreeCoverGainLayer(options);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     case 'terra':
       layer.visible = layer.visible || false;
       esriLayer = new TerraILayer(layer);
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
     break;
     default:
       throw new Error(errors.incorrectLayerConfig(layer.type));

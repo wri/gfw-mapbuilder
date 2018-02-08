@@ -17,8 +17,8 @@ export default class BasemapGroup extends Component {
 
     return (
       <div className='layer-category'>
-        <div className='layer-category-label pointer' onClick={this.toggle}>
-          {label}
+        <div className='layer-category-label-container pointer' onClick={this.toggle}>
+          <div className='layer-category-label'>{label}</div>
           <span className='layer-category-caret'>{String.fromCharCode(active ? closeSymbolCode : openSymbolCode)}</span>
         </div>
         <div className='layer-category-content' style={styles}>{this.props.children}</div>

@@ -1,22 +1,61 @@
 doctype
 html
   head
-    title #{defaultTitle}
-    include jade/meta.jade
-    style
-      :stylus
-        @require 'css/critical'
+    title %DEFAULT_TITLE%
+    include jade/meta.pug
+    style(type="text/css").
+      @font-face {
+        font-family: 'Fira Sans';
+        src: url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff2') format('woff2'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.ttf') format('ttf'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff') format('woff'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff2') format('woff2'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.ttf') format('ttf'),
+             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+      
+      .layer-transparency input[type=range]::-webkit-slider-thumb {
+        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+      }
+      
+      .layer-transparency input[type=range]::-moz-range-thumb {
+        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+      }
+      
+      .layer-transparency input[type=range]::-ms-thumb {
+        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+      }
+      
+      .tree-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
+      }
+      
+      .forest-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
+      }
   body.tundra
-    include jade/svg.jade
+    include jade/svg.pug
     #root
     div#layer-modal.modal-wrapper.hidden
     div#share-modal.modal-wrapper.hidden
     script.
       var _app = {
-        cache: '#{version}',
-        esri: '#{esriVersion}',
-        base: '#{base}'
+        cache: %META_VERSION%,
+        esri: %ESRI_VERSION%,
+        base: ''
       };
+
+      function loadCSS (url, head) {
+        var link = document.createElement('link');
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
+
+        head.appendChild(link);
+
+        link.href = url;
+      }
 
       function makePath (base, path) {
         var position = base.length - 1;
@@ -38,6 +77,12 @@ html
 
       // Add _app.base if it is present
       if (_app.base) { base = makePath(base, _app.base); }
+
+      // load styles
+      var head = document.head;
+      loadCSS(makePath(base, '%CRITICAL_CSS%'), head);
+      loadCSS(makePath(base, '%APP_CSS%'), head);
+
       var dojoConfig = {
         parseOnLoad: false,
         async: true,
@@ -53,18 +98,17 @@ html
           { name: 'helpers', location: makePath(base, 'js/helpers')}
         ],
         aliases: [
-          ['resources', 'root/resources'],
-          ['alt', 'vendor/alt/dist/alt.min'],
-          ['react', 'vendor/react/react'],
-          ['react-dom', 'vendor/react/react-dom'],
-          ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill'],
-          ['jquery', 'vendor/jquery/dist/jquery.min'],
-          ['picker', 'vendor/pickadate/lib/compressed/picker'],
-          ['pickadate', 'vendor/pickadate/lib/compressed/picker.date'],
-          ['FileSaver', 'vendor/file-saver.js/FileSaver']
+          ['resources', 'resources'],
+          ['alt', 'alt/dist/alt.min'],
+          ['react', 'react/react'],
+          ['react-dom', 'react/react-dom'],
+          ['babel-polyfill', 'babel-polyfill/browser-polyfill'],
+          ['FileSaver', 'file-saver.js/FileSaver']
         ],
         deps: ['dojo/domReady!'],
-        callback: function () {require(['js/main']);}
+        callback: function () {
+          require(['%APP_JS%']);
+          }
       };
     //- PROD: if new modules are added, regenerate the JSAPI build
     //- script.
@@ -102,10 +146,11 @@ html
     //-   }
     //-
     //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
+
     script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
     script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.7/vega.min.js")
     //- DEV: Use the normal JSAPI
-    //script(src='//js.arcgis.com/#{esriVersion}/init.js', async)
+    //- script(src='https://js.arcgis.com/3.22/init.js', async)
     //- script(src='vendor/dojo/dojo.js', async)
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

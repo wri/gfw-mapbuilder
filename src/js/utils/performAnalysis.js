@@ -50,7 +50,26 @@ export default function performAnalysis (options) {
       analysisUtils.getFireCount(config.url, geometry, modisFrom, modisTo, language).then(promise.resolve);
     break;
     case analysisKeys.LCC:
-      analysisUtils.getMosaic(language, landCoverConfig.rasterId, geometry).then(promise.resolve);
+      analysisUtils.getLandCover(geostoreId, 'gfw-landcover-2015').then(response => {
+        if (typeof response === 'object' && response.hasOwnProperty('error')) {
+          promise.resolve({ error: response.error, message: text[language].ANALYSIS_ERROR_LAND_COVER_COMPOSITION});
+        } else {
+          const data = {
+            counts: []
+          };
+          response.data.attributes.histogram.forEach(histo => {
+            if (!data[histo.className]) {
+              data[histo.className] = 0;
+            }
+            histo.result.forEach(year => {
+              data[histo.className] += year.result;
+            });
+            data.counts.push(Math.round(data[histo.className] * 100) / 100);
+          });
+          promise.resolve(data);
+        }
+      });
+      // analysisUtils.getMosaic(language, landCoverConfig.rasterId, geometry).then(promise.resolve);
     break;
     case analysisKeys.TC_LOSS:
       analysisUtils.getCountsWithDensity(geostoreId, canopyDensity, tcLossFrom, tcLossTo).then(response => {
@@ -99,14 +118,22 @@ export default function performAnalysis (options) {
       analysisUtils.getBiomassLoss(geostoreId, canopyDensity, language).then(promise.resolve, promise.reject);
     break;
     case analysisKeys.INTACT_LOSS:
-      analysisUtils.getCrossedWithLoss(config, analysisConfig[analysisKeys.TC_LOSS], geometry, {
-        canopyDensity: canopyDensity,
-        simple: true
-      }).then(response => {
+      analysisUtils.getLandCover(geostoreId, 'ifl2000').then(response => {
         if (typeof response === 'object' && response.hasOwnProperty('error')) {
-          promise.resolve({ error: response.error, message: text[language].ANALYSIS_ERROR_INTACT_LOSS});
+          promise.resolve({ error: response.error, message: text[language].ANALYSIS_ERROR_LAND_COVER_COMPOSITION});
         } else {
-          promise.resolve(response);
+          const counts = [];
+          response.data.attributes.histogram[0].result.forEach(histo => {
+            counts.push(Math.round(histo.result * 100) / 100);
+          });
+          promise.resolve({
+            counts: counts,
+            options: {
+              canopyDensity: canopyDensity,
+              simple: true
+            },
+            encoder: analysisUtils.getEncoder(config, analysisConfig[analysisKeys.TC_LOSS])
+          });
         }
       });
     break;

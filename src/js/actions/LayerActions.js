@@ -30,12 +30,15 @@ class LayerActions {
     return info;
   }
 
-  changeViirsFiresTimeline (selectedIndex) {
-    return selectedIndex;
-  }
-
-  changeModisFiresTimeline (selectedIndex) {
-    return selectedIndex;
+  removeAllSubLayers (info) {
+    return info;
+    }
+  
+  setSubLayers (id, ...subIndexes) {
+    return {
+      id,
+      subIndexes
+    };
   }
 
   updateLossTimeline (data) {

@@ -249,7 +249,7 @@ export default {
       }, () => {
         const {subId} = layer;
         url = urls.agolItemEndpoint(layer.itemId);
-        getServiceInfoTask(url, {f: 'json'}).then(results => {
+        getServiceInfoTask(url).then(results => {
           _cache[subId] = results;
           promise.resolve(results);
         }, () => {
@@ -259,11 +259,16 @@ export default {
     } else if (layer.esriLayer) {
       const {esriLayer, subIndex, subId} = layer;
       url = `${esriLayer.url}/${subIndex !== undefined ? subIndex : ''}`;
-      getServiceInfoTask(url, {f: 'json'}).then(results => {
+      getServiceInfoTask(url).then(results => {
         _cache[subId] = results;
         promise.resolve(results);
       });
-    } else if (layer.cartoLayer) {
+    } else if (layer.metadataUrl) {
+      getMetadataTask(layer.metadataUrl).then(results => {
+        _cache[layer.id] = results;
+        promise.resolve(results);
+      });
+      } else if (layer.cartoLayer) {
       const {subId} = layer;
       url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
       const cartoMeta = getCartoMetadata(url);

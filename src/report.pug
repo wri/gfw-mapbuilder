@@ -1,19 +1,16 @@
-extends jade/layout.jade
+extends jade/layout.pug
 
 block append styles
-  style
-    :stylus
-      @require 'css/report'
-      
-  link(rel='stylesheet', href='https://js.arcgis.com/#{esriVersion}/esri/css/esri.css')
-  link(rel='stylesheet', href='https://js.arcgis.com/#{esriVersion}/dijit/themes/tundra/tundra.css')
+  link(rel='stylesheet', href='%REPORT_CSS%')
+  link(rel='stylesheet', href='https://js.arcgis.com/%ESRI_VERSION%/esri/css/esri.css')
+  link(rel='stylesheet', href='https://js.arcgis.com/%ESRI_VERSION%/dijit/themes/tundra/tundra.css')
 
 
 block append content
   div.report.inner
     header.report-header.flex
       div.report-header__logo-container
-        a#logo-anchor
+        a#logo-anchor(target='_blank')
           img#logo.report-header__logo
       div.report-header__title-container
         h1#report-title.report-header__title
@@ -59,9 +56,9 @@ block append content
 block append esri-script
   script.
     var _app = {
-      cache: '#{version}',
-      esri: '#{esriVersion}',
-      base: '#{base}'
+        cache: %META_VERSION%,
+        esri: %ESRI_VERSION%,
+        base: ''
     };
     function makePath (base, path) {
       var position = base.length - 1;
@@ -105,7 +102,7 @@ block append esri-script
         ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill']
       ],
       deps: ['dojo/domReady!'],
-      callback: function () {require(['js/reportMain']);}
+      callback: function () {require(['%REPORT_JS%']);}
     };
     
   //- script.
@@ -146,7 +143,7 @@ block append esri-script
   //- PROD: if new modules are added, regenerate the JSAPI build
   script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
   //- DEV: Use the normal JSAPI
-  //- script(src='//js.arcgis.com/#{esriVersion}/init.js', async)
+  //- script(src=`//js.arcgis.com/${%ESRI_VERSION%}/init.js`, async)
   //- script(src='/vendor/dojo/dojo.js', async)
   script.
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

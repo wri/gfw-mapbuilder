@@ -25,24 +25,9 @@ const config = {
     'production-api.globalforestwatch.org',
     'production-api.globalforestwatch.org/v1/ogr',
     'production-api.globalforestwatch.org/v1/ogr/convert',
-    'api.resourcewatch.org'
+    'api.resourcewatch.org',
+    'gis.wri.org'
   ],
-
-  // Note these will need to be copied in with the bulid script since they are not part of the main bundle
-  assets: {
-    jQuery: 'vendor/jquery/dist/jquery.min.js',
-    // highcharts: '//code.highcharts.com/highcharts.js',
-    // highchartsMore: '//code.highcharts.com/highcharts-more.js',
-    // highchartsExports: '//code.highcharts.com/modules/exporting.js',
-    highcharts: 'vendor/highcharts/highcharts.js',
-    highchartsMore: 'vendor/highcharts/highcharts-more.js',
-    highchartsExports: 'vendor/highcharts/modules/exporting.js',
-    ionCSS: 'vendor/ion.rangeslider/css/ion.rangeSlider.css',
-    ionSkinCSS: 'vendor/ion.rangeslider/css/ion.rangeSlider.skinNice.css',
-    rangeSlider: 'vendor/ion.rangeslider/js/ion.rangeSlider.js',
-    pickadateCSS: 'vendor/pickadate/lib/compressed/themes/classic.css',
-    pickadateDateCSS: 'vendor/pickadate/lib/compressed/themes/classic.date.css'
-  },
 
   urls: {
     metadataApi: 'https://gis-gfw.wri.org/metadata',
@@ -271,7 +256,6 @@ config.analysis[analysisKeys.MODIS_FIRES] = {
 };
 
 export const mapConfig = config.map;
-export const assetUrls = config.assets;
 export const uploadConfig = config.upload;
 export const analysisConfig = config.analysis;
 export const corsServers = config.corsServers;

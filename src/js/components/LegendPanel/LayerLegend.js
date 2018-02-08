@@ -64,7 +64,7 @@ export default class LayerLegend extends React.Component {
 
     return (
       <div className={`parent-legend-container ${bool}`} ref="myRef">
-        <div className='label-container'>{label}</div>
+        <div className='label-container'><strong>{label}</strong></div>
         {this.state.legendInfos.length === 0 ? '' :
           this.state.legendInfos.map(this.itemMapper)
         }

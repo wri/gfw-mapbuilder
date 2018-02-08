@@ -87,23 +87,25 @@ const formatters = {
 
   alerts: function (data) {
     const results = [];
+    if (data.length > 0) {
 
-    data.forEach(d => {
-      results.push([new Date(d.alert_date).getTime(), d.count || 0]);
-    });
-
-    const dateZero = new Date(data[0].alert_date);
-    const dateEnd = new Date(data[data.length - 1].alert_date);
-
-    for (let i = 1; i < 11; i++) {
-      const newDate = new Date(dateZero.getTime() - ((24 * 60 * 60 * 1000) * i));
-      results.unshift([newDate.getTime(), 0]);
+      data.forEach(d => {
+        results.push([new Date(d.alert_date).getTime(), d.count || 0]);
+      });
     }
-    for (let i = 1; i < 11; i++) {
-      const newDate = new Date(dateEnd.getTime() + ((24 * 60 * 60 * 1000) * i));
-      results.push([newDate.getTime(), 0]);
-    }
+    if (results.length > 0) {
+      const dateZero = new Date(data[0].alert_date);
+      const dateEnd = new Date(data[data.length - 1].alert_date);
 
+      for (let i = 1; i < 11; i++) {
+        const newDate = new Date(dateZero.getTime() - ((24 * 60 * 60 * 1000) * i));
+        results.unshift([newDate.getTime(), 0]);
+      }
+      for (let i = 1; i < 11; i++) {
+        const newDate = new Date(dateEnd.getTime() + ((24 * 60 * 60 * 1000) * i));
+        results.push([newDate.getTime(), 0]);
+      }
+    }
     return results;
   },
   terraIAlerts: function (counts) {
@@ -211,14 +213,14 @@ class Encoder {
   }
 
   /* Helper function */
-  fromBounds = (bounds) => {
+  fromBounds (bounds) {
     const result = [], end = bounds[1];
     let current = bounds[0];
     for (;current <= end; current++) {
       result.push(current);
     }
     return result;
-  };
+  }
 
   /* Main Functions */
   //- Get a unique value for two inputs
@@ -340,8 +342,9 @@ export default {
 
     const promise = new Deferred();
     const terraIConfig = analysisConfig[analysisKeys.TERRA_I_ALERTS];
-    const startDate = terraIFrom.toISOString().split('T')[0];
-    const endDate = terraITo.toISOString().split('T')[0];
+
+    const startDate = terraIFrom;
+    const endDate = terraITo;
 
     const terraIData = {
       geostore: geostoreId,
@@ -380,6 +383,30 @@ export default {
       url: tcLossGainConfig.analysisUrl,
       callbackParamName: 'callback',
       content: lossGainData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(lossGainResult => {
+      deferred.resolve(lossGainResult || []);
+    }, err => {
+      console.error(err);
+      deferred.resolve({ error: err });
+    });
+
+    return deferred;
+  },
+
+  getLandCover: function (geostoreId, layerId) {
+    const deferred = new Deferred();
+    const tcLossGainConfig = analysisConfig[analysisKeys.TC_LOSS_GAIN];
+
+    const landCoverData = {
+      geostore: geostoreId,
+      layer: layerId
+    };
+    esriRequest({
+      url: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
+      callbackParamName: 'callback',
+      content: landCoverData,
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(lossGainResult => {
@@ -441,6 +468,11 @@ export default {
     });
 
     return deferred;
+  },
+
+  getEncoder: (config, lossConfig) => {
+    const encoder = new Encoder(lossConfig.bounds, config.bounds);
+    return encoder;
   },
 
   getCrossedWithLoss: (config, lossConfig, geometry, options) => {

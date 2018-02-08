@@ -5,6 +5,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 import performAnalysis from 'utils/performAnalysis';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
+import Point from 'esri/geometry/Point';
 import {getUrlParams} from 'utils/params';
 import {analysisConfig, layerPanelText} from 'js/config';
 import layerFactory from 'utils/layerFactory';
@@ -23,6 +24,7 @@ import charts from 'utils/charts';
 import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
+import moment from 'moment';
 
 let map;
 
@@ -69,8 +71,8 @@ const getFeature = function getFeature (params) {
       promise.resolve({
         attributes: geostoreResult.data.attributes,
         geostoreId: geostoreResult.data.id,
-        geometry: new Polygon(esriJson),
-        title: 'Custom Analysis',
+        geometry: geostoreResult.data.attributes.geojson.features[0].geometry.type === 'Point' ? new Point(esriJson) : new Polygon(esriJson),
+        title: params.customFeatureTitle,
         isCustom: true // TODO MAKE SURE NOT TO HARD CODE THAT IN
       });
     }, err => {
@@ -119,6 +121,14 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];
     const existingIds = [];
+    const reducedLayers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+      if (currentItem.hasOwnProperty('nestedLayers')) {
+        return prevArray.concat(...currentItem.nestedLayers);
+      }
+      return prevArray.concat(currentItem);
+    }, []);
+
+    layers = layers.filter(l => l.url).concat(reducedLayers);
     layers.forEach(layer => {
       if (existingIds.indexOf(layer.id) === -1) {
         uniqueLayers.push(layer);
@@ -177,6 +187,24 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     }
 
     map.addLayers(esriLayers);
+
+    reducedLayers.forEach(layer => {
+      const mapLayer = map.getLayer(layer.id);
+      if (mapLayer) {
+        mapLayer.hide();
+        activeLayers.forEach(id => {
+          if (id.indexOf(layer.id) > -1) {
+            if (layer.hasOwnProperty('includedSublayers')) {
+              const subIndex = parseInt(id.substr(layer.id.length + 1));
+              mapLayer.setVisibleLayers([subIndex]);
+              mapLayer.show();
+              return;
+            }
+            mapLayer.show();
+          }
+        });
+      }
+    });
 
     layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
     layersHelper.updateAGBiomassLayer(tcd, map);
@@ -246,13 +274,13 @@ const createMap = function createMap (params) {
       params.settings = info.settings;
 
       //- Make sure highcharts is loaded before using it
-      if (window.highchartsPromise.isResolved()) {
-        runAnalysis(params, feature);
-      } else {
-        window.highchartsPromise.then(() => {
+      // if (window.highchartsPromise.isResolved()) {
+      //   runAnalysis(params, feature);
+      // } else {
+        // window.highchartsPromise.then(() => {
           runAnalysis(params, feature);
-        });
-      }
+        // });
+      // }
     });
 	});
 };
@@ -306,9 +334,14 @@ const generateSlopeTable = function generateSlopeTable (labels, values) {
 const setupMap = function setupMap (params, feature) {
   const { service, visibleLayers } = params;
   //- Add a graphic to the map
-  const graphic = new Graphic(new Polygon(feature.geometry), symbols.getCustomSymbol());
+  const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
   const graphicExtent = graphic.geometry.getExtent();
-  map.setExtent(graphicExtent, true);
+
+  if (graphicExtent) {
+    map.setExtent(graphicExtent, true);
+  } else {
+    map.centerAndZoom(new Point(graphic.geometry), 15);
+  }
   map.graphics.add(graphic);
 
   const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
@@ -650,6 +683,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   if (settings.landCover && layerConf) {
     performAnalysis({
       type: analysisKeys.LC_LOSS,
+      geostoreId: feature.geostoreId,
       geometry: geographic,
       settings: settings,
       canopyDensity: tcd,
@@ -687,6 +721,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     performAnalysis({
       type: analysisKeys.LCC,
       geometry: geographic,
+      geostoreId: feature.geostoreId,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -775,6 +810,7 @@ const runAnalysis = function runAnalysis (params, feature) {
     performAnalysis({
       type: analysisKeys.INTACT_LOSS,
       geometry: geographic,
+      geostoreId: feature.geostoreId,
       settings: settings,
       canopyDensity: tcd,
       language: lang
@@ -823,7 +859,6 @@ const runAnalysis = function runAnalysis (params, feature) {
       viirsFrom: viirsFrom,
       viirsTo: viirsTo
     }).then((results) => {
-
       const node = document.getElementById('viirs-badge');
 
       const { error } = results;
@@ -835,7 +870,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
       document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
-      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${viirsTo.toLocaleDateString()}`;
+      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${viirsTo.format('MM/DD/YYYY')}`;
       node.classList.remove('hidden');
     });
   } else {
@@ -866,7 +901,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
       document.querySelector('.results__modis-count').innerHTML = results.fireCount;
       document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
-      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.toLocaleDateString()}<br/>${text[lang].TIMELINE_END}${modisTo.toLocaleDateString()}`;
+      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${modisTo.format('MM/DD/YYYY')}`;
       node.classList.remove('hidden');
     });
   } else {
@@ -954,8 +989,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       language: lang,
       geostoreId: feature.geostoreId,
-      gladFrom: new Date(gladFrom),
-      gladTo: new Date(gladTo)
+      gladFrom: moment(new Date(gladFrom)),
+      gladTo: moment(new Date(gladTo))
     }).then((results) => {
       const node = document.getElementById('glad-alerts');
       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
@@ -982,8 +1017,8 @@ const runAnalysis = function runAnalysis (params, feature) {
       canopyDensity: tcd,
       geostoreId: feature.geostoreId,
       language: lang,
-      terraIFrom: new Date(terraIFrom),
-      terraITo: new Date(terraITo)
+      terraIFrom: terraIFrom,
+      terraITo: terraITo
     }).then((results) => {
       const node = document.getElementById('terrai-alerts');
       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
@@ -1109,10 +1144,10 @@ export default {
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis
     const { viirsStartDate, viirsEndDate, modisStartDate, modisEndDate } = params;
-    params.viirsFrom = new Date(viirsStartDate);
-    params.viirsTo = new Date(viirsEndDate);
-    params.modisFrom = new Date(modisStartDate);
-    params.modisTo = new Date(modisEndDate);
+    params.viirsFrom = moment(new Date(viirsStartDate));
+    params.viirsTo = moment(new Date(viirsEndDate));
+    params.modisFrom = moment(new Date(modisStartDate));
+    params.modisTo = moment(new Date(modisEndDate));
 
     //- Create the map as soon as possible
     createMap(params);

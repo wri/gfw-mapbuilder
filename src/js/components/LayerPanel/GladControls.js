@@ -3,7 +3,9 @@ import React, {Component, PropTypes} from 'react';
 import layerActions from 'actions/LayerActions';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
-import 'pickadate';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class GladControls extends Component {
 
@@ -15,71 +17,19 @@ export default class GladControls extends Component {
   constructor (props) {
     super(props);
     //- Defaults
-    this.min = new Date('2015', 0, 1);
-    this.max = new Date();
+    this.min = moment(new Date('2015', 0, 1));
+    this.max = moment(new Date());
 
     this.state = {
       unconfirmed: false
     };
   }
 
-  componentDidMount () {
-    //- Create the date pickers
-    const {fromCalendar, toCalendar} = this.refs;
-    const {startDate, endDate} = this.props;
-    //- Starting date
-    this.fromPicker = $(fromCalendar).pickadate({
-      today: 'Jump to today',
-      min: this.min,
-      max: this.max,
-      selectYears: true,
-      selectMonths: true,
-      closeOnSelect: true,
-      klass: { picker: 'picker__top' },
-      onSet: this.didSetStartDate,
-      onStart: function () { this.set('select', startDate); }
-    }).pickadate('picker');
-    //- Ending date
-    this.toPicker = $(toCalendar).pickadate({
-      today: 'Jump to today',
-      min: this.min,
-      max: this.max,
-      selectYears: true,
-      selectMonths: true,
-      closeOnSelect: true,
-      klass: { picker: 'picker__top' },
-      onSet: this.didSetEndDate,
-      onStart: function () { this.set('select', endDate); }
-    }).pickadate('picker');
-  }
-
   componentDidUpdate(prevProps) {
-    if ((Date.parse(prevProps.startDate) !== Date.parse(this.props.startDate)) || (Date.parse(prevProps.endDate) !== Date.parse(this.props.endDate))) {
+    if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
       this.updateDateRange();
-      this.toPicker.set('select', this.props.endDate);
-      this.fromPicker.set('select', this.props.startDate);
     }
   }
-
-  didSetStartDate = ({select}) => {
-    if (select) {
-      const startDate = new Date(select);
-      layerActions.updateGladStartDate.defer(startDate);
-      if (this.fromPicker && this.toPicker) {
-        this.toPicker.set('min', this.fromPicker.get('select'));
-      }
-    }
-  };
-
-  didSetEndDate = ({select}) => {
-    if (select) {
-      const endDate = new Date(select);
-      layerActions.updateGladEndDate.defer(endDate);
-      if (this.fromPicker && this.toPicker) {
-        this.fromPicker.set('max', this.toPicker.get('select'));
-      }
-    }
-  };
 
   toggleConfirmedAlerts = () => {
     this.setState({ unconfirmed: !this.state.unconfirmed });
@@ -90,16 +40,27 @@ export default class GladControls extends Component {
   };
 
   updateDateRange = () => {
-    const {startDate, endDate, layer} = this.props;
-    const {map} = this.context;
+    const { layer } = this.props;
+    const { startDate, endDate } = this.props;
+    const { map } = this.context;
+
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
-    if (map.getLayer) {
+    if (map.getLayer && map.getLayer(layer.id)) {
       map.getLayer(layer.id).setDateRange(julianFrom, julianTo);
     }
   };
 
+  handleStartChange = (startDate) => {
+    layerActions.updateGladStartDate(startDate);
+  }
+
+  handleEndChange = (endDate) => {
+    layerActions.updateGladEndDate(endDate);
+  }
+
   render () {
+    const {startDate, endDate} = this.props;
     const {unconfirmed} = this.state;
     const {language} = this.context;
 
@@ -109,15 +70,52 @@ export default class GladControls extends Component {
         <div className='glad-controls__calendars'>
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
-            <input className='fa-button sml white pointer' type='text' ref='fromCalendar' />
+            {startDate && <DatePicker
+              customInput={<StartButton />}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              todayButton='Jump to today'
+              minDate={this.min}
+              maxDate={moment(endDate)}
+              selected={moment(startDate)}
+              onChange={this.handleStartChange}
+            />}
           </div>
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
-            <input className='fa-button sml white pointer' type='text' ref='toCalendar' />
+            {endDate && <DatePicker
+              customInput={<EndButton />}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              todayButton='Jump to today'
+              minDate={moment(startDate)}
+              maxDate={this.max}
+              selected={moment(endDate)}
+              onChange={this.handleEndChange}
+            />}
           </div>
         </div>
       </div>
     );
   }
-
 }
+
+const StartButton = ({ onClick, value }) => (
+  <button
+    className='fa-button sml white pointer'
+    onClick={onClick}
+  >
+    {value}
+  </button>
+);
+
+const EndButton = ({ onClick, value }) => (
+  <button
+    className='fa-button sml white pointer'
+    onClick={onClick}
+  >
+    {value}
+  </button>
+);

@@ -22,6 +22,7 @@ import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
 import Loader from 'components/Loader';
 // import Deferred from 'dojo/Deferred';
+import moment from 'moment';
 import request from 'utils/request';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
@@ -64,8 +65,6 @@ export default class Analysis extends Component {
       gladEndDate,
       terraIStartDate,
       terraIEndDate,
-      viirsFiresSelectIndex,
-      modisFiresSelectIndex,
       viirsStartDate,
       viirsEndDate,
       modisStartDate,
@@ -89,12 +88,10 @@ export default class Analysis extends Component {
           gladTo: gladEndDate,
           terraIFrom: terraIStartDate,
           terraITo: terraIEndDate,
-          viirsFiresSelectIndex: viirsFiresSelectIndex,
-          modisFiresSelectIndex: modisFiresSelectIndex,
-          viirsFrom: viirsStartDate,
-          viirsTo: viirsEndDate,
-          modisFrom: modisStartDate,
-          modisTo: modisEndDate
+          viirsFrom: moment(viirsStartDate),
+          viirsTo: moment(viirsEndDate),
+          modisFrom: moment(modisStartDate),
+          modisTo: moment(modisEndDate)
         }).then((results) => {
           this.setState({ results: results, isLoading: false });
         }, () => {
@@ -119,8 +116,6 @@ export default class Analysis extends Component {
       gladEndDate,
       terraIStartDate,
       terraIEndDate,
-      viirsFiresSelectIndex,
-      modisFiresSelectIndex,
       viirsStartDate,
       viirsEndDate,
       modisStartDate,
@@ -155,12 +150,10 @@ export default class Analysis extends Component {
           gladTo: gladEndDate,
           terraIFrom: terraIStartDate,
           terraITo: terraIEndDate,
-          viirsFiresSelectIndex: viirsFiresSelectIndex,
-          modisFiresSelectIndex: modisFiresSelectIndex,
-          viirsFrom: viirsStartDate,
-          viirsTo: viirsEndDate,
-          modisFrom: modisStartDate,
-          modisTo: modisEndDate
+          viirsFrom: moment(viirsStartDate),
+          viirsTo: moment(viirsEndDate),
+          modisFrom: moment(modisStartDate),
+          modisTo: moment(modisEndDate)
         }).then((results) => {
           this.setState({ results: results, isLoading: false });
         }, () => {
@@ -178,13 +171,14 @@ export default class Analysis extends Component {
     let labels, layerConf, colors;
     switch (type) {
       case analysisKeys.VIIRS_FIRES:
-        return <FiresBadge results={results} count={results.fireCount} from={viirsFrom.toLocaleDateString()} to={viirsTo.toLocaleDateString()} />;
+        return <FiresBadge results={results} count={results.fireCount} from={viirsFrom} to={viirsTo} />;
       case analysisKeys.MODIS_FIRES:
-        return <FiresBadge count={results.fireCount} from={modisFrom.toLocaleDateString()} to={modisTo.toLocaleDateString()} />;
+        return <FiresBadge count={results.fireCount} from={modisFrom} to={modisTo} />;
       case analysisKeys.TC_LOSS_GAIN:
         return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
       case analysisKeys.LCC:
         layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+
         return <CompositionPieChart
           results={results}
           name={text[language].ANALYSIS_LCC_CHART_NAME}
@@ -224,6 +218,7 @@ export default class Analysis extends Component {
           }
         })();
         colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
+
         return <TotalLossChart
           results={results}
           counts={results.counts}
@@ -265,8 +260,12 @@ export default class Analysis extends Component {
     }
   };
 
+  setLoader = loadingObj => { //isLoading and possibly error
+    this.setState(loadingObj);
+  }
+
   render () {
-    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate} = this.props;
+    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate, editingEnabled} = this.props;
     const {results, isLoading, error} = this.state;
     const {language, settings} = this.context;
     let chart, title, slopeSelect;
@@ -298,7 +297,7 @@ export default class Analysis extends Component {
     ) {
       title = (
         <div className='analysis-results__title'>
-          <CustomFeatureControl feature={selectedFeature} />
+          <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
         </div>
       );
     } else {
@@ -330,7 +329,7 @@ export default class Analysis extends Component {
           }
         </div>
         <div className='analysis-results__footer'>
-          <ReportSubscribeButtons />
+          <ReportSubscribeButtons setLoader={this.setLoader} />
         </div>
       </div>
     );

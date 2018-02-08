@@ -24,7 +24,7 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidMount() {
-    const layerID = this.props.layerSubIndex ? this.props.layerSubIndex : this.props.layerId;
+    const layerID = typeof this.props.layerSubIndex !== 'undefined' ? this.props.layerSubIndex : this.props.layerId;
     const url = this.props.url.replace(/\d+$/, '');
     Request.getLegendInfos(url, [layerID]).then(legendInfos => {
       if(this.refs.myRef) {
@@ -48,7 +48,7 @@ export default class WebMapLegend extends React.Component {
 
     return (
       <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref="myRef">
-        <div className='label-container'>{label}</div>
+        <div className='label-container'><strong>{label}</strong></div>
         <div className='legend-container'>
           {legendInfos.length === 0 ? '' :
             <div className='crowdsource-legend'>
