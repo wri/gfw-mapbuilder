@@ -1,6 +1,6 @@
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
-import LayersHelper from 'helpers/LayersHelper';
+// import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import React, {
   Component,
@@ -77,7 +77,7 @@ export default class LayerCheckbox extends Component {
   }
 
   toggleLayer () {
-  
+
     const {layer} = this.props;
     if (layer.disabled) { return; }
     if (layer.subId) {
@@ -105,16 +105,16 @@ export default class LayerCheckbox extends Component {
   }
 
   render() {
-    const {map, language} = this.context;
+    const { language } = this.context;
     const {layer} = this.props;
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
-    const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
+    // const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
     const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
     const {sublabel} = layer;
 
     return (
-      <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
+      <div className={`layer-checkbox relative ${checked} ${disabled}`} >
         <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
