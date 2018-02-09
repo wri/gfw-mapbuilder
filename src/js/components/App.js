@@ -6,10 +6,13 @@ import AppStore from 'stores/AppStore';
 import template from 'utils/template';
 import Map from 'components/Map';
 import {getUrlParams} from 'utils/params';
+import generateCSV from 'utils/csvUtils';
 import React, {
   Component,
   PropTypes
 } from 'react';
+
+let highchartsSet = false;
 
 export default class App extends Component {
 
@@ -64,6 +67,19 @@ export default class App extends Component {
     if (this.state.language !== prevState.language) {
       this.updateTitle(this.state.settings);
     }
+
+    if (!highchartsSet && Highcharts) {
+      Highcharts.setOptions({
+        chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
+        lang: { thousandsSep: ',' }
+      });
+
+      Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push({
+        text: 'Download CSV',
+        onclick: generateCSV
+      });
+      highchartsSet = true;
+    }
   }
 
   setSettings = (settings) => {
@@ -88,6 +104,7 @@ export default class App extends Component {
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
       base = base.substring(0, base.length - 1);
     }
+    base = base.replace('map/', 'map-app/');
     buildConfig.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
     });

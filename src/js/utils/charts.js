@@ -76,20 +76,23 @@ export default {
 		});
 	},
 
-	makeCommoditiesPieChart: (el, data) => {
+	makeCommoditiesPieChart: (el, data, showTitle = true) => {
 		const oilPalm = data.oilPalm;
 		const mining = data.mining;
 		const managedForests = data.managedForests;
 
-		const colors = ['#FDDB61', '#8E6E63', '#475961'];
+		const colors = ['#FFC9C3', '#FFEE00', '#F8D587'];
     const names = ['Oil palm concessions', 'Mining concessions', 'Managed forest concessions'];
 		Highcharts.chart(el, {
 			chart: {
 				height: 300,
         type: 'bar'
       },
+      credits: {
+        enabled: false
+      },
       title: {
-        text: ''//'Total Concessions ' + (oilPalm + mining + managedForests)
+        text: showTitle ? 'Total Concessions: ' + (oilPalm + mining + managedForests) : ''
       },
       xAxis: {
         categories: names,
@@ -124,29 +127,28 @@ export default {
         {
           pointWidth: 25,
 					groupPadding: .5,
-          color: colors[0],
           showInLegend: false,
 					data: [
 						{
 							y: Number(oilPalm),
-							color: '#FDDB61',
+							color: colors[0],
 							name: 'Oil palm concessions'
 						},
 						{
 							y: Number(mining),
-							color: '#8E6E63',
+							color: colors[1],
 							name: 'Mining concessions'
 						},
 						{
 							y: Number(managedForests),
-							color: '#475961',
+							color: colors[2],
 							name: 'Managed forest concessions '
 						}
 					]
         },
-        {color: '#FDDB61'},
-        {color: '#8E6E63'},
-        {color: '#475961'}
+        {color: colors[0]},
+        {color: colors[1]},
+        {color: colors[2]}
       ]
 
 		});

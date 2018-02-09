@@ -212,19 +212,11 @@ const formatResources = () => {
   });
 
   //- Update path if it is relative to point to local
-  const base = window._app.base ? window._app.base + '/' : '';
+  let base = window._app.base ? window._app.base + '/' : '';
+  base = base.replace('map/', 'map-app/');
   if (resources.logoUrl && resources.logoUrl.indexOf('.') === 0) {
     resources.logoUrl = base + resources.logoUrl;
   }
-
-  // Object.keys(resources.basemaps).forEach((language) => {
-  //   Object.keys(resources.basemaps[language]).forEach((bm) => {
-  //     const basemap = resources.basemaps[language][bm];
-  //     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
-  //       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
-  //     }
-  //   });
-  // });
 
   resources.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {

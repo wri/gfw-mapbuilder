@@ -14,6 +14,7 @@ import layerUtils from 'utils/layerUtils';
 import layerKeys from 'constants/LayerConstants';
 
 import {errors} from 'js/config';
+import { layerIdMap as indigenousCommunityIdMap} from '../constants/LandMarkConstants';
 
 /**
 * Helper function to make infoTemplates
@@ -98,6 +99,15 @@ export default (layer, lang) => {
         if (layer.popup) { options.infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang); }
         if (layer.minScale) { options.minScale = layer.minScale; }
         if (layer.maxScale) { options.maxScale = layer.maxScale; }
+
+        if (Object.keys(indigenousCommunityIdMap).includes(layer.id)) {
+          // if we have one of our created feature layers
+          // get the layer it is created from
+          const originalLayer = brApp.map.getLayer(indigenousCommunityIdMap[layer.id]);
+          // populate the infotemplate and outfields
+          options.infoTemplate = originalLayer.infoTemplates[layer.id.substr(-1)].infoTemplate;
+          options.outFields = ['*'];
+        }
         esriLayer = new FeatureLayer(layer.url, options);
       }
       esriLayer.legendLayer = layer.legendLayer || null;

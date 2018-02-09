@@ -37,12 +37,12 @@ export default class LandingModal extends React.Component {
 
   render() {
     const {theme} = this.props;
-    const contentClass = `modal-content custom-scroll ${theme ? theme : ''}`;
+    const contentClass = `mapbuilder-modal-content custom-scroll ${theme ? theme : ''}`;
 
     return (
       <div className='modal-container'>
         <div className='modal-background' onClick={::this.close} />
-        <article className='modal shadow'>
+        <article className='modal-boxaa shadow'>
           <div title='close' className='close-icon pointer' onClick={::this.close} >
             <svg><use xlinkHref="#shape-close" /></svg>
           </div>

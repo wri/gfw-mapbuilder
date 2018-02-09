@@ -87,6 +87,11 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -97,10 +102,6 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
   },
   { label: 'Tree cover loss',
     value: analysisKeys.TC_LOSS,
-    group: analysisKeys.ANALYSIS_GROUP_OTHER
-  },
-  { label: 'Land cover loss',
-    value: analysisKeys.LC_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Carbon Stored In Trees',
@@ -115,7 +116,7 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.INTERSECTION_LANDS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Aboveground Live Woody Biomass loss (Carbon)',
+  { label: 'Carbon loss',
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
