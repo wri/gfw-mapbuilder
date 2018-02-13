@@ -192,7 +192,10 @@ const utils = {
     if (window._app.base === window._app.cache) {
       window.open(`report.html?${path}`);
     } else {
-      const appBase = window._app.base.split(window._app.cache)[0];
+      let appBase = window._app.base;
+      if (appBase.substr(-1) !== '/') {
+        appBase += '/';
+      }
       window.open(`${appBase}report.html?${path}`);
     }
   },
