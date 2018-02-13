@@ -129,46 +129,94 @@ export default {
     //     }
     //   ]
     // }
+
+
+    // TODO: Maybe we need a param 'useGfwWidget': <bool> that tells us to use a widget id
+    // and that params look like above
     {
       analysisId: 'TC_LOSS',
-      label: 'Tree Cover Loss',
+      label: {
+        en: 'Tree Cover Loss',
+      },
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
-      params: 'none'
-      // params: [
-      //   {
-      //     name: 'period',
-      //     inputType: 'rangeSlider',
-      //     bounds: [2001, 2016],
-      //     // step: 5,
-      //     label: {
-      //       en: 'Select range for analysis'
-      //     }
-      //   },
-      //   {
-      //     name: 'thresh',
-      //     type: 'tcd',
-      //     label: {
-      //       en: 'Select tree cover density: '
-      //     }
-      //   }
-      // ],
+      // uiParams: 'none' if you don't need a ui element
+      uiParams: [
+        {
+          name: 'period',
+          inputType: 'rangeSlider',
+          bounds: [2001, 2016],
+          // step: 5,
+          label: {
+            en: 'Select range for analysis'
+          }
+        },
+        {
+          name: 'thresh',
+          inputType: 'tcd',
+          label: {
+            en: 'Select tree cover density: '
+          }
+        }
+      ],
+      params: [
+        {
+          name: 'aggregate_values',
+          value: 'false'
+        }
+      ],
     },
-    // {
-    //   analysisId: 'GLAD_ALERTS',
-    //   label: 'GLAD Alerts',
-    //   analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-    //   analysisUIElements: [
-    //     {
-    //       type: 'datepicker',
-    //       label: 'Select start date for analysis'
-    //     },
-    //     {
-    //       type: 'datepicker',
-    //       label: 'Select end date for analysis'
-    //     },
-    //     { type: 'tcd' }
-    //   ]
-    // }
+    {
+      analysisId: 'GLAD_ALERTS',
+      label: {
+        en: 'GLAD Alerts'
+      },
+      analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+      uiParams: [
+        {
+          name: 'period',
+          inputType: 'datepicker',
+          multi: true,
+          defaultStartDate: '2016-01-01',
+          // defaultEndDate: '',
+          label: {
+            en: 'Select date(s) for analysis'
+          }
+        },
+        {
+          name: 'thresh',
+          inputType: 'tcd',
+          label: {
+            en: 'Select tree cover density: '
+          }
+        }
+      ],
+      params: [
+        {
+          name: 'aggregate_values',
+          value: 'true'
+        },
+        {
+          name: 'aggregate_by',
+          value: 'day'
+        }
+      ]
+    },
+    {
+      analysisId: 'VEGA_GLAD',
+      label: {
+        en: 'GLAD Alerts (custom VEGA widget)'
+      },
+      analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+      useGfwWidget: true,
+      widgetId: '786b82bb-bf60-489d-b4b6-893d9bf7c2c5',
+      uiParams: 'none',
+      params: [
+        {
+          key: 'aggregate_values',
+          value: 'false'
+        }
+      ]
+    },
   ],
 
   /**

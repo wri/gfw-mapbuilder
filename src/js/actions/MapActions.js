@@ -220,6 +220,10 @@ class MapActions {
     return arr;
   }
 
+  updateAnalysisParams(params) {
+    return params;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

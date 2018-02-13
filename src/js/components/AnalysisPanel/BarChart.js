@@ -6,6 +6,7 @@ export default class BarChart extends Component {
 
   constructor(props) {
     super(props);
+    console.log('props', props);
     this.state = { isEmpty: false, isError: false };
   }
 
@@ -15,7 +16,7 @@ export default class BarChart extends Component {
       this.setState({ isError: true });
     } else {
 
-
+      console.log(counts);
       if (!counts.some(item => item !== 0)) {
         this.setState({ isEmpty: true });
       } else {

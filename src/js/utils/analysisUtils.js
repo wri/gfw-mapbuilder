@@ -43,7 +43,7 @@ const getSlopeInputOutputValues = function (value) {
 /**
 * Group of formatting functions for results
 */
-const formatters = {
+export const formatters = {
   sadAlerts: (response) => {
     let date, month, year, type, area;
     const {features} = response;
@@ -666,11 +666,12 @@ export default {
   },
 
   getCustomAnalysis: (config, geostoreId) => {
+    console.log('I am here', config);
     const promise = new Deferred();
 
     let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}`;
 
-    widgetUrl += `?queryUrl=${config.queryUrl}`;
+    widgetUrl += `?queryUrl=${config.analysisUrl}`;
 
     if (config.params.length > 0) {
       config.params.forEach(p => {

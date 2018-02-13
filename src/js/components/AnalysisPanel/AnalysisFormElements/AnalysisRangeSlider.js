@@ -6,8 +6,14 @@ const Range = createSliderWithTooltip(Slider.Range);
 
 export default class AnalysisRangeSlider extends Component {
 
+  componentDidMount() {
+    const { rangeSliderCallback, bounds, analysisId, paramName} = this.props;
+    rangeSliderCallback(bounds, analysisId, paramName);
+  }
+
   handleAfterChange = rangeSliderValue => {
-    this.props.handleRangeSliderChange(rangeSliderValue, this.props.analysisId);
+    const { rangeSliderCallback, analysisId, paramName } = this.props;
+    rangeSliderCallback(rangeSliderValue, analysisId, paramName);
   }
 
   render() {

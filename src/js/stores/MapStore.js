@@ -70,6 +70,7 @@ class MapStore {
     this.legendOpacity = {};
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
+    this.analysisParams = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -123,7 +124,8 @@ class MapStore {
       showLoading: layerActions.showLoading,
       updateCartoSymbol: layerActions.updateCartoSymbol,
       toggleAnalysisTab: mapActions.toggleAnalysisTab,
-      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds
+      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
+      updateAnalysisParams: mapActions.updateAnalysisParams
     });
   }
 
@@ -483,6 +485,20 @@ class MapStore {
 
   updateExclusiveRadioIds (ids) {
     this.exclusiveLayerIds = ids;
+  }
+
+  updateAnalysisParams(params) {
+    if (this.analysisParams.hasOwnProperty(params.id)) {
+      this.analysisParams[params.id] = {
+        ...this.analysisParams[params.id],
+        [params.paramName]: params.paramValue
+      };
+    } else {
+      this.analysisParams[params.id] = {
+        [params.paramName]: params.paramValue
+      };
+    }
+    console.log(this.analysisParams);
   }
 }
 

@@ -3,6 +3,8 @@ import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
 import AnalysisRangeSlider from './AnalysisFormElements/AnalysisRangeSlider';
+import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
+import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import text from 'js/languages';
 import React, {
@@ -116,12 +118,15 @@ export default class AnalysisTypeSelect extends Component {
   // };
 
   createOptions = (analysisObj) => {
+    const { language } = this.context;
+    const { analysisId, label } = analysisObj;
+
     return (
       <option
-        key={analysisObj.analysisId}
-        value={analysisObj.analysisId}
+        key={analysisId}
+        value={analysisId}
       >
-        {analysisObj.label}
+        {label[language] ? label[language] : ''}
       </option>
     );
   }
@@ -129,9 +134,9 @@ export default class AnalysisTypeSelect extends Component {
   getFormComponents = (activeAnalysisType, analysisItems) => {
     const { language } = this.context;
     const analysisConfig = analysisItems.filter(ai => ai.analysisId === activeAnalysisType)[0];
-    const { params } = analysisConfig;
+    const { uiParams } = analysisConfig;
     const formComponents = [];
-    if (params === 'none') {
+    if (uiParams === 'none') {
       return <div
         className='analysis-results__select-form-item-container'
       >
@@ -139,35 +144,36 @@ export default class AnalysisTypeSelect extends Component {
       </div>;
     }
 
-    if (!params || params.length === 0) {
-      throw new Error("you either didn't supply an 'analysisUIElements' property on your module or it contained 0 items. Please check your analysis module config");
+    if (!uiParams || uiParams.length === 0) {
+      throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config");
     }
 
-    analysisConfig.analysisUIElements.forEach((uiElement, idx) => {
-      switch (uiElement.type) {
+    analysisConfig.uiParams.forEach((param, idx) => {
+      switch (param.inputType) {
         case 'rangeSlider': {
-          const { bounds, step, label } = uiElement;
+          const { bounds, step, label, name, inputType } = param;
           if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
             throw new Error(`analysis id: '${analysisConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
           }
           formComponents.push(
             <AnalysisRangeSlider
-              key={analysisConfig.analysisId + uiElement.type + idx}
+              key={analysisConfig.analysisId + inputType + idx}
               analysisId={analysisConfig.analysisId}
               bounds={bounds}
+              paramName={name}
               step={step || 1}
               label={label[language] ? label[language] : ''}
-              handleRangeSliderChange={this.handleRangeSliderChange}
+              rangeSliderCallback={this.rangeSliderCallback}
             />
           );
           break;
         }
         case 'tcd': {
           const { canopyDensity } = this.props;
-          const { label } = uiElement;
+          const { label } = param;
           formComponents.push(
             <div
-              key={analysisConfig.analysisId + uiElement.type + idx}
+              key={analysisConfig.analysisId + param.inputType + idx}
               className='analysis-results__select-form-item-container'
             >
               <DensityDisplay
@@ -176,6 +182,44 @@ export default class AnalysisTypeSelect extends Component {
               />
             </div>
           );
+          break;
+        }
+        case 'datepicker': {
+          const {
+            label,
+            name,
+            multi,
+            defaultStartDate,
+            defaultEndDate,
+          } = param;
+
+          if (multi === true || multi === 'true') {
+            formComponents.push(
+              <AnalysisMultiDatePicker
+                key={analysisConfig.analysisId + param.inputType + idx}
+                analysisId={analysisConfig.analysisId}
+                paramName={name}
+                label={null}
+                defaultStartDate={defaultStartDate || new Date()}
+                defaultEndDate={defaultEndDate || new Date()}
+                calendarCallback={this.calendarCallback}
+              />
+            );
+            break;
+          }
+
+          formComponents.push(
+            <AnalysisDatePicker
+              key={analysisConfig.analysisId + param.inputType + idx}
+              analysisId={analysisConfig.analysisId}
+              paramName={name}
+              label={label[language] ? label[language] : ''}
+              defaultSelected={defaultStartDate || null}
+              calendarCallback={this.calendarCallback}
+            />
+          );
+
+          break;
         }
         default:
           return null;
@@ -188,14 +232,29 @@ export default class AnalysisTypeSelect extends Component {
     mapActions.setAnalysisType(e.target.value);
   }
 
-  handleRangeSliderChange = (rangeSliderValue, id) => {
-    this.setState((prevState) => {
-      return {
-        [id]: {
-          ...(prevState[id] ? prevState[id] : {}),
-          rangeSliderValue,
-        },
-      };
+  rangeSliderCallback = (rangeSliderValue, id, paramName) => {
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName,
+      paramValue: `${rangeSliderValue[0]}-01-01,${rangeSliderValue[1]}-12-31`,
+    });
+    // this.setState((prevState) => {
+    //   return {
+    //     [id]: {
+    //       ...(prevState[id] ? prevState[id] : {}),
+    //       rangeSliderValue,
+    //       paramName
+    //     },
+    //   };
+    // });
+  }
+
+  calendarCallback = (date, id, paramName, endDate = null) => {
+    mapActions.updateAnalysisParams({
+      id,
+      paramName,
+      paramValue: endDate ? `${date},${endDate}` : date,
     });
   }
 

@@ -20,7 +20,9 @@ import {attributes} from 'constants/AppConstants';
 import tabKeys from 'constants/TabViewConstants';
 import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
+import {formatters} from 'utils/analysisUtils';
 import Loader from 'components/Loader';
+import esriRequest from 'esri/request';
 // import Deferred from 'dojo/Deferred';
 import moment from 'moment';
 import request from 'utils/request';
@@ -30,6 +32,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import analysisUtils from '../../utils/analysisUtils';
 
 export default class Analysis extends Component {
 
@@ -40,7 +43,8 @@ export default class Analysis extends Component {
 
   state = {
     error: false,
-    isLoading: false
+    isLoading: false,
+    chartComponent: null,
   };
 
   //- Test this as it will need to be tweaked, ideally when we receive new props,
@@ -108,126 +112,216 @@ export default class Analysis extends Component {
   // }
 
   // renderResults = (type, results, language, lossFromSelectIndex, lossToSelectIndex, viirsFrom, viirsTo, modisFrom, modisTo) => {
-  //   const {settings} = this.context;
-  //   const layerGroups = settings.layerPanel;
-  //   const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-  //   const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
-  //   let labels, layerConf, colors;
-  //   switch (type) {
-  //     case analysisKeys.VIIRS_FIRES:
-  //       return <FiresBadge results={results} count={results.fireCount} from={viirsFrom} to={viirsTo} />;
-  //     case analysisKeys.MODIS_FIRES:
-  //       return <FiresBadge count={results.fireCount} from={modisFrom} to={modisTo} />;
-  //     case analysisKeys.TC_LOSS_GAIN:
-  //       return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
-  //     case analysisKeys.LCC:
-  //       layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+  renderResults = (type, results, language, config) => {
+    const {settings} = this.context;
+    const layerGroups = settings.layerPanel;
+    const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
+    const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
+    let labels, layerConf, colors;
+    switch (type) {
+      case analysisKeys.VIIRS_FIRES:
+        return <FiresBadge results={results} count={results.fireCount} from={viirsFrom} to={viirsTo} />;
+      case analysisKeys.MODIS_FIRES:
+        return <FiresBadge count={results.fireCount} from={modisFrom} to={modisTo} />;
+      case analysisKeys.TC_LOSS_GAIN:
+        return <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
+      case analysisKeys.LCC:
+        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
 
-  //       return <CompositionPieChart
-  //         results={results}
-  //         name={text[language].ANALYSIS_LCC_CHART_NAME}
-  //         counts={results.counts}
-  //         colors={layerConf.colors}
-  //         labels={layerConf.classes[language]} />;
-  //     case analysisKeys.TC_LOSS:
+        return <CompositionPieChart
+          results={results}
+          name={text[language].ANALYSIS_LCC_CHART_NAME}
+          counts={results.counts}
+          colors={layerConf.colors}
+          labels={layerConf.classes[language]} />;
+      case analysisKeys.TC_LOSS: {
+        // labels = lossLabels.slice(lossFromSelectIndex, lossToSelectIndex + 1);
+        const sliderConfig = config.uiParams.filter(i => i.inputType === 'rangeSlider')[0];
+        labels = Array.apply(
+          null,
+          Array(sliderConfig.bounds[1] - sliderConfig.bounds[0] + 1)
+        ).map((i, idx) => idx + sliderConfig.bounds[0]);
 
-  //       labels = lossLabels.slice(lossFromSelectIndex, lossToSelectIndex + 1);
+        const lossObj = results.data.attributes.loss;
+        const counts = Object.values(lossObj);
+        console.log('a;lskdjfaiojnfcao;isdjfg;aodisjfas');
+        const chartComponent = <BarChart
+        name={text[language].ANALYSIS_TC_CHART_NAME}
+        counts={counts}
+        colors={['#cf5188']}
+        labels={labels}
+        results={results}/>;
 
-  //       return <BarChart
-  //         name={text[language].ANALYSIS_TC_CHART_NAME}
-  //         counts={results.counts}
-  //         colors={analysisConfig[type].colors}
-  //         labels={labels}
-  //         results={results}/>;
-  //     case analysisKeys.BIO_LOSS:
-  //       return <BiomassChart
-  //         payload={results}
-  //         labels={analysisConfig[type].labels}
-  //         colors={analysisConfig[type].colors}
-  //         />;
-  //     case analysisKeys.LC_LOSS:
-  //     case analysisKeys.INTACT_LOSS:
-  //     case analysisKeys.MANGROVE_LOSS:
-  //       layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
-  //       labels = (function () {
-  //         switch (type) {
-  //           case analysisKeys.LC_LOSS:
-  //             return layerConf.classes[language];
-  //           case analysisKeys.INTACT_LOSS:
-  //             return text[language].ANALYSIS_IFL_LABELS;
-  //           case analysisKeys.MANGROVE_LOSS:
-  //             return text[language].ANALYSIS_MANGROVE_LABELS;
-  //           default:
-  //             return analysisConfig[type].labels;
-  //         }
-  //       })();
-  //       colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
+        this.setState({ chartComponent });
+      }
+      case analysisKeys.BIO_LOSS:
+        return <BiomassChart
+          payload={results}
+          labels={analysisConfig[type].labels}
+          colors={analysisConfig[type].colors}
+          />;
+      case analysisKeys.LC_LOSS:
+      case analysisKeys.INTACT_LOSS:
+      case analysisKeys.MANGROVE_LOSS:
+        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+        labels = (function () {
+          switch (type) {
+            case analysisKeys.LC_LOSS:
+              return layerConf.classes[language];
+            case analysisKeys.INTACT_LOSS:
+              return text[language].ANALYSIS_IFL_LABELS;
+            case analysisKeys.MANGROVE_LOSS:
+              return text[language].ANALYSIS_MANGROVE_LABELS;
+            default:
+              return analysisConfig[type].labels;
+          }
+        })();
+        colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
 
-  //       return <TotalLossChart
-  //         results={results}
-  //         counts={results.counts}
-  //         encoder={results.encoder}
-  //         options={results.options}
-  //         labels={labels}
-  //         lossLabels={lossLabels}
-  //         colors={colors} />;
-  //     case analysisKeys.SLOPE:
-  //       const {counts} = results;
-  //       labels = counts.map((v, index) => text[language].ANALYSIS_SLOPE_OPTION + (index + 1));
-  //       colors = settings.slopeAnalysisPotentialColors;
-  //       const tooltips = settings.labels[language].slopeAnalysisPotentialOptions;
-  //       //- Need a new chart to handle these values correctly
-  //       return <SlopeBarChart results={results} counts={counts} colors={colors} labels={labels} tooltips={tooltips} />;
-  //     case analysisKeys.SAD_ALERTS:
-  //       const {alerts} = results;
-  //       return <SadAlertsChart
-  //         results={results}
-  //         alerts={alerts}
-  //         colors={analysisConfig[type].colors}
-  //         names={text[language].ANALYSIS_SAD_ALERT_NAMES} />;
-  //     case analysisKeys.GLAD_ALERTS:
-  //       return <TimeSeriesChart data={results} name={text[language].ANALYSIS_GLAD_ALERT_NAME} />;
-  //     case analysisKeys.TERRA_I_ALERTS:
-  //       return <TimeSeriesChart data={results} name={text[language].ANALYSIS_TERRA_I_ALERT_NAME} />;
-  //     // case 'custom':
-  //     //   results.data.attributes.widgetConfig.width = 220;
-  //     //   return <VegaChart config={results.data.attributes.widgetConfig} />;
-  //     // case 'custom2':
-  //     //   return <VegaChart config={results.data.attributes.widgetConfig} />;
-  //     case 'default':
-  //       return null;
-  //     default:
-  //     //- This should only be the restoration analysis, since its value is a plain rasterId
-  //       return <RestorationCharts results={results} />;
+        return <TotalLossChart
+          results={results}
+          counts={results.counts}
+          encoder={results.encoder}
+          options={results.options}
+          labels={labels}
+          lossLabels={lossLabels}
+          colors={colors} />;
+      case analysisKeys.SLOPE: {
+        const {counts} = results;
+        labels = counts.map((v, index) => text[language].ANALYSIS_SLOPE_OPTION + (index + 1));
+        colors = settings.slopeAnalysisPotentialColors;
+        const tooltips = settings.labels[language].slopeAnalysisPotentialOptions;
+        //- Need a new chart to handle these values correctly
+        return <SlopeBarChart results={results} counts={counts} colors={colors} labels={labels} tooltips={tooltips} />;
+      }
+      case analysisKeys.SAD_ALERTS: {
+        const {alerts} = results;
+        return <SadAlertsChart
+          results={results}
+          alerts={alerts}
+          colors={analysisConfig[type].colors}
+          names={text[language].ANALYSIS_SAD_ALERT_NAMES} />;
+      }
+      case analysisKeys.GLAD_ALERTS: {
+        const alerts = formatters.alerts(results.data.attributes.value);
+        const chartComponent = <TimeSeriesChart data={alerts} name={text[language].ANALYSIS_GLAD_ALERT_NAME} />;
 
-
-  //       // TESTING CUSTOM ANALYSIS
-  //       // return <VegaChart config={results.data.attributes.widgetConfig} />;
-  //   }
-  // };
+        this.setState({ chartComponent });
+      }
+      case analysisKeys.TERRA_I_ALERTS:
+        return <TimeSeriesChart data={results.data} name={text[language].ANALYSIS_TERRA_I_ALERT_NAME} />;
+      // case 'custom':
+      //   results.data.attributes.widgetConfig.width = 220;
+      //   return <VegaChart config={results.data.attributes.widgetConfig} />;
+      // case 'custom2':
+      //   return <VegaChart config={results.data.attributes.widgetConfig} />;
+      case 'default':
+        return null;
+      default: {
+        if (analysisConfig.useGfwWidget) {
+          // TESTING CUSTOM ANALYSIS
+          const chartComponent = <VegaChart config={results.data.attributes.widgetConfig} />;
+          this.setState({ chartComponent });
+        } else {
+          //- This should only be the restoration analysis, since its value is a plain rasterId
+            return <RestorationCharts results={results} />;
+        }
+      }
+    }
+  };
 
   setLoader = loadingObj => { //isLoading and possibly error
     this.setState(loadingObj);
   }
 
   runAnalysis = () => {
+    const { analysisParams, activeAnalysisType, selectedFeature, canopyDensity } = this.props;
+    const { settings: { customAnalysisModules }, language } = this.context;
     this.setState({
       isLoading: true,
       results: null,
       isError: false
     });
+    Object.keys(analysisParams).forEach(analysisId => {
+      console.log(analysisId, activeAnalysisType);
+      if (analysisId === activeAnalysisType) {
+        const analysisSettings = customAnalysisModules.filter(cam => cam.analysisId === analysisId)[0];
+        const TCDConfig = analysisSettings.uiParams.filter(p => p.inputType === 'tcd')[0];
+        const content = analysisParams[analysisId];
+        const geostoreId = selectedFeature.attributes.geostoreId;
+        content.geostore = geostoreId;
+        if (TCDConfig) { content[TCDConfig.name] = canopyDensity; }
+        if (analysisSettings.params && analysisSettings.params.length !== 0) {
+          analysisSettings.params.forEach(param => {
+            content[param.name] = param.value;
+          });
+        }
+
+        if (analysisSettings.useGfwWidget) {
+          console.log('Gettig herealsdkjfaljf');
+          analysisUtils.getCustomAnalysis(analysisSettings, geostoreId).then(results => {
+            this.renderResults(analysisId, results, language, analysisSettings);
+          });
+        }
+        // request.getRawGeometry(selectedFeature).then((geometry) => {
+
+          esriRequest({
+            url: analysisSettings.analysisUrl,
+            callbackParamName: 'callback',
+            content: content,
+            handleAs: 'json',
+            timeout: 30000
+          }, { usePost: false }).then(results => {
+            this.setState({ isLoading: false });
+            this.renderResults(analysisId, results, language, analysisSettings);
+          //   if (typeof lossGainResult === 'object' && lossGainResult.hasOwnProperty('error')) {
+          //     this.setState({
+          //       isLoading: false,
+          //       results: {
+          //         error: lossGainResult.error,
+          //         message: text[language].ANALYSIS_ERROR_TC_LOSS
+          //       },
+          //       isError: true,
+          //     });
+          //   } else {
+          //     const lossObj = lossGainResult.data.attributes.loss;
+          //     const counts = Object.values(lossObj);
+          //     this.setState({
+          //       results: { counts },
+          //       isLoading: false
+          //     });
+          //   }
+          //   // deferred.resolve(lossGainResult || []);
+          // }, err => {
+          //   console.error(err);
+          //   // deferred.resolve({ error: err });
+          }, (error) => {
+            this.setState({
+              isLoading: false,
+              results: {
+                error: error,
+                message: 'there was an error'
+              },
+              isError: true,
+            });
+          });
+        // })
+      }
+    });
   }
 
   render () {
     const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate, editingEnabled} = this.props;
-    const {results, isLoading, error} = this.state;
+    const {results, isLoading, error, chartComponent} = this.state;
     const {language, settings} = this.context;
     let chart, title, slopeSelect;
 
     // If we have results, show a chart
-    if (results) {
-      chart = this.renderResults(activeAnalysisType, results, language, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate);
-    }
+    // if (results) {
+      // const config = settings.customAnalysisModules.filter(cam => cam.analysisId === activeAnalysisType)[0];
+      // chart = this.renderResults(activeAnalysisType, results, language, lossFromSelectIndex, lossToSelectIndex, viirsStartDate, viirsEndDate, modisStartDate, modisEndDate);
+      // chart = this.renderResults(activeAnalysisType, results, language, config);
+    // }
 
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
@@ -279,12 +373,12 @@ export default class Analysis extends Component {
                 <DensityDisplay canopyDensity={canopyDensity} />
               </div>
               {slopeSelect}
-              {chart}
+              {chartComponent}
             </div>
           }
         </div>
         <div className='analysis-results__footer'>
-          {activeAnalysisType !== 'default' && <div className='report-sub-buttons'>
+          {activeAnalysisType !== 'default' && !chartComponent && <div className='report-sub-buttons'>
             <button className='fa-button gold' onClick={this.runAnalysis}>
               {text[language].RUN_ANALYSIS_BUTTON_TEXT}
             </button>
