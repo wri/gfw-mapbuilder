@@ -183,6 +183,7 @@ export default {
         {
           name: 'period',
           inputType: 'datepicker',
+          combinedParams: true,
           multi: true,
           defaultStartDate: '2016-01-01',
           // defaultEndDate: '',

@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/wri/forest_atlas_template#readme",
   "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTests.js",
     "verbose": true,
     "globals": {
       "NODE_ENV": "test"
@@ -48,7 +49,10 @@
       "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
       "^esri(.*)$": "<rootDir>/config/__mocks__/object.js",
       "^dijit(.*)$": "<rootDir>/config/__mocks__/object.js",
-      "^components(.*)$": "<rootDir>/src/js/components$1"
+      "^components(.*)$": "<rootDir>/src/js/components$1",
+      "^constants(.*)$": "<rootDir>/src/js/constants$1",
+      "^actions(.*)$": "<rootDir>/src/js/actions$1",
+      "^utils(.*)$": "<rootDir>/src/js/utils$1"
     },
     "moduleDirectories": [
       "node_modules",
@@ -84,6 +88,8 @@
     "compression-webpack-plugin": "^1.1.3",
     "copy-webpack-plugin": "^4.2.3",
     "css-loader": "^0.28.7",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-15": "^1.0.5",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.15.0",
     "extract-loader": "^1.0.1",
