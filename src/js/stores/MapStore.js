@@ -71,6 +71,7 @@ class MapStore {
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
     this.analysisParams = {};
+    this.analysisSliderIndices = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -125,7 +126,8 @@ class MapStore {
       updateCartoSymbol: layerActions.updateCartoSymbol,
       toggleAnalysisTab: mapActions.toggleAnalysisTab,
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
-      updateAnalysisParams: mapActions.updateAnalysisParams
+      updateAnalysisParams: mapActions.updateAnalysisParams,
+      updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices
     });
   }
 
@@ -265,6 +267,7 @@ class MapStore {
           this.activeTab = tabKeys.INFO_WINDOW;
         }
       }
+      this.activeAnalysisType = 'default';
     }
   }
 
@@ -491,14 +494,17 @@ class MapStore {
     if (this.analysisParams.hasOwnProperty(params.id)) {
       this.analysisParams[params.id] = {
         ...this.analysisParams[params.id],
-        [params.paramName]: params.paramValue
+        ...(params.paramName ? { [params.paramName]: params.paramValue } : {})
       };
     } else {
       this.analysisParams[params.id] = {
-        [params.paramName]: params.paramValue
+        ...(params.paramName ? { [params.paramName]: params.paramValue } : {})
       };
     }
-    console.log(this.analysisParams);
+  }
+
+  updateAnalysisSliderIndices(params) {
+    this.analysisSliderIndices[params.id] = params.indices;
   }
 }
 

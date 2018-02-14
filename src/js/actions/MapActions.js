@@ -224,6 +224,8 @@ class MapActions {
     return params;
   }
 
+  updateAnalysisSliderIndices = params => params;
+
 }
 
 export default dispatcher.createActions(MapActions);

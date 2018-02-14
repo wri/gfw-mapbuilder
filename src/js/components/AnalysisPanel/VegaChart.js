@@ -10,6 +10,6 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    return <div ref={(chart) => { this.chart = chart; }}></div>;
+    return <div className='vega-chart' ref={(chart) => { this.chart = chart; }}></div>;
   }
 }

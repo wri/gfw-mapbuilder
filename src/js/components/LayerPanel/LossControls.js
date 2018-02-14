@@ -79,7 +79,7 @@ export default class LossControls extends Component {
         if (resetSlider) {
           layerActions.shouldResetSlider(false);
           this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossOptions[0].label, lossOptions[lossOptions.length - 1].label);
-          this.setState({sliderValue: [lossOptions[0].value, lossOptions[lossOptions.length - 1].value]})
+          this.setState({sliderValue: [lossOptions[0].value, lossOptions[lossOptions.length - 1].value]});
         }
 
         if (prevContext.map !== map && Object.keys(prevContext.map).length !== 0) {
@@ -168,8 +168,8 @@ export default class LossControls extends Component {
 
   stopVisualization = () => {
     const { holdSliderValueWhenPlaying, holdSliderMarksWhenPlaying } = this.state;
-    const fromYear = holdSliderValueWhenPlaying[0];
-    const toYear = holdSliderValueWhenPlaying[1];
+    const fromYear = holdSliderValueWhenPlaying[0] - 1;
+    const toYear = holdSliderValueWhenPlaying[1] - 1;
 
     const layer = this.context.map.getLayer(layerKeys.TREE_COVER_LOSS);
 
@@ -189,8 +189,8 @@ export default class LossControls extends Component {
   handleSliderChange = sliderValue => {
     this.setState({sliderValue});
     layerActions.updateLossTimeline({
-      fromSelectedIndex: sliderValue[0],
-      toSelectedIndex: sliderValue[1]
+      fromSelectedIndex: sliderValue[0] - 1,
+      toSelectedIndex: sliderValue[1] - 1
     });
   }
 

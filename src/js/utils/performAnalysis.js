@@ -161,12 +161,12 @@ export default function performAnalysis (options) {
     // case 'custom':
     // // TODO: don't hardcode 'custom'
     // // find a way to create a 'case' in this switch for each item in the array
-    //   analysisUtils.getCustomAnalysis(settings.customAnalysisModules.filter(a => a.value === 'custom')[0], geostoreId).then(promise.resolve);
+    //   analysisUtils.getCustomAnalysis(settings.analysisModules.filter(a => a.value === 'custom')[0], geostoreId).then(promise.resolve);
     // break;
     // case 'custom2':
     // // TODO: don't hardcode 'custom'
     // // find a way to create a 'case' in this switch for each item in the array
-    //   analysisUtils.getCustomAnalysis(settings.customAnalysisModules.filter(a => a.value === 'custom2')[0], geostoreId).then(promise.resolve);
+    //   analysisUtils.getCustomAnalysis(settings.analysisModules.filter(a => a.value === 'custom2')[0], geostoreId).then(promise.resolve);
     // break;
 
     case 'default':
@@ -177,8 +177,8 @@ export default function performAnalysis (options) {
 
 
       // TESTING CUSTOM ANALYSIS
-      // const customAnalysisModule = settings.customAnalysisModules.filter(a => a.value === type)[0];
-      // analysisUtils.getCustomAnalysis(customAnalysisModule, geostoreId).then(promise.resolve);
+      // const analysisModule = settings.analysisModules.filter(a => a.value === type)[0];
+      // analysisUtils.getCustomAnalysis(analysisModule, geostoreId).then(promise.resolve);
     break;
   }
 

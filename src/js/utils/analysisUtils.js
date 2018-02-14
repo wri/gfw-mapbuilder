@@ -665,21 +665,23 @@ export default {
     return alerts;
   },
 
-  getCustomAnalysis: (config, geostoreId) => {
-    console.log('I am here', config);
+  getCustomAnalysis: (config, uiParams) => {
     const promise = new Deferred();
+
+    if (!config.widgetId) {
+      throw new Error("property 'widgetId' is required. Check your analysisModule config.");
+    }
 
     let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}`;
 
+    if (!config.analysisUrl) {
+      throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
+    }
     widgetUrl += `?queryUrl=${config.analysisUrl}`;
 
-    if (config.params.length > 0) {
-      config.params.forEach(p => {
-        widgetUrl += `&${p.key}=${p.value}`;
-      });
-    }
-
-    widgetUrl += `&geostore=${geostoreId}`;
+    Object.entries(uiParams).forEach((entry) => {
+      widgetUrl += `&${entry[0]}=${entry[1]}`;
+    });
 
     esriRequest({
       url: widgetUrl,

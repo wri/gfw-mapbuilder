@@ -90,8 +90,8 @@ export default class AnalysisTypeSelect extends Component {
     //   });
     // }
 
-    // options = options.concat(settings.customAnalysisModules);
-    // console.log(settings.customAnalysisModules);
+    // options = options.concat(settings.analysisModules);
+    // console.log(settings.analysisModules);
 
     // return options;
   // }
@@ -145,24 +145,50 @@ export default class AnalysisTypeSelect extends Component {
     }
 
     if (!uiParams || uiParams.length === 0) {
-      throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config");
+      throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config. If you don't need UI elements, add `uiParams: 'none'`");
     }
 
     analysisConfig.uiParams.forEach((param, idx) => {
       switch (param.inputType) {
         case 'rangeSlider': {
-          const { bounds, step, label, name, inputType } = param;
+          const {
+            bounds,
+            step,
+            label,
+            startParamName,
+            endParamName,
+            combineParams,
+            inputType,
+            valueType,
+            valueSeparator,
+          } = param;
+
+          let initialStartValue = null;
+          let initialEndValue = null;
+
           if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
             throw new Error(`analysis id: '${analysisConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
+          }
+
+          if (analysisConfig.analysisId === 'TC_LOSS') {
+            const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
+            initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
+            initialEndValue = Number(lossOptions[lossToSelectIndex].label);
           }
           formComponents.push(
             <AnalysisRangeSlider
               key={analysisConfig.analysisId + inputType + idx}
               analysisId={analysisConfig.analysisId}
               bounds={bounds}
-              paramName={name}
+              valueType={valueType || null}
+              startParamName={startParamName}
+              endParamName={combineParams ? null : endParamName}
+              valueSeparator={combineParams ? valueSeparator : null}
               step={step || 1}
               label={label[language] ? label[language] : ''}
+              combineParams={combineParams}
+              initialStartValue={initialStartValue}
+              initialEndValue={initialEndValue}
               rangeSliderCallback={this.rangeSliderCallback}
             />
           );
@@ -232,12 +258,38 @@ export default class AnalysisTypeSelect extends Component {
     mapActions.setAnalysisType(e.target.value);
   }
 
-  rangeSliderCallback = (rangeSliderValue, id, paramName) => {
+  rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
+    let startValue = rangeSliderValue[0];
+    let endValue = rangeSliderValue[1];
+
+    if (valueType === 'date') {
+      startValue = `${startValue}-01-01`;
+      endValue = `${endValue}-12-31`;
+    }
+
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startValue}${valueSeparator}${endValue}`,
+      });
+      return;
+    }
 
     mapActions.updateAnalysisParams({
       id,
-      paramName,
-      paramValue: `${rangeSliderValue[0]}-01-01,${rangeSliderValue[1]}-12-31`,
+      paramName: startParam,
+      paramValue: `${startValue}`,
+    });
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: endParam,
+      paramValue: `${endValue}`,
     });
     // this.setState((prevState) => {
     //   return {
@@ -259,7 +311,7 @@ export default class AnalysisTypeSelect extends Component {
   }
 
   render () {
-    const {activeAnalysisType, analysisItems} = this.props;
+    const { activeAnalysisType, analysisItems, chartVisible } = this.props;
     const { language } = this.context;
 
     return (
@@ -279,7 +331,7 @@ export default class AnalysisTypeSelect extends Component {
         </select>
         <div className='analysis-results__select-arrow' />
         <div className='analysis-results__select-form'>
-          {activeAnalysisType !== 'default' && this.getFormComponents(activeAnalysisType, analysisItems)}
+          {activeAnalysisType !== 'default' && !chartVisible && this.getFormComponents(activeAnalysisType, analysisItems)}
         </div>
       </div>
     );

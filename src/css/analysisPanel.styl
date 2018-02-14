@@ -186,11 +186,14 @@
 .analysis-results__content
   position absolute
   overflow auto
+  width 100%
   padding 10px
   bottom 100px
   right 0
   left 0
   top 0
+  .analysis-results__chart-component-container
+    width 100%
 
 .analysis-results__footer
   position absolute
@@ -214,6 +217,9 @@
   justify-content space-between
   font-size 12px
   display flex
+
+.vega-chart
+  width 100%
 
 @media (min-width: $mobileBreak)
   .analysis__chart-container

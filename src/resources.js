@@ -89,7 +89,7 @@ export default {
 
 
 
-  customAnalysisModules: [
+  analysisModules: [
     // {
     //   value: 'glad-alerts',
     //   label: 'GLAD Alerts',
@@ -138,13 +138,20 @@ export default {
       label: {
         en: 'Tree Cover Loss',
       },
+      chartType: 'bar',
+      chartBounds: [2001, 2016],
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
+      valuesAttribute: 'loss',
       // uiParams: 'none' if you don't need a ui element
       uiParams: [
         {
-          name: 'period',
           inputType: 'rangeSlider',
+          combineParams: true,
+          startParamName: 'period',
+          // endParamName: ''
+          valueSeparator: ',',
           bounds: [2001, 2016],
+          valueType: 'date',
           // step: 5,
           label: {
             en: 'Select range for analysis'
@@ -170,6 +177,7 @@ export default {
       label: {
         en: 'GLAD Alerts'
       },
+      chartType: 'timeSeries',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
       uiParams: [
         {
@@ -208,12 +216,34 @@ export default {
       },
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
       useGfwWidget: true,
-      widgetId: '786b82bb-bf60-489d-b4b6-893d9bf7c2c5',
-      uiParams: 'none',
+      widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+      uiParams: [
+        {
+          name: 'period',
+          inputType: 'datepicker',
+          multi: true,
+          defaultStartDate: '2016-01-01',
+          // defaultEndDate: '',
+          label: {
+            en: 'Select date(s) for analysis'
+          }
+        },
+        {
+          name: 'thresh',
+          inputType: 'tcd',
+          label: {
+            en: 'Select tree cover density: '
+          }
+        }
+      ],
       params: [
         {
-          key: 'aggregate_values',
-          value: 'false'
+          name: 'aggregate_values',
+          value: 'true'
+        },
+        {
+          name: 'aggregate_by',
+          value: 'day'
         }
       ]
     },
