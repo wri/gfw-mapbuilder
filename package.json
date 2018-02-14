@@ -44,6 +44,13 @@
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/config/__mocks__/object.js",
       "\\.(jpe?g|png|gif|svg)$": "<rootDir>/config/__mocks__/object.js",
+      "js/layers/TerraILayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/CartoLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/TreeCoverGainLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/TreeCoverLossLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
       "esri/config": "<rootDir>/config/__mocks__/config.js",
       "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
