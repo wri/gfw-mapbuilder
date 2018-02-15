@@ -21,7 +21,11 @@ export function prepareStateForShare (options) {
     shareState.o = [];
     activeLayers.forEach(activeLayerId => {
       const mapLayer = map.getLayer(activeLayerId);
-      shareState.o.push(mapLayer.opacity);
+      if (mapLayer) {
+        shareState.o.push(mapLayer.opacity);
+      } else {
+        shareState.o.push(1);
+      }
     });
   }
   if (canopyDensity !== 30) {
