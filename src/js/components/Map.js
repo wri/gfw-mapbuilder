@@ -20,6 +20,7 @@ import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
+import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
 import Measurement from 'esri/dijit/Measurement';
@@ -43,6 +44,8 @@ import AppUtils from '../utils/AppUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
+const TIMER_DURATION = 200;
+let timer;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -276,6 +279,24 @@ export default class Map extends Component {
             layerId: layerId,
             value: parseFloat(opacityValues[j])
           });
+
+          const mapLayer = map.getLayer(layerId);
+
+          if (mapLayer && mapLayer.setOpacity) {
+            mapLayer.setOpacity(opacityValues[j]);
+          } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
+            const options = mapLayer.layerDrawingOptions || [];
+            // Transparency is the reverse of other layers, 0.25 opacity = transparency of value 75
+            mapLayer.visibleLayers.forEach(visibleLayer => {
+              options[visibleLayer] = new LayerDrawingOptions({ transparency: 100 - (opacityValues[j] * 100) });
+            });
+            if (timer) { clearTimeout(timer); }
+            timer = setTimeout(function () {
+              mapLayer.setLayerDrawingOptions(options);
+            }, TIMER_DURATION);
+          } else {
+            console.log('We are not setting opacity for this layer type!');
+          }
         }
       });
 

@@ -21,6 +21,16 @@ export default class LayerTransparency extends Component {
     this.state = { opacity: props.layer.opacity || 1 };
   }
 
+  componentDidUpdate (prevProps) {
+    if (this.props.initialLayerOpacities.length !== prevProps.initialLayerOpacities.length) {
+      this.props.initialLayerOpacities.forEach(opacity => {
+        if (opacity.layerId === this.props.layer.id) {
+          this.setState({ opacity: opacity.value });
+        }
+      });
+    }
+  }
+
   updateOpacity = (event) => {
     const {map} = this.context;
     const {layer} = this.props;
