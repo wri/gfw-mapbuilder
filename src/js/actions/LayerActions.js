@@ -33,7 +33,7 @@ class LayerActions {
   removeAllSubLayers (info) {
     return info;
     }
-  
+
   setSubLayers (id, ...subIndexes) {
     return {
       id,
@@ -90,6 +90,10 @@ class LayerActions {
 
   changeOpacity (payload) {
     return payload;
+  }
+
+  setOpacities (opacities) {
+    return opacities;
   }
 
   addAll () {

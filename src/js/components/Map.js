@@ -207,7 +207,7 @@ export default class Map extends Component {
 
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
-        this.applyStateFromUrl(response.map, getUrlParams(location.search));
+        this.applyStateFromUrl(response.map, getUrlParams(location.href));
         paramsApplied = true;
       }
       //- Make the map a global in debug mode for easier debugging
@@ -227,9 +227,6 @@ export default class Map extends Component {
     const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
 
     const langKeys = Object.keys(settings.labels);
-
-    //TODO: If we have a '#' at the start of our location.search, this won't work properly --> Our params come back as an empty object!
-    // so check our 'getUrlParams' function
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
@@ -259,7 +256,7 @@ export default class Map extends Component {
   */
   applyLayerStateFromUrl = (map, itemData) => {
     const basemap = itemData && itemData.baseMap;
-    const params = getUrlParams(location.search);
+    const params = getUrlParams(location.href);
 
     //- Set the default basemap in the store
     basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
@@ -269,10 +266,20 @@ export default class Map extends Component {
     }
     if (params.a) {
       const layerIds = params.a.split(',');
-      layerIds.forEach(layerId => {
+      const opacityValues = params.o.split(',');
+      const opacityObjs = [];
+      layerIds.forEach((layerId, j) => {
         // TODO: Confirm this with layerIds and subId's!
         layerActions.addActiveLayer(layerId);
+        if (opacityValues[j] !== 1) {
+          opacityObjs.push({
+            layerId: layerId,
+            value: parseFloat(opacityValues[j])
+          });
+        }
       });
+
+      layerActions.setOpacities(opacityObjs);
     }
 
     if (params.ls && params.le) {
@@ -571,6 +578,7 @@ export default class Map extends Component {
             legendOpen={this.state.legendOpen}
             dynamicLayers={this.state.dynamicLayers}
             legendOpacity={this.state.legendOpacity}
+            initialLayerOpacities={this.state.initialLayerOpacities}
           /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}

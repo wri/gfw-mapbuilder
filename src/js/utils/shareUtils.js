@@ -14,12 +14,20 @@ export function prepareStateForShare (options) {
   shareState.z = map.getLevel();
   shareState.l = language;
   shareState.b = basemap;
-  shareState.a = activeLayers;
   shareState.t = activeTab;
-  shareState.c = canopyDensity;
 
-  //TODO: Find out a way to Not share our params if they are default to avoid clutter & uncessary action dispatches!
-  //TODO: Should we make this cutdown or keep layerParams for layers that aren't turned on?
+  if (activeLayers.length > 0) {
+    shareState.a = activeLayers;
+    shareState.o = [];
+    activeLayers.forEach(activeLayerId => {
+      const mapLayer = map.getLayer(activeLayerId);
+      shareState.o.push(mapLayer.opacity);
+    });
+  }
+  if (canopyDensity !== 30) {
+    shareState.c = canopyDensity;
+  }
+
   if (activeLayers.indexOf('GLAD_ALERTS') > -1) {
     shareState.gs = gladStartDate;
     shareState.ge = gladEndDate;
