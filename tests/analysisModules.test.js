@@ -23,7 +23,6 @@ test('analysis module spec', () => {
     }
 
     if (module.chartType === 'bar') {
-      expect(module).toHaveProperty('valuesAttribute');
       expect(module).toHaveProperty('chartBounds');
       expect(module.chartBounds).toBeInstanceOf(Array);
       expect(module.chartBounds).toHaveLength(2);
