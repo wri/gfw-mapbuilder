@@ -7,7 +7,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 const LossGainBadge = (props, context) => {
 
   const { lossFromSelectIndex, lossToSelectIndex, results } = props;
-  const { lossTotal, gainTotal } = results;
+  const { loss, gain } = results.data.attributes;
   const { language } = context;
   const labelArray = analysisConfig[analysisKeys.TC_LOSS].labels;
 
@@ -27,7 +27,7 @@ const LossGainBadge = (props, context) => {
           <div className='results__loss-gain--label'>{text[language].ANALYSIS_TOTAL_LOSS_LABEL}</div>
           <div className='results__loss-gain--range'>{labelArray[lossFromSelectIndex]} &ndash; {labelArray[lossToSelectIndex]}</div>
           <div className='results__loss--count-container'>
-            <span className='results__loss--count'>{utils.formatNumber(lossTotal)}</span>
+            <span className='results__loss--count'>{utils.formatNumber(loss)}</span>
             <span className='results__loss--unit'>Ha</span>
           </div>
         </div>
@@ -35,7 +35,7 @@ const LossGainBadge = (props, context) => {
           <div className='results__loss-gain--label'>{text[language].ANALYSIS_TOTAL_GAIN_LABEL}</div>
           <div className='results__loss-gain--range'>{text[language].ANALYSIS_TOTAL_GAIN_RANGE}</div>
           <div className='results__gain--count-container'>
-            <span className='results__gain--count'>{utils.formatNumber(gainTotal)}</span>
+            <span className='results__gain--count'>{utils.formatNumber(gain)}</span>
             <span className='results__gain--unit'>Ha</span>
           </div>
         </div>

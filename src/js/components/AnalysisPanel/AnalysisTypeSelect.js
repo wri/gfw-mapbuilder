@@ -7,6 +7,7 @@ import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
 import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import text from 'js/languages';
+import moment from 'moment';
 import React, {
   Component,
   PropTypes
@@ -21,101 +22,8 @@ export default class AnalysisTypeSelect extends Component {
 
   constructor (props, context) {
     super(props, context);
-    // Get options for the select
-    // this.options = this.prepareOptions(context.language);
     this.state = {};
-
-    // mapActions.setAnalysisType.defer('default');
   }
-
-  // componentWillReceiveProps (nextProps, nextContext) {
-    // const {language} = this.context;
-    // if (language !== nextContext.language) {
-    //   this.setState({ options: this.prepareOptions(nextContext.language) });
-    // }
-  // }
-
-  // prepareOptions = (language) => {
-  //   const {settings} = this.context;
-    //- Get references to all the layers
-    // const lcdGroupLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LCD.layers : [];
-    // let options = text[language].ANALYSIS_SELECT_TYPE_OPTIONS;
-    //- Remove options not included based on settings
-    //- Also, remove Tree Cover Options if those layers are not in the settings.layerPanel.GROUP_LCD config
-    // options = options.filter((option) => {
-    //   switch (option.value) {
-    //     case analysisKeys.SLOPE:
-    //       return settings.restorationModule && settings.restorationSlope;
-    //     case analysisKeys.INTACT_LOSS:
-    //       return settings.intactForests;
-    //     case analysisKeys.BIO_LOSS:
-    //       return settings.aboveGroundBiomass;
-    //     case analysisKeys.LC_LOSS:
-    //       return settings.landCover;
-    //     case analysisKeys.LCC:
-    //       return settings.landCover;
-    //     case analysisKeys.VIIRS_FIRES:
-    //       return settings.viirsFires;
-    //     case analysisKeys.MODIS_FIRES:
-    //       return settings.modisFires;
-    //     case analysisKeys.MANGROVE_LOSS:
-    //       return settings.mangroves;
-    //     case analysisKeys.SAD_ALERTS:
-    //       return settings.sadAlerts;
-    //     case analysisKeys.GLAD_ALERTS:
-    //       return settings.gladAlerts;
-    //     case analysisKeys.TERRA_I_ALERTS:
-    //       return settings.terraIAlerts;
-    //     case analysisKeys.TC_LOSS:
-    //       return appUtils.containsObject(lcdGroupLayers, 'id', layerKeys.TREE_COVER_LOSS);
-    //     case analysisKeys.TC_LOSS_GAIN:
-    //       return appUtils.containsObject(lcdGroupLayers, 'id', layerKeys.TREE_COVER_GAIN);
-    //     default:
-    //       return true;
-    //   }
-    // });
-    // //- Merge in the restoration options if the module is enabled and at least one options is enabled
-    // if (settings.restorationModule &&
-    //   (settings.restorationSlopePotential || settings.restorationLandCover ||
-    //   settings.restorationPopulation || settings.restorationTreeCover ||
-    //   settings.restorationRainfall)
-    // ) {
-    //   const {restorationOptions} = settings.labels[language];
-    //   restorationOptions.forEach((restorationOption) => {
-    //     options.push({
-    //       value: restorationOption.id,
-    //       label: restorationOption.label,
-    //       group: analysisKeys.ANALYSIS_GROUP_RESTORATION
-    //     });
-    //   });
-    // }
-
-    // options = options.concat(settings.analysisModules);
-    // console.log(settings.analysisModules);
-
-    // return options;
-  // }
-
-  // renderOption = (group) => {
-  //   return (option, index) => {
-  //     // If this option is not a member of the correct group, dont render it
-  //     if (option.group !== group) { return null; }
-  //     if (option.value === 'default') {
-  //       return <option key={index} disabled={this.props.activeAnalysisType !== 'default'} value={option.value}>{option.label}</option>;
-  //     }
-  //     return <option key={index} value={option.value}>{option.label}</option>;
-  //   };
-  // };
-
-  // renderGroup = (groupKey) => {
-  //   const {language} = this.context;
-  //   const {options} = this.state;
-  //   return (
-  //     <optgroup key={groupKey} label={text[language][groupKey]}>
-  //       {options.map(this.renderOption(groupKey))}
-  //     </optgroup>
-  //   );
-  // };
 
   createOptions = (analysisObj) => {
     const { language } = this.context;
@@ -185,7 +93,7 @@ export default class AnalysisTypeSelect extends Component {
               endParamName={combineParams ? null : endParamName}
               valueSeparator={combineParams ? valueSeparator : null}
               step={step || 1}
-              label={label[language] ? label[language] : ''}
+              label={label[language]}
               combineParams={combineParams}
               initialStartValue={initialStartValue}
               initialEndValue={initialEndValue}
@@ -213,21 +121,67 @@ export default class AnalysisTypeSelect extends Component {
         case 'datepicker': {
           const {
             label,
-            name,
+            startParamName,
+            endParamName,
+            combineParams,
+            valueSeparator,
             multi,
+            minDate,
+            maxDate,
+          } = param;
+
+          let {
             defaultStartDate,
             defaultEndDate,
           } = param;
+
+          let initialStartDate = null;
+          let initialEndDate = null;
+
+          if (analysisConfig.analysisId === 'GLAD_ALERTS') {
+            const { gladStartDate, gladEndDate } = this.props;
+            initialStartDate = moment(gladStartDate);
+            initialEndDate = moment(gladEndDate);
+          }
+
+          if (analysisConfig.analysisId === 'TERRAI_ALERTS') {
+            const { terraIStartDate, terraIEndDate } = this.props;
+            initialStartDate = moment(terraIStartDate);
+            initialEndDate = moment(terraIEndDate);
+          }
+
+          if (analysisConfig.analysisId === 'VIIRS_FIRES') {
+            const { viirsStartDate, viirsEndDate } = this.props;
+            initialStartDate = moment(viirsStartDate);
+            initialEndDate = moment(viirsEndDate);
+          }
+
+          if (initialStartDate) { defaultStartDate = initialStartDate; }
+          if (initialEndDate) { defaultEndDate = initialEndDate; }
+
+          if (!defaultStartDate && minDate) {
+            defaultStartDate = minDate;
+          }
+
+          if (!defaultEndDate && maxDate) {
+            defaultEndDate = maxDate;
+          }
 
           if (multi === true || multi === 'true') {
             formComponents.push(
               <AnalysisMultiDatePicker
                 key={analysisConfig.analysisId + param.inputType + idx}
                 analysisId={analysisConfig.analysisId}
-                paramName={name}
-                label={null}
+                startParamName={startParamName}
+                endParamName={endParamName}
+                label={label[language]}
+                combineParams={combineParams || null}
+                valueSeparator={combineParams ? valueSeparator : null}
+                multi={true}
                 defaultStartDate={defaultStartDate || new Date()}
                 defaultEndDate={defaultEndDate || new Date()}
+                minDate={minDate || null}
+                maxDate={maxDate || new Date()}
                 calendarCallback={this.calendarCallback}
               />
             );
@@ -238,9 +192,14 @@ export default class AnalysisTypeSelect extends Component {
             <AnalysisDatePicker
               key={analysisConfig.analysisId + param.inputType + idx}
               analysisId={analysisConfig.analysisId}
-              paramName={name}
-              label={label[language] ? label[language] : ''}
-              defaultSelected={defaultStartDate || null}
+              startParamName={startParamName}
+              label={label[language]}
+              combineParams={combineParams || null}
+              valueSeparator={combineParams ? valueSeparator : null}
+              multi={false}
+              defaultStartDate={defaultStartDate || null}
+              minDate={minDate}
+              maxDate={maxDate}
               calendarCallback={this.calendarCallback}
             />
           );
@@ -291,22 +250,35 @@ export default class AnalysisTypeSelect extends Component {
       paramName: endParam,
       paramValue: `${endValue}`,
     });
-    // this.setState((prevState) => {
-    //   return {
-    //     [id]: {
-    //       ...(prevState[id] ? prevState[id] : {}),
-    //       rangeSliderValue,
-    //       paramName
-    //     },
-    //   };
-    // });
   }
 
-  calendarCallback = (date, id, paramName, endDate = null) => {
+  calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+      console.log(id);
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startDate}${valueSeparator}${endDate}`,
+      });
+      return;
+    }
+
+    if (multi === true || multi === 'true') {
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: endParam,
+        paramValue: endDate,
+      });
+    }
+
+
     mapActions.updateAnalysisParams({
       id,
-      paramName,
-      paramValue: endDate ? `${date},${endDate}` : date,
+      paramName: startParam,
+      paramValue: startDate,
     });
   }
 

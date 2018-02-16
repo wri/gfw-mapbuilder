@@ -9,20 +9,57 @@ export default class AnalysisRangeSlider extends Component {
     super(props);
 
     this.state = {
-      selectedStartDate: moment(this.props.defaultStartDate, 'YYYY-MM-DD') || moment(new Date()),
-      selectedEndDate: moment(this.props.defaultEndDate, 'YYYY-MM-DD') || moment(new Date()),
+      selectedStartDate: moment(props.defaultStartDate, 'YYYY-MM-DD') || moment(new Date()),
+      selectedEndDate: moment(props.defaultEndDate, 'YYYY-MM-DD') || moment(new Date()),
     };
+  }
+
+  componentDidMount() {
+    const { selectedStartDate, selectedEndDate } = this.state;
+    const {
+      calendarCallback,
+      analysisId,
+      startParamName,
+      endParamName,
+      multi,
+      valueSeparator,
+      combineParams
+    } = this.props;
+
+    calendarCallback(
+      selectedStartDate.format('YYYY-MM-DD'),
+      selectedEndDate.format('YYYY-MM-DD'),
+      analysisId,
+      combineParams,
+      multi,
+      startParamName,
+      endParamName,
+      valueSeparator,
+    );
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { selectedStartDate, selectedEndDate } = this.state;
-    const { calendarCallback, analysisId, paramName } = this.props;
+    const {
+      calendarCallback,
+      analysisId,
+      startParamName,
+      endParamName,
+      multi,
+      valueSeparator,
+      combineParams
+    } = this.props;
+
     if (prevState.selectedStartDate !== selectedStartDate || prevState.selectedEndDate !== selectedEndDate) {
       calendarCallback(
         selectedStartDate.format('YYYY-MM-DD'),
+        selectedEndDate.format('YYYY-MM-DD'),
         analysisId,
-        paramName,
-        selectedEndDate.format('YYYY-MM-DD')
+        combineParams,
+        multi,
+        startParamName,
+        endParamName,
+        valueSeparator,
       );
     }
   }
@@ -40,7 +77,7 @@ export default class AnalysisRangeSlider extends Component {
   }
 
   render() {
-    const { label } = this.props;
+    const { label, minDate, maxDate } = this.props;
     const { selectedStartDate, selectedEndDate } = this.state;
 
     return (
@@ -52,7 +89,7 @@ export default class AnalysisRangeSlider extends Component {
           showYearDropdown
           dropdownMode="select"
           todayButton='Jump to today'
-          minDate={moment('2015-01-01', 'YYYY-MM-DD')}
+          minDate={moment(minDate)}
           maxDate={selectedEndDate}
           selected={selectedStartDate}
           onChange={this.handleStartChange}
@@ -64,7 +101,7 @@ export default class AnalysisRangeSlider extends Component {
           dropdownMode="select"
           todayButton='Jump to today'
           minDate={selectedStartDate}
-          maxDate={moment(new Date())}
+          maxDate={moment(maxDate || new Date())}
           selected={selectedEndDate}
           onChange={this.handleEndChange}
         />

@@ -14,31 +14,70 @@ export default class AnalysisRangeSlider extends Component {
   }
 
   componentDidMount() {
-    const { calendarCallback, analysisId, paramName } = this.props;
     const { dateSelected } = this.state;
-    calendarCallback(dateSelected.format('YYYY-MM-DD'), analysisId, paramName);
+    const {
+      calendarCallback,
+      analysisId,
+      startParamName,
+      multi,
+      combineParams
+    } = this.props;
+
+    calendarCallback(
+      dateSelected.format('YYYY-MM-DD'),
+      null,
+      analysisId,
+      combineParams,
+      multi,
+      startParamName,
+      null,
+      null,
+    );
   }
 
-  handleChange = date => {
-    const { calendarCallback, analysisId, paramName } = this.props;
-    calendarCallback(date.format('YYYY-MM-DD'), analysisId, paramName);
+  componentDidUpdate(prevProps, prevState) {
+    const { dateSelected } = this.state;
+    const {
+      calendarCallback,
+      analysisId,
+      startParamName,
+      multi,
+      combineParams
+    } = this.props;
+
+    if (prevState.dateSelected !== dateSelected) {
+      calendarCallback(
+        dateSelected.format('YYYY-MM-DD'),
+        null,
+        analysisId,
+        combineParams,
+        multi,
+        startParamName,
+        null,
+        null,
+      );
+    }
+  }
+
+  handleChange = dateSelected => {
+    this.setState({ dateSelected });
   }
 
   render() {
-    const { label, id, buttonLabel } = this.props;
-    const { dateSelected } = this.props;
+    const { label, minDate, maxDate } = this.props;
+    const { dateSelected } = this.state;
 
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <DatePicker
-          customInput={<Button id={id} buttonLabel={buttonLabel} />}
+          customInput={<Button />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
           todayButton='Jump to today'
-          minDate={moment('2015-01-01', 'YYYY-MM-DD')}
-          maxDate={moment(new Date())}
+          minDate={moment(minDate)}
+          maxDate={moment(maxDate || new Date())}
           selected={dateSelected}
           onChange={this.handleChange}
         />
@@ -47,11 +86,10 @@ export default class AnalysisRangeSlider extends Component {
   }
 }
 
-const Button = ({ onClick, value, id, buttonLabel }) => (
+const Button = ({ onClick, value }) => (
   <div>
-    <label htmlFor={id} className='analysis-datepicker-button-label'>{buttonLabel}</label>
+    <label className='analysis-datepicker-button-label'>Date: </label>
     <button
-    id={id}
     className='fa-button sml white pointer'
     onClick={onClick}
     >

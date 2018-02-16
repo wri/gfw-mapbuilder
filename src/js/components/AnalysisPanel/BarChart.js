@@ -6,26 +6,40 @@ export default class BarChart extends Component {
 
   constructor(props) {
     super(props);
-    console.log('props', props);
     this.state = { isEmpty: false, isError: false };
   }
 
   componentDidMount() {
-    const { labels, colors, counts, name, results } = this.props;
+    const { labels, colors, counts, name, results, encoder } = this.props;
     if (typeof results === 'object' && results.hasOwnProperty('error')) {
       this.setState({ isError: true });
     } else {
 
-      console.log(counts);
       if (!counts.some(item => item !== 0)) {
         this.setState({ isEmpty: true });
       } else {
-        const series = [{
-          name: name,
-          data: counts
-        }];
+        let series = [];
+
+        if (encoder) {
+          const chartInfo = charts.formatSeriesWithEncoder({
+            isSimple: true,
+            encoder: encoder,
+            counts: counts,
+            labels: labels,
+            colors: colors,
+            Xs: encoder.A, // Loss Bounds
+            Ys: encoder.B // Raster were crossing with
+          });
+          series = chartInfo.series;
+        } else {
+          series = [{
+            name: name,
+            data: counts
+          }];
+        }
+
         this.setState({ isEmpty: false });
-        charts.makeSimpleBarChart(this.refs.chart, labels, colors, series);
+        charts.makeTotalLossBarChart(this.refs.chart, labels, colors, series);
       }
     }
   }
