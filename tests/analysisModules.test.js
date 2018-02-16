@@ -30,12 +30,14 @@ test('analysis module spec', () => {
 
     }
 
-    expect(module.params).toBeInstanceOf(Array);
+    if (module.params) {
+      expect(module.params).toBeInstanceOf(Array);
 
-    module.params.forEach((param) => {
-      expect(param).toHaveProperty('name');
-      expect(param).toHaveProperty('value');
-    });
+      module.params.forEach((param) => {
+        expect(param).toHaveProperty('name');
+        expect(param).toHaveProperty('value');
+      });
+    }
 
     if (typeof module.uiParams === 'string') {
       expect(module.uiParams).toEqual('none');
