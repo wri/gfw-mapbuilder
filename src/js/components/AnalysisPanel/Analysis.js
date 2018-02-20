@@ -12,6 +12,7 @@ import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
+import Badge from 'components/AnalysisPanel/Badge';
 import BarChart from 'components/AnalysisPanel/BarChart';
 import VegaChart from 'components/AnalysisPanel/VegaChart';
 import analysisKeys from 'constants/AnalysisConstants';
@@ -64,12 +65,13 @@ export default class Analysis extends Component {
   }
 
   renderResults = (type, results, language, config) => {
-    const { chartType, label, color, chartBounds, analysisId } = config;
+    const { chartType, label } = config;
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
 
     switch (chartType) {
       case 'bar': {
+        const { chartBounds, color, analysisId } = config;
         const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
         .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
 
@@ -125,12 +127,15 @@ export default class Analysis extends Component {
           viirsTo,
         } = this.props;
 
+        const { valueAttribute, color, badgeLabel } = config;
+
         if (activeAnalysisType === 'TC_LOSS_GAIN') {
           chartComponent = <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
         }
 
         if (activeAnalysisType === 'VIIRS_FIRES') {
-          chartComponent = <FiresBadge results={results} from={viirsFrom} to={viirsTo} />;
+          // chartComponent = <FiresBadge results={results} from={viirsFrom} to={viirsTo} />;
+          chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
         }
 
         break;

@@ -22,13 +22,6 @@ test('analysis module spec', () => {
       expect(module).toHaveProperty('chartType');
     }
 
-    if (module.chartType === 'bar') {
-      expect(module).toHaveProperty('chartBounds');
-      expect(module.chartBounds).toBeInstanceOf(Array);
-      expect(module.chartBounds).toHaveLength(2);
-
-    }
-
     if (module.params) {
       expect(module.params).toBeInstanceOf(Array);
 
@@ -36,6 +29,20 @@ test('analysis module spec', () => {
         expect(param).toHaveProperty('name');
         expect(param).toHaveProperty('value');
       });
+    }
+
+    if (module.analysisId !== 'LCC') {
+      expect(module.chartType).not.toEqual('lccPie');
+    }
+
+    if (module.analysisId !== 'BIO_LOSS') {
+      expect(module.chartType).not.toEqual('biomassLoss');
+    }
+
+    if (module.chartType === 'bar') {
+      expect(module).toHaveProperty('chartBounds');
+      expect(module.chartBounds).toBeInstanceOf(Array);
+      expect(module.chartBounds).toHaveLength(2);
     }
 
     if (typeof module.uiParams === 'string') {
@@ -54,10 +61,28 @@ test('analysis module spec', () => {
           expect(uiParam).toHaveProperty('bounds');
           expect(uiParam.bounds).toBeInstanceOf(Array);
           expect(uiParam.bounds).toHaveLength(2);
+          expect(uiParam).toHaveProperty('combineParams');
 
-          if (!uiParam.combineParams) {
+          if (uiParam.combineParams) {
+            expect(uiParam).toHaveProperty('valueSeparator');
+          } else {
             expect(uiParam).toHaveProperty('endParamName');
           }
+        } else if (uiParam.inputType === 'datepicker') {
+          expect(uiParam).toHaveProperty('startParamName');
+          expect(uiParam).toHaveProperty('multi');
+
+          if (uiParam.multi) {
+            expect(uiParam).toHaveProperty('combineParams');
+
+            if (uiParam.combineParams) {
+              expect(uiParam).toHaveProperty('valueSeparator');
+            } else {
+              expect(uiParam).toHaveProperty('endParamName');
+            }
+          }
+          
+          if (uiParam.minDate) { expect(uiParam.minDate).toMatch(/\d{4}-\d{2}-\d{2}/); }
         }
       });
     }

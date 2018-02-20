@@ -139,7 +139,7 @@ export default {
         en: 'Total Tree Cover Loss/Gain',
       },
       chartType: 'badge',
-      chartBounds: [2001, 2016],
+      valueAttribute: 'data.attributes.loss',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
       // uiParams: 'none' if you don't need a ui element
       uiParams: [
@@ -381,6 +381,11 @@ export default {
         en: 'VIIRS Active Fires'
       },
       chartType: 'badge',
+      valueAttribute: 'data.attributes.value',
+      badgeLabel: {
+        en: 'Active Fires'
+      },
+      color: '#5ea1ed',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
       uiParams: [
         {
@@ -424,6 +429,20 @@ export default {
         }
       ]
     },
+    // The following configurations will not work because we have not yet
+    // build support for configurable layer queries or compute histograms
+    // {
+    //   analysisId: 'SAD_ALERTS',
+    //   label: {
+    //     en: 'SAD'
+    //   }
+    // },
+    // {
+    //   analysisId: 'LC_LOSS',
+    //   label: {
+    //     en: 'Land Cover Loss'
+    //   }
+    // }
   ],
 
   /**
