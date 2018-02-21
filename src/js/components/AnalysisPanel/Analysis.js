@@ -103,7 +103,8 @@ export default class Analysis extends Component {
             );
             break;
           }
-          default:
+          default: {
+            counts = results;
             if (valueAttribute) {
               counts = valueAttribute.split('.').reduce((prevVal, currentVal) => {
                 if (!prevVal.hasOwnProperty(currentVal)) {
@@ -111,9 +112,8 @@ export default class Analysis extends Component {
                 }
                 return prevVal[currentVal];
               }, results);
-              break;
             }
-            counts = results;
+          }
         }
 
         chartComponent = <BarChart
@@ -124,11 +124,31 @@ export default class Analysis extends Component {
           results={results}
           encoder={encoder}
         />;
-
         break;
       }
       case 'timeSeries': {
-        const data = formatters.alerts(results.data.attributes.value);
+        const { analysisId, valueAttribute } = config;
+
+        let data = [];
+
+        switch (analysisId) {
+          case 'GLAD_ALERTS': {
+            data = formatters.alerts(results.data.attributes.value);
+            break;
+          }
+          default: {
+            data = results;
+
+            if (valueAttribute) {
+              data = valueAttribute.split('.').reduce((prevVal, currentVal) => {
+                if (!prevVal.hasOwnProperty(currentVal)) {
+                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
+                }
+                return prevVal[currentVal];
+              }, results);
+            }
+          }
+        }
         chartComponent = <TimeSeriesChart data={data} name={label[language] ? label[language] : ''} />;
         break;
       }
