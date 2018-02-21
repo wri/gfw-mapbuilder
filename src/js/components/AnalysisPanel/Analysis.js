@@ -71,7 +71,7 @@ export default class Analysis extends Component {
 
     switch (chartType) {
       case 'bar': {
-        const { chartBounds, color, analysisId } = config;
+        const { chartBounds, color, analysisId, valueAttribute } = config;
         const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
         .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
 
@@ -86,20 +86,34 @@ export default class Analysis extends Component {
         let counts = [];
         let encoder = null;
 
-        if (analysisId === 'TC_LOSS') {
-          const lossObj = results.data.attributes.loss;
-          counts = Object.values(lossObj);
-        }
-
-        if (analysisId === 'IFL') {
-          results.data.attributes.histogram[0].result.forEach(histo => {
-            counts.push(Math.round(histo.result * 100) / 100);
-          });
-          encoder = analysisUtils.getEncoder({
-            bounds: [labels[0], labels[labels.length - 1]]
-            },
-            analysisConfig[analysisKeys.TC_LOSS]
-          );
+        switch (analysisId) {
+          case 'TC_LOSS': {
+            const lossObj = results.data.attributes.loss;
+            counts = Object.values(lossObj);
+            break;
+          }
+          case 'IFL': {
+            results.data.attributes.histogram[0].result.forEach(histo => {
+              counts.push(Math.round(histo.result * 100) / 100);
+            });
+            encoder = analysisUtils.getEncoder({
+              bounds: [labels[0], labels[labels.length - 1]]
+              },
+              analysisConfig[analysisKeys.TC_LOSS]
+            );
+            break;
+          }
+          default:
+            if (valueAttribute) {
+              counts = valueAttribute.split('.').reduce((prevVal, currentVal) => {
+                if (!prevVal.hasOwnProperty(currentVal)) {
+                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
+                }
+                return prevVal[currentVal];
+              }, results);
+              break;
+            }
+            counts = results;
         }
 
         chartComponent = <BarChart
