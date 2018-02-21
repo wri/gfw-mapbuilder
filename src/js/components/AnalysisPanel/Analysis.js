@@ -143,15 +143,17 @@ export default class Analysis extends Component {
 
         const { valueAttribute, color, badgeLabel } = config;
 
-        if (activeAnalysisType === 'TC_LOSS_GAIN') {
-          chartComponent = <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
-        }
+        switch (activeAnalysisType) {
+          case 'TC_LOSS_GAIN':
+            chartComponent = <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
+            break;
+          case 'VIIRS_FIRES':
+            chartComponent = <FiresBadge results={results} from={viirsFrom} to={viirsTo} />;
+            break;
+          default:
+            chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
 
-        if (activeAnalysisType === 'VIIRS_FIRES') {
-          // chartComponent = <FiresBadge results={results} from={viirsFrom} to={viirsTo} />;
-          chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
         }
-
         break;
       }
       case 'biomassLoss': {
