@@ -197,7 +197,7 @@ export default class AnalysisTypeSelect extends Component {
               combineParams={combineParams || null}
               valueSeparator={combineParams ? valueSeparator : null}
               multi={false}
-              defaultStartDate={defaultStartDate || null}
+              defaultSelected={defaultStartDate || null}
               minDate={minDate}
               maxDate={maxDate}
               calendarCallback={this.calendarCallback}
@@ -257,7 +257,6 @@ export default class AnalysisTypeSelect extends Component {
       if (!valueSeparator) {
         throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
       }
-      console.log(id);
       mapActions.updateAnalysisParams({
         id,
         paramName: startParam,
