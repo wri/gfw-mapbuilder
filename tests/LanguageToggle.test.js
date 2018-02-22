@@ -2,8 +2,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import Navigation from 'components/Navigation/Navigation';
 import LanguageToggle from 'components/Navigation/LanguageToggle';
-// import AnalysisMultiDatePicker from '../src/js/components/AnalysisPanel/AnalysisFormElements/AnalysisMultiDatePicker';
-
 
 
 describe('<Navigation />', () => {
@@ -40,7 +38,6 @@ describe('<Navigation />', () => {
     expect(wrapper.contains(<LanguageToggle />)).toEqual(false);
   });
 
-
   it('should render <LanguageToggle /> when useAlternativeLanguage is true', () => {
     context.settings.useAlternativeLanguage = true;
     const wrapper = shallow(<Navigation />, { context });
@@ -48,7 +45,7 @@ describe('<Navigation />', () => {
     expect(wrapper.contains(<LanguageToggle />)).toEqual(true);
   });
 
-  it('should render <LanguageToggle /> when useAlternativeLanguage is true', () => {
+  it('LanguageToggle should display an option for each language when useAlternativeLanguage is true', () => {
     context.settings.useAlternativeLanguage = true;
     const wrapper = shallow(<LanguageToggle />, { context });
     wrapper.setContext(context);
@@ -59,23 +56,22 @@ describe('<Navigation />', () => {
     expect(frenchLang.text()).toEqual('Français');
   });
 
-  it('should render <LanguageToggle /> when useAlternativeLanguage is true', () => {
+  it('LanguageToggle should show the new language as active when our context updates', () => {
     context.settings.useAlternativeLanguage = true;
-    const wrapper = mount(<LanguageToggle />, { context });
+    const wrapper = shallow(<LanguageToggle />, { context });
     wrapper.setContext(context);
 
     const frenchLang = wrapper.find('li').at(2);
     expect(frenchLang.hasClass('active')).toEqual(false);
-    frenchLang.simulate('click');
-    context.language = 'fr';
-    expect(frenchLang.hasClass('active')).toEqual(true);
-    // const englishLang = wrapper.find('li').at(1);
-    // expect(englishLang.text()).toEqual('English');
-    // const frenchLang = wrapper.find('li').at(2);
-    // expect(frenchLang.text()).toEqual('Français');
-    // const selectLang = wrapper.find('.app-header__nav-link--language');
-    // expect(selectLang).toEqual('English');
 
+    // frenchLang.simulate('click');
+    context.language = 'fr';
+
+    const frenchWrapper = shallow(<LanguageToggle />, { context });
+    frenchWrapper.setContext(context);
+
+    const activeFrench = frenchWrapper.find('li').at(2);
+    expect(activeFrench.hasClass('active')).toEqual(true);
   });
 
 });
