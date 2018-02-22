@@ -42,6 +42,7 @@ describe('<Navigation />', () => {
     context.settings.useAlternativeLanguage = true;
     const wrapper = shallow(<Navigation />, { context });
     wrapper.setContext(context);
+    console.log(wrapper.debug());
     expect(wrapper.contains(<LanguageToggle />)).toEqual(true);
   });
 
@@ -50,9 +51,9 @@ describe('<Navigation />', () => {
     const wrapper = shallow(<LanguageToggle />, { context });
     wrapper.setContext(context);
 
-    const englishLang = wrapper.find('li').at(1);
+    const englishLang = wrapper.find('li.app-header__language').at(0);
     expect(englishLang.text()).toEqual('English');
-    const frenchLang = wrapper.find('li').at(2);
+    const frenchLang = wrapper.find('li.app-header__language').at(1);
     expect(frenchLang.text()).toEqual('Français');
   });
 
@@ -61,7 +62,7 @@ describe('<Navigation />', () => {
     const wrapper = shallow(<LanguageToggle />, { context });
     wrapper.setContext(context);
 
-    const frenchLang = wrapper.find('li').at(2);
+    const frenchLang = wrapper.find('li.app-header__language').at(1);
     expect(frenchLang.hasClass('active')).toEqual(false);
 
     // frenchLang.simulate('click');
@@ -70,7 +71,7 @@ describe('<Navigation />', () => {
     const frenchWrapper = shallow(<LanguageToggle />, { context });
     frenchWrapper.setContext(context);
 
-    const activeFrench = frenchWrapper.find('li').at(2);
+    const activeFrench = frenchWrapper.find('li.app-header__language').at(1);
     expect(activeFrench.hasClass('active')).toEqual(true);
   });
 
