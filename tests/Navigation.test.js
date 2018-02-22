@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import Navigation from 'components/Navigation/Navigation';
 
 
@@ -21,8 +21,7 @@ describe('<Navigation />', () => {
     webmapMenuName: context.settings.webmapMenuName
   };
 
-
-  it('Navigation should display an option for each language when useAlternativeLanguage is true', () => {
+  it("Navigation should display the proper options depending on resources 'includeMyGFWLogin' and our browser's loggedIn cookie", () => {
     const wrapper = shallow(<Navigation />, { context });
     wrapper.setContext(context);
 
