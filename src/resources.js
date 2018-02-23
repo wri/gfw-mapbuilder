@@ -297,7 +297,7 @@ export default {
         en: 'GLAD Alerts (custom VEGA widget)'
       },
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-      useGfwWidget: true,
+      chartType: 'gfwWidget',
       widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
       uiParams: [
         {

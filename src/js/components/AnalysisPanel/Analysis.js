@@ -206,7 +206,7 @@ export default class Analysis extends Component {
         />;
         break;
       }
-      case 'vega':
+      case 'gfwWidget':
         chartComponent = <VegaChart config={results.data.attributes.widgetConfig} />;
         break;
       default:
