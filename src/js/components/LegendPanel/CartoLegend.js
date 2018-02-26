@@ -1,6 +1,20 @@
 import React from 'react';
 
 export default class CartoLegend extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      opacity: props.legendOpacity || 1
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { legendOpacity, layerId} = this.props;
+    if (legendOpacity.layerId === layerId && legendOpacity.value !== prevProps.legendOpacity.value) {
+      this.setState({ opacity: legendOpacity.value });
+    }
+  }
 
   setColor(rgbaColor) {
     const {r, g, b, a} = rgbaColor;
@@ -9,6 +23,7 @@ export default class CartoLegend extends React.Component {
 
   render () {
     const { layerId, labels, symbol, visible } = this.props;
+    const { opacity } = this.state;
     let featureColour = '';
     let featureSize = '15px';
     let featureType = '';
@@ -39,7 +54,14 @@ export default class CartoLegend extends React.Component {
       <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref="myRef">
         <div className='label-container'>{labels}</div>
           <div className='legend-container'>
-            <div className={`legend-icon ${featureType}`} style={{ background: featureColour, height: featureSize, width: featureSize }}/>
+            <div
+              className={`legend-icon ${featureType}`}
+              style={{
+                background: featureColour,
+                height: featureSize,
+                width: featureSize,
+                opacity: opacity
+              }}/>
           </div>
       </div>
     );

@@ -257,6 +257,7 @@ export default class LegendPanel extends Component {
           labels={layer.label[language]}
           visible={activeLayers.indexOf(layer.id) > -1}
           symbol={layer.symbol}
+          legendOpacity={legendOpacity}
         />;
       } else {
         if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
