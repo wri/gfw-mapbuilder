@@ -227,11 +227,12 @@ export default {
 			title: { text: null },
 			xAxis: {
 				categories: labels,
-				maxPadding: 0.5,
+        maxPadding: 0.5,
 				title: { text: null }
 			},
 			yAxis: {
-				reversedStacks: false,
+        reversedStacks: false,
+        maxPadding: 0.2,
 				stackLabels: { enabled: true },
 				title: { text: null }
 			},
