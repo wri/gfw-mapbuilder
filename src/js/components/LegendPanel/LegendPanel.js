@@ -193,8 +193,6 @@ export default class LegendPanel extends Component {
             visibleLayers={activeLayers}
             legendOpacity={legendOpacity}
           />;
-        } else if (layer.type === 'carto') {
-          childComponent = this.createCartoLegendGroup(layer.esriLayer.cartoLayers, layer.id);
         } else {
           childComponent = this.createWebmapLegend(layer);
         }

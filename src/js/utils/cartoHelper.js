@@ -10,6 +10,7 @@ import layerUtils from 'utils/layerUtils';
 import layerActions from 'actions/LayerActions';
 import geoJsonUtils from 'utils/arcgis-to-geojson';
 import * as topojson from 'topojson-client';
+import {loadCSS} from './loaders';
 
 export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoGroupLabel, lang) => {
 
@@ -65,7 +66,15 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
       // so we should be able to take this and create some symbol for
       // each feature where it has 'someAttribute' = 'value'
       // we will just need to match the css rules to symbol values
-      // console.log(cartoCss);
+      let esriCss = cartoCss;
+      const styleTag = document.createElement('style');
+      esriCss = esriCss.replace(/peat/g, 'peat_07c315f8-c13e-11e4-b457-0e8dde98a187_layer path');
+      esriCss = esriCss.replace(/depth/g, 'data-depth');
+      esriCss = esriCss.replace(/.*?-fill/g, 'fill');
+      esriCss = esriCss.replace(/polygon/g, 'fill');
+      esriCss = esriCss.replace(/line/g, 'stroke');
+      styleTag.innerHTML = esriCss;
+      document.body.appendChild(styleTag);
       // const singleLineCss = cartoCss.replace(/[\r\n]/g, '');
       // const cssRuleType = singleLineCss.match(/\/\*\* (.*?) \*\//)[1].split(' ')[1].toLowerCase();
       // const splitCss = singleLineCss.replace(cssRuleType, '').replace(/ |\/\*\*|\*\//g, '').split('}');
@@ -112,11 +121,13 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         
       // });
       // console.log(splitCss);
-      const layerId = id ? id : `${templateKey}_${layerName}`;
+      const layerId = id ? id : `${layerName}_${templateKey}`;
       // create a CartoLayer/GraphicsLayer for this layer
       const esriLayer = new GraphicsLayer({
         id: layerId,
         visible: false,
+        styling: false, // so we can style with css
+        dataAttributes: ['depth'],
       });
 
       // Query Section
@@ -129,6 +140,11 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
           if (currentVal.column_name.includes('the_geom')) { return prevVal; }
           return prevVal + `, ${currentVal.column_name}`;
         }, '');
+
+        // columnsToQuery also happens to be all of our dataAttributes
+        // that we can use to style the layer with css
+        // const dataAttributes = columnsToQuery.replace(/,/g, '').trim().split(' ');
+        // we might not need this, i don't know yet
 
         // simplify the geometries
         const tableQueryWithSimplify = tableQuery.replace('*', `ST_Simplify(the_geom, 0.1, true) AS the_geom${columnsToQuery}`);
@@ -150,6 +166,34 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
           };
           const cartoGeoJson = topojson.feature(cartoTopoJson, cartoTopoJson.objects);
           // const cartoGeoJson = JSON.parse(sqlRes);
+          // let graphicSymbol;
+
+          // switch (cartoGeoJson.features[0].geometry.type) {
+          //   case 'MultiPolygon':
+          //     graphicSymbol = new SimpleFillSymbol(
+          //       SimpleLineSymbol.STYLE_SOLID,
+          //       new SimpleLineSymbol(
+          //         SimpleLineSymbol.STYLE_SOLID,
+          //         new Color('red'),
+          //         1
+          //       ),
+          //       new Color('blue'),
+          //     );
+          //     break;
+          //   case 'Point':
+          //     graphicSymbol = new SimpleMarkerSymbol(
+          //       SimpleMarkerSymbol.STYLE_CIRCLE,
+          //       5,
+          //       new SimpleLineSymbol(
+          //         SimpleLineSymbol.STYLE_SOLID,
+          //         new Color('red'),
+          //         1
+          //       ),
+          //       new Color('blue'),
+          //     );
+          //     break;
+          // }
+
           const esriJson = geoJsonUtils.geojsonToArcGIS(cartoGeoJson);
           esriJson.forEach((feature) => {
             // create a graphic out of the feature
@@ -162,9 +206,7 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
             }
             
             // create a symbolMap above and get the symbol colors from that
-              
             let graphicSymbol;
-
             switch (graphic.geometry.type) {
               case 'polygon':
                 graphicSymbol = new SimpleFillSymbol(
@@ -190,7 +232,6 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
                 );
                 break;
             }
-              
             graphic.setSymbol(graphicSymbol);
 
             const popup = {
@@ -221,6 +262,7 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         esriLayer,
         order: idx + 1,
         id: esriLayer.id,
+        type: 'carto',
         label: {
           [lang]: tableName,
         },

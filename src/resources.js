@@ -65,8 +65,8 @@ export default {
   analyticsCode: '',
   includeCartoTemplateLayers: true,
   cartoUser: 'wri-01',
-  cartoTemplateId: 'tpl_c4ffec3c_1e29_11e7_8fcd_0e05a8b3e3d7',
-  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  // cartoTemplateId: 'tpl_c4ffec3c_1e29_11e7_8fcd_0e05a8b3e3d7',
+  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
   cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
   cartoGroupLabel: {
     en: 'Carto Layers',
