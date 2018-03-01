@@ -96,7 +96,7 @@ function reduceCarto (rawResults) {
   if(name) { results.name = name; }
   if(license) { results.license = name; }
   if(title) { results.title = title; }
-  if (related_tables[0].synchronization.url) { results.download_data = related_tables[0].synchronization.url; }
+  if (related_tables[0].synchronization && related_tables[0].synchronization.url) { results.download_data = related_tables[0].synchronization.url; }
   if (tags) {
     const keywords = [];
     for (let i = 0; i < tags.length; i++) {

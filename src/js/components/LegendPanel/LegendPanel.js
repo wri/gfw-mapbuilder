@@ -23,7 +23,7 @@ export default class LegendPanel extends Component {
 
   componentDidMount() {
     if (window && window.innerWidth > 950) {
-      mapActions.toggleLegendVisible();
+      mapActions.toggleLegendVisible.defer();
     }
   }
 

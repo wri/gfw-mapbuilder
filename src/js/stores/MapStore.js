@@ -70,6 +70,7 @@ class MapStore {
     this.legendOpacity = {};
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
+    this.fetchingCartoData = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -483,6 +484,10 @@ class MapStore {
 
   updateExclusiveRadioIds (ids) {
     this.exclusiveLayerIds = ids;
+  }
+
+  fetchingCartoData(bool) {
+    this.fetchingCartoData = bool;
   }
 }
 

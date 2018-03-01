@@ -104,6 +104,8 @@ class LayerActions {
     return symbol;
   }
 
+  fetchingCartoData = bool => bool;
+
 }
 
 export default dispatcher.createActions(LayerActions);

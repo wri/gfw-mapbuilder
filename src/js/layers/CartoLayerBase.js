@@ -15,6 +15,7 @@ import dojoJSON from 'dojo/json';
 import {urls} from 'js/config';
 import Color from 'esri/Color';
 import declare from 'dojo/_base/declare';
+import * as topojson from 'topojson-client';
 
 export default declare('CartoLayer', [GraphicsLayer], {
   /*
@@ -28,16 +29,20 @@ export default declare('CartoLayer', [GraphicsLayer], {
     const { cartoColor, cartoIcon, cartoUser, cartoQuery, cartoDataType, cartoLineWidth, popup, id, cartoApiKey, cartoTemplateId } = resource;
     this.cartoUser = cartoUser;
     this.cartoTemplateId = cartoTemplateId;
-    this.infoTemplate = popup || null;
-    this.cartoQuery = cartoQuery;
+    this.infoTemplate = null;
+    // this.cartoQuery = cartoQuery;
     this.cartoApiKey = cartoApiKey;
-    this.cartoColor = cartoColor;
-    this.cartoIcon = cartoIcon;
-    this.cartoDataType = cartoDataType;
-    this.cartoLineWidth = cartoLineWidth;
-    this.id = id;
+    // this.cartoColor = cartoColor;
+    // this.cartoIcon = cartoIcon;
+    // this.cartoDataType = cartoDataType;
+    // this.cartoLineWidth = cartoLineWidth;
+    // this.id = id;
     this.visible = false;
-    this.cartoLayers = null;
+    // this.cartoLayers = null;
+  },
+
+  init: function() {
+    console.log('Getting started');
   },
 
   /*
@@ -71,6 +76,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
   },
 
   processCartoCSS: function(cartoCSS, type) {
+    console.log(cartoCSS, type);
     const cartoObj = {};
     const esriObj = {};
     const esriObjLineSymbol = {};
@@ -90,15 +96,16 @@ export default declare('CartoLayer', [GraphicsLayer], {
     switch(type) {
       case 'Point':
         cartoObj['marker-opacity'] = cartoObj['marker-opacity'] ? cartoObj['marker-opacity'] : 1;
-        esriObj.color = this.convertHex(cartoObj['marker-fill'], cartoObj['marker-opacity']);
-        esriObj.size = cartoObj['marker-width'];
+        esriObj.color = this.convertHex(cartoObj['marker-fill'], Number(cartoObj['marker-opacity']));
+        esriObj.size = Number(cartoObj['marker-width']);
         esriObj.style = 'STYLE_CIRCLE';
-        esriObjLineSymbol.width = cartoObj['marker-line-width'];
+        esriObjLineSymbol.width = Number(cartoObj['marker-line-width']);
         break;
       case 'MultiPolygon':
-        esriObj.color = this.convertHex(cartoObj['polygon-fill'], cartoObj['polygon-opacity']);
-        esriObjLineSymbol.color = this.convertHex(cartoObj['line-color'], cartoObj['line-opacity']);
-        esriObjLineSymbol.width = cartoObj['line-width'];
+        const polygonFill = cartoObj['polygon-fill'] || '#000';
+        esriObj.color = this.convertHex(polygonFill, Number(cartoObj['polygon-opacity']));
+        esriObjLineSymbol.color = this.convertHex(cartoObj['line-color'], Number(cartoObj['line-opacity']));
+        esriObjLineSymbol.width = Number(cartoObj['line-width']);
         break;
       case 'Polyline':
         // TODO but chances are we are not going to see any polylines
@@ -108,6 +115,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
   },
 
   convertHex: function(hex, opacity){
+    console.log(hex);
     const result = [];
     hex = hex.replace('#', '');
     hex = hex.length === 3 ? hex.repeat(2) : hex;
@@ -125,14 +133,20 @@ export default declare('CartoLayer', [GraphicsLayer], {
    * @param {string} queryString
    */
   query: function(cartoQuery, cartoTemplate, layerNumber, layerIndex, cartocss, layerName, cartoLayers, resolve, reject) {
+    // cartoQuery += ' WHERE cartodb_id < 10000';
     var _url = urls.cartoDataEndpoint(this.cartoUser, cartoQuery, this.cartoApiKey);
-    var esriJsonLayer = [];
-    request.id = 2;
+    // var esriJsonLayer = [];
+    // request.id = 2;
 
-    request(_url, {timeout: 5000}).then((data) => {
-
-      var geojson = dojoJSON.parse(data);
-      const meta = this.setMetadataFields(geojson.features[0].properties, layerNumber);
+    request(_url, {timeout: 30000}).then((data) => {
+      const parsedData = JSON.parse(data);
+      const geometryObjects = {...parsedData.objects};
+      parsedData.objects = {
+        geometries: Object.entries(geometryObjects).map(entry => entry[1]),
+        type: 'GeometryCollection'
+      };
+      var geojson = topojson.feature(parsedData, parsedData.objects);
+      // const meta = this.setMetadataFields(geojson.features[0].properties, layerNumber);
       const { esriObj, esriObjLineSymbol } = this.processCartoCSS(cartocss, geojson.features[0].geometry.type);
       this.setParameters(geojson.features[0].geometry.type, esriObj, esriObjLineSymbol);
       const esriJson = geojsonUtil.geojsonToArcGIS(geojson);
@@ -160,7 +174,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
             });
           }
 
-          esriJsonLayer.push(graphic);
+          // esriJsonLayer.push(graphic);
         }
       });
 
@@ -195,6 +209,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
     // Making a call to get the Carto template
     request(_url).then((template) => {
       json = dojoJSON.parse(template);
+      console.log(JSON.parse(template));
       const layers = json.template.layergroup.layers;
       const cartoMapID = json.template.layergroup.stat_tag;
       const cartoLayers = resources.layerPanel.GROUP_CARTO.layers;
@@ -255,7 +270,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
               }
             });
           });
-          // layerActions.updateCartoSymbol(cartoLayers);
+          layerActions.updateCartoSymbol.defer(cartoLayers);
         });
         // Removing the first carto layer as it is the template
         cartoLayers.shift();
