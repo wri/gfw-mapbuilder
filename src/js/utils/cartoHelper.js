@@ -66,13 +66,21 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
       // so we should be able to take this and create some symbol for
       // each feature where it has 'someAttribute' = 'value'
       // we will just need to match the css rules to symbol values
+
+      const cssReplacementMap = new Map();
+      cssReplacementMap.set(new RegExp(tableName, 'g'), `${tableName}_layer path`);
+      cssReplacementMap.set(/.*?-fill/g, 'fill');
+      cssReplacementMap.set(/polygon/g, 'fill');
+      cssReplacementMap.set(/line/g, 'stroke');
+      // This one will need to be dynamic, I think we will have to do this after we have all of the column names
+      cssReplacementMap.set(/depth/g, 'data-depth');
+
+
       let esriCss = cartoCss;
       const styleTag = document.createElement('style');
-      esriCss = esriCss.replace(/peat/g, 'peat_07c315f8-c13e-11e4-b457-0e8dde98a187_layer path');
-      esriCss = esriCss.replace(/depth/g, 'data-depth');
-      esriCss = esriCss.replace(/.*?-fill/g, 'fill');
-      esriCss = esriCss.replace(/polygon/g, 'fill');
-      esriCss = esriCss.replace(/line/g, 'stroke');
+      for (const [value, replacement] of cssReplacementMap) {
+        esriCss = esriCss.replace(value, replacement);
+      }
       styleTag.innerHTML = esriCss;
       document.body.appendChild(styleTag);
       // const singleLineCss = cartoCss.replace(/[\r\n]/g, '');
@@ -121,10 +129,9 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         
       // });
       // console.log(splitCss);
-      const layerId = id ? id : `${layerName}_${templateKey}`;
       // create a CartoLayer/GraphicsLayer for this layer
       const esriLayer = new GraphicsLayer({
-        id: layerId,
+        id: tableName,
         visible: false,
         styling: false, // so we can style with css
         dataAttributes: ['depth'],
