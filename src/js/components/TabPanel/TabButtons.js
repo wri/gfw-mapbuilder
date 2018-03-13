@@ -146,7 +146,7 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          {!settings.includeMeasurementsTab ? null :
+          {!settings.includeMeasurementTab ? null :
             <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
               <svg className='svg-icon'>
                 <use xlinkHref="#icon-measure" />
