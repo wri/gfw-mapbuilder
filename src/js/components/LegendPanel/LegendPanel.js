@@ -219,7 +219,7 @@ export default class LegendPanel extends Component {
         }
       }
 
-      const esriLayer = layer.esriLayer || layer;
+      const esriLayer = layer.esriLayer;
 
       return <WebMapLegend
         key={layer.subId}
@@ -235,7 +235,7 @@ export default class LegendPanel extends Component {
 
 
     } else {
-      const esriLayer = layer.esriLayer || layer;
+      const esriLayer = layer.esriLayer;
 
       if (esriLayer.type === 'Feature Layer') {
         return <WebMapFeatureLayerLegend
