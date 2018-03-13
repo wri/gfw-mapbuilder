@@ -72,17 +72,20 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
       cssReplacementMap.set(/.*?-fill/g, 'fill');
       cssReplacementMap.set(/polygon/g, 'fill');
       cssReplacementMap.set(/line/g, 'stroke');
-      // This one will need to be dynamic, I think we will have to do this after we have all of the column names
-      cssReplacementMap.set(/depth/g, 'data-depth');
+
+      // for paterns we need to create a pattern out of the url
+      // <defs>
+      //   <pattern id="someId">
+      //     <image xlink:href={url}/>
+      //   </pattern>
+      // </defs>
+      // then replace it with fill: url(#someId)
+
+      // cssReplacementMap.set(/fill-pattern-file/g, 'fill');
+      // cssReplacementMap.set(/fill-pattern-opacity/g, 'fill-opacity');
 
 
-      let esriCss = cartoCss;
-      const styleTag = document.createElement('style');
-      for (const [value, replacement] of cssReplacementMap) {
-        esriCss = esriCss.replace(value, replacement);
-      }
-      styleTag.innerHTML = esriCss;
-      document.body.appendChild(styleTag);
+
       // const singleLineCss = cartoCss.replace(/[\r\n]/g, '');
       // const cssRuleType = singleLineCss.match(/\/\*\* (.*?) \*\//)[1].split(' ')[1].toLowerCase();
       // const splitCss = singleLineCss.replace(cssRuleType, '').replace(/ |\/\*\*|\*\//g, '').split('}');
@@ -143,10 +146,26 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
       const columnQueryUrl = `https://${cartoUser}.cartodb.com/api/v2/sql?format=JSON&q=${columnQuery}&api_key=${cartoApiKey}`;
       request(columnQueryUrl).then((columnRes) => {
         const columnJSON = JSON.parse(columnRes);
-        const columnsToQuery = columnJSON.rows.reduce((prevVal, currentVal) => {
-          if (currentVal.column_name.includes('the_geom')) { return prevVal; }
-          return prevVal + `, ${currentVal.column_name}`;
+        const columnNames = columnJSON.rows.map(row => row.column_name);
+        const columnsToQuery = columnNames.reduce((prevVal, currentVal) => {
+          if (currentVal.includes('the_geom')) { return prevVal; }
+          return prevVal + `, ${currentVal}`;
         }, '');
+
+        // create replacements for all of the column names in case
+        // there is some cartoCSS that targets that attribute
+        columnNames.forEach((name) => {
+          cssReplacementMap.set(new RegExp(name, 'g'), `data-${name}`);
+        });
+
+        // create the style tag and add it to the page
+        let esriCss = cartoCss;
+        const styleTag = document.createElement('style');
+        for (const [value, replacement] of cssReplacementMap) {
+          esriCss = esriCss.replace(value, replacement);
+        }
+        styleTag.innerHTML = esriCss;
+        document.body.appendChild(styleTag);
 
         // columnsToQuery also happens to be all of our dataAttributes
         // that we can use to style the layer with css
@@ -154,7 +173,7 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         // we might not need this, i don't know yet
 
         // simplify the geometries
-        const tableQueryWithSimplify = tableQuery.replace('*', `ST_Simplify(the_geom, 0.1, true) AS the_geom${columnsToQuery}`);
+        const tableQueryWithSimplify = tableQuery.replace('*', `ST_Simplify(the_geom, 0.001, true) AS the_geom${columnsToQuery}`);
         queryString = queryString.replace(tableQuery, tableQueryWithSimplify);
         queryString += ' LIMIT 10000';
         // make a request to the carto sql api with the sql from the layer
