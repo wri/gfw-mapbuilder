@@ -504,8 +504,9 @@ export default class Map extends Component {
     if (!webmapGroup.label.hasOwnProperty(language)) {
       if (settings.alternativeLanguage === language) {
         webmapGroup.label[language] = settings.alternativeWebmapMenuName;
+      } else {
+        webmapGroup.label[language] = settings.webmapMenuName;
       }
-      webmapGroup.label[language] = settings.webmapMenuName;
     }
 
     mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
