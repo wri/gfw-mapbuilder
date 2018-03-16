@@ -130,22 +130,27 @@
     top 2px
 
 .analysis-results__select-form
-  position relative
-  top 50px
-  width 90%
-  padding-left 10px;
+  max-height calc(100% - 200px)
+  overflow auto
   .analysis-results__select-form-item-container
     display flex
     flex-direction column
     width 100%
     height 60px
     justify-content space-around
-    margin-bottom: 20px
+    margin-bottom 20px
     .select-form-item
       width 90%
       align-self center
     .canopy-label
       font-size 14px
+  .item-title
+    font-size 16px
+    font-weight bold
+    margin-top 10px
+  .item-description
+    font-size 12px
+    margin-bottom 20px
 
 .analysis-datepicker-button-label
   margin-right: 10px
@@ -183,10 +188,14 @@
   left 0
   top 0
 
+.analysis-results__container
+  // height 90%
+
 .analysis-results__content
   position absolute
   overflow auto
   width 100%
+  height calc(100% - 35px)
   padding 10px
   bottom 100px
   right 0
@@ -194,6 +203,32 @@
   top 0
   .analysis-results__chart-component-container
     width 100%
+
+.analysis-results__none-selected
+  display flex
+  flex-direction column
+  justify-content space-between
+  align-items center
+  width 100%
+  .analysis-results__info-container
+    position relative
+    top 50px
+    width 95%
+    .analysis-results__chart-icon
+      filter blur(5px)
+      opacity 0.15
+      height 180px
+      margin-bottom 50px
+    .analysis-results__info
+      position absolute
+      top 40px
+      width 100%
+      color $darkGray
+      font-size 20px
+  .other-options-info
+    position: absolute;
+    bottom: 5;
+    padding: 0 10px;
 
 .analysis-results__footer
   position absolute

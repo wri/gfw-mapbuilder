@@ -45,11 +45,11 @@ export default class AnalysisTypeSelect extends Component {
     const { uiParams } = analysisConfig;
     const formComponents = [];
     if (uiParams === 'none') {
-      return <div
+      formComponents.push(<div
         className='analysis-results__select-form-item-container'
       >
         Click the &lsquo;Run Analysis&rsquo; button see analysis
-      </div>;
+      </div>);
     }
 
     if (!uiParams || uiParams.length === 0) {
@@ -285,25 +285,53 @@ export default class AnalysisTypeSelect extends Component {
     const { activeAnalysisType, analysisItems, chartVisible } = this.props;
     const { language } = this.context;
 
+    let activeAnalysisItem;
+    let activeItemTitle = null,
+        activeItemDescription = null;
+
+    if (activeAnalysisType !== 'default') {
+      activeAnalysisItem = analysisItems.filter(i => i.analysisId === activeAnalysisType)[0];
+      if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
+      if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
+    }
+
     return (
-      <div className='relative analysis-results__select-container'>
-        <select
-          value={activeAnalysisType || 'default'}
-          className='analysis-results__select pointer'
-          onChange={this.handleChange}
-        >
-          <option
-            value='default'
-            disabled={activeAnalysisType !== 'default'}
+      <div className='analysis-results__container'>
+        <div className='relative analysis-results__select-container'>
+          <select
+            value={activeAnalysisType || 'default'}
+            className='analysis-results__select pointer'
+            onChange={this.handleChange}
           >
-            {text[language].DEFAULT_ANALYSIS_LABEL}
-          </option>
-          {analysisItems.map(this.createOptions)}
-        </select>
-        <div className='analysis-results__select-arrow' />
-        <div className='analysis-results__select-form'>
-          {activeAnalysisType !== 'default' && !chartVisible && this.getFormComponents(activeAnalysisType, analysisItems)}
+            <option
+              value='default'
+              disabled={activeAnalysisType !== 'default'}
+            >
+              {text[language].DEFAULT_ANALYSIS_LABEL}
+            </option>
+            {analysisItems.map(this.createOptions)}
+          </select>
+          <div className='analysis-results__select-arrow' />
         </div>
+        {activeAnalysisType !== 'default' && !chartVisible &&
+          <div className='analysis-results__select-form custom-scroll'>
+            <div className='item-title'>{activeItemTitle}</div><div className='item-description'>{activeItemDescription}</div>
+            {this.getFormComponents(activeAnalysisType, analysisItems)}
+          </div>
+        }
+        {activeAnalysisType === 'default' &&
+          <div className='analysis-results__none-selected'>
+            <div className='analysis-results__info-container'>
+              <div className='analysis-results__chart-icon chart-icon' />
+              <div className='analysis-results__info'>
+                Select an analysis from the drop down menu, configure parameters, then click run to see the results
+              </div>
+            </div>
+            <div className='other-options-info'>
+              You can also print a report showing all analyses or subscribe to receive alerts for the selected area.
+            </div>
+          </div>
+        }
       </div>
     );
   }

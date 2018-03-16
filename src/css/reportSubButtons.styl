@@ -1,30 +1,54 @@
 .report-sub-buttons
   justify-content center
   align-items center
+  background-color $lightGrayHighlight
   display flex
+  height 35px
 
 .report-sub-buttons button, .subscription-sub-buttons button
   text-transform uppercase
   -webkit-appearance none
+  height 100%
+  width 50%
   font-weight 500
-  margin 10px 5px
   font-size 13px
-  padding 0 20px
   outline none
-  color white
   border none
-  &:active
-    box-shadow 0 0 2px $darkGray
+  color $darkGray
+  background-color inherit
+  &.left-border-separator
+    border-left 2px solid $darkGray
+  &:hover
+    background-color $goldTheme
+    color darken($darkGray, 30%)
 
-
-.subscription-sub-buttons button
-  justify-content right
-  align-items right
+.run-analysis-button-container
   display flex
-  float left
+  flex-direction column
+  justify-content space-around
+  align-items center
+  height 150px
+  width 100%
+  .run-analysis-button
+    border 2px solid $goldTheme
+    height 75px
+    width 75px
+    border-radius 50%
+    polygon
+      stroke $goldTheme
+      fill $goldTheme
+      stroke-width: 10px;
+      stroke-linejoin: round;
 
-.subscription-sub-buttons button:last-of-type
-  justify-content left
-  align-items left
-  display flex
-  float right
+
+// .subscription-sub-buttons button
+//   justify-content right
+//   align-items right
+//   display flex
+//   float left
+
+// .subscription-sub-buttons button:last-of-type
+//   justify-content left
+//   align-items left
+//   display flex
+//   float right

@@ -329,10 +329,18 @@ export default class Analysis extends Component {
           }
         </div>
         <div className='analysis-results__footer'>
-          {activeAnalysisType !== 'default' && !chartComponent && <div className='report-sub-buttons'>
-            <button className='fa-button gold' onClick={this.runAnalysis}>
-              {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+          {activeAnalysisType !== 'default' && !chartComponent && <div className='run-analysis-button-container'>
+            <div className='analysis-instructions__separator'>
+              <span className='analysis-instructions__separator-text'>Then</span>
+            </div>
+            <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+              <svg height='100%' width='100%' viewBox='0 0 75 75'>
+                <polygon points='25 15, 60 37.5, 25 60'/>
+              </svg>
             </button>
+            <div>
+              {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+            </div>
           </div>}
           <ReportSubscribeButtons setLoader={this.setLoader} />
         </div>

@@ -138,6 +138,12 @@ export default {
       label: {
         en: 'Total Tree Cover Loss/Gain',
       },
+      title: {
+        en: 'Forest Loss Analysis'
+      },
+      description: {
+        en: 'Select range and tree cover density then click the "run analysis" button to see results'
+      },
       chartType: 'badge',
       valueAttribute: 'data.attributes.loss',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',

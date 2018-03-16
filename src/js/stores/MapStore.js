@@ -501,7 +501,6 @@ class MapStore {
         ...(params.paramName ? { [params.paramName]: params.paramValue } : {})
       };
     }
-    console.log(this.analysisParams);
   }
 
   updateAnalysisSliderIndices(params) {

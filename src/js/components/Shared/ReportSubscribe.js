@@ -77,11 +77,11 @@ export default class ReportSubscribeButtons extends Component {
 
     return (
       <div className='report-sub-buttons'>
-        <button className='fa-button gold' onClick={this.printReport}>
+        <button className='report-sub-button pointer' onClick={this.printReport}>
           {text[language].PRINT_REPORT}
         </button>
         {!isLoggedIn ? null :
-          <button className='fa-button gold' onClick={this.toggleSubscribe}>
+          <button className='report-sub-button pointer left-border-separator' onClick={this.toggleSubscribe}>
             {text[language].SUBSCRIBE}
           </button>
         }
