@@ -146,15 +146,17 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
-            <svg className='svg-icon'>
-              <use xlinkHref="#icon-measure" />
-            </svg>
-            <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
-            <span className='tab-buttons__tab-label mobile-show'>
-              {text[language].MEASUREMENT}
-            </span>
-          </li>
+          {!settings.includeMeasurementTab ? null :
+            <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
+              <svg className='svg-icon'>
+                <use xlinkHref="#icon-measure" />
+              </svg>
+              <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
+              <span className='tab-buttons__tab-label mobile-show'>
+                {text[language].MEASUREMENT}
+              </span>
+            </li>
+          }
           {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <use xlinkHref="#icon-analysis" />

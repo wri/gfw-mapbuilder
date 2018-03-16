@@ -85,13 +85,15 @@ export default class TabView extends Component {
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].DATA}</h3>
           <InfoWindow map={map} />
         </div>
-        <div className={this.getClassName(MEASUREMENT)}>
-          <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-            <svg><use xlinkHref="#shape-close" /></svg>
+        {!settings.includeMeasurementTab ? null :
+          <div className={this.getClassName(MEASUREMENT)}>
+            <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
+              <svg><use xlinkHref="#shape-close" /></svg>
+            </div>
+            <h3 className='tab-view__mobile-header mobile-show'>{text[language].MEASUREMENT}</h3>
+            <Measurement activeWebmap={this.props.activeWebmap} />
           </div>
-          <h3 className='tab-view__mobile-header mobile-show'>{text[language].MEASUREMENT}</h3>
-          <Measurement activeWebmap={this.props.activeWebmap} />
-        </div>
+        }
         <div className={this.getClassName(ANALYSIS)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
             <svg><use xlinkHref="#shape-close" /></svg>
