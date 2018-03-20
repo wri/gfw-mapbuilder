@@ -39,6 +39,11 @@ test('analysis module spec', () => {
       expect(module.chartType).not.toEqual('biomassLoss');
     }
 
+    if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chartType === 'badge') {
+      expect(module).toHaveProperty('badgeLabel');
+      expect(module.badgeLabel).toHaveProperty(resources.language);
+    }
+
     if (module.chartType === 'bar') {
       expect(module).toHaveProperty('chartBounds');
       expect(module.chartBounds).toBeInstanceOf(Array);
@@ -81,7 +86,7 @@ test('analysis module spec', () => {
               expect(uiParam).toHaveProperty('endParamName');
             }
           }
-          
+
           if (uiParam.minDate) { expect(uiParam.minDate).toMatch(/\d{4}-\d{2}-\d{2}/); }
         }
       });
