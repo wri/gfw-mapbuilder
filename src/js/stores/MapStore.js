@@ -305,7 +305,7 @@ class MapStore {
   }
 
   setAnalysisType (payload) {
-    this.activeAnalysisType = payload.type;
+    this.activeAnalysisType = payload;
   }
 
   toggleAnalysisModal (payload) {

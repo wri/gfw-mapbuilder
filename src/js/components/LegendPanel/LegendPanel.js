@@ -232,7 +232,7 @@ export default class LegendPanel extends Component {
         }
       }
 
-      const esriLayer = layer.esriLayer || layer;
+      const esriLayer = layer.esriLayer;
 
       return <WebMapLegend
         key={layer.subId}
@@ -248,7 +248,7 @@ export default class LegendPanel extends Component {
 
 
     } else {
-      const esriLayer = layer.esriLayer || layer;
+      const esriLayer = layer.esriLayer;
 
       if (esriLayer.type === 'Feature Layer') {
         return <WebMapFeatureLayerLegend
@@ -272,17 +272,20 @@ export default class LegendPanel extends Component {
           defaultOpacity={esriLayer.opacity || 1}
         />;
       } else {
-        if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
-          esriLayer.layerId = esriLayer.layerInfos[0].id;
+        if (!layer.layerIds) {
+          throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
         }
-
+        // if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
+        //   esriLayer.layerId = esriLayer.layerInfos[0].id;
+        // }
+        esriLayer.layerId = layer.layerIds[0];
         return <WebMapLegend
           key={layer.id}
           url={esriLayer.url}
           labels={layer.label[language]}
           visibility={activeLayers.indexOf(layer.id) > -1}
           visibleLayers={activeLayers}
-          layerId={esriLayer.layerId}
+          layerId={layer.layerIds || [0]}
           legendOpacity={legendOpacity}
           defaultOpacity={esriLayer.opacity || 1}
         />;

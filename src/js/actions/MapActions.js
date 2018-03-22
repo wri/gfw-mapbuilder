@@ -22,10 +22,8 @@ class MapActions {
     };
   }
 
-  setAnalysisType (evt) {
-    return {
-      type: evt.target.value
-    };
+  setAnalysisType (value) {
+    return value;
   }
 
   centerAndZoomLatLng (lat, lng) {

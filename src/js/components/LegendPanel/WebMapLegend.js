@@ -24,15 +24,9 @@ export default class WebMapLegend extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      url,
-      layerSubIndex,
-      layerId,
-    } = this.props;
-
-    const layerID = typeof layerSubIndex !== 'undefined' ? layerSubIndex : layerId;
-    const requestUrl = url.replace(/\d+$/, '');
-    Request.getLegendInfos(requestUrl, [layerID]).then(legendInfos => {
+    const layerID = typeof this.props.layerSubIndex !== 'undefined' ? [this.props.layerSubIndex] : this.props.layerId;
+    const url = this.props.url.replace(/\d+$/, '');
+    Request.getLegendInfos(url, layerID).then(legendInfos => {
       if(this.refs.myRef) {
         this.setState({ legendInfos: legendInfos });
       }
@@ -41,7 +35,7 @@ export default class WebMapLegend extends React.Component {
 
   itemMapper = (item, idx) => {
     return (
-      <div className='legend-row' key={item.url + idx}>
+      <div className='legend-row' key={String(item.url) + idx}>
         <img style={{'opacity': this.state.opacity}} className='legend-icon' title={item.label} src={`data:image/png;base64,${item.imageData}`} />
         <div className='legend-label'>{item.label}</div>
       </div>
