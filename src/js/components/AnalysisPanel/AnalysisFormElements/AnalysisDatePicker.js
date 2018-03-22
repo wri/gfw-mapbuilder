@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 
 
 
-export default class AnalysisRangeSlider extends Component {
+export default class AnalysisDatePicker extends Component {
   constructor(props) {
     super(props);
 

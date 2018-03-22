@@ -1,7 +1,7 @@
-import analysisKeys from 'constants/AnalysisConstants';
-import layerKeys from 'constants/LayerConstants';
+// import analysisKeys from 'constants/AnalysisConstants';
+// import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
-import appUtils from 'utils/AppUtils';
+// import appUtils from 'utils/AppUtils';
 import AnalysisRangeSlider from './AnalysisFormElements/AnalysisRangeSlider';
 import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
 import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
@@ -19,11 +19,6 @@ export default class AnalysisTypeSelect extends Component {
     settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
   };
-
-  constructor (props, context) {
-    super(props, context);
-    this.state = {};
-  }
 
   createOptions = (analysisObj) => {
     const { language } = this.context;

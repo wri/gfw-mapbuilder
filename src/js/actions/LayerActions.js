@@ -32,8 +32,8 @@ class LayerActions {
 
   removeAllSubLayers (info) {
     return info;
-    }
-  
+  }
+
   setSubLayers (id, ...subIndexes) {
     return {
       id,

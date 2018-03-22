@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Slider from 'rc-slider';
-import MapActions from '../../../actions/MapActions';
+import MapActions from 'actions/MapActions';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
