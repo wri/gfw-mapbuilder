@@ -159,7 +159,7 @@ class MapActions {
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
 
-      uniqueLayers.reverse().forEach((l, i) => {
+      uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i);
       });
 

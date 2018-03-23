@@ -45,7 +45,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
-import { wmsClick, getWMSFeatureInfo } from 'utils/wmsUtils';
+import { wmsClick, getWMSFeatureInfo, createWMSGraphics } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -204,63 +204,25 @@ export default class Map extends Component {
             // don't run this function if we are drawing a custom shape
             return;
           }
-          console.log(brApp.map.layerIds);
-          console.log(brApp.map.getLayer('TectonicPlates_9582'));
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
             .map(wmsId => brApp.map.getLayer(wmsId))
             .filter(layer => layer.visible);
-          console.log(wmsLayers);
 
           if (wmsLayers.length) {
             wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
-              console.log(responses);
-              const layer = brApp.map.getLayer(layerKeys.USER_FEATURES);
               const wmsGraphics = [];
+
               Object.keys(responses).forEach(layerId => {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
-                  responses[layerId].forEach((feature) => {
-                    console.log(feature);
-                    const { attributes, geometry } = feature;
-
-                    if (layer) {
-                      let infoTemplateContent = '<div class="esriViewPopup"><div class="mainSection">';
-                      infoTemplateContent + Object.keys(attributes).map(attr => {
-                        return (
-                          '<div class="esriViewPopup"><div class="mainSection">'
-                          +
-                          + '</table></div></div>'
-                        );
-                      });
-                      const graphic = new Graphic(
-                        geometry,
-                        symbols.getCustomSymbol(),
-                        {
-                          ...attributes,
-                        },
-                        new InfoTemplate({
-                          title: '${id}',
-                          content: (() => {
-                            '<div class=\'custom-feature__content\'>Temp Id: ${id}</div>'
-                          })()
-                        })
-                      );
-                      wmsGraphics.push(graphic);
-                    }
-                  });
+                  createWMSGraphics(responses, layerId, wmsGraphics);
                   brApp.map.infoWindow.setFeatures(wmsGraphics);
                 } else {
-                  console.error('error:', responses[layerId].error);
+                  console.error(`error: ${responses[layerId].error}`);
                 }
               });
             });
           }
-
-          // getWMSFeatureInfo(evt, 'http://cartocritica.mx/geoserver/Tenencia/wms', 'Tenencia:NucleosAgrarios_2015nov', response.map.extent).then((features) => {
-        //   getWMSFeatureInfo(evt, 'https://ahocevar.com/geoserver/wms', 'topp:states', response.map.extent).then((features) => {
-        //     const layer = response.map.getLayer(layerKeys.USER_FEATURES);
-        //     const wmsGraphics = [];
-        //   });
         });
 
         //- Add click event for user-features layer

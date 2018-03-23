@@ -1,5 +1,8 @@
 import esriRequest from 'esri/request';
 import esriConfig from 'esri/config';
+import Graphic from 'esri/graphic';
+import InfoTemplate from 'esri/InfoTemplate';
+import symbols from 'utils/symbols';
 import geometryUtils from './geometryUtils';
 import geojsonUtil from './arcgis-to-geojson';
 import Deferred from 'dojo/Deferred';
@@ -36,9 +39,8 @@ export const getWMSFeatureInfo = (evt, url, layerName, extent) => {
         const convertedFeature = {};
         // convert feature geometry to esri geometry
         const esriGeometry = geojsonUtil.geojsonToArcGIS(feature.geometry);
-        console.log(esriGeometry);
-        // create a polygon from esri geometry
-        const geometry = geometryUtils.generatePolygonInSr(esriGeometry, esriGeometry.spatialReference.wkid);
+        // create a polygon from esri geometry in WebMercator
+        const geometry = geometryUtils.generatePolygonInSr(esriGeometry, 102100);
         // populate the new feature object with the converted geometry and attributes
         convertedFeature.geometry = geometry;
         convertedFeature.attributes = feature.properties || {};
@@ -52,7 +54,9 @@ export const getWMSFeatureInfo = (evt, url, layerName, extent) => {
       deferred.resolve(convertedFeatures);
     }
   }, () => {
-    deferred.resolve({ error: 'an error occurred while getting feature info' });
+    deferred.resolve({
+      error: 'an error occurred while getting feature info. This usually means layer \'' + layerName + '\' is not queryable'
+    });
   });
   return deferred;
 };
@@ -73,7 +77,9 @@ export const getWMSLegendGraphic = (url, layerName, version) => {
     handleAs: 'blob',
   }).then((res) => {
     if (res.type !== 'image/png') {
-      deferred.resolve({ error: 'there was an error retrieving legend info'});
+      deferred.resolve({
+        error: 'there was an error retrieving legend info. Expected type: \'image/png\', got \'' + res.type + '\''
+      });
       return;
     }
     const reader = new FileReader();
@@ -100,4 +106,36 @@ export const wmsClick = (evt, layers, extent) => {
     wmsPromises[layer.id] = getWMSFeatureInfo(evt, layer.url, layer.visibleLayers[0], extent);
   });
   return all(wmsPromises);
+};
+
+export const createWMSGraphics = (responses, layerId, wmsGraphics) => {
+  responses[layerId].forEach((feature) => {
+    const { attributes, geometry } = feature;
+
+    const attributesToSkip = [
+      'isWMSFeature'
+    ];
+
+    let infoTemplateContent = '<div class="esriViewPopup"><div class="mainSection">';
+    infoTemplateContent += '<table class="attrTable">';
+    Object.keys(attributes).forEach(attr => {
+      if (attributesToSkip.includes(attr)) { return; }
+
+      infoTemplateContent += '<tr><td class="attrName">' + attr + '</td>'
+        + '<td class="attrValue">' + attributes[attr] + '</td></tr>';
+    });
+    infoTemplateContent += '</table></div></div>';
+
+    const graphic = new Graphic(
+      geometry,
+      symbols.getCustomSymbol(),
+      {
+        ...attributes,
+      },
+      new InfoTemplate({
+        content: infoTemplateContent
+      })
+    );
+    wmsGraphics.push(graphic);
+  });
 };
