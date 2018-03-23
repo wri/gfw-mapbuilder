@@ -160,7 +160,7 @@ class MapActions {
       //- layers wont be sorted, they always show on top
 
       uniqueLayers.forEach((l, i) => {
-        map.reorderLayer(l, i);
+        map.reorderLayer(l, i + 1);
       });
 
       if (map.getLayer('labels')) {
