@@ -76,15 +76,6 @@ export default class CanopyModal extends Component {
     };
   }
 
-  componentDidMount() {
-    const { canopyDensity } = this.props;
-    const { map, settings } = this.context;
-
-    layersHelper.updateTreeCoverDefinitions(canopyDensity, map, settings.layerPanel);
-    layersHelper.updateAGBiomassLayer(canopyDensity, map);
-
-  }
-
   handleSliderChange = sliderValue => {
     const { sliderMarks } = this.state;
     const {map, settings} = this.context;
