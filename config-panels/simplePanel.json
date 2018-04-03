@@ -35,6 +35,7 @@
 		"hideFooter": false,
 		"includeMyGFWLogin": false,
 		"includeDocumentsTab": false,
+    "includeMeasurementTab": false,
 
 		"mapThemeIds": "",
 		"mapThemes": "",
