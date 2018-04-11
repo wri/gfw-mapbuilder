@@ -162,10 +162,8 @@
 							"tooltip": "Same Map Themes configured above but in your alternative language.",
 							"placeholder": "e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea"
 						}
-
 					]
 				}
-
 			]
 		}, {
 			"category": "Layer/ Analysis Settings",
@@ -256,13 +254,12 @@
 					"fieldName": "analyticsCode",
 					"label": "Google Analytics code",
 					"tooltip": "Please enter the google analytics code for your project"
-
 				}, {
 					"type": "boolean",
 					"fieldName": "includeMyGFWLogin",
 					"tooltip": "This will include/exclude the myGFW login and GFW alert  subscriptions",
 					"label": "Include myGFW login and alert subscriptions",
-					"value": false
+					"value": true
 				}, {
 					"type": "boolean",
 					"fieldName": "hideHeader",
@@ -281,6 +278,12 @@
 					"tooltip": "Attachments of feature layers will be shown in a separate tab",
 					"label": "Show attached documents in separate tab",
 					"value": false
+				}, {
+					"type": "boolean",
+					"fieldName": "includeMeasurementTab",
+					"tooltip": "Show measurement tools in separate tab",
+					"label": "Show measurement tool in separate tab",
+					"value": false
 				}
 			]
 		}
@@ -290,10 +293,10 @@
 		"useAlternativeLanguage": false,
 		"alternativeLanguage": "fr",
 		"mangroves": false,
-		"includeMyGFWLogin": false,
+		"includeMyGFWLogin": true,
 		"hideHeader": false,
 		"hideFooter": false,
-		"includeDocumentsTab": false
-
+		"includeDocumentsTab": false,
+    "includeMeasurementTab": false
 	}
 }
