@@ -41,6 +41,7 @@ import InfoTemplate from 'esri/InfoTemplate';
 import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
+import layersHelper from 'helpers/LayersHelper';
 import React, {
   Component,
   PropTypes
@@ -148,6 +149,7 @@ export default class Map extends Component {
 
   createMap = (webmap, options) => {
     const {language, settings} = this.context;
+    const { canopyDensity } = this.state;
 
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
       // Add operational layers from the webmap to the array of layers from the config file.
@@ -250,6 +252,10 @@ export default class Map extends Component {
             });
           }
         });
+
+        // This function needs to happen after the layer has loaded
+        // otherwise the layer breaks until you manually set the canopyDensity
+        layersHelper.updateAGBiomassLayer(canopyDensity, response.map);
       });
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);

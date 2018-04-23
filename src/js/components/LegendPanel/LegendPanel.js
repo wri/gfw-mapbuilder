@@ -272,13 +272,14 @@ export default class LegendPanel extends Component {
           defaultOpacity={esriLayer.opacity || 1}
         />;
       } else {
-        if (!layer.layerIds) {
+        if (!layer.layerIds && !esriLayer.tileInfo) {
           throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
         }
-        // if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
-        //   esriLayer.layerId = esriLayer.layerInfos[0].id;
-        // }
-        esriLayer.layerId = layer.layerIds[0];
+
+        if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
+          esriLayer.layerId = esriLayer.layerInfos[0].id;
+        }
+
         return <WebMapLegend
           key={layer.id}
           url={esriLayer.url}
