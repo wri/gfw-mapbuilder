@@ -8,20 +8,20 @@ import geojsonUtil from './arcgis-to-geojson';
 import Deferred from 'dojo/Deferred';
 import all from 'dojo/promise/all';
 
-export const getWMSFeatureInfo = (evt, url, layerName, extent) => {
+export const getWMSFeatureInfo = (evt, layer, extent) => {
   const deferred = new Deferred();
   const { xmin, ymin, xmax, ymax } = extent;
   esriRequest({
-    url: url,
+    url: layer.url,
     content: {
       REQUEST: 'GetFeatureInfo',
-      VERSION: '1.1.1',
+      VERSION: layer.version,
       SRS: 'EPSG:3857',
       BBOX: `${xmin},${ymin},${xmax},${ymax}`,
       WIDTH: window.innerWidth,
       HEIGHT: window.innerHeight,
-      QUERY_LAYERS: layerName,
-      LAYERS: layerName,
+      QUERY_LAYERS: layer.visibleLayers[0],
+      LAYERS: layer.visibleLayers[0],
       FEATURE_COUNT: 25,
       X: evt.screenPoint.x,
       Y: evt.screenPoint.y,
@@ -55,7 +55,7 @@ export const getWMSFeatureInfo = (evt, url, layerName, extent) => {
     }
   }, () => {
     deferred.resolve({
-      error: 'an error occurred while getting feature info. This usually means layer \'' + layerName + '\' is not queryable'
+      error: 'an error occurred while getting feature info. This usually means layer \'' + layer.visibleLayers[0] + '\' is not queryable'
     });
   });
   return deferred;
@@ -76,6 +76,7 @@ export const getWMSLegendGraphic = (url, layerName, version) => {
     },
     handleAs: 'blob',
   }).then((res) => {
+
     if (res.type !== 'image/png') {
       deferred.resolve({
         error: 'there was an error retrieving legend info. Expected type: \'image/png\', got \'' + res.type + '\''
@@ -90,6 +91,7 @@ export const getWMSLegendGraphic = (url, layerName, version) => {
     };
 
     reader.onerror = () => {
+      console.log('an error converting to BLKSDJFDSJF');
       deferred.resolve({ error: 'there was a problem converting to base64' });
     };
   }, (err) => {
@@ -103,7 +105,7 @@ export const wmsClick = (evt, layers, extent) => {
   const wmsPromises = {};
 
   layers.forEach(layer => {
-    wmsPromises[layer.id] = getWMSFeatureInfo(evt, layer.url, layer.visibleLayers[0], extent);
+    wmsPromises[layer.id] = getWMSFeatureInfo(evt, layer, extent);
   });
   return all(wmsPromises);
 };
