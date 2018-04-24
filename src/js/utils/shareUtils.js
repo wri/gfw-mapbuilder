@@ -1,3 +1,5 @@
+import utils from 'utils/AppUtils';
+
 export function prepareStateForShare (options) {
   const {map, settings, language, basemap, activeLayers, activeTab, gladStartDate,
     gladEndDate, canopyDensity, terraIStartDate, terraIEndDate, lossFromSelectIndex, lossToSelectIndex,
@@ -5,6 +7,7 @@ export function prepareStateForShare (options) {
     viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
   } = options;
   const shareState = {};
+
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
   //- Map Related Info
@@ -17,16 +20,45 @@ export function prepareStateForShare (options) {
   shareState.t = activeTab;
 
   if (activeLayers.length > 0) {
+    console.log('activeLayers', activeLayers);
     shareState.a = activeLayers;
     shareState.o = [];
     activeLayers.forEach(activeLayerId => {
-      const mapLayer = map.getLayer(activeLayerId);
+      let mapLayer = map.getLayer(activeLayerId);
+
+      if (!mapLayer) {
+        const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
+        const webmapLayerConfig = utils.getObject(webmapLayers, 'subId', activeLayerId);
+        console.log('webmapLayerConfig', webmapLayerConfig);
+
+        if (webmapLayerConfig) {
+          const id = webmapLayerConfig.id;
+          mapLayer = map.getLayer(id);
+        }
+      }
+
       if (mapLayer) {
-        shareState.o.push(mapLayer.opacity);
-      } else {
-        shareState.o.push(1);
+        if (mapLayer && !mapLayer.layerDrawingOptions && mapLayer.setOpacity) {
+          console.log(1);
+          console.log('setOpacity', mapLayer.setOpacity);
+          shareState.o.push(mapLayer.opacity);
+        } else if (mapLayer && mapLayer.layerDrawingOptions && mapLayer.visibleLayers) {
+          // console.log('setOpacity', mapLayer.opacity);
+          console.log('mapLayer.visibleLayers', mapLayer.visibleLayers);
+          console.log('mapLayer.layerDrawingOptions', mapLayer.layerDrawingOptions);
+          mapLayer.visibleLayers.forEach(visibleLayer => {
+            if (mapLayer.layerDrawingOptions[visibleLayer]) {
+              console.log(2);
+              shareState.o.push((100 - mapLayer.layerDrawingOptions[visibleLayer].transparency) / 100);
+            }
+          });
+        } else {
+          console.log(4);
+          shareState.o.push(1);
+        }
       }
     });
+    console.log('shareState.o', shareState.o);
   }
   if (canopyDensity !== 30) {
     shareState.c = canopyDensity;

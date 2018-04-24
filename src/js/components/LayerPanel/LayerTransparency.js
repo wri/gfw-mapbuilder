@@ -26,7 +26,15 @@ export default class LayerTransparency extends Component {
       this.props.initialLayerOpacities.forEach(opacity => {
         if (opacity.layerId === this.props.layer.id) {
           this.setState({ opacity: opacity.value });
+        } else if (opacity.layerId === this.props.layer.subId) {
+          this.setState({ opacity: opacity.value });
+          this.updateOpacity({
+            target: {
+              value: opacity.value
+            }
+          });
         }
+        //else if we have a sublayerId on opacity?! then we fire the local updateOpacity????
       });
     }
   }
@@ -53,7 +61,7 @@ export default class LayerTransparency extends Component {
       timer = setTimeout(function () {
         mapLayer.setLayerDrawingOptions(options);
       }, TIMER_DURATION);
-      layerActions.changeOpacity({
+      layerActions.changeOpacity.defer({
         layerId: layer.id,
         value
       });

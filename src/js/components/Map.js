@@ -40,7 +40,6 @@ import React, {
   Component,
   PropTypes
 } from 'react';
-import AppUtils from '../utils/AppUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -258,23 +257,91 @@ export default class Map extends Component {
   * like terrai & basemaps need to be set After our map has been loaded or layers have been added
   */
   applyLayerStateFromUrl = (map, itemData) => {
+    const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
 
+
     //- Set the default basemap in the store
     basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
-
+    console.log('GROUP_WEBMAP layers', settings.layerPanel.GROUP_WEBMAP.layers);
     if (params.b) {
       mapActions.changeBasemap(params.b);
     }
     if (params.a) {
+
+      // const alteredWebMapLayers
+
+      // const layerIds = params.a.split(',');
+      // const opacityValues = params.o.split(',');
+      // const opacityObjs = [];
+      // console.log('opacityValues', opacityValues);
+      // layerIds.forEach((layerId, j) => {
+      //   // TODO: Confirm this with layerIds and subId's!
+      //   if (webmapLayerIds.indexOf(layerId) === -1) {
+      //     layerActions.addActiveLayer(layerId);
+      //   }
+      //   if (opacityValues[j] !== 1) {
+      //     opacityObjs.push({
+      //       layerId: layerId,
+      //       value: parseFloat(opacityValues[j])
+      //     });
+      //
+      //     let mapLayer = map.getLayer(layerId);
+      //     // console.log('layerId', layerId);
+      //
+      //     if (!mapLayer) {
+      //       const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
+      //       const webmapLayerConfig = utils.getObject(webmapLayers, 'subId', layerId);
+      //
+      //       if (webmapLayerConfig) {
+      //         const id = webmapLayerConfig.id;
+      //         mapLayer = map.getLayer(id);
+      //         console.log('mapLayer', mapLayer);
+      //
+      //       }
+      //     }
+      //
+      //     if (mapLayer && mapLayer.setOpacity) {
+      //       mapLayer.setOpacity(opacityValues[j]);
+      //     } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
+      //       const options = mapLayer.layerDrawingOptions || [];
+      //       // Transparency is the reverse of other layers, 0.25 opacity = transparency of value 75
+      //       mapLayer.visibleLayers.forEach(visibleLayer => {
+      //         options[visibleLayer] = new LayerDrawingOptions({ transparency: 100 - (opacityValues[j] * 100) });
+      //       });
+      //       if (timer) { clearTimeout(timer); }
+      //       timer = setTimeout(function () {
+      //         mapLayer.setLayerDrawingOptions(options);
+      //       }, TIMER_DURATION);
+      //     } else {
+      //       console.log(mapLayer, 'We are not setting opacity for this layer type!');
+      //     }
+      //   }
+      // });
+
+
+      //Here
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
       const opacityObjs = [];
+
+      const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+      const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
+
+      console.log('webmapLayerConfigs', webmapLayerConfigs);
+      console.log('webmapLayerIds', webmapLayerIds);
+      console.log('layerIds', layerIds);
+      console.log('opacityValues', opacityValues); //TODO: Once these are correct (I think right now we have too many), use them on webmap layers!
+
+
       layerIds.forEach((layerId, j) => {
+        console.log('layerId', layerId);
         // TODO: Confirm this with layerIds and subId's!
-        layerActions.addActiveLayer(layerId);
-        if (opacityValues[j] !== 1) {
+        if (webmapLayerIds.indexOf(layerId) === -1) {
+          layerActions.addActiveLayer(layerId);
+        }
+        if (opacityValues[j] && opacityValues[j] !== 1) {
           opacityObjs.push({
             layerId: layerId,
             value: parseFloat(opacityValues[j])
@@ -294,11 +361,70 @@ export default class Map extends Component {
             timer = setTimeout(function () {
               mapLayer.setLayerDrawingOptions(options);
             }, TIMER_DURATION);
-          } else {
-            console.log('We are not setting opacity for this layer type!');
           }
         }
       });
+
+
+      if (webmapLayerIds.length > 0) { //TODO: This is for dynamicMapServiceLayers, what about FeatureLayers?!
+        const webmapIdConfig = {};
+
+        webmapLayerConfigs.forEach(webmapLayerConfig => {
+
+          if (webmapLayerConfig.subIndex === undefined) {
+            console.log('webmapLayerConfig', webmapLayerConfig);
+            const featLayer = map.getLayer(webmapLayerConfig.id);
+            if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
+              featLayer.hide();
+              layerActions.removeActiveLayer(webmapLayerConfig.id);
+            } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
+              featLayer.show();
+              layerActions.addActiveLayer(webmapLayerConfig.id);
+            }
+          } else {
+            if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
+            (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible)) {
+
+              if (!webmapIdConfig[webmapLayerConfig.id]) {
+                webmapIdConfig[webmapLayerConfig.id] = {
+                  layersToHide: [],
+                  layersToShow: []
+                };
+              }
+
+              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) {
+                webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
+              } else {
+                webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
+              }
+            }
+          }
+
+        });
+
+        console.log(webmapIdConfig);
+        Object.keys(webmapIdConfig).forEach(webmapId => {
+          const mapLaya = map.getLayer(webmapId);
+          const updateableVisibleLayers = mapLaya.visibleLayers.slice();
+
+          webmapIdConfig[webmapId].layersToHide.forEach(layerToHide => {
+            updateableVisibleLayers.splice(updateableVisibleLayers.indexOf(layerToHide), 1);
+            const subLayerConfig = utils.getObject(webmapLayerConfigs, 'subId', `${webmapId}_${layerToHide}`);
+            layerActions.removeSubLayer(subLayerConfig);
+          });
+          webmapIdConfig[webmapId].layersToShow.forEach(layerToShow => {
+            if (updateableVisibleLayers.indexOf(layerToShow) === -1) {
+              updateableVisibleLayers.push(layerToShow);
+              const subLayerConfig = utils.getObject(webmapLayerConfigs, 'subId', `${webmapId}_${layerToShow}`);
+              layerActions.addSubLayer(subLayerConfig);
+            }
+          });
+
+          mapLaya.setVisibleLayers(updateableVisibleLayers);
+
+        });
+      }
+      console.log('opacityObjsopacityObjsopacityObjsopacityObjsopacityObjsopacityObjs dont set if there are zero!!', opacityObjs);
 
       layerActions.setOpacities(opacityObjs);
     }
@@ -458,7 +584,7 @@ export default class Map extends Component {
           });
 
           groupLayers.forEach(gl => {
-            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
+            const layerConfigToReplace = utils.getObject(group.layers, 'id', gl.id);
             group.layers.splice(group.layers.indexOf(layerConfigToReplace), 1, gl);
           });
 
@@ -483,7 +609,7 @@ export default class Map extends Component {
             });
 
           layersFromWebmap.forEach(lfw => {
-            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', lfw.id);
+            const layerConfigToReplace = utils.getObject(group.layers, 'id', lfw.id);
             group.layers = [
               ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
               lfw,
@@ -513,7 +639,7 @@ export default class Map extends Component {
               });
 
             layersFromWebmap.forEach(nl => {
-              const layerConfigToReplace = AppUtils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
+              const layerConfigToReplace = utils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
               nestedGroup.nestedLayers = [
                 ...nestedGroup.nestedLayers.slice(0, nestedGroup.nestedLayers.indexOf(layerConfigToReplace)),
                 nl,

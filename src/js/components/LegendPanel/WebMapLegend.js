@@ -34,7 +34,7 @@ export default class WebMapLegend extends React.Component {
 
     this.props.initialLayerOpacities.forEach(opacity => {
       if (opacity.layerId === this.props.layerId) {
-        console.log(this.props);
+        // console.log(this.props);
         this.setState({ opacity: opacity.value });
       }
     });
