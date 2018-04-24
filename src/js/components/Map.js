@@ -43,8 +43,6 @@ import React, {
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
-const TIMER_DURATION = 200;
-let timer;
 
 const getTimeInfo = (operationalLayer) => {
   return operationalLayer.resourceInfo && operationalLayer.resourceInfo.timeInfo;
@@ -286,7 +284,7 @@ export default class Map extends Component {
 
           const mapLayer = map.getLayer(layerId);
 
-          if (mapLayer && mapLayer.setOpacity) {
+          if (mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) {
             mapLayer.setOpacity(opacityValues[j]);
           } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
             const options = mapLayer.layerDrawingOptions || [];
@@ -294,16 +292,13 @@ export default class Map extends Component {
             mapLayer.visibleLayers.forEach(visibleLayer => {
               options[visibleLayer] = new LayerDrawingOptions({ transparency: 100 - (opacityValues[j] * 100) });
             });
-            if (timer) { clearTimeout(timer); }
-            timer = setTimeout(function () {
-              mapLayer.setLayerDrawingOptions(options);
-            }, TIMER_DURATION);
+
+            mapLayer.setLayerDrawingOptions(options);
           }
         }
       });
 
-
-      if (webmapLayerIds.length > 0) { //TODO: This is for dynamicMapServiceLayers, what about FeatureLayers?!
+      if (webmapLayerIds.length > 0) {
         const webmapIdConfig = {};
 
         webmapLayerConfigs.forEach(webmapLayerConfig => {
