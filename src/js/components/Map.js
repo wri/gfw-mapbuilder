@@ -264,7 +264,7 @@ export default class Map extends Component {
 
     //- Set the default basemap in the store
     basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
-    console.log('GROUP_WEBMAP layers', settings.layerPanel.GROUP_WEBMAP.layers);
+
     if (params.b) {
       mapActions.changeBasemap(params.b);
     }

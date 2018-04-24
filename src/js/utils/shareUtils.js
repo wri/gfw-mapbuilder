@@ -22,28 +22,31 @@ export function prepareStateForShare (options) {
   if (activeLayers.length > 0) {
     shareState.a = activeLayers;
     shareState.o = [];
+    const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
     activeLayers.forEach(activeLayerId => {
       let mapLayer = map.getLayer(activeLayerId);
+      const webmapSublayerConfig = utils.getObject(webmapLayers, 'subId', activeLayerId);
 
-      if (!mapLayer) {
-        const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
-        const webmapLayerConfig = utils.getObject(webmapLayers, 'subId', activeLayerId);
-
-        if (webmapLayerConfig) {
-          const id = webmapLayerConfig.id;
-          mapLayer = map.getLayer(id);
-        }
+      if (!mapLayer && webmapSublayerConfig) {
+        const id = webmapSublayerConfig.id;
+        mapLayer = map.getLayer(id);
       }
 
       if (mapLayer) {
         if (mapLayer && !mapLayer.layerDrawingOptions && mapLayer.setOpacity) {
           shareState.o.push(mapLayer.opacity);
         } else if (mapLayer && mapLayer.layerDrawingOptions && mapLayer.visibleLayers) {
-          mapLayer.visibleLayers.forEach(visibleLayer => {
-            if (mapLayer.layerDrawingOptions[visibleLayer]) {
-              shareState.o.push((100 - mapLayer.layerDrawingOptions[visibleLayer].transparency) / 100);
+          if (webmapSublayerConfig) {
+            if (mapLayer.layerDrawingOptions[webmapSublayerConfig.subIndex]) {
+              shareState.o.push((100 - mapLayer.layerDrawingOptions[webmapSublayerConfig.subIndex].transparency) / 100);
             }
-          });
+          } else {
+            mapLayer.visibleLayers.forEach(visibleLayer => {
+              if (mapLayer.layerDrawingOptions[visibleLayer]) {
+                shareState.o.push((100 - mapLayer.layerDrawingOptions[visibleLayer].transparency) / 100);
+              }
+            });
+          }
         } else {
           shareState.o.push(1);
         }
