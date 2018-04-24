@@ -247,9 +247,6 @@ export default class Map extends Component {
       mapActions.changeActiveTab(t);
     }
 
-    if (c) {
-      mapActions.updateCanopyDensity(c);
-    }
   };
 
   /**
@@ -398,6 +395,10 @@ export default class Map extends Component {
       mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_MONTH, parseInt(params.iem));
       mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, parseInt(params.isy));
       mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(params.iey));
+    }
+
+    if (params.c) {
+      mapActions.updateCanopyDensity(parseInt(params.c));
     }
   }
 
