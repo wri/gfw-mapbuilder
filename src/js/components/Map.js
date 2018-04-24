@@ -270,58 +270,6 @@ export default class Map extends Component {
     }
     if (params.a) {
 
-      // const alteredWebMapLayers
-
-      // const layerIds = params.a.split(',');
-      // const opacityValues = params.o.split(',');
-      // const opacityObjs = [];
-      // console.log('opacityValues', opacityValues);
-      // layerIds.forEach((layerId, j) => {
-      //   // TODO: Confirm this with layerIds and subId's!
-      //   if (webmapLayerIds.indexOf(layerId) === -1) {
-      //     layerActions.addActiveLayer(layerId);
-      //   }
-      //   if (opacityValues[j] !== 1) {
-      //     opacityObjs.push({
-      //       layerId: layerId,
-      //       value: parseFloat(opacityValues[j])
-      //     });
-      //
-      //     let mapLayer = map.getLayer(layerId);
-      //     // console.log('layerId', layerId);
-      //
-      //     if (!mapLayer) {
-      //       const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
-      //       const webmapLayerConfig = utils.getObject(webmapLayers, 'subId', layerId);
-      //
-      //       if (webmapLayerConfig) {
-      //         const id = webmapLayerConfig.id;
-      //         mapLayer = map.getLayer(id);
-      //         console.log('mapLayer', mapLayer);
-      //
-      //       }
-      //     }
-      //
-      //     if (mapLayer && mapLayer.setOpacity) {
-      //       mapLayer.setOpacity(opacityValues[j]);
-      //     } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
-      //       const options = mapLayer.layerDrawingOptions || [];
-      //       // Transparency is the reverse of other layers, 0.25 opacity = transparency of value 75
-      //       mapLayer.visibleLayers.forEach(visibleLayer => {
-      //         options[visibleLayer] = new LayerDrawingOptions({ transparency: 100 - (opacityValues[j] * 100) });
-      //       });
-      //       if (timer) { clearTimeout(timer); }
-      //       timer = setTimeout(function () {
-      //         mapLayer.setLayerDrawingOptions(options);
-      //       }, TIMER_DURATION);
-      //     } else {
-      //       console.log(mapLayer, 'We are not setting opacity for this layer type!');
-      //     }
-      //   }
-      // });
-
-
-      //Here
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
       const opacityObjs = [];
@@ -329,15 +277,7 @@ export default class Map extends Component {
       const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
       const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
 
-      console.log('webmapLayerConfigs', webmapLayerConfigs);
-      console.log('webmapLayerIds', webmapLayerIds);
-      console.log('layerIds', layerIds);
-      console.log('opacityValues', opacityValues); //TODO: Once these are correct (I think right now we have too many), use them on webmap layers!
-
-
       layerIds.forEach((layerId, j) => {
-        console.log('layerId', layerId);
-        // TODO: Confirm this with layerIds and subId's!
         if (webmapLayerIds.indexOf(layerId) === -1) {
           layerActions.addActiveLayer(layerId);
         }
@@ -372,7 +312,6 @@ export default class Map extends Component {
         webmapLayerConfigs.forEach(webmapLayerConfig => {
 
           if (webmapLayerConfig.subIndex === undefined) {
-            console.log('webmapLayerConfig', webmapLayerConfig);
             const featLayer = map.getLayer(webmapLayerConfig.id);
             if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
               featLayer.hide();
@@ -402,7 +341,6 @@ export default class Map extends Component {
 
         });
 
-        console.log(webmapIdConfig);
         Object.keys(webmapIdConfig).forEach(webmapId => {
           const mapLaya = map.getLayer(webmapId);
           const updateableVisibleLayers = mapLaya.visibleLayers.slice();
@@ -424,7 +362,6 @@ export default class Map extends Component {
 
         });
       }
-      console.log('opacityObjsopacityObjsopacityObjsopacityObjsopacityObjsopacityObjs dont set if there are zero!!', opacityObjs);
 
       layerActions.setOpacities(opacityObjs);
     }

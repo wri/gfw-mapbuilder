@@ -34,7 +34,6 @@ export default class LayerTransparency extends Component {
             }
           });
         }
-        //else if we have a sublayerId on opacity?! then we fire the local updateOpacity????
       });
     }
   }

@@ -20,7 +20,6 @@ export function prepareStateForShare (options) {
   shareState.t = activeTab;
 
   if (activeLayers.length > 0) {
-    console.log('activeLayers', activeLayers);
     shareState.a = activeLayers;
     shareState.o = [];
     activeLayers.forEach(activeLayerId => {
@@ -29,7 +28,6 @@ export function prepareStateForShare (options) {
       if (!mapLayer) {
         const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
         const webmapLayerConfig = utils.getObject(webmapLayers, 'subId', activeLayerId);
-        console.log('webmapLayerConfig', webmapLayerConfig);
 
         if (webmapLayerConfig) {
           const id = webmapLayerConfig.id;
@@ -39,27 +37,20 @@ export function prepareStateForShare (options) {
 
       if (mapLayer) {
         if (mapLayer && !mapLayer.layerDrawingOptions && mapLayer.setOpacity) {
-          console.log(1);
-          console.log('setOpacity', mapLayer.setOpacity);
           shareState.o.push(mapLayer.opacity);
         } else if (mapLayer && mapLayer.layerDrawingOptions && mapLayer.visibleLayers) {
-          // console.log('setOpacity', mapLayer.opacity);
-          console.log('mapLayer.visibleLayers', mapLayer.visibleLayers);
-          console.log('mapLayer.layerDrawingOptions', mapLayer.layerDrawingOptions);
           mapLayer.visibleLayers.forEach(visibleLayer => {
             if (mapLayer.layerDrawingOptions[visibleLayer]) {
-              console.log(2);
               shareState.o.push((100 - mapLayer.layerDrawingOptions[visibleLayer].transparency) / 100);
             }
           });
         } else {
-          console.log(4);
           shareState.o.push(1);
         }
       }
     });
-    console.log('shareState.o', shareState.o);
   }
+
   if (canopyDensity !== 30) {
     shareState.c = canopyDensity;
   }
