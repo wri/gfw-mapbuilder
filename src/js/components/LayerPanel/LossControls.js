@@ -189,8 +189,8 @@ export default class LossControls extends Component {
   handleSliderChange = sliderValue => {
     this.setState({sliderValue});
     layerActions.updateLossTimeline({
-      fromSelectedIndex: sliderValue[0],
-      toSelectedIndex: sliderValue[1]
+      fromSelectedIndex: sliderValue[0] - 1,
+      toSelectedIndex: sliderValue[1] - 1
     });
   }
 
