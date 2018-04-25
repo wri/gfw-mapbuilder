@@ -37,6 +37,8 @@ export default class SubscriptionsModal extends Component {
     }
 
     const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
+    console.log('subscription', subscription);
+    // debugger
     return (
       <div key={j} className='source-row subscribe-row'>
         <div className='delete-row'>
@@ -49,8 +51,15 @@ export default class SubscriptionsModal extends Component {
             <svg className='svg-icon'><use xlinkHref="#shape-world" /></svg>
           </button>
         </div>
-        <p className='name-row'>{subscription.attributes.name}</p>
-        <p className='other-row date-created'>Created on {endDateString}</p>
+        <div className='subscription-unconfirmed'>
+          <div className={`subscription-unconfirmed-wrap ${subscription.attributes.confirmed ? 'hidden' : ''}`}>
+            <svg className='svg-icon subscription-svg'>
+              <use xlinkHref="#shape-warning" />
+            </svg>
+          </div>
+          <p className={`name-row ${subscription.attributes.confirmed ? 'no-warning' : ''}`}>{subscription.attributes.name}</p>
+        </div>
+        <p className='other-row date-created'>Created on <br />{endDateString}</p>
         <div className='other-row'>Data sets: <span>{datasets.map(dataset => this.listDataset(dataset, subscription))}</span></div>
       </div>
     );
