@@ -91,7 +91,6 @@ export const getWMSLegendGraphic = (url, layerName, version) => {
     };
 
     reader.onerror = () => {
-      console.log('an error converting to BLKSDJFDSJF');
       deferred.resolve({ error: 'there was a problem converting to base64' });
     };
   }, (err) => {

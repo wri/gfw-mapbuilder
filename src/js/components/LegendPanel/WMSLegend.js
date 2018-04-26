@@ -1,5 +1,5 @@
 import React from 'react';
-import {getWMSLegendGraphic} from '../../utils/wmsUtils';
+import {getWMSLegendGraphic} from 'utils/wmsUtils';
 
 export default class WMSLegend extends React.Component {
 

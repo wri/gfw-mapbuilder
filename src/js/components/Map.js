@@ -24,7 +24,7 @@ import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
 import Measurement from 'esri/dijit/Measurement';
-import {actionTypes, attributes as sources} from 'constants/AppConstants';
+import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
 import dom from 'dojo/dom';
 import {getUrlParams} from 'utils/params';
@@ -160,23 +160,6 @@ export default class Map extends Component {
       response.map.graphics.clear();
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
-      // response.map.infoWindow.on('show', (evt) => {
-      //   console.log('show');
-      //   mapActions.infoWindowUpdated(evt);
-      // });
-      // response.map.infoWindow.on('hide', (evt) => {
-      //   console.log('hide', evt.target);
-      //   debugger;
-      //   mapActions.infoWindowUpdated(evt);
-      // });
-      // response.map.infoWindow.on('set-features', (evt) => {
-      //   console.log('set-features');
-      //   mapActions.infoWindowUpdated(evt);
-      // });
-      // response.map.infoWindow.on('selection-change', (evt) => {
-      //   console.log('selection-change');
-      //   mapActions.infoWindowUpdated(evt);
-      // });
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
