@@ -22,6 +22,7 @@ import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
+import basemaps from 'esri/basemaps';
 import Measurement from 'esri/dijit/Measurement';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
@@ -122,7 +123,7 @@ export default class Map extends Component {
       this.createMap(activeWebmap, options);
     }
 
-    if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
+    if ((prevState.basemap !== basemap) && map.loaded) {
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
     }
 
@@ -147,8 +148,18 @@ export default class Map extends Component {
     const { canopyDensity } = this.state;
 
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
-      // Add operational layers from the webmap to the array of layers from the config file.
       const {itemData} = response.itemInfo;
+
+      const { baseMap } = itemData;
+      const basemap = Object.keys(basemaps).filter(bm => basemaps[bm].title === baseMap.title)[0];
+      let thumbnailUrl;
+      if (basemap) {
+        thumbnailUrl = basemap.thumbnailUrl;
+      }
+      basemapUtils.prepareDefault(baseMap.baseMapLayers, baseMap.title, thumbnailUrl);
+      // basemapUtils.prepareDefaultBasemap(response.map, baseMapLayers);
+
+      // Add operational layers from the webmap to the array of layers from the config file.
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
@@ -268,7 +279,7 @@ export default class Map extends Component {
     const params = getUrlParams(location.search);
 
     //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
+    // basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
