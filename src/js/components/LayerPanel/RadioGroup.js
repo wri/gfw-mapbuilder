@@ -73,6 +73,7 @@ import RadioButton from './RadioButton';
       showInfo={this.showInfo}
       iconLoading={this.props.iconLoading}
       toggleLayer={this.toggleLayer}
+      initialLayerOpacities={this.props.initialLayerOpacities}
     />;
   }
 
