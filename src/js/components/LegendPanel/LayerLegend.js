@@ -11,7 +11,11 @@ export default class LayerLegend extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = { legendInfos: [], visible: false, opacity: 1 };
+    this.state = {
+      legendInfos: [],
+      visible: props.visibleLayers.indexOf(props.layerId) === -1 ? false : true,
+      opacity: 1
+    };
   }
 
   componentDidUpdate(prevProps) {
@@ -28,8 +32,14 @@ export default class LayerLegend extends React.Component {
 
   componentDidMount() {
     Request.getLegendInfos(this.props.url, this.props.layerIds).then(legendInfos => {
-      if(this.refs.myRef) {
+      if (this.refs.myRef) {
         this.setState({ legendInfos: legendInfos });
+      }
+    });
+
+    this.props.initialLayerOpacities.forEach(opacity => {
+      if (opacity.layerId === this.props.layerId) {
+        this.setState({ opacity: opacity.value });
       }
     });
   }
@@ -56,7 +66,7 @@ export default class LayerLegend extends React.Component {
       layerConf = utils.getObject(layerGroups.GROUP_LCD.layers, 'id', this.props.layerId);
     }
 
-    if(this.state.visible === false) {
+    if (this.state.visible === false) {
       bool = 'hidden';
     } else {
       label = layerConf.label[language];

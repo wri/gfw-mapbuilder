@@ -92,6 +92,10 @@ class LayerActions {
     return payload;
   }
 
+  setOpacities (opacities) {
+    return opacities;
+  }
+
   addAll () {
     return {};
   }

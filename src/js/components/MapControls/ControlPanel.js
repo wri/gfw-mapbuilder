@@ -1,5 +1,6 @@
 import {prepareStateForShare} from 'utils/shareUtils';
 import modalActions from 'actions/ModalActions';
+import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
 import {toQuerystring} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
@@ -47,12 +48,20 @@ export default class ControlPanel extends Component {
       viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
     } = this.props;
 
+    const visibleLayers = [];
+
+    activeLayers.forEach(activeLayer => {
+      if (activeLayer !== layerKeys.USER_FEATURES) {
+        visibleLayers.push(activeLayer);
+      }
+    });
+
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
       language: language,
       settings: settings,
       basemap: basemapUtils.getBasemap(),
-      activeLayers: activeLayers,
+      activeLayers: visibleLayers,
       activeTab: activeTab,
       gladStartDate: this.formatDate(gladStartDate),
       gladEndDate: this.formatDate(gladEndDate),
