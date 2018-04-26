@@ -5,6 +5,12 @@ import Highcharts from 'highcharts';
 import enableExporting from 'highcharts/modules/exporting';
 
 enableExporting(Highcharts);
+
+Highcharts.setOptions({
+  lang: {
+    thousandsSep: ','
+  }
+});
 /**
 * Module to help in generating charts and also in formatting data for the charts
 * Formatting functions should start with formatXXXX and return series and optionally colors
@@ -221,11 +227,12 @@ export default {
 			title: { text: null },
 			xAxis: {
 				categories: labels,
-				maxPadding: 0.5,
+        maxPadding: 0.5,
 				title: { text: null }
 			},
 			yAxis: {
-				reversedStacks: false,
+        reversedStacks: false,
+        maxPadding: 0.2,
 				stackLabels: { enabled: true },
 				title: { text: null }
 			},

@@ -1,5 +1,7 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
+import layerKeys from 'constants/LayerConstants';
+import {attributes} from 'constants/AppConstants';
 import text from 'js/languages';
 import esriRequest from 'esri/request';
 import geojsonUtil from 'utils/arcgis-to-geojson';
@@ -140,8 +142,17 @@ export default class SubscriptionsModal extends Component {
       timeout: 30000
     }, { usePost: false}).then(geostoreResult => {
       const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+
+      const attributesFromGFW = {
+        geostoreId: geostoreResult.data.id,
+        title: subscription.attributes.name,
+        createdAt: geostoreResult.data.attributes.createdAt,
+        cfid: geostoreResult.data.id,
+        source: attributes.SOURCE_DRAW
+      };
+
       const graphic = new Graphic({
-        attributes: geostoreResult.data.attributes,
+        attributes: attributesFromGFW,
         geostoreId: geostoreResult.data.id,
         geometry: new Polygon(esriJson),
         title: id,
@@ -150,7 +161,12 @@ export default class SubscriptionsModal extends Component {
       graphic.setSymbol(symbols.getCustomSymbol());
       const graphicExtent = graphic.geometry.getExtent();
       this.context.map.setExtent(graphicExtent, true);
-      this.context.map.graphics.add(graphic);
+
+      const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
+      if (layer) {
+        layer.add(graphic);
+        this.context.map.infoWindow.setFeatures([graphic]);
+      }
       mapActions.toggleSubscriptionsModal({ visible: false });
     }, err => {
       console.error(err);

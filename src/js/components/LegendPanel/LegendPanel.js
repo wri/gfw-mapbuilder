@@ -45,7 +45,7 @@ export default class LegendPanel extends Component {
   createLegend = layer => {
     let childComponent;
 
-    const {activeLayers, legendOpacity} = this.props;
+    const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
 
     switch(layer.id) {
@@ -57,6 +57,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.layerIds}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -68,6 +69,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.layerIds}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -79,6 +81,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.layerIds}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -90,6 +93,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.layerIds}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -101,6 +105,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -112,6 +117,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -123,6 +129,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -134,6 +141,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -145,6 +153,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -156,6 +165,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -167,6 +177,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -178,6 +189,7 @@ export default class LegendPanel extends Component {
           layerIds={layer.legendLayer}
           layerId={layer.id}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
         />;
         break;
@@ -192,6 +204,7 @@ export default class LegendPanel extends Component {
             visibility={activeLayers.indexOf(layer.id) > -1 && layer.visibleAtMapScale}
             visibleLayers={activeLayers}
             legendOpacity={legendOpacity}
+            initialLayerOpacities={initialLayerOpacities}
           />;
         } else {
           childComponent = this.createWebmapLegend(layer);
@@ -201,7 +214,7 @@ export default class LegendPanel extends Component {
   }
 
   createWebmapLegend = layer => {
-    const { activeLayers, dynamicLayers, legendOpacity } = this.props;
+    const { activeLayers, dynamicLayers, legendOpacity, initialLayerOpacities } = this.props;
     const { map, language } = this.context;
 
     if (layer.subId) {
@@ -220,7 +233,7 @@ export default class LegendPanel extends Component {
         }
       }
 
-      const esriLayer = layer.esriLayer || layer;
+      const esriLayer = layer.esriLayer;
 
       return <WebMapLegend
         key={layer.subId}
@@ -231,12 +244,11 @@ export default class LegendPanel extends Component {
         layerSubIndex={layer.subIndex}
         layerId={layer.subId}
         legendOpacity={legendOpacity}
-        defaultOpacity={esriLayer.opacity || 1}
-      />;
-
+        initialLayerOpacities={initialLayerOpacities}
+        defaultOpacity={esriLayer.opacity || 1} />;
 
     } else {
-      const esriLayer = layer.esriLayer || layer;
+      const esriLayer = layer.esriLayer;
 
       if (esriLayer.type === 'Feature Layer') {
         return <WebMapFeatureLayerLegend
@@ -246,6 +258,7 @@ export default class LegendPanel extends Component {
           visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
         />;
       } else if (esriLayer.type === 'carto') {
         if (!esriLayer.symbol) { return null; }
@@ -258,6 +271,10 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
         />;
       } else {
+        if (!layer.layerIds && !esriLayer.tileInfo) {
+          throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
+        }
+
         if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
           esriLayer.layerId = esriLayer.layerInfos[0].id;
         }
@@ -268,10 +285,10 @@ export default class LegendPanel extends Component {
           labels={layer.label[language]}
           visibility={activeLayers.indexOf(layer.id) > -1}
           visibleLayers={activeLayers}
-          layerId={esriLayer.layerId}
+          layerId={layer.layerIds || [0]}
           legendOpacity={legendOpacity}
-          defaultOpacity={esriLayer.opacity || 1}
-        />;
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={esriLayer.opacity || 1} />;
       }
     }
   }

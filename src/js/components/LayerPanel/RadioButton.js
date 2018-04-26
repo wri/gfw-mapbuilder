@@ -9,7 +9,8 @@ import LayerTransparency from './LayerTransparency';
   sublabel,
   layer,
   showInfo,
-  toggleLayer
+  toggleLayer,
+  initialLayerOpacities
 }) => {
 
   const handleToggleLayer = () => {
@@ -30,7 +31,7 @@ import LayerTransparency from './LayerTransparency';
         <svg><use xlinkHref="#shape-info" /></svg>
       </span>
       {sublabel && <div className='layer-checkbox-sublabel'>{sublabel}</div>}
-      <LayerTransparency layer={layer} visible={selected}></LayerTransparency>
+      <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={selected}></LayerTransparency>
     </div>
   );
 };
