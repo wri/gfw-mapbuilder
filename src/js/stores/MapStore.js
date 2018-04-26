@@ -68,6 +68,7 @@ class MapStore {
     this.iconLoading = '';
     this.exclusiveLayerIds = [];
     this.legendOpacity = {};
+    this.initialLayerOpacities = [];
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
     this.drawButtonActive = false;
@@ -118,6 +119,7 @@ class MapStore {
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
       changeOpacity: layerActions.changeOpacity,
+      setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
@@ -444,6 +446,10 @@ class MapStore {
   changeOpacity (payload) {
     // payload = { layerId: <string>, value: <number> }
     this.legendOpacity = payload;
+  }
+
+  setOpacities (opacities) {
+    this.initialLayerOpacities = opacities;
   }
 
   changeBasemap (basemap) {

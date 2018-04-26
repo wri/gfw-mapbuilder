@@ -1,3 +1,5 @@
+import utils from 'utils/AppUtils';
+
 export function prepareStateForShare (options) {
   const {map, settings, language, basemap, activeLayers, activeTab, gladStartDate,
     gladEndDate, canopyDensity, terraIStartDate, terraIEndDate, lossFromSelectIndex, lossToSelectIndex,
@@ -5,6 +7,7 @@ export function prepareStateForShare (options) {
     viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
   } = options;
   const shareState = {};
+
   //- Application info
   if (settings.appid) { shareState.appid = settings.appid; }
   //- Map Related Info
@@ -14,12 +17,47 @@ export function prepareStateForShare (options) {
   shareState.z = map.getLevel();
   shareState.l = language;
   shareState.b = basemap;
-  shareState.a = activeLayers;
   shareState.t = activeTab;
-  shareState.c = canopyDensity;
 
-  //TODO: Find out a way to Not share our params if they are default to avoid clutter & uncessary action dispatches!
-  //TODO: Should we make this cutdown or keep layerParams for layers that aren't turned on?
+  if (activeLayers.length > 0) {
+    shareState.a = activeLayers;
+    shareState.o = [];
+    const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
+    activeLayers.forEach(activeLayerId => {
+      let mapLayer = map.getLayer(activeLayerId);
+      const webmapSublayerConfig = utils.getObject(webmapLayers, 'subId', activeLayerId);
+
+      if (!mapLayer && webmapSublayerConfig) {
+        const id = webmapSublayerConfig.id;
+        mapLayer = map.getLayer(id);
+      }
+
+      if (mapLayer) {
+        if (mapLayer && !mapLayer.layerDrawingOptions && mapLayer.setOpacity) {
+          shareState.o.push(mapLayer.opacity);
+        } else if (mapLayer && mapLayer.layerDrawingOptions && mapLayer.visibleLayers) {
+          if (webmapSublayerConfig) {
+            if (mapLayer.layerDrawingOptions[webmapSublayerConfig.subIndex]) {
+              shareState.o.push((100 - mapLayer.layerDrawingOptions[webmapSublayerConfig.subIndex].transparency) / 100);
+            }
+          } else {
+            mapLayer.visibleLayers.forEach(visibleLayer => {
+              if (mapLayer.layerDrawingOptions[visibleLayer]) {
+                shareState.o.push((100 - mapLayer.layerDrawingOptions[visibleLayer].transparency) / 100);
+              }
+            });
+          }
+        } else {
+          shareState.o.push(1);
+        }
+      }
+    });
+  }
+
+  if (canopyDensity !== 30) {
+    shareState.c = canopyDensity;
+  }
+
   if (activeLayers.indexOf('GLAD_ALERTS') > -1) {
     shareState.gs = gladStartDate;
     shareState.ge = gladEndDate;

@@ -31,6 +31,12 @@ export default class WebMapLegend extends React.Component {
         this.setState({ legendInfos: legendInfos });
       }
     });
+
+    this.props.initialLayerOpacities.forEach(opacity => {
+      if (opacity.layerId === this.props.layerId) {
+        this.setState({ opacity: opacity.value });
+      }
+    });
   }
 
   itemMapper = (item, idx) => {
