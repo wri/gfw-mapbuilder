@@ -181,9 +181,6 @@ const utils = {
       ...(OBJECTID ? {OBJECTID} : {})
     };
 
-    console.log('query', query);
-
-
     // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:
     // layerId: array of visible layers
     for (const key in dynamicLayers) {

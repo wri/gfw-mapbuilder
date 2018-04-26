@@ -39,8 +39,6 @@ export default class ReportSubscribeButtons extends Component {
 
       const params = getUrlParams(location.href);
       const payload = {
-        // layerId (if we have one)
-        // OBJECTID (if we have a layerId)
         lang: language,
         activeLayers,
         dynamicLayers,

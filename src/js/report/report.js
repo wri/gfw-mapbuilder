@@ -219,7 +219,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     addTitleAndAttributes(params, feature);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
-      console.log('layers-add-result');
       const addedLayers = result.layers;
       // Check for Errors
       var layerErrors = addedLayers.filter(layer => layer.error);
@@ -265,7 +264,6 @@ const createMap = function createMap (params) {
 
       const { feature, info } = featureResponse;
       //- Add Popup Info Now
-      console.log('params', params);
       // addTitleAndAttributes(params, feature, info);
       //- Need the map to be loaded to add graphics
       if (map.loaded) {
