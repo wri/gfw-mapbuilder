@@ -26,7 +26,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
    * - infoTemplate <esri/InfoTemplate>
    */
   constructor: function(resource) {
-    const { cartoColor, cartoIcon, cartoUser, cartoQuery, cartoDataType, cartoLineWidth, popup, id, cartoApiKey, cartoTemplateId } = resource;
+    const { cartoColor, cartoIcon, cartoUser, cartoQuery, cartoDataType, cartoLineWidth, popup, id, cartoApiKey, cartoTemplateId, type } = resource;
     this.cartoUser = cartoUser;
     this.cartoTemplateId = cartoTemplateId;
     this.infoTemplate = null;
@@ -37,6 +37,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
     // this.cartoDataType = cartoDataType;
     // this.cartoLineWidth = cartoLineWidth;
     // this.id = id;
+    this.type = type;
     this.visible = false;
     // this.cartoLayers = null;
   },

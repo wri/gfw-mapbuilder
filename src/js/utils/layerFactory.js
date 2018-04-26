@@ -38,6 +38,7 @@ export default (layer, lang) => {
   switch (layer.type) {
     case 'carto':
       esriLayer = new CartoLayer(layer);
+      esriLayer.type = layer.type;
       esriLayer.queryBuilder();
     break;
     case 'tiled':

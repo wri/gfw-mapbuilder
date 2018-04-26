@@ -260,7 +260,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
         />;
-      } else if (esriLayer.type === 'carto') {
+      } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
         if (!esriLayer.symbol) { return null; }
         return <CartoLegend
           key={layer.id}

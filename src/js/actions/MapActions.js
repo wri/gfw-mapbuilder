@@ -200,7 +200,10 @@ class MapActions {
           // (don't replace layers without a url property)
           if (l.url) {
             const layer = AppUtils.getObject(esriLayers, 'id', l.id);
-            l.esriLayer = layer;
+            l.esriLayer = {
+              ...l,
+              ...layer,
+            };
           }
           return l;
         });
