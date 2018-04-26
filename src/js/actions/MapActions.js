@@ -22,10 +22,8 @@ class MapActions {
     };
   }
 
-  setAnalysisType (evt) {
-    return {
-      type: evt.target.value
-    };
+  setAnalysisType (value) {
+    return value;
   }
 
   centerAndZoomLatLng (lat, lng) {
@@ -161,8 +159,8 @@ class MapActions {
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
 
-      uniqueLayers.reverse().forEach((l, i) => {
-        map.reorderLayer(l, i);
+      uniqueLayers.forEach((l, i) => {
+        map.reorderLayer(l, i + 1);
       });
 
       if (map.getLayer('labels')) {

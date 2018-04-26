@@ -68,6 +68,7 @@ class MapStore {
     this.iconLoading = '';
     this.exclusiveLayerIds = [];
     this.legendOpacity = {};
+    this.initialLayerOpacities = [];
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
 
@@ -117,6 +118,7 @@ class MapStore {
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
       changeOpacity: layerActions.changeOpacity,
+      setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
@@ -303,7 +305,7 @@ class MapStore {
   }
 
   setAnalysisType (payload) {
-    this.activeAnalysisType = payload.type;
+    this.activeAnalysisType = payload;
   }
 
   toggleAnalysisModal (payload) {
@@ -442,6 +444,10 @@ class MapStore {
   changeOpacity (payload) {
     // payload = { layerId: <string>, value: <number> }
     this.legendOpacity = payload;
+  }
+
+  setOpacities (opacities) {
+    this.initialLayerOpacities = opacities;
   }
 
   changeBasemap (basemap) {

@@ -3,8 +3,6 @@ html
   head
     title %DEFAULT_TITLE%
     include jade/meta.pug
-    link(rel='stylesheet', href='%CRITICAL_CSS%')
-    link(rel='stylesheet', href='%APP_CSS%')
     style(type="text/css").
       @font-face {
         font-family: 'Fira Sans';
@@ -49,6 +47,16 @@ html
         base: ''
       };
 
+      function loadCSS (url, head) {
+        var link = document.createElement('link');
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
+
+        head.appendChild(link);
+
+        link.href = url;
+      }
+
       function makePath (base, path) {
         var position = base.length - 1;
         return !path ?
@@ -69,6 +77,12 @@ html
 
       // Add _app.base if it is present
       if (_app.base) { base = makePath(base, _app.base); }
+
+      // load styles
+      var head = document.head;
+      loadCSS(makePath(base, '%CRITICAL_CSS%'), head);
+      loadCSS(makePath(base, '%APP_CSS%'), head);
+
       var dojoConfig = {
         parseOnLoad: false,
         async: true,

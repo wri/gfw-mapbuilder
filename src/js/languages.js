@@ -113,6 +113,11 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -375,6 +380,11 @@ strings.ka.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'ფერდობი',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -636,6 +646,11 @@ strings.fr.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Pente',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -898,6 +913,11 @@ strings.es.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Pendiente',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -1159,6 +1179,11 @@ strings.pt.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Declividade',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -1420,6 +1445,11 @@ strings.id.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -1681,6 +1711,11 @@ strings.zh.ANALYSIS_SAD_ALERT_NAMES = {
 };
 //- Group and value should not be modified
 strings.zh.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: '倾斜度',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
