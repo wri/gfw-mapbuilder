@@ -34,10 +34,10 @@ class LayerActions {
     return info;
     }
   
-  setSubLayers (id, ...subIndexes) {
+  setSubLayers (info, ...subIndexes) {
     return {
-      id,
-      subIndexes
+      subIndexes,
+      layer: info
     };
   }
 

@@ -408,32 +408,39 @@ export default class Map extends Component {
         case 'radio': {
           let groupLayers = [];
           const groupSublayers = [];
-          const layersFromWebmap = group.layers.filter(l => !l.url);
-          layersFromWebmap.forEach(l => {
-            if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
-              layers.forEach(webmapLayer => {
-                if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
-                  if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {
-                    webmapLayer.activateWithAllLayers = true;
-                    webmapLayer.groupOrder = group.order;
-                  }
-                  groupSublayers.push({
-                    ...l,
-                    ...webmapLayer
-                  });
-                }
-              });
-              groupLayers = groupLayers.concat(groupSublayers);
-            } else { // this is not a dynamic layer
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
-              layers.splice(layers.indexOf(mapLayer), 1);
 
-              groupLayers.push({
-                ...l,
-                ...mapLayer
-              });
-            }
-          });
+          if (group.layers.length) {
+            const layersFromWebmap = group.layers.filter(l => !l.url);
+            layersFromWebmap.forEach(l => {
+              if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
+                layers.forEach(webmapLayer => {
+                  if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                    webmapLayer.isRadioLayer = true;
+                    groupSublayers.push({
+                      ...l,
+                      ...webmapLayer
+                    });
+                  }
+                });
+                groupLayers = groupLayers.concat(groupSublayers);
+              } else { // this is not a dynamic layer
+                const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
+                layers.splice(layers.indexOf(mapLayer), 1);
+                mapLayer.isRadioLayer = true;
+                groupLayers.push({
+                  ...l,
+                  ...mapLayer
+                });
+              }
+            });
+          } else {
+            layers.forEach(webmapLayer => {
+              webmapLayer.isRadioLayer = true;
+              if (webmapLayer.subId) { // this is a dynamic layer
+                groupLayers.push(webmapLayer);
+              }
+            });
+          }
 
           groupLayers.forEach(gl => {
             const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
@@ -441,6 +448,7 @@ export default class Map extends Component {
           });
 
           group.layers.forEach(l => {
+            l.isRadioLayer = true;
             if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
           });
           break;
