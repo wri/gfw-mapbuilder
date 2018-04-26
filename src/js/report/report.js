@@ -215,9 +215,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     if (map.getZoom() > 9) {
       map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
     }
-    console.log('HERE THOO');
-    console.log(map.on);
-    // debugger
+
     addTitleAndAttributes(params, feature);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
@@ -407,19 +405,9 @@ const addHeaderContent = function addHeaderContent (params) {
 
 const addTitleAndAttributes = function addTitleAndAttributes (params, featureInfo) {
   const { layerId, OBJECTID, lang } = params;
-  // const { webmap, settings } = info;
-  // const { operationalLayers } = webmap;
-  // console.log('layerid', layerid);
-  //- Generate the attributes listing and set page title
-  // if (featureInfo.isCustom) {
-  console.log('featureInfo', featureInfo);
-  // console.log('layerId', layerId);
-  // console.log('OBJECTID', OBJECTID);
+
   if (layerId && OBJECTID) {
-    // document.getElementById('feature-title').innerHTML = featureInfo.title;
-    // document.getElementById('report-subtitle').innerHTML = featureInfo.title;
     const mapLayer = map.getLayer(layerId);
-    console.log('mapLayer', mapLayer);
 
     const queryTask = new QueryTask(mapLayer.url);
     const query = new Query();
@@ -427,18 +415,13 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
     query.returnGeometry = false;
     query.outFields = ['*'];
     queryTask.execute(query).then(res => {
-      console.log('ressss', res);
       if (res.features.length > 0) {
         if (mapLayer.infoTemplate) {
-          console.log(res.features);
-          //res.features[0]
+
           // const title = mapLayer.infoTemplate.title.replace(/{.*}/, featureInfo.title || 'N/A');
+          // const graphic = new Graphic(res.features[0].geometry, '', res.features[0].attributes, new InfoTemplate(mapLayer.infoTemplate));
+          // const title = graphic.infoTemplate.info.title.replace(/{.*}/, res.features[0].attributes[mapLayer.displayField] || 'N/A');
 
-          const graphic = new Graphic(res.features[0].geometry, '', res.features[0].attributes, new InfoTemplate(mapLayer.infoTemplate));
-          console.log('graphic', graphic);
-
-          const title = graphic.infoTemplate.info.title.replace(/{.*}/, res.features[0].attributes[mapLayer.displayField] || 'N/A');
-          console.log('title', title);
           document.getElementById('report-subtitle').innerHTML = res.features[0].attributes[mapLayer.displayField];
 
           const fragment = document.createDocumentFragment();
@@ -471,65 +454,7 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
 
     });
   } else {
-    console.log('we custom');
     document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-    // console.log('layerName', layerName);
-    // const operationalLayer = operationalLayers.filter((layer) => layerName.search(layer.id) > -1)[0];
-    // const operationalLayer = operationalLayers.filter((layer) => layer.id(layer.id) > -1)[0];
-    // console.log('operationalLayer', operationalLayer);
-    // if (operationalLayer) {
-    //   //- layerid is a string but layer.id is a number, convert layerid to int
-    //   const activeLayer = !operationalLayer.layers ? operationalLayer : operationalLayer.layers.filter((layer) => layer.id === +layerid)[0];
-    //   console.log('activeLayer', activeLayer);
-    //   if (activeLayer) {
-    //     const title = activeLayer.popupInfo.title.replace(/{.*}/, featureInfo.title || 'N/A');
-    //     //- generate rows for each field that is visible in popup for the configured layer
-    //     const fragment = document.createDocumentFragment();
-    //     activeLayer.popupInfo.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
-    //       let fieldValue = featureInfo.attributes[fieldInfo.fieldName];
-    //       //- If it is a date, format that correctly
-    //       if (fieldInfo.format && fieldInfo.format.dateFormat) {
-    //         fieldValue = locale.format(new Date(fieldValue));
-    //       //- If it is a number, format that here, may need a better way
-    //       } else if (fieldInfo.format && fieldInfo.format.places !== undefined) {
-    //         fieldValue = number.format(fieldValue, fieldInfo.format);
-    //       }
-    //       fragment.appendChild(generateRow(
-    //         fieldInfo.label,
-    //         fieldValue
-    //       ));
-    //     });
-    //     if (brApp.debug) { console.log('Popup info: ', activeLayer.popupInfo); }
-    //     //- Add title to the page
-    //     // document.getElementById('feature-title').innerHTML = title;
-    //     document.getElementById('report-subtitle').innerHTML = title;
-    //     //- Add the rows to the DOM
-    //     console.log('popup-content', fragment);
-    //     document.getElementById('popup-content').appendChild(fragment);
-    //   }
-    // } else { //- Try to get it from the layer config
-    //   const id = layerName.replace(`_${layerid}`, '');
-    //   const config = getLayerConfig(settings.layerPanel, id);
-    //   //- Add title
-    //   document.getElementById('report-subtitle').innerHTML = featureInfo.title || '';
-    //   //- Add some popups if available
-    //   console.log('config', config);
-    //   if (config.popup) {
-    //     const fields = config.popup.content[lang];
-    //     const fragment = document.createDocumentFragment();
-    //     fields.forEach((field) => {
-    //       // TODO: Figure out how to support popup modifiers like ACQ_DATE:DateString(hideTime:true)
-    //       const fieldName = field.fieldExpression.search(':') > -1 ?
-    //         field.fieldExpression.split(':')[0] : field.fieldExpression;
-    //       fragment.appendChild(generateRow(
-    //         field.label,
-    //         featureInfo.attributes[fieldName]
-    //       ));
-    //     });
-    //     console.log('popup-content', fragment);
-    //     document.getElementById('popup-content').appendChild(fragment);
-    //   }
-    // }
   }
 };
 
