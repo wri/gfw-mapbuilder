@@ -123,7 +123,7 @@ export default class Map extends Component {
       this.createMap(activeWebmap, options);
     }
 
-    if ((prevState.basemap !== basemap) && map.loaded) {
+    if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
     }
 
@@ -149,15 +149,6 @@ export default class Map extends Component {
 
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
       const {itemData} = response.itemInfo;
-
-      const { baseMap } = itemData;
-      const basemap = Object.keys(basemaps).filter(bm => basemaps[bm].title === baseMap.title)[0];
-      let thumbnailUrl;
-      if (basemap) {
-        thumbnailUrl = basemap.thumbnailUrl;
-      }
-      basemapUtils.prepareDefault(baseMap.baseMapLayers, baseMap.title, thumbnailUrl);
-      // basemapUtils.prepareDefaultBasemap(response.map, baseMapLayers);
 
       // Add operational layers from the webmap to the array of layers from the config file.
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
@@ -275,7 +266,7 @@ export default class Map extends Component {
 
 
     //- Set the default basemap in the store
-    // basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title, params);
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
@@ -472,11 +463,13 @@ export default class Map extends Component {
             label: {
               [language]: sublayer.title
             },
-            opacity: sublayer.opacity,
+            // opacity: sublayer.opacity,
+            opacity: 0.6,
             visible: layer.visibility,
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
+          sublayer.layerObject.setOpacity(0.6);
           layers.unshift(layerInfo);
           if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
@@ -487,11 +480,13 @@ export default class Map extends Component {
           label: {
             [language]: layer.title
           },
-          opacity: layer.opacity,
+          // opacity: layer.opacity,
+          opacity: 0.6,
           visible: layer.visibility,
           esriLayer: layer.layerObject,
           itemId: layer.itemId
         };
+        layer.layerObject.setOpacity(0.6);
         layers.unshift(layerInfo);
         if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
