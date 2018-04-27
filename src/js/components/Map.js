@@ -266,7 +266,7 @@ export default class Map extends Component {
 
 
     //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title, params);
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 
     if (params.b) {
       mapActions.changeBasemap(params.b);

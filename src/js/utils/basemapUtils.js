@@ -101,7 +101,7 @@ export default {
     map.addLayer(customBasemapLayer, newBasemapIndex);
   },
 
-  prepareDefaultBasemap (map, basemapLayers, title, urlParams) {
+  prepareDefaultBasemap (map, basemapLayers, title) {
     const basemapNames = Object.values(basemaps).map(i => i.title);
 
     let arcgisBasemap, wriName;
@@ -136,7 +136,6 @@ export default {
 
     //- Set the default basemap, this will trigger an update from the LayerPanel
     //- It listens for changes to the basemap in the store, and then triggers updateBasemap above
-    if (!urlParams.b) {
       if (arcgisBasemap) {
         if (this.arcgisBasemaps.indexOf(arcgisBasemap) === -1) {
           this.arcgisBasemaps.push(arcgisBasemap);
@@ -150,7 +149,6 @@ export default {
         //- Use this as a fallback
         mapActions.changeBasemap('wri_mono');
       }
-    }
 
     //- TODO: Add support for a custom basemap
   }

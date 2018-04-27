@@ -227,16 +227,16 @@ class MapStore {
 
     if (!radioLayerToTurnOn) {
       radioLayerToTurnOn = reducedLayers.filter(l => l.id === this.exclusiveLayerIds[0])[0];
-    }
-
-    if (radioLayerToTurnOn.subId) {
-      allActiveLayers.push(radioLayerToTurnOn.subId);
-      allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
-    } else if (radioLayerToTurnOn.layerIds) {
-      allActiveLayers.push(radioLayerToTurnOn.id);
-      allDynamicLayers[radioLayerToTurnOn.id] = radioLayerToTurnOn.layerIds;
     } else {
-      allActiveLayers.push(radioLayerToTurnOn.id);
+      if (radioLayerToTurnOn.subId) {
+        allActiveLayers.push(radioLayerToTurnOn.subId);
+        allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
+      } else if (radioLayerToTurnOn.layerIds) {
+        allActiveLayers.push(radioLayerToTurnOn.id);
+        allDynamicLayers[radioLayerToTurnOn.id] = radioLayerToTurnOn.layerIds;
+      } else {
+        allActiveLayers.push(radioLayerToTurnOn.id);
+      }
     }
 
     reducedLayers.forEach(l => {
