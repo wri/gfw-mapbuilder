@@ -227,7 +227,9 @@ class MapStore {
 
     if (!radioLayerToTurnOn) {
       radioLayerToTurnOn = reducedLayers.filter(l => l.id === this.exclusiveLayerIds[0])[0];
-    } else {
+    }
+
+    if (radioLayerToTurnOn) {
       if (radioLayerToTurnOn.subId) {
         allActiveLayers.push(radioLayerToTurnOn.subId);
         allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
