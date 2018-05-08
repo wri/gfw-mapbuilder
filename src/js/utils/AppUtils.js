@@ -140,6 +140,7 @@ const utils = {
       appid,
       layerId,
       OBJECTID,
+      OBJECTID_Field,
       activeSlopeClass,
       activeLayers,
       dynamicLayers,
@@ -178,7 +179,8 @@ const utils = {
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
       ...(layerId ? {layerId} : {}),
-      ...(OBJECTID ? {OBJECTID} : {})
+      ...(OBJECTID ? {OBJECTID} : {}),
+      ...(OBJECTID_Field ? {OBJECTID_Field} : {})
     };
 
     // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:

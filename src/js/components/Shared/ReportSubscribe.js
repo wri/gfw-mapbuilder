@@ -63,8 +63,37 @@ export default class ReportSubscribeButtons extends Component {
       }
 
       if (selectedFeature._layer && selectedFeature._layer.id && selectedFeature._layer.id !== layerKeys.USER_FEATURES) {
-        payload.layerId = selectedFeature._layer.id;
+        let layerString = '';
+        console.log('selectedFeature._layer.id', selectedFeature._layer.id);
+        console.log('selectedFeature._layer.url', selectedFeature._layer.url);
+        console.log('selectedFeature.attributes', selectedFeature.attributes);
         payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes.OBJECTID : null;
+        // payload.layerId = selectedFeature._layer.url;
+        layerString = selectedFeature._layer.url;
+        console.log('map.layerIds', map.layerIds);
+        console.log('map.graphicsLayerIds', map.graphicsLayerIds);
+        // debugger
+        // if (map.layerIds.indexOf(selectedFeature._layer.id) === -1) {
+        //   const webmapLayers = settings.layerPanel.GROUP_WEBMAP.layers;
+        //   const webmapSublayerConfig = appUtils.getObject(webmapLayers, 'subId', selectedFeature._layer.id);
+        //   payload.layerId = webmapSublayerConfig.id;
+        //   layerString += '--' + webmapSublayerConfig.id;
+        // } else {
+        //   layerString += '--' + selectedFeature._layer.id;
+        // }
+        layerString += '--' + selectedFeature._layer.id;
+
+        payload.layerId = layerString;
+
+        console.log('payload.layerid', payload.layerId);
+
+        if (payload.OBJECTID) {
+          payload.OBJECTID_Field = 'OBJECTID';
+        } else {
+          console.log('we hereeee');
+          payload.OBJECTID_Field = 'objectid';
+          payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes.objectid : null;
+        }
       }
       appUtils.generateReport(payload);
     }
