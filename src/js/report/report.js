@@ -403,12 +403,6 @@ const addHeaderContent = function addHeaderContent (params) {
 
 const addTitleAndAttributes = function addTitleAndAttributes (params, featureInfo) {
   const { layerId, OBJECTID, OBJECTID_Field, lang } = params;
-  console.log(params);
-
-  console.log('layerId', layerId);
-  console.log('OBJECTID', OBJECTID);
-  console.log('featureInfo', featureInfo);
-  // debugger
 
   if (layerId && OBJECTID) {
 
@@ -416,27 +410,15 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
     const url = hashDecoupled[0];
     const id = hashDecoupled[1];
     const mapLayer = map.getLayer(id);
-    console.log('url', url);
-    console.log('id', id);
-    console.log('mapLayer', mapLayer);
 
     const queryTask = new QueryTask(url);
     const query = new Query();
     query.where = OBJECTID_Field + ' = ' + OBJECTID;
-    console.log('query.where', query.where);
     query.returnGeometry = false;
     query.outFields = ['*'];
-    // window.ll = map;
     queryTask.execute(query).then(res => {
-      console.log('res', res);
       if (res.features && res.features.length > 0) {
         if (mapLayer && mapLayer.infoTemplate) {
-          console.log('yeahh?');
-          console.log('mapLayer', mapLayer, mapLayer.infoTemplate);
-
-          // const title = mapLayer.infoTemplate.title.replace(/{.*}/, featureInfo.title || 'N/A');
-          // const graphic = new Graphic(res.features[0].geometry, '', res.features[0].attributes, new InfoTemplate(mapLayer.infoTemplate));
-          // const title = graphic.infoTemplate.info.title.replace(/{.*}/, res.features[0].attributes[mapLayer.displayField] || 'N/A');
 
           document.getElementById('report-subtitle').innerHTML = res.features[0].attributes[mapLayer.displayField];
 
@@ -470,8 +452,6 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
           document.getElementById('report-subtitle').innerHTML = featureInfo.title;
       }
 
-    }, err => {
-      console.log('we did an error somewhere in here ): ', err);
     });
   } else {
     document.getElementById('report-subtitle').innerHTML = featureInfo.title;
