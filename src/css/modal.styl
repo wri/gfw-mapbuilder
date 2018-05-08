@@ -194,6 +194,67 @@
 .dataset-zoom
   cursor pointer
 
+.subscription-unconfirmed
+  margin-bottom -10px
+  .subscription-uncle
+    position relative
+
+.subscription-unconfirmed-wrap:hover .subscribe-tooltipmap
+  display block
+  visibility visible
+  opacity 1
+
+.subscription-unconfirmed-wrap
+  display inline-block
+  float left
+  .subscription-svg
+    width 16px
+    height 16px
+    cursor pointer
+  .subscribe-tooltipmap
+    position absolute
+    background #FFFEE2
+    -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
+    box-shadow 0 1px 3px rgba(85,85,85,0.25)
+    z-index 1000
+    margin 0
+    visibility hidden
+    opacity 0
+    text-transform uppercase
+    color #555555
+    font-weight 400
+    font-size 12px
+    line-height 1.25
+    bottom 100%
+    left 115px
+    text-align center
+    padding 6px 8px
+    white-space nowrap
+    pointer-events none
+    -webkit-transform translate(-50%, 0px)
+    transform translate(-50%, 0px)
+    width 200px
+    white-space normal
+
+.subscribe-tooltipmap:after
+  content ""
+  display block
+  position absolute
+  width 8px
+  height 8px
+  background #FFFEE2
+  z-index 2
+  bottom 0px
+  left 0px
+  -webkit-transform translate(-50%, 50%) rotate(270deg)
+  transform translate(-50%, 50%) rotate(270deg)
+  border-width 1px
+  border-color #f0f0ed
+  border-style solid
+
+.subscription-explanation
+  max-width 230px
+
 .dataset-list
   display inline-block
 
@@ -239,6 +300,10 @@
 
 .name-row
   font-weight bold
+  margin-left 20px
+  margin-top 15px
+  &.no-warning
+    margin-left 0
 
 .source-row
   border-bottom 1px solid $lightGrayBorder
