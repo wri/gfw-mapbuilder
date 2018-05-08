@@ -164,7 +164,7 @@ export default class Map extends Component {
 
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        this.applyLayerStateFromUrl(response.map, itemData);
+        const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -206,7 +206,10 @@ export default class Map extends Component {
 
         // This function needs to happen after the layer has loaded
         // otherwise the layer breaks until you manually set the canopyDensity
-        layersHelper.updateAGBiomassLayer(canopyDensity, response.map);
+        // if we get canopy density from the hash, use that instead!
+
+        layersHelper.updateAGBiomassLayer(cDensityFromHash ? cDensityFromHash : canopyDensity, response.map);
+
       });
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);
@@ -401,6 +404,8 @@ export default class Map extends Component {
     if (params.c) {
       mapActions.updateCanopyDensity(parseInt(params.c));
     }
+
+    return params.c ? parseInt(params.c) : false;
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
