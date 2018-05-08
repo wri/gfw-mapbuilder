@@ -198,9 +198,10 @@ const utils = {
       window.open(`report.html?${path}`);
     } else {
       let appBase = window._app.base;
-      if (appBase.substr(-1) !== '/') {
-        appBase += '/';
+      if (!appBase) {
+        appBase = window.location.origin + window.location.pathname;
       }
+
       window.open(`${appBase}report.html?${path}`);
     }
   },
