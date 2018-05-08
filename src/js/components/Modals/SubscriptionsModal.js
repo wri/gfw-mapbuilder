@@ -111,10 +111,6 @@ export default class SubscriptionsModal extends Component {
       jsonData.datasets = subscription.attributes.datasets;
     }
 
-    console.log('dataset', dataset);
-    console.log('subscription', subscription);
-    console.log('jsonData', jsonData);
-
     fetch(
       `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}`,
       {
@@ -151,10 +147,6 @@ export default class SubscriptionsModal extends Component {
 
   showSubscription = (evt, subscription) => {
     const id = subscription.attributes.params.geostore;
-    console.log('this.context.map', this.context.map);
-    console.log('this.context.map.graphics', this.context.map.graphics);
-    console.log('this.context.map.graphics.graphics', this.context.map.graphics.graphics);
-    console.log('this.context.map.graphics.graphics.length', this.context.map.graphics.graphics.length);
     esriRequest({
       url: 'https://production-api.globalforestwatch.org/v1/geostore/' + id,
       callbackParamName: 'callback',
@@ -195,7 +187,6 @@ export default class SubscriptionsModal extends Component {
 
   deleteSubscription = (evt, subscription) => {
     mapActions.toggleConfirmModal({ visible: true });
-    console.log('subscription', subscription);
     mapActions.deleteSubscription(subscription);
   }
 

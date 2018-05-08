@@ -24,6 +24,7 @@ import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
 import Measurement from 'esri/dijit/Measurement';
+import webMercatorUtils from 'esri/geometry/webMercatorUtils';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
 import dom from 'dojo/dom';
@@ -197,35 +198,29 @@ export default class Map extends Component {
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
-          console.log('evt', evt);
-          console.log('response.map', response.map);
-          console.log('evt.graphic.geometry', evt.graphic.geometry);
-          console.log('response.map.graphics', response.map.graphics, response.map.graphics.graphics.length);
           if (evt.info.isModified) {
-            // mapActions.deleteSubscription(subscription);
+
+            if (evt.graphic.geometry.spatialReference.wkid === 4326){
+              evt.graphic.setGeometry(
+                webMercatorUtils.geographicToWebMercator(evt.graphic.geometry)
+              );
+            }
+
             const { userSubscriptions } = this.state;
-            console.log('userSubscriptions', userSubscriptions);
-            console.log('evt.graphic.attributes.geostoreId', evt.graphic.attributes.geostoreId);
+
             const matchingUserSubscriptions = userSubscriptions.filter(userSubscription => {
-              console.log('userSubscription', userSubscription.attributes.params);
-              console.log(userSubscription.attributes.params.geostore === evt.graphic.attributes.geostoreId);
               return userSubscription && evt.graphic.attributes && userSubscription.attributes.params.geostore === evt.graphic.attributes.geostoreId;
             });
 
-            console.log('matchingUserSubscriptions', matchingUserSubscriptions);
             analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
               evt.graphic.attributes.geostoreId = res.data.id;
               if (matchingUserSubscriptions.length > 0) {
                 this.updateThenDeleteSubscription(evt.graphic, res.data, matchingUserSubscriptions[0]).then(updatedSubscription => {
-                  console.log('updatedSubscription', updatedSubscription);
-
+                  response.map.infoWindow.setFeatures([evt.graphic]);
                 });
               } else {
                 response.map.infoWindow.setFeatures([evt.graphic]);
               }
-              // response.map.graphics.clear();
-              // response.map.graphics.add(evt.graphic);
-              // console.log('response.map.graphics', response.map.graphics);
             });
           }
         });
@@ -277,9 +272,7 @@ export default class Map extends Component {
           mapActions.deleteSubscription({});
           deferred.resolve(json.data.id);
         }
-        // const remainingSubscriptions = this.props.userSubscriptions.filter(subsc => subsc.id !== json.data.id);
-        // mapActions.setUserSubscriptions(remainingSubscriptions);
-        // mapActions.toggleConfirmModal({ visible: false });
+
       });
     });
 
@@ -324,18 +317,15 @@ export default class Map extends Component {
 
     const {language} = this.context;
 
-    console.log('graphic', graphic);
-    console.log('registeredGeom', registeredGeom);
-    console.log('userSubscription', userSubscription);
-    console.log('language', language);
-
-
     const jsonData = {
+      confirmed: userSubscription.attributes.confirmed,
+      createdAt: userSubscription.attributes.createdAt,
       datasets: userSubscription.attributes.datasets,
+      datasetsQuery: userSubscription.attributes.datasetsQuery,
       language: language,
       name: userSubscription.attributes.name,
       params: {
-        geostore: registeredGeom.id, //userSubscription.attributes.params.geostore, //we need registeredGeom geostire
+        geostore: registeredGeom.id,
         iso: {
           country: null,
           region: null
@@ -344,17 +334,12 @@ export default class Map extends Component {
         useid: null,
         wdpaid: null
       },
-      resource: userSubscription.attributes.resource
+      resource: userSubscription.attributes.resource,
+      userId: userSubscription.attributes.userId
     };
-    console.log('userSubscription.id', userSubscription.id, userSubscription);
-    console.log('jsonDat1a', jsonData);
-    console.log('this.state.userSubscriptions', this.state.userSubscriptions);
 
     this.deleteSubscription(userSubscription.id).then(deletedId => {
-      console.log('userSubscription.id', userSubscription.id, userSubscription);
-      console.log('jsonDatw2', jsonData);
       this.updateSubscription(jsonData).then((newId) => {
-        console.log('newId', newId);
 
         const updatedSubscription = {
           attributes: jsonData,
@@ -364,29 +349,10 @@ export default class Map extends Component {
 
         const remainingSubscriptions = this.state.userSubscriptions.filter(subsc => subsc.id !== userSubscription.id);
         remainingSubscriptions.push(updatedSubscription);
-        // mapActions.setUserSubscriptions(remainingSubscriptions);
-        // mapActions.toggleConfirmModal({ visible: false });
-        // debugger
-        // const updatedSubscriptions = this.state.userSubscriptions.map(oldUserSubscription => {
-        //   if (oldUserSubscription.id === userSubscription.id) {
-        //     // oldUserSubscription.id = newId;
-        //     // oldUserSubscription.attributes = jsonData;
-        //     // return oldUserSubscription;
-        //     return {
-        //       attributes: jsonData,
-        //       id: newId,
-        //       type: 'subscription'
-        //     };
-        //   } else {
-        //     return oldUserSubscription;
-        //   }
-        // });
 
-        console.log('remainingSubscriptions', remainingSubscriptions);
         mapActions.setUserSubscriptions(remainingSubscriptions);
         deferred.resolve(remainingSubscriptions);
       });
-      console.log('jsonData3', jsonData);
     });
 
     return deferred;
