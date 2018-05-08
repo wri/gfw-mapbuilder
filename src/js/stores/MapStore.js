@@ -232,10 +232,16 @@ class MapStore {
     if (radioLayerToTurnOn) {
       if (radioLayerToTurnOn.subId) {
         allActiveLayers.push(radioLayerToTurnOn.subId);
-        allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
+        if (!allDynamicLayers.hasOwnProperty(radioLayerToTurnOn.id)) {
+          allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
+        } else {
+          allDynamicLayers[radioLayerToTurnOn.id].push(radioLayerToTurnOn.subIndex);
+        }
       } else if (radioLayerToTurnOn.layerIds) {
         allActiveLayers.push(radioLayerToTurnOn.id);
-        allDynamicLayers[radioLayerToTurnOn.id] = radioLayerToTurnOn.layerIds;
+        if (!allDynamicLayers.hasOwnProperty(radioLayerToTurnOn.id)) {
+          allDynamicLayers[radioLayerToTurnOn.id] = radioLayerToTurnOn.layerIds;
+        }
       } else {
         allActiveLayers.push(radioLayerToTurnOn.id);
       }
@@ -245,9 +251,16 @@ class MapStore {
       if (l.isRadioLayer) {
         return;
       }
+      if (l.subId) {
+        if (!allDynamicLayers.hasOwnProperty(l.id)) {
+          allDynamicLayers[l.id] = [l.subIndex];
+        } else {
+          allDynamicLayers[l.id].push(l.subIndex);
+        }
+      }
       allActiveLayers.push(l.id);
     });
-
+    console.log(allDynamicLayers);
     this.activeLayers = allActiveLayers;
     this.dynamicLayers = allDynamicLayers;
   }
