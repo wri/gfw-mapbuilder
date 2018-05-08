@@ -419,8 +419,9 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
     queryTask.execute(query).then(res => {
       if (res.features && res.features.length > 0) {
         if (mapLayer && mapLayer.infoTemplate) {
+          const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
 
-          document.getElementById('report-subtitle').innerHTML = res.features[0].attributes[mapLayer.displayField];
+          document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
 
           const fragment = document.createDocumentFragment();
 
