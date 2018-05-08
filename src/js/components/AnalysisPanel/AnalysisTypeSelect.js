@@ -13,6 +13,16 @@ import React, {
   PropTypes
 } from 'react';
 
+const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
+  <div className='analysis-item-wrapper'>
+    <div className='analysis-item-label'>
+      <span><strong>{itemNumber}</strong></span>
+      {title}
+    </div>
+    {children}
+  </div>
+);
+
 export default class AnalysisTypeSelect extends Component {
 
   static contextTypes = {
@@ -79,21 +89,25 @@ export default class AnalysisTypeSelect extends Component {
             initialEndValue = Number(lossOptions[lossToSelectIndex].label);
           }
           formComponents.push(
-            <AnalysisRangeSlider
-              key={analysisConfig.analysisId + inputType + idx}
-              analysisId={analysisConfig.analysisId}
-              bounds={bounds}
-              valueType={valueType || null}
-              startParamName={startParamName}
-              endParamName={combineParams ? null : endParamName}
-              valueSeparator={combineParams ? valueSeparator : null}
-              step={step || 1}
-              label={label[language]}
-              combineParams={combineParams}
-              initialStartValue={initialStartValue}
-              initialEndValue={initialEndValue}
-              rangeSliderCallback={this.rangeSliderCallback}
-            />
+            <AnalysisItemWrapper
+              title={label[language]}
+              itemNumber={idx + 1}
+            >
+              <AnalysisRangeSlider
+                key={analysisConfig.analysisId + inputType + idx}
+                analysisId={analysisConfig.analysisId}
+                bounds={bounds}
+                valueType={valueType || null}
+                startParamName={startParamName}
+                endParamName={combineParams ? null : endParamName}
+                valueSeparator={combineParams ? valueSeparator : null}
+                step={step || 1}
+                combineParams={combineParams}
+                initialStartValue={initialStartValue}
+                initialEndValue={initialEndValue}
+                rangeSliderCallback={this.rangeSliderCallback}
+              />
+            </AnalysisItemWrapper>
           );
           break;
         }
@@ -101,15 +115,20 @@ export default class AnalysisTypeSelect extends Component {
           const { canopyDensity } = this.props;
           const { label } = param;
           formComponents.push(
-            <div
-              key={analysisConfig.analysisId + param.inputType + idx}
-              className='analysis-results__select-form-item-container'
+            <AnalysisItemWrapper
+              title={label[language] ? label[language] : ''}
+              itemNumber={idx + 1}
             >
-              <DensityDisplay
-                label={label[language] ? label[language] : ''}
-                canopyDensity={canopyDensity}
-              />
-            </div>
+              <div
+                key={analysisConfig.analysisId + param.inputType + idx}
+                className='analysis-results__select-form-item-container'
+              >
+                <DensityDisplay
+                  label={''}
+                  canopyDensity={canopyDensity}
+                />
+              </div>
+            </AnalysisItemWrapper>
           );
           break;
         }
@@ -164,39 +183,47 @@ export default class AnalysisTypeSelect extends Component {
 
           if (multi === true || multi === 'true') {
             formComponents.push(
-              <AnalysisMultiDatePicker
-                key={analysisConfig.analysisId + param.inputType + idx}
-                analysisId={analysisConfig.analysisId}
-                startParamName={startParamName}
-                endParamName={endParamName}
-                label={label[language]}
-                combineParams={combineParams || null}
-                valueSeparator={combineParams ? valueSeparator : null}
-                multi={true}
-                defaultStartDate={defaultStartDate || new Date()}
-                defaultEndDate={defaultEndDate || new Date()}
-                minDate={minDate || null}
-                maxDate={maxDate || new Date()}
-                calendarCallback={this.calendarCallback}
-              />
+              <AnalysisItemWrapper
+                title={label[language]}
+                itemNumber={idx + 1}
+              >
+                <AnalysisMultiDatePicker
+                  key={analysisConfig.analysisId + param.inputType + idx}
+                  analysisId={analysisConfig.analysisId}
+                  startParamName={startParamName}
+                  endParamName={endParamName}
+                  combineParams={combineParams || null}
+                  valueSeparator={combineParams ? valueSeparator : null}
+                  multi={true}
+                  defaultStartDate={defaultStartDate || new Date()}
+                  defaultEndDate={defaultEndDate || new Date()}
+                  minDate={minDate || null}
+                  maxDate={maxDate || new Date()}
+                  calendarCallback={this.calendarCallback}
+                />
+              </AnalysisItemWrapper>
             );
             break;
           }
 
           formComponents.push(
-            <AnalysisDatePicker
-              key={analysisConfig.analysisId + param.inputType + idx}
-              analysisId={analysisConfig.analysisId}
-              startParamName={startParamName}
-              label={label[language]}
-              combineParams={combineParams || null}
-              valueSeparator={combineParams ? valueSeparator : null}
-              multi={false}
-              defaultSelected={defaultStartDate || null}
-              minDate={minDate}
-              maxDate={maxDate}
-              calendarCallback={this.calendarCallback}
-            />
+            <AnalysisItemWrapper
+              title={label[language]}
+              itemNumber={idx + 1}
+            >
+              <AnalysisDatePicker
+                key={analysisConfig.analysisId + param.inputType + idx}
+                analysisId={analysisConfig.analysisId}
+                startParamName={startParamName}
+                combineParams={combineParams || null}
+                valueSeparator={combineParams ? valueSeparator : null}
+                multi={false}
+                defaultSelected={defaultStartDate || null}
+                minDate={minDate}
+                maxDate={maxDate}
+                calendarCallback={this.calendarCallback}
+              />
+            </AnalysisItemWrapper>
           );
 
           break;
@@ -317,13 +344,11 @@ export default class AnalysisTypeSelect extends Component {
         {activeAnalysisType === 'default' &&
           <div className='analysis-results__none-selected'>
             <div className='analysis-results__info-container'>
-              <div className='analysis-results__chart-icon chart-icon' />
               <div className='analysis-results__info'>
-                Select an analysis from the drop down menu, configure parameters, then click run to see the results
+                <div><strong>Analysis not selected</strong></div>
+                <div>Select an analysis from the drop-down menu to begin</div>
               </div>
-            </div>
-            <div className='other-options-info'>
-              You can also print a report showing all analyses or subscribe to receive alerts for the selected area.
+              <div className='analysis-results__chart-icon chart-icon' />
             </div>
           </div>
         }

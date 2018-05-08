@@ -137,6 +137,7 @@
     flex-direction column
     width 100%
     height 60px
+    padding-left 30px
     justify-content space-around
     margin-bottom 20px
     .select-form-item
@@ -150,10 +151,26 @@
     margin-top 10px
   .item-description
     font-size 12px
-    margin-bottom 20px
+    margin-bottom 10px
 
 .analysis-datepicker-button-label
-  margin-right: 10px
+  margin-right 10px
+
+.analysis-item-wrapper
+  border-bottom 1px solid rgba(0,0,0,0.2)
+  margin-bottom 10px
+  &:last-child
+    border-bottom none
+  .analysis-item-label
+    span strong
+      border 1px solid
+      display inline-flex
+      width 25px
+      height 25px
+      justify-content center
+      align-items center
+      border-radius 50%
+      margin-right 10px
 
 .analysis-results__select-style
   border 1px solid $lightGray
@@ -173,6 +190,7 @@
   position absolute
   content '\25BC'
   font-size 12px
+  color #e6a912
   right 8px
   top 5px
 
@@ -189,7 +207,7 @@
   top 0
 
 .analysis-results__container
-  // height 90%
+  height calc(100% - 50px)
 
 .analysis-results__content
   position absolute
@@ -207,21 +225,22 @@
 .analysis-results__none-selected
   display flex
   flex-direction column
-  justify-content space-between
+  justify-content center
   align-items center
   width 100%
   .analysis-results__info-container
     position relative
-    top 50px
+    display flex
+    flex-direction column
+    justify-content center
     width 95%
+    height 90%
     .analysis-results__chart-icon
       filter blur(5px)
       opacity 0.15
       height 180px
-      margin-bottom 50px
     .analysis-results__info
-      position absolute
-      top 40px
+      text-align center
       width 100%
       color $darkGray
       font-size 20px

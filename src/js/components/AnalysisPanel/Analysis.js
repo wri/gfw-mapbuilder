@@ -327,8 +327,8 @@ export default class Analysis extends Component {
             </div>
           }
         </div>
-        <div className='analysis-results__footer'>
-          {activeAnalysisType !== 'default' && !chartComponent && <div className='run-analysis-button-container'>
+        {activeAnalysisType !== 'default' && !chartComponent && <div className='analysis-results__footer'>
+          <div className='run-analysis-button-container'>
             <div className='analysis-instructions__separator'>
               <span className='analysis-instructions__separator-text'>Then</span>
             </div>
@@ -340,9 +340,9 @@ export default class Analysis extends Component {
             <div>
               {text[language].RUN_ANALYSIS_BUTTON_TEXT}
             </div>
-          </div>}
+          </div>
           <ReportSubscribeButtons setLoader={this.setLoader} />
-        </div>
+        </div>}
       </div>
     );
   }

@@ -82,11 +82,10 @@ export default class AnalysisRangeSlider extends Component {
   }
 
   render() {
-    const { bounds, step, label } = this.props;
+    const { bounds, step } = this.props;
     const { rangeSliderValue } = this.state;
     return (
       <div className='analysis-results__select-form-item-container'>
-        <div className='select-form-item-label'>{label}</div>
         <Range
           className='select-form-item'
           min={bounds[0]}
