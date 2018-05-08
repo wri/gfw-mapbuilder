@@ -65,20 +65,15 @@ export default class ReportSubscribeButtons extends Component {
       if (selectedFeature._layer && selectedFeature._layer.id && selectedFeature._layer.id !== layerKeys.USER_FEATURES) {
         let layerString = '';
 
-        payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes.OBJECTID : null;
+        payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes[selectedFeature._layer.objectIdField] : null;
+        payload.OBJECTID_Field = selectedFeature._layer.objectIdField;
 
         layerString = selectedFeature._layer.url;
         layerString += '--' + selectedFeature._layer.id;
 
         payload.layerId = layerString;
-
-        if (payload.OBJECTID) {
-          payload.OBJECTID_Field = 'OBJECTID';
-        } else {
-          payload.OBJECTID_Field = 'objectid';
-          payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes.objectid : null;
-        }
       }
+
       appUtils.generateReport(payload);
     }
 
