@@ -262,7 +262,7 @@ export default class LegendPanel extends Component {
     } else {
       const esriLayer = layer.esriLayer;
 
-      if (esriLayer.type === 'Feature Layer') {
+      if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
         return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
