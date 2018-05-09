@@ -16,7 +16,7 @@ export const getWMSFeatureInfo = (evt, layer, extent) => {
     content: {
       REQUEST: 'GetFeatureInfo',
       VERSION: layer.version,
-      SRS: 'EPSG:3857',
+      ...(layer.version === '1.3.0' ? {CRS: 'EPSG:3857'} : {SRS: 'EPSG:3857'}),
       BBOX: `${xmin},${ymin},${xmax},${ymax}`,
       WIDTH: window.innerWidth,
       HEIGHT: window.innerHeight,
