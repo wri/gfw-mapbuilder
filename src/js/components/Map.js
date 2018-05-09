@@ -24,9 +24,11 @@ import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
 import Measurement from 'esri/dijit/Measurement';
+import webMercatorUtils from 'esri/geometry/webMercatorUtils';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
 import dom from 'dojo/dom';
+import Deferred from 'dojo/Deferred';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
@@ -195,11 +197,30 @@ export default class Map extends Component {
         });
 
         editToolbar = new Edit(response.map);
-        editToolbar.on('deactivate', function(evt) {
+        editToolbar.on('deactivate', evt => {
           if (evt.info.isModified) {
+
+            if (evt.graphic.geometry.spatialReference.wkid === 4326){
+              evt.graphic.setGeometry(
+                webMercatorUtils.geographicToWebMercator(evt.graphic.geometry)
+              );
+            }
+
+            const { userSubscriptions } = this.state;
+
+            const matchingUserSubscriptions = userSubscriptions.filter(userSubscription => {
+              return userSubscription && evt.graphic.attributes && userSubscription.attributes.params.geostore === evt.graphic.attributes.geostoreId;
+            });
+
             analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
               evt.graphic.attributes.geostoreId = res.data.id;
-              response.map.infoWindow.setFeatures([evt.graphic]);
+              if (matchingUserSubscriptions.length > 0) {
+                this.updateThenDeleteSubscription(res.data.id, matchingUserSubscriptions[0]).then(updatedSubscription => {
+                  response.map.infoWindow.setFeatures([evt.graphic]);
+                });
+              } else {
+                response.map.infoWindow.setFeatures([evt.graphic]);
+              }
             });
           }
         });
@@ -227,6 +248,117 @@ export default class Map extends Component {
       });
     });
   };
+
+  deleteSubscription = id => {
+    const deferred = new Deferred();
+    fetch(
+      `https://production-api.globalforestwatch.org/v1/subscriptions/${id}`,
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    ).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
+      }
+
+      response.json().then(json => {
+        if (hasError) {
+          console.error(json);
+          deferred.reject(json);
+          return;
+        } else {
+          mapActions.deleteSubscription({});
+          deferred.resolve(true);
+        }
+
+      });
+    });
+
+    return deferred;
+  }
+
+  updateSubscription = jsonData => {
+    const deferred = new Deferred();
+
+    fetch(
+      'https://production-api.globalforestwatch.org/v1/subscriptions',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+      }
+    ).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
+      }
+
+      response.json().then(json => {
+        if (hasError) {
+          console.error(json);
+          deferred.reject(json);
+          return;
+        } else {
+          deferred.resolve(json.data.id);
+        }
+      });
+    });
+
+    return deferred;
+  }
+
+  updateThenDeleteSubscription = (registeredGeomId, userSubscription) => {
+    const deferred = new Deferred();
+
+    const {language} = this.context;
+
+    const jsonData = {
+      confirmed: userSubscription.attributes.confirmed,
+      createdAt: userSubscription.attributes.createdAt,
+      datasets: userSubscription.attributes.datasets,
+      datasetsQuery: userSubscription.attributes.datasetsQuery,
+      language: language,
+      name: userSubscription.attributes.name,
+      params: {
+        geostore: registeredGeomId,
+        iso: {
+          country: null,
+          region: null
+        },
+        use: null,
+        useid: null,
+        wdpaid: null
+      },
+      resource: userSubscription.attributes.resource,
+      userId: userSubscription.attributes.userId
+    };
+
+    this.deleteSubscription(userSubscription.id).then(() => {
+      this.updateSubscription(jsonData).then((newId) => {
+
+        const updatedSubscription = {
+          attributes: jsonData,
+          id: newId,
+          type: 'subscription'
+        };
+        const index = this.state.userSubscriptions.map(e => e.id ).indexOf(userSubscription.id);
+
+        const remainingSubscriptions = this.state.userSubscriptions.slice();
+        remainingSubscriptions.splice(index, 1, updatedSubscription);
+
+
+        mapActions.setUserSubscriptions(remainingSubscriptions);
+        deferred.resolve(remainingSubscriptions);
+      });
+    });
+
+    return deferred;
+  }
 
   applyStateFromUrl = (map, params) => {
     const {settings} = this.context;
