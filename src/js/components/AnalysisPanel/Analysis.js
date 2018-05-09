@@ -83,11 +83,13 @@ export default class Analysis extends Component {
     const { uiParams } = analysisItemConfig;
     const formComponents = [];
     if (uiParams === 'none') {
-      formComponents.push(<div
-        className='analysis-results__select-form-item-container'
-      >
-        Click the &lsquo;Run Analysis&rsquo; button see analysis
-      </div>);
+      return (
+        <div
+          className='analysis-results__select-form-item-container'
+        >
+          Click the &lsquo;Run Analysis&rsquo; button see analysis
+        </div>
+      );
     }
 
     if (!uiParams || uiParams.length === 0) {

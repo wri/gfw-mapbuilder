@@ -24,6 +24,14 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.initialLayerOpacities.forEach(opacity => {
+      if (opacity.layerId === this.props.layerId) {
+        this.setState({ opacity: opacity.value });
+      }
+    });
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.visibility !== this.props.visibility) {
       this.setState(prevState => {

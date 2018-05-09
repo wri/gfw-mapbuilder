@@ -23,11 +23,16 @@ export default class InfoWindow extends Component {
 
       const measurementDiv = document.createElement('DIV');
       this.measurementContainer.appendChild(measurementDiv);
-      
+
       this.measurement = new Measurement({
         map: this.context.map
       }, measurementDiv);
       this.measurement.startup();
+      this.measurement.on('measure-end', (event) => {
+        // deactivate the tool after drawing
+        const toolName = event.toolName;
+        this.measurement.setTool(toolName, false);
+      });
     }
 
     if (prevProps.activeWebmap !== undefined && prevProps.activeWebmap !== this.props.activeWebmap) {
@@ -47,6 +52,6 @@ export default class InfoWindow extends Component {
     return <div
       ref={(div) => { this.measurementContainer = div; }}
       className='measurement-container'
-    />
+    />;
   }
 }

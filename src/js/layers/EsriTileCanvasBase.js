@@ -108,6 +108,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
     if (this.options.id) { this.id = this.options.id; }
     //- Create a tile cache to optimize this layer
     this.tiles = {};
+    this.opacity = 1;
     this.tileRequests = [];
     //- Store the position of the map, this is used to apply transforms
     this.position = { x: 0, y: 0 };
@@ -506,6 +507,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   setOpacity: function setOpacity (value) {
     this._container.style.opacity = value;
+    this.opacity = value;
   },
 
   //- Methods that need to be implemented by the child class
