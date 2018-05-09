@@ -215,7 +215,7 @@ export default class Map extends Component {
             analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
               evt.graphic.attributes.geostoreId = res.data.id;
               if (matchingUserSubscriptions.length > 0) {
-                this.updateThenDeleteSubscription(evt.graphic, res.data, matchingUserSubscriptions[0]).then(updatedSubscription => {
+                this.updateThenDeleteSubscription(res.data.id, matchingUserSubscriptions[0]).then(updatedSubscription => {
                   response.map.infoWindow.setFeatures([evt.graphic]);
                 });
               } else {
@@ -270,7 +270,7 @@ export default class Map extends Component {
           return;
         } else {
           mapActions.deleteSubscription({});
-          deferred.resolve(json.data.id);
+          deferred.resolve(true);
         }
 
       });
@@ -312,7 +312,7 @@ export default class Map extends Component {
     return deferred;
   }
 
-  updateThenDeleteSubscription = (graphic, registeredGeom, userSubscription) => {
+  updateThenDeleteSubscription = (registeredGeomId, userSubscription) => {
     const deferred = new Deferred();
 
     const {language} = this.context;
@@ -325,7 +325,7 @@ export default class Map extends Component {
       language: language,
       name: userSubscription.attributes.name,
       params: {
-        geostore: registeredGeom.id,
+        geostore: registeredGeomId,
         iso: {
           country: null,
           region: null
@@ -338,7 +338,7 @@ export default class Map extends Component {
       userId: userSubscription.attributes.userId
     };
 
-    this.deleteSubscription(userSubscription.id).then(deletedId => {
+    this.deleteSubscription(userSubscription.id).then(() => {
       this.updateSubscription(jsonData).then((newId) => {
 
         const updatedSubscription = {
@@ -346,9 +346,11 @@ export default class Map extends Component {
           id: newId,
           type: 'subscription'
         };
+        const index = this.state.userSubscriptions.map(e => e.id ).indexOf(userSubscription.id);
 
-        const remainingSubscriptions = this.state.userSubscriptions.filter(subsc => subsc.id !== userSubscription.id);
-        remainingSubscriptions.push(updatedSubscription);
+        const remainingSubscriptions = this.state.userSubscriptions.slice();
+        remainingSubscriptions.splice(index, 1, updatedSubscription);
+
 
         mapActions.setUserSubscriptions(remainingSubscriptions);
         deferred.resolve(remainingSubscriptions);
