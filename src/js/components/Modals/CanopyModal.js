@@ -82,14 +82,6 @@ export default class CanopyModal extends Component {
     };
   }
 
-  componentDidMount() {
-    const { canopyDensity } = this.props;
-    const { map, settings } = this.context;
-
-    layersHelper.updateTreeCoverDefinitions(canopyDensity, map, settings.layerPanel);
-    layersHelper.updateAGBiomassLayer(canopyDensity, map);
-  }
-
   discernDensityValue = density => {
     const sliderValue = Object.keys(this.state.sliderMarks).filter((mark) => {
       return this.state.sliderMarks[mark].density === density;
