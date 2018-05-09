@@ -15,17 +15,22 @@ import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 import BarChart from 'components/AnalysisPanel/BarChart';
 import VegaChart from 'components/AnalysisPanel/VegaChart';
+import AnalysisRangeSlider from './AnalysisFormElements/AnalysisRangeSlider';
+import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
+import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
+import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
 // import performAnalysis from 'utils/performAnalysis';
 import {attributes} from 'constants/AppConstants';
 // import tabKeys from 'constants/TabViewConstants';
 // import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
+import mapActions from 'actions/MapActions';
 import {formatters, getEncoder, getCustomAnalysis} from 'utils/analysisUtils';
 import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 // import Deferred from 'dojo/Deferred';
-// import moment from 'moment';
+import moment from 'moment';
 // import request from 'utils/request';
 // import utils from 'utils/AppUtils';
 import text from 'js/languages';
@@ -35,6 +40,16 @@ import React, {
 } from 'react';
 import MapActions from '../../actions/MapActions';
 
+const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
+  <div className='analysis-item-wrapper'>
+    <div className='analysis-item-label'>
+      <span><strong>{itemNumber}</strong></span>
+      {title}
+    </div>
+    {children}
+  </div>
+);
+
 export default class Analysis extends Component {
 
   static contextTypes = {
@@ -43,7 +58,6 @@ export default class Analysis extends Component {
   };
 
   state = {
-    error: false,
     isLoading: false,
     chartComponent: null,
   };
@@ -61,6 +75,261 @@ export default class Analysis extends Component {
     if (nextProps.activeAnalysisType !== this.props.activeAnalysisType) {
       this.setState({ chartComponent: null });
     }
+  }
+
+  getFormComponents = (activeAnalysisType, analysisItems) => {
+    const { language } = this.context;
+    const analysisItemConfig = analysisItems.filter(ai => ai.analysisId === activeAnalysisType)[0];
+    const { uiParams } = analysisItemConfig;
+    const formComponents = [];
+    if (uiParams === 'none') {
+      formComponents.push(<div
+        className='analysis-results__select-form-item-container'
+      >
+        Click the &lsquo;Run Analysis&rsquo; button see analysis
+      </div>);
+    }
+
+    if (!uiParams || uiParams.length === 0) {
+      throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config. If you don't need UI elements, add `uiParams: 'none'`");
+    }
+
+    analysisItemConfig.uiParams.forEach((param, idx) => {
+      switch (param.inputType) {
+        case 'rangeSlider': {
+          const {
+            bounds,
+            step,
+            label,
+            startParamName,
+            endParamName,
+            combineParams,
+            inputType,
+            valueType,
+            valueSeparator,
+          } = param;
+
+          let initialStartValue = null;
+          let initialEndValue = null;
+
+          if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
+            throw new Error(`analysis id: '${analysisItemConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
+          }
+
+          if (analysisItemConfig.analysisId === 'TC_LOSS') {
+            const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
+            initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
+            initialEndValue = Number(lossOptions[lossToSelectIndex].label);
+          }
+          formComponents.push(
+            <AnalysisItemWrapper
+              key={analysisItemConfig.analysisId + inputType + idx}
+              title={label[language]}
+              itemNumber={idx + 1}
+            >
+              <AnalysisRangeSlider
+                analysisId={analysisItemConfig.analysisId}
+                bounds={bounds}
+                valueType={valueType || null}
+                startParamName={startParamName}
+                endParamName={combineParams ? null : endParamName}
+                valueSeparator={combineParams ? valueSeparator : null}
+                step={step || 1}
+                combineParams={combineParams}
+                initialStartValue={initialStartValue}
+                initialEndValue={initialEndValue}
+                rangeSliderCallback={this.rangeSliderCallback}
+              />
+            </AnalysisItemWrapper>
+          );
+          break;
+        }
+        case 'tcd': {
+          const { canopyDensity } = this.props;
+          const { label } = param;
+          formComponents.push(
+            <AnalysisItemWrapper
+              key={analysisItemConfig.analysisId + param.inputType + idx}
+              title={label[language] ? label[language] : ''}
+              itemNumber={idx + 1}
+            >
+              <div
+                className='analysis-results__select-form-item-container'
+              >
+                <DensityDisplay
+                  label={''}
+                  canopyDensity={canopyDensity}
+                />
+              </div>
+            </AnalysisItemWrapper>
+          );
+          break;
+        }
+        case 'datepicker': {
+          const {
+            label,
+            startParamName,
+            endParamName,
+            combineParams,
+            valueSeparator,
+            multi,
+            minDate,
+            maxDate,
+          } = param;
+
+          let {
+            defaultStartDate,
+            defaultEndDate,
+          } = param;
+
+          let initialStartDate = null;
+          let initialEndDate = null;
+
+          if (analysisItemConfig.analysisId === 'GLAD_ALERTS') {
+            const { gladStartDate, gladEndDate } = this.props;
+            initialStartDate = moment(gladStartDate);
+            initialEndDate = moment(gladEndDate);
+          }
+
+          if (analysisItemConfig.analysisId === 'TERRAI_ALERTS') {
+            const { terraIStartDate, terraIEndDate } = this.props;
+            initialStartDate = moment(terraIStartDate);
+            initialEndDate = moment(terraIEndDate);
+          }
+
+          if (analysisItemConfig.analysisId === 'VIIRS_FIRES') {
+            const { viirsStartDate, viirsEndDate } = this.props;
+            initialStartDate = moment(viirsStartDate);
+            initialEndDate = moment(viirsEndDate);
+          }
+
+          if (initialStartDate) { defaultStartDate = initialStartDate; }
+          if (initialEndDate) { defaultEndDate = initialEndDate; }
+
+          if (!defaultStartDate && minDate) {
+            defaultStartDate = minDate;
+          }
+
+          if (!defaultEndDate && maxDate) {
+            defaultEndDate = maxDate;
+          }
+
+          if (multi === true || multi === 'true') {
+            formComponents.push(
+              <AnalysisItemWrapper
+                key={analysisItemConfig.analysisId + param.inputType + idx}
+                title={label[language]}
+                itemNumber={idx + 1}
+              >
+                <AnalysisMultiDatePicker
+                  analysisId={analysisItemConfig.analysisId}
+                  startParamName={startParamName}
+                  endParamName={endParamName}
+                  combineParams={combineParams || null}
+                  valueSeparator={combineParams ? valueSeparator : null}
+                  multi={true}
+                  defaultStartDate={defaultStartDate || new Date()}
+                  defaultEndDate={defaultEndDate || new Date()}
+                  minDate={minDate || null}
+                  maxDate={maxDate || new Date()}
+                  calendarCallback={this.calendarCallback}
+                />
+              </AnalysisItemWrapper>
+            );
+            break;
+          }
+
+          formComponents.push(
+            <AnalysisItemWrapper
+              key={analysisItemConfig.analysisId + param.inputType + idx}
+              title={label[language]}
+              itemNumber={idx + 1}
+            >
+              <AnalysisDatePicker
+                analysisId={analysisItemConfig.analysisId}
+                startParamName={startParamName}
+                combineParams={combineParams || null}
+                valueSeparator={combineParams ? valueSeparator : null}
+                multi={false}
+                defaultSelected={defaultStartDate || null}
+                minDate={minDate}
+                maxDate={maxDate}
+                calendarCallback={this.calendarCallback}
+              />
+            </AnalysisItemWrapper>
+          );
+
+          break;
+        }
+        default:
+          return null;
+      }
+    });
+    return formComponents;
+  }
+
+  rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
+    let startValue = rangeSliderValue[0];
+    let endValue = rangeSliderValue[1];
+
+    if (valueType === 'date') {
+      startValue = `${startValue}-01-01`;
+      endValue = `${endValue}-12-31`;
+    }
+
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startValue}${valueSeparator}${endValue}`,
+      });
+      return;
+    }
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: startParam,
+      paramValue: `${startValue}`,
+    });
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: endParam,
+      paramValue: `${endValue}`,
+    });
+  }
+
+  calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startDate}${valueSeparator}${endDate}`,
+      });
+      return;
+    }
+
+    if (multi === true || multi === 'true') {
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: endParam,
+        paramValue: endDate,
+      });
+    }
+
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: startParam,
+      paramValue: startDate,
+    });
   }
 
   renderResults = (type, results, language, config) => {
@@ -225,7 +494,6 @@ export default class Analysis extends Component {
     this.setState({
       isLoading: true,
       results: null,
-      isError: false
     });
     Object.keys(analysisParams).forEach(analysisId => {
       if (analysisId === activeAnalysisType) {
@@ -272,7 +540,6 @@ export default class Analysis extends Component {
               error: error,
               message: 'there was an error'
             },
-            isError: true,
           });
         });
       }
@@ -281,7 +548,7 @@ export default class Analysis extends Component {
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, error, chartComponent} = this.state;
+    const { isLoading, chartComponent} = this.state;
     const {language, settings} = this.context;
     let title, slopeSelect;
 
@@ -310,39 +577,50 @@ export default class Analysis extends Component {
       );
     }
 
+    let activeAnalysisItem;
+    let activeItemTitle = null,
+        activeItemDescription = null;
+
+    if (activeAnalysisType !== 'default') {
+      activeAnalysisItem = settings.analysisModules.filter(i => i.analysisId === activeAnalysisType)[0];
+      if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
+      if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
+    }
+
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
         <div className='analysis-results__content custom-scroll'>
-          {title}
-          <div className='analysis-results__select-label'>
-            {text[language].ANALYSIS_SELECT_TYPE_LABEL}
+          <div className='title-select-container'>
+            <div className='analysis-title'>{title}</div>
+            <div className='analysis-results__select-label'>
+              {text[language].ANALYSIS_SELECT_TYPE_LABEL}
+            </div>
+            <AnalysisTypeSelect {...this.props} analysisItems={settings.analysisModules} />
           </div>
-          <AnalysisTypeSelect {...this.props} analysisItems={settings.analysisModules} chartVisible={!!chartComponent} />
-          {error ?
-            <div className=''>Error Here</div> :
+          {activeAnalysisType !== 'default' && !chartComponent &&
+            <div className='analysis-results__select-form custom-scroll'>
+              <div className='item-title'>{activeItemTitle}</div><div className='item-description'>{activeItemDescription}</div>
+              {this.getFormComponents(activeAnalysisType, settings.analysisModules)}
+            </div>
+          }
+          {chartComponent &&
             <div className='analysis-results__chart-component-container'>
               {slopeSelect}
               {chartComponent}
             </div>
           }
+          {activeAnalysisType !== 'default' && !chartComponent
+            && <div className='analysis-results__footer'>
+              <div className='run-analysis-button-container'>
+                <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+                  {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+                </button>
+              </div>
+              <ReportSubscribeButtons setLoader={this.setLoader} />
+            </div>
+          }
         </div>
-        {activeAnalysisType !== 'default' && !chartComponent && <div className='analysis-results__footer'>
-          <div className='run-analysis-button-container'>
-            <div className='analysis-instructions__separator'>
-              <span className='analysis-instructions__separator-text'>Then</span>
-            </div>
-            <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
-              <svg height='100%' width='100%' viewBox='0 0 75 75'>
-                <polygon points='25 15, 60 37.5, 25 60'/>
-              </svg>
-            </button>
-            <div>
-              {text[language].RUN_ANALYSIS_BUTTON_TEXT}
-            </div>
-          </div>
-          <ReportSubscribeButtons setLoader={this.setLoader} />
-        </div>}
       </div>
     );
   }

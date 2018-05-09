@@ -2,26 +2,12 @@
 // import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
 // import appUtils from 'utils/AppUtils';
-import AnalysisRangeSlider from './AnalysisFormElements/AnalysisRangeSlider';
-import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
-import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
-import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import text from 'js/languages';
-import moment from 'moment';
+
 import React, {
   Component,
   PropTypes
 } from 'react';
-
-const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
-  <div className='analysis-item-wrapper'>
-    <div className='analysis-item-label'>
-      <span><strong>{itemNumber}</strong></span>
-      {title}
-    </div>
-    {children}
-  </div>
-);
 
 export default class AnalysisTypeSelect extends Component {
 
@@ -44,278 +30,14 @@ export default class AnalysisTypeSelect extends Component {
     );
   }
 
-  getFormComponents = (activeAnalysisType, analysisItems) => {
-    const { language } = this.context;
-    const analysisConfig = analysisItems.filter(ai => ai.analysisId === activeAnalysisType)[0];
-    const { uiParams } = analysisConfig;
-    const formComponents = [];
-    if (uiParams === 'none') {
-      formComponents.push(<div
-        className='analysis-results__select-form-item-container'
-      >
-        Click the &lsquo;Run Analysis&rsquo; button see analysis
-      </div>);
-    }
-
-    if (!uiParams || uiParams.length === 0) {
-      throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config. If you don't need UI elements, add `uiParams: 'none'`");
-    }
-
-    analysisConfig.uiParams.forEach((param, idx) => {
-      switch (param.inputType) {
-        case 'rangeSlider': {
-          const {
-            bounds,
-            step,
-            label,
-            startParamName,
-            endParamName,
-            combineParams,
-            inputType,
-            valueType,
-            valueSeparator,
-          } = param;
-
-          let initialStartValue = null;
-          let initialEndValue = null;
-
-          if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
-            throw new Error(`analysis id: '${analysisConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
-          }
-
-          if (analysisConfig.analysisId === 'TC_LOSS') {
-            const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
-            initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
-            initialEndValue = Number(lossOptions[lossToSelectIndex].label);
-          }
-          formComponents.push(
-            <AnalysisItemWrapper
-              title={label[language]}
-              itemNumber={idx + 1}
-            >
-              <AnalysisRangeSlider
-                key={analysisConfig.analysisId + inputType + idx}
-                analysisId={analysisConfig.analysisId}
-                bounds={bounds}
-                valueType={valueType || null}
-                startParamName={startParamName}
-                endParamName={combineParams ? null : endParamName}
-                valueSeparator={combineParams ? valueSeparator : null}
-                step={step || 1}
-                combineParams={combineParams}
-                initialStartValue={initialStartValue}
-                initialEndValue={initialEndValue}
-                rangeSliderCallback={this.rangeSliderCallback}
-              />
-            </AnalysisItemWrapper>
-          );
-          break;
-        }
-        case 'tcd': {
-          const { canopyDensity } = this.props;
-          const { label } = param;
-          formComponents.push(
-            <AnalysisItemWrapper
-              title={label[language] ? label[language] : ''}
-              itemNumber={idx + 1}
-            >
-              <div
-                key={analysisConfig.analysisId + param.inputType + idx}
-                className='analysis-results__select-form-item-container'
-              >
-                <DensityDisplay
-                  label={''}
-                  canopyDensity={canopyDensity}
-                />
-              </div>
-            </AnalysisItemWrapper>
-          );
-          break;
-        }
-        case 'datepicker': {
-          const {
-            label,
-            startParamName,
-            endParamName,
-            combineParams,
-            valueSeparator,
-            multi,
-            minDate,
-            maxDate,
-          } = param;
-
-          let {
-            defaultStartDate,
-            defaultEndDate,
-          } = param;
-
-          let initialStartDate = null;
-          let initialEndDate = null;
-
-          if (analysisConfig.analysisId === 'GLAD_ALERTS') {
-            const { gladStartDate, gladEndDate } = this.props;
-            initialStartDate = moment(gladStartDate);
-            initialEndDate = moment(gladEndDate);
-          }
-
-          if (analysisConfig.analysisId === 'TERRAI_ALERTS') {
-            const { terraIStartDate, terraIEndDate } = this.props;
-            initialStartDate = moment(terraIStartDate);
-            initialEndDate = moment(terraIEndDate);
-          }
-
-          if (analysisConfig.analysisId === 'VIIRS_FIRES') {
-            const { viirsStartDate, viirsEndDate } = this.props;
-            initialStartDate = moment(viirsStartDate);
-            initialEndDate = moment(viirsEndDate);
-          }
-
-          if (initialStartDate) { defaultStartDate = initialStartDate; }
-          if (initialEndDate) { defaultEndDate = initialEndDate; }
-
-          if (!defaultStartDate && minDate) {
-            defaultStartDate = minDate;
-          }
-
-          if (!defaultEndDate && maxDate) {
-            defaultEndDate = maxDate;
-          }
-
-          if (multi === true || multi === 'true') {
-            formComponents.push(
-              <AnalysisItemWrapper
-                title={label[language]}
-                itemNumber={idx + 1}
-              >
-                <AnalysisMultiDatePicker
-                  key={analysisConfig.analysisId + param.inputType + idx}
-                  analysisId={analysisConfig.analysisId}
-                  startParamName={startParamName}
-                  endParamName={endParamName}
-                  combineParams={combineParams || null}
-                  valueSeparator={combineParams ? valueSeparator : null}
-                  multi={true}
-                  defaultStartDate={defaultStartDate || new Date()}
-                  defaultEndDate={defaultEndDate || new Date()}
-                  minDate={minDate || null}
-                  maxDate={maxDate || new Date()}
-                  calendarCallback={this.calendarCallback}
-                />
-              </AnalysisItemWrapper>
-            );
-            break;
-          }
-
-          formComponents.push(
-            <AnalysisItemWrapper
-              title={label[language]}
-              itemNumber={idx + 1}
-            >
-              <AnalysisDatePicker
-                key={analysisConfig.analysisId + param.inputType + idx}
-                analysisId={analysisConfig.analysisId}
-                startParamName={startParamName}
-                combineParams={combineParams || null}
-                valueSeparator={combineParams ? valueSeparator : null}
-                multi={false}
-                defaultSelected={defaultStartDate || null}
-                minDate={minDate}
-                maxDate={maxDate}
-                calendarCallback={this.calendarCallback}
-              />
-            </AnalysisItemWrapper>
-          );
-
-          break;
-        }
-        default:
-          return null;
-      }
-    });
-    return formComponents;
-  }
 
   handleChange = e => {
     mapActions.setAnalysisType(e.target.value);
   }
 
-  rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
-    let startValue = rangeSliderValue[0];
-    let endValue = rangeSliderValue[1];
-
-    if (valueType === 'date') {
-      startValue = `${startValue}-01-01`;
-      endValue = `${endValue}-12-31`;
-    }
-
-    if (combineParams) {
-      if (!valueSeparator) {
-        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
-      }
-
-      mapActions.updateAnalysisParams({
-        id,
-        paramName: startParam,
-        paramValue: `${startValue}${valueSeparator}${endValue}`,
-      });
-      return;
-    }
-
-    mapActions.updateAnalysisParams({
-      id,
-      paramName: startParam,
-      paramValue: `${startValue}`,
-    });
-
-    mapActions.updateAnalysisParams({
-      id,
-      paramName: endParam,
-      paramValue: `${endValue}`,
-    });
-  }
-
-  calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
-    if (combineParams) {
-      if (!valueSeparator) {
-        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
-      }
-      mapActions.updateAnalysisParams({
-        id,
-        paramName: startParam,
-        paramValue: `${startDate}${valueSeparator}${endDate}`,
-      });
-      return;
-    }
-
-    if (multi === true || multi === 'true') {
-      mapActions.updateAnalysisParams({
-        id,
-        paramName: endParam,
-        paramValue: endDate,
-      });
-    }
-
-
-    mapActions.updateAnalysisParams({
-      id,
-      paramName: startParam,
-      paramValue: startDate,
-    });
-  }
-
   render () {
-    const { activeAnalysisType, analysisItems, chartVisible } = this.props;
+    const { activeAnalysisType, analysisItems } = this.props;
     const { language } = this.context;
-
-    let activeAnalysisItem;
-    let activeItemTitle = null,
-        activeItemDescription = null;
-
-    if (activeAnalysisType !== 'default') {
-      activeAnalysisItem = analysisItems.filter(i => i.analysisId === activeAnalysisType)[0];
-      if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
-      if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
-    }
 
     return (
       <div className='analysis-results__container'>
@@ -335,12 +57,6 @@ export default class AnalysisTypeSelect extends Component {
           </select>
           <div className='analysis-results__select-arrow' />
         </div>
-        {activeAnalysisType !== 'default' && !chartVisible &&
-          <div className='analysis-results__select-form custom-scroll'>
-            <div className='item-title'>{activeItemTitle}</div><div className='item-description'>{activeItemDescription}</div>
-            {this.getFormComponents(activeAnalysisType, analysisItems)}
-          </div>
-        }
         {activeAnalysisType === 'default' &&
           <div className='analysis-results__none-selected'>
             <div className='analysis-results__info-container'>

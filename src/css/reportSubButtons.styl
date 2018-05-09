@@ -1,45 +1,67 @@
-.report-sub-buttons
-  justify-content center
-  align-items center
-  background-color $lightGrayHighlight
-  display flex
-  height 35px
+.report-sub-button-container
+  height 60%
 
-.report-sub-buttons button, .subscription-sub-buttons button
-  text-transform uppercase
-  -webkit-appearance none
-  height 100%
-  width 50%
-  font-weight 500
-  font-size 13px
-  outline none
-  border none
-  color $darkGray
-  background-color inherit
-  &.left-border-separator
-    border-left 2px solid $darkGray
-  &:hover
-    background-color $goldTheme
-    color darken($darkGray, 30%)
+  .report-sub-buttons
+    justify-content space-around
+    align-items center
+    display flex
+    height 32px
+    padding 0 20px
+
+  .report-sub-buttons button, .subscription-sub-buttons button
+    text-transform uppercase
+    -webkit-appearance none
+    height 100%
+    width 115px
+    font-weight 500
+    font-size 13px
+    outline none
+    border 1px solid $lightGrayHighlight
+    line-height 14px
+    display flex
+    justify-content space-around
+    align-items center
+    background-color inherit
+    border-radius 16px
+    color $darkGray
+
+    .print-icon, .subscribe-icon
+      height 25px
+      width 25px
+
+    &:hover
+      background-color $lightGrayHighlight
+  
+  .button-description-container
+    width 100%
+    height 50px
+    display flex
+    justify-content center
+    align-items center
+    
+    .button-description-text
+      height 100%
+      width 80%
+      padding-top 10px
+      font-size 12px
+      text-align center
 
 .run-analysis-button-container
   display flex
   flex-direction column
   justify-content space-around
   align-items center
-  height 150px
   width 100%
   .run-analysis-button
     border 2px solid $goldTheme
-    height 75px
-    width 75px
-    border-radius 50%
-    polygon
-      stroke $goldTheme
-      fill $goldTheme
-      stroke-width: 10px;
-      stroke-linejoin: round;
-
+    height 32px
+    color #ffffff
+    width 80%
+    border-radius 16px
+    background-color $goldTheme
+    font-size 18px
+    font-weight bold
+    text-transform uppercase
 
 // .subscription-sub-buttons button
 //   justify-content right
