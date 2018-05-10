@@ -191,7 +191,10 @@ export default class SubscribeModal extends Component {
       }
 
       const jsonData = {
+        confirmed: selectedFeature.attributes.confirmed,
+        createdAt: selectedFeature.attributes.createdAt,
         datasets: datasets,
+        datasetsQuery: selectedFeature.attributes.datasetsQuery,
         language: lang,
         name: aoiName,
         params: {
@@ -207,7 +210,8 @@ export default class SubscribeModal extends Component {
         resource: {
           content: this.state.email,
           type: 'EMAIL'
-        }
+        },
+        userId: selectedFeature.attributes.userId
       };
 
       fetch(

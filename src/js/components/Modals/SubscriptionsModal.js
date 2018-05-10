@@ -37,6 +37,8 @@ export default class SubscriptionsModal extends Component {
     }
 
     const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
+    const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
+
     return (
       <div key={j} className='source-row subscribe-row'>
         <div className='delete-row'>
@@ -49,8 +51,18 @@ export default class SubscriptionsModal extends Component {
             <svg className='svg-icon'><use xlinkHref="#shape-world" /></svg>
           </button>
         </div>
-        <p className='name-row'>{subscription.attributes.name}</p>
-        <p className='other-row date-created'>Created on {endDateString}</p>
+        <div className='svg-icon subscription-svg' className='subscription-unconfirmed'>
+          <div className='svg-icon subscription-svg' className='svg-icon subscription-svg' className={`subscription-unconfirmed-wrap ${subscription.attributes.confirmed ? 'hidden' : ''}`}>
+            <a href={subscribeUrl} className='subscription-uncle'>
+              <svg className='svg-icon subscription-svg'>
+                <use xlinkHref="#shape-warning" />
+              </svg>
+              <span className='subscribe-tooltipmap'>Subscription has not been confirmed, click here to resend the confirmation email</span>
+            </a>
+          </div>
+          <p className={`name-row ${subscription.attributes.confirmed ? 'no-warning' : ''}`}>{subscription.attributes.name}</p>
+        </div>
+        <p className='other-row date-created'>Created on <br />{endDateString}</p>
         <div className='other-row'>Data sets: <span>{datasets.map(dataset => this.listDataset(dataset, subscription))}</span></div>
       </div>
     );
@@ -135,42 +147,53 @@ export default class SubscriptionsModal extends Component {
 
   showSubscription = (evt, subscription) => {
     const id = subscription.attributes.params.geostore;
-    esriRequest({
-      url: 'https://production-api.globalforestwatch.org/v1/geostore/' + id,
-      callbackParamName: 'callback',
-      handleAs: 'json',
-      timeout: 30000
-    }, { usePost: false}).then(geostoreResult => {
-      const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+    const userFeatures = this.context.map.getLayer(layerKeys.USER_FEATURES);
 
-      const attributesFromGFW = {
-        geostoreId: geostoreResult.data.id,
-        title: subscription.attributes.name,
-        createdAt: geostoreResult.data.attributes.createdAt,
-        cfid: geostoreResult.data.id,
-        source: attributes.SOURCE_DRAW
-      };
+    const matchingFeats = userFeatures.graphics.filter(userFeature => userFeature.attributes.geostoreId === id);
 
-      const graphic = new Graphic({
-        attributes: attributesFromGFW,
-        geostoreId: geostoreResult.data.id,
-        geometry: new Polygon(esriJson),
-        title: id,
-        isCustom: true
-      });
-      graphic.setSymbol(symbols.getCustomSymbol());
-      const graphicExtent = graphic.geometry.getExtent();
+    if (matchingFeats.length > 0) {
+      const graphicExtent = matchingFeats[0].geometry.getExtent();
       this.context.map.setExtent(graphicExtent, true);
-
-      const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
-      if (layer) {
-        layer.add(graphic);
-        this.context.map.infoWindow.setFeatures([graphic]);
-      }
+      this.context.map.infoWindow.setFeatures(matchingFeats);
       mapActions.toggleSubscriptionsModal({ visible: false });
-    }, err => {
-      console.error(err);
-    });
+    } else {
+      esriRequest({
+        url: 'https://production-api.globalforestwatch.org/v1/geostore/' + id,
+        callbackParamName: 'callback',
+        handleAs: 'json',
+        timeout: 30000
+      }, { usePost: false}).then(geostoreResult => {
+        const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+
+        const attributesFromGFW = {
+          geostoreId: geostoreResult.data.id,
+          title: subscription.attributes.name,
+          createdAt: geostoreResult.data.attributes.createdAt,
+          cfid: geostoreResult.data.id,
+          source: attributes.SOURCE_DRAW
+        };
+
+        const graphic = new Graphic({
+          attributes: attributesFromGFW,
+          geostoreId: geostoreResult.data.id,
+          geometry: new Polygon(esriJson),
+          title: id,
+          isCustom: true
+        });
+        graphic.setSymbol(symbols.getCustomSymbol());
+        const graphicExtent = graphic.geometry.getExtent();
+        this.context.map.setExtent(graphicExtent, true);
+
+        if (userFeatures) {
+          userFeatures.add(graphic);
+          this.context.map.infoWindow.setFeatures([graphic]);
+        }
+        mapActions.toggleSubscriptionsModal({ visible: false });
+      }, err => {
+        console.error(err);
+      });
+    }
+
   }
 
   deleteSubscription = (evt, subscription) => {
@@ -184,10 +207,10 @@ export default class SubscriptionsModal extends Component {
 
   render () {
     const {userSubscriptions} = this.props;
-
     return (
       <ControlledModalWrapper onClose={this.close}>
-        <p>Subscriptions</p>
+        <h3>Subscriptions</h3>
+        <p className='subscription-explanation'>To add new subscriptions select a feature on the map and click on "subscribe" in the info window.</p>
         {userSubscriptions.map(this.subscriptionMap)}
       </ControlledModalWrapper>
     );
