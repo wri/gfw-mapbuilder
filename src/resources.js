@@ -445,7 +445,7 @@ export default {
         order: 5,
         id: 'TREE_COVER',
         type: 'image',
-        url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+        url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
         technicalName: 'tree_cover',
         colormap: [[1, 0, 179, 0]],
         inputRange: [30, 101],
