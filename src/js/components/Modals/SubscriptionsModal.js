@@ -147,42 +147,53 @@ export default class SubscriptionsModal extends Component {
 
   showSubscription = (evt, subscription) => {
     const id = subscription.attributes.params.geostore;
-    esriRequest({
-      url: 'https://production-api.globalforestwatch.org/v1/geostore/' + id,
-      callbackParamName: 'callback',
-      handleAs: 'json',
-      timeout: 30000
-    }, { usePost: false}).then(geostoreResult => {
-      const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+    const userFeatures = this.context.map.getLayer(layerKeys.USER_FEATURES);
 
-      const attributesFromGFW = {
-        geostoreId: geostoreResult.data.id,
-        title: subscription.attributes.name,
-        createdAt: geostoreResult.data.attributes.createdAt,
-        cfid: geostoreResult.data.id,
-        source: attributes.SOURCE_DRAW
-      };
+    const matchingFeats = userFeatures.graphics.filter(userFeature => userFeature.attributes.geostoreId === id);
 
-      const graphic = new Graphic({
-        attributes: attributesFromGFW,
-        geostoreId: geostoreResult.data.id,
-        geometry: new Polygon(esriJson),
-        title: id,
-        isCustom: true
-      });
-      graphic.setSymbol(symbols.getCustomSymbol());
-      const graphicExtent = graphic.geometry.getExtent();
+    if (matchingFeats.length > 0) {
+      const graphicExtent = matchingFeats[0].geometry.getExtent();
       this.context.map.setExtent(graphicExtent, true);
-
-      const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
-      if (layer) {
-        layer.add(graphic);
-        this.context.map.infoWindow.setFeatures([graphic]);
-      }
+      this.context.map.infoWindow.setFeatures(matchingFeats);
       mapActions.toggleSubscriptionsModal({ visible: false });
-    }, err => {
-      console.error(err);
-    });
+    } else {
+      esriRequest({
+        url: 'https://production-api.globalforestwatch.org/v1/geostore/' + id,
+        callbackParamName: 'callback',
+        handleAs: 'json',
+        timeout: 30000
+      }, { usePost: false}).then(geostoreResult => {
+        const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+
+        const attributesFromGFW = {
+          geostoreId: geostoreResult.data.id,
+          title: subscription.attributes.name,
+          createdAt: geostoreResult.data.attributes.createdAt,
+          cfid: geostoreResult.data.id,
+          source: attributes.SOURCE_DRAW
+        };
+
+        const graphic = new Graphic({
+          attributes: attributesFromGFW,
+          geostoreId: geostoreResult.data.id,
+          geometry: new Polygon(esriJson),
+          title: id,
+          isCustom: true
+        });
+        graphic.setSymbol(symbols.getCustomSymbol());
+        const graphicExtent = graphic.geometry.getExtent();
+        this.context.map.setExtent(graphicExtent, true);
+
+        if (userFeatures) {
+          userFeatures.add(graphic);
+          this.context.map.infoWindow.setFeatures([graphic]);
+        }
+        mapActions.toggleSubscriptionsModal({ visible: false });
+      }, err => {
+        console.error(err);
+      });
+    }
+
   }
 
   deleteSubscription = (evt, subscription) => {

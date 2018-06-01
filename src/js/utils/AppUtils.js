@@ -138,6 +138,9 @@ const utils = {
       lang,
       canopyDensity,
       appid,
+      layerId,
+      OBJECTID,
+      OBJECTID_Field,
       activeSlopeClass,
       activeLayers,
       dynamicLayers,
@@ -174,9 +177,11 @@ const utils = {
       viirsEndDate: viirsEndDate,
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
-      customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis'
+      customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
+      ...(layerId ? {layerId} : {}),
+      ...(OBJECTID ? {OBJECTID} : {}),
+      ...(OBJECTID_Field ? {OBJECTID_Field} : {})
     };
-
 
     // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:
     // layerId: array of visible layers
@@ -193,9 +198,10 @@ const utils = {
       window.open(`report.html?${path}`);
     } else {
       let appBase = window._app.base;
-      if (appBase.substr(-1) !== '/') {
-        appBase += '/';
+      if (!appBase) {
+        appBase = window.location.origin + window.location.pathname;
       }
+
       window.open(`${appBase}report.html?${path}`);
     }
   },
