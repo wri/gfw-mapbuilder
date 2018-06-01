@@ -14,7 +14,7 @@ export default class NestedGroup extends Component {
 
   renderNestedCheckbox = layerGroup => {
     const { language } = this.context;
-    const { activeLayers } = this.props;
+    const { activeLayers, initialLayerOpacities } = this.props;
 
     const checked = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
 
@@ -25,6 +25,7 @@ export default class NestedGroup extends Component {
         layers={layerGroup.nestedLayers}
         activeLayers={activeLayers}
         checked={checked}
+        initialLayerOpacities={initialLayerOpacities}
       />
     );
   }

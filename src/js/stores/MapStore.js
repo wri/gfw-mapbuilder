@@ -10,7 +10,7 @@ import LayersHelper from 'helpers/LayersHelper';
 import analysisUtils from 'utils/analysisUtils';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
-import moment from 'moment';
+import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
 
 let isRegistering = false;
@@ -169,39 +169,98 @@ class MapStore {
 
   removeAllSubLayers(info) {
     this.dynamicLayers[info.id] = [];
-    info.layerInfos.forEach(i => {
-      this.removeActiveLayer(`${info.id}_${i.id}`);
-    });
+    if (info.layerIds) {
+      this.removeActiveLayer(info.id);
+    } else {
+      info.layerInfos.forEach(i => {
+        this.removeActiveLayer(`${info.id}_${i.id}`);
+      });
+    }
   }
 
   setSubLayers(info) {
-    this.dynamicLayers[info.id] = [...info.subIndexes];
-    info.subIndexes.forEach(i => {
-      this.addActiveLayer(`${info.id}_${i}`);
-    });
+    this.dynamicLayers[info.layer.id] = [...info.subIndexes];
+    if (info.layer.layerIds) {
+      this.addActiveLayer(info.layer.id);
+    } else {
+      info.subIndexes.forEach(i => {
+        this.addActiveLayer(`${info.layer.id}_${i}`);
+      });
+    }
   }
 
   addAll () {
     const allActiveLayers = [];
     const allDynamicLayers = {};
-    const radioGroupOrders = this.allLayers.filter(l => l.activateWithAllLayers).map(l => l.groupOrder);
+    const visibleRadioLayerIds = [];
+    let radioLayerToTurnOn = null;
 
     const reducedLayers = this.allLayers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
       }
+
+      if (currentItem.isRadioLayer && currentItem.esriLayer.visible) {
+        if (visibleRadioLayerIds.indexOf(currentItem.id) === -1) {
+          visibleRadioLayerIds.push(currentItem.id);
+        }
+      }
       return prevArray.concat(currentItem);
     }, []);
 
+    const visibleRadioLayers = reducedLayers.filter(l => visibleRadioLayerIds.indexOf(l.id) > -1);
+
+    visibleRadioLayers.forEach(rl => {
+      let idToCheck = rl.id;
+      if (rl.subId) {
+        idToCheck = rl.subId;
+      }
+
+      if (this.activeLayers.indexOf(idToCheck) > -1) {
+        if (rl.subId) {
+          radioLayerToTurnOn = reducedLayers.filter(l => l.subId === rl.subId)[0];
+        } else {
+          radioLayerToTurnOn = reducedLayers.filter(l => l.id === rl.id)[0];
+        }
+      }
+    });
+
+    if (!radioLayerToTurnOn) {
+      radioLayerToTurnOn = reducedLayers.filter(l => l.id === this.exclusiveLayerIds[0])[0];
+    }
+
+    if (radioLayerToTurnOn) {
+      if (radioLayerToTurnOn.subId) {
+        allActiveLayers.push(radioLayerToTurnOn.subId);
+        if (!allDynamicLayers.hasOwnProperty(radioLayerToTurnOn.id)) {
+          allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
+        } else {
+          allDynamicLayers[radioLayerToTurnOn.id].push(radioLayerToTurnOn.subIndex);
+        }
+      } else if (radioLayerToTurnOn.layerIds) {
+        allActiveLayers.push(radioLayerToTurnOn.id);
+        if (!allDynamicLayers.hasOwnProperty(radioLayerToTurnOn.id)) {
+          allDynamicLayers[radioLayerToTurnOn.id] = radioLayerToTurnOn.layerIds;
+        }
+      } else {
+        allActiveLayers.push(radioLayerToTurnOn.id);
+      }
+    }
+
     reducedLayers.forEach(l => {
-      if (l.subId && l.activateWithAllLayers && l.groupOrder === Math.min(...radioGroupOrders)) {
-        allActiveLayers.push(l.subId);
-        allDynamicLayers[l.id] = [l.subIndex];
+      if (l.isRadioLayer) {
         return;
+      }
+      if (l.subId) {
+        if (!allDynamicLayers.hasOwnProperty(l.id)) {
+          allDynamicLayers[l.id] = [l.subIndex];
+        } else {
+          allDynamicLayers[l.id].push(l.subIndex);
+        }
       }
       allActiveLayers.push(l.id);
     });
-
+    console.log(allDynamicLayers);
     this.activeLayers = allActiveLayers;
     this.dynamicLayers = allDynamicLayers;
   }

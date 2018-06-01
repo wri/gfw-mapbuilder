@@ -119,6 +119,10 @@ export default (layer, lang) => {
       options.id = layer.id;
       options.visible = layer.visible || false;
       options.outFields = ['*'];
+      // Feature layers always draw on top of everything, so we
+      // will turn down the default opacity a bit to allow us to
+      // see the tile layers through the features
+      options.opacity = 0.8;
       if (layer.id === layerKeys.USER_FEATURES) {
         esriLayer = new GraphicsLayer(options);
       } else {
