@@ -427,7 +427,9 @@ export default class Map extends Component {
 
           const mapLayer = map.getLayer(layerId);
 
-          if (mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) {
+          const dynamicLayers = [layerKeys.MODIS_ACTIVE_FIRES, layerKeys.VIIRS_ACTIVE_FIRES, layerKeys.IMAZON_SAD];
+
+          if ((mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) || (mapLayer && dynamicLayers.indexOf(mapLayer.id) > -1)) {
             mapLayer.setOpacity(opacityValues[j]);
           } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
             const options = mapLayer.layerDrawingOptions || [];

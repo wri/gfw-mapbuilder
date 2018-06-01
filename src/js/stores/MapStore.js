@@ -32,7 +32,7 @@ class MapStore {
     this.activeAnalysisType = '';
     this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
-    this.lossToSelectIndex = 0;
+    this.lossToSelectIndex = 15;
     this.resetSlider = false;
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();

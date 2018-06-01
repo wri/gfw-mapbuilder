@@ -65,6 +65,14 @@ export default class LossControls extends Component {
       this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), this.state.sliderValue[0], this.state.sliderValue[1]);
     }
 
+    if (this.props.lossFromSelectIndex !== this.state.sliderValue[0] - 1) {
+      this.setState({sliderValue: [this.props.lossFromSelectIndex + 1, this.props.lossToSelectIndex + 1]});
+    }
+
+    if (this.props.lossToSelectIndex !== this.state.sliderValue[1] - 1) {
+      this.setState({sliderValue: [this.props.lossFromSelectIndex + 1, this.props.lossToSelectIndex + 1]});
+    }
+
     const {canopyDensity, resetSlider} = this.props;
     const {sliderValue} = this.state;
     const fromYear = sliderValue[0];
@@ -188,6 +196,7 @@ export default class LossControls extends Component {
 
   handleSliderChange = sliderValue => {
     this.setState({sliderValue});
+
     layerActions.updateLossTimeline({
       fromSelectedIndex: sliderValue[0] - 1,
       toSelectedIndex: sliderValue[1] - 1
