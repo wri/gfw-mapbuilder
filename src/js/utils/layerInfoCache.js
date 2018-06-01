@@ -305,7 +305,7 @@ export default {
 
           const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
           if (xmlLayers.length) {
-            let layerInfo = {};
+            const layerInfo = {};
             xmlLayers.forEach(l => {
               const parsedXml = xmlToJson(l);
               if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
@@ -318,8 +318,13 @@ export default {
                   }
                 }
                 return;
-              } else { layerInfo = null; }
+              }
             });
+            if (Object.keys(layerInfo).length === 0) {
+              promise.resolve(null);
+              return;
+            }
+            _cache[layer.id] = layerInfo;
             promise.resolve(layerInfo);
           } else {
             promise.resolve(null);
@@ -342,7 +347,6 @@ export default {
 
         getServiceInfoTask(url).then(results => {
           _cache[subId] = results;
-          console.log(results);
           promise.resolve(results);
         });
       }
