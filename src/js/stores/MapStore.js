@@ -262,7 +262,6 @@ class MapStore {
       }
       allActiveLayers.push(l.id);
     });
-    console.log(allDynamicLayers);
     this.activeLayers = allActiveLayers;
     this.dynamicLayers = allDynamicLayers;
   }

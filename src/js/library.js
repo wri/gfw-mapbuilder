@@ -14,7 +14,6 @@ var MapBuilder = function(args){
 //       newBase = resourcesBase + constructorParams.version + '/';
 //     }
     newBase = newBase.split(constructorParams.version)[0] + constructorParams.version;
-    console.log('new base', newBase);
 
     window._app = {
       cache: constructorParams.version,
@@ -33,7 +32,6 @@ var MapBuilder = function(args){
     }
 //     function getResourcePath (path) {
 //       var position = path.length - 1;
-//       console.log(path);
 //       return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
 //     }
 //     // Change this to '' if _app.base is a remote url
@@ -47,8 +45,6 @@ var MapBuilder = function(args){
       constructorParams.basePath = newBase;
 //     }
     var base = makePath(newBase);
-    console.log('base', base);
-    console.log('js path', makePath(base, 'js')); 
 
     window.dojoConfig = {
       parseOnLoad: false,
@@ -74,7 +70,6 @@ var MapBuilder = function(args){
       deps: ['dojo/ready'],
       callback: function () {
         require(['js/libraryMain'], function(libraryMain) { //TODO: Don't resort to module.default !!
-          console.log(libraryMain);
           libraryMain.default.startup();
           libraryMain.default.configureApp(constructorParams);
           libraryMain.default.lazyloadAssets(constructorParams);
