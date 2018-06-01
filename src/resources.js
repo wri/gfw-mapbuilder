@@ -5,8 +5,7 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'a7c0d12431a04febb89f2f5271a56f93',
-  // webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
@@ -353,159 +352,6 @@ export default {
         }
       }]
     },
-//     GROUP_LC: {
-//       groupType: 'nested',
-//       order: 3,
-//       label: {
-//         en: 'Land Cover',
-//         fr: 'Couverture des sols',
-//         es: 'Cobertura terrestre',
-//         pt: 'Cobertura do Solo',
-//         id: 'Land Cover',
-//         zh: '土地覆盖',
-//         ka: 'მიწის საფარი'
-//       },
-//       layers: [
-//         {
-//           label: {
-//             en: 'nested1',
-//           },
-//           order: 1,
-//           nestedLayers: [
-//           {
-//         order: 1,
-//         id: 'GLOB_MANGROVE',
-//         type: 'webtiled',
-//         url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
-//         subDomains: [0, 1, 2, 3],
-//         technicalName: 'global_mangroves',
-//         legendLayer: [11],
-//         label: {
-//           en: 'Global Mangrove',
-//           fr: 'Global Mangrove',
-//           es: 'Global Mangrove',
-//           pt: 'Global Mangrove',
-//           id: 'Global Mangrove',
-//           zh: 'Global Mangrove',
-//           ka: 'გლობალური მანგრები'
-//         }
-//       }, {
-//         order: 2,
-//         id: 'IFL',
-//         type: 'dynamic',
-//         url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
-//         technicalName: 'intact_forest_landscapes_change',
-//         layerIds: [0],
-//         label: {
-//           en: 'Intact Forest Landscape',
-//           fr: 'Paysage forestier intact',
-//           es: 'Paisajes Forestales Intactos',
-//           pt: 'Paisagens Florestais Intactas',
-//           id: 'Intact Forest Landscape',
-//           zh: '原生森林景观',
-//           ka: 'ხელუხლებელი ტყის ლანდშაფტი'
-//         }
-//       }, {
-//         order: 3,
-//         id: 'AG_BIOMASS',
-//         type: 'image',
-//         url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
-//         technicalName: 'aboveground_biomass',
-//         legendLayer: [8],
-//         label: {
-//           en: 'Aboveground Live Woody Biomass Density',
-//           fr: 'Densité de la biomasse aérienne vivante',
-//           es: 'Densidad de la biomasa viva en la superficie del suelo',
-//           pt: 'Densidade de biomassa viva acima do solo',
-//           id: 'Aboveground Live Woody Biomass Density',
-//           zh: 'Aboveground Live Woody Biomass Density',
-//           ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
-//         }
-//       },
-//     ]
-//   },
-//   {
-//     label: {
-//       en: 'nested2',
-//     },
-//     order: 2,
-//     nestedLayers: [
-//     {
-//       order: 4,
-//       id: 'LAND_COVER',
-//       type: 'webtiled',
-//       url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
-//       technicalName: 'global_landcover',
-//       legendLayer: [15],
-//       rasterId: '$568',
-//       bounds: [1, 16],
-//       classes: {
-//         en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
-//         fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-//         es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-//         pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-//         id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-//         zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-//         ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-//       },
-//       colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
-//       label: {
-//         en: 'Land Cover',
-//         fr: 'Couverture des sols',
-//         es: 'Cobertura vegetal',
-//         pt: 'Land cover',
-//         id: 'Land cover',
-//         zh: '土地覆盖',
-//         ka: 'მიწის საფარი'
-//       }
-//     }, {
-//       order: 5,
-//       id: 'TREE_COVER',
-//       type: 'image',
-//       url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
-//       technicalName: 'tree_cover',
-//       colormap: [[1, 0, 179, 0]],
-//       inputRange: [30, 101],
-//       outputRange: [1],
-//       opacity: 0.8,
-//       legendLayer: [2],
-//       label: {
-//         en: 'Tree cover density',
-//         fr: 'Densité du couvert arboré',
-//         es: 'Densidad de follaje',
-//         pt: 'Tree cover density',
-//         id: 'Tree cover density',
-//         zh: '森林覆盖密度',
-//         ka: 'ხის ვარჯის სიხშირე'
-//       },
-//       sublabel: {
-//         en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-//         fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-//         es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-//         pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-//         id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-//         zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-//         ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
-//       }
-//     }, {
-//       order: 3,
-//       // id: 'WMS_NUCLEOS_AGRARIOS',
-//       id: 'WMS_STATES',
-//       type: 'wms',
-//       // url: 'http://cartocritica.mx/geoserver/Tenencia/wms',
-//       url: 'https://ahocevar.com/geoserver/wms',
-//       layerName: 'topp:states',
-//       // layerName: 'Tenencia:NucleosAgrarios_2015nov',
-//       visible: true,
-//       label: {
-//         // en: 'Nucleos Agrarios'
-//         en: 'States'
-//       }
-//     }
-//   ]
-//   }
-// ]
-//     },
     GROUP_LC: {
       groupType: 'default',
       order: 3,
@@ -624,20 +470,6 @@ export default {
           zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
           ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
         }
-      }, {
-        order: 3,
-        // id: 'WMS_NUCLEOS_AGRARIOS',
-        id: 'WMS_STATES',
-        type: 'wms',
-        // url: 'http://cartocritica.mx/geoserver/Tenencia/wms',
-        url: 'https://ahocevar.com/geoserver/wms',
-        layerName: 'topp:states',
-        // layerName: 'Tenencia:NucleosAgrarios_2015nov',
-        visible: true,
-        label: {
-          // en: 'Nucleos Agrarios'
-          en: 'States'
-        }
       }]
     },
     GROUP_BASEMAP: {
@@ -692,7 +524,7 @@ export default {
           zh: 'WRI Contextual',
           ka: 'WRI Contextual'
         }
-      }],
+      }]
     },
 
     /**
