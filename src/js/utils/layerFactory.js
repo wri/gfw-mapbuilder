@@ -5,6 +5,9 @@ import ImageParameters from 'esri/layers/ImageParameters';
 import WebTiledLayer from 'esri/layers/WebTiledLayer';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
+import WMSLayer from 'esri/layers/WMSLayer';
+import WMSLayerInfo from 'esri/layers/WMSLayerInfo';
+import Extent from 'esri/geometry/Extent';
 import TerraILayer from 'js/layers/TerraILayer';
 // import CartoLayer from 'js/layers/CartoLayer';
 import GladLayer from 'js/layers/GladLayer';
@@ -184,6 +187,30 @@ export default (layer, lang) => {
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.order = layer.order;
       esriLayer.label = layer.label;
+    break;
+    case 'wms':
+      esriLayer = new WMSLayer(layer.url, {
+        visibleLayers: [layer.layerName],
+        id: layer.id,
+        resourceInfo: {
+          extent: new Extent(-179, -89, 179, 89, {
+            wkid: 4326,
+          }),
+          layerInfos: [
+            new WMSLayerInfo({
+              name: layer.layerName,
+              title: layer.layerName,
+            })
+          ],
+        },
+      });
+      esriLayer.spatialReferences[0] = 3857;
+      esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
+      esriLayer.legendLayer = layer.legendLayer || null;
+      esriLayer.visible = layer.visible || false;
+      esriLayer.opacity = layer.opacity || 1;
+
     break;
     default:
       throw new Error(errors.incorrectLayerConfig(layer.type));

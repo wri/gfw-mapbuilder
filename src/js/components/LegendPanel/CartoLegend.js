@@ -23,11 +23,10 @@ export default class CartoLegend extends React.Component {
   }
 
   render () {
-    console.log(this.state.cartoSymbol);
     if(!this.refs.myRef && this.state.cartoSymbol.length === 0){
       return false;
     }
-    console.log(this.state.updateIcon);
+
     return (
       <div className='legend-container' ref="myRef">
         {this.props.title === 0 ? <div className='legend-unavailable'>No Legend</div> :

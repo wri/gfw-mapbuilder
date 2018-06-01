@@ -58,7 +58,5 @@ configureApp();
 lazyloadAssets();
 // const portal = new arcgisPortal.Portal('http://ags104.blueraster.io/portal');
 // portal.signIn().then(loggedInUser => {
-//   console.log(loggedInUser);
-//   console.log(loggedInUser.portal.defaultBasemap);
 initializeApp();
 // });

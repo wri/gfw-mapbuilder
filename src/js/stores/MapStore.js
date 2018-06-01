@@ -71,6 +71,7 @@ class MapStore {
     this.initialLayerOpacities = [];
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
+    this.drawButtonActive = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -125,7 +126,8 @@ class MapStore {
       showLoading: layerActions.showLoading,
       updateCartoSymbol: layerActions.updateCartoSymbol,
       toggleAnalysisTab: mapActions.toggleAnalysisTab,
-      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds
+      updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
+      activateDrawButton: mapActions.activateDrawButton,
     });
   }
 
@@ -260,7 +262,6 @@ class MapStore {
       }
       allActiveLayers.push(l.id);
     });
-    console.log(allDynamicLayers);
     this.activeLayers = allActiveLayers;
     this.dynamicLayers = allDynamicLayers;
   }
@@ -548,6 +549,10 @@ class MapStore {
 
   updateExclusiveRadioIds (ids) {
     this.exclusiveLayerIds = ids;
+  }
+
+  activateDrawButton(bool) {
+    this.drawButtonActive = bool;
   }
 }
 

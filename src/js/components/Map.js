@@ -37,6 +37,12 @@ import MapStore from 'stores/MapStore';
 import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
+import WMSLayerInfo from 'esri/layers/WMSLayerInfo';
+import WMSLayer from 'esri/layers/WMSLayer';
+import Extent from 'esri/geometry/Extent';
+import Graphic from 'esri/graphic';
+import InfoTemplate from 'esri/InfoTemplate';
+import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
@@ -44,6 +50,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import { wmsClick, getWMSFeatureInfo, createWMSGraphics } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -121,7 +128,6 @@ export default class Map extends Component {
         editToolbar.refresh();
         scalebar.destroy();
       }
-
       this.createMap(activeWebmap, options);
     }
 
@@ -181,6 +187,33 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        // Get WMS Features on click
+        response.map.on('click', (evt) => {
+          if (this.state.drawButtonActive) {
+            // don't run this function if we are drawing a custom shape
+            return;
+          }
+          const wmsLayers = brApp.map.layerIds
+            .filter(id => id.toLowerCase().indexOf('wms') > -1)
+            .map(wmsId => brApp.map.getLayer(wmsId))
+            .filter(layer => layer.visible);
+
+          if (wmsLayers.length) {
+            wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
+              const wmsGraphics = [];
+
+              Object.keys(responses).forEach(layerId => {
+                if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
+                  createWMSGraphics(responses, layerId, wmsGraphics);
+                  brApp.map.infoWindow.setFeatures(wmsGraphics);
+                } else {
+                  console.error(`error: ${responses[layerId].error}`);
+                }
+              });
+            });
+          }
+        });
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -622,7 +655,10 @@ export default class Map extends Component {
           // opacity: layer.opacity,
           opacity: 0.6,
           visible: layer.visibility,
-          esriLayer: layer.layerObject,
+          esriLayer: {
+            ...layer.layerObject,
+            type: layer.layerType,
+          },
           itemId: layer.itemId
         };
         layer.layerObject.setOpacity(0.6);
@@ -827,7 +863,7 @@ export default class Map extends Component {
           </svg>
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
-          <AnalysisModal />
+          <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />
