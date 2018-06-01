@@ -257,8 +257,19 @@ export default {
         });
       });
     } else if (layer.esriLayer) {
+
       const {esriLayer, subIndex, subId} = layer;
-      url = `${esriLayer.url}/${subIndex !== undefined ? subIndex : ''}`;
+      const { layerIds, layerId } = esriLayer;
+
+      url = esriLayer.url;
+      if (subIndex === undefined) {
+        if (layerIds && layerIds.length) { // if there is a layerIds property, this is a configured layer
+          url += `/${layerId}`;
+        }
+      } else {
+        url += `/${subIndex}`;
+      }
+
       getServiceInfoTask(url).then(results => {
         _cache[subId] = results;
         promise.resolve(results);
