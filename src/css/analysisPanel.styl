@@ -131,7 +131,8 @@
 
 .analysis-results__select-form
   height: calc(100% - 225px);
-  overflow auto
+  overflow-y auto
+  overflow-x hidden
   .analysis-results__select-form-item-container
     display flex
     flex-direction column
@@ -140,11 +141,20 @@
     padding-left 30px
     justify-content space-around
     margin-bottom 20px
+    .react-datepicker-wrapper
+      width 100%
+      .react-datepicker__input-container
+        width 100%
+        & > div
+          display inline-flex
+          width: 100%
     .select-form-item
       width 90%
       align-self center
-    .canopy-label
-      font-size 14px
+    .tree-cover-canopy-display
+      line-height 20px
+    .canopy-label, .canopy-button
+      font-size 20px
   .item-title
     font-size 16px
     font-weight bold
@@ -155,6 +165,7 @@
 
 .analysis-datepicker-button-label
   margin-right 10px
+  width 50px
 
 .analysis-item-wrapper
   border-bottom 1px solid rgba(0,0,0,0.2)
@@ -250,7 +261,7 @@
   display flex
   flex-direction column
   justify-content space-around
-  height 150px
+  height 105px
   box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
   position absolute
   bottom 0
