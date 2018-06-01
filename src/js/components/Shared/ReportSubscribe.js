@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import {getUrlParams} from 'utils/params';
+import layerKeys from 'constants/LayerConstants';
 import mapStore from 'stores/MapStore';
 import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
@@ -47,6 +48,7 @@ export default class ReportSubscribeButtons extends Component {
     } = mapStore.getState();
 
     if (selectedFeature) {
+
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
@@ -71,6 +73,19 @@ export default class ReportSubscribeButtons extends Component {
       if (params.appid) {
         payload.appid = params.appid;
       }
+
+      if (selectedFeature._layer && selectedFeature._layer.id && selectedFeature._layer.id !== layerKeys.USER_FEATURES) {
+        let layerString = '';
+
+        payload.OBJECTID = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes[selectedFeature._layer.objectIdField] : null;
+        payload.OBJECTID_Field = selectedFeature._layer.objectIdField;
+
+        layerString = selectedFeature._layer.url;
+        layerString += '--' + selectedFeature._layer.id;
+
+        payload.layerId = layerString;
+      }
+
       appUtils.generateReport(payload);
     }
 
