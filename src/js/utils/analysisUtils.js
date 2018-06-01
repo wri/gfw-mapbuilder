@@ -514,7 +514,12 @@ export default {
 
   registerGeom: (geometry) => {
     const deferred = new Deferred();
-    const geographic = webmercatorUtils.webMercatorToGeographic(geometry);
+    let geographic = null;
+    if (geometry.spatialReference.isWebMercator()) {
+      geographic = webmercatorUtils.webMercatorToGeographic(geometry);
+    } else {
+      geographic = geometry;
+    }
     const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
 
     const geoStore = {

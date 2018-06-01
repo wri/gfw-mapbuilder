@@ -23,6 +23,7 @@ import layerActions from 'actions/LayerActions';
 import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
+import basemaps from 'esri/basemaps';
 import Measurement from 'esri/dijit/Measurement';
 import webMercatorUtils from 'esri/geometry/webMercatorUtils';
 import {actionTypes} from 'constants/AppConstants';
@@ -36,6 +37,12 @@ import MapStore from 'stores/MapStore';
 import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
+import WMSLayerInfo from 'esri/layers/WMSLayerInfo';
+import WMSLayer from 'esri/layers/WMSLayer';
+import Extent from 'esri/geometry/Extent';
+import Graphic from 'esri/graphic';
+import InfoTemplate from 'esri/InfoTemplate';
+import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
@@ -43,6 +50,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import { wmsClick, getWMSFeatureInfo, createWMSGraphics } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -120,7 +128,6 @@ export default class Map extends Component {
         editToolbar.refresh();
         scalebar.destroy();
       }
-
       this.createMap(activeWebmap, options);
     }
 
@@ -149,8 +156,9 @@ export default class Map extends Component {
     const { canopyDensity } = this.state;
 
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
-      // Add operational layers from the webmap to the array of layers from the config file.
       const {itemData} = response.itemInfo;
+
+      // Add operational layers from the webmap to the array of layers from the config file.
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
@@ -179,6 +187,33 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        // Get WMS Features on click
+        response.map.on('click', (evt) => {
+          if (this.state.drawButtonActive) {
+            // don't run this function if we are drawing a custom shape
+            return;
+          }
+          const wmsLayers = brApp.map.layerIds
+            .filter(id => id.toLowerCase().indexOf('wms') > -1)
+            .map(wmsId => brApp.map.getLayer(wmsId))
+            .filter(layer => layer.visible);
+
+          if (wmsLayers.length) {
+            wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
+              const wmsGraphics = [];
+
+              Object.keys(responses).forEach(layerId => {
+                if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
+                  createWMSGraphics(responses, layerId, wmsGraphics);
+                  brApp.map.infoWindow.setFeatures(wmsGraphics);
+                } else {
+                  console.error(`error: ${responses[layerId].error}`);
+                }
+              });
+            });
+          }
+        });
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -399,7 +434,7 @@ export default class Map extends Component {
 
 
     //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
@@ -600,11 +635,13 @@ export default class Map extends Component {
             label: {
               [language]: sublayer.title
             },
-            opacity: sublayer.opacity,
+            // opacity: sublayer.opacity,
+            opacity: 0.6,
             visible: layer.visibility,
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
+          sublayer.layerObject.setOpacity(0.6);
           layers.unshift(layerInfo);
           if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
@@ -615,11 +652,16 @@ export default class Map extends Component {
           label: {
             [language]: layer.title
           },
-          opacity: layer.opacity,
+          // opacity: layer.opacity,
+          opacity: 0.6,
           visible: layer.visibility,
-          esriLayer: layer.layerObject,
+          esriLayer: {
+            ...layer.layerObject,
+            type: layer.layerType,
+          },
           itemId: layer.itemId
         };
+        layer.layerObject.setOpacity(0.6);
         layers.unshift(layerInfo);
         if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
@@ -634,32 +676,39 @@ export default class Map extends Component {
         case 'radio': {
           let groupLayers = [];
           const groupSublayers = [];
-          const layersFromWebmap = group.layers.filter(l => !l.url);
-          layersFromWebmap.forEach(l => {
-            if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
-              layers.forEach(webmapLayer => {
-                if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
-                  if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {
-                    webmapLayer.activateWithAllLayers = true;
-                    webmapLayer.groupOrder = group.order;
-                  }
-                  groupSublayers.push({
-                    ...l,
-                    ...webmapLayer
-                  });
-                }
-              });
-              groupLayers = groupLayers.concat(groupSublayers);
-            } else { // this is not a dynamic layer
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
-              layers.splice(layers.indexOf(mapLayer), 1);
 
-              groupLayers.push({
-                ...l,
-                ...mapLayer
-              });
-            }
-          });
+          if (group.layers.length) {
+            const layersFromWebmap = group.layers.filter(l => !l.url);
+            layersFromWebmap.forEach(l => {
+              if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
+                layers.forEach(webmapLayer => {
+                  if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                    webmapLayer.isRadioLayer = true;
+                    groupSublayers.push({
+                      ...l,
+                      ...webmapLayer
+                    });
+                  }
+                });
+                groupLayers = groupLayers.concat(groupSublayers);
+              } else { // this is not a dynamic layer
+                const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
+                layers.splice(layers.indexOf(mapLayer), 1);
+                mapLayer.isRadioLayer = true;
+                groupLayers.push({
+                  ...l,
+                  ...mapLayer
+                });
+              }
+            });
+          } else {
+            layers.forEach(webmapLayer => {
+              webmapLayer.isRadioLayer = true;
+              if (webmapLayer.subId) { // this is a dynamic layer
+                groupLayers.push(webmapLayer);
+              }
+            });
+          }
 
           groupLayers.forEach(gl => {
             const layerConfigToReplace = utils.getObject(group.layers, 'id', gl.id);
@@ -667,6 +716,7 @@ export default class Map extends Component {
           });
 
           group.layers.forEach(l => {
+            l.isRadioLayer = true;
             if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
           });
           break;
@@ -813,7 +863,7 @@ export default class Map extends Component {
           </svg>
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
-          <AnalysisModal />
+          <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />

@@ -3,6 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import mapActions from 'actions/MapActions';
 // import CartoLegend from 'components/LegendPanel/CartoLegend';
 import WebMapLegend from 'components/LegendPanel/WebMapLegend';
+import WMSLegend from 'components/LegendPanel/WMSLegend';
 import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
 import {urls} from 'js/config';
@@ -51,6 +52,7 @@ export default class LegendPanel extends Component {
       case 'IFL':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -63,6 +65,7 @@ export default class LegendPanel extends Component {
       case 'IMAZON_SAD':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -75,6 +78,7 @@ export default class LegendPanel extends Component {
       case 'VIIRS_ACTIVE_FIRES':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -87,6 +91,7 @@ export default class LegendPanel extends Component {
       case 'MODIS_ACTIVE_FIRES':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={layer.url}
           visibleLayers={activeLayers}
           layerIds={layer.layerIds}
@@ -99,6 +104,7 @@ export default class LegendPanel extends Component {
       case 'GLOB_MANGROVE':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -111,6 +117,7 @@ export default class LegendPanel extends Component {
       case 'AG_BIOMASS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -123,6 +130,7 @@ export default class LegendPanel extends Component {
       case 'TERRA_I_ALERTS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -135,6 +143,7 @@ export default class LegendPanel extends Component {
       case 'GLAD_ALERTS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -147,6 +156,7 @@ export default class LegendPanel extends Component {
       case 'TREE_COVER_GAIN':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -159,6 +169,7 @@ export default class LegendPanel extends Component {
       case 'TREE_COVER_LOSS':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -171,6 +182,7 @@ export default class LegendPanel extends Component {
       case 'LAND_COVER':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -183,6 +195,7 @@ export default class LegendPanel extends Component {
       case 'TREE_COVER':
         childComponent = <LayerLegend
           key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
           url={urls.esriLegendService}
           visibleLayers={activeLayers}
           layerIds={layer.legendLayer}
@@ -249,7 +262,7 @@ export default class LegendPanel extends Component {
     } else {
       const esriLayer = layer.esriLayer;
 
-      if (esriLayer.type === 'Feature Layer') {
+      if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
         return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
@@ -257,7 +270,20 @@ export default class LegendPanel extends Component {
           visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
-          initialLayerOpacities={initialLayerOpacities} />;
+          initialLayerOpacities={initialLayerOpacities}
+        />;
+      } else if (esriLayer.type.toLowerCase() === 'wms') {
+        return <WMSLegend
+          key={layer.id}
+          url={esriLayer.url}
+          version={esriLayer.version}
+          labels={layer.label[language]}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerName={esriLayer.layerInfos[0].name}
+          legendOpacity={legendOpacity}
+          defaultOpacity={esriLayer.opacity || 1}
+        />;
       } else {
         if (!layer.layerIds && !esriLayer.tileInfo) {
           throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
@@ -285,7 +311,7 @@ export default class LegendPanel extends Component {
     const { activeLayers } = this.props;
     const { language } = this.context;
 
-    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createWebmapLegend(layer)));
+    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createLegend(layer)));
 
     const groupVisible = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
 

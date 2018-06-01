@@ -226,6 +226,10 @@ class MapActions {
 
   updateAnalysisSliderIndices = params => params;
 
+  activateDrawButton(bool) {
+    return bool;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

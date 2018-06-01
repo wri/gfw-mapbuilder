@@ -101,6 +101,7 @@ export default class LayerPanel extends Component {
             activeLayers={this.props.activeLayers}
             dynamicLayers={this.props.dynamicLayers}
             iconLoading={this.props.iconLoading}
+            initialLayerOpacities={this.props.initialLayerOpacities}
           />;
           break;
         }
@@ -109,6 +110,7 @@ export default class LayerPanel extends Component {
             layers={group.layers}
             activeLayers={this.props.activeLayers}
             dynamicLayers={this.props.dynamicLayers}
+            initialLayerOpacities={this.props.initialLayerOpacities}
           />;
           break;
         case 'basemap':

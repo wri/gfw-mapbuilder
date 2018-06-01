@@ -57,7 +57,7 @@ export default class NestedCheckbox extends Component {
   renderTree = layer => {
     return (
       <div key={layer.id} style={{ left: '30px', position: 'relative', paddingRight: '30px' }}>
-        <LayerCheckbox layer={layer} checked={this.props.activeLayers.indexOf(layer.id) > -1} toggleLayer={this.toggleLayer}/>
+        <LayerCheckbox initialLayerOpacities={this.props.initialLayerOpacities} layer={layer} checked={this.props.activeLayers.indexOf(layer.id) > -1} toggleLayer={this.toggleLayer}/>
       </div>
     );
   }

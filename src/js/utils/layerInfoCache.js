@@ -223,6 +223,46 @@ function reduceXML (xmlDoc) {
   return result;
 }
 
+// Changes XML to JSON
+// see https://davidwalsh.name/convert-xml-json for mor info
+function xmlToJson(xml) {
+
+	// Create the return object
+	var obj = {};
+
+	if (xml.nodeType === 1) { // element
+		// do attributes
+		if (xml.attributes.length > 0) {
+		obj["@attributes"] = {};
+			for (var j = 0; j < xml.attributes.length; j++) {
+				var attribute = xml.attributes.item(j);
+				obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+			}
+		}
+	} else if (xml.nodeType === 3) { // text
+		obj = xml.nodeValue;
+	}
+
+	// do children
+	if (xml.hasChildNodes()) {
+		for(var i = 0; i < xml.childNodes.length; i++) {
+			var item = xml.childNodes.item(i);
+			var nodeName = item.nodeName;
+			if (typeof obj[nodeName] === 'undefined') {
+				obj[nodeName] = xmlToJson(item);
+			} else {
+				if (typeof obj[nodeName].push === 'undefined') {
+					var old = obj[nodeName];
+					obj[nodeName] = [];
+					obj[nodeName].push(old);
+				}
+				obj[nodeName].push(xmlToJson(item));
+			}
+		}
+	}
+	return obj;
+}
+
 export default {
 
   get (layerId) {
@@ -257,12 +297,59 @@ export default {
         });
       });
     } else if (layer.esriLayer) {
-      const {esriLayer, subIndex, subId} = layer;
-      url = `${esriLayer.url}/${subIndex !== undefined ? subIndex : ''}`;
-      getServiceInfoTask(url).then(results => {
-        _cache[subId] = results;
-        promise.resolve(results);
-      });
+      if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
+        // run GetCapabilities call if this is a WMS layer
+        url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
+        getXMLTask(url).then((xmlDoc) => {
+          if (!xmlDoc) { promise.resolve(null); return; }
+
+          const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
+          if (xmlLayers.length) {
+            const layerInfo = {};
+            xmlLayers.forEach(l => {
+              const parsedXml = xmlToJson(l);
+              if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
+                if (parsedXml.Style) {
+                  if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
+                    layerInfo.name = parsedXml.Style.Title['#text'];
+                  }
+                  if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
+                    layerInfo.description = parsedXml.Style.Abstract['#text'];
+                  }
+                }
+                return;
+              }
+            });
+            if (Object.keys(layerInfo).length === 0) {
+              promise.resolve(null);
+              return;
+            }
+            _cache[layer.id] = layerInfo;
+            promise.resolve(layerInfo);
+          } else {
+            promise.resolve(null);
+          }
+        });
+
+      } else {
+
+        const {esriLayer, subIndex, subId} = layer;
+        const { layerIds, layerId } = esriLayer;
+
+        url = esriLayer.url;
+        if (subIndex === undefined) {
+          if (layerIds && layerIds.length) { // if there is a layerIds property, this is a configured layer
+            url += `/${layerId}`;
+          }
+        } else {
+          url += `/${subIndex}`;
+        }
+
+        getServiceInfoTask(url).then(results => {
+          _cache[subId] = results;
+          promise.resolve(results);
+        });
+      }
     } else if (layer.metadataUrl) {
       getMetadataTask(layer.metadataUrl).then(results => {
         _cache[layer.id] = results;

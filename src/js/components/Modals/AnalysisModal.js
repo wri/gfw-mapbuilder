@@ -13,7 +13,7 @@ export default class AnalysisModal extends Component {
   render () {
     return (
       <ControlledModalWrapper onClose={this.close}>
-        <DrawTools embeddedInModal={true} />
+        <DrawTools embeddedInModal={true} drawButtonActive={this.props.drawButtonActive}/>
         <Upload embeddedInModal={true} />
       </ControlledModalWrapper>
     );
