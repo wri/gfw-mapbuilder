@@ -533,7 +533,6 @@ export default {
         order: 2,
         id: 'TREE_COVER_GAIN',
         type: 'gain', //'image',
-        // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
         url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
         technicalName: 'tree_cover_gain',
         legendLayer: [1],

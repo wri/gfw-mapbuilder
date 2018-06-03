@@ -4,6 +4,7 @@ dist
 vendors
 webpackBuild
 libBuild
+.env
 
 # Ignore these, just do it
 arcgis-modules.txt
