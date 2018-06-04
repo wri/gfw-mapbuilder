@@ -15,6 +15,13 @@ test('resources has the required properties', () => {
     expect(resources.alternativeLanguage).toBeTruthy();
   }
 
+  if (resources.includeCartoTemplateLayers) {
+    expect(resources).toHaveProperty('cartoTemplateId');
+    expect(resources).toHaveProperty('cartoApiKey');
+    expect(resources).toHaveProperty('cartoGroupLabel');
+    expect(resources.cartoGroupLabel).toHaveProperty(resources.language);
+  }
+
   expect(resources).toHaveProperty('layerPanel');
   expect(resources).toHaveProperty('layerPanel.GROUP_WEBMAP');
   expect(resources).toHaveProperty('layerPanel.GROUP_WEBMAP.label');

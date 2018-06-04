@@ -71,6 +71,7 @@ class MapStore {
     this.initialLayerOpacities = [];
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
+    this.fetchingCartoData = false;
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
@@ -554,6 +555,10 @@ class MapStore {
 
   updateExclusiveRadioIds (ids) {
     this.exclusiveLayerIds = ids;
+  }
+
+  fetchingCartoData(bool) {
+    this.fetchingCartoData = bool;
   }
 
   updateAnalysisParams(params) {

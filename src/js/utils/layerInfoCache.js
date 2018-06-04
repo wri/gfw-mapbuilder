@@ -96,7 +96,7 @@ function reduceCarto (rawResults) {
   if(name) { results.name = name; }
   if(license) { results.license = name; }
   if(title) { results.title = title; }
-  if (related_tables[0].synchronization.url) { results.download_data = related_tables[0].synchronization.url; }
+  if (related_tables[0].synchronization && related_tables[0].synchronization.url) { results.download_data = related_tables[0].synchronization.url; }
   if (tags) {
     const keywords = [];
     for (let i = 0; i < tags.length; i++) {
@@ -297,6 +297,21 @@ export default {
         });
       });
     } else if (layer.esriLayer) {
+      if (layer.type === 'carto') {
+        const {subId, id} = layer;
+        url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
+        const cartoMeta = getCartoMetadata(url);
+        cartoMeta.then(results => {
+          _cache[subId || id] = JSON.parse(results);
+          promise.resolve(reduceCarto(JSON.parse(results)));
+        });
+      }
+      const {esriLayer, subIndex, subId} = layer;
+      url = `${esriLayer.url}/${subIndex !== undefined ? subIndex : ''}`;
+      getServiceInfoTask(url).then(results => {
+        _cache[subId] = results;
+        promise.resolve(results);
+      });
       if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
         // run GetCapabilities call if this is a WMS layer
         url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
@@ -355,15 +370,7 @@ export default {
         _cache[layer.id] = results;
         promise.resolve(results);
       });
-      } else if (layer.cartoLayer) {
-      const {subId} = layer;
-      url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
-      const cartoMeta = getCartoMetadata(url);
-      cartoMeta.then(results => {
-        _cache[subId] = JSON.parse(results);
-        promise.resolve(reduceCarto(JSON.parse(results)));
-      });
-    } else {
+      } else {
       promise.resolve();
     }
     return promise;

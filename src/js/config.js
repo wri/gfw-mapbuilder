@@ -34,7 +34,7 @@ const config = {
     metadataXmlEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
     agolItemEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}`,
     cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
-    cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=GeoJSON&q=${queryString}&api_key=${cartoApiKey}`,
+    cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
     esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
   },

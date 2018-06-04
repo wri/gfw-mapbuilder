@@ -34,7 +34,6 @@ import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
 import MapStore from 'stores/MapStore';
-import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
 import WMSLayerInfo from 'esri/layers/WMSLayerInfo';
@@ -50,6 +49,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import {setupCartoLayers} from '../utils/cartoHelper';
 import { wmsClick, getWMSFeatureInfo, createWMSGraphics } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
@@ -588,6 +588,13 @@ export default class Map extends Component {
       settings.alternativeLanguage &&
       settings.useAlternativeLanguage
     );
+
+    if (settings.includeCartoTemplateLayers) {
+      const {cartoUser, cartoApiKey, cartoTemplateId, cartoGroupLabel } = settings;
+      const cartoGroup = setupCartoLayers(cartoUser, cartoTemplateId, cartoApiKey, cartoGroupLabel, language);
+      cartoGroup.order = Object.keys(settings.layerPanel).length - 2;
+      settings.layerPanel.GROUP_CARTO = cartoGroup;
+    }
     // Add the layers to the webmap group
     /**
     * NOTE: We use unshift because pushing the layers into an array results in a list that is

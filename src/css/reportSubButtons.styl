@@ -1,5 +1,6 @@
 .report-sub-button-container
   height 60%
+  width 100%
 
   .report-sub-buttons
     justify-content space-around
@@ -9,6 +10,7 @@
     padding 0 20px
 
   .report-sub-buttons button, .subscription-sub-buttons button
+    position unset // remove absolute position from an esri class
     text-transform uppercase
     -webkit-appearance none
     height 100%

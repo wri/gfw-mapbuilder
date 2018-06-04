@@ -358,19 +358,26 @@ export default class Analysis extends Component {
 
         switch (analysisId) {
           case 'TC_LOSS': {
-            const lossObj = results.data.attributes.loss;
-            counts = Object.values(lossObj);
+            let lossObj = null;
+            if (!results.hasOwnProperty('error')) {
+              lossObj = results.data.attributes.loss;
+              counts = Object.values(lossObj);
+            }
             break;
           }
           case 'IFL': {
-            results.data.attributes.histogram[0].result.forEach(histo => {
-              counts.push(Math.round(histo.result * 100) / 100);
-            });
-            encoder = getEncoder({
-              bounds: [labels[0], labels[labels.length - 1]]
-              },
-              analysisConfig[analysisKeys.TC_LOSS]
-            );
+            if (!results.hasOwnProperty('error')) {
+
+              results.data.attributes.histogram[0].result.forEach(histo => {
+                counts.push(Math.round(histo.result * 100) / 100);
+              });
+              encoder = getEncoder(
+                {
+                  bounds: [labels[0], labels[labels.length - 1]]
+                },
+                analysisConfig[analysisKeys.TC_LOSS]
+              );
+            }
             break;
           }
           default: {
@@ -403,7 +410,9 @@ export default class Analysis extends Component {
 
         switch (analysisId) {
           case 'GLAD_ALERTS': {
-            data = formatters.alerts(results.data.attributes.value);
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.value);
+            }
             break;
           }
           default: {
@@ -457,15 +466,17 @@ export default class Analysis extends Component {
         const data = {
           counts: []
         };
-        results.data.attributes.histogram.forEach(histo => {
-          if (!data[histo.className]) {
-            data[histo.className] = 0;
-          }
-          histo.result.forEach(year => {
-            data[histo.className] += year.result;
+        if (!results.hasOwnProperty('error')) {  
+          results.data.attributes.histogram.forEach(histo => {
+            if (!data[histo.className]) {
+              data[histo.className] = 0;
+            }
+            histo.result.forEach(year => {
+              data[histo.className] += year.result;
+            });
+            data.counts.push(Math.round(data[histo.className] * 100) / 100);
           });
-          data.counts.push(Math.round(data[histo.className] * 100) / 100);
-        });
+        }
 
         chartComponent = <CompositionPieChart
           results={results}
@@ -477,7 +488,7 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
-        chartComponent = <VegaChart config={results.data.attributes.widgetConfig} />;
+        chartComponent = <VegaChart results={results} />;
         break;
       default:
         break;
@@ -540,8 +551,10 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'there was an error'
+              message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
             },
+          }, () => {
+            this.renderResults(analysisId, this.state.results, language, analysisSettings);
           });
         });
       }

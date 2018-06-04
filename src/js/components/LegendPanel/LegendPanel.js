@@ -8,6 +8,7 @@ import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerL
 import LayerLegend from 'components/LegendPanel/LayerLegend';
 import {urls} from 'js/config';
 import text from 'js/languages';
+import CartoLegend from './CartoLegend';
 
 const closeSymbolCode = 9660,
     openSymbolCode = 9650;
@@ -23,7 +24,7 @@ export default class LegendPanel extends Component {
 
   componentDidMount() {
     if (window && window.innerWidth > 950) {
-      mapActions.toggleLegendVisible();
+      mapActions.toggleLegendVisible.defer();
     }
   }
 
@@ -272,6 +273,16 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
         />;
+      } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
+        if (!esriLayer.symbol) { return null; }
+        return <CartoLegend
+          key={layer.id}
+          layerId={layer.id}
+          labels={layer.label[language]}
+          visible={activeLayers.indexOf(layer.id) > -1}
+          symbol={layer.symbol}
+          legendOpacity={legendOpacity}
+        />;
       } else if (esriLayer.type.toLowerCase() === 'wms') {
         return <WMSLegend
           key={layer.id}
@@ -307,6 +318,15 @@ export default class LegendPanel extends Component {
     }
   }
 
+  createCartoLegendGroup = (layerGroup, key) => {
+    const cartoLegends = layerGroup.map(cl => this.createWebmapLegend(cl));
+    return (
+      <div key={key}>
+        {cartoLegends}
+      </div>
+    );
+  }
+
   createNestedLegendGroups = layerGroup => {
     const { activeLayers } = this.props;
     const { language } = this.context;
@@ -336,7 +356,6 @@ export default class LegendPanel extends Component {
     if (!tableOfContentsVisible) {
       rootClasses += ' hidden';
     }
-
     return (
       <div className={rootClasses}>
 
