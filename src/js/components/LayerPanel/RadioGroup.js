@@ -87,19 +87,20 @@ import RadioButton from './RadioButton';
       if (l.esriLayer) {
         if (l.subId || l.layerIds) {
           l.esriLayer.setVisibleLayers([-1]);
-          l.esriLayer.hide();
-          return;
         }
+        l.esriLayer.hide();
+        return;
       }
 
     });
 
     if (layerToShow) {
+      // debugger;
       if (layerToShow.subId || layerToShow.layerIds) {
         layerToShow.esriLayer.setVisibleLayers(dynamicLayers[layerToShow.id]);
-        layerToShow.esriLayer.show();
-        return;
       }
+      layerToShow.esriLayer.show();
+      return;
     }
   }
 
