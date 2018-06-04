@@ -8,6 +8,18 @@ import text from 'js/languages';
 import moment from 'moment';
 
 export default class ReportSubscribeButtons extends Component {
+  constructor(props) {
+    super(props);
+
+    this.descriptionOptions = {
+      print: '',
+      subscribe: 'Subscribe to receive alerts for the selected area',
+    };
+
+    this.state = {
+      descriptionText: '',
+    };
+  }
 
   static contextTypes = {
     language: PropTypes.string.isRequired,
@@ -83,23 +95,58 @@ export default class ReportSubscribeButtons extends Component {
     mapActions.toggleSubscribeModal({ visible: true });
   }
 
+  updateDescriptionText = (evt) => {
+    const { id } = evt.target;
+    this.setState({
+      descriptionText: this.descriptionOptions[id],
+    });
+  }
+
+  clearDescriptionText = () => {
+    this.setState({
+      descriptionText: '',
+    });
+  }
+
   render () {
     const { language } = this.context;
+    const { descriptionText } = this.state;
 
     const {
       isLoggedIn
     } = mapStore.getState();
 
     return (
-      <div className='report-sub-buttons'>
-        <button className='fa-button gold' onClick={this.printReport}>
-          {text[language].PRINT_REPORT}
-        </button>
-        {!isLoggedIn ? null :
-          <button className='fa-button gold' onClick={this.toggleSubscribe}>
-            {text[language].SUBSCRIBE}
+      <div className='report-sub-button-container'>
+        <div className='report-sub-buttons'>
+          <button
+            className='report-sub-button pointer'
+            id='print'
+            onClick={this.printReport}
+            onMouseEnter={this.updateDescriptionText}
+            onMouseLeave={this.clearDescriptionText}
+          >
+            {text[language].PRINT_REPORT}
+            <div className='print-icon' />
           </button>
-        }
+          {!isLoggedIn ? null :
+            <button
+              className='report-sub-button pointer left-border-separator'
+              id='subscribe'
+              onClick={this.toggleSubscribe}
+              onMouseEnter={this.updateDescriptionText}
+              onMouseLeave={this.clearDescriptionText}
+            >
+              {text[language].SUBSCRIBE}
+              <div className='subscribe-icon' />
+            </button>
+          }
+        </div>
+        <div className='button-description-container'>
+          <div className='button-description-text'>
+            {descriptionText}
+          </div>
+        </div>
       </div>
     );
   }

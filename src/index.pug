@@ -35,6 +35,18 @@ html
       .forest-icon {
         background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
       }
+
+      .chart-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/chart-icon.svg') no-repeat center;
+      }
+
+      .print-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
+      }
+
+      .subscribe-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/subscribe-icon.svg') no-repeat center;
+      }
   body.tundra
     include jade/svg.pug
     #root
@@ -148,6 +160,7 @@ html
     //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
 
     script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.7/vega.min.js")
     //- DEV: Use the normal JSAPI
     //- script(src='https://js.arcgis.com/3.22/init.js', async)
     //- script(src='vendor/dojo/dojo.js', async)

@@ -29,7 +29,7 @@ class MapStore {
     this.legendOpen = false;
     this.landsatVisible = false;
     this.dynamicLayers = {};
-    this.activeAnalysisType = '';
+    this.activeAnalysisType = 'default';
     this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
     this.lossToSelectIndex = 15;
@@ -71,6 +71,8 @@ class MapStore {
     this.initialLayerOpacities = [];
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
+    this.analysisParams = {};
+    this.analysisSliderIndices = {};
     this.drawButtonActive = false;
 
     this.bindListeners({
@@ -127,6 +129,8 @@ class MapStore {
       updateCartoSymbol: layerActions.updateCartoSymbol,
       toggleAnalysisTab: mapActions.toggleAnalysisTab,
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
+      updateAnalysisParams: mapActions.updateAnalysisParams,
+      updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
     });
   }
@@ -325,6 +329,7 @@ class MapStore {
           this.activeTab = tabKeys.INFO_WINDOW;
         }
       }
+      this.activeAnalysisType = 'default';
     }
   }
 
@@ -549,6 +554,23 @@ class MapStore {
 
   updateExclusiveRadioIds (ids) {
     this.exclusiveLayerIds = ids;
+  }
+
+  updateAnalysisParams(params) {
+    if (this.analysisParams.hasOwnProperty(params.id)) {
+      this.analysisParams[params.id] = {
+        ...this.analysisParams[params.id],
+        ...(params.paramName ? { [params.paramName]: params.paramValue } : {})
+      };
+    } else {
+      this.analysisParams[params.id] = {
+        ...(params.paramName ? { [params.paramName]: params.paramValue } : {})
+      };
+    }
+  }
+
+  updateAnalysisSliderIndices(params) {
+    this.analysisSliderIndices[params.id] = params.indices;
   }
 
   activateDrawButton(bool) {

@@ -43,7 +43,7 @@ const getSlopeInputOutputValues = function (value) {
 /**
 * Group of formatting functions for results
 */
-const formatters = {
+export const formatters = {
   sadAlerts: (response) => {
     let date, month, year, type, area;
     const {features} = response;
@@ -668,6 +668,54 @@ export default {
         }
     });
     return alerts;
+  },
+
+  getCustomAnalysis: (config, uiParams) => {
+    const promise = new Deferred();
+
+    if (!config.widgetId) {
+      throw new Error("property 'widgetId' is required. Check your analysisModule config.");
+    }
+
+    let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}`;
+
+    if (!config.analysisUrl) {
+      throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
+    }
+    widgetUrl += `?queryUrl=${config.analysisUrl}`;
+
+    Object.entries(uiParams).forEach((entry) => {
+      widgetUrl += `&${entry[0]}=${entry[1]}`;
+    });
+
+    esriRequest({
+      url: widgetUrl,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(result => {
+
+      // For calls to the gfw api that do not return data in the correct format for vega widgets
+      // (umd-loss-gain), we will need to grab the data url
+      // (results.data.attributes.widgetConfig.data[0].url) and make another request to that url.
+      // Then, we need to format the response to vega's liking
+      // someKey: [
+      //  {
+      //    attribute: value,    ] --> data point 1
+      //    attribute2: value2   ]
+      //  },
+      //  {
+      //    attribute: value,    ] --> data point 2
+      //    attribute2: value2   ]
+      //  }
+      // ]
+      console.log(result);
+
+      promise.resolve(result);
+    }, err => {
+      promise.resolve({ error: err});
+    });
+
+    return promise;
   },
 
   getRestoration: (url, rasterId, geometry, settings) => {

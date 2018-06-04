@@ -50,7 +50,7 @@ GROUP_LCD: {
     order: 1,
     id: 'TREE_COVER_LOSS',
     type: 'image',
-    url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
+    url: 'https://gis-treecover.wri.org/arcgis/rest/services/ForestCover_lossyear_density/ImageServer',
     technicalName: 'tree_cover_loss',
     legendLayer: 0,
     colormap: [[1, 219, 101, 152]],
@@ -108,7 +108,7 @@ GROUP_NAME: {
   // groupType: 'checkbox',
   // groupType: 'radio',
   // groupType: 'nested',
-  
+
   // Edit the order of this group and the other groups. This determines the order they appear in the layer panel.
   order: 1,
   label: {

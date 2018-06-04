@@ -1,6 +1,6 @@
 {
   "name": "forest_atlas_template",
-  "version": "1.1.17",
+  "version": "1.2.0",
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
   "main": "webpack.config.js",
   "scripts": {
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/wri/forest_atlas_template#readme",
   "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTests.js",
     "verbose": true,
     "globals": {
       "NODE_ENV": "test"
@@ -43,12 +44,22 @@
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/config/__mocks__/object.js",
       "\\.(jpe?g|png|gif|svg)$": "<rootDir>/config/__mocks__/object.js",
+      "js/layers/TerraILayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/CartoLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/TreeCoverGainLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/TreeCoverLossLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
       "esri/config": "<rootDir>/config/__mocks__/config.js",
       "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
       "^esri(.*)$": "<rootDir>/config/__mocks__/object.js",
       "^dijit(.*)$": "<rootDir>/config/__mocks__/object.js",
-      "^components(.*)$": "<rootDir>/src/js/components$1"
+      "^components(.*)$": "<rootDir>/src/js/components$1",
+      "^constants(.*)$": "<rootDir>/src/js/constants$1",
+      "^actions(.*)$": "<rootDir>/src/js/actions$1",
+      "^utils(.*)$": "<rootDir>/src/js/utils$1"
     },
     "moduleDirectories": [
       "node_modules",
@@ -66,6 +77,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "vega": "^3.0.7",
     "highcharts": "^6.0.4",
     "jest": "^22.0.4",
     "moment": "^2.20.0",
@@ -83,6 +95,8 @@
     "compression-webpack-plugin": "^1.1.3",
     "copy-webpack-plugin": "^4.2.3",
     "css-loader": "^0.28.7",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-15": "^1.0.5",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.15.0",
     "extract-loader": "^1.0.1",

@@ -31,6 +31,7 @@ export default class CustomFeatureControl extends Component {
     const layer = map.getLayer(layerKeys.USER_FEATURES);
     layer.remove(feature);
     brApp.map.graphics.clear();
+    mapActions.setAnalysisType('default');
   };
 
   editPolygon = () => {

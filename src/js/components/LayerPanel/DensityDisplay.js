@@ -17,12 +17,14 @@ export default class DensityDisplay extends Component {
 
   render () {
     const {language} = this.context;
+    const { label } = this.props;
+    const hideDefaultLabel = label === '';
 
     return (
       <div className='tree-cover-canopy-display'>
-        <span className='canopy-label'>{text[language].DENSITY_FIRST}</span>
+        <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
         <span className='canopy-button pointer' onClick={showModal}>{this.props.canopyDensity}</span>
-        <span className='canopy-label'>{text[language].DENSITY_SECOND}</span>
+        <span className='canopy-label'>{!label && !hideDefaultLabel && text[language].DENSITY_SECOND}</span>
       </div>
     );
   }
