@@ -189,9 +189,14 @@
   padding: 10px;
 }
 .infoWindow__footer {
+  display: flex;
+  justify-content: space-around;
+  height: 70px;
+  padding-top: 5px;
+  box-shadow: 0px -1px 4px 0 rgba(0,0,0,0.2);
   position: absolute;
-  width: 100%;
   bottom: 0;
+  right: 0;
   left: 0;
 }
 .infoWindow__clearFeatures-icon {
@@ -369,6 +374,93 @@
   margin: 5px 0;
   color: #000;
 }
+.analysis-results__select-container {
+  height: 25px;
+}
+.analysis-results__select {
+  -webkit-appearance: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  border-radius: 0;
+  padding-left: 10px;
+  left: 0;
+  top: 0;
+}
+.analysis-results__select::after {
+  pointer-events: none;
+  position: absolute;
+  content: '\25BC';
+  font-size: 10px;
+  right: 5px;
+  top: 2px;
+}
+.analysis-results__select-form {
+  height: calc(100% - 178px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 60px;
+  padding-left: 30px;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container .react-datepicker-wrapper {
+  width: 100%;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container .react-datepicker-wrapper .react-datepicker__input-container {
+  width: 100%;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container .react-datepicker-wrapper .react-datepicker__input-container > div {
+  display: inline-flex;
+  width: 100%;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container .select-form-item {
+  width: 90%;
+  align-self: center;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container .tree-cover-canopy-display {
+  line-height: 20px;
+}
+.analysis-results__select-form .analysis-results__select-form-item-container .canopy-label,
+.analysis-results__select-form .analysis-results__select-form-item-container .canopy-button {
+  font-size: 20px;
+}
+.analysis-results__select-form .item-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.analysis-results__select-form .item-description {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.analysis-datepicker-button-label {
+  margin-right: 10px;
+  width: 50px;
+}
+.analysis-item-wrapper {
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+}
+.analysis-item-wrapper:last-child {
+  border-bottom: none;
+}
+.analysis-item-wrapper .analysis-item-label span strong {
+  border: 1px solid;
+  display: inline-flex;
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+}
 .analysis-results__select-style {
   border: 1px solid #aaa;
   text-overflow: ellipsis;
@@ -382,19 +474,18 @@
   height: 2em;
   width: 100%;
 }
-.analysis-results__select-style:after,
-.slope-class-selector__select-style:after {
+.analysis-results__select-arrow:after {
   pointer-events: none;
   position: absolute;
   content: '\25BC';
-  font-size: 10px;
-  right: 5px;
-  top: 2px;
+  font-size: 12px;
+  color: #e6a912;
+  right: 8px;
+  top: 5px;
 }
 .slope-class-selector__select-style:after {
   top: 5px;
 }
-.analysis-results__select,
 .slope-class-selector {
   -webkit-appearance: none;
   position: absolute;
@@ -407,13 +498,54 @@
 .analysis-results__content {
   position: absolute;
   overflow: auto;
-  padding: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 10px 0 10px;
   bottom: 100px;
   right: 0;
   left: 0;
   top: 0;
 }
+.analysis-results__content .analysis-results__chart-component-container {
+  width: 100%;
+}
+.analysis-results__none-selected {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.analysis-results__none-selected .analysis-results__info-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  height: 90%;
+}
+.analysis-results__none-selected .analysis-results__info-container .analysis-results__chart-icon {
+  width: 100%;
+  height: 180px;
+}
+.analysis-results__none-selected .analysis-results__info-container .analysis-results__info {
+  text-align: center;
+  width: 80%;
+  color: #555;
+  font-size: 16px;
+}
+.analysis-results__none-selected .other-options-info {
+  position: absolute;
+  bottom: 5;
+  padding: 0 10px;
+}
 .analysis-results__footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 105px;
+  box-shadow: 0px -1px 4px 0 rgba(0,0,0,0.2);
   position: absolute;
   bottom: 0;
   right: 0;
@@ -434,6 +566,9 @@
   justify-content: space-between;
   font-size: 12px;
   display: flex;
+}
+.vega-chart {
+  width: 100%;
 }
 @media (min-width: 950px) {
   .analysis__chart-container {
@@ -500,11 +635,15 @@
   overflow: hidden;
   max-width: 175px;
 }
+.documents-table a {
+  padding: 0;
+}
 .results__fires-badge,
 .results__viirs-badge,
 .results__modis-badge,
 .results__loss-badge,
-.results__gain-badge {
+.results__gain-badge,
+.results__badge {
   margin: 20px auto 10px;
   text-align: center;
   padding: 5px;
@@ -512,7 +651,8 @@
 }
 .results__fires-badge,
 .results__viirs-badge,
-.results__modis-badge {
+.results__modis-badge,
+.results__badge {
   border: 2px solid #f0ab00;
 }
 .results__loss-badge {
@@ -520,6 +660,10 @@
 }
 .results__gain-badge {
   border: 2px solid #7978e8;
+}
+.results__badge-label {
+  margin: 5px 0 20px 0;
+  color: #6f6f6f;
 }
 .results__fires-active,
 .results__viirs-active,
@@ -533,7 +677,8 @@
 .results__viirs-count,
 .results__modis-count,
 .results__loss--count,
-.results__gain--count {
+.results__gain--count,
+.results__badge-value {
   font-weight: bold;
   font-size: 24px;
 }
@@ -637,6 +782,7 @@
 .analysis-modal-container .modal {
   overflow-y: auto;
   width: 320px;
+  height: 500px;
 }
 .analysis-modal-container .modal .analysis-instructions__separator {
   display: none;
@@ -770,6 +916,70 @@
 .dataset-zoom {
   cursor: pointer;
 }
+.subscription-unconfirmed {
+  margin-bottom: -10px;
+}
+.subscription-unconfirmed .subscription-uncle {
+  position: relative;
+}
+.subscription-unconfirmed-wrap:hover .subscribe-tooltipmap {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+.subscription-unconfirmed-wrap {
+  display: inline-block;
+  float: left;
+}
+.subscription-unconfirmed-wrap .subscription-svg {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.subscription-unconfirmed-wrap .subscribe-tooltipmap {
+  position: absolute;
+  background: #fffee2;
+  -webkit-box-shadow: 0 1px 3px rgba(85,85,85,0.25);
+  box-shadow: 0 1px 3px rgba(85,85,85,0.25);
+  z-index: 1000;
+  margin: 0;
+  visibility: hidden;
+  opacity: 0;
+  text-transform: uppercase;
+  color: #555;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.25;
+  bottom: 100%;
+  left: 115px;
+  text-align: center;
+  padding: 6px 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0px);
+  transform: translate(-50%, 0px);
+  width: 200px;
+  white-space: normal;
+}
+.subscribe-tooltipmap:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #fffee2;
+  z-index: 2;
+  bottom: 0px;
+  left: 0px;
+  -webkit-transform: translate(-50%, 50%) rotate(270deg);
+  transform: translate(-50%, 50%) rotate(270deg);
+  border-width: 1px;
+  border-color: #f0f0ed;
+  border-style: solid;
+}
+.subscription-explanation {
+  max-width: 230px;
+}
 .dataset-list {
   display: inline-block;
 }
@@ -815,6 +1025,11 @@
 }
 .name-row {
   font-weight: bold;
+  margin-left: 20px;
+  margin-top: 15px;
+}
+.name-row.no-warning {
+  margin-left: 0;
 }
 .source-row {
   border-bottom: 1px solid #e5e5df;
@@ -1059,38 +1274,79 @@
 .print-dijit .esriPrintButton:hover {
   cursor: pointer;
 }
-.report-sub-buttons {
-  justify-content: center;
+.print-modal-container .modal-content {
+  height: 115px;
+}
+.report-sub-button-container {
+  height: 60%;
+  width: 100%;
+}
+.report-sub-button-container .report-sub-buttons {
+  justify-content: space-around;
   align-items: center;
   display: flex;
+  height: 32px;
+  padding: 0 20px;
 }
-.report-sub-buttons button,
-.subscription-sub-buttons button {
+.report-sub-button-container .report-sub-buttons button,
+.report-sub-button-container .subscription-sub-buttons button {
+  position: unset;
   text-transform: uppercase;
   -webkit-appearance: none;
+  height: 100%;
+  width: 115px;
   font-weight: 500;
-  margin: 10px 5px;
   font-size: 13px;
-  padding: 0 20px;
   outline: none;
+  border: 1px solid #eee;
+  line-height: 14px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: inherit;
+  border-radius: 16px;
+  color: #555;
+}
+.report-sub-button-container .report-sub-buttons button .print-icon,
+.report-sub-button-container .subscription-sub-buttons button .print-icon,
+.report-sub-button-container .report-sub-buttons button .subscribe-icon,
+.report-sub-button-container .subscription-sub-buttons button .subscribe-icon {
+  height: 25px;
+  width: 25px;
+}
+.report-sub-button-container .report-sub-buttons button:hover,
+.report-sub-button-container .subscription-sub-buttons button:hover {
+  background-color: #eee;
+}
+.report-sub-button-container .button-description-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.report-sub-button-container .button-description-container .button-description-text {
+  width: 80%;
+  padding-top: 5px;
+  font-size: 12px;
+  text-align: center;
+}
+.run-analysis-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+.run-analysis-button-container .run-analysis-button {
+  border: 2px solid #f0ab00;
+  height: 32px;
   color: #fff;
-  border: none;
-}
-.report-sub-buttons button:active,
-.subscription-sub-buttons button:active {
-  box-shadow: 0 0 2px #555;
-}
-.subscription-sub-buttons button {
-  justify-content: right;
-  align-items: right;
-  display: flex;
-  float: left;
-}
-.subscription-sub-buttons button:last-of-type {
-  justify-content: left;
-  align-items: left;
-  display: flex;
-  float: right;
+  width: 80%;
+  border-radius: 16px;
+  background-color: #f0ab00;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 .layer-basemap.selected {
   background: #f2f2f2;
@@ -1148,6 +1404,7 @@
 }
 .search-modal-container .modal-content {
   overflow: visible;
+  height: 160px;
 }
 .arcgisSearch .searchBtn,
 .arcgisSearch .searchInput {

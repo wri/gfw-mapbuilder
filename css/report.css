@@ -147,7 +147,8 @@ h6 {
 .results__viirs-badge,
 .results__modis-badge,
 .results__loss-badge,
-.results__gain-badge {
+.results__gain-badge,
+.results__badge {
   margin: 20px auto 10px;
   text-align: center;
   padding: 5px;
@@ -155,7 +156,8 @@ h6 {
 }
 .results__fires-badge,
 .results__viirs-badge,
-.results__modis-badge {
+.results__modis-badge,
+.results__badge {
   border: 2px solid #f0ab00;
 }
 .results__loss-badge {
@@ -163,6 +165,10 @@ h6 {
 }
 .results__gain-badge {
   border: 2px solid #7978e8;
+}
+.results__badge-label {
+  margin: 5px 0 20px 0;
+  color: #6f6f6f;
 }
 .results__fires-active,
 .results__viirs-active,
@@ -176,7 +182,8 @@ h6 {
 .results__viirs-count,
 .results__modis-count,
 .results__loss--count,
-.results__gain--count {
+.results__gain--count,
+.results__badge-value {
   font-weight: bold;
   font-size: 24px;
 }
