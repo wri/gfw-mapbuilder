@@ -64,15 +64,14 @@ export default {
   // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
-  includeCartoTemplateLayers: true,
-  cartoUser: 'wri-01',
-  // cartoTemplateId: 'tpl_c4ffec3c_1e29_11e7_8fcd_0e05a8b3e3d7',
-  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
-  cartoGroupLabel: {
-    en: 'Carto Layers',
-    fr: 'Carto Layers',
-  },
+  includeCartoTemplateLayers: false,
+  // cartoUser: 'wri-01',
+  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  // cartoApiKey: 'your key here',
+  // cartoGroupLabel: {
+  //   en: 'Carto Layers',
+  //   fr: 'Carto Layers',
+  // },
 
   /**
    * Custom Analysis Module Configuration
@@ -100,49 +99,6 @@ export default {
 
 
   analysisModules: [
-    // {
-    //   value: 'glad-alerts',
-    //   label: 'GLAD Alerts',
-    //   group: 'custom',
-    //   widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
-    //   queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-    //   params: [
-    //     {
-    //       key: 'aggregate_values',
-    //       value: 'false'
-    //     }
-    //   ]
-    // },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Analysis Module!',
-    //   group: 'custom',
-    //   widgetId: '786b82bb-bf60-489d-b4b6-893d9bf7c2c5',
-    //   queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-    //   params: [
-    //     {
-    //       key: 'aggregate_values',
-    //       value: 'false'
-    //     }
-    //   ]
-    // },
-    // {
-    //   value: 'custom2',
-    //   label: 'Custom Analysis Module2!',
-    //   group: 'custom',
-    //   widgetId: '42756e3f-2c35-4d28-a221-47b0751380f7',
-    //   queryUrl: 'https://api.resourcewatch.org/query/cb833538-4fb0-4261-a9d0-125175624f29',
-    //   params: [
-    //     {
-    //       key: 'sql',
-    //       value: 'SELECT%20sum(rs_tl_c)%20%20as%20x,%20rs_tl_c%20as%20y%20FROM%20river_basins%20where%20rs_tl_c%20!=%2010%20group%20by%20rs_tl_c%20order%20by%20y%20asc'
-    //     }
-    //   ]
-    // }
-
-
-    // TODO: Maybe we need a param 'useGfwWidget': <bool> that tells us to use a widget id
-    // and that params look like above
     {
       analysisId: 'TC_LOSS_GAIN',
       label: {
@@ -867,64 +823,6 @@ export default {
         }
       }]
     },
-    // GROUP_CARTO: {
-    //   order: 4,
-    //   groupType: 'carto',
-    //   label: {
-    //     en: 'Carto',
-    //     fr: 'Carto',
-    //     es: 'Carto',
-    //     pt: 'Carto',
-    //     id: 'Carto',
-    //     zh: 'Carto'
-    //   },
-    //   // layers: []
-    //   layers: [{
-    //     order: 1,
-    //     id: 'CARTO_TEMPLATE',
-    //     type: 'carto',
-    //     url: 'cartoLayer',
-    //     cartoUser: 'wri-01',
-    //     cartoIcon: 'M16,3.5c-4.142,0-7.5,3.358-7.5,7.5c0,4.143,7.5,18.121,7.5,18.121S23.5,15.143,23.5,11C23.5,6.858,20.143,3.5,16,3.5z M16,14.584c-1.979,0-3.584-1.604-3.584-3.584S14.021,7.416,16,7.416S19.584,9.021,19.584,11S17.979,14.584,16,14.584z',
-    //     cartoTemplateId: 'tpl_c4ffec3c_1e29_11e7_8fcd_0e05a8b3e3d7',
-    //     // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-    //     cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
-    //     cartoMetadataFields: {},
-    //     cartoColor: [68, 108, 179, 1],
-    //     cartoLayer: true,
-    //     colormap: [[1, 0, 179, 0]],
-    //     opacity: 0.8,
-    //     label: {
-    //       en: 'carto_layer_template',
-    //       fr: 'carto_layer_template',
-    //       es: 'carto_layer_template',
-    //       pt: 'carto_layer_template',
-    //       id: 'carto_layer_template',
-    //       zh: '森林覆盖密度'
-    //     },
-    //     sublabel: {
-    //       en: '(carto_layer)',
-    //       fr: '(carto_layer)',
-    //       es: '(carto_layer)',
-    //       pt: '(carto_layer)',
-    //       id: '(carto_layer)',
-    //       zh: '(carto_layer)'
-    //     },
-    //     popup: {
-    //       title: {
-    //         en: 'Carto Layer'
-    //       },
-    //       content: {
-    //         en: [
-    //           {'label': 'Basin', 'fieldExpression': 'basin_name'},
-    //           {'label': 'Borough', 'fieldExpression': 'borough'},
-    //           {'label': 'Place', 'fieldExpression': 'annoline1'},
-    //           {'label': 'Name', 'fieldExpression': 'name'}
-    //         ]
-    //       }
-    //     }
-    //   }]
-    // },
     GROUP_BASEMAP: {
       groupType: 'basemap',
       order: 200,
