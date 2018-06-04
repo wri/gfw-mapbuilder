@@ -5,7 +5,6 @@ import moment from 'moment';
 
 const FiresBadge = ({ results, from, to }, context) => {
   const { language } = context;
-  const { value } = results.data.attributes;
 
   if (typeof results === 'object' && results.hasOwnProperty('error')) {
     return (
@@ -14,6 +13,7 @@ const FiresBadge = ({ results, from, to }, context) => {
       </div>
     );
   } else {
+    const { value } = results.data.attributes;
     return (
       <div className='results__fires-badge'>
         <div className='results__fires-pre'>{text[language].ANALYSIS_FIRES_PRE}</div>

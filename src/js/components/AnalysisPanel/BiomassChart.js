@@ -26,12 +26,10 @@ export default class BiomassChart extends Component {
     const { language } = this.context;
     const { data } = payload;
 
-    const labels = Object.keys(data.attributes.biomassLossByYear);
-
     if (typeof payload === 'object' && payload.hasOwnProperty('error')) {
       this.setState({ isError: true });
     } else {
-
+      const labels = Object.keys(data.attributes.biomassLossByYear);
       const { series, grossLoss, grossEmissions } = charts.formatSeriesForBiomassLoss({
         data: data.attributes,
         lossColor: colors.loss,

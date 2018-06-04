@@ -7,7 +7,6 @@ import analysisKeys from 'constants/AnalysisConstants';
 const LossGainBadge = (props, context) => {
 
   const { lossFromSelectIndex, lossToSelectIndex, results } = props;
-  const { loss, gain } = results.data.attributes;
   const { language } = context;
   const labelArray = analysisConfig[analysisKeys.TC_LOSS].labels;
 
@@ -20,6 +19,7 @@ const LossGainBadge = (props, context) => {
       </div>
     );
   } else {
+    const { loss, gain } = results.data.attributes;
 
     return (
       <div className='results__loss-gain'>
