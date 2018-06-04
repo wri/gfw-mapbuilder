@@ -4,7 +4,7 @@ import resources from 'resources';
 test('resources has the required properties', () => {
 
   expect(resources).toHaveProperty('webmap');
-  expect(resources).toHaveProperty('title', 'GFW Mapbuilder');
+  expect(resources).toHaveProperty('title');
   expect(resources).toHaveProperty('language');
 
   expect(resources).not.toHaveProperty('Lucas');
@@ -22,13 +22,13 @@ test('resources has the required properties', () => {
   expect(resources.layerPanel.GROUP_WEBMAP.layers).toBeInstanceOf(Array);
   expect(resources.layerPanel.GROUP_WEBMAP.layers).toHaveLength(0);
 
-  expect(resources).toHaveProperty('layerPanel.GROUP_LCD'); //we Are checking for these layers in LossControls & LayerLegend
-  expect(resources).toHaveProperty('layerPanel.GROUP_LCD.layers');
-  expect(resources.layerPanel.GROUP_LCD.layers).toBeInstanceOf(Array);
+  // expect(resources).toHaveProperty('layerPanel.GROUP_LCD'); //we Are checking for these layers in LossControls & LayerLegend
+  // expect(resources).toHaveProperty('layerPanel.GROUP_LCD.layers');
+  // expect(resources.layerPanel.GROUP_LCD.layers).toBeInstanceOf(Array);
 
-  expect(resources).toHaveProperty('layerPanel.GROUP_LC'); //same thing
-  expect(resources).toHaveProperty('layerPanel.GROUP_LC.layers');
-  expect(resources.layerPanel.GROUP_LC.layers).toBeInstanceOf(Array);
+  // expect(resources).toHaveProperty('layerPanel.GROUP_LC'); //same thing
+  // expect(resources).toHaveProperty('layerPanel.GROUP_LC.layers');
+  // expect(resources.layerPanel.GROUP_LC.layers).toBeInstanceOf(Array);
 
   expect(resources).toHaveProperty('layerPanel.GROUP_BASEMAP'); //same thing
   expect(resources).toHaveProperty('layerPanel.GROUP_BASEMAP.layers');
@@ -41,8 +41,17 @@ test('resources has the required properties', () => {
 
 describe('resources layer spec', () => {
 
-  resources.layerPanel.GROUP_LCD.layers.forEach((layer) => {
-    it(`the ${layer.id} layer has the properties we need`, () => {
+  const layerPanelKeys = Object.keys(resources.layerPanel).filter(g => g !== 'GROUP_BASEMAP' && g !== 'GROUP_WEBMAP' && g !== 'extraLayers');
+  const allLayers = layerPanelKeys.map(k => resources.layerPanel[k].layers).reduce((acc, current) => [...acc, ...current], []);
+
+  allLayers.forEach((layer) => {
+    if (layer.type === 'wms') {
+      it('has a layerName property if it is a WMSLayer', () => {
+        expect(layer).toHaveProperty('layerName');
+        expect(typeof layer.layerName).toBe('string');
+      });
+    }
+    it(`layer ${layer.id} has the required properties`, () => {
       expect(layer).toHaveProperty('id');
       expect(layer).toHaveProperty('type');
       expect(layer).toHaveProperty('url');
@@ -51,15 +60,25 @@ describe('resources layer spec', () => {
     });
   });
 
-  resources.layerPanel.GROUP_LC.layers.forEach((layer) => {
-    it(`the ${layer.id} layer has the properties we need`, () => {
-      expect(layer).toHaveProperty('id');
-      expect(layer).toHaveProperty('type');
-      expect(layer).toHaveProperty('url');
-      expect(layer).toHaveProperty('label');
-      expect(layer.label).toHaveProperty(resources.language);
-    });
-  });
+  // resources.layerPanel.GROUP_LCD.layers.forEach((layer) => {
+  //   it(`the ${layer.id} layer has the properties we need`, () => {
+  //     expect(layer).toHaveProperty('id');
+  //     expect(layer).toHaveProperty('type');
+  //     expect(layer).toHaveProperty('url');
+  //     expect(layer).toHaveProperty('label');
+  //     expect(layer.label).toHaveProperty(resources.language);
+  //   });
+  // });
+
+  // resources.layerPanel.GROUP_LC.layers.forEach((layer) => {
+  //   it(`the ${layer.id} layer has the properties we need`, () => {
+  //     expect(layer).toHaveProperty('id');
+  //     expect(layer).toHaveProperty('type');
+  //     expect(layer).toHaveProperty('url');
+  //     expect(layer).toHaveProperty('label');
+  //     expect(layer.label).toHaveProperty(resources.language);
+  //   });
+  // });
 
   resources.layerPanel.GROUP_BASEMAP.layers.forEach((layer) => {
     it(`the ${layer.id} basemap layer has the properties we need`, () => {

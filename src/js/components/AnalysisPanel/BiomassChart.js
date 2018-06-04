@@ -22,9 +22,11 @@ export default class BiomassChart extends Component {
   }
 
   componentDidMount() {
-    const { payload, colors, labels } = this.props;
+    const { payload, colors } = this.props;
     const { language } = this.context;
     const { data } = payload;
+
+    const labels = Object.keys(data.attributes.biomassLossByYear);
 
     if (typeof payload === 'object' && payload.hasOwnProperty('error')) {
       this.setState({ isError: true });

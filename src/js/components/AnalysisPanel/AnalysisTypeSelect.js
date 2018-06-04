@@ -1,8 +1,9 @@
-import analysisKeys from 'constants/AnalysisConstants';
-import layerKeys from 'constants/LayerConstants';
+// import analysisKeys from 'constants/AnalysisConstants';
+// import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
-import appUtils from 'utils/AppUtils';
+// import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
+
 import React, {
   Component,
   PropTypes
@@ -15,138 +16,59 @@ export default class AnalysisTypeSelect extends Component {
     language: PropTypes.string.isRequired
   };
 
-  constructor (props, context) {
-    super(props, context);
-    // Get options for the select
-    const options = this.prepareOptions(context.language);
-    this.state = { options };
+  createOptions = (analysisObj) => {
+    const { language } = this.context;
+    const { analysisId, label } = analysisObj;
 
-    mapActions.setAnalysisType.defer('default');
-  }
-
-  componentWillReceiveProps (nextProps, nextContext) {
-    const {language} = this.context;
-    if (language !== nextContext.language) {
-      this.setState({ options: this.prepareOptions(nextContext.language) });
-    }
-  }
-
-  prepareOptions = (language) => {
-    const {settings} = this.context;
-    //- Get references to all the layers
-    const lcdGroupLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LCD.layers : [];
-    let options = text[language].ANALYSIS_SELECT_TYPE_OPTIONS;
-    //- Remove options not included based on settings
-    //- Also, remove Tree Cover Options if those layers are not in the settings.layerPanel.GROUP_LCD config
-    options = options.filter((option) => {
-      switch (option.value) {
-        case analysisKeys.SLOPE:
-          return settings.restorationModule && settings.restorationSlope;
-        case analysisKeys.INTACT_LOSS:
-          return settings.intactForests;
-        case analysisKeys.BIO_LOSS:
-          return settings.aboveGroundBiomass;
-        case analysisKeys.LC_LOSS:
-          return settings.landCover;
-        case analysisKeys.LCC:
-          return settings.landCover;
-        case analysisKeys.VIIRS_FIRES:
-          return settings.viirsFires;
-        case analysisKeys.MODIS_FIRES:
-          return settings.modisFires;
-        case analysisKeys.MANGROVE_LOSS:
-          return settings.mangroves;
-        case analysisKeys.SAD_ALERTS:
-          return settings.sadAlerts;
-        case analysisKeys.GLAD_ALERTS:
-          return settings.gladAlerts;
-        case analysisKeys.TERRA_I_ALERTS:
-          return settings.terraIAlerts;
-        case analysisKeys.TC_LOSS:
-          return appUtils.containsObject(lcdGroupLayers, 'id', layerKeys.TREE_COVER_LOSS);
-        case analysisKeys.TC_LOSS_GAIN:
-          return appUtils.containsObject(lcdGroupLayers, 'id', layerKeys.TREE_COVER_GAIN);
-        default:
-          return true;
-      }
-    });
-    //- Merge in the restoration options if the module is enabled and at least one options is enabled
-    if (settings.restorationModule &&
-      (settings.restorationSlopePotential || settings.restorationLandCover ||
-      settings.restorationPopulation || settings.restorationTreeCover ||
-      settings.restorationRainfall)
-    ) {
-      const {restorationOptions} = settings.labels[language];
-      restorationOptions.forEach((restorationOption) => {
-        options.push({
-          value: restorationOption.id,
-          label: restorationOption.label,
-          group: analysisKeys.ANALYSIS_GROUP_RESTORATION
-        });
-      });
-    }
-
-    return options;
-  }
-
-  renderOption = (group) => {
-    return (option, index) => {
-      // If this option is not a member of the correct group, dont render it
-      if (option.group !== group) { return null; }
-      if (option.value === 'default') {
-        return <option key={index} disabled={this.props.activeAnalysisType !== 'default'} value={option.value}>{option.label}</option>;
-      }
-      return <option key={index} value={option.value}>{option.label}</option>;
-    };
-  };
-
-  renderGroup = (groupKey) => {
-    const {language} = this.context;
-    const {options} = this.state;
     return (
-      <optgroup key={groupKey} label={text[language][groupKey]}>
-        {options.map(this.renderOption(groupKey))}
-      </optgroup>
+      <option
+        key={analysisId}
+        value={analysisId}
+      >
+        {label[language] ? label[language] : ''}
+      </option>
     );
-  };
+  }
+
 
   handleChange = e => {
     mapActions.setAnalysisType(e.target.value);
   }
 
   render () {
-    const {activeAnalysisType} = this.props;
-    const {options} = this.state;
-    let groupKeys = [];
-    const groups = {};
-    let activeOption;
-    let optionElements;
-    //- Get a unique list of groups so I can render groups if necessary
-    options.forEach((option) => { groups[option.group] = true; });
-    // Order should be ANALYSIS_GROUP_SLOPE, ANALYSIS_GROUP_RESTORATION, then ANALYSIS_GROUP_OTHER
-    groupKeys = Object.keys(groups).sort().reverse();
-    //- Get the selected option
-    activeOption = options.filter((option) => option.value === activeAnalysisType)[0];
-
-    if (groupKeys.length === 1) {
-      optionElements = options.map(this.renderOption(groupKeys[0]));
-    } else {
-      optionElements = groupKeys.map(this.renderGroup);
-    }
+    const { activeAnalysisType, analysisItems } = this.props;
+    const { language } = this.context;
 
     return (
-      <div className='relative'>
-        <select
-          value={activeAnalysisType}
-          className='analysis-results__select pointer'
-          onChange={this.handleChange}>
-          {optionElements}
-        </select>
-        <div className='analysis-results__select-style'>
-          {activeOption && activeOption.label || ''}
+      <div className='analysis-results__container'>
+        <div className='relative analysis-results__select-container'>
+          <select
+            value={activeAnalysisType || 'default'}
+            className='analysis-results__select pointer'
+            onChange={this.handleChange}
+          >
+            <option
+              value='default'
+              disabled={activeAnalysisType !== 'default'}
+            >
+              {text[language].DEFAULT_ANALYSIS_LABEL}
+            </option>
+            {analysisItems.map(this.createOptions)}
+          </select>
+          <div className='analysis-results__select-arrow' />
         </div>
+        {activeAnalysisType === 'default' &&
+          <div className='analysis-results__none-selected'>
+            <div className='analysis-results__info-container'>
+              <div className='analysis-results__info'>
+                <div><strong>Analysis not selected</strong></div>
+                <div>Select an analysis from the drop-down menu to begin</div>
+              </div>
+              <div className='analysis-results__chart-icon chart-icon' />
+            </div>
+          </div>
+        }
       </div>
     );
   }
-
 }

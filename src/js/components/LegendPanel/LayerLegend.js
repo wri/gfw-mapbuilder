@@ -54,22 +54,11 @@ export default class LayerLegend extends React.Component {
   }
 
   render () {
-    const { settings, language } = this.context;
-    const layerGroups = settings.layerPanel;
+    const { label } = this.props;
     let bool = '';
-    let label = '';
-    let layerConf;
-
-    if (utils.getObject(layerGroups.GROUP_LC.layers, 'id', this.props.layerId)) {
-      layerConf = utils.getObject(layerGroups.GROUP_LC.layers, 'id', this.props.layerId);
-    } else if(utils.getObject(layerGroups.GROUP_LCD.layers, 'id', this.props.layerId)) {
-      layerConf = utils.getObject(layerGroups.GROUP_LCD.layers, 'id', this.props.layerId);
-    }
 
     if (this.state.visible === false) {
       bool = 'hidden';
-    } else {
-      label = layerConf.label[language];
     }
 
     return (
