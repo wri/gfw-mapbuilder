@@ -140,6 +140,8 @@ export default class SubscriptionsModal extends Component {
           }
         });
 
+        console.log('updateSubscriptions', updateSubscriptions);
+
         mapActions.setUserSubscriptions(updateSubscriptions);
       });
     });
