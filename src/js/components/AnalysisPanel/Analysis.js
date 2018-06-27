@@ -27,6 +27,7 @@ import {attributes} from 'constants/AppConstants';
 import {analysisConfig} from 'js/config';
 import mapActions from 'actions/MapActions';
 import {formatters, getEncoder, getCustomAnalysis} from 'utils/analysisUtils';
+import analysisUtils from 'utils/analysisUtils';
 import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 // import Deferred from 'dojo/Deferred';
@@ -335,6 +336,7 @@ export default class Analysis extends Component {
   }
 
   renderResults = (type, results, language, config) => {
+
     const { chartType, label } = config;
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
@@ -466,7 +468,7 @@ export default class Analysis extends Component {
         const data = {
           counts: []
         };
-        if (!results.hasOwnProperty('error')) {  
+        if (!results.hasOwnProperty('error')) {
           results.data.attributes.histogram.forEach(histo => {
             if (!data[histo.className]) {
               data[histo.className] = 0;
@@ -488,6 +490,9 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
+        chartComponent = <VegaChart results={results} />;
+        break;
+      case 'vega':
         chartComponent = <VegaChart results={results} />;
         break;
       default:
@@ -530,7 +535,7 @@ export default class Analysis extends Component {
         if (analysisSettings.useGfwWidget) {
           analysisSettings.chartType = 'vega';
 
-          getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
+          analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
             this.setState({ isLoading: false });
             this.renderResults(analysisId, results, language, analysisSettings);
           });

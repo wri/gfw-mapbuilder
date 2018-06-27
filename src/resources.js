@@ -263,13 +263,56 @@ export default {
         }
       ]
     },
+    // {
+    //   analysisId: 'VEGA_GLAD',
+    //   label: {
+    //     en: 'GLAD Alerts (custom VEGA widget)'
+    //   },
+    //   analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+    //   chartType: 'gfwWidget',
+    //   widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+    //   uiParams: [
+    //     {
+    //       startParamName: 'period',
+    //       inputType: 'datepicker',
+    //       combineParams: true,
+    //       valueSeparator: ',',
+    //       multi: true,
+    //       defaultStartDate: '2016-01-01',
+    //       // defaultEndDate: '',
+    //       minDate: '2015-01-01',
+    //       // maxDate: '',
+    //       label: {
+    //         en: 'Select date(s) for analysis'
+    //       }
+    //     },
+    //     {
+    //       name: 'thresh',
+    //       inputType: 'tcd',
+    //       label: {
+    //         en: 'Select tree cover density: '
+    //       }
+    //     }
+    //   ],
+    //   params: [
+    //     {
+    //       name: 'aggregate_values',
+    //       value: 'true'
+    //     },
+    //     {
+    //       name: 'aggregate_by',
+    //       value: 'day'
+    //     }
+    //   ]
+    // },
+
     {
-      analysisId: 'VEGA_GLAD',
+      analysisId: 'VEGA_GLAD_WIDGET',
       label: {
-        en: 'GLAD Alerts (custom VEGA widget)'
+        en: 'GLAD Alerts (VEGA GFW API widget)'
       },
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-      chartType: 'gfwWidget',
+      useGfwWidget: true,
       widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
       uiParams: [
         {
@@ -305,6 +348,8 @@ export default {
         }
       ]
     },
+
+
     {
       analysisId: 'TERRAI_ALERTS',
       label: {
