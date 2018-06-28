@@ -307,6 +307,38 @@ export default class Analysis extends Component {
   }
 
   calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
+    const sDate = moment(startDate);
+    const eDate = moment(endDate);
+
+    switch (id) {
+      case 'TC_LOSS': {
+        // let lossObj = null;
+        // if (!results.hasOwnProperty('error')) {
+        //   lossObj = results.data.attributes.loss;
+        //   counts = Object.values(lossObj);
+        // }
+        break;
+      }
+      case 'VIIRS_FIRES': {
+        if (startDate) {
+          const isSameStart = this.props.viirsStartDate.diff(sDate, 'days') === 0;
+          if (!isSameStart) {
+            layerActions.updateViirsStartDate(sDate);
+          }
+        }
+
+        if (endDate) {
+          const isSameEnd = this.props.viirsEndDate.diff(eDate, 'days') === 0;
+          if (!isSameEnd) {
+            layerActions.updateViirsStartDate(eDate);
+          }
+        }
+
+      }
+      default: {
+        break;
+      }
+    }
 
     if (combineParams) {
       if (!valueSeparator) {
