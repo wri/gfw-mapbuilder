@@ -70,7 +70,6 @@ var MapBuilder = function(args){
       deps: ['dojo/ready'],
       callback: function () {
         require(['js/libraryMain'], function(libraryMain) { //TODO: Don't resort to module.default !!
-        console.log('libraryMain', libraryMain);
           libraryMain.default.startup();
           libraryMain.default.configureApp(constructorParams);
           libraryMain.default.lazyloadAssets(constructorParams);
