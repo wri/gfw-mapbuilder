@@ -51,9 +51,14 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     const infos = renderer.infos;
 
     if (infos && infos.length > 0) {
+      const labels = [];
+
       infos.forEach((info, idx) => {
-        const symbol = info.symbol;
+        if (labels.indexOf(info.label) === -1) {
+          const symbol = info.symbol;
           this.createSymbolStyles(symbol, container, idx, info);
+          labels.push(info.label);
+        }
       });
       return container;
     }
