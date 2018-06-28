@@ -44,7 +44,7 @@ export default function performAnalysis (options) {
 
   switch (type) {
     case analysisKeys.VIIRS_FIRES:
-      analysisUtils.getFireCount(config.url, geometry, viirsFrom, viirsTo, language).then(promise.resolve);
+      analysisUtils.getViirsFires(config, geostoreId, viirsFrom, viirsTo, language).then(promise.resolve);
     break;
     case analysisKeys.MODIS_FIRES:
       analysisUtils.getFireCount(config.url, geometry, modisFrom, modisTo, language).then(promise.resolve);

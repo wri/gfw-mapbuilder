@@ -248,7 +248,8 @@ config.analysis[analysisKeys.TC_LOSS] = {
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8'
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8',
+  analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {

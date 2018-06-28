@@ -840,6 +840,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       type: analysisKeys.VIIRS_FIRES,
       geometry: feature.geometry,
       settings: settings,
+      geostoreId: feature.geostoreId,
       canopyDensity: tcd,
       language: lang,
       viirsFrom: viirsFrom,

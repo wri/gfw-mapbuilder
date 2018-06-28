@@ -289,6 +289,30 @@ export default {
     return promise;
   },
 
+  getViirsFires: function (config, geostoreId, viirsFrom, viirsTo, language) {
+    const promise = new Deferred();
+    const viirsConfig = analysisConfig[analysisKeys.VIIRS_FIRES];
+
+    const viirsData = {
+      geostore: geostoreId,
+      period: `${viirsFrom.format('YYYY-MM-DD')},${viirsTo.format('YYYY-MM-DD')}`,
+    };
+    esriRequest({
+      url: viirsConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: viirsData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(fireResult => {
+      promise.resolve({fireCount: fireResult.data.attributes.value});
+    }, err => {
+      console.error(err);
+      promise.resolve({ error: err, message: text[language].ANALYSIS_ERROR_GLAD });
+    });
+
+    return promise;
+  },
+
   /**
   * Get SAD Alerts and format results
   */
