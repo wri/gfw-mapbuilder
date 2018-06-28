@@ -26,6 +26,7 @@ import {attributes} from 'constants/AppConstants';
 // import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
 import mapActions from 'actions/MapActions';
+import layerActions from 'actions/LayerActions';
 import {formatters, getEncoder, getCustomAnalysis} from 'utils/analysisUtils';
 import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
@@ -306,6 +307,7 @@ export default class Analysis extends Component {
   }
 
   calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
+
     if (combineParams) {
       if (!valueSeparator) {
         throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
@@ -325,7 +327,6 @@ export default class Analysis extends Component {
         paramValue: endDate,
       });
     }
-
 
     mapActions.updateAnalysisParams({
       id,
@@ -436,8 +437,8 @@ export default class Analysis extends Component {
           activeAnalysisType,
           lossFromSelectIndex,
           lossToSelectIndex,
-          viirsFrom,
-          viirsTo,
+          viirsEndDate,
+          viirsStartDate,
         } = this.props;
 
         const { valueAttribute, color, badgeLabel } = config;
@@ -447,7 +448,7 @@ export default class Analysis extends Component {
             chartComponent = <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
             break;
           case 'VIIRS_FIRES':
-            chartComponent = <FiresBadge results={results} from={viirsFrom} to={viirsTo} />;
+            chartComponent = <FiresBadge results={results} from={viirsStartDate} to={viirsEndDate} />;
             break;
           default:
             chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
@@ -466,7 +467,7 @@ export default class Analysis extends Component {
         const data = {
           counts: []
         };
-        if (!results.hasOwnProperty('error')) {  
+        if (!results.hasOwnProperty('error')) {
           results.data.attributes.histogram.forEach(histo => {
             if (!data[histo.className]) {
               data[histo.className] = 0;
@@ -502,7 +503,7 @@ export default class Analysis extends Component {
   }
 
   runAnalysis = () => {
-    const { analysisParams, activeAnalysisType, selectedFeature, canopyDensity } = this.props;
+    const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity } = this.props;
     const { settings: { analysisModules }, language } = this.context;
     this.setState({
       isLoading: true,
@@ -511,6 +512,9 @@ export default class Analysis extends Component {
     Object.keys(analysisParams).forEach(analysisId => {
       if (analysisId === activeAnalysisType) {
         const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
+        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
+          selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
+        }
         const geostoreId = selectedFeature.attributes.geostoreId;
 
         const uiParamsToAppend = analysisParams[analysisId];
