@@ -143,7 +143,7 @@ export default {
         en: 'Tree Cover Loss',
       },
       chartType: 'bar',
-      chartBounds: [2001, 2016],
+      chartBounds: [2001, 2017],
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
       // uiParams: 'none' if you don't need a ui element
       uiParams: [
@@ -153,7 +153,7 @@ export default {
           // endParamName: ''
           combineParams: true,
           valueSeparator: ',',
-          bounds: [2001, 2016],
+          bounds: [2001, 2017],
           valueType: 'date',
           // step: 5,
           label: {
@@ -464,10 +464,10 @@ export default {
         order: 1,
         id: 'TREE_COVER_LOSS',
         type: 'loss', //image
-        url: 'http://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
+        url: 'https://storage.googleapis.com/wri-public/Hansen17/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
         // legendLayer: 7,
         minYear: 1,
-        maxYear: 16,
+        maxYear: 17,
         // minDateValue: 15000,
         // maxDateValue: 16365,
         // confidence: [0, 1],

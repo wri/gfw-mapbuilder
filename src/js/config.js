@@ -97,7 +97,10 @@ const config = {
       {label: '2011', value: 11},
       {label: '2012', value: 12},
       {label: '2013', value: 13},
-      {label: '2014', value: 14}
+      {label: '2014', value: 14},
+      {label: '2015', value: 15},
+      {label: '2016', value: 16},
+      {label: '2017', value: 17}
     ]
   },
   errors: {
@@ -243,8 +246,8 @@ config.analysis[analysisKeys.TC_LOSS] = {
   id: '$530',
   colors: ['#cf5188'],
   // TODO: Generate these dynamically
-  bounds: [1, 15],
-  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
+  bounds: [1, 16],
+  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
