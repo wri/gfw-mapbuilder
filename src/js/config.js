@@ -83,25 +83,6 @@ const config = {
       {label: 'Past 48 hours', value: 2},
       {label: 'Past 24 hours', value: 1}
     ],
-    lossOptions: [
-      {label: '2001', value: 1},
-      {label: '2002', value: 2},
-      {label: '2003', value: 3},
-      {label: '2004', value: 4},
-      {label: '2005', value: 5},
-      {label: '2006', value: 6},
-      {label: '2007', value: 7},
-      {label: '2008', value: 8},
-      {label: '2009', value: 9},
-      {label: '2010', value: 10},
-      {label: '2011', value: 11},
-      {label: '2012', value: 12},
-      {label: '2013', value: 13},
-      {label: '2014', value: 14},
-      {label: '2015', value: 15},
-      {label: '2016', value: 16},
-      {label: '2017', value: 17}
-    ]
   },
   errors: {
     missingLayerConfig: 'You provided a layer config containing a url but not a type, please specify the layer type in the layer config.',
