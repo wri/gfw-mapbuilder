@@ -919,11 +919,27 @@ export default {
         id: 'MASK',
         type: 'dynamic',
         order: 10000,
-        url:
-          'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-          opacity: 0.35,
-          layerIds: [0]
-        },
+        url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+        opacity: 0.35,
+        layerIds: [0]
+      },
+
+        {
+                    "id": "WATERMARK",
+                    "type": "dynamic",
+                    "order": 9999,
+                    "url": "https://gis.forest-atlas.org/server/rest/services/eth/priority_landscapes/MapServer",
+                    "opacity": 0.35,
+                    "layerIds": [282],
+                    "visible": true,
+                    //   "label": {
+                    //     "en": ""
+                    // },
+                    // "sublabel": {
+                    //     "en": ""
+                    // }
+                },
+
         {
           id: 'LEGEND_LAYER',
           type: 'dynamic',
