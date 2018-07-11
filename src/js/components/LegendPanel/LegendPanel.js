@@ -263,8 +263,10 @@ export default class LegendPanel extends Component {
     } else {
       const esriLayer = layer.esriLayer;
 
-      if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
-        return <WebMapFeatureLayerLegend
+      if (esriLayer) {
+
+        if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
+          return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
           label={layer.label[language] || layer.label}
@@ -272,19 +274,19 @@ export default class LegendPanel extends Component {
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
-        />;
-      } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
-        if (!esriLayer.symbol) { return null; }
-        return <CartoLegend
+          />;
+        } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
+          if (!esriLayer.symbol) { return null; }
+          return <CartoLegend
           key={layer.id}
           layerId={layer.id}
           labels={layer.label[language]}
           visible={activeLayers.indexOf(layer.id) > -1}
           symbol={layer.symbol}
           legendOpacity={legendOpacity}
-        />;
-      } else if (esriLayer.type.toLowerCase() === 'wms') {
-        return <WMSLegend
+          />;
+        } else if (esriLayer.type.toLowerCase() === 'wms') {
+          return <WMSLegend
           key={layer.id}
           url={esriLayer.url}
           version={esriLayer.version}
@@ -294,17 +296,17 @@ export default class LegendPanel extends Component {
           layerName={esriLayer.layerInfos[0].name}
           legendOpacity={legendOpacity}
           defaultOpacity={esriLayer.opacity || 1}
-        />;
-      } else {
-        if (!layer.layerIds && !esriLayer.tileInfo) {
-          throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
-        }
+          />;
+        } else {
+          if (!layer.layerIds && !esriLayer.tileInfo) {
+            throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
+          }
 
-        if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
-          esriLayer.layerId = esriLayer.layerInfos[0].id;
-        }
+          if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
+            esriLayer.layerId = esriLayer.layerInfos[0].id;
+          }
 
-        return <WebMapLegend
+          return <WebMapLegend
           key={layer.id}
           url={esriLayer.url}
           labels={layer.label[language]}
@@ -314,6 +316,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={esriLayer.opacity || 1} />;
+        }
       }
     }
   }

@@ -923,36 +923,19 @@ export default {
         opacity: 0.35,
         layerIds: [0]
       },
-
-        {
-                    "id": "WATERMARK",
-                    "type": "dynamic",
-                    "order": 9999,
-                    "url": "https://gis.forest-atlas.org/server/rest/services/eth/priority_landscapes/MapServer",
-                    "opacity": 0.35,
-                    "layerIds": [282],
-                    "visible": true,
-                    //   "label": {
-                    //     "en": ""
-                    // },
-                    // "sublabel": {
-                    //     "en": ""
-                    // }
-                },
-
-        {
-          id: 'LEGEND_LAYER',
-          type: 'dynamic',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-          visible: false,
-          opacity: 0,
-          layerIds: []
-        },
-        {
-          id: 'USER_FEATURES',
-          type: 'graphic',
-          visible: true
-        }
-      ]
+      {
+        id: 'LEGEND_LAYER',
+        type: 'dynamic',
+        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+        visible: false,
+        opacity: 0,
+        layerIds: []
+      },
+      {
+        id: 'USER_FEATURES',
+        type: 'graphic',
+        visible: true
+      }
+    ]
   }
 };
