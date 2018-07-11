@@ -429,7 +429,7 @@
 }
 .analysis-results__select-form .analysis-results__select-form-item-container .canopy-label,
 .analysis-results__select-form .analysis-results__select-form-item-container .canopy-button {
-  font-size: 20px;
+  font-size: smaller;
 }
 .analysis-results__select-form .item-title {
   font-size: 16px;
@@ -1296,7 +1296,7 @@
   height: 100%;
   width: 115px;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 12px;
   outline: none;
   border: 1px solid #eee;
   line-height: 14px;
@@ -1344,8 +1344,7 @@
   width: 80%;
   border-radius: 16px;
   background-color: #f0ab00;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
   text-transform: uppercase;
 }
 .layer-basemap.selected {
