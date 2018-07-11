@@ -242,7 +242,6 @@ export default declare('EsriTileCanvasBase', [Layer], {
     this._container.style.transform = getTranslate(this.position);
 
     for (var c = 0; c < this.tileRequests.length; c++) {
-      // console.log(this.tileRequests[c].abort);
       this.tileRequests[c].abort();
     }
     this.tileRequests = [];
