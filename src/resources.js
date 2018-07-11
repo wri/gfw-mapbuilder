@@ -964,24 +964,23 @@ export default {
         id: 'MASK',
         type: 'dynamic',
         order: 10000,
-        url:
-          'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-          opacity: 0.35,
-          layerIds: [0]
-        },
-        {
-          id: 'LEGEND_LAYER',
-          type: 'dynamic',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-          visible: false,
-          opacity: 0,
-          layerIds: []
-        },
-        {
-          id: 'USER_FEATURES',
-          type: 'graphic',
-          visible: true
-        }
-      ]
+        url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+        opacity: 0.35,
+        layerIds: [0]
+      },
+      {
+        id: 'LEGEND_LAYER',
+        type: 'dynamic',
+        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+        visible: false,
+        opacity: 0,
+        layerIds: []
+      },
+      {
+        id: 'USER_FEATURES',
+        type: 'graphic',
+        visible: true
+      }
+    ]
   }
 };
