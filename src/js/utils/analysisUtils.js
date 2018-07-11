@@ -694,22 +694,6 @@ export default {
       timeout: 30000
     }, { usePost: false }).then(result => {
 
-      // For calls to the gfw api that do not return data in the correct format for vega widgets
-      // (umd-loss-gain), we will need to grab the data url
-      // (results.data.attributes.widgetConfig.data[0].url) and make another request to that url.
-      // Then, we need to format the response to vega's liking
-      // someKey: [
-      //  {
-      //    attribute: value,    ] --> data point 1
-      //    attribute2: value2   ]
-      //  },
-      //  {
-      //    attribute: value,    ] --> data point 2
-      //    attribute2: value2   ]
-      //  }
-      // ]
-      console.log(result);
-
       promise.resolve(result);
     }, err => {
       promise.resolve({ error: err});
