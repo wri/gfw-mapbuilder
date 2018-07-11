@@ -17,11 +17,13 @@ export default class AnalysisPanel extends Component {
 
   render () {
     const {map} = this.context;
-    let selectedFeature;
+    let selectedFeature, selectedFeats;
     let content;
+
 
     //- Infer the selected feature from the info window
     if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
+      selectedFeats = map.infoWindow.features;
       selectedFeature = map.infoWindow.getSelectedFeature();
     }
 
@@ -29,7 +31,7 @@ export default class AnalysisPanel extends Component {
       selectedFeature.geometry &&
       selectedFeature.geometry.type === analysisKeys.GEOMETRY_POLYGON
     ) {
-      content = <Analysis selectedFeature={selectedFeature} {...this.props} />;
+      content = <Analysis selectedFeature={selectedFeature} selectedFeats={selectedFeats} {...this.props} />;
     } else {
       content = [<Instructions key='instructions' />, <DrawTools key='tools' />, <Upload key='upload'/>];
     }
