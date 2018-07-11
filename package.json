@@ -9,7 +9,7 @@
     "test": "jest --no-cache --runInBand",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
-    "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js --env production"
+    "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js"
   },
   "repository": {
     "type": "git",
@@ -49,8 +49,6 @@
       "js/layers/CartoLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/TreeCoverGainLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/TreeCoverLossLayer": "<rootDir>/tests/__mocks__/constructor.js",
-      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
-      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
       "esri/config": "<rootDir>/config/__mocks__/config.js",
       "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
@@ -121,6 +119,7 @@
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.1",
+    "webpack-s3-plugin": "^1.0.0-rc.0"
   }
 }

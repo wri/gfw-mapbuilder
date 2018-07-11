@@ -23,11 +23,27 @@ It is recommended that you generate a new optimized build of the JSAPI and publi
 node arcgis-module-lister
 ```
 
-Once you upload the module list and publish a build to CDN, swap the URL in index.jade and then proceed with the following command to generate a build to the `dist` directory.
+Once you upload the module list and publish a build to CDN, swap the URL in index.jade and then proceed with the following command to generate a build to the `webpackBuild` directory.
 
 ```shell
-npm run dist
+npm run build
 ```
+
+### Generating a **library** build
+To generate a build for testing into the `libBuild` directory run the following command:
+
+```shell
+npm run build-lib
+```
+
+If you are satisfied with your build and would like to push to production run the following command:
+
+```shell
+npm run build-lib -- --env production
+```
+
+> This will require that you have aws keys for the wri-sites s3 bucket in your environment variables as
+> WRI_SITES_AWS_KEY and WRI_SITES_AWS_SECRET
 
 ### Configuring
 This application has a general [`config.js`][config.js] file that contains things controlled by the developers.  There is also a [`resources.js`][resources.js] file which contains more configurations.  However the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application.  You can control things like the layers in the accordion, their source urls, their order on the map  and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis.  Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
