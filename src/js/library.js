@@ -88,7 +88,7 @@ var MapBuilder = function(args){
 
     loadjsfile('https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js');
 //     // loadjsfile('https://alpha.blueraster.io/gfw-mapbuilder/library-webpack/1.1.14/js/dojo.js');
-    
+
     /*eslint-disable */
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
