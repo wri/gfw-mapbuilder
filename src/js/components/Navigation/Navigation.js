@@ -144,6 +144,7 @@ export default class Navigation extends Component {
           });
           mapActions.setUserSubscriptions(json.data);
           mapActions.toggleSubscriptionsModal({ visible: true });
+
         });
       });
     } else {

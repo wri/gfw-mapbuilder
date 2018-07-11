@@ -53,16 +53,55 @@ html
       }
   body.tundra
     include jade/svg.pug
+    div#button-holder
+      button(onclick='triggerCustom()') Subscribe over here!
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.2.0.js')
+    script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/external-subscriptions/1.2.0.js')
     //- script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/library-test/1.1.16.js')
     //- script(id='library-load' src='js/library.js')
 
     script.
+      var triggerCustom = function() {
+        // const subscriptions = [];
+        const subscriptions = [{
+            'type': 'subscription',
+            'id': '5af2197db824a311006f38ed',
+            'attributes': {
+                'name': 'test for date',
+                'createdAt': '2018-05-08T21:41:17.808Z',
+                'userId': '588f5dda35c8259767ed15ab',
+                'resource': {
+                    'type': 'EMAIL',
+                    'content': 'lc07@uw.edu'
+                },
+                'datasets': ['umd-loss-gain'],
+                'params': {
+                    'iso': {
+                        'subRegion': null,
+                        'region': null,
+                        'country': null
+                    },
+                    'wdpaid': null,
+                    'use': null,
+                    'useid': null,
+                    'geostore': '8dcf1b5fe27b2b8dfa392b346f778f5f'
+                },
+                'confirmed': false,
+                'language': 'en',
+                'datasetsQuery': []
+            }
+        }];
+
+        const customEvent = new CustomEvent('listenToThisSubscriptionCall', { detail: subscriptions});
+        console.log('customEvent', customEvent);
+        window.dispatchEvent(customEvent);
+      }
+
       var customApp = new MapBuilder({
         el: 'root',
         config: {
+          "subscriptionEventName": "listenToThisSubscriptionCall",
           //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
           //- General Settings
           // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
@@ -83,7 +122,7 @@ html
           "narrative": "Here the french narrative",
           "includeMyGFWLogin": false,
           "navLinksInNewTab": false,
-          "language": "fr",
+          "language": "en",
           "useAlternativeLanguage": true,
           "alternativeWebmap": "b514d31339954ba9a0c5822135bc2001",
           "alternativeLanguage": "en",

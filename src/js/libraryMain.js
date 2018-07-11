@@ -5,6 +5,7 @@ import {corsServers, assetUrls} from 'js/config';
 import {loadJS, loadCSS } from 'utils/loaders';
 import generateCSV from 'utils/csvUtils';
 import esriConfig from 'esri/config';
+import mapActions from 'actions/MapActions';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import 'babel-polyfill';
@@ -42,6 +43,12 @@ const libraryMain = {
   configureApp: (constructorParams) => {
     corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
     // esriConfig.defaults.io.corsEnabledServers.push(constructorParams.basePath);
+    const handleExternalSubscriptionCall = (request) => {
+      mapActions.setUserSubscriptions(request.detail);//json.data
+      mapActions.toggleSubscriptionsModal({ visible: true });
+    };
+
+    window.addEventListener('listenToThisSubscriptionCall', handleExternalSubscriptionCall);
   },
 
   /**
@@ -68,7 +75,37 @@ const libraryMain = {
   initializeApp: (constructorParams) => {
     ReactDOM.render(<App constructorParams={constructorParams} />, document.getElementById(constructorParams.el));
     ReactDOM.render(<ShareModal />, document.getElementById('share-modal'));
-  }
+
+    const checkLoggedIn = function () {
+      return new Promise((resolve, reject) => {
+        fetch(
+          'https://production-api.globalforestwatch.org/auth/check-logged',
+          {credentials: 'include'}
+        ).then(response => {
+            let hasError = false;
+            if (response.status !== 200) {
+              hasError = true;
+            }
+            response.json().then(json => {
+              if (hasError) {
+                reject(json);
+                return;
+              }
+              resolve(json);
+          });
+        });
+      });
+    };
+    console.log('checkLoggedIn', checkLoggedIn);
+
+    checkLoggedIn().then(res => {
+      if (res) {
+        mapActions.toggleLogin(true);
+      }
+    }, err => {
+      // console.log('user not logged in', err);
+    });
+  },
 
 };
 
