@@ -102,13 +102,31 @@ export default {
     {
       analysisId: 'TC_LOSS_GAIN',
       label: {
-        en: 'Total Tree Cover Loss/Gain',
+          en: 'Total tree cover loss/ gain',
+          fr: 'Total perte/ gain en couvert arboré',
+          es: 'Pérdida/ Aumento de la cobertura arbórea',
+          pt: 'Perda/ Ganho de cobertura arbórea',
+          id: 'Total tree cover loss/ gain',
+          zh: '森林覆盖损失/ 森林覆盖增加',
+          ka: 'ხის ვარჯის კარგვა/ ნამატი'
       },
       title: {
-        en: 'Forest Loss Analysis'
+        en: 'Forest Loss Analysis',
+        fr: 'Forest Loss Analysis',
+        es: 'Forest Loss Analysis',
+        pt: 'Forest Loss Analysis',
+        id: 'Forest Loss Analysis',
+        zh: 'Forest Loss Analysis',
+        ka: 'Forest Loss Analysis'
       },
       description: {
-        en: 'Select range and tree cover density then click the "run analysis" button to see results'
+        en: 'Select range and tree cover density then click the "run analysis" button to see results',
+        fr: 'Select range and tree cover density then click the "run analysis" button to see results',
+        es: 'Select range and tree cover density then click the "run analysis" button to see results',
+        pt: 'Select range and tree cover density then click the "run analysis" button to see results',
+        id: 'Select range and tree cover density then click the "run analysis" button to see results',
+        zh: 'Select range and tree cover density then click the "run analysis" button to see results',
+        ka: 'Select range and tree cover density then click the "run analysis" button to see results'
       },
       chartType: 'badge',
       valueAttribute: 'data.attributes.loss',
@@ -152,7 +170,13 @@ export default {
     {
       analysisId: 'TC_LOSS',
       label: {
-        en: 'Tree Cover Loss',
+          en: 'Tree cover loss',
+          fr: 'Perte en couvert arboré',
+          es: 'Pérdida de la cobertura arbórea',
+          pt: 'Perda de cobertura arbórea',
+          id: 'Tree cover loss',
+          zh: '森林覆盖损失',
+          ka: 'ხის ვარჯის კარგვა'
       },
       chartType: 'bar',
       chartBounds: [2001, 2017],
@@ -248,7 +272,13 @@ export default {
     {
       analysisId: 'IFL',
       label: {
-        en: 'Intact Forest Landscape'
+          en: 'Intact Forest Landscape',
+          fr: 'Paysage forestier intact',
+          es: 'Paisajes Forestales Intactos',
+          pt: 'Paisagens Florestais Intactas',
+          id: 'Intact Forest Landscape',
+          zh: '原生森林景观',
+          ka: 'ხელუხლებელი ტყის ლანდშაფტი'
       },
       chartType: 'bar',
       chartBounds: [2001, 2015],
@@ -459,7 +489,13 @@ export default {
           minDate: '2004-01-01',
           maxDate: '2016-07-12',
           label: {
-            en: 'Select date(s) for analysis'
+            en: 'Select date(s) for analysis',
+            fr: 'Select date(s) for analysis',
+            es: 'Select date(s) for analysis',
+            pt: 'Select date(s) for analysis',
+            id: 'Select date(s) for analysis',
+            zh: 'Select date(s) for analysis',
+            ka: 'Select date(s) for analysis'
           }
         }
       ],
@@ -510,7 +546,13 @@ export default {
           // defaultEndDate: '',
           minDate: '2004-01-01',
           label: {
-            en: 'Select date(s) for analysis'
+            en: 'Select date(s) for analysis',
+            fr: 'Select date(s) for analysis',
+            es: 'Select date(s) for analysis',
+            pt: 'Select date(s) for analysis',
+            id: 'Select date(s) for analysis',
+            zh: 'Select date(s) for analysis',
+            ka: 'Select date(s) for analysis'
           }
         },
       ],
