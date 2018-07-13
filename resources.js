@@ -121,18 +121,30 @@ export default {
           // endParamName: ''
           combineParams: true,
           valueSeparator: ',',
-          bounds: [2001, 2016],
+          bounds: [2001, 2017],
           valueType: 'date',
           // step: 5,
           label: {
-            en: 'Select range for analysis'
+            en: 'Select range for analysis',
+            fr: 'Select range for analysis',
+            es: 'Select range for analysis',
+            pt: 'Select range for analysis',
+            id: 'Select range for analysis',
+            zh: 'Select range for analysis',
+            ka: 'Select range for analysis'
           }
         },
         {
           name: 'thresh',
           inputType: 'tcd',
           label: {
-            en: 'Select tree cover density: '
+            en: 'Select tree cover density: ',
+            fr: 'Select tree cover density: ',
+            es: 'Select tree cover density: ',
+            pt: 'Select tree cover density: ',
+            id: 'Select tree cover density: ',
+            zh: 'Select tree cover density: ',
+            ka: 'Select tree cover density: '
           }
         }
       ],
@@ -157,14 +169,26 @@ export default {
           valueType: 'date',
           // step: 5,
           label: {
-            en: 'Select range for analysis'
+            en: 'Select range for analysis',
+            fr: 'Select range for analysis',
+            es: 'Select range for analysis',
+            pt: 'Select range for analysis',
+            id: 'Select range for analysis',
+            zh: 'Select range for analysis',
+            ka: 'Select range for analysis'
           }
         },
         {
           name: 'thresh',
           inputType: 'tcd',
           label: {
-            en: 'Select tree cover density: '
+                en: 'Select tree cover density: ',
+                fr: 'Select tree cover density: ',
+                es: 'Select tree cover density: ',
+                pt: 'Select tree cover density: ',
+                id: 'Select tree cover density: ',
+                zh: 'Select tree cover density: ',
+                ka: 'Select tree cover density: '
           }
         }
       ],
@@ -178,28 +202,45 @@ export default {
     {
       analysisId: 'BIO_LOSS',
       label: {
-        en: 'Aboveground Live Woody Biomass Loss'
+          en: 'Aboveground Live Woody Biomass Density',
+          fr: 'Densité de la biomasse aérienne vivante',
+          es: 'Densidad de la biomasa viva en la superficie del suelo',
+          pt: 'Densidade de biomassa viva acima do solo',
+          id: 'Aboveground Live Woody Biomass Density',
+          zh: 'Aboveground Live Woody Biomass Density',
+          ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
       },
       chartType: 'biomassLoss',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
       uiParams: [
-        {
-          inputType: 'datepicker',
+       {
+          inputType: 'rangeSlider',
           startParamName: 'period',
           combineParams: true,
           valueSeparator: ',',
-          multi: true,
-          minDate: '2001-01-01',
-          maxDate: '2014-12-31',
+          bounds: [2001, 2014],
+          valueType: 'date',
           label: {
-            en: 'Select Date(s) for analysis'
+            en: 'Select range for analysis',
+            fr: 'Select range for analysis',
+            es: 'Select range for analysis',
+            pt: 'Select range for analysis',
+            id: 'Select range for analysis',
+            zh: 'Select range for analysis',
+            ka: 'Select range for analysis'
           }
         },
         {
           name: 'thresh',
           inputType: 'tcd',
           label: {
-            en: 'Select tree cover density: '
+                en: 'Select tree cover density: ',
+                fr: 'Select tree cover density: ',
+                es: 'Select tree cover density: ',
+                pt: 'Select tree cover density: ',
+                id: 'Select tree cover density: ',
+                zh: 'Select tree cover density: ',
+                ka: 'Select tree cover density: '
           }
         }
       ]
@@ -219,12 +260,50 @@ export default {
           name: 'layer',
           value: 'ifl2000'
         }
+      ],      
+      uiParams: [
+       {
+          inputType: 'rangeSlider',
+          startParamName: 'period',
+          combineParams: true,
+          valueSeparator: ',',
+          bounds: [2001, 2015],
+          valueType: 'date',
+          label: {
+            en: 'Select range for analysis',
+            fr: 'Select range for analysis',
+            es: 'Select range for analysis',
+            pt: 'Select range for analysis',
+            id: 'Select range for analysis',
+            zh: 'Select range for analysis',
+            ka: 'Select range for analysis'
+          }
+        },
+        {
+          name: 'thresh',
+          inputType: 'tcd',
+          label: {
+                en: 'Select tree cover density: ',
+                fr: 'Select tree cover density: ',
+                es: 'Select tree cover density: ',
+                pt: 'Select tree cover density: ',
+                id: 'Select tree cover density: ',
+                zh: 'Select tree cover density: ',
+                ka: 'Select tree cover density: '
+          }
+        }
       ]
     },
     {
       analysisId: 'GLAD_ALERTS',
       label: {
-        en: 'GLAD Alerts'
+          en: 'GLAD Alerts',
+          fr: 'Alertes GLAD',
+          es: 'Alertas GLAD',
+          pt: 'Alertas GLAD',
+          id: 'GLAD Alerts',
+          zh: 'GLAD Alerts',
+          ka: 'GLAD შეტყობინებები'
       },
       chartType: 'timeSeries',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
@@ -241,14 +320,13 @@ export default {
           minDate: '2015-01-01',
           // maxDate: '',
           label: {
-            en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
+            en: 'Select range for analysis',
+            fr: 'Select range for analysis',
+            es: 'Select range for analysis',
+            pt: 'Select range for analysis',
+            id: 'Select range for analysis',
+            zh: 'Select range for analysis',
+            ka: 'Select range for analysis'
           }
         }
       ],
@@ -309,7 +387,13 @@ export default {
     {
       analysisId: 'VEGA_GLAD_WIDGET',
       label: {
-        en: 'GLAD Alerts (VEGA GFW API widget)'
+          en: 'GLAD Alerts (Vega)',
+          fr: 'Alertes GLAD (Vega)',
+          es: 'Alertas GLAD (Vega)',
+          pt: 'Alertas GLAD (Vega)',
+          id: 'GLAD Alerts (Vega)',
+          zh: 'GLAD Alerts (Vega)',
+          ka: 'GLAD შეტყობინებები (vega)'
       },
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
       useGfwWidget: true,
@@ -326,14 +410,13 @@ export default {
           minDate: '2015-01-01',
           // maxDate: '',
           label: {
-            en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
+            en: 'Select range for analysis',
+            fr: 'Select range for analysis',
+            es: 'Select range for analysis',
+            pt: 'Select range for analysis',
+            id: 'Select range for analysis',
+            zh: 'Select range for analysis',
+            ka: 'Select range for analysis'
           }
         }
       ],
@@ -353,7 +436,13 @@ export default {
     {
       analysisId: 'TERRAI_ALERTS',
       label: {
-        en: 'Terra I Alerts'
+          en: 'Terra-I Alerts',
+          fr: 'Alertes Terra-I',
+          es: 'Alertas Terra-I',
+          pt: 'Alertas Terra-I',
+          id: 'Terra-I Alerts',
+          zh: 'Terra-I Alerts',
+          ka: 'Terra-I შეტყობინებები'
       },
       chartType: 'timeSeries',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts',
@@ -372,13 +461,6 @@ export default {
           label: {
             en: 'Select date(s) for analysis'
           }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
         }
       ],
       params: [
@@ -395,12 +477,24 @@ export default {
     {
       analysisId: 'VIIRS_FIRES',
       label: {
-        en: 'VIIRS Active Fires'
+          en: 'VIIRS Active Fires',
+          fr: 'Feux actifs VIIRS',
+          es: 'Incendios activos VIIRS',
+          pt: 'Incêndios ativos VIIRS',
+          id: 'VIIRS Active fires',
+          zh: '活跃火点 VIIRS',
+          ka: 'VIIRS აქტიური ხანძრები'
       },
       chartType: 'badge',
       valueAttribute: 'data.attributes.value',
       badgeLabel: {
-        en: 'Active Fires'
+          en: 'Active Fires',
+          fr: 'Feux actifs',
+          es: 'Incendios activos',
+          pt: 'Incêndios ativos',
+          id: 'Active fires',
+          zh: '活跃火点',
+          ka: 'აქტიური ხანძრები'
       },
       color: '#5ea1ed',
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
@@ -424,7 +518,13 @@ export default {
     {
       analysisId: 'LCC',
       label: {
-        en: 'Land Cover Composition'
+        en: 'Land Cover Composition',
+        fr: 'Couverture des sols',
+        es: 'Cobertura terrestre',
+        pt: 'Cobertura do Solo',
+        id: 'Land Cover',
+        zh: '土地覆盖',
+        ka: 'მიწის საფარი'
       },
       chartType: 'lccPie',
       classes: {
