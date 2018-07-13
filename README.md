@@ -36,11 +36,20 @@ To generate a build for testing into the `libBuild` directory run the following 
 npm run build-lib
 ```
 
-If you are satisfied with your build and would like to push to production run the following command:
+### Deploying to Production
+Once you are ready to deploy to production run the following command
 
 ```shell
-npm run build-lib -- --env production
+npm run deploy -- <version-bump-type>
 ```
+where `<version-bump-type>` is one of `major`, `minor`, or `patch`.
+
+This will do the following things:
+
+1. Bump the version of your `package.json` according to your `<version-bump-type>`
+2. Run a build and publish it on wri-sites s3 bucket
+3. Push the build up to `gh-pages`
+4. Run a library build and publish it on wri-sites library s3 bucket
 
 > This will require that you have aws keys for the wri-sites s3 bucket in your environment variables as
 > WRI_SITES_AWS_KEY and WRI_SITES_AWS_SECRET
