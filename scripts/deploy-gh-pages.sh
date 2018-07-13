@@ -37,27 +37,22 @@ if [[ -z $versionBumpType ]] || ([[ $versionBumpType != "major" ]] && [[ $versio
   exit
 fi
 
-# run the test script from the package.json
-logMessage $yellow "RUNNING TESTS..."
-
-npm run test
-if [ $? != 0 ]; then
-    logMessage $red "Either tests failed or there was a problem with the test script. Exiting..."
-    exit
-fi
-
 # update the package version
 logMessage $yellow "UPDATING PACKAGE VERSION - ${versionBumpType} bump"
 
 npm version $versionBumpType
+if [ $? != 0 ]; then
+  logMessage $red "Version bump failed. Exiting..."
+  exit
+fi
 
 # run the build script
 logMessage $yellow "BUILDING APPLICATION..."
 
 npm run build
 if [ $? != 0 ]; then
-    logMessage $red "Build failed. Exiting..."
-    exit
+  logMessage $red "Build failed. Exiting..."
+  exit
 fi
 
 # get new version number from package json
