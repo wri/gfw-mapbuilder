@@ -9,7 +9,7 @@ const deploy = require('./webpack.deploy');
 const version = require('./package.json').version;
 
 const directoryName = 'libBuild';
-const s3Bucket = 'wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/test-deploy';
+const s3Bucket = 'wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org';
 
 module.exports = (env) => {
   console.log('Environment:', env);

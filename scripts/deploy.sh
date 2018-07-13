@@ -24,7 +24,7 @@ getJsonProperty () {
 # Make sure we are on the develop branch before doing anything
 branch=$(git rev-parse --abbrev-ref HEAD)
 
-if [[ $branch != "testing-gh-pages" ]]; then
+if [[ $branch != "develop" ]]; then
   logMessage $red "This script must be run from the develop branch. Exiting..."
   exit 1;
 fi
@@ -77,7 +77,7 @@ logMessage $green $version
 # checkout the gh-pages branch
 logMessage $yellow "CHECKING OUT GH-PAGES BRANCH..."
 
-git checkout test-pages
+git checkout gh-pages
 
 # move the files we need to update
 logMessage $yellow "MOVING ASSETS..."
@@ -94,7 +94,7 @@ git commit -m "updating to version $version"
 # push to remote gh-pages branch (this updates the production site)
 logMessage $yellow "PUSHING CHANGES TO REMOTE..."
 
-git push pkmoran test-pages
+git push origin gh-pages
 
 # checkout back to the previous branch
 logMessage $yellow "CHECKING OUT PREVIOUS BRANCH..."
