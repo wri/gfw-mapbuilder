@@ -1,17 +1,17 @@
 {
   "name": "forest_atlas_template",
-  "version": "1.2.1",
+  "version": "8.0.0",
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
   "main": "webpack.config.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
     "lint": "eslint src/js/**/*.js",
     "test": "jest --no-cache --runInBand",
-    "build": "npm run clean:build; webpack --env production",
+    "build": "npm run clean:build; webpack",
     "build-lib": "npm run clean:lib; webpack --config webpack.lib.config.js",
     "clean:build": "rm -rf webpackBuild",
     "clean:lib": "rm -rf libBuild",
-    "deploy:gh-pages": "npm run test && scripts/deploy-gh-pages.sh"
+    "deploy": "npm run test && scripts/deploy.sh"
   },
   "repository": {
     "type": "git",

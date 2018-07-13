@@ -52,17 +52,6 @@ module.exports = (PATHS) => {
           threshold: 10240,
           minRatio: 0.8,
         }),
-        new S3Plugin({
-          directory: 'libBuild',
-          s3Options: {
-            accessKeyId: process.env.WRI_SITES_AWS_KEY,
-            secretAccessKey: process.env.WRI_SITES_AWS_SECRET,
-            region: 'us-east-1'
-          },
-          s3UploadOptions: {
-            Bucket: 'wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org'
-          },
-        }),
       ],
     },
   ]);
