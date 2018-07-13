@@ -16,4 +16,3 @@ node_modules
 #pycharm
 .idea/
 .vscode/
-package-lock.json
