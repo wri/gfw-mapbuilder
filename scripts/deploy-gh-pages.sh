@@ -21,6 +21,14 @@ getJsonProperty () {
   echo `grep -m 1 "${2}" $1 | sed -E 's/^ *//;s/.*: *"//;s/",?//g'`;
 }
 
+# Make sure we are on the develop branch before doing anything
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [[ $branch != "develop" ]]; then
+  logMessage $red "This script must be run from the develop branch. Exiting..."
+  exit
+fi
+
 # Check if there are changes on the branch. We don't want to bring them over to gh-pages
 if ! git diff-index --quiet HEAD --; then
   logMessage $red "This branch has un-comitted changes. Stash or commit them and try again"
