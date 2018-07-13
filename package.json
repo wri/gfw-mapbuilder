@@ -8,9 +8,10 @@
     "lint": "eslint src/js/**/*.js",
     "test": "jest --no-cache --runInBand",
     "build": "npm run clean:build; webpack --env production",
+    "build-lib": "npm run clean:lib; webpack --config webpack.lib.config.js",
     "clean:build": "rm -rf webpackBuild",
-    "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js",
-    "deploy:gh-pages": "scripts/deploy-gh-pages.sh"
+    "clean:lib": "rm -rf libBuild",
+    "deploy:gh-pages": "npm run test && scripts/deploy-gh-pages.sh"
   },
   "repository": {
     "type": "git",
