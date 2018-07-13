@@ -1,9 +1,7 @@
-const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const parts = require('./webpack.parts');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-const S3Plugin = require('webpack-s3-plugin');
 
 // TODO: uglifyjs-webpack-plugin, compression-webpack-plugin
 
