@@ -9,7 +9,8 @@
     "test": "jest --no-cache --runInBand",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
-    "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js"
+    "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js",
+    "deploy:gh-pages": "scripts/deploy-gh-pages.sh"
   },
   "repository": {
     "type": "git",
