@@ -653,13 +653,13 @@ strings.fr.ANALYSIS_SAD_ALERT_NAMES = {
   defor: 'Déforestation'
 };
 
-strings.fr.DEFAULT_ANALYSIS_LABEL = 'Sélectionner analysis...';
+strings.fr.DEFAULT_ANALYSIS_LABEL = "Sélectionner l'analyse...";
 strings.fr.RUN_ANALYSIS_BUTTON_TEXT = "Exécuter L'analyse";
 
 //- Group and value should not be modified
 strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
-    label: 'Sélectionner analysis...',
+    label: "Sélectionner l'analyse...",
     value: 'default',
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
