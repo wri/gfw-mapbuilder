@@ -27,7 +27,7 @@ import {attributes} from 'constants/AppConstants';
 import {analysisConfig} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
-import {formatters, getEncoder, getCustomAnalysis} from 'utils/analysisUtils';
+import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
 import analysisUtils from 'utils/analysisUtils';
 import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
@@ -406,7 +406,7 @@ export default class Analysis extends Component {
               results.data.attributes.histogram[0].result.forEach(histo => {
                 counts.push(Math.round(histo.result * 100) / 100);
               });
-              encoder = getEncoder(
+              encoder = analysisUtils.getEncoder(
                 {
                   bounds: [labels[0], labels[labels.length - 1]]
                 },
