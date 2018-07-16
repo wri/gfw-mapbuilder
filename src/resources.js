@@ -121,7 +121,7 @@ export default {
           // endParamName: ''
           combineParams: true,
           valueSeparator: ',',
-          bounds: [2001, 2016],
+          bounds: [2001, 2017],
           valueType: 'date',
           // step: 5,
           label: {
