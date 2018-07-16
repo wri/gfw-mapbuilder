@@ -231,23 +231,13 @@ export default {
         {
           inputType: 'datepicker',
           startParamName: 'period',
-          // endParamName: '',
           combineParams: true,
           valueSeparator: ',',
           multi: true,
           defaultStartDate: '2016-01-01',
-          // defaultEndDate: '',
           minDate: '2015-01-01',
-          // maxDate: '',
           label: {
             en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
           }
         }
       ],
@@ -370,13 +360,6 @@ export default {
           maxDate: '2016-07-12',
           label: {
             en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
           }
         }
       ],
