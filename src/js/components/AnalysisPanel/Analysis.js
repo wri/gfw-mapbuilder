@@ -450,6 +450,12 @@ export default class Analysis extends Component {
             }
             break;
           }
+          case 'TERRAI_ALERTS': {
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.value);
+            }
+            break;
+          }
           default: {
             data = results;
 
