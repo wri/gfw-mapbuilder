@@ -184,15 +184,14 @@ export default {
       analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
       uiParams: [
         {
-          inputType: 'datepicker',
+          inputType: 'rangeSlider',
           startParamName: 'period',
           combineParams: true,
           valueSeparator: ',',
-          multi: true,
-          minDate: '2001-01-01',
-          maxDate: '2014-12-31',
+          bounds: [2001, 2014],
+          valueType: 'date',
           label: {
-            en: 'Select Date(s) for analysis'
+            en: 'Select range for analysis'
           }
         },
         {
