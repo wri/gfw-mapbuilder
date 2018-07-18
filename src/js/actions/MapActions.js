@@ -101,13 +101,12 @@ class MapActions {
       }
 
       const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (index);
         return layer;
       });
 
       return list.concat(orderedGroups);
     }, []);
-
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
 
