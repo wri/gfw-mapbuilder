@@ -370,13 +370,13 @@ export default class Analysis extends Component {
 
   renderResults = (type, results, language, config) => {
 
-    const { chartType, label } = config;
+    const { chartType, label, colors } = config;
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
 
     switch (chartType) {
       case 'bar': {
-        const { chartBounds, color, analysisId, valueAttribute } = config;
+        const { chartBounds, analysisId, valueAttribute } = config;
         const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
         .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
 
@@ -389,7 +389,6 @@ export default class Analysis extends Component {
         }
 
         let counts = [];
-        let encoder = null;
 
         switch (analysisId) {
           case 'TC_LOSS': {
@@ -406,12 +405,6 @@ export default class Analysis extends Component {
               results.data.attributes.histogram[0].result.forEach(histo => {
                 counts.push(Math.round(histo.result * 100) / 100);
               });
-              encoder = analysisUtils.getEncoder(
-                {
-                  bounds: [labels[0], labels[labels.length - 1]]
-                },
-                analysisConfig[analysisKeys.TC_LOSS]
-              );
             }
             break;
           }
@@ -431,10 +424,10 @@ export default class Analysis extends Component {
         chartComponent = <BarChart
           name={label[language]}
           counts={counts}
-          colors={color ? [color] : ['#cf5188']}
+          colors={colors ? colors : ['#cf5188']}
           labels={labels.slice(startIndex, endIndex + 1)}
           results={results}
-          encoder={encoder}
+          encoder={null}
         />;
         break;
       }
@@ -485,10 +478,25 @@ export default class Analysis extends Component {
 
         switch (activeAnalysisType) {
           case 'TC_LOSS_GAIN':
-            chartComponent = <LossGainBadge results={results} lossFromSelectIndex={lossFromSelectIndex} lossToSelectIndex={lossToSelectIndex} />;
+            chartComponent = <LossGainBadge
+              results={results}
+              lossFromSelectIndex={lossFromSelectIndex}
+              lossToSelectIndex={lossToSelectIndex}
+              totalLossLabel={text[language].ANALYSIS_TOTAL_LOSS_LABEL}
+              totalGainLabel={text[language].ANALYSIS_TOTAL_GAIN_LABEL}
+              totalGainRange={text[language].ANALYSIS_TOTAL_GAIN_RANGE}
+            />;
             break;
           case 'VIIRS_FIRES':
-            chartComponent = <FiresBadge results={results} from={viirsStartDate} to={viirsEndDate} />;
+            chartComponent = <FiresBadge
+              results={results}
+              from={viirsStartDate}
+              to={viirsEndDate}
+              preLabel={text[language].ANALYSIS_FIRES_PRE}
+              firesLabel={text[language].ANALYSIS_FIRES_ACTIVE}
+              timelineStartLabel={text[language].TIMELINE_START}
+              timelineEndLabel={text[language].TIMELINE_END}
+            />;
             break;
           default:
             chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
@@ -500,6 +508,8 @@ export default class Analysis extends Component {
         chartComponent = <BiomassChart
           payload={results}
           colors={analysisConfig.BIO_LOSS.colors}
+          lossName={text[language].ANALYSIS_CARBON_LOSS}
+          carbonName={text[language].ANALYSIS_CARBON_EMISSION}
           />;
         break;
       }

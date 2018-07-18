@@ -18,41 +18,42 @@ block append content
     //- h3#feature-title.feature-title
     div#map.map
     div#popup-content.popup-content
-    div.results-container.results__restoration.hidden#restoration
-    div.results-container.results__slope.hidden#slope
-      h3.slope-header#slope-analysis-header
-      h4.slope__description#slope-analysis-description
-      div#slope-chart.chart-container
-      div#slope-table.table-container
-    div.results-container.results__loss-badge.hidden#total-loss-badge
-      div.results__loss-gain--label
-      div.results__loss-gain--range
-      span.results__loss--count
-      span.results__loss--unit Ha
-    div.results-container.results__gain-badge.hidden#total-gain-badge
-      div.results__loss-gain--label
-      div.results__loss-gain--range
-      span.results__gain--count
-      span.results__gain--unit Ha
-    div.results-container#tc-loss
-    div.results-container#lc-loss
-    div.results-container#bio-loss
-    div.results-container#intact-loss
-    div.results-container#mangroves
-    div.results-container#sad-alerts
-    div.results-container#glad-alerts
-    div.results-container#terrai-alerts
-    div.results-container.results__fires-badge.hidden#viirs-badge
-      div.results__viirs-pre
-      div.results__viirs-count
-      div.results__viirs-active
-      div.results__viirs-post
-    div.results-container.results__fires-badge.hidden#modis-badge
-      div.results__modis-pre
-      div.results__modis-count
-      div.results__modis-active
-      div.results__modis-post
-    div.results-container#lc-composition
+    div#results-container.results-container
+    //- div.results-container.results__restoration.hidden#restoration
+    //- div.results-container.results__slope.hidden#slope
+    //-   h3.slope-header#slope-analysis-header
+    //-   h4.slope__description#slope-analysis-description
+    //-   div#slope-chart.chart-container
+    //-   div#slope-table.table-container
+    //- div.results-container.results__loss-badge.hidden#total-loss-badge
+    //-   div.results__loss-gain--label
+    //-   div.results__loss-gain--range
+    //-   span.results__loss--count
+    //-   span.results__loss--unit Ha
+    //- div.results-container.results__gain-badge.hidden#total-gain-badge
+    //-   div.results__loss-gain--label
+    //-   div.results__loss-gain--range
+    //-   span.results__gain--count
+    //-   span.results__gain--unit Ha
+    //- div.results-container#tc-loss
+    //- div.results-container#lc-loss
+    //- div.results-container#bio-loss
+    //- div.results-container#intact-loss
+    //- div.results-container#mangroves
+    //- div.results-container#sad-alerts
+    //- div.results-container#glad-alerts
+    //- div.results-container#terrai-alerts
+    //- div.results-container.results__fires-badge.hidden#viirs-badge
+    //-   div.results__viirs-pre
+    //-   div.results__viirs-count
+    //-   div.results__viirs-active
+    //-   div.results__viirs-post
+    //- div.results-container.results__fires-badge.hidden#modis-badge
+    //-   div.results__modis-pre
+    //-   div.results__modis-count
+    //-   div.results__modis-active
+    //-   div.results__modis-post
+    //- div.results-container#lc-composition
 block append esri-script
   script.
     var _app = {
@@ -142,6 +143,7 @@ block append esri-script
   //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
   //- PROD: if new modules are added, regenerate the JSAPI build
   script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.7/vega.min.js")
   //- DEV: Use the normal JSAPI
   //- script(src=`//js.arcgis.com/${%ESRI_VERSION%}/init.js`, async)
   //- script(src='/vendor/dojo/dojo.js', async)

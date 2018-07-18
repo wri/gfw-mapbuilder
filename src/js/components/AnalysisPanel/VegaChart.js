@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import charts from 'utils/charts';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -11,11 +12,7 @@ export default class VegaChart extends Component {
       this.setState({ isError: true });
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      new vega.View(vega.parse(config))
-      .renderer('canvas')
-      .initialize(this.chart)
-      .hover()
-      .run();
+      charts.makeVegaChart(this.chart, config);
     }
   }
 
