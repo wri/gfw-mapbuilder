@@ -370,13 +370,13 @@ export default class Analysis extends Component {
 
   renderResults = (type, results, language, config) => {
 
-    const { chartType, label } = config;
+    const { chartType, label, colors } = config;
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
 
     switch (chartType) {
       case 'bar': {
-        const { chartBounds, color, analysisId, valueAttribute } = config;
+        const { chartBounds, analysisId, valueAttribute } = config;
         const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
         .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
 
@@ -389,7 +389,6 @@ export default class Analysis extends Component {
         }
 
         let counts = [];
-        let encoder = null;
 
         switch (analysisId) {
           case 'TC_LOSS': {
@@ -425,10 +424,10 @@ export default class Analysis extends Component {
         chartComponent = <BarChart
           name={label[language]}
           counts={counts}
-          colors={color ? [color] : ['#cf5188']}
+          colors={colors ? colors : ['#cf5188']}
           labels={labels.slice(startIndex, endIndex + 1)}
           results={results}
-          encoder={encoder}
+          encoder={null}
         />;
         break;
       }
