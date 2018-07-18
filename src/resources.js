@@ -131,17 +131,14 @@ export default {
        chartType: 'badge',
        valueAttribute: 'data.attributes.loss',
        analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
-       // uiParams: 'none' if you don't need a ui element
        uiParams: [
          {
            inputType: 'rangeSlider',
            startParamName: 'period',
-           // endParamName: ''
            combineParams: true,
            valueSeparator: ',',
            bounds: [2001, 2017],
            valueType: 'date',
-           // step: 5,
            label: {
              en: 'Select range for analysis',
              fr: 'Select range for analysis',
@@ -181,17 +178,14 @@ export default {
        chartType: 'bar',
        chartBounds: [2001, 2017],
        analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
-       // uiParams: 'none' if you don't need a ui element
        uiParams: [
          {
            inputType: 'rangeSlider',
            startParamName: 'period',
-           // endParamName: ''
            combineParams: true,
            valueSeparator: ',',
            bounds: [2001, 2017],
            valueType: 'date',
-           // step: 5,
            label: {
              en: 'Select range for analysis',
              fr: 'Select range for analysis',
@@ -235,6 +229,10 @@ export default {
            ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
        },
        chartType: 'biomassLoss',
+       colors: {
+        loss: '#FF6699',
+        carbon: '#BEBCC2'
+      },
        analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
        uiParams: [
         {
@@ -282,9 +280,8 @@ export default {
        },
        chartType: 'bar',
        chartBounds: [2001, 2015],
-       color: '#186513',
+       colors: ['#186513'],
        analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
-       uiParams: 'none',
        params: [
          {
            name: 'layer',
@@ -341,14 +338,11 @@ export default {
          {
            inputType: 'datepicker',
            startParamName: 'period',
-           // endParamName: '',
            combineParams: true,
            valueSeparator: ',',
            multi: true,
            defaultStartDate: '2016-01-01',
-           // defaultEndDate: '',
            minDate: '2015-01-01',
-           // maxDate: '',
            label: {
              en: 'Select range for analysis',
              fr: 'Select range for analysis',
@@ -436,9 +430,7 @@ export default {
            valueSeparator: ',',
            multi: true,
            defaultStartDate: '2016-01-01',
-           // defaultEndDate: '',
            minDate: '2015-01-01',
-           // maxDate: '',
            label: {
              en: 'Select range for analysis',
              fr: 'Select range for analysis',
@@ -480,12 +472,10 @@ export default {
          {
            inputType: 'datepicker',
            startParamName: 'period',
-           // endParamName: '',
            combineParams: true,
            valueSeparator: ',',
            multi: true,
            defaultStartDate: '2006-06-20',
-           // defaultEndDate: '',
            minDate: '2004-01-01',
            maxDate: '2016-07-12',
            label: {

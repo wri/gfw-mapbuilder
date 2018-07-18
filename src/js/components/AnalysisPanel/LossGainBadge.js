@@ -1,13 +1,19 @@
 import React, { PropTypes } from 'react';
-import text from 'js/languages';
 import { analysisConfig } from 'js/config';
 import utils from 'utils/AppUtils';
 import analysisKeys from 'constants/AnalysisConstants';
 
-const LossGainBadge = (props, context) => {
+const LossGainBadge = (props) => {
 
-  const { lossFromSelectIndex, lossToSelectIndex, results } = props;
-  const { language } = context;
+  const {
+    lossFromSelectIndex,
+    lossToSelectIndex,
+    results,
+    totalLossLabel,
+    totalGainLabel,
+    totalGainRange,
+  } = props;
+
   const labelArray = analysisConfig[analysisKeys.TC_LOSS].labels;
 
   if (results.hasOwnProperty('error')) {
@@ -24,7 +30,7 @@ const LossGainBadge = (props, context) => {
     return (
       <div className='results__loss-gain'>
         <div className='results__loss-badge'>
-          <div className='results__loss-gain--label'>{text[language].ANALYSIS_TOTAL_LOSS_LABEL}</div>
+          <div className='results__loss-gain--label'>{totalLossLabel}</div>
           <div className='results__loss-gain--range'>{labelArray[lossFromSelectIndex]} &ndash; {labelArray[lossToSelectIndex]}</div>
           <div className='results__loss--count-container'>
             <span className='results__loss--count'>{utils.formatNumber(loss)}</span>
@@ -32,8 +38,8 @@ const LossGainBadge = (props, context) => {
           </div>
         </div>
         <div className='results__gain-badge'>
-          <div className='results__loss-gain--label'>{text[language].ANALYSIS_TOTAL_GAIN_LABEL}</div>
-          <div className='results__loss-gain--range'>{text[language].ANALYSIS_TOTAL_GAIN_RANGE}</div>
+          <div className='results__loss-gain--label'>{totalGainLabel}</div>
+          <div className='results__loss-gain--range'>{totalGainRange}</div>
           <div className='results__gain--count-container'>
             <span className='results__gain--count'>{utils.formatNumber(gain)}</span>
             <span className='results__gain--unit'>Ha</span>
@@ -47,10 +53,6 @@ const LossGainBadge = (props, context) => {
 LossGainBadge.propTypes = {
   lossFromSelectIndex: PropTypes.number.isRequired,
   lossToSelectIndex: PropTypes.number.isRequired
-};
-
-LossGainBadge.contextTypes = {
-  language: PropTypes.string.isRequired
 };
 
 export { LossGainBadge as default };
