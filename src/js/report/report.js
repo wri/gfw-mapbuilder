@@ -679,7 +679,7 @@ const renderResults = (results, lang, config, params) => {
       break;
     }
     case 'timeSeries': {
-      const { analysisId, valueAttribute } = config;
+      const { valueAttribute } = config;
 
       let data = [];
 
@@ -700,6 +700,8 @@ const renderResults = (results, lang, config, params) => {
           data = results;
 
           if (valueAttribute) {
+            // see https://github.com/wri/gfw-mapbuilder/wiki/Chart-Types:-Bar#valueattribute-string
+            // for more information on using the valueAttribute property
             data = valueAttribute.split('.').reduce((prevVal, currentVal) => {
               if (!prevVal.hasOwnProperty(currentVal)) {
                 throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
