@@ -823,7 +823,7 @@ const handleRangeSliderParams = (paramsObject, paramModule) => {
   };
 };
 
-const handleDatepickerParams = (paramsObject, paramModule) => {
+const handleDatepickerParams = (paramsObject, paramModule, analysisId, reportProperties) => {
   const {
     combineParams,
     valueSeparator,
@@ -834,8 +834,17 @@ const handleDatepickerParams = (paramsObject, paramModule) => {
     maxDate,
     multi,
   } = paramModule;
-  const startDate = defaultStartDate || minDate;
+
+  const {
+    viirsStartDate,
+  } = reportProperties;
+
+  let startDate = defaultStartDate || minDate;
   const endDate = maxDate || moment().format('YYYY-MM-DD');
+
+  if (analysisId === 'VIIRS_FIRES') {
+    startDate = moment(viirsStartDate).format('YYYY-MM-DD');
+  }
 
   if (combineParams) {
     if (!valueSeparator) {
@@ -883,7 +892,7 @@ const runAnalysis = function runAnalysis (params, feature) {
             uiParamsToAppend = handleRangeSliderParams(uiParamsToAppend, uiParam);
             break;
           case 'datepicker':
-            uiParamsToAppend = handleDatepickerParams(uiParamsToAppend, uiParam);
+            uiParamsToAppend = handleDatepickerParams(uiParamsToAppend, uiParam, module.analysisId, params);
             break;
           case 'tcd':
             uiParamsToAppend = handleTcdParams(uiParamsToAppend);
