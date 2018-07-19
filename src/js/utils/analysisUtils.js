@@ -701,16 +701,20 @@ export default {
       throw new Error("property 'widgetId' is required. Check your analysisModule config.");
     }
 
-    let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}`;
+    let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}?`;
 
-    if (!config.analysisUrl) {
-      throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
-    }
-    widgetUrl += `?queryUrl=${config.analysisUrl}`;
+    // if (!config.analysisUrl) {
+    //   throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
+    // }
 
+    
     Object.entries(uiParams).forEach((entry) => {
-      widgetUrl += `&${entry[0]}=${entry[1]}`;
+      widgetUrl += `${entry[0]}=${entry[1]}&`;
     });
+    
+    if (config.analysisUrl) {
+      widgetUrl += `queryUrl=${config.analysisUrl}`;
+    }
 
     esriRequest({
       url: widgetUrl,
