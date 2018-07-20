@@ -12,7 +12,6 @@ test('analysis modules has the required properties', () => {
 test('analysis module spec', () => {
   analysisModules.forEach((module) => {
     expect(module.label).toHaveProperty(resources.language);
-    expect(module).toHaveProperty('analysisUrl');
     expect(module).toHaveProperty('analysisId');
 
     if (module.useGfwWidget) {
