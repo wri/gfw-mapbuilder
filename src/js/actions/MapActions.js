@@ -101,7 +101,7 @@ class MapActions {
       }
 
       const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (index);
+        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
         return layer;
       });
 
