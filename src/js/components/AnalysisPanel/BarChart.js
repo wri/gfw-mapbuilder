@@ -19,12 +19,13 @@ export default class BarChart extends Component {
         this.setState({ isEmpty: true });
       } else {
         let series = [];
+        const parsedCounts = counts.map(count => parseInt(count));
 
         if (encoder) {
           const chartInfo = charts.formatSeriesWithEncoder({
             isSimple: true,
             encoder: encoder,
-            counts: counts,
+            counts: parsedCounts,
             labels: labels,
             colors: colors,
             Xs: encoder.A, // Loss Bounds
@@ -34,7 +35,7 @@ export default class BarChart extends Component {
         } else {
           series = [{
             name: name,
-            data: counts
+            data: parsedCounts
           }];
         }
 
