@@ -606,7 +606,7 @@ export default class Map extends Component {
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
-        layer.resourceInfo.layers.forEach((sublayer, idx) => {
+        layer.resourceInfo.layers.forEach((sublayer) => {
           const visible = layer.layerObject.visibleLayers.indexOf(sublayer.id) > -1;
           const scaleDependency = (sublayer.minScale > 0 || sublayer.maxScale > 0);
           const layerInfo = {
@@ -622,7 +622,6 @@ export default class Map extends Component {
             },
             opacity: 1,
             visible: visible,
-            order: sublayer.order || idx + 1,
             esriLayer: layer.layerObject,
             itemId: layer.itemId
           };

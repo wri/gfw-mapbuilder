@@ -107,7 +107,6 @@ class MapActions {
 
       return list.concat(orderedGroups);
     }, []);
-
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
 

@@ -4,7 +4,7 @@
 ### Getting Started
 Before you can begin, make sure you have [node.js](https://nodejs.org/en/).
 
-Install all the front end dependencies.
+Install all the javascript dependencies.
 ```shell
 npm install
 ```
@@ -17,20 +17,22 @@ npm start
 ### Generating a build
 > You will need node.js installed for these steps
 
-It is recommended that you generate a new optimized build of the JSAPI and publish it to the cloud. There is a helper script that will generate a `arcgis-modules.txt` file that lists all the esri dependencies, upload that to `jso.arcgis.com`. To run the helper script, run the following command in terminal.
+Run the following command to generate a build to the `webpackBuild` directory.
 
 ```shell
-node arcgis-module-lister
-```
-
-Once you upload the module list and publish a build to CDN, swap the URL in index.jade and then proceed with the following command to generate a build to the `dist` directory.
-
-```shell
-npm run dist
+npm run build
 ```
 
 ### Configuring
-This application has a general [`config.js`][config.js] file that contains things controlled by the developers.  There is also a [`resources.js`][resources.js] file which contains more configurations.  However the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application.  You can control things like the layers in the accordion, their source urls, their order on the map  and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis.  Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
+This application has a general [`config.js`][config.js] file that contains things controlled by the developers.  There is also a [`resources.js`][resources.js] file which contains more configurations.  However the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application.  You can control things like the layers in the accordion, their source urls, their order on the map and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis.  Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
+
+To ensure that your `resources.js` has a valid configuration run the following command
+
+```shell
+npm run test
+```
+
+These [Jest](https://jestjs.io/) unit tests will ensure that you have correctly configured any properties that are required in the `layerPanel` and `analysisModules` sections.
 
 #### Configuring Layers and Accordions
 The layers and the accordion are now more easily configurable via the `resources.js` file. Layers that you want to appear on the map but not in the accordion should be placed under `extraLayers`.  The configuration structure is as follows:

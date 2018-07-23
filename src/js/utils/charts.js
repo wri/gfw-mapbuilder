@@ -368,7 +368,15 @@ export default {
 			},
 			series: series
 		});
-	},
+  },
+
+  makeVegaChart: (el, config) => {
+    new vega.View(vega.parse(config))
+      .renderer('canvas')
+      .initialize(el)
+      .hover()
+      .run();
+  },
 
 	/**
 	* @typedef BiomassSeries

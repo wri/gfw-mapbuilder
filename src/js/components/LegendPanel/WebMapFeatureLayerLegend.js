@@ -63,7 +63,12 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       return container;
     }
 
-    this.createSymbolStyles(renderer.getSymbol(), container);
+    try {
+      this.createSymbolStyles(renderer.getSymbol(), container);
+    } catch (e) {
+      console.log("Error rendering the webmap FeatureLayer's symbology");
+    }
+
     return container;
   }
 
