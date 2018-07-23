@@ -4,7 +4,7 @@
 ### Deploying a build
 > If you need to configure the build or update the process for how it works, read this section
 
-NOTE: Current deployment goes to the `gh-pages` branch which updates the production site.
+NOTE: Current deployment goes to the `gh-pages` branch which updates the [production site](https://wri.github.io/gfw-mapbuilder/).
 
 #### Standard deployment
 Just run the following command and copy the contents of the `webpackBuild` directory to your webserver.
