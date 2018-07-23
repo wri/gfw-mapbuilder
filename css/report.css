@@ -296,6 +296,16 @@ h6 {
   text-align: right;
   width: 20%;
 }
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.results-container .results-chart {
+  width: 100%;
+  margin-top: 100px;
+}
 .results__restoration,
 .results__slope {
   flex-direction: column;
