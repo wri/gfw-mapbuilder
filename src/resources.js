@@ -365,6 +365,60 @@ export default {
          }
        ]
      },
+     {
+       analysisId: 'FORMA_ALERTS',
+       label: {
+           en: 'FORMA Alerts',
+           fr: 'FORMA Alerts',
+           es: 'FORMA Alerts',
+           pt: 'FORMA Alerts',
+           id: 'FORMA Alerts',
+           zh: 'FORMA Alerts',
+           ka: 'FORMA Alerts'
+       },
+       chartType: 'badge',
+       valueAttribute: 'data.attributes.alertCounts',
+       badgeLabel: {
+           en: 'FORMA alerts',
+           fr: 'FORMA alerts',
+           es: 'FORMA alerts',
+           pt: 'FORMA alerts',
+           id: 'FORMA alerts',
+           zh: 'FORMA alerts',
+           ka: 'FORMA alerts'
+       },
+       analysisUrl: 'https://production-api.globalforestwatch.org/forma250GFW',
+       uiParams: [
+         {
+           inputType: 'datepicker',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           multi: true,
+           defaultStartDate: '2016-01-01',
+           minDate: '2015-01-01',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         }
+       ],
+       params: [
+         // {
+         //   name: 'aggregate_values',
+         //   value: 'true'
+         // },
+         // {
+         //   name: 'aggregate_by',
+         //   value: 'day'
+         // }
+       ]
+     },
      // {
      //   analysisId: 'VEGA_GLAD',
      //   label: {
@@ -749,6 +803,34 @@ export default {
           zh: '(weekly, 30m, select countries, UMD/ GLAD)',
           ka: '(ყოველკვირეული, 30მ, აარჩიეთ ქვეყნები, UMD/ GLAD)'
         }
+      }, {
+        order: 4.5,
+        id: 'FORMA_ALERTS',
+        type: 'forma',
+        url: 'https://storage.googleapis.com/forma-public/Forma250/tiles/forma_20180128/v1/{z}/{x}/{y}.png',
+        technicalName: 'forma_250_active_clearing_alerts',
+        legendLayer: [1],
+        minDateValue: 12000,
+        maxDateValue: 999999,
+        // confidence: [0, 1],
+        label: {
+          en: 'FORMA 250',
+          fr: 'FORMA 250',
+          es: 'FORMA 250',
+          pt: 'FORMA 250',
+          id: 'FORMA 250',
+          zh: 'FORMA 250',
+          ka: 'FORMA 250'
+        },
+        // sublabel: {
+        //   en: '(weekly, 30m, select countries, UMD/ FORMA)',
+        //   fr: '(hebdomadaire, 30m, certains pays, UMD/ GLAD)',
+        //   es: '(semanal, 30m, select countries, UMD/ GLAD)',
+        //   pt: '(semanal, 30m, select countries, UMD/ GLAD)',
+        //   id: '(weekly, 30m, select countries, UMD/ GLAD)',
+        //   zh: '(weekly, 30m, select countries, UMD/ GLAD)',
+        //   ka: '(ყოველკვირეული, 30მ, აარჩიეთ ქვეყნები, UMD/ GLAD)'
+        // }
       }, {
         order: 5,
         id: 'TERRA_I_ALERTS',
