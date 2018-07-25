@@ -156,7 +156,6 @@ export default function performAnalysis (options) {
       analysisUtils.getGLADAlerts(config, geostoreId, gladFrom, gladTo, language).then(promise.resolve);
     break;
     case analysisKeys.FORMA_ALERTS:
-    console.log('yeaa', config);
       analysisUtils.getFormaAlerts(config, geostoreId, canopyDensity, language).then(promise.resolve);
       break;
     case analysisKeys.TERRA_I_ALERTS:

@@ -167,7 +167,6 @@ export default (layer, lang) => {
         options.url = layer.url;
         options.minDateValue = layer.minDateValue;
         options.maxDateValue = layer.maxDateValue;
-        // options.confidence = layer.confidence;
         options.visible = layer.visible || false;
         esriLayer = new FormaLayer(options);
         esriLayer.legendLayer = layer.legendLayer || null;

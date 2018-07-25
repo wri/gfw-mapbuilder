@@ -812,7 +812,6 @@ export default {
         legendLayer: [1],
         minDateValue: 12000,
         maxDateValue: 999999,
-        // confidence: [0, 1],
         label: {
           en: 'FORMA 250',
           fr: 'FORMA 250',
@@ -822,15 +821,6 @@ export default {
           zh: 'FORMA 250',
           ka: 'FORMA 250'
         },
-        // sublabel: {
-        //   en: '(weekly, 30m, select countries, UMD/ FORMA)',
-        //   fr: '(hebdomadaire, 30m, certains pays, UMD/ GLAD)',
-        //   es: '(semanal, 30m, select countries, UMD/ GLAD)',
-        //   pt: '(semanal, 30m, select countries, UMD/ GLAD)',
-        //   id: '(weekly, 30m, select countries, UMD/ GLAD)',
-        //   zh: '(weekly, 30m, select countries, UMD/ GLAD)',
-        //   ka: '(ყოველკვირეული, 30მ, აარჩიეთ ქვეყნები, UMD/ GLAD)'
-        // }
       }, {
         order: 5,
         id: 'TERRA_I_ALERTS',

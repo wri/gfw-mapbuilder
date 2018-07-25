@@ -275,7 +275,6 @@ export default class LegendPanel extends Component {
 
     } else {
       const esriLayer = layer.esriLayer;
-      console.log('esriLayer1', esriLayer);
 
       if (esriLayer) {
 
@@ -312,7 +311,6 @@ export default class LegendPanel extends Component {
           defaultOpacity={esriLayer.opacity || 1}
           />;
         } else {
-          console.log('esriLayer2', esriLayer);
           if (!layer.layerIds && !esriLayer.tileInfo) {
             throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
           }

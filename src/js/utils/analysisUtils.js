@@ -394,7 +394,6 @@ export default {
   },
 
   getFormaAlerts: function (config, geostoreId, canopyDensity, language) {
-    console.log('getFormaAlerts (vs getGLADAlerts maybe?)');
 
     const promise = new Deferred();
     const formaConfig = analysisConfig[analysisKeys.FORMA_ALERTS];
