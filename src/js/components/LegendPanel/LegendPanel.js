@@ -154,7 +154,7 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
-      case 'TREE_COVER_GAIN':
+      case 'FORMA_ALERTS':
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -167,6 +167,19 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
+        case 'TREE_COVER_GAIN':
+          childComponent = <LayerLegend
+            key={layer.id}
+            label={layer.label ? layer.label[language] : ''}
+            url={urls.esriLegendService}
+            visibleLayers={activeLayers}
+            layerIds={layer.legendLayer}
+            layerId={layer.id}
+            legendOpacity={legendOpacity}
+            initialLayerOpacities={initialLayerOpacities}
+            defaultOpacity={layer.opacity || 1}
+          />;
+          break;
       case 'TREE_COVER_LOSS':
         childComponent = <LayerLegend
           key={layer.id}
@@ -262,6 +275,7 @@ export default class LegendPanel extends Component {
 
     } else {
       const esriLayer = layer.esriLayer;
+      console.log('esriLayer1', esriLayer);
 
       if (esriLayer) {
 
@@ -298,6 +312,7 @@ export default class LegendPanel extends Component {
           defaultOpacity={esriLayer.opacity || 1}
           />;
         } else {
+          console.log('esriLayer2', esriLayer);
           if (!layer.layerIds && !esriLayer.tileInfo) {
             throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
           }

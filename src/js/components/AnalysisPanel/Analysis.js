@@ -443,6 +443,13 @@ export default class Analysis extends Component {
             }
             break;
           }
+          case 'FORMA_ALERTS': {
+            console.log(results);
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.alertCounts);
+            }
+            break;
+          }
           case 'TERRAI_ALERTS': {
             if (!results.hasOwnProperty('error')) {
               data = formatters.alerts(results.data.attributes.value);
@@ -498,6 +505,17 @@ export default class Analysis extends Component {
               timelineEndLabel={text[language].TIMELINE_END}
             />;
             break;
+          // case 'FORMA_ALERTS':
+          //   chartComponent = <FiresBadge
+          //     results={results}
+          //     from={viirsStartDate}
+          //     to={viirsEndDate}
+          //     preLabel={text[language].ANALYSIS_FIRES_PRE}
+          //     firesLabel={text[language].ANALYSIS_FIRES_ACTIVE}
+          //     timelineStartLabel={text[language].TIMELINE_START}
+          //     timelineEndLabel={text[language].TIMELINE_END}
+          //   />;
+          //   break;
           default:
             chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
 

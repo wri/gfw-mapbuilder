@@ -393,6 +393,33 @@ export default {
     return promise;
   },
 
+  getFormaAlerts: function (config, geostoreId, canopyDensity, language) {
+    console.log('getFormaAlerts (vs getGLADAlerts maybe?)');
+
+    const promise = new Deferred();
+    const formaConfig = analysisConfig[analysisKeys.FORMA_ALERTS];
+
+    const formaData = {
+      geostore: geostoreId,
+      thresh: canopyDensity
+    };
+    esriRequest({
+      url: formaConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: formaData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(formaResult => {
+      const alerts = formatters.alerts(formaResult.data.attributes.value);
+      promise.resolve(alerts || []);
+    }, err => {
+      console.error(err);
+      promise.resolve({ error: err, message: text[language].ANALYSIS_ERROR_FORMA });
+    });
+
+    return promise;
+  },
+
   getCountsWithDensity: function (geostoreId, canopyDensity, tcLossFrom, tcLossTo) {
     const deferred = new Deferred();
     const tcLossGainConfig = analysisConfig[analysisKeys.TC_LOSS_GAIN];
@@ -707,11 +734,11 @@ export default {
     //   throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
     // }
 
-    
+
     Object.entries(uiParams).forEach((entry) => {
       widgetUrl += `${entry[0]}=${entry[1]}&`;
     });
-    
+
     if (config.analysisUrl) {
       widgetUrl += `queryUrl=${config.analysisUrl}`;
     }
