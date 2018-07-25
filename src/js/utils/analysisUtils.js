@@ -536,6 +536,30 @@ export default {
     return promise;
   },
 
+  getExactGeom: (selectedFeature) => {
+    const promise = new Deferred();
+    const url = selectedFeature._layer.url;
+    const queryTask = new QueryTask(url);
+    const query = new Query();
+
+    const OBJECTID = selectedFeature.attributes[selectedFeature._layer.objectIdField];
+    const OBJECTID_Field = selectedFeature._layer.objectIdField;
+
+    query.returnGeometry = true;
+    query.outFields = [];
+    query.maxAllowableOffset = 100;
+    query.where = OBJECTID_Field + ' = ' + OBJECTID;
+    console.log(query.where);
+    queryTask.execute(query).then(response => {
+      const feats = response.features;
+      promise.resolve(feats.length > 0 ? feats[0].geometry : selectedFeature.geometry);
+    }, (error) => {
+      console.error(error);
+      promise.resolve(selectedFeature);
+    });
+    return promise;
+  },
+
   registerGeom: (geometry) => {
     const deferred = new Deferred();
     let geographic = null;
@@ -707,11 +731,11 @@ export default {
     //   throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
     // }
 
-    
+
     Object.entries(uiParams).forEach((entry) => {
       widgetUrl += `${entry[0]}=${entry[1]}&`;
     });
-    
+
     if (config.analysisUrl) {
       widgetUrl += `queryUrl=${config.analysisUrl}`;
     }
