@@ -14,8 +14,6 @@ import '../css/app.styl';
 
 const libraryMain = {
   startup: () => {
-    // TODO: load critical in our startup!
-
     if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }
 
     window.brApp = {
@@ -44,7 +42,7 @@ const libraryMain = {
     corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
     // esriConfig.defaults.io.corsEnabledServers.push(constructorParams.basePath);
     const handleExternalSubscriptionCall = (request) => {
-      mapActions.setUserSubscriptions(request.detail);//json.data
+      mapActions.setUserSubscriptions(request.detail);
       mapActions.toggleSubscriptionsModal({ visible: true });
     };
 
@@ -57,12 +55,8 @@ const libraryMain = {
   */
   lazyloadAssets: (constructorParams) => {
     let cssPath = 'css/';
-    let basePath = '';
     if (constructorParams.cssPath) {
       cssPath = constructorParams.cssPath + '/';
-    }
-    if (constructorParams.basePath) {
-      basePath = constructorParams.basePath;
     }
 
     loadCSS(cssPath + 'critical.css');
@@ -96,14 +90,13 @@ const libraryMain = {
         });
       });
     };
-    console.log('checkLoggedIn', checkLoggedIn);
 
     checkLoggedIn().then(res => {
       if (res) {
         mapActions.toggleLogin(true);
       }
-    }, err => {
-      // console.log('user not logged in', err);
+    }, () => {
+      console.log('user not logged in');
     });
   },
 

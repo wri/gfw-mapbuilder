@@ -1,11 +1,8 @@
 /* eslint no-unused-vars: 0 */
 import App from 'components/App';
 import ShareModal from 'components/Modals/ShareModal';
-import IdentityManager from 'esri/IdentityManager';
-import arcgisPortal from 'esri/arcgis/Portal';
-import {corsServers, assetUrls} from 'js/config';
-import {loadJS, loadCSS } from 'utils/loaders';
-import generateCSV from 'utils/csvUtils';
+import { corsServers } from 'js/config';
+import { loadCSS } from 'utils/loaders';
 import esriConfig from 'esri/config';
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -14,7 +11,6 @@ import 'babel-polyfill';
 if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }
 
 window.brApp = {
-  // debug: location.search.slice(1).search('debug') > -1
   debugEnabled: true,
   debug: function (message) {
     if (this.debugEnabled) {
@@ -56,7 +52,4 @@ const initializeApp = () => {
 
 configureApp();
 lazyloadAssets();
-// const portal = new arcgisPortal.Portal('http://ags104.blueraster.io/portal');
-// portal.signIn().then(loggedInUser => {
 initializeApp();
-// });
