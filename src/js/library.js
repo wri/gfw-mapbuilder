@@ -87,6 +87,7 @@ var MapBuilder = function(args){
     }
 
     loadjsfile('https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js');
+    loadjsfile('https://cdnjs.cloudflare.com/ajax/libs/vega/4.2.0/vega.min.js');
 //     // loadjsfile('https://alpha.blueraster.io/gfw-mapbuilder/library-webpack/1.1.14/js/dojo.js');
 
     /*eslint-disable */
