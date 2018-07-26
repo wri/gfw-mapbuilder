@@ -2,17 +2,13 @@ var MapBuilder = function(args){
 
   this.init = function(constructorParams) {
     var scripts = document.getElementsByTagName('script');
-    var newBase, resourcesBase;
+    var newBase;
     for (var j = 0; j < scripts.length; j++) {
       if (scripts[j].id === 'library-load') {
         newBase = scripts[j].src;
       }
     }
 
-//     if (newBase) {
-//       resourcesBase = newBase.split(constructorParams.version)[0];
-//       newBase = resourcesBase + constructorParams.version + '/';
-//     }
     newBase = newBase.split(constructorParams.version)[0] + constructorParams.version;
 
     window._app = {
@@ -30,46 +26,20 @@ var MapBuilder = function(args){
           base + path
         );
     }
-//     function getResourcePath (path) {
-//       var position = path.length - 1;
-//       return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
-//     }
-//     // Change this to '' if _app.base is a remote url
-//     var base = location.href.replace(/\/[^/]+$/, '');
+    constructorParams.cssPath = makePath(newBase, 'css');
+    constructorParams.basePath = newBase;
 
-//     // Add _app.base if it is present
-//     // if (window._app.base) { base = makePath(base, window._app.base); }
-//     if (newBase) {
-//       base = newBase;
-      constructorParams.cssPath = makePath(newBase, 'css');
-      constructorParams.basePath = newBase;
-//     }
     var base = makePath(newBase);
 
     window.dojoConfig = {
       parseOnLoad: false,
       async: true,
       packages: [
-//         // { name: 'root', location: getResourcePath(resourcesBase.replace(/\/[^/]+$/, ''))},
         { name: 'js', location: makePath(base, 'js') }
-//         // { name: 'vendor', location: makePath(base, 'vendor')},
-//         // { name: 'utils', location: makePath(base, 'js/utils')},
-//         // { name: 'stores', location: makePath(base, 'js/stores')},
-//         // { name: 'actions', location: makePath(base, 'js/actions')},
-//         // { name: 'constants', location: makePath(base, 'js/constants')},
-//         // { name: 'components', location: makePath(base, 'js/components')},
-//         // { name: 'helpers', location: makePath(base, 'js/helpers')}
       ],
-//       // aliases: [
-//         // ['resources', 'root/resources'],
-//         // ['alt', 'vendor/alt/dist/alt.min'],
-//         // ['react', 'vendor/react/react'],
-//         // ['react-dom', 'vendor/react/react-dom'],
-//         // ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill'],
-//       // ],
       deps: ['dojo/ready'],
       callback: function () {
-        require(['js/libraryMain'], function(libraryMain) { //TODO: Don't resort to module.default !!
+        require(['js/libraryMain'], function(libraryMain) {
           libraryMain.default.startup();
           libraryMain.default.configureApp(constructorParams);
           libraryMain.default.lazyloadAssets(constructorParams);
@@ -78,7 +48,7 @@ var MapBuilder = function(args){
       }
     };
 
-    function loadRequiredCss() {
+    function loadRequiredCSS() {
       const css = `
         @font-face {
           font-family: 'Fira Sans';
@@ -145,8 +115,7 @@ var MapBuilder = function(args){
 
     loadjsfile('https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js');
     loadjsfile('https://cdnjs.cloudflare.com/ajax/libs/vega/4.2.0/vega.min.js', { charset: 'UTF-8' });
-    loadRequiredCss();
-//     // loadjsfile('https://alpha.blueraster.io/gfw-mapbuilder/library-webpack/1.1.14/js/dojo.js');
+    loadRequiredCSS();
 
     /*eslint-disable */
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
