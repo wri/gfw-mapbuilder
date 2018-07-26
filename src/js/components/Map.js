@@ -603,10 +603,10 @@ export default class Map extends Component {
     * they show up in the correct location, which is why they have different logic for adding them to
     * the list than any other layers, push them in an array, then unshift in reverse order
     */
-    operationalLayers.forEach((layer) => {
+    operationalLayers.forEach((layer, layerIndex) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
-        layer.resourceInfo.layers.forEach((sublayer) => {
+        layer.resourceInfo.layers.forEach((sublayer, sublayerIndex) => {
           const visible = layer.layerObject.visibleLayers.indexOf(sublayer.id) > -1;
           const scaleDependency = (sublayer.minScale > 0 || sublayer.maxScale > 0);
           const layerInfo = {
@@ -622,6 +622,7 @@ export default class Map extends Component {
             },
             opacity: 1,
             visible: visible,
+            order: (layerIndex + 1) * 100 + sublayerIndex,
             esriLayer: layer.layerObject,
             itemId: layer.itemId
           };
