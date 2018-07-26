@@ -78,16 +78,74 @@ var MapBuilder = function(args){
       }
     };
 
-    function loadjsfile(filename) {
-      // const dojoInit = basePath + filename;
+    function loadRequiredCss() {
+      const css = `
+        @font-face {
+          font-family: 'Fira Sans';
+          src: url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff2') format('woff2'),
+              url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.ttf') format('ttf'),
+              url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff') format('woff'),
+              url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff2') format('woff2'),
+              url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.ttf') format('ttf'),
+              url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff') format('woff');
+          font-weight: normal;
+          font-style: normal;
+        }
 
+        .layer-transparency input[type=range]::-webkit-slider-thumb {
+          background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+        }
+
+        .layer-transparency input[type=range]::-moz-range-thumb {
+          background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+        }
+
+        .layer-transparency input[type=range]::-ms-thumb {
+          background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
+        }
+
+        .tree-icon {
+          background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
+        }
+
+        .forest-icon {
+          background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
+        }
+
+        .chart-icon {
+          background: url('https://my.gfw-mapbuilder.org/img/chart-icon.svg') no-repeat center;
+        }
+
+        .print-icon {
+          background: url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
+        }
+
+        .subscribe-icon {
+          background: url('https://my.gfw-mapbuilder.org/img/subscribe-icon.svg') no-repeat center;
+        }
+      `;
+
+      const styleTag = document.createElement('style');
+      styleTag.type = 'text/css';
+      styleTag.appendChild(document.createTextNode(css));
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
+    }
+
+    function loadjsfile(filename, options) {
       const script = document.createElement('script');
       script.src = filename;
+      if (options) {
+        Object.entries.forEach((item) => {
+          const [ attribute, attributeValue ] = item;
+          script[attribute] = attributeValue;
+        });
+      }
       document.getElementsByTagName('head')[0].appendChild(script);
     }
 
     loadjsfile('https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js');
-    loadjsfile('https://cdnjs.cloudflare.com/ajax/libs/vega/4.2.0/vega.min.js');
+    loadjsfile('https://cdnjs.cloudflare.com/ajax/libs/vega/4.2.0/vega.min.js', { charset: 'UTF-8' });
+    loadRequiredCss();
 //     // loadjsfile('https://alpha.blueraster.io/gfw-mapbuilder/library-webpack/1.1.14/js/dojo.js');
 
     /*eslint-disable */
