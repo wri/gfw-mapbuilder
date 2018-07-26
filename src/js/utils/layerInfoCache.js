@@ -3,6 +3,7 @@
 */
 import esriRequest from 'esri/request';
 import Deferred from 'dojo/Deferred';
+import settings from '../../resources';
 import {urls} from 'js/config';
 
 const _cache = {};
@@ -283,7 +284,7 @@ export default {
     } else if (layer.itemId) {
       // This commented out URL contains a good item id to use for testing
       // url = urls.metadataXmlEndpoint('30e234e880c94a2ca54be9a132808eae');
-      url = urls.metadataXmlEndpoint(layer.itemId);
+      url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
       getXMLTask(url).then(xmlDocument => {
         promise.resolve(reduceXML(xmlDocument));
       }, () => {
