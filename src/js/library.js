@@ -135,7 +135,7 @@ var MapBuilder = function(args){
       const script = document.createElement('script');
       script.src = filename;
       if (options) {
-        Object.entries.forEach((item) => {
+        Object.entries(options).forEach((item) => {
           const [ attribute, attributeValue ] = item;
           script[attribute] = attributeValue;
         });
