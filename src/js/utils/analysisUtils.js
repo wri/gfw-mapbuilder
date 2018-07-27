@@ -563,6 +563,12 @@ export default {
   registerGeom: (geometry) => {
     const deferred = new Deferred();
     let geographic = null;
+
+    if (!geometry) {
+      deferred.resolve({ error: 'There was an error while registering the shape in the geostore', status: '500' });
+      return;
+    }
+
     if (geometry.spatialReference.isWebMercator()) {
       geographic = webmercatorUtils.webMercatorToGeographic(geometry);
     } else {
