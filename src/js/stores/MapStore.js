@@ -321,10 +321,14 @@ class MapStore {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
-          analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
-            selectedFeature.attributes.geostoreId = res.data.id;
-            mapActions.toggleAnalysisTab(false);
-            isRegistering = false;
+
+          analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
+            analysisUtils.registerGeom(exactGeom).then(res => {
+              selectedFeature.attributes.geostoreId = res.data.id;
+              selectedFeature.setGeometry(exactGeom);
+              mapActions.toggleAnalysisTab(false);
+              isRegistering = false;
+            });
           });
         } else {
           this.activeTab = tabKeys.INFO_WINDOW;
