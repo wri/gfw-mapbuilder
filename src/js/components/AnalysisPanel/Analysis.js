@@ -444,7 +444,6 @@ export default class Analysis extends Component {
             break;
           }
           case 'FORMA_ALERTS': {
-            console.log(results);
             if (!results.hasOwnProperty('error')) {
               data = formatters.alerts(results.data.attributes.alertCounts);
             }
