@@ -553,6 +553,11 @@ export default class Map extends Component {
       layerActions.updateGladEndDate(new Date(params.ge.replace(/-/g, '/')));
     }
 
+    if (params.fs && params.fe) {
+      layerActions.updateFormaStartDate(new Date(params.gs.replace(/-/g, '/')));
+      layerActions.updateFormaEndDate(new Date(params.ge.replace(/-/g, '/')));
+    }
+
     if (params.vs && params.ve) {
       layerActions.updateViirsStartDate(new Date(params.vs.replace(/-/g, '/')));
       layerActions.updateViirsEndDate(new Date(params.ve.replace(/-/g, '/')));
