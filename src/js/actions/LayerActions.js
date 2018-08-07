@@ -33,7 +33,7 @@ class LayerActions {
   removeAllSubLayers (info) {
     return info;
     }
-  
+
   setSubLayers (info, ...subIndexes) {
     return {
       subIndexes,
@@ -57,6 +57,14 @@ class LayerActions {
   }
 
   updateGladEndDate (endDate) {
+    return endDate;
+  }
+
+  updateFormaStartDate (startDate) {
+    return startDate;
+  }
+
+  updateFormaEndDate (endDate) {
     return endDate;
   }
 
