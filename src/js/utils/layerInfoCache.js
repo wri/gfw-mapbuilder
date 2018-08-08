@@ -282,22 +282,6 @@ export default {
         promise.resolve(results);
       });
     } else if (layer.itemId) {
-      // This commented out URL contains a good item id to use for testing
-      // url = urls.metadataXmlEndpoint('30e234e880c94a2ca54be9a132808eae');
-      url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
-      getXMLTask(url).then(xmlDocument => {
-        promise.resolve(reduceXML(xmlDocument));
-      }, () => {
-        const {subId} = layer;
-        url = urls.agolItemEndpoint(layer.itemId);
-        getServiceInfoTask(url).then(results => {
-          _cache[subId] = results;
-          promise.resolve(results);
-        }, () => {
-          promise.resolve();
-        });
-      });
-    } else if (layer.esriLayer) {
       if (layer.type === 'carto') {
         const {subId, id} = layer;
         url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
@@ -348,8 +332,6 @@ export default {
         });
 
       } else {
-
-        const {esriLayer, subIndex, subId} = layer;
         const { layerIds, layerId } = esriLayer;
 
         url = esriLayer.url;
@@ -366,6 +348,24 @@ export default {
           promise.resolve(results);
         });
       }
+
+    } else if (layer.esriLayer) {
+      //agolItemEndpoint
+      // This commented out URL contains a good item id to use for testing
+      // url = urls.metadataXmlEndpoint('30e234e880c94a2ca54be9a132808eae');
+      url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
+      getXMLTask(url).then(xmlDocument => {
+        promise.resolve(reduceXML(xmlDocument));
+      }, () => {
+        const {subId} = layer;
+        url = urls.agolItemEndpoint(layer.itemId);
+        getServiceInfoTask(url).then(results => {
+          _cache[subId] = results;
+          promise.resolve(results);
+        }, () => {
+          promise.resolve();
+        });
+      });
     } else if (layer.metadataUrl) {
       getMetadataTask(layer.metadataUrl).then(results => {
         _cache[layer.id] = results;
