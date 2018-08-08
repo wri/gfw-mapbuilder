@@ -100,7 +100,7 @@ export default class LayerCheckbox extends Component {
 
   render() {
     const {map, language} = this.context;
-    const {layer} = this.props;
+    const {layer, initialLayerOpacities} = this.props;
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
@@ -108,6 +108,14 @@ export default class LayerCheckbox extends Component {
     if (typeof label === 'object') {
       label = '';
     }
+
+    if (label === '' && layer.label) {
+      const langs = Object.keys(layer.label);
+      if (langs.length > 0) {
+        label = layer.label[langs[0]];
+      }
+    }
+
     const {sublabel} = layer;
 
     return (
@@ -125,7 +133,7 @@ export default class LayerCheckbox extends Component {
             {this.props.children}
           </div>
         }
-        <LayerTransparency layer={layer} visible={this.props.checked}></LayerTransparency>
+        <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={this.props.checked}></LayerTransparency>
       </div>
     );
   }

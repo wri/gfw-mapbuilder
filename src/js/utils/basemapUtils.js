@@ -29,6 +29,7 @@ export default {
   */
   updateBasemap (map, basemap, customBasemaps) {
     activeBasemap = basemap;
+
     //- Remove custom basemap layer if it exists
     if (customBasemapLayer) {
       map.removeLayer(customBasemapLayer);
@@ -100,29 +101,23 @@ export default {
     map.addLayer(customBasemapLayer, newBasemapIndex);
   },
 
-  prepareDefaultBasemap (map, basemapLayers, urlParams) {
-    const basemapNames = Object.keys(basemaps);
+  prepareDefaultBasemap (map, basemapLayers, title) {
+    const basemapNames = Object.values(basemaps).map(i => i.title);
 
     let arcgisBasemap, wriName;
     if (basemapLayers) {
       //- Check to see if this is a default esri basemap
-      basemapLayers.forEach((layer) => {
-        const url = layer.url && layer.url.toLowerCase().replace(/_/g, '-');
-        //- If there is no URL, this is probably a custom basemap, so just return
-        if (!url) { return; }
-        //- Try to find the name so it can be added to the basemap gallery
-        arcgisBasemap = basemapNames.filter((basemap) => {
-          return url.indexOf(basemap) > -1;
+      basemapLayers.forEach(() => {
+        const arcgisBasemapTitle = basemapNames.filter((basemap) => {
+          return title === basemap;
         })[0];
 
-        //- Check for other matches here that are known not to work with the above method
-        if (!arcgisBasemap && url.indexOf('natgeo') > -1) {
-          arcgisBasemap = 'national-geographic';
-        }
-
-        if (!arcgisBasemap && url.indexOf('world-imagery') > -1) {
-          arcgisBasemap = 'satellite';
-        }
+        arcgisBasemap = Object.entries(basemaps).map((entry) => {
+          if (entry[1].title === arcgisBasemapTitle) {
+            return entry[0];
+          }
+          return null;
+        }).filter(i => i)[0];
       });
 
       //- Check to see if this is a WRI basemap
@@ -134,7 +129,6 @@ export default {
           wriName = 'wri_contextual';
         }
       });
-
       //- Basemaps can cause issues with layer ordering and other things,
       //- remove them here and readd them above in updateBasemap
       basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
@@ -142,7 +136,6 @@ export default {
 
     //- Set the default basemap, this will trigger an update from the LayerPanel
     //- It listens for changes to the basemap in the store, and then triggers updateBasemap above
-    if (!urlParams.b) {
       if (arcgisBasemap) {
         if (this.arcgisBasemaps.indexOf(arcgisBasemap) === -1) {
           this.arcgisBasemaps.push(arcgisBasemap);
@@ -156,7 +149,6 @@ export default {
         //- Use this as a fallback
         mapActions.changeBasemap('wri_mono');
       }
-    }
 
     //- TODO: Add support for a custom basemap
   }

@@ -18,6 +18,8 @@
     "it": true,
     "expect": true,
     "saveAs": true,
+    "expect": true,
+    "test": true,
     "define": true,
     "require": true,
     "navigator": true,

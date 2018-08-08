@@ -289,6 +289,30 @@ export default {
     return promise;
   },
 
+  getViirsFires: function (config, geostoreId, viirsFrom, viirsTo, language) {
+    const promise = new Deferred();
+    const viirsConfig = analysisConfig[analysisKeys.VIIRS_FIRES];
+
+    const viirsData = {
+      geostore: geostoreId,
+      period: `${viirsFrom.format('YYYY-MM-DD')},${viirsTo.format('YYYY-MM-DD')}`,
+    };
+    esriRequest({
+      url: viirsConfig.analysisUrl,
+      callbackParamName: 'callback',
+      content: viirsData,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(fireResult => {
+      promise.resolve({fireCount: fireResult.data.attributes.value});
+    }, err => {
+      console.error(err);
+      promise.resolve({ error: err, message: text[language].ANALYSIS_ERROR_GLAD });
+    });
+
+    return promise;
+  },
+
   /**
   * Get SAD Alerts and format results
   */
@@ -512,9 +536,44 @@ export default {
     return promise;
   },
 
+  getExactGeom: (selectedFeature) => {
+    const promise = new Deferred();
+    const url = selectedFeature._layer.url;
+    const queryTask = new QueryTask(url);
+    const query = new Query();
+
+    const OBJECTID = selectedFeature.attributes[selectedFeature._layer.objectIdField];
+    const OBJECTID_Field = selectedFeature._layer.objectIdField;
+
+    query.returnGeometry = true;
+    query.outFields = [];
+    query.maxAllowableOffset = 100;
+    query.where = OBJECTID_Field + ' = ' + OBJECTID;
+    console.log(query.where);
+    queryTask.execute(query).then(response => {
+      const feats = response.features;
+      promise.resolve(feats.length > 0 ? feats[0].geometry : selectedFeature.geometry);
+    }, (error) => {
+      console.error(error);
+      promise.resolve(selectedFeature);
+    });
+    return promise;
+  },
+
   registerGeom: (geometry) => {
     const deferred = new Deferred();
-    const geographic = webmercatorUtils.webMercatorToGeographic(geometry);
+    let geographic = null;
+
+    if (!geometry) {
+      deferred.resolve({ error: 'There was an error while registering the shape in the geostore', status: '500' });
+      return;
+    }
+
+    if (geometry.spatialReference.isWebMercator()) {
+      geographic = webmercatorUtils.webMercatorToGeographic(geometry);
+    } else {
+      geographic = geometry;
+    }
     const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
 
     const geoStore = {
@@ -672,38 +731,26 @@ export default {
       throw new Error("property 'widgetId' is required. Check your analysisModule config.");
     }
 
-    let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}`;
+    let widgetUrl = `https://api.resourcewatch.org/v1/widget/${config.widgetId}?`;
 
-    if (!config.analysisUrl) {
-      throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
-    }
-    widgetUrl += `?queryUrl=${config.analysisUrl}`;
+    // if (!config.analysisUrl) {
+    //   throw new Error("no 'analysisUrl' property configured. Check your analysisModule config.");
+    // }
+
 
     Object.entries(uiParams).forEach((entry) => {
-      widgetUrl += `&${entry[0]}=${entry[1]}`;
+      widgetUrl += `${entry[0]}=${entry[1]}&`;
     });
+
+    if (config.analysisUrl) {
+      widgetUrl += `queryUrl=${config.analysisUrl}`;
+    }
 
     esriRequest({
       url: widgetUrl,
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(result => {
-
-      // For calls to the gfw api that do not return data in the correct format for vega widgets
-      // (umd-loss-gain), we will need to grab the data url
-      // (results.data.attributes.widgetConfig.data[0].url) and make another request to that url.
-      // Then, we need to format the response to vega's liking
-      // someKey: [
-      //  {
-      //    attribute: value,    ] --> data point 1
-      //    attribute2: value2   ]
-      //  },
-      //  {
-      //    attribute: value,    ] --> data point 2
-      //    attribute2: value2   ]
-      //  }
-      // ]
-      console.log(result);
 
       promise.resolve(result);
     }, err => {

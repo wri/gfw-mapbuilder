@@ -101,6 +101,7 @@ export default class LayerPanel extends Component {
             activeLayers={this.props.activeLayers}
             dynamicLayers={this.props.dynamicLayers}
             iconLoading={this.props.iconLoading}
+            initialLayerOpacities={this.props.initialLayerOpacities}
           />;
           break;
         }
@@ -109,6 +110,7 @@ export default class LayerPanel extends Component {
             layers={group.layers}
             activeLayers={this.props.activeLayers}
             dynamicLayers={this.props.dynamicLayers}
+            initialLayerOpacities={this.props.initialLayerOpacities}
           />;
           break;
         case 'basemap':
@@ -143,7 +145,9 @@ export default class LayerPanel extends Component {
       viirsEndDate,
       modisStartDate,
       modisEndDate,
+      initialLayerOpacities,
       ...props} = this.props;
+
     const {language} = this.context;
     let childComponent;
 
@@ -204,11 +208,11 @@ export default class LayerPanel extends Component {
     let checkbox;
     if (layer.subId) {
       const checked = (dynamicLayers[layer.id] && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1) || false;
-      checkbox = <LayerCheckbox key={layer.subId} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.subId} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }

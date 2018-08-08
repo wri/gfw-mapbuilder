@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Slider from 'rc-slider';
-import MapActions from '../../../actions/MapActions';
+import MapActions from 'actions/MapActions';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -12,12 +12,18 @@ export default class AnalysisRangeSlider extends Component {
     const { initialStartValue, initialEndValue, bounds } = props;
 
     this.rangeArray = [...Array(bounds[1] + 1 - bounds[0]).keys()].map((i, idx) => idx + bounds[0]);
+    const start = initialStartValue || bounds[0];
+    const end = initialEndValue || bounds[1];
 
     this.state = {
       rangeSliderValue: [
-        initialStartValue || bounds[0],
-        initialEndValue || bounds[1],
+        start,
+        end,
       ],
+      sliderMarks: {
+        [start]: <small>{start}</small>,
+        [end]: <small>{end}</small>,
+      },
     };
   }
 
@@ -51,7 +57,14 @@ export default class AnalysisRangeSlider extends Component {
   }
 
   handleChange = rangeSliderValue => {
-    this.setState({ rangeSliderValue });
+    const [ rangeSliderStart, rangeSliderEnd ] = rangeSliderValue;
+    this.setState({
+      rangeSliderValue,
+      sliderMarks: {
+        [rangeSliderStart]: <small>{rangeSliderStart}</small>,
+        [rangeSliderEnd]: <small>{rangeSliderEnd}</small>,
+      },
+    });
   }
 
   handleAfterChange = rangeSliderValue => {
@@ -82,11 +95,10 @@ export default class AnalysisRangeSlider extends Component {
   }
 
   render() {
-    const { bounds, step, label } = this.props;
-    const { rangeSliderValue } = this.state;
+    const { bounds, step } = this.props;
+    const { rangeSliderValue, sliderMarks } = this.state;
     return (
       <div className='analysis-results__select-form-item-container'>
-        <div className='select-form-item-label'>{label}</div>
         <Range
           className='select-form-item'
           min={bounds[0]}
@@ -96,6 +108,7 @@ export default class AnalysisRangeSlider extends Component {
           onChange={this.handleChange}
           onAfterChange={this.handleAfterChange}
           step={step}
+          marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
           trackStyle={[{backgroundColor: '#F0AB00'}]}
           handleStyle={[{borderColor: '#F0AB00'}]}

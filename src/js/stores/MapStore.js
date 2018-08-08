@@ -10,7 +10,7 @@ import LayersHelper from 'helpers/LayersHelper';
 import analysisUtils from 'utils/analysisUtils';
 import {layerPanelText} from 'js/config';
 import request from 'utils/request';
-import moment from 'moment';
+import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
 
 let isRegistering = false;
@@ -32,7 +32,7 @@ class MapStore {
     this.activeAnalysisType = 'default';
     this.cartoSymbol = {};
     this.lossFromSelectIndex = 0; // Will get initialized when the data is fetched
-    this.lossToSelectIndex = 0;
+    this.lossToSelectIndex = 16;
     this.resetSlider = false;
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();
@@ -68,10 +68,13 @@ class MapStore {
     this.iconLoading = '';
     this.exclusiveLayerIds = [];
     this.legendOpacity = {};
+    this.initialLayerOpacities = [];
     this.subscriptionToDelete = {};
     this.analysisDisabled = false;
+    this.fetchingCartoData = false;
     this.analysisParams = {};
     this.analysisSliderIndices = {};
+    this.drawButtonActive = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -119,6 +122,7 @@ class MapStore {
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
       changeOpacity: layerActions.changeOpacity,
+      setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
       updateImazonAlertSettings: mapActions.updateImazonAlertSettings,
       toggleMobileTimeWidgetVisible: mapActions.toggleMobileTimeWidgetVisible,
@@ -127,7 +131,8 @@ class MapStore {
       toggleAnalysisTab: mapActions.toggleAnalysisTab,
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
       updateAnalysisParams: mapActions.updateAnalysisParams,
-      updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices
+      updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
+      activateDrawButton: mapActions.activateDrawButton,
     });
   }
 
@@ -171,39 +176,97 @@ class MapStore {
 
   removeAllSubLayers(info) {
     this.dynamicLayers[info.id] = [];
-    info.layerInfos.forEach(i => {
-      this.removeActiveLayer(`${info.id}_${i.id}`);
-    });
+    if (info.layerIds) {
+      this.removeActiveLayer(info.id);
+    } else {
+      info.layerInfos.forEach(i => {
+        this.removeActiveLayer(`${info.id}_${i.id}`);
+      });
+    }
   }
 
   setSubLayers(info) {
-    this.dynamicLayers[info.id] = [...info.subIndexes];
-    info.subIndexes.forEach(i => {
-      this.addActiveLayer(`${info.id}_${i}`);
-    });
+    this.dynamicLayers[info.layer.id] = [...info.subIndexes];
+    if (info.layer.layerIds) {
+      this.addActiveLayer(info.layer.id);
+    } else {
+      info.subIndexes.forEach(i => {
+        this.addActiveLayer(`${info.layer.id}_${i}`);
+      });
+    }
   }
 
   addAll () {
     const allActiveLayers = [];
     const allDynamicLayers = {};
-    const radioGroupOrders = this.allLayers.filter(l => l.activateWithAllLayers).map(l => l.groupOrder);
+    const visibleRadioLayerIds = [];
+    let radioLayerToTurnOn = null;
 
     const reducedLayers = this.allLayers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
       }
+
+      if (currentItem.isRadioLayer && currentItem.esriLayer.visible) {
+        if (visibleRadioLayerIds.indexOf(currentItem.id) === -1) {
+          visibleRadioLayerIds.push(currentItem.id);
+        }
+      }
       return prevArray.concat(currentItem);
     }, []);
 
+    const visibleRadioLayers = reducedLayers.filter(l => visibleRadioLayerIds.indexOf(l.id) > -1);
+
+    visibleRadioLayers.forEach(rl => {
+      let idToCheck = rl.id;
+      if (rl.subId) {
+        idToCheck = rl.subId;
+      }
+
+      if (this.activeLayers.indexOf(idToCheck) > -1) {
+        if (rl.subId) {
+          radioLayerToTurnOn = reducedLayers.filter(l => l.subId === rl.subId)[0];
+        } else {
+          radioLayerToTurnOn = reducedLayers.filter(l => l.id === rl.id)[0];
+        }
+      }
+    });
+
+    if (!radioLayerToTurnOn) {
+      radioLayerToTurnOn = reducedLayers.filter(l => l.id === this.exclusiveLayerIds[0])[0];
+    }
+
+    if (radioLayerToTurnOn) {
+      if (radioLayerToTurnOn.subId) {
+        allActiveLayers.push(radioLayerToTurnOn.subId);
+        if (!allDynamicLayers.hasOwnProperty(radioLayerToTurnOn.id)) {
+          allDynamicLayers[radioLayerToTurnOn.id] = [radioLayerToTurnOn.subIndex];
+        } else {
+          allDynamicLayers[radioLayerToTurnOn.id].push(radioLayerToTurnOn.subIndex);
+        }
+      } else if (radioLayerToTurnOn.layerIds) {
+        allActiveLayers.push(radioLayerToTurnOn.id);
+        if (!allDynamicLayers.hasOwnProperty(radioLayerToTurnOn.id)) {
+          allDynamicLayers[radioLayerToTurnOn.id] = radioLayerToTurnOn.layerIds;
+        }
+      } else {
+        allActiveLayers.push(radioLayerToTurnOn.id);
+      }
+    }
+
     reducedLayers.forEach(l => {
-      if (l.subId && l.activateWithAllLayers && l.groupOrder === Math.min(...radioGroupOrders)) {
-        allActiveLayers.push(l.subId);
-        allDynamicLayers[l.id] = [l.subIndex];
+      if (l.isRadioLayer) {
         return;
+      }
+      if (l.subId) {
+        if (!allDynamicLayers.hasOwnProperty(l.id)) {
+          allDynamicLayers[l.id] = [l.subIndex];
+        } else {
+          allDynamicLayers[l.id].push(l.subIndex);
+        }
       }
       allActiveLayers.push(l.id);
     });
-
     this.activeLayers = allActiveLayers;
     this.dynamicLayers = allDynamicLayers;
   }
@@ -258,10 +321,14 @@ class MapStore {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
-          analysisUtils.registerGeom(selectedFeature.geometry).then(res => {
-            selectedFeature.attributes.geostoreId = res.data.id;
-            mapActions.toggleAnalysisTab(false);
-            isRegistering = false;
+
+          analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
+            analysisUtils.registerGeom(exactGeom).then(res => {
+              selectedFeature.attributes.geostoreId = res.data.id;
+              selectedFeature.setGeometry(exactGeom);
+              mapActions.toggleAnalysisTab(false);
+              isRegistering = false;
+            });
           });
         } else {
           this.activeTab = tabKeys.INFO_WINDOW;
@@ -449,6 +516,10 @@ class MapStore {
     this.legendOpacity = payload;
   }
 
+  setOpacities (opacities) {
+    this.initialLayerOpacities = opacities;
+  }
+
   changeBasemap (basemap) {
     this.basemap = basemap;
   }
@@ -490,6 +561,10 @@ class MapStore {
     this.exclusiveLayerIds = ids;
   }
 
+  fetchingCartoData(bool) {
+    this.fetchingCartoData = bool;
+  }
+
   updateAnalysisParams(params) {
     if (this.analysisParams.hasOwnProperty(params.id)) {
       this.analysisParams[params.id] = {
@@ -501,11 +576,14 @@ class MapStore {
         ...(params.paramName ? { [params.paramName]: params.paramValue } : {})
       };
     }
-    console.log(this.analysisParams);
   }
 
   updateAnalysisSliderIndices(params) {
     this.analysisSliderIndices[params.id] = params.indices;
+  }
+
+  activateDrawButton(bool) {
+    this.drawButtonActive = bool;
   }
 }
 

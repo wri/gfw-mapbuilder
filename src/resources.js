@@ -31,8 +31,9 @@ export default {
   alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   alternativeNarrative: '',
   alternativeWebmapMenuName: 'Land Use',
-  //- Documents Settings
+  //- Tab Settings
   includeDocumentsTab: false,
+  includeMeasurementTab: false,
   //- Layers/Analysis Settings
   iso: '',
   viirsFires: true,
@@ -63,6 +64,14 @@ export default {
   // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
+  includeCartoTemplateLayers: false,
+  // cartoUser: 'wri-01',
+  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  // cartoApiKey: 'your key here',
+  // cartoGroupLabel: {
+  //   en: 'Carto Layers',
+  //   fr: 'Carto Layers',
+  // },
 
   /**
    * Custom Analysis Module Configuration
@@ -89,361 +98,501 @@ export default {
 
 
 
-  analysisModules: [
-    // {
-    //   value: 'glad-alerts',
-    //   label: 'GLAD Alerts',
-    //   group: 'custom',
-    //   widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
-    //   queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-    //   params: [
-    //     {
-    //       key: 'aggregate_values',
-    //       value: 'false'
-    //     }
-    //   ]
-    // },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Analysis Module!',
-    //   group: 'custom',
-    //   widgetId: '786b82bb-bf60-489d-b4b6-893d9bf7c2c5',
-    //   queryUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-    //   params: [
-    //     {
-    //       key: 'aggregate_values',
-    //       value: 'false'
-    //     }
-    //   ]
-    // },
-    // {
-    //   value: 'custom2',
-    //   label: 'Custom Analysis Module2!',
-    //   group: 'custom',
-    //   widgetId: '42756e3f-2c35-4d28-a221-47b0751380f7',
-    //   queryUrl: 'https://api.resourcewatch.org/query/cb833538-4fb0-4261-a9d0-125175624f29',
-    //   params: [
-    //     {
-    //       key: 'sql',
-    //       value: 'SELECT%20sum(rs_tl_c)%20%20as%20x,%20rs_tl_c%20as%20y%20FROM%20river_basins%20where%20rs_tl_c%20!=%2010%20group%20by%20rs_tl_c%20order%20by%20y%20asc'
-    //     }
-    //   ]
-    // }
+   analysisModules: [
+     {
+       analysisId: 'TC_LOSS_GAIN',
+       label: {
+           en: 'Total tree cover loss/ gain',
+           fr: 'Total perte/ gain en couvert arboré',
+           es: 'Pérdida/ Aumento de la cobertura arbórea',
+           pt: 'Perda/ Ganho de cobertura arbórea',
+           id: 'Total tree cover loss/ gain',
+           zh: '森林覆盖损失/ 森林覆盖增加',
+           ka: 'ხის ვარჯის კარგვა/ ნამატი'
+       },
+       title: {
+         en: 'Forest Loss Analysis',
+         fr: 'Forest Loss Analysis',
+         es: 'Forest Loss Analysis',
+         pt: 'Forest Loss Analysis',
+         id: 'Forest Loss Analysis',
+         zh: 'Forest Loss Analysis',
+         ka: 'Forest Loss Analysis'
+       },
+       description: {
+         en: 'Select range and tree cover density then click the "run analysis" button to see results',
+         fr: 'Select range and tree cover density then click the "run analysis" button to see results',
+         es: 'Select range and tree cover density then click the "run analysis" button to see results',
+         pt: 'Select range and tree cover density then click the "run analysis" button to see results',
+         id: 'Select range and tree cover density then click the "run analysis" button to see results',
+         zh: 'Select range and tree cover density then click the "run analysis" button to see results',
+         ka: 'Select range and tree cover density then click the "run analysis" button to see results'
+       },
+       chartType: 'badge',
+       valueAttribute: 'data.attributes.loss',
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
+       uiParams: [
+         {
+           inputType: 'rangeSlider',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           bounds: [2001, 2017],
+           valueType: 'date',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         },
+         {
+           name: 'thresh',
+           inputType: 'tcd',
+           label: {
+             en: 'Select tree cover density: ',
+             fr: 'Select tree cover density: ',
+             es: 'Select tree cover density: ',
+             pt: 'Select tree cover density: ',
+             id: 'Select tree cover density: ',
+             zh: 'Select tree cover density: ',
+             ka: 'Select tree cover density: '
+           }
+         }
+       ],
+     },
+     {
+       analysisId: 'TC_LOSS',
+       label: {
+           en: 'Tree cover loss',
+           fr: 'Perte en couvert arboré',
+           es: 'Pérdida de la cobertura arbórea',
+           pt: 'Perda de cobertura arbórea',
+           id: 'Tree cover loss',
+           zh: '森林覆盖损失',
+           ka: 'ხის ვარჯის კარგვა'
+       },
+       chartType: 'bar',
+       chartBounds: [2001, 2017],
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
+       uiParams: [
+         {
+           inputType: 'rangeSlider',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           bounds: [2001, 2017],
+           valueType: 'date',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         },
+         {
+           name: 'thresh',
+           inputType: 'tcd',
+           label: {
+                 en: 'Select tree cover density: ',
+                 fr: 'Select tree cover density: ',
+                 es: 'Select tree cover density: ',
+                 pt: 'Select tree cover density: ',
+                 id: 'Select tree cover density: ',
+                 zh: 'Select tree cover density: ',
+                 ka: 'Select tree cover density: '
+           }
+         }
+       ],
+       params: [
+         {
+           name: 'aggregate_values',
+           value: 'false'
+         }
+       ],
+     },
+     {
+       analysisId: 'BIO_LOSS',
+       label: {
+           en: 'Aboveground Live Woody Biomass Density',
+           fr: 'Densité de la biomasse aérienne vivante',
+           es: 'Densidad de la biomasa viva en la superficie del suelo',
+           pt: 'Densidade de biomassa viva acima do solo',
+           id: 'Aboveground Live Woody Biomass Density',
+           zh: 'Aboveground Live Woody Biomass Density',
+           ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
+       },
+       chartType: 'biomassLoss',
+       colors: {
+        loss: '#FF6699',
+        carbon: '#BEBCC2'
+      },
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
+       uiParams: [
+        {
+           inputType: 'rangeSlider',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           bounds: [2001, 2014],
+           valueType: 'date',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         },
+         {
+           name: 'thresh',
+           inputType: 'tcd',
+           label: {
+                 en: 'Select tree cover density: ',
+                 fr: 'Select tree cover density: ',
+                 es: 'Select tree cover density: ',
+                 pt: 'Select tree cover density: ',
+                 id: 'Select tree cover density: ',
+                 zh: 'Select tree cover density: ',
+                 ka: 'Select tree cover density: '
+           }
+         }
+       ]
+     },
+     {
+       analysisId: 'IFL',
+       label: {
+           en: 'Intact Forest Landscape',
+           fr: 'Paysage forestier intact',
+           es: 'Paisajes Forestales Intactos',
+           pt: 'Paisagens Florestais Intactas',
+           id: 'Intact Forest Landscape',
+           zh: '原生森林景观',
+           ka: 'ხელუხლებელი ტყის ლანდშაფტი'
+       },
+       chartType: 'bar',
+       chartBounds: [2001, 2015],
+       colors: ['#186513'],
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
+       params: [
+         {
+           name: 'layer',
+           value: 'ifl2000'
+         }
+       ],
+       uiParams: [
+        {
+           inputType: 'rangeSlider',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           bounds: [2001, 2015],
+           valueType: 'date',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         },
+         {
+           name: 'thresh',
+           inputType: 'tcd',
+           label: {
+                 en: 'Select tree cover density: ',
+                 fr: 'Select tree cover density: ',
+                 es: 'Select tree cover density: ',
+                 pt: 'Select tree cover density: ',
+                 id: 'Select tree cover density: ',
+                 zh: 'Select tree cover density: ',
+                 ka: 'Select tree cover density: '
+           }
+         }
+       ]
+     },
+     {
+       analysisId: 'GLAD_ALERTS',
+       label: {
+           en: 'GLAD Alerts',
+           fr: 'Alertes GLAD',
+           es: 'Alertas GLAD',
+           pt: 'Alertas GLAD',
+           id: 'GLAD Alerts',
+           zh: 'GLAD Alerts',
+           ka: 'GLAD შეტყობინებები'
+       },
+       chartType: 'timeSeries',
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+       uiParams: [
+         {
+           inputType: 'datepicker',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           multi: true,
+           defaultStartDate: '2016-01-01',
+           minDate: '2015-01-01',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         }
+       ],
+       params: [
+         {
+           name: 'aggregate_values',
+           value: 'true'
+         },
+         {
+           name: 'aggregate_by',
+           value: 'day'
+         }
+       ]
+     },
+     // {
+     //   analysisId: 'VEGA_GLAD',
+     //   label: {
+     //     en: 'GLAD Alerts (custom VEGA widget)'
+     //   },
+     //   analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+     //   chartType: 'gfwWidget',
+     //   widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+     //   uiParams: [
+     //     {
+     //       startParamName: 'period',
+     //       inputType: 'datepicker',
+     //       combineParams: true,
+     //       valueSeparator: ',',
+     //       multi: true,
+     //       defaultStartDate: '2016-01-01',
+     //       // defaultEndDate: '',
+     //       minDate: '2015-01-01',
+     //       // maxDate: '',
+     //       label: {
+     //         en: 'Select date(s) for analysis'
+     //       }
+     //     },
+     //     {
+     //       name: 'thresh',
+     //       inputType: 'tcd',
+     //       label: {
+     //         en: 'Select tree cover density: '
+     //       }
+     //     }
+     //   ],
+     //   params: [
+     //     {
+     //       name: 'aggregate_values',
+     //       value: 'true'
+     //     },
+     //     {
+     //       name: 'aggregate_by',
+     //       value: 'day'
+     //     }
+     //   ]
+     // },
+
+     {
+       analysisId: 'VEGA_GLAD_WIDGET',
+       label: {
+           en: 'GLAD Alerts (Vega)',
+           fr: 'Alertes GLAD (Vega)',
+           es: 'Alertas GLAD (Vega)',
+           pt: 'Alertas GLAD (Vega)',
+           id: 'GLAD Alerts (Vega)',
+           zh: 'GLAD Alerts (Vega)',
+           ka: 'GLAD შეტყობინებები (vega)'
+       },
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+       useGfwWidget: true,
+       widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+       uiParams: [
+         {
+           startParamName: 'period',
+           inputType: 'datepicker',
+           combineParams: true,
+           valueSeparator: ',',
+           multi: true,
+           defaultStartDate: '2016-01-01',
+           minDate: '2015-01-01',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         }
+       ],
+       params: [
+         {
+           name: 'aggregate_values',
+           value: 'true'
+         },
+         {
+           name: 'aggregate_by',
+           value: 'day'
+         }
+       ]
+     },
 
 
-    // TODO: Maybe we need a param 'useGfwWidget': <bool> that tells us to use a widget id
-    // and that params look like above
-    {
-      analysisId: 'TC_LOSS_GAIN',
-      label: {
-        en: 'Total Tree Cover Loss/Gain',
-      },
-      chartType: 'badge',
-      valueAttribute: 'data.attributes.loss',
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
-      // uiParams: 'none' if you don't need a ui element
-      uiParams: [
-        {
-          inputType: 'rangeSlider',
-          startParamName: 'period',
-          // endParamName: ''
-          combineParams: true,
-          valueSeparator: ',',
-          bounds: [2001, 2016],
-          valueType: 'date',
-          // step: 5,
-          label: {
-            en: 'Select range for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
-        }
-      ],
-    },
-    {
-      analysisId: 'TC_LOSS',
-      label: {
-        en: 'Tree Cover Loss',
-      },
-      chartType: 'bar',
-      chartBounds: [2001, 2016],
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
-      // uiParams: 'none' if you don't need a ui element
-      uiParams: [
-        {
-          inputType: 'rangeSlider',
-          startParamName: 'period',
-          // endParamName: ''
-          combineParams: true,
-          valueSeparator: ',',
-          bounds: [2001, 2016],
-          valueType: 'date',
-          // step: 5,
-          label: {
-            en: 'Select range for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
-        }
-      ],
-      params: [
-        {
-          name: 'aggregate_values',
-          value: 'false'
-        }
-      ],
-    },
-    {
-      analysisId: 'BIO_LOSS',
-      label: {
-        en: 'Aboveground Live Woody Biomass Loss'
-      },
-      chartType: 'biomassLoss',
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
-      uiParams: [
-        {
-          inputType: 'datepicker',
-          startParamName: 'period',
-          combineParams: true,
-          valueSeparator: ',',
-          multi: true,
-          minDate: '2001-01-01',
-          maxDate: '2014-12-31',
-          label: {
-            en: 'Select Date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
-        }
-      ]
-    },
-    {
-      analysisId: 'IFL',
-      label: {
-        en: 'Intact Forest Landscape'
-      },
-      chartType: 'bar',
-      chartBounds: [2001, 2015],
-      color: '#186513',
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
-      uiParams: 'none',
-      params: [
-        {
-          name: 'layer',
-          value: 'ifl2000'
-        }
-      ]
-    },
-    {
-      analysisId: 'GLAD_ALERTS',
-      label: {
-        en: 'GLAD Alerts'
-      },
-      chartType: 'timeSeries',
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-      uiParams: [
-        {
-          inputType: 'datepicker',
-          startParamName: 'period',
-          // endParamName: '',
-          combineParams: true,
-          valueSeparator: ',',
-          multi: true,
-          defaultStartDate: '2016-01-01',
-          // defaultEndDate: '',
-          minDate: '2015-01-01',
-          // maxDate: '',
-          label: {
-            en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
-        }
-      ],
-      params: [
-        {
-          name: 'aggregate_values',
-          value: 'true'
-        },
-        {
-          name: 'aggregate_by',
-          value: 'day'
-        }
-      ]
-    },
-    {
-      analysisId: 'VEGA_GLAD',
-      label: {
-        en: 'GLAD Alerts (custom VEGA widget)'
-      },
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
-      useGfwWidget: true,
-      widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
-      uiParams: [
-        {
-          startParamName: 'period',
-          inputType: 'datepicker',
-          combineParams: true,
-          valueSeparator: ',',
-          multi: true,
-          defaultStartDate: '2016-01-01',
-          // defaultEndDate: '',
-          minDate: '2015-01-01',
-          // maxDate: '',
-          label: {
-            en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
-        }
-      ],
-      params: [
-        {
-          name: 'aggregate_values',
-          value: 'true'
-        },
-        {
-          name: 'aggregate_by',
-          value: 'day'
-        }
-      ]
-    },
-    {
-      analysisId: 'TERRAI_ALERTS',
-      label: {
-        en: 'Terra I Alerts'
-      },
-      chartType: 'timeSeries',
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts',
-      uiParams: [
-        {
-          inputType: 'datepicker',
-          startParamName: 'period',
-          // endParamName: '',
-          combineParams: true,
-          valueSeparator: ',',
-          multi: true,
-          defaultStartDate: '2006-06-20',
-          // defaultEndDate: '',
-          minDate: '2004-01-01',
-          maxDate: '2016-07-12',
-          label: {
-            en: 'Select date(s) for analysis'
-          }
-        },
-        {
-          name: 'thresh',
-          inputType: 'tcd',
-          label: {
-            en: 'Select tree cover density: '
-          }
-        }
-      ],
-      params: [
-        {
-          name: 'aggregate_values',
-          value: 'true'
-        },
-        {
-          name: 'aggregate_by',
-          value: 'day'
-        }
-      ]
-    },
-    {
-      analysisId: 'VIIRS_FIRES',
-      label: {
-        en: 'VIIRS Active Fires'
-      },
-      chartType: 'badge',
-      valueAttribute: 'data.attributes.value',
-      badgeLabel: {
-        en: 'Active Fires'
-      },
-      color: '#5ea1ed',
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
-      uiParams: [
-        {
-          inputType: 'datepicker',
-          startParamName: 'period',
-          // endParamName: '',
-          combineParams: true,
-          valueSeparator: ',',
-          multi: true,
-          // defaultStartDate: '',
-          // defaultEndDate: '',
-          minDate: '2004-01-01',
-          label: {
-            en: 'Select date(s) for analysis'
-          }
-        },
-      ],
-    },
-    {
-      analysisId: 'LCC',
-      label: {
-        en: 'Land Cover Composition'
-      },
-      chartType: 'lccPie',
-      classes: {
-        en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
-        fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-        es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-        pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-        id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-        zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-        ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-      },
-      colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
-      analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
-      uiParams: 'none',
-      params: [
-        {
-          name: 'layer',
-          value: 'gfw-landcover-2015'
-        }
-      ]
-    },
-    // The following configurations will not work because we have not yet
-    // build support for configurable layer queries or compute histograms
-    // {
-    //   analysisId: 'SAD_ALERTS',
-    //   label: {
-    //     en: 'SAD'
-    //   }
-    // },
-    // {
-    //   analysisId: 'LC_LOSS',
-    //   label: {
-    //     en: 'Land Cover Loss'
-    //   }
-    // }
-  ],
+     {
+       analysisId: 'TERRAI_ALERTS',
+       label: {
+           en: 'Terra-I Alerts',
+           fr: 'Alertes Terra-I',
+           es: 'Alertas Terra-I',
+           pt: 'Alertas Terra-I',
+           id: 'Terra-I Alerts',
+           zh: 'Terra-I Alerts',
+           ka: 'Terra-I შეტყობინებები'
+       },
+       chartType: 'timeSeries',
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts',
+       uiParams: [
+         {
+           inputType: 'datepicker',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           multi: true,
+           defaultStartDate: '2006-06-20',
+           minDate: '2004-01-01',
+           maxDate: '2016-07-12',
+           label: {
+             en: 'Select date(s) for analysis',
+             fr: 'Select date(s) for analysis',
+             es: 'Select date(s) for analysis',
+             pt: 'Select date(s) for analysis',
+             id: 'Select date(s) for analysis',
+             zh: 'Select date(s) for analysis',
+             ka: 'Select date(s) for analysis'
+           }
+         }
+       ],
+       params: [
+         {
+           name: 'aggregate_values',
+           value: 'true'
+         },
+         {
+           name: 'aggregate_by',
+           value: 'day'
+         }
+       ]
+     },
+     {
+       analysisId: 'VIIRS_FIRES',
+       label: {
+           en: 'VIIRS Active Fires',
+           fr: 'Feux actifs VIIRS',
+           es: 'Incendios activos VIIRS',
+           pt: 'Incêndios ativos VIIRS',
+           id: 'VIIRS Active fires',
+           zh: '活跃火点 VIIRS',
+           ka: 'VIIRS აქტიური ხანძრები'
+       },
+       chartType: 'badge',
+       valueAttribute: 'data.attributes.value',
+       badgeLabel: {
+           en: 'Active Fires',
+           fr: 'Feux actifs',
+           es: 'Incendios activos',
+           pt: 'Incêndios ativos',
+           id: 'Active fires',
+           zh: '活跃火点',
+           ka: 'აქტიური ხანძრები'
+       },
+       color: '#5ea1ed',
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
+       uiParams: [
+         {
+           inputType: 'datepicker',
+           startParamName: 'period',
+           // endParamName: '',
+           combineParams: true,
+           valueSeparator: ',',
+           multi: true,
+           // defaultStartDate: '',
+           // defaultEndDate: '',
+           minDate: '2004-01-01',
+           label: {
+             en: 'Select date(s) for analysis',
+             fr: 'Select date(s) for analysis',
+             es: 'Select date(s) for analysis',
+             pt: 'Select date(s) for analysis',
+             id: 'Select date(s) for analysis',
+             zh: 'Select date(s) for analysis',
+             ka: 'Select date(s) for analysis'
+           }
+         },
+       ],
+     },
+     {
+       analysisId: 'LCC',
+       label: {
+         en: 'Land Cover Composition',
+         fr: 'Couverture des sols',
+         es: 'Cobertura terrestre',
+         pt: 'Cobertura do Solo',
+         id: 'Land Cover',
+         zh: '土地覆盖',
+         ka: 'მიწის საფარი'
+       },
+       chartType: 'lccPie',
+       classes: {
+         en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
+         fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+         es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+         pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+         id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+         zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+         ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
+       },
+       colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
+       analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
+       uiParams: 'none',
+       params: [
+         {
+           name: 'layer',
+           value: 'gfw-landcover-2015'
+         }
+       ]
+     },
+     // The following configurations will not work because we have not yet
+     // build support for configurable layer queries or compute histograms
+     // {
+     //   analysisId: 'SAD_ALERTS',
+     //   label: {
+     //     en: 'SAD'
+     //   }
+     // },
+     // {
+     //   analysisId: 'LC_LOSS',
+     //   label: {
+     //     en: 'Land Cover Loss'
+     //   }
+     // }
+   ],
 
   /**
   * Layer panel configuration, anything with an = is optional, {object=}
@@ -492,10 +641,10 @@ export default {
         order: 1,
         id: 'TREE_COVER_LOSS',
         type: 'loss', //image
-        url: 'http://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
+        url: 'https://storage.googleapis.com/wri-public/Hansen17/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
         // legendLayer: 7,
         minYear: 1,
-        maxYear: 16,
+        maxYear: 17,
         // minDateValue: 15000,
         // maxDateValue: 16365,
         // confidence: [0, 1],
@@ -526,7 +675,6 @@ export default {
         order: 2,
         id: 'TREE_COVER_GAIN',
         type: 'gain', //'image',
-        // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
         url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
         technicalName: 'tree_cover_gain',
         legendLayer: [1],
@@ -825,7 +973,7 @@ export default {
         order: 5,
         id: 'TREE_COVER',
         type: 'image',
-        url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+        url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
         technicalName: 'tree_cover',
         colormap: [[1, 0, 179, 0]],
         inputRange: [30, 101],
@@ -948,24 +1096,23 @@ export default {
         id: 'MASK',
         type: 'dynamic',
         order: 10000,
-        url:
-          'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-          opacity: 0.35,
-          layerIds: [0]
-        },
-        {
-          id: 'LEGEND_LAYER',
-          type: 'dynamic',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-          visible: false,
-          opacity: 0,
-          layerIds: []
-        },
-        {
-          id: 'USER_FEATURES',
-          type: 'graphic',
-          visible: true
-        }
-      ]
+        url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+        opacity: 0.35,
+        layerIds: [0]
+      },
+      {
+        id: 'LEGEND_LAYER',
+        type: 'dynamic',
+        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+        visible: false,
+        opacity: 0,
+        layerIds: []
+      },
+      {
+        id: 'USER_FEATURES',
+        type: 'graphic',
+        visible: true
+      }
+    ]
   }
 };

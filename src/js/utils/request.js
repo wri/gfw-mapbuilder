@@ -146,46 +146,49 @@ const request = {
   */
   getRawGeometry (feature) {
     const promise = new Deferred();
-    const layer = feature._layer;
-    const url = layer && layer._url && layer._url.path;
-    const id = feature.attributes[layer.objectIdField];
-
-    // Dont bother querying for custom geometry on the user features layer, we already have it
-    if (layer.id === layerKeys.USER_FEATURES) {
+    if (feature.attributes.isWMSFeature) {
       promise.resolve(feature.geometry);
-    } else if (needsDynamicQuery(url) && layer.source) { // If layer ends in /dynamicLayer, it takes different query params
-      const content = {
-        layer: JSON.stringify({ source: { type: 'mapLayer', mapLayerId: layer.source.mapLayerId }}),
-        objectIds: id,
-        returnGeometry: true,
-        outFields: '*',
-        f: 'json'
-      };
+    } else {
+      const layer = feature._layer;
+      const url = layer && layer._url && layer._url.path;
+      const id = feature.attributes[layer.objectIdField];
 
-      esriRequest({
-        url: `${url}/query`,
-        handleAs: 'json',
-        callbackParamName: 'callback',
-        content: content
-      }).then((results) => {
-        if (results.features.length) {
-          promise.resolve(geometryUtils.generatePolygonInSr(results.features[0].geometry, 102100));
-        } else {
-          promise.resolve(feature.geometry);
-        }
-      }, () => { promise.resolve(feature.geometry); });
-    } else if (url) { // If we have a url , query it
-      this.queryTaskById(url, id).then((results) => {
-        if (results.features.length) {
-          promise.resolve(results.features[0].geometry);
-        } else {
-          promise.resolve(feature.geometry);
-        }
-      }, () => { promise.resolve(feature.geometry); });
-    } else { // If we can't query it, and it's not a custom feature, just return it, this should not be happening though
-      promise.resolve(feature.geometry);
+      // Dont bother querying for custom geometry on the user features layer, we already have it
+      if (layer.id === layerKeys.USER_FEATURES) {
+        promise.resolve(feature.geometry);
+      } else if (needsDynamicQuery(url) && layer.source) { // If layer ends in /dynamicLayer, it takes different query params
+        const content = {
+          layer: JSON.stringify({ source: { type: 'mapLayer', mapLayerId: layer.source.mapLayerId }}),
+          objectIds: id,
+          returnGeometry: true,
+          outFields: '*',
+          f: 'json'
+        };
+
+        esriRequest({
+          url: `${url}/query`,
+          handleAs: 'json',
+          callbackParamName: 'callback',
+          content: content
+        }).then((results) => {
+          if (results.features.length) {
+            promise.resolve(geometryUtils.generatePolygonInSr(results.features[0].geometry, 102100));
+          } else {
+            promise.resolve(feature.geometry);
+          }
+        }, () => { promise.resolve(feature.geometry); });
+        } else if (url) { // If we have a url , query it
+          this.queryTaskById(url, id).then((results) => {
+            if (results.features.length) {
+              promise.resolve(results.features[0].geometry);
+            } else {
+              promise.resolve(feature.geometry);
+            }
+          }, () => { promise.resolve(feature.geometry); });
+        } else { // If we can't query it, and it's not a custom feature, just return it, this should not be happening though
+        promise.resolve(feature.geometry);
+      }
     }
-
     return promise;
   },
 

@@ -21,80 +21,84 @@ export default class CanopyModal extends Component {
     super(props);
 
     this.state = {
-      sliderValue: 5,
       sliderMarks: {
         1: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '10%'
+          label: '10%',
+          density: 10
         },
         2: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '15%'
+          label: '15%',
+          density: 15
         },
         3: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '20%'
+          label: '20%',
+          density: 20
         },
         4: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '25%'
+          label: '25%',
+          density: 25
         },
         5: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '30%'
+          label: '30%',
+          density: 30
         },
         6: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '50%'
+          label: '50%',
+          density: 50
         },
         7: {
           style: {
             color: '#555',
             marginTop: '10px'
           },
-          label: '75%'
+          label: '75%',
+          density: 75
         }
       }
     };
   }
 
-  componentDidMount() {
-    const { canopyDensity } = this.props;
-    const { map, settings } = this.context;
+  discernDensityValue = density => {
+    const sliderValue = Object.keys(this.state.sliderMarks).filter((mark) => {
+      return this.state.sliderMarks[mark].density === density;
+    });
 
-    layersHelper.updateTreeCoverDefinitions(canopyDensity, map, settings.layerPanel);
-    layersHelper.updateAGBiomassLayer(canopyDensity, map);
-
+    return parseInt(sliderValue[0]);
   }
 
   handleSliderChange = sliderValue => {
     const { sliderMarks } = this.state;
     const {map, settings} = this.context;
 
-    const densityValue = Number(sliderMarks[sliderValue].label.substr(0, 2));
+    const densityValue = sliderMarks[sliderValue].density;
 
     layersHelper.updateTreeCoverDefinitions(densityValue, map, settings.layerPanel);
     layersHelper.updateAGBiomassLayer(densityValue, map);
     mapActions.updateCanopyDensity(densityValue);
-    this.setState({ sliderValue });
   }
 
   close = () => {
@@ -102,8 +106,11 @@ export default class CanopyModal extends Component {
   };
 
   render() {
-    const { sliderMarks, sliderValue } = this.state;
+    const { sliderMarks } = this.state;
+    const { canopyDensity } = this.props;
     const {language} = this.context;
+
+    const sliderValue = this.discernDensityValue(canopyDensity);
 
     return (
       <ControlledModalWrapper onClose={this.close}>

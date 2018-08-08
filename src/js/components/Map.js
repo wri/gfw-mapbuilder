@@ -20,26 +20,37 @@ import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
 import appActions from 'actions/AppActions';
 import layerActions from 'actions/LayerActions';
+import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import Scalebar from 'esri/dijit/Scalebar';
 import Edit from 'esri/toolbars/edit';
+import basemaps from 'esri/basemaps';
 import Measurement from 'esri/dijit/Measurement';
+import webMercatorUtils from 'esri/geometry/webMercatorUtils';
 import {actionTypes} from 'constants/AppConstants';
 import on from 'dojo/on';
 import dom from 'dojo/dom';
+import Deferred from 'dojo/Deferred';
 import {getUrlParams} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import analysisUtils from 'utils/analysisUtils';
 import MapStore from 'stores/MapStore';
-import esriRequest from 'esri/request';
 import {mapConfig} from 'js/config';
 import utils from 'utils/AppUtils';
+import WMSLayerInfo from 'esri/layers/WMSLayerInfo';
+import WMSLayer from 'esri/layers/WMSLayer';
+import Extent from 'esri/geometry/Extent';
+import Graphic from 'esri/graphic';
+import InfoTemplate from 'esri/InfoTemplate';
+import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
+import layersHelper from 'helpers/LayersHelper';
 import React, {
   Component,
   PropTypes
 } from 'react';
-import AppUtils from '../utils/AppUtils';
+import {setupCartoLayers} from '../utils/cartoHelper';
+import { wmsClick, getWMSFeatureInfo, createWMSGraphics } from 'utils/wmsUtils';
 
 let mapLoaded, legendReady = false;
 let scalebar, paramsApplied, editToolbar = false;
@@ -117,7 +128,6 @@ export default class Map extends Component {
         editToolbar.refresh();
         scalebar.destroy();
       }
-
       this.createMap(activeWebmap, options);
     }
 
@@ -143,10 +153,12 @@ export default class Map extends Component {
 
   createMap = (webmap, options) => {
     const {language, settings} = this.context;
+    const { canopyDensity } = this.state;
 
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
-      // Add operational layers from the webmap to the array of layers from the config file.
       const {itemData} = response.itemInfo;
+
+      // Add operational layers from the webmap to the array of layers from the config file.
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
@@ -162,7 +174,7 @@ export default class Map extends Component {
 
       on.once(response.map, 'update-end', () => {
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        this.applyLayerStateFromUrl(response.map, itemData);
+        const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -175,6 +187,33 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        // Get WMS Features on click
+        response.map.on('click', (evt) => {
+          if (this.state.drawButtonActive) {
+            // don't run this function if we are drawing a custom shape
+            return;
+          }
+          const wmsLayers = brApp.map.layerIds
+            .filter(id => id.toLowerCase().indexOf('wms') > -1)
+            .map(wmsId => brApp.map.getLayer(wmsId))
+            .filter(layer => layer.visible);
+
+          if (wmsLayers.length) {
+            wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
+              const wmsGraphics = [];
+
+              Object.keys(responses).forEach(layerId => {
+                if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
+                  createWMSGraphics(responses, layerId, wmsGraphics);
+                  brApp.map.infoWindow.setFeatures(wmsGraphics);
+                } else {
+                  console.error(`error: ${responses[layerId].error}`);
+                }
+              });
+            });
+          }
+        });
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -193,21 +232,47 @@ export default class Map extends Component {
         });
 
         editToolbar = new Edit(response.map);
-        editToolbar.on('deactivate', function(evt) {
+        editToolbar.on('deactivate', evt => {
           if (evt.info.isModified) {
+
+            if (evt.graphic.geometry.spatialReference.wkid === 4326){
+              evt.graphic.setGeometry(
+                webMercatorUtils.geographicToWebMercator(evt.graphic.geometry)
+              );
+            }
+
+            const { userSubscriptions } = this.state;
+
+            const matchingUserSubscriptions = userSubscriptions.filter(userSubscription => {
+              return userSubscription && evt.graphic.attributes && userSubscription.attributes.params.geostore === evt.graphic.attributes.geostoreId;
+            });
+
             analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
               evt.graphic.attributes.geostoreId = res.data.id;
-              response.map.infoWindow.setFeatures([evt.graphic]);
+              if (matchingUserSubscriptions.length > 0) {
+                this.updateThenDeleteSubscription(res.data.id, matchingUserSubscriptions[0]).then(updatedSubscription => {
+                  response.map.infoWindow.setFeatures([evt.graphic]);
+                });
+              } else {
+                response.map.infoWindow.setFeatures([evt.graphic]);
+              }
             });
           }
         });
+
+        // This function needs to happen after the layer has loaded
+        // otherwise the layer breaks until you manually set the canopyDensity
+        // if we get canopy density from the hash, use that instead!
+
+        layersHelper.updateAGBiomassLayer(cDensityFromHash ? cDensityFromHash : canopyDensity, response.map);
+
       });
       //- Set the map's extent to its current extent to trigger our update-end
       response.map.setExtent(response.map.extent);
 
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
-        this.applyStateFromUrl(response.map, getUrlParams(location.search));
+        this.applyStateFromUrl(response.map, getUrlParams(location.href));
         paramsApplied = true;
       }
       //- Make the map a global in debug mode for easier debugging
@@ -222,14 +287,122 @@ export default class Map extends Component {
     });
   };
 
+  deleteSubscription = id => {
+    const deferred = new Deferred();
+    fetch(
+      `https://production-api.globalforestwatch.org/v1/subscriptions/${id}`,
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    ).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
+      }
+
+      response.json().then(json => {
+        if (hasError) {
+          console.error(json);
+          deferred.reject(json);
+          return;
+        } else {
+          mapActions.deleteSubscription({});
+          deferred.resolve(true);
+        }
+
+      });
+    });
+
+    return deferred;
+  }
+
+  updateSubscription = jsonData => {
+    const deferred = new Deferred();
+
+    fetch(
+      'https://production-api.globalforestwatch.org/v1/subscriptions',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+      }
+    ).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
+      }
+
+      response.json().then(json => {
+        if (hasError) {
+          console.error(json);
+          deferred.reject(json);
+          return;
+        } else {
+          deferred.resolve(json.data.id);
+        }
+      });
+    });
+
+    return deferred;
+  }
+
+  updateThenDeleteSubscription = (registeredGeomId, userSubscription) => {
+    const deferred = new Deferred();
+
+    const {language} = this.context;
+
+    const jsonData = {
+      confirmed: userSubscription.attributes.confirmed,
+      createdAt: userSubscription.attributes.createdAt,
+      datasets: userSubscription.attributes.datasets,
+      datasetsQuery: userSubscription.attributes.datasetsQuery,
+      language: language,
+      name: userSubscription.attributes.name,
+      params: {
+        geostore: registeredGeomId,
+        iso: {
+          country: null,
+          region: null
+        },
+        use: null,
+        useid: null,
+        wdpaid: null
+      },
+      resource: userSubscription.attributes.resource,
+      userId: userSubscription.attributes.userId
+    };
+
+    this.deleteSubscription(userSubscription.id).then(() => {
+      this.updateSubscription(jsonData).then((newId) => {
+
+        const updatedSubscription = {
+          attributes: jsonData,
+          id: newId,
+          type: 'subscription'
+        };
+        const index = this.state.userSubscriptions.map(e => e.id ).indexOf(userSubscription.id);
+
+        const remainingSubscriptions = this.state.userSubscriptions.slice();
+        remainingSubscriptions.splice(index, 1, updatedSubscription);
+
+
+        mapActions.setUserSubscriptions(remainingSubscriptions);
+        deferred.resolve(remainingSubscriptions);
+      });
+    });
+
+    return deferred;
+  }
+
   applyStateFromUrl = (map, params) => {
     const {settings} = this.context;
     const {x, y, z, l, b, t, c, gs, ge, ts, te, ls, le} = params;
 
     const langKeys = Object.keys(settings.labels);
-
-    //TODO: If we have a '#' at the start of our location.search, this won't work properly --> Our params come back as an empty object!
-    // so check our 'getUrlParams' function
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
@@ -248,9 +421,6 @@ export default class Map extends Component {
       mapActions.changeActiveTab(t);
     }
 
-    if (c) {
-      mapActions.updateCanopyDensity(c);
-    }
   };
 
   /**
@@ -258,21 +428,112 @@ export default class Map extends Component {
   * like terrai & basemaps need to be set After our map has been loaded or layers have been added
   */
   applyLayerStateFromUrl = (map, itemData) => {
+    const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
-    const params = getUrlParams(location.search);
+    const params = getUrlParams(location.href);
+
 
     //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, params);
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
     }
     if (params.a) {
+
       const layerIds = params.a.split(',');
-      layerIds.forEach(layerId => {
-        // TODO: Confirm this with layerIds and subId's!
-        layerActions.addActiveLayer(layerId);
+      const opacityValues = params.o.split(',');
+      const opacityObjs = [];
+
+      const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+      const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
+
+      layerIds.forEach((layerId, j) => {
+        if (webmapLayerIds.indexOf(layerId) === -1) {
+          layerActions.addActiveLayer(layerId);
+        }
+        if (opacityValues[j] && opacityValues[j] !== 1) {
+          opacityObjs.push({
+            layerId: layerId,
+            value: parseFloat(opacityValues[j])
+          });
+
+          const mapLayer = map.getLayer(layerId);
+
+          const dynamicLayers = [layerKeys.MODIS_ACTIVE_FIRES, layerKeys.VIIRS_ACTIVE_FIRES, layerKeys.IMAZON_SAD];
+
+          if ((mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) || (mapLayer && dynamicLayers.indexOf(mapLayer.id) > -1)) {
+            mapLayer.setOpacity(opacityValues[j]);
+          } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
+            const options = mapLayer.layerDrawingOptions || [];
+            // Transparency is the reverse of other layers, 0.25 opacity = transparency of value 75
+            mapLayer.visibleLayers.forEach(visibleLayer => {
+              options[visibleLayer] = new LayerDrawingOptions({ transparency: 100 - (opacityValues[j] * 100) });
+            });
+
+            mapLayer.setLayerDrawingOptions(options);
+          }
+        }
       });
+
+      if (webmapLayerIds.length > 0) {
+        const webmapIdConfig = {};
+
+        webmapLayerConfigs.forEach(webmapLayerConfig => {
+
+          if (webmapLayerConfig.subIndex === undefined) {
+            const featLayer = map.getLayer(webmapLayerConfig.id);
+            if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
+              featLayer.hide();
+              layerActions.removeActiveLayer(webmapLayerConfig.id);
+            } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
+              featLayer.show();
+              layerActions.addActiveLayer(webmapLayerConfig.id);
+            }
+          } else {
+            if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
+            (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible)) {
+
+              if (!webmapIdConfig[webmapLayerConfig.id]) {
+                webmapIdConfig[webmapLayerConfig.id] = {
+                  layersToHide: [],
+                  layersToShow: []
+                };
+              }
+
+              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) {
+                webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
+              } else {
+                webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
+              }
+            }
+          }
+
+        });
+
+        Object.keys(webmapIdConfig).forEach(webmapId => {
+          const mapLaya = map.getLayer(webmapId);
+          const updateableVisibleLayers = mapLaya.visibleLayers.slice();
+
+          webmapIdConfig[webmapId].layersToHide.forEach(layerToHide => {
+            updateableVisibleLayers.splice(updateableVisibleLayers.indexOf(layerToHide), 1);
+            const subLayerConfig = utils.getObject(webmapLayerConfigs, 'subId', `${webmapId}_${layerToHide}`);
+            layerActions.removeSubLayer(subLayerConfig);
+          });
+          webmapIdConfig[webmapId].layersToShow.forEach(layerToShow => {
+            if (updateableVisibleLayers.indexOf(layerToShow) === -1) {
+              updateableVisibleLayers.push(layerToShow);
+              const subLayerConfig = utils.getObject(webmapLayerConfigs, 'subId', `${webmapId}_${layerToShow}`);
+              layerActions.addSubLayer(subLayerConfig);
+            }
+          });
+
+          mapLaya.setVisibleLayers(updateableVisibleLayers);
+
+        });
+      }
+
+      layerActions.setOpacities(opacityObjs);
     }
 
     if (params.ls && params.le) {
@@ -308,6 +569,12 @@ export default class Map extends Component {
       mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, parseInt(params.isy));
       mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, parseInt(params.iey));
     }
+
+    if (params.c) {
+      mapActions.updateCanopyDensity(parseInt(params.c));
+    }
+
+    return params.c ? parseInt(params.c) : false;
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
@@ -321,6 +588,13 @@ export default class Map extends Component {
       settings.alternativeLanguage &&
       settings.useAlternativeLanguage
     );
+
+    if (settings.includeCartoTemplateLayers) {
+      const {cartoUser, cartoApiKey, cartoTemplateId, cartoGroupLabel } = settings;
+      const cartoGroup = setupCartoLayers(cartoUser, cartoTemplateId, cartoApiKey, cartoGroupLabel, language);
+      cartoGroup.order = Object.keys(settings.layerPanel).length - 2;
+      settings.layerPanel.GROUP_CARTO = cartoGroup;
+    }
     // Add the layers to the webmap group
     /**
     * NOTE: We use unshift because pushing the layers into an array results in a list that is
@@ -329,10 +603,10 @@ export default class Map extends Component {
     * they show up in the correct location, which is why they have different logic for adding them to
     * the list than any other layers, push them in an array, then unshift in reverse order
     */
-    operationalLayers.forEach((layer) => {
+    operationalLayers.forEach((layer, layerIndex) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
-        layer.resourceInfo.layers.forEach((sublayer, idx) => {
+        layer.resourceInfo.layers.forEach((sublayer, sublayerIndex) => {
           const visible = layer.layerObject.visibleLayers.indexOf(sublayer.id) > -1;
           const scaleDependency = (sublayer.minScale > 0 || sublayer.maxScale > 0);
           const layerInfo = {
@@ -348,7 +622,7 @@ export default class Map extends Component {
             },
             opacity: 1,
             visible: visible,
-            order: sublayer.order || idx + 1,
+            order: (layerIndex + 1) * 100 + sublayerIndex,
             esriLayer: layer.layerObject,
             itemId: layer.itemId
           };
@@ -368,11 +642,13 @@ export default class Map extends Component {
             label: {
               [language]: sublayer.title
             },
-            opacity: sublayer.opacity,
+            // opacity: sublayer.opacity,
+            opacity: 0.6,
             visible: layer.visibility,
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
+          sublayer.layerObject.setOpacity(0.6);
           layers.unshift(layerInfo);
           if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
@@ -383,11 +659,16 @@ export default class Map extends Component {
           label: {
             [language]: layer.title
           },
-          opacity: layer.opacity,
+          // opacity: layer.opacity,
+          opacity: 0.6,
           visible: layer.visibility,
-          esriLayer: layer.layerObject,
+          esriLayer: {
+            ...layer.layerObject,
+            type: layer.layerType,
+          },
           itemId: layer.itemId
         };
+        layer.layerObject.setOpacity(0.6);
         layers.unshift(layerInfo);
         if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
@@ -402,39 +683,47 @@ export default class Map extends Component {
         case 'radio': {
           let groupLayers = [];
           const groupSublayers = [];
-          const layersFromWebmap = group.layers.filter(l => !l.url);
-          layersFromWebmap.forEach(l => {
-            if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
-              layers.forEach(webmapLayer => {
-                if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
-                  if (webmapLayer.subIndex === Math.min(...l.includedSublayers)) {
-                    webmapLayer.activateWithAllLayers = true;
-                    webmapLayer.groupOrder = group.order;
-                  }
-                  groupSublayers.push({
-                    ...l,
-                    ...webmapLayer
-                  });
-                }
-              });
-              groupLayers = groupLayers.concat(groupSublayers);
-            } else { // this is not a dynamic layer
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
-              layers.splice(layers.indexOf(mapLayer), 1);
 
-              groupLayers.push({
-                ...l,
-                ...mapLayer
-              });
-            }
-          });
+          if (group.layers.length) {
+            const layersFromWebmap = group.layers.filter(l => !l.url);
+            layersFromWebmap.forEach(l => {
+              if (l.hasOwnProperty('includedSublayers')) { // this is a dynamic layer
+                layers.forEach(webmapLayer => {
+                  if (l.id === webmapLayer.id && l.includedSublayers.indexOf(webmapLayer.subIndex) > -1) {
+                    webmapLayer.isRadioLayer = true;
+                    groupSublayers.push({
+                      ...l,
+                      ...webmapLayer
+                    });
+                  }
+                });
+                groupLayers = groupLayers.concat(groupSublayers);
+              } else { // this is not a dynamic layer
+                const mapLayer = layers.filter(l2 => l2.id === l.id)[0] || {};
+                layers.splice(layers.indexOf(mapLayer), 1);
+                mapLayer.isRadioLayer = true;
+                groupLayers.push({
+                  ...l,
+                  ...mapLayer
+                });
+              }
+            });
+          } else {
+            layers.forEach(webmapLayer => {
+              webmapLayer.isRadioLayer = true;
+              if (webmapLayer.subId) { // this is a dynamic layer
+                groupLayers.push(webmapLayer);
+              }
+            });
+          }
 
           groupLayers.forEach(gl => {
-            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', gl.id);
+            const layerConfigToReplace = utils.getObject(group.layers, 'id', gl.id);
             group.layers.splice(group.layers.indexOf(layerConfigToReplace), 1, gl);
           });
 
           group.layers.forEach(l => {
+            l.isRadioLayer = true;
             if (exclusiveLayerIds.indexOf(l.id) === -1) { exclusiveLayerIds.push(l.id); }
           });
           break;
@@ -455,7 +744,7 @@ export default class Map extends Component {
             });
 
           layersFromWebmap.forEach(lfw => {
-            const layerConfigToReplace = AppUtils.getObject(group.layers, 'id', lfw.id);
+            const layerConfigToReplace = utils.getObject(group.layers, 'id', lfw.id);
             group.layers = [
               ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
               lfw,
@@ -485,7 +774,7 @@ export default class Map extends Component {
               });
 
             layersFromWebmap.forEach(nl => {
-              const layerConfigToReplace = AppUtils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
+              const layerConfigToReplace = utils.getObject(nestedGroup.nestedLayers, 'id', nl.id);
               nestedGroup.nestedLayers = [
                 ...nestedGroup.nestedLayers.slice(0, nestedGroup.nestedLayers.indexOf(layerConfigToReplace)),
                 nl,
@@ -504,8 +793,9 @@ export default class Map extends Component {
     if (!webmapGroup.label.hasOwnProperty(language)) {
       if (settings.alternativeLanguage === language) {
         webmapGroup.label[language] = settings.alternativeWebmapMenuName;
+      } else {
+        webmapGroup.label[language] = settings.webmapMenuName;
       }
-      webmapGroup.label[language] = settings.webmapMenuName;
     }
 
     mapActions.updateExclusiveRadioIds(exclusiveLayerIds);
@@ -571,6 +861,7 @@ export default class Map extends Component {
             legendOpen={this.state.legendOpen}
             dynamicLayers={this.state.dynamicLayers}
             legendOpacity={this.state.legendOpacity}
+            initialLayerOpacities={this.state.initialLayerOpacities}
           /> : null}
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
@@ -579,7 +870,7 @@ export default class Map extends Component {
           </svg>
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
-          <AnalysisModal />
+          <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />

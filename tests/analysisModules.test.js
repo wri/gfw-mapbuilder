@@ -12,7 +12,6 @@ test('analysis modules has the required properties', () => {
 test('analysis module spec', () => {
   analysisModules.forEach((module) => {
     expect(module.label).toHaveProperty(resources.language);
-    expect(module).toHaveProperty('analysisUrl');
     expect(module).toHaveProperty('analysisId');
 
     if (module.useGfwWidget) {
@@ -37,6 +36,11 @@ test('analysis module spec', () => {
 
     if (module.analysisId !== 'BIO_LOSS') {
       expect(module.chartType).not.toEqual('biomassLoss');
+    }
+
+    if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chartType === 'badge') {
+      expect(module).toHaveProperty('badgeLabel');
+      expect(module.badgeLabel).toHaveProperty(resources.language);
     }
 
     if (module.chartType === 'bar') {
@@ -81,7 +85,7 @@ test('analysis module spec', () => {
               expect(uiParam).toHaveProperty('endParamName');
             }
           }
-          
+
           if (uiParam.minDate) { expect(uiParam.minDate).toMatch(/\d{4}-\d{2}-\d{2}/); }
         }
       });

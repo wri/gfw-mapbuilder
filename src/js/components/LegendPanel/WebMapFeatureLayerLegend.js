@@ -24,6 +24,14 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.initialLayerOpacities.forEach(opacity => {
+      if (opacity.layerId === this.props.layerId) {
+        this.setState({ opacity: opacity.value });
+      }
+    });
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.visibility !== this.props.visibility) {
       this.setState(prevState => {
@@ -43,14 +51,24 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     const infos = renderer.infos;
 
     if (infos && infos.length > 0) {
+      const labels = [];
+
       infos.forEach((info, idx) => {
-        const symbol = info.symbol;
+        if (labels.indexOf(info.label) === -1) {
+          const symbol = info.symbol;
           this.createSymbolStyles(symbol, container, idx, info);
+          labels.push(info.label);
+        }
       });
       return container;
     }
 
-    this.createSymbolStyles(renderer.getSymbol(), container);
+    try {
+      this.createSymbolStyles(renderer.getSymbol(), container);
+    } catch (e) {
+      console.log("Error rendering the webmap FeatureLayer's symbology");
+    }
+
     return container;
   }
 

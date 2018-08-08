@@ -107,7 +107,6 @@ class MapActions {
 
       return list.concat(orderedGroups);
     }, []);
-
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
 
@@ -146,6 +145,7 @@ class MapActions {
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
+        console.log(cartoLayer);
         cartoLayer.layer.on('onCartoLayerAdd', evt => {
           const tempResources = resources;
           tempResources.layerPanel.GROUP_CARTO.layers = evt.target.cartoLayers;
@@ -159,8 +159,8 @@ class MapActions {
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
 
-      uniqueLayers.reverse().forEach((l, i) => {
-        map.reorderLayer(l, i);
+      uniqueLayers.forEach((l, i) => {
+        map.reorderLayer(l, i + 1);
       });
 
       if (map.getLayer('labels')) {
@@ -225,6 +225,10 @@ class MapActions {
   }
 
   updateAnalysisSliderIndices = params => params;
+
+  activateDrawButton(bool) {
+    return bool;
+  }
 
 }
 

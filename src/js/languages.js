@@ -382,6 +382,10 @@ strings.ka.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'დეგრადაცია',
   defor: 'გაუტყეურება'
 };
+
+strings.ka.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.ka.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
@@ -648,10 +652,14 @@ strings.fr.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Dégradation',
   defor: 'Déforestation'
 };
+
+strings.fr.DEFAULT_ANALYSIS_LABEL = "Sélectionner l'analyse...";
+strings.fr.RUN_ANALYSIS_BUTTON_TEXT = "Exécuter L'analyse";
+
 //- Group and value should not be modified
 strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
-    label: 'Select analysis...',
+    label: "Sélectionner l'analyse...",
     value: 'default',
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -915,6 +923,10 @@ strings.es.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradación',
   defor: 'Deforestación'
 };
+
+strings.es.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.es.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
@@ -1181,6 +1193,10 @@ strings.pt.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradação',
   defor: 'Desmatamento'
 };
+
+strings.pt.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.pt.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
@@ -1447,6 +1463,10 @@ strings.id.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
   defor: 'Deforestation'
 };
+
+strings.id.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.id.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {
@@ -1713,6 +1733,10 @@ strings.zh.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
   defor: 'Deforestation'
 };
+
+strings.zh.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.zh.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.zh.ANALYSIS_SELECT_TYPE_OPTIONS = [
   {

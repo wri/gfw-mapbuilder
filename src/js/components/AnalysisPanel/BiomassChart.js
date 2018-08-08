@@ -5,11 +5,6 @@ import text from 'js/languages';
 import number from 'dojo/number';
 
 export default class BiomassChart extends Component {
-
-  static contextTypes = {
-    language: PropTypes.string.isRequired
-  };
-
   constructor (props) {
     super(props);
     this.state = {
@@ -22,21 +17,18 @@ export default class BiomassChart extends Component {
   }
 
   componentDidMount() {
-    const { payload, colors } = this.props;
-    const { language } = this.context;
+    const { payload, colors, lossName } = this.props;
     const { data } = payload;
-
-    const labels = Object.keys(data.attributes.biomassLossByYear);
 
     if (typeof payload === 'object' && payload.hasOwnProperty('error')) {
       this.setState({ isError: true });
     } else {
-
+      const labels = Object.keys(data.attributes.biomassLossByYear);
       const { series, grossLoss, grossEmissions } = charts.formatSeriesForBiomassLoss({
         data: data.attributes,
         lossColor: colors.loss,
         carbonColor: colors.carbon,
-        lossName: text[language].ANALYSIS_CARBON_LOSS,
+        lossName: lossName,
         carbonName: 't CO2'
       });
       if (series.some(obj => !obj.data.some(item => item !== 0)) && grossLoss === 0 && grossEmissions === 0) {
@@ -61,7 +53,7 @@ export default class BiomassChart extends Component {
   render () {
     const {grossEmissions, grossLoss, loading, isEmpty, isError} = this.state;
     const results = this.props.payload;
-    const {language} = this.context;
+    const { lossName, carbonName } = this.props;
 
     if (isError) {
       return (
@@ -76,11 +68,11 @@ export default class BiomassChart extends Component {
           <div ref='chart' className='biomass-loss analysis__chart-container'></div>
           <div className={loading || isEmpty ? 'hidden' : ''}>
             <div className='analysis__legend-container'>
-              <span>{text[language].ANALYSIS_CARBON_LOSS}</span>
+              <span>{lossName}</span>
               <span>{number.format(grossLoss, { places: 0 })} ha</span>
             </div>
             <div className='analysis__legend-container'>
-              <span>{text[language].ANALYSIS_CARBON_EMISSION}</span>
+              <span>{carbonName}</span>
               <span>{number.format(grossEmissions, { places: 0 })} t CO<sub>2</sub></span>
             </div>
           </div>

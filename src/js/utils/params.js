@@ -50,7 +50,13 @@ export function toQuerystring(json, noEncode) {
 */
 export function getUrlParams(path) {
   if (!path) { return {}; }
-  const bits = path.split('?');
+
+  let windowPath = path;
+  if (windowPath.indexOf('#') > -1) {
+    windowPath = windowPath.slice(0, windowPath.indexOf('#')) + windowPath.slice(windowPath.indexOf('#') + 1, windowPath.length);
+  }
+
+  const bits = windowPath.split('?');
   const querystring = bits.length > 1 ? bits[1] : '';
   return toObject(querystring);
 }

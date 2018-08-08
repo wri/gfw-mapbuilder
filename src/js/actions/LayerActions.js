@@ -34,10 +34,10 @@ class LayerActions {
     return info;
     }
   
-  setSubLayers (id, ...subIndexes) {
+  setSubLayers (info, ...subIndexes) {
     return {
-      id,
-      subIndexes
+      subIndexes,
+      layer: info
     };
   }
 
@@ -92,6 +92,10 @@ class LayerActions {
     return payload;
   }
 
+  setOpacities (opacities) {
+    return opacities;
+  }
+
   addAll () {
     return {};
   }
@@ -103,6 +107,8 @@ class LayerActions {
   updateCartoSymbol (symbol) {
     return symbol;
   }
+
+  fetchingCartoData = bool => bool;
 
 }
 

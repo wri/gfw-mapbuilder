@@ -82,10 +82,6 @@ module.exports = (PATHS) => {
           filename: 'report.html',
           inject: false
         }),
-        // new HtmlWebpackPlugin({
-        //   template: path.resolve(__dirname, 'src/external.pug'),
-        //   inject: false
-        // }),
         new CopyWebpackPlugin([
           {
             from: path.resolve(__dirname, 'src/resources.js'),

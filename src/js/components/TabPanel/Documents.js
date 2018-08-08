@@ -49,7 +49,6 @@ class DocumentResults extends Component {
           size: `${Math.round(item.size / 1000)}KB`,
           url: item.url
         }));
-        console.log(res);
         this.setState({ loading: false, documents });
       }, () => {
         this.setState({ loading: false, documents: [] });

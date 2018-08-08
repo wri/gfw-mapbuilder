@@ -15,7 +15,6 @@ export const NestedLegend = ({ groupLabel, layerGroup, activeLayers }) => {
           url={l.esriLayer.url}
           visibility={activeLayers.indexOf(l.id) > -1}
           visibleLayers={activeLayers}
-          layerSubIndex={1}
           layerId={l.id}
           />;
       })}
