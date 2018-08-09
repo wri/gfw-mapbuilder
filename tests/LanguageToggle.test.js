@@ -4,7 +4,7 @@ import Navigation from 'components/Navigation/Navigation';
 import LanguageToggle from 'components/Navigation/LanguageToggle';
 
 
-describe('<Navigation />', () => {
+describe('<LanguageToggle />', () => {
   const context = {
     language: 'en',
     settings: {
@@ -42,7 +42,6 @@ describe('<Navigation />', () => {
     context.settings.useAlternativeLanguage = true;
     const wrapper = shallow(<Navigation />, { context });
     wrapper.setContext(context);
-    console.log(wrapper.debug());
     expect(wrapper.contains(<LanguageToggle />)).toEqual(true);
   });
 
