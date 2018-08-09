@@ -24,31 +24,35 @@ import RadioButton from './RadioButton';
 
     allRadioLayers.forEach(l => {
       if (l.id === layer.id) {
-        if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer); }
+        if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
         return;
       }
       if (layersAlreadyHidden.indexOf(l.id) > -1) {
         return;
       }
 
-      l.esriLayer.hide();
       layerActions.removeActiveLayer(l.subId || l.id);
-      if (l.subId) { layerActions.removeAllSubLayers(l.esriLayer); }
+      if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
       layersAlreadyHidden.push(l.id);
     });
 
     // If the item you clicked is already on
     // turn it off and return from the fucntion.
     if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
-      layer.esriLayer.hide();
       layerActions.removeActiveLayer(layer.subId || layer.id);
-      if (layer.subId) { layerActions.removeAllSubLayers(layer.esriLayer); }
+      if (layer.subId || layer.layerIds) { layerActions.removeAllSubLayers(layer.esriLayer); }
       return;
     }
 
     if (layer.hasOwnProperty('subId')) {
-      layerActions.setSubLayers(layer.id, layer.subIndex);
+      layerActions.setSubLayers(layer, layer.subIndex);
       layer.esriLayer.setVisibleLayers([layer.subIndex]);
+      return;
+    }
+
+    if (layer.hasOwnProperty('layerIds')) {
+      layerActions.setSubLayers(layer, ...layer.layerIds);
+      layer.esriLayer.setVisibleLayers(layer.layerIds);
       return;
     }
 
@@ -69,29 +73,35 @@ import RadioButton from './RadioButton';
       showInfo={this.showInfo}
       iconLoading={this.props.iconLoading}
       toggleLayer={this.toggleLayer}
+      initialLayerOpacities={this.props.initialLayerOpacities}
     />;
   }
 
   handleLayerVisibility = (groupLayers, dynamicLayers, activeLayers) => {
-    groupLayers.forEach(layer => {
-      if (!layer.esriLayer) { return; }
-      if (layer.subId) {
-        if (dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].length > 0) {
-          layer.esriLayer.show();
-          return;
+    const layerToShow = groupLayers
+      .filter(l => l.subId ? activeLayers.indexOf(l.subId) > -1 : activeLayers.indexOf(l.id) > -1)[0];
+    const layersToHide = groupLayers
+      .filter(l => l.subId ? activeLayers.indexOf(l.subId) === -1 : activeLayers.indexOf(l.id) === -1);
+
+    layersToHide.forEach(l => {
+      if (l.esriLayer) {
+        if (l.subId || l.layerIds) {
+          l.esriLayer.setVisibleLayers([-1]);
         }
-
-        layer.esriLayer.hide();
+        l.esriLayer.hide();
         return;
       }
 
-      if (activeLayers.indexOf(layer.id) > -1) {
-        layer.esriLayer.show();
-        return;
-      }
-
-      layer.esriLayer.hide();
     });
+
+    if (layerToShow) {
+      // debugger;
+      if (layerToShow.subId || layerToShow.layerIds) {
+        layerToShow.esriLayer.setVisibleLayers(dynamicLayers[layerToShow.id]);
+      }
+      layerToShow.esriLayer.show();
+      return;
+    }
   }
 
   render() {

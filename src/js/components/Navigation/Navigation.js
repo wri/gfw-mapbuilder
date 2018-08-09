@@ -144,6 +144,7 @@ export default class Navigation extends Component {
           });
           mapActions.setUserSubscriptions(json.data);
           mapActions.toggleSubscriptionsModal({ visible: true });
+
         });
       });
     } else {
@@ -208,7 +209,7 @@ export default class Navigation extends Component {
             </li>
           }
           {settings.includeMyGFWLogin && !this.state.isLoggedIn ?
-            <li onClick={this.login} className={`app-header__nav-link pointer ${this.state.loginsDisplayed ? 'login-open' : ''}`}>
+            <li onClick={this.login} className={`app-header__nav-link app-header__nav-link--gfw-login  pointer ${this.state.loginsDisplayed ? 'login-open' : ''}`}>
               <a target={target}>
                 <svg className='svg-icon__nav'>
                   <use xlinkHref="#icon-h-mygfw" />
@@ -216,10 +217,10 @@ export default class Navigation extends Component {
                 {text[language].NAV_MY_GFW_LOGIN}
               </a>
             </li> : settings.includeMyGFWLogin && this.state.isLoggedIn ?
-            <li onClick={this.toggleOptions} className={`app-header__nav-link pointer ${this.state.optionsDisplayed ? 'options-open' : ''}`}>
+            <li onClick={this.toggleOptions} className={`app-header__nav-link app-header__nav-link--gfw-logged-in pointer ${this.state.optionsDisplayed ? 'options-open' : ''}`}>
               <a target={target}>
                 <svg className='svg-icon__nav'>
-                  <use xlinkHref="#icon-mygfw" /> //TODO: Make this look correct!
+                  <use xlinkHref="#icon-mygfw" />
                 </svg>
                 {text[language].NAV_MY_GFW}
               </a>

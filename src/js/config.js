@@ -25,15 +25,16 @@ const config = {
     'production-api.globalforestwatch.org',
     'production-api.globalforestwatch.org/v1/ogr',
     'production-api.globalforestwatch.org/v1/ogr/convert',
+    'api.resourcewatch.org',
     'gis.wri.org'
   ],
 
   urls: {
     metadataApi: 'https://gis-gfw.wri.org/metadata',
-    metadataXmlEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
+    metadataXmlEndpoint: (sharingHost, itemId) => `${sharingHost}/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
     agolItemEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}`,
     cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
-    cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=GeoJSON&q=${queryString}&api_key=${cartoApiKey}`,
+    cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
     esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
   },
@@ -82,22 +83,6 @@ const config = {
       {label: 'Past 48 hours', value: 2},
       {label: 'Past 24 hours', value: 1}
     ],
-    lossOptions: [
-      {label: '2001', value: 1},
-      {label: '2002', value: 2},
-      {label: '2003', value: 3},
-      {label: '2004', value: 4},
-      {label: '2005', value: 5},
-      {label: '2006', value: 6},
-      {label: '2007', value: 7},
-      {label: '2008', value: 8},
-      {label: '2009', value: 9},
-      {label: '2010', value: 10},
-      {label: '2011', value: 11},
-      {label: '2012', value: 12},
-      {label: '2013', value: 13},
-      {label: '2014', value: 14}
-    ]
   },
   errors: {
     missingLayerConfig: 'You provided a layer config containing a url but not a type, please specify the layer type in the layer config.',
@@ -242,12 +227,13 @@ config.analysis[analysisKeys.TC_LOSS] = {
   id: '$530',
   colors: ['#cf5188'],
   // TODO: Generate these dynamically
-  bounds: [1, 15],
-  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
+  bounds: [1, 16],
+  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8'
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8',
+  analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {

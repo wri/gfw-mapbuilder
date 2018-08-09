@@ -108,6 +108,14 @@ export default class LayerCheckbox extends Component {
     if (typeof label === 'object') {
       label = '';
     }
+
+    if (label === '' && layer.label) {
+      const langs = Object.keys(layer.label);
+      if (langs.length > 0) {
+        label = layer.label[langs[0]];
+      }
+    }
+
     const {sublabel} = layer;
 
     return (

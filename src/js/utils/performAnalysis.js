@@ -44,7 +44,7 @@ export default function performAnalysis (options) {
 
   switch (type) {
     case analysisKeys.VIIRS_FIRES:
-      analysisUtils.getFireCount(config.url, geometry, viirsFrom, viirsTo, language).then(promise.resolve);
+      analysisUtils.getViirsFires(config, geostoreId, viirsFrom, viirsTo, language).then(promise.resolve);
     break;
     case analysisKeys.MODIS_FIRES:
       analysisUtils.getFireCount(config.url, geometry, modisFrom, modisTo, language).then(promise.resolve);
@@ -158,11 +158,27 @@ export default function performAnalysis (options) {
     case analysisKeys.TERRA_I_ALERTS:
       analysisUtils.getTerraIAlerts(config, geostoreId, terraIFrom, terraITo, language).then(promise.resolve);
     break;
+    // case 'custom':
+    // // TODO: don't hardcode 'custom'
+    // // find a way to create a 'case' in this switch for each item in the array
+    //   analysisUtils.getCustomAnalysis(settings.analysisModules.filter(a => a.value === 'custom')[0], geostoreId).then(promise.resolve);
+    // break;
+    // case 'custom2':
+    // // TODO: don't hardcode 'custom'
+    // // find a way to create a 'case' in this switch for each item in the array
+    //   analysisUtils.getCustomAnalysis(settings.analysisModules.filter(a => a.value === 'custom2')[0], geostoreId).then(promise.resolve);
+    // break;
+
     case 'default':
       return null;
     default:
-      //- This should only be the restoration analysis, since analysisType is a rasterId
+      // //- This should only be the restoration analysis, since analysisType is a rasterId
       analysisUtils.getRestoration(restorationUrl, type, geometry, settings).then(promise.resolve);
+
+
+      // TESTING CUSTOM ANALYSIS
+      // const analysisModule = settings.analysisModules.filter(a => a.value === type)[0];
+      // analysisUtils.getCustomAnalysis(analysisModule, geostoreId).then(promise.resolve);
     break;
   }
 

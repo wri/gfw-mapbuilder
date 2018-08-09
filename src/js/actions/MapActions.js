@@ -107,7 +107,6 @@ class MapActions {
 
       return list.concat(orderedGroups);
     }, []);
-
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
 
@@ -146,6 +145,7 @@ class MapActions {
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
+        console.log(cartoLayer);
         cartoLayer.layer.on('onCartoLayerAdd', evt => {
           const tempResources = resources;
           tempResources.layerPanel.GROUP_CARTO.layers = evt.target.cartoLayers;
@@ -218,6 +218,16 @@ class MapActions {
 
   updateExclusiveRadioIds(arr) {
     return arr;
+  }
+
+  updateAnalysisParams(params) {
+    return params;
+  }
+
+  updateAnalysisSliderIndices = params => params;
+
+  activateDrawButton(bool) {
+    return bool;
   }
 
 }

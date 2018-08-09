@@ -1,16 +1,13 @@
-import DynamicLayer from 'esri/layers/ArcGISDynamicMapServiceLayer';
-import ImageParameters from 'esri/layers/ImageParameters';
-import webmercatorUtils from 'esri/geometry/webMercatorUtils';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import analysisKeys from 'constants/AnalysisConstants';
-import performAnalysis from 'utils/performAnalysis';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
 import Point from 'esri/geometry/Point';
 import QueryTask from 'esri/tasks/QueryTask';
-import InfoTemplate from 'esri/InfoTemplate';
 import Query from 'esri/tasks/query';
 import {getUrlParams} from 'utils/params';
-import {analysisConfig, layerPanelText} from 'js/config';
+import {analysisConfig} from 'js/config';
 import layerFactory from 'utils/layerFactory';
 import geojsonUtil from 'utils/arcgis-to-geojson';
 import esriRequest from 'esri/request';
@@ -20,6 +17,8 @@ import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
 import arcgisUtils from 'esri/arcgis/utils';
+import analysisUtils from 'utils/analysisUtils';
+import {formatters} from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
 import Graphic from 'esri/graphic';
 import resources from 'resources';
@@ -28,6 +27,15 @@ import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
 import moment from 'moment';
+
+import VegaChart from 'components/AnalysisPanel/VegaChart';
+import BarChart from 'components/AnalysisPanel/BarChart';
+import BiomassChart from 'components/AnalysisPanel/BiomassChart';
+import CompositionPieChart from 'components/AnalysisPanel/CompositionPieChart';
+import TimeSeriesChart from 'components/AnalysisPanel/TimeSeriesChart';
+import FiresBadge from 'components/AnalysisPanel/FiresBadge';
+import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
+import Badge from 'components/AnalysisPanel/Badge';
 
 let map;
 
@@ -610,484 +618,820 @@ const makeRestorationAnalysisCharts = function makeRestorationAnalysisCharts (re
   }
 };
 
-const runAnalysis = function runAnalysis (params, feature) {
-  const lcLayers = resources.layerPanel.GROUP_LC ? resources.layerPanel.GROUP_LC.layers : [];
-  const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LCD.layers : [];
-  const layerConf = appUtils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
-  const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-  const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, viirsFrom, viirsTo, modisFrom, modisTo } = params;
-  const geographic = webmercatorUtils.geographicToWebMercator(feature.geometry);
-  //- Only Analyze layers in the analysis
-  if (appUtils.containsObject(lcdLayers, 'id', layerKeys.TREE_COVER_LOSS)) {
-    //- Loss/Gain Analysis
-    performAnalysis({
-      type: analysisKeys.TC_LOSS_GAIN,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      geostoreId: feature.geostoreId,
-      tcLossFrom: tcLossFrom,
-      tcLossTo: tcLossTo
-    }).then((results) => {
-      const {lossCounts = [], gainTotal, lossTotal} = results;
-      const totalLoss = lossTotal;
-      const totalGain = gainTotal;
-      //- Generate chart for Tree Cover Loss
-      const name = text[lang].ANALYSIS_TC_CHART_NAME;
-      const colors = analysisConfig[analysisKeys.TC_LOSS].colors;
-      const tcLossNode = document.getElementById('tc-loss');
-      const series = [{ name: name, data: lossCounts }];
-
-      if (results.lossCounts && results.lossCounts.length && results.lossCounts.some(c => c > 0)) {
-        const chartLabels = lossLabels.slice(tcLossFrom, tcLossTo + 1);
-        charts.makeSimpleBarChart(tcLossNode, chartLabels, colors, series);
-      } else {
-        tcLossNode.remove();
-      }
-      //- Generate content for Loss and Gain Badges
-      //- Loss
-      document.querySelector('#total-loss-badge .results__loss-gain--label').innerHTML = text[lang].ANALYSIS_TOTAL_LOSS_LABEL;
-      document.querySelector('#total-loss-badge .results__loss-gain--range').innerHTML = `${lossLabels[tcLossFrom]} &ndash; ${lossLabels[tcLossTo]}`;
-      document.querySelector('.results__loss--count').innerHTML = totalLoss;
-      document.getElementById('total-loss-badge').classList.remove('hidden');
-      //- Gain
-      document.querySelector('#total-gain-badge .results__loss-gain--label').innerHTML = text[lang].ANALYSIS_TOTAL_GAIN_LABEL;
-      document.querySelector('#total-gain-badge .results__loss-gain--range').innerHTML = text[lang].ANALYSIS_TOTAL_GAIN_RANGE;
-      document.querySelector('.results__gain--count').innerHTML = totalGain;
-      document.getElementById('total-gain-badge').classList.remove('hidden');
-    });
-  } else {
-    const lossChart = document.getElementById('tc-loss');
-    const lossBadge = document.getElementById('total-loss-badge');
-    const gainBadge = document.getElementById('total-gain-badge');
-    lossChart.remove();
-    lossBadge.remove();
-    gainBadge.remove();
+const renderResults = (results, lang, config, params) => {
+  if (results.hasOwnProperty('error')) {
+    return null;
   }
 
-  if (settings.landCover && layerConf) {
-    performAnalysis({
-      type: analysisKeys.LC_LOSS,
-      geostoreId: feature.geostoreId,
-      geometry: geographic,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const configuredColors = layerConf.colors;
-      const labels = layerConf.classes[lang];
-      const node = document.getElementById('lc-loss');
-      const { counts, encoder, error } = results;
+  const { chartType, label, colors, analysisId } = config;
+  const defaultColors = ['#cf5188'];
+  let chartComponent = null;
 
-      if (error) {
-        node.remove();
-        return;
+  switch (chartType) {
+    case 'bar': {
+      const { chartBounds, valueAttribute } = config;
+      const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
+      .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
+
+      let counts = [];
+
+      switch (analysisId) {
+        case 'TC_LOSS': {
+          let lossObj = null;
+          if (!results.hasOwnProperty('error')) {
+            lossObj = results.data.attributes.loss;
+            counts = Object.values(lossObj);
+          }
+          break;
+        }
+        case 'IFL': {
+          if (!results.hasOwnProperty('error')) {
+
+            results.data.attributes.histogram[0].result.forEach(histo => {
+              counts.push(Math.round(histo.result * 100) / 100);
+            });
+          }
+          break;
+        }
+        default: {
+          counts = results;
+          if (valueAttribute) {
+            counts = valueAttribute.split('.').reduce((prevVal, currentVal) => {
+              if (!prevVal.hasOwnProperty(currentVal)) {
+                throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
+              }
+              return prevVal[currentVal];
+            }, results);
+          }
+        }
       }
 
-      const Xs = encoder.A;
-      const Ys = encoder.B;
-      const chartInfo = charts.formatSeriesWithEncoder({
-        colors: configuredColors,
-        encoder: encoder,
-        counts: counts,
-        labels: labels,
-        Xs: Xs,
-        Ys: Ys
-      });
+      const chartColors = colors || defaultColors;
 
-      if (chartInfo.series && chartInfo.series.length) {
-        charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
-      } else {
-        node.remove();
-      }
-    });
-
-    //- Land Cover Composition Analysis
-    performAnalysis({
-      type: analysisKeys.LCC,
-      geometry: geographic,
-      geostoreId: feature.geostoreId,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const node = document.getElementById('lc-composition');
-
-      const { error } = results;
-
-      if (error) {
-        node.remove();
-        return;
-      }
-
-      if (results.counts && results.counts.length) {
-        const series = charts.formatCompositionAnalysis({
-          colors: layerConf.colors,
-          name: text[lang].ANALYSIS_LCC_CHART_NAME,
-          labels: layerConf.classes[lang],
-          counts: results.counts
-        });
-
-        charts.makeCompositionPieChart(node, series);
-      } else {
-        node.remove();
-      }
-    });
-  } else {
-    const lossNode = document.getElementById('lc-loss');
-    const compositionNode = document.getElementById('lc-composition');
-    lossNode.remove();
-    compositionNode.remove();
-  }
-
-  if (settings.aboveGroundBiomass) {
-    //- Carbon Stocks with Loss Analysis
-    performAnalysis({
-      type: analysisKeys.BIO_LOSS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      geostoreId: feature.geostoreId
-    }).then((results) => {
-      const { labels, colors } = analysisConfig[analysisKeys.BIO_LOSS];
-      const { data } = results;
-      const node = document.getElementById('bio-loss');
-      const {series, grossLoss, grossEmissions} = charts.formatSeriesForBiomassLoss({
-        data: data.attributes,
-        lossColor: colors.loss,
-        carbonColor: colors.carbon,
-        lossName: text[lang].ANALYSIS_CARBON_LOSS,
-        carbonName: 'MtCO2'
-      });
-
-      if (!series.some(s => s.data.some(d => d > 0))) {
-        node.remove();
-        return;
-      }
-
-      charts.makeBiomassLossChart(node, {
-        series,
-        categories: labels
-      }, (chart) => {
-        const content = chart.renderer.html(
-          `<div class='results__legend-container'>` +
-            `<span>${text[lang].ANALYSIS_CARBON_LOSS}</span>` +
-            `<span>${Math.round(grossLoss)} Ha</span>` +
-          `</div>` +
-          `<div class='results__legend-container'>` +
-            `<span>${text[lang].ANALYSIS_CARBON_EMISSION}</span>` +
-            `<span>${Math.round(grossEmissions)}m MtCO2</span>` +
-          `</div>`
-        );
-        content.element.className = 'result__biomass-totals';
-        content.add();
-
-      });
-    });
-  } else {
-    const node = document.getElementById('bio-loss');
-    node.remove();
-  }
-
-  if (settings.intactForests) {
-    //- Intact Forest with Loss Analysis
-    performAnalysis({
-      type: analysisKeys.INTACT_LOSS,
-      geometry: geographic,
-      geostoreId: feature.geostoreId,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const configuredColors = analysisConfig[analysisKeys.INTACT_LOSS].colors;
-      const labels = text[lang].ANALYSIS_IFL_LABELS;
-      const node = document.getElementById('intact-loss');
-      const { counts, encoder, error } = results;
-
-      if (error) {
-        node.remove();
-        return;
-      }
-
-      const Xs = encoder.A;
-      const Ys = encoder.B;
-      const chartInfo = charts.formatSeriesWithEncoder({
-        colors: configuredColors,
-        encoder: encoder,
-        counts: counts,
-        labels: labels,
-        isSimple: true,
-        Xs: Xs,
-        Ys: Ys
-      });
-
-      if (chartInfo.series && chartInfo.series.length && chartInfo.series[0].data.length) {
-        charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
-      } else {
-        node.remove();
-      }
-
-    });
-  } else {
-    const node = document.getElementById('intact-loss');
-    node.remove();
-  }
-  if (settings.viirsFires) {
-    //- Fires Analysis
-    performAnalysis({
-      type: analysisKeys.VIIRS_FIRES,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      viirsFrom: viirsFrom,
-      viirsTo: viirsTo
-    }).then((results) => {
-      const node = document.getElementById('viirs-badge');
-
-      const { error } = results;
-      if (error) {
-        node.remove();
-        return;
-      }
-
-      document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
-      document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
-      document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${viirsTo.format('MM/DD/YYYY')}`;
-      node.classList.remove('hidden');
-    });
-  } else {
-    const node = document.getElementById('viirs-badge');
-    node.remove();
-  }
-
-  if (settings.modisFires) {
-    //- Fires Analysis
-    performAnalysis({
-      type: analysisKeys.MODIS_FIRES,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      modisFrom: modisFrom,
-      modisTo: modisTo
-    }).then((results) => {
-
-      const node = document.getElementById('modis-badge');
-
-      const { error } = results;
-      if (error) {
-        node.remove();
-        return;
-      }
-
-      document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
-      document.querySelector('.results__modis-count').innerHTML = results.fireCount;
-      document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
-      document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${modisTo.format('MM/DD/YYYY')}`;
-      node.classList.remove('hidden');
-    });
-  } else {
-    const node = document.getElementById('modis-badge');
-    node.remove();
-  }
-
-  //- Mangroves Loss
-  if (settings.mangroves) {
-    performAnalysis({
-      type: analysisKeys.MANGROVE_LOSS,
-      geometry: geographic,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const node = document.getElementById('mangroves');
-      const colors = analysisConfig[analysisKeys.MANGROVE_LOSS].colors;
-      const labels = text[lang].ANALYSIS_MANGROVE_LABELS;
-      const { counts, encoder } = results;
-      const Xs = encoder.A;
-      const Ys = encoder.B;
-      const chartInfo = charts.formatSeriesWithEncoder({
-        colors: colors,
-        encoder: encoder,
-        counts: counts,
-        labels: labels,
-        isSimple: true,
-        Xs: Xs,
-        Ys: Ys
-      });
-
-      if (chartInfo.series && chartInfo.series.length && chartInfo.series[0].data.length) {
-        charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
-      } else {
-        node.remove();
-      }
-    });
-
-  } else {
-    const node = document.getElementById('mangroves');
-    node.remove();
-  }
-
-  //- SAD Alerts
-  if (settings.sadAlerts) {
-    performAnalysis({
-      type: analysisKeys.SAD_ALERTS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang
-    }).then((results) => {
-      const node = document.getElementById('sad-alerts');
-      const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
-      const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
-      const {alerts, error} = results;
-
-      if (error) {
-        node.remove();
-        return;
-      }
-
-      const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
-      if (categories.length) {
-        //- Tell the second series to use the second axis
-        series[0].yAxis = 1;
-        charts.makeDualAxisTimeSeriesChart(node, { series, categories });
-      } else {
-        node.remove();
-      }
-    });
-
-  } else {
-    const node = document.getElementById('sad-alerts');
-    node.remove();
-  }
-
-  //- GLAD Alerts
-  if (settings.gladAlerts) {
-    performAnalysis({
-      type: analysisKeys.GLAD_ALERTS,
-      geometry: feature.geometry,
-      settings: settings,
-      canopyDensity: tcd,
-      language: lang,
-      geostoreId: feature.geostoreId,
-      gladFrom: moment(new Date(gladFrom)),
-      gladTo: moment(new Date(gladTo))
-    }).then((results) => {
-      const node = document.getElementById('glad-alerts');
-      const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
-
-      const { error } = results;
-      if (error || results.length === 0) {
-        node.remove();
-        return;
-      }
-
-      charts.makeTimeSeriesCharts(node, { data: results, name });
-    });
-  } else {
-    const node = document.getElementById('glad-alerts');
-    node.remove();
-  }
-
-  //- Terra-I Alerts
-  if (settings.terraIAlerts) {
-    performAnalysis({
-      type: analysisKeys.TERRA_I_ALERTS,
-      geometry: geographic,
-      settings: settings,
-      canopyDensity: tcd,
-      geostoreId: feature.geostoreId,
-      language: lang,
-      terraIFrom: terraIFrom,
-      terraITo: terraITo
-    }).then((results) => {
-      const node = document.getElementById('terrai-alerts');
-      const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
-
-      const { error } = results;
-      if (error || results.length === 0) {
-        node.remove();
-        return;
-      }
-
-      charts.makeTimeSeriesCharts(node, { data: results, name });
-    });
-  } else {
-    const node = document.getElementById('terrai-alerts');
-    node.remove();
-  }
-
-  if (settings.restorationModule) {
-    const infos = settings && settings.labels && settings.labels[lang] && settings.labels[lang].restorationOptions || [];
-    // Analyze each configured restoration option
-    const requests = infos.map((info) => {
-      return performAnalysis({
-        type: info.id,
-        geometry: feature.geometry,
-        settings: settings,
-        canopyDensity: tcd,
-        language: lang
-      });
-    });
-
-    all(requests).then((results) => {
-      results.forEach((result, index) => {
-        makeRestorationAnalysisCharts(result, settings, lang, infos[index].label);
-      });
-      //- Show the results
-      document.getElementById('restoration').classList.remove('hidden');
-    });
-
-    // Also perform the slope analysis
-    if (settings.restorationSlope) {
-      performAnalysis({
-        type: analysisKeys.SLOPE,
-        geometry: feature.geometry,
-        settings: settings,
-        canopyDensity: tcd,
-        activeSlopeClass: activeSlopeClass,
-        language: lang
-      }).then((results) => {
-        const container = document.getElementById('slope');
-        const chartNode = document.getElementById('slope-chart');
-        const tableNode = document.getElementById('slope-table');
-        const titleNode = document.getElementById('slope-analysis-header');
-        const descriptionNode = document.getElementById('slope-analysis-description');
-        const {counts = []} = results;
-        // const labels = counts.map((v, index) => text[lang].ANALYSIS_SLOPE_OPTION + (index + 1));
-        const labels = settings.labels[lang].slopeAnalysisPotentialOptions;
-        const colors = settings.slopeAnalysisPotentialColors;
-        const tooltips = settings.labels[lang].slopeAnalysisPotentialOptions;
-        //- Create a  copy of the counts since I need to add data to it for the table below
-        const series = [{ data: counts.slice() }];
-        // Render the chart, table, title, description, and unhide the container
-        container.classList.remove('hidden');
-        titleNode.innerHTML = text[lang].REPORT_SLOPE_TITLE;
-        descriptionNode.innerHTML = settings.labels[lang].slopeDescription;
-        charts.makeSlopeBarChart(chartNode, labels, colors, tooltips, series);
-        //- Push headers into values and labels for the table and totals.
-        const total = counts.reduce((a, b) => a + b, 0);
-        labels.unshift(text[lang].REPORT_SLOPE_TABLE_TYPE);
-        counts.unshift(text[lang].REPORT_SLOPE_TABLE_VALUE);
-        labels.push(text[lang].REPORT_TABLE_TOTAL);
-        counts.push(total);
-        tableNode.appendChild(generateSlopeTable(labels, counts));
-      });
-    } else {
-      const element = document.getElementById('slope');
-      if (element) { element.remove(); }
+      chartComponent = <BarChart
+        name={label[lang]}
+        counts={counts}
+        colors={chartColors}
+        labels={labels}
+        results={results}
+        encoder={null}
+      />;
+      break;
     }
-  } else {
-    const node = document.getElementById('restoration');
-    node.remove();
+    case 'timeSeries': {
+      const { valueAttribute } = config;
+
+      let data = [];
+
+      switch (analysisId) {
+        case 'GLAD_ALERTS': {
+          if (!results.hasOwnProperty('error')) {
+            data = formatters.alerts(results.data.attributes.value);
+          }
+          break;
+        }
+        case 'TERRAI_ALERTS': {
+          if (!results.hasOwnProperty('error')) {
+            data = formatters.alerts(results.data.attributes.value);
+          }
+          break;
+        }
+        default: {
+          data = results;
+
+          if (valueAttribute) {
+            // see https://github.com/wri/gfw-mapbuilder/wiki/Chart-Types:-Bar#valueattribute-string
+            // for more information on using the valueAttribute property
+            data = valueAttribute.split('.').reduce((prevVal, currentVal) => {
+              if (!prevVal.hasOwnProperty(currentVal)) {
+                throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
+              }
+              return prevVal[currentVal];
+            }, results);
+          }
+        }
+      }
+      chartComponent = <TimeSeriesChart data={data} name={label[lang] ? label[lang] : ''} />;
+      break;
+    }
+    case 'badge': {
+      const {
+        tcLossFrom,
+        tcLossTo,
+        viirsEndDate,
+        viirsStartDate,
+      } = params;
+
+      const { valueAttribute, color, badgeLabel } = config;
+
+      switch (analysisId) {
+        case 'TC_LOSS_GAIN':
+          chartComponent = <LossGainBadge
+            results={results}
+            lossFromSelectIndex={Number(tcLossFrom)}
+            lossToSelectIndex={Number(tcLossTo)}
+            totalLossLabel={text[lang].ANALYSIS_TOTAL_LOSS_LABEL}
+            totalGainLabel={text[lang].ANALYSIS_TOTAL_GAIN_LABEL}
+            totalGainRange={text[lang].ANALYSIS_TOTAL_GAIN_RANGE}
+          />;
+          break;
+        case 'VIIRS_FIRES':
+          chartComponent = <FiresBadge
+            results={results}
+            from={viirsStartDate}
+            to={viirsEndDate}
+            preLabel={text[lang].ANALYSIS_FIRES_PRE}
+            firesLabel={text[lang].ANALYSIS_FIRES_ACTIVE}
+            timelineStartLabel={text[lang].TIMELINE_START}
+            timelineEndLabel={text[lang].TIMELINE_END}
+          />;
+          break;
+        default:
+          chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[lang]} />;
+
+      }
+      break;
+    }
+    case 'biomassLoss': {
+      const chartColors = colors || { loss: '#FF6699', carbon: '#BEBCC2' };
+
+      chartComponent = <BiomassChart
+        payload={results}
+        colors={chartColors}
+        lossName={text[lang].ANALYSIS_CARBON_LOSS}
+        carbonName={text[lang].ANALYSIS_CARBON_EMISSION}
+        />;
+      break;
+    }
+    case 'lccPie': {
+      const data = {
+        counts: []
+      };
+      if (!results.hasOwnProperty('error')) {
+        results.data.attributes.histogram.forEach(histo => {
+          if (!data[histo.className]) {
+            data[histo.className] = 0;
+          }
+          histo.result.forEach(year => {
+            data[histo.className] += year.result;
+          });
+          data.counts.push(Math.round(data[histo.className] * 100) / 100);
+        });
+      }
+
+      chartComponent = <CompositionPieChart
+        results={results}
+        name={label[lang]}
+        counts={data.counts}
+        colors={colors}
+        labels={config.classes[lang]}
+      />;
+      break;
+    }
+    case 'vega':
+      chartComponent = <VegaChart results={results} />;
+      break;
+    default:
+      break;
   }
 
+  return chartComponent;
 };
+
+const handleRangeSliderParams = (paramsObject, paramModule) => {
+  const { bounds, valueType, combineParams, startParamName, endParamName, valueSeparator } = paramModule;
+  let startValue = bounds[0];
+  let endValue = bounds[1];
+
+  if (valueType === 'date') {
+    startValue = `${startValue}-01-01`;
+    endValue = `${endValue}-12-31`;
+  }
+
+  if (combineParams) {
+    if (!valueSeparator) {
+      throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+    }
+    return {
+      ...paramsObject,
+      [startParamName]: `${startValue}${valueSeparator}${endValue}`,
+    };
+  }
+
+  return {
+    ...paramsObject,
+    [startParamName]: `${startValue}`,
+    [endParamName]: `${endValue}`,
+  };
+};
+
+const handleDatepickerParams = (paramsObject, paramModule, analysisId, reportProperties) => {
+  const {
+    combineParams,
+    valueSeparator,
+    startParamName,
+    endParamName,
+    defaultStartDate,
+    minDate,
+    maxDate,
+    multi,
+  } = paramModule;
+
+  const {
+    viirsStartDate,
+  } = reportProperties;
+
+  let startDate = defaultStartDate || minDate;
+  const endDate = maxDate || moment().format('YYYY-MM-DD');
+
+  if (analysisId === 'VIIRS_FIRES') {
+    startDate = moment(viirsStartDate).format('YYYY-MM-DD');
+  }
+
+  if (combineParams) {
+    if (!valueSeparator) {
+      throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+    }
+    return {
+      ...paramsObject,
+      [startParamName]: `${startDate}${valueSeparator}${endDate}`,
+    };
+  }
+  const isMultiPicker = multi === true || multi === 'true';
+
+  return {
+    ...paramsObject,
+    [startParamName]: `${startDate}`,
+    ...(isMultiPicker ? { [endParamName]: `${endDate}` } : {}),
+  };
+};
+
+const handleTcdParams = (paramsObject) => {
+  return {
+    ...paramsObject,
+    thresh: '30'
+  };
+};
+
+const runAnalysis = function runAnalysis (params, feature) {
+  const { settings } = params;
+  const { analysisModules, language } = settings;
+  const { geostoreId } = feature;
+  const resultsContainer = document.getElementById('results-container');
+
+  // if there is a selectedModule (need to figure out how to pass this, maybe by analysisModuleId),
+  // remove it from the analysisModules array so it doesn't go through the loop below
+  // and call a separate function that makes an esriRequest (like below) but with the updated
+  // params that were passed into the report
+
+  analysisModules.forEach((module) => {
+    let uiParamsToAppend = {};
+
+    if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {
+      module.uiParams.forEach((uiParam) => {
+        switch (uiParam.inputType) {
+          case 'rangeSlider':
+            uiParamsToAppend = handleRangeSliderParams(uiParamsToAppend, uiParam);
+            break;
+          case 'datepicker':
+            uiParamsToAppend = handleDatepickerParams(uiParamsToAppend, uiParam, module.analysisId, params);
+            break;
+          case 'tcd':
+            uiParamsToAppend = handleTcdParams(uiParamsToAppend);
+            break;
+        }
+      });
+    }
+
+    if (Array.isArray(module.params) && module.params.length > 0) {
+      module.params.forEach((param) => {
+        uiParamsToAppend = {
+          ...uiParamsToAppend,
+          [param.name]: param.value,
+        };
+      });
+    }
+
+    uiParamsToAppend.geostore = geostoreId;
+
+    if (module.useGfwWidget) {
+      module.chartType = 'vega';
+
+      analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
+        const div = document.createElement('div');
+        div.classList.add('vega-chart');
+        resultsContainer.appendChild(div);
+
+        const chartComponent = renderResults(results, language, module, params);
+        ReactDOM.render(chartComponent, div);
+      });
+      return;
+    }
+
+    esriRequest({
+      url: module.analysisUrl,
+      callbackParamName: 'callback',
+      content: uiParamsToAppend,
+      handleAs: 'json',
+      timeout: 30000
+    }, { usePost: false }).then(results => {
+      const div = document.createElement('div');
+      div.id = module.analysisId;
+      div.classList.add('results-chart');
+      resultsContainer.appendChild(div);
+
+      const chartComponent = renderResults(results, language, module, params);
+
+      if (!chartComponent) {
+        div.remove();
+      } else {
+        ReactDOM.render(chartComponent, div);
+      }
+    }, (error) => {
+      console.error(error);
+    });
+  });
+};
+
+// const runAnalysis = function runAnalysis (params, feature) {
+//   const lcLayers = resources.layerPanel.GROUP_LC ? resources.layerPanel.GROUP_LC.layers : [];
+//   const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LCD.layers : [];
+//   const layerConf = appUtils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
+//   const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
+//   const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, viirsFrom, viirsTo, modisFrom, modisTo } = params;
+//   const geographic = webmercatorUtils.geographicToWebMercator(feature.geometry);
+//   //- Only Analyze layers in the analysis
+//   if (appUtils.containsObject(lcdLayers, 'id', layerKeys.TREE_COVER_LOSS)) {
+//     //- Loss/Gain Analysis
+//     performAnalysis({
+//       type: analysisKeys.TC_LOSS_GAIN,
+//       geometry: feature.geometry,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang,
+//       geostoreId: feature.geostoreId,
+//       tcLossFrom: tcLossFrom,
+//       tcLossTo: tcLossTo
+//     }).then((results) => {
+//       const {lossCounts = [], gainTotal, lossTotal} = results;
+//       const totalLoss = lossTotal;
+//       const totalGain = gainTotal;
+//       //- Generate chart for Tree Cover Loss
+//       const name = text[lang].ANALYSIS_TC_CHART_NAME;
+//       const colors = analysisConfig[analysisKeys.TC_LOSS].colors;
+//       const tcLossNode = document.getElementById('tc-loss');
+//       const series = [{ name: name, data: lossCounts }];
+
+//       if (results.lossCounts && results.lossCounts.length && results.lossCounts.some(c => c > 0)) {
+//         const chartLabels = lossLabels.slice(tcLossFrom, tcLossTo + 1);
+//         charts.makeSimpleBarChart(tcLossNode, chartLabels, colors, series);
+//       } else {
+//         tcLossNode.remove();
+//       }
+//       //- Generate content for Loss and Gain Badges
+//       //- Loss
+//       document.querySelector('#total-loss-badge .results__loss-gain--label').innerHTML = text[lang].ANALYSIS_TOTAL_LOSS_LABEL;
+//       document.querySelector('#total-loss-badge .results__loss-gain--range').innerHTML = `${lossLabels[tcLossFrom]} &ndash; ${lossLabels[tcLossTo]}`;
+//       document.querySelector('.results__loss--count').innerHTML = totalLoss;
+//       document.getElementById('total-loss-badge').classList.remove('hidden');
+//       //- Gain
+//       document.querySelector('#total-gain-badge .results__loss-gain--label').innerHTML = text[lang].ANALYSIS_TOTAL_GAIN_LABEL;
+//       document.querySelector('#total-gain-badge .results__loss-gain--range').innerHTML = text[lang].ANALYSIS_TOTAL_GAIN_RANGE;
+//       document.querySelector('.results__gain--count').innerHTML = totalGain;
+//       document.getElementById('total-gain-badge').classList.remove('hidden');
+//     });
+//   } else {
+//     const lossChart = document.getElementById('tc-loss');
+//     const lossBadge = document.getElementById('total-loss-badge');
+//     const gainBadge = document.getElementById('total-gain-badge');
+//     lossChart.remove();
+//     lossBadge.remove();
+//     gainBadge.remove();
+//   }
+
+//   if (settings.landCover && layerConf) {
+//     performAnalysis({
+//       type: analysisKeys.LC_LOSS,
+//       geostoreId: feature.geostoreId,
+//       geometry: geographic,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang
+//     }).then((results) => {
+//       const configuredColors = layerConf.colors;
+//       const labels = layerConf.classes[lang];
+//       const node = document.getElementById('lc-loss');
+//       const { counts, encoder, error } = results;
+
+//       if (error) {
+//         node.remove();
+//         return;
+//       }
+
+//       const Xs = encoder.A;
+//       const Ys = encoder.B;
+//       const chartInfo = charts.formatSeriesWithEncoder({
+//         colors: configuredColors,
+//         encoder: encoder,
+//         counts: counts,
+//         labels: labels,
+//         Xs: Xs,
+//         Ys: Ys
+//       });
+
+//       if (chartInfo.series && chartInfo.series.length) {
+//         charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
+//       } else {
+//         node.remove();
+//       }
+//     });
+
+//     //- Land Cover Composition Analysis
+//     performAnalysis({
+//       type: analysisKeys.LCC,
+//       geometry: geographic,
+//       geostoreId: feature.geostoreId,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang
+//     }).then((results) => {
+//       const node = document.getElementById('lc-composition');
+
+//       const { error } = results;
+
+//       if (error) {
+//         node.remove();
+//         return;
+//       }
+
+//       if (results.counts && results.counts.length) {
+//         const series = charts.formatCompositionAnalysis({
+//           colors: layerConf.colors,
+//           name: text[lang].ANALYSIS_LCC_CHART_NAME,
+//           labels: layerConf.classes[lang],
+//           counts: results.counts
+//         });
+
+//         charts.makeCompositionPieChart(node, series);
+//       } else {
+//         node.remove();
+//       }
+//     });
+//   } else {
+//     const lossNode = document.getElementById('lc-loss');
+//     const compositionNode = document.getElementById('lc-composition');
+//     lossNode.remove();
+//     compositionNode.remove();
+//   }
+
+//   if (settings.aboveGroundBiomass) {
+//     //- Carbon Stocks with Loss Analysis
+//     performAnalysis({
+//       type: analysisKeys.BIO_LOSS,
+//       geometry: feature.geometry,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang,
+//       geostoreId: feature.geostoreId
+//     }).then((results) => {
+//       const { labels, colors } = analysisConfig[analysisKeys.BIO_LOSS];
+//       const { data } = results;
+//       const node = document.getElementById('bio-loss');
+//       const {series, grossLoss, grossEmissions} = charts.formatSeriesForBiomassLoss({
+//         data: data.attributes,
+//         lossColor: colors.loss,
+//         carbonColor: colors.carbon,
+//         lossName: text[lang].ANALYSIS_CARBON_LOSS,
+//         carbonName: 'MtCO2'
+//       });
+
+//       if (!series.some(s => s.data.some(d => d > 0))) {
+//         node.remove();
+//         return;
+//       }
+
+//       charts.makeBiomassLossChart(node, {
+//         series,
+//         categories: labels
+//       }, (chart) => {
+//         const content = chart.renderer.html(
+//           `<div class='results__legend-container'>` +
+//             `<span>${text[lang].ANALYSIS_CARBON_LOSS}</span>` +
+//             `<span>${Math.round(grossLoss)} Ha</span>` +
+//           `</div>` +
+//           `<div class='results__legend-container'>` +
+//             `<span>${text[lang].ANALYSIS_CARBON_EMISSION}</span>` +
+//             `<span>${Math.round(grossEmissions)}m MtCO2</span>` +
+//           `</div>`
+//         );
+//         content.element.className = 'result__biomass-totals';
+//         content.add();
+
+//       });
+//     });
+//   } else {
+//     const node = document.getElementById('bio-loss');
+//     node.remove();
+//   }
+
+//   if (settings.intactForests) {
+//     //- Intact Forest with Loss Analysis
+//     performAnalysis({
+//       type: analysisKeys.INTACT_LOSS,
+//       geometry: geographic,
+//       geostoreId: feature.geostoreId,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang
+//     }).then((results) => {
+//       const configuredColors = analysisConfig[analysisKeys.INTACT_LOSS].colors;
+//       const labels = text[lang].ANALYSIS_IFL_LABELS;
+//       const node = document.getElementById('intact-loss');
+//       const { counts, encoder, error } = results;
+
+//       if (error) {
+//         node.remove();
+//         return;
+//       }
+
+//       const Xs = encoder.A;
+//       const Ys = encoder.B;
+//       const chartInfo = charts.formatSeriesWithEncoder({
+//         colors: configuredColors,
+//         encoder: encoder,
+//         counts: counts,
+//         labels: labels,
+//         isSimple: true,
+//         Xs: Xs,
+//         Ys: Ys
+//       });
+
+//       if (chartInfo.series && chartInfo.series.length && chartInfo.series[0].data.length) {
+//         charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
+//       } else {
+//         node.remove();
+//       }
+
+//     });
+//   } else {
+//     const node = document.getElementById('intact-loss');
+//     node.remove();
+//   }
+//   if (settings.viirsFires) {
+//     //- Fires Analysis
+//     performAnalysis({
+//       type: analysisKeys.VIIRS_FIRES,
+//       geometry: feature.geometry,
+//       settings: settings,
+//       geostoreId: feature.geostoreId,
+//       canopyDensity: tcd,
+//       language: lang,
+//       viirsFrom: viirsFrom,
+//       viirsTo: viirsTo
+//     }).then((results) => {
+//       const node = document.getElementById('viirs-badge');
+
+//       const { error } = results;
+//       if (error) {
+//         node.remove();
+//         return;
+//       }
+
+//       document.querySelector('.results__viirs-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
+//       document.querySelector('.results__viirs-count').innerHTML = results.fireCount;
+//       document.querySelector('.results__viirs-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (VIIRS)';
+//       document.querySelector('.results__viirs-post').innerHTML = `${text[lang].TIMELINE_START}${viirsFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${viirsTo.format('MM/DD/YYYY')}`;
+//       node.classList.remove('hidden');
+//     });
+//   } else {
+//     const node = document.getElementById('viirs-badge');
+//     node.remove();
+//   }
+
+//   if (settings.modisFires) {
+//     //- Fires Analysis
+//     performAnalysis({
+//       type: analysisKeys.MODIS_FIRES,
+//       geometry: feature.geometry,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang,
+//       modisFrom: modisFrom,
+//       modisTo: modisTo
+//     }).then((results) => {
+
+//       const node = document.getElementById('modis-badge');
+
+//       const { error } = results;
+//       if (error) {
+//         node.remove();
+//         return;
+//       }
+
+//       document.querySelector('.results__modis-pre').innerHTML = text[lang].ANALYSIS_FIRES_PRE;
+//       document.querySelector('.results__modis-count').innerHTML = results.fireCount;
+//       document.querySelector('.results__modis-active').innerHTML = text[lang].ANALYSIS_FIRES_ACTIVE + ' (MODIS)';
+//       document.querySelector('.results__modis-post').innerHTML = `${text[lang].TIMELINE_START}${modisFrom.format('MM/DD/YYYY')}<br/>${text[lang].TIMELINE_END}${modisTo.format('MM/DD/YYYY')}`;
+//       node.classList.remove('hidden');
+//     });
+//   } else {
+//     const node = document.getElementById('modis-badge');
+//     node.remove();
+//   }
+
+//   //- Mangroves Loss
+//   if (settings.mangroves) {
+//     performAnalysis({
+//       type: analysisKeys.MANGROVE_LOSS,
+//       geometry: geographic,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang
+//     }).then((results) => {
+//       const node = document.getElementById('mangroves');
+//       const colors = analysisConfig[analysisKeys.MANGROVE_LOSS].colors;
+//       const labels = text[lang].ANALYSIS_MANGROVE_LABELS;
+//       const { counts, encoder } = results;
+//       const Xs = encoder.A;
+//       const Ys = encoder.B;
+//       const chartInfo = charts.formatSeriesWithEncoder({
+//         colors: colors,
+//         encoder: encoder,
+//         counts: counts,
+//         labels: labels,
+//         isSimple: true,
+//         Xs: Xs,
+//         Ys: Ys
+//       });
+
+//       if (chartInfo.series && chartInfo.series.length && chartInfo.series[0].data.length) {
+//         charts.makeTotalLossBarChart(node, lossLabels, chartInfo.colors, chartInfo.series);
+//       } else {
+//         node.remove();
+//       }
+//     });
+
+//   } else {
+//     const node = document.getElementById('mangroves');
+//     node.remove();
+//   }
+
+//   //- SAD Alerts
+//   if (settings.sadAlerts) {
+//     performAnalysis({
+//       type: analysisKeys.SAD_ALERTS,
+//       geometry: feature.geometry,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang
+//     }).then((results) => {
+//       const node = document.getElementById('sad-alerts');
+//       const colors = analysisConfig[analysisKeys.SAD_ALERTS].colors;
+//       const names = text[lang].ANALYSIS_SAD_ALERT_NAMES;
+//       const {alerts, error} = results;
+
+//       if (error) {
+//         node.remove();
+//         return;
+//       }
+
+//       const {categories, series} = charts.formatSadAlerts({ alerts, colors, names });
+//       if (categories.length) {
+//         //- Tell the second series to use the second axis
+//         series[0].yAxis = 1;
+//         charts.makeDualAxisTimeSeriesChart(node, { series, categories });
+//       } else {
+//         node.remove();
+//       }
+//     });
+
+//   } else {
+//     const node = document.getElementById('sad-alerts');
+//     node.remove();
+//   }
+
+//   //- GLAD Alerts
+//   if (settings.gladAlerts) {
+//     performAnalysis({
+//       type: analysisKeys.GLAD_ALERTS,
+//       geometry: feature.geometry,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       language: lang,
+//       geostoreId: feature.geostoreId,
+//       gladFrom: moment(new Date(gladFrom)),
+//       gladTo: moment(new Date(gladTo))
+//     }).then((results) => {
+//       const node = document.getElementById('glad-alerts');
+//       const name = text[lang].ANALYSIS_GLAD_ALERT_NAME;
+
+//       const { error } = results;
+//       if (error || results.length === 0) {
+//         node.remove();
+//         return;
+//       }
+
+//       charts.makeTimeSeriesCharts(node, { data: results, name });
+//     });
+//   } else {
+//     const node = document.getElementById('glad-alerts');
+//     node.remove();
+//   }
+
+//   //- Terra-I Alerts
+//   if (settings.terraIAlerts) {
+//     performAnalysis({
+//       type: analysisKeys.TERRA_I_ALERTS,
+//       geometry: geographic,
+//       settings: settings,
+//       canopyDensity: tcd,
+//       geostoreId: feature.geostoreId,
+//       language: lang,
+//       terraIFrom: terraIFrom,
+//       terraITo: terraITo
+//     }).then((results) => {
+//       const node = document.getElementById('terrai-alerts');
+//       const name = text[lang].ANALYSIS_TERRA_I_ALERT_NAME;
+
+//       const { error } = results;
+//       if (error || results.length === 0) {
+//         node.remove();
+//         return;
+//       }
+
+//       charts.makeTimeSeriesCharts(node, { data: results, name });
+//     });
+//   } else {
+//     const node = document.getElementById('terrai-alerts');
+//     node.remove();
+//   }
+
+//   if (settings.restorationModule) {
+//     const infos = settings && settings.labels && settings.labels[lang] && settings.labels[lang].restorationOptions || [];
+//     // Analyze each configured restoration option
+//     const requests = infos.map((info) => {
+//       return performAnalysis({
+//         type: info.id,
+//         geometry: feature.geometry,
+//         settings: settings,
+//         canopyDensity: tcd,
+//         language: lang
+//       });
+//     });
+
+//     all(requests).then((results) => {
+//       results.forEach((result, index) => {
+//         makeRestorationAnalysisCharts(result, settings, lang, infos[index].label);
+//       });
+//       //- Show the results
+//       document.getElementById('restoration').classList.remove('hidden');
+//     });
+
+//     // Also perform the slope analysis
+//     if (settings.restorationSlope) {
+//       performAnalysis({
+//         type: analysisKeys.SLOPE,
+//         geometry: feature.geometry,
+//         settings: settings,
+//         canopyDensity: tcd,
+//         activeSlopeClass: activeSlopeClass,
+//         language: lang
+//       }).then((results) => {
+//         const container = document.getElementById('slope');
+//         const chartNode = document.getElementById('slope-chart');
+//         const tableNode = document.getElementById('slope-table');
+//         const titleNode = document.getElementById('slope-analysis-header');
+//         const descriptionNode = document.getElementById('slope-analysis-description');
+//         const {counts = []} = results;
+//         // const labels = counts.map((v, index) => text[lang].ANALYSIS_SLOPE_OPTION + (index + 1));
+//         const labels = settings.labels[lang].slopeAnalysisPotentialOptions;
+//         const colors = settings.slopeAnalysisPotentialColors;
+//         const tooltips = settings.labels[lang].slopeAnalysisPotentialOptions;
+//         //- Create a  copy of the counts since I need to add data to it for the table below
+//         const series = [{ data: counts.slice() }];
+//         // Render the chart, table, title, description, and unhide the container
+//         container.classList.remove('hidden');
+//         titleNode.innerHTML = text[lang].REPORT_SLOPE_TITLE;
+//         descriptionNode.innerHTML = settings.labels[lang].slopeDescription;
+//         charts.makeSlopeBarChart(chartNode, labels, colors, tooltips, series);
+//         //- Push headers into values and labels for the table and totals.
+//         const total = counts.reduce((a, b) => a + b, 0);
+//         labels.unshift(text[lang].REPORT_SLOPE_TABLE_TYPE);
+//         counts.unshift(text[lang].REPORT_SLOPE_TABLE_VALUE);
+//         labels.push(text[lang].REPORT_TABLE_TOTAL);
+//         counts.push(total);
+//         tableNode.appendChild(generateSlopeTable(labels, counts));
+//       });
+//     } else {
+//       const element = document.getElementById('slope');
+//       if (element) { element.remove(); }
+//     }
+//   } else {
+//     const node = document.getElementById('restoration');
+//     node.remove();
+//   }
+
+// };
 
 export default {
 

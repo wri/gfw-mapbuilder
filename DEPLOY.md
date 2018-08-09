@@ -4,12 +4,12 @@
 ### Deploying a build
 > If you need to configure the build or update the process for how it works, read this section
 
-NOTE: Current deployment goes to the `gh-pages` branch into the phase-2 folder until it becomes tested enough to be in production.
+NOTE: Current deployment goes to the `gh-pages` branch which updates the [production site](https://wri.github.io/gfw-mapbuilder/).
 
 #### Standard deployment
-Just run the following command and copy the contents of the dist directory to your webserver.
+Just run the following command and copy the contents of the `webpackBuild` directory to your webserver.
 ```shell
-npm run dist
+npm run build
 ```
 
 ### Advanced deployment
@@ -19,16 +19,15 @@ There are configurations that allow for greater flexibility and customization. I
 |- index.html
 |- report.html
 |- resources.js
-|- '1.0.0' // Or whatever the version number is
-|  |- 'css'
-|  |  |- app.css
-|  |- 'js'
-|  |  |- main.js
-|  |  |- reportMain.js
-|  |- 'vendor'
-|  |  |- 'vendor libs here...'
+|- 'css'
+|  |- app.css
+|  |- critical.css
+|  |- report.css
+|- 'js'
+|  |- main.js
+|  |- report.js
 ```
-The `index.html` and `report.html` have an option to change where they load the base version folder from. This way you can put the `index.html`, `report.html`, and `resources.js` on a completely different server than the versioned folder of code, and even point several different html and resource files to the same version. This also makes it easier to update the application and not have to worry about breaking changes as much, since in most cases, you can just change the pointer in the html files to a different version. Sometimes the html files themselves will have updates due to how the app pre-renders content and injects css so in those cases, you will need to update the html files as well.
+The `index.html` and `report.html` have an option to change where they load the base version folder from. This way you can put the `index.html`, `report.html`, and `resources.js` on a completely different server than the folders of code, and even point several different html and resource files to the same version. This also makes it easier to update the application and not have to worry about breaking changes as much, since in most cases, you can just change the pointer in the html files to a different version of your hosted application files. Sometimes the html files themselves will have updates due to how the app pre-renders content and injects css so in those cases, you will need to update the html files as well.
 
 This is a little difficult since the html files are minified, but the two steps below will show you how to configure them.
 

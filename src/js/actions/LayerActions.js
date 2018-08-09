@@ -33,11 +33,11 @@ class LayerActions {
   removeAllSubLayers (info) {
     return info;
     }
-
-  setSubLayers (id, ...subIndexes) {
+  
+  setSubLayers (info, ...subIndexes) {
     return {
-      id,
-      subIndexes
+      subIndexes,
+      layer: info
     };
   }
 
@@ -107,6 +107,8 @@ class LayerActions {
   updateCartoSymbol (symbol) {
     return symbol;
   }
+
+  fetchingCartoData = bool => bool;
 
 }
 

@@ -15,38 +15,92 @@ html
         font-weight: normal;
         font-style: normal;
       }
-      
+
       .layer-transparency input[type=range]::-webkit-slider-thumb {
         background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
       }
-      
+
       .layer-transparency input[type=range]::-moz-range-thumb {
         background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
       }
-      
+
       .layer-transparency input[type=range]::-ms-thumb {
         background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
       }
-      
+
       .tree-icon {
         background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
       }
-      
+
       .forest-icon {
         background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
       }
+
+      .chart-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/chart-icon.svg') no-repeat center;
+      }
+
+      .chart-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/chart-icon.svg') no-repeat center;
+      }
+
+      .print-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
+      }
+
+      .subscribe-icon {
+        background: url('https://my.gfw-mapbuilder.org/img/subscribe-icon.svg') no-repeat center;
+      }
   body.tundra
     include jade/svg.pug
+    div#button-holder
+      button(onclick='triggerCustom()') Subscribe over here!
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.1.16.js')
-    //- script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/library-webpack/1.1.14.js')
+    script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/external-subscriptions/1.2.0.js')
     //- script(id='library-load' src='js/library.js')
-    
+
     script.
+      var triggerCustom = function() {
+        // const subscriptions = [];
+        const subscriptions = [{
+            'type': 'subscription',
+            'id': '5af2197db824a311006f38ed',
+            'attributes': {
+                'name': 'test for date',
+                'createdAt': '2018-05-08T21:41:17.808Z',
+                'userId': '588f5dda35c8259767ed15ab',
+                'resource': {
+                    'type': 'EMAIL',
+                    'content': 'lc07@uw.edu'
+                },
+                'datasets': ['umd-loss-gain'],
+                'params': {
+                    'iso': {
+                        'subRegion': null,
+                        'region': null,
+                        'country': null
+                    },
+                    'wdpaid': null,
+                    'use': null,
+                    'useid': null,
+                    'geostore': '8dcf1b5fe27b2b8dfa392b346f778f5f'
+                },
+                'confirmed': false,
+                'language': 'en',
+                'datasetsQuery': []
+            }
+        }];
+
+        const customEvent = new CustomEvent('listenToThisSubscriptionCall', { detail: subscriptions});
+        console.log('customEvent', customEvent);
+        window.dispatchEvent(customEvent);
+      }
+
       var customApp = new MapBuilder({
         el: 'root',
         config: {
+          "subscriptionEventName": "listenToThisSubscriptionCall",
           //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
           //- General Settings
           // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
@@ -67,7 +121,7 @@ html
           "narrative": "Here the french narrative",
           "includeMyGFWLogin": false,
           "navLinksInNewTab": false,
-          "language": "fr",
+          "language": "en",
           "useAlternativeLanguage": true,
           "alternativeWebmap": "b514d31339954ba9a0c5822135bc2001",
           "alternativeLanguage": "en",
@@ -202,7 +256,6 @@ html
                 order: 2,
                 id: 'TREE_COVER_GAIN',
                 type: 'gain', //'image',
-                // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
                 url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
                 technicalName: 'tree_cover_gain',
                 legendLayer: [1],
@@ -501,7 +554,7 @@ html
                 order: 5,
                 id: 'TREE_COVER',
                 type: 'image',
-                url: 'http://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+                url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
                 technicalName: 'tree_cover',
                 colormap: [[1, 0, 179, 0]],
                 inputRange: [30, 101],
@@ -644,5 +697,5 @@ html
             ]
           }
         },
-        version: "1.1.16"
+        version: "1.2.1" // we'll eventually have to affiliate this w/ the "library-load" script's src
       });
