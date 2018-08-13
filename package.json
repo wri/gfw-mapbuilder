@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
     "lint": "eslint src/js/**/*.js",
-    "test": "jest --no-cache --runInBand",
+    "test": "jest --no-cache --runInBand --verbose",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
     "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js --env production"
