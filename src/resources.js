@@ -365,6 +365,60 @@ export default {
          }
        ]
      },
+     {
+       analysisId: 'FORMA_ALERTS',
+       label: {
+           en: 'FORMA Alerts',
+           fr: 'FORMA Alerts',
+           es: 'FORMA Alerts',
+           pt: 'FORMA Alerts',
+           id: 'FORMA Alerts',
+           zh: 'FORMA Alerts',
+           ka: 'FORMA Alerts'
+       },
+       chartType: 'badge',
+       valueAttribute: 'data.attributes.alertCounts',
+       badgeLabel: {
+           en: 'FORMA alerts',
+           fr: 'FORMA alerts',
+           es: 'FORMA alerts',
+           pt: 'FORMA alerts',
+           id: 'FORMA alerts',
+           zh: 'FORMA alerts',
+           ka: 'FORMA alerts'
+       },
+       analysisUrl: 'https://production-api.globalforestwatch.org/forma250GFW',
+       uiParams: [
+         {
+           inputType: 'datepicker',
+           startParamName: 'period',
+           combineParams: true,
+           valueSeparator: ',',
+           multi: true,
+           defaultStartDate: '2016-01-01',
+           minDate: '2015-01-01',
+           label: {
+             en: 'Select range for analysis',
+             fr: 'Select range for analysis',
+             es: 'Select range for analysis',
+             pt: 'Select range for analysis',
+             id: 'Select range for analysis',
+             zh: 'Select range for analysis',
+             ka: 'Select range for analysis'
+           }
+         }
+       ],
+       params: [
+         // {
+         //   name: 'aggregate_values',
+         //   value: 'true'
+         // },
+         // {
+         //   name: 'aggregate_by',
+         //   value: 'day'
+         // }
+       ]
+     },
      // {
      //   analysisId: 'VEGA_GLAD',
      //   label: {
@@ -751,6 +805,24 @@ export default {
         }
       }, {
         order: 5,
+        id: 'FORMA_ALERTS',
+        type: 'forma',
+        url: 'https://storage.googleapis.com/forma-public/Forma250/tiles/forma_20180128/v1/{z}/{x}/{y}.png',
+        technicalName: 'forma_250_active_clearing_alerts',
+        legendLayer: [27],
+        minDateValue: 12000,
+        maxDateValue: 999999,
+        label: {
+          en: 'FORMA 250',
+          fr: 'FORMA 250',
+          es: 'FORMA 250',
+          pt: 'FORMA 250',
+          id: 'FORMA 250',
+          zh: 'FORMA 250',
+          ka: 'FORMA 250'
+        },
+      }, {
+        order: 6,
         id: 'TERRA_I_ALERTS',
         type: 'terra',
         url: 'https://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png',
@@ -781,7 +853,7 @@ export default {
           ka: '(ყოველთვიური, 250მ, ლათინური ამერიკა, CIAT)'
         }
       }, {
-        order: 6,
+        order: 7,
         id: 'VIIRS_ACTIVE_FIRES',
         type: 'dynamic',
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
@@ -830,7 +902,7 @@ export default {
           }
         }
       }, {
-        order: 7,
+        order: 8,
         id: 'MODIS_ACTIVE_FIRES',
         type: 'dynamic',
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',

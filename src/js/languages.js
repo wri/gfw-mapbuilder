@@ -162,6 +162,10 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
+  { label: 'FORMA Alerts',
+    value: analysisKeys.FORMA_ALERTS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'VIIRS fires',
     value: analysisKeys.VIIRS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
@@ -269,6 +273,7 @@ strings.en.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact
 strings.en.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
 strings.en.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
 strings.en.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_FORMA = 'An error occurred while fetching FORMA analysis. Please select another analysis.';
 strings.en.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
 strings.en.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
 

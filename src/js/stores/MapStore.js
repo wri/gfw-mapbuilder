@@ -36,6 +36,8 @@ class MapStore {
     this.resetSlider = false;
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();
+    this.formaStartDate = new Date('2012', 0, 1);
+    this.formaEndDate = new Date();
     this.terraIStartDate = new Date('2004', 0, 1);
     this.terraIEndDate = new Date('2016', 7, 12);
     this.viirsStartDate = moment(new Date()).subtract(1, 'day');
@@ -115,6 +117,8 @@ class MapStore {
       updateLossTimeline: layerActions.updateLossTimeline,
       updateGladStartDate: layerActions.updateGladStartDate,
       updateGladEndDate: layerActions.updateGladEndDate,
+      updateFormaStartDate: layerActions.updateFormaStartDate,
+      updateFormaEndDate: layerActions.updateFormaEndDate,
       updateTerraIStartDate: layerActions.updateTerraIStartDate,
       updateTerraIEndDate: layerActions.updateTerraIEndDate,
       updateViirsStartDate: layerActions.updateViirsStartDate,
@@ -295,6 +299,10 @@ class MapStore {
     this.gladStartDate = new Date('2015', 0, 1);
     this.gladEndDate = new Date();
 
+    //- FORMA
+    this.formaStartDate = new Date('2012', 0, 1);
+    this.formaEndDate = new Date();
+
     //- FIRES
     this.viirsStartDate = new Date();
     this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
@@ -465,6 +473,14 @@ class MapStore {
 
   updateGladEndDate (endDate) {
     this.gladEndDate = endDate;
+  }
+
+  updateFormaStartDate (startDate) {
+    this.formaStartDate = startDate;
+  }
+
+  updateFormaEndDate (endDate) {
+    this.formaEndDate = endDate;
   }
 
   updateTerraIStartDate (startDate) {
