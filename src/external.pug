@@ -97,7 +97,7 @@ html
         window.dispatchEvent(customEvent);
       }
 
-      window.customApp = new MapBuilder({
+      var customApp = new MapBuilder({
         el: 'root',
         config: {
           "subscriptionEventName": "listenToThisSubscriptionCall",
