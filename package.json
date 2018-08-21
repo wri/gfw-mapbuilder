@@ -8,6 +8,7 @@
     "lint": "eslint src/js/**/*.js",
     "test": "jest --no-cache --runInBand --verbose",
     "e2e": "$(npm bin)/cypress open",
+    "e2e:headless": "$(npm bin)/cypress run",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
     "build-lib": "rm -rf libBuild; webpack --config webpack.lib.config.js --env production"
