@@ -57,7 +57,7 @@ html
       button(onclick='triggerCustom()') Subscribe over here!
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/external-subscriptions/1.2.0.js')
+    script(id='library-load' src='https://beta.blueraster.io/mapbuilder/external-debugging/1.2.2.js')
     //- script(id='library-load' src='js/library.js')
 
     script.
@@ -97,7 +97,7 @@ html
         window.dispatchEvent(customEvent);
       }
 
-      var customApp = new MapBuilder({
+      window.customApp = new MapBuilder({
         el: 'root',
         config: {
           "subscriptionEventName": "listenToThisSubscriptionCall",
@@ -697,5 +697,5 @@ html
             ]
           }
         },
-        version: "1.2.1" // we'll eventually have to affiliate this w/ the "library-load" script's src
+        version: "1.2.2" // we'll eventually have to affiliate this w/ the "library-load" script's src
       });
