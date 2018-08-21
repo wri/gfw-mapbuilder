@@ -195,6 +195,12 @@ export default class Analysis extends Component {
             initialEndDate = moment(gladEndDate);
           }
 
+          if (analysisItemConfig.analysisId === 'FORMA_ALERTS') {
+            const { formaStartDate, formaEndDate } = this.props;
+            initialStartDate = moment(formaStartDate);
+            initialEndDate = moment(formaEndDate);
+          }
+
           if (analysisItemConfig.analysisId === 'TERRAI_ALERTS') {
             const { terraIStartDate, terraIEndDate } = this.props;
             initialStartDate = moment(terraIStartDate);
@@ -440,6 +446,12 @@ export default class Analysis extends Component {
           case 'GLAD_ALERTS': {
             if (!results.hasOwnProperty('error')) {
               data = formatters.alerts(results.data.attributes.value);
+            }
+            break;
+          }
+          case 'FORMA_ALERTS': {
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.alertCounts);
             }
             break;
           }

@@ -154,7 +154,7 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
-      case 'TREE_COVER_GAIN':
+      case 'FORMA_ALERTS':
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -167,6 +167,19 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
+        case 'TREE_COVER_GAIN':
+          childComponent = <LayerLegend
+            key={layer.id}
+            label={layer.label ? layer.label[language] : ''}
+            url={urls.esriLegendService}
+            visibleLayers={activeLayers}
+            layerIds={layer.legendLayer}
+            layerId={layer.id}
+            legendOpacity={legendOpacity}
+            initialLayerOpacities={initialLayerOpacities}
+            defaultOpacity={layer.opacity || 1}
+          />;
+          break;
       case 'TREE_COVER_LOSS':
         childComponent = <LayerLegend
           key={layer.id}

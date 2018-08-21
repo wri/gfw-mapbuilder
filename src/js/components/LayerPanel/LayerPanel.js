@@ -4,6 +4,7 @@ import LayerCheckbox from 'components/LayerPanel/LayerCheckbox';
 import FiresControls from 'components/LayerPanel/FiresControls';
 import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
+import FormaControls from 'components/LayerPanel/FormaControls';
 import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
@@ -139,6 +140,8 @@ export default class LayerPanel extends Component {
       iconLoading,
       gladStartDate,
       gladEndDate,
+      formaStartDate,
+      formaEndDate,
       terraIStartDate,
       terraIEndDate,
       viirsStartDate,
@@ -197,6 +200,9 @@ export default class LayerPanel extends Component {
         break;
       case LayerKeys.GLAD_ALERTS:
         childComponent = <GladControls layer={layer} startDate={gladStartDate} endDate={gladEndDate} />;
+      break;
+      case LayerKeys.FORMA_ALERTS:
+        childComponent = <FormaControls layer={layer} startDate={formaStartDate} endDate={formaEndDate} />;
       break;
       case LayerKeys.TERRA_I_ALERTS:
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;

@@ -11,6 +11,7 @@ import Extent from 'esri/geometry/Extent';
 import TerraILayer from 'js/layers/TerraILayer';
 import CartoLayer from 'js/layers/CartoLayer';
 import GladLayer from 'js/layers/GladLayer';
+import FormaLayer from 'js/layers/FormaLayer';
 import TreeCoverLossLayer from 'js/layers/TreeCoverLossLayer';
 import TreeCoverGainLayer from 'js/layers/TreeCoverGainLayer';
 import layerUtils from 'utils/layerUtils';
@@ -161,6 +162,17 @@ export default (layer, lang) => {
       esriLayer.order = layer.order;
       esriLayer.label = layer.label;
     break;
+      case 'forma':
+        options.id = layer.id;
+        options.url = layer.url;
+        options.minDateValue = layer.minDateValue;
+        options.maxDateValue = layer.maxDateValue;
+        options.visible = layer.visible || false;
+        esriLayer = new FormaLayer(options);
+        esriLayer.legendLayer = layer.legendLayer || null;
+        esriLayer.order = layer.order;
+        esriLayer.label = layer.label;
+      break;
     case 'loss':
       options.id = layer.id;
       options.url = layer.url;

@@ -42,7 +42,7 @@ export default class ControlPanel extends Component {
 
   share = () => {
     const {map, language, settings} = this.context;
-    const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate,
+    const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate, formaStartDate, formaEndDate,
       terraIStartDate, terraIEndDate, lossToSelectIndex, lossFromSelectIndex,
       imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear,
       viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
@@ -65,6 +65,8 @@ export default class ControlPanel extends Component {
       activeTab: activeTab,
       gladStartDate: this.formatDate(gladStartDate),
       gladEndDate: this.formatDate(gladEndDate),
+      formaStartDate: this.formatDate(formaStartDate),
+      formaEndDate: this.formatDate(formaEndDate),
       terraIStartDate: this.formatDate(terraIStartDate),
       terraIEndDate: this.formatDate(terraIEndDate),
       lossToSelectIndex: lossToSelectIndex,
