@@ -56,11 +56,41 @@ block append content
     //- div.results-container#lc-composition
 block append esri-script
   script.
+    //- TODO: How do we know if we are here via index.html or external?!
+    console.log("app url for params: (is 'cache' or 'cache=' present?)", location.href);
+    
+    function toObject(querystring) {
+      if (!querystring) { return {}; }
+      const result = {};
+      const pairs = querystring.split('&').map((item) => {
+        return item.split('=').map(str => decodeURIComponent(str));
+      });
+      // Should have an array of arrays now, ex: [['a','b'], ['foo','bar']]
+      pairs.forEach((pair) => {
+        if ((pair[0] === null || typeof pair[0] === 'undefined') || (pair[0] === null || typeof pair[0] === 'undefined')) {
+          console.warn(`You provided an invalid key-value pair, ${pair[0]} is being omitted.`);
+          return;
+        }
+        result[pair[0]] = pair[1];
+      });
+      return result;
+    }
+    
+    let windowPath = location.href;
+    if (windowPath.indexOf('#') > -1) {
+      windowPath = windowPath.slice(0, windowPath.indexOf('#')) + windowPath.slice(windowPath.indexOf('#') + 1, windowPath.length);
+    }
+
+    const bits = windowPath.split('?');
+    const querystring = bits.length > 1 ? bits[1] : '';
+    const reportParams = toObject(querystring);
+
     var _app = {
-        cache: %META_VERSION%,
+        cache: reportParams.cache,
         esri: %ESRI_VERSION%,
         base: ''
     };
+
     function makePath (base, path) {
       var position = base.length - 1;
       return !path ?
@@ -80,20 +110,18 @@ block append esri-script
     base = makePath(base);
     // Add _app.base if it is present
     if (_app.base) { base = makePath(base, _app.base); }
+
     var dojoConfig = {
       parseOnLoad: false,
       async: true,
       packages: [
         { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, '')) },
-        { name: 'js', location: makePath(base, 'js')},
+        { name: 'js', location: makePath(base, _app.cache ? _app.cache + '/js' : 'js')},
         { name: 'vendor', location: makePath(base, 'vendor')},
         { name: 'utils', location: makePath(base, 'js/utils')},
         { name: 'helpers', location: makePath(base, 'js/helpers')},
         { name: 'report', location: makePath(base, 'js/report')},
-        //- { name: 'stores', location: base + 'js/stores' },
-        //- { name: 'actions', location: base + 'js/actions' },
         { name: 'constants', location: makePath(base,'js/constants')}
-        //- { name: 'components', location: base + 'js/components' }
       ],
       aliases: [
         ['resources', 'root/resources'],
@@ -103,16 +131,16 @@ block append esri-script
         ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill']
       ],
       deps: ['dojo/domReady!'],
-      callback: function () {require(['%REPORT_JS%']);}
+      callback: function () {require(['js/report']);}
     };
-    
+
   //- script.
   //-   var _app = {
   //-     cache: '#{version}',
   //-     esri: '#{esriVersion}',
   //-     base: '#{base}'
   //-   };
-  //- 
+  //-
   //-   function makePath (base, path) {
   //-     var position = base.length - 1;
   //-     return !path ?
@@ -132,14 +160,14 @@ block append esri-script
   //-   base = makePath(base);
   //-   // Add _app.base if it is present
   //-   if (_app.base) { base = makePath(base, _app.base); }
-  //-   
+  //-
   //-   function loadjsfile(filename, base) {
   //-     const dojoInit = base + filename;
   //-     const script = document.createElement('script');
   //-     script.src = dojoInit;
   //-     document.getElementsByTagName('head')[0].appendChild(script);
   //-   }
-  //-   
+  //-
   //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
   //- PROD: if new modules are added, regenerate the JSAPI build
   script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
