@@ -56,8 +56,6 @@ block append content
     //- div.results-container#lc-composition
 block append esri-script
   script.
-    //- TODO: How do we know if we are here via index.html or external?!
-    console.log("app url for params: (is 'cache' or 'cache=' present?)", location.href);
     
     function toObject(querystring) {
       if (!querystring) { return {}; }
