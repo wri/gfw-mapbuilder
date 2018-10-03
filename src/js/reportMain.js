@@ -17,10 +17,6 @@ const configureApp = () => {
 };
 
 const lazyloadAssets = () => {
-
-  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/dijit/themes/tundra/tundra.css`);
-  // loadCSS(`${window._app.base ? window._app.base + '/' : ''}vendor/arcgis-api/esri/css/esri.css`);
-
   const base = window._app.base ? window._app.base + '/' : '';
 };
 

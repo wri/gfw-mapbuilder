@@ -117,7 +117,6 @@ block append esri-script
       packages: [
         { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, '')) },
         { name: 'js', location: makePath(base, _app.cache ? _app.cache + '/js' : 'js')},
-        { name: 'vendor', location: makePath(base, 'vendor')},
         { name: 'utils', location: makePath(base, 'js/utils')},
         { name: 'helpers', location: makePath(base, 'js/helpers')},
         { name: 'report', location: makePath(base, 'js/report')},
@@ -125,10 +124,7 @@ block append esri-script
       ],
       aliases: [
         ['resources', 'root/resources'],
-        //- ['alt', 'vendor/alt/dist/alt.min'],
-        //- ['react', 'vendor/react/react.min'],
-        //- ['react-dom', 'vendor/react/react-dom.min'],
-        ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill']
+        ['babel-polyfill', 'babel-polyfill/browser-polyfill']
       ],
       deps: ['dojo/domReady!'],
       callback: function () {require(['js/report']);}
@@ -168,14 +164,12 @@ block append esri-script
   //-     document.getElementsByTagName('head')[0].appendChild(script);
   //-   }
   //-
-  //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
   //- PROD: if new modules are added, regenerate the JSAPI build
   script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
   //- script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.7/vega.min.js")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/4.2.0/vega.min.js", charset='UTF-8')
   //- DEV: Use the normal JSAPI
   //- script(src=`//js.arcgis.com/${%ESRI_VERSION%}/init.js`, async)
-  //- script(src='/vendor/dojo/dojo.js', async)
   script.
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
