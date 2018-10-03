@@ -572,10 +572,10 @@ export default {
     const OBJECTID_Field = selectedFeature._layer.objectIdField;
 
     query.returnGeometry = true;
-    query.outFields = [];
+    query.outFields = [OBJECTID_Field];
     query.maxAllowableOffset = 100;
     query.where = OBJECTID_Field + ' = ' + OBJECTID;
-    console.log(query.where);
+
     queryTask.execute(query).then(response => {
       const feats = response.features;
       promise.resolve(feats.length > 0 ? feats[0].geometry : selectedFeature.geometry);
