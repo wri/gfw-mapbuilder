@@ -875,7 +875,8 @@ const handleTcdParams = (paramsObject) => {
 
 const runAnalysis = function runAnalysis (params, feature) {
   const { settings } = params;
-  const { analysisModules, language } = settings;
+  const { language } = settings;
+  const analysisModules = window.analysisMods ? window.analysisMods : settings.analysisModules;
   const { geostoreId } = feature;
   const resultsContainer = document.getElementById('results-container');
 

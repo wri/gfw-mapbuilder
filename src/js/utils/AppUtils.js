@@ -216,7 +216,8 @@ const utils = {
         appBase += '/';
       }
 
-      window.open(`${appBase}report.html?${path}`);
+      const reportWindow = window.open(`${appBase}report.html?${path}`);
+      reportWindow.analysisMods = settings.analysisModules;
     }
   },
 
