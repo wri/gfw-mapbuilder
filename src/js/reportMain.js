@@ -16,10 +16,5 @@ const configureApp = () => {
   corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
 };
 
-const lazyloadAssets = () => {
-  const base = window._app.base ? window._app.base + '/' : '';
-};
-
 configureApp();
-lazyloadAssets();
 report.run();
