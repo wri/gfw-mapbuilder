@@ -785,24 +785,18 @@ const runAnalysis = function runAnalysis (params, feature) {
   const { language } = settings;
 
   let analysisModules;
-
-  if (window.analysisMods) { //use these and set Them in localSorage!
-    console.log(1);
+  if (window.analysisMods) {
     localStorage.setItem('analysisMods', JSON.stringify(window.analysisMods));
     analysisModules = window.analysisMods;
   } else {
-    console.log(2);
-    //get analysisMods FROM localStorage!
-    // analysisModules = localStorage.getItem('analysisMods');
     const stringMods = localStorage.getItem('analysisMods');
     analysisModules = stringMods ? JSON.parse(stringMods) : '';
   }
 
   if (!analysisModules) {
-    console.log(3);
     analysisModules = settings.analysisModules;
   }
-  // const analysisModules = window.analysisMods ? window.analysisMods : settings.analysisModules;
+
   const { geostoreId } = feature;
   const resultsContainer = document.getElementById('results-container');
 
