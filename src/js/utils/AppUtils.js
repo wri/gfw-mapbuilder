@@ -193,16 +193,31 @@ const utils = {
       query.appid = appid;
     }
 
+    if (window._app.cache) {
+      query.cache = window._app.cache;
+    }
+
     const path = toQuerystring(query);
+
     if (window._app.base === window._app.cache) {
       window.open(`report.html?${path}`);
     } else {
       let appBase = window._app.base;
+
       if (!appBase) {
         appBase = window.location.origin + window.location.pathname;
       }
 
-      window.open(`${appBase}report.html?${path}`);
+      if (appBase.indexOf(window._app.cache) > -1) {
+        appBase = appBase.split(window._app.cache)[0];
+      }
+
+      if (appBase.slice(-1) !== '/') {
+        appBase += '/';
+      }
+
+      const reportWindow = window.open(`${appBase}report.html?${path}`);
+      reportWindow.analysisMods = settings.analysisModules;
     }
   },
 
