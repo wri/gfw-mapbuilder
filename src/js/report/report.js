@@ -844,13 +844,15 @@ const runAnalysis = function runAnalysis (params, feature) {
     if (module.useGfwWidget) {
       module.chartType = 'vega';
 
+      const div = document.createElement('div');
+      div.id = module.analysisId + '_div';
+      div.classList.add('vega-chart');
+      resultsContainer.appendChild(div);
       analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
-        const div = document.createElement('div');
-        div.classList.add('vega-chart');
-        resultsContainer.appendChild(div);
 
         const chartComponent = renderResults(results, language, module, params);
-        ReactDOM.render(chartComponent, div);
+        const moduleDiv = document.getElementById(module.analysisId + '_div');
+        ReactDOM.render(chartComponent, moduleDiv);
       });
       return;
     }
