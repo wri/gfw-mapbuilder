@@ -197,6 +197,8 @@ const utils = {
       query.cache = window._app.cache;
     }
 
+    query.origin = window.location.origin;
+
     const path = toQuerystring(query);
 
     if (window._app.base === window._app.cache) {
@@ -216,8 +218,16 @@ const utils = {
         appBase += '/';
       }
 
-      const reportWindow = window.open(`${appBase}report.html?${path}`);
-      reportWindow.analysisMods = settings.analysisModules;
+      //We are no longer using localStorage as it won't persist across domains!
+
+      window.addEventListener('message', function(e) {
+        // We need the report's origin; AKA appBase minus a couple things
+        if (appBase.indexOf(e.origin) > -1 && e.data === 'send-info') {
+          e.source.postMessage({command: 'info', info: settings.analysisModules}, e.origin);
+        }
+      }, false);
+
+      window.open(`${appBase}report.html?${path}`);
     }
   },
 

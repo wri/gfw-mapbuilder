@@ -229,7 +229,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
       // Check for Errors
-      var layerErrors = addedLayers.filter(layer => layer.error);
+      const layerErrors = addedLayers.filter(layer => layer.error);
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
@@ -240,6 +240,26 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       });
 
     });
+};
+
+const updateAnalysisModules = function functionName(params) {
+  let acquiredModules = false;
+  window.addEventListener('message', function(e) {
+    let info;
+
+    // If the message is from the parent and it says it has the info
+    if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
+      if (!acquiredModules) { //so let's avoid setting it twice
+        info = e.data.info;
+        console.log('Info is ' + JSON.stringify(info));
+        localStorage.setItem('analysisMods', JSON.stringify(info));
+        acquiredModules = true;
+      }
+    }
+  }, false);
+
+  // Ask the page opener (the map) to send us the info
+  opener.postMessage('send-info', params.origin);
 };
 
 const createMap = function createMap (params) {
@@ -785,13 +805,8 @@ const runAnalysis = function runAnalysis (params, feature) {
   const { language } = settings;
 
   let analysisModules;
-  if (window.analysisMods) {
-    localStorage.setItem('analysisMods', JSON.stringify(window.analysisMods));
-    analysisModules = window.analysisMods;
-  } else {
-    const stringMods = localStorage.getItem('analysisMods');
-    analysisModules = stringMods ? JSON.parse(stringMods) : '';
-  }
+  const stringMods = localStorage.getItem('analysisMods');
+  analysisModules = stringMods ? JSON.parse(stringMods) : '';
 
   if (!analysisModules) {
     analysisModules = settings.analysisModules;
@@ -921,6 +936,10 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
+
+    if (opener) { //If this report.html was opened via the map (rather than a url paste)
+      updateAnalysisModules(params);
+    }
 
     //- Create the map as soon as possible
     createMap(params);
