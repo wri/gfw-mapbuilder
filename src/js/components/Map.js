@@ -125,8 +125,12 @@ export default class Map extends Component {
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
-        editToolbar.refresh();
-        scalebar.destroy();
+        if (editToolbar && editToolbar.refresh) {
+          editToolbar.refresh();
+        }
+        if (scalebar && scalebar.destroy) {
+          scalebar.destroy();
+        }
       }
       this.createMap(activeWebmap, options);
     }
