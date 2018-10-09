@@ -734,28 +734,36 @@ export default class Map extends Component {
           break;
         }
         case 'checkbox': {
-          const layersFromWebmap = group.layers.filter(l => !l.url)
-            .map(l => {
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+          const layersFromWebmap = [];
+          group.layers.filter(l => !l.url).forEach(l => {
 
-              layers = [
-                ...layers.slice(0, layers.indexOf(mapLayer)),
-                ...layers.slice(layers.indexOf(mapLayer) + 1)
-              ];
-              return {
-                ...l,
-                ...mapLayer
-              };
-            });
+            if (l.includedSublayers && l.includedSublayers.length > 0) {
+
+              l.includedSublayers.forEach(sublayer => {
+
+                const mapLayer = layers.filter(l2 => l2.id === l.id && l2.subIndex === sublayer)[0];
+
+                layers = [
+                  ...layers.slice(0, layers.indexOf(mapLayer)),
+                  ...layers.slice(layers.indexOf(mapLayer) + 1)
+                ];
+
+                layersFromWebmap.push({
+                  ...l,
+                  ...mapLayer
+                });
+              });
+
+            }
+          });
+
+          const newLayers = [];
 
           layersFromWebmap.forEach(lfw => {
-            const layerConfigToReplace = utils.getObject(group.layers, 'id', lfw.id);
-            group.layers = [
-              ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
-              lfw,
-              ...group.layers.slice(group.layers.indexOf(layerConfigToReplace) + 1)
-            ];
+            newLayers.push(lfw);
           });
+          group.layers = newLayers;
+
           break;
         }
         case 'nested': {
