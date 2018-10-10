@@ -27,7 +27,6 @@ var MapBuilder = function(args){
         );
     }
     constructorParams.cssPath = makePath(newBase, 'css');
-    constructorParams.basePath = newBase;
 
     var base = makePath(newBase);
 
@@ -125,6 +124,11 @@ var MapBuilder = function(args){
     /*eslint-enable */
   };
 
+  window.customApp = {
+    ...args
+  };
+
+  this.constructorArgs = args;
   this.init(args);
 };
 

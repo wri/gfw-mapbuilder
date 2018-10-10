@@ -40,7 +40,6 @@ const libraryMain = {
 
   configureApp: (constructorParams) => {
     corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
-    // esriConfig.defaults.io.corsEnabledServers.push(constructorParams.basePath);
     const handleExternalSubscriptionCall = (request) => {
       mapActions.setUserSubscriptions(request.detail);
       mapActions.toggleSubscriptionsModal({ visible: true });
