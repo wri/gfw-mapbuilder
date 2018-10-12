@@ -3,6 +3,7 @@
 
 describe('My first integration test', function () {
   it('Is kinda boring', function () {
+    cy.log('Login successful 1')
     expect(1).to.equal(1);
   });
 });
@@ -14,32 +15,107 @@ describe('An actual test on our app', function () {
 
     //.request() passes CORS but does not give us the window object
 
-    cy.visit('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html');
-    expect(1).to.equal(1);
+    // cy.on('uncaught:exception', (err, runnable) => {
+    //   cy.log('Login successful')
+    //   cy.log(err)
+    //   expect(err.message).to.equal(1);
+    //   expect(err.message).to.include('something about the error')
+    //
+    //   // using mocha's async done callback to finish
+    //   // this test so we prove that an uncaught exception
+    //   // was thrown
+    //   // done()
+    //
+    //   // return false to prevent the error from
+    //   // failing this test
+    //   // return false
+    // })
+
+    // cy.visit('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html').then((contentWindow) => {
+    //   // contentWindow is the remote page's window object
+    //   expect(1).to.equal(1);
+    // });
+
+    // cy.request('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html').then((contentWindow) => {
+    //   // contentWindow is the remote page's window object
+    //   // expect(1).to.equal(1);
+    //   // const app = contentWindow;
+    //   // Object.keys(app).forEach(windowKey => {
+    //   //   cy.log('windowKey', windowKey);
+    //   // })
+    //   // cy.log('app', app)
+    //
+    //   cy.window().then((win) => {
+    //     Object.keys(win).forEach(key => {
+    //       cy.log('key', key);
+    //     });
+    //     expect(app).to.not.be.an('undefined');
+    //   });
+    //   // expect(app).to.not.be.an('undefined');
+    //   // const app = contentWindow;
+    //   // cy.log('app', app)
+    //   // expect(app).to.not.be.an('undefined');
+    // });
+
+    cy.visit('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html', {
+      onLoad: (winn) => {
+        const app = winn.customApp;
+        expect(app).to.not.be.an('undefined');
+
+        const config = app.constructorArgs;
+        expect(config).to.not.be.an('undefined');
+
+        const el = config.el;
+        expect(el).to.not.be.an('undefined');
+
+        const version = config.version;
+        expect(version).to.not.be.an('undefined');
+        expect(version).to.be.a('string');
+
+        const cssPath = config.cssPath;
+        if (cssPath) {
+          expect(cssPath).to.be.a('string');
+        }
+      }
+    });
+
+    // cy.visit('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html', {
+    //   onLoad: (winn) => {
+    //     console.log('innnn');
+    //     cy.log('win2', winn);
+    //     // expect(1).to.equal(1);
+    //   }
+    // }).then(contentWindow => {
+    //   expect(1).to.equal(1);
+    // });
+    // cy.visit('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html').then(contentWindow => {
+    //   expect(2).to.equal(2);
+    // });
+    // expect(1).to.equal(1);
     // cy.request('https://alpha.blueraster.io/gfw-mapbuilder/eth-report/external.html');
     // expect(1).to.equal(1);
     // cy.window().then((win) => {
     //   // win is the remote window
     //   expect(1).to.equal(1);
-    //   console.log('win', win);
+    //   cy.log('win', win)
     //   const app = win.customApp;
-    //   console.log('app', app);
+    //   cy.log('app', app)
     //   expect(app).to.not.be.an('undefined');
-    //   //
-    //   // const config = app.constructorArgs;
-    //   // expect(config).to.not.be.an('undefined');
-    //   //
-    //   // const el = config.el;
-    //   // expect(el).to.not.be.an('undefined');
-    //   //
-    //   // const version = config.version;
-    //   // expect(version).to.not.be.an('undefined');
-    //   // expect(version).to.be.a('string');
-    //   //
-    //   // const cssPath = config.cssPath;
-    //   // if (cssPath) {
-    //   //   expect(cssPath).to.be.a('string');
-    //   // }
+    //
+    //   const config = app.constructorArgs;
+    //   expect(config).to.not.be.an('undefined');
+    //
+    //   const el = config.el;
+    //   expect(el).to.not.be.an('undefined');
+    //
+    //   const version = config.version;
+    //   expect(version).to.not.be.an('undefined');
+    //   expect(version).to.be.a('string');
+    //
+    //   const cssPath = config.cssPath;
+    //   if (cssPath) {
+    //     expect(cssPath).to.be.a('string');
+    //   }
     //
     // });
   });

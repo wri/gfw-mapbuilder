@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --env development\"",
     "lint": "eslint src/js/**/*.js",
-    "test": "jest --no-cache --runInBand --verbose",
+    "test": "jest --no-cache --runInBand --verbose; $(npm bin)/cypress run --browser chrome",
     "e2e": "$(npm bin)/cypress open",
     "build": "npm run clean:build; webpack --env production",
     "clean:build": "rm -rf webpackBuild",
