@@ -181,6 +181,21 @@ export default {
             "value": "false"
         }]
     }, {
+      // {
+          "analysisId": "VEGA_MADAGASCAR_LOSS",
+          "label": {
+              "en": "Vega Madagascar TCL"
+          },
+          "title": {
+              "en": "Vega Madagascar TCL Analysis"
+          },
+          "description": {
+              "en": "Restoration potential per rainfall class"
+          },
+          "useGfwWidget": true,
+          "widgetId": "b8f72ead-8ba2-4219-9fcd-3d3728d6935f",
+          "uiParams": "none"
+      }, {
         "analysisId": "BIO_LOSS",
         "label": {
             "en": "Aboveground Live Woody Biomass Density",
