@@ -9,6 +9,7 @@ import LayerLegend from 'components/LegendPanel/LayerLegend';
 import {urls} from 'js/config';
 import text from 'js/languages';
 import CartoLegend from './CartoLegend';
+import SVGIcon from 'utils/svgIcon';
 
 const closeSymbolCode = 9660,
     openSymbolCode = 9650;
@@ -386,7 +387,7 @@ export default class LegendPanel extends Component {
 
         <div title='close' className='legend-close close-icon pointer mobile-show' onClick={mapActions.toggleLegendVisible}>
           <svg className='svg-icon'>
-            <use xlinkHref="#shape-close" />
+            <SVGIcon id={'shape-close'} />
           </svg>
         </div>
 

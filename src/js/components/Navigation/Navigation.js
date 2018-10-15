@@ -2,6 +2,8 @@ import LanguageToggle from 'components/Navigation/LanguageToggle';
 import MapThemes from 'components/Navigation/MapThemes';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -193,7 +195,7 @@ export default class Navigation extends Component {
           {!settings.downloadLinkUrl ? null :
             <li className='app-header__nav-link pointer'>
               <a target={target} href={settings.downloadLinkUrl}>
-                <svg className='svg-icon__nav'><use xlinkHref="#icon-download" /></svg>
+                <svg className='svg-icon__nav'><SVGIcon id={'icon-download'} /></svg>
                 {text[language].NAV_DOWNLOAD}
               </a>
             </li>
@@ -202,7 +204,7 @@ export default class Navigation extends Component {
             <li className='app-header__nav-link pointer'>
               <a target={target} href={settings.aboutLinkUrl}>
                 <svg className='svg-icon__nav'>
-                  <use xlinkHref="#icon-h-about" />
+                  <SVGIcon id={'icon-h-about'} />
                 </svg>
                 {text[language].NAV_ABOUT}
               </a>
@@ -212,7 +214,7 @@ export default class Navigation extends Component {
             <li onClick={this.login} className={`app-header__nav-link app-header__nav-link--gfw-login  pointer ${this.state.loginsDisplayed ? 'login-open' : ''}`}>
               <a target={target}>
                 <svg className='svg-icon__nav'>
-                  <use xlinkHref="#icon-h-mygfw" />
+                  <SVGIcon id={'icon-h-mygfw'} />
                 </svg>
                 {text[language].NAV_MY_GFW_LOGIN}
               </a>
@@ -220,7 +222,7 @@ export default class Navigation extends Component {
             <li onClick={this.toggleOptions} className={`app-header__nav-link app-header__nav-link--gfw-logged-in pointer ${this.state.optionsDisplayed ? 'options-open' : ''}`}>
               <a target={target}>
                 <svg className='svg-icon__nav'>
-                  <use xlinkHref="#icon-mygfw" />
+                  <SVGIcon id={'icon-mygfw'} />
                 </svg>
                 {text[language].NAV_MY_GFW}
               </a>
