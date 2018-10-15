@@ -113,7 +113,7 @@ export default class InfoWindow extends Component {
           </ol>
           <div className='analysis-instructions__draw-icon-container'>
             <svg className='analysis-instructions__draw-icon'>
-              <SVGIcon id={'icon-analysis-polys'} />
+              <SVGIcon id={'icon-analysis-poly'} />
             </svg>
           </div>
         </div>

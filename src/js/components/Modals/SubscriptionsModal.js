@@ -44,7 +44,7 @@ export default class SubscriptionsModal extends Component {
       <div key={j} className='source-row subscribe-row'>
         <div className='delete-row'>
           <button title='Delete subscription' onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
-            <SVGIcon id={'con-analysis-remove'} /><span className='delete-row-label'>Delete</span>
+            <SVGIcon id={'icon-analysis-remove'} /><span className='delete-row-label'>Delete</span>
           </button>
         </div>
         <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'>
