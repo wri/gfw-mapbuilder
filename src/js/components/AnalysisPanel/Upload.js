@@ -7,6 +7,7 @@ import Loader from 'components/Loader';
 import text from 'js/languages';
 import geojsonUtil from 'utils/arcgis-to-geojson';
 import symbols from 'utils/symbols';
+import geometryUtils from 'utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
 import {attributes} from 'constants/AppConstants';
 import graphicsUtils from 'esri/graphicsUtils';
@@ -142,7 +143,13 @@ export default class Upload extends Component {
         graphics.forEach((graphic, i) => {
           graphic.geometry = geometries[i];
           layer.add(graphic);
+          if (i === geometries.length - 1) {
+            geometryUtils.generateDrawnPolygon(graphic.geometry).then(registeredGraphic => {
+              this.context.map.infoWindow.setFeatures([registeredGraphic]);
+            });
+          }
         });
+
       };
       const failedToProject = (err) => {
         console.log('Failed to project the geometry: ', err);
