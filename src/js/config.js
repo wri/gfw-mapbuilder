@@ -26,6 +26,9 @@ const config = {
     'production-api.globalforestwatch.org/v1/ogr',
     'production-api.globalforestwatch.org/v1/ogr/convert',
     'api.resourcewatch.org',
+    'https://library.wcs.org/DesktopModules/WCSVega/API/Data/PopulationMeasure',
+    'https://library.wcs.org',
+    'library.wcs.org',
     'gis.wri.org'
   ],
 

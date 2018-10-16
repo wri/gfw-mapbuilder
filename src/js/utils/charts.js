@@ -2,6 +2,7 @@
 import analysisKeys from 'constants/AnalysisConstants';
 import number from 'dojo/number';
 import Highcharts from 'highcharts';
+import esriRequest from 'esri/request';
 import enableExporting from 'highcharts/modules/exporting';
 
 enableExporting(Highcharts);
@@ -371,11 +372,57 @@ export default {
   },
 
   makeVegaChart: (el, config) => {
-    new vega.View(vega.parse(config))
-      .renderer('canvas')
-      .initialize(el)
-      .hover()
-      .run();
+    // config.data[0].format.property =
+    // config.data[0].url = 'https://vega.github.io/vega/examples/bar-chart.vg.json';
+    // config.data[0].format = null;
+    // config.scales[0].domain.field = 'category';
+    // config.scales[1].domain.field = 'amount';
+    // config.marks[0].encode.enter.x.field = 'category';
+    // config.marks[0].encode.enter.y.field = 'amount';
+
+    // new vega.View(vega.parse(config))
+    //   .renderer('canvas')
+    //   .initialize(el)
+    //   .hover()
+    //   .run();
+
+    vega.loader()
+      // .load('https://vega.github.io/vega/examples/bar-chart.vg.json')
+      .load(config.data[0].url)
+      .then(function(data) {
+        console.log('config', config);
+        config.data[0] = {
+          name: 'table',
+          values: data
+        };
+        render(JSON.parse(config));
+      }).catch(err => {
+        console.log('err', err);
+        debugger
+      });
+
+    // esriRequest({
+    //   url: config.data[0].url,
+    //   handleAs: 'json',
+    //   // content: {f: 'json', mode: 'no-cors'},
+    //   content: {f: 'json'},
+    //   callbackParamName: 'callback'
+    // }).then(res => {
+    //   console.log('res', res);
+    // }, err => {
+    //   console.log('err', err);
+    // });
+
+    // function render(spec) {
+    //   console.log('spec', spec);
+    //   console.log('config', config);
+    //   debugger
+    //   view = new vega.View(vega.parse(spec))
+    //     .renderer('canvas')  // set renderer (canvas or svg)
+    //     .initialize(el) // initialize view within parent DOM container
+    //     .hover()             // enable hover encode set processing
+    //     .run();
+    // }
   },
 
 	/**
