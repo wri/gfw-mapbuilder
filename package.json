@@ -50,7 +50,6 @@
       "js/layers/CartoLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/TreeCoverGainLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/TreeCoverLossLayer": "<rootDir>/tests/__mocks__/constructor.js",
-      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/FormaLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
       "esri/config": "<rootDir>/config/__mocks__/config.js",
