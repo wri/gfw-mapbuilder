@@ -45,6 +45,8 @@ import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -125,8 +127,12 @@ export default class Map extends Component {
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
-        editToolbar.refresh();
-        scalebar.destroy();
+        if (editToolbar && editToolbar.refresh) {
+          editToolbar.refresh();
+        }
+        if (scalebar && scalebar.destroy) {
+          scalebar.destroy();
+        }
       }
       this.createMap(activeWebmap, options);
     }
@@ -879,7 +885,8 @@ export default class Map extends Component {
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
-            <use xlinkHref='#shape-crosshairs' />
+            <SVGIcon id={'shape-crosshairs'} />
+
           </svg>
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>

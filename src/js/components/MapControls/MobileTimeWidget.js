@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
 
 const START = 'START',
       END = 'END';
@@ -60,7 +61,7 @@ export default class MobileTimeWidget extends Component {
       <div className={`mobile-time-widget map-component mobile-show ${visible ? '' : 'hidden'}`}>
         <div title='close' className='close-icon pointer' onClick={mapActions.toggleMobileTimeWidgetVisible}>
           <svg className='svg-icon'>
-            <use xlinkHref="#shape-close" />
+            <SVGIcon id={'shape-close'} />
           </svg>
         </div>
         <div className='timeline-container flex'>
