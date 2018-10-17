@@ -58,7 +58,13 @@ export default class DrawTools extends Component {
   draw = () => {
     // if active, toggle it off
     if (this.props.drawButtonActive) {
-      this.deactivate();
+      if (this.toolbar._graphic && this.toolbar._graphic.geometry && this.toolbar._graphic.geometry.rings) { // && this.toolbar._graphic.geometry.rings.length > 1
+        this.toolbar.finishDrawing();
+        mapActions.activateDrawButton(false);
+        mapActions.toggleAnalysisModal({ visible: false });
+      } else {
+        this.deactivate();
+      }
     } else {
       this.activate();
       //- If the analysis modal is visible, hide it
