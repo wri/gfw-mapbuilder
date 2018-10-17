@@ -1,5 +1,6 @@
 import React from 'react';
 import LayerTransparency from './LayerTransparency';
+import SVGIcon from 'utils/svgIcon';
 
  const RadioButton = ({
   selected,
@@ -28,7 +29,7 @@ import LayerTransparency from './LayerTransparency';
         {label}
       </span>
       <span className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`} onClick={handleShowInfo}>
-        <svg><use xlinkHref="#shape-info" /></svg>
+        <SVGIcon id={'shape-info'} />
       </span>
       {sublabel && <div className='layer-checkbox-sublabel'>{sublabel}</div>}
       <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={selected}></LayerTransparency>
