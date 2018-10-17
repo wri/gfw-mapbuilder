@@ -5,7 +5,8 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://beta.blueraster.io/mapbuilder/214-translate-layers/1.2.2.js')
+    script(id='library-load' src='https://beta.blueraster.io/mapbuilder/external-debugging/1.2.2.js')
+    //- script(id='library-load' src='js/library.js')
 
     script.
       var customApp = new MapBuilder({
@@ -880,6 +881,10 @@ html
                   "visible": true
               }]
           }
+<<<<<<< HEAD
+        },
+=======
       },
+>>>>>>> develop
         version: "1.2.2" // we'll eventually have to affiliate this w/ the "library-load" script's src
       });
