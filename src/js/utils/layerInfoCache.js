@@ -281,7 +281,7 @@ export default {
         _cache[layer.id] = results;
         promise.resolve(results);
       });
-    } else if (layer.itemId) {
+    } else if (!layer.itemId) {
       if (layer.type === 'carto') {
         const {subId, id} = layer;
         url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
