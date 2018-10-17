@@ -2,6 +2,8 @@ import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -125,7 +127,7 @@ export default class LayerCheckbox extends Component {
           {label}
         </span>
         <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
-          <svg><use xlinkHref="#shape-info" /></svg>
+          <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}
         {!this.props.children ? null :

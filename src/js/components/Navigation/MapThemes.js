@@ -1,4 +1,6 @@
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -28,7 +30,7 @@ export default class MapThemes extends Component {
     return (
       <li className='app-header__nav-link app-header__nav-link--map-themes pointer'>
         <svg className='svg-icon__nav'>
-          <use xlinkHref="#icon-h-themes" />
+          <SVGIcon id={'icon-h-themes'} />
         </svg>
         {text[language].NAV_MAP_THEMES}
         <ul className='app-header__theme-list shadow'>
