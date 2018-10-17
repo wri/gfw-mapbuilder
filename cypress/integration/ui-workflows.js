@@ -3,9 +3,18 @@
 describe('An actual test on our app', function () {
   it('Ensures our external constructor has the correct properties', function () {
 
+    let windowObj;
+
     cy.visit('http://localhost:8000/libBuild/external.html')
     cy.title().should('include', 'GFW Mapbuilder')
     cy.wait(500)
+
+    cy.window().then(windowObject => {
+
+      windowObj = windowObject;
+      const app = windowObj.customApp;
+      expect(app).to.not.be.an('undefined');
+    });
 
     cy.get('.tab-buttons__tab:first-child').click()
     cy.get('.legend-title').click()
@@ -38,6 +47,7 @@ describe('An actual test on our app', function () {
     cy.get('.tab-view__content').should('have.class', 'selected');
     cy.get('.analysis-results__select').should('exist');
     cy.get('.analysis-results__select').contains('option', 'Select analysis...')
+
 
     // cy.get('form')                  // yields <form>...</form>
     //   .contains('form', 'Proceed')
