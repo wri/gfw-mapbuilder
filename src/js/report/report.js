@@ -27,7 +27,7 @@ import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
 import moment from 'moment';
-
+import on from 'dojo/on';
 import VegaChart from 'components/AnalysisPanel/VegaChart';
 import BarChart from 'components/AnalysisPanel/BarChart';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
@@ -99,6 +99,19 @@ const getFeature = function getFeature (params) {
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
   const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
 
+  // Need to add webmap layers to layer panel section GROUP_WEBMAP.
+  const webMapLayers = [];
+  map.layerIds.forEach((layerId) => {
+    if (params.hasOwnProperty(layerId)) {
+      webMapLayers.push(map.getLayer(layerId));
+    }
+  });
+  webMapLayers.forEach((webMapLayer, i) => {
+    webMapLayer.order = i;
+  })
+  layerPanel.GROUP_WEBMAP.layers = webMapLayers;
+
+  let maxOrder = 0;
   //- Organize and order the layers before adding them to the map
   let layers = Object.keys(layerPanel).filter((groupName) => {
     //- remove basemaps and extra layers, extra layers will be added later and basemaps
@@ -106,18 +119,24 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     return groupName !== layerKeys.GROUP_BASEMAP && groupName !== layerKeys.EXTRA_LAYERS;
   }).sort((a, b) => {
     //- Sort the groups based on their order property
-    return layerPanel[a].order < layerPanel[b].order;
-  }).reduce((list, groupName) => {
+    return layerPanel[b].order - layerPanel[a].order;
+  }).reduce((list, groupName, groupIndex) => {
     //- Flatten them into a single list but before that,
     //- Multiple the order by 100 so I can sort them more easily below, this is because there
     //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
     //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-    return list.concat(layerPanel[groupName].layers.map((layer, index) => {
-      layer.order = (layerPanel[groupName].order * 100) + (layer.order || index);
-      return layer;
-    }));
-  }, []);
+    if (groupIndex === 0) {
+      maxOrder = layerPanel[groupName].order + 1;
+    }
 
+    const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
+      layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+      return layer;
+    });
+
+    return list.concat(orderedGroups);
+
+  }, []);
   //- Add the extra layers now that all the others have been sorted
   layers = layers.concat(layerPanel.extraLayers);
 
@@ -146,7 +165,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         existingIds.push(layer.id);
       }
     });
-
     //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
     //- Make those updates here to the config as this will trickle down
     uniqueLayers.forEach(layer => {
@@ -196,7 +214,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     if (modisFiresLayer) {
       layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
     }
-
     map.addLayers(esriLayers);
 
     reducedLayers.forEach(layer => {
@@ -226,19 +243,19 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
 
     addTitleAndAttributes(params, feature);
     // If there is an error with a particular layer, handle that here
-    map.on('layers-add-result', result => {
+
+    on.once(map, 'layers-add-result', result => {
       const addedLayers = result.layers;
       // Check for Errors
       const layerErrors = addedLayers.filter(layer => layer.error);
       if (layerErrors.length > 0) { console.error(layerErrors); }
-      //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
-      //- layers wont be sorted, they always show on top
-      uniqueLayers.forEach((layer) => {
-        if (map.getLayer(layer.id) && layer.order) {
-          map.reorderLayer(map.getLayer(layer.id), layer.order);
-        }
+      // Change order of layers based on
+      const webMapLayerIds = map.layerIds.filter((layerId) => params.hasOwnProperty(layerId));
+      const esriLayerIds = esriLayers.map(esriLayer => esriLayer.id);
+      const baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && esriLayerIds.indexOf(layerId) === -1);
+      uniqueLayers.forEach((l, i) => {
+        map.reorderLayer(l, i + baseLayerIds.length);
       });
-
     });
 };
 
@@ -251,7 +268,7 @@ const updateAnalysisModules = function functionName(params) {
     if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
       if (!acquiredModules) { //so let's avoid setting it twice
         info = e.data.info;
-        console.log('Info is ' + JSON.stringify(info));
+        // console.log('Info is ' + JSON.stringify(info));
         localStorage.setItem('analysisMods', JSON.stringify(info));
         acquiredModules = true;
       }
@@ -389,11 +406,9 @@ const setupMap = function setupMap (params, feature) {
       layer.show();
     });
   }
-
   map.layerIds.forEach(id => {
 
     if (params.hasOwnProperty(id)) {
-
       const layer = map.getLayer(id);
 
       if (!params[id].length) {
