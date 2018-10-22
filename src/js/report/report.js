@@ -99,16 +99,21 @@ const getFeature = function getFeature (params) {
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
   const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
 
-  // Need to add webmap layers to layer panel section GROUP_WEBMAP.
+  // Update order of layers as required.
+  // Layers ordered first by their layer group.
+  // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
+  // Esri layers have a specified order field within their layer group.
+
+  // First need to add webmap layers to layer panel section GROUP_WEBMAP.
   const webMapLayers = [];
   map.layerIds.forEach((layerId) => {
     if (params.hasOwnProperty(layerId)) {
       webMapLayers.push(map.getLayer(layerId));
     }
   });
-  webMapLayers.forEach((webMapLayer, i) => {
-    webMapLayer.order = i;
-  })
+  // webMapLayers.forEach((webMapLayer, i) => {
+  //   webMapLayer.order = i;
+  // })
   layerPanel.GROUP_WEBMAP.layers = webMapLayers;
 
   let maxOrder = 0;
@@ -124,22 +129,20 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- Flatten them into a single list but before that,
     //- Multiple the order by 100 so I can sort them more easily below, this is because there
     //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
-    //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
+    //- while group 1 layer 1 would have order of 100
     if (groupIndex === 0) {
       maxOrder = layerPanel[groupName].order + 1;
     }
 
     const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-      layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+      layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index + 1);
       return layer;
     });
-
     return list.concat(orderedGroups);
 
   }, []);
   //- Add the extra layers now that all the others have been sorted
   layers = layers.concat(layerPanel.extraLayers);
-
     //- remove custom features from the layersToAdd if we don't need it to avoid AGOL Auth
     layers.forEach((layer, i) => {
       if (layer.id === 'USER_FEATURES') {
@@ -249,7 +252,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       // Check for Errors
       const layerErrors = addedLayers.filter(layer => layer.error);
       if (layerErrors.length > 0) { console.error(layerErrors); }
-      // Change order of layers based on
+      console.log('uniqueLayers', uniqueLayers)
       const webMapLayerIds = map.layerIds.filter((layerId) => params.hasOwnProperty(layerId));
       const esriLayerIds = esriLayers.map(esriLayer => esriLayer.id);
       const baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && esriLayerIds.indexOf(layerId) === -1);
