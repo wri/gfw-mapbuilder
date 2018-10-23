@@ -3,6 +3,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import SVGIcon from 'utils/svgIcon';
 
 export default class Instructions extends Component {
 
@@ -29,7 +30,7 @@ export default class Instructions extends Component {
         </ol>
         <div className='analysis-instructions__draw-icon-container'>
           <svg className='analysis-instructions__draw-icon'>
-            <use xlinkHref="#icon-analysis-poly" />
+            <SVGIcon id={'icon-analysis-poly'} />
           </svg>
         </div>
         <div className='analysis-instructions__separator'>

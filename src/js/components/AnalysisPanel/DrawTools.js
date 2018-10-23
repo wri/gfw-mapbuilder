@@ -3,6 +3,8 @@ import geometryUtils from 'utils/geometryUtils';
 import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -111,7 +113,7 @@ export default class DrawTools extends Component {
         </ol>
         <div className='analysis-instructions__draw-icon-container'>
           <svg className='analysis-instructions__draw-icon'>
-            <use xlinkHref="#icon-analysis-draw" />
+            <SVGIcon id={'icon-analysis-draw'} />
           </svg>
         </div>
         <div

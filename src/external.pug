@@ -1,102 +1,14 @@
 doctype
 html
   head
-    //- link(rel='stylesheet', href='%CRITICAL_CSS%')
-    //- link(rel='stylesheet', href='%APP_CSS%')
-    style(type="text/css").
-      @font-face {
-        font-family: 'Fira Sans';
-        src: url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff2') format('woff2'),
-             url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.ttf') format('ttf'),
-             url('https://my.gfw-mapbuilder.org/fonts/firasans-regular-webfont.woff') format('woff'),
-             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff2') format('woff2'),
-             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.ttf') format('ttf'),
-             url('https://my.gfw-mapbuilder.org/fonts/firasans-bold-webfont.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-      }
 
-      .layer-transparency input[type=range]::-webkit-slider-thumb {
-        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
-      }
-
-      .layer-transparency input[type=range]::-moz-range-thumb {
-        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
-      }
-
-      .layer-transparency input[type=range]::-ms-thumb {
-        background: #fff url('https://my.gfw-mapbuilder.org/img/dot.svg') no-repeat 50% 50%;
-      }
-
-      .tree-icon {
-        background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
-      }
-
-      .forest-icon {
-        background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
-      }
-
-      .chart-icon {
-        background: url('https://my.gfw-mapbuilder.org/img/chart-icon.svg') no-repeat center;
-      }
-
-      .chart-icon {
-        background: url('https://my.gfw-mapbuilder.org/img/chart-icon.svg') no-repeat center;
-      }
-
-      .print-icon {
-        background: url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
-      }
-
-      .subscribe-icon {
-        background: url('https://my.gfw-mapbuilder.org/img/subscribe-icon.svg') no-repeat center;
-      }
   body.tundra
-    include jade/svg.pug
-    div#button-holder
-      button(onclick='triggerCustom()') Subscribe over here!
     #root
     div#share-modal.modal-wrapper.hidden
     script(id='library-load' src='https://beta.blueraster.io/mapbuilder/external-debugging/1.2.2.js')
-    //- script(id='library-load' src='http://localhost:8000/libBuild/1.2.2.js')
-    
+    //- script(id='library-load' src='js/library.js')
+
     script.
-      var triggerCustom = function() {
-        // const subscriptions = [];
-        const subscriptions = [{
-            'type': 'subscription',
-            'id': '5af2197db824a311006f38ed',
-            'attributes': {
-                'name': 'test for date',
-                'createdAt': '2018-05-08T21:41:17.808Z',
-                'userId': '588f5dda35c8259767ed15ab',
-                'resource': {
-                    'type': 'EMAIL',
-                    'content': 'lc07@uw.edu'
-                },
-                'datasets': ['umd-loss-gain'],
-                'params': {
-                    'iso': {
-                        'subRegion': null,
-                        'region': null,
-                        'country': null
-                    },
-                    'wdpaid': null,
-                    'use': null,
-                    'useid': null,
-                    'geostore': '8dcf1b5fe27b2b8dfa392b346f778f5f'
-                },
-                'confirmed': false,
-                'language': 'en',
-                'datasetsQuery': []
-            }
-        }];
-
-        const customEvent = new CustomEvent('listenToThisSubscriptionCall', { detail: subscriptions});
-        console.log('customEvent', customEvent);
-        window.dispatchEvent(customEvent);
-      }
-
       var customApp = new MapBuilder({
         el: 'root',
         config: {

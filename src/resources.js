@@ -779,7 +779,7 @@ export default {
         order: 4,
         id: 'GLAD_ALERTS',
         type: 'glad',
-        url: 'https://wri-tiles.s3.amazonaws.com/glad_prod/tiles/{z}/{x}/{y}.png',
+        url: 'https://tiles.globalforestwatch.org/glad_prod/tiles/{z}/{x}/{y}.png',
         technicalName: 'umd_landsat_alerts',
         legendLayer: [7],
         minDateValue: 15000,
