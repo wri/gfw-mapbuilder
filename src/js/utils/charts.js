@@ -372,7 +372,21 @@ export default {
   },
 
   makeVegaChart: (el, config) => {
-    // config.data[0].format.property =
+		function render(spec) {
+      new vega.View(vega.parse(spec))
+        .renderer('canvas')
+        .initialize(el)
+        .hover()
+        .run();
+		}
+
+		new vega.View(vega.parse(config))
+			.renderer('canvas')
+			.initialize(el)
+			.hover()
+			.run();
+
+		// config.data[0].format.property =
     // config.data[0].url = 'https://vega.github.io/vega/examples/bar-chart.vg.json';
     // config.data[0].format = null;
     // config.scales[0].domain.field = 'category';
@@ -380,50 +394,16 @@ export default {
     // config.marks[0].encode.enter.x.field = 'category';
     // config.marks[0].encode.enter.y.field = 'amount';
 
-    // new vega.View(vega.parse(config))
-    //   .renderer('canvas')
-    //   .initialize(el)
-    //   .hover()
-    //   .run();
-
-    vega.loader()
-      // .load('https://vega.github.io/vega/examples/bar-chart.vg.json')
-      .load(config.data[0].url)
-      .then(function(data) {
-        console.log('config', config);
-        config.data[0] = {
-          name: 'table',
-          values: data
-        };
-        render(JSON.parse(config));
-      }).catch(err => {
-        console.log('err', err);
-        // debugger
-        render(JSON.parse('{"$schema":"https://vega.github.io/schema/vega/v4.json","width":200,"height":100,"padding":5,"title":"Population Trend","data":[{"name":"table","values":[{"surveyYear":2002,"siteAbundance":2731},{"surveyYear":2004,"siteAbundance":2652},{"surveyYear":2006,"siteAbundance":2175},{"surveyYear":2010,"siteAbundance":2324}]}],"signals":[{"name":"maxbins","value":10,"bind":{"input":"select","options":[5,10,20]}},{"name":"tooltip","value":{},"on":[{"events":"rect:mouseover","update":"datum"},{"events":"rect:mouseout","update":"{}"}]}],"scales":[{"name":"xscale","type":"band","domain":{"data":"table","field":"surveyYear"},"range":"width","padding":0.05,"round":true},{"name":"yscale","domain":{"data":"table","field":"siteAbundance"},"nice":true,"range":"height"}],"axes":[{"orient":"bottom","scale":"xscale","title":"Year"},{"orient":"left","scale":"yscale","title":"Number"}],"marks":[{"type":"rect","from":{"data":"table"},"encode":{"enter":{"x":{"scale":"xscale","field":"surveyYear"},"width":{"scale":"xscale","band":1},"y":{"scale":"yscale","field":"siteAbundance"},"y2":{"scale":"yscale","value":0}},"update":{"fill":{"value":"steelblue"}},"hover":{"fill":{"value":"red"}}}},{"type":"text","encode":{"enter":{"align":{"value":"center"},"baseline":{"value":"bottom"},"fill":{"value":"#333"}},"update":{"x":{"scale":"xscale","signal":"tooltip.surveyYear","band":0.5},"y":{"scale":"yscale","signal":"tooltip.siteAbundance","offset":-2},"text":{"signal":"tooltip.siteAbundance"},"fillOpacity":[{"test":"datum === tooltip","value":0},{"value":1}]}}}]}'));
-      });
-
-    // esriRequest({
-    //   url: config.data[0].url,
-    //   handleAs: 'json',
-    //   // content: {f: 'json', mode: 'no-cors'},
-    //   content: {f: 'json'},
-    //   callbackParamName: 'callback'
-    // }).then(res => {
-    //   console.log('res', res);
-    // }, err => {
-    //   console.log('err', err);
-    // });
-
-    function render(spec) {
-      console.log('spec', spec);
-      console.log('config', config);
-      // debugger
-      new vega.View(vega.parse(spec))
-        .renderer('canvas')  // set renderer (canvas or svg)
-        .initialize(el) // initialize view within parent DOM container
-        .hover()             // enable hover encode set processing
-        .run();
-    }
+    esriRequest({
+      url: config.data[0].url,
+      handleAs: 'json',
+      content: {f: 'json'},
+      callbackParamName: 'callback'
+    }).then(res => {
+			render(res);
+    }, err => {
+      console.log('err', err);
+    });
   },
 
 	/**

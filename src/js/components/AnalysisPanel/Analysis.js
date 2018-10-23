@@ -380,9 +380,6 @@ export default class Analysis extends Component {
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
 
-    console.log('');
-    console.log('chartType', chartType);
-
     switch (chartType) {
       case 'bar': {
         const { chartBounds, analysisId, valueAttribute } = config;
