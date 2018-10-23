@@ -184,13 +184,13 @@ export default {
       // {
           "analysisId": "VEGA_MADAGASCAR_LOSS",
           "label": {
-              "en": "Vega Madagascar TCL"
+              "en": "Vega Demo"
           },
           "title": {
-              "en": "Vega Madagascar TCL Analysis"
+              "en": "Vega Demo"
           },
           "description": {
-              "en": "Restoration potential per rainfall class"
+              "en": "Draw a polygon and click 'RUN ANALYSIS' to test"
           },
           "useGfwWidget": true,
           "widgetId": "b8f72ead-8ba2-4219-9fcd-3d3728d6935f",
@@ -504,7 +504,7 @@ export default {
             "en": "Average Annual Rainfall Analysis"
         },
         "description": {
-            "en": "Restoration potential per rainfall class"
+            "en": "Vega Demo"
         },
         "useGfwWidget": true,
         "widgetId": "6ade3c8e-cec1-415e-bf72-3f9cd69e2369",
