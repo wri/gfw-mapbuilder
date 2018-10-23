@@ -290,14 +290,7 @@ export default {
           _cache[subId || id] = JSON.parse(results);
           promise.resolve(reduceCarto(JSON.parse(results)));
         });
-      }
-      const {esriLayer, subIndex, subId} = layer;
-      url = `${esriLayer.url}/${subIndex !== undefined ? subIndex : ''}`;
-      getServiceInfoTask(url).then(results => {
-        _cache[subId] = results;
-        promise.resolve(results);
-      });
-      if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
+      } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
         // run GetCapabilities call if this is a WMS layer
         url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
         getXMLTask(url).then((xmlDoc) => {
@@ -332,6 +325,8 @@ export default {
         });
 
       } else {
+        const {esriLayer, subIndex, subId} = layer;
+
         const { layerIds, layerId } = esriLayer;
 
         url = esriLayer.url;
