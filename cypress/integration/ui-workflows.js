@@ -10,7 +10,6 @@ describe('User workflows that have been known to fail', function () {
     cy.wait(500)
 
     cy.window().then(windowObject => {
-      console.log('in window');
       const app = windowObject.customApp;
       expect(app).to.not.be.an('undefined');
 
@@ -49,7 +48,15 @@ describe('User workflows that have been known to fail', function () {
 
       cy.get('.tab-view__content').should('have.class', 'selected');
       cy.get('.analysis-results__select').should('exist');
-      cy.get('.analysis-results__select').contains('option', 'Select analysis...')
+      cy.get('.analysis-results__select').contains('option', 'Select analysis...');
+
+      console.log('config', config);
+
+      if (config.analysisModules) {
+        config.analysisModules.forEach((module) => {
+          cy.get('.analysis-results__select').contains('option', module.label[config.language]);
+        });
+      }
 
     });
 
