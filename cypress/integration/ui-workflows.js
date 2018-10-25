@@ -7,7 +7,7 @@ describe('User workflows that have been known to fail', function () {
 
     cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/external.html')
     cy.title().should('include', 'GFW Mapbuilder')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.window().then(windowObject => {
       const app = windowObject.customApp;
