@@ -203,10 +203,7 @@ const utils = {
     const path = toQuerystring(query);
 
     if (window._app.base === window._app.cache) {
-      const packageJSON = require('./package.json');
-      const version = packageJSON.version;
-
-      window.open(`${version}/report.html?${path}`);
+      window.open(`report.html?${path}`);
     } else {
       let appBase = window._app.base;
 
@@ -214,16 +211,10 @@ const utils = {
         appBase = window.location.origin + window.location.pathname;
       }
 
-      if (appBase.indexOf(window._app.cache) > -1) {
-        appBase = appBase.split(window._app.cache)[0];
-      }
-
       if (appBase.slice(-1) !== '/') {
         appBase += '/';
       }
-
       //We are no longer using localStorage as it won't persist across domains!
-
       window.addEventListener('message', function(e) {
         // We need the report's origin; AKA appBase minus a couple things
         if (appBase.indexOf(e.origin) > -1 && e.data === 'send-info') {

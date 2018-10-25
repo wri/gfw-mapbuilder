@@ -157,9 +157,9 @@ module.exports = (PATHS) => {
           META_VERSION: JSON.stringify(version),
           APP_CSS: `${version}/css/app.css`,
           CRITICAL_CSS: `${version}/css/critical.css`,
-          REPORT_CSS: `${version}/css/report.css`,
+          REPORT_CSS: `./css/report.css`,
           APP_JS: 'js/main',
-          REPORT_JS: `${version}/js/report`,
+          REPORT_JS: `./js/report`,
           DEFAULT_TITLE: 'GFW Mapbuilder',
           ESRI_VERSION: '3.20'
         }),

@@ -22,7 +22,7 @@ block append content
 
 block append esri-script
   script.
-    
+
     function toObject(querystring) {
       if (!querystring) { return {}; }
       const result = {};
@@ -39,7 +39,7 @@ block append esri-script
       });
       return result;
     }
-    
+
     let windowPath = location.href;
     if (windowPath.indexOf('#') > -1) {
       windowPath = windowPath.slice(0, windowPath.indexOf('#')) + windowPath.slice(windowPath.indexOf('#') + 1, windowPath.length);
@@ -80,7 +80,7 @@ block append esri-script
       async: true,
       packages: [
         { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, '')) },
-        { name: 'js', location: makePath(base, _app.cache ? _app.cache + '/js' : 'js')},
+        { name: 'js', location: makePath(base, 'js')},
         { name: 'utils', location: makePath(base, 'js/utils')},
         { name: 'helpers', location: makePath(base, 'js/helpers')},
         { name: 'report', location: makePath(base, 'js/report')},
