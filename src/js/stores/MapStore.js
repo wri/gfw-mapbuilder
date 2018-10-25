@@ -513,15 +513,22 @@ class MapStore {
     const info = layerInfoCache.get(id);
 
     if (info) {
-      this.modalLayerInfo = info;
-      this.layerModalVisible = true;
-      this.iconLoading = '';
-      this.emitChange();
+      const promise = new Promise((resolve) => {
+        resolve();
+      });
+
+      promise.then(() => {
+        this.iconLoading = '';
+        this.modalLayerInfo = info;
+        this.layerModalVisible = true;
+        this.emitChange();
+      });
+
     } else {
       layerInfoCache.fetch(layer).then(layerInfo => {
+        this.iconLoading = '';
         this.modalLayerInfo = layerInfo;
         this.layerModalVisible = true;
-        this.iconLoading = '';
         this.emitChange();
       });
     }
