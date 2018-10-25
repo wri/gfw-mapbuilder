@@ -170,13 +170,13 @@ module.exports = (PATHS) => {
         }),
         new HtmlWebpackPlugin({
           template: path.resolve(__dirname, 'src/report.pug'),
-          filename: 'report.html',
+          filename: `${version}/report.html`,
           inject: false
         }),
         new CopyWebpackPlugin([
           {
             from: path.resolve(__dirname, 'src/resources.js'),
-            to: path.resolve(__dirname, 'libBuild')
+            to: path.resolve(__dirname, `libBuild/${version}/resources.js`)
           },
           {
             from: path.resolve(__dirname, 'src/js/library.js'),

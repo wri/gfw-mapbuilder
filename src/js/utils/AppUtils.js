@@ -2,6 +2,7 @@ import geojsonUtil from 'utils/arcgis-to-geojson';
 import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import {toQuerystring} from 'utils/params';
 
+
 const utils = {
   /**
   * Retrieve the object from a given array based on id and value
@@ -202,7 +203,10 @@ const utils = {
     const path = toQuerystring(query);
 
     if (window._app.base === window._app.cache) {
-      window.open(`report.html?${path}`);
+      const packageJSON = require('./package.json');
+      const version = packageJSON.version;
+
+      window.open(`${version}/report.html?${path}`);
     } else {
       let appBase = window._app.base;
 
