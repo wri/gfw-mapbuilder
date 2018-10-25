@@ -264,6 +264,43 @@ function xmlToJson(xml) {
 	return obj;
 }
 
+/**
+* Fetch the metadata from ArcGIS MapService, & if we can't get it from there & we have an itemId: AGOL
+* @param {obj} layer - JS obj that has an esriLayer property to get URL's from
+* @param {Promise} promise - the promise we pass down - to be resolved one way or another: w/ metadata or to show our error message
+*/
+function getServiceMetadata (layer, promise) {
+  const {esriLayer, subIndex, subId} = layer;
+
+  const { layerIds, layerId } = esriLayer;
+
+  let url = esriLayer.url ? esriLayer.url : '';
+  if (subIndex === undefined) {
+    if (layerIds && layerIds.length) { // if there is a layerIds property, this is a configured layer
+      url += `/${layerId}`;
+    }
+  } else {
+    url += `/${subIndex}`;
+  }
+
+  getServiceInfoTask(url).then(results => {
+
+    if (!results.description && layer.itemId) {
+      url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
+      getXMLTask(url).then(xmlDocument => {
+        promise.resolve(reduceXML(xmlDocument));
+      }, () => {
+        promise.resolve();
+      });
+    } else {
+      _cache[subId] = results;
+      promise.resolve(results);
+    }
+  }, () => {
+    promise.resolve();
+  });
+}
+
 export default {
 
   get (layerId) {
@@ -281,7 +318,7 @@ export default {
         _cache[layer.id] = results;
         promise.resolve(results);
       });
-    } else if (!layer.itemId) {
+    } else if (layer.itemId) {
       if (layer.type === 'carto') {
         const {subId, id} = layer;
         url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
@@ -325,23 +362,7 @@ export default {
         });
 
       } else {
-        const {esriLayer, subIndex, subId} = layer;
-
-        const { layerIds, layerId } = esriLayer;
-
-        url = esriLayer.url;
-        if (subIndex === undefined) {
-          if (layerIds && layerIds.length) { // if there is a layerIds property, this is a configured layer
-            url += `/${layerId}`;
-          }
-        } else {
-          url += `/${subIndex}`;
-        }
-
-        getServiceInfoTask(url).then(results => {
-          _cache[subId] = results;
-          promise.resolve(results);
-        });
+        getServiceMetadata(layer, promise);
       }
 
     } else if (layer.esriLayer) {
@@ -352,13 +373,13 @@ export default {
       getXMLTask(url).then(xmlDocument => {
         promise.resolve(reduceXML(xmlDocument));
       }, () => {
-        const {subId} = layer;
         url = urls.agolItemEndpoint(layer.itemId);
         getServiceInfoTask(url).then(results => {
+          const {subId} = layer;
           _cache[subId] = results;
           promise.resolve(results);
         }, () => {
-          promise.resolve();
+          getServiceMetadata(layer, promise);
         });
       });
     } else if (layer.metadataUrl) {
@@ -366,7 +387,7 @@ export default {
         _cache[layer.id] = results;
         promise.resolve(results);
       });
-      } else {
+    } else {
       promise.resolve();
     }
     return promise;
