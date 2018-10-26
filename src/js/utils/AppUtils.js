@@ -2,6 +2,7 @@ import geojsonUtil from 'utils/arcgis-to-geojson';
 import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import {toQuerystring} from 'utils/params';
 
+
 const utils = {
   /**
   * Retrieve the object from a given array based on id and value
@@ -210,16 +211,10 @@ const utils = {
         appBase = window.location.origin + window.location.pathname;
       }
 
-      if (appBase.indexOf(window._app.cache) > -1) {
-        appBase = appBase.split(window._app.cache)[0];
-      }
-
       if (appBase.slice(-1) !== '/') {
         appBase += '/';
       }
-
       //We are no longer using localStorage as it won't persist across domains!
-
       window.addEventListener('message', function(e) {
         // We need the report's origin; AKA appBase minus a couple things
         if (appBase.indexOf(e.origin) > -1 && e.data === 'send-info') {
