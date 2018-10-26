@@ -551,10 +551,10 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
-        chartComponent = <VegaChart results={results} />;
+        chartComponent = <VegaChart results={results} selectedFeature={this.props.selectedFeature} />;
         break;
       case 'vega':
-        chartComponent = <VegaChart results={results} />;
+        chartComponent = <VegaChart results={results} selectedFeature={this.props.selectedFeature} />;
         break;
       default:
         break;

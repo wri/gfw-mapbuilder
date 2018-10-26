@@ -12,7 +12,7 @@ export default class VegaChart extends Component {
       this.setState({ isError: true });
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      charts.makeVegaChart(this.chart, config);
+      charts.makeVegaChart(this.chart, config, this.props.selectedFeature.attributes);
     }
   }
 

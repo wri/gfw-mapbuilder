@@ -182,18 +182,18 @@ export default {
         }]
     }, {
       // {
-          "analysisId": "VEGA_MADAGASCAR_LOSS",
+          "analysisId": "WCS_VEGA_EXAMPLE",
           "label": {
-              "en": "Vega Demo"
+              "en": "WCS Vega Example"
           },
           "title": {
-              "en": "Vega Demo"
+              "en": "WCS Vega Example"
           },
           "description": {
-              "en": "Draw a polygon and click 'RUN ANALYSIS' to test"
+              "en": "A demonstration widget for registration knowledge transfer"
           },
           "useGfwWidget": true,
-          "widgetId": "b8f72ead-8ba2-4219-9fcd-3d3728d6935f",
+          "widgetId": "10003468-dde8-4a70-b0ee-6e4c4e83d3f8",
           "uiParams": "none"
       }, {
         "analysisId": "BIO_LOSS",
@@ -504,10 +504,10 @@ export default {
             "en": "Average Annual Rainfall Analysis"
         },
         "description": {
-            "en": "Vega Demo"
+            "en": "WCS Vega Example"
         },
         "useGfwWidget": true,
-        "widgetId": "6ade3c8e-cec1-415e-bf72-3f9cd69e2369",
+        "widgetId": "10003468-dde8-4a70-b0ee-6e4c4e83d3f8",
         "uiParams": "none"
     }, {
         "analysisId": "VEGA_RESTORATION_SLOPE",

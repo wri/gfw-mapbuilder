@@ -371,7 +371,9 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config) => {
+  makeVegaChart: (el, config, selectedAttributes) => {
+		const queryParams = config.featureDataFieldsToPass.map(fieldName => `${fieldName}=${selectedAttributes[fieldName]}`).join('&');
+
 		function render(spec) {
       new vega.View(vega.parse(spec))
         .renderer('canvas')
@@ -380,22 +382,8 @@ export default {
         .run();
 		}
 
-		new vega.View(vega.parse(config))
-			.renderer('canvas')
-			.initialize(el)
-			.hover()
-			.run();
-
-		// config.data[0].format.property =
-    // config.data[0].url = 'https://vega.github.io/vega/examples/bar-chart.vg.json';
-    // config.data[0].format = null;
-    // config.scales[0].domain.field = 'category';
-    // config.scales[1].domain.field = 'amount';
-    // config.marks[0].encode.enter.x.field = 'category';
-    // config.marks[0].encode.enter.y.field = 'amount';
-
     esriRequest({
-      url: config.data[0].url,
+      url: `${config.data[0].url}?${queryParams}`,
       handleAs: 'json',
       content: {f: 'json'},
       callbackParamName: 'callback'
