@@ -372,6 +372,7 @@ export default {
   },
 
   makeVegaChart: (el, config, selectedAttributes) => {
+		const baseUrl = config.data[0].url.split('?')[0];
 		const queryParams = config.featureDataFieldsToPass.map(fieldName => `${fieldName}=${selectedAttributes[fieldName]}`).join('&');
 
 		function render(spec) {
@@ -383,9 +384,8 @@ export default {
 		}
 
     esriRequest({
-      url: `${config.data[0].url}?${queryParams}`,
+      url: `${baseUrl}?${queryParams}`,
       handleAs: 'json',
-      content: {f: 'json'},
       callbackParamName: 'callback'
     }).then(res => {
 			render(res);
