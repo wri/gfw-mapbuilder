@@ -4,7 +4,7 @@ import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
-import SVGIcon from 'utils/svgIcon';
+
 
 //- Parse Keys for easier access
 const {
@@ -121,7 +121,7 @@ export default class TabButtons extends Component {
           {!narrative ? null :
             <li className={this.getClassName(NARRATIVE)} data-value={NARRATIVE} onClick={this.changeTab}>
               <svg className='svg-icon tab-icon-narrative'>
-                <SVGIcon id={'shape-info'} />
+                <use xlinkHref={'#shape-info'} />
 
               </svg>
               <span className='tab-tooltip'>{text[language].NARRATIVE}</span>
@@ -132,7 +132,7 @@ export default class TabButtons extends Component {
           }
           <li className={this.getClassName(LAYERS)} data-value={LAYERS} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <SVGIcon id={'icon-basemap'} />
+              <use xlinkHref={'#icon-basemap'} />
 
             </svg>
             <span className='tab-tooltip'>{text[language].LAYERS}</span>
@@ -142,7 +142,7 @@ export default class TabButtons extends Component {
           </li>
           <li className={this.getClassName(INFO_WINDOW)} data-value={INFO_WINDOW} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <SVGIcon id={'icon-data'} />
+              <use xlinkHref={'#icon-data'} />
 
             </svg>
             <span className='tab-tooltip'>{text[language].DATA}</span>
@@ -153,7 +153,7 @@ export default class TabButtons extends Component {
           {!settings.includeMeasurementTab ? null :
             <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
               <svg className='svg-icon'>
-                <SVGIcon id={'icon-measure'} />
+                <use xlinkHref={'#icon-measure'} />
 
               </svg>
               <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
@@ -164,7 +164,7 @@ export default class TabButtons extends Component {
           }
           {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <SVGIcon id={'icon-analysis'} />
+              <use xlinkHref={'#icon-analysis'} />
 
             </svg>
             <span className='tab-tooltip'>{text[language].ANALYZE}</span>
@@ -174,7 +174,7 @@ export default class TabButtons extends Component {
           </li> ||
           <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)} analysis-disabled`} data-value={ANALYSIS}>
             <svg className='svg-icon'>
-              <SVGIcon id={'icon-analysis'} />
+              <use xlinkHref={'#icon-analysis'} />
             </svg>
             <span className='tab-tooltip'>Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily</span>
             <span className='tab-buttons__tab-label mobile-show'>
@@ -184,7 +184,7 @@ export default class TabButtons extends Component {
           {!settings.includeDocumentsTab ? null :
             <li className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`} data-value={DOCUMENTS} onClick={this.changeTab}>
               <svg className='svg-icon'>
-                <SVGIcon id={'icon-documents'} />
+                <use xlinkHref={'#icon-documents'} />
 
               </svg>
               <span className='tab-tooltip'>{text[language].DOCUMENTS}</span>
@@ -195,7 +195,7 @@ export default class TabButtons extends Component {
           }
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <SVGIcon id={'icon-menu'} />
+              <use xlinkHref={'#icon-menu'} />
 
             </svg>
             <span className='tab-buttons__tab-label mobile-show'>

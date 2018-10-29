@@ -2,7 +2,7 @@ import modalActions from 'actions/ModalActions';
 import modalStore from 'stores/ModalStore';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import SVGIcon from 'utils/svgIcon';
+
 
 export default class ModalWrapper extends React.Component {
 
@@ -34,7 +34,7 @@ export default class ModalWrapper extends React.Component {
         <div className='modal-background' onClick={::this.close} />
         <article className='modal shadow'>
           <div title='close' className='close-icon pointer' onClick={::this.close} >
-            <SVGIcon id={'shape-close'} />
+            <svg><use xlinkHref={'#shape-close'} /></svg>
           </div>
             <div className={contentClass}>
               {children}

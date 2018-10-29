@@ -1,6 +1,6 @@
 import appActions from 'actions/AppActions';
 import text from 'js/languages';
-import SVGIcon from 'utils/svgIcon';
+
 
 import React, {
   Component,
@@ -49,7 +49,7 @@ export default class LanguageToggle extends Component {
     return (
       <li className='app-header__nav-link app-header__nav-link--language pointer'>
         <svg className='svg-icon__nav'>
-          <SVGIcon id={'icon-h-language'} />
+          <use xlinkHref={'#icon-h-language'} />
         </svg>
         {text[language].NAV_LANGUAGE}
         <ul className='app-header__language-list shadow pointer'>

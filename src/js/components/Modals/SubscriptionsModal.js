@@ -9,7 +9,7 @@ import symbols from 'utils/symbols';
 import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
-import SVGIcon from 'utils/svgIcon';
+
 
 const datasets = ['viirs-active-fires', 'umd-loss-gain', 'glad-alerts', 'imazon-alerts', 'forma-alerts', 'terrai-alerts', 'prodes-loss'];
 
@@ -44,19 +44,19 @@ export default class SubscriptionsModal extends Component {
       <div key={j} className='source-row subscribe-row'>
         <div className='delete-row'>
           <button title='Delete subscription' onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
-            <SVGIcon id={'icon-analysis-remove'} /><span className='delete-row-label'>Delete</span>
+            <svg className='svg-icon'><use xlinkHref={'#icon-analysis-remove'} /></svg><span className='delete-row-label'>Delete</span>
           </button>
         </div>
         <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'>
           <button title='Show on map' className='btn-delete-subscription'>
-            <SVGIcon id={'shape-world'} />
+            <svg className='svg-icon'><use xlinkHref={'#shape-world'} /></svg>
           </button>
         </div>
         <div className='svg-icon subscription-svg' className='subscription-unconfirmed'>
           <div className='svg-icon subscription-svg' className='svg-icon subscription-svg' className={`subscription-unconfirmed-wrap ${subscription.attributes.confirmed ? 'hidden' : ''}`}>
             <a href={subscribeUrl} className='subscription-uncle'>
               <svg className='svg-icon subscription-svg'>
-                <SVGIcon id={'shape-warning'} />
+                <svg><use xlinkHref={'#shape-warning'} /></svg>
               </svg>
               <span className='subscribe-tooltipmap'>Subscription has not been confirmed, click here to resend the confirmation email</span>
             </a>

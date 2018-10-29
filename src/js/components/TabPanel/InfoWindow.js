@@ -2,7 +2,7 @@ import CustomFeatureControl from 'components/AnalysisPanel/CustomFeatureControl'
 import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import {attributes} from 'constants/AppConstants';
 import text from 'js/languages';
-import SVGIcon from 'utils/svgIcon';
+
 
 import React, {
   Component,
@@ -93,7 +93,7 @@ export default class InfoWindow extends Component {
           <div className='feature-controls'>
             <span>{count} features selected.</span>
             <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
-              <SVGIcon id={'shape-close'} />
+              <use xlinkHref={'#shape-close'} />
 
             </svg>
             <span className={`arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`} onClick={this.next}>Next</span>
@@ -113,7 +113,7 @@ export default class InfoWindow extends Component {
           </ol>
           <div className='analysis-instructions__draw-icon-container'>
             <svg className='analysis-instructions__draw-icon'>
-              <SVGIcon id={'icon-analysis-poly'} />
+              <use xlinkHref={'#icon-analysis-poly'} />
             </svg>
           </div>
         </div>

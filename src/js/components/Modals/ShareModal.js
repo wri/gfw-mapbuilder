@@ -3,7 +3,7 @@ import modalStore from 'stores/ModalStore';
 import {modalText} from 'js/config';
 import utils from 'utils/AppUtils';
 import React from 'react';
-import SVGIcon from 'utils/svgIcon';
+
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
@@ -71,13 +71,13 @@ export default class ShareModal extends React.Component {
         </div>
         <div className='share-items'>
           <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={this.shareGoogle.bind(this)}>
-            <SVGIcon id={'icon-googleplus'} />
+            <svg><use xlinkHref={'#icon-googleplus'} /></svg>
           </div>
           <div title='Twitter' className='share-card twitter-modal pointer' onClick={this.shareTwitter.bind(this)}>
-            <SVGIcon id={'icon-twitter'} />
+            <svg><use xlinkHref={'#icon-twitter'} /></svg>
           </div>
           <div title='Facebook' className='share-card facebook-modal pointer' onClick={this.shareFacebook.bind(this)}>
-            <SVGIcon id={'icon-facebook'} />
+            <svg><use xlinkHref={'#icon-facebook'} /></svg>
           </div>
         </div>
       </ModalWrapper>

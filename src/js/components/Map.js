@@ -45,7 +45,7 @@ import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
-import SVGIcon from 'utils/svgIcon';
+
 
 import React, {
   Component,
@@ -885,7 +885,7 @@ export default class Map extends Component {
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
-            <SVGIcon id={'shape-crosshairs'} />
+            <use xlinkHref={'#shape-crosshairs'} />
 
           </svg>
         </div>

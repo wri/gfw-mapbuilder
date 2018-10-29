@@ -6,7 +6,7 @@ import {toQuerystring} from 'utils/params';
 import basemapUtils from 'utils/basemapUtils';
 import text from 'js/languages';
 import moment from 'moment';
-import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -116,37 +116,37 @@ export default class ControlPanel extends Component {
       <div className='control-panel map-component shadow'>
         <ul className='control-panel__list'>
           <li className='control-panel__zoom-out pointer' title={text[language].TOOL_ZOOM_OUT} onClick={this.zoomOut}>
-            <SVGIcon id={'icon-minus'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-minus'} /></svg>
           </li>
           <li className='control-panel__zoom-in pointer' title={text[language].TOOL_ZOOM_IN} onClick={this.zoomIn}>
-            <SVGIcon id={'icon-plus'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-plus'} /></svg>
           </li>
           <li className='control-panel__share-map pointer' title={text[language].TOOL_SHARE} onClick={this.share}>
-            <SVGIcon id={'icon-share'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-share'} /></svg>
           </li>
           <li className='control-panel__print pointer mobile-hide' title={text[language].TOOL_PRINT} onClick={this.showPrintTools}>
-            <SVGIcon id={'icon-print'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-print'} /></svg>
           </li>
           <li className='control-panel__draw-upload pointer' title={text[language].TOOL_ANALYSIS} onClick={this.showAnalysisTools}>
-            <SVGIcon id={'icon-draw-upload'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-draw-upload'} /></svg>
           </li>
           <li className='control-panel__locate-me pointer' title={text[language].SEARCH} onClick={this.search}>
-            <SVGIcon id={'icon-control-search'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-control-search'} /></svg>
           </li>
           <li className='control-panel__toggle-panels pointer mobile-hide' title={text[language].TOOL_TOGGLE} onClick={this.togglePanels}>
             {tableOfContentsVisible ?
-              <SVGIcon id={'icon-controls-toggle__on'} /> :
-              <SVGIcon id={'icon-controls-toggle__off'} />
+              <svg className='svg-icon'><use xlinkHref={'#icon-controls-toggle__on'} /></svg> :
+              <svg className='svg-icon'><use xlinkHref={'#icon-controls-toggle__off'} /></svg>
             }
           </li>
           <li className='control-panel__reset pointer mobile-hide' title={text[language].TOOL_RESET} onClick={this.resetPage}>
-            <SVGIcon id={'icon-reset'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-reset'} /></svg>
           </li>
           <li className='control-panel__legend pointer mobile-show' title={text[language].LEGEND} onClick={this.showLegend}>
-            <SVGIcon id={'icon-legend'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-legend'} /></svg>
           </li>
           <li className={`control-panel__legend pointer mobile-show ${timeEnabled ? '' : 'hidden'}`} title={text[language].TIMELINE} onClick={this.showTimeline}>
-            <SVGIcon id={'icon-timeline'} />
+            <svg className='svg-icon'><use xlinkHref={'#icon-timeline'} /></svg>
           </li>
         </ul>
       </div>

@@ -1,6 +1,6 @@
 import Loader from 'components/Loader';
 // import request from 'utils/request';
-import SVGIcon from 'utils/svgIcon';
+
 
 import text from 'js/languages';
 import React, {
@@ -117,7 +117,7 @@ class DocumentResults extends Component {
                 <td className='documents-table__link'>
                   <a href={doc.url} target='_blank'>
                     <svg className='svg-icon'>
-                      <SVGIcon id={'icon-documents'} />
+                      <use xlinkHref={'#icon-documents'} />
                     </svg>
                   </a>
                 </td>

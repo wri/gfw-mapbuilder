@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import SVGIcon from 'utils/svgIcon';
+
 
 /**
 * Should be wrapped in a component with relative or absolute position
@@ -12,7 +12,7 @@ export default function ControlledModalWrapper (props) {
       <article className='modal shadow'>
         <div title='close' className='close-icon pointer' onClick={props.onClose} >
           <svg>
-            <SVGIcon id={'shape-close'} />
+            <use xlinkHref={'#shape-close'} />
           </svg>
         </div>
           <div className={contentClass}>
