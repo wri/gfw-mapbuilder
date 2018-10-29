@@ -181,7 +181,6 @@ export default {
             "value": "false"
         }]
     }, {
-      // {
           "analysisId": "WCS_VEGA_EXAMPLE",
           "label": {
               "en": "WCS Vega Example"
@@ -193,7 +192,7 @@ export default {
               "en": "A demonstration widget for registration knowledge transfer"
           },
           "useGfwWidget": true,
-          "widgetId": "10003468-dde8-4a70-b0ee-6e4c4e83d3f8",
+          "widgetId": "7ec22b27-9439-4e7d-a27d-c57fe2c30d63",
           "uiParams": "none"
       }, {
         "analysisId": "BIO_LOSS",
