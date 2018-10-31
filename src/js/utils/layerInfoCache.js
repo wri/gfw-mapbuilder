@@ -310,6 +310,7 @@ export default {
   fetch (layer, cartoId) {
     const promise = new Deferred();
     let url;
+
     // If a technicalName is configured, fetch from the metadata API
     // else, attempt to fetch it from the mapservice
     if (layer.technicalName) {
@@ -362,7 +363,19 @@ export default {
         });
 
       } else {
-        getServiceMetadata(layer, promise);
+        url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
+        getXMLTask(url).then(xmlDocument => {
+          promise.resolve(reduceXML(xmlDocument));
+        }, () => {
+          url = urls.agolItemEndpoint(layer.itemId);
+          getServiceInfoTask(url).then(results => {
+            const {subId} = layer;
+            _cache[subId] = results;
+            promise.resolve(results);
+          }, () => {
+            getServiceMetadata(layer, promise);
+          });
+        });
       }
 
     } else if (layer.esriLayer) {
