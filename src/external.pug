@@ -53,49 +53,13 @@ html
       }
   body.tundra
     include jade/svg.pug
-    div#button-holder
-      button(onclick='triggerCustom()') Subscribe over here!
+
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://beta.blueraster.io/mapbuilder/external-library-source/1.2.3.js')
+    script(id='library-load' src='http://library.gfw-mapbuilder.org/1.2.3.js')
     //- script(id='library-load' src='js/library.js')
     meta(charset='utf-8')
     script.
-      var triggerCustom = function() {
-        // const subscriptions = [];
-        const subscriptions = [{
-            'type': 'subscription',
-            'id': '5af2197db824a311006f38ed',
-            'attributes': {
-                'name': 'test for date',
-                'createdAt': '2018-05-08T21:41:17.808Z',
-                'userId': '588f5dda35c8259767ed15ab',
-                'resource': {
-                    'type': 'EMAIL',
-                    'content': 'lc07@uw.edu'
-                },
-                'datasets': ['umd-loss-gain'],
-                'params': {
-                    'iso': {
-                        'subRegion': null,
-                        'region': null,
-                        'country': null
-                    },
-                    'wdpaid': null,
-                    'use': null,
-                    'useid': null,
-                    'geostore': '8dcf1b5fe27b2b8dfa392b346f778f5f'
-                },
-                'confirmed': false,
-                'language': 'en',
-                'datasetsQuery': []
-            }
-        }];
-
-        const customEvent = new CustomEvent('listenToThisSubscriptionCall', { detail: subscriptions});
-        console.log('customEvent', customEvent);
-        window.dispatchEvent(customEvent);
-      }
 
       var customApp = new MapBuilder({
         el: 'root',
