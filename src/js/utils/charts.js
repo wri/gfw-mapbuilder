@@ -383,8 +383,6 @@ export default {
         .run();
 		}
 
-		console.log(config, config.featureDataFieldsToPass)
-
     esriRequest({
       url: `${baseUrl}?${queryParams}`,
       handleAs: 'json',
