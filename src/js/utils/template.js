@@ -220,8 +220,6 @@ const formatResources = () => {
     });
   });
 
-  console.log(remoteDataLayers)
-
   const layerApi = 'https://api.resourcewatch.org/v1/layer/';
   const remoteDataLayerRequests = remoteDataLayers
     .map(item => fetch(layerApi + item.layer.uuid)
@@ -233,19 +231,19 @@ const formatResources = () => {
         const itemGroup = item.group;
         item.layer = layer.attributes.layerConfig.body.options;
         item.layer = {
-          "id": "Test Image",
-          "type": "dynamic",
-          "url": "https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer",
-          "technicalName": "intact_forest_landscapes_change",
-          "layerIds": [0],
-          "label": {
-            "en": "Intact Forest Landscape",
-            "fr": "Paysage forestier intact",
-            "es": "Paisajes Forestales Intactos",
-            "pt": "Paisagens Florestais Intactas",
-            "id": "Intact Forest Landscape",
-            "zh": "原生森林景观",
-            "ka": "ხელუხლებელი ტყის ლანდშაფტი"
+          id: 'Test Image',
+          type: 'dynamic',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+          technicalName: 'intact_forest_landscapes_change',
+          layerIds: [0],
+          label: {
+            en: 'Intact Forest Landscape',
+            fr: 'Paysage forestier intact',
+            es: 'Paisajes Forestales Intactos',
+            pt: 'Paisagens Florestais Intactas',
+            id: 'Intact Forest Landscape',
+            zh: '原生森林景观',
+            ka: 'ხელუხლებელი ტყის ლანდშაფტი'
           }
         };
         item.group = itemGroup;

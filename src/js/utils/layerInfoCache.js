@@ -310,6 +310,11 @@ export default {
   fetch (layer, cartoId) {
     const promise = new Deferred();
     let url;
+    // If layer metadata has already been aquired in the case of API-configured layers
+    if (layer.metadata) {
+      _cache[layer.id] = layer.metadata;
+      promise.resolve(layer.metadata);
+    }
     // If a technicalName is configured, fetch from the metadata API
     // else, attempt to fetch it from the mapservice
     if (layer.technicalName) {
