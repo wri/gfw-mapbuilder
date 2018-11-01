@@ -182,10 +182,19 @@ const formatResources = () => {
   // });
 
   //- Remove Layers from resources.layers if configured
-  Object.keys(resources.layerPanel).forEach((group) => {
+  const remoteDataLayers = [];
+  Object.keys(resources.layerPanel).forEach(group => {
+    if (!remoteDataLayers[group]) { remoteDataLayers[group] = []; }
     const groupSettings = resources.layerPanel[group];
     if (!groupSettings.layers) { return; }
-    resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter((layer) => {
+    resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter(layer => {
+      if (layer.type === 'remoteDataLayer') {
+        remoteDataLayers.push({
+          group,
+          layer
+        });
+        return false;
+      }
       switch (layer.id) {
         case layerKeys.VIIRS_ACTIVE_FIRES:
           return resources.viirsFires;
@@ -211,6 +220,47 @@ const formatResources = () => {
     });
   });
 
+  console.log(remoteDataLayers)
+
+  const layerApi = 'https://api.resourcewatch.org/v1/layer/';
+  const remoteDataLayerRequests = remoteDataLayers
+    .map(item => fetch(layerApi + item.layer.uuid)
+      .then(response => response.json())
+      .then(json => json.data)
+      .then(layer => fetch(layer.attributes.layerConfig.body.metadata)
+      .then(response => response.json())
+      .then(metadata => {
+        const itemGroup = item.group;
+        item.layer = layer.attributes.layerConfig.body.options;
+        item.layer = {
+          "id": "Test Image",
+          "type": "dynamic",
+          "url": "https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer",
+          "technicalName": "intact_forest_landscapes_change",
+          "layerIds": [0],
+          "label": {
+            "en": "Intact Forest Landscape",
+            "fr": "Paysage forestier intact",
+            "es": "Paisajes Forestales Intactos",
+            "pt": "Paisagens Florestais Intactas",
+            "id": "Intact Forest Landscape",
+            "zh": "原生森林景观",
+            "ka": "ხელუხლებელი ტყის ლანდშაფტი"
+          }
+        };
+        item.group = itemGroup;
+        item.layer.metadata = metadata;
+        return item;
+      })
+    )
+  );
+
+  Promise.all(remoteDataLayerRequests)
+  .then(remoteLayers => {
+    remoteLayers.forEach(item => {
+      resources.layerPanel[item.group].layers.push(item.layer);
+    });
+
   //- Update path if it is relative to point to local
   const base = window._app.base ? window._app.base + '/' : '';
   if (resources.logoUrl && resources.logoUrl.indexOf('.') === 0) {
@@ -231,6 +281,8 @@ const formatResources = () => {
       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
     }
   });
+
+});
 
 };
 
