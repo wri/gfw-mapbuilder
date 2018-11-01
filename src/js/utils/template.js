@@ -1,9 +1,11 @@
-import layerKeys from 'constants/LayerConstants';
-import arcgisUtils from 'esri/arcgis/utils';
-import {getUrlParams} from 'utils/params';
 import Deferred from 'dojo/Deferred';
 import lang from 'dojo/_base/lang';
+
+import { urls} from 'js/config';
 import resources from 'resources';
+import { getUrlParams } from 'utils/params';
+import arcgisUtils from 'esri/arcgis/utils';
+import layerKeys from 'constants/LayerConstants';
 
 const SEPARATOR = ';';
 
@@ -220,30 +222,31 @@ const formatResources = () => {
     });
   });
 
-  const layerApi = 'https://api.resourcewatch.org/v1/layer/';
   const remoteDataLayerRequests = remoteDataLayers
-    .map(item => fetch(layerApi + item.layer.uuid)
+    .map(item => fetch(`${urls.resourceWatchLayerApi}/${item.layer.uuid}`)
       .then(response => response.json())
       .then(json => json.data)
       .then(layer => fetch(layer.attributes.layerConfig.body.metadata)
       .then(response => response.json())
       .then(metadata => {
         const itemGroup = item.group;
-        item.layer = layer.attributes.layerConfig.body.options;
-        item.layer = {
-          id: 'Test Image',
+        // ↓↓ this is where the actual layer configuration options will live when API-configured layers become available
+        item.layer = layer.attributes.layerConfig.body.options ||
+        // ↓↓ this layer configuration shim will be deleted when API-configured layers become available
+        {
+          id: 'Test Configuration',
           type: 'dynamic',
           url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
           technicalName: 'intact_forest_landscapes_change',
           layerIds: [0],
           label: {
-            en: 'Intact Forest Landscape',
-            fr: 'Paysage forestier intact',
-            es: 'Paisajes Forestales Intactos',
-            pt: 'Paisagens Florestais Intactas',
-            id: 'Intact Forest Landscape',
-            zh: '原生森林景观',
-            ka: 'ხელუხლებელი ტყის ლანდშაფტი'
+            en: 'Test Configuration',
+            fr: 'Test Configuration',
+            es: 'Test Configuration',
+            pt: 'Test Configuration',
+            id: 'Test Configuration',
+            zh: 'Test Configuration',
+            ka: 'Test Configuration'
           }
         };
         item.group = itemGroup;

@@ -10,7 +10,6 @@ export default class Modal extends Component {
   };
 
   renderMetadata(info) {
-    console.log('modal', info)
     const {language} = this.context;
     if(info.copyrightText && !info.license) {
       info.license = info.copyrightText;
