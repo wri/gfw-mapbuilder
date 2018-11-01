@@ -183,7 +183,7 @@ const formatResources = () => {
   //   });
   // });
 
-  //- Remove Layers from resources.layers if configured
+  //- Remove Layers from resources.layers if configured, while separating remote data layers
   const remoteDataLayers = [];
   Object.keys(resources.layerPanel).forEach(group => {
     if (!remoteDataLayers[group]) { remoteDataLayers[group] = []; }
@@ -249,6 +249,7 @@ const formatResources = () => {
             ka: 'Test Configuration'
           }
         };
+        // end shim
         item.group = itemGroup;
         item.layer.metadata = metadata;
         return item;

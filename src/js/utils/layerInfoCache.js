@@ -310,7 +310,7 @@ export default {
   fetch (layer, cartoId) {
     const promise = new Deferred();
     let url;
-    // If layer metadata has already been aquired in the case of API-configured layers
+    // If layer metadata has already been acquired, in the case of API-configured layers
     if (layer.metadata) {
       _cache[layer.id] = layer.metadata;
       promise.resolve(layer.metadata);
