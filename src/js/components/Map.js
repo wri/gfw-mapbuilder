@@ -46,6 +46,7 @@ import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
 import SVGIcon from 'utils/svgIcon';
+import RecentImagery from 'components/MapControls/RecentImagery';
 
 import React, {
   Component,
@@ -871,6 +872,8 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
+          <RecentImagery {...this.state} />
+
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
           {legendReady ? <Legend
