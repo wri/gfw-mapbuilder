@@ -7,6 +7,8 @@ import resources from 'resources';
 import Point from 'esri/geometry/Point';
 import AppUtils from '../utils/AppUtils';
 
+let layersCreated = false;
+
 class MapActions {
   //- Action to notify the store the map has changed so we can rerender UI changes
   //- if necessary
@@ -92,20 +94,26 @@ class MapActions {
       //- Sort the groups based on their order property
       return layerPanel[b].order - layerPanel[a].order;
     }).reduce((list, groupName, groupIndex) => {
-      //- Flatten them into a single list but before that,
-      //- Multiple the order by 100 so I can sort them more easily below, this is because there
-      //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
-      //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-      if (groupIndex === 0) {
-        maxOrder = layerPanel[groupName].order + 1;
+      if (layersCreated === false) { //or possibly (map.id === 'esri.Map_0') If this is our first time initializing the app, create the proper order
+
+        //- Flatten them into a single list but before that,
+        //- Multiple the order by 100 so I can sort them more easily below, this is because there
+        //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
+        //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
+        if (groupIndex === 0) {
+          maxOrder = layerPanel[groupName].order + 1;
+        }
+
+        const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+          return layer;
+        });
+
+        return list.concat(orderedGroups);
+      } else { //otherwise, inherit the layer-order we worked so hard to create the first time
+        return layerPanel[groupName].layers;
       }
 
-      const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-        layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
-        return layer;
-      });
-
-      return list.concat(orderedGroups);
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
@@ -204,6 +212,8 @@ class MapActions {
           return l;
         });
       });
+
+    layersCreated = true;
 
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {
