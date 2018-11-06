@@ -46,7 +46,8 @@ import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
 import SVGIcon from 'utils/svgIcon';
-import RecentImagery from 'components/MapControls/RecentImagery';
+import SatelliteImagery from 'components/MapControls/SatelliteImagery';
+import ImageryModal from 'components/Modals/ImageryModal';
 
 import React, {
   Component,
@@ -838,7 +839,8 @@ export default class Map extends Component {
       modalLayerInfo,
       webmapInfo,
       map,
-      activeLayers
+      activeLayers,
+      imageryModalVisible
     } = this.state;
 
     const { settings } = this.context;
@@ -872,7 +874,7 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
-          <RecentImagery {...this.state} />
+          <SatelliteImagery {...this.state} />
 
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
@@ -915,6 +917,9 @@ export default class Map extends Component {
         </div>
         <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
+        </div>
+        <div className={`subscription-modal-container modal-wrapper ${imageryModalVisible ? '' : 'hidden'}`}>
+          <ImageryModal />
         </div>
       </div>
     );

@@ -230,6 +230,14 @@ class MapActions {
     return bool;
   }
 
+  toggleImageryVisible(bool) {
+    return bool;
+  }
+
+  getSatelliteImagery(params) {
+    return params;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

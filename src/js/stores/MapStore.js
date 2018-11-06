@@ -77,6 +77,8 @@ class MapStore {
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
+    this.imageryModalVisible = false;
+    this.imageryParams = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -137,6 +139,8 @@ class MapStore {
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
+      toggleImageryVisible: mapActions.toggleImageryVisible,
+      getSatelliteImagery: mapActions.getSatelliteImagery
     });
   }
 
@@ -607,6 +611,19 @@ class MapStore {
 
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
+  }
+
+  toggleImageryVisible(bool) {
+    this.imageryModalVisible = bool;
+  }
+
+  getSatelliteImagery(params) {
+
+    request.getRecentTiles(params).then(response => {
+      console.log('response', response);
+      // this.imageryParams = params;
+    });
+
   }
 }
 

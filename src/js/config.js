@@ -27,7 +27,8 @@ const config = {
     'production-api.globalforestwatch.org/v1/ogr/convert',
     'api.resourcewatch.org',
     'gis.wri.org',
-    'tiles.globalforestwatch.org'
+    'tiles.globalforestwatch.org',
+    'staging-api.globalforestwatch.org'
   ],
 
   urls: {
@@ -37,7 +38,8 @@ const config = {
     cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
     cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
-    esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
+    esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+    satelliteImageService: 'https://staging-api.globalforestwatch.org/recent-tiles'
   },
 
   upload: {

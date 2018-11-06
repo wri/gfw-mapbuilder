@@ -7,6 +7,8 @@ import esriRequest from 'esri/request';
 import Query from 'esri/tasks/query';
 import Deferred from 'dojo/Deferred';
 import geometryUtils from 'utils/geometryUtils';
+import { urls } from 'js/config';
+import moment from 'moment';
 
 const needsDynamicQuery = function needsDynamicQuery (url) {
   return /\/dynamicLayer$/.test(url);
@@ -204,6 +206,30 @@ const request = {
     query.outFields = outFields;
     query.outStatistics = [stat];
     return task.execute(query);
+  },
+
+  getRecentTiles: (params) => {
+    const deferred = new Deferred();
+
+    if (!params.start || !params.end) {
+      // If no date, use the default.
+      params.start = moment().subtract(3, 'months').format('YYYY-MM-DD');
+      params.end = moment().format('YYYY-MM-DD');
+    }
+
+    esriRequest({
+      url: urls.satelliteImageService,
+      handleAs: 'json',
+      callbackParamName: 'callback',
+      content: params
+    }).then(response => {
+        console.log(response)
+        // deferred.resolve();
+    }, err => {
+      console.error(err);
+      // deferred.resolve();
+    });
+    return deferred;
   }
 
 
