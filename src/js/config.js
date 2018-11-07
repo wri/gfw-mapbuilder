@@ -122,7 +122,24 @@ const config = {
       googleUrl: url => `https://plus.google.com/share?url=${url}`,
       twitterUrl: url => `https://twitter.com/share?url=${url}&via=gfw-water`,
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
-    }
+    },
+    imagery: {
+      monthsBefore: '3 Months',
+      imageStyle: 'Natural Color',
+      cloudCoverage: 25,
+
+      monthsOptions: [
+        '4 weeks',
+        '3 months',
+        '6 months',
+        '12 months'
+      ],
+
+      imageStyleOptions: [
+        'Natural Color',
+        'Vegetation Health'
+      ]
+    },
   },
 
   //- Analysis for individual layers are defined below so we can use common keys

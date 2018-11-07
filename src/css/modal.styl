@@ -492,3 +492,39 @@
 
 .delete-header
   text-align center
+
+// Imagery Modal specific styling
+.imagery-modal__wrapper
+  width 500px
+  height 275px
+  padding 20px 0 10px 0
+  -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
+  box-shadow 0 1px 3px rgba(85,85,85,0.25)
+  .flex
+    display flex
+    align-items center
+
+.imagery-modal__title
+  font-size 12px
+  font-weight bold
+  line-height 21px
+  color #555
+  text-transform uppercase
+  margin 0 20px
+
+.imagery-modal__section
+  padding 20px
+  font-size 11px
+  color #999
+  justify-content space-between
+
+  &.filters
+    border-bottom $lightGrayBorder 0.5px solid
+
+  &.scroll
+    max-height 200px
+    overflow-y scroll
+
+.imagery-modal_section-title
+  text-transform uppercase
+  font-weight bold
