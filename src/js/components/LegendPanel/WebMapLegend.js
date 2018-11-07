@@ -52,6 +52,8 @@ export default class WebMapLegend extends React.Component {
     const { visible, legendInfos } = this.state;
     const label = this.props.labels;
 
+    console.log(legendInfos);
+
     return (
       <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref="myRef">
         <div className='label-container'><strong>{label}</strong></div>

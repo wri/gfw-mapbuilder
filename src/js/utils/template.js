@@ -229,9 +229,10 @@ const formatResources = () => {
       .then(layer => fetch(layer.attributes.layerConfig.body.metadata)
       .then(response => response.json())
       .then(metadata => {
+        const attributes = layer.attributes;
         const itemGroup = item.group;
         // ↓↓ this is where the actual layer configuration options will live when API-configured layers become available
-        item.layer = layer.attributes.layerConfig.body.options ||
+        item.layer = attributes.layerConfig.body.options ||
         // ↓↓ this layer configuration shim will be deleted when API-configured layers become available
         {
           id: 'Test Configuration',
@@ -251,7 +252,10 @@ const formatResources = () => {
         };
         // end shim
         item.group = itemGroup;
-        item.layer.metadata = metadata;
+        item.layer.metadata = {
+          metadata,
+          legendConfig: attributes.legendConfig
+        };
         return item;
       })
     )

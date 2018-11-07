@@ -49,7 +49,7 @@ export default class LegendPanel extends Component {
 
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
-
+    console.log(layer)
     switch(layer.id) {
       case 'IFL':
         childComponent = <LayerLegend

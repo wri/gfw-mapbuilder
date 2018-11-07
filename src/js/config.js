@@ -38,11 +38,11 @@ const config = {
     cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
     esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-    resourceWatchLayerApi: 'https://api.resourcewatch.org/v1/layer'
+    resourceWatchLayerApi: 'http://api.resourcewatch.org/v1/layer'
   },
 
   upload: {
-    portal: 'https://www.arcgis.com/sharing/rest/content/features/generate',
+    portal: 'https://api.resourcewatch.org/v1/layer',
     shapefileParams: (name, spatialReference, extentWidth, mapWidth) => {
       return {
         'name': name,
