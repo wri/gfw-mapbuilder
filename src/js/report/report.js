@@ -78,6 +78,7 @@ const getFeature = function getFeature (params) {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false}).then(geostoreResult => {
+
       const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
       promise.resolve({
         attributes: geostoreResult.data.attributes,

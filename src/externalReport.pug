@@ -1,0 +1,28 @@
+doctype
+html
+  head
+
+  body.tundra
+    block append content
+      div.report.inner
+        header.report-header.flex
+          div.report-header__logo-container
+            a#logo-anchor(target='_blank')
+              img#logo.report-header__logo
+          div.report-header__title-container
+            h1#report-title.report-header__title
+            h2#report-subtitle.report-header__subtitle
+
+        div#map.map
+        div#popup-content.popup-content
+        div#results-container.results-container
+    script(id='report-load' src='../reportLib.1.4.0.js')
+    meta(charset='utf-8')
+    script.
+      var customApp = new MapBuilderReport({
+        el: 'root',
+        config: {
+
+        },
+        version: "1.4.0" // we'll eventually have to affiliate this w/ the "library-load" script's src
+      });
