@@ -57,7 +57,7 @@ export default class ImageryModal extends Component {
               <div className='imagery-modal_section-title'>Maximum Cloud Cover Percentage</div>
             </div>
           </div>
-
+          <hr />
           <div className='imagery-modal__section scroll flex'>
 
           </div>

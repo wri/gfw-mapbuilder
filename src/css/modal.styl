@@ -519,11 +519,15 @@
   justify-content space-between
 
   &.filters
-    border-bottom $lightGrayBorder 0.5px solid
+    position relative
+    z-index 5
 
   &.scroll
     max-height 200px
     overflow-y scroll
+
+hr
+  border $lightGrayBorder 0.5px solid
 
 .imagery-modal_section-title
   text-transform uppercase
