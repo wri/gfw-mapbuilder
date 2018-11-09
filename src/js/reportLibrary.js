@@ -38,7 +38,7 @@ var MapBuilderReport = function(args){
       ],
       deps: ['dojo/ready'],
       callback: function () {
-        require(['js/ReportLibraryMain'], function(reportLibraryMain) {
+        require(['js/reportLibraryMain'], function(reportLibraryMain) {
           reportLibraryMain.default.lazyloadAssets(constructorParams);
           reportLibraryMain.default.startup();
 
@@ -71,4 +71,4 @@ var MapBuilderReport = function(args){
   this.init(args);
 };
 
-window.MapBuilder = MapBuilderReport;
+window.MapBuilderReport = MapBuilderReport;
