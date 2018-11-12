@@ -64,12 +64,76 @@ export default class WebMapLegend extends React.Component {
   render () {
     const { visible, legendInfos } = this.state;
     const { labels: label, metadata } = this.props;
+    metadata.legendConfig = {
+      dataMaxZoom: 12, //control zoom level
+      threshold: 30, // optional - loss specific tag to show TCD threshold
+      color: '#dc6c9a',
+      name: 'Tree cover loss',
+      source: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)', // optional
+      notes: [                                                                                                             // optional
+        'Displaying loss with {thresh} canopy density.',
+        'Tree cover loss is not always deforestation.'
+      ],
+      type: 'choropleth',
+      items: [{
+        color: '#ffffb2',
+        name: {
+          en: '<300',
+          fr: '<300',
+          es: '<300',
+          pt: '<300',
+          id: '<300',
+          zh: '<300',
+          ka: '<300'
+        }
+        }, {
+        color: '#fecc5c',
+        name: {
+          en: '<325',
+          fr: '<325',
+          es: '<325',
+          pt: '<325',
+          id: '<325',
+          zh: '<325',
+          ka: '<325'
+        }
+        }, {
+        color: '#fd8d3c',
+          en: '<350',
+          fr: '<350',
+          es: '<350',
+          pt: '<350',
+          id: '<350',
+          zh: '<350',
+          ka: '<350'
+        }, {
+        color: '#f03b20',
+          en: '<375',
+          fr: '<375',
+          es: '<375',
+          pt: '<375',
+          id: '<375',
+          zh: '<375',
+          ka: '<375'
+        }, {
+        color: '#bd0026',
+          en: '<505',
+          fr: '<505',
+          es: '<505',
+          pt: '<505',
+          id: '<505',
+          zh: '<505',
+          ka: '<505'
+      }
+    ],
+    };
+
     if (metadata && metadata.legendConfig) {
       return (
         <div>
           {metadata.legendConfig.items.map((legend, i) => {
             return (
-              <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
+              <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
                 <div className='label-container'><strong>{legend.name}</strong></div>
                 <div className='legend-container'>
                   {legend.categories.length === 0 ? '' :

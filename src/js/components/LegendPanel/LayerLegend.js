@@ -68,18 +68,14 @@ export default class LayerLegend extends React.Component {
 
   render () {
     const { label, metadata } = this.props;
+    const visibility = this.state.visible ? '' : 'hidden';
 
-    let bool = '';
-    if (this.state.visible === false) {
-      bool = 'hidden';
-    }
-    console.log(metadata);
     if (metadata && metadata.legendConfig) {
       return (
         <div>
           {metadata.legendConfig.items.map((legend, i) => {
             return (
-              <div className={`parent-legend-container ${bool}`} ref='myRef' key={`webmap-legend-${i}`}>
+              <div className={`parent-legend-container ${visibility}`} ref='myRef' key={`webmap-legend-${i}`}>
                 <div className='label-container'><strong>{legend.name}</strong></div>
                 <div className='legend-container'>
                   {legend.categories.length === 0 ? '' :
@@ -95,7 +91,7 @@ export default class LayerLegend extends React.Component {
     }
 
     return (
-      <div className={`parent-legend-container ${bool}`} ref="myRef">
+      <div className={`parent-legend-container ${visibility}`} ref='myRef'>
         <div className='label-container'><strong>{label}</strong></div>
         {this.state.legendInfos.length === 0 ? '' :
           this.state.legendInfos.map(this.itemMapper)
