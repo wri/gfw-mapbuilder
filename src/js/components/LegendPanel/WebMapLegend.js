@@ -42,7 +42,7 @@ export default class WebMapLegend extends React.Component {
   }
 
   apiItemMapper(legendItems) {
-    const test = legendItems.map((item, i) => {
+    return legendItems.map((item, i) => {
       return (
         <div className='legend-row' key={`webmap-legend-row-${i}`}>
           <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
@@ -50,8 +50,6 @@ export default class WebMapLegend extends React.Component {
         </div>
       );
     });
-
-    return test;
   }
 
   itemMapper = (item, idx) => {

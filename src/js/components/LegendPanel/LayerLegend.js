@@ -16,6 +16,8 @@ export default class LayerLegend extends React.Component {
       visible: props.visibleLayers.indexOf(props.layerId) === -1 ? false : true,
       opacity: 1
     };
+
+    this.apiItemMapper = this.apiItemMapper.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -44,6 +46,17 @@ export default class LayerLegend extends React.Component {
     });
   }
 
+  apiItemMapper(legendItems) {
+    return legendItems.map((item, i) => {
+      return (
+        <div className='legend-row' key={`webmap-legend-row-${i}`}>
+          <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
+          <div className='legend-label'>{item.name}></div>
+        </div>
+      );
+    });
+  }
+
   itemMapper = (item, index) => {
     return (
       <div className='legend-container' key={index}>
@@ -54,11 +67,31 @@ export default class LayerLegend extends React.Component {
   }
 
   render () {
-    const { label } = this.props;
-    let bool = '';
+    const { label, metadata } = this.props;
 
+    let bool = '';
     if (this.state.visible === false) {
       bool = 'hidden';
+    }
+    console.log(metadata);
+    if (metadata && metadata.legendConfig) {
+      return (
+        <div>
+          {metadata.legendConfig.items.map((legend, i) => {
+            return (
+              <div className={`parent-legend-container ${bool}`} ref='myRef' key={`webmap-legend-${i}`}>
+                <div className='label-container'><strong>{legend.name}</strong></div>
+                <div className='legend-container'>
+                  {legend.categories.length === 0 ? '' :
+                    <div className='crowdsource-legend'>
+                      {this.apiItemMapper(legend.categories)}
+                    </div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
     }
 
     return (
