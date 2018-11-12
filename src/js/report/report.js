@@ -326,7 +326,7 @@ const createMap = function createMap (params) {
       //- Add the settings to the params so we can omit layers or do other things if necessary
       //- If no appid is provided, the value here defaults to the MapBuildReport constructor params and then to resources.js
       params.settings = info.settings;
-
+      window.settings = params.settings;
       //- Make sure highcharts is loaded before using it
       // if (window.highchartsPromise.isResolved()) {
       //   runAnalysis(params, feature);

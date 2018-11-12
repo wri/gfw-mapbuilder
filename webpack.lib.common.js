@@ -167,17 +167,12 @@ module.exports = (PATHS) => {
         }),
         new HtmlWebpackPlugin({
           template: path.resolve(__dirname, 'src/external.pug'),
-          filename: 'external.html',
-          inject: false
-        }),
-        new HtmlWebpackPlugin({
-          template: path.resolve(__dirname, 'src/report.pug'),
-          filename: `${version}/report.html`,
+          filename: 'index.html',
           inject: false
         }),
         new HtmlWebpackPlugin({
           template: path.resolve(__dirname, 'src/externalReport.pug'),
-          filename: `externalReport.html`,
+          filename: `report.html`,
           inject: false
         }),
         new CopyWebpackPlugin([

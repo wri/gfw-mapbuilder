@@ -206,14 +206,7 @@ const utils = {
     //   console.log('window._app.base === window._app.cache', window._app.base, window._app.cache)
     //   window.open(`report.html?${path}`);
     // }
-    let appBase;
-
-    //TODO Not currently working for regular build on local host for development.
-    if(window._app.base === '') {
-      appBase = window._app.base;
-    } else {
-      appBase = window.location.origin + window.location.pathname.split('external.html')[0];
-    }
+    let appBase = window.location.origin + window.location.pathname;
 
     if (appBase.slice(-1) !== '/') {
       appBase += '/';
@@ -226,7 +219,7 @@ const utils = {
       }
     }, false);
 
-    window.open(`${appBase}externalReport.html?${path}`);
+    window.open(`${appBase}report.html?${path}`);
   },
 
   geometryFailure: (err) => {
