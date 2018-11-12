@@ -177,7 +177,7 @@ export default class WebMapLegend extends React.Component {
 
       return (
         <div>
-          <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name}`}>
+          <div className={`parent-legend-container ${!visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name}`}>
             <div className='label-container'><strong>{name}</strong></div>
             <div className='legend-container'>
               {items.length &&
