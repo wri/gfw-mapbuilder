@@ -1,6 +1,8 @@
 import Request from 'utils/request';
 import React from 'react';
 
+import { hexToRgb } from 'utils/math';
+
 export default class WebMapLegend extends React.Component {
 
   constructor (props) {
@@ -74,7 +76,7 @@ export default class WebMapLegend extends React.Component {
         'Displaying loss with {thresh} canopy density.',
         'Tree cover loss is not always deforestation.'
       ],
-      type: 'choropleth',
+      type: 'gradient',
       items: [{
         color: '#ffffb2',
         name: {
@@ -99,6 +101,7 @@ export default class WebMapLegend extends React.Component {
         }
         }, {
         color: '#fd8d3c',
+        name: {
           en: '<350',
           fr: '<350',
           es: '<350',
@@ -106,8 +109,10 @@ export default class WebMapLegend extends React.Component {
           id: '<350',
           zh: '<350',
           ka: '<350'
+        }
         }, {
         color: '#f03b20',
+        name: {
           en: '<375',
           fr: '<375',
           es: '<375',
@@ -115,8 +120,10 @@ export default class WebMapLegend extends React.Component {
           id: '<375',
           zh: '<375',
           ka: '<375'
+        }
         }, {
         color: '#bd0026',
+        name: {
           en: '<505',
           fr: '<505',
           es: '<505',
@@ -124,29 +131,84 @@ export default class WebMapLegend extends React.Component {
           id: '<505',
           zh: '<505',
           ka: '<505'
+        }
       }
     ],
     };
-
+    const language = 'en';
     if (metadata && metadata.legendConfig) {
-      return (
-        <div>
-          {metadata.legendConfig.items.map((legend, i) => {
-            return (
-              <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
-                <div className='label-container'><strong>{legend.name}</strong></div>
-                <div className='legend-container'>
-                  {legend.categories.length === 0 ? '' :
-                    <div className='crowdsource-legend'>
-                      {this.apiItemMapper(legend.categories)}
-                    </div>}
+      const { name, type, items } = metadata.legendConfig;
+      let iterator;
+      switch(type) {
+        case 'choropleth':
+          iterator = () => {
+            return items.map((item, i) => {
+              return (
+                <div className='legend-row' key={`webmap-legend-row-${name}-${i}`}>
+                  <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
+                  <div className='legend-label'>{item.name[language]}</div>
                 </div>
+              );
+            });
+          };
+          break;
+
+        case 'gradient':
+          iterator = () => {
+            const background = `linear-gradient(180deg,${items.map(item => item.color)}`;
+            return (
+              <div>
+                <div className='gradient-legend' style={{height: `${18 * items.length}px`, background}}></div>
+                {items.map((item, i) => {
+                  return (
+                    <div className='legend-row' key={`webmap-legend-row-${name}-${i}`}>
+                      <div className='legend-label'>{item.name[language]}</div>
+                    </div>
+                  );
+                })}
               </div>
             );
-          })}
+          };
+          break;
+
+        default:
+          iterator = () => <div></div>;
+      }
+
+      return (
+        <div>
+          <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name}`}>
+            <div className='label-container'><strong>{name}</strong></div>
+            <div className='legend-container'>
+              {items.length &&
+                <div className='crowdsource-legend'>
+                  {iterator()}
+                </div>}
+            </div>
+          </div>
         </div>
       );
     }
+
+    // if (metadata && metadata.legendConfig) {
+    //   return (
+    //     <div>
+    //       {metadata.legendConfig.items.map((legend, i) => {
+    //         return (
+    //           <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
+    //             <div className='label-container'><strong>{legend.name}</strong></div>
+    //             <div className='legend-container'>
+    //               {legend.categories.length === 0 ? '' :
+    //                 <div className='crowdsource-legend'>
+    //                   {this.apiItemMapper(legend.categories)}
+    //                 </div>}
+    //             </div>
+    //           </div>
+    //         );
+    //       })}
+    //     </div>
+    //   );
+    // }
 
     return (
       <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref='myRef'>
