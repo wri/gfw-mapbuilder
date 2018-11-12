@@ -13,7 +13,7 @@ import 'babel-polyfill';
 import report from 'report/report';
 
 const reportLibraryMain = {
-  startup: () => {
+  startup: (constructorParams) => {
     if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }
 
     window.brApp = {
@@ -40,7 +40,7 @@ const reportLibraryMain = {
     };
 
     configureApp();
-    report.run();
+    report.run(constructorParams);
 
   },
 

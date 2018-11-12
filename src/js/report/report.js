@@ -38,6 +38,7 @@ import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 
 let map;
+let constructorParams = null;
 
 const getWebmapInfo = function getWebmapInfo (webmap) {
   return esriRequest({
@@ -54,7 +55,7 @@ const getApplicationInfo = function getApplicationInfo (params) {
   // //- fall back to this
   if (webmap) {
     all({
-      settings: template.getAppInfo(appid),
+      settings: template.getAppInfo(appid, constructorParams),
       webmap: getWebmapInfo(webmap)
     }).then((results) => {
       promise.resolve(results);
@@ -267,7 +268,6 @@ const updateAnalysisModules = function functionName(params) {
   let acquiredModules = false;
   window.addEventListener('message', function(e) {
     let info;
-
     // If the message is from the parent and it says it has the info
     if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
       if (!acquiredModules) { //so let's avoid setting it twice
@@ -305,7 +305,7 @@ const createMap = function createMap (params) {
     all({
       feature: getFeature(params),
       info: getApplicationInfo(params)
-    }).always((featureResponse) => {
+      }).always((featureResponse) => {
       //- Bail if anything failed
       if (featureResponse.error) {
         throw featureResponse.error;
@@ -324,7 +324,7 @@ const createMap = function createMap (params) {
       }
 
       //- Add the settings to the params so we can omit layers or do other things if necessary
-      //- If no appid is provided, the value here is essentially resources.js
+      //- If no appid is provided, the value here defaults to the MapBuildReport constructor params and then to resources.js
       params.settings = info.settings;
 
       //- Make sure highcharts is loaded before using it
@@ -942,7 +942,10 @@ export default {
   });
   */
 
-  run () {
+  run (constructorArgs) {
+    if (constructorArgs) {
+      constructorParams = constructorArgs;
+    }
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
     if (brApp.debug) { console.log(params); }
@@ -956,7 +959,7 @@ export default {
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
 
-    if (opener) { //If this report.html was opened via the map (rather than a url paste)
+    if (opener && !(constructorParams && constructorParams.analysisModules)) { //If this report.html was opened via the map (rather than a url paste) && there is no construct params for MapBuilderReport
       updateAnalysisModules(params);
     }
 

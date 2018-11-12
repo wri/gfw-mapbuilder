@@ -241,7 +241,7 @@ export default {
   * @param {string=} id - optional app id, if you dont provide it, it will attempt to get it from url
   * @return {promise} promise
   */
-  getAppInfo: (id) => {
+  getAppInfo: (id, constructorParams) => {
     const promise = new Deferred();
     const appid = id ? id : getUrlParams(location.href).appid;
 
@@ -259,12 +259,18 @@ export default {
     arcgisUtils.getItem(appid).then(res => {
       let agolValues = res.itemData && res.itemData.values;
 
-      //- If we dont have agol settings, save the defaults, else merge them in
-      if (!agolValues) {
-        //- Format the resources before resolving
-        formatResources();
-        promise.resolve(resources);
-      } else {
+      // Set app settings with AGOLvalues from webmap being the highest priority, then the constructor params.
+      // Default values are from resources.js
+
+      if (constructorParams) {
+        //- Prune constructorParams by removing null keys
+        constructorParams = pruneValues(constructorParams);
+
+        //- This will merge all the settings in
+        lang.mixin(resources, constructorParams);
+      }
+
+      if (agolValues) {
         //- Prune agolValues by removing null keys
         agolValues = pruneValues(agolValues);
 
@@ -273,11 +279,12 @@ export default {
 
         //- Put the appid in settings so its easy to get to elsewhere in the app without rereading the url
         resources.appid = appid;
-
-        //- Format the resources before resolving
-        formatResources();
-        promise.resolve(resources);
       }
+
+
+      //- Format the resources before resolving
+      formatResources();
+      promise.resolve(resources);
 
     }, err => {
       if (brApp.debug) { console.warn(`template.getAppInfo >> ${err.message}`); }

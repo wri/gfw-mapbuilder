@@ -207,7 +207,7 @@ const utils = {
     //   window.open(`report.html?${path}`);
     // }
     let appBase;
-    
+
     //TODO Not currently working for regular build on local host for development.
     if(window._app.base === '') {
       appBase = window._app.base;
@@ -218,7 +218,6 @@ const utils = {
     if (appBase.slice(-1) !== '/') {
       appBase += '/';
     }
-    console.log('appBase', appBase)
     //We are no longer using localStorage as it won't persist across domains!
     window.addEventListener('message', function(e) {
       // We need the report's origin; AKA appBase minus a couple things

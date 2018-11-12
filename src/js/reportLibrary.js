@@ -10,7 +10,6 @@ var MapBuilderReport = function(args){
     }
 
     newBase = newBase.split('reportLib')[0] + constructorParams.version;
-
     window._app = {
       cache: constructorParams.version,
       esri: '#{esriVersion}',
@@ -40,7 +39,7 @@ var MapBuilderReport = function(args){
       callback: function () {
         require(['js/reportLibraryMain'], function(reportLibraryMain) {
           reportLibraryMain.default.lazyloadAssets(constructorParams);
-          reportLibraryMain.default.startup();
+          reportLibraryMain.default.startup(constructorParams.config);
 
         });
       }
