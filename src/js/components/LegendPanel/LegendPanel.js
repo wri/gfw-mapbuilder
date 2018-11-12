@@ -49,7 +49,6 @@ export default class LegendPanel extends Component {
 
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
-    console.log(layer)
     switch(layer.id) {
       case 'IFL':
         childComponent = <LayerLegend
@@ -62,6 +61,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'IMAZON_SAD':
@@ -75,6 +75,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'VIIRS_ACTIVE_FIRES':
@@ -88,6 +89,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'MODIS_ACTIVE_FIRES':
@@ -101,6 +103,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'GLOB_MANGROVE':
@@ -114,6 +117,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'AG_BIOMASS':
@@ -127,6 +131,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'TERRA_I_ALERTS':
@@ -140,6 +145,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'GLAD_ALERTS':
@@ -153,6 +159,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'FORMA_ALERTS':
@@ -166,6 +173,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
         case 'TREE_COVER_GAIN':
@@ -179,6 +187,7 @@ export default class LegendPanel extends Component {
             legendOpacity={legendOpacity}
             initialLayerOpacities={initialLayerOpacities}
             defaultOpacity={layer.opacity || 1}
+            metadata={layer.metadata}
           />;
           break;
       case 'TREE_COVER_LOSS':
@@ -192,6 +201,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'LAND_COVER':
@@ -205,6 +215,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       case 'TREE_COVER':
@@ -218,6 +229,7 @@ export default class LegendPanel extends Component {
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={layer.opacity || 1}
+          metadata={layer.metadata}
         />;
         break;
       default:
@@ -232,6 +244,7 @@ export default class LegendPanel extends Component {
             visibleLayers={activeLayers}
             legendOpacity={legendOpacity}
             initialLayerOpacities={initialLayerOpacities}
+            metadata={layer.metadata}
           />;
         } else {
           childComponent = this.createWebmapLegend(layer);
@@ -272,7 +285,9 @@ export default class LegendPanel extends Component {
         layerId={layer.subId}
         legendOpacity={legendOpacity}
         initialLayerOpacities={initialLayerOpacities}
-        defaultOpacity={esriLayer.opacity || 1} />;
+        defaultOpacity={esriLayer.opacity || 1}
+        metadata={layer.metadata}
+        />;
 
     } else {
       const esriLayer = layer.esriLayer;
@@ -288,6 +303,7 @@ export default class LegendPanel extends Component {
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
+          metadata={layer.metadata}
           />;
         } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
           if (!esriLayer.symbol) { return null; }
@@ -298,6 +314,7 @@ export default class LegendPanel extends Component {
           visible={activeLayers.indexOf(layer.id) > -1}
           symbol={layer.symbol}
           legendOpacity={legendOpacity}
+          metadata={layer.metadata}
           />;
         } else if (esriLayer.type.toLowerCase() === 'wms') {
           return <WMSLegend
@@ -310,6 +327,7 @@ export default class LegendPanel extends Component {
           layerName={esriLayer.layerInfos[0].name}
           legendOpacity={legendOpacity}
           defaultOpacity={esriLayer.opacity || 1}
+          metadata={layer.metadata}
           />;
         } else {
           if (!layer.layerIds && !esriLayer.tileInfo) {
@@ -329,7 +347,9 @@ export default class LegendPanel extends Component {
           layerId={layer.layerIds || [0]}
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
-          defaultOpacity={esriLayer.opacity || 1} />;
+          defaultOpacity={esriLayer.opacity || 1}
+          metadata={layer.metadata}
+          />;
         }
       }
     }

@@ -16,6 +16,7 @@ export const NestedLegend = ({ groupLabel, layerGroup, activeLayers }) => {
           visibility={activeLayers.indexOf(l.id) > -1}
           visibleLayers={activeLayers}
           layerId={l.id}
+          metadata={l.metadata}
           />;
       })}
     </div>

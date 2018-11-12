@@ -6,6 +6,8 @@ export default class WebMapLegend extends React.Component {
   constructor (props) {
     super(props);
     this.state = { legendInfos: [], visible: props.visibility, opacity: props.defaultOpacity };
+
+    this.apiItemMapper = this.apiItemMapper.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -39,6 +41,19 @@ export default class WebMapLegend extends React.Component {
     });
   }
 
+  apiItemMapper(legendItems) {
+    const test = legendItems.map((item, i) => {
+      return (
+        <div className='legend-row' key={`webmap-legend-row-${i}`}>
+          <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
+          <div className='legend-label'>{item.name}></div>
+        </div>
+      );
+    });
+
+    return test;
+  }
+
   itemMapper = (item, idx) => {
     return (
       <div className='legend-row' key={String(item.url) + idx}>
@@ -50,12 +65,29 @@ export default class WebMapLegend extends React.Component {
 
   render () {
     const { visible, legendInfos } = this.state;
-    const label = this.props.labels;
-
-    console.log(legendInfos);
+    const { labels: label, metadata } = this.props;
+    if (metadata && metadata.legendConfig) {
+      return (
+        <div>
+          {metadata.legendConfig.items.map((legend, i) => {
+            return (
+              <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
+                <div className='label-container'><strong>{legend.name}</strong></div>
+                <div className='legend-container'>
+                  {legend.categories.length === 0 ? '' :
+                    <div className='crowdsource-legend'>
+                      {this.apiItemMapper(legend.categories)}
+                    </div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
 
     return (
-      <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref="myRef">
+      <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref='myRef'>
         <div className='label-container'><strong>{label}</strong></div>
         <div className='legend-container'>
           {legendInfos.length === 0 ? '' :
