@@ -16,21 +16,40 @@ export default class ApiLegend extends Component {
   generateLegends(items, type, language) {
     switch(type) {
       case 'choropleth':
-        return items.map((item, i) => {
-          const { name, color, outlineColor } = item;
-          console.log(outlineColor);
-            return (
-              <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
-                <div style={{
-                  backgroundColor: color,
-                  border: `1px solid ${outlineColor}`,
-                  opacity: this.state.opacity
-                }} className='legend-icon'></div>
-                <div className='legend-label'>{name[language]}</div>
-              </div>
-            );
-          }
+        return (
+          items.map((item, i) => {
+            const { name, color, outlineColor } = item;
+            console.log(outlineColor);
+              return (
+                <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
+                  <div style={{
+                    backgroundColor: color,
+                    border: `1px solid ${outlineColor}`,
+                    opacity: this.state.opacity
+                  }} className='legend-icon'></div>
+                  <div className='legend-label'>{name[language]}</div>
+                </div>
+              );
+            }
+          )
         );
+
+      case 'gradient':
+        const background = `linear-gradient(180deg,${items.map(item => item.color)}`;
+        return (
+          <div>
+            <div className='gradient-legend' style={{height: `${18 * items.length}px`, background}}></div>
+              {items.map((item, i) => {
+                const name = item.name;
+                return (
+                  <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
+                    <div className='legend-label'>{name[language]}</div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+
 
     }
   }
