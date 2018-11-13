@@ -1128,6 +1128,58 @@ export default {
       }]
     },
 
+    LEGEND_TEST: {
+      groupType: 'default',
+      order: 4,
+      label: {
+        en: 'API Legend Test',
+        fr: 'API Legend Test',
+        es: 'API Legend Test',
+        pt: 'API Legend Test',
+        id: 'API Legend Test',
+        zh: 'API Legend Test',
+        ka: 'API Legend Test'
+      },
+      layers: [
+        // basic test layer
+        {
+          order: 13,
+          type: 'remoteDataLayer',
+          uuid: '1ec41dce-99be-4c6f-bbd3-aa37a2e28a42'
+        },
+        // points test layer
+        {
+          order: 9,
+          type: 'remoteDataLayer',
+          uuid: '946fd989-1678-41f8-91cc-dfdaac494507'
+        },
+        // lines test layer
+        {
+          order: 10,
+          type: 'remoteDataLayer',
+          uuid: '840cf0cd-c7db-42db-9bf0-a3a700c79255'
+        },
+        // choropleth test layer
+        {
+          order: 11,
+          type: 'remoteDataLayer',
+          uuid: '67d742f7-e1a3-4d17-971d-29fe18b06cf5'
+        },
+        // gradient test layer
+        {
+          order: 12,
+          type: 'remoteDataLayer',
+          uuid: 'ed76a7d1-50de-4f8d-8015-b20a65349292'
+        },
+        // group test layer
+        {
+          order: 13,
+          type: 'remoteDataLayer',
+          uuid: '7ac94f47-5541-4e89-83f7-8e566ab80a98'
+        }
+      ]
+    },
+
     /**
     * CUSTOM GROUPS
     * Add your custom groups below. The custom groups are similar to the groups defined above.
