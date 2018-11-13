@@ -51,7 +51,6 @@ export default class LegendPanel extends Component {
     const { language } = this.context;
     switch(layer.id) {
       case 'IFL':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -66,7 +65,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'IMAZON_SAD':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -81,7 +79,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'VIIRS_ACTIVE_FIRES':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -96,7 +93,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'MODIS_ACTIVE_FIRES':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -111,7 +107,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'GLOB_MANGROVE':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -126,7 +121,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'AG_BIOMASS':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -141,7 +135,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'TERRA_I_ALERTS':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -156,7 +149,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'GLAD_ALERTS':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -171,7 +163,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'FORMA_ALERTS':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -186,7 +177,6 @@ export default class LegendPanel extends Component {
         />;
         break;
         case 'TREE_COVER_GAIN':
-          console.log('LayerLegend', layer);
           childComponent = <LayerLegend
             key={layer.id}
             label={layer.label ? layer.label[language] : ''}
@@ -201,7 +191,6 @@ export default class LegendPanel extends Component {
           />;
           break;
       case 'TREE_COVER_LOSS':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -216,7 +205,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'LAND_COVER':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -231,7 +219,6 @@ export default class LegendPanel extends Component {
         />;
         break;
       case 'TREE_COVER':
-        console.log('LayerLegend', layer);
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -249,7 +236,6 @@ export default class LegendPanel extends Component {
         if (layer.hasOwnProperty('nestedLayers')) {
           childComponent = this.createNestedLegendGroups(layer);
         } else if (layer.type === 'feature') {
-          console.log('WebMapFeatureLayerLegend');
           childComponent = <WebMapFeatureLayerLegend
             key={layer.id}
             layer={layer}
@@ -288,7 +274,6 @@ export default class LegendPanel extends Component {
       }
 
       const esriLayer = layer.esriLayer;
-      console.log('WebMapLegend');
       return <WebMapLegend
         key={layer.subId}
         url={esriLayer.url}
@@ -301,6 +286,7 @@ export default class LegendPanel extends Component {
         initialLayerOpacities={initialLayerOpacities}
         defaultOpacity={esriLayer.opacity || 1}
         metadata={layer.metadata}
+        language={this.context.language}
         />;
 
     } else {
@@ -309,7 +295,6 @@ export default class LegendPanel extends Component {
       if (esriLayer) {
 
         if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
-          console.log('WebMapFeatureLayerLegend');
           return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
@@ -322,7 +307,6 @@ export default class LegendPanel extends Component {
           />;
         } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
           if (!esriLayer.symbol) { return null; }
-          console.log('CartoLegend');
           return <CartoLegend
           key={layer.id}
           layerId={layer.id}
@@ -333,7 +317,6 @@ export default class LegendPanel extends Component {
           metadata={layer.metadata}
           />;
         } else if (esriLayer.type.toLowerCase() === 'wms') {
-          console.log('WMSLegend');
           return <WMSLegend
           key={layer.id}
           url={esriLayer.url}
@@ -354,7 +337,6 @@ export default class LegendPanel extends Component {
           if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
             esriLayer.layerId = esriLayer.layerInfos[0].id;
           }
-          console.log('WebMapLegend');
           return <WebMapLegend
           key={layer.id}
           url={esriLayer.url}
@@ -366,6 +348,7 @@ export default class LegendPanel extends Component {
           initialLayerOpacities={initialLayerOpacities}
           defaultOpacity={esriLayer.opacity || 1}
           metadata={layer.metadata}
+          language={this.context.language}
           />;
         }
       }

@@ -1,8 +1,6 @@
 import Request from 'utils/request';
 import React from 'react';
 
-import { hexToRgb } from 'utils/math';
-
 export default class WebMapLegend extends React.Component {
 
   constructor (props) {
@@ -41,17 +39,37 @@ export default class WebMapLegend extends React.Component {
         this.setState({ opacity: opacity.value });
       }
     });
+
   }
 
-  apiItemMapper(legendItems) {
-    return legendItems.map((item, i) => {
-      return (
-        <div className='legend-row' key={`webmap-legend-row-${i}`}>
-          <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
-          <div className='legend-label'>{item.name}></div>
-        </div>
-      );
-    });
+  apiItemMapper(items, type, language) {
+    switch(type) {
+      case 'choropleth':
+        return items.map((item, i) => {
+            return (
+              <div className='legend-row' key={`webmap-legend-row-${item.name[language]}-${i}`}>
+                <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
+                <div className='legend-label'>{item.name[language]}</div>
+              </div>
+            );
+          }
+        );
+
+      case 'gradient':
+        const background = `linear-gradient(180deg,${items.map(item => item.color)}`;
+        return (
+          <div>
+            <div className='gradient-legend' style={{height: `${18 * items.length}px`, background}}></div>
+            {items.map((item, i) => {
+              return (
+                <div className='legend-row' key={`webmap-legend-row-${item.name[language]}-${i}`}>
+                  <div className='legend-label'>{item.name[language]}</div>
+                </div>
+              );
+            })}
+          </div>
+        );
+    }
   }
 
   itemMapper = (item, idx) => {
@@ -65,7 +83,7 @@ export default class WebMapLegend extends React.Component {
 
   render () {
     const { visible, legendInfos } = this.state;
-    const { labels: label, metadata } = this.props;
+    const { labels: label, metadata, language } = this.props;
     metadata.legendConfig = {
       dataMaxZoom: 12, //control zoom level
       threshold: 30, // optional - loss specific tag to show TCD threshold
@@ -135,80 +153,127 @@ export default class WebMapLegend extends React.Component {
       }
     ],
     };
-    const language = 'en';
+
+  //   metadata.legendConfig = {
+  //     type: 'group',
+  //     items: [{
+  //       name: {
+  //         en: 'Cereals',
+  //         fr: 'Cereals',
+  //         es: 'Cereals',
+  //         pt: 'Cereals',
+  //         id: 'Cereals',
+  //         zh: 'Cereals',
+  //         ka: 'Cereals'
+  //       },
+  //       subgroup: {
+  //         type: 'choropleth',
+  //         items: [{
+  //           name: {
+  //             en: 'Barley',
+  //             fr: 'Barley',
+  //             es: 'Barley',
+  //             pt: 'Barley',
+  //             id: 'Barley',
+  //             zh: 'Barley',
+  //             ka: 'Barley'
+  //           },
+  //           color: '#531332'
+  //         }, {
+  //           name: {
+  //             en: 'Wheat',
+  //             fr: 'Wheat',
+  //             es: 'Wheat',
+  //             pt: 'Wheat',
+  //             id: 'Wheat',
+  //             zh: 'Wheat',
+  //             ka: 'Wheat'
+  //           },
+  //           color: '#c3ff00'
+  //         },
+  //     ]}}, {
+  //     name: {
+  //       en: 'Pulses and legumes',
+  //       fr: 'Pulses and legumes',
+  //       es: 'Pulses and legumes',
+  //       pt: 'Pulses and legumes',
+  //       id: 'Pulses and legumes',
+  //       zh: 'Pulses and legumes',
+  //       ka: 'Pulses and legumes'
+  //     },
+  //     subgroup: {
+  //       type: 'choropleth',
+  //       items: [{
+  //         name: {
+  //           en: 'Soybeans',
+  //           fr: 'Soybeans',
+  //           es: 'Soybeans',
+  //           pt: 'Soybeans',
+  //           id: 'Soybeans',
+  //           zh: 'Soybeans',
+  //           ka: 'Soybeans'
+  //         },
+  //         color: '#42f4f4'
+  //         }, {
+  //           name: {
+  //             en: 'Peas',
+  //             fr: 'Peas',
+  //             es: 'Peas',
+  //             pt: 'Peas',
+  //             id: 'Peas',
+  //             zh: 'Peas',
+  //             ka: 'Peas'
+  //           },
+  //           color: '#f44141'
+  //         },
+  //       ]
+  //     }
+  //   }]
+  // };
+
     if (metadata && metadata.legendConfig) {
       const { name, type, items } = metadata.legendConfig;
-      let iterator;
-      switch(type) {
-        case 'choropleth':
-          iterator = () => {
-            return items.map((item, i) => {
+
+      if (type === 'group') {
+        return (
+          <div>
+            {items.map((category, i) => {
+              const { name: categoryName, subgroup } = category;
               return (
-                <div className='legend-row' key={`webmap-legend-row-${name}-${i}`}>
-                  <div style={{backgroundColor: item.color, opacity: this.state.opacity}} className='legend-icon'></div>
-                  <div className='legend-label'>{item.name[language]}</div>
+                <div className={`parent-legend-container ${!visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
+                  <div className='label-container'>
+                    <strong>{categoryName[language]}</strong>
+                  </div>
+                  <div className='legend-container'>
+                    {category.subgroup.items.length &&
+                      <div className='crowdsource-legend'>
+                        {this.apiItemMapper(subgroup.items, subgroup.type, language)}
+                      </div>}
+                  </div>
                 </div>
               );
-            });
-          };
-          break;
-
-        case 'gradient':
-          iterator = () => {
-            const background = `linear-gradient(180deg,${items.map(item => item.color)}`;
-            return (
-              <div>
-                <div className='gradient-legend' style={{height: `${18 * items.length}px`, background}}></div>
-                {items.map((item, i) => {
-                  return (
-                    <div className='legend-row' key={`webmap-legend-row-${name}-${i}`}>
-                      <div className='legend-label'>{item.name[language]}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          };
-          break;
-
-        default:
-          iterator = () => <div></div>;
+            })}
+          </div>
+        );
       }
-
-      return (
-        <div>
-          <div className={`parent-legend-container ${!visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name}`}>
-            <div className='label-container'><strong>{name}</strong></div>
-            <div className='legend-container'>
-              {items.length &&
-                <div className='crowdsource-legend'>
-                  {iterator()}
-                </div>}
+      else {
+        return (
+          <div>
+            <div className={`parent-legend-container ${!visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name[language]}`}>
+              <div className='label-container'>
+                <strong>{name[language]}</strong>
+              </div>
+              <div className='legend-container'>
+                {items.length &&
+                  <div className='crowdsource-legend'>
+                    {this.apiItemMapper(items, type, language)}
+                  </div>}
+              </div>
             </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
-
-    // if (metadata && metadata.legendConfig) {
-    //   return (
-    //     <div>
-    //       {metadata.legendConfig.items.map((legend, i) => {
-    //         return (
-    //           <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
-    //             <div className='label-container'><strong>{legend.name}</strong></div>
-    //             <div className='legend-container'>
-    //               {legend.categories.length === 0 ? '' :
-    //                 <div className='crowdsource-legend'>
-    //                   {this.apiItemMapper(legend.categories)}
-    //                 </div>}
-    //             </div>
-    //           </div>
-    //         );
-    //       })}
-    //     </div>
-    //   );
-    // }
 
     return (
       <div className={`parent-legend-container ${visible ? '' : 'hidden'}`} ref='myRef'>
