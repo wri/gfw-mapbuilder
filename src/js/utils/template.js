@@ -229,10 +229,14 @@ const formatResources = () => {
       .then(layer => fetch(layer.attributes.layerConfig.body.metadata)
       .then(response => response.json())
       .then(metadata => {
+        const attributes = layer.attributes;
         const itemGroup = item.group;
         item.layer = layer.attributes.layerConfig.body.options.mapBuilderConfig;
         item.group = itemGroup;
-        item.layer.metadata = metadata;
+        item.layer.metadata = {
+          metadata,
+          legendConfig: attributes.legendConfig
+        };
         return item;
       })
     )

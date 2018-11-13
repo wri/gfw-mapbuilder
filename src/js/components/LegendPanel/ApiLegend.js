@@ -126,7 +126,7 @@ export default class ApiLegend extends Component {
                 <div className='legend-container'>
                   {subgroup.items.length &&
                     <div className='crowdsource-legend'>
-                      {this.apiItemMapper(subgroup.items, subgroup.type, language)}
+                      {this.generateLegends(subgroup.items, subgroup.type, language)}
                     </div>}
                 </div>
               </div>
@@ -145,7 +145,7 @@ export default class ApiLegend extends Component {
           <div className='legend-container'>
             {items.length &&
               <div className='crowdsource-legend'>
-                {this.apiItemMapper(items, type, language)}
+                {this.generateLegends(items, type, language)}
               </div>}
           </div>
         </div>

@@ -50,8 +50,8 @@ export default class LegendPanel extends Component {
 
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
-
     if (layer.metadata && layer.metadata.legendConfig) {
+      console.log(layer);
       return <ApiLegend
         key={layer.id}
         label={layer.label ? layer.label[language] : ''}

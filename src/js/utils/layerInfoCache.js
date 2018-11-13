@@ -313,9 +313,9 @@ export default {
 
     // If layer metadata has already been acquired, in the case of layers configured by the new API,
     // don't perform a query to the old API
-    if (layer.metadata) {
-      _cache[layer.id] = layer.metadata;
-      promise.resolve(layer.metadata);
+    if (layer.metadata.metadata) {
+      _cache[layer.id] = layer.metadata.metadata;
+      promise.resolve(layer.metadata.metadata);
     }
 
     // If a technicalName is configured, fetch from the metadata API
