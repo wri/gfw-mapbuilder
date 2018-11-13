@@ -94,25 +94,24 @@ class MapActions {
       //- Sort the groups based on their order property
       return layerPanel[b].order - layerPanel[a].order;
     }).reduce((list, groupName, groupIndex) => {
-      if (layersCreated === false) { //or possibly (map.id === 'esri.Map_0') If this is our first time initializing the app, create the proper order
-
         //- Flatten them into a single list but before that,
         //- Multiple the order by 100 so I can sort them more easily below, this is because there
         //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
         //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-        if (groupIndex === 0) {
-          maxOrder = layerPanel[groupName].order + 1;
+      if (groupIndex === 0) {
+        maxOrder = layerPanel[groupName].order + 1;
+      }
+
+      const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
+        if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
         }
 
-        const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
-          return layer;
-        });
+        return layer;
+      });
 
-        return list.concat(orderedGroups);
-      } else { //otherwise, inherit the layer-order we worked so hard to create the first time
-        return layerPanel[groupName].layers;
-      }
+      return list.concat(orderedGroups);
+
 
     }, []);
     //- Add the extra layers now that all the others have been sorted
@@ -146,6 +145,7 @@ class MapActions {
       .filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
+
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
@@ -176,7 +176,7 @@ class MapActions {
       }
       // Appending the mask to the end of the parent div to make sure mask is always on top of all layers
       var mask = document.getElementById('esri.Map_0_MASK');
-      if(mask && mask.parentNode) {
+      if (mask && mask.parentNode) {
         mask.parentNode.appendChild(mask);
       }
     });
