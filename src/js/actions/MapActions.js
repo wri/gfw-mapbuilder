@@ -109,7 +109,6 @@ class MapActions {
 
         return layer;
       });
-
       return list.concat(orderedGroups);
 
 
@@ -126,6 +125,7 @@ class MapActions {
     }, []);
     const uniqueLayers = [];
     const existingIds = [];
+
     reducedLayers
       .forEach(layer => {
         if (existingIds.indexOf(layer.id) === -1) {
@@ -153,7 +153,6 @@ class MapActions {
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
-        console.log(cartoLayer);
         cartoLayer.layer.on('onCartoLayerAdd', evt => {
           const tempResources = resources;
           tempResources.layerPanel.GROUP_CARTO.layers = evt.target.cartoLayers;

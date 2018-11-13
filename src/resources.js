@@ -950,6 +950,10 @@ export default {
             ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
         }
+      }, {
+        order: 9,
+        type: 'remoteDataLayer',
+        uuid: 'f2c6a12e-cbc6-481c-88d8-065ddb989d67'
       }]
     },
     GROUP_LC: {

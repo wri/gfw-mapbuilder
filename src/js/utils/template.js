@@ -1,9 +1,11 @@
-import layerKeys from 'constants/LayerConstants';
-import arcgisUtils from 'esri/arcgis/utils';
-import {getUrlParams} from 'utils/params';
 import Deferred from 'dojo/Deferred';
 import lang from 'dojo/_base/lang';
+
+import { urls} from 'js/config';
 import resources from 'resources';
+import { getUrlParams } from 'utils/params';
+import arcgisUtils from 'esri/arcgis/utils';
+import layerKeys from 'constants/LayerConstants';
 
 const SEPARATOR = ';';
 
@@ -181,11 +183,20 @@ const formatResources = () => {
   //   });
   // });
 
-  //- Remove Layers from resources.layers if configured
-  Object.keys(resources.layerPanel).forEach((group) => {
+  //- Remove Layers from resources.layers if configured, while separating remote data layers
+  const remoteDataLayers = [];
+  Object.keys(resources.layerPanel).forEach(group => {
+    if (!remoteDataLayers[group]) { remoteDataLayers[group] = []; }
     const groupSettings = resources.layerPanel[group];
     if (!groupSettings.layers) { return; }
-    resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter((layer) => {
+    resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter(layer => {
+      if (layer.type === 'remoteDataLayer') {
+        remoteDataLayers.push({
+          group,
+          layer
+        });
+        return false;
+      }
       switch (layer.id) {
         case layerKeys.VIIRS_ACTIVE_FIRES:
           return resources.viirsFires;
@@ -211,6 +222,28 @@ const formatResources = () => {
     });
   });
 
+  const remoteDataLayerRequests = remoteDataLayers
+    .map(item => fetch(`${urls.resourceWatchLayerApi}/${item.layer.uuid}`)
+      .then(response => response.json())
+      .then(json => json.data)
+      .then(layer => fetch(layer.attributes.layerConfig.body.metadata)
+      .then(response => response.json())
+      .then(metadata => {
+        const itemGroup = item.group;
+        item.layer = layer.attributes.layerConfig.body.options.mapBuilderConfig;
+        item.group = itemGroup;
+        item.layer.metadata = metadata;
+        return item;
+      })
+    )
+  );
+
+  Promise.all(remoteDataLayerRequests)
+  .then(remoteLayers => {
+    remoteLayers.forEach(item => {
+      resources.layerPanel[item.group].layers.push(item.layer);
+    });
+
   //- Update path if it is relative to point to local
   const base = window._app.base ? window._app.base + '/' : '';
   if (resources.logoUrl && resources.logoUrl.indexOf('.') === 0) {
@@ -231,6 +264,8 @@ const formatResources = () => {
       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
     }
   });
+
+});
 
 };
 
