@@ -230,26 +230,7 @@ const formatResources = () => {
       .then(response => response.json())
       .then(metadata => {
         const itemGroup = item.group;
-        // ↓↓ this is where the actual layer configuration options will live when API-configured layers become available
-        item.layer = layer.attributes.layerConfig.body.options ||
-        // ↓↓ this layer configuration shim will be deleted when API-configured layers become available
-        {
-          id: 'Test Configuration',
-          type: 'dynamic',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
-          technicalName: 'intact_forest_landscapes_change',
-          layerIds: [0],
-          label: {
-            en: 'Test Configuration',
-            fr: 'Test Configuration',
-            es: 'Test Configuration',
-            pt: 'Test Configuration',
-            id: 'Test Configuration',
-            zh: 'Test Configuration',
-            ka: 'Test Configuration'
-          }
-        };
-        // end shim
+        item.layer = layer.attributes.layerConfig.body.options.mapBuilderConfig;
         item.group = itemGroup;
         item.layer.metadata = metadata;
         return item;

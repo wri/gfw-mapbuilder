@@ -953,7 +953,7 @@ export default {
       }, {
         order: 9,
         type: 'remoteDataLayer',
-        uuid: '7e133f7a-2e2e-49c2-b736-14556eb5ffab'
+        uuid: 'f2c6a12e-cbc6-481c-88d8-065ddb989d67'
       }]
     },
     GROUP_LC: {
