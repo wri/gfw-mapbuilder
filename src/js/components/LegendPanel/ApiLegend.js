@@ -32,6 +32,26 @@ export default class ApiLegend extends Component {
           }
         );
 
+      case 'point':
+        return items.map((item, i) => {
+          const { name, color, outlineColor, size } = item;
+          return (
+            <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
+              <div className='legend-icon centered'>
+                <div style={{
+                  backgroundColor: color,
+                  borderColor: outlineColor,
+                  height: `${size}px`,
+                  width: `${size}px`,
+                  marginTop: `-${size / 2 - 2}px`,
+                  opacity: this.state.opacity
+                }} className='legend-point'></div>
+              </div>
+              <div className='legend-label'>{name[language]}</div>
+            </div>
+          );
+        });
+
       case 'choropleth':
         return (
           items.map((item, i) => {
