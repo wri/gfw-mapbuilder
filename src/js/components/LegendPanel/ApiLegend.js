@@ -39,12 +39,12 @@ export default class ApiLegend extends Component {
             <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
               <div className='legend-icon centered'>
                 <div style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
                   backgroundColor: color,
                   borderColor: outlineColor,
-                  height: `${size}px`,
-                  width: `${size}px`,
-                  marginTop: `-${size / 2 - 2}px`,
-                  opacity: this.state.opacity
+                  opacity: this.state.opacity,
+                  marginTop: `-${size / 2 - 2}px`
                 }} className='legend-point'></div>
               </div>
               <div className='legend-label'>{name[language]}</div>
@@ -60,10 +60,10 @@ export default class ApiLegend extends Component {
               <div className='legend-icon line'>
                 <div style={{
                   borderColor: color,
-                  borderWidth: `${width / 2}px`,
                   borderStyle: lineType,
                   marginTop: `-${width}px`,
-                  opacity: this.state.opacity
+                  opacity: this.state.opacity,
+                  borderWidth: `${width / 2}px`
                 }} className='legend-line'></div>
               </div>
               <div className='legend-label'>{name[language]}</div>
@@ -80,8 +80,8 @@ export default class ApiLegend extends Component {
                 <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
                   <div style={{
                     backgroundColor: color,
-                    border: `1px solid ${outlineColor}`,
-                    opacity: this.state.opacity
+                    opacity: this.state.opacity,
+                    border: `1px solid ${outlineColor}`
                   }} className='legend-icon'></div>
                   <div className='legend-label'>{name[language]}</div>
                 </div>
@@ -105,8 +105,6 @@ export default class ApiLegend extends Component {
               })}
             </div>
           );
-
-
     }
   }
 
@@ -115,19 +113,44 @@ export default class ApiLegend extends Component {
     const { label, metadata, language } = this.props;
     const { name, type, items } = metadata.legendConfig;
 
-    return (
-      <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name[language]}`}>
-        <div className='label-container'>
-          <strong>{name[language]}</strong>
+    if (type === 'group') {
+      return (
+        <div>
+          {items.map((category, i) => {
+            const { name: categoryName, subgroup } = category;
+            return (
+              <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${i}`}>
+                <div className='label-container'>
+                  <strong>{categoryName[language]}</strong>
+                </div>
+                <div className='legend-container'>
+                  {subgroup.items.length &&
+                    <div className='crowdsource-legend'>
+                      {this.apiItemMapper(subgroup.items, subgroup.type, language)}
+                    </div>}
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <div className='legend-container'>
-          {items.length &&
-            <div className='crowdsource-legend'>
-              {this.apiItemMapper(items, type, language)}
-            </div>}
+      );
+    }
+
+    else {
+      return (
+        <div className={`parent-legend-container ${visible && 'hidden'}`} ref='myRef' key={`webmap-legend-${name[language]}`}>
+          <div className='label-container'>
+            <strong>{name[language]}</strong>
+          </div>
+          <div className='legend-container'>
+            {items.length &&
+              <div className='crowdsource-legend'>
+                {this.apiItemMapper(items, type, language)}
+              </div>}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   componentDidMount() {
