@@ -69,8 +69,11 @@ const LayersHelper = {
     // Layers have a visibleAtMapScale property which make this easy.
     if (layerInfo.esriLayer && layerInfo.esriLayer.loaded) {
       if (layerInfo.esriLayer.hasOwnProperty('visibleAtMapScale') && !layerInfo.esriLayer.visibleAtMapScale) {
-        visible = false;
-        layerInfo.visible = visible;
+        const scale = map.getScale();
+        if ((scale > layerInfo.esriLayer.minScale) || (scale < layerInfo.esriLayer.maxScale)) {
+          visible = false;
+          layerInfo.visible = visible;
+        }
       }
     }
     if (map && map.getScale && layerInfo.esriLayer) {
