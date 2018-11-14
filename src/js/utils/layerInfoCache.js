@@ -271,20 +271,11 @@ function xmlToJson(xml) {
 */
 function getServiceMetadata (layer, promise) {
   const {esriLayer, subIndex, subId} = layer;
-
-  // const layerIdsFromLayer = layer.layerIds;
-
   const { layerIds, layerId } = esriLayer;
-  //TODO: layerId off of esriLayer might not be right: looks like layerIds has the proper value, but its an array!
-
-  console.log(layer);
-  console.log(esriLayer);
 
   let url = esriLayer.url ? esriLayer.url : '';
-  console.log('subIndex', subIndex);
-  if (subIndex === undefined) { //TODO: Why does layerIds = [101] but layerId = 121?? layerIds[0] is correct!!
+  if (subIndex === undefined) {
     if (layerIds && layerIds.length) { // if there is a layerIds property, this is a configured layer
-      console.log('layerId', layerId);
       if (esriLayer.layerIds && esriLayer.layerIds[0]) {
         url += `/${esriLayer.layerIds[0]}`;
       } else {
@@ -292,27 +283,20 @@ function getServiceMetadata (layer, promise) {
       }
     }
   } else {
-    console.log('subIndex', subIndex);
     url += `/${subIndex}`;
   }
-  // debugger
 
-  console.log(13);
   getServiceInfoTask(url).then(results => {
 
     if (!results.description && layer.itemId) {
       url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
-      console.log(14);
       getXMLTask(url).then(xmlDocument => {
-        console.log(15);
         promise.resolve(reduceXML(xmlDocument));
       }, () => {
-        console.log(16);
         promise.resolve();
       });
     } else {
       _cache[subId] = results;
-      console.log(17);
       promise.resolve(results);
     }
   }, () => {
@@ -330,30 +314,13 @@ export default {
     const promise = new Deferred();
     let url;
 
-
-    //what is the difference between 3 and 2? If we don't have 2, where do we find 3?
-
-    // 1. API reference //layer.technicalName
-    // 2. If it's an ArcGIS Online item, use the feature layer's metadata //layer.itemId
-    // 3. If that does not exist, then use ArcGIS Online item description
-    // 4. If that does not exist, then use feature layer from ArcGIS Server
-    // 5. If none of those exist, display the "no information available" message
-
-    console.log('settings.sharinghost', settings.sharinghost);
-    // If a technicalName is configured, fetch from the metadata API
-    // else, attempt to fetch it from the mapservice
-    // if (layer) {
-    //   getServiceInfoTask(layer.url);
-    // } else
     if (layer.technicalName) {
-      console.log(1, layer);
       url = `${urls.metadataApi}/${layer.technicalName}`;
       getMetadataTask(url).then(results => {
         _cache[layer.id] = results;
         promise.resolve(results);
       });
     } else if (layer.itemId) {
-      console.log(2, layer);
       if (layer.type === 'carto') {
         const {subId, id} = layer;
         url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
@@ -397,47 +364,33 @@ export default {
         });
 
       } else {
-        console.log(3, layer);
         url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
         getXMLTask(url).then(xmlDocument => {
-          console.log(4, layer);
           promise.resolve(reduceXML(xmlDocument));
         }, () => {
           url = urls.agolItemEndpoint(layer.itemId);
-          console.log('url', url);
           getServiceInfoTask(url).then(results => {
-            console.log(5, layer);
             const {subId} = layer;
             _cache[subId] = results;
             promise.resolve(results);
           }, () => {
-            console.log(6, layer);
             getServiceMetadata(layer, promise);
           });
         });
       }
 
     } else if (layer.esriLayer) {
-      console.log(7, layer);
 
-      if (layer.itemId) {
-
-      }
       url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
-      console.log('url2', url);
       getXMLTask(url).then(xmlDocument => {
-        console.log(8, xmlDocument);
         promise.resolve(reduceXML(xmlDocument));
       }, () => {
         url = urls.agolItemEndpoint(layer.itemId);
-        console.log(9, url);
         getServiceInfoTask(url).then(results => {
-          console.log(10, results);
           const {subId} = layer;
           _cache[subId] = results;
           promise.resolve(results);
         }, () => {
-          console.log(11, layer);
           getServiceMetadata(layer, promise);
         });
       });
