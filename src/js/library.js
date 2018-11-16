@@ -30,7 +30,6 @@ var MapBuilder = function(args){
     constructorParams.basePath = newBase;
 
     var base = makePath(newBase);
-
     window.dojoConfig = {
       parseOnLoad: false,
       async: true,

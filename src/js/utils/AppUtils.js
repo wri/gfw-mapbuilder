@@ -196,11 +196,14 @@ const utils = {
     const path = toQuerystring(query);
     if (window._app.base === window._app.cache) {
       window.open(`report.html?${path}`);
+      console.log('if', path);
     } else {
-      let appBase = window._app.base;
-      if (!appBase) {
-        appBase = window.location.origin + window.location.pathname;
-      }
+      console.log('else', path);
+      const appBase = window._app.base.replace('1.2', '');
+      console.log(appBase);
+      // if (!appBase) {
+      //   appBase = window.location.origin + window.location.pathname;
+      // }
 
       window.open(`${appBase}report.html?${path}`);
     }
