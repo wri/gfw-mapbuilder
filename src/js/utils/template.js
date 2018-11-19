@@ -223,7 +223,7 @@ const formatResources = () => {
   });
 
   const remoteDataLayerRequests = remoteDataLayers
-    .map(item => fetch(`${urls.resourceWatchLayerApi}/${item.layer.uuid}`)
+    .map(item => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
       .then(response => response.json())
       .then(json => json.data)
       .then(layer => fetch(layer.attributes.layerConfig.body.metadata)

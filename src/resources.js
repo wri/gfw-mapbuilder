@@ -693,63 +693,12 @@ export default {
       },
       layers: [{
         order: 1,
-        id: 'TREE_COVER_LOSS',
-        type: 'loss', //image
-        url: 'https://storage.googleapis.com/wri-public/Hansen17/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
-        // legendLayer: 7,
-        minYear: 1,
-        maxYear: 17,
-        // minDateValue: 15000,
-        // maxDateValue: 16365,
-        // confidence: [0, 1],
-        technicalName: 'tree_cover_loss',
-        legendLayer: [0],
-        // colormap: [[1, 219, 101, 152]],
-        // inputRange: [1, 15],
-        // outputRange: [1],
-        label: {
-          en: 'Tree cover loss',
-          fr: 'Perte en couvert arboré',
-          es: 'Pérdida de la cobertura arbórea',
-          pt: 'Perda de cobertura arbórea',
-          id: 'Tree cover loss',
-          zh: '森林覆盖损失',
-          ka: 'ხის ვარჯის კარგვა'
-        },
-        sublabel: {
-          en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
+        type: 'remoteDataLayer',
+        uuid: 'c3075c5a-5567-4b09-bc0d-96ed1673f8b6'
       }, {
         order: 2,
-        id: 'TREE_COVER_GAIN',
-        type: 'gain', //'image',
-        url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
-        technicalName: 'tree_cover_gain',
-        legendLayer: [1],
-        label: {
-          en: 'Tree cover gain',
-          fr: 'Gain en couvert arboré',
-          es: 'Aumento de la cobertura arbórea',
-          pt: 'Ganho de cobertura arbórea',
-          id: 'Tree cover gain',
-          zh: '森林覆盖增加',
-          ka: 'ხის ვარჯის ნამატი'
-        },
-        sublabel: {
-          en: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(12 ans, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(12 años, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(12 anos, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(12 years, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(12 年, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(12 წელიწადი, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
+        type: 'remoteDataLayer',
+        uuid: '3b22a574-2507-4b4a-a247-80057c1a1ad4'
       }, {
         order: 3,
         id: 'IMAZON_SAD',
@@ -777,32 +726,8 @@ export default {
         }
       }, {
         order: 4,
-        id: 'GLAD_ALERTS',
-        type: 'glad',
-        url: 'https://tiles.globalforestwatch.org/glad_prod/tiles/{z}/{x}/{y}.png',
-        technicalName: 'umd_landsat_alerts',
-        legendLayer: [7],
-        minDateValue: 15000,
-        maxDateValue: 999999,
-        confidence: [0, 1],
-        label: {
-          en: 'GLAD Alerts',
-          fr: 'Alertes GLAD',
-          es: 'Alertas GLAD',
-          pt: 'Alertas GLAD',
-          id: 'GLAD Alerts',
-          zh: 'GLAD Alerts',
-          ka: 'GLAD შეტყობინებები'
-        },
-        sublabel: {
-          en: '(weekly, 30m, select countries, UMD/ GLAD)',
-          fr: '(hebdomadaire, 30m, certains pays, UMD/ GLAD)',
-          es: '(semanal, 30m, select countries, UMD/ GLAD)',
-          pt: '(semanal, 30m, select countries, UMD/ GLAD)',
-          id: '(weekly, 30m, select countries, UMD/ GLAD)',
-          zh: '(weekly, 30m, select countries, UMD/ GLAD)',
-          ka: '(ყოველკვირეული, 30მ, აარჩიეთ ქვეყნები, UMD/ GLAD)'
-        }
+        type: 'remoteDataLayer',
+        uuid: 'dd5df87f-39c2-4aeb-a462-3ef969b20b66'
       }, {
         order: 5,
         id: 'FORMA_ALERTS',
@@ -823,84 +748,12 @@ export default {
         },
       }, {
         order: 6,
-        id: 'TERRA_I_ALERTS',
-        type: 'terra',
-        url: 'https://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png',
-        technicalName: 'terra_i_alerts',
-        legendLayer: [13],
-        maxZoom: 10,
-        minDateValue: 4000, //We know data starts in 2004
-        // We are setting this way over max, the max date will get set set when TerraIControls mounts
-        // We set this over max so all data is visible by default, and it will update the dates when available
-        maxDateValue: 20000,
-        imageServer: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
-        label: {
-          en: 'Terra-I Alerts',
-          fr: 'Alertes Terra-I',
-          es: 'Alertas Terra-I',
-          pt: 'Alertas Terra-I',
-          id: 'Terra-I Alerts',
-          zh: 'Terra-I Alerts',
-          ka: 'Terra-I შეტყობინებები'
-        },
-        sublabel: {
-          en: '(monthly, 250m, Latin America, CIAT)',
-          fr: '(mensuel, 250m, Amérique Latine, CIAT)',
-          es: '(mensual, 250m, Latin America, CIAT)',
-          pt: '(Mensal, 250m, Latin America, CIAT)',
-          id: '(monthly, 250m, Latin America, CIAT)',
-          zh: '(monthly, 250m, Latin America, CIAT)',
-          ka: '(ყოველთვიური, 250მ, ლათინური ამერიკა, CIAT)'
-        }
+        type: 'remoteDataLayer',
+        uuid: '790b46ce-715a-4173-8f2c-53980073acb6'
       }, {
         order: 7,
-        id: 'VIIRS_ACTIVE_FIRES',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
-        technicalName: 'viirs_fires',
-        layerIds: [8],
-        label: {
-          en: 'VIIRS Active Fires',
-          fr: 'Feux actifs',
-          es: 'Incendios activos',
-          pt: 'Incêndios ativos',
-          id: 'Active fires',
-          zh: '活跃火点',
-          ka: 'VIIRS აქტიური ხანძრები'
-        },
-        sublabel: {
-          en: '(daily, 375m, global, NASA)',
-          fr: '(journalier, 375m, global, NASA)',
-          es: '(Diaria, 375m, global, NASA)',
-          pt: '(Diária, 375m, global, NASA)',
-          id: '(daily, 375m, global, NASA)',
-          zh: '(每天更新, 375米, 全球覆盖, 美国宇航局（NASA))',
-          ka: '(ყოველდღიური, 375მ, გლობალური, NASA)'
-        },
-        popup: {
-          title: {
-            en: 'Active Fires'
-          },
-          content: {
-            en: [
-              { 'label': 'Brightness', 'fieldExpression': 'BRIGHTNESS' },
-              { 'label': 'Confidence', 'fieldExpression': 'CONFIDENCE' },
-              { 'label': 'Latitude', 'fieldExpression': 'LATITUDE' },
-              { 'label': 'Longitude', 'fieldExpression': 'LONGITUDE' },
-              { 'label': 'Acquisition Date', 'fieldExpression': 'ACQ_DATE:DateString(hideTime:true)' },
-              { 'label': 'Acquisition Time', 'fieldExpression': 'ACQ_TIME' }
-            ]
-          },
-          sublabel: {
-            en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-            ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-          }
-        }
+        type: 'remoteDataLayer',
+        uuid: '3d096b4b-de3d-4630-a41b-684b10dc02f3'
       }, {
         order: 8,
         id: 'MODIS_ACTIVE_FIRES',
@@ -984,20 +837,8 @@ export default {
         }
       }, {
         order: 2,
-        id: 'IFL',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
-        technicalName: 'intact_forest_landscapes_change',
-        layerIds: [0],
-        label: {
-          en: 'Intact Forest Landscape',
-          fr: 'Paysage forestier intact',
-          es: 'Paisajes Forestales Intactos',
-          pt: 'Paisagens Florestais Intactas',
-          id: 'Intact Forest Landscape',
-          zh: '原生森林景观',
-          ka: 'ხელუხლებელი ტყის ლანდშაფტი'
-        }
+        type: 'remoteDataLayer',
+        uuid: '7e133f7a-2e2e-49c2-b736-14556eb5ffab'
       }, {
         order: 3,
         id: 'AG_BIOMASS',
@@ -1016,61 +857,8 @@ export default {
         }
       }, {
         order: 4,
-        id: 'LAND_COVER',
-        type: 'webtiled',
-        url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
-        technicalName: 'global_landcover',
-        legendLayer: [15],
-        rasterId: '$568',
-        bounds: [1, 16],
-        classes: {
-          en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
-          fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-        },
-        colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
-        label: {
-          en: 'Land Cover',
-          fr: 'Couverture des sols',
-          es: 'Cobertura vegetal',
-          pt: 'Land cover',
-          id: 'Land cover',
-          zh: '土地覆盖',
-          ka: 'მიწის საფარი'
-        }
-      }, {
-        order: 5,
-        id: 'TREE_COVER',
-        type: 'image',
-        url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
-        technicalName: 'tree_cover',
-        colormap: [[1, 0, 179, 0]],
-        inputRange: [30, 101],
-        outputRange: [1],
-        opacity: 0.8,
-        legendLayer: [2],
-        label: {
-          en: 'Tree cover density',
-          fr: 'Densité du couvert arboré',
-          es: 'Densidad de follaje',
-          pt: 'Tree cover density',
-          id: 'Tree cover density',
-          zh: '森林覆盖密度',
-          ka: 'ხის ვარჯის სიხშირე'
-        },
-        sublabel: {
-          en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
+        type: 'remoteDataLayer',
+        uuid: 'ed836651-f1a2-4ebc-bdb4-d341b68bd544'
       }]
     },
     GROUP_BASEMAP: {
