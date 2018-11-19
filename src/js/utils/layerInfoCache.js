@@ -368,7 +368,7 @@ export default {
         getXMLTask(url).then(xmlDocument => {
           promise.resolve(reduceXML(xmlDocument));
         }, () => {
-          url = urls.agolItemEndpoint(layer.itemId);
+          url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
           getServiceInfoTask(url).then(results => {
             const {subId} = layer;
             _cache[subId] = results;
@@ -385,7 +385,7 @@ export default {
       getXMLTask(url).then(xmlDocument => {
         promise.resolve(reduceXML(xmlDocument));
       }, () => {
-        url = urls.agolItemEndpoint(layer.itemId);
+        url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
         getServiceInfoTask(url).then(results => {
           const {subId} = layer;
           _cache[subId] = results;
