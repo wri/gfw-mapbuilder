@@ -23,7 +23,7 @@ export default class ApiLegend extends Component {
                 <div style={{
                   backgroundColor: color,
                   opacity: this.state.opacity,
-                  border: `1px solid ${outlineColor}`
+                  border: outlineColor ? `1px solid ${outlineColor}` : `1px solid ${color}`
                 }} className='legend-icon'></div>
                 <div className='legend-label'>{name[language]}</div>
               </div>
@@ -41,8 +41,8 @@ export default class ApiLegend extends Component {
                   width: `${size}px`,
                   height: `${size}px`,
                   backgroundColor: color,
-                  borderColor: outlineColor,
-                  opacity: this.state.opacity
+                  opacity: this.state.opacity,
+                  border: outlineColor ? `1px solid ${outlineColor}` : `1px solid ${color}`
                 }} className='legend-point'></div>
               </div>
               <div className='legend-label'>{name[language]}</div>
@@ -57,11 +57,9 @@ export default class ApiLegend extends Component {
             <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
               <div className='legend-icon centered'>
                 <div style={{
-                  borderColor: color,
-                  borderStyle: lineType,
                   opacity: this.state.opacity,
                   marginTop: `-${thickness}px`,
-                  borderWidth: `${thickness / 2}px`
+                  border: color ? `${thickness / 2}px ${lineType} ${color}` : `${thickness / 2}px ${lineType} ${color}`
                 }} className='legend-line'></div>
               </div>
               <div className='legend-label'>{name[language]}</div>
@@ -78,7 +76,7 @@ export default class ApiLegend extends Component {
                   <div style={{
                     backgroundColor: color,
                     opacity: this.state.opacity,
-                    border: `1px solid ${outlineColor}`
+                    border: outlineColor ? `1px solid ${outlineColor}` : `1px solid ${color}`
                   }} className='legend-icon'></div>
                   <div className='legend-label'>{name[language]}</div>
                 </div>
@@ -92,14 +90,16 @@ export default class ApiLegend extends Component {
         return (
           <div>
             <div className='gradient-legend' style={{height: `${18 * items.length}px`, background}}></div>
-              {items.map((item, i) => {
-                const name = item.name;
-                return (
-                  <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
-                    <div className='legend-label'>{name[language]}</div>
-                  </div>
-                );
-              })}
+              <div className='legend-labels'>
+                {items.map((item, i) => {
+                  const name = item.name;
+                  return (
+                    <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
+                      <div className='legend-label'>{name[language]}</div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
     }
@@ -126,7 +126,7 @@ export default class ApiLegend extends Component {
                 </div>
                 <div className='legend-container'>
                   {subgroup.items.length &&
-                    <div className='legend'>
+                    <div>
                       {this.generateLegends(subgroup.items, subgroup.type, language)}
                     </div>}
                 </div>
@@ -145,7 +145,7 @@ export default class ApiLegend extends Component {
           </div>
           <div className='legend-container'>
             {items.length &&
-              <div className='api-legend'>
+              <div>
                 {this.generateLegends(items, type, language)}
               </div>}
           </div>

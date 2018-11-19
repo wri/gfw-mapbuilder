@@ -118,35 +118,42 @@ img.legend-icon
   height 20px
 
 div.legend-icon
-  width 17px
-  height 17px
-  margin 1px
-  &.centered
-    display: flex
-    align-items: center
-    justify-content: center
-
-.legend-line
-    width 16px
+  width 18px
+  height 18px
+  margin 2px
 .api-legend
+  .legend-line
+    width 16px
+  div.legend-icon
+    width 16px
+    height 16px
+    margin: 2px
+    &.centered
+      display: flex
+      align-items: center
+      justify-content: center
   .gradient-legend
-    width: 18px
+    width: 16px
     border: 1px solid #555555
+    clear: none
+    display: inline-block
+    margin 2px 0 2px 2px
     float: left;
+  .legend-labels
+    float: left
+    padding-top: 2px
   .label-container
     strong
-      font-size: 12px
       margin: 5px 0
   .legend-container
     margin: 5px 0 8px
   .legend-label
-    font-size: 12px
-    margin-top: 3.5px;
-    margin-left: 5px
+    margin: 4px 0 0 10px
   .legend-row
-    white-space: nowrap
+    display: flex
+    line-height: 13px
   .legend-point
-    border: 1px solid;
+    border: 1px solid
     border-radius: 50%
 
 .water-stress-legend .no-data-labels div:nth-child(2)
