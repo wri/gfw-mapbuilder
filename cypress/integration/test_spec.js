@@ -11,7 +11,7 @@ describe('My first integration test', function () {
 describe('An actual test on our app', function () {
   it('Ensures our external constructor has the correct properties', function () {
 
-    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/external.html', {
+    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/index.html', {
       onLoad: (winn) => {
         const app = winn.customApp;
         expect(app).to.not.be.an('undefined');
@@ -37,7 +37,7 @@ describe('An actual test on our app', function () {
 
   it('Tests our library constructor parameters', function () {
 
-    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/external.html', {
+    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/index.html', {
 
       onLoad: (winn) => {
 
