@@ -691,16 +691,15 @@ export default {
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
-      layers: [
-        {
+      layers: [{
         order: 1,
         type: 'remoteDataLayer',
-        uuid: 'bb4722a3-4fd8-42a4-b538-cff0bb9da369'
+        uuid: '4625b9eb-0d71-4592-91b5-e81a74646006'
       },
       {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: 'f9a23779-d9b0-4559-829a-b6009fb85f04'
+        uuid: 'c8da0ea6-6b86-4e1a-97cb-7e6d7720fc32'
       },
       {
         order: 3,
@@ -731,7 +730,7 @@ export default {
       {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: 'd422ee6b-de4e-4bda-9125-8fec762e152b'
+        uuid: 'd4569413-93a6-4d22-a153-951236879e05'
       },
       {
         order: 5,
@@ -755,12 +754,12 @@ export default {
       {
         order: 6,
         type: 'remoteDataLayer',
-        uuid: '97df93b7-209d-4170-9ce6-fb21a1112861'
+        uuid: '8d246e84-737b-435d-abb7-d85f5d29a1ce'
       },
       {
         order: 7,
         type: 'remoteDataLayer',
-        uuid: '3d324bc8-9534-4a3e-b9d0-74b5caf97f71'
+        uuid: '1f4bb115-73c4-4474-babb-a0029a269625'
       },
       {
         order: 8,
@@ -847,7 +846,7 @@ export default {
       {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: 'c8b8dcd2-3673-4ecb-afb7-2283e9608a62'
+        uuid: '93a614f1-336a-4130-84d7-3afd11c73686'
       },
       {
         order: 3,
@@ -869,7 +868,7 @@ export default {
       {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: '1842bccd-814f-4166-8a10-e6c28b6e1081'
+        uuid: '8781e995-d08b-4b49-b4a7-e93ff76f4be2'
       },
       {
         order: 5,
@@ -1006,7 +1005,7 @@ export default {
           order: 5,
           id: 'PA',
           type: 'dynamic',
-          visible: true,
+          visible: false,
           url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
           layerIds: [
             4
