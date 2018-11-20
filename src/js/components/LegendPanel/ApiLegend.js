@@ -110,7 +110,6 @@ export default class ApiLegend extends Component {
     const { metadata, language } = this.props;
     const { type, items } = metadata.legendConfig;
     const name = metadata.legendConfig.name[language];
-
     if (type === 'group') {
       return (
         <div className={`parent-legend-container api-legend ${!visible ? 'hidden' : ''}`} ref='myRef' key={`webmap-legend-${name}`}>

@@ -691,15 +691,18 @@ export default {
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
-      layers: [{
+      layers: [
+        {
         order: 1,
         type: 'remoteDataLayer',
-        uuid: 'c3075c5a-5567-4b09-bc0d-96ed1673f8b6'
-      }, {
+        uuid: 'bb4722a3-4fd8-42a4-b538-cff0bb9da369'
+      },
+      {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: '3b22a574-2507-4b4a-a247-80057c1a1ad4'
-      }, {
+        uuid: 'f9a23779-d9b0-4559-829a-b6009fb85f04'
+      },
+      {
         order: 3,
         id: 'IMAZON_SAD',
         type: 'dynamic',
@@ -724,11 +727,13 @@ export default {
           zh: '(monthly, 250m, Brazilian Amazon, Imazon)',
           ka: '(ყოველთვიური, 250მ, ბრაზილიის ამაზონია, Imazon)'
         }
-      }, {
+      },
+      {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: 'dd5df87f-39c2-4aeb-a462-3ef969b20b66'
-      }, {
+        uuid: 'd422ee6b-de4e-4bda-9125-8fec762e152b'
+      },
+      {
         order: 5,
         id: 'FORMA_ALERTS',
         type: 'forma',
@@ -746,15 +751,18 @@ export default {
           zh: 'FORMA 250',
           ka: 'FORMA 250'
         },
-      }, {
+      },
+      {
         order: 6,
         type: 'remoteDataLayer',
-        uuid: '790b46ce-715a-4173-8f2c-53980073acb6'
-      }, {
+        uuid: '97df93b7-209d-4170-9ce6-fb21a1112861'
+      },
+      {
         order: 7,
         type: 'remoteDataLayer',
-        uuid: '3d096b4b-de3d-4630-a41b-684b10dc02f3'
-      }, {
+        uuid: '3d324bc8-9534-4a3e-b9d0-74b5caf97f71'
+      },
+      {
         order: 8,
         id: 'MODIS_ACTIVE_FIRES',
         type: 'dynamic',
@@ -835,11 +843,13 @@ export default {
           zh: 'Global Mangrove',
           ka: 'გლობალური მანგრები'
         }
-      }, {
+      },
+      {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: '7e133f7a-2e2e-49c2-b736-14556eb5ffab'
-      }, {
+        uuid: 'c8b8dcd2-3673-4ecb-afb7-2283e9608a62'
+      },
+      {
         order: 3,
         id: 'AG_BIOMASS',
         type: 'image',
@@ -855,11 +865,43 @@ export default {
           zh: 'Aboveground Live Woody Biomass Density',
           ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
         }
-      }, {
+      },
+      {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: 'ed836651-f1a2-4ebc-bdb4-d341b68bd544'
-      }]
+        uuid: '1842bccd-814f-4166-8a10-e6c28b6e1081'
+      },
+      {
+        order: 5,
+        id: 'TREE_COVER',
+        type: 'image',
+        url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
+        technicalName: 'tree_cover',
+        colormap: [[1, 0, 179, 0]],
+        inputRange: [30, 101],
+        outputRange: [1],
+        opacity: 0.8,
+        legendLayer: [2],
+        label: {
+          en: 'Tree cover density',
+          fr: 'Densité du couvert arboré',
+          es: 'Densidad de follaje',
+          pt: 'Tree cover density',
+          id: 'Tree cover density',
+          zh: '森林覆盖密度',
+          ka: 'ხის ვარჯის სიხშირე'
+        },
+        sublabel: {
+          en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+          fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+          es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+          pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+          id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+          zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
+          ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
+        }
+      }
+    ]
     },
     GROUP_BASEMAP: {
       groupType: 'basemap',
