@@ -973,37 +973,43 @@ export default {
       layers: [
         // basic test layer
         {
-          order: 13,
+          order: 1,
           type: 'remoteDataLayer',
           uuid: '1ec41dce-99be-4c6f-bbd3-aa37a2e28a42'
         },
+        // basic test layer with icon
+        {
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: '6900b201-43c2-47b1-b2d0-5311bc1a5dee'
+        },
         // points test layer
         {
-          order: 9,
+          order: 4,
           type: 'remoteDataLayer',
           uuid: '946fd989-1678-41f8-91cc-dfdaac494507'
         },
         // lines test layer
         {
-          order: 10,
+          order: 5,
           type: 'remoteDataLayer',
           uuid: '840cf0cd-c7db-42db-9bf0-a3a700c79255'
         },
         // choropleth test layer
         {
-          order: 11,
+          order: 6,
           type: 'remoteDataLayer',
           uuid: '67d742f7-e1a3-4d17-971d-29fe18b06cf5'
         },
         // gradient test layer
         {
-          order: 12,
+          order: 7,
           type: 'remoteDataLayer',
           uuid: 'ed76a7d1-50de-4f8d-8015-b20a65349292'
         },
         // group test layer
         {
-          order: 13,
+          order: 8,
           type: 'remoteDataLayer',
           uuid: '7ac94f47-5541-4e89-83f7-8e566ab80a98'
         }

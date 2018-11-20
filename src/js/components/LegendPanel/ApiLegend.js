@@ -16,18 +16,18 @@ export default class ApiLegend extends Component {
     switch(type) {
       case 'basic':
         return items.map((item, i) => {
-          const { name, color, outlineColor, image } = item;
+          const { name, color, outlineColor, icon } = item;
           return (
               <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
-                {image
+                {icon
                   ? (
                     <div style={{
-                      backgroundImage: `url(data:${image})`,
+                      backgroundImage: `url(data:image/png;base64,${icon})`,
                       backgroundSize: 'cover',
                       opacity: this.state.opacity,
                       border: outlineColor ? `1px solid ${outlineColor}` : 'none',
-                      height: image && outlineColor ? '16px' : '18px',
-                      width: image && outlineColor ? '16px' : '18px'
+                      height: outlineColor ? '16px' : '18px',
+                      width: outlineColor ? '16px' : '18px'
                     }} className='legend-icon'></div>
                   )
                   : (
@@ -100,8 +100,8 @@ export default class ApiLegend extends Component {
       case 'gradient':
         const background = `linear-gradient(180deg,${items.map(item => item.color)}`;
         return (
-          <div>
-            <div className='gradient-legend' style={{height: `${18 * items.length}px`, background}}></div>
+          <div className='gradient-legend'>
+            <div className='gradient' style={{height: `${18 * items.length}px`, background}}></div>
               <div className='legend-labels'>
                 {items.map((item, i) => {
                   const name = item.name;
