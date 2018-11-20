@@ -903,6 +903,152 @@ export default {
       }
     ]
     },
+
+    GROUP_PA: {
+      order: 5,
+      label: {
+        en: 'Protected Areas (Legend Test)',
+        ka: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ”áƒ‘áƒ˜'
+      },
+      layers: [
+        {
+          order: 2,
+          id: 'PARoads',
+          type: 'dynamic',
+          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
+          layerIds: [
+            1
+          ],
+          label: {
+            en: 'Touristic Routes of Protected Areas',
+            ka: 'áƒ¢áƒ£áƒ áƒ˜áƒ¡áƒ¢áƒ£áƒšáƒ˜ áƒ‘áƒ˜áƒšáƒ˜áƒ™áƒ”áƒ‘áƒ˜'
+          },
+          popup: {
+            title: {
+              en: 'Touristic Routes of Protected Areas',
+              ka: 'áƒ¢áƒ£áƒ áƒ˜áƒ¡áƒ¢áƒ£áƒšáƒ˜ áƒ‘áƒ˜áƒšáƒ˜áƒ™áƒ”áƒ‘áƒ˜'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090',
+                  fieldExpression: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜_áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090'
+                },
+                {
+                  label: 'áƒœáƒ\u009dáƒ›áƒ”áƒ áƒ˜',
+                  fieldExpression: 'áƒœáƒ\u009dáƒ›áƒ”áƒ áƒ˜'
+                },
+                {
+                  label: 'áƒ°áƒ®áƒ\u0090áƒœáƒ’áƒ áƒ«áƒšáƒ˜áƒ•áƒ\u009dáƒ‘áƒ\u0090',
+                  fieldExpression: 'áƒ®áƒ\u0090áƒœáƒ’áƒ áƒ«áƒšáƒ˜áƒ•áƒ\u009dáƒ‘áƒ\u0090'
+                },
+                {
+                  label: 'áƒ¡áƒ˜áƒ áƒ—áƒ£áƒšáƒ”',
+                  fieldExpression: 'áƒ¡áƒ˜áƒ áƒ—áƒ£áƒšáƒ”'
+                },
+                {
+                  label: 'áƒ“áƒ\u0090áƒ¡áƒ\u0090áƒ®áƒ”áƒšáƒ”áƒ‘áƒ\u0090 áƒ¢áƒ˜áƒžáƒ˜',
+                  fieldExpression: 'áƒ“áƒ\u0090áƒ¡áƒ\u0090áƒ®áƒ”áƒšáƒ”áƒ‘áƒ\u0090_áƒ¢áƒ˜áƒžáƒ˜'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 3,
+          id: 'PALease',
+          type: 'dynamic',
+          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
+          layerIds: [
+            2
+          ],
+          label: {
+            en: 'Lease of Protected Areas',
+            ka: 'áƒ˜áƒ¯áƒ\u0090áƒ áƒ”áƒ‘áƒ˜'
+          },
+          popup: {
+            title: {
+              en: 'Protected Area Zoning',
+              ka: 'áƒ¤áƒ£áƒœáƒ¥áƒªáƒ˜áƒ£áƒ áƒ˜ áƒ–áƒ\u009dáƒœáƒ”áƒ‘áƒ˜'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090',
+                  fieldExpression: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜_áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090'
+                },
+                {
+                  label: 'áƒ“áƒ\u0090áƒœáƒ˜áƒ¨áƒ£áƒšáƒ”áƒ‘áƒ\u0090',
+                  fieldExpression: 'áƒ“áƒ\u0090áƒœáƒ˜áƒ¨áƒ£áƒšáƒ”áƒ‘áƒ\u0090'
+                },
+                {
+                  label: 'áƒ°áƒ”áƒ¥áƒ¢áƒ\u0090áƒ áƒ˜',
+                  fieldExpression: 'áƒ°áƒ”áƒ¥áƒ¢áƒ\u0090áƒ áƒ˜'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 4,
+          id: 'PAFunction',
+          type: 'dynamic',
+          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
+          layerIds: [
+            3
+          ],
+          label: {
+            en: 'Functional Zoning of Protected Areas',
+            ka: 'áƒ¤áƒ£áƒœáƒ¥áƒªáƒ˜áƒ£áƒ áƒ˜ áƒ–áƒ\u009dáƒœáƒ”áƒ‘áƒ˜'
+          }
+        },
+        {
+          order: 5,
+          id: 'PA',
+          type: 'dynamic',
+          visible: true,
+          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
+          layerIds: [
+            4
+          ],
+          label: {
+            en: 'Protected Areas',
+            ka: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ”áƒ‘áƒ˜'
+          },
+          popup: {
+            title: {
+              en: 'Protected Areas',
+              ka: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ”áƒ‘áƒ˜'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'OBJECTID',
+                  fieldExpression: 'OBJECTID'
+                },
+                {
+                  label: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090',
+                  fieldExpression: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜_áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090'
+                },
+                {
+                  label: 'áƒ“áƒ\u0090áƒ\u0090áƒ áƒ¡áƒ”áƒ‘áƒ˜áƒ¡ áƒ¬áƒ”áƒšáƒ˜',
+                  fieldExpression: 'áƒ“áƒ\u0090áƒ\u0090áƒ áƒ¡áƒ”áƒ‘áƒ˜áƒ¡_áƒ¬áƒ”áƒšáƒ˜'
+                },
+                {
+                  label: 'áƒ\u0090áƒ“áƒ›áƒ˜áƒœáƒ˜áƒ¡áƒ¢áƒ áƒ\u0090áƒªáƒ˜áƒ\u0090',
+                  fieldExpression: 'áƒ\u0090áƒ“áƒ›áƒ˜áƒœáƒ˜áƒ¡áƒ¢áƒ áƒ\u0090áƒªáƒ˜áƒ\u0090'
+                },
+                {
+                  label: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ\u0090',
+                  fieldExpression: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ\u0090'
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+
     GROUP_BASEMAP: {
       groupType: 'basemap',
       order: 200,
