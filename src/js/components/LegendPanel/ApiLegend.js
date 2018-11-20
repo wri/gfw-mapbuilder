@@ -14,17 +14,29 @@ export default class ApiLegend extends Component {
 
   generateLegends(items, type, language) {
     switch(type) {
-      // note: as configured, "basic" is essentially the same as "choropleth"
       case 'basic':
         return items.map((item, i) => {
-          const { name, color, outlineColor } = item;
-            return (
+          const { name, color, outlineColor, image } = item;
+          return (
               <div className='legend-row' key={`webmap-legend-row-${name[language]}-${i}`}>
-                <div style={{
-                  backgroundColor: color,
-                  opacity: this.state.opacity,
-                  border: outlineColor ? `1px solid ${outlineColor}` : `1px solid ${color}`
-                }} className='legend-icon'></div>
+                {image
+                  ? (
+                    <div style={{
+                      backgroundImage: `url(data:${image})`,
+                      backgroundSize: 'cover',
+                      opacity: this.state.opacity,
+                      border: outlineColor ? `1px solid ${outlineColor}` : 'none',
+                      height: image && outlineColor ? '16px' : '18px',
+                      width: image && outlineColor ? '16px' : '18px'
+                    }} className='legend-icon'></div>
+                  )
+                  : (
+                    <div style={{
+                      backgroundColor: color,
+                      opacity: this.state.opacity,
+                      border: outlineColor ? `1px solid ${outlineColor}` : `1px solid ${color}`
+                    }} className='legend-icon'></div>
+                  )}
                 <div className='legend-label'>{name[language]}</div>
               </div>
             );
