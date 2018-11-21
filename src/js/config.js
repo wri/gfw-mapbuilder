@@ -138,7 +138,7 @@ const config = {
       imageStyleOptions: [
         'Natural Color',
         'Vegetation Health'
-      ]
+      ],
     },
   },
 

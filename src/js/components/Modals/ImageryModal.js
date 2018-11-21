@@ -3,7 +3,6 @@ import mapActions from 'actions/MapActions';
 import React, { Component } from 'react';
 import ImageryModalSlider from 'components/SatelliteImagery/ImageryModalSlider';
 import ImageryDatePicker from 'components/SatelliteImagery/ImageryDatePicker';
-import CustomDropdown from 'components/shared/CustomDropdown';
 
 import { modalText } from 'js/config';
 
@@ -13,17 +12,32 @@ export default class ImageryModal extends Component {
     super(props);
     this.state = {
       monthsVal: modalText.imagery.monthsBefore,
-      monthsVisible: false,
       imageStyleVal: modalText.imagery.imageStyle,
-      imageStyleVisible: false,
       cloudCoverageVal: modalText.imagery.cloudCoverage,
 
     };
   }
 
+  renderDropdownOptions (option, index) {
+    return <option key={index} value={option}>{option}</option>;
+  }
+
   close = () => {
     mapActions.toggleImageryVisible(false);
   };
+
+  onChangeMonths = (event) => {
+    this.setState({ monthsVal: event.target.value });
+  }
+
+  onChangeImageStyle = (event) => {
+    this.setState({ imageStyleVal: event.target.value });
+  }
+
+  onChangeCalendarVal = (obj) => {
+    console.log(obj)
+  }
+
 
   onDragEnd = (event) => {
     event.target.style.top = event.clientY;
@@ -43,13 +57,22 @@ export default class ImageryModal extends Component {
             <div>
               <div className='imagery-modal_section-title'>Aquisition Date</div>
               <div className='flex'>
-                <CustomDropdown
-                value={monthsVal}
-                options={modalText.imagery.monthsOptions}
-                onClick={() => this.setState({ monthsVisible: !monthsVisible})}
-                open={monthsVisible}
+
+                <div className='relative'>
+                  <select
+                    value={monthsVal}
+                    onChange={this.onChangeMonths}>
+                    {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
+                  </select>
+                  <div className='fa-button sml white'>{monthsVal}</div>
+                </div>
+
+                <div className='imagery-modal_section-text'>before</div>
+
+                <ImageryDatePicker
+                  minDate={'2012-01-01'}
+                  calendarCallback={this.onChangeCalendarVal}
                 />
-                <div>before</div>
               </div>
             </div>
 
@@ -58,6 +81,20 @@ export default class ImageryModal extends Component {
             </div>
           </div>
           <hr />
+
+          <div className='imagery-modal__section flex'>
+
+            <div className='relative'>
+              <select
+                value={imageStyleVal}
+                onChange={this.onChangeImageStyle}>
+                {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
+              </select>
+              <div className='fa-button sml white'>{imageStyleVal}</div>
+            </div>
+
+          </div>
+
           <div className='imagery-modal__section scroll flex'>
 
           </div>

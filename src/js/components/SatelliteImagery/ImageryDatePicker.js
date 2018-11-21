@@ -64,12 +64,11 @@ export default class AnalysisDatePicker extends Component {
   }
 
   render() {
-    const { label, minDate, maxDate } = this.props;
+    const { minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
 
     return (
       <div className='analysis-results__select-form-item-container'>
-        <div className='select-form-item-label'>{label}</div>
         <DatePicker
           customInput={<Button />}
           showMonthDropdown
@@ -88,7 +87,6 @@ export default class AnalysisDatePicker extends Component {
 
 const Button = ({ onClick, value }) => (
   <div>
-    <label className='analysis-datepicker-button-label'>Date: </label>
     <button
     className='fa-button sml white pointer'
     onClick={onClick}
