@@ -694,12 +694,12 @@ export default {
       layers: [{
         order: 1,
         type: 'remoteDataLayer',
-        uuid: '4625b9eb-0d71-4592-91b5-e81a74646006'
+        uuid: 'abcb4b31-0200-494d-9684-73c7aa46288c'
       },
       {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: 'c8da0ea6-6b86-4e1a-97cb-7e6d7720fc32'
+        uuid: 'da8be6b9-009b-4de4-9cc4-274eacbc5d48'
       },
       {
         order: 3,
@@ -730,7 +730,7 @@ export default {
       {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: 'd4569413-93a6-4d22-a153-951236879e05'
+        uuid: '3c97afd7-2c86-42f1-a732-33e8dc60f5ac'
       },
       {
         order: 5,
@@ -754,12 +754,12 @@ export default {
       {
         order: 6,
         type: 'remoteDataLayer',
-        uuid: '8d246e84-737b-435d-abb7-d85f5d29a1ce'
+        uuid: '5d90df1b-53ac-4b50-97c8-cb20b0c94523'
       },
       {
         order: 7,
         type: 'remoteDataLayer',
-        uuid: '1f4bb115-73c4-4474-babb-a0029a269625'
+        uuid: '3020dffd-61f3-46c9-aa68-1ef2fed3fa7b'
       },
       {
         order: 8,
@@ -846,7 +846,7 @@ export default {
       {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: '93a614f1-336a-4130-84d7-3afd11c73686'
+        uuid: '50b5cec5-0d08-4c33-985d-06745a066bc4'
       },
       {
         order: 3,
@@ -868,7 +868,7 @@ export default {
       {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: '8781e995-d08b-4b49-b4a7-e93ff76f4be2'
+        uuid: '9b83f384-547b-45d5-bb27-2489c00cde97'
       },
       {
         order: 5,
@@ -1120,43 +1120,43 @@ export default {
         {
           order: 1,
           type: 'remoteDataLayer',
-          uuid: '1ec41dce-99be-4c6f-bbd3-aa37a2e28a42'
+          uuid: '4bdd009f-54f9-4161-a19b-efbe8d4089a0'
         },
         // basic test layer with icon
         {
           order: 2,
           type: 'remoteDataLayer',
-          uuid: '6900b201-43c2-47b1-b2d0-5311bc1a5dee'
+          uuid: '35913d5a-349d-4784-b96e-ff63d2cc9283'
         },
         // points test layer
         {
           order: 4,
           type: 'remoteDataLayer',
-          uuid: '946fd989-1678-41f8-91cc-dfdaac494507'
+          uuid: 'd5212162-d99c-45a1-8091-5b3e0904a040'
         },
         // lines test layer
         {
           order: 5,
           type: 'remoteDataLayer',
-          uuid: '840cf0cd-c7db-42db-9bf0-a3a700c79255'
+          uuid: '5a30961b-3dbe-4e7a-b1c3-d95a63ff0f68'
         },
         // choropleth test layer
         {
           order: 6,
           type: 'remoteDataLayer',
-          uuid: '67d742f7-e1a3-4d17-971d-29fe18b06cf5'
+          uuid: 'a4365fbc-31ad-45cb-bb4b-91ef4bf58a49'
         },
         // gradient test layer
         {
           order: 7,
           type: 'remoteDataLayer',
-          uuid: 'ed76a7d1-50de-4f8d-8015-b20a65349292'
+          uuid: '20c0422e-4186-492e-b4ce-e7a43576eca0'
         },
         // group test layer
         {
           order: 8,
           type: 'remoteDataLayer',
-          uuid: '7ac94f47-5541-4e89-83f7-8e566ab80a98'
+          uuid: 'f49d3977-f195-45e2-89a9-9431d07aa9f6'
         }
       ]
     },
