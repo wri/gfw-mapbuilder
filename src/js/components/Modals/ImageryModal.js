@@ -3,6 +3,7 @@ import mapActions from 'actions/MapActions';
 import React, { Component } from 'react';
 import ImageryModalSlider from 'components/SatelliteImagery/ImageryModalSlider';
 import ImageryDatePicker from 'components/SatelliteImagery/ImageryDatePicker';
+import moment from 'moment';
 
 import { modalText } from 'js/config';
 
@@ -14,7 +15,8 @@ export default class ImageryModal extends Component {
       monthsVal: modalText.imagery.monthsBefore,
       imageStyleVal: modalText.imagery.imageStyle,
       cloudCoverageVal: modalText.imagery.cloudCoverage,
-
+      dateVal: moment(new Date()).format('YYYY-MM-DD'),
+      rangeVal: [0, 100]
     };
   }
 
@@ -34,8 +36,12 @@ export default class ImageryModal extends Component {
     this.setState({ imageStyleVal: event.target.value });
   }
 
-  onChangeCalendarVal = (obj) => {
-    console.log(obj)
+  calendarCallback = (date) => {
+    this.setState({ dateVal: date });
+  }
+
+  rangeSliderCallback = (range) => {
+    this.setState({ rangeVal: range });
   }
 
 
@@ -71,13 +77,17 @@ export default class ImageryModal extends Component {
 
                 <ImageryDatePicker
                   minDate={'2012-01-01'}
-                  calendarCallback={this.onChangeCalendarVal}
-                />
+                  calendarCallback={this.calendarCallback} />
               </div>
             </div>
 
             <div>
               <div className='imagery-modal_section-title'>Maximum Cloud Cover Percentage</div>
+
+              <ImageryModalSlider
+                rangeSliderCallback={this.rangeSliderCallback}
+                bounds={[0, 100]}
+                step={25} />
             </div>
           </div>
           <hr />

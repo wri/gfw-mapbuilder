@@ -67,35 +67,8 @@ export default class AnalysisRangeSlider extends Component {
     });
   }
 
-  handleAfterChange = rangeSliderValue => {
-    const {
-      rangeSliderCallback,
-      analysisId,
-      startParamName,
-      endParamName,
-      valueType,
-      combineParams,
-      valueSeparator,
-    } = this.props;
-
-    rangeSliderCallback(
-      rangeSliderValue,
-      analysisId,
-      combineParams,
-      startParamName,
-      endParamName,
-      valueSeparator,
-      valueType,
-    );
-
-    MapActions.updateAnalysisSliderIndices({
-      id: analysisId,
-      indices: [this.rangeArray.indexOf(rangeSliderValue[0]), this.rangeArray.indexOf(rangeSliderValue[1])]
-    });
-  }
-
   render() {
-    const { bounds, step } = this.props;
+    const { bounds, step, rangeSliderCallback } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
     return (
       <div className='analysis-results__select-form-item-container'>
@@ -106,14 +79,14 @@ export default class AnalysisRangeSlider extends Component {
           value={rangeSliderValue}
           allowCross={false}
           onChange={this.handleChange}
-          onAfterChange={this.handleAfterChange}
+          onAfterChange={rangeSliderCallback}
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: '#F0AB00'}]}
-          handleStyle={[{borderColor: '#F0AB00'}]}
+          trackStyle={[{backgroundColor: '#97be32'}]}
+          handleStyle={[{borderColor: '#97be32'}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #F0AB00'}}
+          activeDotStyle={{border: '1px solid #97be32'}}
         />
       </div>
     );

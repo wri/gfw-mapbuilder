@@ -17,9 +17,9 @@ export default class SatelliteImagery extends Component {
   };
 
   toggleImagery = () => {
+    const { imageryModalVisible } = this.props;
     const { map } = this.context;
-
-    if (!map.imageryModalVisible) {
+    if (!imageryModalVisible) {
       const xVal = window.innerWidth / 2;
       const yVal = window.innerHeight / 2;
 
@@ -36,14 +36,15 @@ export default class SatelliteImagery extends Component {
       mapActions.getSatelliteImagery({ lat, lon });
     }
 
-    mapActions.toggleImageryVisible(!map.imageryModalVisible);
+    mapActions.toggleImageryVisible(!imageryModalVisible);
   };
 
   render () {
-    const {language} = this.context;
+    const {language } = this.context;
+    const { imageryModalVisible } = this.props;
 
     return (
-      <div className='control-panel map-component shadow imagery'>
+      <div className={`control-panel map-component shadow imagery ${imageryModalVisible ? 'active' : ''}`}>
         <div className='pointer' title={text[language].TOOL_ZOOM_OUT} onClick={this.toggleImagery}>
           <SVGIcon id={'satellite-icon'} />
         </div>

@@ -874,7 +874,7 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
-          <SatelliteImagery {...this.state} />
+          <SatelliteImagery imageryModalVisible={this.state.imageryModalVisible} />
 
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
