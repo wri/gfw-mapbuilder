@@ -918,7 +918,7 @@ export default class Map extends Component {
         <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
-        <div className={`subscription-modal-container modal-wrapper ${imageryModalVisible ? '' : 'hidden'}`}>
+        <div className={`modal-wrapper imagery ${imageryModalVisible ? '' : 'hidden'}`}>
           <ImageryModal />
         </div>
       </div>

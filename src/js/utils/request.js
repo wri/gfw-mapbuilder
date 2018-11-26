@@ -224,7 +224,55 @@ const request = {
       content: params
     }).then(response => {
         console.log(response)
-        // deferred.resolve();
+
+        if(response) {
+          const sourceData = [];
+          response.data.tiles.forEach((tile) => {
+            sourceData.push({ source: tile.attributes.source });
+          })
+
+          const content = {
+            bands: 0,
+            source_data: sourceData,
+          };
+          console.log(content)
+
+          // Tried with promise.all but returns with 500 when both requests are sent out at the same time.
+          fetch(
+            urls.satelliteImageService + '/tiles',
+            {
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(content)
+            }
+          ).then(tileResponse => {
+            console.log('tiles', tileResponse)
+
+            fetch(
+              urls.satelliteImageService + '/thumbs',
+              {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(content)
+              }
+            ).then(thumbResponse => {
+              console.log('thumbs', thumbResponse)
+              deferred.resolve(tileResponse, thumbResponse);
+
+            });
+          });
+
+
+        }
+
+
+
     }, err => {
       console.error(err);
       // deferred.resolve();
