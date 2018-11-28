@@ -528,10 +528,10 @@
   line-height 21px
   color #555
   text-transform uppercase
-  margin 0 20px
+  margin 0 20px 10px 20px
 
 .imagery-modal__section
-  padding 10px 20px
+  padding 0px 20px 10px 20px
   font-size 11px
   color #999
   justify-content space-between
@@ -539,6 +539,10 @@
   &.filters
     position relative
     z-index 5
+
+ &.secondary-filters
+    align-items flex-start
+    min-height 60px
 
   &.thumbnail_container
     width 100%
@@ -548,17 +552,34 @@
     justify-content flex-start
     flex-wrap wrap
 
+  .thumbnail-text
+    width 50%
+    p
+      color #555
+      line-height 1.4
+      margin 0
+
   .thumbnail
     width 85px
     height 85px
+    overflow hidden
     margin 2px
     cursor pointer
     border transparent solid 4px;
+    background #999
+
+    img
+      width 85px
+      height auto
+
+    &:hover
+      border #555 solid 4px;
 
     &.selected
       border #97be32 solid 4px;
 
 hr
+  margin 10px 0px 10px 0px
   border $lightGrayBorder 0.5px solid
 
 .imagery-modal_section-title

@@ -23,23 +23,51 @@ export default class ImageryModal extends Component {
     };
   }
 
-  renderDropdownOptions (option, index) {
-    return <option key={index} value={option.label}>{option.label}</option>;
-  }
-
   selectThumbnail (tileObj, i) {
-    console.log('HERE', tileObj)
+    // console.log('HERE', tileObj)
     this.setState({ selectedThumb: i });
   }
 
+  hoverThumbnail (tileObj) {
+    this.setState({ hoveredThumb: tileObj });
+  }
 
-  renderThumbnails (tileObj, i) {
+  renderDropdownOptions = (option, index) => {
+    return <option key={index} value={option.label}>{option.label}</option>;
+  }
+
+  renderThumbnails = (tileObj, i) => {
     return (
-      <img onClick={() => this.selectThumbnail(tileObj, i)} className={`thumbnail ${this.state.selectedThumb === i ? 'selected' : ''}`} key={`thumb-${i}`} src={tileObj.thumbUrl} />
+      <div
+        onClick={() => this.selectThumbnail(tileObj, i)}
+        onMouseOver={() => this.hoverThumbnail(tileObj)}
+        className={`thumbnail ${this.state.selectedThumb === i ? 'selected' : ''}`}
+        key={`thumb-${i}`}>
+          <img src={tileObj.thumbUrl} />
+      </div>
     );
   }
 
+  renderThumbText = () => {
+    const { hoveredThumb } = this.state;
+    return (
+      <div>
+        <p>{moment(hoveredThumb.attributes.date_time).format('DD MMM YYYY')}</p>
+        <p>{`${hoveredThumb.attributes.cloud_score.toFixed(1)}% cloud coverage`}</p>
+        <p>{hoveredThumb.attributes.instrument.replace('_', ' ')}</p>
+      </div>
+    );
+  };
+
   close = () => {
+    this.setState({
+      monthsVal: modalText.imagery.monthsOptions[1].label,
+      imageStyleVal: modalText.imagery.imageStyleOptions[0].label,
+      cloudScore: [0, 100],
+      start: null,
+      end: null,
+      selectedThumb: null
+    });
     mapActions.toggleImageryVisible(false);
   };
 
@@ -50,20 +78,20 @@ export default class ImageryModal extends Component {
     const end = this.state.end ? moment(this.state.end) : moment();
     const start = end.subtract(value, type).format('YYYY-MM-DD');
 
-    this.setState({ start, monthsVal: event.target.value }, this.updateImagery);
+    this.setState({ start, monthsVal: event.target.value, selectedThumb: null }, this.updateImagery);
   }
 
   onChangeEnd = (end) => {
-    this.setState({ end }, this.updateImagery);
+    this.setState({ end, selectedThumb: null }, this.updateImagery);
   }
 
   onChangeImageStyle = (event) => {
     const value = event.target.value;
-    this.setState({ imageStyleVal: value }, this.updateImagery);
+    this.setState({ imageStyleVal: value, selectedThumb: null }, this.updateImagery);
   }
 
   rangeSliderCallback = (range) => {
-    this.setState({ cloudScore: range });
+    this.setState({ cloudScore: range, selectedThumb: null });
   }
 
 
@@ -92,13 +120,16 @@ export default class ImageryModal extends Component {
     if (imageStyleVal === 'Vegetation Health') {
       params.bands = '[B8,B11,B2]';
     }
-    console.log('PARAMS', params);
     mapActions.getSatelliteImagery(params);
   };
 
   render () {
-    const { monthsVal, imageStyleVal } = this.state;
+    const { monthsVal, imageStyleVal, cloudScore, hoveredThumb } = this.state;
     const { imageryData } = this.props;
+
+    const filteredImageryData = imageryData.filter((data) => {
+      return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
+    });
 
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
@@ -139,7 +170,11 @@ export default class ImageryModal extends Component {
           </div>
           <hr />
 
-          <div className='imagery-modal__section flex'>
+          <div className='imagery-modal__section flex secondary-filters'>
+
+            <div className='thumbnail-text'>
+              { hoveredThumb ? this.renderThumbText() : null }
+            </div>
 
             <div className='relative'>
               <select
@@ -153,7 +188,7 @@ export default class ImageryModal extends Component {
           </div>
 
           <div className='imagery-modal__section thumbnail_container flex'>
-            {imageryData.map(this.renderThumbnails.bind(this))}
+            {filteredImageryData.map(this.renderThumbnails.bind(this))}
           </div>
         </div>
 
