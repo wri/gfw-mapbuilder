@@ -624,7 +624,7 @@ class MapStore {
       console.log('imageryData', imageryData);
       this.imageryData = imageryData;
       this.loadingImagery = false;
-
+      this.emitChange();
     });
 
   }

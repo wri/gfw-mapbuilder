@@ -502,6 +502,7 @@
   padding 20px 0 10px 0
   -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
   box-shadow 0 1px 3px rgba(85,85,85,0.25)
+  overflow hidden
 
   .flex
     display flex
@@ -539,9 +540,23 @@
     position relative
     z-index 5
 
-  &.scroll
-    max-height 200px
+  &.thumbnail_container
+    width 100%
+    max-height 100px
     overflow-y scroll
+    display flex
+    justify-content flex-start
+    flex-wrap wrap
+
+  .thumbnail
+    width 85px
+    height 85px
+    margin 2px
+    cursor pointer
+    border transparent solid 4px;
+
+    &.selected
+      border #97be32 solid 4px;
 
 hr
   border $lightGrayBorder 0.5px solid

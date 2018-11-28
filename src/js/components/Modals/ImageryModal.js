@@ -27,6 +27,18 @@ export default class ImageryModal extends Component {
     return <option key={index} value={option.label}>{option.label}</option>;
   }
 
+  selectThumbnail (tileObj, i) {
+    console.log('HERE', tileObj)
+    this.setState({ selectedThumb: i });
+  }
+
+
+  renderThumbnails (tileObj, i) {
+    return (
+      <img onClick={() => this.selectThumbnail(tileObj, i)} className={`thumbnail ${this.state.selectedThumb === i ? 'selected' : ''}`} key={`thumb-${i}`} src={tileObj.thumbUrl} />
+    );
+  }
+
   close = () => {
     mapActions.toggleImageryVisible(false);
   };
@@ -62,7 +74,6 @@ export default class ImageryModal extends Component {
 
   updateImagery = () => {
     const { map } = this.context;
-    console.log('>>', map)
     const { start, end, imageStyleVal } = this.state;
 
     const xVal = window.innerWidth / 2;
@@ -87,6 +98,7 @@ export default class ImageryModal extends Component {
 
   render () {
     const { monthsVal, imageStyleVal } = this.state;
+    const { imageryData } = this.props;
 
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
@@ -140,10 +152,9 @@ export default class ImageryModal extends Component {
 
           </div>
 
-          <div className='imagery-modal__section scroll flex'>
-
+          <div className='imagery-modal__section thumbnail_container flex'>
+            {imageryData.map(this.renderThumbnails.bind(this))}
           </div>
-
         </div>
 
 
