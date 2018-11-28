@@ -919,7 +919,7 @@ export default class Map extends Component {
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
         <div className={`modal-wrapper imagery ${imageryModalVisible ? '' : 'hidden'}`}>
-          <ImageryModal imageryData={this.state.imageryData}/>
+          <ImageryModal imageryData={this.state.imageryData} loadingImagery={this.state.loadingImagery}/>
         </div>
       </div>
     );

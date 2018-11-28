@@ -5,6 +5,7 @@ import ImageryModalSlider from 'components/SatelliteImagery/ImageryModalSlider';
 import ImageryDatePicker from 'components/SatelliteImagery/ImageryDatePicker';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
 import moment from 'moment';
+import Loader from 'components/Loader';
 
 import { modalText } from 'js/config';
 
@@ -121,12 +122,17 @@ export default class ImageryModal extends Component {
       params.bands = '[B8,B11,B2]';
     }
     mapActions.getSatelliteImagery(params);
+
+    //Reset state
+    this.setState({
+      selectedThumb: null,
+      hoveredThumb: null
+    });
   };
 
   render () {
     const { monthsVal, imageStyleVal, cloudScore, hoveredThumb } = this.state;
-    const { imageryData } = this.props;
-
+    const { imageryData, loadingImagery} = this.props;
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
@@ -188,6 +194,7 @@ export default class ImageryModal extends Component {
           </div>
 
           <div className='imagery-modal__section thumbnail_container flex'>
+            <Loader active={loadingImagery} type={'imagery'}/>
             {filteredImageryData.map(this.renderThumbnails.bind(this))}
           </div>
         </div>
