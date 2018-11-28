@@ -124,20 +124,17 @@ const config = {
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
     },
     imagery: {
-      monthsBefore: '3 Months',
-      imageStyle: 'Natural Color',
-      cloudCoverage: 25,
 
       monthsOptions: [
-        '4 weeks',
-        '3 months',
-        '6 months',
-        '12 months'
+        { label: '4 weeks', value: 4 },
+        { label: '3 months', value: 3},
+        { label: '6 months', value: 6},
+        { label: '12 months', value: 12}
       ],
 
       imageStyleOptions: [
-        'Natural Color',
-        'Vegetation Health'
+        { label: 'Natural Color'},
+        { label: 'Vegetation Health'}
       ],
     },
   },

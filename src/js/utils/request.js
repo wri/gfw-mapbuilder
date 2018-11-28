@@ -217,27 +217,36 @@ const request = {
       params.end = moment().format('YYYY-MM-DD');
     }
 
-    esriRequest({
-      url: urls.satelliteImageService,
-      handleAs: 'json',
-      callbackParamName: 'callback',
-      content: params
-    }).then(response => {
-        console.log(response)
+    const recentTilesUrl = new URL(urls.satelliteImageService);
+    Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
+
+    fetch(
+      recentTilesUrl,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    )
+    .then(response => response.json())
+    .then(response => {
 
         if(response) {
           const sourceData = [];
-          response.data.tiles.forEach((tile) => {
-            sourceData.push({ source: tile.attributes.source });
-          })
 
+          const imageryData = response.data.tiles;
+
+          imageryData.forEach((tile) => {
+            sourceData.push({ source: tile.attributes.source });
+          });
           const content = {
-            bands: 0,
+            bands: params.bands,
             source_data: sourceData,
           };
-          console.log(content)
-
-          // Tried with promise.all but returns with 500 when both requests are sent out at the same time.
+          // Tried using promise.all but request may fail when both requests
+          // are sent out at the same time.
           fetch(
             urls.satelliteImageService + '/tiles',
             {
@@ -248,35 +257,40 @@ const request = {
               },
               body: JSON.stringify(content)
             }
-          ).then(tileResponse => {
-            console.log('tiles', tileResponse)
+          )
+          .then(tileResponse => tileResponse.json())
+          .then(tileResponse => {
 
-            fetch(
-              urls.satelliteImageService + '/thumbs',
-              {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(content)
-              }
-            ).then(thumbResponse => {
-              console.log('thumbs', thumbResponse)
-              deferred.resolve(tileResponse, thumbResponse);
+            setTimeout(function () {
+              fetch(
+                urls.satelliteImageService + '/thumbs',
+                {
+                  method: 'POST',
+                  credentials: 'include',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(content)
+                }
+              )
+              .then(thumbResponse => thumbResponse.json())
+              .then(thumbResponse => {
+                imageryData.forEach((data, i) => {
+                  data.tileUrl = tileResponse.data.attributes[i].tile_url;
+                  data.thumbUrl = thumbResponse.data.attributes[i].thumbnail_url;
+                });
+                deferred.resolve(imageryData);
+              })
+              .catch((err) => deferred.reject(err));
+            }, 2000);
 
-            });
-          });
 
-
+          })
+          .catch((err) => deferred.reject(err));
         }
 
-
-
-    }, err => {
-      console.error(err);
-      // deferred.resolve();
-    });
+    })
+    .catch((err) => deferred.reject(err));
     return deferred;
   }
 
