@@ -179,6 +179,9 @@ export default class Map extends Component {
       });
 
       on.once(response.map, 'update-end', () => {
+        if (response.map.id !== 'esri.Map_0') {
+          mapLoaded = false;
+        }
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
