@@ -67,6 +67,31 @@ describe('An actual test on our app', function () {
           expect(alternativeLanguage).to.not.be.an('undefined');
         }
 
+        if (config.initialExtent) {
+          const { initialExtent } = config;
+          expect(config.initialExtent).to.be.a('object');
+
+          expect(config.initialExtent).to.have.property('x');
+          expect(config.initialExtent).to.have.property('y');
+          expect(config.initialExtent).to.have.property('z');
+
+          if (initialExtent.x && initialExtent.y && initialExtent.z) {
+            expect(config.initialExtent.x).to.be.a('number');
+            expect(config.initialExtent.y).to.be.a('number');
+            expect(config.initialExtent.z).to.be.a('number');
+
+            expect(config.initialExtent.x).to.be.greaterThan(-181);
+            expect(config.initialExtent.x).to.be.lessThan(181);
+
+            expect(config.initialExtent.y).to.be.greaterThan(-91);
+            expect(config.initialExtent.y).to.be.lessThan(91);
+
+            expect(config.initialExtent.z).to.be.greaterThan(0);
+            expect(config.initialExtent.z).to.be.lessThan(21);
+          }
+
+        }
+
         if (config.includeCartoTemplateLayers) {
           const cartoTemplateId = config.cartoTemplateId;
           expect(cartoTemplateId).to.not.be.an('undefined');
