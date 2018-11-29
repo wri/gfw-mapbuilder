@@ -28,9 +28,8 @@ export default class SatelliteImagery extends Component {
 
       // Convert screen point to map point and zoom to point;
       const mapPt = map.toMap(screenPt);
-      map.centerAndZoom(mapPt, 8);
-      const lat = mapPt.getLatitude();
-      const lon = mapPt.getLongitude();
+      const lon = mapPt.getLatitude();
+      const lat = mapPt.getLongitude();
 
       // Request imagery with lat / lon
       mapActions.getSatelliteImagery({ lat, lon });

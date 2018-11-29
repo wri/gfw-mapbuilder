@@ -217,6 +217,9 @@ const request = {
       params.end = moment().format('YYYY-MM-DD');
     }
 
+
+    console.log('>>>>', params)
+
     const recentTilesUrl = new URL(urls.satelliteImageService);
     Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
 

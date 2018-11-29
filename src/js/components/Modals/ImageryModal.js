@@ -6,6 +6,7 @@ import ImageryDatePicker from 'components/SatelliteImagery/ImageryDatePicker';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
 import moment from 'moment';
 import Loader from 'components/Loader';
+import GFWImageryLayer from 'js/layers/GFWImageryLayer';
 
 import { modalText } from 'js/config';
 
@@ -24,9 +25,33 @@ export default class ImageryModal extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.imageryData.length && nextProps.imageryData[0] && nextProps.imageryData !== this.props.imageryData) {
+      // Always display first image on the map
+      this.selectThumbnail(nextProps.imageryData[0], 0);
+    }
+  }
+
   selectThumbnail (tileObj, i) {
-    // console.log('HERE', tileObj)
+    const { map } = this.context;
+    const layer = map.getLayer('GFWImageryLayer');
+
+    if (layer) {
+      map.removeLayer(layer);
+      this.setState({ selectedThumb: null, hoveredThumb: null });
+    }
+
     this.setState({ selectedThumb: i });
+
+    const options = {
+      id: 'GFWImageryLayer',
+      url: tileObj.tileUrl,
+      visible: true
+    };
+
+    const esriLayer = new GFWImageryLayer(options);
+    esriLayer.order = 700;
+    map.addLayer(esriLayer);
   }
 
   hoverThumbnail (tileObj) {
@@ -54,7 +79,7 @@ export default class ImageryModal extends Component {
     return (
       <div>
         <p>{moment(hoveredThumb.attributes.date_time).format('DD MMM YYYY')}</p>
-        <p>{`${hoveredThumb.attributes.cloud_score.toFixed(1)}% cloud coverage`}</p>
+        <p>{`${hoveredThumb.attributes.cloud_score.toFixed(0)}% cloud coverage`}</p>
         <p>{hoveredThumb.attributes.instrument.replace('_', ' ')}</p>
       </div>
     );
@@ -103,6 +128,9 @@ export default class ImageryModal extends Component {
 
   updateImagery = () => {
     const { map } = this.context;
+
+    if (map.toMap === undefined) { return; }
+
     const { start, end, imageStyleVal } = this.state;
 
     const xVal = window.innerWidth / 2;
@@ -113,8 +141,8 @@ export default class ImageryModal extends Component {
 
     // Convert screen point to map point and zoom to point;
     const mapPt = map.toMap(screenPt);
-    const lat = mapPt.getLatitude();
-    const lon = mapPt.getLongitude();
+    const lon = mapPt.getLatitude();
+    const lat = mapPt.getLongitude();
 
     const params = { lat, lon, start, end };
 
@@ -198,8 +226,6 @@ export default class ImageryModal extends Component {
             {filteredImageryData.map(this.renderThumbnails.bind(this))}
           </div>
         </div>
-
-
       </DraggableModalWrapper>
     );
   }
