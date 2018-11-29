@@ -41,6 +41,7 @@ import WMSLayer from 'esri/layers/WMSLayer';
 import Extent from 'esri/geometry/Extent';
 import Graphic from 'esri/graphic';
 import InfoTemplate from 'esri/InfoTemplate';
+import Point from 'esri/geometry/Point';
 import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
@@ -273,8 +274,14 @@ export default class Map extends Component {
         layersHelper.updateAGBiomassLayer(cDensityFromHash ? cDensityFromHash : canopyDensity, response.map);
 
       });
-      //- Set the map's extent to its current extent to trigger our update-end
-      response.map.setExtent(response.map.extent);
+      const { initialExtent } = settings;
+      if (initialExtent && initialExtent.x && initialExtent.y && initialExtent.z) {
+        //- Set the map's extent to the x/y/z specified in settings
+        response.map.centerAndZoom(new Point(initialExtent.x, initialExtent.y), initialExtent.z);
+      } else {
+        //- Set the map's extent to its current extent to trigger our update-end
+        response.map.setExtent(response.map.extent);
+      }
 
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
