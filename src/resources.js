@@ -31,6 +31,11 @@ export default {
   alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   alternativeNarrative: '',
   alternativeWebmapMenuName: 'Land Use',
+  initialExtent: {
+    x: null, // -122.3,
+    y: null, // 47.6,
+    z: null, // 9,
+  },
   //- Tab Settings
   includeDocumentsTab: false,
   includeMeasurementTab: false,
