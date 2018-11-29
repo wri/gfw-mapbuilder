@@ -1,13 +1,4 @@
 
-
-
-describe('My first integration test', function () {
-  it('Is kinda boring', function () {
-    cy.log('Login successful 1')
-    expect(1).to.equal(1);
-  });
-});
-
 describe('An actual test on our app', function () {
   it('Ensures our external constructor has the correct properties', function () {
 
