@@ -7,6 +7,7 @@ import esriRequest from 'esri/request';
 import Query from 'esri/tasks/query';
 import Deferred from 'dojo/Deferred';
 import geometryUtils from 'utils/geometryUtils';
+
 import { urls } from 'js/config';
 import moment from 'moment';
 
@@ -208,7 +209,7 @@ const request = {
     return task.execute(query);
   },
 
-  getRecentTiles: (params) => {
+  getImageryData(params) {
     const deferred = new Deferred();
 
     if (!params.start || !params.end) {
@@ -217,83 +218,133 @@ const request = {
       params.end = moment().format('YYYY-MM-DD');
     }
 
-
-    console.log('>>>>', params)
-
     const recentTilesUrl = new URL(urls.satelliteImageService);
     Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
 
-    fetch(
-      recentTilesUrl,
-      {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      }
-    )
-    .then(response => response.json())
-    .then(response => {
+    const getRecentTiles = (count = 0) =>
+      fetch(
+        recentTilesUrl,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }
+      ).then(res => res.json())
+       .then(res => {
+         console.log('>>>', count, res);
 
-        if(response) {
-          const sourceData = [];
-
-          const imageryData = response.data.tiles;
-
-          imageryData.forEach((tile) => {
-            sourceData.push({ source: tile.attributes.source });
-          });
-          const content = {
-            bands: params.bands,
-            source_data: sourceData,
-          };
-          // Tried using promise.all but request may fail when both requests
-          // are sent out at the same time.
-          fetch(
-            urls.satelliteImageService + '/tiles',
-            {
-              method: 'POST',
-              credentials: 'include',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(content)
+         return new Promise((resolve) => {
+          setTimeout(() => {
+            if (res.errors && res.errors[0].status === 500 && count < 15) {
+              count++;
+              console.log('Error')
+              resolve(getRecentTiles(count));
             }
-          )
-          .then(tileResponse => tileResponse.json())
-          .then(tileResponse => {
+            resolve(res);
+          }, 500)
+        });
+      });
 
-            setTimeout(function () {
-              fetch(
-                urls.satelliteImageService + '/thumbs',
-                {
-                  method: 'POST',
-                  credentials: 'include',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(content)
-                }
-              )
-              .then(thumbResponse => thumbResponse.json())
-              .then(thumbResponse => {
-                imageryData.forEach((data, i) => {
-                  data.tileUrl = tileResponse.data.attributes[i].tile_url;
-                  data.thumbUrl = thumbResponse.data.attributes[i].thumbnail_url;
-                });
-                deferred.resolve(imageryData);
-              })
-              .catch((err) => deferred.reject(err));
-            }, 2000);
+    getRecentTiles(params).then(response => {
 
-
-          })
-          .catch((err) => deferred.reject(err));
+        console.log('>>>> response', response)
+        if (response.errors) {
+          deferred.reject(response);
+          return;
         }
 
-    })
-    .catch((err) => deferred.reject(err));
+        const sourceData = [];
+        const imageryData = response.data.tiles;
+        imageryData.forEach((tile) => {
+          sourceData.push({ source: tile.attributes.source });
+        });
+        const content = {
+          bands: params.bands,
+          source_data: sourceData,
+        };
+
+        const postTiles = (count = 0) =>
+          fetch(
+              urls.satelliteImageService + '/tiles',
+              {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(content)
+              }
+            ).then(res => res.json())
+             .then(res => {
+               console.log('>>>', count, res);
+
+               return new Promise((resolve) => {
+                setTimeout(() => {
+                  if (res.errors && res.errors[0].status === 500 && count < 15) {
+                    count++;
+                    console.log('Error')
+                    resolve(postTiles(count));
+                  }
+                  resolve(res);
+                }, 500)
+              });
+            });
+
+
+        postTiles().then(tileResponse => {
+
+          console.log('>>>> tileResponse', tileResponse)
+          if (tileResponse.errors) {
+            deferred.reject(tileResponse);
+            return;
+          }
+
+
+          const postThumbs = (count = 0) =>
+            fetch(
+              urls.satelliteImageService + '/thumbs',
+              {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(content)
+              }
+            ).then(res => res.json())
+             .then(res => {
+               console.log('>>>', count, res);
+
+               return new Promise((resolve) => {
+                setTimeout(() => {
+                  if (res.errors && res.errors[0].status === 500 && count < 15) {
+                    count++;
+                    console.log('Error')
+                    resolve(postThumbs(count));
+                  }
+                  resolve(res);
+                }, 500)
+              });
+            });
+
+          postThumbs().then(thumbResponse => {
+
+            console.log('>>>> thumbResponse', thumbResponse)
+            if (thumbResponse.errors) {
+              deferred.reject(thumbResponse);
+              return;
+            }
+
+            imageryData.forEach((data, i) => {
+              data.tileUrl = tileResponse.data.attributes[i].tile_url;
+              data.thumbUrl = thumbResponse.data.attributes[i].thumbnail_url;
+            });
+            deferred.resolve(imageryData);
+          });
+        });
+    });
     return deferred;
   }
 

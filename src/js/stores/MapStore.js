@@ -81,6 +81,7 @@ class MapStore {
     this.imageryActive = false;
     this.imageryData = [];
     this.loadingImagery = false;
+    this.imageryError = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -618,19 +619,27 @@ class MapStore {
 
   toggleImageryVisible(bool) {
     this.imageryModalVisible = bool;
+    this.imageryError = false;
   }
 
   toggleImageryActive(bool) {
     this.imageryActive = bool;
+    this.imageryError = false;
+
   }
 
   getSatelliteImagery(params) {
+    this.imageryError = false;
     this.loadingImagery = true;
-    request.getRecentTiles(params).then(imageryData => {
+    request.getImageryData(params).then(imageryData => {
       console.log('imageryData', imageryData);
       this.imageryData = imageryData;
       this.loadingImagery = false;
       this.emitChange();
+    }, (err) => {
+      console.log('Imagery data requests failed.')
+      this.loadingImagery = false;
+      this.imageryError = true;
     });
 
   }
