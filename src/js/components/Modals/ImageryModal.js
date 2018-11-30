@@ -26,32 +26,44 @@ export default class ImageryModal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.imageryModalVisible && !this.props.imageryModalVisible) {
+      console.log('modal visible')
+      this.updateImagery();
+    }
     if (nextProps.imageryData.length && nextProps.imageryData[0] && nextProps.imageryData !== this.props.imageryData) {
       // Always display first image on the map
+      console.log('select first thumbnail')
+
       this.selectThumbnail(nextProps.imageryData[0], 0);
     }
   }
 
   selectThumbnail (tileObj, i) {
     const { map } = this.context;
-    const layer = map.getLayer('GFWImageryLayer');
+    const imageryLayer = map.getLayer('GFWImageryLayer');
 
-    if (layer) {
-      map.removeLayer(layer);
-      this.setState({ selectedThumb: null, hoveredThumb: null });
+    if (imageryLayer) {
+      imageryLayer.setUrl(tileObj.tileUrl);
+    } else {
+      const options = {
+        id: 'GFWImageryLayer',
+        url: tileObj.tileUrl,
+        visible: true
+      };
+
+      const esriLayer = new GFWImageryLayer(options);
+      esriLayer.order = 700;
+      map.addLayer(esriLayer);
     }
 
     this.setState({ selectedThumb: i });
 
-    const options = {
-      id: 'GFWImageryLayer',
-      url: tileObj.tileUrl,
-      visible: true
-    };
 
-    const esriLayer = new GFWImageryLayer(options);
-    esriLayer.order = 700;
-    map.addLayer(esriLayer);
+    if (map.getZoom() < 8) {
+      map.setZoom(8);
+    }
+    map.setExtent(map.extent); // Hack to make sure map refreshes.
+
   }
 
   hoverThumbnail (tileObj) {
@@ -63,15 +75,30 @@ export default class ImageryModal extends Component {
   }
 
   renderThumbnails = (tileObj, i) => {
-    return (
-      <div
-        onClick={() => this.selectThumbnail(tileObj, i)}
-        onMouseOver={() => this.hoverThumbnail(tileObj)}
-        className={`thumbnail ${this.state.selectedThumb === i ? 'selected' : ''}`}
-        key={`thumb-${i}`}>
-          <img src={tileObj.thumbUrl} />
-      </div>
-    );
+
+      let reloadCount = 0;
+
+      const handleError = (event) => {
+        if (reloadCount < 3) {
+          event.persist();
+          event.target.src = '';
+          console.log(reloadCount);
+          reloadCount++
+          setTimeout(() => {
+            event.target.src = tileObj.thumbUrl;
+          }, 1000);
+        }
+      };
+
+      return (
+        <div
+          onClick={() => this.selectThumbnail(tileObj, i)}
+          onMouseOver={() => this.hoverThumbnail(tileObj)}
+          className={`thumbnail ${this.state.selectedThumb === i ? 'selected' : ''}`}
+          key={`thumb-${i}`}>
+            <img src={tileObj.thumbUrl} onError={handleError} />
+        </div>
+      );
   }
 
   renderThumbText = () => {

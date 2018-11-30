@@ -78,6 +78,7 @@ class MapStore {
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
     this.imageryModalVisible = false;
+    this.imageryActive = false;
     this.imageryData = [];
     this.loadingImagery = false;
 
@@ -141,7 +142,8 @@ class MapStore {
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
       toggleImageryVisible: mapActions.toggleImageryVisible,
-      getSatelliteImagery: mapActions.getSatelliteImagery
+      getSatelliteImagery: mapActions.getSatelliteImagery,
+      toggleImageryActive: mapActions.toggleImageryActive
     });
   }
 
@@ -616,6 +618,10 @@ class MapStore {
 
   toggleImageryVisible(bool) {
     this.imageryModalVisible = bool;
+  }
+
+  toggleImageryActive(bool) {
+    this.imageryActive = bool;
   }
 
   getSatelliteImagery(params) {

@@ -234,6 +234,10 @@ class MapActions {
     return bool;
   }
 
+  toggleImageryActive(bool) {
+    return bool;
+  }
+
   getSatelliteImagery(params) {
     return params;
   }

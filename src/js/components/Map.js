@@ -221,6 +221,10 @@ export default class Map extends Component {
               });
             });
           }
+
+          if (this.state.imageryActive && !this.state.imageryModalVisible) {
+            mapActions.toggleImageryVisible(true);
+          }
         });
 
         //- Add click event for user-features layer
@@ -874,7 +878,7 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
-          <SatelliteImagery imageryModalVisible={this.state.imageryModalVisible} />
+          <SatelliteImagery imageryModalVisible={this.state.imageryModalVisible} imageryActive={this.state.imageryActive}/>
 
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
@@ -918,8 +922,8 @@ export default class Map extends Component {
         <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
-        <div className={`modal-wrapper imagery ${imageryModalVisible ? '' : 'hidden'}`}>
-          <ImageryModal imageryData={this.state.imageryData} loadingImagery={this.state.loadingImagery}/>
+        <div className={`imagery ${imageryModalVisible ? '' : 'hidden'}`}>
+          <ImageryModal imageryData={this.state.imageryData} loadingImagery={this.state.loadingImagery} imageryModalVisible={imageryModalVisible}/>
         </div>
       </div>
     );
