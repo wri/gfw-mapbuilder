@@ -952,9 +952,30 @@ export default {
         }
       }]
     },
+    // GROUP_IMAGERY: {
+    //   groupType: 'default',
+    //   order: 199,
+    //   label: {
+    //     en: 'Recent Imagery',
+    //   },
+    //   layers: [{
+    //     order: 1,
+    //     id: 'GFWImageryLayer',
+    //     type: 'imagery',
+    //     url: '',
+    //     technicalName: 'umd_landsat_alerts',
+    //     label: {
+    //       en: 'Recent Imagery',
+    //     },
+    //     sublabel: {
+    //       en: '',
+    //
+    //     }
+    //   }]
+    // },
     GROUP_LC: {
       groupType: 'default',
-      order: 3,
+      order: 4,
       label: {
         en: 'Land Cover',
         fr: 'Couverture des sols',

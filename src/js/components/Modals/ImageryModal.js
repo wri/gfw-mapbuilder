@@ -34,16 +34,20 @@ export default class ImageryModal extends Component {
     if (nextProps.imageryData.length && nextProps.imageryData[0] && nextProps.imageryData !== this.props.imageryData) {
       // Always display first image on the map
       console.log('select first thumbnail')
+      const filteredImageryData = nextProps.imageryData.filter((data) => {
+        return data.attributes.cloud_score >= this.state.cloudScore[0] && data.attributes.cloud_score <= this.state.cloudScore[1];
+      });
 
-      this.selectThumbnail(nextProps.imageryData[0], 0);
+      this.selectThumbnail(filteredImageryData[0], 0);
     }
   }
 
   selectThumbnail (tileObj, i) {
     const { map } = this.context;
-    const imageryLayer = map.getLayer('GFWImageryLayer');
+    let imageryLayer = map.getLayer('GFWImageryLayer');
 
     if (imageryLayer) {
+      imageryLayer.show();
       imageryLayer.setUrl(tileObj.tileUrl);
     } else {
       const options = {
@@ -52,18 +56,17 @@ export default class ImageryModal extends Component {
         visible: true
       };
 
-      const esriLayer = new GFWImageryLayer(options);
-      esriLayer.order = 700;
-      map.addLayer(esriLayer);
+      imageryLayer = new GFWImageryLayer(options);
+      imageryLayer.order = 199;
+      map.addLayer(imageryLayer);
     }
 
     this.setState({ selectedThumb: i });
 
-
-    if (map.getZoom() < 8) {
-      map.setZoom(8);
-    }
-    map.setExtent(map.extent); // Hack to make sure map refreshes.
+    // Hack to make sure map refreshes.
+    const zoom = map.getZoom();
+    map.setZoom(zoom + 1);
+    map.setZoom(zoom);
 
   }
 
@@ -176,6 +179,9 @@ export default class ImageryModal extends Component {
 
     if (imageStyleVal === 'Vegetation Health') {
       params.bands = '[B8,B11,B2]';
+    }
+    if (map.getZoom() < 8) {
+      map.setZoom(8);
     }
     mapActions.getSatelliteImagery(params);
 

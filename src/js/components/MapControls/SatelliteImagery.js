@@ -17,14 +17,21 @@ export default class SatelliteImagery extends Component {
   };
 
   toggleImagery = () => {
+    const { map } = this.context;
     const { imageryActive } = this.props;
+    const imageryLayer = map.getLayer('GFWImageryLayer');
+
     mapActions.toggleImageryActive(!imageryActive);
 
     if (!imageryActive) {
       mapActions.toggleImageryVisible(true);
     } else {
       mapActions.toggleImageryVisible(false);
+      if (imageryLayer) {
+        imageryLayer.hide();
+      }
     }
+
   };
 
   render () {

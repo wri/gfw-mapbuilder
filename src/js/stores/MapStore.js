@@ -625,6 +625,7 @@ class MapStore {
   toggleImageryActive(bool) {
     this.imageryActive = bool;
     this.imageryError = false;
+    this.imageryData = [];
 
   }
 

@@ -221,10 +221,6 @@ export default class Map extends Component {
               });
             });
           }
-
-          if (this.state.imageryActive && !this.state.imageryModalVisible) {
-            mapActions.toggleImageryVisible(true);
-          }
         });
 
         //- Add click event for user-features layer

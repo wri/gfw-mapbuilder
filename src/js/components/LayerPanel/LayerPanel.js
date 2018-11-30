@@ -67,6 +67,7 @@ export default class LayerPanel extends Component {
 
   renderLayerGroups = (groups, language) => {
     const allRadioLayers = [];
+    console.log(groups)
     Object.keys(groups)
       .filter(groupKey => groups[groupKey].groupType === 'radio')
       .forEach(radioGroup => {
