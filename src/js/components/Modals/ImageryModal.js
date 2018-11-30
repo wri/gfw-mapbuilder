@@ -7,6 +7,7 @@ import ScreenPoint from 'esri/geometry/ScreenPoint';
 import moment from 'moment';
 import Loader from 'components/Loader';
 import GFWImageryLayer from 'js/layers/GFWImageryLayer';
+import SVGIcon from 'utils/svgIcon';
 
 import { modalText } from 'js/config';
 
@@ -187,7 +188,7 @@ export default class ImageryModal extends Component {
 
   render () {
     const { monthsVal, imageStyleVal, cloudScore, hoveredThumb } = this.state;
-    const { imageryData, loadingImagery} = this.props;
+    const { imageryData, loadingImagery, imageryError} = this.props;
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
@@ -250,6 +251,12 @@ export default class ImageryModal extends Component {
 
           <div className='imagery-modal__section thumbnail_container flex'>
             <Loader active={loadingImagery} type={'imagery'}/>
+            { imageryError &&
+              <div className='imagery-modal__error'>
+                <SVGIcon id={'icon-alerts'} />
+                <p>Error loading recent imagery.</p>
+              </div>
+            }
             {filteredImageryData.map(this.renderThumbnails.bind(this))}
           </div>
         </div>

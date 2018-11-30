@@ -636,10 +636,12 @@ class MapStore {
       this.imageryData = imageryData;
       this.loadingImagery = false;
       this.emitChange();
-    }, (err) => {
+    }, () => {
       console.log('Imagery data requests failed.')
       this.loadingImagery = false;
       this.imageryError = true;
+      this.imageryData = [];
+      this.emitChange();
     });
 
   }

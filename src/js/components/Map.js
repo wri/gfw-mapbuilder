@@ -844,7 +844,8 @@ export default class Map extends Component {
       webmapInfo,
       map,
       activeLayers,
-      imageryModalVisible
+      imageryModalVisible,
+      imageryError
     } = this.state;
 
     const { settings } = this.context;
@@ -923,7 +924,12 @@ export default class Map extends Component {
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
         <div className={`imagery ${imageryModalVisible ? '' : 'hidden'}`}>
-          <ImageryModal imageryData={this.state.imageryData} loadingImagery={this.state.loadingImagery} imageryModalVisible={imageryModalVisible}/>
+          <ImageryModal
+            imageryData={this.state.imageryData}
+            loadingImagery={this.state.loadingImagery}
+            imageryModalVisible={imageryModalVisible}
+            imageryError={imageryError}
+          />
         </div>
       </div>
     );
