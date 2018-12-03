@@ -233,8 +233,6 @@ const request = {
         }
       ).then(res => res.json())
        .then(res => {
-         console.log('>>>', count, res);
-
          return new Promise((resolve) => {
           setTimeout(() => {
             if (res.errors && res.errors[0].status === 500 && count < 15) {

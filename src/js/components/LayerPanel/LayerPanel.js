@@ -9,6 +9,8 @@ import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
+import SVGIcon from 'utils/svgIcon';
+import LayerTransparency from './LayerTransparency';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
@@ -65,9 +67,14 @@ export default class LayerPanel extends Component {
     }
   }
 
+  showInfo (layer) {
+    if (layer.disabled) { return; }
+    mapActions.showLayerInfo(layer);
+    layerActions.showLoading(layer.id);
+  }
+
   renderLayerGroups = (groups, language) => {
     const allRadioLayers = [];
-    console.log(groups)
     Object.keys(groups)
       .filter(groupKey => groups[groupKey].groupType === 'radio')
       .forEach(radioGroup => {
@@ -87,9 +94,8 @@ export default class LayerPanel extends Component {
       //- Sort on configured order
       return a.order - b.order;
     });
-
     return orderedGroups.map((group) => {
-      if (group.layers.length === 0) { return null; }
+      if (group.layers.length === 0 || group.hidden) { return null; }
       group.layers = group.layers.sort((a, b) => b.order - a.order);
       //- Sort the layers and then render them, basemaps use a different function
       //- as not all basemaps are present in configuration
@@ -117,6 +123,9 @@ export default class LayerPanel extends Component {
           break;
         case 'basemap':
           layers = this.renderBasemaps(group.layers);
+          break;
+        case 'imagery':
+          layers = group.layers.map(this.renderImageryLayers);
           break;
         default:
           layers = group.layers.map(this.checkboxMap);
@@ -278,6 +287,25 @@ export default class LayerPanel extends Component {
 
     return basemapLayers;
   };
+
+  renderImageryLayers = (layer) => {
+    const {
+      iconLoading,
+      initialLayerOpacities,
+      ...props} = this.props;
+
+    const {language} = this.context;
+
+    return <div className='layer-checkbox relative' key={layer.label[language]} >
+      <span className='layer-checkbox-label'>
+        {layer.label[language]}
+      </span>
+      <span className={`info-icon pointer ${iconLoading === layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
+        <SVGIcon id={'shape-info'} />
+      </span>
+      <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={true}></LayerTransparency>
+    </div>;
+  }
 
   render() {
     const {settings, language} = this.context;

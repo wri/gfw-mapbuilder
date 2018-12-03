@@ -57,8 +57,9 @@ export default class ImageryModal extends Component {
       };
 
       imageryLayer = new GFWImageryLayer(options);
-      imageryLayer.order = 199;
       map.addLayer(imageryLayer);
+      map.reorderLayer('GFWImageryLayer', 1); // Should be underneath all other layers
+
     }
 
     this.setState({ selectedThumb: i });
@@ -86,7 +87,6 @@ export default class ImageryModal extends Component {
         if (reloadCount < 3) {
           event.persist();
           event.target.src = '';
-          console.log(reloadCount);
           reloadCount++
           setTimeout(() => {
             event.target.src = tileObj.thumbUrl;

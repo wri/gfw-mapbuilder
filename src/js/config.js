@@ -70,7 +70,6 @@ const config = {
   layerPanel: {
     landCoverDynamics: 'Land Cover Dynamics',
     landCover: 'Land Cover',
-    satelliteImagery: 'Recent Imagery',
     waterStressLegend: {
       min: 'Low',
       max: 'High',

@@ -952,30 +952,9 @@ export default {
         }
       }]
     },
-    // GROUP_IMAGERY: {
-    //   groupType: 'default',
-    //   order: 199,
-    //   label: {
-    //     en: 'Recent Imagery',
-    //   },
-    //   layers: [{
-    //     order: 1,
-    //     id: 'GFWImageryLayer',
-    //     type: 'imagery',
-    //     url: '',
-    //     technicalName: 'umd_landsat_alerts',
-    //     label: {
-    //       en: 'Recent Imagery',
-    //     },
-    //     sublabel: {
-    //       en: '',
-    //
-    //     }
-    //   }]
-    // },
     GROUP_LC: {
       groupType: 'default',
-      order: 4,
+      order: 3,
       label: {
         en: 'Land Cover',
         fr: 'Couverture des sols',
@@ -1090,6 +1069,25 @@ export default {
           id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
           zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
           ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
+        }
+      }]
+    },
+    GROUP_IMAGERY: {
+      groupType: 'imagery',
+      order: 4,
+      hidden: true,
+      label: {
+        en: 'Recent Imagery',
+      },
+      layers: [{
+        order: 1,
+        id: 'GFWImageryLayer',
+        type: 'imagery',
+        label: {
+          en: 'Recent Imagery',
+        },
+        sublabel: {
+          en: '',
         }
       }]
     },
