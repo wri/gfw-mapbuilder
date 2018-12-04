@@ -290,6 +290,11 @@ export default class LayerPanel extends Component {
     return basemapLayers;
   };
 
+  editImagery = () => {
+    mapActions.toggleImageryVisible(true);
+    this.props.hideTabView();
+  }
+
   renderImageryLayers = (layer) => {
     const {
       iconLoading,
@@ -306,7 +311,7 @@ export default class LayerPanel extends Component {
           {`(${moment(selectedImagery.attributes.date_time).format('DD MMM YYYY')}, ${selectedImagery.attributes.cloud_score.toFixed(0)}% cloud coverage, ${selectedImagery.attributes.instrument.replace('_', ' ')})`}
         </div> : null}
       </span>
-      <span className='fa-button sml white layer-edit' onClick={() => mapActions.toggleImageryVisible(true)}>edit</span>
+      <span className='fa-button sml white layer-edit' onClick={this.editImagery}>edit</span>
       <span className={`info-icon pointer ${iconLoading === layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
         <SVGIcon id={'shape-info'} />
       </span>

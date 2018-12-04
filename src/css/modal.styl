@@ -497,6 +497,12 @@
   text-align center
 
 // Imagery Modal specific styling
+.imagery-modal-container
+  display block
+  &.collapse
+    display none
+
+
 .imagery-modal__wrapper
   width 500px
   height 285px
@@ -597,13 +603,27 @@ hr
   margin 0 10px
 
 @media (max-width: 600px)
+
+  .imagery-modal-container
+    &.collapse
+      display block
+
+      .imagery-modal__wrapper
+        height 0px
+        transition all 1s
+
   .imagery-modal__wrapper
     width 100vw
-    height 330px
+    height 380px
+    transition all 1s
 
     .imagery-modal__section
       flex-wrap wrap
       justify-content center
+
+      &.thumbnail_container
+        width 100%
+        max-height 150px
 
       .imagery-modal__item
         margin 0 0 15 0
@@ -612,4 +632,6 @@ hr
   .modal.draggable
     top unset
     cursor default
-    bottom -115px
+    bottom 0px
+    transform none
+    left unset
