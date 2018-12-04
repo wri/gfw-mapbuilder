@@ -31,7 +31,7 @@ export default class ImageryModal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.imageryModalVisible && !this.props.imageryModalVisible) {
+    if (nextProps.imageryModalVisible && !this.props.imageryModalVisible && !nextProps.imageryData.length) {
       console.log('modal visible')
       this.updateImagery();
     }
@@ -51,7 +51,6 @@ export default class ImageryModal extends Component {
     let imageryLayer = map.getLayer('GFWImageryLayer');
 
     if (imageryLayer) {
-      imageryLayer.show();
       imageryLayer.setUrl(tileObj.tileUrl);
     } else {
       const options = {
@@ -66,7 +65,8 @@ export default class ImageryModal extends Component {
 
     }
 
-    this.setState({ selectedThumb: i });
+    this.setState({ selectedThumb: {index: i, tileObj} });
+    mapActions.setSelectedImagery(tileObj);
 
     // Hack to make sure map refreshes.
     const zoom = map.getZoom();
@@ -103,8 +103,9 @@ export default class ImageryModal extends Component {
       return (
         <div
           onClick={() => this.selectThumbnail(tileObj, i)}
-          onMouseOver={() => this.hoverThumbnail(tileObj)}
-          className={`thumbnail ${this.state.selectedThumb === i ? 'selected' : ''}`}
+          onMouseEnter={() => this.hoverThumbnail(tileObj)}
+          onMouseLeave={() => this.hoverThumbnail(null)}
+          className={`thumbnail ${this.state.selectedThumb.index === i ? 'selected' : ''}`}
           key={`thumb-${i}`}>
             <img src={tileObj.thumbUrl} onError={handleError} />
         </div>
@@ -112,25 +113,20 @@ export default class ImageryModal extends Component {
   }
 
   renderThumbText = () => {
-    const { hoveredThumb } = this.state;
+    const { hoveredThumb, selectedThumb } = this.state;
+
+    const thumbnailText = hoveredThumb || selectedThumb.tileObj;
+
     return (
       <div>
-        <p>{moment(hoveredThumb.attributes.date_time).format('DD MMM YYYY')}</p>
-        <p>{`${hoveredThumb.attributes.cloud_score.toFixed(0)}% cloud coverage`}</p>
-        <p>{hoveredThumb.attributes.instrument.replace('_', ' ')}</p>
+        <p>{moment(thumbnailText.attributes.date_time).format('DD MMM YYYY')}</p>
+        <p>{`${thumbnailText.attributes.cloud_score.toFixed(0)}% cloud coverage`}</p>
+        <p>{thumbnailText.attributes.instrument.replace('_', ' ')}</p>
       </div>
     );
   };
 
   close = () => {
-    this.setState({
-      monthsVal: modalText.imagery.monthsOptions[1].label,
-      imageStyleVal: modalText.imagery.imageStyleOptions[0].label,
-      cloudScore: [0, 100],
-      start: null,
-      end: null,
-      selectedThumb: null
-    });
     mapActions.toggleImageryVisible(false);
   };
 
@@ -199,7 +195,7 @@ export default class ImageryModal extends Component {
   };
 
   render () {
-    const { monthsVal, imageStyleVal, cloudScore, hoveredThumb } = this.state;
+    const { monthsVal, imageStyleVal, cloudScore, hoveredThumb, selectedThumb } = this.state;
     const { imageryData, loadingImagery, imageryError} = this.props;
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
@@ -247,7 +243,7 @@ export default class ImageryModal extends Component {
           <div className='imagery-modal__section flex secondary-filters'>
 
             <div className='thumbnail-text'>
-              { hoveredThumb ? this.renderThumbText() : null }
+              {hoveredThumb || selectedThumb ? this.renderThumbText() : null}
             </div>
 
             <div className='relative'>

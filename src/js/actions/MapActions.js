@@ -242,6 +242,10 @@ class MapActions {
     return params;
   }
 
+  setSelectedImagery(obj) {
+    return obj;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

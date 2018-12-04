@@ -82,6 +82,7 @@ class MapStore {
     this.imageryData = [];
     this.loadingImagery = false;
     this.imageryError = false;
+    this.selectedImagery = null;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -144,7 +145,9 @@ class MapStore {
       activateDrawButton: mapActions.activateDrawButton,
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
-      toggleImageryActive: mapActions.toggleImageryActive
+      toggleImageryActive: mapActions.toggleImageryActive,
+      setSelectedImagery: mapActions.setSelectedImagery
+
     });
   }
 
@@ -639,12 +642,17 @@ class MapStore {
       this.emitChange();
     }, () => {
       console.log('Imagery data requests failed.')
+      this.selectedImagery = null;
       this.loadingImagery = false;
       this.imageryError = true;
       this.imageryData = [];
       this.emitChange();
     });
 
+  }
+
+  setSelectedImagery(obj) {
+    this.selectedImagery = obj;
   }
 }
 

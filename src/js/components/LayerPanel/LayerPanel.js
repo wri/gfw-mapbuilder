@@ -20,6 +20,8 @@ import BasemapLayer from 'components/LayerPanel/BasemapLayer';
 import LayerKeys from 'constants/LayerConstants';
 import basemapUtils from 'utils/basemapUtils';
 import basemaps from 'esri/basemaps';
+import moment from 'moment';
+
 // import utils from 'utils/AppUtils';
 // import text from 'js/languages';
 import React, {
@@ -292,6 +294,7 @@ export default class LayerPanel extends Component {
     const {
       iconLoading,
       initialLayerOpacities,
+      selectedImagery,
       ...props} = this.props;
 
     const {language} = this.context;
@@ -299,7 +302,11 @@ export default class LayerPanel extends Component {
     return <div className='layer-checkbox relative' key={layer.label[language]} >
       <span className='layer-checkbox-label'>
         {layer.label[language]}
+        {selectedImagery ? <div className='layer-checkbox-sublabel'>
+          {`(${moment(selectedImagery.attributes.date_time).format('DD MMM YYYY')}, ${selectedImagery.attributes.cloud_score.toFixed(0)}% cloud coverage, ${selectedImagery.attributes.instrument.replace('_', ' ')})`}
+        </div> : null}
       </span>
+      <span className='fa-button sml white layer-edit' onClick={() => mapActions.toggleImageryVisible(true)}>edit</span>
       <span className={`info-icon pointer ${iconLoading === layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
         <SVGIcon id={'shape-info'} />
       </span>
