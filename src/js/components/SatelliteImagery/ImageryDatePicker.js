@@ -79,6 +79,16 @@ export default class AnalysisDatePicker extends Component {
           maxDate={moment(maxDate || new Date())}
           selected={dateSelected}
           onChange={this.handleChange}
+          popperPlacement='bottom'
+          popperModifiers={{
+            flip: {
+              enabled: false
+            },
+            preventOverflow: {
+              enabled: false,
+            }
+          }}
+
         />
       </div>
     );
