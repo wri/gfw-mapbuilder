@@ -60,16 +60,12 @@ export default class ImageryModal extends Component {
       imageryLayer = new GFWImageryLayer(options);
       map.addLayer(imageryLayer);
       map.reorderLayer('GFWImageryLayer', 1); // Should be underneath all other layers
+      imageryLayer._extentChanged();
 
     }
 
     this.setState({ selectedThumb: {index: i, tileObj} });
     mapActions.setSelectedImagery(tileObj);
-
-    // Hack to make sure map refreshes.
-    const zoom = map.getZoom();
-    map.setZoom(zoom + 1);
-    map.setZoom(zoom);
 
   }
 
@@ -89,7 +85,7 @@ export default class ImageryModal extends Component {
         if (reloadCount < 10) {
           event.persist();
           event.target.src = '';
-          reloadCount++
+          reloadCount++;
           setTimeout(() => {
             event.target.src = tileObj.thumbUrl;
           }, 1000);
@@ -103,7 +99,7 @@ export default class ImageryModal extends Component {
           onClick={() => this.selectThumbnail(tileObj, i)}
           onMouseEnter={() => this.hoverThumbnail(tileObj)}
           onMouseLeave={() => this.hoverThumbnail(null)}
-          className={`thumbnail ${this.state.selectedThumb.index === i ? 'selected' : ''}`}
+          className={`thumbnail ${this.state.selectedThumb && this.state.selectedThumb.index === i ? 'selected' : ''}`}
           key={`thumb-${i}`}>
             <img src={tileObj.thumbUrl} onError={handleError} />
         </div>

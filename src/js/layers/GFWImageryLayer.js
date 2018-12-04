@@ -9,8 +9,7 @@ export default declare('GFWImageryLayer', [TileCanvasLayer], {
 
   setUrl: function setUrl (url) {
     this.options.url = url;
-    this.refresh();
-    // this._extentChanged();
+    this._extentChanged(true);
   }
 
 });
