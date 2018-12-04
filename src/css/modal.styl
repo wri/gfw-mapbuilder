@@ -500,7 +500,6 @@
 .imagery-modal__wrapper
   width 500px
   height 285px
-  padding 10px 0 10px 0
   -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
   box-shadow 0 1px 3px rgba(85,85,85,0.25)
   overflow hidden
@@ -529,7 +528,7 @@
   line-height 21px
   color #555
   text-transform uppercase
-  margin 0 20px 10px 20px
+  margin 10px 20px 10px 20px
 
 .imagery-modal__section
   padding 0px 20px 10px 20px
@@ -596,3 +595,21 @@ hr
 
 .imagery-modal_section-text
   margin 0 10px
+
+@media (max-width: 600px)
+  .imagery-modal__wrapper
+    width 100vw
+    height 330px
+
+    .imagery-modal__section
+      flex-wrap wrap
+      justify-content center
+
+      .imagery-modal__item
+        margin 0 0 15 0
+        min-width 80vw
+
+  .modal.draggable
+    top unset
+    cursor default
+    bottom -115px

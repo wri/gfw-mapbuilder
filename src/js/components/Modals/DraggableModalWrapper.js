@@ -13,9 +13,9 @@ export default function DraggableModalWrapper (props) {
           <SVGIcon id={'shape-close'} />
         </svg>
       </div>
-        <div className={contentClass}>
-          {props.children}
-        </div>
+      <div className={contentClass}>
+        {props.children}
+      </div>
     </article>
   );
 }

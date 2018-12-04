@@ -39,10 +39,11 @@ export default class SatelliteImagery extends Component {
     const { imageryActive } = this.props;
 
     return (
-      <div className={`control-panel map-component shadow imagery ${imageryActive ? 'active' : ''}`}>
-        <div className='pointer' title={text[language].TOOL_ZOOM_OUT} onClick={this.toggleImagery}>
+      <div className={`control-panel map-component shadow imagery ${imageryActive ? 'active' : ''}`} onClick={this.toggleImagery}>
+        <div className='pointer' title={text[language].TOOL_ZOOM_OUT}>
           <SVGIcon id={'satellite-icon'} />
         </div>
+        <div className='imagery_label'>Recent Imagery</div>
       </div>
     );
   }

@@ -22,7 +22,11 @@ export default class ImageryModal extends Component {
     this.state = {
       monthsVal: modalText.imagery.monthsOptions[1].label,
       imageStyleVal: modalText.imagery.imageStyleOptions[0].label,
-      cloudScore: [0, 100]
+      cloudScore: [0, 100],
+      start: null,
+      end: null,
+      selectedThumb: null,
+      hoveredThumb: null
     };
   }
 
@@ -84,13 +88,15 @@ export default class ImageryModal extends Component {
       let reloadCount = 0;
 
       const handleError = (event) => {
-        if (reloadCount < 3) {
+        if (reloadCount < 5) {
           event.persist();
           event.target.src = '';
           reloadCount++
           setTimeout(() => {
             event.target.src = tileObj.thumbUrl;
           }, 1000);
+        } else {
+          event.target.classList.add('hidden');
         }
       };
 
@@ -206,7 +212,7 @@ export default class ImageryModal extends Component {
 
           <div className='imagery-modal__section filters flex'>
 
-            <div>
+            <div className='imagery-modal__item'>
               <div className='imagery-modal_section-title'>Aquisition Date</div>
               <div className='flex'>
 
@@ -227,7 +233,7 @@ export default class ImageryModal extends Component {
               </div>
             </div>
 
-            <div>
+            <div className='imagery-modal__item'>
               <div className='imagery-modal_section-title'>Maximum Cloud Cover Percentage</div>
 
               <ImageryModalSlider

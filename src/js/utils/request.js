@@ -221,8 +221,8 @@ const request = {
     const recentTilesUrl = new URL(urls.satelliteImageService);
     Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
 
-    const getRecentTiles = (count = 0) =>
-      fetch(
+    const getRecentTiles = (count = 0) => {
+      return fetch(
         recentTilesUrl,
         {
           method: 'GET',
@@ -237,13 +237,14 @@ const request = {
           setTimeout(() => {
             if (res.errors && res.errors[0].status === 500 && count < 15) {
               count++;
-              console.log('Error')
               resolve(getRecentTiles(count));
             }
             resolve(res);
-          }, 500)
+          }, 500);
         });
       });
+    };
+
 
     getRecentTiles(params).then(response => {
 
@@ -263,8 +264,8 @@ const request = {
           source_data: sourceData,
         };
 
-        const postTiles = (count = 0) =>
-          fetch(
+        const postTiles = (count = 0) => {
+          return fetch(
               urls.satelliteImageService + '/tiles',
               {
                 method: 'POST',
@@ -282,13 +283,14 @@ const request = {
                 setTimeout(() => {
                   if (res.errors && res.errors[0].status === 500 && count < 15) {
                     count++;
-                    console.log('Error')
                     resolve(postTiles(count));
                   }
                   resolve(res);
-                }, 500)
+                }, 500);
               });
             });
+        };
+
 
 
         postTiles().then(tileResponse => {
@@ -300,8 +302,8 @@ const request = {
           }
 
 
-          const postThumbs = (count = 0) =>
-            fetch(
+          const postThumbs = (count = 0) => {
+            return fetch(
               urls.satelliteImageService + '/thumbs',
               {
                 method: 'POST',
@@ -319,13 +321,14 @@ const request = {
                 setTimeout(() => {
                   if (res.errors && res.errors[0].status === 500 && count < 15) {
                     count++;
-                    console.log('Error')
                     resolve(postThumbs(count));
                   }
                   resolve(res);
-                }, 500)
+                }, 500);
               });
             });
+          };
+
 
           postThumbs().then(thumbResponse => {
 
