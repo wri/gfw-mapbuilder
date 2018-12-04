@@ -291,8 +291,11 @@ export default class LayerPanel extends Component {
   };
 
   editImagery = () => {
+    const imageryMobile = window.innerWidth <= 600;
     mapActions.toggleImageryVisible(true);
-    this.props.hideTabView();
+    if (imageryMobile) {
+      this.props.hideTabView();
+    }
   }
 
   renderImageryLayers = (layer) => {

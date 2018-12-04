@@ -32,12 +32,10 @@ export default class ImageryModal extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.imageryModalVisible && !this.props.imageryModalVisible && !nextProps.imageryData.length) {
-      console.log('modal visible')
       this.updateImagery();
     }
     if (nextProps.imageryData.length && nextProps.imageryData[0] && nextProps.imageryData !== this.props.imageryData) {
       // Always display first image on the map
-      console.log('select first thumbnail')
       const filteredImageryData = nextProps.imageryData.filter((data) => {
         return data.attributes.cloud_score >= this.state.cloudScore[0] && data.attributes.cloud_score <= this.state.cloudScore[1];
       });
@@ -88,7 +86,7 @@ export default class ImageryModal extends Component {
       let reloadCount = 0;
 
       const handleError = (event) => {
-        if (reloadCount < 5) {
+        if (reloadCount < 10) {
           event.persist();
           event.target.src = '';
           reloadCount++

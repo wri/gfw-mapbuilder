@@ -247,8 +247,6 @@ const request = {
 
 
     getRecentTiles(params).then(response => {
-
-        console.log('>>>> response', response)
         if (response.errors) {
           deferred.reject(response);
           return;
@@ -277,7 +275,6 @@ const request = {
               }
             ).then(res => res.json())
              .then(res => {
-               console.log('>>>', count, res);
 
                return new Promise((resolve) => {
                 setTimeout(() => {
@@ -294,8 +291,6 @@ const request = {
 
 
         postTiles().then(tileResponse => {
-
-          console.log('>>>> tileResponse', tileResponse)
           if (tileResponse.errors) {
             deferred.reject(tileResponse);
             return;
@@ -315,7 +310,6 @@ const request = {
               }
             ).then(res => res.json())
              .then(res => {
-               console.log('>>>', count, res);
 
                return new Promise((resolve) => {
                 setTimeout(() => {
@@ -331,8 +325,6 @@ const request = {
 
 
           postThumbs().then(thumbResponse => {
-
-            console.log('>>>> thumbResponse', thumbResponse)
             if (thumbResponse.errors) {
               deferred.reject(thumbResponse);
               return;
