@@ -25,6 +25,9 @@ export default class SatelliteImagery extends Component {
 
     if (!imageryActive) {
       mapActions.toggleImageryVisible(true);
+      if (imageryLayer) {
+        imageryLayer.show();
+      }
     } else {
       mapActions.toggleImageryVisible(false);
       if (imageryLayer) {
