@@ -5,8 +5,8 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='./1.3.1.js')
-    //- script(id='library-load' src='js/library.js')
+    script(id='library-load' src='https://beta.blueraster.io/mapbuilder/external-debugging/1.2.2.js')
+    //- script(id='library-load' src='./1.2.2.js')
     meta(charset='utf-8')
     script.
       var customApp = new MapBuilder({
@@ -42,6 +42,11 @@ html
           "alternativeMapThemes": "",
           "alternativeNarrative": "English narrative",
           "alternativeWebmapMenuName": "English Menu Name",
+          "initialExtent": {
+            x: null, // -122.3,
+            y: null, // 47.6,
+            z: null, // 9,
+          },
           "includeDocumentsTab": true,
           "documentsDirectory": "https://cmr.forest-atlas.org/resources/docs/",
           "documentsMapserver": "https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer",

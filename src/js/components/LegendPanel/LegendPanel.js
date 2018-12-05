@@ -278,13 +278,22 @@ export default class LegendPanel extends Component {
       const esriLayer = layer.esriLayer;
 
       if (esriLayer) {
-
         if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
+
+          let visibility = activeLayers.indexOf(esriLayer.id) > -1;
+
+          if (esriLayer.hasOwnProperty('visibleAtMapScale') && !esriLayer.visibleAtMapScale) {
+            const scale = map.getScale();
+            if ((scale > esriLayer.minScale) || (scale < esriLayer.maxScale)) {
+              visibility = false;
+            }
+          }
+
           return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
           label={layer.label[language] || layer.label}
-          visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
+          visibility={visibility}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}

@@ -5,7 +5,7 @@ describe('User workflows that have been known to fail', function () {
 
     let constructorParams, config;
 
-    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/external.html')
+    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/index.html')
     cy.title().should('include', 'GFW Mapbuilder')
     cy.wait(1000)
 
@@ -20,7 +20,6 @@ describe('User workflows that have been known to fail', function () {
       expect(config).to.not.be.an('undefined');
 
       cy.get('.tab-buttons__tab:first-child').click()
-      cy.get('.legend-title').click()
       cy.wait(500)
 
       cy.get('.analysis-modal-container').should('have.class', 'hidden')

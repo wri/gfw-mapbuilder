@@ -271,13 +271,16 @@ function xmlToJson(xml) {
 */
 function getServiceMetadata (layer, promise) {
   const {esriLayer, subIndex, subId} = layer;
-
   const { layerIds, layerId } = esriLayer;
 
   let url = esriLayer.url ? esriLayer.url : '';
   if (subIndex === undefined) {
     if (layerIds && layerIds.length) { // if there is a layerIds property, this is a configured layer
-      url += `/${layerId}`;
+      if (esriLayer.layerIds && esriLayer.layerIds[0]) {
+        url += `/${esriLayer.layerIds[0]}`;
+      } else {
+        url += `/${layerId}`;
+      }
     }
   } else {
     url += `/${subIndex}`;
@@ -310,8 +313,7 @@ export default {
   fetch (layer, cartoId) {
     const promise = new Deferred();
     let url;
-    // If a technicalName is configured, fetch from the metadata API
-    // else, attempt to fetch it from the mapservice
+
     if (layer.technicalName) {
       url = `${urls.metadataApi}/${layer.technicalName}`;
       getMetadataTask(url).then(results => {
@@ -362,18 +364,28 @@ export default {
         });
 
       } else {
-        getServiceMetadata(layer, promise);
+        url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
+        getXMLTask(url).then(xmlDocument => {
+          promise.resolve(reduceXML(xmlDocument));
+        }, () => {
+          url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
+          getServiceInfoTask(url).then(results => {
+            const {subId} = layer;
+            _cache[subId] = results;
+            promise.resolve(results);
+          }, () => {
+            getServiceMetadata(layer, promise);
+          });
+        });
       }
 
     } else if (layer.esriLayer) {
-      //agolItemEndpoint
-      // This commented out URL contains a good item id to use for testing
-      // url = urls.metadataXmlEndpoint('30e234e880c94a2ca54be9a132808eae');
+
       url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
       getXMLTask(url).then(xmlDocument => {
         promise.resolve(reduceXML(xmlDocument));
       }, () => {
-        url = urls.agolItemEndpoint(layer.itemId);
+        url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
         getServiceInfoTask(url).then(results => {
           const {subId} = layer;
           _cache[subId] = results;
