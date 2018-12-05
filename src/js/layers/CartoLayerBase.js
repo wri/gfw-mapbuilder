@@ -27,6 +27,8 @@ export default declare('CartoLayer', [GraphicsLayer], {
    */
   constructor: function(resource) {
     const { cartoColor, cartoIcon, cartoUser, cartoQuery, cartoDataType, cartoLineWidth, popup, id, cartoApiKey, cartoTemplateId, type } = resource;
+    console.log('resource', resource);
+    debugger
     this.cartoUser = cartoUser;
     this.cartoTemplateId = cartoTemplateId;
     this.infoTemplate = null;
@@ -68,6 +70,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
   *  Gets the layer name from the Carto metadata call
   **/
   getLayerName: function(layer, layerId) {
+    console.log('innnnnn');
     const promise = new Deferred();
     layerInfoCache.fetch(layer, layerId).then(layerInfo => {
       this.modalLayerInfo = layerInfo;
@@ -203,6 +206,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
   * Returns an object of layers with their ID, data type, and query
   **/
   getLayers: function() {
+
     // Getting the Carto template url
     const _url = urls.cartoTemplateEndpoint(this.cartoUser, this.cartoTemplateId, this.cartoApiKey);
     let json = {};
@@ -212,7 +216,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
       json = dojoJSON.parse(template);
       console.log(JSON.parse(template));
       const layers = json.template.layergroup.layers;
-      const cartoMapID = json.template.layergroup.stat_tag;
+      const cartoMapID = json.template.layergroup.stat_tag; //TODO: what is this?? do we need this when we call 'layerInfoCache.fetch' from elsewhere??
       const cartoLayers = resources.layerPanel.GROUP_CARTO.layers;
 
       this.getLayerName(cartoLayers[0], cartoMapID).then(response => {

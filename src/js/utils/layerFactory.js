@@ -41,6 +41,7 @@ export default (layer, lang) => {
 
   switch (layer.type) {
     case 'carto':
+    debugger
       esriLayer = new CartoLayer(layer);
       esriLayer.type = layer.type;
       esriLayer.queryBuilder();

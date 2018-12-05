@@ -14,34 +14,39 @@ const _cache = {};
 * @return {Deferred} promise
 */
 function getMetadataTask (url) {
-  const promise = new Deferred();
-  const request = new XMLHttpRequest();
-  request.addEventListener('load', () => {
-    promise.resolve(JSON.parse(request.response));
+  const promise = new Promise((resolve) => {
+    const request = new XMLHttpRequest();
+    request.addEventListener('load', () => {
+      resolve(JSON.parse(request.response));
+    });
+    request.open('GET', url);
+    request.send();
+
   });
-  request.open('GET', url);
-  request.send();
   return promise;
 }
 
 /**
 * Fetch the metadata from the Carto API
 * @param {string} url - api url plus technical name, e.g. urls.metadataApi + '/tree_cover_loss'
-* @return {Deferred} promise
+* @return {Promise} promise
 */
+
 // function getCartoMetadata (url) {
-//   const promise = new Deferred();
-//   debugger;
-//   const request = new XMLHttpRequest();
-//   request.addEventListener('load', () => {
-//     promise.resolve(JSON.parse(request.response));
+//   const promise = new Promise((resolve, reject) => {
+//     const request = new XMLHttpRequest();
+//     request.addEventListener('load', () => {
+//       resolve(JSON.parse(request.response));
+//     });
+//     request.addEventListener('error', () => {
+//       reject('error');
+//     });
+//     request.open('GET', url);
+//     request.send();
+//
 //   });
-//   request.open('GET', url);
-//   request.setRequestHeader( 'Access-Control-Allow-Origin', '*');
-//   request.send();
 //   return promise;
 // }
-
 const getCartoMetadata = (unique => url =>
   new Promise(rs => {
     const script = document.createElement('script');
@@ -70,11 +75,40 @@ const getCartoMetadata = (unique => url =>
 * @return {Deferred} promise
 */
 function getXMLTask (url) {
-  return esriRequest({
-    url,
-    handleAs: 'xml',
-    callbackParamName: 'callback'
+  // return esriRequest({
+  //   url,
+  //   handleAs: 'xml',
+  //   callbackParamName: 'callback'
+  // });
+  const promise = new Promise((resolve, reject) => {
+    // const request = new XMLHttpRequest();
+    // request.addEventListener('load', () => {
+    //   resolve(JSON.parse(request.response));
+    // });
+    // request.addEventListener('error', () => {
+    //   reject('error');
+    // });
+    // request.open('GET', url);
+    // request.send();
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.responseType = 'json';
+    xhr.onload = (e) => {
+      console.log(xhr);
+      console.log(xhr.status);
+      if (xhr.status === 200) {
+        console.log(xhr);
+        console.log(e);
+        debugger
+        console.log('response', xhr.response); // JSON response
+        resolve(JSON.parse(xhr.response));
+      }
+    };
+    xhr.send();
+
   });
+  return promise;
+
 }
 
 /**
@@ -264,12 +298,53 @@ function xmlToJson(xml) {
 	return obj;
 }
 
+function getWmsMetadata (layer, resolve) {
+
+  console.log('iiia');
+  const url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
+  console.log('url', url);
+  getXMLTask(url).then((xmlDoc) => {
+    resolve({resolution: 'aa'});
+    if (!xmlDoc) { resolve(null); return; }
+
+    const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
+    if (xmlLayers.length) {
+      const layerInfo = {};
+      xmlLayers.forEach(l => {
+        const parsedXml = xmlToJson(l);
+        if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
+          if (parsedXml.Style) {
+            if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
+              layerInfo.name = parsedXml.Style.Title['#text'];
+            }
+            if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
+              layerInfo.description = parsedXml.Style.Abstract['#text'];
+            }
+          }
+          return;
+        }
+      });
+      if (Object.keys(layerInfo).length === 0) {
+        resolve(null);
+        return;
+      }
+      _cache[layer.id] = layerInfo;
+      resolve(layerInfo);
+    } else {
+      resolve(null);
+    }
+  }, () => {
+    resolve({resolution: 'bb'});
+    resolve();
+  });
+}
+
 /**
 * Fetch the metadata from ArcGIS MapService, & if we can't get it from there & we have an itemId: AGOL
 * @param {obj} layer - JS obj that has an esriLayer property to get URL's from
 * @param {Promise} promise - the promise we pass down - to be resolved one way or another: w/ metadata or to show our error message
 */
-function getServiceMetadata (layer, promise) {
+function getServiceMetadata (layer, resolve) {
   const {esriLayer, subIndex, subId} = layer;
   const { layerIds, layerId } = esriLayer;
 
@@ -291,16 +366,16 @@ function getServiceMetadata (layer, promise) {
     if (!results.description && layer.itemId) {
       url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
       getXMLTask(url).then(xmlDocument => {
-        promise.resolve(reduceXML(xmlDocument));
+        resolve(reduceXML(xmlDocument));
       }, () => {
-        promise.resolve();
+        resolve();
       });
     } else {
       _cache[subId] = results;
-      promise.resolve(results);
+      resolve(results);
     }
   }, () => {
-    promise.resolve();
+    resolve();
   });
 }
 
@@ -311,97 +386,156 @@ export default {
   },
 
   fetch (layer, cartoId) {
-    const promise = new Deferred();
     let url;
 
-    if (layer.technicalName) {
-      url = `${urls.metadataApi}/${layer.technicalName}`;
-      getMetadataTask(url).then(results => {
-        _cache[layer.id] = results;
-        promise.resolve(results);
-      });
-    } else if (layer.itemId) {
-      if (layer.type === 'carto') {
-        const {subId, id} = layer;
-        url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
-        const cartoMeta = getCartoMetadata(url);
-        cartoMeta.then(results => {
-          _cache[subId || id] = JSON.parse(results);
-          promise.resolve(reduceCarto(JSON.parse(results)));
-        });
-      } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
-        // run GetCapabilities call if this is a WMS layer
-        url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
-        getXMLTask(url).then((xmlDoc) => {
-          if (!xmlDoc) { promise.resolve(null); return; }
+    const promise = new Promise((resolve) => {
 
-          const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
-          if (xmlLayers.length) {
-            const layerInfo = {};
-            xmlLayers.forEach(l => {
-              const parsedXml = xmlToJson(l);
-              if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
-                if (parsedXml.Style) {
-                  if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
-                    layerInfo.name = parsedXml.Style.Title['#text'];
-                  }
-                  if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
-                    layerInfo.description = parsedXml.Style.Abstract['#text'];
-                  }
-                }
-                return;
-              }
-            });
-            if (Object.keys(layerInfo).length === 0) {
-              promise.resolve(null);
-              return;
-            }
-            _cache[layer.id] = layerInfo;
-            promise.resolve(layerInfo);
-          } else {
-            promise.resolve(null);
-          }
+      console.log(layer);
+      if (layer.technicalName) {
+        url = `${urls.metadataApi}/${layer.technicalName}`;
+        getMetadataTask(url).then(results => {
+          _cache[layer.id] = results;
+          resolve(results);
         });
-
-      } else {
-        url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
-        getXMLTask(url).then(xmlDocument => {
-          promise.resolve(reduceXML(xmlDocument));
-        }, () => {
-          url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
-          getServiceInfoTask(url).then(results => {
-            const {subId} = layer;
-            _cache[subId] = results;
-            promise.resolve(results);
-          }, () => {
-            getServiceMetadata(layer, promise);
+      } else if (layer.itemId) {
+        console.log('itemiddd');
+        if (layer.type === 'carto') {
+          const {subId, id} = layer;
+          url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
+          getCartoMetadata(url).then(results => {
+            _cache[subId || id] = JSON.parse(results);
+            resolve(reduceCarto(JSON.parse(results)));
           });
+        } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
+          console.log('wmsss');
+          getWmsMetadata(layer, resolve);
+          // run GetCapabilities call if this is a WMS layer
+          // url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
+          // getXMLTask(url).then((xmlDoc) => {
+          //   if (!xmlDoc) { resolve(null); return; }
+          //
+          //   const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
+          //   if (xmlLayers.length) {
+          //     const layerInfo = {};
+          //     xmlLayers.forEach(l => {
+          //       const parsedXml = xmlToJson(l);
+          //       if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
+          //         if (parsedXml.Style) {
+          //           if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
+          //             layerInfo.name = parsedXml.Style.Title['#text'];
+          //           }
+          //           if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
+          //             layerInfo.description = parsedXml.Style.Abstract['#text'];
+          //           }
+          //         }
+          //         return;
+          //       }
+          //     });
+          //     if (Object.keys(layerInfo).length === 0) {
+          //       resolve(null);
+          //       return;
+          //     }
+          //     _cache[layer.id] = layerInfo;
+          //     resolve(layerInfo);
+          //   } else {
+          //     resolve(null);
+          //   }
+          // });
+
+        } else {
+          console.log(4);
+          url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
+          getXMLTask(url).then(xmlDocument => {
+            resolve(reduceXML(xmlDocument));
+          }, () => {
+            url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
+            getServiceInfoTask(url).then(results => {
+              const {subId} = layer;
+              _cache[subId] = results;
+              resolve(results);
+            }, () => {
+              getServiceMetadata(layer, resolve);
+            });
+          });
+        }
+
+      } else if (layer.esriLayer) {
+        console.log('iii');
+
+        if (layer.type === 'carto') {
+          const {subId, id} = layer;
+          url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
+
+          getCartoMetadata(url).then(results => {
+            console.log('res', results);
+            _cache[subId || id] = JSON.parse(results);
+            resolve(reduceCarto(JSON.parse(results)));
+          }, () => {
+            resolve();
+          });
+        } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
+          console.log('wmsss');
+          getWmsMetadata(layer, resolve);
+          // run GetCapabilities call if this is a WMS layer
+          // url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
+          // getXMLTask(url).then((xmlDoc) => {
+          //   if (!xmlDoc) { resolve(null); return; }
+          //
+          //   const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
+          //   if (xmlLayers.length) {
+          //     const layerInfo = {};
+          //     xmlLayers.forEach(l => {
+          //       const parsedXml = xmlToJson(l);
+          //       if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
+          //         if (parsedXml.Style) {
+          //           if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
+          //             layerInfo.name = parsedXml.Style.Title['#text'];
+          //           }
+          //           if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
+          //             layerInfo.description = parsedXml.Style.Abstract['#text'];
+          //           }
+          //         }
+          //         return;
+          //       }
+          //     });
+          //     if (Object.keys(layerInfo).length === 0) {
+          //       resolve(null);
+          //       return;
+          //     }
+          //     _cache[layer.id] = layerInfo;
+          //     resolve(layerInfo);
+          //   } else {
+          //     resolve(null);
+          //   }
+          // });
+
+        } else {
+          console.log('astttt');
+          url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
+          getXMLTask(url).then(xmlDocument => {
+            resolve(reduceXML(xmlDocument));
+          }, () => {
+            url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
+            getServiceInfoTask(url).then(results => {
+              const {subId} = layer;
+              _cache[subId] = results;
+              resolve(results);
+            }, () => {
+              getServiceMetadata(layer, resolve);
+            });
+          });
+        }
+
+      } else if (layer.metadataUrl) {
+        getMetadataTask(layer.metadataUrl).then(results => {
+          _cache[layer.id] = results;
+          resolve(results);
         });
+      } else {
+        resolve();
       }
+    });
 
-    } else if (layer.esriLayer) {
-
-      url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
-      getXMLTask(url).then(xmlDocument => {
-        promise.resolve(reduceXML(xmlDocument));
-      }, () => {
-        url = `${settings.sharinghost}/sharing/rest/content/items/${layer.itemId}`;
-        getServiceInfoTask(url).then(results => {
-          const {subId} = layer;
-          _cache[subId] = results;
-          promise.resolve(results);
-        }, () => {
-          getServiceMetadata(layer, promise);
-        });
-      });
-    } else if (layer.metadataUrl) {
-      getMetadataTask(layer.metadataUrl).then(results => {
-        _cache[layer.id] = results;
-        promise.resolve(results);
-      });
-    } else {
-      promise.resolve();
-    }
     return promise;
   }
 

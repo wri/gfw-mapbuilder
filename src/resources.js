@@ -69,14 +69,14 @@ export default {
   // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
-  includeCartoTemplateLayers: false,
-  // cartoUser: 'wri-01',
-  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  // cartoApiKey: 'your key here',
-  // cartoGroupLabel: {
-  //   en: 'Carto Layers',
-  //   fr: 'Carto Layers',
-  // },
+  includeCartoTemplateLayers: true,
+  cartoUser: 'wri-01',
+  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
+  cartoGroupLabel: {
+    en: 'Carto Layers',
+    fr: 'Carto Layers',
+  },
 
   /**
    * Custom Analysis Module Configuration
@@ -954,6 +954,20 @@ export default {
             zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
             ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
+        }
+      }, {
+        order: 3,
+        // id: 'WMS_NUCLEOS_AGRARIOS',
+        id: 'WMS_STATES',
+        type: 'wms',
+        // url: 'http://cartocritica.mx/geoserver/Tenencia/wms',
+        url: 'https://ahocevar.com/geoserver/wms',
+        layerName: 'topp:states',
+        // layerName: 'Tenencia:NucleosAgrarios_2015nov',
+        visible: true,
+        label: {
+          // en: 'Nucleos Agrarios'
+          en: 'States'
         }
       }]
     },

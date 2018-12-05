@@ -15,7 +15,7 @@ import {loadCSS} from './loaders';
 export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoGroupLabel, lang) => {
 
   const templateUrl = `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`;
-  
+
   const cartoGroup = {
       groupType: 'carto',
       label: cartoGroupLabel,
@@ -28,9 +28,11 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
     const cartoTemplate = templateJson.template;
     const { layergroup: layerGroup, placeholders } = cartoTemplate;
     const { layers: templateLayers, stat_tag: templateKey} = layerGroup;
-    
+
     const cartoLayers = templateLayers.filter(l => l.type === 'cartodb');
-    
+
+    console.log('cartoTemplate', cartoTemplate);
+
     cartoLayers.forEach((layer, idx) => {
       const {
         id,
@@ -40,9 +42,11 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
           layer_name: layerName,
         }
       } = layer;
-      
+
+      console.log(id);
+
       // const symbolDictionary = {};
-      
+
       // if there is a placeholder figure out how to use it. For now use the default in 'placeholders'
       let queryString = sql;
       const sqlPlaceholder = sql.match(/<%=.+?%>/);
@@ -125,11 +129,11 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
       //     case 'category': {
       //       if (line.charAt(0) !== '#') { return; }
       //       // if (line.includes('{')) {
-      //       //   symbolDictionary[layerNameToAdd] = 
+      //       //   symbolDictionary[layerNameToAdd] =
       //       // }
       //     }
       //   }
-        
+
       // });
       // console.log(splitCss);
       // create a CartoLayer/GraphicsLayer for this layer
@@ -179,7 +183,7 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         // make a request to the carto sql api with the sql from the layer
         const sqlUrl = `https://${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`;
         request(sqlUrl, { timeout: 30000 }).then((sqlRes) => {
-          
+
           sqlRes = sqlRes.replace('undefined', '\"undefined\"');
           const cartoTopoJson = JSON.parse(sqlRes, (key, value) => {
             if (value === 'undefined') { return undefined; }
@@ -224,13 +228,13 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
           esriJson.forEach((feature) => {
             // create a graphic out of the feature
             const graphic = new Graphic(feature);
-            
+
             // convert to webmercator if necessary
             if (graphic.geometry.spatialReference.wkid === 4326) {
               const wmGeom = webMercatorUtils.geographicToWebMercator(graphic.geometry);
               graphic.setGeometry(wmGeom);
             }
-            
+
             // create a symbolMap above and get the symbol colors from that
             let graphicSymbol;
             switch (graphic.geometry.type) {
@@ -275,10 +279,10 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
                 fieldExpression: attribute,
               });
             });
-            
+
             // const graphicInfoTemplate = new InfoTemplate('Attributes', '${*}');
             graphic.setInfoTemplate(layerUtils.makeInfoTemplate(popup, lang));
-            
+
             esriLayer.add(graphic);
             // return graphic;
           });
@@ -292,6 +296,14 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         label: {
           [lang]: tableName,
         },
+        cartoMetadataUrl: templateUrl,
+        cartoUser: cartoUser,
+        cartoApiKey: cartoApiKey,
+        // templateKey: ,
+        cartoLayerId: templateKey,
+        cartoMapID: templateKey,
+        // cartoMapID
+        //cartoMapID
       });
       brApp.map.addLayer(esriLayer);
       layerActions.fetchingCartoData(false);
