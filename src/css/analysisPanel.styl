@@ -1,6 +1,7 @@
 .analysis-panel
   overflow-x hidden
-  overflow-y auto
+  overflow-y visible
+  position static
   height 100%
 
 .analysis-instructions
@@ -96,6 +97,8 @@
 .analysis-results
   color $grayFont
   width 100%
+  position static
+  overflow visible
 
 .analysis-results__title
   border-bottom 1px solid $lightGray
@@ -220,8 +223,8 @@
   top 0
 
 .analysis-results__content
-  position absolute
-  overflow auto
+  position static
+  overflow visible
   width 100%
   height 100%
   padding 10px 10px 0 10px

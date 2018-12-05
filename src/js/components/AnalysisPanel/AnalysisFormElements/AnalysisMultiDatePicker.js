@@ -97,9 +97,6 @@ export default class AnalysisMultiDatePicker extends Component {
           popperModifiers={{
             flip: {
               enabled: false
-            },
-            preventOverflow: {
-              enabled: false,
             }
           }}
 
@@ -118,9 +115,6 @@ export default class AnalysisMultiDatePicker extends Component {
           popperModifiers={{
             flip: {
               enabled: false
-            },
-            preventOverflow: {
-              enabled: false,
             }
           }}
 
