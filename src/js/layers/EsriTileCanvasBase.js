@@ -274,7 +274,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   _fetchTile: function _fetchTile (tile, urlChanged) {
     const id = this._getId(tile);
-    if (urlChanged) {
+
+    if (urlChanged && this.tiles[id]) {
       this.tiles[id].canvas.remove();
       delete this.tiles[id];
     }
@@ -288,6 +289,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
         const x = Math.floor(tile.x / Math.pow(2, steps));
         const y = Math.floor(tile.y / Math.pow(2, steps));
         url = this._getUrl({ x, y, z: this.options.maxZoom });
+
       } else {
         url = this._getUrl(tile);
       }
