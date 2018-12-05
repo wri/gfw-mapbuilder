@@ -634,7 +634,6 @@ export default class Analysis extends Component {
     const { isLoading, chartComponent} = this.state;
     const {language, settings} = this.context;
     let title, slopeSelect;
-    console.log('isLoading', isLoading)
 
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
