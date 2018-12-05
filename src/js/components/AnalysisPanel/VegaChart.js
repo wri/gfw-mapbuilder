@@ -5,24 +5,50 @@ export default class VegaChart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isError: false };
+    this.state = { isError: false, errorMsg: null };
   }
+
+  handleError(errorMsg) {
+    this.setState({ isError: true, errorMsg });
+    this.props.setLoading();
+  }
+
   componentDidMount() {
     if (this.props.results.hasOwnProperty('error')) {
-      this.setState({ isError: true });
+      this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      charts.makeVegaChart(this.chart, config);
-    }
+      const url = config.data[0].url;
+      fetch(url)
+        .then(res => {
+          if (res.status !== 200) {
+            this.handleError('Error creating analysis.');
+          }
+
+          res.json().then(json => {
+            if (json.data){
+              const values = json.data.attributes.value;
+              if (values.length) {
+                charts.makeVegaChart(this.chart, config, this.props.setLoading);
+              } else {
+                this.handleError('No results for this analysis.' );
+              }
+
+            }
+          });
+        });
+      }
+
+
   }
 
   render() {
-    const { isError } = this.state;
+    const { isError, errorMsg } = this.state;
     const { results } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
-          <h5>{results.message}</h5>
+          <h5>{results.message || errorMsg}</h5>
         </div>
       );
     } else {
