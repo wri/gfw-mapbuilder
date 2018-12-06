@@ -5,28 +5,28 @@ import layerInfoCache from 'utils/layerInfoCache';
 //   promise.resolve(layerInfo);
 // });
 
-// test('The layerInfoCache has the proper methods', () => {
-//   expect(layerInfoCache).toHaveProperty('fetch');
-//   expect(layerInfoCache).toHaveProperty('get');
-//
-//   expect(typeof layerInfoCache.fetch).toEqual('function');
-//   expect(typeof layerInfoCache.get).toEqual('function');
-// });
-//
-// test('A layer w/ a "technicalName" returns the proper metadata from getMetadataTask', () => {
-//   const layerObj = {
-//     technicalName: 'tree_cover_loss',
-//     id: 'TREE_COVER_LOSS',
-//     type: 'loss',
-//     url: 'https://storage.googleapis.com/wri-public/Hansen17/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
-//   };
-//
-//   expect.assertions(2);
-//   return layerInfoCache.fetch(layerObj).then(data => {
-//     expect(data.frequency_of_updates).toBe('<p>Annual</p>');
-//     expect(data.resolution).toBe('<p>30 × 30 meters</p>');
-//   });
-// });
+test('The layerInfoCache has the proper methods', () => {
+  expect(layerInfoCache).toHaveProperty('fetch');
+  expect(layerInfoCache).toHaveProperty('get');
+
+  expect(typeof layerInfoCache.fetch).toEqual('function');
+  expect(typeof layerInfoCache.get).toEqual('function');
+});
+
+test('A layer w/ a "technicalName" returns the proper metadata from getMetadataTask', () => {
+  const layerObj = {
+    technicalName: 'tree_cover_loss',
+    id: 'TREE_COVER_LOSS',
+    type: 'loss',
+    url: 'https://storage.googleapis.com/wri-public/Hansen17/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png',
+  };
+
+  expect.assertions(2);
+  return layerInfoCache.fetch(layerObj).then(data => {
+    expect(data.frequency_of_updates).toBe('<p>Annual</p>');
+    expect(data.resolution).toBe('<p>30 × 30 meters</p>');
+  });
+});
 
 test('A layer w/ type = "wms" returns the proper metadata from the xml doc', () => {
   const layerObj = {
@@ -49,6 +49,6 @@ test('A layer w/ type = "wms" returns the proper metadata from the xml doc', () 
   return layerInfoCache.fetch(layerObj).then(data => {
     console.log(data);
     // expect(data.frequency_of_updates).toBe('<p>Annual</p>');
-    expect(data.resolution).toBe('<p>30 × 30 meters</p>');
+    expect(data.description).toBe('A sample filter that filters the United States into three categories of population, drawn in different colors');
   });
 });

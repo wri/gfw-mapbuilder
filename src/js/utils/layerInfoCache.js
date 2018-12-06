@@ -75,33 +75,16 @@ const getCartoMetadata = (unique => url =>
 * @return {Deferred} promise
 */
 function getXMLTask (url) {
-  // return esriRequest({
-  //   url,
-  //   handleAs: 'xml',
-  //   callbackParamName: 'callback'
-  // });
   const promise = new Promise((resolve, reject) => {
-    // const request = new XMLHttpRequest();
-    // request.addEventListener('load', () => {
-    //   resolve(JSON.parse(request.response));
-    // });
-    // request.addEventListener('error', () => {
-    //   reject('error');
-    // });
-    // request.open('GET', url);
-    // request.send();
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url);
-    xhr.responseType = 'json';
-    xhr.onload = (e) => {
-      console.log(xhr);
-      console.log(xhr.status);
+    xhr.responseType = 'document';
+    xhr.onload = () => {
       if (xhr.status === 200) {
-        console.log(xhr);
-        console.log(e);
-        debugger
-        console.log('response', xhr.response); // JSON response
-        resolve(JSON.parse(xhr.response));
+        const root = xhr.responseXML.documentElement;
+        resolve(root);
+      } else {
+        reject();
       }
     };
     xhr.send();
@@ -298,13 +281,15 @@ function xmlToJson(xml) {
 	return obj;
 }
 
+function stripHtml(html){
+   var doc = new DOMParser().parseFromString(html, 'text/html');
+   return doc.body.textContent || '';
+}
+
 function getWmsMetadata (layer, resolve) {
 
-  console.log('iiia');
   const url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
-  console.log('url', url);
   getXMLTask(url).then((xmlDoc) => {
-    resolve({resolution: 'aa'});
     if (!xmlDoc) { resolve(null); return; }
 
     const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
@@ -318,7 +303,10 @@ function getWmsMetadata (layer, resolve) {
               layerInfo.name = parsedXml.Style.Title['#text'];
             }
             if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
-              layerInfo.description = parsedXml.Style.Abstract['#text'];
+              let innerText = parsedXml.Style.Abstract['#text'];
+              innerText = innerText.replace(/[\n\r]+/g, '');
+              innerText = innerText.replace(/\s+/g, ' ').trim();
+              layerInfo.description = innerText;
             }
           }
           return;
@@ -334,7 +322,6 @@ function getWmsMetadata (layer, resolve) {
       resolve(null);
     }
   }, () => {
-    resolve({resolution: 'bb'});
     resolve();
   });
 }
@@ -390,7 +377,6 @@ export default {
 
     const promise = new Promise((resolve) => {
 
-      console.log(layer);
       if (layer.technicalName) {
         url = `${urls.metadataApi}/${layer.technicalName}`;
         getMetadataTask(url).then(results => {
