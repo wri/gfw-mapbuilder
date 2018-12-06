@@ -95,6 +95,7 @@ function getXMLTask (url) {
 /**
 * Fetch the metadata from ArcGIS MapService, this is the last resort
 * @param {string} url - Map Service URL
+* @param {bool} json - If this request is going to ArcServer (rather than AGOL), set 'f=json'!
 * @return {Promise} promise
 */
 function getServiceInfoTask (url, json) {
