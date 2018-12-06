@@ -59,7 +59,8 @@
       "^components(.*)$": "<rootDir>/src/js/components$1",
       "^constants(.*)$": "<rootDir>/src/js/constants$1",
       "^actions(.*)$": "<rootDir>/src/js/actions$1",
-      "^utils(.*)$": "<rootDir>/src/js/utils$1"
+      "^utils(.*)$": "<rootDir>/src/js/utils$1",
+      "testing/config": "<rootDir>/config/testing/config.js"
     },
     "moduleDirectories": [
       "node_modules",

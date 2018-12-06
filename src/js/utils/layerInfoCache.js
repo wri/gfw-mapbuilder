@@ -403,7 +403,6 @@ export default {
         } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
           getWmsMetadata(layer, resolve);
         } else {
-          console.log(4);
           url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
           getXMLTask(url).then(xmlDocument => {
             resolve(reduceXML(xmlDocument));
@@ -420,7 +419,6 @@ export default {
         }
 
       } else if (layer.esriLayer) {
-        console.log('iii');
 
         if (layer.type === 'carto') {
           const {subId, id} = layer;
@@ -435,7 +433,6 @@ export default {
         } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
           getWmsMetadata(layer, resolve);
         } else {
-          console.log('astttt');
           url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
           getXMLTask(url).then(xmlDocument => {
             resolve(reduceXML(xmlDocument));
