@@ -48,7 +48,6 @@ test('A layer w/ type = "wms" returns the proper metadata from the xml doc', () 
   expect.assertions(1);
   return layerInfoCache.fetch(layerObj).then(data => {
     console.log(data);
-    // expect(data.frequency_of_updates).toBe('<p>Annual</p>');
     expect(data.description).toBe('A sample filter that filters the United States into three categories of population, drawn in different colors');
   });
 });

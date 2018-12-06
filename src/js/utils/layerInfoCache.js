@@ -2,7 +2,7 @@
 * Cache for information about each layer, to be shown in the modal
 */
 import esriRequest from 'esri/request';
-import Deferred from 'dojo/Deferred';
+// import Deferred from 'dojo/Deferred';
 import settings from '../../resources';
 import {urls} from 'js/config';
 
@@ -281,13 +281,7 @@ function xmlToJson(xml) {
 	return obj;
 }
 
-function stripHtml(html){
-   var doc = new DOMParser().parseFromString(html, 'text/html');
-   return doc.body.textContent || '';
-}
-
 function getWmsMetadata (layer, resolve) {
-
   const url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
   getXMLTask(url).then((xmlDoc) => {
     if (!xmlDoc) { resolve(null); return; }
@@ -393,41 +387,7 @@ export default {
             resolve(reduceCarto(JSON.parse(results)));
           });
         } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
-          console.log('wmsss');
           getWmsMetadata(layer, resolve);
-          // run GetCapabilities call if this is a WMS layer
-          // url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
-          // getXMLTask(url).then((xmlDoc) => {
-          //   if (!xmlDoc) { resolve(null); return; }
-          //
-          //   const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
-          //   if (xmlLayers.length) {
-          //     const layerInfo = {};
-          //     xmlLayers.forEach(l => {
-          //       const parsedXml = xmlToJson(l);
-          //       if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
-          //         if (parsedXml.Style) {
-          //           if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
-          //             layerInfo.name = parsedXml.Style.Title['#text'];
-          //           }
-          //           if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
-          //             layerInfo.description = parsedXml.Style.Abstract['#text'];
-          //           }
-          //         }
-          //         return;
-          //       }
-          //     });
-          //     if (Object.keys(layerInfo).length === 0) {
-          //       resolve(null);
-          //       return;
-          //     }
-          //     _cache[layer.id] = layerInfo;
-          //     resolve(layerInfo);
-          //   } else {
-          //     resolve(null);
-          //   }
-          // });
-
         } else {
           console.log(4);
           url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
@@ -460,41 +420,7 @@ export default {
             resolve();
           });
         } else if (layer.type === 'wms' || layer.esriLayer.type === 'WMS') {
-          console.log('wmsss');
           getWmsMetadata(layer, resolve);
-          // run GetCapabilities call if this is a WMS layer
-          // url = `${layer.esriLayer.url}?service=wms&request=GetCapabilities&version=${layer.esriLayer.version}`;
-          // getXMLTask(url).then((xmlDoc) => {
-          //   if (!xmlDoc) { resolve(null); return; }
-          //
-          //   const xmlLayers = xmlDoc.querySelectorAll('Layer Layer');
-          //   if (xmlLayers.length) {
-          //     const layerInfo = {};
-          //     xmlLayers.forEach(l => {
-          //       const parsedXml = xmlToJson(l);
-          //       if (parsedXml.Name && parsedXml.Name['#text'] && parsedXml.Name['#text'] === layer.layerName) {
-          //         if (parsedXml.Style) {
-          //           if (parsedXml.Style.Title && parsedXml.Style.Title['#text']) {
-          //             layerInfo.name = parsedXml.Style.Title['#text'];
-          //           }
-          //           if (parsedXml.Style.Abstract && parsedXml.Style.Abstract['#text']) {
-          //             layerInfo.description = parsedXml.Style.Abstract['#text'];
-          //           }
-          //         }
-          //         return;
-          //       }
-          //     });
-          //     if (Object.keys(layerInfo).length === 0) {
-          //       resolve(null);
-          //       return;
-          //     }
-          //     _cache[layer.id] = layerInfo;
-          //     resolve(layerInfo);
-          //   } else {
-          //     resolve(null);
-          //   }
-          // });
-
         } else {
           console.log('astttt');
           url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
