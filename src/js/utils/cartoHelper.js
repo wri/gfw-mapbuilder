@@ -31,8 +31,6 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
 
     const cartoLayers = templateLayers.filter(l => l.type === 'cartodb');
 
-    console.log('cartoTemplate', cartoTemplate);
-
     cartoLayers.forEach((layer, idx) => {
       const {
         id,
@@ -42,8 +40,6 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
           layer_name: layerName,
         }
       } = layer;
-
-      console.log(id);
 
       // const symbolDictionary = {};
 
@@ -299,11 +295,8 @@ export const setupCartoLayers = (cartoUser, cartoTemplateId, cartoApiKey, cartoG
         cartoMetadataUrl: templateUrl,
         cartoUser: cartoUser,
         cartoApiKey: cartoApiKey,
-        // templateKey: ,
         cartoLayerId: templateKey,
-        cartoMapID: templateKey,
-        // cartoMapID
-        //cartoMapID
+        cartoMapID: templateKey
       });
       brApp.map.addLayer(esriLayer);
       layerActions.fetchingCartoData(false);

@@ -5,7 +5,7 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  webmap: 'b514d31339954ba9a0c5822135bc2001',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
@@ -72,7 +72,7 @@ export default {
   includeCartoTemplateLayers: true,
   cartoUser: 'wri-01',
   cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  cartoApiKey: '0e5365cb1a299778e9df9c7bf6db489af8aa08e1',
+  cartoApiKey: 'your key here',
   cartoGroupLabel: {
     en: 'Carto Layers',
     fr: 'Carto Layers',
@@ -954,20 +954,6 @@ export default {
             zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
             ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
           }
-        }
-      }, {
-        order: 3,
-        // id: 'WMS_NUCLEOS_AGRARIOS',
-        id: 'WMS_STATES',
-        type: 'wms',
-        // url: 'http://cartocritica.mx/geoserver/Tenencia/wms',
-        url: 'https://ahocevar.com/geoserver/wms',
-        layerName: 'topp:states',
-        // layerName: 'Tenencia:NucleosAgrarios_2015nov',
-        visible: true,
-        label: {
-          // en: 'Nucleos Agrarios'
-          en: 'States'
         }
       }]
     },

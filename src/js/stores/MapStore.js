@@ -509,7 +509,6 @@ class MapStore {
 
   showLayerInfo (layer) {
     // Grab the id of the sublayer if it exists, else, grab the normal id
-    console.log('layy', layer);
     const id = layer.subId ? layer.subId : layer.id;
     const info = layerInfoCache.get(id);
 

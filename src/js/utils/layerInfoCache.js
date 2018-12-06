@@ -1,8 +1,6 @@
 /**
 * Cache for information about each layer, to be shown in the modal
 */
-// import esriRequest from 'esri/request';
-// import Deferred from 'dojo/Deferred';
 import settings from '../../resources';
 import {urls} from 'js/config';
 
@@ -11,7 +9,7 @@ const _cache = {};
 /**
 * Fetch the metadata from GFW's Metadata API
 * @param {string} url - api url plus technical name, e.g. urls.metadataApi + '/tree_cover_loss'
-* @return {Deferred} promise
+* @return {Promise} promise
 */
 function getMetadataTask (url) {
   const promise = new Promise((resolve) => {
@@ -72,7 +70,7 @@ const getCartoMetadata = (unique => url =>
 /**
 * Fetch the metadata from ArcGIS Online via the item Id
 * @param {string} url - Url includes the item id and refers to ArcGIS Online sharing url, urls.metadataXmlEndpoint(layer.itemId)
-* @return {Deferred} promise
+* @return {Promise} promise
 */
 function getXMLTask (url) {
   const promise = new Promise((resolve, reject) => {
@@ -97,7 +95,7 @@ function getXMLTask (url) {
 /**
 * Fetch the metadata from ArcGIS MapService, this is the last resort
 * @param {string} url - Map Service URL
-* @return {Deferred} promise
+* @return {Promise} promise
 */
 function getServiceInfoTask (url, json) {
   const promise = new Promise((resolve, reject) => {

@@ -1,7 +1,3 @@
-// config.analysis[analysisKeys.MODIS_FIRES] = {
-//   url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
-// };
-
 export const values = {
   technical: {
     layerObj: {
@@ -33,7 +29,7 @@ export const values = {
   },
   oil: {
     layerObj: {
-      itemId: undefined,
+      itemId: undefined, //let's be explicit!
       label: {
         en: 'Oil permits'
       },
