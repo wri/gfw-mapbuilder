@@ -1,7 +1,7 @@
 /**
 * Cache for information about each layer, to be shown in the modal
 */
-import esriRequest from 'esri/request';
+// import esriRequest from 'esri/request';
 // import Deferred from 'dojo/Deferred';
 import settings from '../../resources';
 import {urls} from 'js/config';
@@ -99,13 +99,29 @@ function getXMLTask (url) {
 * @param {string} url - Map Service URL
 * @return {Deferred} promise
 */
-function getServiceInfoTask (url) {
-  return esriRequest({
-    url,
-    handleAs: 'json',
-    content: {f: 'json'},
-    callbackParamName: 'callback'
+function getServiceInfoTask (url, json) {
+  const promise = new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+
+    request.open('GET', json ? url + '?f=json' : url);
+    request.responseType = 'json';
+    request.addEventListener('load', () => {
+      if (request.status === 200) {
+        if (request.response) {
+          resolve(request.response);
+        } else {
+          reject();
+        }
+      }
+    });
+    request.addEventListener('error', () => {
+      reject();
+    });
+
+    request.send();
+
   });
+  return promise;
 }
 
 function reduceCarto (rawResults) {
@@ -342,8 +358,7 @@ function getServiceMetadata (layer, resolve) {
     url += `/${subIndex}`;
   }
 
-  getServiceInfoTask(url).then(results => {
-
+  getServiceInfoTask(url, true).then(results => {
     if (!results.description && layer.itemId) {
       url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
       getXMLTask(url).then(xmlDocument => {
@@ -378,7 +393,6 @@ export default {
           resolve(results);
         });
       } else if (layer.itemId) {
-        console.log('itemiddd');
         if (layer.type === 'carto') {
           const {subId, id} = layer;
           url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
@@ -413,7 +427,6 @@ export default {
           url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
 
           getCartoMetadata(url).then(results => {
-            console.log('res', results);
             _cache[subId || id] = JSON.parse(results);
             resolve(reduceCarto(JSON.parse(results)));
           }, () => {

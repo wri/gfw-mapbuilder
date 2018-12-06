@@ -17,8 +17,6 @@ export default class Modal extends Component {
       info.license = info.licenseInfo;
     }
 
-    console.log(info.description);
-    window.lll = info.description;
     return (
       <div className='layer-modal-content'>
         <div className='source-header'>
