@@ -1087,6 +1087,7 @@ export default {
         order: 1,
         id: 'GFWImageryLayer',
         type: 'imagery',
+        technicalName: 'recent_satellite_imagery',
         visible: false,
         label: {
           en: 'Recent Imagery',
