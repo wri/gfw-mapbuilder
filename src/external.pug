@@ -883,6 +883,26 @@ html
                 }
               }]
             },
+            GROUP_IMAGERY: {
+              groupType: 'imagery',
+              order: 4,
+              label: {
+                en: 'Recent Imagery',
+              },
+              layers: [{
+                order: 1,
+                id: 'GFWImageryLayer',
+                type: 'imagery',
+                technicalName: 'recent_satellite_imagery',
+                visible: false,
+                label: {
+                  en: 'Recent Imagery',
+                },
+                dynamicSublabel: {
+                  en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                }
+              }]
+            },
             GROUP_BASEMAP: {
               groupType: 'basemap',
               order: 200,
