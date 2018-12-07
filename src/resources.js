@@ -1080,7 +1080,6 @@ export default {
     GROUP_IMAGERY: {
       groupType: 'imagery',
       order: 4,
-      hidden: true,
       label: {
         en: 'Recent Imagery',
       },
@@ -1088,11 +1087,12 @@ export default {
         order: 1,
         id: 'GFWImageryLayer',
         type: 'imagery',
+        visible: false,
         label: {
           en: 'Recent Imagery',
         },
-        sublabel: {
-          en: '',
+        dynamicSublabel: {
+          en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
         }
       }]
     },

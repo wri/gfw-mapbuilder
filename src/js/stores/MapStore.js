@@ -631,6 +631,7 @@ class MapStore {
     this.imageryActive = bool;
     this.imageryError = false;
     this.imageryData = [];
+    this.selectedImagery = null;
 
   }
 
@@ -671,6 +672,7 @@ class MapStore {
 
   setSelectedImagery(obj) {
     this.selectedImagery = obj;
+
   }
 }
 

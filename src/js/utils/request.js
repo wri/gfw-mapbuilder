@@ -235,7 +235,7 @@ const request = {
        .then(res => {
          return new Promise((resolve) => {
           setTimeout(() => {
-            if (res.errors && res.errors[0].status === 500 && count < 15) {
+            if (res.errors && res.errors[0].status !== 200 && count < 15) {
               count++;
               resolve(fetchTiles(count));
             }

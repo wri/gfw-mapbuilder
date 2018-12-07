@@ -44,8 +44,9 @@ class AppStore {
     this.activeWebmap = settings.webmap;
   }
 
-  toggleImageryActive (active) {
-    this.settings.layerPanel.GROUP_IMAGERY.hidden = !active;
+  toggleImageryActive () {
+    console.log('here')
+    // this.settings.layerPanel.GROUP_IMAGERY.hidden = !active;
   }
 
 }

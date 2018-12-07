@@ -98,11 +98,16 @@ export default class LayerCheckbox extends Component {
         layerActions.addActiveLayer(layer.id);
       }
     }
+
+    if (layer.id === 'GFWImageryLayer') {
+      mapActions.toggleImageryVisible(layer.visible); // Imagery Modal
+      mapActions.toggleImageryActive(layer.visible);
+    }
   }
 
   render() {
     const {map, language} = this.context;
-    const {layer, initialLayerOpacities} = this.props;
+    const {layer, initialLayerOpacities, onEdit, dynamicSublabel} = this.props;
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
@@ -126,10 +131,14 @@ export default class LayerCheckbox extends Component {
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
+        {onEdit && this.props.checked && <span className='fa-button sml white layer-edit' onClick={onEdit}>edit</span>}
+
         <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}
+        {!dynamicSublabel ? null : <div className='layer-checkbox-sublabel dynamic'>{dynamicSublabel}</div>}
+
         {!this.props.children ? null :
           <div className={`layer-content-container flex ${this.props.checked ? '' : 'hidden'}`}>
             {this.props.children}

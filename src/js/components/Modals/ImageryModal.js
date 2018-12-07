@@ -4,10 +4,10 @@ import React, { Component, PropTypes } from 'react';
 import ImageryModalSlider from 'components/SatelliteImagery/ImageryModalSlider';
 import ImageryDatePicker from 'components/SatelliteImagery/ImageryDatePicker';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
-import moment from 'moment';
 import Loader from 'components/Loader';
 import GFWImageryLayer from 'js/layers/GFWImageryLayer';
 import SVGIcon from 'utils/svgIcon';
+import moment from 'moment';
 
 import { modalText } from 'js/config';
 
@@ -69,10 +69,8 @@ export default class ImageryModal extends Component {
       imageryLayer._extentChanged();
 
     }
-
     this.setState({ selectedThumb: {index: i, tileObj} });
     mapActions.setSelectedImagery(tileObj);
-
   }
 
   hoverThumbnail (tileObj) {

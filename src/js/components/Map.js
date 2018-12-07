@@ -220,6 +220,7 @@ export default class Map extends Component {
           params.lat = mapPt.getLongitude();
 
           mapActions.getSatelliteImagery(params);
+          mapActions.toggleImageryVisible(true);
         });
 
         // Get WMS Features on click
@@ -907,7 +908,6 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
-          {settings.layerPanel && settings.layerPanel.GROUP_IMAGERY && <SatelliteImagery imageryModalVisible={this.state.imageryModalVisible} imageryActive={this.state.imageryActive}/>}
 
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}

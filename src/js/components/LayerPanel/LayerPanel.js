@@ -6,11 +6,10 @@ import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
 import FormaControls from 'components/LayerPanel/FormaControls';
 import SadControls from 'components/LayerPanel/SadControls';
+import ImageryControls from 'components/LayerPanel/ImageryControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
-import SVGIcon from 'utils/svgIcon';
-import LayerTransparency from './LayerTransparency';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
@@ -69,12 +68,6 @@ export default class LayerPanel extends Component {
     }
   }
 
-  showInfo (layer) {
-    if (layer.disabled) { return; }
-    mapActions.showLayerInfo(layer);
-    layerActions.showLoading(layer.id);
-  }
-
   renderLayerGroups = (groups, language) => {
     const allRadioLayers = [];
     Object.keys(groups)
@@ -97,7 +90,7 @@ export default class LayerPanel extends Component {
       return a.order - b.order;
     });
     return orderedGroups.map((group) => {
-      if (group.layers.length === 0 || group.hidden) { return null; }
+      if (group.layers.length === 0) { return null; }
       group.layers = group.layers.sort((a, b) => b.order - a.order);
       //- Sort the layers and then render them, basemaps use a different function
       //- as not all basemaps are present in configuration
@@ -125,9 +118,6 @@ export default class LayerPanel extends Component {
           break;
         case 'basemap':
           layers = this.renderBasemaps(group.layers);
-          break;
-        case 'imagery':
-          layers = group.layers.map(this.renderImageryLayers);
           break;
         default:
           layers = group.layers.map(this.checkboxMap);
@@ -161,10 +151,11 @@ export default class LayerPanel extends Component {
       modisStartDate,
       modisEndDate,
       initialLayerOpacities,
+      selectedImagery,
       ...props} = this.props;
 
     const {language} = this.context;
-    let childComponent;
+    let childComponent, editCallback, dynamicSublabel;
 
     switch (layer.id) {
       case 'VIIRS_ACTIVE_FIRES':
@@ -197,6 +188,22 @@ export default class LayerPanel extends Component {
           <DensityDisplay key='tcl_density-display' {...props} />
         ];
         break;
+      case 'GFWImageryLayer':
+        editCallback = () => {
+          const imageryMobile = window.innerWidth <= 600;
+          mapActions.toggleImageryVisible(true);
+          if (imageryMobile) {
+            this.props.hideTabView();
+          }
+        };
+        const attr = selectedImagery ? selectedImagery.attributes : null;
+        const label = layer.dynamicSublabel[language];
+        dynamicSublabel = attr && label ? label
+                          .replace('{DATE_TIME}', `${moment(attr.date_time).format('DD MMM YYYY')}`)
+                          .replace('{CLOUD_COVERAGE}', `${attr.cloud_score.toFixed(0)}`)
+                          .replace('{INSTRUMENT}', `${attr.instrument.replace('_', ' ')}`) : '';
+
+        break;
       case LayerKeys.TREE_COVER:
       case LayerKeys.AG_BIOMASS:
         childComponent = <DensityDisplay {...props} />;
@@ -221,6 +228,7 @@ export default class LayerPanel extends Component {
       break;
       default:
         childComponent = null;
+        editCallback = null;
     }
 
     let checkbox;
@@ -230,7 +238,7 @@ export default class LayerPanel extends Component {
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }
@@ -289,38 +297,6 @@ export default class LayerPanel extends Component {
 
     return basemapLayers;
   };
-
-  editImagery = () => {
-    const imageryMobile = window.innerWidth <= 600;
-    mapActions.toggleImageryVisible(true);
-    if (imageryMobile) {
-      this.props.hideTabView();
-    }
-  }
-
-  renderImageryLayers = (layer) => {
-    const {
-      iconLoading,
-      initialLayerOpacities,
-      selectedImagery,
-      ...props} = this.props;
-
-    const {language} = this.context;
-
-    return <div className='layer-checkbox relative' key={layer.label[language]} >
-      <span className='layer-checkbox-label'>
-        {layer.label[language]}
-        {selectedImagery ? <div className='layer-checkbox-sublabel'>
-          {`(${moment(selectedImagery.attributes.date_time).format('DD MMM YYYY')}, ${selectedImagery.attributes.cloud_score.toFixed(0)}% cloud coverage, ${selectedImagery.attributes.instrument.replace('_', ' ')})`}
-        </div> : null}
-      </span>
-      <span className='fa-button sml white layer-edit' onClick={this.editImagery}>edit</span>
-      <span className={`info-icon pointer ${iconLoading === layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
-        <SVGIcon id={'shape-info'} />
-      </span>
-      <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={true}></LayerTransparency>
-    </div>;
-  }
 
   render() {
     const {settings, language} = this.context;
