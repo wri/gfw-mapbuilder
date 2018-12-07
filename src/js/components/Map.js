@@ -49,6 +49,7 @@ import layersHelper from 'helpers/LayersHelper';
 import SVGIcon from 'utils/svgIcon';
 import SatelliteImagery from 'components/MapControls/SatelliteImagery';
 import ImageryModal from 'components/Modals/ImageryModal';
+import ScreenPoint from 'esri/geometry/ScreenPoint';
 
 import React, {
   Component,
@@ -199,6 +200,27 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        response.map.on('extent-change', (evt) => {
+          if (!this.state.imageryActive) { return; }
+          const { imageryParams } = this.state;
+          const params = imageryParams ? imageryParams : {};
+
+
+          const xVal = window.innerWidth / 2;
+          const yVal = window.innerHeight / 2;
+
+          // Create new screen point at center;
+          const screenPt = new ScreenPoint(xVal, yVal);
+          // Convert screen point to map point and zoom to point;
+          const mapPt = response.map.toMap(screenPt);
+          // Note: Lat and lon are intentionally reversed until imagery api is fixed.
+          // The imagery API only returns the correct image for that lat/lon if they are reversed.
+          params.lon = mapPt.getLatitude();
+          params.lat = mapPt.getLongitude();
+
+          mapActions.getSatelliteImagery(params);
+        });
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {

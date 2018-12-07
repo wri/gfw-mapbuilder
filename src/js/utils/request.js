@@ -209,7 +209,7 @@ const request = {
     return task.execute(query);
   },
 
-  getImageryData(params) {
+  getRecentTiles(params) {
     const deferred = new Deferred();
 
     if (!params.start || !params.end) {
@@ -221,7 +221,7 @@ const request = {
     const recentTilesUrl = new URL(urls.satelliteImageService);
     Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
 
-    const getRecentTiles = (count = 0) => {
+    const fetchTiles = (count = 0) => {
       return fetch(
         recentTilesUrl,
         {
@@ -237,7 +237,7 @@ const request = {
           setTimeout(() => {
             if (res.errors && res.errors[0].status === 500 && count < 15) {
               count++;
-              resolve(getRecentTiles(count));
+              resolve(fetchTiles(count));
             }
             resolve(res);
           }, 500);
@@ -245,103 +245,110 @@ const request = {
       });
     };
 
+    fetchTiles().then(response => {
+      if (response.errors) {
+        deferred.reject(response);
+        return;
+      }
+      deferred.resolve(response);
+    });
+    return deferred;
+  },
 
-    getRecentTiles(params).then(response => {
-        if (response.errors) {
-          deferred.reject(response);
+  getImageryData(params, tiles) {
+    const deferred = new Deferred();
+    const sourceData = [];
+    tiles.forEach((tile) => {
+      sourceData.push({ source: tile.attributes.source });
+    });
+
+    // Create request body that will be used for both the recent-tiles/tiles
+    // request and the recent-tiles/thumbs request
+    const content = {
+      bands: params.bands,
+      source_data: sourceData,
+    };
+
+    const postTiles = (count = 0) => {
+      return fetch(
+          urls.satelliteImageService + '/tiles',
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(content)
+          }
+        ).then(res => res.json())
+         .then(res => {
+           // If the request fails, try it again up to 15 times and then fail it.
+          // There are resource limitations with the imagery endpoint.
+          if (res.errors && res.errors[0].status !== 200 && count < 15) {
+             return new Promise((resolve) => {
+                setTimeout(() => {
+                  count++;
+                  resolve(postTiles(count));
+                }, 500);
+            });
+          } else {
+            return res;
+          }
+
+        });
+    };
+    // Make a post request to the tiles endpoint to all of the tile_urls for
+    // each tile returned in the get recent tiles request
+    postTiles().then(tileResponse => {
+      if (tileResponse.errors) {
+        deferred.reject(tileResponse);
+        return;
+      }
+      const postThumbs = (count = 0) => {
+        return fetch(
+          urls.satelliteImageService + '/thumbs',
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(content)
+          }
+        ).then(res => res.json())
+         .then(res => {
+           // If the request fails, try it again up to 15 times and then fail it.
+          // There are resource limitations with the imagery endpoint.
+          if (res.errors && res.errors[0].status !== 200 && count < 15) {
+             return new Promise((resolve) => {
+                setTimeout(() => {
+                  count++;
+                  resolve(postThumbs(count));
+                }, 500);
+            });
+          } else {
+            return res;
+          }
+        });
+      };
+
+      // Make a post request to the thumbs endpoint to get all of the thumbnail image urls for
+      // each tile returned in the get recent tiles request.
+      postThumbs().then(thumbResponse => {
+        if (thumbResponse.errors) {
+          deferred.reject(thumbResponse);
           return;
         }
 
-        const sourceData = [];
-        const imageryData = response.data.tiles;
-        imageryData.forEach((tile) => {
-          sourceData.push({ source: tile.attributes.source });
+        tiles.forEach((data, i) => {
+          data.tileUrl = tileResponse.data.attributes[i].tile_url;
+          data.thumbUrl = thumbResponse.data.attributes[i].thumbnail_url;
         });
-        const content = {
-          bands: params.bands,
-          source_data: sourceData,
-        };
-
-        const postTiles = (count = 0) => {
-          return fetch(
-              urls.satelliteImageService + '/tiles',
-              {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(content)
-              }
-            ).then(res => res.json())
-             .then(res => {
-
-               return new Promise((resolve) => {
-                setTimeout(() => {
-                  if (res.errors && res.errors[0].status === 500 && count < 15) {
-                    count++;
-                    resolve(postTiles(count));
-                  }
-                  resolve(res);
-                }, 500);
-              });
-            });
-        };
-
-
-
-        postTiles().then(tileResponse => {
-          if (tileResponse.errors) {
-            deferred.reject(tileResponse);
-            return;
-          }
-
-
-          const postThumbs = (count = 0) => {
-            return fetch(
-              urls.satelliteImageService + '/thumbs',
-              {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(content)
-              }
-            ).then(res => res.json())
-             .then(res => {
-
-               return new Promise((resolve) => {
-                setTimeout(() => {
-                  if (res.errors && res.errors[0].status === 500 && count < 15) {
-                    count++;
-                    resolve(postThumbs(count));
-                  }
-                  resolve(res);
-                }, 500);
-              });
-            });
-          };
-
-
-          postThumbs().then(thumbResponse => {
-            if (thumbResponse.errors) {
-              deferred.reject(thumbResponse);
-              return;
-            }
-
-            imageryData.forEach((data, i) => {
-              data.tileUrl = tileResponse.data.attributes[i].tile_url;
-              data.thumbUrl = thumbResponse.data.attributes[i].thumbnail_url;
-            });
-            deferred.resolve(imageryData);
-          });
-        });
+        deferred.resolve(tiles);
+      });
     });
     return deferred;
   }
-
-
 };
 
 export {request as default};

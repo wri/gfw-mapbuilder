@@ -12,6 +12,7 @@ import {layerPanelText} from 'js/config';
 import request from 'utils/request';
 import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
+import { urls } from 'js/config';
 
 let isRegistering = false;
 
@@ -83,6 +84,7 @@ class MapStore {
     this.loadingImagery = false;
     this.imageryError = false;
     this.selectedImagery = null;
+    this.imageryParams = null;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -633,22 +635,38 @@ class MapStore {
   }
 
   getSatelliteImagery(params) {
+    // Confirm the imagery data isn't already being loaded.
+    if (this.loadingImagery) { return; }
+
     this.imageryError = false;
     this.loadingImagery = true;
-    request.getImageryData(params).then(imageryData => {
-      console.log('imageryData', imageryData);
-      this.imageryData = imageryData;
-      this.loadingImagery = false;
+
+    // First make a reqest to the recent tiles metadata endpoint
+    request.getRecentTiles(params).then(response => {
+      const tiles = response.data.tiles;
+      // Only the first tile url is returned with the metadata response from the
+      // recent tiles endpoint. We can add this to state and show it on the map
+      // while the requests are made for the other tiles and the thumbnails.
+      this.imageryData = [tiles[0]];
+      this.imageryParams = params;
       this.emitChange();
+
+      request.getImageryData(params, tiles).then(imageryData => {
+        this.loadingImagery = false;
+        this.imageryData = imageryData;
+        this.emitChange();
+      }, () => {
+        this.loadingImagery = false;
+        this.emitChange();
+      });
     }, () => {
-      console.log('Imagery data requests failed.')
+      this.imageryParams = null;
       this.selectedImagery = null;
       this.loadingImagery = false;
       this.imageryError = true;
       this.imageryData = [];
       this.emitChange();
     });
-
   }
 
   setSelectedImagery(obj) {

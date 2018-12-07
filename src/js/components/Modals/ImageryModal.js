@@ -34,12 +34,18 @@ export default class ImageryModal extends Component {
     if (nextProps.imageryModalVisible && !this.props.imageryModalVisible && !nextProps.imageryData.length) {
       this.updateImagery();
     }
-    if (nextProps.imageryData.length && nextProps.imageryData[0] && nextProps.imageryData !== this.props.imageryData) {
-      // Always display first image on the map
+    // Load first tile in imageryData array only if the tile_url does not equal the tile_url from the previous props.
+    // or if this the first time the imagery data array has lenth.
+    if ((nextProps.imageryData.length &&
+        nextProps.imageryData[0] &&
+        this.props.imageryData[0] &&
+        nextProps.imageryData[0].attributes.tile_url !== this.props.imageryData[0].attributes.tile_url) ||
+        (nextProps.imageryData.length && !this.props.imageryData.length)) {
+      // filterImagery data based on the selected cloud score.
       const filteredImageryData = nextProps.imageryData.filter((data) => {
         return data.attributes.cloud_score >= this.state.cloudScore[0] && data.attributes.cloud_score <= this.state.cloudScore[1];
       });
-
+      // Select first tile in the filteredImageryData array to display.
       this.selectThumbnail(filteredImageryData[0], 0);
     }
   }
@@ -49,11 +55,11 @@ export default class ImageryModal extends Component {
     let imageryLayer = map.getLayer('GFWImageryLayer');
 
     if (imageryLayer) {
-      imageryLayer.setUrl(tileObj.tileUrl);
+      imageryLayer.setUrl(tileObj.tileUrl || tileObj.attributes.tile_url);
     } else {
       const options = {
         id: 'GFWImageryLayer',
-        url: tileObj.tileUrl,
+        url: tileObj.tileUrl || tileObj.attributes.tile_url,
         visible: true
       };
 
@@ -168,6 +174,8 @@ export default class ImageryModal extends Component {
 
     // Convert screen point to map point and zoom to point;
     const mapPt = map.toMap(screenPt);
+    // Note: Lat and lon are intentionally reversed until imagery api is fixed.
+    // The imagery API only returns the correct image for that lat/lon if they are reversed.
     const lon = mapPt.getLatitude();
     const lat = mapPt.getLongitude();
 
