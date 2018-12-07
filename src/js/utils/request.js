@@ -235,12 +235,12 @@ const request = {
        .then(res => {
          return new Promise((resolve) => {
           setTimeout(() => {
-            if (res.errors && res.errors[0].status !== 200 && count < 15) {
+            if (res.errors && res.errors[0].status !== 200 && count < 25) {
               count++;
               resolve(fetchTiles(count));
             }
             resolve(res);
-          }, 500);
+          }, 100);
         });
       });
     };
@@ -284,12 +284,12 @@ const request = {
          .then(res => {
            // If the request fails, try it again up to 15 times and then fail it.
           // There are resource limitations with the imagery endpoint.
-          if (res.errors && res.errors[0].status !== 200 && count < 15) {
+          if (res.errors && res.errors[0].status !== 200 && count < 25) {
              return new Promise((resolve) => {
                 setTimeout(() => {
                   count++;
                   resolve(postTiles(count));
-                }, 500);
+                }, 100);
             });
           } else {
             return res;
@@ -319,12 +319,12 @@ const request = {
          .then(res => {
            // If the request fails, try it again up to 15 times and then fail it.
           // There are resource limitations with the imagery endpoint.
-          if (res.errors && res.errors[0].status !== 200 && count < 15) {
+          if (res.errors && res.errors[0].status !== 200 && count < 25) {
              return new Promise((resolve) => {
                 setTimeout(() => {
                   count++;
                   resolve(postThumbs(count));
-                }, 500);
+                }, 100);
             });
           } else {
             return res;

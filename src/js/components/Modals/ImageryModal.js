@@ -86,12 +86,13 @@ export default class ImageryModal extends Component {
       let reloadCount = 0;
 
       const handleError = (event) => {
-        if (reloadCount < 10) {
+        if (reloadCount < 20) {
           event.persist();
           event.target.src = '';
           reloadCount++;
           setTimeout(() => {
             event.target.src = tileObj.thumbUrl;
+            event.target.classList.remove('hidden');
           }, 1000);
         } else {
           event.target.classList.add('hidden');
