@@ -98,15 +98,15 @@ function getXMLTask (url) {
 * @param {bool} json - If this request is going to ArcServer (rather than AGOL), set 'f=json'!
 * @return {Promise} promise
 */
-function getServiceInfoTask (url, json) {
+function getServiceInfoTask (url) {
   const promise = new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
 
-    request.open('GET', json ? url + '?f=json' : url);
+    request.open('GET', url.indexOf('f=json') === -1 ? url + '?f=json' : url);
     request.responseType = 'json';
     request.addEventListener('load', () => {
       if (request.status === 200) {
-        if (request.response) {
+        if (request.response && !request.response.error) {
           resolve(request.response);
         } else {
           reject();
@@ -357,7 +357,7 @@ function getServiceMetadata (layer, resolve) {
     url += `/${subIndex}`;
   }
 
-  getServiceInfoTask(url, true).then(results => {
+  getServiceInfoTask(url).then(results => {
     if (!results.description && layer.itemId) {
       url = urls.metadataXmlEndpoint(settings.sharinghost, layer.itemId);
       getXMLTask(url).then(xmlDocument => {
@@ -418,7 +418,6 @@ export default {
         }
 
       } else if (layer.esriLayer) {
-
         if (layer.type === 'carto') {
           const {subId, id} = layer;
           url = urls.cartoMetaEndpoint(layer.cartoUser, cartoId ? cartoId : layer.cartoLayerId, layer.cartoApiKey);
