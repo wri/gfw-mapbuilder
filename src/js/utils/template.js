@@ -197,6 +197,8 @@ const formatResources = () => {
           return resources.aboveGroundBiomass;
         case layerKeys.IFL:
           return resources.intactForests;
+        case layerKeys.PRIMARY_FORESTS:
+          return resources.primaryForests;
         case layerKeys.GLOB_MANGROVE:
           return resources.mangroves;
         case layerKeys.IMAZON_SAD:
