@@ -21,7 +21,7 @@ export default {
     if (imagerySymbol) { return imagerySymbol; }
     imagerySymbol = new SimpleFillSymbol(
       SimpleLineSymbol.STYLE_SOLID,
-      new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([210, 210, 210, 1]), 1),
+      new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([210, 210, 210, 0]), 1),
       new Color([210, 210, 210, 0.0])
     );
     return imagerySymbol;
