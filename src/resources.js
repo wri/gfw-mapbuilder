@@ -71,13 +71,13 @@ export default {
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
   includeCartoTemplateLayers: false,
-  // cartoUser: 'wri-01',
-  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  // cartoApiKey: 'your key here',
-  // cartoGroupLabel: {
-  //   en: 'Carto Layers',
-  //   fr: 'Carto Layers',
-  // },
+  cartoUser: 'wri-01',
+  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  cartoApiKey: 'your key here',
+  cartoGroupLabel: {
+    en: 'Carto Layers',
+    fr: 'Carto Layers',
+  },
 
   /**
    * Custom Analysis Module Configuration

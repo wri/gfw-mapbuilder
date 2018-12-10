@@ -27,7 +27,8 @@ const config = {
     'production-api.globalforestwatch.org/v1/ogr/convert',
     'api.resourcewatch.org',
     'gis.wri.org',
-    'tiles.globalforestwatch.org'
+    'tiles.globalforestwatch.org',
+    'wri-01.carto.com',
   ],
 
   urls: {

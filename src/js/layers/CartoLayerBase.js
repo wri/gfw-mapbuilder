@@ -203,6 +203,7 @@ export default declare('CartoLayer', [GraphicsLayer], {
   * Returns an object of layers with their ID, data type, and query
   **/
   getLayers: function() {
+
     // Getting the Carto template url
     const _url = urls.cartoTemplateEndpoint(this.cartoUser, this.cartoTemplateId, this.cartoApiKey);
     let json = {};
