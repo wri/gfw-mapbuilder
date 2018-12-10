@@ -7,8 +7,22 @@ import ScreenPoint from 'esri/geometry/ScreenPoint';
 import Loader from 'components/Loader';
 import GFWImageryLayer from 'js/layers/GFWImageryLayer';
 import SVGIcon from 'utils/svgIcon';
+import Graphic from 'esri/graphic';
 import moment from 'moment';
+import GraphicsLayer from 'esri/layers/GraphicsLayer';
+import Polygon from 'esri/geometry/Polygon';
+import geojsonUtil from 'utils/arcgis-to-geojson';
+import geometryUtils from 'utils/geometryUtils';
+import symbols from 'utils/symbols';
 
+
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
+import SimpleLineSymbol from 'esri/symbols/SimpleLineSymbol';
+import Color from 'esri/Color';
+
+import ProjectParameters from 'esri/tasks/ProjectParameters';
+import GeometryService from 'esri/tasks/GeometryService';
+import SpatialReference from 'esri/SpatialReference';
 import { modalText } from 'js/config';
 
 export default class ImageryModal extends Component {
@@ -26,7 +40,7 @@ export default class ImageryModal extends Component {
       start: null,
       end: null,
       selectedThumb: null,
-      hoveredThumb: null
+      hoveredThumb: null,
     };
   }
 
@@ -35,7 +49,7 @@ export default class ImageryModal extends Component {
       this.updateImagery();
     }
     // Load first tile in imageryData array only if the tile_url does not equal the tile_url from the previous props.
-    // or if this the first time the imagery data array has lenth.
+    // or if this the first time the imagery data array has length.
     if ((nextProps.imageryData.length &&
         nextProps.imageryData[0] &&
         this.props.imageryData[0] &&
@@ -67,10 +81,58 @@ export default class ImageryModal extends Component {
       map.addLayer(imageryLayer);
       map.reorderLayer('GFWImageryLayer', 1); // Should be underneath all other layers
       imageryLayer._extentChanged();
-
     }
+
     this.setState({ selectedThumb: {index: i, tileObj} });
     mapActions.setSelectedImagery(tileObj);
+
+
+    // Add graphic to the map for hover effect on tile.
+    let imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
+
+    if (imageryGraphicsLayer) {
+      imageryGraphicsLayer.clear();
+    } else {
+      imageryGraphicsLayer = new GraphicsLayer({
+        id: 'imageryGraphicsLayer',
+        visible: true
+      });
+      map.addLayer(imageryGraphicsLayer);
+
+      imageryGraphicsLayer.on('mouse-out', () => {
+        mapActions.setImageryHoverInfo({ visible: false });
+      });
+
+      imageryGraphicsLayer.on('mouse-move', (evt) => {
+        if (imageryGraphicsLayer.graphics.length) {
+          mapActions.setImageryHoverInfo({ visible: true, top: evt.clientY, left: evt.clientX });
+        }
+      });
+
+    }
+
+    const geometry = new Polygon({ rings: [tileObj.attributes.bbox.geometry.coordinates], type: 'polygon' });
+    const registeredGraphic = new Graphic(
+      new Polygon(geometry),
+      symbols.getImagerySymbol()
+    );
+    const geometryService = new GeometryService('https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+    var params = new ProjectParameters();
+
+    // Set the projection of the geometry for the image server
+    params.outSR = new SpatialReference(102100);
+    params.geometries = [geometry];
+
+    // update the graphics geometry with the new projected geometry
+    const successfullyProjected = (geometries) => {
+        registeredGraphic.geometry = geometries[0];
+        imageryGraphicsLayer.add(registeredGraphic);
+    };
+    const failedToProject = (err) => {
+      console.log('Failed to project the geometry: ', err);
+    };
+    geometryService.project(params).then(successfullyProjected, failedToProject);
+
   }
 
   hoverThumbnail (tileObj) {

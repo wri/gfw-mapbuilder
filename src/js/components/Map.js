@@ -50,6 +50,7 @@ import SVGIcon from 'utils/svgIcon';
 import SatelliteImagery from 'components/MapControls/SatelliteImagery';
 import ImageryModal from 'components/Modals/ImageryModal';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
+import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
 
 import React, {
   Component,
@@ -957,8 +958,15 @@ export default class Map extends Component {
             loadingImagery={this.state.loadingImagery}
             imageryModalVisible={imageryModalVisible}
             imageryError={imageryError}
+            imageryHoverVisible={this.state.imageryHoverVisible}
           />
         </div>
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible &&
+            <ImageryHoverModal
+              selectedImagery={this.state.selectedImagery}
+              top={this.state.imageryHoverInfo.top}
+              left={this.state.imageryHoverInfo.left}/>
+        }
       </div>
     );
   }

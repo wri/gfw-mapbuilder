@@ -1082,6 +1082,12 @@ export default {
       order: 4,
       label: {
         en: 'Recent Imagery',
+        fr: 'Recent Imagery',
+        es: 'Recent Imagery',
+        pt: 'Recent Imagery',
+        id: 'Recent Imagery',
+        zh: 'Recent Imagery',
+        ka: 'Recent Imagery'
       },
       layers: [{
         order: 1,
@@ -1091,9 +1097,21 @@ export default {
         visible: false,
         label: {
           en: 'Recent Imagery',
+          fr: 'Recent Imagery',
+          es: 'Recent Imagery',
+          pt: 'Recent Imagery',
+          id: 'Recent Imagery',
+          zh: 'Recent Imagery',
+          ka: 'Recent Imagery'
         },
         dynamicSublabel: {
           en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          fr: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
         }
       }]
     },

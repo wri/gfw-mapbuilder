@@ -85,6 +85,7 @@ class MapStore {
     this.imageryError = false;
     this.selectedImagery = null;
     this.imageryParams = null;
+    this.imageryHoverInfo = null;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -148,8 +149,8 @@ class MapStore {
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       toggleImageryActive: mapActions.toggleImageryActive,
-      setSelectedImagery: mapActions.setSelectedImagery
-
+      setSelectedImagery: mapActions.setSelectedImagery,
+      setImageryHoverInfo: mapActions.setImageryHoverInfo
     });
   }
 
@@ -673,6 +674,10 @@ class MapStore {
   setSelectedImagery(obj) {
     this.selectedImagery = obj;
 
+  }
+
+  setImageryHoverInfo(obj) {
+    this.imageryHoverInfo = obj;
   }
 }
 

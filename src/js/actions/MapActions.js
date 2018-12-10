@@ -256,6 +256,10 @@ class MapActions {
     return obj;
   }
 
+  setImageryHoverInfo(obj) {
+    return obj;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);

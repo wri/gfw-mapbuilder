@@ -73,6 +73,7 @@ export default class LayerCheckbox extends Component {
 
   showInfo () {
     const {layer} = this.props;
+
     if (layer.disabled) { return; }
     mapActions.showLayerInfo(layer);
     layerActions.showLoading(layer.id);
@@ -80,6 +81,8 @@ export default class LayerCheckbox extends Component {
 
   toggleLayer () {
     const {layer} = this.props;
+    const {map} = this.context;
+
     if (layer.disabled) { return; }
     if (layer.subId) {
       if (this.props.checked) {
@@ -102,6 +105,10 @@ export default class LayerCheckbox extends Component {
     if (layer.id === 'GFWImageryLayer') {
       mapActions.toggleImageryVisible(layer.visible); // Imagery Modal
       mapActions.toggleImageryActive(layer.visible);
+      if (!layer.visible) {
+        const imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
+        if (imageryGraphicsLayer) { map.removeLayer(imageryGraphicsLayer); }
+      }
     }
   }
 
