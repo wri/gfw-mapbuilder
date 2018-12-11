@@ -222,7 +222,6 @@ export default class Map extends Component {
           params.lat = mapPt.getLongitude();
 
           mapActions.getSatelliteImagery(params);
-          mapActions.toggleImageryVisible(true);
         });
 
         // Get WMS Features on click
