@@ -202,10 +202,9 @@ export default class Map extends Component {
         }
 
         response.map.on('extent-change', (evt) => {
+          const imageryLayer = response.map.getLayer('GFWImageryLayer');
 
-          const mapLayers = evt.target._layers;
-
-          if (!mapLayers.GFWImageryLayer || !mapLayers.GFWImageryLayer.visible) { return; }
+          if (!imageryLayer || !imageryLayer.visible) { return; }
           const { imageryParams } = this.state;
           const params = imageryParams ? imageryParams : {};
 

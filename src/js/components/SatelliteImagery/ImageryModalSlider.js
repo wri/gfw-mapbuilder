@@ -83,10 +83,10 @@ export default class AnalysisRangeSlider extends Component {
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: '#97be32'}]}
-          handleStyle={[{borderColor: '#97be32'}]}
+          trackStyle={[{backgroundColor: '#f0ab00'}]}
+          handleStyle={[{borderColor: '#f0ab00'}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #97be32'}}
+          activeDotStyle={{border: '1px solid #f0ab00'}}
         />
       </div>
     );
