@@ -13,7 +13,6 @@ class AppStore {
     this.bindListeners({
       setLanguage: appActions.setLanguage,
       applySettings: appActions.applySettings,
-      toggleImageryActive: mapActions.toggleImageryActive
     });
 
   }
@@ -42,11 +41,6 @@ class AppStore {
     this.settings = settings;
     this.language = settings.language;
     this.activeWebmap = settings.webmap;
-  }
-
-  toggleImageryActive () {
-    console.log('here')
-    // this.settings.layerPanel.GROUP_IMAGERY.hidden = !active;
   }
 
 }

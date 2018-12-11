@@ -104,7 +104,6 @@ export default class LayerCheckbox extends Component {
 
     if (layer.id === 'GFWImageryLayer') {
       mapActions.toggleImageryVisible(layer.visible); // Imagery Modal
-      mapActions.toggleImageryActive(layer.visible);
       if (!layer.visible) {
         const imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
         if (imageryGraphicsLayer) { map.removeLayer(imageryGraphicsLayer); }

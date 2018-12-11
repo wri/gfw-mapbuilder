@@ -203,7 +203,8 @@ export default class Map extends Component {
         }
 
         response.map.on('extent-change', (evt) => {
-          if (!this.state.imageryActive) { return; }
+          const imageryLayer = response.map.getLayer('GFWImageryLayer');
+          if (!imageryLayer.visible) { return; }
           const { imageryParams } = this.state;
           const params = imageryParams ? imageryParams : {};
 
