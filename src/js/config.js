@@ -28,7 +28,9 @@ const config = {
     'api.resourcewatch.org',
     'gis.wri.org',
     'tiles.globalforestwatch.org',
-    'staging-api.globalforestwatch.org'
+    'staging-api.globalforestwatch.org',
+    'wri-01.carto.com',
+
   ],
 
   urls: {

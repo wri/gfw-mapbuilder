@@ -93,6 +93,13 @@ export default class AnalysisMultiDatePicker extends Component {
           maxDate={selectedEndDate}
           selected={selectedStartDate}
           onChange={this.handleStartChange}
+          popperPlacement='bottom-start'
+          popperModifiers={{
+            flip: {
+              enabled: false
+            }
+          }}
+
         />
         <DatePicker
           customInput={<EndButton />}
@@ -104,6 +111,13 @@ export default class AnalysisMultiDatePicker extends Component {
           maxDate={moment(maxDate || new Date())}
           selected={selectedEndDate}
           onChange={this.handleEndChange}
+          popperPlacement='bottom-start'
+          popperModifiers={{
+            flip: {
+              enabled: false
+            }
+          }}
+
         />
       </div>
     );

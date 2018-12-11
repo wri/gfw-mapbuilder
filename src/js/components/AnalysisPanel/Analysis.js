@@ -551,10 +551,10 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
-        chartComponent = <VegaChart results={results} />;
+        chartComponent = <VegaChart results={results} setLoading={() => this.setState({isLoading: false})}/>;
         break;
       case 'vega':
-        chartComponent = <VegaChart results={results} />;
+        chartComponent = <VegaChart results={results} setLoading={() => this.setState({isLoading: false})}/>;
         break;
       default:
         break;
@@ -600,7 +600,6 @@ export default class Analysis extends Component {
           analysisSettings.chartType = 'vega';
 
           analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
-            this.setState({ isLoading: false });
             this.renderResults(analysisId, results, language, analysisSettings);
           });
           return;

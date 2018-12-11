@@ -370,12 +370,14 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config) => {
+  makeVegaChart: (el, config, callback) => {
     new vega.View(vega.parse(config))
       .renderer('canvas')
       .initialize(el)
       .hover()
       .run();
+
+    if (callback) { callback(); }
   },
 
 	/**

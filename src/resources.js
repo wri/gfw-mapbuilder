@@ -44,6 +44,7 @@ export default {
   viirsFires: true,
   modisFires: true,
   intactForests: true,
+  primaryForests: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
@@ -70,13 +71,13 @@ export default {
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
   includeCartoTemplateLayers: false,
-  // cartoUser: 'wri-01',
-  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  // cartoApiKey: 'your key here',
-  // cartoGroupLabel: {
-  //   en: 'Carto Layers',
-  //   fr: 'Carto Layers',
-  // },
+  cartoUser: 'wri-01',
+  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  cartoApiKey: 'your key here',
+  cartoGroupLabel: {
+    en: 'Carto Layers',
+    fr: 'Carto Layers',
+  },
 
   /**
    * Custom Analysis Module Configuration
@@ -1004,6 +1005,23 @@ export default {
         }
       }, {
         order: 3,
+        id: 'PRIMARY_FORESTS', //http://api.resourcewatch.org/layer/079fae08-5696-4926-9417-794bd3a7e8dc
+        type: 'primed',
+        url: 'https://storage.googleapis.com/gee-tiles/079fae08-5696-4926-9417-794bd3a7e8dc%2F{z}%2F{x}%2F{y}%2Ftile_5b017146ab8a93bf55948f7fa3ec3d5e.png',
+        // legendLayer: 7,
+        technicalName: 'regional_primary_forests',
+        // legendLayer: [0],
+        label: {
+          en: 'Primary Forests',
+          fr: 'Forêts primaires',
+          es: 'Bosques Primarios',
+          pt: 'Florestas Primárias',
+          id: 'Hutan Primer',
+          zh: '主要森林',
+          ka: 'პირველადი ტყეები'
+        },
+      }, {
+        order: 4,
         id: 'AG_BIOMASS',
         type: 'image',
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
@@ -1019,7 +1037,7 @@ export default {
           ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
         }
       }, {
-        order: 4,
+        order: 5,
         id: 'LAND_COVER',
         type: 'webtiled',
         url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
@@ -1047,7 +1065,7 @@ export default {
           ka: 'მიწის საფარი'
         }
       }, {
-        order: 5,
+        order: 6,
         id: 'TREE_COVER',
         type: 'image',
         url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
