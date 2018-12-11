@@ -36,7 +36,7 @@ export default class ImageryModal extends Component {
     this.state = {
       monthsVal: modalText.imagery.monthsOptions[1].label,
       imageStyleVal: modalText.imagery.imageStyleOptions[0].label,
-      cloudScore: [0, 100],
+      cloudScore: [0, 25],
       start: null,
       end: null,
       selectedThumb: null,
@@ -300,6 +300,8 @@ export default class ImageryModal extends Component {
               <ImageryModalSlider
                 rangeSliderCallback={this.rangeSliderCallback}
                 bounds={[0, 100]}
+                initialStartValue={0}
+                initialEndValue={25}
                 step={25} />
             </div>
           </div>
