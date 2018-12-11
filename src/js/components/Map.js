@@ -47,7 +47,6 @@ import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
 import SVGIcon from 'utils/svgIcon';
-import SatelliteImagery from 'components/MapControls/SatelliteImagery';
 import ImageryModal from 'components/Modals/ImageryModal';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
@@ -204,7 +203,7 @@ export default class Map extends Component {
 
         response.map.on('extent-change', (evt) => {
           const imageryLayer = response.map.getLayer('GFWImageryLayer');
-          if (!imageryLayer.visible) { return; }
+          if (imageryLayer && !imageryLayer.visible) { return; }
           const { imageryParams } = this.state;
           const params = imageryParams ? imageryParams : {};
 
