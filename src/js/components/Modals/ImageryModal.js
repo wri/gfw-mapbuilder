@@ -60,7 +60,9 @@ export default class ImageryModal extends Component {
         return data.attributes.cloud_score >= this.state.cloudScore[0] && data.attributes.cloud_score <= this.state.cloudScore[1];
       });
       // Select first tile in the filteredImageryData array to display.
-      this.selectThumbnail(filteredImageryData[0], 0);
+      if (filteredImageryData[0]) {
+        this.selectThumbnail(filteredImageryData[0], 0);
+      }
     }
   }
 
