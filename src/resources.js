@@ -45,6 +45,7 @@ export default {
   modisFires: true,
   intactForests: true,
   primaryForests: true,
+  forma: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
