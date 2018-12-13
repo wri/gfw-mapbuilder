@@ -209,6 +209,30 @@ const request = {
     return task.execute(query);
   },
 
+  fetchTiles(url, count = 0) {
+    return fetch(
+      url,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    ).then(res => res.json())
+     .then(res => {
+       return new Promise((resolve) => {
+        setTimeout(() => {
+          if (res.errors && res.errors[0].status !== 200 && count < 25) {
+            count++;
+            resolve(this.fetchTiles(url, count));
+          }
+          resolve(res);
+        }, 100);
+      });
+    });
+  },
+
   getRecentTiles(params) {
     const deferred = new Deferred();
 
@@ -221,31 +245,7 @@ const request = {
     const recentTilesUrl = new URL(urls.satelliteImageService);
     Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
 
-    const fetchTiles = (count = 0) => {
-      return fetch(
-        recentTilesUrl,
-        {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-        }
-      ).then(res => res.json())
-       .then(res => {
-         return new Promise((resolve) => {
-          setTimeout(() => {
-            if (res.errors && res.errors[0].status !== 200 && count < 25) {
-              count++;
-              resolve(fetchTiles(count));
-            }
-            resolve(res);
-          }, 100);
-        });
-      });
-    };
-
-    fetchTiles().then(response => {
+    this.fetchTiles(recentTilesUrl).then(response => {
       if (response.errors) {
         deferred.reject(response);
         return;
@@ -253,6 +253,63 @@ const request = {
       deferred.resolve(response);
     });
     return deferred;
+  },
+
+  postTiles(content, count = 0) {
+    return fetch(
+        urls.satelliteImageService + '/tiles',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(content)
+        }
+      ).then(res => res.json())
+       .then(res => {
+         // If the request fails, try it again up to 15 times and then fail it.
+        // There are resource limitations with the imagery endpoint.
+        if (res.errors && res.errors[0].status !== 200 && count < 25) {
+           return new Promise((resolve) => {
+              setTimeout(() => {
+                count++;
+                resolve(this.postTiles(content, count));
+              }, 100);
+          });
+        } else {
+          return res;
+        }
+
+      });
+  },
+
+  postThumbs(content, count = 0) {
+    return fetch(
+      urls.satelliteImageService + '/thumbs',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(content)
+      }
+    ).then(res => res.json())
+     .then(res => {
+       // If the request fails, try it again up to 15 times and then fail it.
+      // There are resource limitations with the imagery endpoint.
+      if (res.errors && res.errors[0].status !== 200 && count < 25) {
+         return new Promise((resolve) => {
+            setTimeout(() => {
+              count++;
+              resolve(this.postThumbs(content, count));
+            }, 100);
+        });
+      } else {
+        return res;
+      }
+    });
   },
 
   getImageryData(params, tiles) {
@@ -269,72 +326,17 @@ const request = {
       source_data: sourceData,
     };
 
-    const postTiles = (count = 0) => {
-      return fetch(
-          urls.satelliteImageService + '/tiles',
-          {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(content)
-          }
-        ).then(res => res.json())
-         .then(res => {
-           // If the request fails, try it again up to 15 times and then fail it.
-          // There are resource limitations with the imagery endpoint.
-          if (res.errors && res.errors[0].status !== 200 && count < 25) {
-             return new Promise((resolve) => {
-                setTimeout(() => {
-                  count++;
-                  resolve(postTiles(count));
-                }, 100);
-            });
-          } else {
-            return res;
-          }
-
-        });
-    };
     // Make a post request to the tiles endpoint to all of the tile_urls for
     // each tile returned in the get recent tiles request
-    postTiles().then(tileResponse => {
+    this.postTiles(content).then(tileResponse => {
       if (tileResponse.errors) {
         deferred.reject(tileResponse);
         return;
       }
-      const postThumbs = (count = 0) => {
-        return fetch(
-          urls.satelliteImageService + '/thumbs',
-          {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(content)
-          }
-        ).then(res => res.json())
-         .then(res => {
-           // If the request fails, try it again up to 15 times and then fail it.
-          // There are resource limitations with the imagery endpoint.
-          if (res.errors && res.errors[0].status !== 200 && count < 25) {
-             return new Promise((resolve) => {
-                setTimeout(() => {
-                  count++;
-                  resolve(postThumbs(count));
-                }, 100);
-            });
-          } else {
-            return res;
-          }
-        });
-      };
 
       // Make a post request to the thumbs endpoint to get all of the thumbnail image urls for
       // each tile returned in the get recent tiles request.
-      postThumbs().then(thumbResponse => {
+      this.postThumbs(content).then(thumbResponse => {
         if (thumbResponse.errors) {
           deferred.reject(thumbResponse);
           return;
