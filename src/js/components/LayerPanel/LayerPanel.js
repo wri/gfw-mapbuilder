@@ -6,7 +6,6 @@ import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
 import FormaControls from 'components/LayerPanel/FormaControls';
 import SadControls from 'components/LayerPanel/SadControls';
-import ImageryControls from 'components/LayerPanel/ImageryControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
