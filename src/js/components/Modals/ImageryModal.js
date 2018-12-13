@@ -162,17 +162,27 @@ export default class ImageryModal extends Component {
           event.target.classList.add('hidden');
         }
       };
-
-      return (
-        <div
-          onClick={() => this.selectThumbnail(tileObj, i)}
-          onMouseEnter={() => this.hoverThumbnail(tileObj)}
-          onMouseLeave={() => this.hoverThumbnail(null)}
-          className={`thumbnail ${this.state.selectedThumb && this.state.selectedThumb.index === i ? 'selected' : ''}`}
-          key={`thumb-${i}`}>
-            <img src={tileObj.thumbUrl} onError={handleError} />
-        </div>
-      );
+      if (!tileObj.tileUrl) {
+        return (
+          <div
+            className='thumbnail disabled'
+            key={`thumb-${i}`}>
+              <Loader active={this.props.loadingImagery} type={'imagery'}/>
+              {!this.props.loadingImagery && <SVGIcon id={'icon-alerts'} />}
+          </div>
+        );
+      } else {
+        return (
+          <div
+            onClick={() => this.selectThumbnail(tileObj, i)}
+            onMouseEnter={() => this.hoverThumbnail(tileObj)}
+            onMouseLeave={() => this.hoverThumbnail(null)}
+            className={`thumbnail ${this.state.selectedThumb && this.state.selectedThumb.index === i ? 'selected' : ''}`}
+            key={`thumb-${i}`}>
+              <img src={tileObj.thumbUrl} onError={handleError} />
+          </div>
+        );
+      }
   }
 
   renderThumbText = () => {
@@ -325,7 +335,6 @@ export default class ImageryModal extends Component {
           </div>
 
           <div className='imagery-modal__section thumbnail_container flex'>
-            <Loader active={loadingImagery} type={'imagery'}/>
             { imageryError &&
               <div className='imagery-modal__error'>
                 <SVGIcon id={'icon-alerts'} />

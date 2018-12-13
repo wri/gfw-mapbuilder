@@ -635,22 +635,51 @@ class MapStore {
 
     // First make a reqest to the recent tiles metadata endpoint
     request.getRecentTiles(params).then(response => {
-      const tiles = response.data.tiles;
       // Only the first tile url is returned with the metadata response from the
       // recent tiles endpoint. We can add this to state and show it on the map
       // while the requests are made for the other tiles and the thumbnails.
-      this.imageryData = [tiles[0]];
+      const tiles = response.data.tiles;
+      this.imageryData = response.data.tiles;
       this.imageryParams = params;
       this.emitChange();
 
-      request.getImageryData(params, tiles).then(imageryData => {
-        this.loadingImagery = false;
-        this.imageryData = imageryData;
-        this.emitChange();
-      }, () => {
-        this.loadingImagery = false;
-        this.emitChange();
+      const tileArrays = [];
+
+      response.data.tiles.forEach((tile, i) => {
+        const index = i;
+        if ((index % 5 === 0) || (i === 0)) {
+          const tileArr = tiles.slice(index, index + 5);
+          tileArrays.push(tileArr);
+        }
       });
+
+      let responseCount = 0;
+      // console.log('TILE ARRAYS', tileArrays)
+      tileArrays.forEach((tileArr, i) => {
+        const index = i * 5;
+
+        request.getImageryData(params, tileArr).then(data => {
+          data.forEach((d, pos) => {
+            this.imageryData[pos + index] = d;
+          });
+          responseCount++;
+          // console.log('>>> success.', responseCount, tileArrays.length);
+
+          if (responseCount === tileArrays.length) {
+            this.loadingImagery = false;
+          }
+          this.emitChange();
+        }, () => {
+          responseCount++;
+          // console.log('>>> Error loading tiles.', responseCount, tileArrays.length);
+
+          if (responseCount === tileArrays.length) {
+            this.loadingImagery = false;
+          }
+        });
+
+      });
+
     }, () => {
       this.imageryParams = null;
       this.selectedImagery = null;
