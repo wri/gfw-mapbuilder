@@ -275,7 +275,6 @@ export default class ImageryModal extends Component {
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
-
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
         <div className='imagery-modal__wrapper'>
@@ -339,6 +338,14 @@ export default class ImageryModal extends Component {
               <div className='imagery-modal__error'>
                 <SVGIcon id={'icon-alerts'} />
                 <p>Error loading recent imagery.</p>
+              </div>
+            }
+
+            <Loader active={loadingImagery && !filteredImageryData.length} type={'imagery-modal-width'}/>
+
+            {!loadingImagery && !filteredImageryData.length &&
+              <div className='imagery-modal__error'>
+                <p>No results match the selected critria.</p>
               </div>
             }
             {filteredImageryData.map(this.renderThumbnails.bind(this))}
