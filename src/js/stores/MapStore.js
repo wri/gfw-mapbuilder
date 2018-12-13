@@ -40,7 +40,7 @@ class MapStore {
     this.formaStartDate = new Date('2012', 0, 1);
     this.formaEndDate = new Date();
     this.terraIStartDate = new Date('2004', 0, 1);
-    this.terraIEndDate = new Date('2016', 7, 12);
+    this.terraIEndDate = new Date('2016', 6, 12);
     this.viirsStartDate = moment(new Date()).subtract(1, 'day');
     this.viirsEndDate = moment(new Date());
     this.modisStartDate = moment(new Date()).subtract(1, 'day');
@@ -325,7 +325,7 @@ class MapStore {
 
     //-Terra I
     this.terraIStartDate = new Date('2004', 0, 1);
-    this.terraIEndDate = new Date('2016', 7, 12);
+    this.terraIEndDate = new Date('2016', 6, 12);
   }
 
   mapUpdated () {}

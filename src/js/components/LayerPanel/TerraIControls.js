@@ -22,7 +22,7 @@ export default class TerraIControls extends Component {
     if (map.loaded && !this.initialized) {
       this.initialized = true;
       const min = moment(new Date('2004', 0, 1));
-      const max = moment(new Date('2016', 7, 12));
+      const max = moment(new Date('2016', 6, 12));
       this.setState({
         min,
         max

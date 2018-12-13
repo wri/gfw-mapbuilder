@@ -199,6 +199,8 @@ const formatResources = () => {
           return resources.intactForests;
         case layerKeys.PRIMARY_FORESTS:
           return resources.primaryForests;
+        case layerKeys.FORMA_ALERTS:
+          return resources.forma;
         case layerKeys.GLOB_MANGROVE:
           return resources.mangroves;
         case layerKeys.IMAZON_SAD:
