@@ -275,9 +275,11 @@ export default declare('EsriTileCanvasBase', [Layer], {
   _fetchTile: function _fetchTile (tile, urlChanged) {
     const id = this._getId(tile);
 
-    if (urlChanged && this.tiles[id]) {
-      this.tiles[id].canvas.remove();
-      delete this.tiles[id];
+    if (urlChanged) {
+      this.tiles.forEach((existingTile) => {
+        existingTile.canvas.remove();
+      });
+      this.tiles = [];
     }
 
     let url;
