@@ -124,7 +124,7 @@ describe('An actual test on our app', function () {
               expect(layer.layerName).to.be.a('string');
             }
             if (layer.type !== 'imagery') {
-              expect(layer).toHaveProperty('url');
+              expect(layer).to.have.property('url');
             }
 
             expect(layer).to.have.property('id');
