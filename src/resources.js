@@ -52,6 +52,7 @@ export default {
   sadAlerts: true,
   gladAlerts: true,
   terraIAlerts: true,
+  recentImagery: true,
   webmapMenuName: 'Land Use',
   //- Include/Exclude various restoration analysis types
   restorationSlope: true, //- Main Slope Analysis
@@ -1110,7 +1111,7 @@ export default {
       },
       layers: [{
         order: 1,
-        id: 'GFWImageryLayer',
+        id: 'RECENT_IMAGERY',
         type: 'imagery',
         technicalName: 'recent_satellite_imagery',
         visible: false,

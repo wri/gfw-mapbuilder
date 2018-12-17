@@ -68,20 +68,21 @@ export default class ImageryModal extends Component {
 
   selectThumbnail (tileObj, i) {
     const { map } = this.context;
-    let imageryLayer = map.getLayer('GFWImageryLayer');
+    let imageryLayer = map.getLayer('RECENT_IMAGERY');
 
     if (imageryLayer) {
       imageryLayer.setUrl(tileObj.tileUrl || tileObj.attributes.tile_url);
     } else {
+      console.log("CREATE NEW LAYER >>>>>>>>>>>>>>>>")
       const options = {
-        id: 'GFWImageryLayer',
+        id: 'RECENT_IMAGERY',
         url: tileObj.tileUrl || tileObj.attributes.tile_url,
         visible: true
       };
 
       imageryLayer = new GFWImageryLayer(options);
       map.addLayer(imageryLayer);
-      map.reorderLayer('GFWImageryLayer', 1); // Should be underneath all other layers
+      map.reorderLayer('RECENT_IMAGERY', 1); // Should be underneath all other layers
       imageryLayer._extentChanged();
     }
 
