@@ -1,3 +1,2 @@
-module.exports = function Map(basemap) {
-  this.basemap = basemap;
+module.exports = function Map() {
 };

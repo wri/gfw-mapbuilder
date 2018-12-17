@@ -123,11 +123,12 @@ describe('An actual test on our app', function () {
               expect(layer).to.have.property('layerName');
               expect(layer.layerName).to.be.a('string');
             }
+            if (layer.type !== 'imagery') {
+              expect(layer).to.have.property('url');
+            }
 
-            // console.log(`${layer.id} has the required properties`);
             expect(layer).to.have.property('id');
             expect(layer).to.have.property('type');
-            expect(layer).to.have.property('url');
             expect(layer).to.have.property('label');
             expect(layer.label).to.have.property(config.language);
           });

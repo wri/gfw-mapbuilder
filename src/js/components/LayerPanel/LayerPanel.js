@@ -187,7 +187,7 @@ export default class LayerPanel extends Component {
           <DensityDisplay key='tcl_density-display' {...props} />
         ];
         break;
-      case 'RECENT_IMAGERY':
+      case LayerKeys.RECENT_IMAGERY:
         editCallback = () => {
           const imageryMobile = window.innerWidth <= 600;
           mapActions.toggleImageryVisible(true);
