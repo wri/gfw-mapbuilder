@@ -26,16 +26,22 @@
     z-index 1
     .app-loader__spinner
       position relative
-      height 50px
-      width 50px
-      left 50%
-      top 50%
-      transform translate(-50%, -50%)
 
   &.imagery-modal-width
+   background transparent
+   position relative
+
+  &.layer-group
     background transparent
     position relative
-
+    display inline
+    height auto
+    width auto
+    top 0
+    left 20px
+    .app-loader__spinner
+      height 20px
+      width 20px
 
 .app-loader__spinner
   transform translate(-50%, -50%)

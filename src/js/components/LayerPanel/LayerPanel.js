@@ -122,10 +122,20 @@ export default class LayerPanel extends Component {
           layers = group.layers.map(this.checkboxMap);
       }
 
+      let layerLoading;
+      switch (group.key) {
+        case 'GROUP_IMAGERY':
+          layerLoading = this.props.loadingImagery;
+          break;
+        default:
+          layerLoading = false;
+      }
+
       return (
         <LayerGroup
           key={group.key}
           groupKey={group.key}
+          layerLoading={layerLoading}
           label={group.label[language]}
           {...this.props}>
           {layers}
@@ -151,10 +161,11 @@ export default class LayerPanel extends Component {
       modisEndDate,
       initialLayerOpacities,
       selectedImagery,
+      loadingImagery,
       ...props} = this.props;
 
     const {language} = this.context;
-    let childComponent, editCallback, dynamicSublabel;
+    let childComponent, editCallback, dynamicSublabel, layerLoading;
 
     switch (layer.id) {
       case 'VIIRS_ACTIVE_FIRES':
@@ -201,7 +212,7 @@ export default class LayerPanel extends Component {
                           .replace('{DATE_TIME}', `${moment(attr.date_time).format('DD MMM YYYY')}`)
                           .replace('{CLOUD_COVERAGE}', `${attr.cloud_score.toFixed(0)}`)
                           .replace('{INSTRUMENT}', `${attr.instrument.replace('_', ' ')}`) : '';
-
+        layerLoading = loadingImagery;
         break;
       case LayerKeys.TREE_COVER:
       case LayerKeys.AG_BIOMASS:
@@ -237,7 +248,7 @@ export default class LayerPanel extends Component {
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox layerLoading={layerLoading} onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }

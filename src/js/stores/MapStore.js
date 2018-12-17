@@ -654,7 +654,6 @@ class MapStore {
       });
 
       let responseCount = 0;
-      // console.log('TILE ARRAYS', tileArrays)
       tileArrays.forEach((tileArr, i) => {
         const index = i * 5;
 
@@ -663,7 +662,6 @@ class MapStore {
             this.imageryData[pos + index] = d;
           });
           responseCount++;
-          // console.log('>>> success.', responseCount, tileArrays.length);
 
           if (responseCount === tileArrays.length) {
             this.loadingImagery = false;
@@ -671,8 +669,6 @@ class MapStore {
           this.emitChange();
         }, () => {
           responseCount++;
-          // console.log('>>> Error loading tiles.', responseCount, tileArrays.length);
-
           if (responseCount === tileArrays.length) {
             this.loadingImagery = false;
           }
