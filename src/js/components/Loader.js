@@ -14,7 +14,7 @@ const Loader = (props) => {
               type="rotate"
               from="0 25 25"
               to="360 25 25"
-              dur="0.6s"
+              dur=".9s"
               repeatCount="indefinite"/>
             </path>
         </svg>
