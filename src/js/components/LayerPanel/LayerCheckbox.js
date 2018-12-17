@@ -1,5 +1,6 @@
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
+import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
@@ -102,7 +103,7 @@ export default class LayerCheckbox extends Component {
       }
     }
 
-    if (layer.id === 'RECENT_IMAGERY') {
+    if (layer.id === layerKeys.RECENT_IMAGERY) {
       mapActions.toggleImageryVisible(layer.visible); // Imagery Modal
       if (!layer.visible) {
         const imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
