@@ -83,9 +83,11 @@ describe('resources layer spec', () => {
       });
     }
     it(`layer ${layer.id} has the required properties`, () => {
+      if (layer.type !== 'imagery') {
+        expect(layer).toHaveProperty('url');
+      }
       expect(layer).toHaveProperty('id');
       expect(layer).toHaveProperty('type');
-      expect(layer).toHaveProperty('url');
       expect(layer).toHaveProperty('label');
       expect(layer.label).toHaveProperty(resources.language);
     });

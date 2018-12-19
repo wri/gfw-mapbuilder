@@ -80,7 +80,7 @@ export default class TabView extends Component {
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].LAYERS}</h3>
           <LayerToggles />
-          <LayerPanel loaded={map.loaded} {...this.props} />
+          <LayerPanel loaded={map.loaded} {...this.props} hideTabView={this.hideTabView} />
         </div>
         <div className={this.getClassName(INFO_WINDOW)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >

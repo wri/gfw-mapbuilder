@@ -52,6 +52,7 @@ export default {
   sadAlerts: true,
   gladAlerts: true,
   terraIAlerts: true,
+  recentImagery: true,
   webmapMenuName: 'Land Use',
   //- Include/Exclude various restoration analysis types
   restorationSlope: true, //- Main Slope Analysis
@@ -1093,6 +1094,44 @@ export default {
           id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
           zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
           ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
+        }
+      }]
+    },
+    GROUP_IMAGERY: {
+      groupType: 'imagery',
+      order: 4,
+      label: {
+        en: 'Recent Imagery',
+        fr: 'Recent Imagery',
+        es: 'Recent Imagery',
+        pt: 'Recent Imagery',
+        id: 'Recent Imagery',
+        zh: 'Recent Imagery',
+        ka: 'Recent Imagery'
+      },
+      layers: [{
+        order: 1,
+        id: 'RECENT_IMAGERY',
+        type: 'imagery',
+        technicalName: 'recent_satellite_imagery',
+        visible: false,
+        label: {
+          en: 'Recent Imagery',
+          fr: 'Recent Imagery',
+          es: 'Recent Imagery',
+          pt: 'Recent Imagery',
+          id: 'Recent Imagery',
+          zh: 'Recent Imagery',
+          ka: 'Recent Imagery'
+        },
+        dynamicSublabel: {
+          en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          fr: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
         }
       }]
     },

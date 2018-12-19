@@ -14,6 +14,7 @@ import GladLayer from 'js/layers/GladLayer';
 import FormaLayer from 'js/layers/FormaLayer';
 import TreeCoverLossLayer from 'js/layers/TreeCoverLossLayer';
 import TreeCoverGainLayer from 'js/layers/TreeCoverGainLayer';
+import GFWImageryLayer from 'js/layers/GFWImageryLayer';
 import PrimaryForestLayer from 'js/layers/PrimaryForestLayer';
 import layerUtils from 'utils/layerUtils';
 import layerKeys from 'constants/LayerConstants';
@@ -233,6 +234,13 @@ export default (layer, lang) => {
       esriLayer.visible = layer.visible || false;
       esriLayer.opacity = layer.opacity || 1;
 
+    break;
+    case 'imagery':
+      options.id = layer.id;
+      options.url = layer.url;
+      options.visible = false;
+      esriLayer = new GFWImageryLayer(options);
+      esriLayer.order = layer.order;
     break;
     default:
       throw new Error(errors.incorrectLayerConfig(layer.type));

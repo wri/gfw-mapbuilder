@@ -47,6 +47,9 @@ import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
 import SVGIcon from 'utils/svgIcon';
+import ImageryModal from 'components/Modals/ImageryModal';
+import ScreenPoint from 'esri/geometry/ScreenPoint';
+import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
 
 import React, {
   Component,
@@ -197,6 +200,29 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        response.map.on('extent-change', (evt) => {
+          const imageryLayer = response.map.getLayer(layerKeys.RECENT_IMAGERY);
+          if (!imageryLayer || !imageryLayer.visible || evt.lod.level > 9) { return; }
+
+          const { imageryParams } = this.state;
+          const params = imageryParams ? imageryParams : {};
+
+
+          const xVal = window.innerWidth / 2;
+          const yVal = window.innerHeight / 2;
+
+          // Create new screen point at center;
+          const screenPt = new ScreenPoint(xVal, yVal);
+          // Convert screen point to map point and zoom to point;
+          const mapPt = response.map.toMap(screenPt);
+          // Note: Lat and lon are intentionally reversed until imagery api is fixed.
+          // The imagery API only returns the correct image for that lat/lon if they are reversed.
+          params.lon = mapPt.getLatitude();
+          params.lat = mapPt.getLongitude();
+
+          mapActions.getSatelliteImagery(params);
+        });
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {
@@ -847,7 +873,9 @@ export default class Map extends Component {
       modalLayerInfo,
       webmapInfo,
       map,
-      activeLayers
+      activeLayers,
+      imageryModalVisible,
+      imageryError
     } = this.state;
 
     const { settings } = this.context;
@@ -881,6 +909,7 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
+
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
           {legendReady ? <Legend
@@ -923,6 +952,21 @@ export default class Map extends Component {
         <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
+        <div className={`imagery-modal-container ${imageryModalVisible ? '' : 'collapse'}`}>
+          <ImageryModal
+            imageryData={this.state.imageryData}
+            loadingImagery={this.state.loadingImagery}
+            imageryModalVisible={imageryModalVisible}
+            imageryError={imageryError}
+            imageryHoverVisible={this.state.imageryHoverVisible}
+          />
+        </div>
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible &&
+            <ImageryHoverModal
+              selectedImagery={this.state.selectedImagery}
+              top={this.state.imageryHoverInfo.top}
+              left={this.state.imageryHoverInfo.left}/>
+        }
       </div>
     );
   }

@@ -23,5 +23,6 @@ export default {
   WRI_CONTEXTUAL: 'wri_contextual',
   WRI_MONO: 'wri_mono',
   LANDSAT: 'landsat',
-  EXTRA_LAYERS: 'extraLayers'
+  EXTRA_LAYERS: 'extraLayers',
+  RECENT_IMAGERY: 'RECENT_IMAGERY'
 };
