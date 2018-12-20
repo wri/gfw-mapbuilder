@@ -507,6 +507,7 @@ strings.ka.TOOL_ANALYSIS = 'ანალიზი';
 strings.ka.TOOL_TOGGLE = 'Toggle Panel (გადართვის პანელი)';
 strings.ka.TOOL_RESET = 'გადატვირთვა';
 
+
 strings.ka.ANALYSIS_CARBON_EMISSION = 'კარბონის მთლიანი ემისიები';
 strings.ka.ANALYSIS_CARBON_LOSS = 'კარბონის კარგვა';
 strings.ka.ANALYSIS_SLOPE_CHART_HEADER = 'ფერდობი';

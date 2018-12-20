@@ -40,8 +40,9 @@ import Badge from 'components/AnalysisPanel/Badge';
 let map;
 
 const getWebmapInfo = function getWebmapInfo (webmap) {
+
   return esriRequest({
-    url: `https://www.arcgis.com/sharing/rest/content/items/${webmap}/data?f=json`,
+    url: `${resources.sharinghost}/sharing/rest/content/items/${webmap}/data?f=json`,
     callbackParamName: 'callback'
   });
 };
@@ -252,7 +253,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       // Check for Errors
       const layerErrors = addedLayers.filter(layer => layer.error);
       if (layerErrors.length > 0) { console.error(layerErrors); }
-      console.log('uniqueLayers', uniqueLayers)
       const webMapLayerIds = map.layerIds.filter((layerId) => params.hasOwnProperty(layerId));
       const esriLayerIds = esriLayers.map(esriLayer => esriLayer.id);
       const baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && esriLayerIds.indexOf(layerId) === -1);
@@ -293,6 +293,10 @@ const createMap = function createMap (params) {
     zoom: 2
   };
 
+  // Set the sharinghost to the correct location so the app can find the webmap content
+  if (!resources.sharinghost) { resources.sharinghost = 'https://www.arcgis.com'; }
+  arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
+
   arcgisUtils.createMap(params.webmap, 'map', { mapOptions: options }).then(response => {
     map = response.map;
 
@@ -311,6 +315,7 @@ const createMap = function createMap (params) {
       }
 
       const { feature, info } = featureResponse;
+
       //- Add Popup Info Now
       // addTitleAndAttributes(params, feature, info);
       //- Need the map to be loaded to add graphics

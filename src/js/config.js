@@ -27,18 +27,21 @@ const config = {
     'production-api.globalforestwatch.org/v1/ogr/convert',
     'api.resourcewatch.org',
     'gis.wri.org',
-    'tiles.globalforestwatch.org'
+    'tiles.globalforestwatch.org',
+    'staging-api.globalforestwatch.org',
+    'wri-01.carto.com',
+
   ],
 
   urls: {
     metadataApi: 'https://gis-gfw.wri.org/metadata',
     metadataXmlEndpoint: (sharingHost, itemId) => `${sharingHost}/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
-    agolItemEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}`,
     cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
     cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
     esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-    forestWatchLayerApi: 'https://production-api.globalforestwatch.org/layer'
+    forestWatchLayerApi: 'https://production-api.globalforestwatch.org/layer',
+    satelliteImageService: 'https://production-api.globalforestwatch.org/recent-tiles'
   },
 
   upload: {
@@ -121,7 +124,21 @@ const config = {
       googleUrl: url => `https://plus.google.com/share?url=${url}`,
       twitterUrl: url => `https://twitter.com/share?url=${url}&via=gfw-water`,
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
-    }
+    },
+    imagery: {
+
+      monthsOptions: [
+        { label: '4 weeks', value: 4 },
+        { label: '3 months', value: 3},
+        { label: '6 months', value: 6},
+        { label: '12 months', value: 12}
+      ],
+
+      imageStyleOptions: [
+        { label: 'Natural Color'},
+        { label: 'Vegetation Health'}
+      ],
+    },
   },
 
   //- Analysis for individual layers are defined below so we can use common keys

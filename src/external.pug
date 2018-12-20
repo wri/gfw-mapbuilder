@@ -5,9 +5,10 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://beta.blueraster.io/mapbuilder/external-debugging/1.2.2.js')
-    //- script(id='library-load' src='js/library.js')
+    script(id='library-load' src='./1.3.1.js')
+    //- script(id='library-load' src='./1.2.2.js')
     meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
     script.
       var customApp = new MapBuilder({
         el: 'root',
@@ -42,18 +43,26 @@ html
           "alternativeMapThemes": "",
           "alternativeNarrative": "English narrative",
           "alternativeWebmapMenuName": "English Menu Name",
+          "initialExtent": {
+            x: null, // -122.3,
+            y: null, // 47.6,
+            z: null, // 9,
+          },
           "includeDocumentsTab": true,
           "documentsDirectory": "https://cmr.forest-atlas.org/resources/docs/",
           "documentsMapserver": "https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer",
           "iso": "COD",
           "activeFires": true,
           "intactForests": true,
+          "primaryForests": true,
+          "forma": true,
           "aboveGroundBiomass": true,
           "landCover": false,
           "mangroves": false,
           "sadAlerts": false,
           "gladAlerts": true,
           "terraIAlerts": false,
+          "recentImagery": true,
           "webmapMenuName": "French Menu Name",
           "restorationModule": false,
           "restorationImageServer": "https://gis-gfw.wri.org/arcgis/rest/services/image_services/eth_restoration_module2/ImageServer",
@@ -805,6 +814,23 @@ html
                 }
               }, {
                 order: 3,
+                id: 'PRIMARY_FORESTS', //http://api.resourcewatch.org/layer/079fae08-5696-4926-9417-794bd3a7e8dc
+                type: 'primed',
+                url: 'https://storage.googleapis.com/gee-tiles/079fae08-5696-4926-9417-794bd3a7e8dc%2F{z}%2F{x}%2F{y}%2Ftile_5b017146ab8a93bf55948f7fa3ec3d5e.png',
+                // legendLayer: 7,
+                technicalName: 'regional_primary_forests',
+                // legendLayer: [0],
+                label: {
+                  en: 'Primary Forests',
+                  fr: 'Forêts primaires',
+                  es: 'Bosques Primarios',
+                  pt: 'Florestas Primárias',
+                  id: 'Hutan Primer',
+                  zh: '主要森林',
+                  ka: 'პირველადი ტყეები'
+                },
+              }, {
+                order: 4,
                 id: 'AG_BIOMASS',
                 type: 'image',
                 url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
@@ -820,7 +846,7 @@ html
                   ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
                 }
               }, {
-                order: 4,
+                order: 5,
                 id: 'LAND_COVER',
                 type: 'webtiled',
                 url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
@@ -848,7 +874,7 @@ html
                   ka: 'მიწის საფარი'
                 }
               }, {
-                order: 5,
+                order: 6,
                 id: 'TREE_COVER',
                 type: 'image',
                 url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
@@ -875,6 +901,44 @@ html
                   id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
                   zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
                   ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
+                }
+              }]
+            },
+            GROUP_IMAGERY: {
+              groupType: 'imagery',
+              order: 4,
+              label: {
+                en: 'Recent Imagery',
+                fr: 'Recent Imagery',
+                es: 'Recent Imagery',
+                pt: 'Recent Imagery',
+                id: 'Recent Imagery',
+                zh: 'Recent Imagery',
+                ka: 'Recent Imagery'
+              },
+              layers: [{
+                order: 1,
+                id: 'RECENT_IMAGERY',
+                type: 'imagery',
+                technicalName: 'recent_satellite_imagery',
+                visible: false,
+                label: {
+                  en: 'Recent Imagery',
+                  fr: 'Recent Imagery',
+                  es: 'Recent Imagery',
+                  pt: 'Recent Imagery',
+                  id: 'Recent Imagery',
+                  zh: 'Recent Imagery',
+                  ka: 'Recent Imagery'
+                },
+                dynamicSublabel: {
+                  en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                  fr: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                  es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                  pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                  id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                  zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+                  ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
                 }
               }]
             },
@@ -994,5 +1058,5 @@ html
             ]
           }
         },
-        version: "1.2.2" // we'll eventually have to affiliate this w/ the "library-load" script's src
+        version: "1.3.1" // we'll eventually have to affiliate this w/ the "library-load" script's src
       });

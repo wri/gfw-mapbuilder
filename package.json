@@ -1,6 +1,6 @@
 {
   "name": "forest_atlas_template",
-  "version": "1.2.2",
+  "version": "1.3.1",
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
   "main": "webpack.config.js",
   "scripts": {
@@ -51,6 +51,7 @@
       "js/layers/TreeCoverGainLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/TreeCoverLossLayer": "<rootDir>/tests/__mocks__/constructor.js",
       "js/layers/FormaLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "dojo/_base/declare": "<rootDir>/tests/__mocks__/constructor.js",
       "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
       "esri/config": "<rootDir>/config/__mocks__/config.js",
       "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
@@ -59,7 +60,8 @@
       "^components(.*)$": "<rootDir>/src/js/components$1",
       "^constants(.*)$": "<rootDir>/src/js/constants$1",
       "^actions(.*)$": "<rootDir>/src/js/actions$1",
-      "^utils(.*)$": "<rootDir>/src/js/utils$1"
+      "^utils(.*)$": "<rootDir>/src/js/utils$1",
+      "testing/config": "<rootDir>/config/testing/config.js"
     },
     "moduleDirectories": [
       "node_modules",

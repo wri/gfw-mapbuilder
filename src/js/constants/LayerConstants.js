@@ -8,6 +8,7 @@ export default {
   IFL: 'IFL',
   AG_BIOMASS: 'AG_BIOMASS',
   GLOB_MANGROVE: 'GLOB_MANGROVE',
+  PRIMARY_FORESTS: 'PRIMARY_FORESTS',
   IMAZON_SAD: 'IMAZON_SAD',
   GLAD_ALERTS: 'GLAD_ALERTS',
   FORMA_ALERTS: 'FORMA_ALERTS',
@@ -22,5 +23,6 @@ export default {
   WRI_CONTEXTUAL: 'wri_contextual',
   WRI_MONO: 'wri_mono',
   LANDSAT: 'landsat',
-  EXTRA_LAYERS: 'extraLayers'
+  EXTRA_LAYERS: 'extraLayers',
+  RECENT_IMAGERY: 'RECENT_IMAGERY'
 };

@@ -31,6 +31,11 @@ export default {
   alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   alternativeNarrative: '',
   alternativeWebmapMenuName: 'Land Use',
+  initialExtent: {
+    x: null, // -122.3,
+    y: null, // 47.6,
+    z: null, // 9,
+  },
   //- Tab Settings
   includeDocumentsTab: false,
   includeMeasurementTab: false,
@@ -39,12 +44,15 @@ export default {
   viirsFires: true,
   modisFires: true,
   intactForests: true,
+  primaryForests: true,
+  forma: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
   sadAlerts: true,
   gladAlerts: true,
   terraIAlerts: true,
+  recentImagery: true,
   webmapMenuName: 'Land Use',
   //- Include/Exclude various restoration analysis types
   restorationSlope: true, //- Main Slope Analysis
@@ -65,13 +73,13 @@ export default {
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
   includeCartoTemplateLayers: false,
-  // cartoUser: 'wri-01',
-  // cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  // cartoApiKey: 'your key here',
-  // cartoGroupLabel: {
-  //   en: 'Carto Layers',
-  //   fr: 'Carto Layers',
-  // },
+  cartoUser: 'wri-01',
+  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  cartoApiKey: 'your key here',
+  cartoGroupLabel: {
+    en: 'Carto Layers',
+    fr: 'Carto Layers',
+  },
 
   /**
    * Custom Analysis Module Configuration
@@ -850,6 +858,23 @@ export default {
       },
       {
         order: 3,
+        id: 'PRIMARY_FORESTS', //http://api.resourcewatch.org/layer/079fae08-5696-4926-9417-794bd3a7e8dc
+        type: 'primed',
+        url: 'https://storage.googleapis.com/gee-tiles/079fae08-5696-4926-9417-794bd3a7e8dc%2F{z}%2F{x}%2F{y}%2Ftile_5b017146ab8a93bf55948f7fa3ec3d5e.png',
+        // legendLayer: 7,
+        technicalName: 'regional_primary_forests',
+        // legendLayer: [0],
+        label: {
+          en: 'Primary Forests',
+          fr: 'Forêts primaires',
+          es: 'Bosques Primarios',
+          pt: 'Florestas Primárias',
+          id: 'Hutan Primer',
+          zh: '主要森林',
+          ka: 'პირველადი ტყეები'
+        },
+      }, {
+        order: 4,
         id: 'AG_BIOMASS',
         type: 'image',
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
@@ -864,14 +889,36 @@ export default {
           zh: 'Aboveground Live Woody Biomass Density',
           ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
         }
-      },
-      {
-        order: 4,
-        type: 'remoteDataLayer',
-        uuid: '9b83f384-547b-45d5-bb27-2489c00cde97'
-      },
-      {
+      }, {
         order: 5,
+        id: 'LAND_COVER',
+        type: 'webtiled',
+        url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
+        technicalName: 'global_landcover',
+        legendLayer: [15],
+        rasterId: '$568',
+        bounds: [1, 16],
+        classes: {
+          en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
+          fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
+          ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
+        },
+        colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
+        label: {
+          en: 'Land Cover',
+          fr: 'Couverture des sols',
+          es: 'Cobertura vegetal',
+          pt: 'Land cover',
+          id: 'Land cover',
+          zh: '土地覆盖',
+          ka: 'მიწის საფარი'
+        }
+      }, {
+        order: 6,
         id: 'TREE_COVER',
         type: 'image',
         url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
@@ -1047,7 +1094,44 @@ export default {
         }
       ]
     },
-
+    GROUP_IMAGERY: {
+      groupType: 'imagery',
+      order: 4,
+      label: {
+        en: 'Recent Imagery',
+        fr: 'Recent Imagery',
+        es: 'Recent Imagery',
+        pt: 'Recent Imagery',
+        id: 'Recent Imagery',
+        zh: 'Recent Imagery',
+        ka: 'Recent Imagery'
+      },
+      layers: [{
+        order: 1,
+        id: 'RECENT_IMAGERY',
+        type: 'imagery',
+        technicalName: 'recent_satellite_imagery',
+        visible: false,
+        label: {
+          en: 'Recent Imagery',
+          fr: 'Recent Imagery',
+          es: 'Recent Imagery',
+          pt: 'Recent Imagery',
+          id: 'Recent Imagery',
+          zh: 'Recent Imagery',
+          ka: 'Recent Imagery'
+        },
+        dynamicSublabel: {
+          en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          fr: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+          ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
+        }
+      }]
+    },
     GROUP_BASEMAP: {
       groupType: 'basemap',
       order: 200,

@@ -12,6 +12,7 @@ import {layerPanelText} from 'js/config';
 import request from 'utils/request';
 import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
+import { urls } from 'js/config';
 
 let isRegistering = false;
 
@@ -39,7 +40,7 @@ class MapStore {
     this.formaStartDate = new Date('2012', 0, 1);
     this.formaEndDate = new Date();
     this.terraIStartDate = new Date('2004', 0, 1);
-    this.terraIEndDate = new Date('2016', 7, 12);
+    this.terraIEndDate = new Date('2016', 6, 12);
     this.viirsStartDate = moment(new Date()).subtract(1, 'day');
     this.viirsEndDate = moment(new Date());
     this.modisStartDate = moment(new Date()).subtract(1, 'day');
@@ -77,6 +78,13 @@ class MapStore {
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
+    this.imageryModalVisible = false;
+    this.imageryData = [];
+    this.loadingImagery = false;
+    this.imageryError = false;
+    this.selectedImagery = null;
+    this.imageryParams = null;
+    this.imageryHoverInfo = null;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -137,6 +145,10 @@ class MapStore {
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
+      toggleImageryVisible: mapActions.toggleImageryVisible,
+      getSatelliteImagery: mapActions.getSatelliteImagery,
+      setSelectedImagery: mapActions.setSelectedImagery,
+      setImageryHoverInfo: mapActions.setImageryHoverInfo
     });
   }
 
@@ -313,7 +325,7 @@ class MapStore {
 
     //-Terra I
     this.terraIStartDate = new Date('2004', 0, 1);
-    this.terraIEndDate = new Date('2016', 7, 12);
+    this.terraIEndDate = new Date('2016', 6, 12);
   }
 
   mapUpdated () {}
@@ -608,6 +620,80 @@ class MapStore {
 
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
+  }
+
+  toggleImageryVisible(bool) {
+    this.imageryModalVisible = bool;
+    this.imageryError = false;
+  }
+
+  getSatelliteImagery(params) {
+    // Confirm the imagery data isn't already being loaded.
+    if (this.loadingImagery) { return; }
+
+    this.imageryError = false;
+    this.loadingImagery = true;
+
+    // First make a reqest to the recent tiles metadata endpoint
+    request.getRecentTiles(params).then(response => {
+      // Only the first tile url is returned with the metadata response from the
+      // recent tiles endpoint. We can add this to state and show it on the map
+      // while the requests are made for the other tiles and the thumbnails.
+      const tiles = response.data.tiles;
+      this.imageryData = response.data.tiles;
+      this.imageryParams = params;
+      this.emitChange();
+
+      const tileArrays = [];
+
+      response.data.tiles.forEach((tile, i) => {
+        const index = i;
+        if ((index % 5 === 0) || (i === 0)) {
+          const tileArr = tiles.slice(index, index + 5);
+          tileArrays.push(tileArr);
+        }
+      });
+
+      let responseCount = 0;
+      tileArrays.forEach((tileArr, i) => {
+        const index = i * 5;
+
+        request.getImageryData(params, tileArr).then(data => {
+          data.forEach((d, pos) => {
+            this.imageryData[pos + index] = d;
+          });
+          responseCount++;
+
+          if (responseCount === tileArrays.length) {
+            this.loadingImagery = false;
+          }
+          this.emitChange();
+        }, () => {
+          responseCount++;
+          if (responseCount === tileArrays.length) {
+            this.loadingImagery = false;
+          }
+        });
+
+      });
+
+    }, () => {
+      this.imageryParams = null;
+      this.selectedImagery = null;
+      this.loadingImagery = false;
+      this.imageryError = true;
+      this.imageryData = [];
+      this.emitChange();
+    });
+  }
+
+  setSelectedImagery(obj) {
+    this.selectedImagery = obj;
+
+  }
+
+  setImageryHoverInfo(obj) {
+    this.imageryHoverInfo = obj;
   }
 }
 

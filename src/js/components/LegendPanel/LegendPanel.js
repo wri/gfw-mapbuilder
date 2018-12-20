@@ -211,6 +211,19 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
+      case 'PRIMARY_FORESTS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
       case 'LAND_COVER':
         childComponent = <LayerLegend
           key={layer.id}

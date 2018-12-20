@@ -8,6 +8,9 @@ import Query from 'esri/tasks/query';
 import Deferred from 'dojo/Deferred';
 import geometryUtils from 'utils/geometryUtils';
 
+import { urls } from 'js/config';
+import moment from 'moment';
+
 const needsDynamicQuery = function needsDynamicQuery (url) {
   return /\/dynamicLayer$/.test(url);
 };
@@ -204,9 +207,150 @@ const request = {
     query.outFields = outFields;
     query.outStatistics = [stat];
     return task.execute(query);
+  },
+
+  fetchTiles(url, count = 0) {
+    return fetch(
+      url,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    ).then(res => res.json())
+     .then(res => {
+       return new Promise((resolve) => {
+        setTimeout(() => {
+          if (res.errors && res.errors[0].status !== 200 && count < 25) {
+            count++;
+            resolve(this.fetchTiles(url, count));
+          }
+          resolve(res);
+        }, 100);
+      });
+    });
+  },
+
+  getRecentTiles(params) {
+    const deferred = new Deferred();
+
+    if (!params.start || !params.end) {
+      // If no date, use the default.
+      params.start = moment().subtract(3, 'months').format('YYYY-MM-DD');
+      params.end = moment().format('YYYY-MM-DD');
+    }
+
+    const recentTilesUrl = new URL(urls.satelliteImageService);
+    Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
+
+    this.fetchTiles(recentTilesUrl).then(response => {
+      if (response.errors) {
+        deferred.reject(response);
+        return;
+      }
+      deferred.resolve(response);
+    });
+    return deferred;
+  },
+
+  postTiles(content, count = 0) {
+    return fetch(
+        urls.satelliteImageService + '/tiles',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(content)
+        }
+      ).then(res => res.json())
+       .then(res => {
+         // If the request fails, try it again up to 15 times and then fail it.
+        // There are resource limitations with the imagery endpoint.
+        if (res.errors && res.errors[0].status !== 200 && count < 25) {
+           return new Promise((resolve) => {
+              setTimeout(() => {
+                count++;
+                resolve(this.postTiles(content, count));
+              }, 100);
+          });
+        } else {
+          return res;
+        }
+
+      });
+  },
+
+  postThumbs(content, count = 0) {
+    return fetch(
+      urls.satelliteImageService + '/thumbs',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(content)
+      }
+    ).then(res => res.json())
+     .then(res => {
+       // If the request fails, try it again up to 15 times and then fail it.
+      // There are resource limitations with the imagery endpoint.
+      if (res.errors && res.errors[0].status !== 200 && count < 25) {
+         return new Promise((resolve) => {
+            setTimeout(() => {
+              count++;
+              resolve(this.postThumbs(content, count));
+            }, 100);
+        });
+      } else {
+        return res;
+      }
+    });
+  },
+
+  getImageryData(params, tiles) {
+    const deferred = new Deferred();
+    const sourceData = [];
+    tiles.forEach((tile) => {
+      sourceData.push({ source: tile.attributes.source });
+    });
+
+    // Create request body that will be used for both the recent-tiles/tiles
+    // request and the recent-tiles/thumbs request
+    const content = {
+      bands: params.bands,
+      source_data: sourceData,
+    };
+
+    // Make a post request to the tiles endpoint to all of the tile_urls for
+    // each tile returned in the get recent tiles request
+    this.postTiles(content).then(tileResponse => {
+      if (tileResponse.errors) {
+        deferred.reject(tileResponse);
+        return;
+      }
+
+      // Make a post request to the thumbs endpoint to get all of the thumbnail image urls for
+      // each tile returned in the get recent tiles request.
+      this.postThumbs(content).then(thumbResponse => {
+        if (thumbResponse.errors) {
+          deferred.reject(thumbResponse);
+          return;
+        }
+
+        tiles.forEach((data, i) => {
+          data.tileUrl = tileResponse.data.attributes[i].tile_url;
+          data.thumbUrl = thumbResponse.data.attributes[i].thumbnail_url;
+        });
+        deferred.resolve(tiles);
+      });
+    });
+    return deferred;
   }
-
-
 };
 
 export {request as default};
