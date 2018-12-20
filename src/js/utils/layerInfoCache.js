@@ -385,7 +385,7 @@ export default {
     const promise = new Promise((resolve) => {
       // If layer metadata has already been acquired, in the case of layers configured by the new API,
       // don't perform a query to the old API
-      if (layer.metadata.metadata) {
+      if (layer.metadata && layer.metadata.metadata) {
         _cache[layer.id] = layer.metadata.metadata;
         resolve(layer.metadata.metadata);
       }
