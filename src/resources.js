@@ -702,128 +702,37 @@ export default {
       layers: [{
         order: 1,
         type: 'remoteDataLayer',
-        uuid: 'abcb4b31-0200-494d-9684-73c7aa46288c'
-      },
-      {
+        uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+      }, {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: 'da8be6b9-009b-4de4-9cc4-274eacbc5d48'
-      },
-      {
+        uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+      }, {
         order: 3,
-        id: 'IMAZON_SAD',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer',
-        technicalName: 'imazon_sad',
-        layerIds: [2],
-        label: {
-          en: 'SAD alerts',
-          fr: 'Alertes SAD',
-          es: 'Alertas SAD',
-          pt: 'Alertas SAD',
-          id: 'SAD alerts',
-          zh: 'SAD alerts',
-          ka: 'SAD შეტყობინებები'
-        },
-        sublabel: {
-          en: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          fr: '(mensuel, 250m, Amazonie brésilienne, Imazon)',
-          es: '(mensual, 250m, Amazonia brasileña, Imazon)',
-          pt: '(mensal, 250m, Amazônia brasileira, Imazon)',
-          id: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          zh: '(monthly, 250m, Brazilian Amazon, Imazon)',
-          ka: '(ყოველთვიური, 250მ, ბრაზილიის ამაზონია, Imazon)'
-        }
-      },
-      {
+        type: 'remoteDataLayer',
+        uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
+      }, {
         order: 4,
         type: 'remoteDataLayer',
-        uuid: '3c97afd7-2c86-42f1-a732-33e8dc60f5ac'
-      },
-      {
+        uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+      }, {
         order: 5,
-        id: 'FORMA_ALERTS',
-        type: 'forma',
-        url: 'https://storage.googleapis.com/forma-public/Forma250/tiles/forma_20180128/v1/{z}/{x}/{y}.png',
-        technicalName: 'forma_250_active_clearing_alerts',
-        legendLayer: [27],
-        minDateValue: 12000,
-        maxDateValue: 999999,
-        label: {
-          en: 'FORMA 250',
-          fr: 'FORMA 250',
-          es: 'FORMA 250',
-          pt: 'FORMA 250',
-          id: 'FORMA 250',
-          zh: 'FORMA 250',
-          ka: 'FORMA 250'
-        },
-      },
-      {
+        type: 'remoteDataLayer',
+        uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+      }, {
         order: 6,
         type: 'remoteDataLayer',
-        uuid: '5d90df1b-53ac-4b50-97c8-cb20b0c94523'
-      },
-      {
+        uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+      }, {
         order: 7,
         type: 'remoteDataLayer',
-        uuid: '3020dffd-61f3-46c9-aa68-1ef2fed3fa7b'
-      },
-      {
-        order: 8,
-        id: 'MODIS_ACTIVE_FIRES',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
-        technicalName: 'firms_active_fires',
-        layerIds: [9],
-        label: {
-          en: 'MODIS Active Fires',
-          fr: 'Feux actifs',
-          es: 'Incendios activos',
-          pt: 'Incêndios ativos',
-          id: 'Active fires',
-          zh: '活跃火点',
-          ka: 'MODIS აქტიური ხანძრები'
-        },
-        sublabel: {
-          en: '(daily, 1km, global, NASA)',
-          fr: '(journalier, 1km, global, NASA)',
-          es: '(Diaria, 1km, global, NASA)',
-          pt: '(Diária, 1km, global, NASA)',
-          id: '(daily, 1km, global, NASA)',
-          zh: '(每天更新, 1千米, 全球覆盖, 美国宇航局（NASA))',
-          ka: '(ყოველდღიური, 1კმ, გლობალური, NASA)'
-        },
-        popup: {
-          title: {
-            en: 'Active Fires'
-          },
-          content: {
-            en: [
-              { 'label': 'Brightness', 'fieldExpression': 'BRIGHTNESS' },
-              { 'label': 'Confidence', 'fieldExpression': 'CONFIDENCE' },
-              { 'label': 'Latitude', 'fieldExpression': 'LATITUDE' },
-              { 'label': 'Longitude', 'fieldExpression': 'LONGITUDE' },
-              { 'label': 'Acquisition Date', 'fieldExpression': 'ACQ_DATE:DateString(hideTime:true)' },
-              { 'label': 'Acquisition Time', 'fieldExpression': 'ACQ_TIME' }
-            ]
-          },
-          sublabel: {
-            en: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            fr: '(annuel, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            es: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            pt: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            id: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            zh: '(每年更新, 30米, 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-            ka: '(წლიური, 30მ, გლობალური, Hansen/UMD/Google/USGS/NASA)'
-          }
-        }
-      },
+        uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+      }
     ]
     },
     GROUP_LC: {
       groupType: 'default',
-      order: 3,
+      order: 2,
       label: {
         en: 'Land Cover',
         fr: 'Couverture des sols',
@@ -835,268 +744,30 @@ export default {
       },
       layers: [{
         order: 1,
-        id: 'GLOB_MANGROVE',
-        type: 'webtiled',
-        url: 'http://{subDomain}.ashbu.cartocdn.com/wri-01/api/v1/map/209485bfcb3eafb435befa0c405242ae:1467735931596/0/{level}/{col}/{row}.png',
-        subDomains: [0, 1, 2, 3],
-        technicalName: 'global_mangroves',
-        legendLayer: [11],
-        label: {
-          en: 'Global Mangrove',
-          fr: 'Global Mangrove',
-          es: 'Global Mangrove',
-          pt: 'Global Mangrove',
-          id: 'Global Mangrove',
-          zh: 'Global Mangrove',
-          ka: 'გლობალური მანგრები'
-        }
-      },
-      {
+        type: 'remoteDataLayer',
+        uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
+      }, {
         order: 2,
         type: 'remoteDataLayer',
-        uuid: '50b5cec5-0d08-4c33-985d-06745a066bc4'
-      },
-      {
+        uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+      }, {
         order: 3,
-        id: 'PRIMARY_FORESTS', //http://api.resourcewatch.org/layer/079fae08-5696-4926-9417-794bd3a7e8dc
-        type: 'primed',
-        url: 'https://storage.googleapis.com/gee-tiles/079fae08-5696-4926-9417-794bd3a7e8dc%2F{z}%2F{x}%2F{y}%2Ftile_5b017146ab8a93bf55948f7fa3ec3d5e.png',
-        // legendLayer: 7,
-        technicalName: 'regional_primary_forests',
-        // legendLayer: [0],
-        label: {
-          en: 'Primary Forests',
-          fr: 'Forêts primaires',
-          es: 'Bosques Primarios',
-          pt: 'Florestas Primárias',
-          id: 'Hutan Primer',
-          zh: '主要森林',
-          ka: 'პირველადი ტყეები'
-        },
+        type: 'remoteDataLayer',
+        uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
       }, {
         order: 4,
-        id: 'AG_BIOMASS',
-        type: 'image',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
-        technicalName: 'aboveground_biomass',
-        legendLayer: [8],
-        label: {
-          en: 'Aboveground Live Woody Biomass Density',
-          fr: 'Densité de la biomasse aérienne vivante',
-          es: 'Densidad de la biomasa viva en la superficie del suelo',
-          pt: 'Densidade de biomassa viva acima do solo',
-          id: 'Aboveground Live Woody Biomass Density',
-          zh: 'Aboveground Live Woody Biomass Density',
-          ka: 'მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე'
-        }
+        type: 'remoteDataLayer',
+        uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
       }, {
         order: 5,
-        id: 'LAND_COVER',
-        type: 'webtiled',
-        url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
-        technicalName: 'global_landcover',
-        legendLayer: [15],
-        rasterId: '$568',
-        bounds: [1, 16],
-        classes: {
-          en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
-          fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-          ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-        },
-        colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
-        label: {
-          en: 'Land Cover',
-          fr: 'Couverture des sols',
-          es: 'Cobertura vegetal',
-          pt: 'Land cover',
-          id: 'Land cover',
-          zh: '土地覆盖',
-          ka: 'მიწის საფარი'
-        }
-      }, {
-        order: 6,
-        id: 'TREE_COVER',
-        type: 'image',
-        url: 'https://gis-treecover.wri.org/arcgis/rest/services/TreeCover2000/ImageServer',
-        technicalName: 'tree_cover',
-        colormap: [[1, 0, 179, 0]],
-        inputRange: [30, 101],
-        outputRange: [1],
-        opacity: 0.8,
-        legendLayer: [2],
-        label: {
-          en: 'Tree cover density',
-          fr: 'Densité du couvert arboré',
-          es: 'Densidad de follaje',
-          pt: 'Tree cover density',
-          id: 'Tree cover density',
-          zh: '森林覆盖密度',
-          ka: 'ხის ვარჯის სიხშირე'
-        },
-        sublabel: {
-          en: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-          pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-          zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))',
-          ka: '(2000 წ, 30მ გლობალური, Hansen/UMD/Google/USGS/NASA)'
-        }
+        type: 'remoteDataLayer',
+        uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
       }
     ]
     },
-
-    GROUP_PA: {
-      order: 5,
-      label: {
-        en: 'Protected Areas (Legend Test)',
-        ka: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ”áƒ‘áƒ˜'
-      },
-      layers: [
-        {
-          order: 2,
-          id: 'PARoads',
-          type: 'dynamic',
-          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
-          layerIds: [
-            1
-          ],
-          label: {
-            en: 'Touristic Routes of Protected Areas',
-            ka: 'áƒ¢áƒ£áƒ áƒ˜áƒ¡áƒ¢áƒ£áƒšáƒ˜ áƒ‘áƒ˜áƒšáƒ˜áƒ™áƒ”áƒ‘áƒ˜'
-          },
-          popup: {
-            title: {
-              en: 'Touristic Routes of Protected Areas',
-              ka: 'áƒ¢áƒ£áƒ áƒ˜áƒ¡áƒ¢áƒ£áƒšáƒ˜ áƒ‘áƒ˜áƒšáƒ˜áƒ™áƒ”áƒ‘áƒ˜'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090',
-                  fieldExpression: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜_áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090'
-                },
-                {
-                  label: 'áƒœáƒ\u009dáƒ›áƒ”áƒ áƒ˜',
-                  fieldExpression: 'áƒœáƒ\u009dáƒ›áƒ”áƒ áƒ˜'
-                },
-                {
-                  label: 'áƒ°áƒ®áƒ\u0090áƒœáƒ’áƒ áƒ«áƒšáƒ˜áƒ•áƒ\u009dáƒ‘áƒ\u0090',
-                  fieldExpression: 'áƒ®áƒ\u0090áƒœáƒ’áƒ áƒ«áƒšáƒ˜áƒ•áƒ\u009dáƒ‘áƒ\u0090'
-                },
-                {
-                  label: 'áƒ¡áƒ˜áƒ áƒ—áƒ£áƒšáƒ”',
-                  fieldExpression: 'áƒ¡áƒ˜áƒ áƒ—áƒ£áƒšáƒ”'
-                },
-                {
-                  label: 'áƒ“áƒ\u0090áƒ¡áƒ\u0090áƒ®áƒ”áƒšáƒ”áƒ‘áƒ\u0090 áƒ¢áƒ˜áƒžáƒ˜',
-                  fieldExpression: 'áƒ“áƒ\u0090áƒ¡áƒ\u0090áƒ®áƒ”áƒšáƒ”áƒ‘áƒ\u0090_áƒ¢áƒ˜áƒžáƒ˜'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 3,
-          id: 'PALease',
-          type: 'dynamic',
-          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
-          layerIds: [
-            2
-          ],
-          label: {
-            en: 'Lease of Protected Areas',
-            ka: 'áƒ˜áƒ¯áƒ\u0090áƒ áƒ”áƒ‘áƒ˜'
-          },
-          popup: {
-            title: {
-              en: 'Protected Area Zoning',
-              ka: 'áƒ¤áƒ£áƒœáƒ¥áƒªáƒ˜áƒ£áƒ áƒ˜ áƒ–áƒ\u009dáƒœáƒ”áƒ‘áƒ˜'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090',
-                  fieldExpression: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜_áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090'
-                },
-                {
-                  label: 'áƒ“áƒ\u0090áƒœáƒ˜áƒ¨áƒ£áƒšáƒ”áƒ‘áƒ\u0090',
-                  fieldExpression: 'áƒ“áƒ\u0090áƒœáƒ˜áƒ¨áƒ£áƒšáƒ”áƒ‘áƒ\u0090'
-                },
-                {
-                  label: 'áƒ°áƒ”áƒ¥áƒ¢áƒ\u0090áƒ áƒ˜',
-                  fieldExpression: 'áƒ°áƒ”áƒ¥áƒ¢áƒ\u0090áƒ áƒ˜'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 4,
-          id: 'PAFunction',
-          type: 'dynamic',
-          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
-          layerIds: [
-            3
-          ],
-          label: {
-            en: 'Functional Zoning of Protected Areas',
-            ka: 'áƒ¤áƒ£áƒœáƒ¥áƒªáƒ˜áƒ£áƒ áƒ˜ áƒ–áƒ\u009dáƒœáƒ”áƒ‘áƒ˜'
-          }
-        },
-        {
-          order: 5,
-          id: 'PA',
-          type: 'dynamic',
-          visible: false,
-          url: 'https://gis.mepa.gov.ge/server/rest/services/atlas/%E1%83%93%E1%83%90%E1%83%AA%E1%83%A3%E1%83%9A%E1%83%98_%E1%83%A2%E1%83%94%E1%83%A0%E1%83%98%E1%83%A2%E1%83%9D%E1%83%A0%E1%83%98%E1%83%94%E1%83%91%E1%83%98_protected_areas/MapServer',
-          layerIds: [
-            4
-          ],
-          label: {
-            en: 'Protected Areas',
-            ka: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ”áƒ‘áƒ˜'
-          },
-          popup: {
-            title: {
-              en: 'Protected Areas',
-              ka: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ”áƒ‘áƒ˜'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'OBJECTID',
-                  fieldExpression: 'OBJECTID'
-                },
-                {
-                  label: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜ áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090',
-                  fieldExpression: 'áƒ“áƒ\u0090áƒªáƒ£áƒšáƒ˜_áƒ¢áƒ”áƒ áƒ˜áƒ¢áƒ\u009dáƒ áƒ˜áƒ\u0090'
-                },
-                {
-                  label: 'áƒ“áƒ\u0090áƒ\u0090áƒ áƒ¡áƒ”áƒ‘áƒ˜áƒ¡ áƒ¬áƒ”áƒšáƒ˜',
-                  fieldExpression: 'áƒ“áƒ\u0090áƒ\u0090áƒ áƒ¡áƒ”áƒ‘áƒ˜áƒ¡_áƒ¬áƒ”áƒšáƒ˜'
-                },
-                {
-                  label: 'áƒ\u0090áƒ“áƒ›áƒ˜áƒœáƒ˜áƒ¡áƒ¢áƒ áƒ\u0090áƒªáƒ˜áƒ\u0090',
-                  fieldExpression: 'áƒ\u0090áƒ“áƒ›áƒ˜áƒœáƒ˜áƒ¡áƒ¢áƒ áƒ\u0090áƒªáƒ˜áƒ\u0090'
-                },
-                {
-                  label: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ\u0090',
-                  fieldExpression: 'áƒ™áƒ\u0090áƒ¢áƒ”áƒ’áƒ\u009dáƒ áƒ˜áƒ\u0090'
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
     GROUP_IMAGERY: {
       groupType: 'imagery',
-      order: 4,
+      order: 3,
       label: {
         en: 'Recent Imagery',
         fr: 'Recent Imagery',
@@ -1204,43 +875,43 @@ export default {
         {
           order: 1,
           type: 'remoteDataLayer',
-          uuid: '4bdd009f-54f9-4161-a19b-efbe8d4089a0'
+          uuid: 'aedc3d8b-47ca-48a5-8a11-12b805732321'
         },
         // basic test layer with icon
         {
           order: 2,
           type: 'remoteDataLayer',
-          uuid: '35913d5a-349d-4784-b96e-ff63d2cc9283'
+          uuid: '00de9852-d762-41a5-ad70-2477f792987b'
         },
         // points test layer
         {
           order: 4,
           type: 'remoteDataLayer',
-          uuid: 'd5212162-d99c-45a1-8091-5b3e0904a040'
+          uuid: 'b173e1e5-a6df-4a96-9ab7-93dab994293f'
         },
         // lines test layer
         {
           order: 5,
           type: 'remoteDataLayer',
-          uuid: '5a30961b-3dbe-4e7a-b1c3-d95a63ff0f68'
+          uuid: '2ef0c69f-31d3-4e73-8d2c-018269d637bd'
         },
         // choropleth test layer
         {
           order: 6,
           type: 'remoteDataLayer',
-          uuid: 'a4365fbc-31ad-45cb-bb4b-91ef4bf58a49'
+          uuid: 'e9954850-23c4-446c-bcfb-c3b18ec21298'
         },
         // gradient test layer
         {
           order: 7,
           type: 'remoteDataLayer',
-          uuid: '20c0422e-4186-492e-b4ce-e7a43576eca0'
+          uuid: '0b89fa17-9a07-4411-9d51-92b5816c8165'
         },
         // group test layer
         {
           order: 8,
           type: 'remoteDataLayer',
-          uuid: 'f49d3977-f195-45e2-89a9-9431d07aa9f6'
+          uuid: 'bb5dc1f1-06b9-4117-943a-e2dd9341ea6b'
         }
       ]
     },

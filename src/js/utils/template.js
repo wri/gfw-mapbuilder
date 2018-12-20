@@ -232,12 +232,12 @@ const formatResources = () => {
     .map(item => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
       .then(response => response.json())
       .then(json => json.data)
-      .then(layer => fetch(layer.attributes.layerConfig.body.metadata)
+      .then(layer => fetch(layer.attributes.layerConfig.metadata)
       .then(response => response.json())
       .then(metadata => {
         const attributes = layer.attributes;
         const itemGroup = item.group;
-        item.layer = layer.attributes.layerConfig.body.options.mapBuilderConfig;
+        item.layer = layer.attributes.layerConfig;
         item.group = itemGroup;
         item.layer.metadata = {
           metadata,

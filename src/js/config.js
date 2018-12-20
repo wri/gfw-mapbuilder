@@ -40,7 +40,7 @@ const config = {
     cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
     esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-    forestWatchLayerApi: 'https://production-api.globalforestwatch.org/layer',
+    forestWatchLayerApi: 'http://api.resourcewatch.org/layer',
     satelliteImageService: 'https://production-api.globalforestwatch.org/recent-tiles'
   },
 
