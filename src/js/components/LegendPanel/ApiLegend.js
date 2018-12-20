@@ -12,7 +12,6 @@ export default class ApiLegend extends Component {
   }
 
   generateLegends(items, type, language) {
-    console.log(items, type, language);
     switch(type) {
       case 'basic':
         return items.map((item, i) => {
@@ -121,7 +120,6 @@ export default class ApiLegend extends Component {
     const visible = this.state.visible;
     const { metadata, language } = this.props;
     const { type, items } = metadata.legendConfig;
-    console.log(metadata.legendConfig)
     const name = metadata.legendConfig.name[language];
     if (type === 'group') {
       return (
