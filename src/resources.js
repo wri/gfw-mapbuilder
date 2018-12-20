@@ -878,11 +878,11 @@ export default {
           uuid: 'aedc3d8b-47ca-48a5-8a11-12b805732321'
         },
         // basic test layer with icon
-        {
-          order: 2,
-          type: 'remoteDataLayer',
-          uuid: '00de9852-d762-41a5-ad70-2477f792987b'
-        },
+        // {
+        //   order: 2,
+        //   type: 'remoteDataLayer',
+        //   uuid: '00de9852-d762-41a5-ad70-2477f792987b'
+        // },
         // points test layer
         {
           order: 4,
