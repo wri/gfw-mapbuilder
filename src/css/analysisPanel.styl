@@ -294,6 +294,44 @@
   width 100%
   margin-top 20px
 
+.vega-chart_download-container
+  position relative
+  overflow visible
+  display flex
+  justify-content flex-end
+  padding-top 10px
+
+.vega-chart_download-options
+  position absolute
+  overflow auto
+  top 40px
+  right 0
+  max-height 100px
+  min-width 120px
+  display flex
+  flex-direction column
+  justify-content flex-start
+  border 0.75px solid #eee
+
+  a
+    width 100%
+    padding 8px 10px
+    text-decoration none
+    color #555
+    font-size 12px
+    background #fff
+    border-top 0.75px #eee solid
+
+  a:nth-child(1)
+    border none
+
+  a:hover
+    background #eee
+
+  .download-option-label
+    text-transform uppercase
+
+
 @media (min-width: $mobileBreak)
   .analysis__chart-container
     max-width 270px

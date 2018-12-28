@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import charts from 'utils/charts';
+import SVGIcon from 'utils/svgIcon';
+import { urls } from 'js/config';
 
 export default class VegaChart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isError: false, errorMsg: null };
+    this.state = { isError: false, errorMsg: null, showDownloadOptions: false, downloadOptions: []};
   }
 
   handleError(errorMsg) {
@@ -34,17 +36,33 @@ export default class VegaChart extends Component {
                 this.handleError('No results for this analysis.' );
               }
 
+              const downloadOptions = [];
+              const downloadUrls = json.data.attributes.downloadUrls;
+              if (downloadUrls) {
+                const labels = Object.keys(downloadUrls);
+                labels.forEach((label) => {
+                  downloadOptions.push({label, url: downloadUrls[label]});
+                });
+              }
+              this.setState({ downloadOptions });
+
             }
           });
         });
       }
-
-
   }
 
+  renderdownloadOptions = (option) => {
+    const baseUrl = urls.analysisDataBaseUrl;
+    return (
+      <a href={baseUrl + option.url}>Download data as <span className='download-option-label'>{option.label}</span></a>
+    );
+  };
+
   render() {
-    const { isError, errorMsg } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions } = this.state;
     const { results } = this.props;
+
     if (isError) {
       return (
         <div className='data-error'>
@@ -52,7 +70,21 @@ export default class VegaChart extends Component {
         </div>
       );
     } else {
-      return <div className='vega-chart' ref={(chart) => { this.chart = chart; }}></div>;
+      return (
+        <div className='vega-chart_container'>
+          <div className='vega-chart_download-container'>
+            <div className='pointer' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}><SVGIcon id={'icon-menu'} /></div>
+
+            {showDownloadOptions &&
+              <div className='vega-chart_download-options shadow'>
+                {downloadOptions.map(this.renderdownloadOptions)}
+              </div>
+            }
+
+          </div>
+          <div className='vega-chart' ref={(chart) => { this.chart = chart; }}></div>
+        </div>
+      );
     }
   }
 }
