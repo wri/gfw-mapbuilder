@@ -52,10 +52,12 @@ export default class VegaChart extends Component {
       }
   }
 
-  renderdownloadOptions = (option) => {
+  renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
-      <a href={baseUrl + option.url}>Download data as <span className='download-option-label'>{option.label}</span></a>
+      <a href={baseUrl + option.url} key={`option-${i}`}>
+        Download data as <span className='download-option-label'>{option.label}</span>
+      </a>
     );
   };
 
@@ -72,14 +74,15 @@ export default class VegaChart extends Component {
     } else {
       return (
         <div className='vega-chart_container'>
+          { showDownloadOptions &&
+            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> }
           <div className='vega-chart_download-container'>
             <div className='pointer' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}><SVGIcon id={'icon-menu'} /></div>
 
-            {showDownloadOptions &&
-              <div className='vega-chart_download-options shadow'>
+            { showDownloadOptions &&
+              <div className='vega-chart_download-options shadow' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                 {downloadOptions.map(this.renderdownloadOptions)}
-              </div>
-            }
+              </div> }
 
           </div>
           <div className='vega-chart' ref={(chart) => { this.chart = chart; }}></div>
