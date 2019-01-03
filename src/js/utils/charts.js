@@ -372,12 +372,16 @@ export default {
 
   makeVegaChart: (el, config, callback) => {
     new vega.View(vega.parse(config))
-      .renderer('canvas')
-      .initialize(el)
-      .hover()
-      .run();
-
-    if (callback) { callback(); }
+    .renderer('canvas')
+    .initialize(el)
+    .hover()
+    .run()
+    .toImageURL('png')
+    .then((url) => {
+      if (callback) {
+        callback(url);
+      }
+    });
   },
 
 	/**

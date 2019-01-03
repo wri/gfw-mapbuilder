@@ -7,7 +7,14 @@ export default class VegaChart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isError: false, errorMsg: null, showDownloadOptions: false, downloadOptions: []};
+    this.state = {
+      isError: false,
+      errorMsg: null,
+      showDownloadOptions: false,
+      downloadOptions: [],
+      chartDownloadTitle: 'analysis.png',
+      chartImgDownloadUrl: null,
+    };
   }
 
   handleError(errorMsg) {
@@ -31,7 +38,7 @@ export default class VegaChart extends Component {
             if (json.data){
               const values = json.data.attributes.value;
               if (values.length) {
-                charts.makeVegaChart(this.chart, config, this.props.setLoading);
+                charts.makeVegaChart(this.chart, config, this.addChartDownload);
               } else {
                 this.handleError('No results for this analysis.' );
               }
@@ -44,25 +51,32 @@ export default class VegaChart extends Component {
                   downloadOptions.push({label, url: downloadUrls[label]});
                 });
               }
-              this.setState({ downloadOptions });
+              const chartDownloadTitle = json.data.type + '-analysis.png';
+              this.setState({ downloadOptions, chartDownloadTitle });
 
             }
           });
-        });
+        })
+        .catch(() => this.handleError('Error creating analysis.'));
       }
+  }
+
+  addChartDownload = (url) => {
+    this.setState({ chartImgDownloadUrl: url });
+    this.props.setLoading();
   }
 
   renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
-      <a href={baseUrl + option.url} key={`option-${i}`}>
+      <a href={baseUrl + option.url} download key={`option-${i}`}>
         Download data as <span className='download-option-label'>{option.label}</span>
       </a>
     );
   };
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl } = this.state;
     const { results } = this.props;
 
     if (isError) {
@@ -82,10 +96,15 @@ export default class VegaChart extends Component {
             { showDownloadOptions &&
               <div className='vega-chart_download-options shadow' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                 {downloadOptions.map(this.renderdownloadOptions)}
+                {this.chart &&
+                  <a href={chartImgDownloadUrl} download={chartDownloadTitle}>
+                    Download data as <span className='download-option-label'>PNG</span>
+                  </a>
+                }
               </div> }
 
           </div>
-          <div className='vega-chart' ref={(chart) => { this.chart = chart; }}></div>
+          <div className='vega-chart' id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
         </div>
       );
     }
