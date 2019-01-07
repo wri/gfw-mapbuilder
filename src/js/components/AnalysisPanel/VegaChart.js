@@ -26,16 +26,26 @@ export default class VegaChart extends Component {
           }
 
           res.json().then(json => {
-            if (json.data){
+            if (json.data) {
               const values = json.data.attributes.value;
               if (values.length) {
                 charts.makeVegaChart(this.chart, config, this.props.setLoading);
               } else {
                 this.handleError('No results for this analysis.' );
               }
-
+            } else if (json.histograms) {
+              const values = json.histograms[0].counts;
+              if (values.length) {
+                charts.makeVegaChart(this.chart, config, this.props.setLoading);
+              } else {
+                this.handleError('No results for this analysis.' );
+              }
+            } else {
+              this.handleError('No results for this analysis.' );
             }
           });
+        }).catch(() => {
+          this.handleError('Error creating analysis.');
         });
       }
 
