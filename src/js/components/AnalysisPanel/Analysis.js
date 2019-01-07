@@ -20,7 +20,6 @@ import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
 import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
-// import performAnalysis from 'utils/performAnalysis';
 import {attributes} from 'constants/AppConstants';
 // import tabKeys from 'constants/TabViewConstants';
 // import layerKeys from 'constants/LayerConstants';
