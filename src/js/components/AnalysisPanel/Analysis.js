@@ -1,15 +1,10 @@
 import CustomFeatureControl from 'components/AnalysisPanel/CustomFeatureControl';
 import CompositionPieChart from 'components/AnalysisPanel/CompositionPieChart';
 import AnalysisTypeSelect from 'components/AnalysisPanel/AnalysisTypeSelect';
-// import RestorationCharts from 'components/AnalysisPanel/RestorationCharts';
 import TimeSeriesChart from 'components/AnalysisPanel/TimeSeriesChart';
-// import TotalLossChart from 'components/AnalysisPanel/TotalLossChart';
-// import SadAlertsChart from 'components/AnalysisPanel/SadAlertsChart';
 import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import SlopeSelect from 'components/AnalysisPanel/SlopeClassSelect';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
-// import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
-// import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import Badge from 'components/AnalysisPanel/Badge';
@@ -20,10 +15,7 @@ import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
 import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
-// import performAnalysis from 'utils/performAnalysis';
 import {attributes} from 'constants/AppConstants';
-// import tabKeys from 'constants/TabViewConstants';
-// import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
@@ -31,10 +23,7 @@ import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
 import analysisUtils from 'utils/analysisUtils';
 import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
-// import Deferred from 'dojo/Deferred';
 import moment from 'moment';
-// import request from 'utils/request';
-// import utils from 'utils/AppUtils';
 import text from 'js/languages';
 import React, {
   Component,
