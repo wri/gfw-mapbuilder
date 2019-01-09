@@ -97,7 +97,7 @@
 .analysis-results
   color $grayFont
   width 100%
-  position static
+  height 100%
   overflow visible
 
 .analysis-results__title
@@ -133,8 +133,6 @@
     top 2px
 
 .analysis-results__select-form
-  height: calc(100% - 178px);
-  overflow-y auto
   overflow-x hidden
   .analysis-results__select-form-item-container
     display flex
@@ -223,15 +221,12 @@
   top 0
 
 .analysis-results__content
-  position static
-  overflow visible
+  overflow-y auto
   width 100%
   height 100%
   padding 10px 10px 0 10px
-  bottom 100px
-  right 0
-  left 0
-  top 0
+  &.footer
+    height calc(100% - 100px)
   .analysis-results__chart-component-container
     width 100%
 
@@ -266,12 +261,13 @@
   display flex
   flex-direction column
   justify-content space-around
-  height 105px
+  height 100px
   box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
   position absolute
   bottom 0
   right 0
   left 0
+  padding 8px 0px
 
 .chart-error
   height auto
