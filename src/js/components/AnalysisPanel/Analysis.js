@@ -633,6 +633,7 @@ export default class Analysis extends Component {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
     const { isLoading, chartComponent} = this.state;
     const {language, settings} = this.context;
+    const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
 
     // If we have the restoration module, add in the slope select
@@ -673,7 +674,7 @@ export default class Analysis extends Component {
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
-        <div className='analysis-results__content custom-scroll'>
+        <div className={`analysis-results__content custom-scroll ${showFooter ? 'footer' : ''}`}>
           <div className='title-select-container'>
             <div className='analysis-title'>{title}</div>
             <div className='analysis-results__select-label'>
@@ -693,17 +694,17 @@ export default class Analysis extends Component {
               {chartComponent}
             </div>
           }
-          {activeAnalysisType !== 'default' && !chartComponent
-            && <div className='analysis-results__footer'>
-              <div className='run-analysis-button-container'>
-                <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
-                  {text[language].RUN_ANALYSIS_BUTTON_TEXT}
-                </button>
-              </div>
-              <ReportSubscribeButtons setLoader={this.setLoader} />
-            </div>
-          }
         </div>
+        {showFooter &&
+          <div className='analysis-results__footer'>
+            <div className='run-analysis-button-container'>
+              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+                {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+              </button>
+            </div>
+            <ReportSubscribeButtons setLoader={this.setLoader} />
+          </div>
+        }
       </div>
     );
   }
