@@ -19,37 +19,22 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       const url = config.data[0].url;
-      fetch(url)
-        .then(res => {
-          if (res.status !== 200) {
-            this.handleError('Error creating analysis.');
-          }
 
-          res.json().then(json => {
-            if (json.data) {
-              const values = json.data.attributes.value;
-              if (values.length) {
-                charts.makeVegaChart(this.chart, config, this.props.setLoading);
-              } else {
-                this.handleError('No results for this analysis.' );
-              }
-            } else if (json.histograms) {
-              const values = json.histograms[0].counts;
-              if (values.length) {
-                charts.makeVegaChart(this.chart, config, this.props.setLoading);
-              } else {
-                this.handleError('No results for this analysis.' );
-              }
-            } else {
-              this.handleError('No results for this analysis.' );
-            }
-          });
-        }).catch(() => {
+      fetch(url).then(res => {
+        if (res.status !== 200) {
           this.handleError('Error creating analysis.');
-        });
-      }
+        } else {
+          res.json().then(json => {
+            // We used to have this 'json' object for validation and error-checking, but now
+            // we leave that up to the Widget API!
+            charts.makeVegaChart(this.chart, config, this.props.setLoading);
+          });
+        }
 
-
+      }).catch(() => {
+        this.handleError('Error creating analysis.');
+      });
+    }
   }
 
   render() {
