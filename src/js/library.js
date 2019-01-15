@@ -1,6 +1,32 @@
 var MapBuilder = function(args){
 
   this.init = function(constructorParams) {
+    // Dynamically add meta tags if they don't already exist
+    const currentMetaTags = document.getElementsByTagName('meta');
+    let currentCharsetTag, currentMobileTag;
+
+    for (var i = 0; i < currentMetaTags.length; i++) {
+      const content = currentMetaTags[i].getAttribute('content');
+      if (content === 'text/html; charset=utf-8') {
+        currentCharsetTag = true;
+      } else if (content === 'width=device-width, initial-scale=1.0') {
+        currentMobileTag = true;
+      }
+    }
+    if (!currentCharsetTag) {
+      const metaCharset = document.createElement('meta');
+      metaCharset.httpEquiv = 'Content-Type';
+      metaCharset.content = 'text/html; charset=utf-8';
+      document.getElementsByTagName('body')[0].appendChild(metaCharset);
+    }
+
+    if (!currentMobileTag) {
+      const metaMobileDevice = document.createElement('meta');
+      metaMobileDevice.name = 'viewport';
+      metaMobileDevice.content = 'width=device-width, initial-scale=1.0';
+      document.getElementsByTagName('body')[0].appendChild(metaMobileDevice);
+    }
+
     var scripts = document.getElementsByTagName('script');
     var newBase;
     for (var j = 0; j < scripts.length; j++) {
