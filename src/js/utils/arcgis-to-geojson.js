@@ -216,7 +216,6 @@ function orientRings (poly) {
       }
     }
   }
-
   return output;
 }
 
@@ -338,6 +337,8 @@ function geojsonToArcGIS (geojson, idAttribute) {
         result.push(geojsonToArcGIS(geojson.geometries[i], idAttribute));
       }
       break;
+
+
   }
 
   return result;

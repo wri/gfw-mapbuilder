@@ -3,9 +3,12 @@ import LayerPanel from 'components/LayerPanel/LayerPanel';
 import MobileMenu from 'components/TabPanel/MobileMenu';
 import LayerToggles from 'components/LayerPanel/LayerToggles';
 import InfoWindow from 'components/TabPanel/InfoWindow';
+import Measurement from 'components/TabPanel/Measurement';
 import Documents from 'components/TabPanel/Documents';
 import mapActions from 'actions/MapActions';
 import tabKeys from 'constants/TabViewConstants';
+import SVGIcon from 'utils/svgIcon';
+
 import text from 'js/languages';
 import React, {
   Component,
@@ -17,6 +20,7 @@ const {
   LAYERS,
   ANALYSIS,
   INFO_WINDOW,
+  MEASUREMENT,
   NARRATIVE,
   MORE
 } = tabKeys;
@@ -42,6 +46,7 @@ export default class TabView extends Component {
       activeTab === LAYERS ||
       activeTab === ANALYSIS ||
       activeTab === INFO_WINDOW ||
+      activeTab === MEASUREMENT ||
       activeTab === NARRATIVE ||
       activeTab === MORE
     ) && tableOfContentsVisible ? '' : 'hidden';
@@ -61,7 +66,8 @@ export default class TabView extends Component {
         {!narrative ? null :
           <div className={this.getClassName(NARRATIVE)}>
             <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-              <svg><use xlinkHref="#shape-close" /></svg>
+              <SVGIcon id={'shape-close'} />
+
             </div>
             <h3 className='tab-view__mobile-header mobile-show'>NARRATIVE</h3>
             <div className='tab-view__narrative' dangerouslySetInnerHTML={{ __html: narrative }} />
@@ -69,22 +75,35 @@ export default class TabView extends Component {
         }
         <div className={this.getClassName(LAYERS)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-            <svg><use xlinkHref="#shape-close" /></svg>
+            <SVGIcon id={'shape-close'} />
+
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].LAYERS}</h3>
           <LayerToggles />
-          <LayerPanel loaded={map.loaded} {...this.props} />
+          <LayerPanel loaded={map.loaded} {...this.props} hideTabView={this.hideTabView} />
         </div>
         <div className={this.getClassName(INFO_WINDOW)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-            <svg><use xlinkHref="#shape-close" /></svg>
+            <SVGIcon id={'shape-close'} />
+
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].DATA}</h3>
           <InfoWindow map={map} />
         </div>
+        {!settings.includeMeasurementTab ? null :
+          <div className={this.getClassName(MEASUREMENT)}>
+            <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
+              <SVGIcon id={'shape-close'} />
+
+            </div>
+            <h3 className='tab-view__mobile-header mobile-show'>{text[language].MEASUREMENT}</h3>
+            <Measurement activeWebmap={this.props.activeWebmap} />
+          </div>
+        }
         <div className={this.getClassName(ANALYSIS)}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-            <svg><use xlinkHref="#shape-close" /></svg>
+            <SVGIcon id={'shape-close'} />
+
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].ANALYZE}</h3>
           <AnalysisPanel {...this.props} />
@@ -92,7 +111,8 @@ export default class TabView extends Component {
         {!settings.includeDocumentsTab ? null :
           <div className={this.getClassName(DOCUMENTS)}>
             <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-              <svg><use xlinkHref="#shape-close" /></svg>
+              <SVGIcon id={'shape-close'} />
+
             </div>
             <h3 className='tab-view__mobile-header mobile-show'>{text[language].DOCS}</h3>
             <Documents active={this.props.activeTab === DOCUMENTS} />
@@ -100,7 +120,8 @@ export default class TabView extends Component {
         }
         <div className={`${this.getClassName(MORE)} mobile-show`}>
           <div title='close' className='close-icon pointer mobile-show' onClick={this.hideTabView} >
-            <svg><use xlinkHref="#shape-close" /></svg>
+            <SVGIcon id={'shape-close'} />
+
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].MORE}</h3>
           <MobileMenu />

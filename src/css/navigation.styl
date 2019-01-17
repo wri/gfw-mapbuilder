@@ -30,6 +30,11 @@
   padding 0 5px
   display flex
 
+.app-header__nav-link.login-open, .app-header__nav-link.options-open
+  background #eeeeee
+  border-left 1px solid #ddd
+  border-right 1px solid #ddd
+
 .app-header__theme-list
 .app-header__language-list
   border-top 3px solid $goldTheme
@@ -52,6 +57,118 @@
 .app-header__nav-link--language:hover .app-header__language-list
     display block
 
+.login-modal
+  position absolute
+  right 20px
+  z-index 100
+  top 50px
+  min-width 400px
+  max-width 400px
+  background white
+  padding 40px
+  border 1px solid #ddd
+  p
+    color #333
+    font-size 14px
+    text-transform none
+  a
+    color #97bd3d
+    display inline
+  .subscribe-method
+    text-align center
+    margin-top 20px
+    color white
+    padding-top 15px
+    padding-bottom 15px
+  ul span
+    color white
+  &:after
+    margin-left -6px
+    border-width 6px
+    border-color rgba(51,51,51,0)
+    right 2px
+    border-bottom-color #fff
+
+.login-modal:after
+  transform translate(-50%, 0px)
+  background $tooltipBackground
+  transition all 0.25s linear
+  text-transform uppercase
+  position absolute
+  padding 4px 6px
+  font-weight 400
+  font-size 12px
+  z-index 1000
+  bottom 100%
+  transform translate(-50%, 50%) rotate(45deg)
+  background white
+  border-width 0 1px 1px 0
+  border-style solid
+  display block
+  content ""
+  height 8px
+  width 8px
+  right 53px
+
+.twitter-box
+  background #598dca
+  a
+    color white
+
+.facebook-box
+  background #39579b
+  a
+    color white
+
+.google-box
+  background #da4735
+  a
+    color white
+
+.options-modal
+  position absolute
+  right 20px
+  z-index 100
+  top 50px
+  min-width 200px
+  max-width 200px
+  background white
+  border 1px solid #ddd
+
+  .options-modal:after
+    transform translate(-50%, 0px)
+    background $tooltipBackground
+    transition all 0.25s linear
+    text-transform uppercase
+    position absolute
+    padding 4px 6px
+    font-weight 400
+    font-size 12px
+    z-index 1000
+    bottom 100%
+    transform translate(-50%, 50%) rotate(45deg)
+    background white
+    border-width 0 1px 1px 0
+    border-style solid
+    display block
+    content ""
+    height 8px
+    width 8px
+    right 53px
+
+.gfw-api-option
+  padding 12px 15px
+  max-width none
+  margin-right 0!important
+  p
+    margin-bottom 0
+    margin-top 0
+    cursor pointer
+
+.subscription-authentication
+  padding-left 0
+  list-style none
+
 .app-header__theme
 .app-header__language
   border-bottom 1px solid $lightGray
@@ -68,5 +185,10 @@
     top auto
 
 @media (max-width: $mobileBreak)
-  .app-header__nav
-    display none
+  .app-header__nav, .app-header__nav-list
+    margin 0
+  .login-modal
+    min-width inherit
+    right 0x
+  .modal
+    min-width 300px

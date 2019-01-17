@@ -1,5 +1,6 @@
 import LayerDrawingOptions from 'esri/layers/LayerDrawingOptions';
 import React, {Component, PropTypes} from 'react';
+import layerActions from 'actions/LayerActions';
 
 /**
 * Timer to prevent too many requests
@@ -20,6 +21,23 @@ export default class LayerTransparency extends Component {
     this.state = { opacity: props.layer.opacity || 1 };
   }
 
+  componentDidUpdate (prevProps) {
+    if (this.props.initialLayerOpacities.length !== prevProps.initialLayerOpacities.length) {
+      this.props.initialLayerOpacities.forEach(opacity => {
+        if (opacity.layerId === this.props.layer.id) {
+          this.setState({ opacity: opacity.value });
+        } else if (opacity.layerId === this.props.layer.subId) {
+          this.setState({ opacity: opacity.value });
+          this.updateOpacity({
+            target: {
+              value: opacity.value
+            }
+          });
+        }
+      });
+    }
+  }
+
   updateOpacity = (event) => {
     const {map} = this.context;
     const {layer} = this.props;
@@ -29,6 +47,10 @@ export default class LayerTransparency extends Component {
     // Bail if this is a dynamic layer or of the layer is not found
     if (mapLayer && layer.subIndex === undefined) {
       mapLayer.setOpacity(value);
+      layerActions.changeOpacity({
+        layerId: layer.id,
+        value
+      });
       this.setState({ opacity: value });
     } else if (mapLayer && layer.subIndex !== undefined) {
       const options = mapLayer.layerDrawingOptions || [];
@@ -37,8 +59,11 @@ export default class LayerTransparency extends Component {
       if (timer) { clearTimeout(timer); }
       timer = setTimeout(function () {
         mapLayer.setLayerDrawingOptions(options);
-        console.log(layer.subId);
       }, TIMER_DURATION);
+      layerActions.changeOpacity.defer({
+        layerId: layer.id,
+        value
+      });
       this.setState({ opacity: value });
     }
   };
@@ -51,7 +76,8 @@ export default class LayerTransparency extends Component {
           max="1"
           step="0.01"
           value={this.state.opacity}
-          onChange={this.updateOpacity} />
+          onChange={this.updateOpacity}
+          onMouseUp={this.updateOpacity} />
         <div>Transparency</div>
       </div>
     );

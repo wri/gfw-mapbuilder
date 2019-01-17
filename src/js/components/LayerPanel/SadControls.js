@@ -7,7 +7,7 @@ import all from 'dojo/promise/all';
 import text from 'js/languages';
 
 const STATS = {
-  url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
   field: 'date',
   outFields: ['date']
 };
@@ -63,10 +63,11 @@ export default class SadControls extends Component {
 
   componentDidUpdate (prevProps, prevState, prevContext) {
     const {startYear, endYear, startMonth, endMonth, layer} = this.props;
+    const {min_year, max_year, min_month, max_month} = this.state;
     const {map} = this.context;
     const defs = [];
     // - If the years don't exist, don't even bother attempting to update
-    if (!startYear || !endYear) { return; }
+    if ((!startYear && startYear !== 0) || (!endYear && endYear !== 0)) { return; }
 
     if (prevProps.startYear !== startYear ||
       prevProps.endYear !== endYear ||
@@ -74,9 +75,23 @@ export default class SadControls extends Component {
       prevProps.endMonth !== endMonth
     ) {
       if (map.getLayer && map.getLayer(layer.id)) {
-        const definitionExpression = this.formatQuery(startYear, endYear, startMonth, endMonth);
-        defs[2] = definitionExpression;
-        map.getLayer(layer.id).setLayerDefinitions(defs);
+        if (startYear === 0 && endYear === 0 && startMonth === 0 && endMonth === 0) { // if we have just reset all layers
+          // Update store values
+          mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_MONTH, min_month);
+          mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_MONTH, max_month);
+          mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_START_YEAR, min_year);
+          mapActions.updateImazonAlertSettings(actionTypes.UPDATE_IMAZON_END_YEAR, max_year);
+
+          const definitionExpression = this.formatQuery(min_year, max_year, min_month, max_month);
+          defs[2] = definitionExpression;
+        } else { // else the select is what set the values so we don't need to update the store here
+          const definitionExpression = this.formatQuery(startYear, endYear, startMonth, endMonth);
+          defs[2] = definitionExpression;
+        }
+        const sadLayer = map.getLayer(layer.id);
+        if (sadLayer) {
+          sadLayer.setLayerDefinitions(defs);
+        }
       }
     }
 
@@ -86,7 +101,10 @@ export default class SadControls extends Component {
         signal.remove();
         const definitionExpression = this.formatQuery(startYear, endYear, startMonth, endMonth);
         defs[2] = definitionExpression;
-        map.getLayer(layer.id).setLayerDefinitions(defs);
+        const sadLayer = map.getLayer(layer.id);
+        if (sadLayer) {
+          sadLayer.setLayerDefinitions(defs);
+        }
       });
     }
   }

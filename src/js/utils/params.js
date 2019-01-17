@@ -1,3 +1,4 @@
+import moment from 'moment';
 /**
 * Convert a paramterized string to an object
 * @param {string} querystring - Query string to be expanded into an object
@@ -10,7 +11,7 @@ export function toObject(querystring) {
   });
   // Should have an array of arrays now, ex: [['a','b'], ['foo','bar']]
   pairs.forEach((pair) => {
-    if (!pair[0] || !pair[1]) {
+    if ((pair[0] === null || typeof pair[0] === 'undefined') || (pair[0] === null || typeof pair[0] === 'undefined')) {
       console.warn(`You provided an invalid key-value pair, ${pair[0]} is being omitted.`);
       return;
     }
@@ -27,6 +28,9 @@ export function toQuerystring(json, noEncode) {
   const errorMsg = 'You should not be converting nested objects as they wont encode properly. Try making it a string first.';
   const result = [];
   for (const key in json) {
+    if (json[key] && json[key].constructor === Date) {
+      json[key] = json[key].toISOString();
+    }
     if (Object.prototype.toString.call(json[key]) === '[object Object]') {
       throw new Error(errorMsg);
     }
@@ -46,7 +50,13 @@ export function toQuerystring(json, noEncode) {
 */
 export function getUrlParams(path) {
   if (!path) { return {}; }
-  const bits = path.split('?');
+
+  let windowPath = path;
+  if (windowPath.indexOf('#') > -1) {
+    windowPath = windowPath.slice(0, windowPath.indexOf('#')) + windowPath.slice(windowPath.indexOf('#') + 1, windowPath.length);
+  }
+
+  const bits = windowPath.split('?');
   const querystring = bits.length > 1 ? bits[1] : '';
   return toObject(querystring);
 }

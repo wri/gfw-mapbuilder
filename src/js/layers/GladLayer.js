@@ -1,68 +1,112 @@
 import TileCanvasLayer from './EsriTileCanvasBase';
 import declare from 'dojo/_base/declare';
+import moment from 'moment';
 
-function pad (num) {
-  var str = '00' + num;
-  return str.slice(str.length - 3);
-}
+// Modify the JS Date object
+Date.prototype.getJulian = function() {
+  // Convert date into moment Object
+  const date = moment(this);
+  // Get the year
+  const year = date.year();
+  // Create a moment object of the beginning of the year
+  const startOfYear = moment(`${year}/01/01`, 'YYYY/MM/DD');
+  // Find number of days passed
+  const daysPassed = date.diff(startOfYear, 'days');
+  // Append leading zeros if needed
+  let daysPassedFormatted = daysPassed.toString();
+  if (daysPassedFormatted.length < 3) {
+    while (daysPassedFormatted.length < 3) {
+      daysPassedFormatted = `0${daysPassedFormatted}`;
+    }
+  }
+  // Return the correct Julian
+  return `${date.format('YY')}${daysPassedFormatted}`;
+};
 
 export default declare('GladLayer', [TileCanvasLayer], {
 
   filter: function (data) {
+    const todayDate = new Date().getJulian();
+    const twoWeeksAgo = new Date();
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+    const weekAgoJulian = twoWeeksAgo.getJulian();
     for (var i = 0; i < data.length; i += 4) {
-      // Decode the rgba/pixel so I can filter on confidence and date ranges
-      var slice = [data[i], data[i + 1], data[i + 2]];
-      var values = this.decodeDate(slice);
-      //- Check against confidence, min date, and max date
-      if (
-        values.date >= this.options.minDateValue &&
-        values.date <= this.options.maxDateValue &&
-        this.options.confidence.indexOf(values.confidence) > -1
-      ) {
-        // Set the alpha to the intensity
-        data[i + 3] = values.intensity;
-        // Make the pixel pink for glad alerts
-        // Note, this may mess up the decode date function if it's called at a future date as the decoded information comes from the pixel
-        data[i] = 220; // R
-        data[i + 1] = 102; // G
-        data[i + 2] = 153; // B
+      var values = this.decodeDate(data[i], data[i + 1], data[i + 2]);
+
+      // Check if pixel date is between Julian Date properties above
+      if (values.date > this.options.minDateValue && values.date < this.options.maxDateValue) {
+        // Check if we are only examining confirmed cases or not
+        if (this.options.confidence.length === 1) {
+          if (values.confidence > 0) {
+            data[i + 3] = values.intensity;
+            // Make the pixel pink for glad alerts
+            if (values.date > weekAgoJulian && values.date < todayDate) {
+              // Make the pixel yellow for recent alerts
+              data[i] = 224; // R
+              data[i + 1] = 190; // G
+              data[i + 2] = 7; // B
+            } else {
+              data[i] = 220; // R
+              data[i + 1] = 102; // G
+              data[i + 2] = 153; // B
+            }
+          } else {
+            // Hide the pixel
+            data[i + 3] = 0;
+            data[i + 2] = 0;
+            data[i + 1] = 0;
+            data[i] = 0;
+          }
+        // Glad is not confirmed
+        } else {
+          data[i + 3] = values.intensity;
+          if (values.date > weekAgoJulian && values.date < todayDate) {
+            // Make the pixel yellow for recent alerts
+            data[i] = 224; // R
+            data[i + 1] = 190; // G
+            data[i + 2] = 7; // B
+          } else {
+              // Make the pixel pink for glad alerts
+            data[i] = 220; // R
+            data[i + 1] = 102; // G
+            data[i + 2] = 153; // B
+          }
+        }
+      // Hide pixel if outside of date range
       } else {
         // Hide the pixel
         data[i + 3] = 0;
+        data[i + 2] = 0;
+        data[i + 1] = 0;
+        data[i] = 0;
       }
+
     }
     return data;
   },
 
-  decodeDate: function (pixel) {
-    // Find the total days of the pixel by multiplying the red band by 255 and adding the green band
-    var totalDays = (pixel[0] * 255) + pixel[1];
-    // Dived the total days by 365 to get the year offset, add 15 to this to get current year
-    // Example, parseInt(totalDays / 365) = 1, add 15, year is 2016
-    var yearAsInt = parseInt(totalDays / 365) + 15;
-    // Multiple by 1000 to get in YYDDD format, i.e. 15000 or 16000
-    var year = yearAsInt * 1000;
-    // Add the remaining days to get the julian day for that year
-    var julianDay = totalDays % 365;
-    // Add julian to year to get the data value
-    var date = year + julianDay;
-    // Convert the blue band to a string and pad with 0's to three digits
-    // It's rarely not three digits, except for cases where there is an intensity value and no date/confidence.
-    // This is due to bilinear resampling
-    var band3Str = pad(pixel[2]);
-    // Parse confidence, confidence is stored as 1/2, subtract 1 so it's values are 0/1
-    var confidence = parseInt(band3Str[0]) - 1;
-    // Parse raw intensity to make it visible, it is the second and third character in blue band, it's range is 1 - 55
-    var rawIntensity = parseInt(band3Str.slice(1, 3));
-    // Scale it to make it visible
-    var intensity = rawIntensity * 50;
-    // Prevent intensity from being higher then the max value
-    if (intensity > 255) { intensity = 255; }
-    // Return all components needed for filtering/labeling
+  pad: function (num) {
+    var str = '00' + num;
+    return str.slice(str.length - 3);
+  },
+
+  decodeDate: function (pixelOne, pixelTwo, pixelThree) {
+
+    const total_days = pixelOne * 255 + pixelTwo;
+    const year_int = parseInt(total_days / 365) + 15;
+
+    const band3_str = this.pad(pixelThree.toString());
+
+    const intensity_raw = parseInt(band3_str.slice(1, 3));
+
+    let intensity = intensity_raw * 50;
+    if (intensity > 255) {
+      intensity = 255;
+    }
     return {
-      confidence: confidence,
+      confidence: parseInt(band3_str[0]) - 1,
       intensity: intensity,
-      date: date
+      date: parseInt(year_int * 1000) + total_days % 365
     };
   },
 

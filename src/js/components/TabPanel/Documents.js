@@ -1,5 +1,7 @@
 import Loader from 'components/Loader';
 // import request from 'utils/request';
+import SVGIcon from 'utils/svgIcon';
+
 import text from 'js/languages';
 import React, {
   Component,
@@ -49,7 +51,6 @@ class DocumentResults extends Component {
           size: `${Math.round(item.size / 1000)}KB`,
           url: item.url
         }));
-        console.log(res);
         this.setState({ loading: false, documents });
       }, () => {
         this.setState({ loading: false, documents: [] });
@@ -59,7 +60,7 @@ class DocumentResults extends Component {
     }
 
     //- Use this URL in Equatorial Guinea for Testing
-    // const url = 'http://gis.forest-atlas.org/arcgis/rest/services/GAB/documents_administratifs/MapServer';
+    // const url = 'https://gis.forest-atlas.org/arcgis/rest/services/GAB/documents_administratifs/MapServer';
     // request.queryTaskByGeometry(`${service}/${layerId}`, selectedFeature.geometry).then((results) => {
     //   let {features} = results;
     //   let docs = [], attributes;
@@ -116,7 +117,7 @@ class DocumentResults extends Component {
                 <td className='documents-table__link'>
                   <a href={doc.url} target='_blank'>
                     <svg className='svg-icon'>
-                      <use xlinkHref="#icon-documents" />
+                      <SVGIcon id={'icon-documents'} />
                     </svg>
                   </a>
                 </td>

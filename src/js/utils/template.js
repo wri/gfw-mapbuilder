@@ -59,6 +59,11 @@ const formatResources = () => {
       });
     });
   }
+
+  const langUrlParam = getUrlParams(location.href).l;
+  if (langUrlParam && langUrlParam === resources.alternativeLanguage) {
+    resources.useAlternativeLanguage = true;
+  }
   //- Add content for second language if configured
   if (resources.useAlternativeLanguage && resources.alternativeLanguage) {
     resources.labels[resources.alternativeLanguage] = {
@@ -154,7 +159,7 @@ const formatResources = () => {
   // Object.keys(resources.layers).forEach((language) => {
   //   resources.layers[language] = resources.layers[language].filter((layer) => {
       // switch (layer.id) {
-      //   case layerKeys.ACTIVE_FIRES:
+      //   case layerKeys.VIIRS_ACTIVE_FIRES:
       //     return resources.activeFires;
       //   case layerKeys.LAND_COVER:
       //     return resources.landCover;
@@ -182,14 +187,20 @@ const formatResources = () => {
     if (!groupSettings.layers) { return; }
     resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter((layer) => {
       switch (layer.id) {
-        case layerKeys.ACTIVE_FIRES:
-          return resources.activeFires;
+        case layerKeys.VIIRS_ACTIVE_FIRES:
+          return resources.viirsFires;
+        case layerKeys.MODIS_ACTIVE_FIRES:
+          return resources.modisFires;
         case layerKeys.LAND_COVER:
           return resources.landCover;
         case layerKeys.AG_BIOMASS:
           return resources.aboveGroundBiomass;
         case layerKeys.IFL:
           return resources.intactForests;
+        case layerKeys.PRIMARY_FORESTS:
+          return resources.primaryForests;
+        case layerKeys.FORMA_ALERTS:
+          return resources.forma;
         case layerKeys.GLOB_MANGROVE:
           return resources.mangroves;
         case layerKeys.IMAZON_SAD:
@@ -198,6 +209,8 @@ const formatResources = () => {
           return resources.gladAlerts;
         case layerKeys.TERRA_I_ALERTS:
           return resources.terraIAlerts;
+        case layerKeys.RECENT_IMAGERY:
+          return resources.recentImagery;
         default:
           return true;
       }
@@ -239,7 +252,7 @@ export default {
     const appid = id ? id : getUrlParams(location.href).appid;
 
     // Set the sharinghost to the correct location so the app can find the webmap content
-    if (!resources.sharinghost) { resources.sharinghost = 'http://www.arcgis.com'; }
+    if (!resources.sharinghost) { resources.sharinghost = 'https://www.arcgis.com'; }
     arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
 
     if (!appid) {

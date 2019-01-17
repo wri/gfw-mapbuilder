@@ -1,16 +1,13 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
-import layerKeys from 'constants/LayerConstants';
-import rasterFuncs from 'utils/rasterFunctions';
-import {modalText, assetUrls} from 'js/config';
-import {loadJS, loadCSS} from 'utils/loaders';
 import mapActions from 'actions/MapActions';
-import mapStore from 'stores/MapStore';
-import utils from 'utils/AppUtils';
 import text from 'js/languages';
+import layersHelper from 'helpers/LayersHelper';
 import React, {
   Component,
   PropTypes
 } from 'react';
+import Slider, { createSliderWithTooltip } from 'rc-slider';
+const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export default class CanopyModal extends Component {
 
@@ -20,105 +17,100 @@ export default class CanopyModal extends Component {
     map: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    const base = window._app.base ? window._app.base + '/' : '';
-    this.loadedSlider = false;
-    // loadJS(base + assetUrls.jQuery);
-    loadJS(base + assetUrls.rangeSlider).then(() => {
-      if ($('#tree-cover-slider').ionRangeSlider) {
-        $('#tree-cover-slider').ionRangeSlider({
-          type: 'double',
-          values: modalText.canopy.slider,
-          hide_min_max: true,
-          grid_snap: true,
-          to_fixed: true,
-          from_min: 1,
-          from_max: 7,
-          grid: true,
-          from: 5,
-          onFinish: this.sliderChanged,
-          prettify: value => (value + '%')
-        });
-        this.loadedSlider = true;
-      }
+  constructor(props) {
+    super(props);
 
-    }, console.error);
-    loadCSS(base + assetUrls.ionCSS);
-    loadCSS(base + assetUrls.ionSkinCSS);
+    this.state = {
+      sliderMarks: {
+        1: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '10%',
+          density: 10
+        },
+        2: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '15%',
+          density: 15
+        },
+        3: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '20%',
+          density: 20
+        },
+        4: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '25%',
+          density: 25
+        },
+        5: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '30%',
+          density: 30
+        },
+        6: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '50%',
+          density: 50
+        },
+        7: {
+          style: {
+            color: '#555',
+            marginTop: '10px'
+          },
+          label: '75%',
+          density: 75
+        }
+      }
+    };
   }
 
-  componentDidUpdate(prevProps, prevState, prevContext) {
-    if (this.loadedSlider === false) {
-      if ($('#tree-cover-slider').ionRangeSlider) {
-        $('#tree-cover-slider').ionRangeSlider({
-          type: 'double',
-          values: modalText.canopy.slider,
-          hide_min_max: true,
-          grid_snap: true,
-          to_fixed: true,
-          from_min: 1,
-          from_max: 7,
-          grid: true,
-          from: 5,
-          onFinish: this.sliderChanged,
-          prettify: value => (value + '%')
-        });
-        this.loadedSlider = true;
-      }
-    }
-    //- Set the default canopy density when the map loads
-    const {map} = this.context;
-    if (!prevContext.map.loaded && map.loaded) {
-      const {canopyDensity} = mapStore.getState();
-      //- Wait for layers to load
-      const signal = map.on('update-end', () => {
-        signal.remove(); //- Remove the event so it does not continue ot fire
-        this.updateTreeCoverDefinitions(canopyDensity);
-        this.updateAGBiomassLayer(canopyDensity);
-      });
-    }
+  discernDensityValue = density => {
+    const sliderValue = Object.keys(this.state.sliderMarks).filter((mark) => {
+      return this.state.sliderMarks[mark].density === density;
+    });
+
+    return parseInt(sliderValue[0]);
   }
 
-  updateTreeCoverDefinitions = (density) => {
+  handleSliderChange = sliderValue => {
+    const { sliderMarks } = this.state;
     const {map, settings} = this.context;
-    if (map.loaded) {
-      //- Get the layer config, I am hardcoding en becuase I do not need anything language specific, just its config
-      const lcGroupLayers = settings.layerPanel.GROUP_LC ? settings.layerPanel.GROUP_LC.layers : [];
-      const layerConfig = utils.getObject(lcGroupLayers, 'id', layerKeys.TREE_COVER);
-      const layer = map.getLayer(layerKeys.TREE_COVER);
 
-      if (layer && layerConfig) {
-        const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
-        layer.setRenderingRule(renderingRule);
-      }
-    }
-  };
+    const densityValue = sliderMarks[sliderValue].density;
 
-  updateAGBiomassLayer = (density) => {
-    const {map} = this.context;
-    if (map.loaded) {
-      const layer = map.getLayer(layerKeys.AG_BIOMASS);
-      const mosaicRule = rasterFuncs.getBiomassMosaicRule(density);
-
-      if (layer) {
-        layer.setMosaicRule(mosaicRule);
-      }
-    }
-  };
-
-  sliderChanged = (data) => {
-    this.updateTreeCoverDefinitions(data.from_value);
-    this.updateAGBiomassLayer(data.from_value);
-    //- Update the store, this will allow any other components interested in this information to react
-    mapActions.updateCanopyDensity(data.from_value);
-  };
+    layersHelper.updateTreeCoverDefinitions(densityValue, map, settings.layerPanel);
+    layersHelper.updateAGBiomassLayer(densityValue, map);
+    mapActions.updateCanopyDensity(densityValue);
+  }
 
   close = () => {
     mapActions.toggleCanopyModal({ visible: false });
   };
 
   render() {
+    const { sliderMarks } = this.state;
+    const { canopyDensity } = this.props;
     const {language} = this.context;
+
+    const sliderValue = this.discernDensityValue(canopyDensity);
 
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -128,7 +120,20 @@ export default class CanopyModal extends Component {
           <div className='forest-icon' />
         </div>
         <div className='slider-container'>
-          <div id='tree-cover-slider' />
+        <SliderWithTooltip
+          min={0}
+          max={8}
+          value={sliderValue}
+          marks={sliderMarks}
+          step={null}
+          onChange={this.handleSliderChange}
+          tipFormatter={value => sliderMarks[value].label}
+          railStyle={{backgroundColor: '#F0AB00', height: 10}}
+          trackStyle={{backgroundColor: '#e9e9e9', height: 10}}
+          dotStyle={{border: '2px solid #F0AB00', height: 10, width: 10, bottom: -6, marginLeft: -7}}
+          activeDotStyle={{border: '2px solid #e9e9e9'}}
+          handleStyle={[{border: '2px solid #F0AB00', height: 20, width: 20, marginLeft: -13}]}
+        />
         </div>
       </ControlledModalWrapper>
     );

@@ -1,17 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import {loadCSS} from 'utils/loaders';
-import {assetUrls} from 'js/config';
 import utils from 'utils/AppUtils';
 import text from 'js/languages';
-import 'pickadate';
-
-/**
-* Same function that is in the layer, but the layer is not always loaded when the data is back from the server
-*/
-const getJulianDateFromGridCode = function getJulianDateFromGridCode (gridCode) {
-  const {year, day} = utils.getDateFromGridCode(gridCode);
-  return ((year % 2000) * 1000) + day;
-};
+import layerActions from 'actions/LayerActions';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class TerraIControls extends Component {
 
@@ -23,92 +16,39 @@ export default class TerraIControls extends Component {
   initialized = false;
   state = {};
 
-  componentDidMount () {
-    //- Load the pickers css if it has not already been loaded
-    const base = window._app.base ? window._app.base + '/' : '';
-    loadCSS(base + assetUrls.pickadateCSS);
-    loadCSS(base + assetUrls.pickadateDateCSS);
-  }
-
   componentWillUpdate () {
     const {map} = this.context;
-    const {layer} = this.props;
+
     if (map.loaded && !this.initialized) {
       this.initialized = true;
-      //- Fetch the max date for these requests
-      var xhr = new XMLHttpRequest();
-      xhr.addEventListener('load', () => {
-        const mapLayer = map.getLayer(layer.id);
-        const data = JSON.parse(xhr.response);
-        const maxDateValue = getJulianDateFromGridCode(data.maxValues[0]);
-        //- Update local state
-        this.setState({
-          minDate: layer.minDateValue,
-          maxDate: maxDateValue
-        });
-        //- Update the layer if ready, if not it will get updated on first set
-        if (mapLayer) {
-          mapLayer.setDateRange(layer.minDateValue, maxDateValue);
-        }
-        //- Get date in normal JS Date format
-        const min = new Date(((layer.minDateValue / 1000) + 2000).toString(), 0, 1);
-        const max = new Date(((maxDateValue / 1000) + 2000).toString(), 0, maxDateValue % 1000);
-        //- Create the date pickers
-        const {fromTerraCalendar, toTerraCalendar} = this.refs;
-        //- Starting date
-        this.fromPicker = $(fromTerraCalendar).pickadate({
-          today: 'Jump to today',
-          min: min,
-          max: max,
-          selectYears: max.getFullYear() - min.getFullYear(),
-          selectMonths: true,
-          closeOnSelect: true,
-          klass: { picker: 'picker__top' },
-          onSet: this.didSetStartDate,
-          onStart: function () { this.set('select', min); }
-        }).pickadate('picker');
-        //- Ending date
-        this.toPicker = $(toTerraCalendar).pickadate({
-          today: 'Jump to today',
-          min: min,
-          max: max,
-          selectYears: max.getFullYear() - min.getFullYear(),
-          selectMonths: true,
-          closeOnSelect: true,
-          klass: { picker: 'picker__top' },
-          onSet: this.didSetEndDate,
-          onStart: function () { this.set('select', max); }
-        }).pickadate('picker');
+      const min = moment(new Date('2004', 0, 1));
+      const max = moment(new Date('2016', 6, 12));
+      this.setState({
+        min,
+        max
       });
-      xhr.open('GET', `${layer.imageServer}?f=json`, true);
-      xhr.send();
     }
   }
 
-  didSetStartDate = ({select}) => {
-    if (select) {
-      this.setState({ startDate: new Date(select) });
-      this.updateDateRange();
-      if (this.fromPicker && this.toPicker) {
-        this.toPicker.set('min', this.fromPicker.get('select'));
+  componentDidUpdate(prevProps) {
+    if (this.initialized) {
+      if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
+        this.updateDateRange(this.props.startDate, this.props.endDate);
       }
     }
-  };
+  }
 
-  didSetEndDate = ({select}) => {
-    if (select) {
-      this.setState({ endDate: new Date(select) });
-      this.updateDateRange();
-      if (this.fromPicker && this.toPicker) {
-        this.fromPicker.set('max', this.toPicker.get('select'));
-      }
-    }
-  };
+  handleStartChange = (startDate) => {
+    layerActions.updateTerraIStartDate(startDate);
+  }
 
-  updateDateRange = () => {
-    const {startDate, endDate} = this.state;
-    const {map} = this.context;
+  handleEndChange = (endDate) => {
+    layerActions.updateTerraIEndDate(endDate);
+  }
+
+  updateDateRange = (startDate, endDate) => {
     const {layer} = this.props;
+    const {map} = this.context;
     const julianFrom = utils.getJulianDate(startDate);
     const julianTo = utils.getJulianDate(endDate);
     if (map.getLayer && map.getLayer(layer.id)) {
@@ -117,6 +57,8 @@ export default class TerraIControls extends Component {
   };
 
   render () {
+    const { startDate, endDate } = this.props;
+    const { min, max } = this.state;
     const {language} = this.context;
 
     return (
@@ -124,15 +66,52 @@ export default class TerraIControls extends Component {
         <div className='terra-i-controls__calendars'>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
-            <input className='fa-button sml white pointer' type='text' ref='fromTerraCalendar' />
+            {startDate && <DatePicker
+              customInput={<StartButton />}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              todayButton='Jump to today'
+              minDate={min}
+              maxDate={moment(endDate)}
+              selected={moment(startDate)}
+              onChange={this.handleStartChange}
+            />}
           </div>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
-            <input className='fa-button sml white pointer' type='text' ref='toTerraCalendar' />
+            {endDate && <DatePicker
+              customInput={<EndButton />}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              todayButton='Jump to today'
+              minDate={moment(startDate)}
+              maxDate={max}
+              selected={moment(endDate)}
+              onChange={this.handleEndChange}
+            />}
           </div>
         </div>
       </div>
     );
   }
-
 }
+
+const StartButton = ({ onClick, value }) => (
+  <button
+    className='fa-button sml white pointer'
+    onClick={onClick}
+  >
+    {value}
+  </button>
+);
+
+const EndButton = ({ onClick, value }) => (
+  <button
+    className='fa-button sml white pointer'
+    onClick={onClick}
+  >
+    {value}
+  </button>
+);

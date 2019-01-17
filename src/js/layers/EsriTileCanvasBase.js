@@ -1,6 +1,7 @@
-import declare from 'dojo/_base/declare';
+import declare from 'dojo/_base/declare'; //this is breaking our prerender!
 import Point from 'esri/geometry/Point';
 import Layer from 'esri/layers/layer';
+import layerKeys from 'constants/LayerConstants';
 
 //- Default settings
 const DEFAULTS = {
@@ -107,6 +108,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
     if (this.options.id) { this.id = this.options.id; }
     //- Create a tile cache to optimize this layer
     this.tiles = {};
+    this.opacity = 1;
+    this.tileRequests = [];
     //- Store the position of the map, this is used to apply transforms
     this.position = { x: 0, y: 0 };
     //- Create an array of handles for events
@@ -161,7 +164,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   /**
   * @description Method to start the process for rendering canvases in tile grid
   */
-  _extentChanged: function _extentChanged () {
+  _extentChanged: function _extentChanged (urlChanged) {
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
     const resolution = this._map.getResolution(),
@@ -184,7 +187,45 @@ export default declare('EsriTileCanvasBase', [Layer], {
     //- Get a range of tiles for this extent, each info contains x, y, z
     const tileInfos = getTileInfos(rowMin, colMin, rowMax, colMax, level);
     //- Fetch the tile and update the map
-    tileInfos.forEach(tile => this._fetchTile(tile));
+    tileInfos.forEach(tile => this._fetchTile(tile, urlChanged));
+
+    const tilesToDelete = [];
+
+    for (var c = 0; c < this._container.children.length; c++) {
+      var tileId = this._container.children[c].id;
+      tileId = tileId.split('_');
+      if (tileId.length > 0) {
+        if (this.id === layerKeys.TREE_COVER_LOSS) {
+          let tileIdLevel = tileId[3];
+          if (tileIdLevel) {
+            tileIdLevel = parseInt(tileIdLevel);
+            if (tileIdLevel !== level) {
+              // this._container.children[c].remove();
+              tilesToDelete.push(this._container.children[c]);
+            }
+          }
+          let tileIdThresh = tileId[0];
+          if (tileIdThresh) {
+            tileIdThresh = parseInt(tileIdThresh);
+            if (tileIdThresh !== parseInt(this.options.url.split('tc')[1].substr(0, 2))) {
+              tilesToDelete.push(this._container.children[c]);
+            }
+          }
+        } else {
+          tileId = tileId[2];
+          if (tileId) {
+            tileId = parseInt(tileId);
+            if (tileId !== level) {
+              tilesToDelete.push(this._container.children[c]);
+            }
+          }
+        }
+      }
+    }
+    tilesToDelete.forEach(tile => {
+      tile.remove();
+    });
+
   },
 
   /**
@@ -199,6 +240,11 @@ export default declare('EsriTileCanvasBase', [Layer], {
     this.position = { x: 0, y: 0 };
     this._container.innerHTML = '';
     this._container.style.transform = getTranslate(this.position);
+
+    for (var c = 0; c < this.tileRequests.length; c++) {
+      this.tileRequests[c].abort();
+    }
+    this.tileRequests = [];
   },
 
   /**
@@ -226,46 +272,55 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @param
   * @return {object} data
   */
-  _fetchTile: function _fetchTile (tile) {
+  _fetchTile: function _fetchTile (tile, urlChanged) {
     const id = this._getId(tile);
+
+    if (urlChanged && Object.keys(this.tiles).length) {
+      Object.keys(this.tiles).forEach((key) => {
+        this.tiles[key].canvas.remove();
+      });
+      this.tiles = {};
+    }
+
     let url;
     //- Don't fetch the image if we already have it
-    if (this.tiles[id]) {
-      this._drawTile(this.tiles[id]);
+    if (!this.tiles.hasOwnProperty(id)) {
+      //- If we are past max zoom, get the parent tile
+      if (tile.z > this.options.maxZoom) {
+        const steps = this._getZoomSteps(tile.z);
+        const x = Math.floor(tile.x / Math.pow(2, steps));
+        const y = Math.floor(tile.y / Math.pow(2, steps));
+        url = this._getUrl({ x, y, z: this.options.maxZoom });
+
+      } else {
+        url = this._getUrl(tile);
+      }
+
+      this._fetchImage(url, (image) => {
+        const canvas = document.createElement('canvas');
+        canvas.height = this.options.tileSize;
+        canvas.width = this.options.tileSize;
+        canvas.style.position = 'absolute';
+        canvas.setAttribute('id', id);
+
+        const data = {
+          x: tile.x,
+          y: tile.y,
+          z: tile.z,
+          canvas,
+          image,
+          id,
+          url: url
+        };
+
+        //- Cache the tile
+        this.tiles[id] = data;
+        //- Render the tile
+        this._drawTile(data);
+      });
       return;
     }
-
-    //- If we are past max zoom, get the parent tile
-    if (tile.z > this.options.maxZoom) {
-      const steps = this._getZoomSteps(tile.z);
-      const x = Math.floor(tile.x / Math.pow(2, steps));
-      const y = Math.floor(tile.y / Math.pow(2, steps));
-      url = this._getUrl({ x, y, z: this.options.maxZoom });
-    } else {
-      url = this._getUrl(tile);
-    }
-
-    this._fetchImage(url, (image) => {
-      const canvas = document.createElement('canvas');
-      canvas.height = this.options.tileSize;
-      canvas.width = this.options.tileSize;
-      canvas.style.position = 'absolute';
-      canvas.setAttribute('id', id);
-
-      const data = {
-        x: tile.x,
-        y: tile.y,
-        z: tile.z,
-        canvas,
-        image,
-        id
-      };
-
-      //- Cache the tile
-      this.tiles[id] = data;
-      //- Render the tile
-      this._drawTile(data);
-    });
+    this._drawTile(this.tiles[id]);
   },
 
   /**
@@ -283,25 +338,53 @@ export default declare('EsriTileCanvasBase', [Layer], {
     if (!canvas.parentElement) {
       const ctx = canvas.getContext('2d');
       //- Get the current position of the container to offset the tile position
-      canvas.style.transform = getTranslate({
-        x: Math.abs(this.position.x) + coords.x,
-        y: Math.abs(this.position.y) + coords.y
-      });
-      //- Scale the tile if we are past max zoom
-      if (data.z > this.options.maxZoom) {
-        const info = this._getSubrectangleInfo(data);
-        //- Stop image enhancement
-        ctx.imageSmoothingEnabled = false;
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.drawImage(data.image, info.sX, info.sY, info.sWidth, info.sHeight, 0, 0, tileSize, tileSize);
+      // canvas.style.transform = getTranslate({
+        //   x: this.position.x + coords.x,
+        //   y: this.position.y + coords.y
+        // });
+
+        let yTransfrom = Math.abs(this.position.y) + coords.y;
+        if (this.position.y > 0) {
+          yTransfrom = coords.y - this.position.y;
+        }
+        let xTransfrom = Math.abs(this.position.x) + coords.x;
+        if (this.position.x > 0) {
+          xTransfrom = coords.x - this.position.x;
+        }
+        canvas.style.transform = getTranslate({
+          x: xTransfrom,
+          y: yTransfrom
+        });
+
+      if (this.id === 'TREE_COVER_GAIN' && this._map.getZoom() < 12) {
+        const hardUrl = 'url(' + data.url + ')';
+        ctx.canvas.style.background = hardUrl;
+
+        // ctx.canvas.style.background = 'url(http://earthengine.google.org/static/hansen_2013/gain_alpha/3/7/5.png)';
       } else {
-        ctx.drawImage(data.image, 0, 0);
+        //- Scale the tile if we are past max zoom
+        if (data.z > this.options.maxZoom) {
+          const info = this._getSubrectangleInfo(data);
+          //- Stop image enhancement
+          ctx.imageSmoothingEnabled = false;
+          ctx.mozImageSmoothingEnabled = false;
+          ctx.drawImage(data.image, info.sX, info.sY, info.sWidth, info.sHeight, 0, 0, tileSize, tileSize);
+        } else {
+          ctx.drawImage(data.image, 0, 0);
+        }
+
+        const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
+        imageData.data.set(this.filter(imageData.data, data.z));
+        ctx.putImageData(imageData, 0, 0);
       }
 
-      const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
-      imageData.data.set(this.filter(imageData.data));
-      ctx.putImageData(imageData, 0, 0);
       this._container.appendChild(canvas);
+
+      const level = this._map.getLevel();
+
+      if (data.z === level) {
+        this._container.appendChild(canvas);
+      }
     }
   },
 
@@ -339,7 +422,17 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @return {string} id for the tile
   */
   _getId: function _getId (tile) {
-    return `${tile.x}_${tile.y}_${tile.z}`;
+    if (this.id === layerKeys.TREE_COVER_LOSS) {
+      const urlOptions = this.options.url.split('tc');
+      if (urlOptions[1]) {
+        const tcd = this.options.url.split('tc')[1].substr(0, 2);
+        return `${tcd}_${tile.x}_${tile.y}_${tile.z}`;
+      } else {
+        return `${tile.x}_${tile.y}_${tile.z}`;
+      }
+    } else {
+      return `${tile.x}_${tile.y}_${tile.z}`;
+    }
   },
 
   /**
@@ -394,7 +487,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
       }
 
       const imageData = ctx.getImageData(0, 0, tileSize, tileSize);
-      imageData.data.set(this.filter(imageData.data));
+      imageData.data.set(this.filter(imageData.data, tile.z));
       ctx.putImageData(imageData, 0, 0);
     });
   },
@@ -422,6 +515,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   setOpacity: function setOpacity (value) {
     this._container.style.opacity = value;
+    this.opacity = value;
   },
 
   //- Methods that need to be implemented by the child class

@@ -3,7 +3,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 //- Embedded Icons
 const drawIcon = '<svg class="svg-icon"><use xlink:href="#icon-draw-upload" /></svg>';
 
-const strings = { en: {}, fr: {}, es: {}, pt: {}, id: {}, zh: {} };
+const strings = { en: {}, fr: {}, es: {}, pt: {}, id: {}, zh: {}, ka: {} };
 //- NOTE: English
 //- Supported Languages
 strings.en.LANG_EN = 'English';
@@ -12,11 +12,40 @@ strings.en.LANG_ES = 'Spanish';
 strings.en.LANG_PT = 'Portugese';
 strings.en.LANG_ID = 'Indonesian';
 strings.en.LANG_ZH = 'Mandarin';
+strings.en.LANG_KA = 'Georgian';
 //- Header
 strings.en.NAV_ABOUT = 'About';
 strings.en.NAV_DOWNLOAD = 'Download Data';
 strings.en.NAV_MAP_THEMES = 'Map Themes';
-strings.en.NAV_MY_GFW = 'Log in to my GFW';
+strings.en.NAV_MY_GFW_LOGIN = 'Log in to my GFW';
+strings.en.NAV_MY_GFW = 'MY GFW';
+strings.en.NAV_LOGIN_REQUIRED = 'Log in is required so you can return to Global Forest Watch to view, manage, and delete your subscriptions. Questions? ';
+strings.en.NAV_CONTACT_US = 'Contact us at gfw@wri.org';
+strings.en.NAV_TWITTER = 'Log in with Twitter';
+strings.en.NAV_FACEBOOK = 'Log in with Facebook';
+strings.en.NAV_GOOGLE = 'Log in with Google';
+strings.en.NAV_SUBSCRIPTIONS = 'My Subscriptions';
+strings.en.NAV_STORIES = 'My Stories';
+strings.en.NAV_PROFILE = 'My GFW Profile';
+strings.en.NAV_LOGOUT = 'Log Out';
+
+strings.en.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.en.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.en.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.en.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.en.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.en.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.en.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.en.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
+strings.en.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.en.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.en.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.en.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.en.SUBSCRIBE_NAME = 'Name your subscription';
+strings.en.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.en.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.en.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.en.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.en.NAV_LANGUAGE = 'Select Language';
 //- Documents
 strings.en.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
@@ -60,9 +89,14 @@ strings.en.ANALYSIS_IFL_LABELS = ['Intact Forest'];
 strings.en.ANALYSIS_MANGROVE_LABELS = ['Global Mangroves'];
 strings.en.ANALYSIS_FIRES_PRE = 'There are';
 strings.en.ANALYSIS_FIRES_ACTIVE = 'active fires';
-strings.en.ANALYSIS_FIRES_POST = 'in the last 7 days';
+strings.en.ANALYSIS_FIRES_POST_LIST = [
+  'in the last 7 days',
+  'in the last 72 hours',
+  'in the last 48 hours',
+  'in the last 24 hours'
+];
 strings.en.ANALYSIS_TOTAL_LOSS_LABEL = 'Total tree cover loss';
-strings.en.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2014):';
+strings.en.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.en.ANALYSIS_TOTAL_GAIN_LABEL = 'Total tree cover gained';
 strings.en.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.en.ANALYSIS_SLOPE_OPTION = 'Option #';
@@ -71,14 +105,23 @@ strings.en.ANALYSIS_RESTORATION_ERROR = 'Area not meeting criteria for potential
 strings.en.ANALYSIS_GROUP_RESTORATION = 'Restoration potential for';
 strings.en.ANALYSIS_GROUP_SLOPE = 'Potential according to';
 strings.en.ANALYSIS_GROUP_OTHER = 'Other analysis';
-strings.en.ANALYSIS_GLAD_ALERT_NAME = 'Glad Alerts';
+strings.en.ANALYSIS_GLAD_ALERT_NAME = 'GLAD Alerts';
 strings.en.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I Alerts';
 strings.en.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
   defor: 'Deforestation'
 };
+
+strings.en.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.en.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -99,7 +142,7 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Intact forest loss',
+  { label: 'Intact forest landscape',
     value: analysisKeys.INTACT_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -119,8 +162,16 @@ strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Active fires',
-    value: analysisKeys.FIRES,
+  { label: 'FORMA Alerts',
+    value: analysisKeys.FORMA_ALERTS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Land cover composition',
@@ -155,9 +206,12 @@ strings.en.DESCRIPTION = 'description';
 //- Miscellaneous
 strings.en.PRINT_BUTTON_LABEL = 'Choose a print output';
 strings.en.PRINT_REPORT = 'Print Report';
+strings.en.EDIT_SAVE = 'Save';
+strings.en.EDIT_EDIT = 'Edit';
 strings.en.SUBSCRIBE = 'Subscribe';
 strings.en.LAYERS = 'Layers';
 strings.en.DATA = 'Data';
+strings.en.MEASUREMENT = 'Measurement';
 strings.en.ANALYZE = 'Analyze';
 strings.en.DOCS = 'Docs';
 strings.en.NARRATIVE = 'Narrative';
@@ -210,6 +264,291 @@ strings.en.REPORT_SLOPE_TABLE_VALUE = 'Hectares';
 strings.en.REPORT_RESTORATION_TABLE_TYPE = 'Category';
 strings.en.REPORT_RESTORATION_TABLE_VALUE = 'Hectares';
 
+//- Error Messages
+strings.en.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_FORMA = 'An error occurred while fetching FORMA analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.en.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
+
+//- NOTE: Georgian
+//- Supported Languages
+strings.ka.LANG_EN = 'English';
+strings.ka.LANG_FR = 'French';
+strings.ka.LANG_ES = 'Spanish';
+strings.ka.LANG_PT = 'Portugese';
+strings.ka.LANG_ID = 'Indonesian';
+strings.ka.LANG_ZH = 'Mandarin';
+strings.ka.LANG_KA = 'ქართული';
+
+//- Header
+strings.ka.NAV_ABOUT = 'პროექტის შესახებ';
+strings.ka.NAV_DOWNLOAD = 'მონაცემების გადმოწერა';
+strings.ka.NAV_MAP_THEMES = 'რუკის თემები';
+strings.ka.NAV_MY_GFW_LOGIN = 'GFW პროფილში შესვლა';
+strings.ka.NAV_MY_GFW = 'GFW';
+strings.ka.NAV_LOGIN_REQUIRED = 'Log in is required so you can return to Global Forest Watch to view, manage, and delete your subscriptions. Questions? ';
+strings.ka.NAV_CONTACT_US = 'Contact us at gfw@wri.org';
+strings.ka.NAV_TWITTER = 'Log in with Twitter';
+strings.ka.NAV_FACEBOOK = 'Log in with Facebook';
+strings.ka.NAV_GOOGLE = 'Log in with Google';
+strings.ka.NAV_SUBSCRIPTIONS = '';
+strings.ka.NAV_STORIES = 'My Stories';
+strings.ka.NAV_PROFILE = 'My GFW Profile';
+strings.ka.NAV_LOGOUT = 'Log Out';
+
+strings.ka.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.ka.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.ka.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.ka.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.ka.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.ka.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.ka.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.ka.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
+strings.ka.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.ka.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.ka.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.ka.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.ka.SUBSCRIBE_NAME = 'Name your subscription';
+strings.ka.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.ka.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.ka.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.ka.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
+strings.ka.NAV_LANGUAGE = 'Select Language';
+strings.ka.NAV_LANGUAGE = 'ენის არჩევა';
+//- Documents
+
+strings.ka.DOCS_INSTRUCTIONS = 'შეარჩიეთ საინტერესო ტერიტორია, და ნახეთ არის თუ არა მასთან დაკავშირებული დოკუმენტები';
+strings.ka.DOCS_NOT_AVAILABLE = 'ამ ტერიტორიისთვის დოკუმენტები არ იძებნება';
+strings.ka.DOCS_TYPE = 'ტიპი';
+strings.ka.DOCS_AUTHOR = 'ავტორი';
+strings.ka.DOCS_YEAR = 'წელი';
+strings.ka.DOCS_PDF = 'PDF';
+strings.ka.DOCS_NAME = 'სახელი';
+strings.ka.DOCS_SIZE = 'ზომა';
+//- Info Window
+strings.ka.INFO_WINDOW_INSTRUCTION_HEADER = 'აარჩიეთ პოლიგონი რუკაზე';
+strings.ka.INFO_WINDOW_INSTRUCTION_LIST = [
+  'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
+  'აარჩიეთ ფიგურა რუკაზე'
+];
+//- Analysis
+strings.ka.ANALYSIS_INSTRUCTION_HEADER = 'ჩაატარეთ ფიგურის ანალიზი რუკაზე';
+strings.ka.ANALYSIS_INSTRUCTION_LIST = [
+  'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
+  'აარჩიეთ ფიგურა რუკაზე',
+  'დააჭირეთ ანალიზისი მენიუს'
+];
+strings.ka.ANALYSIS_OR = 'ან';
+strings.ka.ANALYSIS_DRAW_HEADER = 'ჩაატარეთ თქვენი ფიგურის ანალიზი';
+//- ${drawIcon} references a variable above, do not translate
+strings.ka.ANALYSIS_DRAW_INSTRUCTIONS = [
+  `შეარჩიეთ სახაზავი ინსტრუმენტი ${drawIcon} ტულბოქსიდან`,
+  'რუკაზე ნებისმიერი ფიგურა დახაზეთ',
+  'ანალიზის ჩასატარებლად შეარჩიეთ ფიგურა'
+];
+strings.ka.ANALYSIS_DRAW_BUTTON = 'დაიწყეთ ხაზვა';
+strings.ka.ANALYSIS_INSTRUCTION_ADDITIONAL = `მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ${drawIcon} მეშვეობით`;
+strings.ka.ANALYSIS_SHAPEFILE_UPLOAD = 'ან შემოიტანეთ სხვა შეიპფაილი';
+strings.ka.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'უნდა იყოს გამოყენებული მხოლოდ პოლიგონების მონაცემები WGS84 სივრცული რეფერენსებით. რეკომენდირებული მაქსიმალური ზომაა 5 მბ, უფრო დიდმა ფაილმა შეიძლება ვერ იმუშაოს კორექტულად.  Esri შეიპფაილები უნდა იყოს დაზიპული (.zip) ხოლო GeoJSON ფაილები უნდა იყოს  .json ფორმატით.';
+strings.ka.ANALYSIS_SELECT_TYPE_LABEL = 'აარჩიეთ ანალიზის ტიპი:';
+//- Chart Labels in the Analysis
+strings.ka.ANALYSIS_TC_CHART_NAME = 'ხის საფარის კარგვა ჰექტრებში ';
+strings.ka.ANALYSIS_LCC_CHART_NAME = 'მიწის საფარის შემადგენლობა';
+strings.ka.ANALYSIS_IFL_LABELS = ['ხელუხლებელი ტყე'];
+strings.ka.ANALYSIS_MANGROVE_LABELS = ['გლობალური მანგროვები'];
+strings.ka.ANALYSIS_FIRES_PRE = 'არიან';
+strings.ka.ANALYSIS_FIRES_ACTIVE = 'აქტიური ხანძრები';
+strings.ka.ANALYSIS_FIRES_POST_LIST = [
+  'ბოლო 7 დღის განმავლობაში',
+  'ბოლო 72 საათის განმავლობაში',
+  'ბოლო 48 საათის განმავლობაში',
+  'ბოლო 24 საათის განმავლობაში'
+];
+strings.ka.ANALYSIS_TOTAL_LOSS_LABEL = 'საერთო ხის საფარის კარგვა';
+strings.ka.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
+strings.ka.ANALYSIS_TOTAL_GAIN_LABEL = 'საერთო ხის საფარის მატება';
+strings.ka.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
+strings.ka.ANALYSIS_SLOPE_OPTION = 'ვარიანტი #';
+strings.ka.SLOPE_SELECT_LABEL = 'შეარჩიეთ ფერდობის დახრილობის პროცენტი:';
+strings.ka.ANALYSIS_RESTORATION_ERROR = 'ტერიტორია არ აკმაყოფილებს პოტენციალის კრიტერიუმებს/ მონაცემები არ არსებობს';
+strings.ka.ANALYSIS_GROUP_RESTORATION = 'აღდგენის პოტენციალი';
+strings.ka.ANALYSIS_GROUP_SLOPE = 'პოტენციალი ფერდობის მიხედვით';
+strings.ka.ANALYSIS_GROUP_OTHER = 'სხვა ანალიზი';
+strings.ka.ANALYSIS_GLAD_ALERT_NAME = 'GLAD შეტყობინებები';
+strings.ka.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I შეტყობინებები';
+strings.ka.ANALYSIS_SAD_ALERT_NAMES = {
+  degrad: 'დეგრადაცია',
+  defor: 'გაუტყეურება'
+};
+
+strings.ka.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.ka.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
+//- Group and value should not be modified
+strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'ფერდობი',
+    value: analysisKeys.SLOPE,
+    group: analysisKeys.ANALYSIS_GROUP_SLOPE
+  },
+  { label: 'ხის საფარის კარგვა/ მატება',
+    value: analysisKeys.TC_LOSS_GAIN,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'ხის საფარის კარგვა',
+    value: analysisKeys.TC_LOSS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'მიწის საფარის კარგვა',
+    value: analysisKeys.LC_LOSS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'მიწისზედა ცოცხალი ტყის ბიომასის კარგვა',
+    value: analysisKeys.BIO_LOSS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'ხელუხლებელი ტყის კარგვა',
+    value: analysisKeys.INTACT_LOSS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'გლობალური მანგროვების კარგვა',
+    value: analysisKeys.MANGROVE_LOSS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'SAD შეტყობინებები',
+    value: analysisKeys.SAD_ALERTS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'GLAD შეტყობინებები',
+    value: analysisKeys.GLAD_ALERTS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'Terra-I შეტყობინებები',
+    value: analysisKeys.TERRA_I_ALERTS,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'VIIRS აქტიური ხანძრები',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS აქტიური ხანძრები',
+    value: analysisKeys.MODIS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'მიწის საფარის შემადგენლობა',
+    value: analysisKeys.LCC,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  }
+];
+
+//- Modals
+strings.ka.CANOPY_MODAL_TEXT = 'დააზუსტეთ მინიმალური ვარჯის სიხშირე, რომ დაინახოთ ხის საფარი და ხის საფარის კარგვა';
+strings.ka.DENSITY_FIRST = 'წარმოდგენილია';
+strings.ka.DENSITY_SECOND = 'ვარჯის სიმჭიდროვე.';
+strings.ka.SEARCH_WIDGET_TITLE = 'პარამეტრის ძიება:';
+strings.ka.SEARCH_CLICK_FOR_MORE = 'გთხოვთ დააჭიროთ შერჩეულ პარამეტრს მეტი ინფოსთვის.';
+//- Layer Info Modal
+strings.ka.NO_INFO = 'ინფორმაცია არ არსებობს';
+strings.ka.OVERVIEW = 'მიმოხილვა';
+strings.ka.CITATION = 'ციტატა';
+//- Case does not matter, css makes them all uppercase
+strings.ka.FUNCTION = 'ფუნქცია';
+strings.ka.RESOLUTION = 'რეზოლუცია';
+strings.ka.GEO_COVERAGE = 'გეოგრაფიული არეალი';
+strings.ka.SOURCE = 'წყარო';
+strings.ka.FREQUENCY = 'სიხშირე';
+strings.ka.CONTENT_DATE = 'მონაცემების თარიღი';
+strings.ka.CAUTIONS = 'გაფრთხილება';
+strings.ka.LICENSE = 'ლიცენზია';
+strings.ka.LEARN_MORE = 'მეტი ინფო';
+strings.ka.DOWNLOAD_DATA = 'მონაცემების ჩამოტვირთვა';
+strings.ka.DESCRIPTION = 'აღწერა';
+
+//- Miscellaneous
+strings.ka.PRINT_BUTTON_LABEL = 'აარჩიეთ ბეჭდვის ფორმატი';
+strings.ka.PRINT_REPORT = 'ანგარიშის ბეჭდვა';
+strings.ka.EDIT_SAVE = 'Save';
+strings.ka.EDIT_EDIT = 'Edit';
+strings.ka.SUBSCRIBE = 'გამოწერა';
+strings.ka.LAYERS = 'ფენები';
+strings.ka.DATA = 'მონაცემები';
+strings.ka.MEASUREMENT = 'Measurement';
+strings.ka.ANALYZE = 'ანალიზი';
+strings.ka.DOCS = 'დოკუმენტები';
+strings.ka.NARRATIVE = 'ტექსტი/ ნარატივი';
+strings.ka.MORE = 'დამატებით';
+strings.ka.DELETE = 'წაშლა';
+strings.ka.DOCUMENTS = 'დოკუმენტები';
+
+strings.ka.BASEMAP = 'საბაზო რუკა';
+strings.ka.SELECT_ALL = 'ყველაფრის მონიშვნა';
+strings.ka.CLEAR_ALL = 'ყველაფრის წაშლა';
+strings.ka.LEGEND = 'ლეგენდა';
+strings.ka.TIMELINE = 'დროის სკალა';
+strings.ka.TIMELINE_START = 'დასაწყისი: ';
+strings.ka.TIMELINE_END = 'დასასრული: ';
+strings.ka.SEARCH = 'გადიდება'; // Also Used for tools, but was used else where first
+strings.ka.TOOL_ZOOM_IN = 'გადიდება';
+strings.ka.TOOL_ZOOM_OUT = 'შემცირება';
+strings.ka.TOOL_SHARE = 'გაზიარება';
+strings.ka.TOOL_PRINT = 'ბეჭვდა';
+strings.ka.TOOL_ANALYSIS = 'ანალიზი';
+strings.ka.TOOL_TOGGLE = 'Toggle Panel (გადართვის პანელი)';
+strings.ka.TOOL_RESET = 'გადატვირთვა';
+
+
+strings.ka.ANALYSIS_CARBON_EMISSION = 'კარბონის მთლიანი ემისიები';
+strings.ka.ANALYSIS_CARBON_LOSS = 'კარბონის კარგვა';
+strings.ka.ANALYSIS_SLOPE_CHART_HEADER = 'ფერდობი';
+strings.ka.ANALYSIS_LAND_COVER_CHART_HEADER = 'მიწის საფარი';
+strings.ka.ANALYSIS_POPULATION_CHART_HEADER = 'მოსახლეობის სიმჭიდროვე';
+strings.ka.ANALYSIS_TREE_COVER_CHART_HEADER = '% ხის საფარი';
+strings.ka.ANALYSIS_RAINFALL_CHART_HEADER = 'ნალექები';
+strings.ka.MONTHS_LIST = [
+  { name: 'იანვარი', abbr: 'იან'},
+  { name: 'თებერვალი', abbr: 'თებ'},
+  { name: 'მარტი', abbr: 'მარ'},
+  { name: 'აპრილი', abbr: 'აპრ'},
+  { name: 'მაისი', abbr: 'მაი'},
+  { name: 'ივნისი', abbr: 'ივნ'},
+  { name: 'ივლისი', abbr: 'ივლ'},
+  { name: 'აგვისტო', abbr: 'აგვ'},
+  { name: 'სექტემბერი', abbr: 'სექ'},
+  { name: 'ოქტომბერი', abbr: 'ოქტ'},
+  { name: 'ნოემბერი', abbr: 'ნოე'},
+  { name: 'დეკემბერი', abbr: 'დეკ'}
+];
+
+strings.ka.REPORT_TABLE_TOTAL = 'მთლიანად';
+strings.ka.REPORT_SLOPE_TITLE = 'ფერდობის ანალიზი';
+strings.ka.REPORT_SLOPE_TABLE_TYPE = 'ფერდობის პოტენციური ტიპი';
+strings.ka.REPORT_SLOPE_TABLE_VALUE = 'ჰექტარი';
+strings.ka.REPORT_RESTORATION_TABLE_TYPE = 'კატეგორია';
+strings.ka.REPORT_RESTORATION_TABLE_VALUE = 'ჰექტარი';
+
+//- Error Messages
+strings.ka.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.ka.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
+
 //- NOTE: French
 //- Supported Languages
 strings.fr.LANG_EN = 'Anglais';
@@ -218,11 +557,42 @@ strings.fr.LANG_ES = 'Espagnol';
 strings.fr.LANG_PT = 'Portugais';
 strings.fr.LANG_ID = 'Indonesien';
 strings.fr.LANG_ZH = 'Mandarin';
+strings.fr.LANG_KA = 'Georgian';
+
 //- Header
 strings.fr.NAV_ABOUT = 'A Propos';
 strings.fr.NAV_DOWNLOAD = 'Téléchargez les Données';
 strings.fr.NAV_MAP_THEMES = 'Thèmes';
-strings.fr.NAV_MY_GFW = 'Se connecter à GFW';
+strings.fr.NAV_MY_GFW_LOGIN = 'Se connecter à GFW';
+strings.fr.NAV_MY_GFW = 'GFW';
+strings.fr.NAV_LOGIN_REQUIRED = 'Vous devez être connecté pour afficher, gérer et supprimer vos abonnements. Des questions? ';
+strings.fr.NAV_CONTACT_US = 'Contactez-nous';
+strings.fr.NAV_TWITTER = 'Connectez-vous avec Twitter';
+strings.fr.NAV_FACEBOOK = 'Connectez-vous avec Facebook';
+strings.fr.NAV_GOOGLE = 'Se connecter avec Google';
+strings.fr.NAV_SUBSCRIPTIONS = 'Mes abonnements';
+strings.fr.NAV_STORIES = 'Mes histoires';
+strings.fr.NAV_PROFILE = 'Mon profil';
+strings.fr.NAV_LOGOUT = 'Déconnecter';
+
+strings.fr.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.fr.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.fr.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.fr.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.fr.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.fr.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.fr.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.fr.SUBSCRIBE_ALERTS_SELECT = 'Sélectionnez les alertes de changement forestier que vous souhaitez recevoir';
+strings.fr.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.fr.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.fr.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.fr.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.fr.SUBSCRIBE_NAME = 'Name your subscription';
+strings.fr.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.fr.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.fr.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.fr.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
+strings.fr.NAV_LANGUAGE = 'Select Language';
 strings.fr.NAV_LANGUAGE = 'Choisir Langue';
 //- Documents
 strings.fr.DOCS_INSTRUCTIONS = 'Choisisez une région d\'intérêt pour voir les documents associés';
@@ -266,9 +636,14 @@ strings.fr.ANALYSIS_IFL_LABELS = ['Forêts intactes'];
 strings.fr.ANALYSIS_MANGROVE_LABELS = ['Mangroves'];
 strings.fr.ANALYSIS_FIRES_PRE = 'Il y a';
 strings.fr.ANALYSIS_FIRES_ACTIVE = 'feux actifs';
-strings.fr.ANALYSIS_FIRES_POST = 'ces 7 derniers jours';
+strings.fr.ANALYSIS_FIRES_POST_LIST = [
+  'in the last 7 days',
+  'in the last 72 hours',
+  'in the last 48 hours',
+  'in the last 24 hours'
+];
 strings.fr.ANALYSIS_TOTAL_LOSS_LABEL = 'Total Perte en couvert arboré';
-strings.fr.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2014):';
+strings.fr.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.fr.ANALYSIS_TOTAL_GAIN_LABEL = 'Total Gain en couvert arboré';
 strings.fr.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.fr.ANALYSIS_SLOPE_OPTION = 'Option #';
@@ -283,8 +658,17 @@ strings.fr.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Dégradation',
   defor: 'Déforestation'
 };
+
+strings.fr.DEFAULT_ANALYSIS_LABEL = "Sélectionner l'analyse...";
+strings.fr.RUN_ANALYSIS_BUTTON_TEXT = "Exécuter L'analyse";
+
 //- Group and value should not be modified
 strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: "Sélectionner l'analyse...",
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Pente',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -325,8 +709,12 @@ strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Feux actifs',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS Feux actifs',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS Feux actifs',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Occupation du sol',
@@ -361,9 +749,12 @@ strings.fr.DESCRIPTION = 'description';
 //- Miscellaneous
 strings.fr.PRINT_BUTTON_LABEL = 'Choisissez un format d\'impression';
 strings.fr.PRINT_REPORT = 'Imprimer le Rapport';
+strings.fr.EDIT_SAVE = 'Save';
+strings.fr.EDIT_EDIT = 'Edit';
 strings.fr.SUBSCRIBE = 'S\'abonner';
 strings.fr.LAYERS = 'Couches';
 strings.fr.DATA = 'Données';
+strings.fr.MEASUREMENT = 'Measurement';
 strings.fr.ANALYZE = 'Analyser';
 strings.fr.DOCS = 'Documents';
 strings.fr.NARRATIVE = 'Texte';
@@ -416,6 +807,18 @@ strings.fr.REPORT_SLOPE_TABLE_VALUE = 'Hectares';
 strings.fr.REPORT_RESTORATION_TABLE_TYPE = 'Category';
 strings.fr.REPORT_RESTORATION_TABLE_VALUE = 'Hectares';
 
+//- Error Messages
+strings.fr.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.fr.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
+
 
 //- NOTE: Spanish
 //- Supported Languages
@@ -425,11 +828,42 @@ strings.es.LANG_ES = 'Español';
 strings.es.LANG_PT = 'Portugese';
 strings.es.LANG_ID = 'Portugués';
 strings.es.LANG_ZH = 'Mandarín';
+strings.es.LANG_KA = 'Georgian';
+
 //- Header
 strings.es.NAV_ABOUT = 'Acerca de';
 strings.es.NAV_DOWNLOAD = 'Descargar Datos';
 strings.es.NAV_MAP_THEMES = 'Temas';
-strings.es.NAV_MY_GFW = 'Entrar a mi GFW';
+strings.es.NAV_MY_GFW_LOGIN = 'Entrar a mi GFW';
+strings.es.NAV_MY_GFW = 'MI GFW';
+strings.es.NAV_LOGIN_REQUIRED = 'Es necesario iniciar sesión para ver, administrar y eliminar tus suscripciones. ¿Alguna pregunta? ';
+strings.es.NAV_CONTACT_US = 'Contáctanos';
+strings.es.NAV_TWITTER = 'Ingresar con Twitter';
+strings.es.NAV_FACEBOOK = 'Iniciar sesión con Facebook';
+strings.es.NAV_GOOGLE = 'Iniciar sesión con Google';
+strings.es.NAV_SUBSCRIPTIONS = 'Mis suscripciones';
+strings.es.NAV_STORIES = 'Mis historias';
+strings.es.NAV_PROFILE = 'Mon profil';
+strings.es.NAV_LOGOUT = 'Cerrar sesión';
+
+strings.es.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.es.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.es.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.es.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.es.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.es.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.es.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.es.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
+strings.es.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.es.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.es.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.es.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.es.SUBSCRIBE_NAME = 'Name your subscription';
+strings.es.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.es.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.es.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.es.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
+strings.es.NAV_LANGUAGE = 'Select Language';
 strings.es.NAV_LANGUAGE = 'Seleccionar idioma';
 //- Documents
 strings.es.DOCS_INSTRUCTIONS = 'Seleccionar una área de interés para ver si haya algún documento relacionado';
@@ -473,9 +907,14 @@ strings.es.ANALYSIS_IFL_LABELS = ['Bosque Intacto'];
 strings.es.ANALYSIS_MANGROVE_LABELS = ['Global Mangroves'];
 strings.es.ANALYSIS_FIRES_PRE = 'Hay';
 strings.es.ANALYSIS_FIRES_ACTIVE = 'incendios activos';
-strings.es.ANALYSIS_FIRES_POST = 'en los últimos 7 días';
+strings.es.ANALYSIS_FIRES_POST_LIST = [
+  'in the last 7 days',
+  'in the last 72 hours',
+  'in the last 48 hours',
+  'in the last 24 hours'
+];
 strings.es.ANALYSIS_TOTAL_LOSS_LABEL = 'Pérdida total de la cobertura arbórea';
-strings.es.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2014):';
+strings.es.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.es.ANALYSIS_TOTAL_GAIN_LABEL = 'Ganancia total de la cobertura arbórea';
 strings.es.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.es.ANALYSIS_SLOPE_OPTION = 'Opción #';
@@ -490,8 +929,17 @@ strings.es.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradación',
   defor: 'Deforestación'
 };
+
+strings.es.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.es.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Pendiente',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -532,8 +980,12 @@ strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Incendios activos',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS Incendios activos',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS Incendios activos',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Composición de la cobertura del suelo',
@@ -568,9 +1020,12 @@ strings.es.DESCRIPTION = 'Descripción';
 //- Miscellaneous
 strings.es.PRINT_BUTTON_LABEL = 'Elegir diseño de página';
 strings.es.PRINT_REPORT = 'Imprimir Informe';
+strings.es.EDIT_SAVE = 'Save';
+strings.es.EDIT_EDIT = 'Edit';
 strings.es.SUBSCRIBE = 'Subscribirse';
 strings.es.LAYERS = 'Capas';
 strings.es.DATA = 'Datos';
+strings.es.MEASUREMENT = 'Measurement';
 strings.es.ANALYZE = 'Análisis';
 strings.es.DOCS = 'Documentos';
 strings.es.NARRATIVE = 'Narrativa';
@@ -623,6 +1078,18 @@ strings.es.REPORT_SLOPE_TABLE_VALUE = 'Hectares';
 strings.es.REPORT_RESTORATION_TABLE_TYPE = 'Category';
 strings.es.REPORT_RESTORATION_TABLE_VALUE = 'Hectares';
 
+//- Error Messages
+strings.es.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.es.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
+
 //- NOTE: Portugese
 //- Supported Languages
 strings.pt.LANG_EN = 'Inglês';
@@ -631,11 +1098,42 @@ strings.pt.LANG_ES = 'Espanhol';
 strings.pt.LANG_PT = 'Português';
 strings.pt.LANG_ID = 'Indonésio';
 strings.pt.LANG_ZH = 'Mandarim';
+strings.pt.LANG_KA = 'Georgian';
+
 //- Header
 strings.pt.NAV_ABOUT = 'Sobre';
 strings.pt.NAV_DOWNLOAD = 'Baixar Dados';
 strings.pt.NAV_MAP_THEMES = 'Temas do Mapa';
-strings.pt.NAV_MY_GFW = 'Fazer Login no MEU GFW';
+strings.pt.NAV_MY_GFW_LOGIN = 'Fazer Login no MEU GFW';
+strings.pt.NAV_MY_GFW = 'MEU GFW';
+strings.pt.NAV_LOGIN_REQUIRED = 'É necessário iniciar uma sessão para visualizar, gerenciar e deletar suas assinaturas. Dúvidas? ';
+strings.pt.NAV_CONTACT_US = 'Entre em contato';
+strings.pt.NAV_TWITTER = 'Entrar com Twitter';
+strings.pt.NAV_FACEBOOK = 'Entrar Com Facebook';
+strings.pt.NAV_GOOGLE = 'Entrar Com Google';
+strings.pt.NAV_SUBSCRIPTIONS = 'Minhas Assinaturas';
+strings.pt.NAV_STORIES = 'My Stories';
+strings.pt.NAV_PROFILE = 'Mon profil';
+strings.pt.NAV_LOGOUT = 'Sair';
+
+strings.pt.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.pt.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.pt.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.pt.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.pt.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.pt.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.pt.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.pt.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
+strings.pt.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.pt.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.pt.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.pt.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.pt.SUBSCRIBE_NAME = 'Name your subscription';
+strings.pt.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.pt.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.pt.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.pt.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
+strings.pt.NAV_LANGUAGE = 'Select Language';
 strings.pt.NAV_LANGUAGE = 'Selecionar Idioma';
 //- Documents
 strings.pt.DOCS_INSTRUCTIONS = 'Selecione área de interesse para verificar a existência de documentos relacionados';
@@ -679,9 +1177,14 @@ strings.pt.ANALYSIS_IFL_LABELS = ['Floresta Intacta'];
 strings.pt.ANALYSIS_MANGROVE_LABELS = ['Mangues Global'];
 strings.pt.ANALYSIS_FIRES_PRE = 'Existem';
 strings.pt.ANALYSIS_FIRES_ACTIVE = 'Focos de incêndio ativos';
-strings.pt.ANALYSIS_FIRES_POST = 'nos ultimos 7 dias';
+strings.pt.ANALYSIS_FIRES_POST_LIST = [
+  'in the last 7 days',
+  'in the last 72 hours',
+  'in the last 48 hours',
+  'in the last 24 hours'
+];
 strings.pt.ANALYSIS_TOTAL_LOSS_LABEL = 'Perda de cobertura florestal total';
-strings.pt.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2014):';
+strings.pt.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.pt.ANALYSIS_TOTAL_GAIN_LABEL = 'Ganho de cobertura florestal total';
 strings.pt.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.pt.ANALYSIS_SLOPE_OPTION = 'Opção #';
@@ -696,8 +1199,17 @@ strings.pt.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradação',
   defor: 'Desmatamento'
 };
+
+strings.pt.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.pt.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Declividade',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -738,8 +1250,12 @@ strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Focos de incêndio ativos',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS Focos de incêndio ativos',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS Focos de incêndio ativos',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Composicao da cobertura do solo',
@@ -774,9 +1290,12 @@ strings.pt.DESCRIPTION = 'Descrição';
 //- Miscellaneous
 strings.pt.PRINT_BUTTON_LABEL = 'Escolher saída de impressão.';
 strings.pt.PRINT_REPORT = 'Imprimir Relatório';
+strings.pt.EDIT_SAVE = 'Save';
+strings.pt.EDIT_EDIT = 'Edit';
 strings.pt.SUBSCRIBE = 'Inscrever-se';
 strings.pt.LAYERS = 'Camadas';
 strings.pt.DATA = 'Dados';
+strings.pt.MEASUREMENT = 'Measurement';
 strings.pt.ANALYZE = 'Analisar';
 strings.pt.DOCS = 'Docs';
 strings.pt.NARRATIVE = 'Narrativa';
@@ -829,6 +1348,18 @@ strings.pt.REPORT_SLOPE_TABLE_VALUE = 'Hectares';
 strings.pt.REPORT_RESTORATION_TABLE_TYPE = 'Category';
 strings.pt.REPORT_RESTORATION_TABLE_VALUE = 'Hectares';
 
+//- Error Messages
+strings.pt.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.pt.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
+
 //- NOTE: Bahasa Indonesia
 //- Supported Languages
 strings.id.LANG_EN = 'English';
@@ -837,11 +1368,42 @@ strings.id.LANG_ES = 'Spanish';
 strings.id.LANG_PT = 'Portugese';
 strings.id.LANG_ID = 'Indonesian';
 strings.id.LANG_ZH = 'Mandarin';
+strings.id.LANG_KA = 'Georgian';
+
 //- Header
 strings.id.NAV_ABOUT = 'About';
 strings.id.NAV_DOWNLOAD = 'Download Data';
 strings.id.NAV_MAP_THEMES = 'Map Themes';
-strings.id.NAV_MY_GFW = 'Log in to my GFW';
+strings.id.NAV_MY_GFW_LOGIN = 'Log in to my GFW';
+strings.id.NAV_MY_GFW = 'MY GFW';
+strings.id.NAV_LOGIN_REQUIRED = 'Anda harus masuk untuk dapat melihat, mengelola, serta menghapus langganan Anda. Ada pertanyaan? ';
+strings.id.NAV_CONTACT_US = 'Hubungi kami';
+strings.id.NAV_TWITTER = 'Masuk dengan Twitter';
+strings.id.NAV_FACEBOOK = 'Masuk dengan Facebook';
+strings.id.NAV_GOOGLE = 'Masuk dengan Google';
+strings.id.NAV_SUBSCRIPTIONS = 'Berlangganan Saya';
+strings.id.NAV_STORIES = 'Cerita Saya';
+strings.id.NAV_PROFILE = 'Mon profil';
+strings.id.NAV_LOGOUT = 'Keluar';
+
+strings.id.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.id.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.id.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.id.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.id.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.id.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.id.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.id.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
+strings.id.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.id.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.id.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.id.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.id.SUBSCRIBE_NAME = 'Name your subscription';
+strings.id.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.id.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.id.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.id.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
+strings.id.NAV_LANGUAGE = 'Select Language';
 strings.id.NAV_LANGUAGE = 'Select Language';
 //- Documents
 strings.id.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
@@ -885,9 +1447,14 @@ strings.id.ANALYSIS_IFL_LABELS = ['Intact Forest'];
 strings.id.ANALYSIS_MANGROVE_LABELS = ['Global Mangroves'];
 strings.id.ANALYSIS_FIRES_PRE = 'There are';
 strings.id.ANALYSIS_FIRES_ACTIVE = 'active fires';
-strings.id.ANALYSIS_FIRES_POST = 'in the last 7 days';
+strings.id.ANALYSIS_FIRES_POST_LIST = [
+  'in the last 7 days',
+  'in the last 72 hours',
+  'in the last 48 hours',
+  'in the last 24 hours'
+];
 strings.id.ANALYSIS_TOTAL_LOSS_LABEL = 'Total tree cover loss';
-strings.id.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2014):';
+strings.id.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.id.ANALYSIS_TOTAL_GAIN_LABEL = 'Total tree cover gained';
 strings.id.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.id.ANALYSIS_SLOPE_OPTION = 'Option #';
@@ -896,14 +1463,23 @@ strings.id.ANALYSIS_RESTORATION_ERROR = 'Area not meeting criteria for potential
 strings.id.ANALYSIS_GROUP_RESTORATION = 'Restoration potential for';
 strings.id.ANALYSIS_GROUP_SLOPE = 'Potential according to';
 strings.id.ANALYSIS_GROUP_OTHER = 'Other analysis';
-strings.id.ANALYSIS_GLAD_ALERT_NAME = 'Glad Alerts';
+strings.id.ANALYSIS_GLAD_ALERT_NAME = 'GLAD Alerts';
 strings.id.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I Alerts';
 strings.id.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
   defor: 'Deforestation'
 };
+
+strings.id.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.id.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: 'Slope',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -924,7 +1500,7 @@ strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.BIO_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Intact forest loss',
+  { label: 'Intact forest landscape',
     value: analysisKeys.INTACT_LOSS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
@@ -944,8 +1520,12 @@ strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: 'Active fires',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: 'Land cover composition',
@@ -980,9 +1560,12 @@ strings.id.DESCRIPTION = 'description';
 //- Miscellaneous
 strings.id.PRINT_BUTTON_LABEL = 'Choose a print output';
 strings.id.PRINT_REPORT = 'Print Report';
+strings.id.EDIT_SAVE = 'Save';
+strings.id.EDIT_EDIT = 'Edit';
 strings.id.SUBSCRIBE = 'Subscribe';
 strings.id.LAYERS = 'Layers';
 strings.id.DATA = 'Data';
+strings.id.MEASUREMENT = 'Measurement';
 strings.id.ANALYZE = 'Analyze';
 strings.id.DOCS = 'Docs';
 strings.id.NARRATIVE = 'Narrative';
@@ -1035,6 +1618,18 @@ strings.id.REPORT_SLOPE_TABLE_VALUE = 'Hectares';
 strings.id.REPORT_RESTORATION_TABLE_TYPE = 'Category';
 strings.id.REPORT_RESTORATION_TABLE_VALUE = 'Hectares';
 
+//- Error Messages
+strings.id.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.id.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
+
 //- NOTE: Mandarin
 //- Supported Languages
 strings.zh.LANG_EN = 'English';
@@ -1043,11 +1638,42 @@ strings.zh.LANG_ES = 'Spanish';
 strings.zh.LANG_PT = 'Portugese';
 strings.zh.LANG_ID = 'Indonesian';
 strings.zh.LANG_ZH = 'Mandarin';
+strings.zh.LANG_KA = 'Georgian';
+
 //- Header
 strings.zh.NAV_ABOUT = '关于';
 strings.zh.NAV_DOWNLOAD = '下载数据';
 strings.zh.NAV_MAP_THEMES = '地图图集';
-strings.zh.NAV_MY_GFW = '登录我的GFW';
+strings.zh.NAV_MY_GFW_LOGIN = '登录我的GFW';
+strings.zh.NAV_MY_GFW = 'GFW';
+strings.zh.NAV_LOGIN_REQUIRED = '您需要登录以查看、管理或删除您的订阅。 有疑问? ';
+strings.zh.NAV_CONTACT_US = '请联系我们';
+strings.zh.NAV_TWITTER = '使用 Twitter 账户登录';
+strings.zh.NAV_FACEBOOK = 'Log in with Facebook'; //TODO: Get this from GFW!
+strings.zh.NAV_GOOGLE = '使用谷歌账户登录';
+strings.zh.NAV_SUBSCRIPTIONS = '我的订阅';
+strings.zh.NAV_STORIES = '我的故事';
+strings.zh.NAV_PROFILE = '我的概述';
+strings.zh.NAV_LOGOUT = '注销';
+
+strings.zh.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
+strings.zh.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
+strings.zh.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
+strings.zh.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
+strings.zh.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
+strings.zh.SUBSCRIBE_SAVED_END = ' to manage them.';
+strings.zh.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.zh.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
+strings.zh.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.zh.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.zh.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
+strings.zh.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.zh.SUBSCRIBE_NAME = 'Name your subscription';
+strings.zh.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
+strings.zh.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
+strings.zh.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
+strings.zh.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
+strings.zh.NAV_LANGUAGE = 'Select Language';
 strings.zh.NAV_LANGUAGE = '选择语言';
 //- Documents
 strings.zh.DOCS_INSTRUCTIONS = '选择感兴趣区域来查看相关文件';
@@ -1091,9 +1717,14 @@ strings.zh.ANALYSIS_IFL_LABELS = ['原生森林'];
 strings.zh.ANALYSIS_MANGROVE_LABELS = ['Global Mangroves'];
 strings.zh.ANALYSIS_FIRES_PRE = '共计';
 strings.zh.ANALYSIS_FIRES_ACTIVE = '活跃火点';
-strings.zh.ANALYSIS_FIRES_POST = '在过去7天里';
+strings.zh.ANALYSIS_FIRES_POST_LIST = [
+  'in the last 7 days',
+  'in the last 72 hours',
+  'in the last 48 hours',
+  'in the last 24 hours'
+];
 strings.zh.ANALYSIS_TOTAL_LOSS_LABEL = '总森林覆盖损失';
-strings.zh.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2014):';
+strings.zh.ANALYSIS_TOTAL_LOSS_RANGE = '(2001 - 2015):';
 strings.zh.ANALYSIS_TOTAL_GAIN_LABEL = '总森林覆盖增加';
 strings.zh.ANALYSIS_TOTAL_GAIN_RANGE = '(2001 - 2012):';
 strings.zh.ANALYSIS_SLOPE_OPTION = '选项 #';
@@ -1102,14 +1733,23 @@ strings.zh.ANALYSIS_RESTORATION_ERROR = '无数据 或者 区域不满足条件'
 strings.zh.ANALYSIS_GROUP_RESTORATION = '在生态修复可能性的层面';
 strings.zh.ANALYSIS_GROUP_SLOPE = '可能性原因';
 strings.zh.ANALYSIS_GROUP_OTHER = '其他分析';
-strings.zh.ANALYSIS_GLAD_ALERT_NAME = 'Glad Alerts';
+strings.zh.ANALYSIS_GLAD_ALERT_NAME = 'GLAD Alerts';
 strings.zh.ANALYSIS_TERRA_I_ALERT_NAME = 'Terra-I Alerts';
 strings.zh.ANALYSIS_SAD_ALERT_NAMES = {
   degrad: 'Degradation',
   defor: 'Deforestation'
 };
+
+strings.zh.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
+strings.zh.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+
 //- Group and value should not be modified
 strings.zh.ANALYSIS_SELECT_TYPE_OPTIONS = [
+  {
+    label: 'Select analysis...',
+    value: 'default',
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
   { label: '倾斜度',
     value: analysisKeys.SLOPE,
     group: analysisKeys.ANALYSIS_GROUP_SLOPE
@@ -1150,8 +1790,12 @@ strings.zh.ANALYSIS_SELECT_TYPE_OPTIONS = [
     value: analysisKeys.TERRA_I_ALERTS,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
-  { label: '活跃火点',
-    value: analysisKeys.FIRES,
+  { label: 'VIIRS fires',
+    value: analysisKeys.VIIRS_FIRES,
+    group: analysisKeys.ANALYSIS_GROUP_OTHER
+  },
+  { label: 'MODIS fires',
+    value: analysisKeys.MODIS_FIRES,
     group: analysisKeys.ANALYSIS_GROUP_OTHER
   },
   { label: '土地覆盖组成',
@@ -1186,10 +1830,13 @@ strings.zh.DESCRIPTION = '说明';
 //- Miscellaneous
 strings.zh.PRINT_BUTTON_LABEL = '选择打印模板';
 strings.zh.PRINT_REPORT = '打印报告';
+strings.zh.EDIT_SAVE = 'Save';
+strings.zh.EDIT_EDIT = 'Edit';
 strings.zh.SUBSCRIBE = '订阅';
 strings.zh.SEARCH = '搜寻';
 strings.zh.LAYERS = '图层';
 strings.zh.DATA = '数据';
+strings.zh.MEASUREMENT = 'Measurement';
 strings.zh.ANALYZE = '分析';
 strings.zh.DOCS = '文本文件';
 strings.zh.NARRATIVE = '说明';
@@ -1241,5 +1888,18 @@ strings.zh.REPORT_SLOPE_TABLE_TYPE = 'Slope Potential Type';
 strings.zh.REPORT_SLOPE_TABLE_VALUE = 'Hectares';
 strings.zh.REPORT_RESTORATION_TABLE_TYPE = 'Category';
 strings.zh.REPORT_RESTORATION_TABLE_VALUE = 'Hectares';
+
+//- Error Messages
+strings.zh.ANALYSIS_ERROR_TC_LOSS_GAIN = 'An error occurred while fetching tree cover loss/gain analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_TC_LOSS = 'An error occurred while fetching tree cover loss analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_LAND_COVER_LOSS = 'An error occurred while fetching land cover loss analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_LAND_COVER_COMPOSITION = 'An error occurred while fetching land cover composition analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_INTACT_LOSS = 'An error occurred while fetching intact loss analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_SAD = 'An error occurred while fetching SAD analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_GLAD = 'An error occurred while fetching GLAD analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_SLOPE = 'An error occurred while fetching slope analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
+strings.zh.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
 
 export { strings as default };

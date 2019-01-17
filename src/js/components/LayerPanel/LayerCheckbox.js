@@ -1,9 +1,10 @@
-import layerKeys from 'constants/LayerConstants';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
+import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
-import utils from 'utils/AppUtils';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -16,6 +17,7 @@ const showSubLayer = function showSubLayer (layerItem) {
     esriLayer.visibleLayers.push(subIndex);
   }
   esriLayer.setVisibleLayers(esriLayer.visibleLayers);
+  if (esriLayer.visible === false) { esriLayer.show(); }
 };
 
 const hideSubLayer = function hideSubLayer (layerItem) {
@@ -52,93 +54,82 @@ export default class LayerCheckbox extends Component {
 
   componentDidUpdate(prevProps) {
     const {map} = this.context;
+
     if (prevProps.checked !== this.props.checked) {
       if (this.props.checked) {
         if (this.props.subLayer) {
           showSubLayer(this.props.layer);
         } else {
           showLayer(map, this.props.layer.id);
-          //- If the legend layer is present, update it
-          this.updateLegendLayer(this.props.layer.id, { visible: true });
         }
       } else {
         if (this.props.subLayer) {
           hideSubLayer(this.props.layer);
         } else {
           hideLayer(map, this.props.layer.id);
-          //- If the legend layer is present, update it
-          this.updateLegendLayer(this.props.layer.id, { visible: false });
         }
       }
     }
   }
-
-  /**
-  * There is a dynamic layer with opacity set to 0, turn on or off its sub layers so they show up in the
-  * legend, this is great for image services or other layers that don't have a legend but need one
-  */
-  updateLegendLayer (layerId, options) {
-    const {settings, map} = this.context;
-    //- The layer could be in any of these two groups
-    const lcLayers = settings.layerPanel.GROUP_LC ? settings.layerPanel.GROUP_LC.layers : [];
-    const lcdLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LC.layers : [];
-    const layersConfig = lcLayers.concat(lcdLayers);
-
-    const conf = utils.getObject(layersConfig, 'id', layerId);
-    if (conf && conf.legendLayer !== undefined) {
-      const layer = map.getLayer(layerKeys.LEGEND_LAYER);
-      const {visibleLayers} = layer;
-
-      if (options.visible) {
-        visibleLayers.push(conf.legendLayer);
-        layer.show();
-      } else {
-        visibleLayers.splice(visibleLayers.indexOf(conf.legendLayer), 1);
-        if (visibleLayers.length === 0) {
-          layer.hide();
-        }
-      }
-    }
-  }
-
-  // shouldComponentUpdate(nextProps) {
-  //   return nextProps.checked !== this.props.checked ||
-  //          nextProps.layer !== this.props.layer ||
-  //          !!this.props.children;
-  // }
 
   showInfo () {
     const {layer} = this.props;
+
     if (layer.disabled) { return; }
     mapActions.showLayerInfo(layer);
+    layerActions.showLoading(layer.id);
   }
 
   toggleLayer () {
     const {layer} = this.props;
+    const {map} = this.context;
+
     if (layer.disabled) { return; }
     if (layer.subId) {
-      // TODO:  Update visible layers.
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
+        layer.visible = false;
       } else {
         layerActions.addSubLayer(layer);
+        layer.visible = true;
       }
     } else {
       if (this.props.checked) {
+        layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
       } else {
+        layer.visible = true;
         layerActions.addActiveLayer(layer.id);
+      }
+    }
+
+    if (layer.id === layerKeys.RECENT_IMAGERY) {
+      mapActions.toggleImageryVisible(layer.visible); // Imagery Modal
+      if (!layer.visible) {
+        const imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
+        if (imageryGraphicsLayer) { map.removeLayer(imageryGraphicsLayer); }
       }
     }
   }
 
   render() {
     const {map, language} = this.context;
-    const {layer} = this.props;
+    const {layer, initialLayerOpacities, onEdit, dynamicSublabel} = this.props;
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
-    const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
+    let label = layer.label ? layer.label[language] ? layer.label[language] : layer.label : '';
+    if (typeof label === 'object') {
+      label = '';
+    }
+
+    if (label === '' && layer.label) {
+      const langs = Object.keys(layer.label);
+      if (langs.length > 0) {
+        label = layer.label[langs[0]];
+      }
+    }
+
     const {sublabel} = layer;
 
     return (
@@ -147,16 +138,20 @@ export default class LayerCheckbox extends Component {
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
-        <span className='info-icon pointer' onClick={this.showInfo.bind(this)}>
-          <svg><use xlinkHref="#shape-info" /></svg>
+        {onEdit && this.props.checked && <div className='fa-button sml white layer-edit' onClick={onEdit}><span className='layer-edit-text'>Edit</span></div>}
+
+        <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
+          <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}
+        {!dynamicSublabel ? null : <div className='layer-checkbox-sublabel dynamic'>{dynamicSublabel}</div>}
+
         {!this.props.children ? null :
           <div className={`layer-content-container flex ${this.props.checked ? '' : 'hidden'}`}>
             {this.props.children}
           </div>
         }
-        <LayerTransparency layer={layer} visible={this.props.checked}></LayerTransparency>
+        <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={this.props.checked}></LayerTransparency>
       </div>
     );
   }

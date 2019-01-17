@@ -4,6 +4,8 @@ import InfoTemplate from 'esri/InfoTemplate';
 import Polygon from 'esri/geometry/Polygon';
 import symbols from 'utils/symbols';
 import Graphic from 'esri/graphic';
+import Deferred from 'dojo/Deferred';
+import analysisUtils from 'utils/analysisUtils';
 
 //- Really crappy UUID generator but it works
 let cfid = 0;
@@ -16,20 +18,25 @@ export default {
   * @return {Graphic}
   */
   generateDrawnPolygon: (geometry) => {
-    const id = customFeatureUUIDGenerator();
-    return new Graphic(
-      new Polygon(geometry),
-      symbols.getCustomSymbol(),
-      {
-        cfid: id,
-        source: attributes.SOURCE_DRAW,
-        title: `Custom Feature #${id}`
-      },
-      new InfoTemplate({
-        title: '${title}',
-        content: '<div class=\'custom-feature__content\'>Temp Id: ${cfid}</div>'
-      })
-    );
+    const deferred = new Deferred();
+    analysisUtils.registerGeom(geometry).then(res => {
+      const id = customFeatureUUIDGenerator();
+      deferred.resolve(new Graphic(
+        new Polygon(geometry),
+        symbols.getCustomSymbol(),
+        {
+          cfid: id,
+          source: attributes.SOURCE_DRAW,
+          title: `Custom Feature #${id}`,
+          geostoreId: res.data.id
+        },
+        new InfoTemplate({
+          title: '${title}',
+          content: '<div class=\'custom-feature__content\'>Temp Id: ${cfid}</div>'
+        })
+      ));
+    });
+    return deferred;
   },
 
   /**

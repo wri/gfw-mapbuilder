@@ -40,7 +40,11 @@
 			{
 				"value": "zh",
 				"label": "Chinese"
-			}]
+      },
+			{
+				"value": "ka",
+				"label": "Georgian"
+      }]
 		},
 		{
 			"type": "string",

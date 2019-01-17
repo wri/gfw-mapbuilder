@@ -31,12 +31,18 @@
     word-break break-word
     word-wrap break-word
 
+  &.draggable
+    top 250px
+    cursor grab
+    z-index 100
+
 .close-icon
   position absolute
   height 40px
   width 40px
   right 0
   top 0
+  z-index 10
   & svg
     transform translate(-50%, -50%)
     position absolute
@@ -71,6 +77,7 @@
 .analysis-modal-container .modal
   overflow-y auto
   width 320px
+  height 500px
   & .analysis-instructions__separator
     display none
   & .modal-content
@@ -148,6 +155,7 @@
 .canopy-modal-container
   & .modal-content
     width 340px
+    height 210px
   & .irs-line-left
   & .irs-line-right
   & .irs-line-mid
@@ -175,14 +183,12 @@
   width 280px
 
 .tree-icon
-  background url('images/tree.png') no-repeat center
   margin-top 19px
   height 41px
   float left
   width 25px
 
 .forest-icon
-  background url('images/forest.png') no-repeat center
   float right
   height 60px
   width 91px
@@ -190,6 +196,83 @@
 .slider-container
   margin 5px 10px
   width 280px
+
+.dataset-zoom
+  cursor pointer
+
+.subscription-unconfirmed
+  margin-bottom -10px
+  .subscription-uncle
+    position relative
+
+.subscription-unconfirmed-wrap:hover .subscribe-tooltipmap
+  display block
+  visibility visible
+  opacity 1
+
+.subscription-unconfirmed-wrap
+  display inline-block
+  float left
+  .subscription-svg
+    width 16px
+    height 16px
+    cursor pointer
+  .subscribe-tooltipmap
+    position absolute
+    background #FFFEE2
+    -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
+    box-shadow 0 1px 3px rgba(85,85,85,0.25)
+    z-index 1000
+    margin 0
+    visibility hidden
+    opacity 0
+    text-transform uppercase
+    color #555555
+    font-weight 400
+    font-size 12px
+    line-height 1.25
+    bottom 100%
+    left 115px
+    text-align center
+    padding 6px 8px
+    white-space nowrap
+    pointer-events none
+    -webkit-transform translate(-50%, 0px)
+    transform translate(-50%, 0px)
+    width 200px
+    white-space normal
+
+.subscribe-tooltipmap:after
+  content ""
+  display block
+  position absolute
+  width 8px
+  height 8px
+  background #FFFEE2
+  z-index 2
+  bottom 0px
+  left 0px
+  -webkit-transform translate(-50%, 50%) rotate(270deg)
+  transform translate(-50%, 50%) rotate(270deg)
+  border-width 1px
+  border-color #f0f0ed
+  border-style solid
+
+.subscription-explanation
+  max-width 230px
+
+.dataset-list
+  display inline-block
+
+.step-title
+  font-size 24px
+  margin 0 auto
+  color #555555
+  text-align center
+
+.custom-checkbox
+  display inline-block
+  width 50%
 
 //- Layer modal specific styling
 .layer-modal-container .modal-content:not(.no-download)
@@ -221,6 +304,13 @@
 .source-table
   border-top 1px solid $lightGrayBorder
 
+.name-row
+  font-weight bold
+  margin-left 20px
+  margin-top 15px
+  &.no-warning
+    margin-left 0
+
 .source-row
   border-bottom 1px solid $lightGrayBorder
   display table
@@ -228,6 +318,15 @@
   margin 0
   &:nth-child(even)
     background #F2F2F3
+  &.subscribe-row
+    padding 5px
+  .other-row
+    font-size 15px
+    &.date-created
+      font-style italic
+    p
+      margin-top 8px
+      margin-bottom 8px
 
 .source-row dt
 .source-row dd
@@ -247,6 +346,35 @@
   border-left 1px solid $lightGrayBorder
   padding-left 15px
   font-size 13px
+
+.source-row .btn-delete-subscription
+  -webkit-appearance none
+  border 1px solid transparent
+  background none
+  outline none
+  box-shadow none
+  text-align center
+  cursor pointer
+  text-decoration none
+  font-family "Fira GFW Sans", "Fira Sans"
+  font-feature-settings "liga" 0
+  display -webkit-box
+  display -ms-flexbox
+  display flex
+  -webkit-box-pack justify
+  -ms-flex-pack justify
+  justify-content space-between
+  -webkit-box-align center
+  -ms-flex-align center
+  align-items center
+  font-size 14px
+
+.delete-row, .map-row
+  float right
+  padding 10px 0
+
+.delete-row-label
+  padding-top 3px
 
 .source-summary
   margin-top 20px
@@ -315,3 +443,203 @@
 //- Search Modal
 .search-widget-label
   padding 10px 0
+
+.deg-box
+  display inline-block
+  -webkit-justify-content space-between
+  justify-content space-between
+  align-items center
+  -webkit-align-items center
+  // width 50%
+
+.deg-box span
+  width auto
+
+.deg-box input.deg-input
+  max-width 90px
+  text-align left
+  margin 13px 0 9px 5px
+  padding 0
+  text-align left
+  outline 0
+  border none
+  border-bottom 1px solid #555555
+  font-size 18px
+  border-radius 0
+  font-family inherit
+
+.deg-box .gfw-btn
+  background #e5e5df
+  position relative
+  display inline-block
+  z-index 1
+  padding 0px 12px
+  border-radius 40px
+  font-size 14px
+  text-decoration none
+  height 36px
+  line-height 36px
+  text-align center
+  font-weight 500
+  white-space nowrap
+  -webkit-transition background 0.15s linear
+  -moz-transition background 0.15s linear
+  -o-transition background 0.15s linear
+  transition background 0.15s linear
+
+.search-submit-button
+  &.fa-button
+    border 0
+    font-size 16px
+    margin-left 5px
+
+.delete-header
+  text-align center
+
+// Imagery Modal specific styling
+.imagery-modal-container
+  display block
+  &.collapse
+    display none
+
+
+.imagery-modal__wrapper
+  width 500px
+  height 285px
+  -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
+  box-shadow 0 1px 3px rgba(85,85,85,0.25)
+
+  .flex
+    display flex
+    align-items center
+
+  .fa-button.white
+    border 1px solid #f0ab00
+
+  select
+    -webkit-appearance none
+    position absolute
+    height 100%
+    width 100%
+    opacity 0
+    left 0
+    top 0
+    &:hover + div
+      background darken(white, 10%)
+
+.imagery-modal__title
+  font-size 12px
+  font-weight bold
+  line-height 21px
+  color #555
+  text-transform uppercase
+  margin 10px 20px 10px 20px
+
+.imagery-modal__section
+  padding 0px 20px 10px 20px
+  font-size 11px
+  color #999
+  justify-content space-between
+
+  &.filters
+    position relative
+    z-index 5
+
+ &.secondary-filters
+    align-items flex-start
+    min-height 60px
+
+  &.thumbnail_container
+    width 100%
+    max-height 102px
+    overflow-y auto
+    display flex
+    justify-content flex-start
+    flex-wrap wrap
+
+  .thumbnail-text
+    width 50%
+    p
+      color #555
+      line-height 1.4
+      margin 0
+
+  .thumbnail
+    width 88px
+    height 88px
+    overflow hidden
+    margin 2px
+    cursor pointer
+    border transparent solid 4px;
+    background #999
+    display flex
+
+    &.disabled
+      cursor default
+
+      &:hover
+        border transparent solid 4px;
+    .svg-icon
+      fill #c1c1c1
+
+    img
+      width 85px
+      height auto
+
+    &:hover
+      border #555 solid 4px;
+
+    &.selected
+      border #f0ab00 solid 4px;
+
+.imagery-modal__error
+  display flex
+  align-items center
+  flex-direction column
+  width 100%
+
+hr
+  margin 8px 0px 8px 0px
+  border $lightGrayBorder 0.5px solid
+
+.imagery-modal_section-title
+  text-transform uppercase
+  font-weight bold
+  margin-bottom 10px
+
+.imagery-modal_section-text
+  margin 0 10px
+
+@media (max-width: 600px)
+
+  .imagery-modal-container
+    &.collapse
+      display none
+
+      .imagery-modal__wrapper
+        height 0px
+        transition all 1s
+
+  .imagery-modal__wrapper
+    width 100vw
+    height 400px
+    transition all 1s
+
+    .imagery-modal__section
+      flex-wrap wrap
+      justify-content space-between
+
+      &.thumbnail_container
+        width 100%
+        max-height 150px
+
+      .imagery-modal__item
+        margin 0 0 15 0
+        min-width 80vw
+
+  .modal.draggable
+    top unset
+    cursor default
+    bottom 0px
+    transform none
+    left unset

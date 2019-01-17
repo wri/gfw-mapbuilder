@@ -18,6 +18,32 @@
   bottom 5px
   z-index 5
 
+.map .esriMeasurement
+  text-align center
+  margin-top 15px
+
+.map .esriMeasurement .esriMeasurementSeparator
+  display none
+
+.esriMeasurement .esriToggleButton .dijitButtonNode
+  width inherit !important
+
+.imagery-hover-modal
+  background white
+  padding 10px
+  position absolute
+  cursor pointer
+  transform translate(-50%, 30%)
+  font-size 12px
+  background #fffee2
+  box-shadow 0px 0px 2px 0 rgba(0, 0, 0, 0.2)
+  div
+    display flex
+    margin-bottom 5px
+
+  h4
+    margin-right 5px
+
 //@media (min-width: $mobileBreak)
 //  .esriScalebar
 //    left 50% !important
@@ -25,3 +51,5 @@
 @media (max-width: $mobileBreak)
   .map .esriScalebar
     bottom 55px
+  .esriMeasurement .dijitInline
+    padding 3px

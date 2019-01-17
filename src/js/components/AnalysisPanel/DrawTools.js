@@ -3,6 +3,8 @@ import geometryUtils from 'utils/geometryUtils';
 import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -45,19 +47,26 @@ export default class DrawTools extends Component {
     this.toolbar.on('draw-end', (evt) => {
       this.deactivate();
       // Add graphic to map and set as active feature
-      const graphic = geometryUtils.generateDrawnPolygon(evt.geometry);
-      const layer = map.getLayer(layerKeys.USER_FEATURES);
-      if (layer) {
-        layer.add(graphic);
-        map.infoWindow.setFeatures([graphic]);
-      }
+      geometryUtils.generateDrawnPolygon(evt.geometry).then(graphic => {
+        const layer = map.getLayer(layerKeys.USER_FEATURES);
+        if (layer) {
+          layer.add(graphic);
+          map.infoWindow.setFeatures([graphic]);
+        }
+      });
     });
   };
 
   draw = () => {
     // if active, toggle it off
-    if (this.state.drawButtonActive) {
-      this.deactivate();
+    if (this.props.drawButtonActive) {
+      if (this.toolbar._graphic && this.toolbar._graphic.geometry && this.toolbar._graphic.geometry.rings) { // && this.toolbar._graphic.geometry.rings.length > 1
+        this.toolbar.finishDrawing();
+        mapActions.activateDrawButton(false);
+        mapActions.toggleAnalysisModal({ visible: false });
+      } else {
+        this.deactivate();
+      }
     } else {
       this.activate();
       //- If the analysis modal is visible, hide it
@@ -68,7 +77,7 @@ export default class DrawTools extends Component {
   activate = () => {
     const {map} = this.context;
     this.toolbar.activate(Draw.POLYGON);
-    this.setState({ drawButtonActive: true });
+    mapActions.activateDrawButton(true);
     // Disable popups while this is active, this function is only available to webmaps when usePopupManager is true
     map.setInfoWindowOnClick(false);
   };
@@ -76,7 +85,7 @@ export default class DrawTools extends Component {
   deactivate = () => {
     const {map} = this.context;
     this.toolbar.deactivate();
-    this.setState({ drawButtonActive: false });
+    mapActions.activateDrawButton(false);
     // Reconnect the popups, this function is only available to webmaps when usePopupManager is true
     map.setInfoWindowOnClick(true);
   };
@@ -104,7 +113,7 @@ export default class DrawTools extends Component {
         </ol>
         <div className='analysis-instructions__draw-icon-container'>
           <svg className='analysis-instructions__draw-icon'>
-            <use xlinkHref="#icon-analysis-draw" />
+            <SVGIcon id={'icon-analysis-draw'} />
           </svg>
         </div>
         <div

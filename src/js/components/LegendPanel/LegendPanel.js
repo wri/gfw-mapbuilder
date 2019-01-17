@@ -1,14 +1,18 @@
 import layerKeys from 'constants/LayerConstants';
 import React, {PropTypes, Component} from 'react';
 import mapActions from 'actions/MapActions';
-import Legend from 'esri/dijit/Legend';
+// import CartoLegend from 'components/LegendPanel/CartoLegend';
+import WebMapLegend from 'components/LegendPanel/WebMapLegend';
+import WMSLegend from 'components/LegendPanel/WMSLegend';
+import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerLegend';
+import LayerLegend from 'components/LegendPanel/LayerLegend';
+import {urls} from 'js/config';
 import text from 'js/languages';
+import CartoLegend from './CartoLegend';
+import SVGIcon from 'utils/svgIcon';
 
 const closeSymbolCode = 9660,
     openSymbolCode = 9650;
-
-let legend;
-
 
 export default class LegendPanel extends Component {
 
@@ -21,82 +25,369 @@ export default class LegendPanel extends Component {
 
   componentDidMount() {
     if (window && window.innerWidth > 950) {
-      mapActions.toggleLegendVisible();
+      mapActions.toggleLegendVisible.defer();
     }
   }
 
-  componentDidUpdate() {
-    const {map} = this.context;
-    if (map.loaded && !legend) {
-      legend = new Legend({
-        map: map,
-        layerInfos: this.getLayersForLegend()
-      }, this.refs.legendNode);
-      legend.startup();
-    } else if (legend) {
-      legend.refresh(this.getLayersForLegend());
-    }
-  }
-
-  getLayersForLegend () {
-    const {map, webmapInfo} = this.context;
-    const {basemapLayerIds, graphicsLayerIds} = map;
-    let {layerIds = []} = map;
-    let legendInfos = [];
-    let ids = [];
-
+  getLayersForLegend (layers) {
     // Loop through layer ids and if those layers exist, add them to the legend
     // Add any layers we want to exclude from the legend to ignores, including basemapLayerIds
     // If a layer has a legendLayerId configured in the resources.js, you will probably want to add it here to prevent
     // two legends from the same service from showing up
-    let ignores = [
+    const ignores = [
       layerKeys.MASK,
-      layerKeys.TREE_COVER,
-      layerKeys.AG_BIOMASS,
       layerKeys.USER_FEATURES,
-      layerKeys.TREE_COVER_GAIN,
-      layerKeys.TREE_COVER_LOSS
+      layerKeys.LEGEND_LAYER
     ];
 
-    //- Add basemap layers and graphics layers
-    if (basemapLayerIds) {
-      ignores = ignores.concat(basemapLayerIds);
-    }
+    const filteredLayers = layers.filter(l => ignores.indexOf(l.id) === -1);
+    return filteredLayers;
+  }
 
-    if (graphicsLayerIds) {
-      layerIds = layerIds.concat(graphicsLayerIds);
-    }
+  createLegend = layer => {
+    let childComponent;
 
-    //- Get layers from the webmap, we could comment out this block but may miss any layers added from
-    //- the webmap as graphics or feature layers since those won't be in layerIds
-    // legendInfos = webmapInfo.operationalLayers.filter((item) => {
-    //   //- Add them to ignores so they do not show up twice
-    //   if (item.layerObject) { ignores.push(item.id); }
-    //   return item.layerObject;
-    // }).map((layer) => {
-    //   return {
-    //     layer: layer.layerObject,
-    //     title: '' // layer.layerObject.name
-    //   };
-    // });
+    const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
+    const { language } = this.context;
 
-    if (layerIds) {
-      //- Remove layers to ignore
-      ids = layerIds.filter(id => ignores.indexOf(id) === -1);
-      ids.forEach((layerId) => {
-        const layer = map.getLayer(layerId);
-        if (layer) {
-          legendInfos.push({ layer, title: '' });
+    switch(layer.id) {
+      case 'IFL':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'IMAZON_SAD':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'VIIRS_ACTIVE_FIRES':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'MODIS_ACTIVE_FIRES':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={layer.url}
+          visibleLayers={activeLayers}
+          layerIds={layer.layerIds}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'GLOB_MANGROVE':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'AG_BIOMASS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'TERRA_I_ALERTS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'GLAD_ALERTS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'FORMA_ALERTS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+        case 'TREE_COVER_GAIN':
+          childComponent = <LayerLegend
+            key={layer.id}
+            label={layer.label ? layer.label[language] : ''}
+            url={urls.esriLegendService}
+            visibleLayers={activeLayers}
+            layerIds={layer.legendLayer}
+            layerId={layer.id}
+            legendOpacity={legendOpacity}
+            initialLayerOpacities={initialLayerOpacities}
+            defaultOpacity={layer.opacity || 1}
+          />;
+          break;
+      case 'TREE_COVER_LOSS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'PRIMARY_FORESTS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'LAND_COVER':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      case 'TREE_COVER':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
+      default:
+        if (layer.hasOwnProperty('nestedLayers')) {
+          childComponent = this.createNestedLegendGroups(layer);
+        } else if (layer.type === 'feature') {
+          childComponent = <WebMapFeatureLayerLegend
+            key={layer.id}
+            layer={layer}
+            label={layer.label[language] || layer.label}
+            visibility={activeLayers.indexOf(layer.id) > -1 && layer.visibleAtMapScale}
+            visibleLayers={activeLayers}
+            legendOpacity={legendOpacity}
+            initialLayerOpacities={initialLayerOpacities}
+          />;
+        } else {
+          childComponent = this.createWebmapLegend(layer);
         }
-      });
     }
+    return childComponent;
+  }
 
-    return legendInfos;
+  createWebmapLegend = layer => {
+    const { activeLayers, dynamicLayers, legendOpacity, initialLayerOpacities } = this.props;
+    const { map, language } = this.context;
+
+    if (layer.subId) {
+      const scale = map.getScale();
+      let visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1;
+
+      if (layer.hasScaleDependency) {
+        visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale && layer.maxScale <= scale;
+
+        if (layer.minScale === 0) {
+          visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.maxScale <= scale;
+        }
+
+        if (layer.maxScale === 0) {
+          visible = dynamicLayers.hasOwnProperty(layer.id) && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1 && layer.minScale >= scale;
+        }
+      }
+
+      const esriLayer = layer.esriLayer;
+
+      return <WebMapLegend
+        key={layer.subId}
+        url={esriLayer.url}
+        labels={layer.label[language]}
+        visibility={visible}
+        visibleLayers={activeLayers}
+        layerSubIndex={layer.subIndex}
+        layerId={layer.subId}
+        legendOpacity={legendOpacity}
+        initialLayerOpacities={initialLayerOpacities}
+        defaultOpacity={esriLayer.opacity || 1} />;
+
+    } else {
+      const esriLayer = layer.esriLayer;
+
+      if (esriLayer) {
+        if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
+
+          let visibility = activeLayers.indexOf(esriLayer.id) > -1;
+
+          if (esriLayer.hasOwnProperty('visibleAtMapScale') && !esriLayer.visibleAtMapScale) {
+            const scale = map.getScale();
+            if ((scale > esriLayer.minScale) || (scale < esriLayer.maxScale)) {
+              visibility = false;
+            }
+          }
+
+          return <WebMapFeatureLayerLegend
+          key={esriLayer.id}
+          layer={esriLayer}
+          label={layer.label[language] || layer.label}
+          visibility={visibility}
+          visibleLayers={activeLayers}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          />;
+        } else if (esriLayer.type === 'carto' || layer.type === 'carto') {
+          if (!esriLayer.symbol) { return null; }
+          return <CartoLegend
+          key={layer.id}
+          layerId={layer.id}
+          labels={layer.label[language]}
+          visible={activeLayers.indexOf(layer.id) > -1}
+          symbol={layer.symbol}
+          legendOpacity={legendOpacity}
+          />;
+        } else if (esriLayer.type.toLowerCase() === 'wms') {
+          return <WMSLegend
+          key={layer.id}
+          url={esriLayer.url}
+          version={esriLayer.version}
+          labels={layer.label[language]}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerName={esriLayer.layerInfos[0].name}
+          legendOpacity={legendOpacity}
+          defaultOpacity={esriLayer.opacity || 1}
+          />;
+        } else {
+          if (!layer.layerIds && !esriLayer.tileInfo) {
+            throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
+          }
+
+          if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
+            esriLayer.layerId = esriLayer.layerInfos[0].id;
+          }
+
+          return <WebMapLegend
+          key={layer.id}
+          url={esriLayer.url}
+          labels={layer.label[language]}
+          visibility={activeLayers.indexOf(layer.id) > -1}
+          visibleLayers={activeLayers}
+          layerId={layer.layerIds || [0]}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={esriLayer.opacity || 1} />;
+        }
+      }
+    }
+  }
+
+  createCartoLegendGroup = (layerGroup, key) => {
+    const cartoLegends = layerGroup.map(cl => this.createWebmapLegend(cl));
+    return (
+      <div key={key}>
+        {cartoLegends}
+      </div>
+    );
+  }
+
+  createNestedLegendGroups = layerGroup => {
+    const { activeLayers } = this.props;
+    const { language } = this.context;
+
+    const nestedComponents = layerGroup.nestedLayers.map(layer => (this.createLegend(layer)));
+
+    const groupVisible = layerGroup.nestedLayers.some(l => activeLayers.indexOf(l.id) > -1);
+
+    return (
+      <div key={layerGroup.order} className={`nested-legend-group${groupVisible ? '' : ' hidden'}`}>
+        <div className='nested-group-label'><strong>{layerGroup.label[language]}</strong></div>
+        {nestedComponents}
+      </div>
+    );
   }
 
   render () {
-    const {tableOfContentsVisible, legendOpen} = this.props;
-    const {language} = this.context;
+    const {tableOfContentsVisible, legendOpen, allLayers} = this.props;
+    const { language } = this.context;
+
+    const legendLayers = this.getLayersForLegend(allLayers).sort((a, b) => b.order - a.order);
+    const legendComponents = legendLayers.map(this.createLegend);
 
     let rootClasses = legendOpen ? 'legend-panel map-component shadow' : 'legend-panel map-component shadow legend-collapsed';
 
@@ -104,7 +395,6 @@ export default class LegendPanel extends Component {
     if (!tableOfContentsVisible) {
       rootClasses += ' hidden';
     }
-
     return (
       <div className={rootClasses}>
 
@@ -119,15 +409,14 @@ export default class LegendPanel extends Component {
 
         <div title='close' className='legend-close close-icon pointer mobile-show' onClick={mapActions.toggleLegendVisible}>
           <svg className='svg-icon'>
-            <use xlinkHref="#shape-close" />
+            <SVGIcon id={'shape-close'} />
           </svg>
         </div>
 
         <div className='legend-layers'>
-          <div id='legend' ref='legendNode' className={`${legendOpen ? '' : 'hidden'}`}></div>
+          <div className='legendContainer'>{legendComponents}</div>
         </div>
       </div>
     );
   }
-
 }

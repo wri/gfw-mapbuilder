@@ -2,6 +2,8 @@ import CustomFeatureControl from 'components/AnalysisPanel/CustomFeatureControl'
 import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import {attributes} from 'constants/AppConstants';
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -15,16 +17,29 @@ export default class InfoWindow extends Component {
   };
 
   previous = () => {
-    this.props.map.infoWindow.selectPrevious();
+    this.context.map.infoWindow.selectPrevious();
   };
 
   next = () => {
-    this.props.map.infoWindow.selectNext();
+    this.context.map.infoWindow.selectNext();
   };
 
   clearFeatures = () => {
     const {map} = this.context;
+    const features = map.infoWindow.features;
+    const selectedIndex = map.infoWindow.selectedIndex;
+
+    const newFeatures = [
+      ...features.slice(0, selectedIndex),
+      ...features.slice(selectedIndex + 1)
+    ];
+
     map.infoWindow.clearFeatures();
+    map.infoWindow.hide();
+
+    map.infoWindow.setFeatures(newFeatures);
+    map.infoWindow.show();
+    map.infoWindow.select(0);
   };
 
   renderInstructionList = (instruction, index) => {
@@ -77,8 +92,9 @@ export default class InfoWindow extends Component {
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
           <div className='feature-controls'>
             <span>{count} features selected.</span>
-            <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer'>
-              <use xlinkHref="#shape-close" />
+            <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
+              <SVGIcon id={'shape-close'} />
+
             </svg>
             <span className={`arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`} onClick={this.next}>Next</span>
             <span className={`arrow left ${selectedIndex > 0 ? '' : 'disabled'}`} onClick={this.previous}>Prev</span>
@@ -97,7 +113,7 @@ export default class InfoWindow extends Component {
           </ol>
           <div className='analysis-instructions__draw-icon-container'>
             <svg className='analysis-instructions__draw-icon'>
-              <use xlinkHref="#icon-analysis-poly" />
+              <SVGIcon id={'icon-analysis-poly'} />
             </svg>
           </div>
         </div>

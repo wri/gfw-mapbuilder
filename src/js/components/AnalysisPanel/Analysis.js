@@ -1,41 +1,45 @@
 import CustomFeatureControl from 'components/AnalysisPanel/CustomFeatureControl';
 import CompositionPieChart from 'components/AnalysisPanel/CompositionPieChart';
 import AnalysisTypeSelect from 'components/AnalysisPanel/AnalysisTypeSelect';
-import RestorationCharts from 'components/AnalysisPanel/RestorationCharts';
 import TimeSeriesChart from 'components/AnalysisPanel/TimeSeriesChart';
-import TotalLossChart from 'components/AnalysisPanel/TotalLossChart';
-import SadAlertsChart from 'components/AnalysisPanel/SadAlertsChart';
 import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import SlopeSelect from 'components/AnalysisPanel/SlopeClassSelect';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
-import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
-import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
+import Badge from 'components/AnalysisPanel/Badge';
 import BarChart from 'components/AnalysisPanel/BarChart';
+import VegaChart from 'components/AnalysisPanel/VegaChart';
+import AnalysisRangeSlider from './AnalysisFormElements/AnalysisRangeSlider';
+import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
+import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
+import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
-import performAnalysis from 'utils/performAnalysis';
 import {attributes} from 'constants/AppConstants';
-import tabKeys from 'constants/TabViewConstants';
-import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
+import mapActions from 'actions/MapActions';
+import layerActions from 'actions/LayerActions';
+import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
+import analysisUtils from 'utils/analysisUtils';
 import Loader from 'components/Loader';
-// import Deferred from 'dojo/Deferred';
-import request from 'utils/request';
-import utils from 'utils/AppUtils';
+import esriRequest from 'esri/request';
+import moment from 'moment';
 import text from 'js/languages';
 import React, {
   Component,
   PropTypes
 } from 'react';
+import MapActions from '../../actions/MapActions';
 
-const getDefaultState = function () {
-  return {
-    error: false,
-    isLoading: true,
-    results: undefined
-  };
-};
+const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
+  <div className='analysis-item-wrapper'>
+    <div className='analysis-item-label'>
+      <span><strong>{itemNumber}</strong></span>
+      {title}
+    </div>
+    {children}
+  </div>
+);
 
 export default class Analysis extends Component {
 
@@ -44,164 +48,582 @@ export default class Analysis extends Component {
     settings: PropTypes.object.isRequired
   };
 
-  state = getDefaultState();
-
-  componentDidMount() {
-    const {settings, language} = this.context;
-    const {
-      selectedFeature,
-      activeTab,
-      activeAnalysisType,
-      canopyDensity,
-      activeSlopeClass
-    } = this.props;
-
-    if (selectedFeature && activeAnalysisType && activeTab === tabKeys.ANALYSIS) {
-      request.getRawGeometry(selectedFeature).then((geometry) => {
-        performAnalysis({
-          type: activeAnalysisType,
-          geometry: geometry,
-          canopyDensity: canopyDensity,
-          activeSlopeClass: activeSlopeClass,
-          settings: settings,
-          language: language
-        }).then((results) => {
-          this.setState({ results: results, isLoading: false });
-        }, () => {
-          this.setState({ isLoading: false, error: true });
-        });
-      });
-    }
-  }
-
-  //- Test this as it will need to be tweaked, ideally when we receive new props,
-  //- We want to reset state to default before our render pass
-  componentWillReceiveProps(nextProps) {
-    const {
-      selectedFeature,
-      activeTab,
-      activeAnalysisType,
-      canopyDensity,
-      activeSlopeClass
-    } = nextProps;
-
-    //- Only rerun the analysis if one of these things changes
-    if (
-      (selectedFeature !== this.props.selectedFeature ||
-      activeAnalysisType !== this.props.activeAnalysisType ||
-      activeTab !== this.props.activeTab ||
-      canopyDensity !== this.props.canopyDensity ||
-      activeSlopeClass !== this.props.activeSlopeClass
-      ) &&
-      activeTab === tabKeys.ANALYSIS &&
-      activeAnalysisType !== ''
-    ) {
-      this.setState(getDefaultState());
-      const {settings, language} = this.context;
-      request.getRawGeometry(selectedFeature).then((geometry) => {
-        performAnalysis({
-          type: activeAnalysisType,
-          geometry: geometry,
-          canopyDensity: canopyDensity,
-          activeSlopeClass: activeSlopeClass,
-          settings: settings,
-          language: language
-        }).then((results) => {
-          this.setState({ results: results, isLoading: false });
-        }, () => {
-          this.setState({ isLoading: false });
-        });
-      });
-    }
-  }
-
-  renderResults = (type, results, language) => {
-    const {settings} = this.context;
-    const layerGroups = settings.layerPanel;
-    const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-    const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
-    let labels, layerConf, colors;
-    switch (type) {
-      case analysisKeys.FIRES:
-        return <FiresBadge count={results.fireCount} />;
-      case analysisKeys.TC_LOSS_GAIN:
-        return <LossGainBadge lossCounts={results.lossCounts} gainCounts={results.gainCounts} />;
-      case analysisKeys.LCC:
-        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
-        return <CompositionPieChart
-          name={text[language].ANALYSIS_LCC_CHART_NAME}
-          counts={results.counts}
-          colors={layerConf.colors}
-          labels={layerConf.classes[language]} />;
-      case analysisKeys.TC_LOSS:
-        return <BarChart
-          name={text[language].ANALYSIS_TC_CHART_NAME}
-          counts={results.counts}
-          colors={analysisConfig[type].colors}
-          labels={lossLabels} />;
-      case analysisKeys.BIO_LOSS:
-        return <BiomassChart
-          payload={results}
-          labels={analysisConfig[type].labels}
-          colors={analysisConfig[type].colors}
-          />;
-      case analysisKeys.LC_LOSS:
-      case analysisKeys.INTACT_LOSS:
-      case analysisKeys.MANGROVE_LOSS:
-        layerConf = utils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
-        labels = (function () {
-          switch (type) {
-            case analysisKeys.LC_LOSS:
-              return layerConf.classes[language];
-            case analysisKeys.INTACT_LOSS:
-              return text[language].ANALYSIS_IFL_LABELS;
-            case analysisKeys.MANGROVE_LOSS:
-              return text[language].ANALYSIS_MANGROVE_LABELS;
-            default:
-              return analysisConfig[type].labels;
-          }
-        })();
-        colors = type === analysisKeys.LC_LOSS ? layerConf.colors : analysisConfig[type].colors;
-        return <TotalLossChart
-          counts={results.counts}
-          encoder={results.encoder}
-          options={results.options}
-          labels={labels}
-          lossLabels={lossLabels}
-          colors={colors} />;
-      case analysisKeys.SLOPE:
-        const {counts} = results;
-        labels = counts.map((v, index) => text[language].ANALYSIS_SLOPE_OPTION + (index + 1));
-        colors = settings.slopeAnalysisPotentialColors;
-        const tooltips = settings.labels[language].slopeAnalysisPotentialOptions;
-        //- Need a new chart to handle these values correctly
-        return <SlopeBarChart counts={counts} colors={colors} labels={labels} tooltips={tooltips} />;
-      case analysisKeys.SAD_ALERTS:
-        const {alerts} = results;
-        return <SadAlertsChart
-          alerts={alerts}
-          colors={analysisConfig[type].colors}
-          names={text[language].ANALYSIS_SAD_ALERT_NAMES} />;
-      case analysisKeys.GLAD_ALERTS:
-        return <TimeSeriesChart data={results} name={text[language].ANALYSIS_GLAD_ALERT_NAME} />;
-      case analysisKeys.TERRA_I_ALERTS:
-        return <TimeSeriesChart data={results} name={text[language].ANALYSIS_TERRA_I_ALERT_NAME} />;
-      default:
-      //- This should only be the restoration analysis, since its value is a plain rasterId
-        return <RestorationCharts results={results} />;
-    }
+  state = {
+    isLoading: false,
+    chartComponent: null,
   };
 
-  render () {
-    const {selectedFeature, activeAnalysisType, canopyDensity, activeSlopeClass} = this.props;
-    const {results, isLoading, error} = this.state;
-    const {language, settings} = this.context;
-    let chart, title, slopeSelect;
+  componentDidMount() {
+    const { settings } = this.context;
+    const { analysisModules } = settings;
 
-    // If we have results, show a chart
-    if (results) {
-      chart = this.renderResults(activeAnalysisType, results, language);
+    analysisModules.forEach((analysisModule) => {
+      MapActions.updateAnalysisParams.defer({ id: analysisModule.analysisId });
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.activeAnalysisType !== this.props.activeAnalysisType) {
+      this.setState({ chartComponent: null });
     }
+  }
+
+  getFormComponents = (activeAnalysisType, analysisItems) => {
+    const { language } = this.context;
+    const analysisItemConfig = analysisItems.filter(ai => ai.analysisId === activeAnalysisType)[0];
+    const { uiParams } = analysisItemConfig;
+    const formComponents = [];
+    if (uiParams === 'none') {
+      return (
+        <div
+          className='analysis-results__select-form-item-container'
+        >
+          Click the &lsquo;Run Analysis&rsquo; button see analysis
+        </div>
+      );
+    }
+
+    if (!uiParams || uiParams.length === 0) {
+      throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config. If you don't need UI elements, add `uiParams: 'none'`");
+    }
+
+    analysisItemConfig.uiParams.forEach((param, idx) => {
+      switch (param.inputType) {
+        case 'rangeSlider': {
+          const {
+            bounds,
+            step,
+            label,
+            startParamName,
+            endParamName,
+            combineParams,
+            inputType,
+            valueType,
+            valueSeparator,
+          } = param;
+
+          let initialStartValue = null;
+          let initialEndValue = null;
+
+          if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
+            throw new Error(`analysis id: '${analysisItemConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
+          }
+
+          if (analysisItemConfig.analysisId === 'TC_LOSS') {
+            const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
+            initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
+            initialEndValue = Number(lossOptions[lossToSelectIndex].label);
+          }
+          formComponents.push(
+            <AnalysisItemWrapper
+              key={analysisItemConfig.analysisId + inputType + idx}
+              title={label[language]}
+              itemNumber={idx + 1}
+            >
+              <AnalysisRangeSlider
+                analysisId={analysisItemConfig.analysisId}
+                bounds={bounds}
+                valueType={valueType || null}
+                startParamName={startParamName}
+                endParamName={combineParams ? null : endParamName}
+                valueSeparator={combineParams ? valueSeparator : null}
+                step={step || 1}
+                combineParams={combineParams}
+                initialStartValue={initialStartValue}
+                initialEndValue={initialEndValue}
+                rangeSliderCallback={this.rangeSliderCallback}
+              />
+            </AnalysisItemWrapper>
+          );
+          break;
+        }
+        case 'tcd': {
+          const { canopyDensity } = this.props;
+          const { label } = param;
+          formComponents.push(
+            <AnalysisItemWrapper
+              key={analysisItemConfig.analysisId + param.inputType + idx}
+              title={label[language] ? label[language] : ''}
+              itemNumber={idx + 1}
+            >
+              <div
+                className='analysis-results__select-form-item-container'
+              >
+                <DensityDisplay
+                  label={''}
+                  canopyDensity={canopyDensity}
+                />
+              </div>
+            </AnalysisItemWrapper>
+          );
+          break;
+        }
+        case 'datepicker': {
+          const {
+            label,
+            startParamName,
+            endParamName,
+            combineParams,
+            valueSeparator,
+            multi,
+            minDate,
+            maxDate,
+          } = param;
+
+          let {
+            defaultStartDate,
+            defaultEndDate,
+          } = param;
+
+          let initialStartDate = null;
+          let initialEndDate = null;
+
+          if (analysisItemConfig.analysisId === 'GLAD_ALERTS') {
+            const { gladStartDate, gladEndDate } = this.props;
+            initialStartDate = moment(gladStartDate);
+            initialEndDate = moment(gladEndDate);
+          }
+
+          if (analysisItemConfig.analysisId === 'FORMA_ALERTS') {
+            const { formaStartDate, formaEndDate } = this.props;
+            initialStartDate = moment(formaStartDate);
+            initialEndDate = moment(formaEndDate);
+          }
+
+          if (analysisItemConfig.analysisId === 'TERRAI_ALERTS') {
+            const { terraIStartDate, terraIEndDate } = this.props;
+            initialStartDate = moment(terraIStartDate);
+            initialEndDate = moment(terraIEndDate);
+          }
+
+          if (analysisItemConfig.analysisId === 'VIIRS_FIRES') {
+            const { viirsStartDate, viirsEndDate } = this.props;
+            initialStartDate = moment(viirsStartDate);
+            initialEndDate = moment(viirsEndDate);
+          }
+
+          if (initialStartDate) { defaultStartDate = initialStartDate; }
+          if (initialEndDate) { defaultEndDate = initialEndDate; }
+
+          if (!defaultStartDate && minDate) {
+            defaultStartDate = minDate;
+          }
+
+          if (!defaultEndDate && maxDate) {
+            defaultEndDate = maxDate;
+          }
+
+          if (multi === true || multi === 'true') {
+            formComponents.push(
+              <AnalysisItemWrapper
+                key={analysisItemConfig.analysisId + param.inputType + idx}
+                title={label[language]}
+                itemNumber={idx + 1}
+              >
+                <AnalysisMultiDatePicker
+                  analysisId={analysisItemConfig.analysisId}
+                  startParamName={startParamName}
+                  endParamName={endParamName}
+                  combineParams={combineParams || null}
+                  valueSeparator={combineParams ? valueSeparator : null}
+                  multi={true}
+                  defaultStartDate={defaultStartDate || new Date()}
+                  defaultEndDate={defaultEndDate || new Date()}
+                  minDate={minDate || null}
+                  maxDate={maxDate || new Date()}
+                  calendarCallback={this.calendarCallback}
+                />
+              </AnalysisItemWrapper>
+            );
+            break;
+          }
+
+          formComponents.push(
+            <AnalysisItemWrapper
+              key={analysisItemConfig.analysisId + param.inputType + idx}
+              title={label[language]}
+              itemNumber={idx + 1}
+            >
+              <AnalysisDatePicker
+                analysisId={analysisItemConfig.analysisId}
+                startParamName={startParamName}
+                combineParams={combineParams || null}
+                valueSeparator={combineParams ? valueSeparator : null}
+                multi={false}
+                defaultSelected={defaultStartDate || null}
+                minDate={minDate}
+                maxDate={maxDate}
+                calendarCallback={this.calendarCallback}
+              />
+            </AnalysisItemWrapper>
+          );
+
+          break;
+        }
+        default:
+          return null;
+      }
+    });
+    return formComponents;
+  }
+
+  rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
+    let startValue = rangeSliderValue[0];
+    let endValue = rangeSliderValue[1];
+
+    if (valueType === 'date') {
+      startValue = `${startValue}-01-01`;
+      endValue = `${endValue}-12-31`;
+    }
+
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startValue}${valueSeparator}${endValue}`,
+      });
+      return;
+    }
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: startParam,
+      paramValue: `${startValue}`,
+    });
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: endParam,
+      paramValue: `${endValue}`,
+    });
+  }
+
+  calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
+    const sDate = moment(startDate);
+    const eDate = moment(endDate);
+
+    switch (id) {
+      case 'TC_LOSS': {
+        // let lossObj = null;
+        // if (!results.hasOwnProperty('error')) {
+        //   lossObj = results.data.attributes.loss;
+        //   counts = Object.values(lossObj);
+        // }
+        break;
+      }
+      case 'VIIRS_FIRES': {
+        if (startDate) {
+          const isSameStart = this.props.viirsStartDate.diff(sDate, 'days') === 0;
+          if (!isSameStart) {
+            layerActions.updateViirsStartDate(sDate);
+          }
+        }
+
+        if (endDate) {
+          const isSameEnd = this.props.viirsEndDate.diff(eDate, 'days') === 0;
+          if (!isSameEnd) {
+            layerActions.updateViirsStartDate(eDate);
+          }
+        }
+
+      }
+      default: {
+        break;
+      }
+    }
+
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startDate}${valueSeparator}${endDate}`,
+      });
+      return;
+    }
+
+    if (multi === true || multi === 'true') {
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: endParam,
+        paramValue: endDate,
+      });
+    }
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: startParam,
+      paramValue: startDate,
+    });
+  }
+
+  renderResults = (type, results, language, config) => {
+
+    const { chartType, label, colors } = config;
+    const { analysisSliderIndices } = this.props;
+    let chartComponent = null;
+
+    switch (chartType) {
+      case 'bar': {
+        const { chartBounds, analysisId, valueAttribute } = config;
+        const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
+        .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
+
+        let startIndex = 0;
+        let endIndex = labels.length - 1;
+
+        if (analysisSliderIndices[analysisId]) {
+          startIndex = analysisSliderIndices[analysisId][0];
+          endIndex = analysisSliderIndices[analysisId][1];
+        }
+
+        let counts = [];
+
+        switch (analysisId) {
+          case 'TC_LOSS': {
+            let lossObj = null;
+            if (!results.hasOwnProperty('error')) {
+              lossObj = results.data.attributes.loss;
+              counts = Object.values(lossObj);
+            }
+            break;
+          }
+          case 'IFL': {
+            if (!results.hasOwnProperty('error')) {
+
+              results.data.attributes.histogram[0].result.forEach(histo => {
+                counts.push(Math.round(histo.result * 100) / 100);
+              });
+            }
+            break;
+          }
+          default: {
+            counts = results;
+            if (valueAttribute) {
+              counts = valueAttribute.split('.').reduce((prevVal, currentVal) => {
+                if (!prevVal.hasOwnProperty(currentVal)) {
+                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
+                }
+                return prevVal[currentVal];
+              }, results);
+            }
+          }
+        }
+
+        chartComponent = <BarChart
+          name={label[language]}
+          counts={counts}
+          colors={colors ? colors : ['#cf5188']}
+          labels={labels.slice(startIndex, endIndex + 1)}
+          results={results}
+          encoder={null}
+        />;
+        break;
+      }
+      case 'timeSeries': {
+        const { analysisId, valueAttribute } = config;
+
+        let data = [];
+
+        switch (analysisId) {
+          case 'GLAD_ALERTS': {
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.value);
+            }
+            break;
+          }
+          case 'FORMA_ALERTS': {
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.alertCounts);
+            }
+            break;
+          }
+          case 'TERRAI_ALERTS': {
+            if (!results.hasOwnProperty('error')) {
+              data = formatters.alerts(results.data.attributes.value);
+            }
+            break;
+          }
+          default: {
+            data = results;
+
+            if (valueAttribute) {
+              data = valueAttribute.split('.').reduce((prevVal, currentVal) => {
+                if (!prevVal.hasOwnProperty(currentVal)) {
+                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
+                }
+                return prevVal[currentVal];
+              }, results);
+            }
+          }
+        }
+        chartComponent = <TimeSeriesChart data={data} name={label[language] ? label[language] : ''} />;
+        break;
+      }
+      case 'badge': {
+        const {
+          activeAnalysisType,
+          lossFromSelectIndex,
+          lossToSelectIndex,
+          viirsEndDate,
+          viirsStartDate,
+        } = this.props;
+
+        const { valueAttribute, color, badgeLabel } = config;
+
+        switch (activeAnalysisType) {
+          case 'TC_LOSS_GAIN':
+            chartComponent = <LossGainBadge
+              results={results}
+              lossFromSelectIndex={lossFromSelectIndex}
+              lossToSelectIndex={lossToSelectIndex}
+              totalLossLabel={text[language].ANALYSIS_TOTAL_LOSS_LABEL}
+              totalGainLabel={text[language].ANALYSIS_TOTAL_GAIN_LABEL}
+              totalGainRange={text[language].ANALYSIS_TOTAL_GAIN_RANGE}
+            />;
+            break;
+          case 'VIIRS_FIRES':
+            chartComponent = <FiresBadge
+              results={results}
+              from={viirsStartDate}
+              to={viirsEndDate}
+              preLabel={text[language].ANALYSIS_FIRES_PRE}
+              firesLabel={text[language].ANALYSIS_FIRES_ACTIVE}
+              timelineStartLabel={text[language].TIMELINE_START}
+              timelineEndLabel={text[language].TIMELINE_END}
+            />;
+            break;
+          default:
+            chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
+
+        }
+        break;
+      }
+      case 'biomassLoss': {
+        chartComponent = <BiomassChart
+          payload={results}
+          colors={analysisConfig.BIO_LOSS.colors}
+          lossName={text[language].ANALYSIS_CARBON_LOSS}
+          carbonName={text[language].ANALYSIS_CARBON_EMISSION}
+          />;
+        break;
+      }
+      case 'lccPie': {
+        const data = {
+          counts: []
+        };
+        if (!results.hasOwnProperty('error')) {
+          results.data.attributes.histogram.forEach(histo => {
+            if (!data[histo.className]) {
+              data[histo.className] = 0;
+            }
+            histo.result.forEach(year => {
+              data[histo.className] += year.result;
+            });
+            data.counts.push(Math.round(data[histo.className] * 100) / 100);
+          });
+        }
+
+        chartComponent = <CompositionPieChart
+          results={results}
+          name={label[language]}
+          counts={data.counts}
+          colors={config.colors}
+          labels={config.classes[language]}
+        />;
+        break;
+      }
+      case 'gfwWidget':
+        chartComponent = <VegaChart results={results} setLoading={() => this.setState({isLoading: false})}/>;
+        break;
+      case 'vega':
+        chartComponent = <VegaChart results={results} setLoading={() => this.setState({isLoading: false})}/>;
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ chartComponent });
+  }
+
+  setLoader = loadingObj => { //isLoading and possibly error
+    this.setState(loadingObj);
+  }
+
+  runAnalysis = () => {
+    const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity } = this.props;
+    const { settings: { analysisModules }, language } = this.context;
+    this.setState({
+      isLoading: true,
+      results: null,
+    });
+    Object.keys(analysisParams).forEach(analysisId => {
+      if (analysisId === activeAnalysisType) {
+        const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
+        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
+          selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
+        }
+        const geostoreId = selectedFeature.attributes.geostoreId;
+
+        const uiParamsToAppend = analysisParams[analysisId];
+        uiParamsToAppend.geostore = geostoreId;
+
+        if (analysisSettings.uiParams && analysisSettings.uiParams !== 'none') {
+          const TCDConfig = analysisSettings.uiParams.filter(p => p.inputType === 'tcd')[0];
+          if (TCDConfig) { uiParamsToAppend[TCDConfig.name] = canopyDensity; }
+        }
+
+        if (analysisSettings.params && analysisSettings.params.length !== 0) {
+          analysisSettings.params.forEach(param => {
+            uiParamsToAppend[param.name] = param.value;
+          });
+        }
+
+        if (analysisSettings.useGfwWidget) {
+          analysisSettings.chartType = 'vega';
+
+          analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
+            this.renderResults(analysisId, results, language, analysisSettings);
+          });
+          return;
+        }
+
+        esriRequest({
+          url: analysisSettings.analysisUrl,
+          callbackParamName: 'callback',
+          content: uiParamsToAppend,
+          handleAs: 'json',
+          timeout: 30000
+        }, { usePost: false }).then(results => {
+          this.setState({ isLoading: false });
+          this.renderResults(analysisId, results, language, analysisSettings);
+        }, (error) => {
+          this.setState({
+            isLoading: false,
+            results: {
+              error: error,
+              message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+            },
+          }, () => {
+            this.renderResults(analysisId, this.state.results, language, analysisSettings);
+          });
+        });
+      }
+    });
+  }
+
+  render () {
+    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
+    const { isLoading, chartComponent} = this.state;
+    const {language, settings} = this.context;
+    const showFooter = activeAnalysisType !== 'default' && !chartComponent;
+    let title, slopeSelect;
 
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
@@ -212,20 +634,12 @@ export default class Analysis extends Component {
       );
     }
 
-    const showDensityDisplay = (
-      activeAnalysisType === analysisKeys.TC_LOSS ||
-      activeAnalysisType === analysisKeys.TC_LOSS_GAIN ||
-      activeAnalysisType === analysisKeys.LC_LOSS ||
-      activeAnalysisType === analysisKeys.BIO_LOSS ||
-      activeAnalysisType === analysisKeys.INTACT_LOSS
-    );
-
     if (selectedFeature.attributes.source === attributes.SOURCE_DRAW ||
       selectedFeature.attributes.source === attributes.SOURCE_UPLOAD
     ) {
       title = (
         <div className='analysis-results__title'>
-          <CustomFeatureControl feature={selectedFeature} />
+          <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
         </div>
       );
     } else {
@@ -236,29 +650,50 @@ export default class Analysis extends Component {
       );
     }
 
+    let activeAnalysisItem;
+    let activeItemTitle = null,
+        activeItemDescription = null;
+
+    if (activeAnalysisType !== 'default') {
+      activeAnalysisItem = settings.analysisModules.filter(i => i.analysisId === activeAnalysisType)[0];
+      if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
+      if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
+    }
+
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
-        <div className='analysis-results__content custom-scroll'>
-          {title}
-          <div className='analysis-results__select-label'>
-            {text[language].ANALYSIS_SELECT_TYPE_LABEL}
+        <div className={`analysis-results__content custom-scroll ${showFooter ? 'footer' : ''}`}>
+          <div className='title-select-container'>
+            <div className='analysis-title'>{title}</div>
+            <div className='analysis-results__select-label'>
+              {text[language].ANALYSIS_SELECT_TYPE_LABEL}
+            </div>
+            <AnalysisTypeSelect {...this.props} analysisItems={settings.analysisModules} />
           </div>
-          <AnalysisTypeSelect {...this.props} />
-          {error ?
-            <div className=''>Error Here</div> :
-            <div>
-              <div className={`analysis-results__density-display ${showDensityDisplay ? '' : 'hidden'}`}>
-                <DensityDisplay canopyDensity={canopyDensity} />
-              </div>
+          {activeAnalysisType !== 'default' && !chartComponent &&
+            <div className='analysis-results__select-form custom-scroll'>
+              <div className='item-title'>{activeItemTitle}</div><div className='item-description'>{activeItemDescription}</div>
+              {this.getFormComponents(activeAnalysisType, settings.analysisModules)}
+            </div>
+          }
+          {chartComponent &&
+            <div className='analysis-results__chart-component-container'>
               {slopeSelect}
-              {chart}
+              {chartComponent}
             </div>
           }
         </div>
-        <div className='analysis-results__footer'>
-          <ReportSubscribeButtons />
-        </div>
+        {showFooter &&
+          <div className='analysis-results__footer'>
+            <div className='run-analysis-button-container'>
+              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+                {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+              </button>
+            </div>
+            <ReportSubscribeButtons setLoader={this.setLoader} />
+          </div>
+        }
       </div>
     );
   }

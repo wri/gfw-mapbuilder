@@ -1,6 +1,7 @@
 .infoWindow
   color $darkGray
   height 100%
+  position relative !important
 
   .feature-name
     border-bottom 1px solid #888
@@ -58,9 +59,15 @@
   padding 10px
 
 .infoWindow__footer
+  display flex
+  justify-content space-around
+  height 70px
+  padding-top 5px
+  background-color white
+  box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
   position absolute
-  width 100%
   bottom 0
+  right 0
   left 0
 
 .infoWindow__clearFeatures-icon
@@ -72,13 +79,24 @@
 .infoWindow__no-configure
   margin 10px
 
+.custom-feature__header
+  display flex
+  justify-content space-between
+
+.edit-delete-container
+  display flex
+
 .custom-feature__input
   -webkit-appearance none
   outline none
   border none
 
 .custom-feature__delete
-  float right
+  margin-left 5px
+  align-self flex-end
+
+.pointer-custom
+  cursor pointer
 
 .custom-feature__content
   padding 10px

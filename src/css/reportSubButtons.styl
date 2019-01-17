@@ -1,17 +1,76 @@
-.report-sub-buttons
-  justify-content center
-  align-items center
-  display flex
+.report-sub-button-container
+  height 60%
+  width 100%
+  padding 5px 0
 
-.report-sub-buttons button
-  text-transform uppercase
-  -webkit-appearance none
-  font-weight 500
-  margin 10px 5px
-  font-size 13px
-  padding 0 20px
-  outline none
-  color white
-  border none
-  &:active
-    box-shadow 0 0 2px $darkGray
+  .report-sub-buttons
+    justify-content space-around
+    align-items center
+    display flex
+    height 32px
+    padding 0 20px
+
+  .report-sub-buttons button, .subscription-sub-buttons button
+    position unset // remove absolute position from an esri class
+    text-transform uppercase
+    -webkit-appearance none
+    height 100%
+    width 115px
+    font-weight 500
+    font-size 12px
+    outline none
+    border 1px solid $lightGrayHighlight
+    line-height 14px
+    display flex
+    justify-content space-around
+    align-items center
+    background-color inherit
+    border-radius 16px
+    color $darkGray
+
+    .print-icon, .subscribe-icon
+      height 25px
+      width 25px
+
+    &:hover
+      background-color $lightGrayHighlight
+
+  .button-description-container
+    width 100%
+    display flex
+    justify-content center
+    align-items center
+
+    .button-description-text
+      width 80%
+      padding-top 5px
+      font-size 12px
+      text-align center
+
+.run-analysis-button-container
+  display flex
+  flex-direction column
+  justify-content space-around
+  align-items center
+  width 100%
+  .run-analysis-button
+    border 2px solid $goldTheme
+    height 32px
+    color #ffffff
+    width 80%
+    border-radius 16px
+    background-color $goldTheme
+    font-size 16px
+    text-transform uppercase
+
+// .subscription-sub-buttons button
+//   justify-content right
+//   align-items right
+//   display flex
+//   float left
+
+// .subscription-sub-buttons button:last-of-type
+//   justify-content left
+//   align-items left
+//   display flex
+//   float right

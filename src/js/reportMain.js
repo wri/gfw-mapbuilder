@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 0 */
 import IdentityManager from 'esri/IdentityManager';
 import {corsServers, assetUrls} from 'js/config';
-import {loadJS} from 'utils/loaders';
+import {loadJS, loadCSS } from 'utils/loaders';
 import esriConfig from 'esri/config';
 import report from 'report/report';
 import 'babel-polyfill';
@@ -16,17 +16,5 @@ const configureApp = () => {
   corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
 };
 
-const lazyloadAssets = () => {
-  window.highchartsPromise = loadJS(assetUrls.highcharts);
-  window.highchartsPromise.then(() => {
-    Highcharts.setOptions({
-      chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
-      lang: { thousandsSep: ',' }
-    });
-  });
-  loadJS(assetUrls.highchartsMore);
-};
-
 configureApp();
-lazyloadAssets();
 report.run();

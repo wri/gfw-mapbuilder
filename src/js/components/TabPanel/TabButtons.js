@@ -2,7 +2,9 @@ import {attributes, esriType} from 'constants/AppConstants';
 import tabKeys from 'constants/TabViewConstants';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
+import SVGIcon from 'utils/svgIcon';
 
 //- Parse Keys for easier access
 const {
@@ -10,6 +12,7 @@ const {
   LAYERS,
   ANALYSIS,
   INFO_WINDOW,
+  MEASUREMENT,
   NARRATIVE,
   MORE
 } = tabKeys;
@@ -40,7 +43,10 @@ export default class TabButtons extends Component {
     if (!initialTabSet && map.loaded) {
       const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
       const activeTab = window && window.innerWidth > 950 ? (narrative ? NARRATIVE : LAYERS) : '';
-      mapActions.changeActiveTab.defer(activeTab);
+      const params = getUrlParams(location.search);
+      if (!params.t) {
+        mapActions.changeActiveTab.defer(activeTab);
+      }
       initialTabSet = true;
     }
     /**
@@ -115,7 +121,8 @@ export default class TabButtons extends Component {
           {!narrative ? null :
             <li className={this.getClassName(NARRATIVE)} data-value={NARRATIVE} onClick={this.changeTab}>
               <svg className='svg-icon tab-icon-narrative'>
-                <use xlinkHref="#shape-info" />
+                <SVGIcon id={'shape-info'} />
+
               </svg>
               <span className='tab-tooltip'>{text[language].NARRATIVE}</span>
               <span className='tab-buttons__tab-label mobile-show'>
@@ -125,7 +132,8 @@ export default class TabButtons extends Component {
           }
           <li className={this.getClassName(LAYERS)} data-value={LAYERS} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <use xlinkHref="#icon-basemap" />
+              <SVGIcon id={'icon-basemap'} />
+
             </svg>
             <span className='tab-tooltip'>{text[language].LAYERS}</span>
             <span className='tab-buttons__tab-label mobile-show'>
@@ -134,26 +142,50 @@ export default class TabButtons extends Component {
           </li>
           <li className={this.getClassName(INFO_WINDOW)} data-value={INFO_WINDOW} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <use xlinkHref="#icon-data" />
+              <SVGIcon id={'icon-data'} />
+
             </svg>
             <span className='tab-tooltip'>{text[language].DATA}</span>
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].DATA}
             </span>
           </li>
-          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
+          {!settings.includeMeasurementTab ? null :
+            <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
+              <svg className='svg-icon'>
+                <SVGIcon id={'icon-measure'} />
+
+              </svg>
+              <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
+              <span className='tab-buttons__tab-label mobile-show'>
+                {text[language].MEASUREMENT}
+              </span>
+            </li>
+          }
+          {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <use xlinkHref="#icon-analysis" />
+              <SVGIcon id={'icon-analysis'} />
+
             </svg>
             <span className='tab-tooltip'>{text[language].ANALYZE}</span>
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].ANALYZE}
             </span>
-          </li>
+          </li> ||
+          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)} analysis-disabled`} data-value={ANALYSIS}>
+            <svg className='svg-icon'>
+              <SVGIcon id={'icon-analysis'} />
+            </svg>
+            <span className='tab-tooltip'>Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily</span>
+            <span className='tab-buttons__tab-label mobile-show'>
+              {text[language].ANALYZE}
+            </span>
+          </li>}
           {!settings.includeDocumentsTab ? null :
             <li className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`} data-value={DOCUMENTS} onClick={this.changeTab}>
               <svg className='svg-icon'>
-                <use xlinkHref='#icon-documents' />
+                <SVGIcon id={'icon-documents'} />
+
               </svg>
               <span className='tab-tooltip'>{text[language].DOCUMENTS}</span>
               <span className='tab-buttons__tab-label mobile-show'>
@@ -163,7 +195,8 @@ export default class TabButtons extends Component {
           }
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>
-              <use xlinkHref="#icon-menu" />
+              <SVGIcon id={'icon-menu'} />
+
             </svg>
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].MORE}

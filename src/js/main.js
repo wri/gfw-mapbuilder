@@ -1,10 +1,8 @@
 /* eslint no-unused-vars: 0 */
 import App from 'components/App';
 import ShareModal from 'components/Modals/ShareModal';
-import IdentityManager from 'esri/IdentityManager';
-import {corsServers, assetUrls} from 'js/config';
-import {loadJS, loadCSS } from 'utils/loaders';
-import generateCSV from 'utils/csvUtils';
+import { corsServers } from 'js/config';
+import { loadCSS } from 'utils/loaders';
 import esriConfig from 'esri/config';
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -13,7 +11,6 @@ import 'babel-polyfill';
 if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }
 
 window.brApp = {
-  // debug: location.search.slice(1).search('debug') > -1
   debugEnabled: true,
   debug: function (message) {
     if (this.debugEnabled) {
@@ -42,25 +39,10 @@ const configureApp = () => {
 * When deploying to specific versions, this must be used for all relative paths
 */
 const lazyloadAssets = () => {
-  loadCSS('http://fonts.googleapis.com/css?family=Fira+Sans:400,500,300');
-  loadCSS(`${window._app.base ? window._app.base + '/' : ''}css/app.css`);
-  loadCSS(`https://js.arcgis.com/${window._app.esri}/dijit/themes/tundra/tundra.css`);
-  loadCSS(`https://js.arcgis.com/${window._app.esri}/esri/css/esri.css`);
-  loadJS(assetUrls.highcharts).then(() => {
-    //- Set default Options for Highcharts
-    Highcharts.setOptions({
-      chart: { style: { fontFamily: '"Fira Sans", Georgia, sans-serif' }},
-      lang: { thousandsSep: ',' }
-    });
-  });
-  loadJS(assetUrls.highchartsMore);
-  loadJS(assetUrls.highchartsExports).then(() => {
-    //- Add CSV Exporting as an option
-    Highcharts.getOptions().exporting.buttons.contextButton.menuItems.push({
-      text: 'Download CSV',
-      onclick: generateCSV
-    });
-  });
+  const base = window._app.base ? window._app.base + '/' : '';
+
+  loadCSS(`https://js.arcgis.com/3.20/dijit/themes/tundra/tundra.css`);
+  loadCSS(`https://js.arcgis.com/3.20/esri/css/esri.css`);
 };
 
 const initializeApp = () => {
