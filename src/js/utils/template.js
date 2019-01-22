@@ -248,12 +248,6 @@ const formatResources = () => {
     )
   );
 
-  Promise.all(remoteDataLayerRequests)
-  .then(remoteLayers => {
-    remoteLayers.forEach(item => {
-      resources.layerPanel[item.group].layers.push(item.layer);
-    });
-
   //- Update path if it is relative to point to local
   const base = window._app.base ? window._app.base + '/' : '';
   if (resources.logoUrl && resources.logoUrl.indexOf('.') === 0) {
@@ -261,13 +255,13 @@ const formatResources = () => {
   }
 
   // Object.keys(resources.basemaps).forEach((language) => {
-  //   Object.keys(resources.basemaps[language]).forEach((bm) => {
-  //     const basemap = resources.basemaps[language][bm];
-  //     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
-  //       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
-  //     }
-  //   });
-  // });
+    //   Object.keys(resources.basemaps[language]).forEach((bm) => {
+      //     const basemap = resources.basemaps[language][bm];
+      //     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
+        //       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
+        //     }
+        //   });
+        // });
 
   resources.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
@@ -275,7 +269,12 @@ const formatResources = () => {
     }
   });
 
-});
+  return Promise.all(remoteDataLayerRequests)
+  .then(remoteLayers => {
+    remoteLayers.forEach(item => {
+      resources.layerPanel[item.group].layers.push(item.layer);
+    });
+  });
 
 };
 
@@ -296,9 +295,10 @@ export default {
 
     if (!appid) {
       //- Format the resources before resolving
-      formatResources();
-      promise.resolve(resources);
-      return promise;
+      formatResources().then(() => {
+        promise.resolve(resources);
+        return promise;
+      });
     }
 
     arcgisUtils.getItem(appid).then(res => {
@@ -307,8 +307,9 @@ export default {
       //- If we dont have agol settings, save the defaults, else merge them in
       if (!agolValues) {
         //- Format the resources before resolving
-        formatResources();
-        promise.resolve(resources);
+        formatResources().then(() => {
+          promise.resolve(resources);
+        });
       } else {
         //- Prune agolValues by removing null keys
         agolValues = pruneValues(agolValues);
@@ -326,8 +327,9 @@ export default {
 
     }, err => {
       if (brApp.debug) { console.warn(`template.getAppInfo >> ${err.message}`); }
-      formatResources();
-      promise.resolve(resources);
+      formatResources().then(() => {
+        promise.resolve(resources);
+      });
     });
 
     return promise;
