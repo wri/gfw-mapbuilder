@@ -179,6 +179,7 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
+      sharinghost: settings.sharinghost,
       ...(layerId ? {layerId} : {}),
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})

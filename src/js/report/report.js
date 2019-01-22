@@ -293,6 +293,8 @@ const createMap = function createMap (params) {
     zoom: 2
   };
 
+  if (params.sharinghost) { resources.sharinghost = params.sharinghost; }
+
   // Set the sharinghost to the correct location so the app can find the webmap content
   if (!resources.sharinghost) { resources.sharinghost = 'https://www.arcgis.com'; }
   arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
