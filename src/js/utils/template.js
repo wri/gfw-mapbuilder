@@ -287,6 +287,7 @@ export default {
   */
   getAppInfo: (id) => {
     const promise = new Deferred();
+    console.log(id);
     const appid = id ? id : getUrlParams(location.href).appid;
 
     // Set the sharinghost to the correct location so the app can find the webmap content
@@ -300,8 +301,9 @@ export default {
         return promise;
       });
     }
-
+    console.log(appid);
     arcgisUtils.getItem(appid).then(res => {
+      console.log(res);
       let agolValues = res.itemData && res.itemData.values;
 
       //- If we dont have agol settings, save the defaults, else merge them in
