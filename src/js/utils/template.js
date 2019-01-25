@@ -255,13 +255,13 @@ const formatResources = () => {
   }
 
   // Object.keys(resources.basemaps).forEach((language) => {
-    //   Object.keys(resources.basemaps[language]).forEach((bm) => {
-      //     const basemap = resources.basemaps[language][bm];
-      //     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
-        //       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
-        //     }
-        //   });
-        // });
+  //   Object.keys(resources.basemaps[language]).forEach((bm) => {
+  //     const basemap = resources.basemaps[language][bm];
+  //     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
+  //       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
+  //#endregion//     }
+  //   });
+  // });
 
   resources.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
