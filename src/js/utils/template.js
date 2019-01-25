@@ -274,6 +274,7 @@ const formatResources = () => {
     remoteLayers.forEach(item => {
       resources.layerPanel[item.group].layers.push(item.layer);
     });
+    return resources;
   });
 
 };
@@ -295,8 +296,8 @@ export default {
 
     if (!appid) {
       //- Format the resources before resolving
-      formatResources().then(() => {
-        promise.resolve(resources);
+      formatResources().then(formattedResources => {
+        promise.resolve(formattedResources);
       });
       return promise;
     }
@@ -307,8 +308,8 @@ export default {
       //- If we dont have agol settings, save the defaults, else merge them in
       if (!agolValues) {
         //- Format the resources before resolving
-        formatResources().then(() => {
-          promise.resolve(resources);
+        formatResources().then(formattedResources => {
+          promise.resolve(formattedResources);
         });
         return promise;
       } else {
@@ -322,14 +323,15 @@ export default {
         resources.appid = appid;
 
         //- Format the resources before resolving
-        formatResources();
-        promise.resolve(resources);
+        formatResources().then(formattedResources => {
+          promise.resolve(formattedResources);
+        });
       }
 
     }, err => {
       if (brApp.debug) { console.warn(`template.getAppInfo >> ${err.message}`); }
-      formatResources().then(() => {
-        promise.resolve(resources);
+      formatResources().then(formattedResources => {
+        promise.resolve(formattedResources);
       });
     });
 
