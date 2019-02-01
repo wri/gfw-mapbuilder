@@ -11,7 +11,7 @@
 		"logoLinkUrl": "http://developers.globalforestwatch.org/map-builder/",
 		"aboutLinkUrl": "",
 		"downloadLinkUrl": "",
-
+		
 		"useAlternativeLanguage": false,
 		"alternativeLanguage": "fr",
 		"alternativeWebmap": "",
@@ -29,13 +29,16 @@
 		"aboveGroundBiomass": true,
 		"landCover": true,
 		"mangroves": false,
+		"primaryForests": false,
+		"forma": true,
+		"recentImagery": true,
 
 		"iso": "",
 		"hideHeader": false,
 		"hideFooter": false,
 		"includeMyGFWLogin": false,
 		"includeDocumentsTab": false,
-    "includeMeasurementTab": false,
+		"includeMeasurementTab": false,
 
 		"mapThemeIds": "",
 		"mapThemes": "",
