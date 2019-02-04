@@ -19,6 +19,7 @@ import PrimaryForestLayer from 'js/layers/PrimaryForestLayer';
 import layerUtils from 'utils/layerUtils';
 import layerKeys from 'constants/LayerConstants';
 import {errors} from 'js/config';
+import { addYears } from 'date-fns';
 
 /**
 * Helper function to make infoTemplates
@@ -85,12 +86,13 @@ export default (layer, lang) => {
       options.opacity = layer.opacity || 1.0;
       options.imageParameters = imageParameters;
       //- Add a popup template if configuration is present
-      if (layer.popup) {
+      if (layer.popup && layer.layerIds) {
         options.infoTemplates = {};
         const template = layerUtils.makeInfoTemplate(layer.popup, lang);
         layer.layerIds.forEach((id) => { options.infoTemplates[id] = { infoTemplate: template }; });
       }
-
+      console.log(layer, options);
+      if (!options || !options.id || !layer.layerIds) { return false; }
       esriLayer = new DynamicLayer(layer.url, options);
 
       if (layer.id === 'VIIRS_ACTIVE_FIRES' || layer.id === 'MODIS_ACTIVE_FIRES') {
