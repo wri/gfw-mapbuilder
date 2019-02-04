@@ -34,9 +34,8 @@ var MapBuilder = function(args){
         newBase = scripts[j].src;
       }
     }
-
-    newBase = newBase.split(constructorParams.version)[0] + constructorParams.version;
-
+    const version = newBase.split('libBuild/')[1].replace('.js', '');
+    newBase = newBase.split(version)[0] + version;
     window._app = {
       cache: constructorParams.version,
       esri: '#{esriVersion}',
