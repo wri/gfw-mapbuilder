@@ -91,7 +91,7 @@ export default (layer, lang) => {
         const template = layerUtils.makeInfoTemplate(layer.popup, lang);
         layer.layerIds.forEach((id) => { options.infoTemplates[id] = { infoTemplate: template }; });
       }
-      console.log(layer, options);
+
       if (!options || !options.id || !layer.layerIds) { return false; }
       esriLayer = new DynamicLayer(layer.url, options);
 
