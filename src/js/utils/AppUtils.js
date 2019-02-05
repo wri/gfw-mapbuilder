@@ -101,6 +101,38 @@ const utils = {
     return JSON.parse(JSON.stringify(sourceObject));
   },
 
+  registerGeom: (feature, success, failure, options) => {
+    const geographic = webmercatorUtils.webMercatorToGeographic(feature.geometry);
+    const geojson = geojsonUtil.arcgisToGeoJSON(geographic);
+    const geoStore = {
+      'geojson': {
+        'type': 'FeatureCollection',
+        'features': [{
+          'type': 'Feature',
+          'properties': {},
+          'geometry': geojson
+        }]
+      }
+    };
+    const content = JSON.stringify(geoStore);
+
+    const http = new XMLHttpRequest();
+    const url = 'https://production-api.globalforestwatch.org/v1/geostore';
+    const params = content;
+    http.open('POST', url, true);
+
+    http.setRequestHeader('Content-type', 'application/json');
+
+    http.onreadystatechange = () => {
+      if(http.readyState === 4 && http.status === 200) {
+        success(JSON.parse(http.responseText), options);
+      } else if (http.readyState === 4) {
+        failure(http);
+      }
+    };
+    http.send(params);
+  },
+
   geometrySuccess: (response, options) => {
     const {
       settings,
