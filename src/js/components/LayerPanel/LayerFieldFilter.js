@@ -22,9 +22,9 @@ export default class LayerFieldFilter extends Component {
   componentWillMount() {
     // Make request for dropdown options..
     const { layer } = this.props;
+    const { filters } = this.state;
 
     if (layer.type === 'feature') {
-
       const url = layer.url;
       const queryTask = new QueryTask(url);
       const query = new Query();
@@ -33,14 +33,39 @@ export default class LayerFieldFilter extends Component {
       query.outFields = [layer.filterField];
       query.returnDistinctValues = true;
       queryTask.execute(query).then(res => {
-        const { filters } = this.state;
         res.features.forEach((feature) => {
           filters.push({label: feature.attributes[layer.filterField]});
         });
 
         this.setState({ filters });
       });
+    } else if (layer.type === 'dynamic') {
+      const promises = [];
+
+      layer.layerIds.forEach((id) => {
+        const url = layer.url + '/' + layer.layerIds[id];
+        const queryTask = new QueryTask(url);
+        const query = new Query();
+        query.where = '1=1';
+        query.returnGeometry = false;
+        query.outFields = [layer.filterField];
+        query.returnDistinctValues = true;
+        promises.push(queryTask.execute(query));
+      });
+
+      Promise.all(promises).then(results => {
+        results.forEach((res) => {
+          res.features.forEach((feature) => {
+            if (!filters.find((filter) => filter.label === feature.attributes[layer.filterField].trim().length)) {
+              filters.push({label: feature.attributes[layer.filterField]});
+            }
+          });
+        });
+        this.setState({ filters });
+
+      });
     }
+
   }
 
   onSelectFilter = (e) => {
@@ -49,11 +74,17 @@ export default class LayerFieldFilter extends Component {
     const { layer } = this.props;
 
     this.setState({ value });
+    const defExpression = value === 'None Selected' ? '1=1' : `${layer.filterField} = '${value}'`;
+    const mapLayer = map.getLayer(layer.id);
 
     if (layer.type === 'feature') {
-      const defExpression = value === 'None Selected' ? '1=1' : `${layer.filterField} = '${value}'`;
-      const mapLayer = map.getLayer(layer.id);
       mapLayer.setDefinitionExpression(defExpression);
+    } else if (layer.type === 'dynamic') {
+      const layerDefinitions = [];
+      layer.layerIds.forEach((id) => {
+        layerDefinitions[id] = defExpression;
+      });
+      mapLayer.setLayerDefinitions(layerDefinitions);
     }
   }
 
