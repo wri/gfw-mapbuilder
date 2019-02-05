@@ -589,34 +589,45 @@ export default {
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
-      layers: [{
-        order: 1,
-        type: 'remoteDataLayer',
-        uuid: '0721f089-b887-4d49-bad3-4b19261de208'
-      }, {
-        order: 2,
-        type: 'remoteDataLayer',
-        uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
-      }, {
-        order: 3,
-        type: 'remoteDataLayer',
-        uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
-      }, {
-        order: 4,
-        type: 'remoteDataLayer',
-        uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-      }, {
-        order: 5,
-        type: 'remoteDataLayer',
-        uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
-      }, {
-        order: 6,
-        type: 'remoteDataLayer',
-        uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
-      }, {
-        order: 7,
-        type: 'remoteDataLayer',
-        uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+      layers: [
+        {
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+        }, {
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+        }, {
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
+        }, {
+          order: 4,
+          type: 'remoteDataLayer',
+          uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+        }, {
+          order: 5,
+          type: 'remoteDataLayer',
+          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+        }, {
+          order: 6,
+          type: 'remoteDataLayer',
+          uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+        }, {
+          order: 7,
+          type: 'remoteDataLayer',
+          uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+        }, {
+          order: 8,
+          id: 'PALM_OIL',
+          type: 'feature',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/partner_requests/greenpeace_en/MapServer/0',
+          filterField: 'po_grup',
+          label: {
+            en: 'Palm Oil',
+
+          }
       }]
     },
     GROUP_LC: {
@@ -707,7 +718,7 @@ export default {
           order: 8,
           type: 'remoteDataLayer',
           uuid: 'bb5dc1f1-06b9-4117-943a-e2dd9341ea6b'
-        }
+        },
       ]
     },
     GROUP_IMAGERY: {

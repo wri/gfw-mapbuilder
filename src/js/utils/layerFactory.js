@@ -233,7 +233,6 @@ export default (layer, lang) => {
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.visible = layer.visible || false;
       esriLayer.opacity = layer.opacity || 1;
-
     break;
     case 'imagery':
       options.id = layer.id;
