@@ -185,18 +185,20 @@ const formatResources = () => {
 
   //- Remove Layers from resources.layers if configured, while separating remote data layers
   const remoteDataLayers = [];
-  Object.keys(resources.layerPanel).forEach(group => {
-    if (!remoteDataLayers[group]) { remoteDataLayers[group] = []; }
-    const groupSettings = resources.layerPanel[group];
+  Object.keys(resources.layerPanel).forEach(groupId => {
+    if (!remoteDataLayers[groupId]) { remoteDataLayers[groupId] = []; }
+    const groupSettings = resources.layerPanel[groupId];
     if (!groupSettings.layers) { return; }
-    resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter(layer => {
+    resources.layerPanel[groupId].layers = resources.layerPanel[groupId].layers.filter(layer => {
       if (layer.type === 'remoteDataLayer') {
         remoteDataLayers.push({
-          group,
-          layer
+          order: layer.order,
+          groupId,
+          layer,
         });
         return false;
       }
+
       switch (layer.id) {
         case layerKeys.VIIRS_ACTIVE_FIRES:
           return resources.viirsFires;
@@ -230,11 +232,11 @@ const formatResources = () => {
 
   const remoteDataLayerRequests = remoteDataLayers
     .map(item => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
-      .then(response => response.json())
-      .then(json => json.data)
-      .then(layer => fetch(layer.attributes.layerConfig.metadata)
-      .then(response => response.json())
-      .then(metadata => {
+    .then(response => response.json())
+    .then(json => json.data)
+    .then(layer => fetch(layer.attributes.layerConfig.metadata)
+    .then(response => response.json())
+    .then(metadata => {
         const attributes = layer.attributes;
         const itemGroup = item.group;
         item.layer = layer.attributes.layerConfig;
@@ -271,12 +273,12 @@ const formatResources = () => {
 
   return Promise.all(remoteDataLayerRequests)
   .then(remoteLayers => {
+    remoteLayers.sort((a, b) => a.order - b.order);
     remoteLayers.forEach(item => {
-      resources.layerPanel[item.group].layers.push(item.layer);
+      resources.layerPanel[item.groupId].layers.push(item.layer);
     });
     return resources;
   });
-
 };
 
 export default {
