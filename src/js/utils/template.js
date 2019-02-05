@@ -29,6 +29,44 @@ const parseIntoArray = (resourceString) => {
 };
 
 /**
+ * This function globally filters layers marked as false in the core config from the table of contents,
+ * and optionally accepts an array of objects containing a layer within a property
+ */
+const filterLayers = ({layers, layerKey}) => {
+  return layers.filter(layer => {
+    layer = layerKey ? layer[layerKey] : layer;
+    switch (layer.id) {
+      case layerKeys.VIIRS_ACTIVE_FIRES:
+        return resources.viirsFires;
+      case layerKeys.MODIS_ACTIVE_FIRES:
+        return resources.modisFires;
+      case layerKeys.LAND_COVER:
+        return resources.landCover;
+      case layerKeys.AG_BIOMASS:
+        return resources.aboveGroundBiomass;
+      case layerKeys.IFL:
+        return resources.intactForests;
+      case layerKeys.PRIMARY_FORESTS:
+        return resources.primaryForests;
+      case layerKeys.FORMA_ALERTS:
+        return resources.forma;
+      case layerKeys.GLOB_MANGROVE:
+        return resources.mangroves;
+      case layerKeys.IMAZON_SAD:
+        return resources.sadAlerts;
+      case layerKeys.GLAD_ALERTS:
+        return resources.gladAlerts;
+      case layerKeys.TERRA_I_ALERTS:
+        return resources.terraIAlerts;
+      case layerKeys.RECENT_IMAGERY:
+        return resources.recentImagery;
+      default:
+        return true;
+    }
+  });
+};
+
+/**
 * This function formats the resources object by adding information to it
 * The default values in the resources match the values from AGOL, to make
 * them easier to consume in my components, do all the formatting here
@@ -157,13 +195,21 @@ const formatResources = () => {
     }
   }
 
+  //- Remove Layers from resources.layers if configured
+  Object.keys(resources.layerPanel).forEach((group) => {
+    const groupSettings = resources.layerPanel[group];
+    if (!groupSettings.layers) { return; }
+    resources.layerPanel[group].layers = filterLayers({layers: resources.layerPanel[group].layers});
+  });
+
   //- Separate remote data layers
-  let remoteDataLayers = [];
+  const remoteDataLayers = [];
   Object.keys(resources.layerPanel).forEach(groupId => {
     if (!remoteDataLayers[groupId]) { remoteDataLayers[groupId] = []; }
     const groupSettings = resources.layerPanel[groupId];
     if (!groupSettings.layers) { return; }
     resources.layerPanel[groupId].layers = resources.layerPanel[groupId].layers.filter(layer => {
+      if (layer.id === layerKeys.RECENT_IMAGERY) { return true; }
       if (layer.type === 'remoteDataLayer') {
         remoteDataLayers.push({
           order: layer.order,
@@ -174,42 +220,6 @@ const formatResources = () => {
       }
     });
   });
-
-   //- Remove Layers from resources.layers if configured
-  //  Object.keys(resources.layerPanel).forEach((group) => {
-  //   const groupSettings = resources.layerPanel[group];
-  //   if (!groupSettings.layers) { return; }
-  remoteDataLayers = remoteDataLayers.filter(layer => {
-      switch (layer.id) {
-        case layerKeys.VIIRS_ACTIVE_FIRES:
-          return resources.viirsFires;
-        case layerKeys.MODIS_ACTIVE_FIRES:
-          return resources.modisFires;
-        case layerKeys.LAND_COVER:
-          return resources.landCover;
-        case layerKeys.AG_BIOMASS:
-          return resources.aboveGroundBiomass;
-        case layerKeys.IFL:
-          return resources.intactForests;
-        case layerKeys.PRIMARY_FORESTS:
-          return resources.primaryForests;
-        case layerKeys.FORMA_ALERTS:
-          return resources.forma;
-        case layerKeys.GLOB_MANGROVE:
-          return resources.mangroves;
-        case layerKeys.IMAZON_SAD:
-          return resources.sadAlerts;
-        case layerKeys.GLAD_ALERTS:
-          return resources.gladAlerts;
-        case layerKeys.TERRA_I_ALERTS:
-          return resources.terraIAlerts;
-        case layerKeys.RECENT_IMAGERY:
-          return resources.recentImagery;
-        default:
-          return true;
-      }
-    });
-  // });
 
   const remoteDataLayerRequests = remoteDataLayers
     .map(item => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
@@ -254,38 +264,7 @@ const formatResources = () => {
 
   return Promise.all(remoteDataLayerRequests)
   .then(remoteLayers => {
-    remoteLayers = remoteLayers.filter(layer => {
-      layer = layer.layer;
-      console.log(layer, resources.viirsFires, layerKeys.VIIRS_ACTIVE_FIRES, layer.id);
-      switch (layer.id) {
-        case layerKeys.VIIRS_ACTIVE_FIRES:
-          return resources.viirsFires;
-        case layerKeys.MODIS_ACTIVE_FIRES:
-          return resources.modisFires;
-        case layerKeys.LAND_COVER:
-          return resources.landCover;
-        case layerKeys.AG_BIOMASS:
-          return resources.aboveGroundBiomass;
-        case layerKeys.IFL:
-          return resources.intactForests;
-        case layerKeys.PRIMARY_FORESTS:
-          return resources.primaryForests;
-        case layerKeys.FORMA_ALERTS:
-          return resources.forma;
-        case layerKeys.GLOB_MANGROVE:
-          return resources.mangroves;
-        case layerKeys.IMAZON_SAD:
-          return resources.sadAlerts;
-        case layerKeys.GLAD_ALERTS:
-          return resources.gladAlerts;
-        case layerKeys.TERRA_I_ALERTS:
-          return resources.terraIAlerts;
-        case layerKeys.RECENT_IMAGERY:
-          return resources.recentImagery;
-        default:
-          return true;
-      }
-    });
+    remoteLayers = filterLayers({layers: remoteLayers, layerKey: 'layer'});
     remoteLayers.sort((a, b) => a.order - b.order);
     remoteLayers.forEach(item => {
       resources.layerPanel[item.groupId].layers.push(item.layer);
