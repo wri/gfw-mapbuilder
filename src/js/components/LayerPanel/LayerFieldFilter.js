@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import layerActions from 'actions/LayerActions';
-import utils from 'utils/AppUtils';
+import QueryTask from 'esri/tasks/QueryTask';
+import Query from 'esri/tasks/query';
 import text from 'js/languages';
 
 export default class LayerFieldFilter extends Component {
@@ -21,11 +21,41 @@ export default class LayerFieldFilter extends Component {
 
   componentWillMount() {
     // Make request for dropdown options..
-    const {layer} = this.props;
+    const { layer } = this.props;
 
+    if (layer.type === 'feature') {
 
+      const url = layer.url;
+      const queryTask = new QueryTask(url);
+      const query = new Query();
+      query.where = '1=1';
+      query.returnGeometry = false;
+      query.outFields = [layer.filterField];
+      query.returnDistinctValues = true;
+      queryTask.execute(query).then(res => {
+        const { filters } = this.state;
+        res.features.forEach((feature) => {
+          filters.push({label: feature.attributes[layer.filterField]});
+        });
+
+        this.setState({ filters });
+      });
+    }
   }
 
+  onSelectFilter = (e) => {
+    const { map } = this.context;
+    const { value } = e.target;
+    const { layer } = this.props;
+
+    this.setState({ value });
+
+    if (layer.type === 'feature') {
+      const defExpression = value === 'None Selected' ? '1=1' : `${layer.filterField} = '${value}'`;
+      const mapLayer = map.getLayer(layer.id);
+      mapLayer.setDefinitionExpression(defExpression);
+    }
+  }
 
   renderDropdownOptions = (option, index) => {
     return <option key={index} value={option.label}>{option.label}</option>;
@@ -33,7 +63,6 @@ export default class LayerFieldFilter extends Component {
 
 
   render () {
-    const { layer } = this.props;
     const { value, filters } = this.state;
     const { language } = this.context;
     // console.log('>>', layer);
