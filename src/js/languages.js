@@ -234,6 +234,7 @@ strings.en.TOOL_PRINT = 'Print';
 strings.en.TOOL_ANALYSIS = 'Analysis';
 strings.en.TOOL_TOGGLE = 'Toggle Panel';
 strings.en.TOOL_RESET = 'Reset';
+strings.en.FILTER_BY_GROUP = 'Filter by group';
 
 strings.en.ANALYSIS_CARBON_EMISSION = 'Gross carbon emissions';
 strings.en.ANALYSIS_CARBON_LOSS = 'Tree cover loss';
@@ -506,6 +507,7 @@ strings.ka.TOOL_PRINT = 'ბეჭვდა';
 strings.ka.TOOL_ANALYSIS = 'ანალიზი';
 strings.ka.TOOL_TOGGLE = 'Toggle Panel (გადართვის პანელი)';
 strings.ka.TOOL_RESET = 'გადატვირთვა';
+strings.ka.FILTER_BY_GROUP = 'Filter by group';
 
 
 strings.ka.ANALYSIS_CARBON_EMISSION = 'კარბონის მთლიანი ემისიები';
@@ -777,6 +779,7 @@ strings.fr.TOOL_PRINT = 'Imprimer';
 strings.fr.TOOL_ANALYSIS = 'Analyse';
 strings.fr.TOOL_TOGGLE = 'Basculer panneau';
 strings.fr.TOOL_RESET = 'Réinitialiser';
+strings.fr.FILTER_BY_GROUP = 'Filter by group';
 
 strings.fr.ANALYSIS_CARBON_EMISSION = 'Emissions de carbone brutes';
 strings.fr.ANALYSIS_CARBON_LOSS = 'Perte en couvert arboré';
@@ -1048,6 +1051,7 @@ strings.es.TOOL_PRINT = 'Imprimir';
 strings.es.TOOL_ANALYSIS = 'Análisis';
 strings.es.TOOL_TOGGLE = 'Alternar Pane';
 strings.es.TOOL_RESET = 'Reajustar';
+strings.es.FILTER_BY_GROUP = 'Filter by group';
 
 strings.es.ANALYSIS_CARBON_EMISSION = 'Emisiones de dióxido de carbono';
 strings.es.ANALYSIS_CARBON_LOSS = 'Pérdida de cobertura arbórea';
@@ -1318,6 +1322,7 @@ strings.pt.TOOL_PRINT = 'Imprimir';
 strings.pt.TOOL_ANALYSIS = 'Análise';
 strings.pt.TOOL_TOGGLE = 'Alternar Painel';
 strings.pt.TOOL_RESET = 'Reiniciar';
+strings.pt.FILTER_BY_GROUP = 'Filter by group';
 
 strings.pt.ANALYSIS_CARBON_EMISSION = 'Taxa de emissões de carbono';
 strings.pt.ANALYSIS_CARBON_LOSS = 'Perda de cobertura florestal';
@@ -1588,6 +1593,7 @@ strings.id.TOOL_PRINT = 'Print';
 strings.id.TOOL_ANALYSIS = 'Analysis';
 strings.id.TOOL_TOGGLE = 'Toggle Panel';
 strings.id.TOOL_RESET = 'Reset';
+strings.id.FILTER_BY_GROUP = 'Filter by group';
 
 strings.id.ANALYSIS_CARBON_EMISSION = 'Gross carbon emissions';
 strings.id.ANALYSIS_CARBON_LOSS = 'Tree cover loss';
@@ -1859,6 +1865,7 @@ strings.zh.TOOL_PRINT = '打印';
 strings.zh.TOOL_ANALYSIS = '分析';
 strings.zh.TOOL_TOGGLE = '控制面板';
 strings.zh.TOOL_RESET = '重置';
+strings.zh.FILTER_BY_GROUP = 'Filter by group';
 
 strings.zh.ANALYSIS_CARBON_EMISSION = 'Gross carbon emissions';
 strings.zh.ANALYSIS_CARBON_LOSS = 'Tree cover loss';

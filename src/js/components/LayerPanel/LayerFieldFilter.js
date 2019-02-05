@@ -65,10 +65,9 @@ export default class LayerFieldFilter extends Component {
   render () {
     const { value, filters } = this.state;
     const { language } = this.context;
-    // console.log('>>', layer);
     return (
       <div className='layer-field-filter'>
-        <p>Filter by group</p>
+        <p>{text[language].FILTER_BY_GROUP}</p>
         <div className='relative'>
           <select
             value={value}
