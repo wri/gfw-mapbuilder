@@ -209,7 +209,6 @@ const formatResources = () => {
     const groupSettings = resources.layerPanel[groupId];
     if (!groupSettings.layers) { return; }
     resources.layerPanel[groupId].layers = resources.layerPanel[groupId].layers.filter(layer => {
-      if (layer.id === layerKeys.RECENT_IMAGERY || groupId === 'GROUP_BASEMAP') { return true; }
       if (layer.type === 'remoteDataLayer') {
         remoteDataLayers.push({
           order: layer.order,
@@ -217,6 +216,9 @@ const formatResources = () => {
           layer,
         });
         return false;
+      }
+      else {
+        return true;
       }
     });
   });
