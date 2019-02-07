@@ -239,7 +239,7 @@ export default class LayerPanel extends Component {
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
       break;
       default:
-        if (layer.filterField) {
+        if (layer.filterField && (layer.type === 'dynamic' || layer.type === 'feature')) {
           childComponent = <LayerFieldFilter layer={layer} />;
         } else {
           childComponent = null;
