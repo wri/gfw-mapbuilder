@@ -101,10 +101,10 @@ export default class LayerFieldFilter extends Component {
 
 
   onSelectFilter = (option) => {
-    const { value } = option;
+
+    const value = option ? option.value : null;
     const { map } = this.context;
     const { layer } = this.props;
-
     const defExpression = !value ? '1=1' : `${layer.filterField} = '${value}'`;
     const mapLayer = map.getLayer(layer.id);
 
@@ -118,11 +118,6 @@ export default class LayerFieldFilter extends Component {
       mapLayer.setLayerDefinitions(layerDefinitions);
     }
   }
-
-  renderDropdownOptions = (option, index) => {
-    return <option key={index} value={option.label}/>;
-  }
-
 
   render () {
     const { filters } = this.state;
