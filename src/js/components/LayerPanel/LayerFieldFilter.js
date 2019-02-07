@@ -1,7 +1,38 @@
 import React, {Component, PropTypes} from 'react';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/query';
+import Select from 'react-select';
 import text from 'js/languages';
+
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: '12px',
+    color: 'rgb(51, 51, 51)',
+    cursor: 'pointer',
+    background: state.isSelected ? '#eee' : 'none',
+    '&:hover': {
+      background: '#eee'
+    }
+  }),
+  control: (provided, state) => ({
+      ...provided,
+      fontSize: '12px',
+      padding: '0px',
+      cursor: 'text',
+      minHeight: '30px',
+      boxShadow: state.isFocused ? 0 : 0,
+      borderColor: state.isFocused
+        ? '#f0ab00'
+        : 'grey',
+      '&:hover': {
+        borderColor: state.isFocused
+          ? '#f0ab00'
+          : 'grey',
+      }
+  }),
+
+};
 
 export default class LayerFieldFilter extends Component {
 
@@ -14,7 +45,7 @@ export default class LayerFieldFilter extends Component {
     super(props);
     this.state = {
       value: 'None Selected',
-      filters: [{label: 'None Selected'}]
+      filters: []
     };
 
   }
@@ -34,7 +65,7 @@ export default class LayerFieldFilter extends Component {
       query.returnDistinctValues = true;
       queryTask.execute(query).then(res => {
         res.features.forEach((feature) => {
-          filters.push({label: feature.attributes[layer.filterField]});
+          filters.push({label: feature.attributes[layer.filterField], value: feature.attributes[layer.filterField]});
         });
 
         this.setState({ filters });
@@ -57,7 +88,7 @@ export default class LayerFieldFilter extends Component {
         results.forEach((res) => {
           res.features.forEach((feature) => {
             if (!filters.find((filter) => filter.label === feature.attributes[layer.filterField].trim().length)) {
-              filters.push({label: feature.attributes[layer.filterField]});
+              filters.push({label: feature.attributes[layer.filterField], value: feature.attributes[layer.filterField]});
             }
           });
         });
@@ -68,13 +99,13 @@ export default class LayerFieldFilter extends Component {
 
   }
 
-  onSelectFilter = (e) => {
+
+  onSelectFilter = (option) => {
+    const { value } = option;
     const { map } = this.context;
-    const { value } = e.target;
     const { layer } = this.props;
 
-    this.setState({ value });
-    const defExpression = value === 'None Selected' ? '1=1' : `${layer.filterField} = '${value}'`;
+    const defExpression = !value ? '1=1' : `${layer.filterField} = '${value}'`;
     const mapLayer = map.getLayer(layer.id);
 
     if (layer.type === 'feature') {
@@ -89,24 +120,33 @@ export default class LayerFieldFilter extends Component {
   }
 
   renderDropdownOptions = (option, index) => {
-    return <option key={index} value={option.label}>{option.label}</option>;
+    return <option key={index} value={option.label}/>;
   }
 
 
   render () {
-    const { value, filters } = this.state;
+    const { filters } = this.state;
     const { language } = this.context;
+
     return (
       <div className='layer-field-filter'>
-        <p>{text[language].FILTER_BY_GROUP}</p>
-        <div className='relative'>
-          <select
-            value={value}
-            onChange={this.onSelectFilter}>
-            {filters.map(this.renderDropdownOptions)}
-          </select>
-          <div className='fa-button sml white'>{value}</div>
-        </div>
+        { filters.length > 0 &&
+          <div>
+            <p>{text[language].FILTER_BY_GROUP}</p>
+            <div className='layer-filter relative'>
+              <Select
+                styles={customStyles}
+                onChange={this.onSelectFilter}
+                options={filters}
+                placeholder={'None Selected'}
+                isSearchable={true}
+                className={'layer-field-filter-select'}
+                isClearable={true}
+              />
+            </div>
+          </div>
+        }
+
       </div>
     );
   }
