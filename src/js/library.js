@@ -28,13 +28,14 @@ var MapBuilder = function(args){
     }
 
     var scripts = document.getElementsByTagName('script');
+    var version;
     var newBase;
     for (var j = 0; j < scripts.length; j++) {
       if (scripts[j].id === 'library-load') {
         newBase = scripts[j].src;
+        version = scripts[j].getAttribute('version');
       }
     }
-    const version = newBase.split('libBuild/')[1].replace('.js', '');
     newBase = newBase.split(version)[0] + version;
     window._app = {
       cache: constructorParams.version,
