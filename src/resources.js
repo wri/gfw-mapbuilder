@@ -33,9 +33,9 @@ export default {
   alternativeNarrative: '',
   alternativeWebmapMenuName: 'Land Use',
   initialExtent: {
-    x: null, // -122.3,
-    y: null, // 47.6,
-    z: null, // 9,
+    x: 113, // -122.3,
+    y: 0.5, // 47.6,
+    z: 5, // 9,
   },
   //- Tab Settings
   includeDocumentsTab: false,
@@ -617,7 +617,75 @@ export default {
         order: 7,
         type: 'remoteDataLayer',
         uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
-      }]
+      },
+      {
+         order: 9,
+         id: 'LANDCOVER_TEST',
+         type: 'feature',
+         url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/0',
+         // technicalName: '',
+         visible: false,
+         versions: [
+           { label: '2009', url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/1' },
+           { label: '2010', url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/2' },
+           { label: '2011', url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/3' },
+           { label: '2013', url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/4' },
+           { label: '2014', url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/5' },
+           { label: '2015', url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/6' }
+         ],
+         label: {
+           en: 'Palm Oil Concessions - feature layer',
+           fr: 'Palm Oil Concessions - feature layer',
+           es: 'Palm Oil Concessions - feature layer',
+           pt: 'Palm Oil Concessions - feature layer',
+           id: 'Palm Oil Concessions - feature layer',
+           zh: 'Palm Oil Concessions - feature layer',
+           ka: 'Palm Oil Concessions - feature layer'
+         },
+         sublabel: {
+           en: '(incl. rubber, coconut) ',
+           fr: '(incl. rubber, coconut) ',
+           es: '(incl. rubber, coconut) ',
+           pt: '(incl. rubber, coconut) ',
+           id: '(incl. rubber, coconut) ',
+           zh: '(incl. rubber, coconut) ',
+           ka: '(incl. rubber, coconut) '
+         }
+       }, {
+         order: 10,
+         id: 'LANDCOVER_TEST_DYNAMIC',
+         type: 'dynamic',
+         url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+         layerIds: [0],
+         // technicalName: '',
+         visible: false,
+         versions: [
+           { label: '2009', layerId: 1 },
+           { label: '2010', layerId: 2 },
+           { label: '2011', layerId: 3 },
+           { label: '2013', layerId: 4 },
+           { label: '2014', layerId: 5 },
+           { label: '2015', layerId: 6 }
+         ],
+         label: {
+           en: 'Palm Oil Concessions - dynamic layer',
+           fr: 'Palm Oil Concessions - dynamic layer',
+           es: 'Palm Oil Concessions - dynamic layer',
+           pt: 'Palm Oil Concessions - dynamic layer',
+           id: 'Palm Oil Concessions - dynamic layer',
+           zh: 'Palm Oil Concessions - dynamic layer',
+           ka: 'Palm Oil Concessions - dynamic layer'
+         },
+         sublabel: {
+           en: '(incl. rubber, coconut) ',
+           fr: '(incl. rubber, coconut) ',
+           es: '(incl. rubber, coconut) ',
+           pt: '(incl. rubber, coconut) ',
+           id: '(incl. rubber, coconut) ',
+           zh: '(incl. rubber, coconut) ',
+           ka: '(incl. rubber, coconut) '
+         }
+       }]
     },
     GROUP_LC: {
       groupType: 'default',

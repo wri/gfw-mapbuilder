@@ -9,6 +9,7 @@ import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
+import LayerVersions from 'components/LayerPanel/LayerVersions';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
@@ -237,8 +238,12 @@ export default class LayerPanel extends Component {
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
       break;
       default:
-        childComponent = null;
-        editCallback = null;
+        if (layer.versions && layer.versions.length > 0 && (layer.type === 'feature' || layer.type === 'dynamic')) {
+          childComponent = <LayerVersions layer={layer}/>;
+        } else {
+          childComponent = null;
+          editCallback = null;
+        }
     }
 
     let checkbox;
