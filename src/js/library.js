@@ -33,12 +33,12 @@ var MapBuilder = function(args){
     for (var j = 0; j < scripts.length; j++) {
       if (scripts[j].id === 'library-load') {
         newBase = scripts[j].src;
-        version = scripts[j].getAttribute('version');
+        version = scripts[j].getAttribute('version') || constructorParams.version;
       }
     }
     newBase = newBase.split(version)[0] + version;
     window._app = {
-      cache: constructorParams.version,
+      cache: version,
       esri: '#{esriVersion}',
       base: newBase
     };
