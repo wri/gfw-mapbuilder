@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import layerFactory from 'utils/layerFactory';
+
 
 export default class LayerVersions extends Component {
 
@@ -12,16 +14,21 @@ export default class LayerVersions extends Component {
     super(props);
     this.state = {
       versions: props.layer.versions,
-      selected: props.layer.versions[0].label
+      selected: null
     };
   }
 
+  componentWillMount() {
+    const { layer } = this.props;
+    this.setState({ selected: layer.versions[0].label[this.context.language]});
+  }
+
   renderVersionOptions = (version, i) => {
-    return <option value={version.label} key={`option-${i}`}>{version.label}</option>;
+    return <option value={version.label[this.context.language]} key={`option-${i}`}>{version.label[this.context.language]}</option>;
   }
 
   onSelectVersion = (e) => {
-    const { map } = this.context;
+    const { map, language } = this.context;
     const { layer } = this.props;
     const mapLayer = map.getLayer(layer.id);
     const selected = e.target.value;
@@ -29,15 +36,28 @@ export default class LayerVersions extends Component {
     this.setState({ selected });
 
     if (layer.type === 'dynamic') {
-      const versionObj = this.state.versions.find((version) => version.label === selected);
-      mapLayer.layerIds = versionObj.url;
+      const versionObj = this.state.versions.find((version) => version.label[language] === selected);
+      const service = versionObj.service[language];
+      console.log(service);
+
+      if (layer.url !== service.url) {
+        map.removeLayer(mapLayer);
+        delete layer.esriLayer;
+        layer.url = service.url;
+        layer.layerIds = service.layerIds;
+        const newLayer = layerFactory(layer, language);
+        map.addLayer(newLayer);
+      } else {
+        mapLayer.setVisibleLayers(service.layerIds);
+
+      }
+      mapLayer.refresh();
     }
   }
 
   render () {
-    const { layer } = this.props;
     const { versions, selected } = this.state;
-    console.log(layer.versions);
+
     return (
       <div className='layer-versions'>
         <div className='relative'>
