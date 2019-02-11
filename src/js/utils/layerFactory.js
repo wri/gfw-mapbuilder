@@ -124,6 +124,7 @@ export default (layer, lang) => {
       esriLayer.label = layer.label;
     break;
     case 'feature':
+      console.log(layer)
       options.id = layer.id;
       options.visible = layer.visible || false;
       options.outFields = ['*'];

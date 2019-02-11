@@ -34,33 +34,26 @@ export default class LayerVersions extends Component {
     const selected = e.target.value;
 
     this.setState({ selected });
+    const versionObj = this.state.versions.find((version) => version.label[language] === selected);
+    const service = versionObj.service[language];
 
-    if (layer.type === 'dynamic') {
-      const versionObj = this.state.versions.find((version) => version.label[language] === selected);
-      const service = versionObj.service[language];
-      console.log(service);
-
-      if (layer.url !== service.url) {
-        map.removeLayer(mapLayer);
-        delete layer.esriLayer;
-        layer.url = service.url;
-        layer.layerIds = service.layerIds;
-        const newLayer = layerFactory(layer, language);
-        map.addLayer(newLayer);
-      } else {
-        mapLayer.setVisibleLayers(service.layerIds);
-
-      }
-      mapLayer.refresh();
-    }
+    map.removeLayer(mapLayer);
+    delete layer.esriLayer;
+    layer.url = service.url;
+    if (layer.type === 'dynamic') { layer.layerIds = service.layerIds; }
+    const newLayer = layerFactory(layer, language);
+    map.addLayer(newLayer);
   }
 
   render () {
     const { versions, selected } = this.state;
+    const { layer } = this.props;
+    const { language } = this.context;
 
     return (
       <div className='layer-versions'>
         <div className='relative'>
+          <p>{layer.versionLabel[language]}</p>
           <select onChange={this.onSelectVersion} value={selected}>
             {versions.map(this.renderVersionOptions)}
           </select>
