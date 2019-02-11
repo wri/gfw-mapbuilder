@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/query';
 import Select from 'react-select';
-import text from 'js/languages';
 
 const customStyles = {
   option: (provided, state) => ({
@@ -54,6 +53,7 @@ export default class LayerFieldFilter extends Component {
     // Make request for dropdown options..
     const { layer } = this.props;
     const { filters } = this.state;
+    const { language } = this.context;
 
     if (layer.type === 'feature') {
       const url = layer.url;
@@ -61,11 +61,11 @@ export default class LayerFieldFilter extends Component {
       const query = new Query();
       query.where = '1=1';
       query.returnGeometry = false;
-      query.outFields = [layer.filterField];
+      query.outFields = [layer.filterField[language]];
       query.returnDistinctValues = true;
       queryTask.execute(query).then(res => {
         res.features.forEach((feature) => {
-          filters.push({label: feature.attributes[layer.filterField], value: feature.attributes[layer.filterField]});
+          filters.push({label: feature.attributes[layer.filterField[language]], value: feature.attributes[layer.filterField[language]]});
         });
 
         this.setState({ filters });
@@ -79,7 +79,7 @@ export default class LayerFieldFilter extends Component {
         const query = new Query();
         query.where = '1=1';
         query.returnGeometry = false;
-        query.outFields = [layer.filterField];
+        query.outFields = [layer.filterField[language]];
         query.returnDistinctValues = true;
         promises.push(queryTask.execute(query));
       });
@@ -87,8 +87,8 @@ export default class LayerFieldFilter extends Component {
       Promise.all(promises).then(results => {
         results.forEach((res) => {
           res.features.forEach((feature) => {
-            if (!filters.find((filter) => filter.label === feature.attributes[layer.filterField].trim().length)) {
-              filters.push({label: feature.attributes[layer.filterField], value: feature.attributes[layer.filterField]});
+            if (!filters.find((filter) => filter.label === feature.attributes[layer.filterField[language]].trim().length)) {
+              filters.push({label: feature.attributes[layer.filterField[language]], value: feature.attributes[layer.filterField[language]]});
             }
           });
         });
@@ -103,9 +103,9 @@ export default class LayerFieldFilter extends Component {
   onSelectFilter = (option) => {
 
     const value = option ? option.value : null;
-    const { map } = this.context;
+    const { map, language } = this.context;
     const { layer } = this.props;
-    const defExpression = !value ? '1=1' : `${layer.filterField} = '${value}'`;
+    const defExpression = !value ? '1=1' : `${layer.filterField[language]} = '${value}'`;
     const mapLayer = map.getLayer(layer.id);
 
     if (layer.type === 'feature') {
@@ -122,12 +122,13 @@ export default class LayerFieldFilter extends Component {
   render () {
     const { filters } = this.state;
     const { language } = this.context;
+    const { layer } = this.props;
 
     return (
       <div className='layer-field-filter'>
         { filters.length > 0 &&
           <div>
-            <p>{text[language].FILTER_BY_GROUP}</p>
+            <p>{layer.filterLabel[language]}</p>
             <div className='layer-filter relative'>
               <Select
                 styles={customStyles}

@@ -33,9 +33,9 @@ export default {
   alternativeNarrative: '',
   alternativeWebmapMenuName: 'Land Use',
   initialExtent: {
-    x: null, // -122.3,
-    y: null, // 47.6,
-    z: null, // 9,
+    x: 113, // -122.3,
+    y: 0.5, // 47.6,
+    z: 5, // 9,
   },
   //- Tab Settings
   includeDocumentsTab: false,
@@ -619,16 +619,91 @@ export default {
           type: 'remoteDataLayer',
           uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
         }, {
-          order: 8,
-          id: 'PALM_OIL',
-          type: 'feature',
-          url: 'https://gis-gfw.wri.org/arcgis/rest/services/partner_requests/greenpeace_en/MapServer/0',
-          filterField: 'po_grup',
-          label: {
-            en: 'Palm Oil',
-
-          }
-      }]
+        order: 9,
+        id: 'PALM_OIL',
+        type: 'feature',
+        url: 'https://gis-gfw.wri.org/arcgis/rest/services/partner_requests/greenpeace_en/MapServer/0',
+        visible: false,
+        label: {
+          en: 'Palm Oil Concessions - feature layer',
+          fr: 'Palm Oil Concessions - feature layer',
+          es: 'Palm Oil Concessions - feature layer',
+          pt: 'Palm Oil Concessions - feature layer',
+          id: 'Palm Oil Concessions - feature layer',
+          zh: 'Palm Oil Concessions - feature layer',
+          ka: 'Palm Oil Concessions - feature layer'
+        },
+        sublabel: {
+          en: '(incl. rubber, coconut)',
+          fr: '(incl. rubber, coconut)',
+          es: '(incl. rubber, coconut)',
+          pt: '(incl. rubber, coconut)',
+          id: '(incl. rubber, coconut)',
+          zh: '(incl. rubber, coconut)',
+          ka: '(incl. rubber, coconut)'
+        },
+        filterField: {
+          en: 'po_grup',
+          fr: 'po_grup',
+          es: 'po_grup',
+          pt: 'po_grup',
+          id: 'po_grup',
+          zh: 'po_grup',
+          ka: 'po_grup'
+        },
+        filterLabel: {
+          en: 'Filter by group',
+          fr: 'Filter by group',
+          es: 'Filter by group',
+          pt: 'Filter by group',
+          id: 'Filter by group',
+          zh: 'Filter by group',
+          ka: 'Filter by group'
+        },
+      }, {
+        order: 10,
+        id: 'PALM_OIL_DYNAMIC',
+        type: 'dynamic',
+        url: 'https://gis-gfw.wri.org/arcgis/rest/services/partner_requests/greenpeace_en/MapServer',
+        layerIds: [0],
+        visible: false,
+        label: {
+          en: 'Palm Oil Concessions - dynamic layer',
+          fr: 'Palm Oil Concessions - dynamic layer',
+          es: 'Palm Oil Concessions - dynamic layer',
+          pt: 'Palm Oil Concessions - dynamic layer',
+          id: 'Palm Oil Concessions - dynamic layer',
+          zh: 'Palm Oil Concessions - dynamic layer',
+          ka: 'Palm Oil Concessions - dynamic layer'
+        },
+        sublabel: {
+          en: '(incl. rubber, coconut)',
+          fr: '(incl. rubber, coconut)',
+          es: '(incl. rubber, coconut)',
+          pt: '(incl. rubber, coconut)',
+          id: '(incl. rubber, coconut)',
+          zh: '(incl. rubber, coconut)',
+          ka: '(incl. rubber, coconut)'
+        },
+        filterField: {
+          en: 'po_grup',
+          fr: 'po_grup',
+          es: 'po_grup',
+          pt: 'po_grup',
+          id: 'po_grup',
+          zh: 'po_grup',
+          ka: 'po_grup'
+        },
+        filterLabel: {
+          en: 'Filter by group',
+          fr: 'Filter by group',
+          es: 'Filter by group',
+          pt: 'Filter by group',
+          id: 'Filter by group',
+          zh: 'Filter by group',
+          ka: 'Filter by group'
+        }
+     }]
     },
     GROUP_LC: {
       groupType: 'default',
