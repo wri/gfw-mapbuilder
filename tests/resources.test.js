@@ -92,7 +92,7 @@ describe('resources layer spec', () => {
         expect(layer).toHaveProperty('label');
         expect(layer.label).toHaveProperty(resources.language);
         if (layer.filterField) {
-          expect(layer.type).toEqual('feature' || 'dynamic');
+          expect(layer.type === 'feature' || layer.type === 'dynamic').toBeTruthy();
           expect(layer).toHaveProperty('url');
           expect(typeof layer.filterField).toBe('object');
           expect(layer).toHaveProperty('filterLabel');
