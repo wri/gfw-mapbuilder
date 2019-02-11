@@ -51,14 +51,12 @@ export default class LayerVersions extends Component {
     const { language } = this.context;
 
     return (
-      <div className='layer-versions'>
-        <div className='relative'>
-          <p>{layer.versionLabel[language]}</p>
-          <select onChange={this.onSelectVersion} value={selected}>
-            {versions.map(this.renderVersionOptions)}
-          </select>
-          <div className='fa-button sml white'>{selected}</div>
-        </div>
+      <div className='relative layer-versions'>
+        <p>{layer.versionLabel[language]}:</p>
+        <select onChange={this.onSelectVersion} value={selected}>
+          {versions.map(this.renderVersionOptions)}
+        </select>
+        <div className='fa-button sml white'>{selected}</div>
       </div>
     );
   }
