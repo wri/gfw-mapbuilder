@@ -844,63 +844,6 @@ export default {
         uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
       }]
     },
-    LEGEND_TEST: {
-      groupType: 'default',
-      order: 4,
-      label: {
-        en: 'API Legend Test',
-        fr: 'API Legend Test',
-        es: 'API Legend Test',
-        pt: 'API Legend Test',
-        id: 'API Legend Test',
-        zh: 'API Legend Test',
-        ka: 'API Legend Test'
-      },
-      layers: [
-        // basic test layer
-        {
-          order: 1,
-          type: 'remoteDataLayer',
-          uuid: 'aedc3d8b-47ca-48a5-8a11-12b805732321'
-        },
-        // basic test layer with icon
-        // {
-        //   order: 2,
-        //   type: 'remoteDataLayer',
-        //   uuid: '00de9852-d762-41a5-ad70-2477f792987b'
-        // },
-        // points test layer
-        {
-          order: 4,
-          type: 'remoteDataLayer',
-          uuid: 'b173e1e5-a6df-4a96-9ab7-93dab994293f'
-        },
-        // lines test layer
-        {
-          order: 5,
-          type: 'remoteDataLayer',
-          uuid: '2ef0c69f-31d3-4e73-8d2c-018269d637bd'
-        },
-        // choropleth test layer
-        {
-          order: 6,
-          type: 'remoteDataLayer',
-          uuid: 'e9954850-23c4-446c-bcfb-c3b18ec21298'
-        },
-        // gradient test layer
-        {
-          order: 7,
-          type: 'remoteDataLayer',
-          uuid: '0b89fa17-9a07-4411-9d51-92b5816c8165'
-        },
-        // group test layer
-        {
-          order: 8,
-          type: 'remoteDataLayer',
-          uuid: 'bb5dc1f1-06b9-4117-943a-e2dd9341ea6b'
-        }
-      ]
-    },
     GROUP_IMAGERY: {
       groupType: 'imagery',
       order: 4,
