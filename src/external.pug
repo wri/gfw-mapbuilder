@@ -5,7 +5,7 @@ html
   body.tundra
     #root
     div#share-modal-wrapper.hidden
-    script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.3.js')
+    script(id='library-load' src='./1.3.3.js')
     script.
       var customApp = new MapBuilder({
         el: 'root',
@@ -648,7 +648,196 @@ html
               order: 7,
               type: 'remoteDataLayer',
               uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
-            }]
+            },   {
+                order: 9,
+                 id: 'LANDCOVER_TEST',
+                 type: 'dynamic',
+                 layerIds: [0],
+                 url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer',
+                 visible: false,
+                 label: {
+                   en: 'Land Cover test - dynamic layer',
+                   fr: 'Land Cover test - dynamic layer',
+                   es: 'Land Cover test - dynamic layer',
+                   pt: 'Land Cover test - dynamic layer',
+                   id: 'Land Cover test - dynamic layer',
+                   zh: 'Land Cover test - dynamic layer',
+                   ka: 'Land Cover test - dynamic layer'
+                 },
+                 sublabel: {
+                   en: '(sublabel)',
+                   fr: '(sublabel)',
+                   es: '(sublabel)',
+                   pt: '(sublabel)',
+                   id: '(sublabel)',
+                   zh: '(sublabel)',
+                   ka: '(sublabel)'
+                 },
+                 versionLabel: {
+                   en: 'Select year',
+                   fr: 'Select year',
+                   es: 'Select year',
+                   pt: 'Select year',
+                   id: 'Select year',
+                   zh: 'Select year',
+                   ka: 'Select year'
+                 },
+                 versions: [
+                  {
+                    label: {
+                      en: '2008',
+                      fr: '2008',
+                      es: '2008',
+                      pt: '2008',
+                      id: '2008',
+                      zh: '2008',
+                      ka: '2008'
+                    },
+                    service: {
+                      en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
+                      fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
+                      es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
+                      pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
+                      id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
+                      zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
+                      ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] }
+                    },
+                   },
+                   {
+                     label: {
+                       en: '2009',
+                       fr: '2009',
+                       es: '2009',
+                       pt: '2009',
+                       id: '2009',
+                       zh: '2009',
+                       ka: '2009'
+                     },
+                     service: {
+                       en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
+                       fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
+                       es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
+                       pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
+                       id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
+                       zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
+                       ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] }
+                     },
+                    },
+                    {
+                      label: {
+                        en: '2010',
+                        fr: '2010',
+                        es: '2010',
+                        pt: '2010',
+                        id: '2010',
+                        zh: '2010',
+                        ka: '2010'
+                      },
+                      service: {
+                        en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
+                        fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
+                        es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
+                        pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
+                        id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
+                        zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
+                        ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] }
+                      },
+                     },
+                 ],
+               }, {
+                 order: 10,
+                 id: 'NATIONAL_PARKS',
+                 type: 'feature',
+                 url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0',
+                 visible: false,
+                 label: {
+                   en: 'National Parks - feature layer',
+                   fr: 'National Parks - feature layer',
+                   es: 'National Parks - feature layer',
+                   pt: 'National Parks - feature layer',
+                   id: 'National Parks - feature layer',
+                   zh: 'National Parks - feature layer',
+                   ka: 'National Parks - feature layer'
+                 },
+                 sublabel: {
+                   en: '(sublabel)',
+                   fr: '(sublabel)',
+                   es: '(sublabel)',
+                   pt: '(sublabel)',
+                   id: '(sublabel)',
+                   zh: '(sublabel)',
+                   ka: '(sublabel)'
+                 },
+                 versionLabel: {
+                   en: 'Select version',
+                   fr: 'Select version',
+                   es: 'Select version',
+                   pt: 'Select version',
+                   id: 'Select version',
+                   zh: 'Select version',
+                   ka: 'Select version'
+                 },
+                 versions: [
+                   {
+                     label: {
+                       en: 'Protected Areas',
+                       fr: 'Protected Areas',
+                       es: 'Protected Areas',
+                       pt: 'Protected Areas',
+                       id: 'Protected Areas',
+                       zh: 'Protected Areas',
+                       ka: 'Protected Areas'
+                     },
+                     service: {
+                       en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
+                       fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
+                       es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
+                       pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
+                       id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
+                       zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
+                       ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' }
+                     },
+                   }, {
+                      label: {
+                        en: 'National Parks',
+                        fr: 'National Parks',
+                        es: 'National Parks',
+                        pt: 'National Parks',
+                        id: 'National Parks',
+                        zh: 'National Parks',
+                        ka: 'National Parks'
+                      },
+                      service: {
+                        en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
+                        fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
+                        es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
+                        pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
+                        id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
+                        zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
+                        ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' }
+                      },
+                    }, {
+                       label: {
+                         en: 'Réserve naturelle intégrale',
+                         fr: 'Réserve naturelle intégrale',
+                         es: 'Réserve naturelle intégrale',
+                         pt: 'Réserve naturelle intégrale',
+                         id: 'Réserve naturelle intégrale',
+                         zh: 'Réserve naturelle intégrale',
+                         ka: 'Réserve naturelle intégrale'
+                       },
+                       service: {
+                         en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
+                         fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
+                         es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
+                         pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
+                         id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
+                         zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
+                         ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' }
+                       },
+                     },
+                 ]
+               }]
           },
           GROUP_LC: {
             groupType: 'default',

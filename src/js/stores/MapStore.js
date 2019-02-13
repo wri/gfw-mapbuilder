@@ -148,7 +148,9 @@ class MapStore {
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
-      setImageryHoverInfo: mapActions.setImageryHoverInfo
+      setImageryHoverInfo: mapActions.setImageryHoverInfo,
+      updateLayer: mapActions.updateLayer
+
     });
   }
 
@@ -694,6 +696,19 @@ class MapStore {
 
   setImageryHoverInfo(obj) {
     this.imageryHoverInfo = obj;
+  }
+
+  updateLayer(obj) {
+    const { id, newLayer } = obj;
+    const allLayersCopy = this.allLayers.map((layer) => {
+      if (layer.id === id) {
+        layer = newLayer;
+      }
+      return layer;
+    });
+    this.allLayers = allLayersCopy;
+    this.emitChange();
+
   }
 }
 

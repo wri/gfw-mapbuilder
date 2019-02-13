@@ -589,35 +589,36 @@ export default {
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
-      layers: [{
-        order: 1,
-        type: 'remoteDataLayer',
-        uuid: '0721f089-b887-4d49-bad3-4b19261de208'
-      }, {
-        order: 2,
-        type: 'remoteDataLayer',
-        uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
-      }, {
-        order: 3,
-        type: 'remoteDataLayer',
-        uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
-      }, {
-        order: 4,
-        type: 'remoteDataLayer',
-        uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-      }, {
-        order: 5,
-        type: 'remoteDataLayer',
-        uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
-      }, {
-        order: 6,
-        type: 'remoteDataLayer',
-        uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
-      }, {
-        order: 7,
-        type: 'remoteDataLayer',
-        uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
-      },
+      layers: [
+      //   {
+      //   order: 1,
+      //   type: 'remoteDataLayer',
+      //   uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+      // }, {
+      //   order: 2,
+      //   type: 'remoteDataLayer',
+      //   uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+      // }, {
+      //   order: 3,
+      //   type: 'remoteDataLayer',
+      //   uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
+      // }, {
+      //   order: 4,
+      //   type: 'remoteDataLayer',
+      //   uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+      // }, {
+      //   order: 5,
+      //   type: 'remoteDataLayer',
+      //   uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+      // }, {
+      //   order: 6,
+      //   type: 'remoteDataLayer',
+      //   uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+      // }, {
+      //   order: 7,
+      //   type: 'remoteDataLayer',
+      //   uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+      // },
       {
         order: 9,
          id: 'LANDCOVER_TEST',
@@ -663,15 +664,8 @@ export default {
               zh: '2008',
               ka: '2008'
             },
-            service: {
-              en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
-              fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
-              es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
-              pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
-              id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
-              zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] },
-              ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [0] }
-            },
+            url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+            layerIds: [0]
            },
            {
              label: {
@@ -683,15 +677,8 @@ export default {
                zh: '2009',
                ka: '2009'
              },
-             service: {
-               en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
-               fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
-               es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
-               pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
-               id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
-               zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] },
-               ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [1] }
-             },
+             url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+             layerIds: [1]
             },
             {
               label: {
@@ -703,15 +690,8 @@ export default {
                 zh: '2010',
                 ka: '2010'
               },
-              service: {
-                en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
-                fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
-                es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
-                pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
-                id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
-                zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] },
-                ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/', layerIds: [2] }
-              },
+              url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+              layerIds: [2]
              },
          ],
        }, {
@@ -758,15 +738,7 @@ export default {
                zh: 'Protected Areas',
                ka: 'Protected Areas'
              },
-             service: {
-               en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
-               fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
-               es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
-               pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
-               id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
-               zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' },
-               ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0' }
-             },
+             url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0'
            }, {
               label: {
                 en: 'National Parks',
@@ -777,15 +749,7 @@ export default {
                 zh: 'National Parks',
                 ka: 'National Parks'
               },
-              service: {
-                en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
-                fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
-                es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
-                pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
-                id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
-                zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' },
-                ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1' }
-              },
+              url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1'
             }, {
                label: {
                  en: 'Réserve naturelle intégrale',
@@ -796,15 +760,7 @@ export default {
                  zh: 'Réserve naturelle intégrale',
                  ka: 'Réserve naturelle intégrale'
                },
-               service: {
-                 en: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
-                 fr: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
-                 es: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
-                 pt: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
-                 id: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
-                 zh: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' },
-                 ka: { url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2' }
-               },
+               url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2'
              },
          ]
        }

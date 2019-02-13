@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import layerFactory from 'utils/layerFactory';
+import mapActions from 'actions/MapActions';
 
 
 export default class LayerVersions extends Component {
@@ -30,19 +31,30 @@ export default class LayerVersions extends Component {
   onSelectVersion = (e) => {
     const { map, language } = this.context;
     const { layer } = this.props;
-    const mapLayer = map.getLayer(layer.id);
+
     const selected = e.target.value;
-
+    const version = this.state.versions.find((v) => v.label[language] === selected);
     this.setState({ selected });
-    const versionObj = this.state.versions.find((version) => version.label[language] === selected);
-    const service = versionObj.service[language];
 
+    const mapLayer = map.getLayer(layer.id);
     map.removeLayer(mapLayer);
-    delete layer.esriLayer;
-    layer.url = service.url;
-    if (layer.type === 'dynamic') { layer.layerIds = service.layerIds; }
-    const newLayer = layerFactory(layer, language);
-    map.addLayer(newLayer);
+
+    const newLayer = {};
+    const keys = Object.keys(layer);
+    keys.forEach((key) => {
+      if (key === 'url') {
+        newLayer.url = version.url;
+      } else if (key === 'layerIds') {
+        newLayer.layerIds = version.layerIds;
+      } else if (key !== 'esriLayer') {
+        newLayer[key] = layer[key];
+      }
+    });
+
+    const esriLayer = layerFactory(newLayer, language);
+    map.addLayer(esriLayer);
+    newLayer.esriLayer = Object.assign({}, esriLayer);
+    mapActions.updateLayer({ id: layer.id, newLayer });
   }
 
   render () {

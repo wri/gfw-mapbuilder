@@ -85,7 +85,7 @@ export default class ReportSubscribeButtons extends Component {
 
         payload.layerId = layerString;
       }
-
+      console.log(payload)
       appUtils.generateReport(payload);
     }
 

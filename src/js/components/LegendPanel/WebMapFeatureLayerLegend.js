@@ -62,7 +62,6 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       });
       return container;
     }
-
     try {
       this.createSymbolStyles(renderer.getSymbol(), container);
     } catch (e) {
@@ -129,7 +128,6 @@ export default class WebMapFeatureLayerLegend extends React.Component {
 
   render () {
     let { label } = this.props;
-
     if (typeof label === 'object') {
       label = '';
     }
