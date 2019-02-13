@@ -255,7 +255,7 @@ class MapActions {
     return obj;
   }
 
-  updateLayer(obj) {
+  changeLayerVersion(obj) {
     return obj;
   }
 

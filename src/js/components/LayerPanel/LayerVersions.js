@@ -34,6 +34,7 @@ export default class LayerVersions extends Component {
 
     const selected = e.target.value;
     const version = this.state.versions.find((v) => v.label[language] === selected);
+    const versionIndex = this.state.versions.indexOf(version);
     this.setState({ selected });
 
     const mapLayer = map.getLayer(layer.id);
@@ -54,7 +55,7 @@ export default class LayerVersions extends Component {
     const esriLayer = layerFactory(newLayer, language);
     map.addLayer(esriLayer);
     newLayer.esriLayer = Object.assign({}, esriLayer);
-    mapActions.updateLayer({ id: layer.id, newLayer });
+    mapActions.changeLayerVersion({ id: layer.id, newLayer, versionIndex });
   }
 
   render () {

@@ -99,7 +99,6 @@ const getFeature = function getFeature (params) {
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
   const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
-
   // Update order of layers as required.
   // Layers ordered first by their layer group.
   // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
@@ -179,6 +178,13 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic')).map((layer) => {
+      // Check for activeVersions
+
+      // Compare activeVersion Id with layer Id
+
+      // Get layer url / layer ids from config
+
+      // replace layer urls / ids
       return layerFactory(layer, language);
     });
 
@@ -952,7 +958,7 @@ export default {
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
     if (brApp.debug) { console.log(params); }
-
+    console.log(params)
     //- Add Title, Subtitle, and logo right away
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis

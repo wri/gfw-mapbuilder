@@ -25,6 +25,7 @@ class MapStore {
     this.activeTab = '';
 
     this.activeLayers = [];
+    this.activeVersions = [];
     this.allLayers = [];
     this.basemap = null;
     this.legendOpen = false;
@@ -149,7 +150,7 @@ class MapStore {
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
-      updateLayer: mapActions.updateLayer
+      changeLayerVersion: mapActions.changeLayerVersion
 
     });
   }
@@ -698,8 +699,8 @@ class MapStore {
     this.imageryHoverInfo = obj;
   }
 
-  updateLayer(obj) {
-    const { id, newLayer } = obj;
+  changeLayerVersion(obj) {
+    const { id, newLayer, versionIndex } = obj;
     const allLayersCopy = this.allLayers.map((layer) => {
       if (layer.id === id) {
         layer = newLayer;
@@ -707,7 +708,11 @@ class MapStore {
       return layer;
     });
     this.allLayers = allLayersCopy;
+    this.activeVersions[id] = versionIndex;
+    console.log(this.activeVersions)
     this.emitChange();
+
+
 
   }
 }

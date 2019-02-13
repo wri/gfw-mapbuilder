@@ -130,6 +130,7 @@ const utils = {
         failure(http);
       }
     };
+    console.log(params)
     http.send(params);
   },
 
