@@ -621,7 +621,7 @@ export default {
     },
     GROUP_LC: {
       groupType: 'default',
-      order: 2,
+      order: 3,
       label: {
         en: 'Land Cover',
         fr: 'Couverture des sols',
