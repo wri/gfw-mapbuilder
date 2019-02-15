@@ -267,8 +267,8 @@ const formatResources = () => {
   return Promise.all(remoteDataLayerRequests)
   .then(remoteLayers => {
     remoteLayers = filterLayers({layers: remoteLayers, layerKey: 'layer'});
-    remoteLayers.sort((a, b) => a.order - b.order);
     remoteLayers.forEach(item => {
+      item.layer.order = item.order; // item.order is the value we set in resources, this needs to be added to the layer object
       resources.layerPanel[item.groupId].layers.push(item.layer);
     });
     return resources;
