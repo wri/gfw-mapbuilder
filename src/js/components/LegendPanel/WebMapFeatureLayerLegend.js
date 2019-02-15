@@ -132,6 +132,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     if (typeof label === 'object') {
       label = '';
     }
+
     return (
       <div className={`parent-legend-container ${this.state.visible ? '' : 'hidden'}`} ref="myRef">
         <div className='label-container'><strong>{label}</strong></div>

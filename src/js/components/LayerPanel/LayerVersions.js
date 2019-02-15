@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import layerFactory from 'utils/layerFactory';
 import mapActions from 'actions/MapActions';
+import on from 'dojo/on';
 
 
 export default class LayerVersions extends Component {
@@ -53,9 +54,14 @@ export default class LayerVersions extends Component {
     });
 
     const esriLayer = layerFactory(newLayer, language);
+
     map.addLayer(esriLayer);
-    newLayer.esriLayer = Object.assign({}, esriLayer);
-    mapActions.changeLayerVersion({ id: layer.id, newLayer, versionIndex });
+
+    on.once(esriLayer, 'load', () => {
+      newLayer.esriLayer = Object.assign({}, esriLayer);
+      mapActions.changeLayerVersion({ id: layer.id, newLayer, versionIndex });
+    });
+
   }
 
   render () {
