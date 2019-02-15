@@ -44,7 +44,8 @@ export default class ReportSubscribeButtons extends Component {
       viirsStartDate,
       viirsEndDate,
       modisStartDate,
-      modisEndDate
+      modisEndDate,
+      activeFilters
     } = mapStore.getState();
 
     if (selectedFeature) {
@@ -67,7 +68,8 @@ export default class ReportSubscribeButtons extends Component {
         activeSlopeClass,
         selectedFeature,
         canopyDensity,
-        settings
+        settings,
+        activeFilters: []
       };
 
       if (params.appid) {
@@ -86,6 +88,12 @@ export default class ReportSubscribeButtons extends Component {
         payload.layerId = layerString;
       }
 
+      if (Object.keys(activeFilters).length) {
+        Object.keys(activeFilters).forEach((key) => {
+          payload.activeFilters.push(`${key}|${activeFilters[key]}`);
+        });
+      }
+      console.log(payload)
       appUtils.generateReport(payload);
     }
 

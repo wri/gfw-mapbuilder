@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/query';
 import Select from 'react-select';
+import mapActions from 'actions/MapActions';
 
 const customStyles = {
   option: (provided, state) => ({
@@ -117,6 +118,8 @@ export default class LayerFieldFilter extends Component {
       });
       mapLayer.setLayerDefinitions(layerDefinitions);
     }
+
+    mapActions.setActiveFilters({layerId: layer.id, value});
   }
 
   render () {

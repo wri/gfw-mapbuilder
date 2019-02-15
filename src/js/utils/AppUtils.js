@@ -144,6 +144,7 @@ const utils = {
       OBJECTID_Field,
       activeSlopeClass,
       activeLayers,
+      activeFilters,
       dynamicLayers,
       tcLossFrom,
       tcLossTo,
@@ -180,6 +181,7 @@ const utils = {
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
       sharinghost: settings.sharinghost,
+      activeFilters: activeFilters,
       ...(layerId ? {layerId} : {}),
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})

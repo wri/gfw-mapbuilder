@@ -255,6 +255,10 @@ class MapActions {
     return obj;
   }
 
+  setActiveFilters(obj) {
+    return obj;
+  }
+
 }
 
 export default dispatcher.createActions(MapActions);
