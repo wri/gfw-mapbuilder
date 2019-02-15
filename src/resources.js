@@ -5,7 +5,7 @@ export default {
   // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
   // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
   // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  webmap: 'acb6f60ce2fe469c9a1aa92de084c264',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',

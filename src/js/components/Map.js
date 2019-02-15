@@ -142,6 +142,8 @@ export default class Map extends Component {
     }
 
     if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
+      // console.log('bmbm', basemap);
+      // console.log('prevStatebmbm', prevState.basemap);
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
     }
 
@@ -473,6 +475,8 @@ export default class Map extends Component {
     const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
+
+    console.log('basemapbasemap', basemap);
 
 
     //- Set the default basemap in the store

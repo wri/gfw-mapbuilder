@@ -103,6 +103,7 @@ export default {
 
   prepareDefaultBasemap (map, basemapLayers, title) {
     const basemapNames = Object.values(basemaps).map(i => i.title);
+    console.log('basemapNames', basemapNames);
 
     let arcgisBasemap, wriName;
     if (basemapLayers) {
@@ -113,12 +114,17 @@ export default {
         })[0];
 
         arcgisBasemap = Object.entries(basemaps).map((entry) => {
+          // console.log('entry', entry);
           if (entry[1].title === arcgisBasemapTitle) {
             return entry[0];
           }
+          console.log('here?');
           return null;
         }).filter(i => i)[0];
       });
+
+      console.log('arcgisBasemap', arcgisBasemap);
+      debugger
 
       //- Check to see if this is a WRI basemap
       basemapLayers.forEach((layer) => {
@@ -131,24 +137,24 @@ export default {
       });
       //- Basemaps can cause issues with layer ordering and other things,
       //- remove them here and readd them above in updateBasemap
-      basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
+      // basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
     }
 
     //- Set the default basemap, this will trigger an update from the LayerPanel
     //- It listens for changes to the basemap in the store, and then triggers updateBasemap above
-      if (arcgisBasemap) {
-        if (this.arcgisBasemaps.indexOf(arcgisBasemap) === -1) {
-          this.arcgisBasemaps.push(arcgisBasemap);
-        }
-        mapActions.changeBasemap(arcgisBasemap);
-      } else if (wriName) {
-        mapActions.changeBasemap(wriName);
-      } else if (map.getBasemap()) {
-        mapActions.changeBasemap(map.getBasemap());
-      } else {
-        //- Use this as a fallback
-        mapActions.changeBasemap('wri_mono');
+    if (arcgisBasemap) {
+      if (this.arcgisBasemaps.indexOf(arcgisBasemap) === -1) {
+        this.arcgisBasemaps.push(arcgisBasemap);
       }
+      mapActions.changeBasemap(arcgisBasemap);
+    } else if (wriName) {
+      mapActions.changeBasemap(wriName);
+    } else if (map.getBasemap()) {
+      mapActions.changeBasemap(map.getBasemap());
+    } else {
+      //- Use this as a fallback
+      mapActions.changeBasemap('wri_mono');
+    }
 
     //- TODO: Add support for a custom basemap
   }

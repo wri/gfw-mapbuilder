@@ -68,6 +68,8 @@ export default class LayerPanel extends Component {
   }
 
   renderLayerGroups = (groups, language) => {
+    // console.log('groups', groups);
+    // debugger
     const allRadioLayers = [];
     Object.keys(groups)
       .filter(groupKey => groups[groupKey].groupType === 'radio')
@@ -259,6 +261,9 @@ export default class LayerPanel extends Component {
     const {language} = this.context;
     const {basemap} = this.props;
     let basemapLayers = [];
+
+    console.log('basemap', basemap);
+    console.log('configuredLayers', configuredLayers);
 
     //- Add Custom Basemaps
     configuredLayers.forEach((layer) => {
