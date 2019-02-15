@@ -69,7 +69,7 @@ export default class ReportSubscribeButtons extends Component {
         selectedFeature,
         canopyDensity,
         settings,
-        activeVersions
+        activeVersions: []
       };
 
       if (params.appid) {
@@ -87,7 +87,13 @@ export default class ReportSubscribeButtons extends Component {
 
         payload.layerId = layerString;
       }
-      console.log('payload', payload)
+
+      if (Object.keys(activeVersions).length) {
+        Object.keys(activeVersions).forEach((key) => {
+          payload.activeVersions.push(`${key}|${activeVersions[key]}`);
+        });
+      }
+
       appUtils.generateReport(payload);
     }
 

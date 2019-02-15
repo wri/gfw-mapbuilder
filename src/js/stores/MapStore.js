@@ -25,7 +25,7 @@ class MapStore {
     this.activeTab = '';
 
     this.activeLayers = [];
-    this.activeVersions = [];
+    this.activeVersions = {};
     this.allLayers = [];
     this.basemap = null;
     this.legendOpen = false;
@@ -709,10 +709,7 @@ class MapStore {
     });
     this.allLayers = allLayersCopy;
     this.activeVersions[id] = versionIndex;
-    console.log(this.activeVersions)
     this.emitChange();
-
-
 
   }
 }

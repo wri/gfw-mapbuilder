@@ -130,7 +130,6 @@ const utils = {
         failure(http);
       }
     };
-    console.log(params)
     http.send(params);
   },
 
@@ -145,6 +144,7 @@ const utils = {
       OBJECTID_Field,
       activeSlopeClass,
       activeLayers,
+      activeVersions,
       dynamicLayers,
       tcLossFrom,
       tcLossTo,
@@ -181,6 +181,7 @@ const utils = {
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
       sharinghost: settings.sharinghost,
+      activeVersions: activeVersions,
       ...(layerId ? {layerId} : {}),
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})

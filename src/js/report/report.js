@@ -98,7 +98,7 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
-  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeVersions} = params;
   // Update order of layers as required.
   // Layers ordered first by their layer group.
   // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
@@ -174,17 +174,37 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       layer.visible = activeLayers.indexOf(layer.id) > -1;
     });
 
+    // format active version params into an object
+    const versions = {};
+    if (activeVersions.length) {
+      activeVersions.forEach((v) => {
+        const version = v.split('|');
+        versions[version[0]] = version[1];
+      });
+    }
+
     //- remove layers from config that have no url unless they are of type graphic(which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic')).map((layer) => {
-      // Check for activeVersions
+      // Check for active versions matching the layer id
+      if (versions[layer.id] && versions[layer.id] !== 0) {
+        const groups = Object.keys(resources.layerPanel);
+        let versionConfig;
+        groups.forEach((group) => {
+          const configs = resources.layerPanel[group].layers;
+          const layerConfig = configs && configs.find((c) => c.id === layer.id);
+          if (layerConfig) {
+            versionConfig = layerConfig.versions[versions[layer.id]];
+          }
+        });
+        // Update the layer config object to include active version url / layerIds
+        if (versionConfig) {
+          layer.url = versionConfig.url;
+          if (versionConfig.layerIds) { layer.layerIds = versionConfig.layerIds; }
+        }
+      }
 
-      // Compare activeVersion Id with layer Id
-
-      // Get layer url / layer ids from config
-
-      // replace layer urls / ids
       return layerFactory(layer, language);
     });
 
@@ -958,7 +978,6 @@ export default {
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
     if (brApp.debug) { console.log(params); }
-    console.log(params)
     //- Add Title, Subtitle, and logo right away
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis
@@ -967,6 +986,7 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
+    params.activeVersions = params.activeVersions.split(',');
 
     if (opener) { //If this report.html was opened via the map (rather than a url paste)
       updateAnalysisModules(params);
