@@ -150,9 +150,7 @@ var MapBuilder = function(args){
     /*eslint-enable */
   };
 
-  window.customApp = {
-    ...args
-  };
+  window.customApp = args;
 
   this.constructorArgs = args;
   this.init(args);
