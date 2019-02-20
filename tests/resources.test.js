@@ -84,7 +84,7 @@ describe('resources layer spec', () => {
     }
     if (layer.type !== 'remoteDataLayer') {
       it(`layer ${layer.id} has the required properties`, () => {
-        if (layer.type !== 'imagery' || layer.versions) {
+        if (layer.type !== 'imagery' && !layer.versions) {
           expect(layer).toHaveProperty('url');
         }
         expect(layer).toHaveProperty('id');
