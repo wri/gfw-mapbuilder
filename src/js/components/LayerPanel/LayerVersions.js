@@ -37,7 +37,6 @@ export default class LayerVersions extends Component {
     const version = this.state.versions.find((v) => v.label[language] === selected);
     const versionIndex = this.state.versions.indexOf(version);
     this.setState({ selected });
-
     const mapLayer = map.getLayer(layer.id);
     map.removeLayer(mapLayer);
 
@@ -52,11 +51,10 @@ export default class LayerVersions extends Component {
         newLayer[key] = layer[key];
       }
     });
-
+    // console.log(newLayer.url, newLayer)
     const esriLayer = layerFactory(newLayer, language);
 
     map.addLayer(esriLayer);
-
     on.once(esriLayer, 'load', () => {
       newLayer.esriLayer = Object.assign({}, esriLayer);
       mapActions.changeLayerVersion({ id: layer.id, newLayer, versionIndex });
@@ -71,7 +69,7 @@ export default class LayerVersions extends Component {
 
     return (
       <div className='relative layer-versions'>
-        <p>{layer.versionLabel[language]}:</p>
+        <p>{layer.versionHeaderText[language]}:</p>
         <select onChange={this.onSelectVersion} value={selected}>
           {versions.map(this.renderVersionOptions)}
         </select>

@@ -623,8 +623,6 @@ export default {
         order: 9,
          id: 'LANDCOVER_TEST',
          type: 'dynamic',
-         layerIds: [0],
-         url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer',
          visible: false,
          label: {
            en: 'Land Cover test - dynamic layer',
@@ -644,7 +642,7 @@ export default {
            zh: '(sublabel)',
            ka: '(sublabel)'
          },
-         versionLabel: {
+         versionHeaderText: {
            en: 'Select year',
            fr: 'Select year',
            es: 'Select year',
@@ -698,7 +696,6 @@ export default {
          order: 10,
          id: 'NATIONAL_PARKS',
          type: 'feature',
-         url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0',
          visible: false,
          label: {
            en: 'National Parks - feature layer',
@@ -709,6 +706,7 @@ export default {
            zh: 'National Parks - feature layer',
            ka: 'National Parks - feature layer'
          },
+
          sublabel: {
            en: '(sublabel)',
            fr: '(sublabel)',
@@ -718,7 +716,7 @@ export default {
            zh: '(sublabel)',
            ka: '(sublabel)'
          },
-         versionLabel: {
+         versionHeaderText: {
            en: 'Select version',
            fr: 'Select version',
            es: 'Select version',
@@ -727,6 +725,17 @@ export default {
            zh: 'Select version',
            ka: 'Select version'
          },
+         popup: {
+          	title: {
+          		en: "National Parks"
+          	},
+          	content: {
+          		en: [{
+          			label: "Province",
+          			fieldExpression: "province"
+          		}]
+          	}
+        },
          versions: [
            {
              label: {
