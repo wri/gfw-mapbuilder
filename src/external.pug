@@ -4,8 +4,8 @@ html
 
   body.tundra
     #root
-    div#share-modal-wrapper.hidden
-    script(id='library-load' src='./1.3.3.js')
+    div#share-modal.modal-wrapper.hidden
+    script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.3.js')
     script.
       var customApp = new MapBuilder({
         el: 'root',
@@ -948,6 +948,7 @@ html
                * @property {object[]} layers[].nestedLayers - the layers for the nested group
                */
 
+<<<<<<< HEAD
               extraLayers: [{
                   id: 'MASK',
                   type: 'dynamic',
@@ -973,4 +974,31 @@ html
             }
           },
         version: "1.3.3" // we'll eventually have to affiliate this w/ the "library-load" script's src
+=======
+            extraLayers: [
+              {
+                id: 'MASK',
+                type: 'dynamic',
+                order: 10000,
+                url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+                opacity: 0.35,
+                layerIds: [0]
+              },
+              {
+                id: 'LEGEND_LAYER',
+                type: 'dynamic',
+                url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+                visible: false,
+                opacity: 0,
+                layerIds: []
+              },
+              {
+                id: 'USER_FEATURES',
+                type: 'graphic',
+                visible: true
+              }
+            ]
+          }
+        },
+>>>>>>> chart-api
       });
