@@ -1,18 +1,44 @@
 var MapBuilder = function(args){
 
   this.init = function(constructorParams) {
+    // Dynamically add meta tags if they don't already exist
+    const currentMetaTags = document.getElementsByTagName('meta');
+    let currentCharsetTag, currentMobileTag;
+
+    for (var i = 0; i < currentMetaTags.length; i++) {
+      const content = currentMetaTags[i].getAttribute('content');
+      if (content === 'text/html; charset=utf-8') {
+        currentCharsetTag = true;
+      } else if (content === 'width=device-width, initial-scale=1.0') {
+        currentMobileTag = true;
+      }
+    }
+    if (!currentCharsetTag) {
+      const metaCharset = document.createElement('meta');
+      metaCharset.httpEquiv = 'Content-Type';
+      metaCharset.content = 'text/html; charset=utf-8';
+      document.getElementsByTagName('body')[0].appendChild(metaCharset);
+    }
+
+    if (!currentMobileTag) {
+      const metaMobileDevice = document.createElement('meta');
+      metaMobileDevice.name = 'viewport';
+      metaMobileDevice.content = 'width=device-width, initial-scale=1.0';
+      document.getElementsByTagName('body')[0].appendChild(metaMobileDevice);
+    }
+
     var scripts = document.getElementsByTagName('script');
+    var version;
     var newBase;
     for (var j = 0; j < scripts.length; j++) {
       if (scripts[j].id === 'library-load') {
         newBase = scripts[j].src;
+        version = scripts[j].getAttribute('version') || constructorParams.version;
       }
     }
-
-    newBase = newBase.split(constructorParams.version)[0] + constructorParams.version;
-
+    newBase = newBase.split(version)[0] + version;
     window._app = {
-      cache: constructorParams.version,
+      cache: version,
       esri: '#{esriVersion}',
       base: newBase
     };
@@ -27,7 +53,6 @@ var MapBuilder = function(args){
         );
     }
     constructorParams.cssPath = makePath(newBase, 'css');
-    constructorParams.basePath = newBase;
 
     var base = makePath(newBase);
     window.dojoConfig = {
@@ -124,6 +149,11 @@ var MapBuilder = function(args){
     /*eslint-enable */
   };
 
+  window.customApp = {
+    ...args
+  };
+
+  this.constructorArgs = args;
   this.init(args);
 };
 

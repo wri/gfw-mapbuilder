@@ -15,6 +15,30 @@ test('resources has the required properties', () => {
     expect(resources.alternativeLanguage).toBeTruthy();
   }
 
+  if (resources.initialExtent) {
+    const { initialExtent } = resources;
+    expect(typeof resources.initialExtent).toBe('object');
+    expect(resources.initialExtent).toHaveProperty('x');
+    expect(resources.initialExtent).toHaveProperty('y');
+    expect(resources.initialExtent).toHaveProperty('z');
+
+    if (initialExtent.x && initialExtent.y && initialExtent.z) {
+      expect(typeof resources.initialExtent.x).toBe('number');
+      expect(typeof resources.initialExtent.y).toBe('number');
+      expect(typeof resources.initialExtent.z).toBe('number');
+
+      expect(resources.initialExtent.x).toBeGreaterThanOrEqual(-180);
+      expect(resources.initialExtent.x).toBeLessThan(180);
+
+      expect(resources.initialExtent.y).toBeGreaterThanOrEqual(-90);
+      expect(resources.initialExtent.y).toBeLessThan(90);
+
+      expect(resources.initialExtent.z).toBeGreaterThanOrEqual(1);
+      expect(resources.initialExtent.z).toBeLessThan(21);
+    }
+
+  }
+
   if (resources.includeCartoTemplateLayers) {
     expect(resources).toHaveProperty('cartoTemplateId');
     expect(resources).toHaveProperty('cartoApiKey');
@@ -59,9 +83,11 @@ describe('resources layer spec', () => {
       });
     }
     it(`layer ${layer.id} has the required properties`, () => {
+      if (layer.type !== 'imagery') {
+        expect(layer).toHaveProperty('url');
+      }
       expect(layer).toHaveProperty('id');
       expect(layer).toHaveProperty('type');
-      expect(layer).toHaveProperty('url');
       expect(layer).toHaveProperty('label');
       expect(layer.label).toHaveProperty(resources.language);
     });

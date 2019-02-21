@@ -1,6 +1,7 @@
 .analysis-panel
   overflow-x hidden
-  overflow-y auto
+  overflow-y visible
+  position static
   height 100%
 
 .analysis-instructions
@@ -96,6 +97,8 @@
 .analysis-results
   color $grayFont
   width 100%
+  height 100%
+  overflow visible
 
 .analysis-results__title
   border-bottom 1px solid $lightGray
@@ -130,8 +133,6 @@
     top 2px
 
 .analysis-results__select-form
-  height: calc(100% - 178px);
-  overflow-y auto
   overflow-x hidden
   .analysis-results__select-form-item-container
     display flex
@@ -139,6 +140,7 @@
     width 100%
     height 60px
     padding-left 30px
+    padding-right 10px
     justify-content space-around
     margin-bottom 20px
     .react-datepicker-wrapper
@@ -219,15 +221,12 @@
   top 0
 
 .analysis-results__content
-  position absolute
-  overflow auto
+  overflow-y auto
   width 100%
   height 100%
   padding 10px 10px 0 10px
-  bottom 100px
-  right 0
-  left 0
-  top 0
+  &.footer
+    height calc(100% - 100px)
   .analysis-results__chart-component-container
     width 100%
 
@@ -262,12 +261,13 @@
   display flex
   flex-direction column
   justify-content space-around
-  height 105px
+  height 100px
   box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
   position absolute
   bottom 0
   right 0
   left 0
+  padding 8px 0px
 
 .chart-error
   height auto

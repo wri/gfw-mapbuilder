@@ -3,6 +3,8 @@ import geometryUtils from 'utils/geometryUtils';
 import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -58,7 +60,13 @@ export default class DrawTools extends Component {
   draw = () => {
     // if active, toggle it off
     if (this.props.drawButtonActive) {
-      this.deactivate();
+      if (this.toolbar._graphic && this.toolbar._graphic.geometry && this.toolbar._graphic.geometry.rings) { // && this.toolbar._graphic.geometry.rings.length > 1
+        this.toolbar.finishDrawing();
+        mapActions.activateDrawButton(false);
+        mapActions.toggleAnalysisModal({ visible: false });
+      } else {
+        this.deactivate();
+      }
     } else {
       this.activate();
       //- If the analysis modal is visible, hide it
@@ -105,7 +113,7 @@ export default class DrawTools extends Component {
         </ol>
         <div className='analysis-instructions__draw-icon-container'>
           <svg className='analysis-instructions__draw-icon'>
-            <use xlinkHref="#icon-analysis-draw" />
+            <SVGIcon id={'icon-analysis-draw'} />
           </svg>
         </div>
         <div

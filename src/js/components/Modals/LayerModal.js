@@ -16,6 +16,7 @@ export default class Modal extends Component {
     } else if(info.licenseInfo && !info.license) {
       info.license = info.licenseInfo;
     }
+
     return (
       <div className='layer-modal-content'>
         <div className='source-header'>

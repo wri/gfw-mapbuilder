@@ -2,6 +2,7 @@ import geojsonUtil from 'utils/arcgis-to-geojson';
 import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import {toQuerystring} from 'utils/params';
 
+
 const utils = {
   /**
   * Retrieve the object from a given array based on id and value
@@ -178,6 +179,7 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
+      sharinghost: settings.sharinghost,
       ...(layerId ? {layerId} : {}),
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})
@@ -193,17 +195,37 @@ const utils = {
       query.appid = appid;
     }
 
+    if (window._app.cache) {
+      query.cache = window._app.cache;
+    }
+
+    query.origin = window.location.origin;
+
     const path = toQuerystring(query);
+
     if (window._app.base === window._app.cache) {
       window.open(`report.html?${path}`);
-      console.log('if', path);
     } else {
-      console.log('else', path);
-      const appBase = window._app.base.replace('1.2', '');
-      console.log(appBase);
+      // const appBase = window._app.base.replace('1.2', '');
       // if (!appBase) {
       //   appBase = window.location.origin + window.location.pathname;
       // }
+
+      let appBase = window._app.base;
+      if (!appBase) {
+        appBase = window.location.origin + window.location.pathname;
+      }
+
+      if (appBase.slice(-1) !== '/') {
+        appBase += '/';
+      }
+      //We are no longer using localStorage as it won't persist across domains!
+      window.addEventListener('message', function(e) {
+        // We need the report's origin; AKA appBase minus a couple things
+        if (appBase.indexOf(e.origin) > -1 && e.data === 'send-info') {
+          e.source.postMessage({command: 'info', info: settings.analysisModules}, e.origin);
+        }
+      }, false);
 
       window.open(`${appBase}report.html?${path}`);
     }

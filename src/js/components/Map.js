@@ -41,10 +41,16 @@ import WMSLayer from 'esri/layers/WMSLayer';
 import Extent from 'esri/geometry/Extent';
 import Graphic from 'esri/graphic';
 import InfoTemplate from 'esri/InfoTemplate';
+import Point from 'esri/geometry/Point';
 import symbols from 'utils/symbols';
 import resources from 'resources';
 import moment from 'moment';
 import layersHelper from 'helpers/LayersHelper';
+import SVGIcon from 'utils/svgIcon';
+import ImageryModal from 'components/Modals/ImageryModal';
+import ScreenPoint from 'esri/geometry/ScreenPoint';
+import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
+
 import React, {
   Component,
   PropTypes
@@ -125,8 +131,12 @@ export default class Map extends Component {
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
-        editToolbar.refresh();
-        scalebar.destroy();
+        if (editToolbar && editToolbar.refresh) {
+          editToolbar.refresh();
+        }
+        if (scalebar && scalebar.destroy) {
+          scalebar.destroy();
+        }
       }
       this.createMap(activeWebmap, options);
     }
@@ -173,6 +183,9 @@ export default class Map extends Component {
       });
 
       on.once(response.map, 'update-end', () => {
+        if (response.map.id !== 'esri.Map_0') {
+          mapLoaded = false;
+        }
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
@@ -187,6 +200,29 @@ export default class Map extends Component {
             maskLayer.show();
           }
         }
+
+        response.map.on('extent-change', (evt) => {
+          const imageryLayer = response.map.getLayer(layerKeys.RECENT_IMAGERY);
+          if (!imageryLayer || !imageryLayer.visible || evt.lod.level > 9) { return; }
+
+          const { imageryParams } = this.state;
+          const params = imageryParams ? imageryParams : {};
+
+
+          const xVal = window.innerWidth / 2;
+          const yVal = window.innerHeight / 2;
+
+          // Create new screen point at center;
+          const screenPt = new ScreenPoint(xVal, yVal);
+          // Convert screen point to map point and zoom to point;
+          const mapPt = response.map.toMap(screenPt);
+          // Note: Lat and lon are intentionally reversed until imagery api is fixed.
+          // The imagery API only returns the correct image for that lat/lon if they are reversed.
+          params.lon = mapPt.getLatitude();
+          params.lat = mapPt.getLongitude();
+
+          mapActions.getSatelliteImagery(params);
+        });
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {
@@ -267,8 +303,14 @@ export default class Map extends Component {
         layersHelper.updateAGBiomassLayer(cDensityFromHash ? cDensityFromHash : canopyDensity, response.map);
 
       });
-      //- Set the map's extent to its current extent to trigger our update-end
-      response.map.setExtent(response.map.extent);
+      const { initialExtent } = settings;
+      if (initialExtent && initialExtent.x && initialExtent.y && initialExtent.z) {
+        //- Set the map's extent to the x/y/z specified in settings
+        response.map.centerAndZoom(new Point(initialExtent.x, initialExtent.y), initialExtent.z);
+      } else {
+        //- Set the map's extent to its current extent to trigger our update-end
+        response.map.setExtent(response.map.extent);
+      }
 
       //- Load any shared state if available but only on first load
       if (!paramsApplied) {
@@ -734,28 +776,36 @@ export default class Map extends Component {
           break;
         }
         case 'checkbox': {
-          const layersFromWebmap = group.layers.filter(l => !l.url)
-            .map(l => {
-              const mapLayer = layers.filter(l2 => l2.id === l.id)[0];
+          const layersFromWebmap = [];
+          group.layers.filter(l => !l.url).forEach(l => {
 
-              layers = [
-                ...layers.slice(0, layers.indexOf(mapLayer)),
-                ...layers.slice(layers.indexOf(mapLayer) + 1)
-              ];
-              return {
-                ...l,
-                ...mapLayer
-              };
-            });
+            if (l.includedSublayers && l.includedSublayers.length > 0) {
+
+              l.includedSublayers.forEach(sublayer => {
+
+                const mapLayer = layers.filter(l2 => l2.id === l.id && l2.subIndex === sublayer)[0];
+
+                layers = [
+                  ...layers.slice(0, layers.indexOf(mapLayer)),
+                  ...layers.slice(layers.indexOf(mapLayer) + 1)
+                ];
+
+                layersFromWebmap.push({
+                  ...l,
+                  ...mapLayer
+                });
+              });
+
+            }
+          });
+
+          const newLayers = [];
 
           layersFromWebmap.forEach(lfw => {
-            const layerConfigToReplace = utils.getObject(group.layers, 'id', lfw.id);
-            group.layers = [
-              ...group.layers.slice(0, group.layers.indexOf(layerConfigToReplace)),
-              lfw,
-              ...group.layers.slice(group.layers.indexOf(layerConfigToReplace) + 1)
-            ];
+            newLayers.push(lfw);
           });
+          group.layers = newLayers;
+
           break;
         }
         case 'nested': {
@@ -823,7 +873,9 @@ export default class Map extends Component {
       modalLayerInfo,
       webmapInfo,
       map,
-      activeLayers
+      activeLayers,
+      imageryModalVisible,
+      imageryError
     } = this.state;
 
     const { settings } = this.context;
@@ -857,6 +909,7 @@ export default class Map extends Component {
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
+
           <TabButtons {...this.state} />
           {map.loaded && <TabView {...this.state} activeWebmap={this.props.activeWebmap} />}
           {legendReady ? <Legend
@@ -871,7 +924,8 @@ export default class Map extends Component {
           <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
-            <use xlinkHref='#shape-crosshairs' />
+            <SVGIcon id={'shape-crosshairs'} />
+
           </svg>
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
@@ -898,6 +952,21 @@ export default class Map extends Component {
         <div className={`subscription-modal-container modal-wrapper ${confirmModalVisible ? '' : 'hidden'}`}>
           <ConfirmModal userSubscriptions={userSubscriptions} subscriptionToDelete={subscriptionToDelete} />
         </div>
+        <div className={`imagery-modal-container ${imageryModalVisible ? '' : 'collapse'}`}>
+          <ImageryModal
+            imageryData={this.state.imageryData}
+            loadingImagery={this.state.loadingImagery}
+            imageryModalVisible={imageryModalVisible}
+            imageryError={imageryError}
+            imageryHoverVisible={this.state.imageryHoverVisible}
+          />
+        </div>
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible &&
+            <ImageryHoverModal
+              selectedImagery={this.state.selectedImagery}
+              top={this.state.imageryHoverInfo.top}
+              left={this.state.imageryHoverInfo.left}/>
+        }
       </div>
     );
   }

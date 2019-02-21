@@ -1,7 +1,10 @@
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
+import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
+import SVGIcon from 'utils/svgIcon';
+
 import React, {
   Component,
   PropTypes
@@ -71,6 +74,7 @@ export default class LayerCheckbox extends Component {
 
   showInfo () {
     const {layer} = this.props;
+
     if (layer.disabled) { return; }
     mapActions.showLayerInfo(layer);
     layerActions.showLoading(layer.id);
@@ -78,6 +82,8 @@ export default class LayerCheckbox extends Component {
 
   toggleLayer () {
     const {layer} = this.props;
+    const {map} = this.context;
+
     if (layer.disabled) { return; }
     if (layer.subId) {
       if (this.props.checked) {
@@ -96,11 +102,19 @@ export default class LayerCheckbox extends Component {
         layerActions.addActiveLayer(layer.id);
       }
     }
+
+    if (layer.id === layerKeys.RECENT_IMAGERY) {
+      mapActions.toggleImageryVisible(layer.visible); // Imagery Modal
+      if (!layer.visible) {
+        const imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
+        if (imageryGraphicsLayer) { map.removeLayer(imageryGraphicsLayer); }
+      }
+    }
   }
 
   render() {
     const {map, language} = this.context;
-    const {layer, initialLayerOpacities} = this.props;
+    const {layer, initialLayerOpacities, onEdit, dynamicSublabel} = this.props;
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
@@ -124,10 +138,14 @@ export default class LayerCheckbox extends Component {
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
+        {onEdit && this.props.checked && <div className='fa-button sml white layer-edit' onClick={onEdit}><span className='layer-edit-text'>Edit</span></div>}
+
         <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
-          <svg><use xlinkHref="#shape-info" /></svg>
+          <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}
+        {!dynamicSublabel ? null : <div className='layer-checkbox-sublabel dynamic'>{dynamicSublabel}</div>}
+
         {!this.props.children ? null :
           <div className={`layer-content-container flex ${this.props.checked ? '' : 'hidden'}`}>
             {this.props.children}

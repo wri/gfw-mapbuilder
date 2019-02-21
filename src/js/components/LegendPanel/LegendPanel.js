@@ -9,6 +9,7 @@ import LayerLegend from 'components/LegendPanel/LayerLegend';
 import {urls} from 'js/config';
 import text from 'js/languages';
 import CartoLegend from './CartoLegend';
+import SVGIcon from 'utils/svgIcon';
 
 const closeSymbolCode = 9660,
     openSymbolCode = 9650;
@@ -193,6 +194,19 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
+      case 'PRIMARY_FORESTS':
+        childComponent = <LayerLegend
+          key={layer.id}
+          label={layer.label ? layer.label[language] : ''}
+          url={urls.esriLegendService}
+          visibleLayers={activeLayers}
+          layerIds={layer.legendLayer}
+          layerId={layer.id}
+          legendOpacity={legendOpacity}
+          initialLayerOpacities={initialLayerOpacities}
+          defaultOpacity={layer.opacity || 1}
+        />;
+        break;
       case 'LAND_COVER':
         childComponent = <LayerLegend
           key={layer.id}
@@ -277,13 +291,22 @@ export default class LegendPanel extends Component {
       const esriLayer = layer.esriLayer;
 
       if (esriLayer) {
-
         if (esriLayer.type === 'Feature Layer' || esriLayer.type === 'ArcGISFeatureLayer') {
+
+          let visibility = activeLayers.indexOf(esriLayer.id) > -1;
+
+          if (esriLayer.hasOwnProperty('visibleAtMapScale') && !esriLayer.visibleAtMapScale) {
+            const scale = map.getScale();
+            if ((scale > esriLayer.minScale) || (scale < esriLayer.maxScale)) {
+              visibility = false;
+            }
+          }
+
           return <WebMapFeatureLayerLegend
           key={esriLayer.id}
           layer={esriLayer}
           label={layer.label[language] || layer.label}
-          visibility={activeLayers.indexOf(esriLayer.id) > -1 && esriLayer.visibleAtMapScale}
+          visibility={visibility}
           visibleLayers={activeLayers}
           legendOpacity={legendOpacity}
           initialLayerOpacities={initialLayerOpacities}
@@ -386,7 +409,7 @@ export default class LegendPanel extends Component {
 
         <div title='close' className='legend-close close-icon pointer mobile-show' onClick={mapActions.toggleLegendVisible}>
           <svg className='svg-icon'>
-            <use xlinkHref="#shape-close" />
+            <SVGIcon id={'shape-close'} />
           </svg>
         </div>
 

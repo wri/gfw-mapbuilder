@@ -18,6 +18,8 @@ import BasemapLayer from 'components/LayerPanel/BasemapLayer';
 import LayerKeys from 'constants/LayerConstants';
 import basemapUtils from 'utils/basemapUtils';
 import basemaps from 'esri/basemaps';
+import moment from 'moment';
+
 // import utils from 'utils/AppUtils';
 // import text from 'js/languages';
 import React, {
@@ -86,7 +88,6 @@ export default class LayerPanel extends Component {
       //- Sort on configured order
       return a.order - b.order;
     });
-
     return orderedGroups.map((group) => {
       if (group.layers.length === 0) { return null; }
       group.layers = group.layers.sort((a, b) => b.order - a.order);
@@ -121,10 +122,20 @@ export default class LayerPanel extends Component {
           layers = group.layers.map(this.checkboxMap);
       }
 
+      let layerLoading;
+      switch (group.key) {
+        case 'GROUP_IMAGERY':
+          layerLoading = this.props.loadingImagery;
+          break;
+        default:
+          layerLoading = false;
+      }
+
       return (
         <LayerGroup
           key={group.key}
           groupKey={group.key}
+          layerLoading={layerLoading}
           label={group.label[language]}
           {...this.props}>
           {layers}
@@ -149,10 +160,12 @@ export default class LayerPanel extends Component {
       modisStartDate,
       modisEndDate,
       initialLayerOpacities,
+      selectedImagery,
+      loadingImagery,
       ...props} = this.props;
 
     const {language} = this.context;
-    let childComponent;
+    let childComponent, editCallback, dynamicSublabel, layerLoading;
 
     switch (layer.id) {
       case 'VIIRS_ACTIVE_FIRES':
@@ -185,6 +198,22 @@ export default class LayerPanel extends Component {
           <DensityDisplay key='tcl_density-display' {...props} />
         ];
         break;
+      case LayerKeys.RECENT_IMAGERY:
+        editCallback = () => {
+          const imageryMobile = window.innerWidth <= 600;
+          mapActions.toggleImageryVisible(true);
+          if (imageryMobile) {
+            this.props.hideTabView();
+          }
+        };
+        const attr = selectedImagery ? selectedImagery.attributes : null;
+        const label = layer.dynamicSublabel[language];
+        dynamicSublabel = attr && label ? label
+                          .replace('{DATE_TIME}', `${moment(attr.date_time).format('DD MMM YYYY')}`)
+                          .replace('{CLOUD_COVERAGE}', `${attr.cloud_score.toFixed(0)}`)
+                          .replace('{INSTRUMENT}', `${attr.instrument.replace('_', ' ')}`) : '';
+        layerLoading = loadingImagery;
+        break;
       case LayerKeys.TREE_COVER:
       case LayerKeys.AG_BIOMASS:
         childComponent = <DensityDisplay {...props} />;
@@ -209,6 +238,7 @@ export default class LayerPanel extends Component {
       break;
       default:
         childComponent = null;
+        editCallback = null;
     }
 
     let checkbox;
@@ -218,7 +248,7 @@ export default class LayerPanel extends Component {
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox layerLoading={layerLoading} onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }

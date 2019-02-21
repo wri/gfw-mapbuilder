@@ -164,7 +164,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   /**
   * @description Method to start the process for rendering canvases in tile grid
   */
-  _extentChanged: function _extentChanged () {
+  _extentChanged: function _extentChanged (urlChanged) {
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
     const resolution = this._map.getResolution(),
@@ -187,7 +187,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
     //- Get a range of tiles for this extent, each info contains x, y, z
     const tileInfos = getTileInfos(rowMin, colMin, rowMax, colMax, level);
     //- Fetch the tile and update the map
-    tileInfos.forEach(tile => this._fetchTile(tile));
+    tileInfos.forEach(tile => this._fetchTile(tile, urlChanged));
 
     const tilesToDelete = [];
 
@@ -272,8 +272,16 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @param
   * @return {object} data
   */
-  _fetchTile: function _fetchTile (tile) {
+  _fetchTile: function _fetchTile (tile, urlChanged) {
     const id = this._getId(tile);
+
+    if (urlChanged && Object.keys(this.tiles).length) {
+      Object.keys(this.tiles).forEach((key) => {
+        this.tiles[key].canvas.remove();
+      });
+      this.tiles = {};
+    }
+
     let url;
     //- Don't fetch the image if we already have it
     if (!this.tiles.hasOwnProperty(id)) {
@@ -283,6 +291,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
         const x = Math.floor(tile.x / Math.pow(2, steps));
         const y = Math.floor(tile.y / Math.pow(2, steps));
         url = this._getUrl({ x, y, z: this.options.maxZoom });
+
       } else {
         url = this._getUrl(tile);
       }

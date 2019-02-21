@@ -371,27 +371,39 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, selectedAttributes) => {
-		const baseUrl = config.data[0].url.split('?')[0];
-		const queryParams = config.featureDataFieldsToPass.map(fieldName => `${fieldName}=${selectedAttributes[fieldName]}`).join('&');
+  makeVegaChart: (el, config, callback, selectedAttributes) => {
 
-		function render(spec) {
-      new vega.View(vega.parse(spec))
+    if (selectedAttributes) { // WCS Specific logic
+      const baseUrl = config.data[0].url.split('?')[0];
+  		const queryParams = config.featureDataFieldsToPass.map(fieldName => `${fieldName}=${selectedAttributes[fieldName]}`).join('&');
+
+  		function render(spec) {
+        new vega.View(vega.parse(spec))
+          .renderer('canvas')
+          .initialize(el)
+          .hover()
+          .run();
+  		}
+
+      esriRequest({
+        url: `${baseUrl}?${queryParams}`,
+        handleAs: 'json',
+        callbackParamName: 'callback'
+      }).then(res => {
+  			render(res);
+      }, err => {
+        console.log('err', err);
+      });
+    } else {
+      new vega.View(vega.parse(config))
         .renderer('canvas')
         .initialize(el)
         .hover()
         .run();
-		}
 
-    esriRequest({
-      url: `${baseUrl}?${queryParams}`,
-      handleAs: 'json',
-      callbackParamName: 'callback'
-    }).then(res => {
-			render(res);
-    }, err => {
-      console.log('err', err);
-    });
+      if (callback) { callback(); }
+    }
+
   },
 
 	/**

@@ -4,6 +4,29 @@
   width 76px
   top 80px
 
+  &.imagery
+    top 243px
+    padding 3px 0px
+    border 1px solid $lightGray
+    font-size 9px
+    display flex
+    justify-content space-between
+    cursor pointer
+    align-items center
+    .pointer
+      margin 0 3px
+    .imagery_label
+      display inline
+
+  &.imagery.active
+    svg
+      fill #97be32
+
+  &.imagery:active
+    background $lightGrayHighlight
+  &.imagery:hover
+    background $lightGrayHighlight
+
 .control-panel__list
   flex-wrap wrap
   display flex
@@ -38,10 +61,20 @@
 
 @media (max-width: $mobileBreak)
   .control-panel
-    bottom 110px
+    bottom 150px
     width 38px
     z-index 4
     top auto
+
+    &.imagery
+      bottom 115
+      top unset
+      padding 5 0
+      border-bottom none
+      border-right none
+      border-left none
+      .imagery_label
+        display none
 
   .control-panel__list
     & li

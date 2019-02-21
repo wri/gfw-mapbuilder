@@ -5,24 +5,45 @@ export default class VegaChart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isError: false };
+    this.state = { isError: false, errorMsg: null };
   }
+
+  handleError(errorMsg) {
+    this.setState({ isError: true, errorMsg });
+    this.props.setLoading();
+  }
+
   componentDidMount() {
     if (this.props.results.hasOwnProperty('error')) {
-      this.setState({ isError: true });
+      this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      charts.makeVegaChart(this.chart, config, this.props.selectedFeature.attributes);
+      const url = config.data[0].url;
+
+      fetch(url).then(res => {
+        if (res.status !== 200) {
+          this.handleError('Error creating analysis.');
+        } else {
+          res.json().then(json => {
+            // We used to have this 'json' object for validation and error-checking, but now
+            // we leave that up to the Widget API!
+            charts.makeVegaChart(this.chart, config, this.props.setLoading, this.props.selectedFeature.attributes);
+          });
+        }
+
+      }).catch(() => {
+        this.handleError('Error creating analysis.');
+      });
     }
   }
 
   render() {
-    const { isError } = this.state;
+    const { isError, errorMsg } = this.state;
     const { results } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
-          <h5>{results.message}</h5>
+          <h5>{results.message || errorMsg}</h5>
         </div>
       );
     } else {

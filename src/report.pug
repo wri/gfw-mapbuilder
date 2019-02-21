@@ -15,52 +15,46 @@ block append content
       div.report-header__title-container
         h1#report-title.report-header__title
         h2#report-subtitle.report-header__subtitle
-    //- h3#feature-title.feature-title
+
     div#map.map
     div#popup-content.popup-content
     div#results-container.results-container
-    //- div.results-container.results__restoration.hidden#restoration
-    //- div.results-container.results__slope.hidden#slope
-    //-   h3.slope-header#slope-analysis-header
-    //-   h4.slope__description#slope-analysis-description
-    //-   div#slope-chart.chart-container
-    //-   div#slope-table.table-container
-    //- div.results-container.results__loss-badge.hidden#total-loss-badge
-    //-   div.results__loss-gain--label
-    //-   div.results__loss-gain--range
-    //-   span.results__loss--count
-    //-   span.results__loss--unit Ha
-    //- div.results-container.results__gain-badge.hidden#total-gain-badge
-    //-   div.results__loss-gain--label
-    //-   div.results__loss-gain--range
-    //-   span.results__gain--count
-    //-   span.results__gain--unit Ha
-    //- div.results-container#tc-loss
-    //- div.results-container#lc-loss
-    //- div.results-container#bio-loss
-    //- div.results-container#intact-loss
-    //- div.results-container#mangroves
-    //- div.results-container#sad-alerts
-    //- div.results-container#glad-alerts
-    //- div.results-container#terrai-alerts
-    //- div.results-container.results__fires-badge.hidden#viirs-badge
-    //-   div.results__viirs-pre
-    //-   div.results__viirs-count
-    //-   div.results__viirs-active
-    //-   div.results__viirs-post
-    //- div.results-container.results__fires-badge.hidden#modis-badge
-    //-   div.results__modis-pre
-    //-   div.results__modis-count
-    //-   div.results__modis-active
-    //-   div.results__modis-post
-    //- div.results-container#lc-composition
+
 block append esri-script
   script.
+
+    function toObject(querystring) {
+      if (!querystring) { return {}; }
+      const result = {};
+      const pairs = querystring.split('&').map((item) => {
+        return item.split('=').map(str => decodeURIComponent(str));
+      });
+      // Should have an array of arrays now, ex: [['a','b'], ['foo','bar']]
+      pairs.forEach((pair) => {
+        if ((pair[0] === null || typeof pair[0] === 'undefined') || (pair[0] === null || typeof pair[0] === 'undefined')) {
+          console.warn(`You provided an invalid key-value pair, ${pair[0]} is being omitted.`);
+          return;
+        }
+        result[pair[0]] = pair[1];
+      });
+      return result;
+    }
+
+    let windowPath = location.href;
+    if (windowPath.indexOf('#') > -1) {
+      windowPath = windowPath.slice(0, windowPath.indexOf('#')) + windowPath.slice(windowPath.indexOf('#') + 1, windowPath.length);
+    }
+
+    const bits = windowPath.split('?');
+    const querystring = bits.length > 1 ? bits[1] : '';
+    const reportParams = toObject(querystring);
+
     var _app = {
-        cache: %META_VERSION%,
+        cache: reportParams.cache,
         esri: %ESRI_VERSION%,
         base: ''
     };
+
     function makePath (base, path) {
       var position = base.length - 1;
       return !path ?
@@ -80,74 +74,32 @@ block append esri-script
     base = makePath(base);
     // Add _app.base if it is present
     if (_app.base) { base = makePath(base, _app.base); }
+
     var dojoConfig = {
       parseOnLoad: false,
       async: true,
       packages: [
         { name: 'root', location: getResourcePath(location.href.replace(/\/[^/]+$/, '')) },
         { name: 'js', location: makePath(base, 'js')},
-        { name: 'vendor', location: makePath(base, 'vendor')},
         { name: 'utils', location: makePath(base, 'js/utils')},
         { name: 'helpers', location: makePath(base, 'js/helpers')},
         { name: 'report', location: makePath(base, 'js/report')},
-        //- { name: 'stores', location: base + 'js/stores' },
-        //- { name: 'actions', location: base + 'js/actions' },
         { name: 'constants', location: makePath(base,'js/constants')}
-        //- { name: 'components', location: base + 'js/components' }
       ],
       aliases: [
         ['resources', 'root/resources'],
-        //- ['alt', 'vendor/alt/dist/alt.min'],
-        //- ['react', 'vendor/react/react.min'],
-        //- ['react-dom', 'vendor/react/react-dom.min'],
-        ['babel-polyfill', 'vendor/babel-polyfill/browser-polyfill']
+        ['babel-polyfill', 'babel-polyfill/browser-polyfill']
       ],
       deps: ['dojo/domReady!'],
-      callback: function () {require(['%REPORT_JS%']);}
+      callback: function () {require(['js/report']);}
     };
-    
-  //- script.
-  //-   var _app = {
-  //-     cache: '#{version}',
-  //-     esri: '#{esriVersion}',
-  //-     base: '#{base}'
-  //-   };
-  //- 
-  //-   function makePath (base, path) {
-  //-     var position = base.length - 1;
-  //-     return !path ?
-  //-       (base.indexOf('/', position) !== position ? base + '/' : base) :
-  //-       (base.indexOf('/', position) !== position ?
-  //-         base + '/' + path :
-  //-         base + path
-  //-       )
-  //-   }
-  //-   function getResourcePath (path) {
-  //-     var position = path.length - 1;
-  //-     return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
-  //-   }
-  //-   // Change this to '' if _app.base is a remote url
-  //-   var base = location.href.replace(/\/[^/]+$/, '');
-  //-   // Add trailing slash if it is not present
-  //-   base = makePath(base);
-  //-   // Add _app.base if it is present
-  //-   if (_app.base) { base = makePath(base, _app.base); }
-  //-   
-  //-   function loadjsfile(filename, base) {
-  //-     const dojoInit = base + filename;
-  //-     const script = document.createElement('script');
-  //-     script.src = dojoInit;
-  //-     document.getElementsByTagName('head')[0].appendChild(script);
-  //-   }
-  //-   
-  //-   loadjsfile('/vendor/arcgis-api/dojo/dojo.js', base);
+
   //- PROD: if new modules are added, regenerate the JSAPI build
   script(src='https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/dojo/dojo.js', async)
   //- script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.7/vega.min.js")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/vega/4.2.0/vega.min.js", charset='UTF-8')
   //- DEV: Use the normal JSAPI
   //- script(src=`//js.arcgis.com/${%ESRI_VERSION%}/init.js`, async)
-  //- script(src='/vendor/dojo/dojo.js', async)
   script.
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -2,7 +2,7 @@
 
 exports[`resources layer spec renders correctly while active 1`] = `
 <div
-  className="app-loader__active"
+  className="app-loader__active "
 >
   <div
     className="app-loader__spinner"
@@ -22,7 +22,7 @@ exports[`resources layer spec renders correctly while active 1`] = `
 
 exports[`resources layer spec renders correctly while static 1`] = `
 <div
-  className="app-loader"
+  className="app-loader "
 >
   <div
     className="app-loader__spinner"
