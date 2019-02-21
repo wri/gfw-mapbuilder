@@ -29,7 +29,10 @@ const config = {
     'https://library.wcs.org/DesktopModules/WCSVega/API/Data/PopulationMeasure',
     'https://library.wcs.org',
     'library.wcs.org',
-    'gis.wri.org'
+    'gis.wri.org',
+    'tiles.globalforestwatch.org',
+    'staging-api.globalforestwatch.org',
+    'wri-01.carto.com',
   ],
 
   urls: {
