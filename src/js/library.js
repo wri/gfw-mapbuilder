@@ -13,14 +13,14 @@ var MapBuilder = function(args){
         currentMobileTag = true;
       }
     }
-    if (!currentCharsetTag) {
+    if (!currentCharsetTag && document.getElementsByTagName('body')[0]) {
       const metaCharset = document.createElement('meta');
       metaCharset.httpEquiv = 'Content-Type';
       metaCharset.content = 'text/html; charset=utf-8';
       document.getElementsByTagName('body')[0].appendChild(metaCharset);
     }
 
-    if (!currentMobileTag) {
+    if (!currentMobileTag && document.getElementsByTagName('body')[0]) {
       const metaMobileDevice = document.createElement('meta');
       metaMobileDevice.name = 'viewport';
       metaMobileDevice.content = 'width=device-width, initial-scale=1.0';
@@ -150,9 +150,7 @@ var MapBuilder = function(args){
     /*eslint-enable */
   };
 
-  window.customApp = {
-    ...args
-  };
+  window.customApp = args;
 
   this.constructorArgs = args;
   this.init(args);

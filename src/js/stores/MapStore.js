@@ -364,6 +364,7 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
+
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);

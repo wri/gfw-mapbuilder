@@ -99,24 +99,21 @@ class MapActions {
         //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
         //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
       if (groupIndex === 0) {
-        maxOrder = layerPanel[groupName].order + 1;
+       maxOrder = layerPanel[groupName].order + 1;
       }
 
-      const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
+      const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+          // We used to use index here is layer.order was undefined, but this doesn't appear to be working consistently.
+          // layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
         }
-
         return layer;
       });
-
       return list.concat(orderedGroups);
-
-
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
-
     //- make sure there's only one entry for each dynamic layer
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
@@ -126,6 +123,7 @@ class MapActions {
     }, []);
     const uniqueLayers = [];
     const existingIds = [];
+
     reducedLayers
       .forEach(layer => {
         if (existingIds.indexOf(layer.id) === -1) {
@@ -153,7 +151,6 @@ class MapActions {
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
-        console.log(cartoLayer);
         cartoLayer.layer.on('onCartoLayerAdd', evt => {
           const tempResources = resources;
           tempResources.layerPanel.GROUP_CARTO.layers = evt.target.cartoLayers;

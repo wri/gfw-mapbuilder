@@ -82,15 +82,21 @@ describe('resources layer spec', () => {
         expect(typeof layer.layerName).toBe('string');
       });
     }
-    it(`layer ${layer.id} has the required properties`, () => {
-      if (layer.type !== 'imagery') {
-        expect(layer).toHaveProperty('url');
-      }
-      expect(layer).toHaveProperty('id');
+    if (layer.type !== 'remoteDataLayer') {
+      it(`layer ${layer.id} has the required properties`, () => {
+        if (layer.type !== 'imagery') {
+          expect(layer).toHaveProperty('url');
+        }
+        expect(layer).toHaveProperty('id');
+        expect(layer).toHaveProperty('type');
+        expect(layer).toHaveProperty('label');
+        expect(layer.label).toHaveProperty(resources.language);
+      });
+    } else {
+      expect(layer).toHaveProperty('order');
       expect(layer).toHaveProperty('type');
-      expect(layer).toHaveProperty('label');
-      expect(layer.label).toHaveProperty(resources.language);
-    });
+      expect(layer).toHaveProperty('uuid');
+    }
   });
 
   // resources.layerPanel.GROUP_LCD.layers.forEach((layer) => {
