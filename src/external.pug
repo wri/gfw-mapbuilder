@@ -5,7 +5,7 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.3.js')
+    script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.3.js' version='1.3.3')
     script.
       var customApp = new MapBuilder({
         el: 'root',
@@ -530,37 +530,43 @@ html
                 },
               ],
             },
-            {
-              analysisId: 'LCC',
-              label: {
-                en: 'Land Cover Composition',
-                fr: 'Couverture des sols',
-                es: 'Cobertura terrestre',
-                pt: 'Cobertura do Solo',
-                id: 'Land Cover',
-                zh: '土地覆盖',
-                ka: 'მიწის საფარი'
-              },
-              chartType: 'lccPie',
-              classes: {
-                en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
-                fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-              },
-              colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
-              analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
-              uiParams: 'none',
-              params: [
-                {
-                  name: 'layer',
-                  value: 'gfw-landcover-2015'
-                }
-              ]
-            },
+             {
+      		"analysisId": "LCC",
+      		"label": {
+      			"en": "Land Cover Composition",
+      			"fr": "Couverture des sols",
+      			"es": "Cobertura terrestre",
+      			"pt": "Cobertura do Solo",
+      			"id": "Land Cover",
+      			"zh": "土地覆盖",
+      			"ka": "მიწის საფარი"
+      		},
+      		"title": {
+      			"en": "Land Cover Composition",
+      			"fr": "Couverture des sols",
+      			"es": "Cobertura terrestre",
+      			"pt": "Cobertura do Solo",
+      			"id": "Land Cover",
+      			"zh": "土地覆盖",
+      			"ka": "მიწის საფარი"
+      		},
+      		"description": {
+      			"en": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"fr": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"es": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"pt": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"id": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"zh": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"ka": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. "
+      		},
+      		"useGfwWidget": true,
+      		"widgetId":"f4e138a2-98f9-4f1a-9f12-a93e4e05e7c2",
+      		"uiParams": "none",
+      		"params": [{
+      			"name": "layer",
+      			"value": "gfw-landcover-2015"
+      		}]
+      	},
             // The following configurations will not work because we have not yet
             // build support for configurable layer queries or compute histograms
             // {
@@ -652,7 +658,7 @@ html
           },
           GROUP_LC: {
             groupType: 'default',
-            order: 2,
+            order: 3,
             label: {
               en: 'Land Cover',
               fr: 'Couverture des sols',
