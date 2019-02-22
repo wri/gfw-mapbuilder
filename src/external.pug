@@ -5,7 +5,7 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.3.js')
+    script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.3.js' version='1.3.3')
     script.
       var customApp = new MapBuilder({
         el: 'root',
@@ -509,83 +509,180 @@ html
                     zh: 'Select date(s) for analysis',
                     ka: 'Select date(s) for analysis'
                   }
-                }, ],
-              },
-              {
-                analysisId: 'LCC',
-                label: {
-                  en: 'Land Cover Composition',
-                  fr: 'Couverture des sols',
-                  es: 'Cobertura terrestre',
-                  pt: 'Cobertura do Solo',
-                  id: 'Land Cover',
-                  zh: '土地覆盖',
-                  ka: 'მიწის საფარი'
                 },
-                chartType: 'lccPie',
-                classes: {
-                  en: ['Land Cover', 'Agriculture', 'Forest', 'Grassland', 'Shrubland', 'Sparse vegetation', 'Wetland', 'Settlement', 'Bare', 'Water', 'Permanent snow and ice'],
-                  fr: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                  es: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                  pt: ['Culturas Irrigadas', 'Rainfed croplands', 'Mosaico de areas florestais e de cultivo', 'Floresta verde ou semi-decídua', 'Floresta decídua de folha larga', 'Floresta verde de coníferas ou Floresta decídua', 'Misto de floresta de conifera e de folha larga"', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                  id: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                  zh: ['Irrigated croplands', 'Rainfed croplands', 'Cropland forest mosaic', 'Broadleaved evergreen or semi-deciduous forest', 'Broadleaved deciduous forest', 'Needleleaved evergreen or deciduous forest', 'Mixed broadleaved and needleleaved forest', 'Mosaic of forest, shrubland and grassland', 'Shrubland', 'Grassland', 'Sparse vegetation', 'Flooded broadleaved forest', 'Flooded vegetation', 'Artificial areas', 'Bare areas', 'Permanent snow and ice'],
-                  ka: ['მორწყვადი ს/ს კულტურები', 'წვიმით მორწყვადი კულტურები', 'ს/ს კულტურების და ტყის მოზაიკა', 'ფართოფოთლოვანი მარადმწვანე ან ნახევრად-ფოთოლმცვენი ტყე', 'ფართოფოთლოვანი ფოთოლმცვენი ტყე', 'წიწვოვანი მარადმწვანე ან ფოთოლმცვენი ტყე', 'შერეული ფართოფოთლოვანი და წიწვოვანი ტყე', 'ტყის, ბუჩქნარის და მინდორის მოზაიკა', 'ბუჩქნარი', 'მინდორი', 'მეჩხერი მცენარეულობა', 'დატბორილი ფართოფოთლოვანი ტყე', 'დატბორილი მცენარეულობა', 'სახეცვლილი (ხელოვნური) ადგილები', 'მოშიშვლებული ადგილები', 'მუდმივი თოვლი და ყინული']
-                },
-                colors: ['#D2A965', '#157764', '#CCDB98', '#596B2C', '#D5C998', '#2789D4', '#E9462B', '#F6F0EA', '#A3DCFF', '#FFFFFF'],
-                analysisUrl: 'https://production-api.globalforestwatch.org/v1/loss-by-landcover',
-                uiParams: 'none',
-                params: [{
-                  name: 'layer',
-                  value: 'gfw-landcover-2015'
-                }]
-              },
-              // The following configurations will not work because we have not yet
-              // build support for configurable layer queries or compute histograms
-              // {
-              //   analysisId: 'SAD_ALERTS',
-              //   label: {
-              //     en: 'SAD'
-              //   }
-              // },
-              // {
-              //   analysisId: 'LC_LOSS',
-              //   label: {
-              //     en: 'Land Cover Loss'
-              //   }
-              // }
-            ],
+              ],
+            },
+             {
+      		"analysisId": "LCC",
+      		"label": {
+      			"en": "Land Cover Composition",
+      			"fr": "Couverture des sols",
+      			"es": "Cobertura terrestre",
+      			"pt": "Cobertura do Solo",
+      			"id": "Land Cover",
+      			"zh": "土地覆盖",
+      			"ka": "მიწის საფარი"
+      		},
+      		"title": {
+      			"en": "Land Cover Composition",
+      			"fr": "Couverture des sols",
+      			"es": "Cobertura terrestre",
+      			"pt": "Cobertura do Solo",
+      			"id": "Land Cover",
+      			"zh": "土地覆盖",
+      			"ka": "მიწის საფარი"
+      		},
+      		"description": {
+      			"en": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"fr": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"es": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"pt": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"id": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"zh": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+      			"ka": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. "
+      		},
+      		"useGfwWidget": true,
+      		"widgetId":"f4e138a2-98f9-4f1a-9f12-a93e4e05e7c2",
+      		"uiParams": "none",
+      		"params": [{
+      			"name": "layer",
+      			"value": "gfw-landcover-2015"
+      		}]
+      	},
+            // The following configurations will not work because we have not yet
+            // build support for configurable layer queries or compute histograms
+            // {
+            //   analysisId: 'SAD_ALERTS',
+            //   label: {
+            //     en: 'SAD'
+            //   }
+            // },
+            // {
+            //   analysisId: 'LC_LOSS',
+            //   label: {
+            //     en: 'Land Cover Loss'
+            //   }
+            // }
+          ],
 
-            /**
-             * Layer panel configuration, anything with an = is optional, {object=}
-             * Order at the group level controls the order of the accordions, the top most accordion's layers
-             * will also be the top most layers on the map. The order in the layer level controls how those layers
-             * are organized within their own group
-             ** @name layerPanel
-             ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
-             ** and values are string labels
-             * @property {object=} label - Label for the group in the layer panel
-             * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
-             * @property {object[]=} layers - Layers placed in the various accordions
-             * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
-             * @property {number} layers[].order - Order of this layer in this section only
-             * @property {string} layers[].id - Must be a unique id for the layer
-             * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
-             ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
-             * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
-             * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
-             * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
-             * @property {string} layers[].url - URL for the service
-             * @property {object=} layers[].label - Label for the layer in the UI
-             * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
-             * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
-             * @property {object=} popup - Popup configuration for the layer if it is available
-             */
-            layerPanel: {
-              GROUP_WEBMAP: {
-                order: 2,
-                label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
-                layers: [] // Will get filled in with layers from the webmap
+          /**
+          * Layer panel configuration, anything with an = is optional, {object=}
+          * Order at the group level controls the order of the accordions, the top most accordion's layers
+          * will also be the top most layers on the map. The order in the layer level controls how those layers
+          * are organized within their own group
+          ** @name layerPanel
+          ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
+          ** and values are string labels
+          * @property {object=} label - Label for the group in the layer panel
+          * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
+          * @property {object[]=} layers - Layers placed in the various accordions
+          * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
+          * @property {number} layers[].order - Order of this layer in this section only
+          * @property {string} layers[].id - Must be a unique id for the layer
+          * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
+          ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
+          * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
+          * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
+          * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
+          * @property {string} layers[].url - URL for the service
+          * @property {object=} layers[].label - Label for the layer in the UI
+          * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
+          * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
+          * @property {object=} popup - Popup configuration for the layer if it is available
+          */
+          layerPanel: {
+            GROUP_WEBMAP: {
+              order: 2,
+              label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
+              layers: [] // Will get filled in with layers from the webmap
+            },
+          GROUP_LCD: {
+            groupType: 'default',
+            order: 1,
+            label: {
+              en: 'Land Cover Dynamics',
+              fr: 'Evolution de la couverture des sols',
+              es: 'Dinámica de la Cobertura del Suelo',
+              pt: 'Dinâmica de cobertura da terra ',
+              id: 'Land Cover Dynamics',
+              zh: '土地覆盖动态数据',
+              ka: 'მიწის საფარის დინამიკა'
+            },
+            layers: [{
+              order: 1,
+              type: 'remoteDataLayer',
+              uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+            }, {
+              order: 2,
+              type: 'remoteDataLayer',
+              uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+            }, {
+              order: 3,
+              type: 'remoteDataLayer',
+              uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
+            }, {
+              order: 4,
+              type: 'remoteDataLayer',
+              uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+            }, {
+              order: 5,
+              type: 'remoteDataLayer',
+              uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+            }, {
+              order: 6,
+              type: 'remoteDataLayer',
+              uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+            }, {
+              order: 7,
+              type: 'remoteDataLayer',
+              uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+            }]
+          },
+          GROUP_LC: {
+            groupType: 'default',
+            order: 3,
+            label: {
+              en: 'Land Cover',
+              fr: 'Couverture des sols',
+              es: 'Cobertura terrestre',
+              pt: 'Cobertura do Solo',
+              id: 'Land Cover',
+              zh: '土地覆盖',
+              ka: 'მიწის საფარი'
+            },
+            layers: [{
+              order: 1,
+              type: 'remoteDataLayer',
+              uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
+            }, {
+              order: 2,
+              type: 'remoteDataLayer',
+              uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+            }, {
+              order: 3,
+              type: 'remoteDataLayer',
+              uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
+            }, {
+              order: 4,
+              type: 'remoteDataLayer',
+              uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
+            }, {
+              order: 5,
+              type: 'remoteDataLayer',
+              uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
+            }]
+          },
+            GROUP_IMAGERY: {
+              groupType: 'imagery',
+              order: 4,
+              label: {
+                en: 'Recent Imagery',
+                fr: 'Recent Imagery',
+                es: 'Recent Imagery',
+                pt: 'Recent Imagery',
+                id: 'Recent Imagery',
+                zh: 'Recent Imagery',
+                ka: 'Recent Imagery'
               },
               GROUP_LCD: {
                 groupType: 'default',
