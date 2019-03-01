@@ -1,3 +1,4 @@
+
 export default {
   webmap: '7b64776e2f8b4280a806b7b46ccddc78',
   title: 'Natural Strongholds Impact Platform',
