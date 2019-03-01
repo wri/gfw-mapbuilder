@@ -14,6 +14,8 @@ import AnalysisRangeSlider from './AnalysisFormElements/AnalysisRangeSlider';
 import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
 import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
+import webmercatorUtils from 'esri/geometry/webMercatorUtils';
+import geojsonUtil from 'utils/arcgis-to-geojson';
 import analysisKeys from 'constants/AnalysisConstants';
 import {attributes} from 'constants/AppConstants';
 import {analysisConfig} from 'js/config';
@@ -499,6 +501,24 @@ export default class Analysis extends Component {
               timelineEndLabel={text[language].TIMELINE_END}
             />;
             break;
+          case 'FRAGMENTATION':
+            console.log('results', results);
+            console.log('config', config);
+            // results.startYearValue = startCount;
+            // results.totalRangeValue = totalCount;
+            const diff = results.totalRangeValue - results.startYearValue;
+            // debugger
+
+            const style = {
+              borderColor: 'purple',
+              color: 'purple'
+            };
+            chartComponent = <div className='results__badge' style={style}>
+              <div className='results__badge-label'>Frag Loss {config.startYear}-{config.endYear}</div>
+              <div className='results__badge-value'>{diff.toFixed(3)}</div>
+            </div>;
+
+            break;
           default:
             chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
 
@@ -594,26 +614,95 @@ export default class Analysis extends Component {
           return;
         }
 
-        esriRequest({
-          url: analysisSettings.analysisUrl,
-          callbackParamName: 'callback',
-          content: uiParamsToAppend,
-          handleAs: 'json',
-          timeout: 30000
-        }, { usePost: false }).then(results => {
-          this.setState({ isLoading: false });
-          this.renderResults(analysisId, results, language, analysisSettings);
-        }, (error) => {
-          this.setState({
-            isLoading: false,
-            results: {
-              error: error,
-              message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
-            },
-          }, () => {
-            this.renderResults(analysisId, this.state.results, language, analysisSettings);
+        if (analysisSettings.analysisId === 'FRAGMENTATION') {
+
+          if (selectedFeature.geometry.spatialReference.isWebMercator()) {
+            selectedFeature.geometry = webmercatorUtils.webMercatorToGeographic(selectedFeature.geometry);
+          }
+
+          const geojson = geojsonUtil.arcgisToGeoJSON(selectedFeature.geometry);
+
+          const content = {
+            polygon: geojson.coordinates
+          };
+
+          fetch(
+            analysisSettings.analysisUrl,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(content)
+            }
+          ).then(results => {
+            console.log('results', results);
+
+            if (results.json) {
+              results.json().then(newRes => {
+                console.log('newResss', newRes);
+                console.log('uiParamsToAppend.period', uiParamsToAppend.period);
+                const dates = uiParamsToAppend.period.split(',');
+
+                const startYear = dates[0].split('-')[0];
+                const endYear = dates[1].split('-')[0];
+                analysisSettings.startYear = parseInt(startYear);
+                analysisSettings.endYear = parseInt(endYear);
+                let startCount;
+                let totalCount = 0;
+                console.log('analysisSettings.startYear', analysisSettings.startYear);
+                console.log('analysisSettings.endYear', analysisSettings.endYear);
+                Object.keys(newRes).forEach(year => {
+                  console.log(year, typeof year);
+                  if (parseInt(year) === analysisSettings.startYear) {
+                    console.log('');
+                    startCount = newRes[year];
+                    console.log('startCount', startCount);
+                  } else if (parseInt(year) > analysisSettings.startYear && parseInt(year) <= analysisSettings.endYear) {
+                    totalCount += newRes[year];
+                  }
+                });
+                newRes.startYearValue = startCount;
+                newRes.totalRangeValue = totalCount;
+                this.setState({ isLoading: false });
+                this.renderResults(analysisId, newRes, language, analysisSettings);
+              });
+            }
+
+          }, (error) => {
+            console.log('nahh', error);
+            this.setState({
+              isLoading: false,
+              results: {
+                error: error,
+                message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+              },
+            }, () => {
+              this.renderResults(analysisId, this.state.results, language, analysisSettings);
+            });
           });
-        });
+        } else {
+          esriRequest({
+            url: analysisSettings.analysisUrl,
+            callbackParamName: 'callback',
+            content: uiParamsToAppend,
+            handleAs: 'json',
+            timeout: 30000
+          }, { usePost: true }).then(results => {
+            this.setState({ isLoading: false });
+            this.renderResults(analysisId, results, language, analysisSettings);
+          }, (error) => {
+            this.setState({
+              isLoading: false,
+              results: {
+                error: error,
+                message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+              },
+            }, () => {
+              this.renderResults(analysisId, this.state.results, language, analysisSettings);
+            });
+          });
+        }
       }
     });
   }
