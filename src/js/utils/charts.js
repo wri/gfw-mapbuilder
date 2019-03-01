@@ -372,21 +372,6 @@ export default {
   },
 
   makeVegaChart: (el, config, callback, selectedAttributes) => {
-		selectedAttributes = {
-			analyticid: 'an analysis',
-			polygonname: 'a polygon',
-			OBJECTID: 1,
-			extra: undefined
-		};
-		console.log('selectedAttributes :', selectedAttributes);
-
-		config.featureDataFieldsToPass = [
-			'polygonname',
-			'analyticid',
-			'polygonid',
-			'extra'
-		];
-
     if (selectedAttributes) { // WCS Specific logic
       const baseUrl = config.data[0].url.split('?')[0];
 			const queryParams = config.featureDataFieldsToPass
@@ -397,8 +382,6 @@ export default {
 				fieldName = fieldName === 'OBJECTID' ? 'analyticid' : fieldName;
 				return `${fieldName}=${value}`;
 			}).join('&');
-
-			console.log('`${baseUrl}?${queryParams}` :', `${baseUrl}?${queryParams}`);
 
       function render(spec) {
         new vega.View(vega.parse(spec))
