@@ -372,25 +372,48 @@ export default {
   },
 
   makeVegaChart: (el, config, callback, selectedAttributes) => {
+		selectedAttributes = {
+			analyticid: 'an analysis',
+			polygonname: 'a polygon',
+			OBJECTID: 1,
+			extra: undefined
+		};
+		console.log('selectedAttributes :', selectedAttributes);
+
+		config.featureDataFieldsToPass = [
+			'polygonname',
+			'analyticid',
+			'polygonid',
+			'extra'
+		];
 
     if (selectedAttributes) { // WCS Specific logic
       const baseUrl = config.data[0].url.split('?')[0];
-  		const queryParams = config.featureDataFieldsToPass.map(fieldName => `${fieldName}=${selectedAttributes[fieldName]}`).join('&');
+			const queryParams = config.featureDataFieldsToPass
+				.filter(fieldName => selectedAttributes[fieldName === 'analyticid' ? 'OBJECTID' : fieldName])
+				.map(fieldName => {
+				fieldName = fieldName === 'analyticid' ? 'OBJECTID' : fieldName;
+				const value = selectedAttributes[fieldName];
+				fieldName = fieldName === 'OBJECTID' ? 'analyticid' : fieldName;
+				return `${fieldName}=${value}`;
+			}).join('&');
 
-  		function render(spec) {
+			console.log('`${baseUrl}?${queryParams}` :', `${baseUrl}?${queryParams}`);
+
+      function render(spec) {
         new vega.View(vega.parse(spec))
           .renderer('canvas')
           .initialize(el)
           .hover()
           .run();
-  		}
+      }
 
       esriRequest({
         url: `${baseUrl}?${queryParams}`,
         handleAs: 'json',
         callbackParamName: 'callback'
       }).then(res => {
-  			render(res);
+        render(res);
       }, err => {
         console.log('err', err);
       });
