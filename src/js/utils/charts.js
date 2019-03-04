@@ -375,11 +375,11 @@ export default {
     if (selectedAttributes) { // WCS Specific logic
       const baseUrl = config.data[0].url.split('?')[0];
 			const queryParams = config.featureDataFieldsToPass
-				.filter(fieldName => selectedAttributes[fieldName === 'analyticid' ? 'OBJECTID' : fieldName])
+				.filter(fieldName => selectedAttributes[fieldName === 'analyticid' ? 'AnnualPopulationTrend' : fieldName])
 				.map(fieldName => {
-				fieldName = fieldName === 'analyticid' ? 'OBJECTID' : fieldName;
+				fieldName = fieldName === 'analyticid' ? 'AnnualPopulationTrend' : fieldName;
 				const value = selectedAttributes[fieldName];
-				fieldName = fieldName === 'OBJECTID' ? 'analyticid' : fieldName;
+				fieldName = fieldName === 'AnnualPopulationTrend' ? 'analyticid' : fieldName;
 				return `${fieldName}=${value}`;
 			}).join('&');
 
