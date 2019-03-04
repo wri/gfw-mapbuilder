@@ -64,6 +64,7 @@ export default {
      "analysisModules": [
         {
            "analysisId": "AnnualPopulationTrend",
+           "fieldToSubstitute": "AnnualPopulationTrend",
            "label": {
               "en": "Elephant Population Trend"
            },

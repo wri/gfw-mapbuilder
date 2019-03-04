@@ -1,9 +1,11 @@
 /* eslint no-unused-vars: 0 */
-import analysisKeys from 'constants/AnalysisConstants';
-import number from 'dojo/number';
-import Highcharts from 'highcharts';
-import esriRequest from 'esri/request';
+/* global vega */
 import enableExporting from 'highcharts/modules/exporting';
+import analysisKeys from 'constants/AnalysisConstants';
+import esriRequest from 'esri/request';
+import Highcharts from 'highcharts';
+import resources from 'resources';
+import number from 'dojo/number';
 
 enableExporting(Highcharts);
 
@@ -371,17 +373,24 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, callback, selectedAttributes) => {
+  makeVegaChart: (el, config, callback, selectedAttributes, id) => {
     if (selectedAttributes) { // WCS Specific logic
+			const baseConfig = resources.analysisModules.find(mod => mod.widgetId === id);
       const baseUrl = config.data[0].url.split('?')[0];
 			const queryParams = encodeURI(config.featureDataFieldsToPass
-				.filter(fieldName => selectedAttributes[fieldName === 'analyticid' ? 'AnnualPopulationTrend' : fieldName])
+				.filter(fieldName => {
+					const fieldToSubstitute = baseConfig.fieldToSubstitute ? baseConfig.fieldToSubstitute : 'analyticId';
+					return selectedAttributes[fieldName === 'analyticid' ? fieldToSubstitute : fieldName];
+				})
 				.map(fieldName => {
-				fieldName = fieldName === 'analyticid' ? 'AnnualPopulationTrend' : fieldName;
+				const fieldToSubstitute = baseConfig.fieldToSubstitute ? baseConfig.fieldToSubstitute : 'analyticId';
+				fieldName = fieldName === 'analyticid' ? fieldToSubstitute : fieldName;
 				const value = selectedAttributes[fieldName];
-				fieldName = fieldName === 'AnnualPopulationTrend' ? 'analyticid' : fieldName;
+				fieldName = fieldName === fieldToSubstitute ? 'analyticid' : fieldName;
 				return `${fieldName}=${value}`;
 			}).join('&'));
+
+			console.log('queryParams', queryParams)
 
       function render(spec) {
         new vega.View(vega.parse(spec))

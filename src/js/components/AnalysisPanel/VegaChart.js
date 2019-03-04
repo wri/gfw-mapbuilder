@@ -24,10 +24,8 @@ export default class VegaChart extends Component {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
         } else {
-          res.json().then(json => {
-            // We used to have this 'json' object for validation and error-checking, but now
-            // we leave that up to the Widget API!
-            charts.makeVegaChart(this.chart, config, this.props.setLoading, this.props.selectedFeature.attributes);
+          res.json().then(() => {
+            charts.makeVegaChart(this.chart, config, this.props.setLoading, this.props.selectedFeature.attributes, this.props.results.data.id);
           });
         }
 

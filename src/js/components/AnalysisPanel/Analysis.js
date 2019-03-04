@@ -655,9 +655,7 @@ export default class Analysis extends Component {
                 Object.keys(newRes).forEach(year => {
                   console.log(year, typeof year);
                   if (parseInt(year) === analysisSettings.startYear) {
-                    console.log('');
                     startCount = newRes[year];
-                    console.log('startCount', startCount);
                   } else if (parseInt(year) > analysisSettings.startYear && parseInt(year) <= analysisSettings.endYear) {
                     totalCount += newRes[year];
                   }
@@ -670,7 +668,6 @@ export default class Analysis extends Component {
             }
 
           }, (error) => {
-            console.log('nahh', error);
             this.setState({
               isLoading: false,
               results: {
