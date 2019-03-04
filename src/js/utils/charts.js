@@ -374,14 +374,14 @@ export default {
   makeVegaChart: (el, config, callback, selectedAttributes) => {
     if (selectedAttributes) { // WCS Specific logic
       const baseUrl = config.data[0].url.split('?')[0];
-			const queryParams = config.featureDataFieldsToPass
+			const queryParams = encodeURI(config.featureDataFieldsToPass
 				.filter(fieldName => selectedAttributes[fieldName === 'analyticid' ? 'AnnualPopulationTrend' : fieldName])
 				.map(fieldName => {
 				fieldName = fieldName === 'analyticid' ? 'AnnualPopulationTrend' : fieldName;
 				const value = selectedAttributes[fieldName];
 				fieldName = fieldName === 'AnnualPopulationTrend' ? 'analyticid' : fieldName;
 				return `${fieldName}=${value}`;
-			}).join('&');
+			}).join('&'));
 
       function render(spec) {
         new vega.View(vega.parse(spec))
