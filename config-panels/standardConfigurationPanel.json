@@ -212,7 +212,7 @@
 			"type": "boolean",
 			"fieldName": "gladAlerts",
 			"tooltip": "This will include/exclude this layer from the layer list",
-			"label": "Include GLAD alerts (Brazil, Peru, Congo and Borneo only) in your application",
+			"label": "Include GLAD alerts (Pan tropics) in your application",
 			"value": true
 		},
 		{
