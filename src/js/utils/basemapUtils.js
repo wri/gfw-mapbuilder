@@ -18,6 +18,8 @@ let customBasemapLayer;
 let customLabelLayer;
 let activeBasemap;
 
+const customBMLayers = [];
+
 export default {
 
   arcgisBasemaps: ['satellite', 'hybrid', 'osm'],
@@ -28,7 +30,16 @@ export default {
   * arcgis layers, just call setBasemap, this will unhide the layer if necessary
   */
   updateBasemap (map, basemap, customBasemaps) {
+    console.log('updateBasemap: basemap/customBasemaps', basemap, customBasemaps);
     activeBasemap = basemap;
+
+    customBMLayers.forEach(customBM => {
+      if (customBM.affiliatedBM !== basemap) {
+        map.getLayer(customBM.id).hide();
+      } else if (customBM.affiliatedBM === basemap) {
+        map.getLayer(customBM.id).show();
+      }
+    });
 
     //- Remove custom basemap layer if it exists
     if (customBasemapLayer) {
@@ -103,7 +114,6 @@ export default {
 
   prepareDefaultBasemap (map, basemapLayers, title) {
     const basemapNames = Object.values(basemaps).map(i => i.title);
-    console.log('basemapNames', basemapNames);
 
     let arcgisBasemap, wriName;
     if (basemapLayers) {
@@ -118,13 +128,9 @@ export default {
           if (entry[1].title === arcgisBasemapTitle) {
             return entry[0];
           }
-          console.log('here?');
           return null;
         }).filter(i => i)[0];
       });
-
-      console.log('arcgisBasemap', arcgisBasemap);
-      debugger
 
       //- Check to see if this is a WRI basemap
       basemapLayers.forEach((layer) => {
@@ -136,8 +142,18 @@ export default {
         }
       });
       //- Basemaps can cause issues with layer ordering and other things,
-      //- remove them here and readd them above in updateBasemap
-      // basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
+      //- remove them here and read them above in updateBasemap
+      basemapLayers.forEach(bm => {
+        if (basemapNames.indexOf(bm.title) === -1) {
+          customBMLayers.push({
+            affiliatedBM: arcgisBasemap ? arcgisBasemap : wriName,
+            title: bm.title,
+            id: bm.id
+          });
+        } else {
+          map.removeLayer(bm.layerObject);
+        }
+      });
     }
 
     //- Set the default basemap, this will trigger an update from the LayerPanel

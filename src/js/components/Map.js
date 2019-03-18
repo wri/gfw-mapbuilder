@@ -142,8 +142,6 @@ export default class Map extends Component {
     }
 
     if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
-      // console.log('bmbm', basemap);
-      // console.log('prevStatebmbm', prevState.basemap);
       basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
     }
 
