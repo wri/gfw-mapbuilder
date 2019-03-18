@@ -474,9 +474,6 @@ export default class Map extends Component {
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
 
-    console.log('basemapbasemap', basemap);
-
-
     //- Set the default basemap in the store
     basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 

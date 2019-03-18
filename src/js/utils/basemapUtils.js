@@ -30,7 +30,6 @@ export default {
   * arcgis layers, just call setBasemap, this will unhide the layer if necessary
   */
   updateBasemap (map, basemap, customBasemaps) {
-    console.log('updateBasemap: basemap/customBasemaps', basemap, customBasemaps);
     activeBasemap = basemap;
 
     customBMLayers.forEach(customBM => {
@@ -124,7 +123,6 @@ export default {
         })[0];
 
         arcgisBasemap = Object.entries(basemaps).map((entry) => {
-          // console.log('entry', entry);
           if (entry[1].title === arcgisBasemapTitle) {
             return entry[0];
           }
@@ -142,7 +140,7 @@ export default {
         }
       });
       //- Basemaps can cause issues with layer ordering and other things,
-      //- remove them here and read them above in updateBasemap
+      //- remove them here (if they're not part of the webmap's basemap object) and read them above in updateBasemap
       basemapLayers.forEach(bm => {
         if (basemapNames.indexOf(bm.title) === -1) {
           customBMLayers.push({
