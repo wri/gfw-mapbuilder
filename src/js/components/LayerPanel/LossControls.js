@@ -31,7 +31,7 @@ export default class LossControls extends Component {
 
   componentDidMount () {
     const min = 1;
-    const max = 17;
+    const max = 18;
     for ( let i = min; i <= max; i++ ) {
       lossOptions.push({ label: 2000 + i + '', value: i });
     }
@@ -39,7 +39,7 @@ export default class LossControls extends Component {
     //- Update the defaults to be the last year
     layerActions.updateLossTimeline.defer({
       fromSelectedIndex: 0,
-      toSelectedIndex: 16
+      toSelectedIndex: 17
     });
     //- Set the options in the store so others can use it
     layerActions.setLossOptions.defer(lossOptions);
@@ -54,7 +54,7 @@ export default class LossControls extends Component {
         11: <small>{lossOptions[10].label}</small>,
         13: <small>{lossOptions[12].label}</small>,
         15: <small>{lossOptions[14].label}</small>,
-        17: <small>{lossOptions[16].label}</small>
+        17: <small>{lossOptions[16].label}</small>,
       }
     });
   }
