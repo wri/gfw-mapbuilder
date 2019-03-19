@@ -54,7 +54,7 @@ export default class LossControls extends Component {
         11: <small>{lossOptions[10].label}</small>,
         13: <small>{lossOptions[12].label}</small>,
         15: <small>{lossOptions[14].label}</small>,
-        17: <small>{lossOptions[16].label}</small>,
+        17: <small>{lossOptions[16].label}</small>
       }
     });
   }
