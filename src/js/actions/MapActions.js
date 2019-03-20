@@ -105,6 +105,7 @@ class MapActions {
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         // if (mapLoaded) {
           // if (layersCreated === false || groupName === 'GROUP_WEBMAP' || groupName === 'GROUP_PA') {
+          if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
           // if (groupName === 'GROUP_WEBMAP') {
 
             // We used to use index here is layer.order was undefined, but this doesn't appear to be working consistently.
@@ -131,7 +132,7 @@ class MapActions {
               layer.order = layer.originalOrder;
             }
             console.log(layer.id, layer.order);
-          // }
+          }
         // }
         return layer;
       });
