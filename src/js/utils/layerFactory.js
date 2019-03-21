@@ -35,7 +35,7 @@ import { addYears } from 'date-fns';
 *   - FeatureLayer
 */
 export default (layer, lang) => {
-  if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; }
+  // if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; } //Actually, let's re-create!
 
   if ((!layer.url && !layer.versions && layer.type !== 'graphic' && !layer.versions) || !layer.type) { throw new Error(errors.missingLayerConfig); }
 
