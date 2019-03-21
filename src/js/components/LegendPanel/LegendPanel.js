@@ -26,6 +26,7 @@ export default class LegendPanel extends Component {
 
   componentDidMount() {
     if (window && window.innerWidth > 950) {
+      console.log('togglin');
       mapActions.toggleLegendVisible.defer();
     }
   }
@@ -51,6 +52,7 @@ export default class LegendPanel extends Component {
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
     if (layer.metadata && layer.metadata.legendConfig && layer.metadata.legendConfig.type) {
+      // console.log('layer', layer.label);
       return <ApiLegend
         key={layer.id}
         label={layer.label ? layer.label[language] : ''}
@@ -404,7 +406,12 @@ export default class LegendPanel extends Component {
     const { language } = this.context;
 
     const legendLayers = this.getLayersForLegend(allLayers).sort((a, b) => b.order - a.order);
+    // console.log('legendLayers', legendLayers);
     const legendComponents = legendLayers.map(this.createLegend);
+    console.log('');
+    console.log('legendComponents', legendComponents);
+    // console.log('legendOpen', legendOpen);
+    // console.log('activeLayers', activeLayers);
 
     let rootClasses = legendOpen ? 'legend-panel map-component shadow' : 'legend-panel map-component shadow legend-collapsed';
 

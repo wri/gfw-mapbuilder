@@ -250,8 +250,8 @@ const formatResources = () => {
         // console.log('layer', layer);
         // console.log('item', item);
         // console.log('j', j);
-        console.log(remoteDataLayers);
-        console.log(remoteDataLayers[j]);
+        // console.log(remoteDataLayers);
+        // console.log(remoteDataLayers[j]);
         Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
           // console.log('layerProp', layerProp);
           if (layerProp !== 'type' && layerProp !== 'uuid') {
@@ -260,7 +260,7 @@ const formatResources = () => {
         });
         item.layer = layer.attributes.layerConfig;
         item.group = itemGroup;
-        console.log('item.layer', item.layer);
+        // console.log('item.layer', item.layer);
         // debugger
         item.layer.metadata = {
           metadata,
@@ -294,9 +294,9 @@ const formatResources = () => {
 
   return Promise.all(remoteDataLayerRequests)
   .then(remoteLayers => {
-    console.log('remoteLayers', remoteLayers);
+    // console.log('remoteLayers', remoteLayers);
     remoteLayers = filterLayers({layers: remoteLayers, layerKey: 'layer'});
-    console.log('remoteLayers2', remoteLayers);
+    // console.log('remoteLayers2', remoteLayers);
     remoteLayers.forEach(item => {
       // console.log('item', item);
       // console.log('item.groupId', item.groupId);
