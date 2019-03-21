@@ -233,7 +233,11 @@ const formatResources = () => {
         const itemGroup = item.group;
         Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
           if (layerProp !== 'type' && layerProp !== 'uuid') {
-            layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
+            if (layerProp === 'legendConfig') {
+              attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+            } else {
+              layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
+            }
           }
         });
         item.layer = layer.attributes.layerConfig;
