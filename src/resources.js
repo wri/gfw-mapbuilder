@@ -615,7 +615,8 @@ export default {
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
-      layers: [{
+      layers: [
+        {
         order: 1,
         type: 'remoteDataLayer',
         uuid: '0721f089-b887-4d49-bad3-4b19261de208'
@@ -643,7 +644,162 @@ export default {
         order: 7,
         type: 'remoteDataLayer',
         uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
-      }]
+      },
+      {
+        order: 9,
+         id: 'LANDCOVER_TEST',
+         type: 'dynamic',
+         visible: false,
+         label: {
+           en: 'Land Cover test - dynamic layer',
+           fr: 'Land Cover test - dynamic layer',
+           es: 'Land Cover test - dynamic layer',
+           pt: 'Land Cover test - dynamic layer',
+           id: 'Land Cover test - dynamic layer',
+           zh: 'Land Cover test - dynamic layer',
+           ka: 'Land Cover test - dynamic layer'
+         },
+         sublabel: {
+           en: '(sublabel)',
+           fr: '(sublabel)',
+           es: '(sublabel)',
+           pt: '(sublabel)',
+           id: '(sublabel)',
+           zh: '(sublabel)',
+           ka: '(sublabel)'
+         },
+         versionHeaderText: {
+           en: 'Select year',
+           fr: 'Select year',
+           es: 'Select year',
+           pt: 'Select year',
+           id: 'Select year',
+           zh: 'Select year',
+           ka: 'Select year'
+         },
+         versions: [
+          {
+            label: {
+              en: '2008',
+              fr: '2008',
+              es: '2008',
+              pt: '2008',
+              id: '2008',
+              zh: '2008',
+              ka: '2008'
+            },
+            url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+            layerIds: [0]
+           },
+           {
+             label: {
+               en: '2009',
+               fr: '2009',
+               es: '2009',
+               pt: '2009',
+               id: '2009',
+               zh: '2009',
+               ka: '2009'
+             },
+             url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+             layerIds: [1]
+            },
+            {
+              label: {
+                en: '2010',
+                fr: '2010',
+                es: '2010',
+                pt: '2010',
+                id: '2010',
+                zh: '2010',
+                ka: '2010'
+              },
+              url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
+              layerIds: [2]
+             },
+         ],
+       }, {
+         order: 10,
+         id: 'NATIONAL_PARKS',
+         type: 'feature',
+         visible: false,
+         label: {
+           en: 'National Parks - feature layer',
+           fr: 'National Parks - feature layer',
+           es: 'National Parks - feature layer',
+           pt: 'National Parks - feature layer',
+           id: 'National Parks - feature layer',
+           zh: 'National Parks - feature layer',
+           ka: 'National Parks - feature layer'
+         },
+
+         sublabel: {
+           en: '(sublabel)',
+           fr: '(sublabel)',
+           es: '(sublabel)',
+           pt: '(sublabel)',
+           id: '(sublabel)',
+           zh: '(sublabel)',
+           ka: '(sublabel)'
+         },
+         versionHeaderText: {
+           en: 'Select version',
+           fr: 'Select version',
+           es: 'Select version',
+           pt: 'Select version',
+           id: 'Select version',
+           zh: 'Select version',
+           ka: 'Select version'
+         },
+         popup: {
+          	title: {
+          		en: "National Parks"
+          	},
+          	content: {
+          		en: [{
+          			label: "Province",
+          			fieldExpression: "province"
+          		}]
+          	}
+        },
+         versions: [
+           {
+             label: {
+               en: 'Protected Areas',
+               fr: 'Protected Areas',
+               es: 'Protected Areas',
+               pt: 'Protected Areas',
+               id: 'Protected Areas',
+               zh: 'Protected Areas',
+               ka: 'Protected Areas'
+             },
+             url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0'
+           }, {
+              label: {
+                en: 'National Parks',
+                fr: 'National Parks',
+                es: 'National Parks',
+                pt: 'National Parks',
+                id: 'National Parks',
+                zh: 'National Parks',
+                ka: 'National Parks'
+              },
+              url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1'
+            }, {
+               label: {
+                 en: 'Réserve naturelle intégrale',
+                 fr: 'Réserve naturelle intégrale',
+                 es: 'Réserve naturelle intégrale',
+                 pt: 'Réserve naturelle intégrale',
+                 id: 'Réserve naturelle intégrale',
+                 zh: 'Réserve naturelle intégrale',
+                 ka: 'Réserve naturelle intégrale'
+               },
+               url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2'
+             },
+         ]
+       }
+     ]
     },
     GROUP_LC: {
       groupType: 'default',

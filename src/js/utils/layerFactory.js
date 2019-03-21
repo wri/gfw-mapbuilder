@@ -37,11 +37,10 @@ import { addYears } from 'date-fns';
 export default (layer, lang) => {
   if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; }
 
-  if ((!layer.url && layer.type !== 'graphic') || !layer.type) { throw new Error(errors.missingLayerConfig); }
+  if ((!layer.url && !layer.versions && layer.type !== 'graphic' && !layer.versions) || !layer.type) { throw new Error(errors.missingLayerConfig); }
 
   const options = {};
   let esriLayer;
-
   switch (layer.type) {
     case 'carto':
       esriLayer = new CartoLayer(layer);
@@ -78,6 +77,7 @@ export default (layer, lang) => {
       // Create some image parameters
       const imageParameters = new ImageParameters();
       imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+      if (!layer.layerIds && layer.versions && layer.versions[0].layerIds) {layer.layerIds = layer.versions[0].layerIds; }
       imageParameters.layerIds = layer.layerIds;
       imageParameters.format = 'png32';
       // Populate the options and then add the layer
@@ -92,7 +92,8 @@ export default (layer, lang) => {
         layer.layerIds.forEach((id) => { options.infoTemplates[id] = { infoTemplate: template }; });
       }
 
-      if (!options || !options.id || !layer.layerIds) { return false; }
+      if (!options || !options.id || (!layer.layerIds && !layer.versions)) { return false; }
+      if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
       esriLayer = new DynamicLayer(layer.url, options);
 
       if (layer.id === 'VIIRS_ACTIVE_FIRES' || layer.id === 'MODIS_ACTIVE_FIRES') {
@@ -139,6 +140,7 @@ export default (layer, lang) => {
         if (layer.popup) { options.infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang); }
         if (layer.minScale) { options.minScale = layer.minScale; }
         if (layer.maxScale) { options.maxScale = layer.maxScale; }
+        if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
         esriLayer = new FeatureLayer(layer.url, options);
       }
       esriLayer.legendLayer = layer.legendLayer || null;

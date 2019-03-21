@@ -98,8 +98,7 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
-  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
-
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeVersions} = params;
   // Update order of layers as required.
   // Layers ordered first by their layer group.
   // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
@@ -155,14 +154,14 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];
     const existingIds = [];
-    const reducedLayers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+    const reducedLayers = layers.filter(l => !l.url && !l.versions).reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
       }
       return prevArray.concat(currentItem);
     }, []);
 
-    layers = layers.filter(l => l.url).concat(reducedLayers);
+    layers = layers.filter(l => l.url || l.versions).concat(reducedLayers);
     layers.forEach(layer => {
       if (existingIds.indexOf(layer.id) === -1) {
         uniqueLayers.push(layer);
@@ -175,10 +174,40 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       layer.visible = activeLayers.indexOf(layer.id) > -1;
     });
 
-    //- remove layers from config that have no url unless they are of type graphic(which have no url)
+    // format active version params into an object
+    const versions = {};
+    if (activeVersions.length) {
+      activeVersions.forEach((v) => {
+        const version = v.split('|');
+        versions[version[0]] = version[1];
+      });
+    }
+
+    //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
-    const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic')).map((layer) => {
+    const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
+      // Check for active versions matching the layer id
+      console.log('here', versions)
+
+      if (versions[layer.id] && versions[layer.id] !== 0) {
+        const groups = Object.keys(resources.layerPanel);
+        let versionConfig;
+        groups.forEach((group) => {
+          const configs = resources.layerPanel[group].layers;
+          const layerConfig = configs && configs.find((c) => c.id === layer.id);
+          if (layerConfig) {
+            versionConfig = layerConfig.versions[versions[layer.id]];
+          }
+        });
+        // Update the layer config object to include active version url / layerIds
+        if (versionConfig) {
+          layer.url = versionConfig.url;
+          if (versionConfig.layerIds) { layer.layerIds = versionConfig.layerIds; }
+        }
+        console.log(layer.layerIds, versionConfig.layerIds)
+
+      }
       return layerFactory(layer, language);
     });
 
@@ -952,7 +981,6 @@ export default {
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
     if (brApp.debug) { console.log(params); }
-
     //- Add Title, Subtitle, and logo right away
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis
@@ -961,6 +989,7 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
+    params.activeVersions = params.activeVersions.split(',');
 
     if (opener) { //If this report.html was opened via the map (rather than a url paste)
       updateAnalysisModules(params);
