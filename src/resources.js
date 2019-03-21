@@ -145,7 +145,7 @@ export default {
             startParamName: 'period',
             combineParams: true,
             valueSeparator: ',',
-            bounds: [2001, 2017],
+            bounds: [2001, 2018],
             valueType: 'date',
             label: {
               en: 'Select range for analysis',
@@ -184,7 +184,7 @@ export default {
             ka: 'ხის ვარჯის კარგვა'
         },
         chartType: 'bar',
-        chartBounds: [2001, 2017],
+        chartBounds: [2001, 2018],
         analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
         uiParams: [
           {
@@ -192,7 +192,7 @@ export default {
             startParamName: 'period',
             combineParams: true,
             valueSeparator: ',',
-            bounds: [2001, 2017],
+            bounds: [2001, 2018],
             valueType: 'date',
             label: {
               en: 'Select range for analysis',
@@ -618,7 +618,7 @@ export default {
       layers: [{
         order: 1,
         type: 'remoteDataLayer',
-        uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+        uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
       }, {
         order: 2,
         type: 'remoteDataLayer',
