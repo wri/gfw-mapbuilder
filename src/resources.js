@@ -618,15 +618,7 @@ export default {
         layers: [{
           order: 1,
           type: 'remoteDataLayer',
-          uuid: '0721f089-b887-4d49-bad3-4b19261de208',
-          lucas: 'cotnaaa',
-          visible: true,
-          sublabel: {
-            en: 'new sublabellll'
-          },
-          label: {
-            en: 'Tree Cover Lost'
-          }
+          uuid: '0721f089-b887-4d49-bad3-4b19261de208'
         }, {
           order: 2,
           type: 'remoteDataLayer',

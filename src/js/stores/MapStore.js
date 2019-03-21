@@ -25,6 +25,7 @@ class MapStore {
     this.activeTab = '';
 
     this.activeLayers = [];
+    this.activeVersions = {};
     this.allLayers = [];
     this.basemap = null;
     this.legendOpen = false;
@@ -148,7 +149,9 @@ class MapStore {
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
-      setImageryHoverInfo: mapActions.setImageryHoverInfo
+      setImageryHoverInfo: mapActions.setImageryHoverInfo,
+      changeLayerVersion: mapActions.changeLayerVersion
+
     });
   }
 
@@ -694,6 +697,20 @@ class MapStore {
 
   setImageryHoverInfo(obj) {
     this.imageryHoverInfo = obj;
+  }
+
+  changeLayerVersion(obj) {
+    const { id, newLayer, versionIndex } = obj;
+    const allLayersCopy = this.allLayers.map((layer) => {
+      if (layer.id === id) {
+        layer = newLayer;
+      }
+      return layer;
+    });
+    this.allLayers = allLayersCopy;
+    this.activeVersions[id] = versionIndex;
+    this.emitChange();
+
   }
 }
 

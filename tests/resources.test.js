@@ -84,7 +84,7 @@ describe('resources layer spec', () => {
     }
     if (layer.type !== 'remoteDataLayer') {
       it(`layer ${layer.id} has the required properties`, () => {
-        if (layer.type !== 'imagery') {
+        if (layer.type !== 'imagery' && !layer.versions) {
           expect(layer).toHaveProperty('url');
         }
         expect(layer).toHaveProperty('id');
@@ -93,6 +93,14 @@ describe('resources layer spec', () => {
         expect(layer.label).toHaveProperty(resources.language);
       });
     } else {
+      if (layer.versions) {
+        expect(typeof layer.versions).toBe('array');
+        layer.versions.forEach((version) => {
+          expect(version).toHaveProperty('url');
+          expect(version).toHaveProperty('label');
+        });
+
+      }
       expect(layer).toHaveProperty('order');
       expect(layer).toHaveProperty('type');
       expect(layer).toHaveProperty('uuid');

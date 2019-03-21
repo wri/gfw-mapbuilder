@@ -140,7 +140,7 @@ class MapActions {
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers
-      .filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
+      .filter(layer => layer && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
 
@@ -250,6 +250,10 @@ class MapActions {
   }
 
   setImageryHoverInfo(obj) {
+    return obj;
+  }
+
+  changeLayerVersion(obj) {
     return obj;
   }
 
