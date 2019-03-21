@@ -631,26 +631,26 @@ export default {
           order: 2,
           type: 'remoteDataLayer',
           uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
-        // }, {
-        //   order: 3,
-        //   type: 'remoteDataLayer',
-        //   uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
-        // }, {
-        //   order: 4,
-        //   type: 'remoteDataLayer',
-        //   uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-        // }, {
-        //   order: 5,
-        //   type: 'remoteDataLayer',
-        //   uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
-        // }, {
-        //   order: 6,
-        //   type: 'remoteDataLayer',
-        //   uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
-        // }, {
-        //   order: 7,
-        //   type: 'remoteDataLayer',
-        //   uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+        }, {
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
+        }, {
+          order: 4,
+          type: 'remoteDataLayer',
+          uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+        }, {
+          order: 5,
+          type: 'remoteDataLayer',
+          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+        }, {
+          order: 6,
+          type: 'remoteDataLayer',
+          uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+        }, {
+          order: 7,
+          type: 'remoteDataLayer',
+          uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
         }]
       },
       GROUP_LC: {
@@ -665,30 +665,28 @@ export default {
           zh: '土地覆盖',
           ka: 'მიწის საფარი'
         },
-        layers: [
-          // {
-          // order: 1,
-          // type: 'remoteDataLayer',
-          // uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
-        // }, {
-        //   order: 2,
-        //   type: 'remoteDataLayer',
-        //   uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
-        // }, {
-        //   order: 3,
-        //   type: 'remoteDataLayer',
-        //   uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
-        // }, {
-        //   order: 4,
-        //   type: 'remoteDataLayer',
-        //   uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
-        // }, {
-        //   order: 5,
-        //   type: 'remoteDataLayer',
-        //   uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
-        // }
-      ]
-      },
+        layers: [{
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
+        }, {
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+        }, {
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
+        }, {
+          order: 4,
+          type: 'remoteDataLayer',
+          uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
+        }, {
+          order: 5,
+          type: 'remoteDataLayer',
+          uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
+        }
+      ]},
       GROUP_IMAGERY: {
         groupType: 'imagery',
         order: 4,
