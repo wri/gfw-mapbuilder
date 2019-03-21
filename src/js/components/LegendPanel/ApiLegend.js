@@ -12,7 +12,6 @@ export default class ApiLegend extends Component {
   }
 
   generateLegends(items, type, language) {
-    // console.log(type);
     switch(type) {
       case 'basic':
         return items.map((item, i) => {
@@ -119,12 +118,9 @@ export default class ApiLegend extends Component {
 
   render () {
     const visible = this.state.visible;
-    console.log('visible ', visible);
     const { metadata, language } = this.props;
     const { type, items } = metadata.legendConfig;
     const name = metadata.legendConfig.name[language];
-    console.log('name', name);
-    console.log('');
     if (type === 'group') {
       return (
         <div className={`parent-legend-container api-legend ${!visible ? 'hidden' : ''}`} ref='myRef' key={`webmap-legend-${name}`}>

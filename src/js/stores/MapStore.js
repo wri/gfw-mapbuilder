@@ -565,7 +565,6 @@ class MapStore {
   }
 
   toggleLegendVisible () {
-    console.log('toggleLegendVisible');
     this.legendOpen = !this.legendOpen;
   }
 

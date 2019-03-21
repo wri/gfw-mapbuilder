@@ -627,10 +627,10 @@ export default {
           label: {
             en: 'Tree Cover Lost'
           }
-        // }, {
-        //   order: 2,
-        //   type: 'remoteDataLayer',
-        //   uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+        }, {
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
         // }, {
         //   order: 3,
         //   type: 'remoteDataLayer',

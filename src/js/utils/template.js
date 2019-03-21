@@ -210,36 +210,20 @@ const formatResources = () => {
     if (!groupSettings.layers) { return; }
     resources.layerPanel[groupId].layers = resources.layerPanel[groupId].layers.filter(layer => {
       if (layer.type === 'remoteDataLayer') {
-        // console.log('layer', layer);
         remoteDataLayers.push({
           order: layer.order,
           groupId,
           layer,
         });
-        // console.log('remoteDataLayers', remoteDataLayers);
         return false;
-      }
-      else {
+      } else {
         return true;
       }
     });
   });
 
-  console.log('remoteDataLayers', remoteDataLayers);
-
   const remoteDataLayerRequests = remoteDataLayers
   .map((item, j) => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
-    // .map(item => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
-    // .map(item => {
-    //   fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`).then(foreignLayer => {
-    //     return foreignLayer;
-    //   })
-    // })
-    // .map(item => {
-    //   fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`).then(foreignLayer => {
-    //     return foreignLayer;
-    //   })
-    // })
     .then(response => response.json())
     .then(json => json.data)
     .then(layer => fetch(layer.attributes.layerConfig.metadata)
@@ -247,21 +231,13 @@ const formatResources = () => {
     .then(metadata => {
         const attributes = layer.attributes;
         const itemGroup = item.group;
-        // console.log('layer', layer);
-        // console.log('item', item);
-        // console.log('j', j);
-        // console.log(remoteDataLayers);
-        // console.log(remoteDataLayers[j]);
         Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
-          // console.log('layerProp', layerProp);
           if (layerProp !== 'type' && layerProp !== 'uuid') {
             layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
           }
         });
         item.layer = layer.attributes.layerConfig;
         item.group = itemGroup;
-        // console.log('item.layer', item.layer);
-        // debugger
         item.layer.metadata = {
           metadata,
           legendConfig: attributes.legendConfig
@@ -294,15 +270,8 @@ const formatResources = () => {
 
   return Promise.all(remoteDataLayerRequests)
   .then(remoteLayers => {
-    // console.log('remoteLayers', remoteLayers);
     remoteLayers = filterLayers({layers: remoteLayers, layerKey: 'layer'});
-    // console.log('remoteLayers2', remoteLayers);
     remoteLayers.forEach(item => {
-      // console.log('item', item);
-      // console.log('item.groupId', item.groupId);
-      // console.log('resources.layerPanel[item.groupId', resources.layerPanel[item.groupId]);
-      // console.log(resources);
-      // debugger
       item.layer.order = item.order; // item.order is the value we set in resources, this needs to be added to the layer object
       resources.layerPanel[item.groupId].layers.push(item.layer);
     });
