@@ -136,6 +136,10 @@ export default class LossControls extends Component {
       }
 
       layer.setDateRange(start, currentValue);
+      layerActions.updateLossTimeline({
+        fromSelectedIndex: start,
+        toSelectedIndex: currentValue
+      });
       const nextMark = currentValue % 2 === 0 ? currentValue + 1 : currentValue + 2;
       const prevMark = currentValue % 2 === 0 ? currentValue - 1 : currentValue - 2;
       const shouldHideNextMark = nextMark <= lossOptions[lossOptions.length - 1].value;
