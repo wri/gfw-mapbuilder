@@ -603,238 +603,82 @@ export default {
         label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
         layers: [] // Will get filled in with layers from the webmap
       },
-    GROUP_LCD: {
-      groupType: 'default',
-      order: 1,
-      label: {
-        en: 'Land Cover Dynamics',
-        fr: 'Evolution de la couverture des sols',
-        es: 'Dinámica de la Cobertura del Suelo',
-        pt: 'Dinâmica de cobertura da terra ',
-        id: 'Land Cover Dynamics',
-        zh: '土地覆盖动态数据',
-        ka: 'მიწის საფარის დინამიკა'
-      },
-      layers: [
-        {
+      GROUP_LCD: {
+        groupType: 'default',
         order: 1,
-        type: 'remoteDataLayer',
-        uuid: '0721f089-b887-4d49-bad3-4b19261de208'
-      }, {
-        order: 2,
-        type: 'remoteDataLayer',
-        uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
-      }, {
-        order: 3,
-        type: 'remoteDataLayer',
-        uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
-      }, {
-        order: 4,
-        type: 'remoteDataLayer',
-        uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-      }, {
-        order: 5,
-        type: 'remoteDataLayer',
-        uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
-      }, {
-        order: 6,
-        type: 'remoteDataLayer',
-        uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
-      }, {
-        order: 7,
-        type: 'remoteDataLayer',
-        uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
-      },
-      {
-        order: 9,
-         id: 'LANDCOVER_TEST',
-         type: 'dynamic',
-         visible: false,
-         label: {
-           en: 'Land Cover test - dynamic layer',
-           fr: 'Land Cover test - dynamic layer',
-           es: 'Land Cover test - dynamic layer',
-           pt: 'Land Cover test - dynamic layer',
-           id: 'Land Cover test - dynamic layer',
-           zh: 'Land Cover test - dynamic layer',
-           ka: 'Land Cover test - dynamic layer'
-         },
-         sublabel: {
-           en: '(sublabel)',
-           fr: '(sublabel)',
-           es: '(sublabel)',
-           pt: '(sublabel)',
-           id: '(sublabel)',
-           zh: '(sublabel)',
-           ka: '(sublabel)'
-         },
-         versionHeaderText: {
-           en: 'Select year',
-           fr: 'Select year',
-           es: 'Select year',
-           pt: 'Select year',
-           id: 'Select year',
-           zh: 'Select year',
-           ka: 'Select year'
-         },
-         versions: [
-          {
-            label: {
-              en: '2008',
-              fr: '2008',
-              es: '2008',
-              pt: '2008',
-              id: '2008',
-              zh: '2008',
-              ka: '2008'
-            },
-            url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
-            layerIds: [0]
-           },
-           {
-             label: {
-               en: '2009',
-               fr: '2009',
-               es: '2009',
-               pt: '2009',
-               id: '2009',
-               zh: '2009',
-               ka: '2009'
-             },
-             url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
-             layerIds: [1]
-            },
-            {
-              label: {
-                en: '2010',
-                fr: '2010',
-                es: '2010',
-                pt: '2010',
-                id: '2010',
-                zh: '2010',
-                ka: '2010'
-              },
-              url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer/',
-              layerIds: [2]
-             },
-         ],
-       }, {
-         order: 10,
-         id: 'NATIONAL_PARKS',
-         type: 'feature',
-         visible: false,
-         label: {
-           en: 'National Parks - feature layer',
-           fr: 'National Parks - feature layer',
-           es: 'National Parks - feature layer',
-           pt: 'National Parks - feature layer',
-           id: 'National Parks - feature layer',
-           zh: 'National Parks - feature layer',
-           ka: 'National Parks - feature layer'
-         },
-
-         sublabel: {
-           en: '(sublabel)',
-           fr: '(sublabel)',
-           es: '(sublabel)',
-           pt: '(sublabel)',
-           id: '(sublabel)',
-           zh: '(sublabel)',
-           ka: '(sublabel)'
-         },
-         versionHeaderText: {
-           en: 'Select version',
-           fr: 'Select version',
-           es: 'Select version',
-           pt: 'Select version',
-           id: 'Select version',
-           zh: 'Select version',
-           ka: 'Select version'
-         },
-         popup: {
-          	title: {
-          		en: "National Parks"
-          	},
-          	content: {
-          		en: [{
-          			label: "Province",
-          			fieldExpression: "province"
-          		}]
-          	}
+        label: {
+          en: 'Land Cover Dynamics',
+          fr: 'Evolution de la couverture des sols',
+          es: 'Dinámica de la Cobertura del Suelo',
+          pt: 'Dinâmica de cobertura da terra ',
+          id: 'Land Cover Dynamics',
+          zh: '土地覆盖动态数据',
+          ka: 'მიწის საფარის დინამიკა'
         },
-         versions: [
-           {
-             label: {
-               en: 'Protected Areas',
-               fr: 'Protected Areas',
-               es: 'Protected Areas',
-               pt: 'Protected Areas',
-               id: 'Protected Areas',
-               zh: 'Protected Areas',
-               ka: 'Protected Areas'
-             },
-             url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/0'
-           }, {
-              label: {
-                en: 'National Parks',
-                fr: 'National Parks',
-                es: 'National Parks',
-                pt: 'National Parks',
-                id: 'National Parks',
-                zh: 'National Parks',
-                ka: 'National Parks'
-              },
-              url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/1'
-            }, {
-               label: {
-                 en: 'Réserve naturelle intégrale',
-                 fr: 'Réserve naturelle intégrale',
-                 es: 'Réserve naturelle intégrale',
-                 pt: 'Réserve naturelle intégrale',
-                 id: 'Réserve naturelle intégrale',
-                 zh: 'Réserve naturelle intégrale',
-                 ka: 'Réserve naturelle intégrale'
-               },
-               url: 'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer/2'
-             },
-         ]
-       }
-     ]
-    },
-    GROUP_LC: {
-      groupType: 'default',
-      order: 3,
-      label: {
-        en: 'Land Cover',
-        fr: 'Couverture des sols',
-        es: 'Cobertura terrestre',
-        pt: 'Cobertura do Solo',
-        id: 'Land Cover',
-        zh: '土地覆盖',
-        ka: 'მიწის საფარი'
+        layers: [{
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+        }, {
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+        }, {
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
+        }, {
+          order: 4,
+          type: 'remoteDataLayer',
+          uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+        }, {
+          order: 5,
+          type: 'remoteDataLayer',
+          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+        }, {
+          order: 6,
+          type: 'remoteDataLayer',
+          uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+        }, {
+          order: 7,
+          type: 'remoteDataLayer',
+          uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
+        }]
       },
-      layers: [{
-        order: 1,
-        type: 'remoteDataLayer',
-        uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
-      }, {
-        order: 2,
-        type: 'remoteDataLayer',
-        uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
-      }, {
+      GROUP_LC: {
+        groupType: 'default',
         order: 3,
-        type: 'remoteDataLayer',
-        uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
-      }, {
-        order: 4,
-        type: 'remoteDataLayer',
-        uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
-      }, {
-        order: 5,
-        type: 'remoteDataLayer',
-        uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
-      }]
-    },
+        label: {
+          en: 'Land Cover',
+          fr: 'Couverture des sols',
+          es: 'Cobertura terrestre',
+          pt: 'Cobertura do Solo',
+          id: 'Land Cover',
+          zh: '土地覆盖',
+          ka: 'მიწის საფარი'
+        },
+        layers: [{
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
+        }, {
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+        }, {
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
+        }, {
+          order: 4,
+          type: 'remoteDataLayer',
+          uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
+        }, {
+          order: 5,
+          type: 'remoteDataLayer',
+          uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
+        }
+      ]},
       GROUP_IMAGERY: {
         groupType: 'imagery',
         order: 4,
