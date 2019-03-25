@@ -103,50 +103,10 @@ class MapActions {
       }
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
-        // if (mapLoaded) {
-          // if (layersCreated === false || groupName === 'GROUP_WEBMAP' || groupName === 'GROUP_PA') {
           if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          // if (groupName === 'GROUP_WEBMAP') {
-
-            // We used to use index here is layer.order was undefined, but this doesn't appear to be working consistently.
-            // layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
-            // if (groupIndex === 4) {
-            //   console.log(layer);
-            //   debugger
-            // }
-            // if (mapLoaded) {
-              // layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
-            // } else {
-            //   layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
-            // }
-            const firstOrder = parseInt(layer.order);
-            console.log('firstOrder', firstOrder);
-            // if (!layersCreated) {
             layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
-            // }
-            // else {
-            //   layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
-            // }
-            // console.log(layer);
-            // if (!layer.originalOrder) {
-            //   layer.originalOrder = layer.order;
-            // } else {
-            //   layer.order = layer.originalOrder;
-            // }
-            // console.log(groupName, (maxOrder - layerPanel[groupName].order) * 100);
-            // console.log('groupName', layerPanel[groupName].order);
-            // if (layer.subId) {
-              // console.log(layer.label, layer.order);
-              console.log(layer.id, layer.order);
-              // debugger
-            // }
-            // else {
-            //   // console.log(layer.id, layer.order);
-            // }
-            // debugger
-            console.log('');
           }
-        // }
+
         return layer;
       });
       return list.concat(orderedGroups);
@@ -175,8 +135,6 @@ class MapActions {
     uniqueLayers.forEach(layer => {
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
-    console.log('');
-    console.log('uniqueLayers', uniqueLayers);
     //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
@@ -184,9 +142,6 @@ class MapActions {
       .filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
-
-    console.log('');
-    console.log('esriLayers', esriLayers);
 
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here

@@ -669,8 +669,6 @@ export default class Map extends Component {
             },
             opacity: 1,
             visible: visible,
-            // order: (settings.layerPanel.GROUP_WEBMAP.order) * 100 + sublayerIndex,
-            // order: (layerIndex + 1) * 100 + sublayerIndex,
             order: (layerIndex + 1) + sublayerIndex,
             esriLayer: layer.layerObject,
             itemId: layer.itemId
