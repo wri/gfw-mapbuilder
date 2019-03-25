@@ -119,19 +119,32 @@ class MapActions {
             // } else {
             //   layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
             // }
+            const firstOrder = parseInt(layer.order);
+            console.log('firstOrder', firstOrder);
             // if (!layersCreated) {
-              layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
+            layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
             // }
             // else {
             //   layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
             // }
             // console.log(layer);
-            if (!layer.originalOrder) {
-              layer.originalOrder = layer.order;
-            } else {
-              layer.order = layer.originalOrder;
-            }
-            console.log(layer.id, layer.order);
+            // if (!layer.originalOrder) {
+            //   layer.originalOrder = layer.order;
+            // } else {
+            //   layer.order = layer.originalOrder;
+            // }
+            // console.log(groupName, (maxOrder - layerPanel[groupName].order) * 100);
+            // console.log('groupName', layerPanel[groupName].order);
+            // if (layer.subId) {
+              // console.log(layer.label, layer.order);
+              console.log(layer.id, layer.order);
+              // debugger
+            // }
+            // else {
+            //   // console.log(layer.id, layer.order);
+            // }
+            // debugger
+            console.log('');
           }
         // }
         return layer;
