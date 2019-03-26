@@ -9,6 +9,7 @@ import SadControls from 'components/LayerPanel/SadControls';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
+import LayerVersions from 'components/LayerPanel/LayerVersions';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
@@ -237,18 +238,23 @@ export default class LayerPanel extends Component {
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
       break;
       default:
-        childComponent = null;
-        editCallback = null;
+        if (layer.versions && layer.versions.length > 0 && (layer.type === 'feature' || layer.type === 'dynamic')) {
+          childComponent = <LayerVersions layer={layer}/>;
+        } else {
+          childComponent = null;
+          editCallback = null;
+        }
     }
 
     let checkbox;
+
     if (layer.subId) {
       const checked = (dynamicLayers[layer.id] && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1) || false;
       checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.subId || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox layerLoading={layerLoading} onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox layerLoading={layerLoading} onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} checked={activeLayers.indexOf(layer.id) > -1 } iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }
