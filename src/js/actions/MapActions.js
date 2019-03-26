@@ -103,10 +103,9 @@ class MapActions {
       }
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
-          if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-            layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
-          }
-
+        if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
+        }
         return layer;
       });
       return list.concat(orderedGroups);
