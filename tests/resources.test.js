@@ -91,6 +91,13 @@ describe('resources layer spec', () => {
         expect(layer).toHaveProperty('type');
         expect(layer).toHaveProperty('label');
         expect(layer.label).toHaveProperty(resources.language);
+        if (layer.filterField) {
+          expect(layer.type === 'feature' || layer.type === 'dynamic').toBeTruthy();
+          expect(layer).toHaveProperty('url');
+          expect(typeof layer.filterField).toBe('object');
+          expect(layer).toHaveProperty('filterLabel');
+          expect(typeof layer.filterLabel).toBe('object');
+        }
       });
     } else {
       if (layer.versions) {

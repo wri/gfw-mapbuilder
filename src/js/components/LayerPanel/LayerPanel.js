@@ -6,6 +6,7 @@ import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
 import FormaControls from 'components/LayerPanel/FormaControls';
 import SadControls from 'components/LayerPanel/SadControls';
+import LayerFieldFilter from 'components/LayerPanel/LayerFieldFilter';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
@@ -168,6 +169,7 @@ export default class LayerPanel extends Component {
     const {language} = this.context;
     let childComponent, editCallback, dynamicSublabel, layerLoading;
 
+    // Set child component based on layer id
     switch (layer.id) {
       case 'VIIRS_ACTIVE_FIRES':
         childComponent = <FiresControls
@@ -238,7 +240,9 @@ export default class LayerPanel extends Component {
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
       break;
       default:
-        if (layer.versions && layer.versions.length > 0 && (layer.type === 'feature' || layer.type === 'dynamic')) {
+        if (layer.filterField && (layer.type === 'dynamic' || layer.type === 'feature')) {
+          childComponent = <LayerFieldFilter layer={layer} />;
+        } else if (layer.versions && layer.versions.length > 0 && (layer.type === 'feature' || layer.type === 'dynamic')) {
           childComponent = <LayerVersions layer={layer}/>;
         } else {
           childComponent = null;

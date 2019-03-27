@@ -98,7 +98,8 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
-  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeVersions} = params;
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeFilters, activeVersions} = params;
+
   // Update order of layers as required.
   // Layers ordered first by their layer group.
   // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
@@ -183,21 +184,39 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       });
     }
 
+    // format active filter params into an object
+    const filters = {};
+    if (activeFilters) {
+      activeFilters.forEach((f) => {
+        const filter = f.split('|');
+        filters[filter[0]] = filter[1];
+      });
+    }
+
     //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
       // Check for active versions matching the layer id
-      console.log('here', versions)
+      console.log('here', versions);
+
+      let layerConfig, filterField;
+      Object.keys(resources.layerPanel).forEach((group) => {
+        const configs = resources.layerPanel[group].layers;
+        layerConfig = configs && configs.find((c) => c.id === layer.id);
+        if (layerConfig) {
+          filterField = layerConfig.filterField[language];
+        }
+      });
 
       if (versions[layer.id] && versions[layer.id] !== 0) {
         const groups = Object.keys(resources.layerPanel);
         let versionConfig;
         groups.forEach((group) => {
           const configs = resources.layerPanel[group].layers;
-          const layerConfig = configs && configs.find((c) => c.id === layer.id);
-          if (layerConfig) {
-            versionConfig = layerConfig.versions[versions[layer.id]];
+          const layerVersionConfig = configs && configs.find((c) => c.id === layer.id);
+          if (layerVersionConfig) {
+            versionConfig = layerVersionConfig.versions[versions[layer.id]];
           }
         });
         // Update the layer config object to include active version url / layerIds
@@ -205,10 +224,27 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
           layer.url = versionConfig.url;
           if (versionConfig.layerIds) { layer.layerIds = versionConfig.layerIds; }
         }
-        console.log(layer.layerIds, versionConfig.layerIds)
+        console.log(layer.layerIds, versionConfig.layerIds);
 
       }
-      return layerFactory(layer, language);
+      // return layerFactory(layer, language);
+
+
+      const mapLayer = layerFactory(layer, language);
+
+      // If there are active filters, set definition expressions on layer.
+      if (filterField && layer.type === 'feature') {
+        mapLayer.setDefinitionExpression(`${filterField} = '${filters[layer.id]}'`);
+      } else if (filterField && layer.type === 'dynamic') {
+        const layerDefinitions = [];
+        layer.layerIds.forEach((id) => {
+          layerDefinitions[id] = `${filterField} = '${filters[layer.id]}'`;
+        });
+        mapLayer.setLayerDefinitions(layerDefinitions);
+      }
+
+      return mapLayer;
+
     });
 
     // Set the date range for the loss and glad layers
@@ -989,6 +1025,7 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
+    params.activeFilters = params.activeFilters.split(',');
     params.activeVersions = params.activeVersions.split(',');
 
     if (opener) { //If this report.html was opened via the map (rather than a url paste)

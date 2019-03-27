@@ -86,6 +86,7 @@ class MapStore {
     this.selectedImagery = null;
     this.imageryParams = null;
     this.imageryHoverInfo = null;
+    this.activeFilters = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -150,6 +151,7 @@ class MapStore {
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
+      setActiveFilters: mapActions.setActiveFilters,
       changeLayerVersion: mapActions.changeLayerVersion
 
     });
@@ -697,6 +699,16 @@ class MapStore {
 
   setImageryHoverInfo(obj) {
     this.imageryHoverInfo = obj;
+  }
+
+  setActiveFilters(obj) {
+    const { layerId, value } = obj;
+
+    if (!value && this.activeFilters[layerId]) {
+      delete this.activeFilters[layerId];
+    } else {
+      this.activeFilters[layerId] = value;
+    }
   }
 
   changeLayerVersion(obj) {

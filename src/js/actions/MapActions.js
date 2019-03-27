@@ -253,6 +253,10 @@ class MapActions {
     return obj;
   }
 
+  setActiveFilters(obj) {
+    return obj;
+  }
+
   changeLayerVersion(obj) {
     return obj;
   }
