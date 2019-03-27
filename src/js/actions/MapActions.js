@@ -99,14 +99,12 @@ class MapActions {
         //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
         //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
       if (groupIndex === 0) {
-       maxOrder = layerPanel[groupName].order + 1;
+        maxOrder = layerPanel[groupName].order + 1;
       }
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          // We used to use index here is layer.order was undefined, but this doesn't appear to be working consistently.
-          // layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order);
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
         }
         return layer;
       });
@@ -136,7 +134,7 @@ class MapActions {
     uniqueLayers.forEach(layer => {
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
-    //- remove layers from config that have no url unless they are of type graphic(which have no url)
+    //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers
@@ -163,6 +161,8 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
+
+      uniqueLayers.sort((a, b) => a.order - b.order);
 
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
