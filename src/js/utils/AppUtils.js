@@ -145,6 +145,7 @@ const utils = {
       activeSlopeClass,
       activeLayers,
       activeFilters,
+      activeVersions,
       dynamicLayers,
       tcLossFrom,
       tcLossTo,
@@ -182,6 +183,7 @@ const utils = {
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
       sharinghost: settings.sharinghost,
       activeFilters: activeFilters,
+      activeVersions: activeVersions,
       ...(layerId ? {layerId} : {}),
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})

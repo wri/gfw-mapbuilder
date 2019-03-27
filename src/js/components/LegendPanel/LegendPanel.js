@@ -51,6 +51,11 @@ export default class LegendPanel extends Component {
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
     if (layer.metadata && layer.metadata.legendConfig && layer.metadata.legendConfig.type) {
+      let visibility = activeLayers.indexOf(layer.id) > -1;
+      if (typeof layer.visibleAtMapScale !== 'undefined') {
+        visibility = activeLayers.indexOf(layer.id && layer.visibleAtMapScale);
+      }
+
       return <ApiLegend
         key={layer.id}
         label={layer.label ? layer.label[language] : ''}
@@ -62,7 +67,7 @@ export default class LegendPanel extends Component {
         initialLayerOpacities={initialLayerOpacities}
         defaultOpacity={layer.opacity || 1}
         metadata={layer.metadata}
-        visibility={activeLayers.indexOf(layer.id) > -1 && layer.visibleAtMapScale}
+        visibility={visibility}
         language={this.context.language}
       />;
     }

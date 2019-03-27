@@ -102,20 +102,16 @@ class MapActions {
         maxOrder = layerPanel[groupName].order + 1;
       }
 
-      const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
+      const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
         }
-
         return layer;
       });
       return list.concat(orderedGroups);
-
-
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
-
     //- make sure there's only one entry for each dynamic layer
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
@@ -138,11 +134,11 @@ class MapActions {
     uniqueLayers.forEach(layer => {
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
-    //- remove layers from config that have no url unless they are of type graphic(which have no url)
+    //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers
-      .filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
+      .filter(layer => layer && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
 
@@ -165,6 +161,8 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
+
+      uniqueLayers.sort((a, b) => a.order - b.order);
 
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
@@ -256,6 +254,10 @@ class MapActions {
   }
 
   setActiveFilters(obj) {
+    return obj;
+  }
+
+  changeLayerVersion(obj) {
     return obj;
   }
 

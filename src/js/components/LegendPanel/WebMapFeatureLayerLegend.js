@@ -47,6 +47,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
   }
 
   createLegendSymbol = (renderer) => {
+    if (!renderer) { return; }
     const container = [];
     const infos = renderer.infos;
 
@@ -62,7 +63,6 @@ export default class WebMapFeatureLayerLegend extends React.Component {
       });
       return container;
     }
-
     try {
       this.createSymbolStyles(renderer.getSymbol(), container);
     } catch (e) {
@@ -132,6 +132,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
     if (typeof label === 'object') {
       label = '';
     }
+
     return (
       <div className={`parent-legend-container ${this.state.visible ? '' : 'hidden'}`} ref="myRef">
         <div className='label-container'><strong>{label}</strong></div>

@@ -216,15 +216,14 @@ const formatResources = () => {
           layer,
         });
         return false;
-      }
-      else {
+      } else {
         return true;
       }
     });
   });
 
   const remoteDataLayerRequests = remoteDataLayers
-    .map(item => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
+  .map((item, j) => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
     .then(response => response.json())
     .then(json => json.data)
     .then(layer => fetch(layer.attributes.layerConfig.metadata)
@@ -232,6 +231,15 @@ const formatResources = () => {
     .then(metadata => {
         const attributes = layer.attributes;
         const itemGroup = item.group;
+        Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
+          if (layerProp !== 'type' && layerProp !== 'uuid') {
+            if (layerProp === 'legendConfig') {
+              attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+            } else {
+              layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
+            }
+          }
+        });
         item.layer = layer.attributes.layerConfig;
         item.group = itemGroup;
         item.layer.metadata = {
@@ -267,8 +275,8 @@ const formatResources = () => {
   return Promise.all(remoteDataLayerRequests)
   .then(remoteLayers => {
     remoteLayers = filterLayers({layers: remoteLayers, layerKey: 'layer'});
-    remoteLayers.sort((a, b) => a.order - b.order);
     remoteLayers.forEach(item => {
+      item.layer.order = item.order; // item.order is the value we set in resources, this needs to be added to the layer object
       resources.layerPanel[item.groupId].layers.push(item.layer);
     });
     return resources;
