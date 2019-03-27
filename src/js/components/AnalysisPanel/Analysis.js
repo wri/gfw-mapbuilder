@@ -540,16 +540,22 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
-        chartComponent = <VegaChart results={results} setLoading={() => this.setState({isLoading: false})}/>;
+        chartComponent = <VegaChart results={results} setLoading={this.setLoading} />;
         break;
       case 'vega':
-        chartComponent = <VegaChart results={results} setLoading={() => this.setState({isLoading: false})}/>;
+        chartComponent = <VegaChart results={results} setLoading={this.setLoading} />;
         break;
       default:
         break;
     }
 
     this.setState({ chartComponent });
+  }
+
+  setLoading = () => {
+    this.setState({
+      isLoading: false
+    });
   }
 
   setLoader = loadingObj => { //isLoading and possibly error
@@ -608,7 +614,7 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+              message: 'An error occurred performing selected analysis. Please select another analysis or try again later.'
             },
           }, () => {
             this.renderResults(analysisId, this.state.results, language, analysisSettings);

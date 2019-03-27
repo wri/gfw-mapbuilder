@@ -427,6 +427,50 @@ export default {
           // }
         ]
       },
+      { analysisId: 'VEGA_GLAD_WIDGET',
+        label: {
+            en: 'GLAD Alerts (Vega)',
+            fr: 'Alertes GLAD (Vega)',
+            es: 'Alertas GLAD (Vega)',
+            pt: 'Alertas GLAD (Vega)',
+            id: 'GLAD Alerts (Vega)',
+            zh: 'GLAD Alerts (Vega)',
+            ka: 'GLAD შეტყობინებები (vega)'
+        },
+        analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+        useGfwWidget: true,
+        widgetId: 'f264dc99-a100-47e5-9867-5da0eb74973e',
+        uiParams: [
+          {
+            startParamName: 'period',
+            inputType: 'datepicker',
+            combineParams: true,
+            valueSeparator: ',',
+            multi: true,
+            defaultStartDate: '2016-01-01',
+            minDate: '2015-01-01',
+            label: {
+              en: 'Select range for analysis',
+              fr: 'Select range for analysis',
+              es: 'Select range for analysis',
+              pt: 'Select range for analysis',
+              id: 'Select range for analysis',
+              zh: 'Select range for analysis',
+              ka: 'Select range for analysis'
+            }
+          }
+        ],
+        params: [
+          {
+            name: 'aggregate_values',
+            value: 'true'
+          },
+          {
+            name: 'aggregate_by',
+            value: 'day'
+          }
+        ]
+      },
       {
         analysisId: 'TERRAI_ALERTS',
         label: {
@@ -553,8 +597,8 @@ export default {
 		"uiParams": "none",
 		"params": [{
 			"name": "layer",
-			"value": "gfw-landcover-2015"
-		}]
+			"value": "gfw-landcover-2015",
+		}],
 	},
       // The following configurations will not work because we have not yet
       // build support for configurable layer queries or compute histograms

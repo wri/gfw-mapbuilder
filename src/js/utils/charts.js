@@ -375,9 +375,10 @@ export default {
       .renderer('canvas')
       .initialize(el)
       .hover()
-      .run();
-
-    if (callback) { callback(); }
+      .runAsync()
+      .then(promise => {
+        return callback();
+      });
   },
 
 	/**
