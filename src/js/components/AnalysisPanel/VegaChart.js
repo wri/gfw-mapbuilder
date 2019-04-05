@@ -19,6 +19,7 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       const url = config.data[0].url;
+      const { setLoading, language} = this.props;
 
       fetch(url).then(res => {
         if (res.status !== 200) {
@@ -27,7 +28,7 @@ export default class VegaChart extends Component {
           res.json().then(json => {
             // We used to have this 'json' object for validation and error-checking, but now
             // we leave that up to the Widget API!
-            charts.makeVegaChart(this.chart, config, this.props.setLoading);
+            charts.makeVegaChart(this.chart, config, language, setLoading);
           });
         }
 
