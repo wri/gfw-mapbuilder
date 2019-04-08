@@ -107,25 +107,90 @@ export default {
 
 
     analysisModules: [
+    //   {
+    //     analysisId: 'TC_LOSS_GAIN',
+    //     label: {
+    //         en: 'Total tree cover loss/ gain',
+    //         fr: 'Total perte/ gain en couvert arboré',
+    //         es: 'Pérdida/ Aumento de la cobertura arbórea',
+    //         pt: 'Perda/ Ganho de cobertura arbórea',
+    //         id: 'Total tree cover loss/ gain',
+    //         zh: '森林覆盖损失/ 森林覆盖增加',
+    //         ka: 'ხის ვარჯის კარგვა/ ნამატი'
+    //     },
+    //     title: {
+    //       en: 'Forest Loss Analysis',
+    //       fr: 'Forest Loss Analysis',
+    //       es: 'Forest Loss Analysis',
+    //       pt: 'Forest Loss Analysis',
+    //       id: 'Forest Loss Analysis',
+    //       zh: 'Forest Loss Analysis',
+    //       ka: 'Forest Loss Analysis'
+    //     },
+    //     description: {
+    //       en: 'Select range and tree cover density then click the "run analysis" button to see results',
+    //       fr: 'Select range and tree cover density then click the "run analysis" button to see results',
+    //       es: 'Select range and tree cover density then click the "run analysis" button to see results',
+    //       pt: 'Select range and tree cover density then click the "run analysis" button to see results',
+    //       id: 'Select range and tree cover density then click the "run analysis" button to see results',
+    //       zh: 'Select range and tree cover density then click the "run analysis" button to see results',
+    //       ka: 'Select range and tree cover density then click the "run analysis" button to see results'
+    //     },
+    //     chartType: 'badge',
+    //     valueAttribute: 'data.attributes.loss',
+    //     analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
+    //     uiParams: [
+    //       {
+    //         inputType: 'rangeSlider',
+    //         startParamName: 'period',
+    //         combineParams: true,
+    //         valueSeparator: ',',
+    //         bounds: [2001, 2017],
+    //         valueType: 'date',
+    //         label: {
+    //           en: 'Select range for analysis',
+    //           fr: 'Select range for analysis',
+    //           es: 'Select range for analysis',
+    //           pt: 'Select range for analysis',
+    //           id: 'Select range for analysis',
+    //           zh: 'Select range for analysis',
+    //           ka: 'Select range for analysis'
+    //         }
+    //       },
+    //       {
+    //         name: 'thresh',
+    //         inputType: 'tcd',
+    //         label: {
+    //           en: 'Select tree cover density: ',
+    //           fr: 'Select tree cover density: ',
+    //           es: 'Select tree cover density: ',
+    //           pt: 'Select tree cover density: ',
+    //           id: 'Select tree cover density: ',
+    //           zh: 'Select tree cover density: ',
+    //           ka: 'Select tree cover density: '
+    //         }
+    //       }
+    //     ],
+    //   },
       {
         analysisId: 'TC_LOSS_GAIN',
         label: {
-            en: 'Total tree cover loss/ gain',
-            fr: 'Total perte/ gain en couvert arboré',
-            es: 'Pérdida/ Aumento de la cobertura arbórea',
-            pt: 'Perda/ Ganho de cobertura arbórea',
-            id: 'Total tree cover loss/ gain',
-            zh: '森林覆盖损失/ 森林覆盖增加',
-            ka: 'ხის ვარჯის კარგვა/ ნამატი'
+            en: 'Total tree cover loss/ gain (Vega)',
+            fr: 'Total perte/ gain en couvert arboré (Vega)',
+            es: 'Pérdida/ Aumento de la cobertura arbórea (Vega)',
+            pt: 'Perda/ Ganho de cobertura arbórea (Vega)',
+            id: 'Total tree cover loss/ gain (Vega)',
+            zh: '森林覆盖损失/ 森林覆盖增加 (Vega)',
+            ka: 'ხის ვარჯის კარგვა/ ნამატი (Vega)'
         },
         title: {
-          en: 'Forest Loss Analysis',
-          fr: 'Forest Loss Analysis',
-          es: 'Forest Loss Analysis',
-          pt: 'Forest Loss Analysis',
-          id: 'Forest Loss Analysis',
-          zh: 'Forest Loss Analysis',
-          ka: 'Forest Loss Analysis'
+          en: 'Forest Loss Analysis (Vega)',
+          fr: 'Forest Loss Analysis (Vega)',
+          es: 'Forest Loss Analysis (Vega)',
+          pt: 'Forest Loss Analysis (Vega)',
+          id: 'Forest Loss Analysis (Vega)',
+          zh: 'Forest Loss Analysis (Vega)',
+          ka: 'Forest Loss Analysis (Vega)'
         },
         description: {
           en: 'Select range and tree cover density then click the "run analysis" button to see results',
@@ -136,9 +201,9 @@ export default {
           zh: 'Select range and tree cover density then click the "run analysis" button to see results',
           ka: 'Select range and tree cover density then click the "run analysis" button to see results'
         },
-        chartType: 'badge',
+        chartType: 'gfwWidget',
         valueAttribute: 'data.attributes.loss',
-        analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
+        analysisUrl: 'http://production-api.globalforestwatch.org/widget/a7f65bb7-c037-412f-86e1-ca75e3348892',
         uiParams: [
           {
             inputType: 'rangeSlider',
@@ -172,6 +237,7 @@ export default {
           }
         ],
       },
+      
       {
         analysisId: 'TC_LOSS',
         label: {

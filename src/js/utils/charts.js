@@ -371,13 +371,16 @@ export default {
   },
 
   makeVegaChart: (el, config, callback) => {
+    config.data[0].url = "https://production-api.globalforestwatch.org/v1/umd-loss-gain?aggregate_values=false&table=true&period=2001-01-01,2017-12-31&geostore=2c71036c5314cfe1a11bf9a00148bcc0&thresh=30";
     new vega.View(vega.parse(config))
       .renderer('canvas')
       .initialize(el)
       .hover()
       .run();
 
-    if (callback) { callback(); }
+    if (callback) { callback(); 
+     //Put error handling somewhere here!
+    }
   },
 
 	/**

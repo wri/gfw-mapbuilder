@@ -239,7 +239,7 @@ config.analysis[analysisKeys.SLOPE] = {
 config.analysis[analysisKeys.TC_LOSS_GAIN] = {
   lossRaster: '$530',
   gainRaster: '$527',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain'
+  analysisUrl: 'http://production-api.globalforestwatch.org/widget/a7f65bb7-c037-412f-86e1-ca75e3348892'
 };
 
 config.analysis[analysisKeys.TC_LOSS] = {
