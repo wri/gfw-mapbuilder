@@ -18,9 +18,12 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      //const url = config.data[0].url;
-      const url = "https://production-api.globalforestwatch.org/v1/umd-loss-gain?aggregate_values=false&table=true&period=2001-01-01,2017-12-31&geostore=2c71036c5314cfe1a11bf9a00148bcc0&thresh=30";
-      fetch(url.toString()).then(res => {
+      if (config.data[0].url.indexOf('?&') > -1){
+        const urlPieces = config.data[0].url.split('?&');
+        config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
+      }
+      const url = "https://production-api.globalforestwatch.org/v1/umd-loss-gain?&aggregate_values=false&table=true&period=2001-01-01,2017-12-31&geostore=2c71036c5314cfe1a11bf9a00148bcc0&thresh=30";
+      fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
         } else {
