@@ -204,7 +204,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       Object.keys(resources.layerPanel).forEach((group) => {
         const configs = resources.layerPanel[group].layers;
         layerConfig = configs && configs.find((c) => c.id === layer.id);
-        if (layerConfig) {
+        if (layerConfig && layerConfig.filterField) {
           filterField = layerConfig.filterField[language];
         }
       });
@@ -806,7 +806,7 @@ const renderResults = (results, lang, config, params) => {
       break;
     }
     case 'vega':
-      chartComponent = <VegaChart results={results} />;
+      chartComponent = <VegaChart results={results} language={lang} />;
       break;
     default:
       break;

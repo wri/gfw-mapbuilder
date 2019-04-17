@@ -10,7 +10,9 @@ export default class VegaChart extends Component {
 
   handleError(errorMsg) {
     this.setState({ isError: true, errorMsg });
-    this.props.setLoading();
+    if (this.props.setLoading) {
+      this.props.setLoading();
+    }
   }
 
   componentDidMount() {
@@ -30,7 +32,7 @@ export default class VegaChart extends Component {
           res.json().then(json => {
             // We used to have this 'json' object for validation and error-checking, but now
             // we leave that up to the Widget API!
-            /* makeVegaChart also makes a request call to the API - Maybe refactor this 
+            /* makeVegaChart also makes a request call to the API - Maybe refactor this
             and remove the fetch call here and put error handling inside of Vega? */
             charts.makeVegaChart(this.chart, config, language, setLoading);
           });
