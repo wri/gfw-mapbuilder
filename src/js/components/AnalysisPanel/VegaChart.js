@@ -18,10 +18,10 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
+      const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
-        console.log('config', config);
       }
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
@@ -32,11 +32,9 @@ export default class VegaChart extends Component {
             // we leave that up to the Widget API!
             /* makeVegaChart also makes a request call to the API - Maybe refactor this 
             and remove the fetch call here and put error handling inside of Vega? */
-            console.log(json);
-            charts.makeVegaChart(this.chart, config, this.props.setLoading);
+            charts.makeVegaChart(this.chart, config, language, setLoading);
           });
         }
-
       }).catch(() => {
         this.handleError('Error creating analysis.');
       });
