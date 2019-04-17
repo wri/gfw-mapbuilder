@@ -402,6 +402,40 @@ export default {
 		"uiParams": "none"
 	},
 	{
+		"analysisId": "GLAD_ALERTS_2",
+		"label": {
+			"en": "GLAD alerts per month",
+			"fr": "Alertes GLAD",
+			"es": "Alertas GLAD",
+			"pt": "Alertas GLAD",
+			"id": "GLAD Alerts",
+			"zh": "GLAD Alerts",
+			"ka": "GLAD შეტყობინებები"
+		},
+		"title": {
+			"en": "GLAD Alerts per Month",
+			"fr": "Alertes GLAD",
+			"es": "Alertas GLAD",
+			"pt": "Alertas GLAD",
+			"id": "GLAD Alerts",
+			"zh": "GLAD Alerts",
+			"ka": "GLAD შეტყობინებები"
+		},
+		"description": {
+			"en": "Count the number of GLAD alerts per month. ",
+			"fr": "Count the number of GLAD alerts per month.  ",
+			"es": "Count the number of GLAD alerts per month. ",
+			"pt": "Count the number of GLAD alerts per month. ",
+			"id": "Count the number of GLAD alerts per month.  ",
+			"zh": "Count the number of GLAD alerts per month.  ",
+			"ka": "Count the number of GLAD alerts per month.  "
+		},
+		"useGfwWidget": true,
+		"widgetId": "0e2da211-a9b2-4271-a437-5de56e437df2",
+		"uiParams": "none"
+	},
+
+	{
 		"analysisId": "GLAD_ALERTS_Badge",
 		"label": {
 			"en": "Total GLAD Alerts",
