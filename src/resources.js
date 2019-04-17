@@ -44,7 +44,7 @@ export default {
     viirsFires: true,
     modisFires: true,
     intactForests: true,
-    primaryForests: false,
+    primaryForests: true,
     forma: false,
     aboveGroundBiomass: true,
     landCover: true,
@@ -676,7 +676,7 @@ export default {
         }, {
           order: 5,
           type: 'remoteDataLayer',
-          uuid: 'b7fa5a81-719a-48e3-832e-cc3a2793bf5e'
+          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
         }
       ]},
       GROUP_IMAGERY: {
