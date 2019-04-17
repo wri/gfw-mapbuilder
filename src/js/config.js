@@ -143,6 +143,7 @@ const config = {
 
   //- Analysis for individual layers are defined below so we can use common keys
   //- Generic/Modules config is here
+  //- Since switching to Vega widgets, we no longer use the config analyses below!
   analysis: {
     apiUrl: 'https://production-api.globalforestwatch.org/v1/geostore',
     imageService: analysisImageService,
