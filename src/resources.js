@@ -371,7 +371,7 @@ export default {
 	{
 		"analysisId": "GLAD_ALERTS",
 		"label": {
-			"en": "GLAD alerts per month",
+			"en": "GLAD alerts",
 			"fr": "Alertes GLAD",
 			"es": "Alertas GLAD",
 			"pt": "Alertas GLAD",
@@ -380,7 +380,7 @@ export default {
 			"ka": "GLAD შეტყობინებები"
 		},
 		"title": {
-			"en": "GLAD Alerts per Month",
+			"en": "GLAD Alerts",
 			"fr": "Alertes GLAD",
 			"es": "Alertas GLAD",
 			"pt": "Alertas GLAD",
