@@ -661,15 +661,16 @@ export default {
           order: 1,
           type: 'remoteDataLayer',
           uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
-        }, {
+        }, 
+        {
           order: 2,
           type: 'remoteDataLayer',
-          uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
         },
         {
           order: 3,
           type: 'remoteDataLayer',
-          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
+          uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
         },
         {
           order: 4,
