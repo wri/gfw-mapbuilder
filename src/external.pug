@@ -6,7 +6,7 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://alpha.blueraster.io.s3.amazonaws.com/gfw-mapbuilder/364-new-primary-forest-layer/1.3.4.js' version='1.3.4')
+    script(id='library-load' src='https://alpha.blueraster.io.s3.amazonaws.com/gfw-mapbuilder/merge-of-primary-forest-and-2018/1.3.4.js' version='1.3.4')
     script.
       var customApp = new MapBuilder({
         el: 'root',
@@ -73,7 +73,7 @@ html
           restorationLandCover: true,
           restorationPopulation: true,
           restorationRainfall: true,
-      
+        
           // Options not configurable from AGOL but can be from here
           restorationChartDescription: 'Some explanatory text for this anlaysis',
           restorationTableDescription: 'Some explanatory text for this anlaysis',
@@ -92,7 +92,7 @@ html
             en: 'Carto Layers',
             fr: 'Carto Layers',
           },
-      
+        
           /**
           * Custom Analysis Module Configuration
           * This section provides the opportunity to define additional custom analysis modules.
@@ -115,9 +115,9 @@ html
           *
           * (geostore is automatically appended with each request)
           */
-      
-      
-      
+        
+        
+        
           analysisModules: [
             {
               analysisId: 'TC_LOSS_GAIN',
@@ -157,7 +157,7 @@ html
                   startParamName: 'period',
                   combineParams: true,
                   valueSeparator: ',',
-                  bounds: [2001, 2017],
+                  bounds: [2001, 2018],
                   valueType: 'date',
                   label: {
                     en: 'Select range for analysis',
@@ -196,7 +196,7 @@ html
                   ka: 'ხის ვარჯის კარგვა'
               },
               chartType: 'bar',
-              chartBounds: [2001, 2017],
+              chartBounds: [2001, 2018],
               analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain',
               uiParams: [
                 {
@@ -204,7 +204,7 @@ html
                   startParamName: 'period',
                   combineParams: true,
                   valueSeparator: ',',
-                  bounds: [2001, 2017],
+                  bounds: [2001, 2018],
                   valueType: 'date',
                   label: {
                     en: 'Select range for analysis',
@@ -532,42 +532,42 @@ html
               ],
             },
              {
-      		"analysisId": "LCC",
-      		"label": {
-      			"en": "Land Cover Composition",
-      			"fr": "Couverture des sols",
-      			"es": "Cobertura terrestre",
-      			"pt": "Cobertura do Solo",
-      			"id": "Land Cover",
-      			"zh": "土地覆盖",
-      			"ka": "მიწის საფარი"
-      		},
-      		"title": {
-      			"en": "Land Cover Composition",
-      			"fr": "Couverture des sols",
-      			"es": "Cobertura terrestre",
-      			"pt": "Cobertura do Solo",
-      			"id": "Land Cover",
-      			"zh": "土地覆盖",
-      			"ka": "მიწის საფარი"
-      		},
-      		"description": {
-      			"en": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
-      			"fr": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
-      			"es": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
-      			"pt": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
-      			"id": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
-      			"zh": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
-      			"ka": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. "
-      		},
-      		"useGfwWidget": true,
-      		"widgetId":"f4e138a2-98f9-4f1a-9f12-a93e4e05e7c2",
-      		"uiParams": "none",
-      		"params": [{
-      			"name": "layer",
-      			"value": "gfw-landcover-2015"
-      		}]
-      	},
+          "analysisId": "LCC",
+          "label": {
+            "en": "Land Cover Composition",
+            "fr": "Couverture des sols",
+            "es": "Cobertura terrestre",
+            "pt": "Cobertura do Solo",
+            "id": "Land Cover",
+            "zh": "土地覆盖",
+            "ka": "მიწის საფარი"
+          },
+          "title": {
+            "en": "Land Cover Composition",
+            "fr": "Couverture des sols",
+            "es": "Cobertura terrestre",
+            "pt": "Cobertura do Solo",
+            "id": "Land Cover",
+            "zh": "土地覆盖",
+            "ka": "მიწის საფარი"
+          },
+          "description": {
+            "en": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+            "fr": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+            "es": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+            "pt": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+            "id": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+            "zh": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. ",
+            "ka": "Land cover data is from 2015 and provided by the European Space Agency (ESA), the data was reclassified according to IPCC categories. "
+          },
+          "useGfwWidget": true,
+          "widgetId":"f4e138a2-98f9-4f1a-9f12-a93e4e05e7c2",
+          "uiParams": "none",
+          "params": [{
+            "name": "layer",
+            "value": "gfw-landcover-2015"
+          }]
+        },
             // The following configurations will not work because we have not yet
             // build support for configurable layer queries or compute histograms
             // {
@@ -583,7 +583,7 @@ html
             //   }
             // }
           ],
-      
+        
           /**
           * Layer panel configuration, anything with an = is optional, {object=}
           * Order at the group level controls the order of the accordions, the top most accordion's layers
@@ -630,7 +630,7 @@ html
               layers: [{
                 order: 1,
                 type: 'remoteDataLayer',
-                uuid: '0721f089-b887-4d49-bad3-4b19261de208'
+                uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
               }, {
                 order: 2,
                 type: 'remoteDataLayer',
@@ -786,7 +786,7 @@ html
                 }
               }]
             },
-      
+        
             /**
             * CUSTOM GROUPS
             * Add your custom groups below. The custom groups are similar to the groups defined above.
@@ -822,7 +822,7 @@ html
             * @property {object} layers[].label - the label for the nested group
             * @property {object[]} layers[].nestedLayers - the layers for the nested group
             */
-      
+        
             extraLayers: [
               {
                 id: 'MASK',
@@ -847,5 +847,5 @@ html
               }
             ]
           }
-          },
+        }
       });
