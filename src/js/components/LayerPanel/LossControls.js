@@ -66,13 +66,13 @@ export default class LossControls extends Component {
       this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), this.state.sliderValue[0], this.state.sliderValue[1]);
     }
 
-    if (this.props.lossFromSelectIndex !== this.state.sliderValue[0] - 1) {
-      this.setState({sliderValue: [this.props.lossFromSelectIndex + 1, this.props.lossToSelectIndex + 1]});
-    }
+    // if (this.props.lossFromSelectIndex !== this.state.sliderValue[0] - 1) {
+    //   this.setState({sliderValue: [this.props.lossFromSelectIndex + 1, this.props.lossToSelectIndex + 1]});
+    // }
 
-    if (this.props.lossToSelectIndex !== this.state.sliderValue[1] - 1) {
-      this.setState({sliderValue: [this.props.lossFromSelectIndex + 1, this.props.lossToSelectIndex + 1]});
-    }
+    // if (this.props.lossToSelectIndex !== this.state.sliderValue[1] - 1) {
+    //   this.setState({sliderValue: [this.props.lossFromSelectIndex + 1, this.props.lossToSelectIndex + 1]});
+    // }
 
     const {canopyDensity, resetSlider} = this.props;
     const {sliderValue} = this.state;
@@ -140,8 +140,8 @@ export default class LossControls extends Component {
         fromSelectedIndex: start,
         toSelectedIndex: currentValue
       });
-      const nextMark = currentValue % 2 === 0 ? currentValue + 1 : currentValue + 2;
-      const prevMark = currentValue % 2 === 0 ? currentValue - 1 : currentValue - 2;
+      const nextMark = currentValue + 1;
+      const prevMark = currentValue - 1;
       const shouldHideNextMark = nextMark <= lossOptions[lossOptions.length - 1].value;
       const shouldHidePrevMark = prevMark >= lossOptions[0].value;
 
@@ -216,7 +216,7 @@ export default class LossControls extends Component {
       color: '#aaa',
       cursor: 'default'
     };
-
+    console.log('slider value', sliderValue);
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
