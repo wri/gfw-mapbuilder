@@ -216,7 +216,6 @@ export default class LossControls extends Component {
       color: '#aaa',
       cursor: 'default'
     };
-    console.log('slider value', sliderValue);
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
