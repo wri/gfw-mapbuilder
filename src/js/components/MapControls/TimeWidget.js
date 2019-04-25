@@ -35,6 +35,7 @@ export default class TimeWidget extends Component {
       start: timeExtent.startTime.getFullYear(),
       end: timeExtent.startTime.getFullYear()
     });
+    
     // Create the slider and set some defaults
     this.slider = new TimeSlider({ style: 'width: 100%;'}, this.refs.timeSlider);
     this.slider.setThumbCount(sliderProps.thumbCount);
