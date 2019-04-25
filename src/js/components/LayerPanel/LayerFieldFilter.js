@@ -75,7 +75,7 @@ export default class LayerFieldFilter extends Component {
       const promises = [];
 
       layer.layerIds.forEach((id) => {
-        const url = layer.url + '/' + layer.layerIds[id];
+        const url = layer.url + '/' + id;
         const queryTask = new QueryTask(url);
         const query = new Query();
         query.where = '1=1';
