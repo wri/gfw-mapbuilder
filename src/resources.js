@@ -45,7 +45,7 @@ export default {
   modisFires: true,
   intactForests: true,
   primaryForests: true,
-  forma: false,
+  forma: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
@@ -634,13 +634,17 @@ export default {
       }, {
         order: 5,
         type: 'remoteDataLayer',
-        uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+        uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3'
       }, {
         order: 6,
         type: 'remoteDataLayer',
-        uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+        uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
       }, {
         order: 7,
+        type: 'remoteDataLayer',
+        uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
+      }, {
+        order: 8,
         type: 'remoteDataLayer',
         uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
       }]
@@ -661,7 +665,7 @@ export default {
         order: 1,
         type: 'remoteDataLayer',
         uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
-      }, 
+      },
       {
         order: 2,
         type: 'remoteDataLayer',
