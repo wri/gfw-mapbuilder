@@ -45,7 +45,7 @@ export default {
   modisFires: true,
   intactForests: true,
   primaryForests: true,
-  forma: true,
+  forma: false,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
@@ -616,34 +616,42 @@ export default {
         ka: 'მიწის საფარის დინამიკა'
       },
       layers: [{
+        id: 'TREE_COVER_LOSS',
         order: 1,
         type: 'remoteDataLayer',
         uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
       }, {
+        id: 'TREE_COVER_GAIN',
         order: 2,
         type: 'remoteDataLayer',
         uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
       }, {
+        id: 'IMAZON_SAD',
         order: 3,
         type: 'remoteDataLayer',
         uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
       }, {
+        id: 'FORMA_ALERTS',
         order: 4,
-        type: 'remoteDataLayer',
-        uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-      }, {
-        order: 5,
         type: 'remoteDataLayer',
         uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3'
       }, {
+        id: 'GLAD_ALERTS',
+        order: 5,
+        type: 'remoteDataLayer',
+        uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
+      }, {
+        id: 'TERRA_I_ALERTS',
         order: 6,
         type: 'remoteDataLayer',
         uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
       }, {
+        id: 'VIIRS_ACTIVE_FIRES',
         order: 7,
         type: 'remoteDataLayer',
         uuid: 'f34f3c4e-625c-420f-b95e-48dc3543d34d'
       }, {
+        id: 'MODIS_ACTIVE_FIRES',
         order: 8,
         type: 'remoteDataLayer',
         uuid: '46608c38-0e34-4b82-899d-ba2977b07271'
@@ -662,26 +670,33 @@ export default {
         ka: 'მიწის საფარი'
       },
       layers: [{
+        id: 'GLOB_MANGROVE',
         order: 1,
         type: 'remoteDataLayer',
-        uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
-      },
-      {
+        uuid: '533cbe18-22a6-46ac-99ca-027c96f33ac3'
+      }, {
+        id: 'IFL',
         order: 2,
         type: 'remoteDataLayer',
-        uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
-      },
-      {
+        uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
+      }, {
+        id: 'PRIMARY_FORESTS',
         order: 3,
         type: 'remoteDataLayer',
-        uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
-      },
-      {
+        uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
+      }, {
+        id: 'AG_BIOMASS',
         order: 4,
+        type: 'remoteDataLayer',
+        uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+      }, {
+        id: 'LAND_COVER',
+        order: 5,
         type: 'remoteDataLayer',
         uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
       }, {
-        order: 5,
+        id: 'TREE_COVER',
+        order: 6,
         type: 'remoteDataLayer',
         uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
       }
