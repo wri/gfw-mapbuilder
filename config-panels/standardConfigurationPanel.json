@@ -254,7 +254,7 @@
 			"type": "boolean",
 			"fieldName": "primaryForests",
 			"tooltip": "This will include/exclude this layer from the layer list",
-			"label": "Include the primary forest layer in your application, primary forest data is currently only available for Brazil, Indonesia and the DRC",
+			"label": "Include the Pan tropics primary forest layer in your application",
 			"value": false
 		},
 		{
