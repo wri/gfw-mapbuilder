@@ -241,7 +241,7 @@ export default class LayerPanel extends Component {
       break;
       default:
         if (layer.filterField && (layer.type === 'dynamic' || layer.type === 'feature')) {
-          childComponent = <LayerFieldFilter layer={layer} />;
+          childComponent = <LayerFieldFilter language={language} layer={layer} />;
         } else if (layer.versions && layer.versions.length > 0 && (layer.type === 'feature' || layer.type === 'dynamic')) {
           childComponent = <LayerVersions layer={layer}/>;
         } else {
