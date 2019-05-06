@@ -93,6 +93,7 @@ export default class LayerFieldFilter extends Component {
             }
           });
         });
+
         this.setState({ filters });
 
       });
@@ -100,6 +101,64 @@ export default class LayerFieldFilter extends Component {
 
   }
 
+  componentDidUpdate(prevProps) {
+    const { layer, language } = this.props;
+    const filters = [];
+
+    if (prevProps.language !== language) {
+      if (layer.type === 'feature') {
+        const url = layer.url;
+        const queryTask = new QueryTask(url);
+        const query = new Query();
+        query.where = '1=1';
+        query.returnGeometry = false;
+        query.outFields = [layer.filterField[language]];
+        query.returnDistinctValues = true;
+        queryTask.execute(query).then(res => {
+          res.features.forEach((feature) => {
+            filters.push({label: feature.attributes[layer.filterField[language]], value: feature.attributes[layer.filterField[language]]});
+          });
+
+          this.setState({ filters });
+        });
+      } else if (layer.type === 'dynamic') {
+        const promises = [];
+
+        layer.layerIds.forEach((id) => {
+          const url = layer.url + '/' + id;
+          const queryTask = new QueryTask(url);
+          const query = new Query();
+          query.where = '1=1';
+          query.returnGeometry = false;
+          query.outFields = [layer.filterField[language]];
+          query.returnDistinctValues = true;
+          promises.push(queryTask.execute(query));
+        });
+
+        Promise.all(promises).then(results => {
+          results.forEach((res) => {
+            res.features.forEach((feature) => {
+              if (!filters.find((filter) => filter.label === feature.attributes[layer.filterField[language]].trim().length)) {
+                filters.push({label: feature.attributes[layer.filterField[language]], value: feature.attributes[layer.filterField[language]]});
+              }
+            });
+          });
+
+          this.inputSelect.state = {
+            inputValue: '',
+            menuIsOpen: false,
+            value: null
+          };
+
+          this.setState({
+            filters: filters,
+            value: 'None Selected'
+          });
+
+        });
+      }
+    }
+  }
 
   onSelectFilter = (option) => {
 
@@ -120,12 +179,20 @@ export default class LayerFieldFilter extends Component {
     }
 
     mapActions.setActiveFilters({layerId: layer.id, value});
+
+    this.setState({
+      value
+    });
   }
 
   render () {
-    const { filters } = this.state;
+    const { filters, value } = this.state;
     const { language } = this.context;
     const { layer } = this.props;
+
+    filters.forEach(filter => {
+      filter.selected = filter.value === value;
+    });
 
     return (
       <div className='layer-field-filter'>
@@ -141,6 +208,7 @@ export default class LayerFieldFilter extends Component {
                 isSearchable={true}
                 className={'layer-field-filter-select'}
                 isClearable={true}
+                ref={el => this.inputSelect = el}
               />
             </div>
           </div>

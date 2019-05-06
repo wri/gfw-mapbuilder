@@ -204,7 +204,7 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       Object.keys(resources.layerPanel).forEach((group) => {
         const configs = resources.layerPanel[group].layers;
         layerConfig = configs && configs.find((c) => c.id === layer.id);
-        if (layerConfig) {
+        if (layerConfig && layerConfig.filterField) {
           filterField = layerConfig.filterField[language];
         }
       });
@@ -215,14 +215,16 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
         groups.forEach((group) => {
           const configs = resources.layerPanel[group].layers;
           const layerVersionConfig = configs && configs.find((c) => c.id === layer.id);
-          if (layerVersionConfig) {
+          if (layerVersionConfig && layerVersionConfig.versions) {
             versionConfig = layerVersionConfig.versions[versions[layer.id]];
           }
         });
         // Update the layer config object to include active version url / layerIds
         if (versionConfig) {
           layer.url = versionConfig.url;
-          if (versionConfig.layerIds) { layer.layerIds = versionConfig.layerIds; }
+          if (versionConfig.layerIds) {
+            layer.layerIds = versionConfig.layerIds;
+          }
         }
         console.log(layer.layerIds, versionConfig.layerIds);
 
