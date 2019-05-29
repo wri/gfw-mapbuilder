@@ -71,7 +71,7 @@
 			"type": "string",
 			"stringFieldOption": "richtext",
 			"fieldName": "narrative",
-			"label": "Enter a narrative about your map to give your users some insight about it.",
+			"label": "Enter a narrative about your map to give your users some insight about it. (optional)",
 			"tooltip": "This will be visible in the table of contents.",
 			"placeholder": "Explore this map to discover ..."
 		},
@@ -182,7 +182,7 @@
 				"type": "string",
 				"stringFieldOption": "richtext",
 				"fieldName": "alternativeNarrative",
-				"label": "Enter a narrative about your map to give your users some insight about it.",
+				"label": "Enter a narrative about your map to give your users some insight about it. ",
 				"tooltip": "This will be visible in the table of contents.",
 				"placeholder": "Explore the Forest Atlas of Cameroon to discover ..."
 			},
@@ -295,34 +295,34 @@
 		{
 			"type": "string",
 			"fieldName": "iso",
-			"label": "ISO Code for your mask layer",
-			"tooltip": "Please enter the 3-digit ISO code of your country atlas",
+			"label": "ISO Code for your mask layer (optional)",
+			"tooltip": "Please enter the 3-digit ISO code of your country of focus",
 			"placeholder": "e.g. CMR or COD"
 		},
 		{
 			"type": "string",
 			"fieldName": "mapThemeIds",
-			"label": "Enter a semi-colon separated list of web app ID's(Map Themes) for other Forest Atlas applications.",
+			"label": "Enter a semi-colon separated list of web app ID's(Map Themes) for other GFW MapBuilder applications. (optional)",
 			"tooltip": "These will be linked to from within your application under the Map Themes header.",
 			"placeholder": "e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19"
 		},
 		{
 			"type": "string",
 			"fieldName": "mapThemes",
-			"label": "Enter a semi-colon separated list of names for the app ID's configured above(Map Themes).",
+			"label": "Enter a semi-colon separated list of names for the app ID's configured above(Map Themes). (optional)",
 			"tooltip": "These will be visible when you hover over map themes and take you to the app added above.",
 			"placeholder": "e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea"
 		},
 		{
 			"type": "string",
 			"fieldName": "analyticsCode",
-			"label": "Google Analytics code",
+			"label": "Google Analytics code (optional)",
 			"tooltip": "Please enter the google analytics code for your project"
 		},
 		{
 			"type": "boolean",
 			"fieldName": "includeMyGFWLogin",
-			"tooltip": "This will include/exclude the myGFW login and GFW alert  subscriptions",
+			"tooltip": "This will include/exclude the myGFW login and GFW alert subscription tools",
 			"label": "Include myGFW login and alert subscriptions",
 			"value": true
 		},
