@@ -75,7 +75,7 @@ export default class LayerFieldFilter extends Component {
       const promises = [];
 
       layer.layerIds.forEach((id) => {
-        const url = layer.url + '/' + layer.layerIds[id];
+        const url = layer.url + '/' + id;
         const queryTask = new QueryTask(url);
         const query = new Query();
         query.where = '1=1';
@@ -88,7 +88,7 @@ export default class LayerFieldFilter extends Component {
       Promise.all(promises).then(results => {
         results.forEach((res) => {
           res.features.forEach((feature) => {
-            if (!filters.find((filter) => filter.label === feature.attributes[layer.filterField[language]].trim().length)) {
+            if (!filters.find((filter) => feature.attributes[layer.filterField[language]] && filter.label === feature.attributes[layer.filterField[language]].trim().length)) {
               filters.push({label: feature.attributes[layer.filterField[language]], value: feature.attributes[layer.filterField[language]]});
             }
           });
