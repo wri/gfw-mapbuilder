@@ -198,7 +198,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
       // Check for active versions matching the layer id
-      console.log('here', versions);
 
       let layerConfig, filterField;
       Object.keys(resources.layerPanel).forEach((group) => {
@@ -892,7 +891,7 @@ const handleTcdParams = (paramsObject) => {
 
 const runAnalysis = function runAnalysis (params, feature) {
   const { settings } = params;
-  const { language } = settings;
+  const language = params.lang;
 
   let analysisModules;
   const stringMods = localStorage.getItem('analysisMods');
