@@ -39,20 +39,15 @@ export default class VegaChart extends Component {
           this.handleError('Error creating analysis.');
         } else {
           res.json().then(json => {
-            
                 charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
-            
                 const downloadOptions = [];
                 const downloadUrls = json.data.attributes.downloadUrls;
-                if (downloadUrls) {
-                  const labels = Object.keys(downloadUrls);
-                  labels.forEach((label) => {
-                    downloadOptions.push({label, url: downloadUrls[label]});
-                  });
+                if (downloadUrls && !config.title) {
+                  const label = 'csv';
+                  downloadOptions.push({label, url: downloadUrls[label]});
                 }
                 const chartDownloadTitle = json.data.type + '-analysis.png';
                 this.setState({ downloadOptions, chartDownloadTitle });
-  
               });
           }
         })
