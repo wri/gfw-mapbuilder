@@ -370,14 +370,23 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, callback) => {
+  makeVegaChart: (el, config, language, callback) => {
+    if (config.signals && config.signals.length > 0){
+        const signalLanguage = config.signals.find(signal => signal.name === 'language');
+        const signalIndex = config.signals.findIndex(signal => signal.name === 'language');
+        if (signalLanguage && signalLanguage.value !== language) {
+            config.signals[signalIndex].value = language;
+        }
+	}
     new vega.View(vega.parse(config))
       .renderer('canvas')
       .initialize(el)
       .hover()
       .run();
 
-    if (callback) { callback(); }
+    if (callback) { callback(); 
+     //Put error handling somewhere here!
+    }
   },
 
 	/**

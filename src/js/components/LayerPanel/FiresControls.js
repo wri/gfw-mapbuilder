@@ -88,6 +88,7 @@ export default class FiresControls extends React.Component {
   }
 }
 
+
 const StartButton = ({ onClick, value }) => (
   <button
     className='fa-button sml white pointer'

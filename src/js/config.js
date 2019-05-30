@@ -143,6 +143,7 @@ const config = {
 
   //- Analysis for individual layers are defined below so we can use common keys
   //- Generic/Modules config is here
+  //- Since switching to Vega widgets, we no longer use the config analyses below!
   analysis: {
     apiUrl: 'https://production-api.globalforestwatch.org/v1/geostore',
     imageService: analysisImageService,
@@ -191,15 +192,15 @@ config.analysis[analysisKeys.GLAD_ALERTS] = {
     '2016': 4,
     '2017': 9
   },
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/dae27aaf-6dc6-4cc4-ac65-9901ed3f162b',
   startDate: '2015',
   endDate: new Date().getFullYear()
 };
 
-config.analysis[analysisKeys.TERRA_I_ALERTS] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
-};
+// config.analysis[analysisKeys.TERRA_I_ALERTS] = {
+//   url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
+//   analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
+// };
 
 config.analysis[analysisKeys.BIO_LOSS] = {
   // id: '$524',
@@ -221,7 +222,7 @@ config.analysis[analysisKeys.BIO_LOSS] = {
     loss: '#FF6699',
     carbon: '#BEBCC2'
   },
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/https://production-api.globalforestwatch.org/widget/937a74e7-f616-4d1d-91b3-e69c68e278aa',
   startDate: '2001',
   endDate: '2014'
 };
@@ -239,7 +240,7 @@ config.analysis[analysisKeys.SLOPE] = {
 config.analysis[analysisKeys.TC_LOSS_GAIN] = {
   lossRaster: '$530',
   gainRaster: '$527',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain'
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/e6c01eff-0d79-4865-a431-65d6adb89589'
 };
 
 config.analysis[analysisKeys.TC_LOSS] = {
@@ -252,11 +253,19 @@ config.analysis[analysisKeys.TC_LOSS] = {
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/97b82853-d9fb-4e74-b9b3-2fac7937f38f',
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
+};
+
+config.analysis[analysisKeys.LCC] = {
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/65dc8170-0049-48e7-94ba-fa846fcb295c',
+};
+
+config.analysis[analysisKeys.IFL] = {
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/d0d22aeb-9642-4c4d-a310-f7fb95a48c21',
 };
 
 export const mapConfig = config.map;

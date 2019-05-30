@@ -10,7 +10,9 @@ export default class VegaChart extends Component {
 
   handleError(errorMsg) {
     this.setState({ isError: true, errorMsg });
-    this.props.setLoading();
+    if (this.props.setLoading) {
+      this.props.setLoading();
+    }
   }
 
   componentDidMount() {
@@ -18,19 +20,23 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      const url = config.data[0].url;
-
-      fetch(url).then(res => {
+      const {setLoading, language} = this.props;
+      if (config.data[0].url.indexOf('?&') > -1){
+        const urlPieces = config.data[0].url.split('?&');
+        config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
+      }
+      fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
         } else {
           res.json().then(json => {
             // We used to have this 'json' object for validation and error-checking, but now
             // we leave that up to the Widget API!
-            charts.makeVegaChart(this.chart, config, this.props.setLoading);
+            /* makeVegaChart also makes a request call to the API - Maybe refactor this
+            and remove the fetch call here and put error handling inside of Vega? */
+            charts.makeVegaChart(this.chart, config, language, setLoading);
           });
         }
-
       }).catch(() => {
         this.handleError('Error creating analysis.');
       });
