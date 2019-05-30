@@ -62,7 +62,6 @@ export default class VegaChart extends Component {
 
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
-    //this.props.setLoading();
   };
 
   renderdownloadOptions = (option, i) => {
