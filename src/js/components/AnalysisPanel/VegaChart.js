@@ -19,7 +19,9 @@ export default class VegaChart extends Component {
 
   handleError(errorMsg) {
     this.setState({ isError: true, errorMsg });
-    this.props.setLoading();
+    if (this.props.setLoading) {
+      this.props.setLoading();
+    }
   }
 
   componentDidMount() {
@@ -27,35 +29,32 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      const url = config.data[0].url;
-      fetch(url)
-        .then(res => {
-          if (res.status !== 200) {
-            this.handleError('Error creating analysis.');
-          }
-
+      const {setLoading, language} = this.props;
+      if (config.data[0].url.indexOf('?&') > -1){
+        const urlPieces = config.data[0].url.split('?&');
+        config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
+      }
+      fetch(config.data[0].url).then(res => {
+        if (res.status !== 200) {
+          this.handleError('Error creating analysis.');
+        } else {
           res.json().then(json => {
-            if (json.data){
-              const values = json.data.attributes.value;
-              if (values.length) {
-                charts.makeVegaChart(this.chart, config, this.addChartDownload);
-              } else {
-                this.handleError('No results for this analysis.' );
-              }
-
-              const downloadOptions = [];
-              const downloadUrls = json.data.attributes.downloadUrls;
-              if (downloadUrls) {
-                const labels = Object.keys(downloadUrls);
-                labels.forEach((label) => {
-                  downloadOptions.push({label, url: downloadUrls[label]});
-                });
-              }
-              const chartDownloadTitle = json.data.type + '-analysis.png';
-              this.setState({ downloadOptions, chartDownloadTitle });
-
-            }
-          });
+            
+                charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
+            
+                const downloadOptions = [];
+                const downloadUrls = json.data.attributes.downloadUrls;
+                if (downloadUrls) {
+                  const labels = Object.keys(downloadUrls);
+                  labels.forEach((label) => {
+                    downloadOptions.push({label, url: downloadUrls[label]});
+                  });
+                }
+                const chartDownloadTitle = json.data.type + '-analysis.png';
+                this.setState({ downloadOptions, chartDownloadTitle });
+  
+              });
+          }
         })
         .catch(() => this.handleError('Error creating analysis.'));
       }
@@ -63,8 +62,8 @@ export default class VegaChart extends Component {
 
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
-    this.props.setLoading();
-  }
+    //this.props.setLoading();
+  };
 
   renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;

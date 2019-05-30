@@ -138,7 +138,7 @@ export default class LayerCheckbox extends Component {
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
-        {onEdit && this.props.checked && <span className='fa-button sml white layer-edit' onClick={onEdit}>Edit</span>}
+        {onEdit && this.props.checked && <div className='fa-button sml white layer-edit' onClick={onEdit}><span className='layer-edit-text'>Edit</span></div>}
 
         <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <SVGIcon id={'shape-info'} />

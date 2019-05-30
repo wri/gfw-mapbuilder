@@ -82,15 +82,36 @@ describe('resources layer spec', () => {
         expect(typeof layer.layerName).toBe('string');
       });
     }
-    it(`layer ${layer.id} has the required properties`, () => {
-      if (layer.type !== 'imagery') {
-        expect(layer).toHaveProperty('url');
+    if (layer.type !== 'remoteDataLayer') {
+      it(`layer ${layer.id} has the required properties`, () => {
+        if (layer.type !== 'imagery' && !layer.versions) {
+          expect(layer).toHaveProperty('url');
+        }
+        expect(layer).toHaveProperty('id');
+        expect(layer).toHaveProperty('type');
+        expect(layer).toHaveProperty('label');
+        expect(layer.label).toHaveProperty(resources.language);
+        if (layer.filterField) {
+          expect(layer.type === 'feature' || layer.type === 'dynamic').toBeTruthy();
+          expect(layer).toHaveProperty('url');
+          expect(typeof layer.filterField).toBe('object');
+          expect(layer).toHaveProperty('filterLabel');
+          expect(typeof layer.filterLabel).toBe('object');
+        }
+      });
+    } else {
+      if (layer.versions) {
+        expect(typeof layer.versions).toBe('array');
+        layer.versions.forEach((version) => {
+          expect(version).toHaveProperty('url');
+          expect(version).toHaveProperty('label');
+        });
+
       }
-      expect(layer).toHaveProperty('id');
+      expect(layer).toHaveProperty('order');
       expect(layer).toHaveProperty('type');
-      expect(layer).toHaveProperty('label');
-      expect(layer.label).toHaveProperty(resources.language);
-    });
+      expect(layer).toHaveProperty('uuid');
+    }
   });
 
   // resources.layerPanel.GROUP_LCD.layers.forEach((layer) => {

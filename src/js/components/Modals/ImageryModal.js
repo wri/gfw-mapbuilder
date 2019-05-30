@@ -339,7 +339,7 @@ export default class ImageryModal extends Component {
 
             {!loadingImagery && !filteredImageryData.length &&
               <div className='imagery-modal__error'>
-                <p>No results match the selected critria.</p>
+                <p>No results match the selected criteria.</p>
               </div>
             }
             {filteredImageryData.map(this.renderThumbnails.bind(this))}

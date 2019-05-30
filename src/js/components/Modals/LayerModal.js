@@ -86,6 +86,7 @@ export default class Modal extends Component {
     const {info} = this.props;
     const theme = info && info.download_data ? '' : 'no-download';
     const content = !info ? <div className='no-info-available'>{text[language].NO_INFO}</div> :
+
       // (info.title && info.hasOwnProperty('subtitle') ?
       //   this.renderFromMetadataAPI(info) :
       //   this.renderFromMapService(info)
