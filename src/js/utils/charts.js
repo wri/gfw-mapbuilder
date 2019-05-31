@@ -370,23 +370,29 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, language, callback) => {
-    if (config.signals && config.signals.length > 0){
+  makeVegaChart: (el, config, language, loadingCallback, downloadCallback) => {
+    if (config.signals && config.signals.length > 0) {
         const signalLanguage = config.signals.find(signal => signal.name === 'language');
         const signalIndex = config.signals.findIndex(signal => signal.name === 'language');
         if (signalLanguage && signalLanguage.value !== language) {
             config.signals[signalIndex].value = language;
         }
-	}
-    new vega.View(vega.parse(config))
-      .renderer('canvas')
-      .initialize(el)
-      .hover()
-      .run();
-
-    if (callback) { callback(); 
-     //Put error handling somewhere here!
     }
+
+    new vega.View(vega.parse(config))
+    .renderer('canvas')
+    .initialize(el)
+    .hover()
+    .run()
+    .toImageURL('png')
+    .then((url) => {
+      if (downloadCallback) {
+        downloadCallback(url);
+      }
+      if (loadingCallback){
+        loadingCallback();
+      }
+    });
   },
 
 	/**

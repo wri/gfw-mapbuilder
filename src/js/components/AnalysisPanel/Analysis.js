@@ -25,6 +25,7 @@ import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 import moment from 'moment';
 import text from 'js/languages';
+
 import React, {
   Component,
   PropTypes
@@ -620,7 +621,7 @@ export default class Analysis extends Component {
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent} = this.state;
+    const { isLoading, chartComponent, showDownloadOptions} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
@@ -677,7 +678,7 @@ export default class Analysis extends Component {
               {this.getFormComponents(activeAnalysisType, settings.analysisModules)}
             </div>
           }
-          {chartComponent &&
+          {chartComponent && !showDownloadOptions &&
             <div className='analysis-results__chart-component-container'>
               {slopeSelect}
               {chartComponent}
