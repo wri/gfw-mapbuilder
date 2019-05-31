@@ -64,7 +64,7 @@ export default class VegaChart extends Component {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
       <a href={baseUrl + option.url} download key={`option-${i}`}>
-        Download data as <span className='download-option-label'>{option.label}</span>
+        <span className='download-option-label'>Download Alerts as .CSV</span>
       </a>
     );
   };
@@ -92,7 +92,7 @@ export default class VegaChart extends Component {
                 {downloadOptions.map(this.renderdownloadOptions)}
                 {this.chart &&
                   <a href={chartImgDownloadUrl} download={chartDownloadTitle}>
-                    Download data as <span className='download-option-label'>PNG</span>
+                    <span className='download-option-label'>Download PNG</span>
                   </a>
                 }
               </div> }
