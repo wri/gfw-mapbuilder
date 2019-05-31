@@ -34,25 +34,26 @@ export default class VegaChart extends Component {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
       }
+
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
         } else {
           res.json().then(json => {
-                charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
-                const downloadOptions = [];
-                const downloadUrls = json.data.attributes.downloadUrls;
-                if (downloadUrls && !config.title) {
-                  const label = 'csv';
-                  downloadOptions.push({label, url: downloadUrls[label]});
-                }
-                const chartDownloadTitle = json.data.type + '-analysis.png';
-                this.setState({ downloadOptions, chartDownloadTitle });
-              });
-          }
-        })
-        .catch(() => this.handleError('Error creating analysis.'));
-      }
+            charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
+            const downloadOptions = [];
+            const downloadUrls = json.data.attributes.downloadUrls;
+            if (downloadUrls && !config.title) {
+              const label = 'csv';
+              downloadOptions.push({label, url: downloadUrls[label]});
+            }
+            const chartDownloadTitle = json.data.type + '-analysis.png';
+            this.setState({ downloadOptions, chartDownloadTitle });
+          });
+        }
+      })
+      .catch(() => this.handleError('Error creating analysis.'));
+    }
   }
 
   addChartDownload = (url) => {
