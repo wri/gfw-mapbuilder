@@ -18,7 +18,9 @@ export default class FiresControls extends React.Component {
   constructor(props) {
     super(props);
 
-    this.min = props.layer.id === 'VIIRS_ACTIVE_FIRES' ? moment(new Date('2016', 0, 8)) : moment(new Date('2012', 0, 1));
+    const currentDate = new Date();
+    const oneYearAgo = currentDate.setFullYear(currentDate.getFullYear() - 1);
+    this.min = moment(oneYearAgo);
     const max = new Date();
     this.max = moment(max);
   }

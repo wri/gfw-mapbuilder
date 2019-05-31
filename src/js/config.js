@@ -253,12 +253,12 @@ config.analysis[analysisKeys.TC_LOSS] = {
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8',
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer/0',
   analysisUrl: 'https://production-api.globalforestwatch.org/widget/97b82853-d9fb-4e74-b9b3-2fac7937f38f',
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer/21'
 };
 
 config.analysis[analysisKeys.LCC] = {
