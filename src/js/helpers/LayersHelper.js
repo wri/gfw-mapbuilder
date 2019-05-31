@@ -2,6 +2,7 @@ import layerKeys from 'constants/LayerConstants';
 import rasterFuncs from 'utils/rasterFunctions';
 import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
+import {shortTermServices} from '../config';
 
 const LayersHelper = {
 
@@ -32,10 +33,52 @@ const LayersHelper = {
   * @param {number} optionIndex - Index of the selected option in the UI, see js/config
   * @param {boolean} dontRefresh - Whether or not to not fetch a new image
   */
-  updateFiresLayerDefinitions (startDate, endDate, layer, dontRefresh) {
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, dontRefresh) {
+    debugger;
     if (brApp.map) {
-      const queryString = this.generateFiresQuery(startDate, endDate);
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
+      console.log('fires layer', firesLayer);
+      if (selectValue){
+        if (firesLayer){
+          const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? "viirs" : "modis";
+        // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
+      // We are hiding and showing the layer to avoid calling the service multiple times.
+      
+      firesLayer.hide();
+      const layaDefs = [];
+      switch(selectValue) {
+        case "0": //past 24 hours
+          firesLayer.url = shortTermServices[`${fireID}24HR`].url;
+          firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+          firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+          break;
+        case "1": //past 48 hours
+          firesLayer.url = shortTermServices[`${fireID}48HR`].url;
+          firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+          firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+          break;
+        case "2": //past 72 hours
+          firesLayer.url = shortTermServices[`${fireID}7D`].url;
+          firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
+          firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+          layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`
+          //`Date > date'${new window.Kalendae.moment().subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+          break;
+        case "3": //past 7 days
+          firesLayer.url = shortTermServices[`${fireID}7D`].url;
+          firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
+          firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+          break;
+        default:
+          console.log('default');
+          break;
+      }
+      firesLayer.setLayerDefinitions(layaDefs);
+      firesLayer.refresh();
+      firesLayer.show();
+    }
+        }
+      const queryString = this.generateFiresQuery(startDate, endDate);
       const defs = [];
 
       if (firesLayer) {
