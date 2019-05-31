@@ -164,6 +164,34 @@ body
 
 .restoration__description
   padding 0 10px 10px
+  
+.vega-chart_download-options
+  overflow auto
+  max-height 110px
+  min-width 150px
+  display flex
+  flex-direction column
+  justify-content flex-start
+  border 0.75px solid #eee
+  z-index 2
+
+  a
+    width 100%
+    padding 8px 10px
+    text-decoration none
+    color #555
+    font-size 12px
+    background #fff
+    border-top 0.75px #eee solid
+
+  a:nth-child(1)
+    border none
+
+  a:hover
+    background #eee
+
+  .download-option-label
+    text-transform uppercase
 
 @media (max-width: $mobileBreak)
   .restoration-table
