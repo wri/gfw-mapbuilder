@@ -63,7 +63,7 @@ export default class VegaChart extends Component {
   renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
-      <a href={baseUrl + option.url} download key={`option-${i}`}>
+      <a href={option.url.includes('cartodb') ? option.url : baseUrl + option.url} download key={`option-${i}`}>
         <span className='download-option-label'>Download Alerts as .CSV</span>
       </a>
     );
