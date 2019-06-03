@@ -77,7 +77,8 @@ export default class FiresControls extends React.Component {
     const {language} = this.context;
     const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
     return (
-        <div className="active-fires-controls">
+      <div>
+        <div className="active-fires-controls-container">
           <div className="active-fires-time-range timeline-container imazon-controls flex">
             <div className='relative'>
               <select
@@ -97,7 +98,9 @@ export default class FiresControls extends React.Component {
           >
             Custom Range
           </div>
+        </div>
           {customRange &&
+            <div className="active-fires-custom-range-container">
             <div className='fires active-fires-custom-range'>
               <div className='glad-controls__calendars'>
                 <div className='glad-controls__calendars--row'>
@@ -129,6 +132,7 @@ export default class FiresControls extends React.Component {
                   />
                 </div>
               </div>
+            </div>
             </div>
           }
         </div>
