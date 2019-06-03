@@ -82,12 +82,13 @@ export default class FiresControls extends React.Component {
           <div className="active-fires-time-range timeline-container imazon-controls flex">
             <div className='relative'>
               <select
+                className="pointer"
                 value={activeFireOption}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
               >
               {this.renderActiveFireOptions(this.fireOptions)}
               </select>
-              <div className='fa-button sml white'>{activeFireOptionLabel}</div>
+              <div className='fa-button sml white pointer'>{activeFireOptionLabel}</div>
             </div>
           </div>
           <div
