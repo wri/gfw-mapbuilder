@@ -5,9 +5,6 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
-let startCount = 0;
-
-let endCount = 0;
 export default class FiresControls extends React.Component {
 
   static contextTypes = {
@@ -20,16 +17,20 @@ export default class FiresControls extends React.Component {
 
     const currentDate = new Date();
     const oneYearAgo = currentDate.setFullYear(currentDate.getFullYear() - 1);
-    this.min = moment(oneYearAgo);
-    console.log('min', this.min);
     const max = new Date();
+
+    this.min = moment(oneYearAgo);
     this.max = moment(max);
-    console.log('max', this.max);
-    
-    
+    this.fireOptions = [
+      {label: '24HR', value: 0},
+      {label: '48HR', value: 1},
+      {label: '72HR', value: 2},
+      {label: '7D', value: 3}
+    ];
     this.state = {
       customRange: false,
-      activeFireOption: 0
+      activeFireOption: 0,
+      activeFireOptionLabel: '24HR'
     };
   }
 
@@ -57,51 +58,48 @@ export default class FiresControls extends React.Component {
     this.props.updateEndDate(endDate);
   }
   
-  renderActiveFireOptions = () => {
-    const fireOptions = [
-    {label: '24HR', value: 0},
-    {label: '48HR', value: 1},
-    {label: '72HR', value: 2},
-    {label: '7D', value: 3}
-    ];
-    return fireOptions.map(fireOption => {
-      return <option value={fireOption.value}>{fireOption.label}</option>
+  renderActiveFireOptions = fireOptions => {
+    return fireOptions.map((fireOption, index) => {
+      return <option key={`option-${index}`} value={fireOption.value}>{fireOption.label}</option>
     });
   };
   
-  updateActiveFires = evt => {
+  updateActiveFires = (evt, fireOptions) => {
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
     this.setState({
-      activeFireOption: evt.target.value
+      activeFireOption: evt.target.value,
+      activeFireOptionLabel: fireOptions[evt.target.value].label
     });
   };
 
   render () {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
-    const {customRange} = this.state;
+    const {customRange, activeFireOptionLabel} = this.state;
 
     return (
-        <div>
-          <div className="select">
-            <select
-            value={this.state.activeFireOption}
-            onChange={evt => this.updateActiveFires(evt)}
-            >
-            {this.renderActiveFireOptions()}
-            </select>
-            
+        <div className="active-fires-controls">
+          <div className="active-fires-time-range timeline-container imazon-controls flex">
+            <div className='relative'>
+              <select
+                value={this.state.activeFireOption}
+                onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
+              >
+              {this.renderActiveFireOptions(this.fireOptions)}
+              </select>
+              <div className='fa-button sml white'>{activeFireOptionLabel}</div>
+            </div>
           </div>
-          <button
-          className="custom-range-button"
-          onClick={() => this.setState({
-            customRange: !customRange
-          })}
+          <div
+            className="fa-button sml white pointer"
+            onClick={() => this.setState({
+              customRange: !customRange
+            })}
           >
             Custom Range
-          </button>
+          </div>
           {customRange &&
-            <div className='fires'>
+            <div className='fires active-fires-custom-range'>
               <div className='glad-controls__calendars'>
                 <div className='glad-controls__calendars--row'>
                   <label>{text[language].TIMELINE_START}</label>

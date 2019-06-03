@@ -34,7 +34,6 @@ const LayersHelper = {
   * @param {boolean} dontRefresh - Whether or not to not fetch a new image
   */
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, dontRefresh) {
-    debugger;
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
       console.log('fires layer', firesLayer);
