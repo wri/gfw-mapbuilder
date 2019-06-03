@@ -61,7 +61,6 @@ const LayersHelper = {
           firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
           firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
           layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`
-          //`Date > date'${new window.Kalendae.moment().subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
           break;
         case "3": //past 7 days
           firesLayer.url = shortTermServices[`${fireID}7D`].url;

@@ -22,14 +22,14 @@ export default class FiresControls extends React.Component {
     this.min = moment(oneYearAgo);
     this.max = moment(max);
     this.fireOptions = [
-      {label: '24HR', value: 0},
-      {label: '48HR', value: 1},
-      {label: '72HR', value: 2},
-      {label: '7D', value: 3}
+      {label: '24HR', value: '0'},
+      {label: '48HR', value: '1'},
+      {label: '72HR', value: '2'},
+      {label: '7D', value: '3'}
     ];
     this.state = {
       customRange: false,
-      activeFireOption: 0,
+      activeFireOption: '0',
       activeFireOptionLabel: '24HR'
     };
   }
@@ -57,13 +57,13 @@ export default class FiresControls extends React.Component {
   handleEndChange = (endDate) => {
     this.props.updateEndDate(endDate);
   }
-  
+
   renderActiveFireOptions = fireOptions => {
     return fireOptions.map((fireOption, index) => {
-      return <option key={`option-${index}`} value={fireOption.value}>{fireOption.label}</option>
+      return <option key={`option-${index}`} value={fireOption.value}>{fireOption.label}</option>;
     });
   };
-  
+
   updateActiveFires = (evt, fireOptions) => {
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
     this.setState({
@@ -76,7 +76,6 @@ export default class FiresControls extends React.Component {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
     const {customRange, activeFireOptionLabel} = this.state;
-
     return (
         <div className="active-fires-controls">
           <div className="active-fires-time-range timeline-container imazon-controls flex">
