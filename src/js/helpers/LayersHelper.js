@@ -37,51 +37,58 @@ const LayersHelper = {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
       console.log('fires layer', firesLayer);
+      const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? "viirs" : "modis";
       if (selectValue){
-        if (firesLayer){
-          const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? "viirs" : "modis";
+        if (firesLayer) {
         // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
-      // We are hiding and showing the layer to avoid calling the service multiple times.
+        // We are hiding and showing the layer to avoid calling the service multiple times.
       
-      firesLayer.hide();
-      const layaDefs = [];
-      switch(selectValue) {
-        case "0": //past 24 hours
-          firesLayer.url = shortTermServices[`${fireID}24HR`].url;
-          firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
-          firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
-          break;
-        case "1": //past 48 hours
-          firesLayer.url = shortTermServices[`${fireID}48HR`].url;
-          firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
-          firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
-          break;
-        case "2": //past 72 hours
-          firesLayer.url = shortTermServices[`${fireID}7D`].url;
-          firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-          firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-          layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`
-          break;
-        case "3": //past 7 days
-          firesLayer.url = shortTermServices[`${fireID}7D`].url;
-          firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-          firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-          break;
-        default:
-          console.log('default');
-          break;
-      }
-      firesLayer.setLayerDefinitions(layaDefs);
-      firesLayer.refresh();
-      firesLayer.show();
-    }
+        firesLayer.hide();
+        const layaDefs = [];
+        switch(selectValue) {
+          case "0": //past 24 hours
+            firesLayer.url = shortTermServices[`${fireID}24HR`].url;
+            firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+            firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+            break;
+          case "1": //past 48 hours
+            firesLayer.url = shortTermServices[`${fireID}48HR`].url;
+            firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+            firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+            break;
+          case "2": //past 72 hours
+            firesLayer.url = shortTermServices[`${fireID}7D`].url;
+            firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
+            firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+            layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`
+            break;
+          case "3": //past 7 days
+            firesLayer.url = shortTermServices[`${fireID}7D`].url;
+            firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
+            firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+            break;
+          default:
+            console.log('default');
+            break;
         }
-      const queryString = this.generateFiresQuery(startDate, endDate);
-      const defs = [];
-
-      if (firesLayer) {
-        firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-        firesLayer.setLayerDefinitions(defs, dontRefresh);
+        firesLayer.setLayerDefinitions(layaDefs);
+        firesLayer.refresh();
+        firesLayer.show();
+        }
+      }
+      else {
+        const queryString = this.generateFiresQuery(startDate, endDate);
+        const defs = [];
+        if (firesLayer) {
+          if(firesLayer.url !== shortTermServices[`${fireID}1YR`].url){
+            firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+            firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+            firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+          }
+          firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+          firesLayer.setLayerDefinitions(defs, dontRefresh);
+          
+        }
       }
     }
   },
