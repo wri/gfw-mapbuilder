@@ -805,9 +805,9 @@ export default {
           "order": 6,
           "id": "VIIRS_ACTIVE_FIRES",
           "type": "dynamic",
-          "url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer",
+          "url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer",
           "technicalName": "viirs_fires",
-          "layerIds": [8],
+          "layerIds": [21],
           "label": {
             "en": "VIIRS Active Fires",
             "fr": "Feux actifs",
@@ -872,9 +872,9 @@ export default {
           "order": 7,
           "id": "MODIS_ACTIVE_FIRES",
           "type": "dynamic",
-          "url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer",
+          "url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_24hrs/MapServer",
           "technicalName": "firms_active_fires",
-          "layerIds": [9],
+          "layerIds": [21],
           "label": {
             "en": "MODIS Active Fires",
             "fr": "Feux actifs",

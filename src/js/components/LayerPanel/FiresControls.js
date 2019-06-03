@@ -75,13 +75,13 @@ export default class FiresControls extends React.Component {
   render () {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
-    const {customRange, activeFireOptionLabel} = this.state;
+    const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
     return (
         <div className="active-fires-controls">
           <div className="active-fires-time-range timeline-container imazon-controls flex">
             <div className='relative'>
               <select
-                value={this.state.activeFireOption}
+                value={activeFireOption}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
               >
               {this.renderActiveFireOptions(this.fireOptions)}
@@ -135,7 +135,6 @@ export default class FiresControls extends React.Component {
     );
   }
 }
-
 
 const StartButton = ({ onClick, value }) => (
   <button
