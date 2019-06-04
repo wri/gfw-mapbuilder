@@ -36,7 +36,6 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, dontRefresh) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      console.log('fires layer', firesLayer);
       const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? "viirs" : "modis";
       if (selectValue){
         if (firesLayer) {

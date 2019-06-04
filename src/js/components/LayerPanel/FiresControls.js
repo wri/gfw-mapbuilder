@@ -30,7 +30,7 @@ export default class FiresControls extends React.Component {
     this.state = {
       customRange: false,
       activeFireOption: '0',
-      activeFireOptionLabel: '24HR'
+      activeFireOptionLabel: 'Past 24 hours'
     };
   }
 
