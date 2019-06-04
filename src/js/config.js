@@ -3,6 +3,41 @@ import analysisKeys from 'constants/AnalysisConstants';
 const analysisImageService = 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
 
 const config = {
+  shortTermServices : {
+    modis24HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_24hrs/MapServer',
+      id: 21
+    },
+    modis48HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_48hrs/MapServer',
+      id: 21
+    },
+    modis7D: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer',
+      id: 21
+    },
+    modis1YR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer',
+      id: 21
+    },
+    viirs24HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer',
+      id: 21
+    },
+    viirs48HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_48hrs/MapServer',
+      id: 21
+    },
+    viirs7D: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer',
+      id: 21
+    },
+    viirs1YR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer',
+      id: 0
+    }
+  },
+  
   map: {
     options: {
       navigationMode: 'css-transforms',
@@ -253,12 +288,12 @@ config.analysis[analysisKeys.TC_LOSS] = {
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8',
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer/0',
   analysisUrl: 'https://production-api.globalforestwatch.org/widget/97b82853-d9fb-4e74-b9b3-2fac7937f38f',
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer/21'
 };
 
 config.analysis[analysisKeys.LCC] = {
@@ -278,3 +313,4 @@ export const layerInformation = config.layerInformation;
 export const modalText = config.modals;
 export const errors = config.errors;
 export const urls = config.urls;
+export const shortTermServices = config.shortTermServices;
