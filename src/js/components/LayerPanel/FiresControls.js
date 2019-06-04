@@ -68,7 +68,8 @@ export default class FiresControls extends React.Component {
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
     this.setState({
       activeFireOption: evt.target.value,
-      activeFireOptionLabel: fireOptions[evt.target.value].label
+      activeFireOptionLabel: fireOptions[evt.target.value].label,
+      customRange: false
     });
   };
 
@@ -94,7 +95,8 @@ export default class FiresControls extends React.Component {
           <div
             className="fa-button sml white pointer"
             onClick={() => this.setState({
-              customRange: !customRange
+              customRange: !customRange,
+              activeFireOptionLabel: 'Active Fires'
             })}
           >
             Custom Range
