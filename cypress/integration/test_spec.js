@@ -2,7 +2,7 @@
 describe('An actual test on our app', function () {
   it('Ensures our external constructor has the correct properties', function () {
 
-    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/index.html', {
+    cy.visit('https://my.gfw-mapbuilder.org/v1.latest/index.html', {
       onLoad: (winn) => {
         const app = winn.customApp;
         expect(app).to.not.be.an('undefined');
@@ -12,10 +12,6 @@ describe('An actual test on our app', function () {
 
         const el = config.el;
         expect(el).to.not.be.an('undefined');
-
-        const version = config.version;
-        expect(version).to.not.be.an('undefined');
-        expect(version).to.be.a('string');
 
         const cssPath = config.cssPath;
         if (cssPath) {
@@ -28,7 +24,7 @@ describe('An actual test on our app', function () {
 
   it('Tests our library constructor parameters', function () {
 
-    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/index.html', {
+    cy.visit('https://my.gfw-mapbuilder.org/v1.latest/index.html', {
 
       onLoad: (winn) => {
 
@@ -123,14 +119,15 @@ describe('An actual test on our app', function () {
               expect(layer).to.have.property('layerName');
               expect(layer.layerName).to.be.a('string');
             }
-            if (layer.type !== 'imagery') {
-              expect(layer).to.have.property('url');
+
+            if (layer.type === 'remoteDataLayer') {
+              expect(layer).to.have.property('uuid');
             }
 
             expect(layer).to.have.property('id');
             expect(layer).to.have.property('type');
-            expect(layer).to.have.property('label');
-            expect(layer.label).to.have.property(config.language);
+            // expect(layer).to.have.property('label');
+            // expect(layer.label).to.have.property(config.language);
           });
         }
 
