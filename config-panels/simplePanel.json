@@ -38,6 +38,9 @@
 		"hideFooter": false,
 		"includeMyGFWLogin": false,
 		"includeDocumentsTab": false,
-		"includeMeasurementTab": false
+		"includeMeasurementTab": false,
+    "mapThemeIds": "",
+    "mapThemes": "",
+    "alternativeMapThemes": ""
 	}
 }
