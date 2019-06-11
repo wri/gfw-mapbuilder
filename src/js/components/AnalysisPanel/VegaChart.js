@@ -39,10 +39,6 @@ export default class VegaChart extends Component {
           this.handleError('Error creating analysis.');
         } else {
           res.json().then(json => {
-                if (json.data.attributes.value.length > 400){
-                  return this.handleError('Geometry is too large for custom stats/download. Please try again with a smaller area of interest.');
-                }
-                console.log('json', json);
                 charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
                 const downloadOptions = [];
                 const downloadUrls = json.data.attributes.downloadUrls;
@@ -66,7 +62,7 @@ export default class VegaChart extends Component {
   renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
-      <a href={baseUrl + option.url} download key={`option-${i}`}>
+      <a href={baseUrl + option.url} target="_blank" download key={`option-${i}`}>
         Download data as <span className='download-option-label'>{option.label}</span>
       </a>
     );
