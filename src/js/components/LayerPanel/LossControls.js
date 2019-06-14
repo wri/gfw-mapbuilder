@@ -102,7 +102,9 @@ export default class LossControls extends Component {
   }
 
   componentWillUnmount () {
-    if (this.timer) clearInterval(this.timer);
+    if (this.timer) {
+    clearInterval(this.timer);
+    }
   }
 
   updateDates (layer, fromYear, toYear) {

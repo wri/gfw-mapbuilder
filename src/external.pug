@@ -6,7 +6,7 @@ html
 	body.tundra
 		#root
 		div#share-modal.modal-wrapper.hidden
-		script(id='library-load' src='https://alpha.blueraster.io.s3.amazonaws.com/gfw-mapbuilder/287-new-download-build/1.3.4.js' version='1.3.4')
+		script(id='library-load' src='https://library.gfw-mapbuilder.org/1.3.4.js' version='1.3.4')
 		script.
 			var customApp = new MapBuilder({
 				el: 'root',
@@ -820,9 +820,9 @@ html
 									"order": 6,
 									"id": "VIIRS_ACTIVE_FIRES",
 									"type": "dynamic",
-									"url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer",
+									"url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer",
 									"technicalName": "viirs_fires",
-									"layerIds": [8],
+									"layerIds": [21],
 									"label": {
 										"en": "VIIRS Active Fires",
 										"fr": "Feux actifs",
@@ -849,28 +849,28 @@ html
 											"en": [{
 												"label": "Brightness",
 												"fieldExpression": "BRIGHTNESS"
-									},
-									{
-										"label": "Confidence",
-										"fieldExpression": "CONFIDENCE"
-									},
-									{
-										"label": "Latitude",
-										"fieldExpression": "LATITUDE"
-									},
-									{
-										"label": "Longitude",
-										"fieldExpression": "LONGITUDE"
-									},
-									{
-										"label": "Acquisition Date",
-										"fieldExpression": "ACQ_DATE:DateString(hideTime:true)"
-									},
-									{
-										"label": "Acquisition Time",
-										"fieldExpression": "ACQ_TIME"
-									}
-											]
+											},
+											{
+												"label": "Confidence",
+												"fieldExpression": "CONFIDENCE"
+											},
+											{
+												"label": "Latitude",
+												"fieldExpression": "LATITUDE"
+											},
+											{
+												"label": "Longitude",
+												"fieldExpression": "LONGITUDE"
+											},
+											{
+												"label": "Acquisition Date",
+												"fieldExpression": "ACQ_DATE:DateString(hideTime:true)"
+											},
+											{
+												"label": "Acquisition Time",
+												"fieldExpression": "ACQ_TIME"
+											}
+										]
 										},
 										"sublabel": {
 											"en": "(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)",
@@ -887,9 +887,9 @@ html
 									"order": 7,
 									"id": "MODIS_ACTIVE_FIRES",
 									"type": "dynamic",
-									"url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer",
+									"url": "https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_24hrs/MapServer",
 									"technicalName": "firms_active_fires",
-									"layerIds": [9],
+									"layerIds": [21],
 									"label": {
 										"en": "MODIS Active Fires",
 										"fr": "Feux actifs",
@@ -916,27 +916,27 @@ html
 											"en": [{
 												"label": "Brightness",
 												"fieldExpression": "BRIGHTNESS"
-										},
-										{
-											"label": "Confidence",
-											"fieldExpression": "CONFIDENCE"
-										},
-										{
-											"label": "Latitude",
-											"fieldExpression": "LATITUDE"
-										},
-										{
-											"label": "Longitude",
-											"fieldExpression": "LONGITUDE"
-										},
-										{
-											"label": "Acquisition Date",
-											"fieldExpression": "ACQ_DATE:DateString(hideTime:true)"
-										},
-										{
-											"label": "Acquisition Time",
-											"fieldExpression": "ACQ_TIME"
-										}
+												},
+												{
+													"label": "Confidence",
+													"fieldExpression": "CONFIDENCE"
+												},
+												{
+													"label": "Latitude",
+													"fieldExpression": "LATITUDE"
+												},
+												{
+													"label": "Longitude",
+													"fieldExpression": "LONGITUDE"
+												},
+												{
+													"label": "Acquisition Date",
+													"fieldExpression": "ACQ_DATE:DateString(hideTime:true)"
+												},
+												{
+													"label": "Acquisition Time",
+													"fieldExpression": "ACQ_TIME"
+												}
 											]
 										},
 										"sublabel": {

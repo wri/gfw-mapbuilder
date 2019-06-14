@@ -50,6 +50,7 @@ export default class LegendPanel extends Component {
 
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
+
     if (layer.metadata && layer.metadata.legendConfig && layer.metadata.legendConfig.type) {
       let visibility = activeLayers.indexOf(layer.id) > -1;
       if (typeof layer.visibleAtMapScale !== 'undefined') {
@@ -258,7 +259,7 @@ export default class LegendPanel extends Component {
       default:
         if (layer.hasOwnProperty('nestedLayers')) {
           childComponent = this.createNestedLegendGroups(layer);
-        } else if (layer.type === 'feature') {
+        } else if (layer.type === 'feature' && !layer.url) {
           childComponent = <WebMapFeatureLayerLegend
             key={layer.id}
             layer={layer}

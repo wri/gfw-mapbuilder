@@ -371,13 +371,14 @@ export default {
   },
 
   makeVegaChart: (el, config, language, loadingCallback, downloadCallback) => {
-    if (config.signals && config.signals.length > 0){
+    if (config.signals && config.signals.length > 0) {
         const signalLanguage = config.signals.find(signal => signal.name === 'language');
         const signalIndex = config.signals.findIndex(signal => signal.name === 'language');
         if (signalLanguage && signalLanguage.value !== language) {
             config.signals[signalIndex].value = language;
         }
-	}
+    }
+
     new vega.View(vega.parse(config))
     .renderer('canvas')
     .initialize(el)
