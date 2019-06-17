@@ -7,16 +7,21 @@ block append styles
 
 
 block append content
-  div.report.inner
-    header.report-header.flex
+  div.report
+    header.report-header
       div.report-header__logo-container
         a#logo-anchor(target='_blank')
-          img#logo.report-header__logo
+        img#logo.report-header__logo
       div.report-header__title-container
         h1#report-title.report-header__title
-        h2#report-subtitle.report-header__subtitle
+        div.report-header__icon-container
+          span.report-header__icon.report-header__icon-print
+          span.report-header__icon.report-header__icon-info
+          span.report-header__icon.report-header__icon-share
 
-    div#map.map
+    div.map-analysis-area-container
+      div#map.map
+      div.analysis-area
     div#popup-content.popup-content
     div#results-container.results-container
 

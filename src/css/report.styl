@@ -15,35 +15,85 @@ body
 //- Since this CSS is inlined, this will prevent the map from snapping down when
 //- the title gets injected
 .report-header
+  position absolute
+  background-color #555
+  box-sizing border-box
+  height $headerHeight
+  display flex
   width 100%
+  z-index 10
+  left 0
+  top 0
 
 .report-header__logo-container
-  padding 5px 10px 5px 0
+  // position: absolute
+  // left: 1rem
+  // top: 1.75rem
+  // z-index: 1000
+  padding 5px 10px 5px 20px
 
 .report-header__logo
   height 60px
 
 .report-header__title-container
-  flex-direction column
+  // flex-direction column
   align-items center
   display flex
-  flex-grow 1
+  flex-wrap nowrap
+  justify-content space-between
+  // flex-grow 1
+  // background-color #555
+  // padding 0.5rem 0
+  overflow hidden
+  padding-top 5px
+  width 100%
 
 .report-header__title
-  text-transform uppercase
+  color #fff
+  font-family "Fira GFW Sans", "Fira Sans"
+  white-space nowrap
+  line-height 25px
+  overflow hidden
+  font-size 20px
 
 .report-header__subtitle
   font-weight normal
   line-height 20px
 
+.report-header__icon-container
+  display flex
+  align-items center
+  
+.report-header__icon 
+  fill #eee
+  padding 0 0.5rem
+
+.report-header__icon:hover
+  fill #fff
+    
+.report-header__icon-print
+  background url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
+  height 25px
+  width 25px
+
 .feature-title
   min-height 30px
   margin 5px 0
 
+.map-analysis-area-container
+  display flex
+  flex-wrap nowrap
+
 .map
   margin 10px auto
   height 400px
-  width 100%
+  width 50%
+
+.analysis-area
+  margin 10px auto
+  height 400px
+  width 50%
+  background-color #eee
 
 .popup-content
   margin 20px auto
