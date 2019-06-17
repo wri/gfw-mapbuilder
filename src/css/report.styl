@@ -50,7 +50,6 @@ body
 
 .report-header__title
   color #fff
-  font-family "Fira GFW Sans", "Fira Sans"
   white-space nowrap
   line-height 25px
   overflow hidden
@@ -67,14 +66,14 @@ body
 .report-header__icon 
   fill #eee
   padding 0 0.5rem
-
-.report-header__icon:hover
-  fill #fff
-    
-.report-header__icon-print
-  background url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
   height 25px
   width 25px
+  &:hover
+    fill #fff
+
+// .report-header__icon-print
+//   background url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
+
 
 .feature-title
   min-height 30px
@@ -142,16 +141,25 @@ body
     width 20%
 
 .results-container
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  display flex
+  flex-direction column
+  align-items flex-start
   .results-chart
-    width 100%
     margin-top 100px
   .vega-chart
-    margin-top 30px
-
+    width 100%
+    margin 1rem
+    
+.vega-chart_download-container
+  display flex
+  flex-flow row
+  flex-wrap wrap
+  align-items center
+  justify-content space-between
+  width 100%
+  .pointer
+    margin-left auto
+    
 // Restoration Module Styling
 .results__restoration
 .results__slope
@@ -215,27 +223,27 @@ body
 .restoration__description
   padding 0 10px 10px
   
+.vega-chart-label
+  text-transform uppercase
+  text-align left 
+  
 .vega-chart_download-options
+  flex 0 1 100%
   overflow auto
   max-height 110px
   min-width 150px
   display flex
   flex-direction column
-  justify-content flex-start
-  border 0.75px solid #eee
+  justify-content flex-end
   z-index 2
-
   a
-    width 100%
     padding 8px 10px
     text-decoration none
     color #555
     font-size 12px
     background #fff
-    border-top 0.75px #eee solid
-
-  a:nth-child(1)
-    border none
+    border 0.75px solid #eee
+    margin-left auto
 
   a:hover
     background #eee

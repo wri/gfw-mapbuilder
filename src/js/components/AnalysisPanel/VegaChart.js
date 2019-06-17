@@ -72,7 +72,7 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl } = this.state;
     const { results } = this.props;
-
+    console.log('results', results);
     if (isError) {
       return (
         <div className='data-error'>
@@ -85,13 +85,14 @@ export default class VegaChart extends Component {
           { showDownloadOptions &&
             <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> }
           <div className='vega-chart_download-container'>
+            <h3 className="vega-chart-label">{results.data.attributes.name}</h3>
             <div className='pointer' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}><SVGIcon id={'icon-menu'} /></div>
 
             { showDownloadOptions &&
-              <div className='vega-chart_download-options shadow' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+              <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                 {downloadOptions.map(this.renderdownloadOptions)}
                 {this.chart &&
-                  <a href={chartImgDownloadUrl} download={chartDownloadTitle}>
+                  <a className="download-option" href={chartImgDownloadUrl} download={chartDownloadTitle}>
                     <span className='download-option-label'>Download PNG</span>
                   </a>
                 }

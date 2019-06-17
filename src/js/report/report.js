@@ -36,6 +36,7 @@ import TimeSeriesChart from 'components/AnalysisPanel/TimeSeriesChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
+import SVGIcon from 'utils/svgIcon';
 
 let map;
 
@@ -518,6 +519,13 @@ const addHeaderContent = function addHeaderContent (params) {
   //- TODO: This should be modified, logoUrl should come from querying the appid instead of the url since that is safer
   document.getElementById('logo').setAttribute('src', logoUrl);
   document.getElementById('logo-anchor').setAttribute('href', logoLinkUrl);
+  document.getElementById('report-icons').innerHTML =
+  <div>
+    <SVGIcon id={'icon-print'} />
+    <SVGIcon id={'shape-info'} />
+    <SVGIcon id={'icon-share'} />
+  </div>;
+  
 };
 
 const addTitleAndAttributes = function addTitleAndAttributes (params, featureInfo) {
@@ -540,7 +548,7 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
         if (mapLayer && mapLayer.infoTemplate) {
           const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
 
-          document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
+          //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
 
           const fragment = document.createDocumentFragment();
 
@@ -566,15 +574,15 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
 
           });
         } else {
-          document.getElementById('report-subtitle').innerHTML = featureInfo.title;
+          //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
         }
       } else {
-          document.getElementById('report-subtitle').innerHTML = featureInfo.title;
+          //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
       }
 
     });
   } else {
-    document.getElementById('report-subtitle').innerHTML = featureInfo.title;
+   //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
   }
 };
 
@@ -912,6 +920,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   // params that were passed into the report
 
   analysisModules.forEach((module) => {
+    console.log('module', module);
     let uiParamsToAppend = {};
 
     if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {
@@ -943,10 +952,13 @@ const runAnalysis = function runAnalysis (params, feature) {
 
     if (module.useGfwWidget) {
       module.chartType = 'vega';
-
       const div = document.createElement('div');
       div.id = module.analysisId + '_div';
       div.classList.add('vega-chart');
+      //const label = document.createElement('h3');
+      //label.classList.add('vega-chart-label');
+      //label.innerHTML = module.label.en;
+      //resultsContainer.appendChild(label);
       resultsContainer.appendChild(div);
       analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
 
