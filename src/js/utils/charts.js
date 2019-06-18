@@ -374,6 +374,7 @@ export default {
   },
 
   makeVegaChart: (el, config, callback, selectedAttributes, id) => {
+    console.log('selectedAttributes', selectedAttributes);
     if (selectedAttributes) { // WCS Specific logic
 			const baseConfig = resources.analysisModules.find(mod => mod.widgetId === id);
       const baseUrl = config.data[0].url.split('?')[0];
@@ -390,7 +391,8 @@ export default {
 				return `${fieldName}=${value}`;
 			}).join('&'));
 
-			console.log('queryParams', queryParams)
+			console.log('queryParams', queryParams);
+      // debugger
 
       function render(spec) {
         new vega.View(vega.parse(spec))
@@ -400,8 +402,11 @@ export default {
           .run();
       }
 
+      const fakeUrl = 'https://measures.wcs.org/DesktopModules/WCSVega/API/Data/MapBuilderVegaSQL?polygonname=Nouabale-Ndoki%20NP&AnalysisID=WCS_SpeciesPopulationTrend_WCSBarChart2DropDown_%5bTabID%5d_%5bPortalID%5d_%5bLocale%5d___';
+
       esriRequest({
-        url: `${baseUrl}?${queryParams}`,
+        url: fakeUrl,
+        // url: `${baseUrl}?${queryParams}`,
         handleAs: 'json',
         callbackParamName: 'callback'
       }).then(res => {
