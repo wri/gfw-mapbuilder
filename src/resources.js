@@ -74,8 +74,9 @@ export default {
       "en": "Population trend analysis based on field surveys and peer reviewed papers"
     },
     "useGfwWidget": true,
-      "widgetId": "53a2ad48-46c2-41b0-9a72-8d6ef34131c9",
-    "uiParams": "none"
+    "widgetId": "53a2ad48-46c2-41b0-9a72-8d6ef34131c9",
+    "uiParams": "none",
+    "featureDataFieldsToPass": ['polygonname']
   }, {
     "analysisId": "FRAGMENTATION",
     "label": {
