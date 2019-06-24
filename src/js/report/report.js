@@ -989,11 +989,15 @@ const runAnalysis = function runAnalysis (params, feature) {
       //label.innerHTML = module.label.en;
       //resultsContainer.appendChild(label);
       resultsContainer.appendChild(div);
+      const infoDiv = document.createElement('div');
+      infoDiv.classList.add('vega-chart-info');
+      infoDiv.innerHTML = module.description[language];
       analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
-
+        
         const chartComponent = renderResults(results, language, module, params);
         const moduleDiv = document.getElementById(module.analysisId + '_div');
         ReactDOM.render(chartComponent, moduleDiv);
+        moduleDiv.appendChild(infoDiv);
       });
       return;
     }
