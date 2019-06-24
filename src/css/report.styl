@@ -65,6 +65,7 @@ body
   justify-content space-between
   flex-wrap nowrap
   flex-direction row
+  margin-right 1.25rem
   
 .report-header__icon 
   fill #eee
@@ -191,7 +192,9 @@ body
       color: #555
       padding: 0.5rem
       font-size x-small
-      width 100%
+      width: 75%
+      min-height 5rem
+      margin 0 auto
     
 .vega-chart_download-container
   display flex
@@ -200,8 +203,17 @@ body
   align-items center
   justify-content space-between
   width 100%
-  .pointer
+  .vega-chart-menu
     margin-left auto
+    display flex
+    align-items center
+    cursor pointer
+    .vega-chart-menu-icon
+      fill #555 !important
+    .vega-chart-menu-text
+      color #555
+      font-size x-small
+      margin 0 0.5rem
     
 // Restoration Module Styling
 .results__restoration
