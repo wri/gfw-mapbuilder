@@ -179,6 +179,9 @@ body
     display flex
     flex-wrap: nowrap;
     flex-direction: column;
+    .vega-chart-container 
+      border-top 1px solid #eee
+      padding-top 1rem
     canvas
       margin 0 auto
       display flex
@@ -188,13 +191,12 @@ body
       margin 0 auto
       display flex
     .vega-chart-info
-      border 1px solid #eee
       color: #555
       padding: 0.5rem
       font-size x-small
       width: 75%
-      min-height 5rem
       margin 0 auto
+      text-align center
     
 .vega-chart_download-container
   display flex
@@ -209,9 +211,11 @@ body
     align-items center
     cursor pointer
     .vega-chart-menu-icon
-      fill #555 !important
+      svg
+        path
+          fill #888 !important
     .vega-chart-menu-text
-      color #555
+      color #888
       font-size x-small
       margin 0 0.5rem
     

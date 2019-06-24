@@ -81,7 +81,7 @@ export default class VegaChart extends Component {
       );
     } else {
       return (
-        <div className='vega-chart_container'>
+        <div className='vega-chart-container'>
           { showDownloadOptions &&
             <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> }
           <div className='vega-chart_download-container'>
