@@ -174,12 +174,24 @@ body
     margin-top 100px
   .vega-chart
     width 100%
-    padding 1rem
+    padding 1rem 2rem
+    display flex
+    flex-wrap: nowrap;
+    flex-direction: column;
+    canvas
+      margin 0 auto
+      display flex
+      width 300px !important
+      height auto !important
+    .vega-bindings
+      margin 0 auto
+      display flex
     .vega-chart-info
       border 1px solid #eee
       color: #555
       padding: 0.5rem
       font-size x-small
+      width 100%
     
 .vega-chart_download-container
   display flex
