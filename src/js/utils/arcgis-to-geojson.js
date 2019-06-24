@@ -339,7 +339,7 @@ function geojsonToArcGIS (geojson, idAttribute) {
       }
       break;
   }
-  debugger
+
   return result;
 }
 
