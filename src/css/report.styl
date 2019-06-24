@@ -83,8 +83,7 @@ body
   height 1.25rem
   width 2rem
   margin-left 0.5rem
-
-
+  
 
 .feature-title
   min-height 30px
@@ -104,6 +103,22 @@ body
   height 400px
   width 50%
   background-color #eee
+  position relative
+  .analysis-area-subtitle 
+    position absolute
+    top 3rem
+    left 1rem 
+
+.analysis-area-list 
+  list-style none
+  position absolute
+  top 5rem
+  left 1rem
+  .analysis-area-list-item:before
+    content "•"
+    color #96BD3D
+    margin-right 0.5rem
+
 
 .popup-content
   margin 20px auto

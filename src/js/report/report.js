@@ -511,7 +511,8 @@ const setupMap = function setupMap (params, feature) {
 };
 
 const addHeaderContent = function addHeaderContent (params) {
-  const {title, logoUrl, logoLinkUrl} = params; // subtitle was in params
+  const {title, logoUrl, logoLinkUrl} = params; 
+  console.log('params', params);// subtitle was in params
 
   document.getElementById('report-title').innerHTML = `${title} Custom Analysis`;
   // document.getElementById('report-subtitle').innerHTML = subtitle;
@@ -539,9 +540,21 @@ const addHeaderContent = function addHeaderContent (params) {
       </svg>
     </svg>`;
   };
+  
+  const analysisArea = document.getElementById('analysis-area');
   document.getElementById('analysis-area').innerHTML = `
-    <h3>AREA OF ANALYSIS</h3>
+    <span class="analysis-area-subtitle">AREA OF ANALYSIS</span>
   `;
+  
+  const analysisAreaList = document.createElement('ul');
+  analysisAreaList.classList.add('analysis-area-list');
+  
+  const analysisAreaListItem = document.createElement('li');
+  analysisAreaListItem.classList.add('analysis-area-list-item');
+  analysisAreaListItem.innerHTML = `L1`;
+  
+  analysisAreaList.appendChild(analysisAreaListItem);
+  document.getElementById('analysis-area').appendChild(analysisAreaList);
 
 
 const addTitleAndAttributes = function addTitleAndAttributes (params, featureInfo) {
