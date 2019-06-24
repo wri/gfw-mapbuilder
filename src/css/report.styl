@@ -62,17 +62,28 @@ body
 .report-header__icon-container
   display flex
   align-items center
+  justify-content space-between
+  flex-wrap nowrap
+  flex-direction row
   
 .report-header__icon 
   fill #eee
-  padding 0 0.5rem
-  height 25px
-  width 25px
+  padding 0 0.25rem
+  height 2.5rem
+  width 2.5rem
+  cursor pointer
   &:hover
     fill #fff
 
-// .report-header__icon-print
-//   background url('https://my.gfw-mapbuilder.org/img/print-icon.svg') no-repeat center;
+.report-header__icon-print
+  height 2rem
+  width 2rem
+  
+.report-header__icon-info
+  height 1.25rem
+  width 2rem
+  margin-left 0.5rem
+
 
 
 .feature-title
@@ -250,6 +261,10 @@ body
 
   .download-option-label
     text-transform uppercase
+    
+.vega-chart_divider {
+  color #ddd
+}
 
 @media (max-width: $mobileBreak)
   .restoration-table
