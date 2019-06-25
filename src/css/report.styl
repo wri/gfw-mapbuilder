@@ -182,15 +182,14 @@ body
 .results-container
   .results-chart
     margin-top 100px
-  .vega-chart
-    width 100%
-    padding 1rem 2rem
-    display flex
+  .vega-chart-wrapper
+    display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
-    .vega-chart-container 
-      // border-top 1px solid #eee
-      // padding-top 1rem
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 2rem;
     canvas
       margin 0 auto
       display flex
@@ -213,30 +212,33 @@ body
       .data-error
         display flex
         justify-content center
-    
-.vega-chart_download-container
-  display flex
-  flex-flow row
-  flex-wrap wrap
-  align-items center
-  justify-content space-between
+
+.vega-chart_container
   width 100%
-  .vega-chart-menu
-    margin-left auto
+  .vega-chart_download-container
     display flex
+    flex-flow row
+    flex-wrap nowrap
     align-items center
-    cursor pointer
-    .vega-chart-menu-icon
-      svg
-        path
-          fill #888 !important
-    .vega-chart-menu-text
-      color #888
-      font-size x-small
-      margin 0 0.5rem
-      &:hover
-        text-decoration underline
-        text-decoration-color #888
+    justify-content space-between
+    width 100%
+    //margin 0 2rem
+    .vega-chart-menu
+      //margin-left auto
+      display flex
+      align-items center
+      cursor pointer
+      .vega-chart-menu-icon
+        svg
+          path
+            fill #888 !important
+      .vega-chart-menu-text
+        color #888
+        font-size x-small
+        margin 0 0.5rem
+        &:hover
+          text-decoration underline
+          text-decoration-color #888
     
 // Restoration Module Styling
 .results__restoration

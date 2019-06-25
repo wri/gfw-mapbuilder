@@ -983,7 +983,7 @@ const runAnalysis = function runAnalysis (params, feature) {
       module.chartType = 'vega';
       const div = document.createElement('div');
       div.id = module.analysisId + '_div';
-      div.classList.add('vega-chart');
+      div.classList.add('vega-chart-wrapper');
       
       const reportContainerDiv = document.createElement('div');
       reportContainerDiv.classList.add('report-container');
