@@ -1001,8 +1001,22 @@ const runAnalysis = function runAnalysis (params, feature) {
       infoContainerDiv.appendChild(infoDiv);
       
       const sectionDiv = document.createElement('div');
-      sectionDiv.classList.add('report-section');
-      sectionDiv.innerHTML = 'TEST';
+      //sectionDiv.classList.add('report-section');
+      
+      if (module.analysisId === 'TC_LOSS_GAIN') {
+        sectionDiv.classList.add('report-section');
+        sectionDiv.innerHTML = `<h1>Forest Change</h1>`;
+      }
+      
+      if (module.analysisId === 'VIIRS_FIRES') {
+        sectionDiv.classList.add('report-section');
+        sectionDiv.innerHTML = `<h1>Fires</h1>`;
+      }
+      
+      if (module.analysisId === 'GLAD_ALERTS') {
+        sectionDiv.classList.add('report-section');
+        sectionDiv.innerHTML = `<h1>Alerts</h1>`;
+      }
       
       analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
         const chartComponent = renderResults(results, language, module, params);
