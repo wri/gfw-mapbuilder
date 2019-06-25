@@ -3,6 +3,41 @@ import analysisKeys from 'constants/AnalysisConstants';
 const analysisImageService = 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
 
 const config = {
+  shortTermServices : {
+    modis24HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_24hrs/MapServer',
+      id: 21
+    },
+    modis48HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_48hrs/MapServer',
+      id: 21
+    },
+    modis7D: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer',
+      id: 21
+    },
+    modis1YR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer',
+      id: 21
+    },
+    viirs24HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer',
+      id: 21
+    },
+    viirs48HR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_48hrs/MapServer',
+      id: 21
+    },
+    viirs7D: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer',
+      id: 21
+    },
+    viirs1YR: {
+      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer',
+      id: 0
+    }
+  },
+  
   map: {
     options: {
       navigationMode: 'css-transforms',
@@ -27,17 +62,22 @@ const config = {
     'production-api.globalforestwatch.org/v1/ogr/convert',
     'api.resourcewatch.org',
     'gis.wri.org',
-    'tiles.globalforestwatch.org'
+    'tiles.globalforestwatch.org',
+    'staging-api.globalforestwatch.org',
+    'wri-01.carto.com',
+
   ],
 
   urls: {
     metadataApi: 'https://gis-gfw.wri.org/metadata',
     metadataXmlEndpoint: (sharingHost, itemId) => `${sharingHost}/sharing/rest/content/items/${itemId}/info/metadata/metadata.xml`,
-    agolItemEndpoint: (itemId) => `https://www.arcgis.com/sharing/rest/content/items/${itemId}`,
     cartoMetaEndpoint: (cartoUser, cartoLayerId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/viz/${cartoLayerId}?api_key=${cartoApiKey}`,
     cartoDataEndpoint: (cartoUser, queryString, cartoApiKey) => `//${cartoUser}.cartodb.com/api/v2/sql?format=TopoJSON&q=${queryString}&api_key=${cartoApiKey}`,
     cartoTemplateEndpoint: (cartoUser, cartoTemplateId, cartoApiKey) => `https://${cartoUser}.carto.com/api/v1/map/named/${cartoTemplateId}?api_key=${cartoApiKey}`,
-    esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer'
+    esriLegendService: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+    satelliteImageService: 'https://production-api.globalforestwatch.org/recent-tiles',
+    analysisDataBaseUrl: 'https://production-api.globalforestwatch.org',
+    forestWatchLayerApi: 'https://production-api.globalforestwatch.org/v1/layer',
   },
 
   upload: {
@@ -120,11 +160,26 @@ const config = {
       googleUrl: url => `https://plus.google.com/share?url=${url}`,
       twitterUrl: url => `https://twitter.com/share?url=${url}&via=gfw-water`,
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
-    }
+    },
+    imagery: {
+
+      monthsOptions: [
+        { label: '4 weeks', value: 4 },
+        { label: '3 months', value: 3},
+        { label: '6 months', value: 6},
+        { label: '12 months', value: 12}
+      ],
+
+      imageStyleOptions: [
+        { label: 'Natural Color'},
+        { label: 'Vegetation Health'}
+      ],
+    },
   },
 
   //- Analysis for individual layers are defined below so we can use common keys
   //- Generic/Modules config is here
+  //- Since switching to Vega widgets, we no longer use the config analyses below!
   analysis: {
     apiUrl: 'https://production-api.globalforestwatch.org/v1/geostore',
     imageService: analysisImageService,
@@ -173,15 +228,15 @@ config.analysis[analysisKeys.GLAD_ALERTS] = {
     '2016': 4,
     '2017': 9
   },
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/dae27aaf-6dc6-4cc4-ac65-9901ed3f162b',
   startDate: '2015',
   endDate: new Date().getFullYear()
 };
 
-config.analysis[analysisKeys.TERRA_I_ALERTS] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
-};
+// config.analysis[analysisKeys.TERRA_I_ALERTS] = {
+//   url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
+//   analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
+// };
 
 config.analysis[analysisKeys.BIO_LOSS] = {
   // id: '$524',
@@ -203,7 +258,7 @@ config.analysis[analysisKeys.BIO_LOSS] = {
     loss: '#FF6699',
     carbon: '#BEBCC2'
   },
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/biomass-loss',
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/https://production-api.globalforestwatch.org/widget/937a74e7-f616-4d1d-91b3-e69c68e278aa',
   startDate: '2001',
   endDate: '2014'
 };
@@ -221,24 +276,32 @@ config.analysis[analysisKeys.SLOPE] = {
 config.analysis[analysisKeys.TC_LOSS_GAIN] = {
   lossRaster: '$530',
   gainRaster: '$527',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/umd-loss-gain'
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/e6c01eff-0d79-4865-a431-65d6adb89589'
 };
 
 config.analysis[analysisKeys.TC_LOSS] = {
   id: '$530',
   colors: ['#cf5188'],
   // TODO: Generate these dynamically
-  bounds: [1, 16],
-  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
+  bounds: [1, 18],
+  labels: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
 };
 
 config.analysis[analysisKeys.VIIRS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/8',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/viirs-active-fires',
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer/0',
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/97b82853-d9fb-4e74-b9b3-2fac7937f38f',
 };
 
 config.analysis[analysisKeys.MODIS_FIRES] = {
-  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer/9'
+  url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer/21'
+};
+
+config.analysis[analysisKeys.LCC] = {
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/65dc8170-0049-48e7-94ba-fa846fcb295c',
+};
+
+config.analysis[analysisKeys.IFL] = {
+  analysisUrl: 'https://production-api.globalforestwatch.org/widget/d0d22aeb-9642-4c4d-a310-f7fb95a48c21',
 };
 
 export const mapConfig = config.map;
@@ -250,3 +313,4 @@ export const layerInformation = config.layerInformation;
 export const modalText = config.modals;
 export const errors = config.errors;
 export const urls = config.urls;
+export const shortTermServices = config.shortTermServices;

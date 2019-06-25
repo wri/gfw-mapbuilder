@@ -6,9 +6,11 @@ import LossControls from 'components/LayerPanel/LossControls';
 import GladControls from 'components/LayerPanel/GladControls';
 import FormaControls from 'components/LayerPanel/FormaControls';
 import SadControls from 'components/LayerPanel/SadControls';
+import LayerFieldFilter from 'components/LayerPanel/LayerFieldFilter';
 import LayerGroup from 'components/LayerPanel/LayerGroup';
 import RadioGroup from 'components/LayerPanel/RadioGroup';
 import NestedGroup from 'components/LayerPanel/NestedGroup';
+import LayerVersions from 'components/LayerPanel/LayerVersions';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
@@ -18,6 +20,8 @@ import BasemapLayer from 'components/LayerPanel/BasemapLayer';
 import LayerKeys from 'constants/LayerConstants';
 import basemapUtils from 'utils/basemapUtils';
 import basemaps from 'esri/basemaps';
+import moment from 'moment';
+
 // import utils from 'utils/AppUtils';
 // import text from 'js/languages';
 import React, {
@@ -86,7 +90,6 @@ export default class LayerPanel extends Component {
       //- Sort on configured order
       return a.order - b.order;
     });
-
     return orderedGroups.map((group) => {
       if (group.layers.length === 0) { return null; }
       group.layers = group.layers.sort((a, b) => b.order - a.order);
@@ -121,10 +124,20 @@ export default class LayerPanel extends Component {
           layers = group.layers.map(this.checkboxMap);
       }
 
+      let layerLoading;
+      switch (group.key) {
+        case 'GROUP_IMAGERY':
+          layerLoading = this.props.loadingImagery;
+          break;
+        default:
+          layerLoading = false;
+      }
+
       return (
         <LayerGroup
           key={group.key}
           groupKey={group.key}
+          layerLoading={layerLoading}
           label={group.label[language]}
           {...this.props}>
           {layers}
@@ -149,11 +162,14 @@ export default class LayerPanel extends Component {
       modisStartDate,
       modisEndDate,
       initialLayerOpacities,
+      selectedImagery,
+      loadingImagery,
       ...props} = this.props;
 
     const {language} = this.context;
-    let childComponent;
+    let childComponent, editCallback, dynamicSublabel, layerLoading;
 
+    // Set child component based on layer id
     switch (layer.id) {
       case 'VIIRS_ACTIVE_FIRES':
         childComponent = <FiresControls
@@ -185,6 +201,22 @@ export default class LayerPanel extends Component {
           <DensityDisplay key='tcl_density-display' {...props} />
         ];
         break;
+      case LayerKeys.RECENT_IMAGERY:
+        editCallback = () => {
+          const imageryMobile = window.innerWidth <= 600;
+          mapActions.toggleImageryVisible(true);
+          if (imageryMobile) {
+            this.props.hideTabView();
+          }
+        };
+        const attr = selectedImagery ? selectedImagery.attributes : null;
+        const label = layer.dynamicSublabel[language];
+        dynamicSublabel = attr && label ? label
+                          .replace('{DATE_TIME}', `${moment(attr.date_time).format('DD MMM YYYY')}`)
+                          .replace('{CLOUD_COVERAGE}', `${attr.cloud_score.toFixed(0)}`)
+                          .replace('{INSTRUMENT}', `${attr.instrument.replace('_', ' ')}`) : '';
+        layerLoading = loadingImagery;
+        break;
       case LayerKeys.TREE_COVER:
       case LayerKeys.AG_BIOMASS:
         childComponent = <DensityDisplay {...props} />;
@@ -208,17 +240,25 @@ export default class LayerPanel extends Component {
         childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
       break;
       default:
-        childComponent = null;
+        if (layer.filterField && (layer.type === 'dynamic' || layer.type === 'feature')) {
+          childComponent = <LayerFieldFilter language={language} layer={layer} />;
+        } else if (layer.versions && layer.versions.length > 0 && (layer.type === 'feature' || layer.type === 'dynamic')) {
+          childComponent = <LayerVersions layer={layer}/>;
+        } else {
+          childComponent = null;
+          editCallback = null;
+        }
     }
 
     let checkbox;
+
     if (layer.subId) {
       const checked = (dynamicLayers[layer.id] && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1) || false;
-      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.subId} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.subId || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     } else {
-      checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.id} layer={layer} checked={activeLayers.indexOf(layer.id) > -1} iconLoading={iconLoading}>
+      checkbox = <LayerCheckbox layerLoading={layerLoading} onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} checked={activeLayers.indexOf(layer.id) > -1 } iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
     }

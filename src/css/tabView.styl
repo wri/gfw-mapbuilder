@@ -1,6 +1,6 @@
 .tab-view
   width $tabViewWidth
-  overflow-y auto
+  overflow-y visible
   background #FFF
   bottom 50px
   left 20px
@@ -12,7 +12,8 @@
   //   max-height 75%
 
 .tab-view__content
-  overflow-y auto
+  overflow-y visible
+  position static
   display none
   height 100%
 
@@ -22,6 +23,7 @@
 
 .tab-view__narrative
   margin 10px
+  overflow-y auto
 
 @media (max-width: $mobileBreak)
   .tab-view

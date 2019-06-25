@@ -232,12 +232,12 @@ export default (props) => {
       <path fill="#555" d="M10 1v23H1V1h9m1-1H0v25h11V0z"></path>
       <path fill="#555" d="M10 3.999H5v1h5v-1z"></path>
       <g fill="#555">
-        <path fillRule="evenodd" clip-rule="evenodd" d="M6.476 8.475h3.579v.048H6.476z"></path>
+        <path fillRule="evenodd" clipRule="evenodd" d="M6.476 8.475h3.579v.048H6.476z"></path>
         <path d="M10.531 7.999H6v1h4.531v-1z"></path>
       </g>
       <path fill="#555" d="M10 11.999H5v1h5v-1z"></path>
       <g fill="#555">
-        <path fillRule="evenodd" clip-rule="evenodd" d="M6.476 16.475h3.579v.048H6.476z"></path>
+        <path fillRule="evenodd" clipRule="evenodd" d="M6.476 16.475h3.579v.048H6.476z"></path>
         <path d="M10.531 15.999H6v1h4.531v-1z"></path>
       </g>
       <path fill="#555" d="M10 19.999H5v1h5v-1z"></path>
@@ -346,6 +346,12 @@ export default (props) => {
         <path d="M349.557,174.779c0-8.24-6.677-14.917-14.917-14.917H221.926c-8.24,0-14.917,6.677-14.917,14.917      s6.677,14.917,14.917,14.917H334.64C342.874,189.696,349.557,183.019,349.557,174.779z"></path>
         <path d="M159.858,334.637c0,8.24,6.677,14.917,14.917,14.917c8.24,0,14.917-6.677,14.917-14.917V221.923      c0-8.24-6.677-14.917-14.917-14.917c-8.24,0-14.917,6.677-14.917,14.917V334.637z"></path>
       </g>
+      </svg></svg>;
+      break;
+
+    case 'satellite-icon':
+      icon = <svg className='svg-icon'><svg viewBox="0 0 32 32" id="satellite-icon" width="100%" height="100%">
+        <g fillRule="nonzero" transform="rotate(45 15.324 16.824)"><path id="satellite_a" d="M16.324 14.86v2h-2v-2h-5a6 6 0 1 1 12 0h-5zm-8.071 7l1.414-1.415a8 8 0 0 0 11.314 0l1.414 1.415c-3.905 3.905-10.237 3.905-14.142 0zm2.828-2.829l1.415-1.414a4 4 0 0 0 5.657 0l1.414 1.414a6 6 0 0 1-8.486 0zm11.243-7.171h6v4h-6v-4zm-20 0h6v4h-6v-4z"></path></g>
       </svg></svg>;
       break;
     }

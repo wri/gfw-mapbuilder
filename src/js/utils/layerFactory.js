@@ -14,9 +14,12 @@ import GladLayer from 'js/layers/GladLayer';
 import FormaLayer from 'js/layers/FormaLayer';
 import TreeCoverLossLayer from 'js/layers/TreeCoverLossLayer';
 import TreeCoverGainLayer from 'js/layers/TreeCoverGainLayer';
+import GFWImageryLayer from 'js/layers/GFWImageryLayer';
+import PrimaryForestLayer from 'js/layers/PrimaryForestLayer';
 import layerUtils from 'utils/layerUtils';
 import layerKeys from 'constants/LayerConstants';
 import {errors} from 'js/config';
+import { addYears } from 'date-fns';
 
 /**
 * Helper function to make infoTemplates
@@ -32,13 +35,12 @@ import {errors} from 'js/config';
 *   - FeatureLayer
 */
 export default (layer, lang) => {
-  if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; }
+  // if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; } //Actually, let's re-create!
 
-  if ((!layer.url && layer.type !== 'graphic') || !layer.type) { throw new Error(errors.missingLayerConfig); }
+  if ((!layer.url && !layer.versions && layer.type !== 'graphic' && !layer.versions) || !layer.type) { throw new Error(errors.missingLayerConfig); }
 
   const options = {};
   let esriLayer;
-
   switch (layer.type) {
     case 'carto':
       esriLayer = new CartoLayer(layer);
@@ -75,6 +77,7 @@ export default (layer, lang) => {
       // Create some image parameters
       const imageParameters = new ImageParameters();
       imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+      if (!layer.layerIds && layer.versions && layer.versions[0].layerIds) {layer.layerIds = layer.versions[0].layerIds; }
       imageParameters.layerIds = layer.layerIds;
       imageParameters.format = 'png32';
       // Populate the options and then add the layer
@@ -83,37 +86,16 @@ export default (layer, lang) => {
       options.opacity = layer.opacity || 1.0;
       options.imageParameters = imageParameters;
       //- Add a popup template if configuration is present
-      if (layer.popup) {
+      if (layer.popup && layer.layerIds) {
         options.infoTemplates = {};
         const template = layerUtils.makeInfoTemplate(layer.popup, lang);
         layer.layerIds.forEach((id) => { options.infoTemplates[id] = { infoTemplate: template }; });
       }
 
+      if (!options || !options.id || (!layer.layerIds && !layer.versions)) { return false; }
+      if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
       esriLayer = new DynamicLayer(layer.url, options);
 
-      if (layer.id === 'VIIRS_ACTIVE_FIRES' || layer.id === 'MODIS_ACTIVE_FIRES') {
-        const today = new Date();
-        const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
-
-        let month = yesterday.getUTCMonth() + 1;
-        let day = yesterday.getUTCDate();
-        const year = yesterday.getUTCFullYear();
-
-        month = month.toString();
-        day = day.toString();
-
-        if (month.length === 1) {
-          month = '0' + month;
-        }
-        if (day.length === 1) {
-          day = '0' + day;
-        }
-
-        const defaultDefExpression = "ACQ_DATE > date'" + year + '-' + month + '-' + day + "'";
-        const layerDefinitions = [];
-        esriLayer.visibleLayers.forEach(val => { layerDefinitions[val] = defaultDefExpression; });
-        esriLayer.setLayerDefinitions(layerDefinitions);
-      }
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.layerIds = layer.layerIds;
       esriLayer.order = layer.order;
@@ -135,6 +117,7 @@ export default (layer, lang) => {
         if (layer.popup) { options.infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang); }
         if (layer.minScale) { options.minScale = layer.minScale; }
         if (layer.maxScale) { options.maxScale = layer.maxScale; }
+        if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
         esriLayer = new FeatureLayer(layer.url, options);
       }
       esriLayer.legendLayer = layer.legendLayer || null;
@@ -193,6 +176,15 @@ export default (layer, lang) => {
       esriLayer.order = layer.order;
       esriLayer.label = layer.label;
     break;
+    case 'primed':
+      options.id = layer.id;
+      options.url = layer.url;
+      options.visible = layer.visible || false;
+      esriLayer = new PrimaryForestLayer(options);
+      esriLayer.legendLayer = layer.legendLayer || null;
+      esriLayer.order = layer.order;
+      esriLayer.label = layer.label;
+    break;
     case 'terra':
       layer.visible = layer.visible || false;
       esriLayer = new TerraILayer(layer);
@@ -222,7 +214,13 @@ export default (layer, lang) => {
       esriLayer.legendLayer = layer.legendLayer || null;
       esriLayer.visible = layer.visible || false;
       esriLayer.opacity = layer.opacity || 1;
-
+    break;
+    case 'imagery':
+      options.id = layer.id;
+      options.url = layer.url;
+      options.visible = false;
+      esriLayer = new GFWImageryLayer(options);
+      esriLayer.order = layer.order;
     break;
     default:
       throw new Error(errors.incorrectLayerConfig(layer.type));

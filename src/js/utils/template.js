@@ -1,9 +1,11 @@
-import layerKeys from 'constants/LayerConstants';
-import arcgisUtils from 'esri/arcgis/utils';
-import {getUrlParams} from 'utils/params';
 import Deferred from 'dojo/Deferred';
 import lang from 'dojo/_base/lang';
+
+import { urls} from 'js/config';
 import resources from 'resources';
+import { getUrlParams } from 'utils/params';
+import arcgisUtils from 'esri/arcgis/utils';
+import layerKeys from 'constants/LayerConstants';
 
 const SEPARATOR = ';';
 
@@ -23,6 +25,44 @@ const pruneValues = (dict) => {
 const parseIntoArray = (resourceString) => {
   return resourceString.split(SEPARATOR).filter((value) => {
     return value !== undefined && value !== '';
+  });
+};
+
+/**
+ * This function globally filters layers marked as false in the core config from the table of contents,
+ * and optionally accepts an array of objects containing a layer within a property
+ */
+const filterLayers = ({layers, layerKey}) => {
+  return layers.filter(layer => {
+    layer = layerKey ? layer[layerKey] : layer;
+    switch (layer.id) {
+      case layerKeys.VIIRS_ACTIVE_FIRES:
+        return resources.viirsFires;
+      case layerKeys.MODIS_ACTIVE_FIRES:
+        return resources.modisFires;
+      case layerKeys.LAND_COVER:
+        return resources.landCover;
+      case layerKeys.AG_BIOMASS:
+        return resources.aboveGroundBiomass;
+      case layerKeys.IFL:
+        return resources.intactForests;
+      case layerKeys.PRIMARY_FORESTS:
+        return resources.primaryForests;
+      case layerKeys.FORMA_ALERTS:
+        return resources.forma;
+      case layerKeys.GLOB_MANGROVE:
+        return resources.mangroves;
+      case layerKeys.IMAZON_SAD:
+        return resources.sadAlerts;
+      case layerKeys.GLAD_ALERTS:
+        return resources.gladAlerts;
+      case layerKeys.TERRA_I_ALERTS:
+        return resources.terraIAlerts;
+      case layerKeys.RECENT_IMAGERY:
+        return resources.recentImagery;
+      default:
+        return true;
+    }
   });
 };
 
@@ -156,60 +196,60 @@ const formatResources = () => {
   }
 
   //- Remove Layers from resources.layers if configured
-  // Object.keys(resources.layers).forEach((language) => {
-  //   resources.layers[language] = resources.layers[language].filter((layer) => {
-      // switch (layer.id) {
-      //   case layerKeys.VIIRS_ACTIVE_FIRES:
-      //     return resources.activeFires;
-      //   case layerKeys.LAND_COVER:
-      //     return resources.landCover;
-      //   case layerKeys.AG_BIOMASS:
-      //     return resources.aboveGroundBiomass;
-      //   case layerKeys.IFL:
-      //     return resources.intactForests;
-      //   case layerKeys.GLOB_MANGROVE:
-      //     return resources.mangroves;
-      //   case layerKeys.IMAZON_SAD:
-      //     return resources.sadAlerts;
-      //   case layerKeys.GLAD_ALERTS:
-      //     return resources.gladAlerts;
-      //   case layerKeys.TERRA_I_ALERTS:
-      //     return resources.terraIAlerts;
-      //   default:
-      //     return true;
-      // }
-  //   });
-  // });
-
-  //- Remove Layers from resources.layers if configured
   Object.keys(resources.layerPanel).forEach((group) => {
     const groupSettings = resources.layerPanel[group];
     if (!groupSettings.layers) { return; }
-    resources.layerPanel[group].layers = resources.layerPanel[group].layers.filter((layer) => {
-      switch (layer.id) {
-        case layerKeys.VIIRS_ACTIVE_FIRES:
-          return resources.viirsFires;
-        case layerKeys.MODIS_ACTIVE_FIRES:
-          return resources.modisFires;
-        case layerKeys.LAND_COVER:
-          return resources.landCover;
-        case layerKeys.AG_BIOMASS:
-          return resources.aboveGroundBiomass;
-        case layerKeys.IFL:
-          return resources.intactForests;
-        case layerKeys.GLOB_MANGROVE:
-          return resources.mangroves;
-        case layerKeys.IMAZON_SAD:
-          return resources.sadAlerts;
-        case layerKeys.GLAD_ALERTS:
-          return resources.gladAlerts;
-        case layerKeys.TERRA_I_ALERTS:
-          return resources.terraIAlerts;
-        default:
-          return true;
+    resources.layerPanel[group].layers = filterLayers({layers: resources.layerPanel[group].layers});
+  });
+
+  //- Separate remote data layers
+  const remoteDataLayers = [];
+  Object.keys(resources.layerPanel).forEach(groupId => {
+    if (!remoteDataLayers[groupId]) { remoteDataLayers[groupId] = []; }
+    const groupSettings = resources.layerPanel[groupId];
+    if (!groupSettings.layers) { return; }
+    resources.layerPanel[groupId].layers = resources.layerPanel[groupId].layers.filter(layer => {
+      if (layer.type === 'remoteDataLayer') {
+        remoteDataLayers.push({
+          order: layer.order,
+          groupId,
+          layer,
+        });
+        return false;
+      } else {
+        return true;
       }
     });
   });
+
+  const remoteDataLayerRequests = remoteDataLayers
+  .map((item, j) => fetch(`${urls.forestWatchLayerApi}/${item.layer.uuid}`)
+    .then(response => response.json())
+    .then(json => json.data)
+    .then(layer => fetch(layer.attributes.layerConfig.metadata)
+    .then(response => response.json())
+    .then(metadata => {
+        const attributes = layer.attributes;
+        const itemGroup = item.group;
+        Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
+          if (layerProp !== 'type' && layerProp !== 'uuid') {
+            if (layerProp === 'legendConfig') {
+              attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+            } else {
+              layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
+            }
+          }
+        });
+        item.layer = layer.attributes.layerConfig;
+        item.group = itemGroup;
+        item.layer.metadata = {
+          metadata,
+          legendConfig: attributes.legendConfig
+        };
+        return item;
+      })
+    )
+  );
 
   //- Update path if it is relative to point to local
   const base = window._app.base ? window._app.base + '/' : '';
@@ -222,7 +262,7 @@ const formatResources = () => {
   //     const basemap = resources.basemaps[language][bm];
   //     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
   //       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
-  //     }
+  //#endregion//     }
   //   });
   // });
 
@@ -232,6 +272,15 @@ const formatResources = () => {
     }
   });
 
+  return Promise.all(remoteDataLayerRequests)
+  .then(remoteLayers => {
+    remoteLayers = filterLayers({layers: remoteLayers, layerKey: 'layer'});
+    remoteLayers.forEach(item => {
+      item.layer.order = item.order; // item.order is the value we set in resources, this needs to be added to the layer object
+      resources.layerPanel[item.groupId].layers.push(item.layer);
+    });
+    return resources;
+  });
 };
 
 export default {
@@ -251,16 +300,14 @@ export default {
 
     if (!appid) {
       //- Format the resources before resolving
-      formatResources();
-      promise.resolve(resources);
+      formatResources().then(formattedResources => {
+        promise.resolve(formattedResources);
+      });
       return promise;
     }
 
     arcgisUtils.getItem(appid).then(res => {
       let agolValues = res.itemData && res.itemData.values;
-
-      // Set app settings with AGOLvalues from webmap being the highest priority, then the constructor params.
-      // Default values are from resources.js
 
       if (constructorParams) {
         //- Prune constructorParams by removing null keys
@@ -270,7 +317,14 @@ export default {
         lang.mixin(resources, constructorParams);
       }
 
-      if (agolValues) {
+      //- If we dont have agol settings, save the defaults, else merge them in
+      if (!agolValues) {
+        //- Format the resources before resolving
+        formatResources().then(formattedResources => {
+          promise.resolve(formattedResources);
+        });
+        return promise;
+      } else {
         //- Prune agolValues by removing null keys
         agolValues = pruneValues(agolValues);
 
@@ -279,17 +333,19 @@ export default {
 
         //- Put the appid in settings so its easy to get to elsewhere in the app without rereading the url
         resources.appid = appid;
+
+        //- Format the resources before resolving
+        formatResources().then(formattedResources => {
+          promise.resolve(formattedResources);
+        });
+
       }
-
-
-      //- Format the resources before resolving
-      formatResources();
-      promise.resolve(resources);
 
     }, err => {
       if (brApp.debug) { console.warn(`template.getAppInfo >> ${err.message}`); }
-      formatResources();
-      promise.resolve(resources);
+      formatResources().then(formattedResources => {
+        promise.resolve(formattedResources);
+      });
     });
 
     return promise;

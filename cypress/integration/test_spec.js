@@ -1,13 +1,4 @@
 
-
-
-describe('My first integration test', function () {
-  it('Is kinda boring', function () {
-    cy.log('Login successful 1')
-    expect(1).to.equal(1);
-  });
-});
-
 describe('An actual test on our app', function () {
   it('Ensures our external constructor has the correct properties', function () {
 
@@ -21,10 +12,6 @@ describe('An actual test on our app', function () {
 
         const el = config.el;
         expect(el).to.not.be.an('undefined');
-
-        const version = config.version;
-        expect(version).to.not.be.an('undefined');
-        expect(version).to.be.a('string');
 
         const cssPath = config.cssPath;
         if (cssPath) {
@@ -65,6 +52,31 @@ describe('An actual test on our app', function () {
         if (config.useAlternativeLanguage) {
           const alternativeLanguage = config.alternativeLanguage;
           expect(alternativeLanguage).to.not.be.an('undefined');
+        }
+
+        if (config.initialExtent) {
+          const { initialExtent } = config;
+          expect(config.initialExtent).to.be.a('object');
+
+          expect(config.initialExtent).to.have.property('x');
+          expect(config.initialExtent).to.have.property('y');
+          expect(config.initialExtent).to.have.property('z');
+
+          if (initialExtent.x && initialExtent.y && initialExtent.z) {
+            expect(config.initialExtent.x).to.be.a('number');
+            expect(config.initialExtent.y).to.be.a('number');
+            expect(config.initialExtent.z).to.be.a('number');
+
+            expect(config.initialExtent.x).to.be.greaterThan(-181);
+            expect(config.initialExtent.x).to.be.lessThan(181);
+
+            expect(config.initialExtent.y).to.be.greaterThan(-91);
+            expect(config.initialExtent.y).to.be.lessThan(91);
+
+            expect(config.initialExtent.z).to.be.greaterThan(0);
+            expect(config.initialExtent.z).to.be.lessThan(21);
+          }
+
         }
 
         if (config.includeCartoTemplateLayers) {
@@ -108,12 +120,14 @@ describe('An actual test on our app', function () {
               expect(layer.layerName).to.be.a('string');
             }
 
-            // console.log(`${layer.id} has the required properties`);
+            if (layer.type === 'remoteDataLayer') {
+              expect(layer).to.have.property('uuid');
+            }
+
             expect(layer).to.have.property('id');
             expect(layer).to.have.property('type');
-            expect(layer).to.have.property('url');
-            expect(layer).to.have.property('label');
-            expect(layer.label).to.have.property(config.language);
+            // expect(layer).to.have.property('label');
+            // expect(layer.label).to.have.property(config.language);
           });
         }
 

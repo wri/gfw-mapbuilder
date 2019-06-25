@@ -1,4 +1,5 @@
 import appActions from 'actions/AppActions';
+import mapActions from 'actions/MapActions';
 import dispatcher from 'js/dispatcher';
 
 class AppStore {
@@ -11,7 +12,7 @@ class AppStore {
 
     this.bindListeners({
       setLanguage: appActions.setLanguage,
-      applySettings: appActions.applySettings
+      applySettings: appActions.applySettings,
     });
 
   }

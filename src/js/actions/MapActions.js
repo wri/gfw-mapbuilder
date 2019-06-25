@@ -94,30 +94,24 @@ class MapActions {
       //- Sort the groups based on their order property
       return layerPanel[b].order - layerPanel[a].order;
     }).reduce((list, groupName, groupIndex) => {
-      if (layersCreated === false) { //or possibly (map.id === 'esri.Map_0') If this is our first time initializing the app, create the proper order
-
         //- Flatten them into a single list but before that,
         //- Multiple the order by 100 so I can sort them more easily below, this is because there
         //- order numbers start at 0 for each group, so group 0, layer 1 would have order of 1
         //- while group 1 layer 1 would have order of 100, and I need to integrate with webmap layers
-        if (groupIndex === 0) {
-          maxOrder = layerPanel[groupName].order + 1;
-        }
-
-        const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index);
-          return layer;
-        });
-
-        return list.concat(orderedGroups);
-      } else { //otherwise, inherit the layer-order we worked so hard to create the first time
-        return layerPanel[groupName].layers;
+      if (groupIndex === 0) {
+        maxOrder = layerPanel[groupName].order + 1;
       }
 
+      const orderedGroups = layerPanel[groupName].layers.map((layer) => {
+        if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
+        }
+        return layer;
+      });
+      return list.concat(orderedGroups);
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
-
     //- make sure there's only one entry for each dynamic layer
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
@@ -127,6 +121,7 @@ class MapActions {
     }, []);
     const uniqueLayers = [];
     const existingIds = [];
+
     reducedLayers
       .forEach(layer => {
         if (existingIds.indexOf(layer.id) === -1) {
@@ -139,13 +134,14 @@ class MapActions {
     uniqueLayers.forEach(layer => {
       layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
     });
-    //- remove layers from config that have no url unless they are of type graphic(which have no url)
+    //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
     const esriLayers = uniqueLayers
-      .filter(layer => layer && (layer.url || layer.type === 'graphic')).map((layer) => {
+      .filter(layer => layer && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
+
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
@@ -153,7 +149,6 @@ class MapActions {
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
-        console.log(cartoLayer);
         cartoLayer.layer.on('onCartoLayerAdd', evt => {
           const tempResources = resources;
           tempResources.layerPanel.GROUP_CARTO.layers = evt.target.cartoLayers;
@@ -167,6 +162,8 @@ class MapActions {
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
 
+      uniqueLayers.sort((a, b) => a.order - b.order);
+
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
       });
@@ -176,7 +173,7 @@ class MapActions {
       }
       // Appending the mask to the end of the parent div to make sure mask is always on top of all layers
       var mask = document.getElementById('esri.Map_0_MASK');
-      if(mask && mask.parentNode) {
+      if (mask && mask.parentNode) {
         mask.parentNode.appendChild(mask);
       }
     });
@@ -238,6 +235,30 @@ class MapActions {
 
   activateDrawButton(bool) {
     return bool;
+  }
+
+  toggleImageryVisible(bool) {
+    return bool;
+  }
+
+  getSatelliteImagery(params) {
+    return params;
+  }
+
+  setSelectedImagery(obj) {
+    return obj;
+  }
+
+  setImageryHoverInfo(obj) {
+    return obj;
+  }
+
+  setActiveFilters(obj) {
+    return obj;
+  }
+
+  changeLayerVersion(obj) {
+    return obj;
   }
 
 }

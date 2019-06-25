@@ -41,8 +41,9 @@ let map;
 let constructorParams = null;
 
 const getWebmapInfo = function getWebmapInfo (webmap) {
+
   return esriRequest({
-    url: `https://www.arcgis.com/sharing/rest/content/items/${webmap}/data?f=json`,
+    url: `${resources.sharinghost}/sharing/rest/content/items/${webmap}/data?f=json`,
     callbackParamName: 'callback'
   });
 };
@@ -99,7 +100,7 @@ const getFeature = function getFeature (params) {
 };
 
 const createLayers = function createLayers (layerPanel, activeLayers, language, params, feature) {
-  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo} = params;
+  const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeFilters, activeVersions} = params;
 
   // Update order of layers as required.
   // Layers ordered first by their layer group.
@@ -156,14 +157,14 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     //- make sure there's only one entry for each dynamic layer
     const uniqueLayers = [];
     const existingIds = [];
-    const reducedLayers = layers.filter(l => !l.url).reduce((prevArray, currentItem) => {
+    const reducedLayers = layers.filter(l => !l.url && !l.versions).reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
       }
       return prevArray.concat(currentItem);
     }, []);
 
-    layers = layers.filter(l => l.url).concat(reducedLayers);
+    layers = layers.filter(l => l.url || l.versions).concat(reducedLayers);
     layers.forEach(layer => {
       if (existingIds.indexOf(layer.id) === -1) {
         uniqueLayers.push(layer);
@@ -176,11 +177,77 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       layer.visible = activeLayers.indexOf(layer.id) > -1;
     });
 
-    //- remove layers from config that have no url unless they are of type graphic(which have no url)
+    // format active version params into an object
+    const versions = {};
+    if (activeVersions.length) {
+      activeVersions.forEach((v) => {
+        const version = v.split('|');
+        versions[version[0]] = version[1];
+      });
+    }
+
+    // format active filter params into an object
+    const filters = {};
+    if (activeFilters) {
+      activeFilters.forEach((f) => {
+        const filter = f.split('|');
+        filters[filter[0]] = filter[1];
+      });
+    }
+
+    //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
-    const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic')).map((layer) => {
-      return layerFactory(layer, language);
+    const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
+      // Check for active versions matching the layer id
+
+      let layerConfig, filterField;
+      Object.keys(resources.layerPanel).forEach((group) => {
+        const configs = resources.layerPanel[group].layers;
+        layerConfig = configs && configs.find((c) => c.id === layer.id);
+        if (layerConfig && layerConfig.filterField) {
+          filterField = layerConfig.filterField[language];
+        }
+      });
+
+      if (versions[layer.id] && versions[layer.id] !== 0) {
+        const groups = Object.keys(resources.layerPanel);
+        let versionConfig;
+        groups.forEach((group) => {
+          const configs = resources.layerPanel[group].layers;
+          const layerVersionConfig = configs && configs.find((c) => c.id === layer.id);
+          if (layerVersionConfig && layerVersionConfig.versions) {
+            versionConfig = layerVersionConfig.versions[versions[layer.id]];
+          }
+        });
+        // Update the layer config object to include active version url / layerIds
+        if (versionConfig) {
+          layer.url = versionConfig.url;
+          if (versionConfig.layerIds) {
+            layer.layerIds = versionConfig.layerIds;
+          }
+        }
+        console.log(layer.layerIds, versionConfig.layerIds);
+
+      }
+      // return layerFactory(layer, language);
+
+
+      const mapLayer = layerFactory(layer, language);
+
+      // If there are active filters, set definition expressions on layer.
+      if (filterField && layer.type === 'feature') {
+        mapLayer.setDefinitionExpression(`${filterField} = '${filters[layer.id]}'`);
+      } else if (filterField && layer.type === 'dynamic') {
+        const layerDefinitions = [];
+        layer.layerIds.forEach((id) => {
+          layerDefinitions[id] = `${filterField} = '${filters[layer.id]}'`;
+        });
+        mapLayer.setLayerDefinitions(layerDefinitions);
+      }
+
+      return mapLayer;
+
     });
 
     // Set the date range for the loss and glad layers
@@ -254,7 +321,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
       // Check for Errors
       const layerErrors = addedLayers.filter(layer => layer.error);
       if (layerErrors.length > 0) { console.error(layerErrors); }
-      console.log('uniqueLayers', uniqueLayers)
       const webMapLayerIds = map.layerIds.filter((layerId) => params.hasOwnProperty(layerId));
       const esriLayerIds = esriLayers.map(esriLayer => esriLayer.id);
       const baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && esriLayerIds.indexOf(layerId) === -1);
@@ -294,6 +360,12 @@ const createMap = function createMap (params) {
     zoom: 2
   };
 
+  if (params.sharinghost) { resources.sharinghost = params.sharinghost; }
+
+  // Set the sharinghost to the correct location so the app can find the webmap content
+  if (!resources.sharinghost) { resources.sharinghost = 'https://www.arcgis.com'; }
+  arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
+
   arcgisUtils.createMap(params.webmap, 'map', { mapOptions: options }).then(response => {
     map = response.map;
 
@@ -312,6 +384,7 @@ const createMap = function createMap (params) {
       }
 
       const { feature, info } = featureResponse;
+
       //- Add Popup Info Now
       // addTitleAndAttributes(params, feature, info);
       //- Need the map to be loaded to add graphics
@@ -735,7 +808,7 @@ const renderResults = (results, lang, config, params) => {
       break;
     }
     case 'vega':
-      chartComponent = <VegaChart results={results} />;
+      chartComponent = <VegaChart results={results} language={lang} />;
       break;
     default:
       break;
@@ -821,7 +894,7 @@ const handleTcdParams = (paramsObject) => {
 
 const runAnalysis = function runAnalysis (params, feature) {
   const { settings } = params;
-  const { language } = settings;
+  const language = params.lang;
 
   let analysisModules;
   const stringMods = localStorage.getItem('analysisMods');
@@ -949,7 +1022,6 @@ export default {
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
     if (brApp.debug) { console.log(params); }
-
     //- Add Title, Subtitle, and logo right away
     addHeaderContent(params);
     //- Convert stringified dates back to date objects for analysis
@@ -958,6 +1030,8 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
+    params.activeFilters = params.activeFilters.split(',');
+    params.activeVersions = params.activeVersions.split(',');
 
     if (opener && !(constructorParams && constructorParams.analysisModules)) { //If this report.html was opened via the map (rather than a url paste) && there is no construct params for MapBuilderReport
       updateAnalysisModules(params);

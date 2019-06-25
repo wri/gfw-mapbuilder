@@ -31,12 +31,18 @@
     word-break break-word
     word-wrap break-word
 
+  &.draggable
+    top 250px
+    cursor grab
+    z-index 100
+
 .close-icon
   position absolute
   height 40px
   width 40px
   right 0
   top 0
+  z-index 10
   & svg
     transform translate(-50%, -50%)
     position absolute
@@ -489,3 +495,151 @@
 
 .delete-header
   text-align center
+
+// Imagery Modal specific styling
+.imagery-modal-container
+  display block
+  &.collapse
+    display none
+
+
+.imagery-modal__wrapper
+  width 500px
+  height 285px
+  -webkit-box-shadow 0 1px 3px rgba(85,85,85,0.25)
+  box-shadow 0 1px 3px rgba(85,85,85,0.25)
+
+  .flex
+    display flex
+    align-items center
+
+  .fa-button.white
+    border 1px solid #f0ab00
+
+  select
+    -webkit-appearance none
+    position absolute
+    height 100%
+    width 100%
+    opacity 0
+    left 0
+    top 0
+    &:hover + div
+      background darken(white, 10%)
+
+.imagery-modal__title
+  font-size 12px
+  font-weight bold
+  line-height 21px
+  color #555
+  text-transform uppercase
+  margin 10px 20px 10px 20px
+
+.imagery-modal__section
+  padding 0px 20px 10px 20px
+  font-size 11px
+  color #999
+  justify-content space-between
+
+  &.filters
+    position relative
+    z-index 5
+
+ &.secondary-filters
+    align-items flex-start
+    min-height 60px
+
+  &.thumbnail_container
+    width 100%
+    max-height 102px
+    overflow-y auto
+    display flex
+    justify-content flex-start
+    flex-wrap wrap
+
+  .thumbnail-text
+    width 50%
+    p
+      color #555
+      line-height 1.4
+      margin 0
+
+  .thumbnail
+    width 88px
+    height 88px
+    overflow hidden
+    margin 2px
+    cursor pointer
+    border transparent solid 4px;
+    background #999
+    display flex
+
+    &.disabled
+      cursor default
+
+      &:hover
+        border transparent solid 4px;
+    .svg-icon
+      fill #c1c1c1
+
+    img
+      width 85px
+      height auto
+
+    &:hover
+      border #555 solid 4px;
+
+    &.selected
+      border #f0ab00 solid 4px;
+
+.imagery-modal__error
+  display flex
+  align-items center
+  flex-direction column
+  width 100%
+
+hr
+  margin 8px 0px 8px 0px
+  border $lightGrayBorder 0.5px solid
+
+.imagery-modal_section-title
+  text-transform uppercase
+  font-weight bold
+  margin-bottom 10px
+
+.imagery-modal_section-text
+  margin 0 10px
+
+@media (max-width: 600px)
+
+  .imagery-modal-container
+    &.collapse
+      display none
+
+      .imagery-modal__wrapper
+        height 0px
+        transition all 1s
+
+  .imagery-modal__wrapper
+    width 100vw
+    height 400px
+    transition all 1s
+
+    .imagery-modal__section
+      flex-wrap wrap
+      justify-content space-between
+
+      &.thumbnail_container
+        width 100%
+        max-height 150px
+
+      .imagery-modal__item
+        margin 0 0 15 0
+        min-width 80vw
+
+  .modal.draggable
+    top unset
+    cursor default
+    bottom 0px
+    transform none
+    left unset

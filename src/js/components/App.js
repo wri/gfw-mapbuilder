@@ -38,6 +38,8 @@ export default class App extends Component {
 
         lang.mixin(settings, this.props.constructorParams.config);
 
+        console.log(location, location.href);
+
         const appid = getUrlParams(location.href).appid;
 
         if (appid) {

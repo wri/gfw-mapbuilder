@@ -565,6 +565,11 @@ export default {
   getExactGeom: (selectedFeature) => {
     const promise = new Deferred();
     const url = selectedFeature._layer.url;
+
+    if (!url) {
+      return promise.resolve(selectedFeature.geometry);
+    }
+
     const queryTask = new QueryTask(url);
     const query = new Query();
 
@@ -581,7 +586,7 @@ export default {
       promise.resolve(feats.length > 0 ? feats[0].geometry : selectedFeature.geometry);
     }, (error) => {
       console.error(error);
-      promise.resolve(selectedFeature);
+      promise.resolve(selectedFeature.geometry);
     });
     return promise;
   },

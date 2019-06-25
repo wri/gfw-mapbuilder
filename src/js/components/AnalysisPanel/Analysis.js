@@ -1,15 +1,10 @@
 import CustomFeatureControl from 'components/AnalysisPanel/CustomFeatureControl';
 import CompositionPieChart from 'components/AnalysisPanel/CompositionPieChart';
 import AnalysisTypeSelect from 'components/AnalysisPanel/AnalysisTypeSelect';
-// import RestorationCharts from 'components/AnalysisPanel/RestorationCharts';
 import TimeSeriesChart from 'components/AnalysisPanel/TimeSeriesChart';
-// import TotalLossChart from 'components/AnalysisPanel/TotalLossChart';
-// import SadAlertsChart from 'components/AnalysisPanel/SadAlertsChart';
 import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import SlopeSelect from 'components/AnalysisPanel/SlopeClassSelect';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
-// import SlopeBarChart from 'components/AnalysisPanel/SlopeBarChart';
-// import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import BiomassChart from 'components/AnalysisPanel/BiomassChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import Badge from 'components/AnalysisPanel/Badge';
@@ -20,10 +15,7 @@ import AnalysisDatePicker from './AnalysisFormElements/AnalysisDatePicker';
 import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
-// import performAnalysis from 'utils/performAnalysis';
 import {attributes} from 'constants/AppConstants';
-// import tabKeys from 'constants/TabViewConstants';
-// import layerKeys from 'constants/LayerConstants';
 import {analysisConfig} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
@@ -31,11 +23,9 @@ import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
 import analysisUtils from 'utils/analysisUtils';
 import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
-// import Deferred from 'dojo/Deferred';
 import moment from 'moment';
-// import request from 'utils/request';
-// import utils from 'utils/AppUtils';
 import text from 'js/languages';
+
 import React, {
   Component,
   PropTypes
@@ -551,10 +541,10 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
-        chartComponent = <VegaChart results={results} />;
+        chartComponent = <VegaChart language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
         break;
       case 'vega':
-        chartComponent = <VegaChart results={results} />;
+        chartComponent = <VegaChart language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
         break;
       default:
         break;
@@ -600,7 +590,6 @@ export default class Analysis extends Component {
           analysisSettings.chartType = 'vega';
 
           analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
-            this.setState({ isLoading: false });
             this.renderResults(analysisId, results, language, analysisSettings);
           });
           return;
@@ -632,8 +621,9 @@ export default class Analysis extends Component {
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent} = this.state;
+    const { isLoading, chartComponent, showDownloadOptions} = this.state;
     const {language, settings} = this.context;
+    const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
 
     // If we have the restoration module, add in the slope select
@@ -674,7 +664,7 @@ export default class Analysis extends Component {
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
-        <div className='analysis-results__content custom-scroll'>
+        <div className={`analysis-results__content custom-scroll ${showFooter ? 'footer' : ''}`}>
           <div className='title-select-container'>
             <div className='analysis-title'>{title}</div>
             <div className='analysis-results__select-label'>
@@ -688,23 +678,23 @@ export default class Analysis extends Component {
               {this.getFormComponents(activeAnalysisType, settings.analysisModules)}
             </div>
           }
-          {chartComponent &&
+          {chartComponent && !showDownloadOptions &&
             <div className='analysis-results__chart-component-container'>
               {slopeSelect}
               {chartComponent}
             </div>
           }
-          {activeAnalysisType !== 'default' && !chartComponent
-            && <div className='analysis-results__footer'>
-              <div className='run-analysis-button-container'>
-                <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
-                  {text[language].RUN_ANALYSIS_BUTTON_TEXT}
-                </button>
-              </div>
-              <ReportSubscribeButtons setLoader={this.setLoader} />
-            </div>
-          }
         </div>
+        {showFooter &&
+          <div className='analysis-results__footer'>
+            <div className='run-analysis-button-container'>
+              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+                {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+              </button>
+            </div>
+            <ReportSubscribeButtons setLoader={this.setLoader} />
+          </div>
+        }
       </div>
     );
   }
