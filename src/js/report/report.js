@@ -988,10 +988,6 @@ const runAnalysis = function runAnalysis (params, feature) {
       const reportContainerDiv = document.createElement('div');
       reportContainerDiv.classList.add('report-container');
       reportContainerDiv.appendChild(div);
-      //const label = document.createElement('h3');
-      //label.classList.add('vega-chart-label');
-      //label.innerHTML = module.label.en;
-      //resultsContainer.appendChild(label);
       resultsContainer.appendChild(reportContainerDiv);
       const infoContainerDiv = document.createElement('div');
       infoContainerDiv.classList.add('vega-chart-info-container');
@@ -1001,7 +997,6 @@ const runAnalysis = function runAnalysis (params, feature) {
       infoContainerDiv.appendChild(infoDiv);
       
       const sectionDiv = document.createElement('div');
-      //sectionDiv.classList.add('report-section');
       
       if (module.analysisId === 'TC_LOSS_GAIN') {
         sectionDiv.classList.add('report-section');
