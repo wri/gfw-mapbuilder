@@ -68,6 +68,10 @@ export default class VegaChart extends Component {
       </a>
     );
   };
+  
+  toggleChart = () => {
+    console.log('toggle');
+  }
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl } = this.state;
@@ -86,8 +90,15 @@ export default class VegaChart extends Component {
             <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> }
           <div className='vega-chart_download-container'>
             <h3 className="vega-chart-label">{results.data.attributes.name}</h3>
-            <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-              <SVGIcon className="vega-chart-menu-icon" id={'gear-icon'} /><span className="vega-chart-menu-text">SETTINGS</span>
+            
+            <div className='vega-chart-menu-container'>
+              <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+                <SVGIcon className="vega-chart-menu-icon" id={'gear-icon'} /><span className="vega-chart-menu-text">SETTINGS</span>
+              </div>
+              <div className="vega-chart-divider"></div>
+              <div className="vega-chart-toggle" onClick={this.toggleChart}>
+                <span className="vega-chart-toggle-dot"></span>
+              </div>
             </div>
 
             { showDownloadOptions &&
