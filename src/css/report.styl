@@ -180,8 +180,8 @@ body
     flex-wrap: nowrap;
     flex-direction: column;
     .vega-chart-container 
-      border-top 1px solid #eee
-      padding-top 1rem
+      // border-top 1px solid #eee
+      // padding-top 1rem
     canvas
       margin 0 auto
       display flex
@@ -190,13 +190,20 @@ body
     .vega-bindings
       margin 0 auto
       display flex
-    .vega-chart-info
-      color: #555
-      padding: 0.5rem
-      font-size x-small
-      width: 75%
-      margin 0 auto
-      text-align center
+    .vega-chart-info-container
+      width 100%
+      border-bottom 1px solid #eee
+      padding-bottom 1rem
+      .vega-chart-info
+        color: #555
+        padding: 0.5rem
+        font-size x-small
+        width: 75%
+        margin 0 auto
+        text-align center
+      .data-error
+        display flex
+        justify-content center
     
 .vega-chart_download-container
   display flex
@@ -218,6 +225,9 @@ body
       color #888
       font-size x-small
       margin 0 0.5rem
+      &:hover
+        text-decoration underline
+        text-decoration-color #888
     
 // Restoration Module Styling
 .results__restoration
