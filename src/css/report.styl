@@ -12,6 +12,7 @@ body
 @require 'base'
 @require 'results'
 
+
 //- Since this CSS is inlined, this will prevent the map from snapping down when
 //- the title gets injected
 .report-header
@@ -26,10 +27,6 @@ body
   top 0
 
 .report-header__logo-container
-  // position: absolute
-  // left: 1rem
-  // top: 1.75rem
-  // z-index: 1000
   padding 5px 10px 5px 20px
 
 .report-header__logo
@@ -220,7 +217,7 @@ body
   .vega-chart_download-container
     display flex
     flex-flow row
-    flex-wrap wrap
+    flex-wrap nowrap
     align-items center
     justify-content space-between
     width 100%
