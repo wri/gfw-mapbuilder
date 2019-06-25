@@ -984,23 +984,32 @@ const runAnalysis = function runAnalysis (params, feature) {
       const div = document.createElement('div');
       div.id = module.analysisId + '_div';
       div.classList.add('vega-chart');
+      
+      const reportContainerDiv = document.createElement('div');
+      reportContainerDiv.classList.add('report-container');
+      reportContainerDiv.appendChild(div);
       //const label = document.createElement('h3');
       //label.classList.add('vega-chart-label');
       //label.innerHTML = module.label.en;
       //resultsContainer.appendChild(label);
-      resultsContainer.appendChild(div);
+      resultsContainer.appendChild(reportContainerDiv);
       const infoContainerDiv = document.createElement('div');
       infoContainerDiv.classList.add('vega-chart-info-container');
       const infoDiv = document.createElement('div');
       infoDiv.classList.add('vega-chart-info');
       infoDiv.innerHTML = module.description[language];
       infoContainerDiv.appendChild(infoDiv);
+      
       const sectionDiv = document.createElement('div');
+      sectionDiv.classList.add('report-section');
+      sectionDiv.innerHTML = 'TEST';
+      
       analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
         const chartComponent = renderResults(results, language, module, params);
         const moduleDiv = document.getElementById(module.analysisId + '_div');
         ReactDOM.render(chartComponent, moduleDiv);
         moduleDiv.appendChild(infoContainerDiv);
+        moduleDiv.parentNode.insertBefore(sectionDiv, moduleDiv);
       });
       return;
     }
