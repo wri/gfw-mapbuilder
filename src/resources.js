@@ -77,7 +77,6 @@ export default {
     "widgetId": "53a2ad48-46c2-41b0-9a72-8d6ef34131c9",
     "uiParams": "none",
     "featureDataFieldsToPass": ['polygonname'],
-    "fieldToSubstitute": "AnnualPopulationTrend",
   }, {
     "analysisId": "FRAGMENTATION",
     "label": {
