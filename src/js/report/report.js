@@ -518,8 +518,14 @@ const addHeaderContent = function addHeaderContent (params) {
   // document.getElementById('report-subtitle').innerHTML = subtitle;
   // above is now using feature title in addTitleAndAttributes
   //- TODO: This should be modified, logoUrl should come from querying the appid instead of the url since that is safer
-  document.getElementById('logo').setAttribute('src', logoUrl);
+  
+  //document.getElementById('logo').setAttribute('src', logoUrl);
+  const logo = document.createElement('img');
+  logo.setAttribute('src', logoUrl);
+  logo.id = 'logo';
+  logo.classList.add('report-header__logo');
   document.getElementById('logo-anchor').setAttribute('href', logoLinkUrl);
+  document.getElementById('logo-anchor').appendChild(logo);
   document.getElementById('report-icons').innerHTML = `
     <svg class='svg-icon report-header__icon report-header__icon-print'>
       <svg id="icon-print" viewBox="0 0 19 14">
