@@ -299,6 +299,15 @@ export default {
     arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
 
     if (!appid) {
+
+      if (constructorParams) {
+        //- Prune constructorParams by removing null keys
+        constructorParams = pruneValues(constructorParams);
+
+        //- This will merge all the settings in
+        lang.mixin(resources, constructorParams);
+      }
+
       //- Format the resources before resolving
       formatResources().then(formattedResources => {
         promise.resolve(formattedResources);
