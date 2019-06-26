@@ -118,7 +118,7 @@
          ka: 'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
        },
        useGfwWidget: true,
-       widgetId: 'e6c01eff-0d79-4865-a431-65d6adb89589',
+       widgetId: '95c2c559-ca78-4b7a-b18b-7b2bca14ce83',
        uiParams: [{
            inputType: 'rangeSlider',
            startParamName: 'period',
@@ -181,7 +181,7 @@
          ka: 'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგებს სანახავად.'
        },
        useGfwWidget: true,
-       widgetId: '23c064f5-fc93-4888-9db7-6d34c8681dd6',
+       widgetId: 'e53e541c-92cd-4b00-9aa7-2c7bb36d4697',
        uiParams: [{
            inputType: 'rangeSlider',
            startParamName: 'period',
@@ -244,7 +244,7 @@
          ka: 'შედეგები არ იქნება ხელმისაწვდომი, თუკი თქვენ მიერ შერჩეული ფართობი არ შეიცავს ხტლ-ს. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
        },
        "useGfwWidget": true,
-       "widgetId": "d0d22aeb-9642-4c4d-a310-f7fb95a48c21",
+       "widgetId": "2083a1bc-440d-43fe-8b50-ff9918a37c5",
        params: [{
          name: 'layer',
          value: 'ifl2000'
@@ -311,7 +311,7 @@
          ka: 'მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
        },
        useGfwWidget: true,
-       widgetId: 'e2ccdd72-1611-4a41-abd6-23b5cee61fa6',
+       widgetId: '31f78466-fc0b-42f9-a7ae-bea8559740d8',
        params: [{
          name: 'layer',
          value: 'gfw-landcover-2000'
@@ -378,7 +378,7 @@
          ka: 'ემისიები არ შეიცავენ ნახშირის ემისიებს სხვა წყაროებიდან, გარდა ცოცხალი ბიომასის (ხის ვარჯი) კარგვის. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
        },
        useGfwWidget: true,
-       widgetId: '937a74e7-f616-4d1d-91b3-e69c68e278aa',
+       widgetId: 'ac38fdbd-fdb1-4d8e-9109-674013fb51a2',
        uiParams: [{
            inputType: 'rangeSlider',
            startParamName: 'period',
@@ -441,7 +441,7 @@
          ka: 'Count the number of GLAD tree cover loss alerts per month.'
        },
        useGfwWidget: true,
-       widgetId: '0e2da211-a9b2-4271-a437-5de56e437df2',
+       widgetId: '0734ba0a-3a6c-4388-aa4a-5871791b1d1f',
        uiParams: 'none'
      },
      {
@@ -474,7 +474,7 @@
          ka: 'Count the number of GLAD tree cover loss alerts per month.'
        },
        useGfwWidget: true,
-       widgetId: '42784c7d-95dd-40b9-804b-9cfa94c4a4d0',
+       widgetId: '16ff6282-8ceb-4055-938a-43726a62b205',
        uiParams: [{
          inputType: 'datepicker',
          startParamName: 'period',
@@ -524,7 +524,7 @@
          ka: 'ეს ანალიზი თვლის VIIRS ხანძრის შეტყობინებების გამოვლენის რაოდენობას ბოლო 7 დღის განმავლობაში.'
        },
        useGfwWidget: true,
-       widgetId: '97b82853-d9fb-4e74-b9b3-2fac7937f38f',
+       widgetId: '5d696f96-e6c7-4323-8bda-4c99cd6b0cb4',
        uiParams: 'none'
      },
      {
@@ -557,7 +557,7 @@
          ka: 'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA)  და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
        },
        useGfwWidget: true,
-       widgetId: '65dc8170-0049-48e7-94ba-fa846fcb295c',
+       widgetId: '1b84364d-0efd-4d60-81ef-870f7d13ee7b',
        uiParams: 'none',
        params: [{
          name: 'layer',
