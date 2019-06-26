@@ -850,7 +850,7 @@ const renderResults = (results, lang, config, params) => {
       break;
     }
     case 'vega':
-      chartComponent = <VegaChart results={results} language={lang} />;
+      chartComponent = <VegaChart component='Report' results={results} language={lang} />;
       break;
     default:
       break;

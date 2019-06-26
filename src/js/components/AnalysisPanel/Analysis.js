@@ -541,10 +541,10 @@ export default class Analysis extends Component {
         break;
       }
       case 'gfwWidget':
-        chartComponent = <VegaChart language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
+        chartComponent = <VegaChart component='Analysis' language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
         break;
       case 'vega':
-        chartComponent = <VegaChart language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
+        chartComponent = <VegaChart component='Analysis' language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
         break;
       default:
         break;

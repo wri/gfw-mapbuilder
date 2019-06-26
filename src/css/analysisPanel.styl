@@ -287,14 +287,17 @@
   font-size 12px
   display flex
 
-.vega-chart
-  width 100%
-  margin-top 20px
-
-.vega-chart_download-container
-  position relative
-  overflow visible
-  float right
+.vega-chart_container
+  display flex
+  flex-flow column
+  align-items center
+  margin-top 0.5rem
+  .vega-chart_download-container
+    display flex
+    align-items center
+    flex-wrap nowrap
+    justify-content space-between
+    width 100%
 
   .svg-icon
     width 18px
