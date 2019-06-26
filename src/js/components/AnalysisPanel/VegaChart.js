@@ -97,12 +97,13 @@ export default class VegaChart extends Component {
           <div className='vega-chart_download-container'>
             <h3 className="vega-chart-label">{results.data.attributes.name}</h3>
             <div className='vega-chart-menu-container'>
-              <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                <SVGIcon className="vega-chart-menu-icon" id={'gear-icon'} /><span className="vega-chart-menu-text">SETTINGS</span>
+              <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
+                <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
+                {/* <span className="vega-chart-menu-text">SETTINGS</span> */}
               </div>
               <div className="vega-chart-divider"></div>
               <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                <SVGIcon className="vega-chart-menu-icon" id={'gear-icon'} /><span className="vega-chart-menu-text">SETTINGS</span>
+                <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
               </div>
               <div className="vega-chart-divider"></div>
               <div className={`vega-chart-toggle-${toggle}`} onClick={this.toggleChart}>
