@@ -13,23 +13,43 @@ body
 @require 'results'
 
 
-.vega-chart-toggle 
-  transition: all 0.3s ease;
-  background: #888;
-  display: inline-block;
-  border-radius: 10px;
-  position: relative;
-  height: 15px;
-  width: 30px;
+.vega-chart-toggle-true
+  cursor pointer
+  transition all 0.3s ease
+  background #888
+  display inline-block
+  border-radius 10px
+  position relative
+  height 15px
+  width 30px
   .vega-chart-toggle-dot
-    transition: all 0.3s ease;
-    border-radius: 50%;
-    position: absolute;
-    background: #fff;
-    height: 10px;
-    width: 10px;
-    left: 3px;
-    top: 2px;
+    transition all 0.3s ease
+    border-radius 50%
+    position absolute
+    background: #fff
+    height 10px
+    width 10px
+    left 3px
+    top 2px
+
+.vega-chart-toggle-false
+  cursor pointer
+  transition all 0.3s ease
+  background #F0AB00
+  display inline-block
+  border-radius 10px
+  position relative
+  height 15px
+  width 30px
+  .vega-chart-toggle-dot
+    transition all 0.3s ease
+    border-radius 50%
+    position absolute
+    background #fff
+    height 10px
+    width 10px
+    left 17px
+    top 2px
 
 //- Since this CSS is inlined, this will prevent the map from snapping down when
 //- the title gets injected
@@ -217,7 +237,7 @@ body
     .vega-chart-info-container
       width 100%
       border-bottom 1px solid #ccc
-      padding-bottom 1rem
+      padding 1rem 0
       .vega-chart-info
         color #555
         padding 0.5rem
@@ -229,13 +249,14 @@ body
       .data-error
         display flex
         justify-content center
+        margin-bottom 0.5rem
 
 .vega-chart_container
   width 100%
   .vega-chart_download-container
     display flex
     flex-flow row
-    flex-wrap wrap
+    flex-wrap nowrap
     align-items center
     justify-content space-between
     width 100%
@@ -348,19 +369,27 @@ body
   
 .vega-chart-label
   text-transform uppercase
-  text-align left 
+  text-align left
+  margin-bottom 0.5rem
   
 .vega-chart_download-options
-  flex 0 1 100%
-  overflow auto
-  max-height 110px
-  min-width 150px
-  display flex
-  flex-direction column
-  justify-content flex-end
-  z-index 2
-  margin-top 0.25rem
-  a
+  // flex 0 1 100%
+  // overflow auto
+  // max-height 110px
+  // min-width 150px
+  // display flex
+  // flex-direction column
+  // justify-content flex-end
+  // z-index 2
+  // margin-top 0.25rem
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 2;
+  margin-left: auto;
+  margin-top: 0.25rem;
+  .download-option
     padding 8px 10px
     text-decoration none
     color #555
@@ -368,16 +397,18 @@ body
     background #fff
     border 0.75px solid #eee
     margin-left auto
-
-  a:hover
-    background #eee
+    :hover
+      background #eee
 
   .download-option-label
     text-transform uppercase
     
-.vega-chart_divider {
+.vega-chart_divider 
   color #ddd
-}
+
+
+.vega-chart-hide 
+  display none
 
 @media (max-width 550px)
   .report-header__title
@@ -405,26 +436,26 @@ body
         align-items center
         cursor pointer
         margin 0.25rem 0
-      .vega-chart_download-options 
-        flex 0 1 100%
-        overflow auto
-        max-height 110px
-        min-width 150px
-        display flex
-        flex-direction column
-        justify-content center
-        z-index 2
-        .download-option 
-          flex 0 1 100%
-          overflow auto
-          max-height 110px
-          min-width 150px
-          display flex
-          flex-direction column
-          justify-content center
-          z-index 2
-          margin 0
-          text-align center
+        
+  .vega-chart_download-options 
+    max-height 110px
+    min-width 150px
+    width 100%
+    display flex
+    flex-direction column
+    justify-content center
+    z-index 2
+    .download-option 
+      flex 0 1 100%
+      overflow auto
+      max-height 110px
+      min-width 150px
+      display flex
+      flex-direction column
+      justify-content center
+      z-index 2
+      margin 0
+      text-align center
 
 @media (max-width: $mobileBreak)
   .restoration-table
