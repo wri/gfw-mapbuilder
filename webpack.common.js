@@ -20,7 +20,7 @@ module.exports = (PATHS) => {
           path.resolve(__dirname, 'src/css/critical.styl')
         ],
         report: [
-          path.resolve(__dirname, 'src/js/reportMain.js'),
+          path.resolve(__dirname, 'src/js/report.js'),
           path.resolve(__dirname, 'src/css/report.styl')
         ]
         // lib: path.resolve(__dirname, 'src/js/libraryMain.js')

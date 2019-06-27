@@ -25,8 +25,7 @@ export default class ReportMain extends Component {
   };
   
   render() {
-    return(
-      {this.configureApp}
+    return (
       <Report />
     );
   }

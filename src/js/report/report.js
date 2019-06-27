@@ -1,4 +1,4 @@
-
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import analysisKeys from 'constants/AnalysisConstants';
 import layerKeys from 'constants/LayerConstants';
@@ -36,7 +36,6 @@ import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
-import ReportAnalysisArea from './ReportMap';
 
 let map;
 let constructorParams = null;
