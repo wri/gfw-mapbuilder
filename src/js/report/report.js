@@ -1036,18 +1036,9 @@ export default class Report extends Component {
   render () {
     //- Get params necessary for the report
     const params = getUrlParams(location.href);
-    // if (brApp.debug) { console.log(params); }
-    // //- Convert stringified dates back to date objects for analysis
-    // const { viirsStartDate, viirsEndDate, modisStartDate, modisEndDate } = params;
-    // params.viirsFrom = moment(new Date(viirsStartDate));
-    // params.viirsTo = moment(new Date(viirsEndDate));
-    // params.modisFrom = moment(new Date(modisStartDate));
-    // params.modisTo = moment(new Date(modisEndDate));
-    // params.activeFilters = params.activeFilters.split(',');
-    // params.activeVersions = params.activeVersions.split(',');
 
     return (
-      <div className="report">
+      <div>
         <ReportHeader />
         <ReportAnalysisArea />
         {/* If this report.html was opened via the map (rather than a url paste) */}
