@@ -114,7 +114,9 @@ module.exports = (PATHS) => {
           path.resolve(__dirname, 'src/js/reportMain.js'),
           path.resolve(__dirname, 'src/css/report.styl')
         ],
-        libraryMain: path.resolve(__dirname, 'src/js/libraryMain.js')
+        libraryMain: path.resolve(__dirname, 'src/js/libraryMain.js'),
+        reportLibraryMain: path.resolve(__dirname, 'src/js/reportLibraryMain.js')
+
       },
       output: {
         filename: `${version}/js/[name].js`,
@@ -165,12 +167,12 @@ module.exports = (PATHS) => {
         }),
         new HtmlWebpackPlugin({
           template: path.resolve(__dirname, 'src/external.pug'),
-          filename: 'external.html',
+          filename: 'index.html',
           inject: false
         }),
         new HtmlWebpackPlugin({
-          template: path.resolve(__dirname, 'src/report.pug'),
-          filename: `${version}/report.html`,
+          template: path.resolve(__dirname, 'src/externalReport.pug'),
+          filename: `report.html`,
           inject: false
         }),
         new CopyWebpackPlugin([
@@ -181,6 +183,11 @@ module.exports = (PATHS) => {
           {
             from: path.resolve(__dirname, 'src/js/library.js'),
             to: path.resolve(__dirname, `libBuild/${version}.js`),
+            toType: 'file'
+          },
+          {
+            from: path.resolve(__dirname, 'src/js/reportLibrary.js'),
+            to: path.resolve(__dirname, `libBuild/reportLib.${version}.js`),
             toType: 'file'
           }
         ]),

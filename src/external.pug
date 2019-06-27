@@ -6,7 +6,9 @@ html
 	body.tundra
 		#root
 		div#share-modal.modal-wrapper.hidden
-		script(id='library-load' src='https://alpha.blueraster.io.s3.amazonaws.com/gfw-mapbuilder/new-report-styles/1.4.0.js' version='1.4.0')
+		script(id='library-load' src='https://library.gfw-mapbuilder.org/1.4.0.js' version='1.4.0')
+		//- script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/246-report-build-merge/1.4.0.js')
+		//- script(id='library-load' src='js/library.js')
 		script.
 			var customApp = new MapBuilder({
 				el: 'root',
@@ -77,7 +79,7 @@ html
 						en: 'Carto Layers',
 						fr: 'Carto Layers',
 					},
-				
+
 					/**
 					* Custom Analysis Module Configuration
 					* This section provides the opportunity to define additional custom analysis modules.
@@ -100,9 +102,9 @@ html
 					*
 					* (geostore is automatically appended with each request)
 					*/
-				
-				
-				
+
+
+
 					analysisModules: [{
 						analysisId: 'TC_LOSS_GAIN',
 						label: {
@@ -580,7 +582,7 @@ html
 							}]
 						},
 					],
-				
+
 					/**
 					* Layer panel configuration, anything with an = is optional, {object=}
 					* Order at the group level controls the order of the accordions, the top most accordion's layers
@@ -805,7 +807,7 @@ html
 								}
 							}]
 						},
-				
+
 						/**
 						* CUSTOM GROUPS
 						* Add your custom groups below. The custom groups are similar to the groups defined above.
@@ -841,7 +843,7 @@ html
 						* @property {object} layers[].label - the label for the nested group
 						* @property {object[]} layers[].nestedLayers - the layers for the nested group
 						*/
-				
+
 						extraLayers: [{
 							id: 'MASK',
 							type: 'dynamic',
@@ -865,5 +867,6 @@ html
 							}
 						]
 					}
-				}
+				},
+				version: '1.4.0'
 			});

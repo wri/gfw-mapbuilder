@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+
 import ReactDOM from 'react-dom';
 import analysisKeys from 'constants/AnalysisConstants';
 import layerKeys from 'constants/LayerConstants';
@@ -39,6 +39,7 @@ import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportMap';
 
 let map;
+let constructorParams = null;
 
 export default class Report extends Component {
   constructor(props){
