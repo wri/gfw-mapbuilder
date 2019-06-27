@@ -22,7 +22,6 @@ import {formatters} from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
 import Graphic from 'esri/graphic';
 import resources from 'resources';
-import charts from 'utils/charts';
 import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
@@ -36,7 +35,6 @@ import TimeSeriesChart from 'components/AnalysisPanel/TimeSeriesChart';
 import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
-import mapActions from './../actions/MapActions';
 
 let map;
 
@@ -613,9 +611,7 @@ const addTitleAndAttributes = function addTitleAndAttributes (params, featureInf
       if (res.features && res.features.length > 0) {
         if (mapLayer && mapLayer.infoTemplate) {
           const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
-
           //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
-
           const fragment = document.createDocumentFragment();
 
           mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
