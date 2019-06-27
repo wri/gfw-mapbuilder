@@ -36,9 +36,9 @@ import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
+import ReportAnalysisArea from './ReportAnalysisArea';
 
 let map;
-let constructorParams = null;
 
 export default class Report extends Component {
   constructor(props){
@@ -969,7 +969,7 @@ export default class Report extends Component {
         }
         
         analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
-          const chartComponent = renderResults(results, language, module, params);
+          const chartComponent = this.renderResults(results, language, module, params);
           const moduleDiv = document.getElementById(module.analysisId + '_div');
           ReactDOM.render(chartComponent, moduleDiv);
           moduleDiv.appendChild(infoContainerDiv);
@@ -990,7 +990,7 @@ export default class Report extends Component {
         div.classList.add('results-chart');
         resultsContainer.appendChild(div);
   
-        const chartComponent = renderResults(results, language, module, params);
+        const chartComponent = this.renderResults(results, language, module, params);
   
         if (!chartComponent) {
           div.remove();
