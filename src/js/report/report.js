@@ -36,6 +36,7 @@ import FiresBadge from 'components/AnalysisPanel/FiresBadge';
 import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
+import ReportAnalysisArea from './ReportMap';
 
 let map;
 
@@ -1046,8 +1047,9 @@ export default class Report extends Component {
     // params.activeVersions = params.activeVersions.split(',');
 
     return (
-      <div>
+      <div className="report">
         <ReportHeader />
+        <ReportAnalysisArea />
         {/* If this report.html was opened via the map (rather than a url paste) */}
         {opener && this.updateAnalysisModules(params)}
         {/* Create the map as soon as possible */}

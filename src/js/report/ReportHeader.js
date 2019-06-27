@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {getUrlParams} from 'utils/params';
-import ReportAnalysisArea from './ReportMap';
-
 
 export default class ReportHeader extends Component {
     constructor(props) {
@@ -26,7 +24,7 @@ export default class ReportHeader extends Component {
         console.log('params', params);// subtitle was in params
         
         return (
-            <div className="report">
+            <div>
                 <header className="report-header">
                     <div className='report-header__logo-container'>
                         <a id="logo-anchor" target="_blank" href={logoLinkUrl}>
@@ -64,7 +62,6 @@ export default class ReportHeader extends Component {
                             </div>
                         </div>
                     </div>
-                    <ReportAnalysisArea />
                 </header>
             </div>
         );
