@@ -290,7 +290,7 @@ export default {
   * @param {string=} id - optional app id, if you dont provide it, it will attempt to get it from url
   * @return {promise} promise
   */
-  getAppInfo: (id) => {
+  getAppInfo: (id, constructorParams) => {
     const promise = new Deferred();
     const appid = id ? id : getUrlParams(location.href).appid;
 
@@ -299,6 +299,15 @@ export default {
     arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
 
     if (!appid) {
+
+      if (constructorParams) {
+        //- Prune constructorParams by removing null keys
+        constructorParams = pruneValues(constructorParams);
+
+        //- This will merge all the settings in
+        lang.mixin(resources, constructorParams);
+      }
+
       //- Format the resources before resolving
       formatResources().then(formattedResources => {
         promise.resolve(formattedResources);
@@ -308,6 +317,14 @@ export default {
 
     arcgisUtils.getItem(appid).then(res => {
       let agolValues = res.itemData && res.itemData.values;
+
+      if (constructorParams) {
+        //- Prune constructorParams by removing null keys
+        constructorParams = pruneValues(constructorParams);
+
+        //- This will merge all the settings in
+        lang.mixin(resources, constructorParams);
+      }
 
       //- If we dont have agol settings, save the defaults, else merge them in
       if (!agolValues) {
@@ -330,6 +347,7 @@ export default {
         formatResources().then(formattedResources => {
           promise.resolve(formattedResources);
         });
+
       }
 
     }, err => {

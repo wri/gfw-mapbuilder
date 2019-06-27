@@ -29,16 +29,12 @@ const LayersHelper = {
     esriLayer.setVisibleLayers(esriLayer.visibleLayers);
   },
 
-  /**
-  * @param {number} optionIndex - Index of the selected option in the UI, see js/config
-  * @param {boolean} dontRefresh - Whether or not to not fetch a new image
-  */
-  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, dontRefresh) {
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? "viirs" : "modis";
+      const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? 'viirs' : 'modis';
       if (selectValue) {
-        if (firesLayer) {
+        if (firesLayer && firesLayer.visible) {
         // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
         // We are hiding and showing the layer to avoid calling the service multiple times.
 
@@ -66,6 +62,20 @@ const LayersHelper = {
               firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
               firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               break;
+            case '4': //past 7 days
+              const queryString = this.generateFiresQuery(startDate, endDate);
+              const defs = [];
+              firesLayer.hide();
+              if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
+                firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+                firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+                firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+              }
+              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              firesLayer.setLayerDefinitions(defs, false);
+              firesLayer.show();
+
+              break;
             default:
               console.log('default');
               break;
@@ -75,21 +85,22 @@ const LayersHelper = {
           firesLayer.refresh();
           firesLayer.show();
         }
-      } else {
-        const queryString = this.generateFiresQuery(startDate, endDate);
-        const defs = [];
-        if (firesLayer) {
-          firesLayer.hide();
-          if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
-            firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-            firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-            firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-          }
-          firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-          firesLayer.setLayerDefinitions(defs, dontRefresh);
-          firesLayer.show();
-        }
       }
+      // else {
+      //   const queryString = this.generateFiresQuery(startDate, endDate);
+      //   const defs = [];
+      //   if (firesLayer) {
+      //     firesLayer.hide();
+      //     if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
+      //       firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+      //       firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+      //       firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+      //     }
+      //     firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+      //     firesLayer.setLayerDefinitions(defs, dontRefresh);
+      //     firesLayer.show();
+      //   }
+      // }
     }
   },
 
