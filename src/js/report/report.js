@@ -76,7 +76,6 @@ export default class Report extends Component {
 
   getFeature = (params) => {
     const { idvalue } = params;
-    console.log('id value', idvalue);
     const promise = new Deferred();
     if (idvalue) {
       esriRequest({
@@ -86,7 +85,6 @@ export default class Report extends Component {
         timeout: 30000
       }, { usePost: false}).then(geostoreResult => {
   
-        console.log('geostore', geostoreResult);
         const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
         promise.resolve({
           attributes: geostoreResult.data.attributes,
@@ -357,7 +355,6 @@ export default class Report extends Component {
   };
 
   createMap = (params) => {
-  console.log('create map');
     const { basemap } = params;
   
     const options = {
@@ -386,7 +383,6 @@ export default class Report extends Component {
         feature: this.getFeature(params),
         info: this.getApplicationInfo(params)
       }).always((featureResponse) => {
-        console.log('feature response', featureResponse);
         //- Bail if anything failed
         if (featureResponse.error) {
           throw featureResponse.error;

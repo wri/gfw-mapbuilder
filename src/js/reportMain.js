@@ -20,7 +20,6 @@ class ReportMain extends Component {
     super(props);
   }
 
-  
   render() {
     return (
       <Report />
