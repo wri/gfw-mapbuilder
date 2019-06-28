@@ -9,6 +9,7 @@ export default class ReportHeader extends Component {
 
     printReport = () => {
         console.log('print report');
+        window.print();
       };
 
     getReportInfo = () => {
@@ -22,7 +23,6 @@ export default class ReportHeader extends Component {
     render() {
         const params = getUrlParams(location.href);
         const {title, logoUrl, logoLinkUrl} = params;
-        console.log('params', params);// subtitle was in params
         
         return (
             <div>
@@ -36,17 +36,17 @@ export default class ReportHeader extends Component {
                         <h1 id="report-title" className="report-header__title">
                             {`${title} Custom Analysis`}
                         </h1>
-                        <div id="report-icons" className="report-header__icon-container">
-                            <div className="report-print" onClick={this.printReport}>
+                        <ul id="report-icons" className="report-header__icon-container">
+                            <li className="report-print" onClick={this.printReport}>
                                 <SVGIcon id="report-print-icon" />
-                            </div>
-                            <div className="report-info" onClick={this.getReportInfo}>
+                            </li>
+                            <li className="report-info" onClick={this.getReportInfo}>
                                 <SVGIcon id="report-info-icon" />
-                            </div>
-                            <div className="report-share" onClick={this.shareReport}>
+                            </li>
+                            <li className="report-share" onClick={this.shareReport}>
                                 <SVGIcon id="report-share-icon" />
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </header>
             </div>

@@ -76,6 +76,7 @@ export default class Report extends Component {
 
   getFeature = (params) => {
     const { idvalue } = params;
+    console.log('id value', idvalue);
     const promise = new Deferred();
     if (idvalue) {
       esriRequest({
@@ -84,6 +85,8 @@ export default class Report extends Component {
         handleAs: 'json',
         timeout: 30000
       }, { usePost: false}).then(geostoreResult => {
+  
+        console.log('geostore', geostoreResult);
         const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
         promise.resolve({
           attributes: geostoreResult.data.attributes,
@@ -354,6 +357,7 @@ export default class Report extends Component {
   };
 
   createMap = (params) => {
+  console.log('create map');
     const { basemap } = params;
   
     const options = {
@@ -382,6 +386,7 @@ export default class Report extends Component {
         feature: this.getFeature(params),
         info: this.getApplicationInfo(params)
       }).always((featureResponse) => {
+        console.log('feature response', featureResponse);
         //- Bail if anything failed
         if (featureResponse.error) {
           throw featureResponse.error;
@@ -409,7 +414,7 @@ export default class Report extends Component {
         //   runAnalysis(params, feature);
         // } else {
           // window.highchartsPromise.then(() => {
-            this.runAnalysis(params, feature);
+            //this.runAnalysis(params, feature);
           // });
         // }
       });
@@ -911,13 +916,13 @@ export default class Report extends Component {
         module.uiParams.forEach((uiParam) => {
           switch (uiParam.inputType) {
             case 'rangeSlider':
-              uiParamsToAppend = handleRangeSliderParams(uiParamsToAppend, uiParam);
+              uiParamsToAppend = this.handleRangeSliderParams(uiParamsToAppend, uiParam);
               break;
             case 'datepicker':
-              uiParamsToAppend = handleDatepickerParams(uiParamsToAppend, uiParam, module.analysisId, params);
+              uiParamsToAppend = this.handleDatepickerParams(uiParamsToAppend, uiParam, module.analysisId, params);
               break;
             case 'tcd':
-              uiParamsToAppend = handleTcdParams(uiParamsToAppend);
+              uiParamsToAppend = this.handleTcdParams(uiParamsToAppend);
               break;
           }
         });
@@ -1032,19 +1037,21 @@ export default class Report extends Component {
     lang: language
   });
   */
-
-  render () {
-    //- Get params necessary for the report
+  
+  componentDidMount() {
     const params = getUrlParams(location.href);
 
+    window.opener && this.updateAnalysisModules(params);
+  
+    this.createMap(params);
+  }
+
+  render () {
     return (
       <div>
         <ReportHeader />
         <ReportAnalysisArea />
-        {/* If this report.html was opened via the map (rather than a url paste) */}
-        {opener && this.updateAnalysisModules(params)}
-        {/* Create the map as soon as possible */}
-        {this.createMap(params)}
+        
       </div>
     );
   }
