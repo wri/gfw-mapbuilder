@@ -43,6 +43,11 @@ let map;
 export default class Report extends Component {
   constructor(props){
     super(props);
+    
+    this.state = {
+      sections: [],
+      analysisModules: []
+    };
   }
   
   getWebmapInfo = (webmap) => {
@@ -407,11 +412,11 @@ export default class Report extends Component {
   
         //- Make sure highcharts is loaded before using it
         // if (window.highchartsPromise.isResolved()) {
-        //   runAnalysis(params, feature);
+         this.runAnalysis(params, feature);
         // } else {
-          // window.highchartsPromise.then(() => {
-            //this.runAnalysis(params, feature);
-          // });
+        //   window.highchartsPromise.then(() => {
+        //     this.runAnalysis(params, feature);
+        //   });
         // }
       });
   	});
@@ -888,23 +893,22 @@ export default class Report extends Component {
     const { settings } = params;
     const language = params.lang;
   
-    let analysisModules;
-    const stringMods = localStorage.getItem('analysisMods');
-    analysisModules = stringMods ? JSON.parse(stringMods) : '';
+    // let analysisModules;
+    // const stringMods = localStorage.getItem('analysisMods');
+    // analysisModules = stringMods ? JSON.parse(stringMods) : '';
   
-    if (!analysisModules) {
-      analysisModules = settings.analysisModules;
-    }
+    // if (!analysisModules) {
+    //   analysisModules = settings.analysisModules;
+    // }
   
     const { geostoreId } = feature;
-    const resultsContainer = document.getElementById('results-container');
   
     // if there is a selectedModule (need to figure out how to pass this, maybe by analysisModuleId),
     // remove it from the analysisModules array so it doesn't go through the loop below
     // and call a separate function that makes an esriRequest (like below) but with the updated
     // params that were passed into the report
   
-    analysisModules.forEach((module) => {
+    settings.analysisModules.forEach((module) => {
       console.log('module', module);
       let uiParamsToAppend = {};
   
@@ -937,71 +941,77 @@ export default class Report extends Component {
   
       if (module.useGfwWidget) {
         module.chartType = 'vega';
-        const div = document.createElement('div');
-        div.id = module.analysisId + '_div';
-        div.classList.add('vega-chart-wrapper');
+        // const div = document.createElement('div');
+        // div.id = module.analysisId + '_div';
+        // div.classList.add('vega-chart-wrapper');
         
-        const reportContainerDiv = document.createElement('div');
-        reportContainerDiv.classList.add('report-container');
-        reportContainerDiv.appendChild(div);
-        resultsContainer.appendChild(reportContainerDiv);
-        const infoContainerDiv = document.createElement('div');
-        infoContainerDiv.classList.add('vega-chart-info-container');
-        const infoDiv = document.createElement('div');
-        infoDiv.classList.add('vega-chart-info');
-        infoDiv.innerHTML = module.description[language];
-        infoContainerDiv.appendChild(infoDiv);
+        // const reportContainerDiv = document.createElement('div');
+        // reportContainerDiv.classList.add('report-container');
+        // reportContainerDiv.appendChild(div);
+        // resultsContainer.appendChild(reportContainerDiv);
+        // const infoContainerDiv = document.createElement('div');
+        // infoContainerDiv.classList.add('vega-chart-info-container');
+        // const infoDiv = document.createElement('div');
+        // infoDiv.classList.add('vega-chart-info');
+        // infoDiv.innerHTML = module.description[language];
+        // infoContainerDiv.appendChild(infoDiv);
         
-        const sectionDiv = document.createElement('div');
+        // const sectionDiv = document.createElement('div');
         
-        if (module.analysisId === 'TC_LOSS_GAIN') {
-          sectionDiv.classList.add('report-section');
-          sectionDiv.innerHTML = `<h1>Forest Change</h1>`;
-        }
+        // if (module.analysisId === 'TC_LOSS_GAIN') {
+        //   sectionDiv.classList.add('report-section');
+        //   sectionDiv.innerHTML = `<h1>Forest Change</h1>`;
+        // }
         
-        if (module.analysisId === 'VIIRS_FIRES') {
-          sectionDiv.classList.add('report-section');
-          sectionDiv.innerHTML = `<h1>Fires</h1>`;
-        }
+        // if (module.analysisId === 'VIIRS_FIRES') {
+        //   sectionDiv.classList.add('report-section');
+        //   sectionDiv.innerHTML = `<h1>Fires</h1>`;
+        // }
         
-        if (module.analysisId === 'GLAD_ALERTS') {
-          sectionDiv.classList.add('report-section');
-          sectionDiv.innerHTML = `<h1>Alerts</h1>`;
-        }
+        // if (module.analysisId === 'GLAD_ALERTS') {
+        //   sectionDiv.classList.add('report-section');
+        //   sectionDiv.innerHTML = `<h1>Alerts</h1>`;
+        // }
         
-        analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
-          const chartComponent = this.renderResults(results, language, module, params);
-          const moduleDiv = document.getElementById(module.analysisId + '_div');
-          ReactDOM.render(chartComponent, moduleDiv);
-          moduleDiv.appendChild(infoContainerDiv);
-          moduleDiv.parentNode.insertBefore(sectionDiv, moduleDiv);
-        });
-        return;
+        
+        // analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
+        //   const chartComponent = this.renderResults(results, language, module, params);
+        //   const moduleDiv = document.getElementById(module.analysisId + '_div');
+        //   ReactDOM.render(chartComponent, moduleDiv);
+        //   moduleDiv.appendChild(infoContainerDiv);
+        //   moduleDiv.parentNode.insertBefore(sectionDiv, moduleDiv);
+        // });
+        // return;
       }
   
-      esriRequest({
-        url: module.analysisUrl,
-        callbackParamName: 'callback',
-        content: uiParamsToAppend,
-        handleAs: 'json',
-        timeout: 30000
-      }, { usePost: false }).then(results => {
-        const div = document.createElement('div');
-        div.id = module.analysisId;
-        div.classList.add('results-chart');
-        resultsContainer.appendChild(div);
+      // esriRequest({
+      //   url: module.analysisUrl,
+      //   callbackParamName: 'callback',
+      //   content: uiParamsToAppend,
+      //   handleAs: 'json',
+      //   timeout: 30000
+      // }, { usePost: false }).then(results => {
+      //   const div = document.createElement('div');
+      //   div.id = module.analysisId;
+      //   div.classList.add('results-chart');
+      //   resultsContainer.appendChild(div);
   
-        const chartComponent = this.renderResults(results, language, module, params);
+      //   const chartComponent = this.renderResults(results, language, module, params);
   
-        if (!chartComponent) {
-          div.remove();
-        } else {
-          ReactDOM.render(chartComponent, div);
-        }
-      }, (error) => {
-        console.error(error);
-      });
+      //   if (!chartComponent) {
+      //     div.remove();
+      //   } else {
+      //     ReactDOM.render(chartComponent, div);
+      //   }
+      // }, (error) => {
+      //   console.error(error);
+      // });
+      module.reportParams = uiParamsToAppend;
     });
+    this.setState({
+      analysisModules: settings.analysisModules
+    });
+    console.log(settings.analysisModules);
   };
 
   /**
@@ -1036,6 +1046,7 @@ export default class Report extends Component {
   
   componentDidMount() {
     const params = getUrlParams(location.href);
+    console.log('params', params);
 
     window.opener && this.updateAnalysisModules(params);
   
@@ -1043,11 +1054,12 @@ export default class Report extends Component {
   }
 
   render () {
+    console.log(this.state);
     return (
       <div>
         <ReportHeader />
         <ReportAnalysisArea />
-        
+        {}
       </div>
     );
   }
