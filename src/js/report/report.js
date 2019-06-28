@@ -37,6 +37,7 @@ import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
+import ReportAnalysisModule from './ReportAnalysisModule';
 
 let map;
 
@@ -559,7 +560,7 @@ export default class Report extends Component {
                   fieldValue
                 ));
   
-                document.getElementById('popup-content').appendChild(fragment);
+                //document.getElementById('popup-content').appendChild(fragment);
               }
   
             });
@@ -1011,7 +1012,7 @@ export default class Report extends Component {
     this.setState({
       analysisModules: settings.analysisModules
     });
-    console.log(settings.analysisModules);
+    
   };
 
   /**
@@ -1053,13 +1054,19 @@ export default class Report extends Component {
     this.createMap(params);
   }
 
+  
   render () {
     console.log(this.state);
+    const {analysisModules} = this.state;
     return (
       <div>
         <ReportHeader />
         <ReportAnalysisArea />
-        {}
+        {
+          analysisModules.map((module, index) => {
+            return <ReportAnalysisModule module={module} key={`analysis-module-${index}`} />;
+          })
+        }
       </div>
     );
   }
