@@ -338,26 +338,6 @@ export default class Report extends Component {
       });
   };
 
-  // updateAnalysisModules = (params) => {
-  //   let acquiredModules = false;
-  //   window.addEventListener('message', function(e) {
-  //     let info;
-  
-  //     If the message is from the parent and it says it has the info
-  //     if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
-  //       if (!acquiredModules) { //so let's avoid setting it twice
-  //         info = e.data.info;
-  //         // console.log('Info is ' + JSON.stringify(info));
-  //         localStorage.setItem('analysisMods', JSON.stringify(info));
-  //         acquiredModules = true;
-  //       }
-  //     }
-  //   }, false);
-  
-  //   Ask the page opener (the map) to send us the info
-  //   opener.postMessage('send-info', params.origin);
-  // };
-
   createMap = (params) => {
     const { basemap } = params;
   
@@ -942,71 +922,7 @@ export default class Report extends Component {
       if (module.useGfwWidget) {
         module.chartType = 'vega';
         module.reportParams = uiParamsToAppend;
-        // const div = document.createElement('div');
-        // div.id = module.analysisId + '_div';
-        // div.classList.add('vega-chart-wrapper');
-        
-        // const reportContainerDiv = document.createElement('div');
-        // reportContainerDiv.classList.add('report-container');
-        // reportContainerDiv.appendChild(div);
-        // resultsContainer.appendChild(reportContainerDiv);
-        // const infoContainerDiv = document.createElement('div');
-        // infoContainerDiv.classList.add('vega-chart-info-container');
-        // const infoDiv = document.createElement('div');
-        // infoDiv.classList.add('vega-chart-info');
-        // infoDiv.innerHTML = module.description[language];
-        // infoContainerDiv.appendChild(infoDiv);
-        
-        // const sectionDiv = document.createElement('div');
-        
-        // if (module.analysisId === 'TC_LOSS_GAIN') {
-        //   sectionDiv.classList.add('report-section');
-        //   sectionDiv.innerHTML = `<h1>Forest Change</h1>`;
-        // }
-        
-        // if (module.analysisId === 'VIIRS_FIRES') {
-        //   sectionDiv.classList.add('report-section');
-        //   sectionDiv.innerHTML = `<h1>Fires</h1>`;
-        // }
-        
-        // if (module.analysisId === 'GLAD_ALERTS') {
-        //   sectionDiv.classList.add('report-section');
-        //   sectionDiv.innerHTML = `<h1>Alerts</h1>`;
-        // }
-        
-        
-        // analysisUtils.getCustomAnalysis(module, uiParamsToAppend).then(results => {
-        //   const chartComponent = this.renderResults(results, language, module, params);
-        //   const moduleDiv = document.getElementById(module.analysisId + '_div');
-        //   ReactDOM.render(chartComponent, moduleDiv);
-        //   moduleDiv.appendChild(infoContainerDiv);
-        //   moduleDiv.parentNode.insertBefore(sectionDiv, moduleDiv);
-        // });
-        // return;
       }
-  
-      // esriRequest({
-      //   url: module.analysisUrl,
-      //   callbackParamName: 'callback',
-      //   content: uiParamsToAppend,
-      //   handleAs: 'json',
-      //   timeout: 30000
-      // }, { usePost: false }).then(results => {
-      //   const div = document.createElement('div');
-      //   div.id = module.analysisId;
-      //   div.classList.add('results-chart');
-      //   resultsContainer.appendChild(div);
-  
-      //   const chartComponent = this.renderResults(results, language, module, params);
-  
-      //   if (!chartComponent) {
-      //     div.remove();
-      //   } else {
-      //     ReactDOM.render(chartComponent, div);
-      //   }
-      // }, (error) => {
-      //   console.error(error);
-      // });
     });
     this.setState({
       analysisModules: settings.analysisModules
@@ -1046,7 +962,6 @@ export default class Report extends Component {
   
   componentDidMount() {
     const params = getUrlParams(location.href);
-    //window.opener && this.updateAnalysisModules(params);
     this.createMap(params);
   }
 
