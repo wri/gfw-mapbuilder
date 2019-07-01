@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
-import Loader from 'components/Loader';
+import Loader from './../components/Loader';
 
 export default class ReportAnalysis extends Component {
     constructor(props){
         super(props);
         this.state = {
             results: {},
-            isLoading: true
+            isLoading: false
         };
     }
     
@@ -18,13 +18,24 @@ export default class ReportAnalysis extends Component {
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
-            results: results,
-            isLoading: false
+                results: results,
+                isLoading: false
             });
         });
     }
     
+    handleReportAnalysisError = analysisId => {
+        return (
+            <div className="vega-chart-error">
+                {`An error occurred performing selected analysis for ${analysisId}.`}
+            </div>
+        );
+    }
+    
     componentDidMount(){
+        this.setState({
+            isLoading: true
+        });
         this.createReportAnalysis();
     }
     
@@ -35,16 +46,11 @@ export default class ReportAnalysis extends Component {
         return (
             <div className="report-container">
                 <div className="vega-chart-wrapper" id={`${module.analysisId}_div`}>
-                    {!results.data && <Loader active={isLoading} />}
-                    {results.error && 'Error'}
-                    {results.data && <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})}/>}
-                    {/* <div className="vega-chart-info-container">
-                        <div className="vega-chart-info">
-                            {module.description[language]}
-                        </div>
-                    </div> */}
+                    {!results.data && isLoading && <Loader active={isLoading} />}
+                    {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
+                    {results.data && !isLoading && <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
                 </div>
             </div>
         );
     }
-}  
+} 
