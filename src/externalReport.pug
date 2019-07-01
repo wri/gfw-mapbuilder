@@ -1,21 +1,10 @@
 doctype
 html
   head
-
-  body.tundra
-    div.report.inner
-      header.report-header.flex
-        div.report-header__logo-container
-          a#logo-anchor(target='_blank')
-            img#logo.report-header__logo
-        div.report-header__title-container
-          h1#report-title.report-header__title
-          h2#report-subtitle.report-header__subtitle
-
-      div#map.map
-      div#popup-content.popup-content
-      div#results-container.results-container
-    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/246-report-external-build/reportLib.1.4.0.js')
+  body
+    div#report.report
+    
+    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/new-report-styles/reportLib.1.4.0.js')
     meta(charset='utf-8')
     script.
       var customApp = new MapBuilderReport({

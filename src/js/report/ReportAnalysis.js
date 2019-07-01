@@ -44,7 +44,7 @@ export default class ReportAnalysis extends Component {
         const {results, isLoading} = this.state;
         return (
             <div className="report-container">
-                <div className="vega-chart-wrapper" id={`${module.analysisId}_div`}>
+                <div className="vega-chart-wrapper">
                     <Loader active={isLoading} />
                     {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
                     {results.data && <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
