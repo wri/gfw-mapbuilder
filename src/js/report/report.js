@@ -38,6 +38,7 @@ import ReportAnalysisArea from './ReportAnalysisArea';
 import ReportAnalysis from './ReportAnalysis';
 
 let map;
+let constructorParams = null;
 
 export default class Report extends Component {
   constructor(props){
