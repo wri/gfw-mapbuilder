@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import Loader from '../Loader';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -38,6 +39,7 @@ export default class VegaChart extends Component {
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
       
+      //Add loader here when Vega Chart mounts????
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
