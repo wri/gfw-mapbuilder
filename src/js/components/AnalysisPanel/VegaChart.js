@@ -31,14 +31,13 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      console.log('config', this.props.results.data.attributes.widgetConfig);
       // config.autosize = {type: 'fit', resize: true};
       const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
-        config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
+        config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
-
+      
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
@@ -82,7 +81,6 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
     const { results, component } = this.props;
-    //console.log('results', results);
     if (isError) {
       return (
         <div className='data-error'>

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import analysisKeys from 'constants/AnalysisConstants';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
@@ -17,7 +16,6 @@ import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
 import arcgisUtils from 'esri/arcgis/utils';
-import analysisUtils from 'utils/analysisUtils';
 import {formatters} from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
 import Graphic from 'esri/graphic';
@@ -340,25 +338,25 @@ export default class Report extends Component {
       });
   };
 
-  updateAnalysisModules = (params) => {
-    let acquiredModules = false;
-    window.addEventListener('message', function(e) {
-      let info;
+  // updateAnalysisModules = (params) => {
+  //   let acquiredModules = false;
+  //   window.addEventListener('message', function(e) {
+  //     let info;
   
-      // If the message is from the parent and it says it has the info
-      if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
-        if (!acquiredModules) { //so let's avoid setting it twice
-          info = e.data.info;
-          // console.log('Info is ' + JSON.stringify(info));
-          localStorage.setItem('analysisMods', JSON.stringify(info));
-          acquiredModules = true;
-        }
-      }
-    }, false);
+  //     If the message is from the parent and it says it has the info
+  //     if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
+  //       if (!acquiredModules) { //so let's avoid setting it twice
+  //         info = e.data.info;
+  //         // console.log('Info is ' + JSON.stringify(info));
+  //         localStorage.setItem('analysisMods', JSON.stringify(info));
+  //         acquiredModules = true;
+  //       }
+  //     }
+  //   }, false);
   
-    // Ask the page opener (the map) to send us the info
-    opener.postMessage('send-info', params.origin);
-  };
+  //   Ask the page opener (the map) to send us the info
+  //   opener.postMessage('send-info', params.origin);
+  // };
 
   createMap = (params) => {
     const { basemap } = params;
@@ -406,7 +404,8 @@ export default class Report extends Component {
             this.setupMap(params, feature);
           });
         }
-  
+        console.log('params', params);
+        console.log('info', info);
         //- Add the settings to the params so we can omit layers or do other things if necessary
         //- If no appid is provided, the value here is essentially resources.js
         params.settings = info.settings;
@@ -892,7 +891,7 @@ export default class Report extends Component {
 
   runAnalysis = (params, feature) => {
     const { settings } = params;
-    const language = params.lang;
+    //const language = params.lang;
   
     // let analysisModules;
     // const stringMods = localStorage.getItem('analysisMods');
@@ -942,6 +941,7 @@ export default class Report extends Component {
   
       if (module.useGfwWidget) {
         module.chartType = 'vega';
+        module.reportParams = uiParamsToAppend;
         // const div = document.createElement('div');
         // div.id = module.analysisId + '_div';
         // div.classList.add('vega-chart-wrapper');
@@ -1007,7 +1007,6 @@ export default class Report extends Component {
       // }, (error) => {
       //   console.error(error);
       // });
-      module.reportParams = uiParamsToAppend;
     });
     this.setState({
       analysisModules: settings.analysisModules
@@ -1047,25 +1046,24 @@ export default class Report extends Component {
   
   componentDidMount() {
     const params = getUrlParams(location.href);
-    console.log('params', params);
-
-    window.opener && this.updateAnalysisModules(params);
-  
+    //window.opener && this.updateAnalysisModules(params);
     this.createMap(params);
   }
 
   
   render () {
-    console.log(this.state);
     const {analysisModules} = this.state;
+    const params = getUrlParams(location.href);
     return (
       <div>
         <ReportHeader />
         <ReportAnalysisArea />
-        {
-          analysisModules.map((module, index) => {
-            return <ReportAnalysisModule module={module} key={`analysis-module-${index}`} />;
-          })
+        {analysisModules.length > 0 &&
+          <div className="analysis-modules-container">
+            {
+              analysisModules.map((module, index) => <ReportAnalysisModule params={params} module={module} key={`analysis-module-${index}`} />)
+            }
+          </div>
         }
       </div>
     );

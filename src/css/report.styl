@@ -215,41 +215,42 @@ body
     h1
       margin-bottom 0.5rem
       
-.results-container
+.analysis-modules-container
   .results-chart
     margin-top 100px
-  .vega-chart-wrapper
+    
+.vega-chart-wrapper
+  display flex
+  flex-wrap nowrap
+  flex-direction column
+  justify-content center
+  align-items center
+  width 100%
+  padding 1rem 2rem
+  canvas
+    margin 0 auto
     display flex
-    flex-wrap nowrap
-    flex-direction column
-    justify-content center
-    align-items center
+    width 300px !important
+    height auto !important
+  .vega-bindings
+    margin 0 auto
+    display flex
+  .vega-chart-info-container
     width 100%
-    padding 1rem 2rem
-    canvas
+    border-bottom 1px solid #ccc
+    padding 1rem 0
+    .vega-chart-info
+      color #555
+      padding 0.5rem
+      font-size x-small
+      width 75%
       margin 0 auto
+      text-align center
+      border 1px solid #eee
+    .data-error
       display flex
-      width 300px !important
-      height auto !important
-    .vega-bindings
-      margin 0 auto
-      display flex
-    .vega-chart-info-container
-      width 100%
-      border-bottom 1px solid #ccc
-      padding 1rem 0
-      .vega-chart-info
-        color #555
-        padding 0.5rem
-        font-size x-small
-        width 75%
-        margin 0 auto
-        text-align center
-        border 1px solid #eee
-      .data-error
-        display flex
-        justify-content center
-        margin-bottom 0.5rem
+      justify-content center
+      margin-bottom 0.5rem
 
 .vega-chart_container
   width 100%
