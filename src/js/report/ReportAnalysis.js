@@ -13,8 +13,10 @@ export default class ReportAnalysis extends Component {
     }
     
     createReportAnalysis = () => {
+        this.setState({
+            isLoading: true
+        });
         const {module} = this.props;
-        //const language = params.lang;
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
@@ -27,15 +29,12 @@ export default class ReportAnalysis extends Component {
     handleReportAnalysisError = analysisId => {
         return (
             <div className="vega-chart-error">
-                {`An error occurred performing selected analysis for ${analysisId}.`}
+                {`An error occurred performing the selected analysis for ${analysisId}.`}
             </div>
         );
     }
     
     componentDidMount(){
-        this.setState({
-            isLoading: true
-        });
         this.createReportAnalysis();
     }
     
@@ -46,9 +45,9 @@ export default class ReportAnalysis extends Component {
         return (
             <div className="report-container">
                 <div className="vega-chart-wrapper" id={`${module.analysisId}_div`}>
-                    {!results.data && isLoading && <Loader active={isLoading} />}
+                    <Loader active={isLoading} />
                     {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && !isLoading && <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
+                    {results.data && <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
                 </div>
             </div>
         );
