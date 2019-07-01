@@ -3,7 +3,6 @@ const path = require('path');
 
 const common = require('./webpack.common');
 const development = require('./webpack.development');
-const production = require('./webpack.production');
 
 module.exports = (env) => {
   console.log('Environment:', env);
@@ -17,10 +16,7 @@ module.exports = (env) => {
     assets: './'
   };
 
-  // Default to development webpack unless production is specified
-  if (env === 'production') {
-    return merge(common(PATHS), production(PATHS));
-  } else {
-    return merge(common(PATHS), development(PATHS));
-  }
+  // We only use webpack development via this config
+  return merge(common(PATHS), development(PATHS));
+
 };
