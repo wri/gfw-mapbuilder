@@ -131,6 +131,16 @@ export default class VegaChart extends Component {
             </div>
           }
           <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+          {component === 'Report' &&
+            <div>
+              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+                <div className="vega-chart-info">
+                    DESCRIPTION GOES HERE
+                </div>
+              </div>
+              <div className="vega-chart-separator"></div>
+            </div>
+          }
         </div>
       );
     }

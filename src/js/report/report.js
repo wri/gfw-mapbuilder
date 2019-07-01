@@ -35,7 +35,7 @@ import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
-import ReportAnalysisModule from './ReportAnalysisModule';
+import ReportAnalysis from './ReportAnalysis';
 
 let map;
 
@@ -72,7 +72,7 @@ export default class Report extends Component {
       });
     } else {
       promise.reject({
-        error: new Error('Missing Webmap Id. We need atleast one.')
+        error: new Error('Missing Webmap Id. We need at least one.')
       });
     }
     return promise;
@@ -976,7 +976,7 @@ export default class Report extends Component {
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {
-              analysisModules.map((module, index) => <ReportAnalysisModule params={params} module={module} key={`analysis-module-${index}`} />)
+              analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
             }
           </div>
         }
