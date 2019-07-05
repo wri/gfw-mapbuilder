@@ -373,11 +373,11 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, callback, selectedAttributes, id) => {
+  makeVegaChart: (el, config, callback, selectedAttributes, id, handleError) => {
     if (selectedAttributes) { // WCS Specific logic
 			const baseConfig = resources.analysisModules.find(mod => mod.widgetId === id);
       const baseUrl = config.data[0].url.split('?')[0];
-			const queryParams = encodeURI(config.featureDataFieldsToPass
+			let queryParams = encodeURI(config.featureDataFieldsToPass
 				.filter(fieldName => {
 					const fieldToSubstitute = baseConfig.fieldToSubstitute ? baseConfig.fieldToSubstitute : 'analyticId';
 					return selectedAttributes[fieldName === 'analyticid' ? fieldToSubstitute : fieldName];
@@ -390,15 +390,27 @@ export default {
 				return `${fieldName}=${value}`;
 			}).join('&'));
 
-			console.log('queryParams', queryParams)
+      //We have the correct queryParams, but this 'MapBuilderVegaSQL' also requires the analysisId from the analysisModule sent in as a param: analysisId=...
+      let analysisSuffix = '';
+      if (baseConfig.analysisId) {
+        analysisSuffix = encodeURI('analysisId=' + baseConfig.analysisId);
+        queryParams += '&' + analysisSuffix;
+      }
 
       function render(spec) {
-        new vega.View(vega.parse(spec))
+        if (vega) {
+          new vega.View(vega.parse(spec))
           .renderer('canvas')
           .initialize(el)
           .hover()
           .run();
+        } else {
+          handleError('Error creating analysis.');
+        }
       }
+
+      // const fakeUrl = 'https://measures.wcs.org/DesktopModules/WCSVega/API/Data/MapBuilderVegaSQL?polygonname=Nouabale-Ndoki%20NP&AnalysisID=WCS_SpeciesPopulationTrend_WCSBarChart2DropDown_%5bTabID%5d_%5bPortalID%5d_%5bLocale%5d___';
+      // url: fakeUrl, //down in the esriRequest to debug what a successful call looks like
 
       esriRequest({
         url: `${baseUrl}?${queryParams}`,
@@ -406,8 +418,10 @@ export default {
         callbackParamName: 'callback'
       }).then(res => {
         render(res);
+        if (callback) { callback(); }
       }, err => {
         console.log('err', err);
+        handleError('Error creating analysis.');
       });
     } else {
       new vega.View(vega.parse(config))

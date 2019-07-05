@@ -8,7 +8,7 @@ export default class VegaChart extends Component {
     this.state = { isError: false, errorMsg: null };
   }
 
-  handleError(errorMsg) {
+  handleError = (errorMsg) => {
     this.setState({ isError: true, errorMsg });
     this.props.setLoading();
   }
@@ -18,20 +18,7 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      const url = config.data[0].url;
-
-      fetch(url).then(res => {
-        if (res.status !== 200) {
-          this.handleError('Error creating analysis.');
-        } else {
-          res.json().then(() => {
-            charts.makeVegaChart(this.chart, config, this.props.setLoading, this.props.selectedFeature.attributes, this.props.results.data.id);
-          });
-        }
-
-      }).catch(() => {
-        this.handleError('Error creating analysis.');
-      });
+      charts.makeVegaChart(this.chart, config, this.props.setLoading, this.props.selectedFeature.attributes, this.props.results.data.id, this.handleError);
     }
   }
 
