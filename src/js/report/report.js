@@ -37,6 +37,7 @@ import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
 import ReportAnalysis from './ReportAnalysis';
 
+
 let map;
 let constructorParams = null;
 
@@ -385,7 +386,6 @@ export default class Report extends Component {
             this.setupMap(params, feature);
           });
         }
-        console.log('params', params);
         console.log('info', info);
         //- Add the settings to the params so we can omit layers or do other things if necessary
         //- If no appid is provided, the value here is essentially resources.js
@@ -970,10 +970,11 @@ export default class Report extends Component {
   render () {
     const {analysisModules} = this.state;
     const params = getUrlParams(location.href);
+    console.log('params', params);
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea />
+        <ReportAnalysisArea params={params} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {
