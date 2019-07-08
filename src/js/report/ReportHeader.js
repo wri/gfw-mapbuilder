@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import {getUrlParams} from 'utils/params';
 import SVGIcon from './../utils/svgIcon';
+import ShareModal from './../components/Modals/ShareModal';
 
 export default class ReportHeader extends Component {
     constructor(props) {
-      super(props);
+        super(props);
+        this.state = {
+            showModal: false
+        };
     }
 
+
     printReport = () => {
-        console.log('print report');
         window.print();
       };
 
@@ -18,11 +22,16 @@ export default class ReportHeader extends Component {
 
     shareReport= () => {
         console.log('share report');
+        const showModal = this.state.showModal;
+        this.setState({
+            showModal: !showModal
+        });
     };
 
     render() {
         const params = getUrlParams(location.href);
         const {title, logoUrl, logoLinkUrl} = params;
+        const {showModal} = this.props;
         
         return (
             <div>
@@ -48,7 +57,11 @@ export default class ReportHeader extends Component {
                             </li>
                         </ul>
                     </div>
+                    <div id="share-modal">
+                        <ShareModal />
+                    </div>
                 </header>
+                
             </div>
         );
     }
