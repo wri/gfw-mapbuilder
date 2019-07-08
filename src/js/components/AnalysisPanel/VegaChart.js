@@ -73,7 +73,7 @@ export default class VegaChart extends Component {
       </a>
     );
   };
-  
+
   toggleChart = () => {
     this.setState({
       toggle: !this.state.toggle
