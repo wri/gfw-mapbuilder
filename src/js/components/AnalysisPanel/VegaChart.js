@@ -3,6 +3,7 @@ import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
 import Loader from '../Loader';
+import esriRequest from 'esri/request';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ export default class VegaChart extends Component {
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
       chartName: '',
-      toggle: false
+      toggle: false,
+      description: ''
     };
   }
 
@@ -28,6 +30,7 @@ export default class VegaChart extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.results);
     if (this.props.results.hasOwnProperty('error')) {
       this.handleError();
     } else {
@@ -39,6 +42,25 @@ export default class VegaChart extends Component {
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
       
+      const dataset = this.props.results.data.attributes.dataset;
+      const id = this.props.results.data.id;
+      
+   
+      fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
+        res.json().then(json => {
+          if (res.status !== 200) {
+            this.setState({
+              description: 'Error retrieving description'
+            });
+          } else {
+          this.setState({
+            description: json.data[0].attributes.description
+          });
+          console.log(this.state.description);
+          }
+        });
+      });
+  
       //Add loader here when Vega Chart mounts????
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
@@ -81,7 +103,7 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
     const { results, component } = this.props;
     if (isError) {
       return (
@@ -137,7 +159,7 @@ export default class VegaChart extends Component {
             <div>
               <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
                 <div className="vega-chart-info">
-                    DESCRIPTION GOES HERE
+                    {description}
                 </div>
               </div>
               <div className="vega-chart-separator"></div>
