@@ -473,5 +473,22 @@ body
   h3
   h4
     margin 0 5px
+    
+@media print
+  .report-header
+    background-color #555 !important
+    -webkit-print-color-adjust exact
+    .report-header__title-container
+      .report-header__title
+        color #fff !important
+        -webkit-print-color-adjust exact
+  .analysis-area
+    background-color #eee !important
+    -webkit-print-color-adjust exact
+  .report-header__icon-container
+  .vega-chart-menu-container
+    display none !important 
+  
+    
 
 
