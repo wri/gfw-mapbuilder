@@ -39,17 +39,17 @@ export default class ShareModal extends React.Component {
   }
 
   shareGoogle () {
-    const url = modalText.share.googleUrl(this.state.bitlyUrl);
+    const url = modalText.share.googleUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Google Plus', windowOptions);
   }
 
   shareFacebook () {
-    const url = modalText.share.facebookUrl(this.state.bitlyUrl);
+    const url = modalText.share.facebookUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Facebook', windowOptions);
   }
 
   shareTwitter () {
-    const url = modalText.share.twitterUrl(this.state.bitlyUrl);
+    const url = modalText.share.twitterUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Twitter', windowOptions);
   }
 
@@ -62,12 +62,14 @@ export default class ShareModal extends React.Component {
   }
 
   render () {
+  
+    const {url} = this.props;
     return (
       <ModalWrapper>
         <div className='modal-title'>{modalText.share.title}</div>
         <div className='share-instructions'>{modalText.share.linkInstructions}</div>
         <div className='share-input'>
-          <input ref='shareInput' type='text' readOnly value={this.state.bitlyUrl} onClick={this.handleFocus} />
+          <input ref='shareInput' type='text' readOnly value={url ? url : this.state.bitlyUrl} onClick={this.handleFocus} />
           <button className='gfw-btn white pointer' onClick={this.copyShare}>{this.state.copyText}</button>
         </div>
         <div className='share-items'>
@@ -81,6 +83,7 @@ export default class ShareModal extends React.Component {
             <SVGIcon id={'icon-facebook'} />
           </div>
         </div>
+        {}
       </ModalWrapper>
     );
   }

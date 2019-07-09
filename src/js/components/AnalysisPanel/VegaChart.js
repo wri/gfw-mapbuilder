@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
-import Loader from '../Loader';
+
 
 export default class VegaChart extends Component {
   constructor(props) {
