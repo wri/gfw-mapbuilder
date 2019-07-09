@@ -14,7 +14,6 @@ class ReportMain extends Component {
     window.brApp = {
       debug: location.search.slice(1).search('debug=true') > -1
     };
-    
     corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
   }
 
@@ -26,5 +25,5 @@ class ReportMain extends Component {
 }
 
 ReactDOM.render(<ReportMain />, document.getElementById('report'));
-ReactDOM.render(<ShareModal />, document.getElementById('share-modal'));
+ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
 

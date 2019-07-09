@@ -62,7 +62,6 @@ export default class ShareModal extends React.Component {
   }
 
   render () {
-  
     const {url} = this.props;
     return (
       <ModalWrapper>
@@ -83,7 +82,6 @@ export default class ShareModal extends React.Component {
             <SVGIcon id={'icon-facebook'} />
           </div>
         </div>
-        {}
       </ModalWrapper>
     );
   }

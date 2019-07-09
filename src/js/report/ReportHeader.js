@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {getUrlParams} from 'utils/params';
 import SVGIcon from './../utils/svgIcon';
-import modalActions from './../actions/ModalActions';
-import ShareModal from '../components/Modals/ShareModal';
 
 export default class ReportHeader extends Component {
     constructor(props) {
@@ -20,7 +17,6 @@ export default class ReportHeader extends Component {
     };
 
     shareReport = () => {
-        console.log('share report');
         document.getElementById('share-modal').classList.toggle('hidden');
     };
 
@@ -52,7 +48,6 @@ export default class ReportHeader extends Component {
                         </ul>
                     </div>
                 </header>
-                
             </div>
         );
     }
