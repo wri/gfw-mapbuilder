@@ -51,7 +51,7 @@ export default class ReportAnalysis extends Component {
                 <div className="vega-chart-wrapper">
                     <Loader active={isLoading} />
                     {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && <VegaChart reportTitle={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
+                    {results.data && <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
                 </div>
             </div>
         );
