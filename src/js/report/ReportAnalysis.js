@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
+import Loader from '../components/Loader';
 
 export default class ReportAnalysis extends Component {
     constructor(props){
         super(props);
         this.state = {
             results: {},
+            isLoading: true
         };
     }
     
@@ -15,7 +17,7 @@ export default class ReportAnalysis extends Component {
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
-                results: results,
+                results: results
             });
         });
     }
@@ -29,23 +31,24 @@ export default class ReportAnalysis extends Component {
     }
     
     componentDidMount(){
-        setTimeout(this.createReportAnalysis(), 10000);
-        
+        this.createReportAnalysis();
     }
     
     render(){
         const {module, params} = this.props;
         const language = params.lang;
-        const {results} = this.state;
+        const {results, isLoading} = this.state;
         return (
             <div className="report-container">
                 <div className="vega-chart-wrapper">
-                   
-                    {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
-                    {!results.data && <p>LOADING</p>}
-                    {results.data && <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
+                    {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
+                    {results.data ?
+                        <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />
+                        :
+                        <Loader active={results.data ? false : true} />
+                    }
                 </div>
             </div>
         );
     }
-} 
+}
