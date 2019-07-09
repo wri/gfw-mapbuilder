@@ -3,6 +3,7 @@ import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
 import Loader from '../Loader';
+import resources from './../../../resources';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -15,8 +16,8 @@ export default class VegaChart extends Component {
       downloadOptions: [],
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
-      chartName: '',
-      toggle: false
+      toggle: false,
+      chartTitle: ''
     };
   }
 
@@ -38,7 +39,6 @@ export default class VegaChart extends Component {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
-      
       //Add loader here when Vega Chart mounts????
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
@@ -54,6 +54,7 @@ export default class VegaChart extends Component {
             }
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
             this.setState({ downloadOptions, chartDownloadTitle });
+            this.getChartTitle();
           });
         }
       })
@@ -79,10 +80,28 @@ export default class VegaChart extends Component {
       toggle: !this.state.toggle
     });
   }
+  
+  getChartTitle = () => {
+    const { results, language } = this.props;
+    const id = results.data.id;
+    const analysisModules = resources.analysisModules;
+    let analysisModuleTitle;
+    analysisModules.forEach(module => {
+      if (module.widgetId === id){
+        analysisModuleTitle = module.title[language];
+      }
+      else {
+        analysisModuleTitle = 'Title Unavailable';
+      }
+      this.setState({
+        chartTitle: analysisModuleTitle
+      });
+    });
+  }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
-    const { results, component } = this.props;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, chartTitle } = this.state;
+    const { results, component, language } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -97,7 +116,8 @@ export default class VegaChart extends Component {
           }
           {component === 'Report' ?
           <div className='vega-chart_download-container'>
-            <h3 className="vega-chart-label">{results.data.attributes.name}</h3>
+            {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
+            <h3 className="vega-chart-label">{chartTitle}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
