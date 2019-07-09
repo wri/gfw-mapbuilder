@@ -144,8 +144,10 @@ export default class VegaChart extends Component {
               }}
               >
                 {({ measureRef }) => (
-            <div  ref={measureRef}></div>
-                <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  <div ref={measureRef}>
+                    {width < 250 && <div width={width} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>}
+                  </div>
+                )}
               </Measure>
               {component === 'Report' &&
                 <div>
