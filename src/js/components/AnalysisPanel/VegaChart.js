@@ -87,21 +87,23 @@ export default class VegaChart extends Component {
     const analysisModules = resources.analysisModules;
     let analysisModuleTitle;
     analysisModules.forEach(module => {
-      if (module.widgetId === id){
+      console.log('widget id', module.widgetId);
+      console.log('id', id);
+      if (id === module.widgetId){
         analysisModuleTitle = module.title[language];
       }
       else {
         analysisModuleTitle = 'Title Unavailable';
       }
-      this.setState({
-        chartTitle: analysisModuleTitle
-      });
+    });
+    this.setState({
+      chartTitle: analysisModuleTitle
     });
   }
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, chartTitle } = this.state;
-    const { results, component, language } = this.props;
+    const { results, component } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
