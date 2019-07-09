@@ -16,8 +16,7 @@ export default class VegaChart extends Component {
       downloadOptions: [],
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
-      toggle: false,
-      chartTitle: ''
+      toggle: false
     };
   }
 
@@ -54,7 +53,6 @@ export default class VegaChart extends Component {
             }
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
             this.setState({ downloadOptions, chartDownloadTitle });
-            this.getChartTitle(results, language);
           });
         }
       })
@@ -80,32 +78,10 @@ export default class VegaChart extends Component {
       toggle: !this.state.toggle
     });
   }
-  
-  getChartTitle = (results, language) => {
-    //const { results, language } = this.props;
-    const id = results.data.id;
-    const analysisModules = resources.analysisModules;
-    let analysisModuleTitle;
-    //console.log('results', results);
-    //debugger
-    analysisModules.forEach(module => {
-      console.log('widget id', module.widgetId);
-      console.log('id', id);
-      if (id === module.widgetId){
-        analysisModuleTitle = module.title[language];
-      }
-      else {
-        analysisModuleTitle = 'Title Unavailable';
-      }
-    });
-    this.setState({
-      chartTitle: analysisModuleTitle
-    });
-  }
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, chartTitle } = this.state;
-    const { results, component, reportTitle } = this.props;
+    const { results, component, reportLabel } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -121,7 +97,7 @@ export default class VegaChart extends Component {
           {component === 'Report' ?
           <div className='vega-chart_download-container'>
             {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
-            <h3 className="vega-chart-label">{reportTitle !== '' ? reportTitle : chartTitle}</h3>
+            <h3 className="vega-chart-label">{reportLabel !== '' ? reportLabel : 'Report Label Unavailable'}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
@@ -138,7 +114,7 @@ export default class VegaChart extends Component {
             </div>
           </div> :
           <div className='vega-chart_download-container'>
-            <h3 className="vega-chart-label">{reportTitle !== '' ? reportTitle : chartTitle}</h3>
+            <h3 className="vega-chart-label">{reportLabel !== '' ? reportLabel : 'Report Label Unavailable'}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
