@@ -92,7 +92,7 @@
        analysisId: 'TC_LOSS_GAIN',
        label: {
          en: 'Total tree cover loss/ gain',
-         fr: 'Perte/gain total de la couverture arborée',
+         fr: 'Perte/gain total de la couverture arborée!!!!!',
          es: 'Pérdida/ganancia de cobertura arbórea total',
          pt: 'Perda/ganho total de cobertura arbórea',
          id: 'Total kehilangan/perolehan tutupan pohon ',

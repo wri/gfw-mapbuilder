@@ -34,7 +34,7 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       // config.autosize = {type: 'fit', resize: true};
-      const {setLoading, language} = this.props;
+      const {setLoading, language, results} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
@@ -54,7 +54,7 @@ export default class VegaChart extends Component {
             }
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
             this.setState({ downloadOptions, chartDownloadTitle });
-            this.getChartTitle();
+            this.getChartTitle(results, language);
           });
         }
       })
@@ -81,11 +81,13 @@ export default class VegaChart extends Component {
     });
   }
   
-  getChartTitle = () => {
-    const { results, language } = this.props;
+  getChartTitle = (results, language) => {
+    //const { results, language } = this.props;
     const id = results.data.id;
     const analysisModules = resources.analysisModules;
     let analysisModuleTitle;
+    //console.log('results', results);
+    //debugger
     analysisModules.forEach(module => {
       console.log('widget id', module.widgetId);
       console.log('id', id);
@@ -103,7 +105,7 @@ export default class VegaChart extends Component {
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, chartTitle } = this.state;
-    const { results, component } = this.props;
+    const { results, component, reportTitle } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -119,7 +121,7 @@ export default class VegaChart extends Component {
           {component === 'Report' ?
           <div className='vega-chart_download-container'>
             {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
-            <h3 className="vega-chart-label">{chartTitle}</h3>
+            <h3 className="vega-chart-label">{reportTitle !== '' ? reportTitle : chartTitle}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
