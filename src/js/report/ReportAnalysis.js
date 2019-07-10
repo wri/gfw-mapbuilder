@@ -17,7 +17,8 @@ export default class ReportAnalysis extends Component {
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
-                results: results
+                results: results,
+                isLoading: false
             });
         });
     }
