@@ -69,16 +69,16 @@ export default class ShareModal extends React.Component {
         <div className='share-instructions'>{modalText.share.linkInstructions}</div>
         <div className='share-input'>
           <input ref='shareInput' type='text' readOnly value={url ? url : this.state.bitlyUrl} onClick={this.handleFocus} />
-          <button className='gfw-btn white pointer' onClick={this.copyShare}>{this.state.copyText}</button>
+          <button className='gfw-btn white pointer' onClick={() => this.copyShare()}>{this.state.copyText}</button>
         </div>
         <div className='share-items'>
-          <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={this.shareGoogle}>
+          <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={() => this.shareGoogle()}>
             <SVGIcon id={'icon-googleplus'} />
           </div>
-          <div title='Twitter' className='share-card twitter-modal pointer' onClick={this.shareTwitter}>
+          <div title='Twitter' className='share-card twitter-modal pointer' onClick={() => this.shareTwitter()}>
             <SVGIcon id={'icon-twitter'} />
           </div>
-          <div title='Facebook' className='share-card facebook-modal pointer' onClick={this.shareFacebook}>
+          <div title='Facebook' className='share-card facebook-modal pointer' onClick={() => this.shareFacebook()}>
             <SVGIcon id={'icon-facebook'} />
           </div>
         </div>
