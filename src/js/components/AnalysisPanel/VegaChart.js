@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import esriRequest from 'esri/request';
+
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -14,7 +16,8 @@ export default class VegaChart extends Component {
       downloadOptions: [],
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
-      toggle: false
+      toggle: false,
+      description: ''
     };
   }
 
@@ -36,6 +39,27 @@ export default class VegaChart extends Component {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
+      
+      const dataset = this.props.results.data.attributes.dataset;
+      const id = this.props.results.data.id;
+      
+   
+      if (this.props.component === 'Report'){
+        fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
+          res.json().then(json => {
+            if (res.status !== 200) {
+              this.setState({
+                description: 'Error retrieving description'
+              });
+            } else {
+            this.setState({
+              description: json.data[0].attributes.description
+            });
+            }
+          });
+        });
+      }
+      
       //Add loader here when Vega Chart mounts????
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
@@ -78,7 +102,7 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle} = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
     const { results, component, reportLabel } = this.props;
     if (isError) {
       return (
@@ -135,7 +159,7 @@ export default class VegaChart extends Component {
             <div>
               <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
                 <div className="vega-chart-info">
-                    DESCRIPTION GOES HERE
+                    {description}
                 </div>
               </div>
               <div className="vega-chart-separator"></div>
