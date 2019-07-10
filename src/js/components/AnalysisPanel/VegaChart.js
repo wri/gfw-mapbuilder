@@ -30,7 +30,6 @@ export default class VegaChart extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.results);
     if (this.props.results.hasOwnProperty('error')) {
       this.handleError();
     } else {
@@ -46,20 +45,22 @@ export default class VegaChart extends Component {
       const id = this.props.results.data.id;
       
    
-      fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
-        res.json().then(json => {
-          if (res.status !== 200) {
+      if (this.props.component === 'Report'){
+        fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
+          res.json().then(json => {
+            if (res.status !== 200) {
+              this.setState({
+                description: 'Error retrieving description'
+              });
+            } else {
             this.setState({
-              description: 'Error retrieving description'
+              description: json.data[0].attributes.description
             });
-          } else {
-          this.setState({
-            description: json.data[0].attributes.description
+            }
           });
-          console.log(this.state.description);
-          }
         });
-      });
+      }
+      
   
       //Add loader here when Vega Chart mounts????
       fetch(config.data[0].url).then(res => {
