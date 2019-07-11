@@ -4,11 +4,11 @@ import SVGIcon from './../utils/svgIcon';
 
 export default class ReportHeader extends Component {
     constructor(props) {
-      super(props);
+        super(props);
     }
 
+
     printReport = () => {
-        console.log('print report');
         window.print();
       };
 
@@ -16,14 +16,14 @@ export default class ReportHeader extends Component {
         console.log('get report info');
     };
 
-    shareReport= () => {
+    shareReport = () => {
         console.log('share report');
+        document.getElementById('share-modal').classList.toggle('hidden');
     };
 
     render() {
         const params = getUrlParams(location.href);
         const {title, logoUrl, logoLinkUrl} = params;
-        
         return (
             <div>
                 <header className="report-header">

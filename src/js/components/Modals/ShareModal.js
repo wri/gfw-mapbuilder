@@ -12,8 +12,9 @@ export default class ShareModal extends React.Component {
   constructor (props) {
     super(props);
 
-    modalStore.listen(this.storeUpdated.bind(this));
+    modalStore.listen(this.storeUpdated);
     const defaultState = modalStore.getState();
+    console.log('default state', defaultState);
     this.state = {
       bitlyUrl: defaultState.bitlyUrl,
       copyText: modalText.share.copyButton
@@ -38,17 +39,17 @@ export default class ShareModal extends React.Component {
   }
 
   shareGoogle () {
-    const url = modalText.share.googleUrl(this.state.bitlyUrl);
+    const url = modalText.share.googleUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Google Plus', windowOptions);
   }
 
   shareFacebook () {
-    const url = modalText.share.facebookUrl(this.state.bitlyUrl);
+    const url = modalText.share.facebookUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Facebook', windowOptions);
   }
 
   shareTwitter () {
-    const url = modalText.share.twitterUrl(this.state.bitlyUrl);
+    const url = modalText.share.twitterUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Twitter', windowOptions);
   }
 
@@ -61,22 +62,23 @@ export default class ShareModal extends React.Component {
   }
 
   render () {
+    const {url} = this.props;
     return (
       <ModalWrapper>
         <div className='modal-title'>{modalText.share.title}</div>
         <div className='share-instructions'>{modalText.share.linkInstructions}</div>
         <div className='share-input'>
-          <input ref='shareInput' type='text' readOnly value={this.state.bitlyUrl} onClick={this.handleFocus} />
-          <button className='gfw-btn white pointer' onClick={this.copyShare.bind(this)}>{this.state.copyText}</button>
+          <input ref='shareInput' type='text' readOnly value={url ? url : this.state.bitlyUrl} onClick={this.handleFocus} />
+          <button className='gfw-btn white pointer' onClick={() => this.copyShare()}>{this.state.copyText}</button>
         </div>
         <div className='share-items'>
-          <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={this.shareGoogle.bind(this)}>
+          <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={() => this.shareGoogle()}>
             <SVGIcon id={'icon-googleplus'} />
           </div>
-          <div title='Twitter' className='share-card twitter-modal pointer' onClick={this.shareTwitter.bind(this)}>
+          <div title='Twitter' className='share-card twitter-modal pointer' onClick={() => this.shareTwitter()}>
             <SVGIcon id={'icon-twitter'} />
           </div>
-          <div title='Facebook' className='share-card facebook-modal pointer' onClick={this.shareFacebook.bind(this)}>
+          <div title='Facebook' className='share-card facebook-modal pointer' onClick={() => this.shareFacebook()}>
             <SVGIcon id={'icon-facebook'} />
           </div>
         </div>

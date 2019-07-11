@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
-import esriRequest from 'esri/request';
 
 
 export default class VegaChart extends Component {
