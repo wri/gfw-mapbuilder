@@ -93,8 +93,6 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
     const {width, height} = this.state.dimensions;
-    console.log('width', width);
-    console.log('height', height);
     const { results, component } = this.props;
     if (isError) {
       return (
@@ -152,8 +150,8 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div ref={measureRef}>
-                    <div width={width} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  <div className="vega-chart-container" ref={measureRef}>
+                    <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
               </Measure>

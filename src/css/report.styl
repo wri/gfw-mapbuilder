@@ -13,6 +13,12 @@ body
 @require 'base'
 @require 'results'
 
+.vega-chart-container,
+.vega-chart > canvas {
+  min-width: 250px !important;
+  max-height: 600px !important;
+  margin: 1rem 2rem;
+}
 
 .vega-chart-toggle-true
   cursor pointer
