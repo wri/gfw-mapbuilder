@@ -17,6 +17,7 @@ export default class ReportHeader extends Component {
     };
 
     shareReport = () => {
+        console.log('share report');
         document.getElementById('share-modal').classList.toggle('hidden');
     };
 
