@@ -17,6 +17,7 @@ export default class ReportAnalysis extends Component {
             isLoading: true
         });
         const {module} = this.props;
+        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
@@ -52,4 +53,4 @@ export default class ReportAnalysis extends Component {
             </div>
         );
     }
-} 
+}

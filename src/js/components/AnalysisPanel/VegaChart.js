@@ -36,7 +36,8 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      // config.autosize = {type: 'fit', resize: true};
+      config.autosize = {type: 'pad', resize: true};
+      console.log('config', config);
       const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
@@ -64,6 +65,11 @@ export default class VegaChart extends Component {
       .catch(() => this.handleError('Error creating analysis.'));
     }
   }
+  
+  componentDidUpdate(){
+    const config = this.props.results.data.attributes.widgetConfig;
+    config.width = this.state.dimensions.width;
+  }
 
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
@@ -87,6 +93,8 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
     const {width, height} = this.state.dimensions;
+    console.log('width', width);
+    console.log('height', height);
     const { results, component } = this.props;
     if (isError) {
       return (
@@ -138,14 +146,14 @@ export default class VegaChart extends Component {
                 </div>
               }
               <Measure
-              bounds
-              onResize={contentRect => {
-              this.setState({ dimensions: contentRect.bounds })
-              }}
+                bounds
+                onResize={contentRect => {
+                this.setState({ dimensions: contentRect.bounds });
+                }}
               >
                 {({ measureRef }) => (
                   <div ref={measureRef}>
-                    {width < 250 && <div width={width} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>}
+                    <div width={width} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
               </Measure>
