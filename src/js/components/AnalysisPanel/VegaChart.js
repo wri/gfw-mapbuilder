@@ -15,8 +15,8 @@ export default class VegaChart extends Component {
       downloadOptions: [],
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
-      chartName: '',
-      toggle: false
+      toggle: false,
+      description: ''
     };
   }
 
@@ -33,10 +33,30 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       // config.autosize = {type: 'fit', resize: true};
-      const {setLoading, language} = this.props;
+      const {setLoading, language, results} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
+      }
+      
+      const dataset = this.props.results.data.attributes.dataset;
+      const id = this.props.results.data.id;
+      
+   
+      if (this.props.component === 'Report'){
+        fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
+          res.json().then(json => {
+            if (res.status !== 200) {
+              this.setState({
+                description: 'Error retrieving description'
+              });
+            } else {
+            this.setState({
+              description: json.data[0].attributes.description
+            });
+            }
+          });
+        });
       }
       
       //Add loader here when Vega Chart mounts????
@@ -81,8 +101,8 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
-    const { results, component } = this.props;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
+    const { results, component, reportLabel } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -97,7 +117,8 @@ export default class VegaChart extends Component {
           }
           {component === 'Report' ?
           <div className='vega-chart_download-container'>
-            <h3 className="vega-chart-label">{results.data.attributes.name}</h3>
+            {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
+            <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
@@ -114,7 +135,7 @@ export default class VegaChart extends Component {
             </div>
           </div> :
           <div className='vega-chart_download-container'>
-            <h3 className="vega-chart-label">{results.data.attributes.name}</h3>
+            <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
@@ -137,7 +158,7 @@ export default class VegaChart extends Component {
             <div>
               <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
                 <div className="vega-chart-info">
-                    DESCRIPTION GOES HERE
+                    {description}
                 </div>
               </div>
               <div className="vega-chart-separator"></div>
