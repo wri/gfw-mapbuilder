@@ -40,6 +40,7 @@ import ShareModal from './components/Modals/ShareModal';
         }
       };
       corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
+      console.log('report library share modal', ShareModal);
     }
   
     render() {
