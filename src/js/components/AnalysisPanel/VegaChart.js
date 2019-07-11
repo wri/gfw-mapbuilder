@@ -83,9 +83,6 @@ export default class VegaChart extends Component {
       </a>
     );
   };
-  
-  https://api.resourcewatch.org/v1/widget/2083a1bc-440d-43fe-8b50-ff9918a37c5?period=2001-01-01,2018-12-31&thresh=30&layer=ifl2000&geostore=f73be5ae8470bb369e36ab2ff640ad12&
-  http://production-api.globalforestwatch.org/dataset/d7287e09-77b5-4885-a88d-8df715cb7b67/widget/2083a1bc-440d-43fe-8b50-ff9918a37c57/
 
   toggleChart = () => {
     this.setState({
