@@ -348,9 +348,11 @@ class MapStore {
           mapActions.toggleAnalysisTab.defer(true);
 
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
+            console.log('selectedFeature after getExactGeom', selectedFeature);
             analysisUtils.registerGeom(exactGeom).then(res => {
               selectedFeature.attributes.geostoreId = res.data.id;
               selectedFeature.setGeometry(exactGeom);
+              console.log('selectedFeature after setGeometry', selectedFeature);
               mapActions.toggleAnalysisTab(false);
               isRegistering = false;
             });

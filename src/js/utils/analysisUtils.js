@@ -618,6 +618,8 @@ export default {
 
     queryTask.execute(query).then(response => {
       const feats = response.features;
+      console.log('feats geometry', feats[0].geometry);
+      console.log('selectedFeature geometry', selectedFeature.geometry);
       promise.resolve(feats.length > 0 ? feats[0].geometry : selectedFeature.geometry);
     }, (error) => {
       console.error(error);
@@ -658,6 +660,7 @@ export default {
     const http = new XMLHttpRequest();
     const url = analysisConfig.apiUrl;
     const params = content;
+    
 
     http.open('POST', url, true);
     http.setRequestHeader('Content-type', 'application/json');
