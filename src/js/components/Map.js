@@ -174,8 +174,12 @@ export default class Map extends Component {
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
       //- Attach events I need for the info window
-      response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
+      //response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
       //response.map.infoWindow.on('show, hide, set-features, selection-change', () => console.log('event', event));
+      response.map.infoWindow.on('show', () => console.log('show event', event));
+      response.map.infoWindow.on('hide', () => console.log('hide event', event));
+      response.map.infoWindow.on('set-features', () => console.log('set-features event', event));
+      response.map.infoWindow.on('selection-change', () => console.log('selection-change event', event));
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
@@ -238,6 +242,7 @@ export default class Map extends Component {
             .filter(layer => layer.visible);
 
           if (wmsLayers.length) {
+          
             wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
               const wmsGraphics = [];
 
@@ -256,6 +261,7 @@ export default class Map extends Component {
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
         userFeaturesLayer.on('click', (evt) => {
+      
           if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
             evt.stopPropagation();
             if (!evt.graphic.attributes.geostoreId) {

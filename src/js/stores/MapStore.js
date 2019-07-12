@@ -343,23 +343,23 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
-          isRegistering = true;
-          mapActions.toggleAnalysisTab.defer(true);
+        // if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
+        //   isRegistering = true;
+        //   mapActions.toggleAnalysisTab.defer(true);
 
-          analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
-            console.log('selectedFeature after getExactGeom', selectedFeature);
-            analysisUtils.registerGeom(exactGeom).then(res => {
-              selectedFeature.attributes.geostoreId = res.data.id;
-              selectedFeature.setGeometry(exactGeom);
-              console.log('selectedFeature after setGeometry', selectedFeature);
-              mapActions.toggleAnalysisTab(false);
-              isRegistering = false;
-            });
-          });
-        } else {
+        //   analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
+        //     console.log('selectedFeature after getExactGeom', selectedFeature);
+        //     analysisUtils.registerGeom(exactGeom).then(res => {
+        //       selectedFeature.attributes.geostoreId = res.data.id;
+        //       selectedFeature.setGeometry(exactGeom);
+        //       console.log('selectedFeature after setGeometry', selectedFeature);
+        //       mapActions.toggleAnalysisTab(false);
+        //       isRegistering = false;
+        //     });
+        //   });
+        // } else {
           this.activeTab = tabKeys.INFO_WINDOW;
-        }
+        //}
       }
       this.activeAnalysisType = 'default';
     }
