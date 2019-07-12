@@ -15,6 +15,7 @@ class MapActions {
   mapUpdated () { return {}; }
 
   infoWindowUpdated ({target}) {
+    //debugger
     return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
   }
 

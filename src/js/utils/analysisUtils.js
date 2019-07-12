@@ -563,9 +563,25 @@ export default {
   },
 
   getExactGeom: (selectedFeature) => {
+    //Pull in fires layer here and check the ID. If ID matches, check _layer.url to fires url, If they don't match, use fires url
+    const viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
+    const viirsID = `VIIRS_ACTIVE_FIRES_${viirsFiresLayer.visibleLayers[0]}`;
     const promise = new Deferred();
-    const url = selectedFeature._layer.url;
-
+    let url;
+    
+    console.log('selectedFeature', selectedFeature);
+    console.log('viirsFiresLayer', viirsFiresLayer);
+    console.log('viirsID', viirsID);
+    
+    if (selectedFeature._layer.id === viirsID) {
+      if (selectedFeature._layer.url !== viirsFiresLayer.url) {
+        url = viirsFiresLayer.url;
+      } else {
+        url = selectedFeature._layer.url;
+      }
+    }
+    
+    console.log('url', url);
     if (!url) {
       return promise.resolve(selectedFeature.geometry);
     }

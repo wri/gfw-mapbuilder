@@ -166,6 +166,7 @@ export default class Map extends Component {
     const { canopyDensity } = this.state;
 
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
+      //debugger;
       const {itemData} = response.itemInfo;
 
       // Add operational layers from the webmap to the array of layers from the config file.
@@ -174,6 +175,7 @@ export default class Map extends Component {
       response.map.graphics.clear();
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
+      //response.map.infoWindow.on('show, hide, set-features, selection-change', () => console.log('event', event));
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
