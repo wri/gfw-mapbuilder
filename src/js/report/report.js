@@ -366,7 +366,7 @@ export default class Report extends Component {
       map.disablePan();
   
       all({
-        feature: this.getFeature(params),
+        //feature: this.getFeature(params),
         info: this.getApplicationInfo(params)
       }).always((featureResponse) => {
         //- Bail if anything failed
