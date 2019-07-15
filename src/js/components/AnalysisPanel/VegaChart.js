@@ -15,12 +15,17 @@ export default class VegaChart extends Component {
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
       chartName: '',
-      toggle: false
+      toggle: false,
+      isLoading: false
     };
   }
 
   handleError(errorMsg) {
-    this.setState({ isError: true, errorMsg });
+    this.setState({
+      isError: true,
+      errorMsg,
+      isLoading: false
+    });
     if (this.props.setLoading) {
       this.props.setLoading();
     }
@@ -36,6 +41,9 @@ export default class VegaChart extends Component {
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
+        this.setState({
+          isLoading: true
+        });
       }
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
@@ -50,7 +58,11 @@ export default class VegaChart extends Component {
               downloadOptions.push({label, url: downloadUrls[label]});
             }
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
-            this.setState({ downloadOptions, chartDownloadTitle });
+            this.setState({
+              downloadOptions,
+              chartDownloadTitle,
+              isLoading: false
+            });
           });
         }
       })
@@ -78,7 +90,7 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, isLoading } = this.state;
     const { results, component } = this.props;
     if (isError) {
       return (
@@ -129,7 +141,28 @@ export default class VegaChart extends Component {
               }
             </div>
           }
-          <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+          {component === 'Report' ?
+            <div>
+              {isLoading ?
+                <div className="loader">
+                  <svg width="100px" height="100px" viewBox="0 0 50 50" style={{ enableBackground: 'new 0 0 50 50'}}>
+                    <path fill="#bbb" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                      <animateTransform attributeType="xml"
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 25 25"
+                        to="360 25 25"
+                        dur=".9s"
+                        repeatCount="indefinite"/>
+                      </path>
+                  </svg>
+                </div>
+              : <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+              }
+            </div>
+            :
+            <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+          }
           {component === 'Report' &&
             <div>
               <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>

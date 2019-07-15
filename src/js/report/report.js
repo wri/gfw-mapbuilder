@@ -974,7 +974,7 @@ export default class Report extends Component {
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea params={params} />
+        <ReportAnalysisArea params={params} {...this.props} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {

@@ -27,9 +27,10 @@ export default class ReportAnalysis extends Component {
     };
     
     renderReportAnalysis = (results, language) => {
-        const chartComponent = <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />
+        const chartComponent = <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />;
         this.setState({
-            chartComponent,
+            chartComponent: chartComponent,
+            results: results,
             isLoading: false
         });
     };
@@ -46,6 +47,12 @@ export default class ReportAnalysis extends Component {
         this.createReportAnalysis();
     }
     
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.activeAnalysisType !== this.props.activeAnalysisType) {
+          this.setState({ chartComponent: null });
+        }
+      }
+      
     render(){
         const {module, params} = this.props;
         const {results, isLoading, chartComponent} = this.state;
@@ -53,12 +60,8 @@ export default class ReportAnalysis extends Component {
             <div className="report-container">
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
-                    <Loader active={isLoading} />
-                    {chartComponent &&
-                        <div>
-                            {chartComponent}
-                        </div>
-                    }
+                    {/* <Loader active={isLoading} /> */}
+                    {chartComponent ? chartComponent : null}
                 </div>
             </div>
         );
