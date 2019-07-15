@@ -8,20 +8,31 @@ export default class ReportAnalysis extends Component {
         super(props);
         this.state = {
             results: {},
-            isLoading: true
+            isLoading: false,
+            chartComponent: null
         };
     }
     
     createReportAnalysis = () => {
-        const {module} = this.props;
+        this.setState({
+            results: {},
+            isLoading: true
+        });
+        const {module, params} = this.props;
+        const language = params.lang;
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
-            this.setState({
-                results: results,
-                isLoading: false
-            });
+           this.renderReportAnalysis(results, language);
         });
-    }
+    };
+    
+    renderReportAnalysis = (results, language) => {
+        const chartComponent = <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />
+        this.setState({
+            chartComponent,
+            isLoading: false
+        });
+    };
     
     handleReportAnalysisError = analysisId => {
         return (
@@ -37,16 +48,16 @@ export default class ReportAnalysis extends Component {
     
     render(){
         const {module, params} = this.props;
-        const language = params.lang;
-        const {results, isLoading} = this.state;
+        const {results, isLoading, chartComponent} = this.state;
         return (
             <div className="report-container">
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data ?
-                        <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />
-                        :
-                        <Loader active={results.data ? false : true} />
+                    <Loader active={isLoading} />
+                    {chartComponent &&
+                        <div>
+                            {chartComponent}
+                        </div>
                     }
                 </div>
             </div>
