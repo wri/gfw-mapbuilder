@@ -1,22 +1,19 @@
 import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
-import Loader from '../components/Loader';
 
 export default class ReportAnalysis extends Component {
     constructor(props){
         super(props);
         this.state = {
             results: {},
-            isLoading: false,
             chartComponent: null
         };
     }
     
     createReportAnalysis = () => {
         this.setState({
-            results: {},
-            isLoading: true
+            results: {}
         });
         const {module, params} = this.props;
         const language = params.lang;
@@ -30,8 +27,7 @@ export default class ReportAnalysis extends Component {
         const chartComponent = <VegaChart component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />;
         this.setState({
             chartComponent: chartComponent,
-            results: results,
-            isLoading: false
+            results: results
         });
     };
     
@@ -46,21 +42,14 @@ export default class ReportAnalysis extends Component {
     componentDidMount(){
         this.createReportAnalysis();
     }
-    
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.activeAnalysisType !== this.props.activeAnalysisType) {
-          this.setState({ chartComponent: null });
-        }
-      }
-      
+
     render(){
-        const {module, params} = this.props;
-        const {results, isLoading, chartComponent} = this.state;
+        const {module} = this.props;
+        const {results, chartComponent} = this.state;
         return (
             <div className="report-container">
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
-                    {/* <Loader active={isLoading} /> */}
                     {chartComponent ? chartComponent : null}
                 </div>
             </div>
