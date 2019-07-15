@@ -90,8 +90,9 @@ export default class Report extends Component {
         handleAs: 'json',
         timeout: 30000
       }, { usePost: false}).then(geostoreResult => {
-  
+        console.log('geostoreResult', geostoreResult);
         const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
+        console.log('esriJson', esriJson);
         promise.resolve({
           attributes: geostoreResult.data.attributes,
           geostoreId: geostoreResult.data.id,
@@ -366,7 +367,7 @@ export default class Report extends Component {
       map.disablePan();
   
       all({
-        //feature: this.getFeature(params),
+        feature: this.getFeature(params),
         info: this.getApplicationInfo(params)
       }).always((featureResponse) => {
         //- Bail if anything failed
@@ -375,7 +376,7 @@ export default class Report extends Component {
         }
   
         const { feature, info } = featureResponse;
-  
+      
         //- Add Popup Info Now
         // addTitleAndAttributes(params, feature, info);
         //- Need the map to be loaded to add graphics
@@ -415,15 +416,21 @@ export default class Report extends Component {
     return config;
   };
 
-  generateRows = (fieldName, fieldValue) => {
-    const row = document.createElement('dl');
-    const label = document.createElement('dt');
-    const value = document.createElement('dd');
-    label.innerHTML = fieldName;
-    value.innerHTML = fieldValue;
-    row.appendChild(label);
-    row.appendChild(value);
-    return row;
+  generateRow = (fieldName, fieldValue) => {
+   return (
+      <dl>
+        <dt>{fieldName}</dt>
+        <dd>{fieldValue}</dd>
+      </dl>
+    );
+    // const row = document.createElement('dl');
+    // const label = document.createElement('dt');
+    // const value = document.createElement('dd');
+    // label.innerHTML = fieldName;
+    // value.innerHTML = fieldValue;
+    // row.appendChild(label);
+    // row.appendChild(value);
+    // return row;
   };
 
   generateSlopeTable = (labels, values) => {
@@ -435,13 +442,21 @@ export default class Report extends Component {
       roundedValues.push(value);
     });
   
-    const fragment = document.createDocumentFragment();
-    labels.forEach((label, index) => {
-      fragment.appendChild(this.generateRow(label,
-        typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
-      ));
-    });
-    return fragment;
+    // const fragment = document.createDocumentFragment();
+    // labels.forEach((label, index) => {
+    //   fragment.appendChild(this.generateRow(label,
+    //     typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
+    //   ));
+    // });
+    
+    return (
+      <React.Fragment>
+        {labels.forEach((label, index) => {
+          this.generateRow(label, typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]);
+        })}
+      </React.Fragment>
+    );
+    //return fragment;
   };
 
   /**
@@ -451,7 +466,9 @@ export default class Report extends Component {
   setupMap = (params, feature) => {
     const { visibleLayers } = params;
     //- Add a graphic to the map
+    console.log('feature', feature);
     const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
+    //console.log('graphic', graphic);
     const graphicExtent = graphic.geometry.getExtent();
   
     if (graphicExtent) {
@@ -520,7 +537,7 @@ export default class Report extends Component {
           if (mapLayer && mapLayer.infoTemplate) {
             //const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
             //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
-            const fragment = document.createDocumentFragment();
+            //const fragment = document.createDocumentFragment();
   
             mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
               let fieldValue = res.features[0].attributes[fieldInfo.fieldName];
@@ -534,10 +551,13 @@ export default class Report extends Component {
   
               if (fieldValue && fieldValue.trim) {
                 fieldValue = fieldValue.trim();
-                fragment.appendChild(this.generateRow(
-                  fieldInfo.label,
-                  fieldValue
-                ));
+                const fragment = <React.Fragment>
+                  {this.generateRow(fieldInfo.label, fieldValue)}
+                </React.Fragment>;
+                // fragment.appendChild(this.generateRow(
+                //   fieldInfo.label,
+                //   fieldValue
+                // ));
   
                 //document.getElementById('popup-content').appendChild(fragment);
               }
