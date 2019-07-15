@@ -174,8 +174,8 @@ export default class Map extends Component {
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
       //- Attach events I need for the info window
-      //response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
-      //response.map.infoWindow.on('show, hide, set-features, selection-change', () => console.log('event', event));
+      response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
+      response.map.infoWindow.on('show, hide, set-features, selection-change', () => console.log('event', event));
       response.map.infoWindow.on('show', () => console.log('show event', event));
       response.map.infoWindow.on('hide', () => console.log('hide event', event));
       response.map.infoWindow.on('set-features', () => console.log('set-features event', event));

@@ -336,6 +336,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
+    debugger
     if (selectedFeature) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
@@ -343,23 +344,23 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        // if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
-        //   isRegistering = true;
-        //   mapActions.toggleAnalysisTab.defer(true);
+        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
+          isRegistering = true;
+          mapActions.toggleAnalysisTab.defer(true);
 
-        //   analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
-        //     console.log('selectedFeature after getExactGeom', selectedFeature);
-        //     analysisUtils.registerGeom(exactGeom).then(res => {
-        //       selectedFeature.attributes.geostoreId = res.data.id;
-        //       selectedFeature.setGeometry(exactGeom);
-        //       console.log('selectedFeature after setGeometry', selectedFeature);
-        //       mapActions.toggleAnalysisTab(false);
-        //       isRegistering = false;
-        //     });
-        //   });
-        // } else {
+          analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
+            console.log('selectedFeature after getExactGeom', selectedFeature);
+            analysisUtils.registerGeom(exactGeom).then(res => {
+              selectedFeature.attributes.geostoreId = res.data.id;
+              selectedFeature.setGeometry(exactGeom);
+              console.log('selectedFeature after setGeometry', selectedFeature);
+              mapActions.toggleAnalysisTab(false);
+              isRegistering = false;
+            });
+          });
+        } else {
           this.activeTab = tabKeys.INFO_WINDOW;
-        //}
+        }
       }
       this.activeAnalysisType = 'default';
     }
