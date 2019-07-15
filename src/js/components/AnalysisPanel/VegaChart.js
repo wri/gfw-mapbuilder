@@ -60,10 +60,13 @@ export default class VegaChart extends Component {
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
             this.setState({
               downloadOptions,
-              chartDownloadTitle,
-              isLoading: false
+              chartDownloadTitle
             });
-          });
+          }).then(
+            this.setState({
+              isLoading: false
+            })
+          );
         }
       })
       .catch(() => this.handleError('Error creating analysis.'));
@@ -157,11 +160,11 @@ export default class VegaChart extends Component {
                       </path>
                   </svg>
                 </div>
-              : <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+              : <div className={`vega-chart ${toggle ? 'vega-chart-hide' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
               }
             </div>
             :
-            <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+            <div className={`vega-chart ${toggle ? 'vega-chart-hide' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
           }
           {component === 'Report' &&
             <div>
