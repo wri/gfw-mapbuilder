@@ -24,9 +24,10 @@ export default class ReportAnalysis extends Component {
         });
     };
     
-    renderReportAnalysis = (results, language) => {
+    renderReportAnalysis = (module, results, language) => {
+        const reportLabel = module.label[language];
         return (
-            <VegaChart component='Report' results={results} language={language} />
+            <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
         );
     };
     
@@ -50,7 +51,7 @@ export default class ReportAnalysis extends Component {
             <div className="report-container">
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && this.renderReportAnalysis(results, language)}
+                    {results.data && this.renderReportAnalysis(module, results, language)}
                 </div>
             </div>
         );
