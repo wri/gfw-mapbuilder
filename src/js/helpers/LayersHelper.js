@@ -63,10 +63,8 @@ const LayersHelper = {
               firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               break;
             case '4': //past 365 days
-              debugger
               const queryString = this.generateFiresQuery(startDate, endDate);
               const defs = [];
-            
               firesLayer.url = shortTermServices[`${fireID}1YR`].url;
               firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
               firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);

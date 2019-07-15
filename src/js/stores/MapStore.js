@@ -336,7 +336,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    debugger
+    //debugger
     if (selectedFeature) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&

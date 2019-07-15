@@ -571,7 +571,6 @@ export default {
     const modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
     const modisLayerID = modisFiresLayer.layerIds[0];
     const modisID = `MODIS_ACTIVE_FIRES_${modisLayerID}`;
-    debugger
     const promise = new Deferred();
     let url = selectedFeature._layer.url;
     
@@ -615,11 +614,8 @@ export default {
     query.outFields = [OBJECTID_Field];
     query.maxAllowableOffset = 100;
     query.where = OBJECTID_Field + ' = ' + OBJECTID;
-  debugger
     queryTask.execute(query).then(response => {
       const feats = response.features;
-      console.log('feats geometry', feats[0].geometry);
-      console.log('selectedFeature geometry', selectedFeature.geometry);
       promise.resolve(feats.length > 0 ? feats[0].geometry : selectedFeature.geometry);
     }, (error) => {
       console.error(error);
