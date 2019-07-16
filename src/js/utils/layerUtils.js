@@ -18,6 +18,7 @@ export default {
   * @param {string} lang - ISO Code to use for the popup
   */
   makeInfoTemplate: (config, lang) => {
+    debugger
     let template = '<div class="esriViewPopup"><div class="mainSection">';
     const title = config.title[lang];
     const content = config.content[lang];

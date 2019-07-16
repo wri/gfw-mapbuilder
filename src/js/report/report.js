@@ -243,7 +243,8 @@ export default class Report extends Component {
         }
         // return layerFactory(layer, language);
   
-  
+        //WIP
+        console.log('layer in report', uniqueLayers);
         const mapLayer = layerFactory(layer, language);
   
         // If there are active filters, set definition expressions on layer.
@@ -260,6 +261,7 @@ export default class Report extends Component {
         return mapLayer;
   
       });
+      
   
       // Set the date range for the loss and glad layers
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
