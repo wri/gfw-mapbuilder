@@ -27,7 +27,7 @@ export default class ReportAnalysis extends Component {
     renderReportAnalysis = (module, results, language) => {
         const reportLabel = module.label[language];
         return (
-            <div style={{width: "500px", height: "500px"}}>
+            <div style={{width: "100%", height: "100%"}}>
                 <Loader active={true} />
                 <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
             </div>
