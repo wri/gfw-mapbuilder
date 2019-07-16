@@ -196,16 +196,16 @@ export default class VegaChart extends Component {
             </div>
           }
           <Measure
-                bounds
-                onResize={contentRect => {
-                this.setState({ dimensions: contentRect.bounds });
-                }}
-              >
-                {({ measureRef }) => (
-                  <div className="vega-chart-container" ref={measureRef}>
-                    <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
-                  </div>
-                )}
+            bounds
+            onResize={contentRect => {
+            this.setState({ dimensions: contentRect.bounds });
+            }}
+          >
+            {({ measureRef }) => (
+              <div className="vega-chart-container" ref={measureRef}>
+                <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+              </div>
+            )}
           </Measure>
           {component === 'Report' &&
             <div>
