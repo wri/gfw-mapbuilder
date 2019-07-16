@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import Loader from '../Loader';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -170,7 +171,7 @@ export default class VegaChart extends Component {
             <div>
               {isLoading ?
                 <div className="loader">
-                  <svg width="100px" height="100px" viewBox="0 0 50 50" style={{ enableBackground: 'new 0 0 50 50'}}>
+                  {/* <svg width="100px" height="100px" viewBox="0 0 50 50" style={{ enableBackground: 'new 0 0 50 50'}}>
                     <path fill="#bbb" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
                       <animateTransform attributeType="xml"
                         attributeName="transform"
@@ -180,7 +181,8 @@ export default class VegaChart extends Component {
                         dur=".9s"
                         repeatCount="indefinite"/>
                       </path>
-                  </svg>
+                  </svg> */}
+                  {/* <Loader active={isLoading} /> */}
                 </div>
               : <div className={`vega-chart ${toggle ? 'vega-chart-hide' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
               }
