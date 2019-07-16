@@ -18,8 +18,8 @@ export default class VegaChart extends Component {
       chartName: '',
       toggle: false,
       dimensions: {
-        width: 500,
-        height: 500
+        width: -1,
+        height: -1
       },
       description: ''
     };
@@ -37,6 +37,7 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
+      console.log('config', config);
       const widthSignal = {
         name: "width",
         value: "",
@@ -63,8 +64,8 @@ export default class VegaChart extends Component {
           }
         ]
       };
-      config.width = this.state.dimensions.width;
-      config.height = this.state.dimensions.height;
+      config.width = config.width * 2;
+      config.height = config.height * 2;
       config.autosize = {type: 'fit', resize: true};
       config.signals.push(widthSignal);
       config.signals.push(heightSignal);
@@ -112,10 +113,7 @@ export default class VegaChart extends Component {
     }
   }
   
-  componentDidUpdate(){
-    const config = this.props.results.data.attributes.widgetConfig;
-    config.width = this.state.dimensions.width;
-  }
+ 
 
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
@@ -190,25 +188,29 @@ export default class VegaChart extends Component {
               }
             </div>
           }
-          <Measure
-            bounds
-            onResize={contentRect => {
-            this.setState({ dimensions: contentRect.bounds });
-            }}
-          >
-            {({ measureRef }) => (
-              <div className="vega-chart-container" ref={measureRef}>
-                <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
-              </div>
-            )}
-          </Measure>
-          {component === 'Report' &&
-            <div>
+          {component === 'Report' ?
+          <div>
+              <Measure
+                bounds
+                onResize={contentRect => {
+                this.setState({ dimensions: contentRect.bounds });
+                }}
+              >
+                {({ measureRef }) => (
+                  <div className="vega-chart-container" ref={measureRef}>
+                    <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  </div>
+                )}
+              </Measure>
               <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
                 <div className="vega-chart-info">
                     {description}
                 </div>
               </div>
+            </div> 
+            :
+            <div className="vega-chart-container">
+              <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
             </div>
           }
         </div>
