@@ -4,7 +4,6 @@ import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
 import Measure from 'react-measure';
 
-
 export default class VegaChart extends Component {
   constructor(props) {
     super(props);
@@ -70,16 +69,12 @@ export default class VegaChart extends Component {
       config.signals.push(widthSignal);
       config.signals.push(heightSignal);
       const {setLoading, language, results} = this.props;
-
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
-      
       const dataset = this.props.results.data.attributes.dataset;
       const id = this.props.results.data.id;
-      
-   
       if (this.props.component === 'Report'){
         fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
           res.json().then(json => {
