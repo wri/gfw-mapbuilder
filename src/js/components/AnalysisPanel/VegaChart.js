@@ -69,6 +69,20 @@ export default class VegaChart extends Component {
       config.autosize = {type: 'fit', resize: true};
       config.signals.push(widthSignal);
       config.signals.push(heightSignal);
+     
+      // config.marks.forEach(mark => {
+      //   if (mark.type === "text"){
+      //     mark.encode.enter.x.signal = "width/2 + 10";
+      //     mark.encode.enter.y.signal = "height/2";
+      //   }
+      //   if(mark.type === "rect"){
+      //     mark.encode.enter.height.signal = "height";
+      //     mark.encode.enter.width.signal = "width";
+      //     mark.encode.enter.x.signal = "width/6";
+      //     mark.encode.enter.y.signal = "height/6";
+      //   }
+      // });
+      
       const {setLoading, language, results} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
