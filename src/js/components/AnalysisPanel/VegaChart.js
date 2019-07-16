@@ -18,8 +18,8 @@ export default class VegaChart extends Component {
       chartName: '',
       toggle: false,
       dimensions: {
-        width: -1,
-        height: -1
+        width: 500,
+        height: 500
       }
     };
   }
@@ -36,7 +36,37 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      config.autosize = {type: 'pad', resize: true};
+      const widthSignal = {
+        name: "width",
+        value: "",
+        on: [
+          {
+            events: {
+              source: "window",
+              type: "resize"
+            },
+            update: "containerSize()[0]*0.95"
+          }
+        ]
+      };
+      const heightSignal = {
+        name: "height",
+        value: "",
+        on: [
+          {
+            events: {
+              source: "window",
+              type: "resize"
+            },
+            update: "containerSize()[1]*0.95"
+          }
+        ]
+      };
+      config.autosize = {type: 'fit', resize: true};
+      config.width = this.state.dimensions.width;
+      config.height = this.state.dimensions.height;
+      config.signals.push(widthSignal);
+      config.signals.push(heightSignal);
       console.log('config', config);
       const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
@@ -44,7 +74,6 @@ export default class VegaChart extends Component {
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
       
-      //Add loader here when Vega Chart mounts????
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
