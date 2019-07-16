@@ -67,7 +67,6 @@ export default class VegaChart extends Component {
       config.height = this.state.dimensions.height;
       config.signals.push(widthSignal);
       config.signals.push(heightSignal);
-      console.log('config', config);
       const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
