@@ -386,7 +386,6 @@ export default class Report extends Component {
             this.setupMap(params, feature);
           });
         }
-        console.log('info', info);
         //- Add the settings to the params so we can omit layers or do other things if necessary
         //- If no appid is provided, the value here is essentially resources.js
         params.settings = info.settings;
@@ -890,7 +889,6 @@ export default class Report extends Component {
     // params that were passed into the report
   
     settings.analysisModules.forEach((module) => {
-      console.log('module', module);
       let uiParamsToAppend = {};
   
       if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {
