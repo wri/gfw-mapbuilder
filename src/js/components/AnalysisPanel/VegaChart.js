@@ -51,9 +51,12 @@ export default class VegaChart extends Component {
                 description: 'Error retrieving description'
               });
             } else {
-            this.setState({
-              description: json.data[0].attributes.description
-            });
+            if(json.data && json.data.length > 0 && json.data[0].attributes) {
+              this.setState({
+                description: json.data[0].attributes.description
+              });
+            }
+           
             }
           });
         });

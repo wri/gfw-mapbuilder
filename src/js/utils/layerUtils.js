@@ -27,7 +27,7 @@ export default {
       template += '<div class="header">' + title + '</div>';
     }
     //- Add the attr table
-    template += '<table class="attrTable">';
+    template += '<table class="attrTable Kayla-Was-Here">';
     //- Add the content
     if (content) {
       content.forEach((row) => {

@@ -521,7 +521,8 @@ export default class Report extends Component {
 
   addTitleAndAttributes = (params, featureInfo) => {
     const { layerId, OBJECTID, OBJECTID_Field, lang } = params;
-  
+    console.log('layerId', layerId);
+    console.log('object id', OBJECTID);
     if (layerId && OBJECTID) {
   
       const hashDecoupled = layerId.split('--');
@@ -535,7 +536,10 @@ export default class Report extends Component {
       query.returnGeometry = false;
       query.outFields = ['*'];
       queryTask.execute(query).then(res => {
+        console.log('res', res);
         if (res.features && res.features.length > 0) {
+          console.log('res features', res.features);
+          console.log('mapLayer', mapLayer);
           if (mapLayer && mapLayer.infoTemplate) {
             //const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
             //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
@@ -552,10 +556,14 @@ export default class Report extends Component {
               }
   
               if (fieldValue && fieldValue.trim) {
+              
                 fieldValue = fieldValue.trim();
+                console.log('fieldValue', fieldValue);
                 const fragment = <React.Fragment>
                   {this.generateRow(fieldInfo.label, fieldValue)}
                 </React.Fragment>;
+                document.getElementById('popup-content').appendChild(fragment);
+                console.log('fragment', fragment);
                 // fragment.appendChild(this.generateRow(
                 //   fieldInfo.label,
                 //   fieldValue
