@@ -64,12 +64,11 @@ export default class VegaChart extends Component {
           }
         ]
       };
-      config.autosize = {type: 'fit', resize: true};
       config.width = this.state.dimensions.width;
       config.height = this.state.dimensions.height;
+      config.autosize = {type: 'fit', resize: true};
       config.signals.push(widthSignal);
       config.signals.push(heightSignal);
-      const {setLoading, language} = this.props;
       const {setLoading, language, results} = this.props;
 
       if (config.data[0].url.indexOf('?&') > -1){
@@ -196,26 +195,7 @@ export default class VegaChart extends Component {
               }
             </div>
           }
-          <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
-          {component === 'Report' &&
-            <div>
-              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
-                <div className="vega-chart-info">
-                    {description}
-                </div>
-              </div>
-              }
-              { showDownloadOptions &&
-                <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                  {downloadOptions.map(this.renderdownloadOptions)}
-                  {this.chart &&
-                    <a className="download-option" href={chartImgDownloadUrl} download={chartDownloadTitle}>
-                      <span className='download-option-label'>Download PNG</span>
-                    </a>
-                  }
-                </div>
-              }
-              <Measure
+          <Measure
                 bounds
                 onResize={contentRect => {
                 this.setState({ dimensions: contentRect.bounds });
@@ -226,18 +206,17 @@ export default class VegaChart extends Component {
                     <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
-              </Measure>
-              {component === 'Report' &&
-                <div>
-                  <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
-                    <div className="vega-chart-info">
-                        DESCRIPTION GOES HERE
-                    </div>
-                  </div>
-                  <div className="vega-chart-separator"></div>
+          </Measure>
+          {component === 'Report' &&
+            <div>
+              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+                <div className="vega-chart-info">
+                    {description}
                 </div>
-              }
+              </div>
             </div>
+          }
+        </div>
       );
     }
   }
