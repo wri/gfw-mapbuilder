@@ -68,7 +68,7 @@ const LayersHelper = {
               firesLayer.url = shortTermServices[`${fireID}1YR`].url;
               firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
               firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              firesLayer.layerIds = [shortTermServices[`${fireID}1YR`].id];
+              //firesLayer.layerIds = [shortTermServices[`${fireID}1YR`].id];
               firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
               console.log('defs', defs);
               firesLayer.setLayerDefinitions(defs);

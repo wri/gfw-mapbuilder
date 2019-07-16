@@ -33,8 +33,8 @@ const config = {
       id: 21
     },
     viirs1YR: {
-      url: 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer',
-      id: 0
+      url: 'https://gfw-staging.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer',
+      id: 21
     }
   },
   
