@@ -369,7 +369,8 @@ export default class ReportTable extends Component {
     // };
     
     addTitleAndAttributes = () => {
-        const params = getUrlParams(location.href);
+        const {map, params} = this.props;
+        //const params = getUrlParams(location.href);
         const { layerId, OBJECTID, OBJECTID_Field} = params;
         if (layerId && OBJECTID) {
           const hashDecoupled = layerId.split('--');
@@ -534,6 +535,7 @@ export default class ReportTable extends Component {
         return (
             <div className="reportTable">
                 TABLE GOES HERE!!!
+                {this.addTitleAndAttributes()}
             </div>
         );
     }

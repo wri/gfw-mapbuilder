@@ -1001,7 +1001,9 @@ export default class Report extends Component {
         <ReportAnalysisArea params={params} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
-            <ReportTable map={mapForTable} params={paramsForTable} />
+            {
+              (mapForTable !== null && paramsForTable !== null) && <ReportTable map={mapForTable} params={paramsForTable} />
+            }
             {
               analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
             }
