@@ -82,6 +82,8 @@ export default class ControlPanel extends Component {
       modisEndDate: this.formatDate(modisEndDate),
       canopyDensity: canopyDensity
     })));
+
+    mapActions.toggleShareModal({ visible: true });
   };
 
   showAnalysisTools = () => {

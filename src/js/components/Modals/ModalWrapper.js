@@ -1,4 +1,5 @@
 import modalActions from 'actions/ModalActions';
+import mapActions from 'actions/MapActions';
 import modalStore from 'stores/ModalStore';
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -23,6 +24,7 @@ export default class ModalWrapper extends React.Component {
 
   close () {
     modalActions.hideModal(ReactDOM.findDOMNode(this).parentElement);
+    mapActions.toggleShareModal({ visible: false });
   }
 
   render() {

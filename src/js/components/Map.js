@@ -10,6 +10,8 @@ import LayerModal from 'components/Modals/LayerModal';
 import SubscriptionsModal from 'components/Modals/SubscriptionsModal';
 import SubscribeModal from 'components/Modals/SubscribeModal';
 import ConfirmModal from 'components/Modals/ConfirmModal';
+import ShareModal from 'components/Modals/ShareModal';
+
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
 import SearchModal from 'components/Modals/SearchModal';
@@ -869,6 +871,7 @@ export default class Map extends Component {
       subscriptionsModalVisible,
       subscribeModalVisible,
       confirmModalVisible,
+      shareModalVisible,
       subscriptionToDelete,
       modalLayerInfo,
       webmapInfo,
@@ -907,6 +910,7 @@ export default class Map extends Component {
 
     return (
       <div className={`map-container ${!timeSlider ? 'noSlider' : ''}`}>
+
         <div ref='map' className='map'>
           <Controls {...this.state} timeEnabled={!!timeSlider} />
 
@@ -927,6 +931,9 @@ export default class Map extends Component {
             <SVGIcon id={'shape-crosshairs'} />
 
           </svg>
+        </div>
+        <div className={`share-modal-container modal-wrapper ${shareModalVisible ? '' : 'hidden'}`}>
+          <ShareModal />
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />

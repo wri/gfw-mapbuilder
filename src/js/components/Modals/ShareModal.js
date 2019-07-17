@@ -61,8 +61,9 @@ export default class ShareModal extends React.Component {
   }
 
   render () {
+
     return (
-      <ModalWrapper>
+      <ModalWrapper theme='share-modal-wrap'>
         <div className='modal-title'>{modalText.share.title}</div>
         <div className='share-instructions'>{modalText.share.linkInstructions}</div>
         <div className='share-input'>

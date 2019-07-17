@@ -59,6 +59,7 @@ class MapStore {
     this.subscriptionsModalVisible = false;
     this.subscribeModalVisible = false;
     this.confirmModalVisible = false;
+    this.shareModalVisible = false;
     this.isLoggedIn = false;
     this.canopyDensity = 30;
     this.activeSlopeClass = null;
@@ -103,6 +104,7 @@ class MapStore {
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
       toggleConfirmModal: mapActions.toggleConfirmModal,
+      toggleShareModal: mapActions.toggleShareModal,
       toggleLogin: mapActions.toggleLogin,
       deleteSubscription: mapActions.deleteSubscription,
       updateCanopyDensity: mapActions.updateCanopyDensity,
@@ -430,6 +432,10 @@ class MapStore {
 
   toggleConfirmModal (payload) {
     this.confirmModalVisible = payload.visible;
+  }
+
+  toggleShareModal (payload) {
+    this.shareModalVisible = payload.visible;
   }
 
   toggleLogin (loggedIn) {
