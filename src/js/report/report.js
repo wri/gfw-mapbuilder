@@ -36,6 +36,7 @@ import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
 import ReportAnalysis from './ReportAnalysis';
+import ReportTable from './ReportTable';
 
 
 let map;
@@ -47,7 +48,9 @@ export default class Report extends Component {
     
     this.state = {
       sections: [],
-      analysisModules: []
+      analysisModules: [],
+      mapForTable: null,
+      paramsForTable: null
     };
   }
   
@@ -90,9 +93,7 @@ export default class Report extends Component {
         handleAs: 'json',
         timeout: 30000
       }, { usePost: false}).then(geostoreResult => {
-        console.log('geostoreResult', geostoreResult);
         const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
-        console.log('esriJson', esriJson);
         promise.resolve({
           attributes: geostoreResult.data.attributes,
           geostoreId: geostoreResult.data.id,
@@ -242,9 +243,6 @@ export default class Report extends Component {
   
         }
         // return layerFactory(layer, language);
-  
-        //WIP
-        console.log('layer in report', uniqueLayers);
         const mapLayer = layerFactory(layer, language);
   
         // If there are active filters, set definition expressions on layer.
@@ -326,7 +324,7 @@ export default class Report extends Component {
         map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
       }
   
-      this.addTitleAndAttributes(params, feature);
+      // this.addTitleAndAttributes(params, feature);
       // If there is an error with a particular layer, handle that here
   
       on.once(map, 'layers-add-result', result => {
@@ -367,6 +365,11 @@ export default class Report extends Component {
       map.disableMapNavigation();
       map.disableRubberBandZoom();
       map.disablePan();
+      
+      this.setState({
+        mapForTable: map,
+        paramsForTable: params
+      });
   
       all({
         feature: this.getFeature(params),
@@ -468,9 +471,7 @@ export default class Report extends Component {
   setupMap = (params, feature) => {
     const { visibleLayers } = params;
     //- Add a graphic to the map
-    console.log('feature', feature);
     const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
-    //console.log('graphic', graphic);
     const graphicExtent = graphic.geometry.getExtent();
   
     if (graphicExtent) {
@@ -521,8 +522,6 @@ export default class Report extends Component {
 
   addTitleAndAttributes = (params, featureInfo) => {
     const { layerId, OBJECTID, OBJECTID_Field, lang } = params;
-    console.log('layerId', layerId);
-    console.log('object id', OBJECTID);
     if (layerId && OBJECTID) {
   
       const hashDecoupled = layerId.split('--');
@@ -536,10 +535,7 @@ export default class Report extends Component {
       query.returnGeometry = false;
       query.outFields = ['*'];
       queryTask.execute(query).then(res => {
-        console.log('res', res);
         if (res.features && res.features.length > 0) {
-          console.log('res features', res.features);
-          console.log('mapLayer', mapLayer);
           if (mapLayer && mapLayer.infoTemplate) {
             //const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
             //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
@@ -556,14 +552,13 @@ export default class Report extends Component {
               }
   
               if (fieldValue && fieldValue.trim) {
-              
                 fieldValue = fieldValue.trim();
-                console.log('fieldValue', fieldValue);
-                const fragment = <React.Fragment>
+                const fragment = <div>
                   {this.generateRow(fieldInfo.label, fieldValue)}
-                </React.Fragment>;
-                document.getElementById('popup-content').appendChild(fragment);
-                console.log('fragment', fragment);
+                </div>;
+                return fragment;
+                //document.getElementById('popup-content').appendChild(fragment);
+                //console.log('fragment', fragment);
                 // fragment.appendChild(this.generateRow(
                 //   fieldInfo.label,
                 //   fieldValue
@@ -996,15 +991,17 @@ export default class Report extends Component {
 
   
   render () {
-    const {analysisModules} = this.state;
+    const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
-    console.log('params', params);
+    console.log('mapForTable', mapForTable);
+    console.log('paramsForTable', paramsForTable);
     return (
       <div>
         <ReportHeader />
         <ReportAnalysisArea params={params} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
+            <ReportTable map={mapForTable} params={paramsForTable} />
             {
               analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
             }
