@@ -1,20 +1,18 @@
 import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
-import Loader from '/Users/kkremer/Desktop/Projects/gfw-mapbuilder/src/js/components/Loader';
+import Loader from '../components/Loader';
 export default class ReportAnalysis extends Component {
     constructor(props){
         super(props);
         this.state = {
             results: {},
-            chartComponent: null
+            chartComponent: null,
+            //isLoading: true
         };
     }
     
     createReportAnalysis = () => {
-        this.setState({
-            results: {}
-        });
         const {module} = this.props;
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
@@ -27,10 +25,7 @@ export default class ReportAnalysis extends Component {
     renderReportAnalysis = (module, results, language) => {
         const reportLabel = module.label[language];
         return (
-            <div style={{width: "100%", height: "100%"}}>
-                <Loader active={true} />
                 <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
-            </div>
         );
     };
     

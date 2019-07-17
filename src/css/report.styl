@@ -5,6 +5,12 @@
 @require 'base'
 @require 'results'
 
+@keyframes loader
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
+
 html
 body
   font-family $fontFamily
@@ -12,21 +18,23 @@ body
   width 100%
   padding 0
   margin 0
-
-.app-loader__active
-    background rgba(220,220,220,0.75)
-    height 100%
-    width 100%
-    z-index 5
-       position relative
-    .app-loader__spinner
-      position absolute
-      height 50px
-      width 50px
-      left 50%
-      margin-top 25%
   
-
+.app-loader__active
+  background rgba(220,220,220,0.75)
+  height 20rem
+  width 100%
+  z-index 5
+  position relative
+  margin-bottom 2rem
+  & .foreground
+    animation loader 0.95s cubic-bezier(0.645, 0.045, 0.355, 1.000) infinite
+  .app-loader__spinner
+    position absolute
+    height 50px
+    width 50px
+    left 50%
+    top 40%
+  
 .vega-chart-toggle-true
   cursor pointer
   transition all 0.3s ease
