@@ -3,8 +3,6 @@ import analysisKeys from 'constants/AnalysisConstants';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
 import Point from 'esri/geometry/Point';
-import QueryTask from 'esri/tasks/QueryTask';
-import Query from 'esri/tasks/query';
 import {getUrlParams} from 'utils/params';
 import {analysisConfig} from 'js/config';
 import layerFactory from 'utils/layerFactory';
@@ -12,7 +10,6 @@ import geojsonUtil from 'utils/arcgis-to-geojson';
 import esriRequest from 'esri/request';
 import template from 'utils/template';
 import appUtils from 'utils/AppUtils';
-import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
 import arcgisUtils from 'esri/arcgis/utils';
@@ -257,10 +254,8 @@ export default class Report extends Component {
         }
   
         return mapLayer;
-  
       });
-      
-  
+
       // Set the date range for the loss and glad layers
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
       const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
@@ -324,7 +319,6 @@ export default class Report extends Component {
         map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
       }
   
-      // this.addTitleAndAttributes(params, feature);
       // If there is an error with a particular layer, handle that here
   
       on.once(map, 'layers-add-result', result => {
@@ -365,11 +359,6 @@ export default class Report extends Component {
       map.disableMapNavigation();
       map.disableRubberBandZoom();
       map.disablePan();
-      
-      this.setState({
-        mapForTable: map,
-        paramsForTable: params
-      });
   
       all({
         feature: this.getFeature(params),
@@ -381,9 +370,6 @@ export default class Report extends Component {
         }
   
         const { feature, info } = featureResponse;
-      
-        //- Add Popup Info Now
-        // addTitleAndAttributes(params, feature, info);
         //- Need the map to be loaded to add graphics
         if (map.loaded) {
           this.setupMap(params, feature);
@@ -404,6 +390,10 @@ export default class Report extends Component {
         //     this.runAnalysis(params, feature);
         //   });
         // }
+        this.setState({
+          mapForTable: map,
+          paramsForTable: params
+        });
       });
   	});
   };
@@ -469,7 +459,6 @@ export default class Report extends Component {
   * Add layers to the map
   */
   setupMap = (params, feature) => {
-    const { visibleLayers } = params;
     //- Add a graphic to the map
     const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
     const graphicExtent = graphic.geometry.getExtent();
@@ -515,70 +504,7 @@ export default class Report extends Component {
     // we must split into an array to prevent 'TREE_COVER_LOSS' from matching 'TREE_COVER'
     // when using indexOf. With strings this will match
     params.activeLayers = params.activeLayers.split(',');
-  
     this.createLayers(resources.layerPanel, params.activeLayers, params.lang, params, feature);
-  
-  };
-
-  addTitleAndAttributes = (params, featureInfo) => {
-    const { layerId, OBJECTID, OBJECTID_Field, lang } = params;
-    if (layerId && OBJECTID) {
-  
-      const hashDecoupled = layerId.split('--');
-      const url = hashDecoupled[0];
-      const id = hashDecoupled[1];
-      const mapLayer = map.getLayer(id);
-  
-      const queryTask = new QueryTask(url);
-      const query = new Query();
-      query.where = OBJECTID_Field + ' = ' + OBJECTID;
-      query.returnGeometry = false;
-      query.outFields = ['*'];
-      queryTask.execute(query).then(res => {
-        if (res.features && res.features.length > 0) {
-          if (mapLayer && mapLayer.infoTemplate) {
-            //const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
-            //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
-            //const fragment = document.createDocumentFragment();
-  
-            mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
-              let fieldValue = res.features[0].attributes[fieldInfo.fieldName];
-              //- If it is a date, format that correctly
-              if (fieldInfo.format && fieldInfo.format.dateFormat) {
-                fieldValue = locale.format(new Date(fieldValue));
-              //- If it is a number, format that here, may need a better way
-              } else if (fieldInfo.format && fieldInfo.format.places !== undefined) {
-                fieldValue = number.format(fieldValue, fieldInfo.format);
-              }
-  
-              if (fieldValue && fieldValue.trim) {
-                fieldValue = fieldValue.trim();
-                const fragment = <div>
-                  {this.generateRow(fieldInfo.label, fieldValue)}
-                </div>;
-                return fragment;
-                //document.getElementById('popup-content').appendChild(fragment);
-                //console.log('fragment', fragment);
-                // fragment.appendChild(this.generateRow(
-                //   fieldInfo.label,
-                //   fieldValue
-                // ));
-  
-                //document.getElementById('popup-content').appendChild(fragment);
-              }
-  
-            });
-          } else {
-            //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-          }
-        } else {
-            //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-        }
-  
-      });
-    } else {
-     //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-    }
   };
 
   /**
@@ -628,7 +554,7 @@ export default class Report extends Component {
       name: text[lang].REPORT_TABLE_TOTAL,
       data: [total]
     });
-  
+
     data.forEach((datum) => {
       table.appendChild(this.generateRow(datum.name,
         typeof datum.data[0] === 'number' ?
@@ -983,18 +909,15 @@ export default class Report extends Component {
     lang: language
   });
   */
-  
+
   componentDidMount() {
     const params = getUrlParams(location.href);
     this.createMap(params);
   }
 
-  
   render () {
     const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
-    console.log('mapForTable', mapForTable);
-    console.log('paramsForTable', paramsForTable);
     return (
       <div>
         <ReportHeader />
@@ -1002,7 +925,8 @@ export default class Report extends Component {
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {
-              (mapForTable !== null && paramsForTable !== null) && <ReportTable map={mapForTable} params={paramsForTable} />
+              (mapForTable !== null && paramsForTable !== null) &&
+              <ReportTable map={mapForTable} params={paramsForTable} />
             }
             {
               analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
