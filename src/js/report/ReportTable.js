@@ -64,9 +64,9 @@ export default class ReportTable extends Component {
         return (
           <table className="report-table">
             <tbody>
-            <tr className="table-header-row">
+            {/* <tr className="table-header-row">
               <th colSpan="2" className="table-header">HEADER</th>
-            </tr>
+            </tr> */}
             {tableFields.map((tableField, index) => {
               return (
                   <tr key={`field-row-${index}`} className="field-row">
