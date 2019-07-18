@@ -466,6 +466,25 @@ body
       &:hover
         background #eee
         text-decoration underline
+        
+.report-table
+  font-size 12px
+  width 90%
+  margin 1rem auto
+  .table-header-row
+    .table-header
+      color $grayFont
+      font-size 14px
+      text-align left
+      border-bottom 1px solid $grayFont
+      padding-bottom .25rem
+      padding-left 10px
+  .field-row:nth-child(even)
+    background-color $selectionGray
+  .field-label
+    padding-left 10px
+    font-weight bold
+    color #555
 
 @media (max-width: $mobileBreak)
   .restoration-table

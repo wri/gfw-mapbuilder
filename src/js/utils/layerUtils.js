@@ -17,8 +17,7 @@ export default {
   * @param {object} config.content - Content for the info template in a dictionary of ISO Codes
   * @param {string} lang - ISO Code to use for the popup
   */
-  makeInfoTemplate: (config, lang) => {
-    debugger
+  makeInfoTemplate: (config, lang) => {  
     let template = '<div class="esriViewPopup"><div class="mainSection">';
     const title = config.title[lang];
     const content = config.content[lang];
@@ -27,7 +26,7 @@ export default {
       template += '<div class="header">' + title + '</div>';
     }
     //- Add the attr table
-    template += '<table class="attrTable Kayla-Was-Here">';
+    template += '<table class="attrTable">';
     //- Add the content
     if (content) {
       content.forEach((row) => {

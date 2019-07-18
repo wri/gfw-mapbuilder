@@ -62,18 +62,21 @@ export default class ReportTable extends Component {
     render() {
         const {tableFields} = this.state;
         return (
-          <div className="reportTable">
-            {tableFields.map(tableField => {
-            return (
-              <div>
-                <dl>
-                  <dt>{tableField.fieldLabel}</dt>
-                  <dd>{tableField.fieldValue}</dd>
-                </dl>
-              </div>
-            );
+          <table className="report-table">
+            <tbody>
+            <tr className="table-header-row">
+              <th colSpan="2" className="table-header">HEADER</th>
+            </tr>
+            {tableFields.map((tableField, index) => {
+              return (
+                  <tr key={`field-row-${index}`} className="field-row">
+                    <td className="field-label">{tableField.fieldLabel}</td>
+                    <td className="field-value">{tableField.fieldValue}</td>
+                  </tr>
+              );
             })}
-          </div>
+            </tbody>
+          </table>
         );
     }
 }

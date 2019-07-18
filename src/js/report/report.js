@@ -110,7 +110,6 @@ export default class Report extends Component {
 
   createLayers = (layerPanel, activeLayers, language, params, feature) => {
     const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeFilters, activeVersions} = params;
-  
     // Update order of layers as required.
     // Layers ordered first by their layer group.
     // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
@@ -145,7 +144,6 @@ export default class Report extends Component {
       if (groupIndex === 0) {
         maxOrder = layerPanel[groupName].order + 1;
       }
-  
       const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
         layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index + 1);
         return layer;
@@ -155,6 +153,7 @@ export default class Report extends Component {
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
+    console.log('layers', layers);
       //- remove custom features from the layersToAdd if we don't need it to avoid AGOL Auth
       layers.forEach((layer, i) => {
         if (layer.id === 'USER_FEATURES') {
@@ -172,7 +171,6 @@ export default class Report extends Component {
         }
         return prevArray.concat(currentItem);
       }, []);
-  
       layers = layers.filter(l => l.url || l.versions).concat(reducedLayers);
       layers.forEach(layer => {
         if (existingIds.indexOf(layer.id) === -1) {
@@ -207,9 +205,13 @@ export default class Report extends Component {
       //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
       //- sort by order from the layer config
       //- return an arcgis layer for each config object
-      const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
+      console.log('uniqueLayers', uniqueLayers);
+      console.log('activeLayers', activeLayers);
+      const esriLayers = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
+      console.log('esriLayers', esriLayers);
+      esriLayers.map((layer) => {
         // Check for active versions matching the layer id
-  
+        console.log('layer', layer);
         let layerConfig, filterField;
         Object.keys(resources.layerPanel).forEach((group) => {
           const configs = resources.layerPanel[group].layers;
@@ -237,10 +239,10 @@ export default class Report extends Component {
             }
           }
           console.log(layer.layerIds, versionConfig.layerIds);
-  
         }
         // return layerFactory(layer, language);
         const mapLayer = layerFactory(layer, language);
+        console.log('mapLayer', mapLayer);
   
         // If there are active filters, set definition expressions on layer.
         if (filterField && layer.type === 'feature') {
