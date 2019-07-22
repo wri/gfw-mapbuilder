@@ -37,7 +37,6 @@ import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
 import ReportAnalysis from './ReportAnalysis';
 
-
 let map;
 let constructorParams = null;
 

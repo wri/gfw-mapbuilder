@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import ReportSettings from '../../report/ReportSettings';
 
 
 export default class VegaChart extends Component {
@@ -16,7 +17,8 @@ export default class VegaChart extends Component {
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
       toggle: false,
-      description: ''
+      description: '',
+      showSettings: false
     };
   }
 
@@ -101,7 +103,7 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, showSettings } = this.state;
     const { results, component, reportLabel } = this.props;
     if (isError) {
       return (
@@ -120,7 +122,7 @@ export default class VegaChart extends Component {
             {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
             <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
-              <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
+              <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
                 {/* <span className="vega-chart-menu-text">SETTINGS</span> */}
               </div>
@@ -142,6 +144,9 @@ export default class VegaChart extends Component {
               </div>
             </div>
           </div>
+          }
+          {showSettings && 
+            <ReportSettings />
           }
           { showDownloadOptions &&
             <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
