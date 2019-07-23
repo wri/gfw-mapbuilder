@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
 import Loader from './../components/Loader';
+import ReportSettings from './ReportSettings';
 
 export default class ReportAnalysis extends Component {
     constructor(props){
@@ -46,14 +47,22 @@ export default class ReportAnalysis extends Component {
         if(results.data){
             reportLabel = module.label[language];
         }
+        console.log('params', params);
+        console.log('module', module);
         return (
             <div className="report-container">
                 <div className="vega-chart-wrapper">
                     <Loader active={isLoading} />
                     {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
+                    {results.data && 
+                        <div>
+                            <ReportSettings module={module} params={params} language={language} />
+                            <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />
+                        </div>
+                    }
                 </div>
             </div>
         );
     }
-} 
+}
+

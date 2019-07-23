@@ -6,6 +6,7 @@ import AnalysisDatePicker from '../components/AnalysisPanel/AnalysisFormElements
 import AnalysisMultiDatePicker from '../components/AnalysisPanel/AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from '../components/LayerPanel/DensityDisplay';
 
+
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
     <div className='analysis-item-wrapper'>
       <div className='analysis-item-label'>
@@ -17,17 +18,25 @@ const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
   );
 
 export default class ReportSettings extends Component {
-    
-    constructor(props){
-        super(props);
-        this.state = {
-            ...MapStore.getState()
-        };
-    }
+
+  constructor(props){
+    super(props);
+    this.state = {
+     ...MapStore.getState()
+    };
+  }
+
+  rangeSliderCallback = () => {
+    console.log('range slider');
+  };
+  
+  calendarCallback = () => {
+    console.log('calendar');
+  };
 
     getFormComponents = (activeAnalysisType, analysisItems) => {
-        const { language } = this.context;
-        const analysisItemConfig = analysisItems.filter(ai => ai.analysisId === activeAnalysisType)[0];
+        const { language } = this.props;
+        const analysisItemConfig = this.props.module;
         const { uiParams } = analysisItemConfig;
         const formComponents = [];
         if (uiParams === 'none') {
@@ -68,8 +77,13 @@ export default class ReportSettings extends Component {
     
               if (analysisItemConfig.analysisId === 'TC_LOSS') {
                 const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
-                initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
-                initialEndValue = Number(lossOptions[lossToSelectIndex].label);
+                console.log('1', lossToSelectIndex);
+                console.log('2', lossFromSelectIndex);
+                console.log('3', lossOptions);
+                //initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
+                //initialEndValue = Number(lossOptions[lossToSelectIndex].label);
+                initialStartValue = 2;
+                initialEndValue = 3;
               }
               formComponents.push(
                 <AnalysisItemWrapper
@@ -225,10 +239,11 @@ export default class ReportSettings extends Component {
       }
     
     render() {
-        const {activeAnalysisType, analysisItems} = this.state;
+        console.log('state', this.state);
         return (
             <div>
-                {this.getFormComponents(activeAnalysisType, analysisItems)}
+                {this.getFormComponents()}
+                HEY
             </div>
         );
     }

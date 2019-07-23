@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
 import MapActions from 'actions/MapActions';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -38,6 +39,7 @@ export default class AnalysisRangeSlider extends Component {
       valueSeparator,
     } = this.props;
     const { rangeSliderValue } = this.state;
+    console.log('inside analysis range slider');
 
     // Set the default params to to pass in the request
     rangeSliderCallback(
