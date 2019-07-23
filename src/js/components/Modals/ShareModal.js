@@ -38,11 +38,6 @@ export default class ShareModal extends React.Component {
     }
   }
 
-  shareGoogle () {
-    const url = modalText.share.googleUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
-    window.open(url, 'Google Plus', windowOptions);
-  }
-
   shareFacebook () {
     const url = modalText.share.facebookUrl(this.props.url ? this.props.url : this.state.bitlyUrl);
     window.open(url, 'Facebook', windowOptions);
@@ -72,9 +67,6 @@ export default class ShareModal extends React.Component {
           <button className='gfw-btn white pointer' onClick={() => this.copyShare()}>{this.state.copyText}</button>
         </div>
         <div className='share-items'>
-          <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={() => this.shareGoogle()}>
-            <SVGIcon id={'icon-googleplus'} />
-          </div>
           <div title='Twitter' className='share-card twitter-modal pointer' onClick={() => this.shareTwitter()}>
             <SVGIcon id={'icon-twitter'} />
           </div>
