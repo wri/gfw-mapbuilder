@@ -16,7 +16,12 @@ export default class DensityDisplay extends Component {
   };
 
   render () {
-    const {language} = this.context;
+    let language;
+    if (this.context.language){
+      language = this.context.language;
+    } else {
+      language = this.props.language;
+    }
     const { label } = this.props;
     const hideDefaultLabel = label === '';
 

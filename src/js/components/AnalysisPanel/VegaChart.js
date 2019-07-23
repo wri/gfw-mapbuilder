@@ -104,7 +104,7 @@ export default class VegaChart extends Component {
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, showSettings } = this.state;
-    const { results, component, reportLabel } = this.props;
+    const { results, component, reportLabel, module, params, language, analysisId } = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -145,8 +145,19 @@ export default class VegaChart extends Component {
             </div>
           </div>
           }
-          {showSettings && 
-            <ReportSettings />
+          { showSettings &&
+            <div className="vega-chart-report-settings-container">
+              {
+                (analysisId === 'TC_LOSS' ||
+                analysisId === 'TC_LOSS_GAIN' ||
+                analysisId === 'IFL' ||
+                analysisId === 'Loss_LandCover' ||
+                analysisId === 'BIO_LOSS') ?
+                  <ReportSettings module={module} params={params} language={language} />
+                :
+                <div className="no-report-settings">There are no settings for this analysis.</div>
+              }
+            </div>
           }
           { showDownloadOptions &&
             <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>

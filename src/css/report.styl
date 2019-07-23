@@ -5,6 +5,7 @@
 @require 'base'
 @require 'results'
 @require 'analysisPanel'
+@require 'layerPanel'
 
 html
 body
@@ -417,6 +418,19 @@ body
 
 .vega-chart-hide 
   display none
+  
+.vega-chart-report-settings-container
+  width 100%
+  margin 1rem
+  
+.analysis-results__select-form-container
+  width 100%
+
+.no-report-settings
+  font-weight bold
+  text-transform uppercase
+  text-align center
+  margin 1rem
 
 @media (max-width 550px)
   .report-header__title

@@ -34,7 +34,7 @@ export default class ReportSettings extends Component {
     console.log('calendar');
   };
 
-    getFormComponents = (activeAnalysisType, analysisItems) => {
+    getFormComponents = () => {
         const { language } = this.props;
         const analysisItemConfig = this.props.module;
         const { uiParams } = analysisItemConfig;
@@ -77,9 +77,6 @@ export default class ReportSettings extends Component {
     
               if (analysisItemConfig.analysisId === 'TC_LOSS') {
                 const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
-                console.log('1', lossToSelectIndex);
-                console.log('2', lossFromSelectIndex);
-                console.log('3', lossOptions);
                 //initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
                 //initialEndValue = Number(lossOptions[lossToSelectIndex].label);
                 initialStartValue = 2;
@@ -109,8 +106,10 @@ export default class ReportSettings extends Component {
               break;
             }
             case 'tcd': {
-              const { canopyDensity } = this.props;
+              const { canopyDensity } = this.state;
               const { label } = param;
+              console.log('canopyDensity', canopyDensity);
+              console.log('label', label);
               formComponents.push(
                 <AnalysisItemWrapper
                   key={analysisItemConfig.analysisId + param.inputType + idx}
@@ -123,6 +122,7 @@ export default class ReportSettings extends Component {
                     <DensityDisplay
                       label={''}
                       canopyDensity={canopyDensity}
+                      language={language}
                     />
                   </div>
                 </AnalysisItemWrapper>
@@ -239,11 +239,12 @@ export default class ReportSettings extends Component {
       }
     
     render() {
-        console.log('state', this.state);
+      console.log('state', this.state);
         return (
-            <div>
+            <div className="analysis-results__select-form-container">
+              <div className='analysis-results__select-form custom-scroll'>
                 {this.getFormComponents()}
-                HEY
+              </div>
             </div>
         );
     }
