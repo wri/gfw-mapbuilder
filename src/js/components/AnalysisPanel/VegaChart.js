@@ -52,24 +52,24 @@ export default class VegaChart extends Component {
             }
           ]
         };
-        const heightSignal = {
-          name: "height",
-          value: "",
-          on: [
-            {
-              events: {
-                source: "window",
-                type: "resize"
-              },
-              update: "containerSize()[1]*0.95"
-            }
-          ]
-        };
-        config.width = config.width * 2;
-        config.height = config.height * 2;
+        // const heightSignal = {
+        //   name: "height",
+        //   value: "",
+        //   on: [
+        //     {
+        //       events: {
+        //         source: "window",
+        //         type: "resize"
+        //       },
+        //       update: "containerSize()[1]*0.95"
+        //     }
+        //   ]
+        // };
+        //config.width = config.width * 2;
+        //config.height = config.height * 2;
         config.autosize = {type: 'fit', resize: true};
         config.signals.push(widthSignal);
-        config.signals.push(heightSignal);
+        //config.signals.push(heightSignal);
       }
 
       // config.marks.forEach(mark => {
