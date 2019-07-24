@@ -65,8 +65,6 @@ export default class VegaChart extends Component {
             }
           ]
         };
-        config.width = config.width * 2;
-        config.height = config.height * 2;
         config.autosize = {type: 'fit', resize: true};
         config.signals.push(widthSignal);
         config.signals.push(heightSignal);
@@ -153,7 +151,9 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
     const {width, height} = this.state.dimensions;
-    const { results, component, reportLabel } = this.props;
+    const { results, component, reportLabel, module } = this.props;
+    const analysisId = module.analysisId;
+    
     if (isError) {
       return (
         <div className='data-error'>
@@ -213,7 +213,7 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div className="vega-chart-container" ref={measureRef}>
+                  <div className={`${analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES' ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
                     <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
