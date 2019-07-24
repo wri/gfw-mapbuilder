@@ -101,7 +101,7 @@ export default class VegaChart extends Component {
   }
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description} = this.state;
     const { results, component, reportLabel } = this.props;
     if (isError) {
       return (
@@ -156,11 +156,13 @@ export default class VegaChart extends Component {
           <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
           {component === 'Report' &&
             <div>
-              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
-                <div className="vega-chart-info">
-                    {description}
+              {description && description !== '' &&
+                <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+                  <div className="vega-chart-info">
+                      {description}
+                  </div>
                 </div>
-              </div>
+              }
               <div className="vega-chart-separator"></div>
             </div>
           }
