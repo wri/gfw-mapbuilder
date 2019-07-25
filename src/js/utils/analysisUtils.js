@@ -574,17 +574,6 @@ export default {
     const promise = new Deferred();
     let url = selectedFeature._layer.url;
     
-    console.log('---------------------------------------');
-    console.log('selectedFeature', selectedFeature);
-    console.log('---------------------------------------');
-    console.log('viirsFiresLayer', viirsFiresLayer);
-    console.log('viirsID', viirsID);
-    console.log('---------------------------------------');
-    console.log('modisFiresLayer', modisFiresLayer);
-    console.log('modisID', modisID);
-    console.log('---------------------------------------');
-    console.log('url: before', url);
-    
     if (selectedFeature._layer.id === viirsID) {
       if (selectedFeature._layer.url !== viirsFiresLayer.url) {
         url = `${viirsFiresLayer.url}/${viirsLayerID}`;
@@ -596,9 +585,6 @@ export default {
         url = `${viirsFiresLayer.url}/${modisLayerID}`;
       }
     }
-    
-    console.log('url: after', url);
-    console.log('---------------------------------------');
     
     if (!url) {
       return promise.resolve(selectedFeature.geometry);
