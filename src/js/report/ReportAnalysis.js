@@ -17,6 +17,7 @@ export default class ReportAnalysis extends Component {
             isLoading: true
         });
         const {module} = this.props;
+        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
@@ -51,9 +52,9 @@ export default class ReportAnalysis extends Component {
                 <div className="vega-chart-wrapper">
                     <Loader active={isLoading} />
                     {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
+                    {results.data && <VegaChart module={module} reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
                 </div>
             </div>
         );
     }
-} 
+}
