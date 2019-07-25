@@ -125,7 +125,10 @@ export default class VegaChart extends Component {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
     const {width, height} = this.state.dimensions;
     const { results, component, reportLabel, module } = this.props;
-    const analysisId = module.analysisId;
+    let analysisId = null;
+    if (module && module.analysisId){
+      analysisId = module.analysisId;
+    }
 
     if (isError) {
       return (
