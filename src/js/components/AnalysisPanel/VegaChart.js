@@ -38,7 +38,7 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       console.log('config', config);
-      if (this.props.component === 'Report'){
+      if (this.props.component === 'Report') {
         const widthSignal = {
           name: "width",
           value: "",
@@ -53,11 +53,14 @@ export default class VegaChart extends Component {
           ]
         };
         config.autosize = {type: 'fit', resize: true};
+        if (!config.signals) {
+          config.signals = [];
+        }
         config.signals.push(widthSignal);
       }
 
       const {setLoading, language, results} = this.props;
-      if (config.data[0].url.indexOf('?&') > -1){
+      if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
@@ -71,9 +74,9 @@ export default class VegaChart extends Component {
                 description: 'Error retrieving description'
               });
             } else {
-            this.setState({
-              description: json.data[0].attributes.description
-            });
+              this.setState({
+                description: json.data[0].attributes.description
+              });
             }
           });
         });
