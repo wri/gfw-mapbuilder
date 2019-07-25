@@ -109,8 +109,6 @@ export default class ReportSettings extends Component {
           case 'tcd': {
             const { canopyDensity } = this.state;
             const { label } = param;
-            console.log('canopyDensity', canopyDensity);
-            console.log('label', label);
             formComponents.push(
               <AnalysisItemWrapper
                 key={analysisItemConfig.analysisId + param.inputType + idx}
