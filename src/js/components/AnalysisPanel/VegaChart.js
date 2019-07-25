@@ -37,25 +37,11 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      console.log('config', config);
       if (this.props.component === 'Report') {
-      
-        const initialWidthSignal = {
-          name: "width",
-          value: "",
-          on: [
-            {
-              events: {
-                source: ".vega-chart-container",
-                type: "load"
-              },
-              update: "containerSize()[0]*0.95"
-            }
-          ]
-        };
           
         const resizeWidthSignal = {
           name: "width",
+          update: "containerSize()[0]*0.95",
           value: "",
           on: [
             {
@@ -73,7 +59,6 @@ export default class VegaChart extends Component {
           config.signals = [];
         }
         
-        config.signals.push(initialWidthSignal);
         config.signals.push(resizeWidthSignal);
       }
 
