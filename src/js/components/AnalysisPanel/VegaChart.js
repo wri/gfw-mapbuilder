@@ -153,9 +153,9 @@ export default class VegaChart extends Component {
                 analysisId === 'IFL' ||
                 analysisId === 'Loss_LandCover' ||
                 analysisId === 'BIO_LOSS') ?
-                  <ReportSettings module={module} params={params} language={language} />
+                <ReportSettings module={module} params={params} language={language} />
                 :
-                <div className="no-report-settings">There are no settings for this analysis.</div>
+                <div className="no-report-settings">There are no settings for this analysis</div>
               }
             </div>
           }

@@ -6,6 +6,7 @@
 @require 'results'
 @require 'analysisPanel'
 @require 'layerPanel'
+@require 'reportSubButtons'
 
 html
 body
@@ -235,6 +236,7 @@ body
   .vega-chart-error
       font-weight bold
       width 100%
+      max-width 60rem
       border-bottom 1px solid #ccc
       text-align center
       padding-bottom 1.75rem
@@ -248,6 +250,7 @@ body
     display flex
   .vega-chart-info-container
     width 100%
+    max-width 60rem
     padding 1rem 0
     .vega-chart-info
       color #555
@@ -431,6 +434,23 @@ body
   text-transform uppercase
   text-align center
   margin 1rem
+  
+.run-report-analysis-button-container
+  display flex
+  flex-direction column
+  justify-content space-around
+  align-items center
+  width 100%
+  max-width 60rem
+  .run-report-analysis-button
+    border 2px solid $goldTheme
+    height 32px
+    color #ffffff
+    width 50%
+    border-radius 16px
+    background-color $goldTheme
+    font-size 16px
+    text-transform uppercase
 
 @media (max-width 550px)
   .report-header__title
