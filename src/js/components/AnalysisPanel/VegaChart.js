@@ -39,7 +39,22 @@ export default class VegaChart extends Component {
       const config = this.props.results.data.attributes.widgetConfig;
       console.log('config', config);
       if (this.props.component === 'Report') {
-        const widthSignal = {
+      
+        const initialWidthSignal = {
+          name: "width",
+          value: "",
+          on: [
+            {
+              events: {
+                source: ".vega-chart-container",
+                type: "load"
+              },
+              update: "containerSize()[0]*0.95"
+            }
+          ]
+        };
+          
+        const resizeWidthSignal = {
           name: "width",
           value: "",
           on: [
@@ -52,11 +67,14 @@ export default class VegaChart extends Component {
             }
           ]
         };
+        
         config.autosize = {type: 'fit', resize: true};
         if (!config.signals) {
           config.signals = [];
         }
-        config.signals.push(widthSignal);
+        
+        config.signals.push(initialWidthSignal);
+        config.signals.push(resizeWidthSignal);
       }
 
       const {setLoading, language, results} = this.props;
@@ -103,8 +121,6 @@ export default class VegaChart extends Component {
     }
   }
 
-
-
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
   };
@@ -122,7 +138,7 @@ export default class VegaChart extends Component {
     this.setState({
       toggle: !this.state.toggle
     });
-  }
+  };
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
