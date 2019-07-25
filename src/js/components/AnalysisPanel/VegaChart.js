@@ -38,37 +38,24 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       console.log('config', config);
-      const widthSignal = {
-        name: "width",
-        value: "",
-        on: [
-          {
-            events: {
-              source: "window",
-              type: "resize"
-            },
-            update: "containerSize()[0]*0.95"
-          }
-        ]
-      };
-      const heightSignal = {
-        name: "height",
-        value: "",
-        on: [
-          {
-            events: {
-              source: "window",
-              type: "resize"
-            },
-            update: "containerSize()[1]*0.95"
-          }
-        ]
-      };
-      config.width = config.width * 2;
-      config.height = config.height * 2;
-      config.autosize = {type: 'fit', resize: true};
-      config.signals.push(widthSignal);
-      config.signals.push(heightSignal);
+      if (this.props.component === 'Report'){
+        const widthSignal = {
+          name: "width",
+          value: "",
+          on: [
+            {
+              events: {
+                source: "window",
+                type: "resize"
+              },
+              update: "containerSize()[0]*0.95"
+            }
+          ]
+        };
+        config.autosize = {type: 'fit', resize: true};
+        config.signals.push(widthSignal);
+      }
+      
       const {setLoading, language, results} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
