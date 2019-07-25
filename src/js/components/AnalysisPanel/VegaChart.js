@@ -55,7 +55,7 @@ export default class VegaChart extends Component {
         config.autosize = {type: 'fit', resize: true};
         config.signals.push(widthSignal);
       }
-      
+
       const {setLoading, language, results} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
@@ -78,7 +78,7 @@ export default class VegaChart extends Component {
           });
         });
       }
-   
+
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
@@ -99,8 +99,8 @@ export default class VegaChart extends Component {
       .catch(() => this.handleError('Error creating analysis.'));
     }
   }
-  
- 
+
+
 
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
@@ -124,7 +124,12 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
     const {width, height} = this.state.dimensions;
-    const { results, component, reportLabel } = this.props;
+    const { results, component, reportLabel, module } = this.props;
+    let analysisId = null;
+    if (module && module.analysisId){
+      analysisId = module.analysisId;
+    }
+
     if (isError) {
       return (
         <div className='data-error'>
@@ -135,7 +140,7 @@ export default class VegaChart extends Component {
       return (
         <div className='vega-chart_container'>
           { showDownloadOptions &&
-            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> 
+            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div>
           }
           {component === 'Report' ?
           <div className='vega-chart_download-container'>
@@ -184,7 +189,7 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div className="vega-chart-container" ref={measureRef}>
+                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
                     <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
@@ -194,7 +199,7 @@ export default class VegaChart extends Component {
                     {description}
                 </div>
               </div>
-            </div> 
+            </div>
             :
             <div className="vega-chart-container">
               <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
