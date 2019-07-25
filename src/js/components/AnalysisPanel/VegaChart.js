@@ -52,37 +52,10 @@ export default class VegaChart extends Component {
             }
           ]
         };
-        const heightSignal = {
-          name: "height",
-          value: "",
-          on: [
-            {
-              events: {
-                source: "window",
-                type: "resize"
-              },
-              update: "containerSize()[1]*0.95"
-            }
-          ]
-        };
         config.autosize = {type: 'fit', resize: true};
         config.signals.push(widthSignal);
-        config.signals.push(heightSignal);
       }
 
-      // config.marks.forEach(mark => {
-      //   if (mark.type === "text"){
-      //     mark.encode.enter.x.signal = "width/2 + 10";
-      //     mark.encode.enter.y.signal = "height/2";
-      //   }
-      //   if(mark.type === "rect"){
-      //     mark.encode.enter.height.signal = "height";
-      //     mark.encode.enter.width.signal = "width";
-      //     mark.encode.enter.x.signal = "width/6";
-      //     mark.encode.enter.y.signal = "height/6";
-      //   }
-      // });
-      
       const {setLoading, language, results} = this.props;
       if (config.data[0].url.indexOf('?&') > -1){
         const urlPieces = config.data[0].url.split('?&');
@@ -105,7 +78,7 @@ export default class VegaChart extends Component {
           });
         });
       }
-   
+
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
@@ -126,8 +99,8 @@ export default class VegaChart extends Component {
       .catch(() => this.handleError('Error creating analysis.'));
     }
   }
-  
- 
+
+
 
   addChartDownload = (url) => {
     this.setState({ chartImgDownloadUrl: url });
@@ -153,7 +126,7 @@ export default class VegaChart extends Component {
     const {width, height} = this.state.dimensions;
     const { results, component, reportLabel, module } = this.props;
     const analysisId = module.analysisId;
-    
+
     if (isError) {
       return (
         <div className='data-error'>
@@ -164,7 +137,7 @@ export default class VegaChart extends Component {
       return (
         <div className='vega-chart_container'>
           { showDownloadOptions &&
-            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> 
+            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div>
           }
           {component === 'Report' ?
           <div className='vega-chart_download-container'>
@@ -223,7 +196,7 @@ export default class VegaChart extends Component {
                     {description}
                 </div>
               </div>
-            </div> 
+            </div>
             :
             <div className="vega-chart-container">
               <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
