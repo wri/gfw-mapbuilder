@@ -423,9 +423,15 @@ body
   display none
   
 .vega-chart-report-settings-container
-  width 100%
+  width 75%
   max-width 60rem
   margin 1rem
+  .analysis-item-wrapper
+    width 100%
+    display flex
+    flex-flow column
+    justify-content center
+    align-items center
   
 .analysis-results__select-form-container
   width 100%
@@ -443,21 +449,21 @@ body
   align-items center
   width 100%
   max-width 60rem
+  border-bottom 1px solid rgba(0,0,0,0.2)
+  margin-bottom 10px
   .run-report-analysis-button
     border 2px solid $goldTheme
     height 32px
     color #ffffff
-    width 50%
+    width 10rem
     border-radius 16px
     background-color $goldTheme
     font-size 16px
     text-transform uppercase
+    margin-bottom 0.75rem
     
-// .analysis-item-wrapper
-//   display flex
-//   justify-content center
-//   align-items center
-//   flex-flow column
+.analysis-results__select-form-item-container > .tree-cover-canopy-display
+  margin 0 auto
 
 @media (max-width 550px)
   .report-header__title
