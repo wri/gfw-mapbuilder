@@ -7,17 +7,11 @@ export default class ReportHeader extends Component {
         super(props);
     }
 
-
     printReport = () => {
         window.print();
       };
 
-    getReportInfo = () => {
-        console.log('get report info');
-    };
-
     shareReport = () => {
-        console.log('share report');
         document.getElementById('share-modal').classList.toggle('hidden');
     };
 
@@ -39,9 +33,6 @@ export default class ReportHeader extends Component {
                         <ul id="report-icons" className="report-header__icon-container">
                             <li className="report-print" onClick={this.printReport}>
                                 <SVGIcon id="report-print-icon" />
-                            </li>
-                            <li className="report-info" onClick={this.getReportInfo}>
-                                <SVGIcon id="report-info-icon" />
                             </li>
                             <li className="report-share" onClick={this.shareReport}>
                                 <SVGIcon id="report-share-icon" />
