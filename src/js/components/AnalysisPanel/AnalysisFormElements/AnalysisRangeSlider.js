@@ -39,7 +39,6 @@ export default class AnalysisRangeSlider extends Component {
       valueSeparator,
     } = this.props;
     const { rangeSliderValue } = this.state;
-    console.log('inside analysis range slider');
 
     // Set the default params to to pass in the request
     rangeSliderCallback(

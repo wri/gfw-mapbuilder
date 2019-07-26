@@ -672,7 +672,6 @@ export default class Analysis extends Component {
             </div>
             <AnalysisTypeSelect {...this.props} analysisItems={settings.analysisModules} />
           </div>
-          {/* WIP */}
           {activeAnalysisType !== 'default' && !chartComponent &&
             <div className='analysis-results__select-form custom-scroll'>
               <div className='item-title'>{activeItemTitle}</div><div className='item-description'>{activeItemDescription}</div>
