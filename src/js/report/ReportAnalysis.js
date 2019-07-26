@@ -57,7 +57,6 @@ export default class ReportAnalysis extends Component {
                     {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
                     {results.data &&
                         <div>
-                            {/* <ReportSettings module={module} params={params} language={language} /> */}
                             <VegaChart analysisId={analysisId} module={module} params={params} reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />
                         </div>
                     }
