@@ -6,6 +6,7 @@ import AnalysisDatePicker from '../components/AnalysisPanel/AnalysisFormElements
 import AnalysisMultiDatePicker from '../components/AnalysisPanel/AnalysisFormElements/AnalysisMultiDatePicker';
 import DensityDisplay from '../components/LayerPanel/DensityDisplay';
 import text from 'js/languages';
+import mapActions from '../actions/MapActions';
 
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
@@ -27,9 +28,40 @@ export default class ReportSettings extends Component {
     };
   }
 
-  rangeSliderCallback = () => {
-    console.log('range slider');
-  };
+  rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
+    let startValue = rangeSliderValue[0];
+    let endValue = rangeSliderValue[1];
+
+    if (valueType === 'date') {
+      startValue = `${startValue}-01-01`;
+      endValue = `${endValue}-12-31`;
+    }
+
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startValue}${valueSeparator}${endValue}`,
+      });
+      return;
+    }
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: startParam,
+      paramValue: `${startValue}`,
+    });
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: endParam,
+      paramValue: `${endValue}`,
+    });
+  }
   
   calendarCallback = () => {
     console.log('calendar');
@@ -77,11 +109,11 @@ export default class ReportSettings extends Component {
             }
   
             if (analysisItemConfig.analysisId === 'TC_LOSS') {
-              const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.props;
-              //initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
-              //initialEndValue = Number(lossOptions[lossToSelectIndex].label);
-              initialStartValue = 2;
-              initialEndValue = 3;
+              const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.state;
+              initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
+              initialEndValue = Number(lossOptions[lossToSelectIndex].label);
+              //initialStartValue = 2;
+              //initialEndValue = 3;
             }
             formComponents.push(
               <AnalysisItemWrapper

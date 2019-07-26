@@ -22,13 +22,14 @@ body
 
 .vega-chart-container,
 .vega-chart > canvas {
-  min-width: 250px !important
-  margin: 1rem auto
+  max-width 60rem
+  width 100%
+  margin 1rem auto
 }
 
 .vega-chart-badge-container {
-  min-width 250px !important
-  max-width 500px
+  max-width 30rem
+  width 100%
   margin 1rem auto
 }
 
@@ -262,16 +263,15 @@ body
     margin 0 auto
     display flex
   .vega-chart-info-container
-    width 100%
     max-width 60rem
-    padding 1rem 0
+    margin 1rem
     .vega-chart-info
       color #555
       padding 0.5rem
       font-size x-small
-      width 75%
+      width 100%
+      max-width 60rem
       margin 0 auto
-      text-align center
       border 1px solid #eee
     .data-error
       display flex
@@ -436,7 +436,7 @@ body
   display none
   
 .vega-chart-report-settings-container
-  width 75%
+  width 100%
   max-width 60rem
   margin 1rem
   .analysis-item-wrapper

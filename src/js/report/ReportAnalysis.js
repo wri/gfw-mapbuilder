@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
 import Loader from './../components/Loader';
-import ReportSettings from './ReportSettings';
 
 export default class ReportAnalysis extends Component {
     constructor(props){
@@ -18,7 +17,6 @@ export default class ReportAnalysis extends Component {
             isLoading: true
         });
         const {module} = this.props;
-        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
