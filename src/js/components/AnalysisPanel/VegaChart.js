@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
-
+import Measure from 'react-measure';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -15,7 +15,12 @@ export default class VegaChart extends Component {
       downloadOptions: [],
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
+      chartName: '',
       toggle: false,
+      dimensions: {
+        width: -1,
+        height: -1
+      },
       description: ''
     };
   }
@@ -32,17 +37,38 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      // config.autosize = {type: 'fit', resize: true};
+      if (this.props.component === 'Report') {
+          
+        const resizeWidthSignal = {
+          name: "width",
+          update: "containerSize()[0]*0.95",
+          value: "",
+          on: [
+            {
+              events: {
+                source: "window",
+                type: "resize"
+              },
+              update: "containerSize()[0]*0.95"
+            }
+          ]
+        };
+        
+        config.autosize = {type: 'fit', resize: true};
+        if (!config.signals) {
+          config.signals = [];
+        }
+        
+        config.signals.push(resizeWidthSignal);
+      }
+
       const {setLoading, language, results} = this.props;
-      if (config.data[0].url.indexOf('?&') > -1){
+      if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
       }
-      
       const dataset = this.props.results.data.attributes.dataset;
       const id = this.props.results.data.id;
-      
-   
       if (this.props.component === 'Report'){
         fetch(`https://production-api.globalforestwatch.org/v1/dataset/${dataset}/widget/${id}/metadata?language=${language}`).then(res => {
           res.json().then(json => {
@@ -51,18 +77,16 @@ export default class VegaChart extends Component {
                 description: 'Error retrieving description'
               });
             } else {
-            if(json.data && json.data.length > 0 && json.data[0].attributes) {
-              this.setState({
-                description: json.data[0].attributes.description
-              });
-            }
-           
+              if (json.data && json.data.length > 0 && json.data[0].attributes) {
+                this.setState({
+                  description: json.data[0].attributes.description
+                });
+              }
             }
           });
         });
       }
-      
-      //Add loader here when Vega Chart mounts????
+
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
@@ -91,7 +115,7 @@ export default class VegaChart extends Component {
   renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
-      <a href={option.url.includes('cartodb') ? option.url : baseUrl + option.url} target="_blank" download key={`option-${i}`}>
+      <a className="download-option" href={option.url.includes('cartodb') ? option.url : baseUrl + option.url} target="_blank" download key={`option-${i}`}>
         <span className='download-option-label'>Download Alerts as .CSV</span>
       </a>
     );
@@ -101,11 +125,17 @@ export default class VegaChart extends Component {
     this.setState({
       toggle: !this.state.toggle
     });
-  }
+  };
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
-    const { results, component, reportLabel } = this.props;
+    const {width, height} = this.state.dimensions;
+    const { results, component, reportLabel, module } = this.props;
+    let analysisId = null;
+    if (module && module.analysisId){
+      analysisId = module.analysisId;
+    }
+
     if (isError) {
       return (
         <div className='data-error'>
@@ -116,10 +146,10 @@ export default class VegaChart extends Component {
       return (
         <div className='vega-chart_container'>
           { showDownloadOptions &&
-            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> 
+            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div>
           }
           {component === 'Report' ?
-          <div className='vega-chart_download-container'>
+          <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
             {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
             <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
@@ -137,7 +167,7 @@ export default class VegaChart extends Component {
               </div>
             </div>
           </div> :
-          <div className='vega-chart_download-container'>
+          <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
             <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
@@ -147,7 +177,7 @@ export default class VegaChart extends Component {
           </div>
           }
           { showDownloadOptions &&
-            <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+            <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
               {downloadOptions.map(this.renderdownloadOptions)}
               {this.chart &&
                 <a className="download-option" href={chartImgDownloadUrl} download={chartDownloadTitle}>
@@ -156,15 +186,31 @@ export default class VegaChart extends Component {
               }
             </div>
           }
-          <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
-          {component === 'Report' &&
-            <div>
-              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
-                <div className="vega-chart-info">
-                    {description}
+          {component === 'Report' ?
+          <div>
+              <Measure
+                bounds
+                onResize={contentRect => {
+                this.setState({ dimensions: contentRect.bounds });
+                }}
+              >
+                {({ measureRef }) => (
+                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
+                    <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  </div>
+                )}
+              </Measure>
+              {description && description !== '' &&
+                <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+                  <div className="vega-chart-info">
+                      {description}
+                  </div>
                 </div>
-              </div>
-              <div className="vega-chart-separator"></div>
+              }
+            </div>
+            :
+            <div className="vega-chart-container">
+              <div className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
             </div>
           }
         </div>
