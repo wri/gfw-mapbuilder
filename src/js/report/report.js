@@ -42,7 +42,7 @@ let constructorParams = null;
 export default class Report extends Component {
   constructor(props){
     super(props);
-    
+
     this.state = {
       sections: [],
       analysisModules: [],
@@ -50,14 +50,14 @@ export default class Report extends Component {
       paramsForTable: null
     };
   }
-  
+
   getWebmapInfo = (webmap) => {
     return esriRequest({
       url: `${resources.sharinghost}/sharing/rest/content/items/${webmap}/data?f=json`,
       callbackParamName: 'callback'
     });
   };
-  
+
   getApplicationInfo = (params) => {
     const { webmap, appid } = params;
     const promise = new Deferred();
@@ -114,7 +114,7 @@ export default class Report extends Component {
     // Layers ordered first by their layer group.
     // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
     // Esri layers have a specified order field within their layer group.
-  
+
     // First need to add webmap layers to layer panel section GROUP_WEBMAP.
     const webMapLayers = [];
     map.layerIds.forEach((layerId) => {
@@ -126,7 +126,7 @@ export default class Report extends Component {
     //   webMapLayer.order = i;
     // })
     layerPanel.GROUP_WEBMAP.layers = webMapLayers;
-  
+
     let maxOrder = 0;
     //- Organize and order the layers before adding them to the map
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -149,7 +149,7 @@ export default class Report extends Component {
         return layer;
       });
       return list.concat(orderedGroups);
-  
+
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
@@ -160,7 +160,7 @@ export default class Report extends Component {
           return;
         }
       });
-  
+
       //- make sure there's only one entry for each dynamic layer
       const uniqueLayers = [];
       const existingIds = [];
@@ -182,7 +182,7 @@ export default class Report extends Component {
       uniqueLayers.forEach(layer => {
         layer.visible = activeLayers.indexOf(layer.id) > -1;
       });
-  
+
       // format active version params into an object
       const versions = {};
       if (activeVersions.length) {
@@ -191,7 +191,7 @@ export default class Report extends Component {
           versions[version[0]] = version[1];
         });
       }
-  
+
       // format active filter params into an object
       const filters = {};
       if (activeFilters) {
@@ -200,7 +200,7 @@ export default class Report extends Component {
           filters[filter[0]] = filter[1];
         });
       }
-  
+
       //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
       //- sort by order from the layer config
       //- return an arcgis layer for each config object
@@ -216,7 +216,7 @@ export default class Report extends Component {
             filterField = layerConfig.filterField[language];
           }
         });
-  
+
         if (versions[layer.id] && versions[layer.id] !== 0) {
           const groups = Object.keys(resources.layerPanel);
           let versionConfig;
@@ -238,7 +238,7 @@ export default class Report extends Component {
         }
         // return layerFactory(layer, language);
         const mapLayer = layerFactory(layer, language);
-  
+
         // If there are active filters, set definition expressions on layer.
         if (filterField && layer.type === 'feature') {
           mapLayer.setDefinitionExpression(`${filterField} = '${filters[layer.id]}'`);
@@ -249,7 +249,7 @@ export default class Report extends Component {
           });
           mapLayer.setLayerDefinitions(layerDefinitions);
         }
-  
+
         return mapLayer;
       });
 
@@ -259,38 +259,38 @@ export default class Report extends Component {
       const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
       const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
       const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
-  
+
       if (lossLayer && lossLayer.setDateRange) {
         const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
         const fromYear = yearsArray[tcLossFrom];
         const toYear = yearsArray[tcLossTo];
-  
+
         lossLayer.setDateRange(fromYear - 2000, toYear - 2000);
       }
-  
+
       if (gladLayer && gladLayer.setDateRange) {
         const julianFrom = appUtils.getJulianDate(gladFrom);
         const julianTo = appUtils.getJulianDate(gladTo);
-  
+
         gladLayer.setDateRange(julianFrom, julianTo);
       }
-  
+
       if (terraILayer && terraILayer.setDateRange) {
         const julianFrom = appUtils.getJulianDate(terraIFrom);
         const julianTo = appUtils.getJulianDate(terraITo);
-  
+
         terraILayer.setDateRange(julianFrom, julianTo);
       }
-  
+
       if (viirsFiresLayer) {
         layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer);
       }
-  
+
       if (modisFiresLayer) {
         layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
       }
       map.addLayers(esriLayers);
-  
+
       reducedLayers.forEach(layer => {
         const mapLayer = map.getLayer(layer.id);
         if (mapLayer) {
@@ -308,16 +308,16 @@ export default class Report extends Component {
           });
         }
       });
-  
+
       layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
       layersHelper.updateAGBiomassLayer(tcd, map);
-  
+
       if (map.getZoom() > 9) {
         map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
       }
-  
+
       // If there is an error with a particular layer, handle that here
-  
+
       on.once(map, 'layers-add-result', result => {
         const addedLayers = result.layers;
         // Check for Errors
@@ -334,7 +334,7 @@ export default class Report extends Component {
 
   createMap = (params) => {
     const { basemap } = params;
-  
+
     const options = {
       center: [-8.086, 21.085],
       basemap: basemap || 'topo',
@@ -342,21 +342,21 @@ export default class Report extends Component {
       logo: false,
       zoom: 2
     };
-  
+
     if (params.sharinghost) { resources.sharinghost = params.sharinghost; }
-  
+
     // Set the sharinghost to the correct location so the app can find the webmap content
     if (!resources.sharinghost) { resources.sharinghost = 'https://www.arcgis.com'; }
     arcgisUtils.arcgisUrl = `${resources.sharinghost}/sharing/rest/content/items`;
-  
+
     arcgisUtils.createMap(params.webmap, 'map', { mapOptions: options }).then(response => {
       map = response.map;
-  
+
       map.disableKeyboardNavigation();
       map.disableMapNavigation();
       map.disableRubberBandZoom();
       map.disablePan();
-  
+
       all({
         feature: this.getFeature(params),
         info: this.getApplicationInfo(params)
@@ -365,7 +365,7 @@ export default class Report extends Component {
         if (featureResponse.error) {
           throw featureResponse.error;
         }
-  
+
         const { feature, info } = featureResponse;
         //- Need the map to be loaded to add graphics
         if (map.loaded) {
@@ -378,7 +378,7 @@ export default class Report extends Component {
         //- Add the settings to the params so we can omit layers or do other things if necessary
         //- If no appid is provided, the value here is essentially resources.js
         params.settings = info.settings;
-  
+
         //- Make sure highcharts is loaded before using it
         // if (window.highchartsPromise.isResolved()) {
          this.runAnalysis(params, feature);
@@ -433,14 +433,14 @@ export default class Report extends Component {
       }
       roundedValues.push(value);
     });
-  
+
     // const fragment = document.createDocumentFragment();
     // labels.forEach((label, index) => {
     //   fragment.appendChild(this.generateRow(label,
     //     typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
     //   ));
     // });
-    
+
     return (
       <React.Fragment>
         {labels.forEach((label, index) => {
@@ -459,16 +459,16 @@ export default class Report extends Component {
     //- Add a graphic to the map
     const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
     const graphicExtent = graphic.geometry.getExtent();
-  
+
     if (graphicExtent) {
       map.setExtent(graphicExtent, true);
     } else {
       map.centerAndZoom(new Point(graphic.geometry), 15);
     }
     map.graphics.add(graphic);
-  
+
     const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
-  
+
     if (hasGraphicsLayers) {
       map.graphicsLayerIds.forEach(id => {
         const layer = map.getLayer(id);
@@ -480,24 +480,24 @@ export default class Report extends Component {
       });
     }
     map.layerIds.forEach(id => {
-  
+
       if (params.hasOwnProperty(id)) {
         const layer = map.getLayer(id);
-  
+
         if (!params[id].length) {
           layer.setVisibleLayers([-1]);
           return;
         }
-  
+
         const layersVisible = params[id].split(',').map(layerIndex => Number(layerIndex));
-  
+
         layer.setVisibleLayers(layersVisible);
       }
     });
     //- Add the layer to the map
     //- TODO: Old method adds a dynamic layer, this needs to be able to handle all layer types eventually,
     //- Update the layer factory to be more flexible
-  
+
     // we must split into an array to prevent 'TREE_COVER_LOSS' from matching 'TREE_COVER'
     // when using indexOf. With strings this will match
     params.activeLayers = params.activeLayers.split(',');
@@ -566,19 +566,19 @@ export default class Report extends Component {
     if (results.hasOwnProperty('error')) {
       return null;
     }
-  
+
     const { chartType, label, colors, analysisId } = config;
     const defaultColors = ['#cf5188'];
     let chartComponent = null;
-  
+
     switch (chartType) {
       case 'bar': {
         const { chartBounds, valueAttribute } = config;
         const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
         .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
-  
+
         let counts = [];
-  
+
         switch (analysisId) {
           case 'TC_LOSS': {
             let lossObj = null;
@@ -590,7 +590,7 @@ export default class Report extends Component {
           }
           case 'IFL': {
             if (!results.hasOwnProperty('error')) {
-  
+
               results.data.attributes.histogram[0].result.forEach(histo => {
                 counts.push(Math.round(histo.result * 100) / 100);
               });
@@ -609,9 +609,9 @@ export default class Report extends Component {
             }
           }
         }
-  
+
         const chartColors = colors || defaultColors;
-  
+
         chartComponent = <BarChart
           name={label[lang]}
           counts={counts}
@@ -624,9 +624,9 @@ export default class Report extends Component {
       }
       case 'timeSeries': {
         const { valueAttribute } = config;
-  
+
         let data = [];
-  
+
         switch (analysisId) {
           case 'GLAD_ALERTS': {
             if (!results.hasOwnProperty('error')) {
@@ -642,7 +642,7 @@ export default class Report extends Component {
           }
           default: {
             data = results;
-  
+
             if (valueAttribute) {
               // see https://github.com/wri/gfw-mapbuilder/wiki/Chart-Types:-Bar#valueattribute-string
               // for more information on using the valueAttribute property
@@ -665,9 +665,9 @@ export default class Report extends Component {
           viirsEndDate,
           viirsStartDate,
         } = params;
-  
+
         const { valueAttribute, color, badgeLabel } = config;
-  
+
         switch (analysisId) {
           case 'TC_LOSS_GAIN':
             chartComponent = <LossGainBadge
@@ -692,13 +692,13 @@ export default class Report extends Component {
             break;
           default:
             chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[lang]} />;
-  
+
         }
         break;
       }
       case 'biomassLoss': {
         const chartColors = colors || { loss: '#FF6699', carbon: '#BEBCC2' };
-  
+
         chartComponent = <BiomassChart
           payload={results}
           colors={chartColors}
@@ -722,7 +722,7 @@ export default class Report extends Component {
             data.counts.push(Math.round(data[histo.className] * 100) / 100);
           });
         }
-  
+
         chartComponent = <CompositionPieChart
           results={results}
           name={label[lang]}
@@ -738,7 +738,7 @@ export default class Report extends Component {
       default:
         break;
     }
-  
+
     return chartComponent;
   };
 
@@ -746,12 +746,12 @@ export default class Report extends Component {
     const { bounds, valueType, combineParams, startParamName, endParamName, valueSeparator } = paramModule;
     let startValue = bounds[0];
     let endValue = bounds[1];
-  
+
     if (valueType === 'date') {
       startValue = `${startValue}-01-01`;
       endValue = `${endValue}-12-31`;
     }
-  
+
     if (combineParams) {
       if (!valueSeparator) {
         throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
@@ -761,7 +761,7 @@ export default class Report extends Component {
         [startParamName]: `${startValue}${valueSeparator}${endValue}`,
       };
     }
-  
+
     return {
       ...paramsObject,
       [startParamName]: `${startValue}`,
@@ -780,18 +780,18 @@ export default class Report extends Component {
       maxDate,
       multi,
     } = paramModule;
-  
+
     const {
       viirsStartDate,
     } = reportProperties;
-  
+
     let startDate = defaultStartDate || minDate;
     const endDate = maxDate || moment().format('YYYY-MM-DD');
-  
+
     if (analysisId === 'VIIRS_FIRES') {
       startDate = moment(viirsStartDate).format('YYYY-MM-DD');
     }
-  
+
     if (combineParams) {
       if (!valueSeparator) {
         throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
@@ -802,7 +802,7 @@ export default class Report extends Component {
       };
     }
     const isMultiPicker = multi === true || multi === 'true';
-  
+
     return {
       ...paramsObject,
       [startParamName]: `${startDate}`,
@@ -820,25 +820,25 @@ export default class Report extends Component {
   runAnalysis = (params, feature) => {
     const { settings } = params;
     //const language = params.lang;
-  
+
     // let analysisModules;
     // const stringMods = localStorage.getItem('analysisMods');
     // analysisModules = stringMods ? JSON.parse(stringMods) : '';
-  
+
     // if (!analysisModules) {
     //   analysisModules = settings.analysisModules;
     // }
-  
+
     const { geostoreId } = feature;
-  
+
     // if there is a selectedModule (need to figure out how to pass this, maybe by analysisModuleId),
     // remove it from the analysisModules array so it doesn't go through the loop below
     // and call a separate function that makes an esriRequest (like below) but with the updated
     // params that were passed into the report
-  
+
     settings.analysisModules.forEach((module) => {
       let uiParamsToAppend = {};
-  
+
       if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {
         module.uiParams.forEach((uiParam) => {
           switch (uiParam.inputType) {
@@ -854,7 +854,7 @@ export default class Report extends Component {
           }
         });
       }
-  
+
       if (Array.isArray(module.params) && module.params.length > 0) {
         module.params.forEach((param) => {
           uiParamsToAppend = {
@@ -863,9 +863,9 @@ export default class Report extends Component {
           };
         });
       }
-  
+
       uiParamsToAppend.geostore = geostoreId;
-  
+
       if (module.useGfwWidget) {
         module.chartType = 'vega';
         module.reportParams = uiParamsToAppend;
@@ -874,7 +874,7 @@ export default class Report extends Component {
     this.setState({
       analysisModules: settings.analysisModules
     });
-    
+
   };
 
   /**
@@ -918,7 +918,7 @@ export default class Report extends Component {
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea params={params} {...this.props} />
+        <ReportAnalysisArea params={params} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {

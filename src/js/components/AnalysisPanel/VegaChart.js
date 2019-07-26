@@ -205,11 +205,11 @@ export default class VegaChart extends Component {
           {component === 'Report' ?
           <div>
             {
-              isLoading &&
+              isLoading ?
               <div className="loader">
                 <Loader active={isLoading} />
-              </div>
-            }
+              </div> :
+              <div>
               <Measure
                 bounds
                 onResize={contentRect => {
@@ -229,6 +229,9 @@ export default class VegaChart extends Component {
                   </div>
                 </div>
               }
+              </div>
+            }
+
             </div>
             :
             <div className="vega-chart-container">

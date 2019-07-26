@@ -23,9 +23,12 @@ export default class ReportAnalysis extends Component {
     };
 
     renderReportAnalysis = (module, results, language) => {
-        const reportLabel = module.label[language];
+        let reportLabel = '';
+        if (results.data) {
+          reportLabel = module.label[language];
+        }
         return (
-                <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
+          <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
         );
     };
 
