@@ -198,11 +198,13 @@ export default class VegaChart extends Component {
                   </div>
                 )}
               </Measure>
-              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
-                <div className="vega-chart-info">
-                    {description}
+              {description && description !== '' &&
+                <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+                  <div className="vega-chart-info">
+                      {description}
+                  </div>
                 </div>
-              </div>
+              }
             </div>
             :
             <div className="vega-chart-container">
