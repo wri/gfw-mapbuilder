@@ -14,6 +14,12 @@
   to
     transform rotate(360deg)
 
+@keyframes loader
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
+
 html
 body
   font-family $fontFamily
@@ -22,10 +28,9 @@ body
   padding 0
   margin 0
   
-.loader-wrapper {
+.loader-wrapper 
   width 100%
-}
-
+  
 .app-loader__active
   background rgba(220,220,220,0.75)
   height 20rem
