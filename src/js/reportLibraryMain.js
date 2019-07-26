@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
 import 'babel-polyfill';
 import Report from './report/report';
+import ShareModal from './components/Modals/ShareModal';
 
 // if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }
     
@@ -39,6 +40,7 @@ import Report from './report/report';
         }
       };
       corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
+      console.log('report library share modal', ShareModal);
     }
   
     render() {
@@ -49,5 +51,5 @@ import Report from './report/report';
   }
   
   ReactDOM.render(<ReportLibraryMain />, document.getElementById('report'));
-
+  ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
 
