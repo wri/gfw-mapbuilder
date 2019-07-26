@@ -1,9 +1,15 @@
 @require 'variables'
-@require 'loader'
+//@require 'loader'
 @require 'modal'
 @require 'grid'
 @require 'base'
 @require 'results'
+
+@keyframes loader
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
 
 html
 body
@@ -12,6 +18,21 @@ body
   width 100%
   padding 0
   margin 0
+.app-loader__active
+  background rgba(220,220,220,0.75)
+  height 20rem
+  width 100%
+  z-index 5
+  position relative
+  margin-bottom 2rem
+  & .foreground
+    animation loader 0.95s cubic-bezier(0.645, 0.045, 0.355, 1.000) infinite
+  .app-loader__spinner
+    position absolute
+    height 50px
+    width 50px
+    left 50%
+    top 40%
 
 @require 'grid'
 @require 'base'
@@ -19,9 +40,14 @@ body
 
 .vega-chart-container,
 .vega-chart > canvas {
-  min-width: 250px !important;
-  max-height: 600px !important;
-  margin: 1rem 2rem;
+  min-width: 250px !important
+  margin: 1rem auto
+}
+
+.vega-chart-badge-container {
+  min-width 250px !important
+  max-width 500px
+  margin 1rem auto
 }
 
 .vega-chart-toggle-true
@@ -113,8 +139,8 @@ body
   flex-direction row
   margin-left auto
   margin-right 1.25rem
-  
-.report-header__icon 
+
+.report-header__icon
   fill #eee
   padding 0 0.25rem
   height 2.5rem
@@ -126,12 +152,12 @@ body
 .report-header__icon-print
   height 2rem
   width 2rem
-  
+
 .report-header__icon-info
   height 1.25rem
   width 2rem
   margin-left 0.5rem
-  
+
 
 .feature-title
   min-height 30px
@@ -154,12 +180,12 @@ body
   width 50%
   background-color #eee
   position relative
-  .analysis-area-subtitle 
+  .analysis-area-subtitle
     position absolute
     top 3rem
-    left 1rem 
+    left 1rem
 
-.analysis-area-list 
+.analysis-area-list
   list-style none
   position absolute
   top 5rem
@@ -227,11 +253,11 @@ body
     width: calc(100% - 4rem);
     h1
       margin-bottom 0.5rem
-      
+
 .analysis-modules-container
   .results-chart
     margin-top 100px
-    
+
 .vega-chart-wrapper
   display flex
   flex-wrap nowrap
@@ -274,7 +300,7 @@ body
     border-bottom 1px solid #ccc
     height 1rem
     width 100%
-  .vega-chart_download-container
+  .vega-chart_download-container-report
     display flex
     flex-flow row
     flex-wrap nowrap
@@ -308,7 +334,7 @@ body
         height 20px
         margin 0 1rem
         background-color #888
-      .vega-chart-toggle 
+      .vega-chart-toggle
         transition all 0.3s ease
         background #888
         display inline-block
@@ -326,7 +352,7 @@ body
           width 10px
           left 3px
           top 2px
-    
+
 // Restoration Module Styling
 .results__restoration
 .results__slope
@@ -389,13 +415,13 @@ body
 
 .restoration__description
   padding 0 10px 10px
-  
+
 .vega-chart-label
   text-transform uppercase
   text-align left
   margin-bottom 0.5rem
-  
-.vega-chart_download-options
+
+.vega-chart_download-options-report
   width 150px
   display flex
   flex-direction column
@@ -417,26 +443,26 @@ body
 
   .download-option-label
     text-transform uppercase
-    
-.vega-chart_divider 
+
+.vega-chart_divider
   color #ddd
 
 
-.vega-chart-hide 
+.vega-chart-hide
   display none
 
 @media (max-width 550px)
   .report-header__title
     display none
-    
+
   .report-section
     margin 0.5rem 2rem
     border-bottom 2px solid #888
     width calc(100% - 4rem)
     text-align center
-  
+
   .vega-chart_container
-    .vega-chart_download-container
+    .vega-chart_download-container-report
         display flex
         flex-flow row
         flex-wrap wrap
@@ -451,8 +477,8 @@ body
         align-items center
         cursor pointer
         margin 0.25rem 0
-        
-  .vega-chart_download-options 
+
+  .vega-chart_download-options-report
     max-height 110px
     min-width 150px
     width 100%
@@ -460,7 +486,7 @@ body
     flex-direction column
     justify-content center
     z-index 2
-    .download-option 
+    .download-option
       flex 0 1 100%
       overflow auto
       max-height 110px
@@ -475,6 +501,20 @@ body
         background #eee
         text-decoration underline
 
+.report-table
+  font-size 12px
+  width 90%
+  margin 1rem auto
+  .field-row:nth-child(even)
+    background-color $selectionGray
+  .field-label
+    font-weight bold
+    color #555
+    width 50%
+  .field-value
+    color #555
+    width 50%
+
 @media (max-width: $mobileBreak)
   .restoration-table
   .restoration__chart
@@ -483,7 +523,7 @@ body
   h3
   h4
     margin 0 5px
-    
+
 @media print
   .report-header
     background-color #555 !important
@@ -497,8 +537,4 @@ body
     -webkit-print-color-adjust exact
   .report-header__icon-container
   .vega-chart-menu-container
-    display none !important 
-  
-    
-
-
+    display none !important

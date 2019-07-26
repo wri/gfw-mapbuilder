@@ -309,8 +309,11 @@ function geojsonToArcGIS (geojson, idAttribute) {
       result.spatialReference = spatialReference;
       break;
     case 'Polygon':
-      result.rings = orientRings(geojson.coordinates.slice(0));
-      result.spatialReference = spatialReference;
+      console.log('geojson coordinates', geojson.coordinates);
+      if(geojson.coordinates.length > 0) {
+        result.rings = orientRings(geojson.coordinates.slice(0));
+        result.spatialReference = spatialReference;
+      }
       break;
     case 'MultiPolygon':
       result.rings = flattenMultiPolygonRings(geojson.coordinates.slice(0));
