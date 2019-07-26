@@ -28,4 +28,3 @@ class ReportMain extends Component {
 
 ReactDOM.render(<ReportMain />, document.getElementById('report'));
 ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
-

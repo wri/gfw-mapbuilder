@@ -14,7 +14,6 @@ export default class ShareModal extends React.Component {
 
     modalStore.listen(this.storeUpdated);
     const defaultState = modalStore.getState();
-    console.log('default state', defaultState);
     this.state = {
       bitlyUrl: defaultState.bitlyUrl,
       copyText: modalText.share.copyButton
