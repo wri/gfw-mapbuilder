@@ -6,6 +6,7 @@ import Report from './report/report';
 import ShareModal from './components/Modals/ShareModal';
 import 'babel-polyfill';
 
+
 class ReportMain extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +16,7 @@ class ReportMain extends Component {
       debug: location.search.slice(1).search('debug=true') > -1
     };
     corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
+    console.log('report share modal', ShareModal);
   }
 
   render() {
@@ -26,4 +28,3 @@ class ReportMain extends Component {
 
 ReactDOM.render(<ReportMain />, document.getElementById('report'));
 ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
-
