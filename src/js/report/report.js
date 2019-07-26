@@ -3,8 +3,6 @@ import analysisKeys from 'constants/AnalysisConstants';
 import layerKeys from 'constants/LayerConstants';
 import Polygon from 'esri/geometry/Polygon';
 import Point from 'esri/geometry/Point';
-import QueryTask from 'esri/tasks/QueryTask';
-import Query from 'esri/tasks/query';
 import {getUrlParams} from 'utils/params';
 import {analysisConfig} from 'js/config';
 import layerFactory from 'utils/layerFactory';
@@ -12,7 +10,6 @@ import geojsonUtil from 'utils/arcgis-to-geojson';
 import esriRequest from 'esri/request';
 import template from 'utils/template';
 import appUtils from 'utils/AppUtils';
-import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
 import arcgisUtils from 'esri/arcgis/utils';
@@ -36,6 +33,7 @@ import Badge from 'components/AnalysisPanel/Badge';
 import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
 import ReportAnalysis from './ReportAnalysis';
+import ReportTable from './ReportTable';
 
 
 let map;
@@ -47,7 +45,9 @@ export default class Report extends Component {
     
     this.state = {
       sections: [],
-      analysisModules: []
+      analysisModules: [],
+      mapForTable: null,
+      paramsForTable: null
     };
   }
   
@@ -90,7 +90,6 @@ export default class Report extends Component {
         handleAs: 'json',
         timeout: 30000
       }, { usePost: false}).then(geostoreResult => {
-  
         const esriJson = geojsonUtil.geojsonToArcGIS(geostoreResult.data.attributes.geojson.features[0].geometry);
         promise.resolve({
           attributes: geostoreResult.data.attributes,
@@ -111,7 +110,6 @@ export default class Report extends Component {
 
   createLayers = (layerPanel, activeLayers, language, params, feature) => {
     const {tcLossFrom, tcLossTo, gladFrom, gladTo, terraIFrom, terraITo, tcd, viirsFrom, viirsTo, modisFrom, modisTo, activeFilters, activeVersions} = params;
-  
     // Update order of layers as required.
     // Layers ordered first by their layer group.
     // Layer groups in order from top to bottom: extraLayers, GROUP_LCD, GROUP_WEBMAP, GROUP_LC, GROUP_BASEMAP.
@@ -146,7 +144,6 @@ export default class Report extends Component {
       if (groupIndex === 0) {
         maxOrder = layerPanel[groupName].order + 1;
       }
-  
       const orderedGroups = layerPanel[groupName].layers.map((layer, index) => {
         layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order || index + 1);
         return layer;
@@ -173,7 +170,6 @@ export default class Report extends Component {
         }
         return prevArray.concat(currentItem);
       }, []);
-  
       layers = layers.filter(l => l.url || l.versions).concat(reducedLayers);
       layers.forEach(layer => {
         if (existingIds.indexOf(layer.id) === -1) {
@@ -208,9 +204,10 @@ export default class Report extends Component {
       //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
       //- sort by order from the layer config
       //- return an arcgis layer for each config object
-      const esriLayers = uniqueLayers.filter(layer => layer && activeLayers.indexOf(layer.id) > -1 && (layer.url || layer.type === 'graphic' || layer.versions)).map((layer) => {
+      //esriLayers returns an empty array!!!
+      const esriLayers = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
+      esriLayers.map((layer) => {
         // Check for active versions matching the layer id
-  
         let layerConfig, filterField;
         Object.keys(resources.layerPanel).forEach((group) => {
           const configs = resources.layerPanel[group].layers;
@@ -238,11 +235,8 @@ export default class Report extends Component {
             }
           }
           console.log(layer.layerIds, versionConfig.layerIds);
-  
         }
         // return layerFactory(layer, language);
-  
-  
         const mapLayer = layerFactory(layer, language);
   
         // If there are active filters, set definition expressions on layer.
@@ -257,9 +251,8 @@ export default class Report extends Component {
         }
   
         return mapLayer;
-  
       });
-  
+
       // Set the date range for the loss and glad layers
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
       const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
@@ -323,7 +316,6 @@ export default class Report extends Component {
         map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
       }
   
-      this.addTitleAndAttributes(params, feature);
       // If there is an error with a particular layer, handle that here
   
       on.once(map, 'layers-add-result', result => {
@@ -375,9 +367,6 @@ export default class Report extends Component {
         }
   
         const { feature, info } = featureResponse;
-  
-        //- Add Popup Info Now
-        // addTitleAndAttributes(params, feature, info);
         //- Need the map to be loaded to add graphics
         if (map.loaded) {
           this.setupMap(params, feature);
@@ -398,6 +387,10 @@ export default class Report extends Component {
         //     this.runAnalysis(params, feature);
         //   });
         // }
+        this.setState({
+          mapForTable: map,
+          paramsForTable: params
+        });
       });
   	});
   };
@@ -415,15 +408,21 @@ export default class Report extends Component {
     return config;
   };
 
-  generateRows = (fieldName, fieldValue) => {
-    const row = document.createElement('dl');
-    const label = document.createElement('dt');
-    const value = document.createElement('dd');
-    label.innerHTML = fieldName;
-    value.innerHTML = fieldValue;
-    row.appendChild(label);
-    row.appendChild(value);
-    return row;
+  generateRow = (fieldName, fieldValue) => {
+   return (
+      <dl>
+        <dt>{fieldName}</dt>
+        <dd>{fieldValue}</dd>
+      </dl>
+    );
+    // const row = document.createElement('dl');
+    // const label = document.createElement('dt');
+    // const value = document.createElement('dd');
+    // label.innerHTML = fieldName;
+    // value.innerHTML = fieldValue;
+    // row.appendChild(label);
+    // row.appendChild(value);
+    // return row;
   };
 
   generateSlopeTable = (labels, values) => {
@@ -435,13 +434,21 @@ export default class Report extends Component {
       roundedValues.push(value);
     });
   
-    const fragment = document.createDocumentFragment();
-    labels.forEach((label, index) => {
-      fragment.appendChild(this.generateRow(label,
-        typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
-      ));
-    });
-    return fragment;
+    // const fragment = document.createDocumentFragment();
+    // labels.forEach((label, index) => {
+    //   fragment.appendChild(this.generateRow(label,
+    //     typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]
+    //   ));
+    // });
+    
+    return (
+      <React.Fragment>
+        {labels.forEach((label, index) => {
+          this.generateRow(label, typeof roundedValues[index] === 'number' ? number.format(roundedValues[index]) : values[index]);
+        })}
+      </React.Fragment>
+    );
+    //return fragment;
   };
 
   /**
@@ -449,7 +456,6 @@ export default class Report extends Component {
   * Add layers to the map
   */
   setupMap = (params, feature) => {
-    const { visibleLayers } = params;
     //- Add a graphic to the map
     const graphic = new Graphic(feature.geometry, symbols.getCustomSymbol());
     const graphicExtent = graphic.geometry.getExtent();
@@ -495,65 +501,7 @@ export default class Report extends Component {
     // we must split into an array to prevent 'TREE_COVER_LOSS' from matching 'TREE_COVER'
     // when using indexOf. With strings this will match
     params.activeLayers = params.activeLayers.split(',');
-  
     this.createLayers(resources.layerPanel, params.activeLayers, params.lang, params, feature);
-  
-  };
-
-  addTitleAndAttributes = (params, featureInfo) => {
-    const { layerId, OBJECTID, OBJECTID_Field, lang } = params;
-  
-    if (layerId && OBJECTID) {
-  
-      const hashDecoupled = layerId.split('--');
-      const url = hashDecoupled[0];
-      const id = hashDecoupled[1];
-      const mapLayer = map.getLayer(id);
-  
-      const queryTask = new QueryTask(url);
-      const query = new Query();
-      query.where = OBJECTID_Field + ' = ' + OBJECTID;
-      query.returnGeometry = false;
-      query.outFields = ['*'];
-      queryTask.execute(query).then(res => {
-        if (res.features && res.features.length > 0) {
-          if (mapLayer && mapLayer.infoTemplate) {
-            //const subTitle = mapLayer.displayField ? res.features[0].attributes[mapLayer.displayField] : featureInfo.title;
-            //document.getElementById('report-subtitle').innerHTML = subTitle ? subTitle : '';
-            const fragment = document.createDocumentFragment();
-  
-            mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
-              let fieldValue = res.features[0].attributes[fieldInfo.fieldName];
-              //- If it is a date, format that correctly
-              if (fieldInfo.format && fieldInfo.format.dateFormat) {
-                fieldValue = locale.format(new Date(fieldValue));
-              //- If it is a number, format that here, may need a better way
-              } else if (fieldInfo.format && fieldInfo.format.places !== undefined) {
-                fieldValue = number.format(fieldValue, fieldInfo.format);
-              }
-  
-              if (fieldValue && fieldValue.trim) {
-                fieldValue = fieldValue.trim();
-                fragment.appendChild(this.generateRow(
-                  fieldInfo.label,
-                  fieldValue
-                ));
-  
-                //document.getElementById('popup-content').appendChild(fragment);
-              }
-  
-            });
-          } else {
-            //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-          }
-        } else {
-            //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-        }
-  
-      });
-    } else {
-     //document.getElementById('report-subtitle').innerHTML = featureInfo.title;
-    }
   };
 
   /**
@@ -603,7 +551,7 @@ export default class Report extends Component {
       name: text[lang].REPORT_TABLE_TOTAL,
       data: [total]
     });
-  
+
     data.forEach((datum) => {
       table.appendChild(this.generateRow(datum.name,
         typeof datum.data[0] === 'number' ?
@@ -958,23 +906,25 @@ export default class Report extends Component {
     lang: language
   });
   */
-  
+
   componentDidMount() {
     const params = getUrlParams(location.href);
     this.createMap(params);
   }
 
-  
   render () {
-    const {analysisModules} = this.state;
+    const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
-    console.log('params', params);
     return (
       <div>
         <ReportHeader />
         <ReportAnalysisArea params={params} {...this.props} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
+            {
+              (mapForTable !== null && paramsForTable !== null) &&
+              <ReportTable map={mapForTable} params={paramsForTable} />
+            }
             {
               analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
             }

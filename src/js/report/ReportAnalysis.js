@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
-import Loader from '../components/Loader';
 export default class ReportAnalysis extends Component {
     constructor(props){
         super(props);
@@ -11,9 +10,10 @@ export default class ReportAnalysis extends Component {
             //isLoading: true
         };
     }
-    
+
     createReportAnalysis = () => {
         const {module} = this.props;
+        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
@@ -21,14 +21,14 @@ export default class ReportAnalysis extends Component {
             });
         });
     };
-    
+
     renderReportAnalysis = (module, results, language) => {
         const reportLabel = module.label[language];
         return (
                 <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
         );
     };
-    
+
     handleReportAnalysisError = analysisId => {
         return (
             <div className="vega-chart-error">
@@ -36,7 +36,7 @@ export default class ReportAnalysis extends Component {
             </div>
         );
     }
-    
+
     componentDidMount(){
         this.createReportAnalysis();
     }
