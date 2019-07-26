@@ -147,7 +147,7 @@ export default class VegaChart extends Component {
             <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div>
           }
           {component === 'Report' ?
-          <div className='vega-chart_download-container'>
+          <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
             {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
             <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
@@ -165,7 +165,7 @@ export default class VegaChart extends Component {
               </div>
             </div>
           </div> :
-          <div className='vega-chart_download-container'>
+          <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
             <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
@@ -175,7 +175,7 @@ export default class VegaChart extends Component {
           </div>
           }
           { showDownloadOptions &&
-            <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+            <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
               {downloadOptions.map(this.renderdownloadOptions)}
               {this.chart &&
                 <a className="download-option" href={chartImgDownloadUrl} download={chartDownloadTitle}>
