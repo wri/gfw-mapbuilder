@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import Loader from '../Loader';
 import Measure from 'react-measure';
 
 export default class VegaChart extends Component {
@@ -17,6 +18,7 @@ export default class VegaChart extends Component {
       chartImgDownloadUrl: null,
       chartName: '',
       toggle: false,
+      isLoading: false,
       dimensions: {
         width: -1,
         height: -1
@@ -26,7 +28,11 @@ export default class VegaChart extends Component {
   }
 
   handleError(errorMsg) {
-    this.setState({ isError: true, errorMsg });
+    this.setState({
+      isError: true,
+      errorMsg,
+      isLoading: false
+    });
     if (this.props.setLoading) {
       this.props.setLoading();
     }
@@ -38,7 +44,7 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       if (this.props.component === 'Report') {
-          
+
         const resizeWidthSignal = {
           name: "width",
           update: "containerSize()[0]*0.95",
@@ -53,12 +59,12 @@ export default class VegaChart extends Component {
             }
           ]
         };
-        
+
         config.autosize = {type: 'fit', resize: true};
         if (!config.signals) {
           config.signals = [];
         }
-        
+
         config.signals.push(resizeWidthSignal);
       }
 
@@ -66,6 +72,9 @@ export default class VegaChart extends Component {
       if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
+        this.setState({
+          isLoading: true
+        });
       }
       const dataset = this.props.results.data.attributes.dataset;
       const id = this.props.results.data.id;
@@ -100,8 +109,15 @@ export default class VegaChart extends Component {
               downloadOptions.push({label, url: downloadUrls[label]});
             }
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
-            this.setState({ downloadOptions, chartDownloadTitle });
-          });
+            this.setState({
+              downloadOptions,
+              chartDownloadTitle
+            });
+          }).then(
+            this.setState({
+              isLoading: false
+            })
+          );
         }
       })
       .catch(() => this.handleError('Error creating analysis.'));
@@ -128,7 +144,7 @@ export default class VegaChart extends Component {
   };
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, isLoading } = this.state;
     const {width, height} = this.state.dimensions;
     const { results, component, reportLabel, module } = this.props;
     let analysisId = null;
@@ -188,6 +204,12 @@ export default class VegaChart extends Component {
           }
           {component === 'Report' ?
           <div>
+            {
+              isLoading ?
+              <div className="loader">
+                <Loader active={isLoading} />
+              </div> :
+              <div>
               <Measure
                 bounds
                 onResize={contentRect => {
@@ -207,6 +229,9 @@ export default class VegaChart extends Component {
                   </div>
                 </div>
               }
+              </div>
+            }
+
             </div>
             :
             <div className="vega-chart-container">
