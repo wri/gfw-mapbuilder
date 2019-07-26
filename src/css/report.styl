@@ -13,6 +13,21 @@ body
   padding 0
   margin 0
 
+@require 'grid'
+@require 'base'
+@require 'results'
+
+.vega-chart-container,
+.vega-chart > canvas {
+  min-width: 250px !important
+  margin: 1rem auto
+}
+
+.vega-chart-badge-container {
+  min-width 250px !important
+  max-width 500px
+  margin 1rem auto
+}
 
 .vega-chart-toggle-true
   cursor pointer
@@ -239,8 +254,6 @@ body
   canvas
     margin 0 auto
     display flex
-    width 300px !important
-    height auto !important
   .vega-bindings
     margin 0 auto
     display flex
@@ -266,7 +279,7 @@ body
     border-bottom 1px solid #ccc
     height 1rem
     width 100%
-  .vega-chart_download-container
+  .vega-chart_download-container-report
     display flex
     flex-flow row
     flex-wrap nowrap
@@ -387,7 +400,7 @@ body
   text-align left
   margin-bottom 0.5rem
   
-.vega-chart_download-options
+.vega-chart_download-options-report
   width 150px
   display flex
   flex-direction column
@@ -428,7 +441,7 @@ body
     text-align center
   
   .vega-chart_container
-    .vega-chart_download-container
+    .vega-chart_download-container-report
         display flex
         flex-flow row
         flex-wrap wrap
@@ -444,7 +457,7 @@ body
         cursor pointer
         margin 0.25rem 0
         
-  .vega-chart_download-options 
+  .vega-chart_download-options-report 
     max-height 110px
     min-width 150px
     width 100%
