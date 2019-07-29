@@ -78,6 +78,33 @@ strings.en.ANALYSIS_DRAW_INSTRUCTIONS = [
   'Select the shape to run the analysis'
 ];
 strings.en.ANALYSIS_DRAW_BUTTON = 'Start drawing';
+
+strings.en.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.en.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.en.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter values`,
+  `Add More`,
+  `Make Shape`
+];
+strings.en.ANALYSIS_COORDINATES_FORMATS = [
+  `Select Format`,
+  `Degrees Decimal Minutes (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.en.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`
+];
+strings.en.ANALYSIS_COORDINATES_DIRECTIONS = [
+  `N`,
+  `S`,
+  `E`,
+  `W`
+];
+
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;
 strings.en.ANALYSIS_SHAPEFILE_UPLOAD = 'or drop a custom shapefile here';
 strings.en.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 5MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';
