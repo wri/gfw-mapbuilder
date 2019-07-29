@@ -55,8 +55,6 @@ export default class ReportAnalysis extends Component {
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
                     {results.data && this.renderReportAnalysis(module, params, results, language)}
-
-                    {results.data && this.renderReportAnalysis(module, results, language)}
                 </div>
             </div>
         );
