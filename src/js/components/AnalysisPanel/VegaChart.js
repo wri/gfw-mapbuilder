@@ -133,6 +133,7 @@ export default class VegaChart extends Component {
         } else {
           res.json().then(json => {
             charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
+            console.log('inside componentDidMount', this.chart);
             const downloadOptions = [];
             if (json.data && json.data.attributes && json.data.attributes.downloadUrls && !config.title) {
               const downloadUrls = json.data.attributes.downloadUrls;
@@ -172,6 +173,13 @@ export default class VegaChart extends Component {
     this.setState({
       toggle: !this.state.toggle
     });
+  };
+  
+  reRenderChart = (config) => {
+    const {language, setLoading} = this.props;
+    const widgetConfig = config.data.attributes.widgetConfig;
+    console.log('reRenderChart config', config);
+    charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
 
   render() {
@@ -226,7 +234,7 @@ export default class VegaChart extends Component {
                 analysisId === 'IFL' ||
                 analysisId === 'Loss_LandCover' ||
                 analysisId === 'BIO_LOSS') ?
-                <ReportSettings module={module} params={params} language={language} />
+                <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
                 :
                 <div className="no-report-settings">There are no settings for this analysis</div>
               }

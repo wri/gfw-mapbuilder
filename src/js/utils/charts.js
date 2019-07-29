@@ -371,6 +371,7 @@ export default {
   },
 
   makeVegaChart: (el, config, language, loadingCallback, downloadCallback) => {
+    console.log('inside makeVegaChart config', config);
     if (config.signals && config.signals.length > 0) {
         const signalLanguage = config.signals.find(signal => signal.name === 'language');
         const signalIndex = config.signals.findIndex(signal => signal.name === 'language');
