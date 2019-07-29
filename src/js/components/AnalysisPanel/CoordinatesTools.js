@@ -73,18 +73,16 @@ export default class CoordinatesTools extends Component {
         const {language} = this.context;
        
         return (
-          <div className='analysis-instructions__draw'>
+          <div className='analysis-instructions__coordinates'>
             <h4 className='analysis-instructions__header'>
               {text[language].ANALYSIS_COORDINATES_HEADER}
             </h4>
             <ol className='analysis-instructions__olist'>
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
-            <div
-              className={`fa-button gold analysis-instructions__draw-button ${this.state.drawButtonActive ? 'active' : ''}`}
-              onClick={this.enterValues}>
-              <SVGIcon id={'icon-coordinates'} />
-              {text[language].ANALYSIS_COORDINATES_BUTTONS[0]}
+            <div className={`fa-button gold analysis-instructions__coordinates-button`} onClick={this.enterValues}>
+              <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-coordinates'} /></span>
+              <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>
             </div>
             <div className='analysis-instructions__separator'>
               <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
