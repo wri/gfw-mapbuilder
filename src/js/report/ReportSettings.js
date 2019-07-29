@@ -27,6 +27,14 @@ export default class ReportSettings extends Component {
      ...MapStore.getState()
     };
   }
+  
+  componentDidMount() {
+    MapStore.listen(this.storeDidUpdate);
+  }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
     let startValue = rangeSliderValue[0];

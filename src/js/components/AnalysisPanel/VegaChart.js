@@ -97,7 +97,6 @@ export default class VegaChart extends Component {
           ]
         };
         config.signals.push(resizeWidthSignal);
-        console.log('config', config);
       }
 
       const {setLoading, language, results} = this.props;

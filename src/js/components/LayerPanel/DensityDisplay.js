@@ -6,14 +6,15 @@ import React, {
 } from 'react';
 
 const showModal = function showModal () {
+  console.log('clicked', mapActions.toggleCanopyModal);
   mapActions.toggleCanopyModal({ visible: true });
 };
 
 export default class DensityDisplay extends Component {
 
-  // static contextTypes = {
-  //   language: PropTypes.string.isRequired
-  // };
+  static contextTypes = {
+    language: PropTypes.string.isRequired
+  };
 
   render () {
     let language;
@@ -26,6 +27,7 @@ export default class DensityDisplay extends Component {
     const hideDefaultLabel = label === '';
 
     return (
+    
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
         <span className='canopy-button pointer' onClick={showModal}>{canopyDensity}</span>
