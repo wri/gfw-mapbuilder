@@ -11,9 +11,9 @@ const showModal = function showModal () {
 
 export default class DensityDisplay extends Component {
 
-  static contextTypes = {
-    language: PropTypes.string.isRequired
-  };
+  // static contextTypes = {
+  //   language: PropTypes.string.isRequired
+  // };
 
   render () {
     let language;
@@ -22,13 +22,13 @@ export default class DensityDisplay extends Component {
     } else {
       language = this.props.language;
     }
-    const { label } = this.props;
+    const { label, canopyDensity } = this.props;
     const hideDefaultLabel = label === '';
 
     return (
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
-        <span className='canopy-button pointer' onClick={showModal}>{this.props.canopyDensity}</span>
+        <span className='canopy-button pointer' onClick={showModal}>{canopyDensity}</span>
         <span className='canopy-label'>{!label && !hideDefaultLabel && text[language].DENSITY_SECOND}</span>
       </div>
     );

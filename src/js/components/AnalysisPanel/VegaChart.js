@@ -46,6 +46,42 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       if (this.props.component === 'Report') {
+        if (!config.signals) {
+          config.signals = [];
+        }
+        config.autosize = {
+        type: 'fit',
+        resize: true
+        };
+        
+        // if (config.signals[1].value === "Land Cover Composition") {
+        //   config.legends[0] =
+        //   {
+        //     columnPadding: 30,
+        //     columns: 2,
+        //     direction: "vertical",
+        //     fill: "color",
+        //     labelFontSize: 9.5,
+        //     orient: "bottom",
+        //     title: {
+        //       signal: "legend"
+        //     },
+        //     titleBaseline: "top",
+        //     titleFontSize: 9.5,
+        //     titleFontStyle: "normal",
+        //     legend: {
+        //       layout: {
+        //         bottom: {
+        //           anchor: "middle",
+        //           direction: "vertical",
+        //           center: true,
+        //           margin: 2,
+        //         }
+        //       }
+        //     }
+        //   };
+        // }
+
         const resizeWidthSignal = {
           name: "width",
           update: "containerSize()[0]*0.95",
@@ -60,13 +96,8 @@ export default class VegaChart extends Component {
             }
           ]
         };
-
-        config.autosize = {type: 'fit', resize: true};
-        if (!config.signals) {
-          config.signals = [];
-        }
-
         config.signals.push(resizeWidthSignal);
+        console.log('config', config);
       }
 
       const {setLoading, language, results} = this.props;
