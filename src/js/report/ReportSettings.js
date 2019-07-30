@@ -47,11 +47,7 @@ export default class ReportSettings extends Component {
       endValue = `${endValue}-12-31`;
     }
     
-    console.log('startValue', startValue);
-    console.log('endValue', endValue);
-    
     layerActions.setLossOptions([startValue, endValue]);
-    console.log('lossOptions', this.state.lossOptions);
 
     if (combineParams) {
       if (!valueSeparator) {
@@ -77,9 +73,8 @@ export default class ReportSettings extends Component {
       paramName: endParam,
       paramValue: `${endValue}`,
     });
-    
-  }
-  
+  };
+
   calendarCallback = () => {
     console.log('calendar');
   };
@@ -290,74 +285,17 @@ export default class ReportSettings extends Component {
     const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity, module, reRenderChart } = this.props;
     
     const reportParams = module.reportParams;
-    console.log('reportParams', reportParams);
     reportParams.thresh = this.state.canopyDensity;
     reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
-    // const { analysisModules, language } = this.props;
-    //Insert old code back here! Need to update reportParams thresh value still so that we can update
-    // the url inside of widgetConfig.data.url
-
-    //   Object.keys(analysisParams).forEach(analysisId => {
-  //     if (analysisId === activeAnalysisType) {
-  //       const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
-  //       if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
-  //         selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
-  //       }
-  //       const geostoreId = selectedFeature.attributes.geostoreId;
-
-  //       const uiParamsToAppend = analysisParams[analysisId];
-  //       uiParamsToAppend.geostore = geostoreId;
-
-  //       if (analysisSettings.uiParams && analysisSettings.uiParams !== 'none') {
-  //         const TCDConfig = analysisSettings.uiParams.filter(p => p.inputType === 'tcd')[0];
-  //         if (TCDConfig) { uiParamsToAppend[TCDConfig.name] = canopyDensity; }
-  //       }
-
-  //       if (analysisSettings.params && analysisSettings.params.length !== 0) {
-  //         analysisSettings.params.forEach(param => {
-  //           uiParamsToAppend[param.name] = param.value;
-  //         });
-  //       }
-
-  //       if (analysisSettings.useGfwWidget) {
-  //         analysisSettings.chartType = 'vega';
-
-  //         analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
-  //           this.renderResults(analysisId, results, language, analysisSettings);
-  //         });
-  //         return;
-  //       }
-
-  //       esriRequest({
-  //         url: analysisSettings.analysisUrl,
-  //         callbackParamName: 'callback',
-  //         content: uiParamsToAppend,
-  //         handleAs: 'json',
-  //         timeout: 30000
-  //       }, { usePost: false }).then(results => {
-  //         this.setState({ isLoading: false });
-  //         this.renderResults(analysisId, results, language, analysisSettings);
-  //       }, (error) => {
-  //         this.setState({
-  //           isLoading: false,
-  //           results: {
-  //             error: error,
-  //             message: 'An error occurred performing selected analysis. Please select another analysis or try again later.'
-  //           },
-  //         }, () => {
-  //           this.renderResults(analysisId, this.state.results, language, analysisSettings);
-  //         });
-  //       });
-  //     }
-  //   });
-          console.log('reportParams', reportParams);
+    
+    console.log('reportParams', reportParams);
        
-          //analysisSettings.chartType = 'vega';
-          analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
-            //this.renderResults(analysisId, results, language, analysisSettings);
-            console.log('results', results);
-            reRenderChart(results);
-          });
+    //analysisSettings.chartType = 'vega';
+    analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
+      //this.renderResults(analysisId, results, language, analysisSettings);
+      console.log('results', results);
+      reRenderChart(results);
+    });
   };
   
     render() {
