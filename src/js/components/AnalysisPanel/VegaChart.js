@@ -71,7 +71,7 @@ export default class VegaChart extends Component {
         config.signals.push(resizeWidthSignal);
       }
 
-      const {setLoading, language, results} = this.props;
+      const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
@@ -218,20 +218,18 @@ export default class VegaChart extends Component {
               </div>
             </div>
           }
-          { showSettings &&
-            <div className="vega-chart-report-settings-container">
-              {
-                (analysisId === 'TC_LOSS' ||
-                analysisId === 'TC_LOSS_GAIN' ||
-                analysisId === 'IFL' ||
-                analysisId === 'Loss_LandCover' ||
-                analysisId === 'BIO_LOSS') ?
-                <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
-                :
-                <div className="no-report-settings">There are no settings for this analysis</div>
-              }
-            </div>
-          }
+          <div className={`vega-chart-report-settings-container ${showSettings ? '' : 'vega-chart-hide'}`}>
+            {
+              (analysisId === 'TC_LOSS' ||
+              analysisId === 'TC_LOSS_GAIN' ||
+              analysisId === 'IFL' ||
+              analysisId === 'Loss_LandCover' ||
+              analysisId === 'BIO_LOSS') ?
+              <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
+              :
+              <div className="no-report-settings">There are no settings for this analysis</div>
+            }
+          </div>
           { showDownloadOptions &&
             <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
               {downloadOptions.map(this.renderdownloadOptions)}
