@@ -26,7 +26,6 @@ export default class ReportSettings extends Component {
   constructor(props){
     super(props);
     this.state = {
-    gladDates: [],
      ...MapStore.getState()
     };
   }
@@ -77,17 +76,17 @@ export default class ReportSettings extends Component {
   };
 
   calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
-    console.log('startDate', startDate);
-    console.log('endDate', endDate);
-    
     const gladStartDate = moment(startDate);
     const gladEndDate = moment(endDate);
     
     layerActions.updateGladStartDate(gladStartDate);
     layerActions.updateGladEndDate(gladEndDate);
     
+    const gladDates = [gladStartDate._i, gladEndDate._i];
+    console.log('gladDates', gladDates);
+    
     this.setState({
-      gladDates: [startDate, endDate]
+      gladDates
     });
 
     if (combineParams) {
@@ -315,9 +314,11 @@ export default class ReportSettings extends Component {
   runAnalysis = () => {
     const { module, reRenderChart } = this.props;
     const reportParams = module.reportParams;
-    reportParams.thresh = this.state.canopyDensity;
-    if (this.state.gladDates.length > 0) {
-      reportParams.period = `${this.state.gladDates[0]}, ${this.state.gladDates[1]}`;
+    if (reportParams.thresh){
+      reportParams.thresh = this.state.canopyDensity;
+    }
+    if (this.state.gladStartDate._i && this.state.gladEndDate._i){
+      reportParams.period = `${this.state.gladStartDate._i}, ${this.state.gladEndDate._i}`;
     } else {
       reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
     }
