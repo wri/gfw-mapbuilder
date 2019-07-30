@@ -7,6 +7,7 @@ import AnalysisMultiDatePicker from '../components/AnalysisPanel/AnalysisFormEle
 import DensityDisplay from '../components/LayerPanel/DensityDisplay';
 import text from 'js/languages';
 import mapActions from '../actions/MapActions';
+import layerActions from '../actions/LayerActions';
 import analysisUtils from './../utils/analysisUtils';
 
 
@@ -45,6 +46,12 @@ export default class ReportSettings extends Component {
       startValue = `${startValue}-01-01`;
       endValue = `${endValue}-12-31`;
     }
+    
+    console.log('startValue', startValue);
+    console.log('endValue', endValue);
+    
+    layerActions.setLossOptions([startValue, endValue]);
+    console.log('lossOptions', this.state.lossOptions);
 
     if (combineParams) {
       if (!valueSeparator) {
@@ -70,6 +77,7 @@ export default class ReportSettings extends Component {
       paramName: endParam,
       paramValue: `${endValue}`,
     });
+    
   }
   
   calendarCallback = () => {
@@ -282,7 +290,9 @@ export default class ReportSettings extends Component {
     const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity, module, reRenderChart } = this.props;
     
     const reportParams = module.reportParams;
+    console.log('reportParams', reportParams);
     reportParams.thresh = this.state.canopyDensity;
+    reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
     // const { analysisModules, language } = this.props;
     //Insert old code back here! Need to update reportParams thresh value still so that we can update
     // the url inside of widgetConfig.data.url

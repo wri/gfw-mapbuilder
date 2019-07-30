@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 
 const showModal = function showModal () {
-  console.log('clicked', mapActions.toggleCanopyModal);
   mapActions.toggleCanopyModal({ visible: true });
 };
 

@@ -177,7 +177,6 @@ export default class VegaChart extends Component {
   reRenderChart = (config) => {
     const {language, setLoading} = this.props;
     const widgetConfig = config.data.attributes.widgetConfig;
-    console.log('reRenderChart config', config);
     charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
 
