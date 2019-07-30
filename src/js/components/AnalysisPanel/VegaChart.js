@@ -53,34 +53,6 @@ export default class VegaChart extends Component {
           type: 'fit',
           resize: true
         };
-        
-        // if (config.signals[1].value === "Land Cover Composition") {
-        //   config.legends[0] =
-        //   {
-        //     columnPadding: 30,
-        //     columns: 2,
-        //     direction: "vertical",
-        //     fill: "color",
-        //     labelFontSize: 9.5,
-        //     orient: "bottom",
-        //     title: {
-        //       signal: "legend"
-        //     },
-        //     titleBaseline: "top",
-        //     titleFontSize: 9.5,
-        //     titleFontStyle: "normal",
-        //     legend: {
-        //       layout: {
-        //         bottom: {
-        //           anchor: "middle",
-        //           direction: "vertical",
-        //           center: true,
-        //           margin: 2,
-        //         }
-        //       }
-        //     }
-        //   };
-        // }
 
         const resizeWidthSignal = {
           name: "width",
