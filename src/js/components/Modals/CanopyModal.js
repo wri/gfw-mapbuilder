@@ -104,7 +104,6 @@ export default class CanopyModal extends Component {
     } else {
       map = this.props.map;
     }
-    console.log('settings', settings);
     const densityValue = sliderMarks[sliderValue].density;
 
     layersHelper.updateTreeCoverDefinitions(densityValue, map, settings.layerPanel);

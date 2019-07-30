@@ -75,9 +75,10 @@ export default class ReportSettings extends Component {
     });
   };
 
-  calendarCallback = () => {
-    console.log('calendar');
-  };
+  // Placeholder for if we need to have a chart with calendar settings in the future
+  // calendarCallback = () => {
+  //   console.log('calendar');
+  // };
 
   getFormComponents = () => {
       const { language } = this.props;
@@ -113,19 +114,12 @@ export default class ReportSettings extends Component {
               valueSeparator,
             } = param;
   
-            let initialStartValue = null;
-            let initialEndValue = null;
+            const initialStartValue = null;
+            const initialEndValue = null;
   
             if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
               throw new Error(`analysis id: '${analysisItemConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
             }
-  
-            // if (analysisItemConfig.analysisId === 'TC_LOSS') {
-            //   const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.state;
-            //   console.log('lossOptions for TC_LOSS', lossOptions);
-            //   initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
-            //   initialEndValue = Number(lossOptions[lossToSelectIndex].label);
-            // }
             
             formComponents.push(
               <AnalysisItemWrapper
@@ -282,24 +276,16 @@ export default class ReportSettings extends Component {
   };
   
   runAnalysis = () => {
-    const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity, module, reRenderChart } = this.props;
-    
+    const { module, reRenderChart } = this.props;
     const reportParams = module.reportParams;
     reportParams.thresh = this.state.canopyDensity;
     reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
-    
-    console.log('reportParams', reportParams);
-       
-    //analysisSettings.chartType = 'vega';
     analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
-      //this.renderResults(analysisId, results, language, analysisSettings);
-      console.log('results', results);
       reRenderChart(results);
     });
   };
-  
+
     render() {
-      console.log('state', this.state);
       const {language} = this.props;
         return (
             <div className="analysis-results__select-form-container">

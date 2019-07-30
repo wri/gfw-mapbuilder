@@ -237,7 +237,6 @@ export default class Report extends Component {
               layer.layerIds = versionConfig.layerIds;
             }
           }
-          console.log(layer.layerIds, versionConfig.layerIds);
         }
         // return layerFactory(layer, language);
         const mapLayer = layerFactory(layer, language);
