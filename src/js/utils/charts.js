@@ -374,8 +374,13 @@ export default {
   },
 
   makeVegaChart: (el, config, callback, selectedAttributes, id, handleError) => {
-    if (selectedAttributes) { // WCS Specific logic
-			const baseConfig = resources.analysisModules.find(mod => mod.widgetId === id);
+    console.log('selectedAttributes', selectedAttributes);
+    console.log('config', config);
+    //selectedAttributes && config.featureDataFieldsToPass
+      // &&/|| baseConfig.analysisId ??
+    if (selectedAttributes && config.featureDataFieldsToPass) { // WCS Specific logic
+      const baseConfig = resources.analysisModules.find(mod => mod.widgetId === id);
+      console.log('baseConfig', baseConfig);
       const baseUrl = config.data[0].url.split('?')[0];
 			let queryParams = encodeURI(config.featureDataFieldsToPass
 				.filter(fieldName => {
@@ -399,6 +404,7 @@ export default {
 
       function render(spec) {
         if (vega) {
+          console.log('spec', spec);
           new vega.View(vega.parse(spec))
           .renderer('canvas')
           .initialize(el)
@@ -424,6 +430,8 @@ export default {
         handleError('Error creating analysis.');
       });
     } else {
+      console.log(callback);
+      console.log('config', config);
       new vega.View(vega.parse(config))
         .renderer('canvas')
         .initialize(el)
