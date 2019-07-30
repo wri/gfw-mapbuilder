@@ -83,7 +83,6 @@ export default class ReportSettings extends Component {
     layerActions.updateGladEndDate(gladEndDate);
     
     const gladDates = [gladStartDate._i, gladEndDate._i];
-    console.log('gladDates', gladDates);
     
     this.setState({
       gladDates
@@ -318,9 +317,9 @@ export default class ReportSettings extends Component {
       reportParams.thresh = this.state.canopyDensity;
     }
     if (this.state.gladStartDate._i && this.state.gladEndDate._i){
-      reportParams.period = `${this.state.gladStartDate._i}, ${this.state.gladEndDate._i}`;
+      reportParams.period = `${this.state.gladStartDate._i},${this.state.gladEndDate._i}`;
     } else {
-      reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
+      reportParams.period = `${this.state.lossOptions[0]},${this.state.lossOptions[1]}`;
     }
     analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
       reRenderChart(results);
@@ -329,7 +328,6 @@ export default class ReportSettings extends Component {
 
     render() {
       const {language} = this.props;
-      console.log('state', this.state);
         return (
             <div className="analysis-results__select-form-container">
               <div className='analysis-results__select-form custom-scroll'>
