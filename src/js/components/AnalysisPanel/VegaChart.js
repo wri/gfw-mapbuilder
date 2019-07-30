@@ -50,8 +50,8 @@ export default class VegaChart extends Component {
           config.signals = [];
         }
         config.autosize = {
-        type: 'fit',
-        resize: true
+          type: 'fit',
+          resize: true
         };
         
         // if (config.signals[1].value === "Land Cover Composition") {
@@ -177,6 +177,28 @@ export default class VegaChart extends Component {
   reRenderChart = (config) => {
     const {language, setLoading} = this.props;
     const widgetConfig = config.data.attributes.widgetConfig;
+    widgetConfig.autosize = {
+      type: 'fit',
+      resize: true
+    };
+    if (!widgetConfig.signals) {
+      widgetConfig.signals = [];
+    }
+    const resizeWidthSignal = {
+      name: "width",
+      update: "containerSize()[0]*0.95",
+      value: "",
+      on: [
+        {
+          events: {
+            source: "window",
+            type: "resize"
+          },
+          update: "containerSize()[0]*0.95"
+        }
+      ]
+    };
+    widgetConfig.signals.push(resizeWidthSignal);
     charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
 
