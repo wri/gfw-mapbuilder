@@ -196,10 +196,22 @@ export default class VegaChart extends Component {
               {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
               <h3 className="vega-chart-label">{reportLabel}</h3>
               <div className='vega-chart-menu-container'>
-                <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
-                  <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
-                </div>
-                <div className="vega-chart-divider"></div>
+                {
+                  (
+                  analysisId === 'TC_LOSS' ||
+                  analysisId === 'TC_LOSS_GAIN' ||
+                  analysisId === 'IFL' ||
+                  analysisId === 'Loss_LandCover' ||
+                  analysisId === 'BIO_LOSS'
+                  ) ?
+                  <div className="vega-chart-menu-settings">
+                    <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
+                      <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
+                    </div>
+                    <div className="vega-chart-divider"></div>
+                  </div> :
+                  null
+                }
                 <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                   <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
                 </div>
@@ -219,16 +231,7 @@ export default class VegaChart extends Component {
             </div>
           }
           <div className={`vega-chart-report-settings-container ${showSettings ? '' : 'vega-chart-hide'}`}>
-            {
-              (analysisId === 'TC_LOSS' ||
-              analysisId === 'TC_LOSS_GAIN' ||
-              analysisId === 'IFL' ||
-              analysisId === 'Loss_LandCover' ||
-              analysisId === 'BIO_LOSS') ?
-              <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
-              :
-              <div className="no-report-settings">There are no settings for this analysis</div>
-            }
+            <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
           </div>
           { showDownloadOptions &&
             <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
