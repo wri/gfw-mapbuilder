@@ -70,6 +70,7 @@ export default class AnalysisDatePicker extends Component {
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
+        <div className="report-date-picker">
         <DatePicker
           customInput={<Button />}
           showMonthDropdown
@@ -81,6 +82,7 @@ export default class AnalysisDatePicker extends Component {
           selected={dateSelected}
           onChange={this.handleChange}
         />
+        </div>
       </div>
     );
   }

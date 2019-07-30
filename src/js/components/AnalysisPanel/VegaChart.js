@@ -70,8 +70,6 @@ export default class VegaChart extends Component {
         };
         config.signals.push(resizeWidthSignal);
       }
-      
-      console.log('config', config);
 
       const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1) {
@@ -176,7 +174,6 @@ export default class VegaChart extends Component {
       ]
     };
     widgetConfig.signals.push(resizeWidthSignal);
-    console.log('widgetConfig', widgetConfig);
     charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
   
@@ -210,7 +207,8 @@ export default class VegaChart extends Component {
                   analysisId === 'TC_LOSS_GAIN' ||
                   analysisId === 'IFL' ||
                   analysisId === 'Loss_LandCover' ||
-                  analysisId === 'BIO_LOSS'
+                  analysisId === 'BIO_LOSS' ||
+                  analysisId === 'GLAD_ALERTS_Badge'
                   ) ?
                   <div className="vega-chart-menu-settings">
                     <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>

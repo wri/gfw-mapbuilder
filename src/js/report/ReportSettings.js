@@ -75,10 +75,36 @@ export default class ReportSettings extends Component {
     });
   };
 
-  // Placeholder for if we need to have a chart with calendar settings in the future
-  // calendarCallback = () => {
-  //   console.log('calendar');
-  // };
+  calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
+    console.log('startDate', startDate);
+    console.log('endDate', endDate);
+
+    if (combineParams) {
+      if (!valueSeparator) {
+        throw new Error("no 'valueSeparator' property configured. If using 'combineParams', you must supply a 'valueSeparator'. Check your analysisModule config.");
+      }
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: startParam,
+        paramValue: `${startDate}${valueSeparator}${endDate}`,
+      });
+      return;
+    }
+
+    if (multi === true || multi === 'true') {
+      mapActions.updateAnalysisParams({
+        id,
+        paramName: endParam,
+        paramValue: endDate,
+      });
+    }
+
+    mapActions.updateAnalysisParams({
+      id,
+      paramName: startParam,
+      paramValue: startDate,
+    });
+  };
 
   getFormComponents = () => {
       const { language } = this.props;
