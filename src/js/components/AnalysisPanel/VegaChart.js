@@ -70,6 +70,8 @@ export default class VegaChart extends Component {
         };
         config.signals.push(resizeWidthSignal);
       }
+      
+      console.log('config', config);
 
       const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1) {
@@ -128,7 +130,7 @@ export default class VegaChart extends Component {
   }
 
   addChartDownload = (url) => {
-    this.setState({ chartImgDownloadUrl: url });
+    this.setState({ chartImgDownloadUrl: url, isLoading: false });
   };
 
   renderdownloadOptions = (option, i) => {
@@ -147,6 +149,9 @@ export default class VegaChart extends Component {
   };
   
   reRenderChart = (config) => {
+    this.setState({
+      isLoading: true
+    });
     const {language, setLoading} = this.props;
     const widgetConfig = config.data.attributes.widgetConfig;
     widgetConfig.autosize = {
@@ -171,8 +176,11 @@ export default class VegaChart extends Component {
       ]
     };
     widgetConfig.signals.push(resizeWidthSignal);
+    console.log('widgetConfig', widgetConfig);
     charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
+  
+  
 
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, isLoading, showSettings } = this.state;
@@ -251,24 +259,20 @@ export default class VegaChart extends Component {
                   <Loader active={isLoading} />
                 </div>
               }
-
-              {!isLoading &&
-                <Measure
-                  bounds
-                  onResize={contentRect => {
-                  this.setState({ dimensions: contentRect.bounds });
-                  }}
-                >
-                  {({ measureRef }) => (
-                    <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
-                      <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
-                    </div>
-                  )}
-                </Measure>
-              }
-
+              <Measure
+                bounds
+                onResize={contentRect => {
+                this.setState({ dimensions: contentRect.bounds });
+                }}
+              >
+                {({ measureRef }) => (
+                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
+                    <div width={width} height={height} className={`vega-chart ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  </div>
+                )}
+              </Measure>
               {!isLoading && description && description !== '' &&
-                <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+                <div className={`vega-chart-info-container ${toggle ? 'vega-chart-hide' : ''}`}>
                   <div className="vega-chart-info">
                       {description}
                   </div>
