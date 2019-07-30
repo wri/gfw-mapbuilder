@@ -280,32 +280,74 @@ export default class ReportSettings extends Component {
   
   runAnalysis = () => {
     console.log('all props', this.props);
-    const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity, module } = this.props;
+    const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity, module, reRenderChart } = this.props;
     const { analysisModules, language } = this.props;
-    //Insert old code back here! Need to update reportParams thresh value still so that we can update 
+    //Insert old code back here! Need to update reportParams thresh value still so that we can update
     // the url inside of widgetConfig.data.url
 
-        // const uiParamsToAppend = analysisParams[analysisId];
-        // uiParamsToAppend.geostore = geostoreId;
+    //   Object.keys(analysisParams).forEach(analysisId => {
+  //     if (analysisId === activeAnalysisType) {
+  //       const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
+  //       if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
+  //         selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
+  //       }
+  //       const geostoreId = selectedFeature.attributes.geostoreId;
 
+  //       const uiParamsToAppend = analysisParams[analysisId];
+  //       uiParamsToAppend.geostore = geostoreId;
 
+  //       if (analysisSettings.uiParams && analysisSettings.uiParams !== 'none') {
+  //         const TCDConfig = analysisSettings.uiParams.filter(p => p.inputType === 'tcd')[0];
+  //         if (TCDConfig) { uiParamsToAppend[TCDConfig.name] = canopyDensity; }
+  //       }
 
-        // if (module.reportParams && module.reportParams.length !== 0) {
-        //   module.reportParams.forEach(param => {
-        //     uiParamsToAppend[param.name] = param.value;
-        //   });
-        // }
+  //       if (analysisSettings.params && analysisSettings.params.length !== 0) {
+  //         analysisSettings.params.forEach(param => {
+  //           uiParamsToAppend[param.name] = param.value;
+  //         });
+  //       }
+
+  //       if (analysisSettings.useGfwWidget) {
+  //         analysisSettings.chartType = 'vega';
+
+  //         analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
+  //           this.renderResults(analysisId, results, language, analysisSettings);
+  //         });
+  //         return;
+  //       }
+
+  //       esriRequest({
+  //         url: analysisSettings.analysisUrl,
+  //         callbackParamName: 'callback',
+  //         content: uiParamsToAppend,
+  //         handleAs: 'json',
+  //         timeout: 30000
+  //       }, { usePost: false }).then(results => {
+  //         this.setState({ isLoading: false });
+  //         this.renderResults(analysisId, results, language, analysisSettings);
+  //       }, (error) => {
+  //         this.setState({
+  //           isLoading: false,
+  //           results: {
+  //             error: error,
+  //             message: 'An error occurred performing selected analysis. Please select another analysis or try again later.'
+  //           },
+  //         }, () => {
+  //           this.renderResults(analysisId, this.state.results, language, analysisSettings);
+  //         });
+  //       });
+  //     }
+  //   });
           console.log('reportParams', module.reportParams);
        
           //analysisSettings.chartType = 'vega';
           analysisUtils.getCustomAnalysis(module, module.reportParams).then(results => {
             //this.renderResults(analysisId, results, language, analysisSettings);
             console.log('results', results);
-          
-            this.props.reRenderChart(results);
+            reRenderChart(results);
           });
   };
-    
+  
     render() {
       console.log('state', this.state);
       const {language} = this.props;
