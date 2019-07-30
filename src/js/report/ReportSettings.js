@@ -26,6 +26,7 @@ export default class ReportSettings extends Component {
   constructor(props){
     super(props);
     this.state = {
+    gladDates: [],
      ...MapStore.getState()
     };
   }
@@ -78,6 +79,16 @@ export default class ReportSettings extends Component {
   calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
     console.log('startDate', startDate);
     console.log('endDate', endDate);
+    
+    const gladStartDate = moment(startDate);
+    const gladEndDate = moment(endDate);
+    
+    layerActions.updateGladStartDate(gladStartDate);
+    layerActions.updateGladEndDate(gladEndDate);
+    
+    this.setState({
+      gladDates: [startDate, endDate]
+    });
 
     if (combineParams) {
       if (!valueSeparator) {
@@ -305,7 +316,11 @@ export default class ReportSettings extends Component {
     const { module, reRenderChart } = this.props;
     const reportParams = module.reportParams;
     reportParams.thresh = this.state.canopyDensity;
-    reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
+    if (this.state.gladDates.length > 0) {
+      reportParams.period = `${this.state.gladDates[0]}, ${this.state.gladDates[1]}`;
+    } else {
+      reportParams.period = `${this.state.lossOptions[0]}, ${this.state.lossOptions[1]}`;
+    }
     analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
       reRenderChart(results);
     });
@@ -313,6 +328,7 @@ export default class ReportSettings extends Component {
 
     render() {
       const {language} = this.props;
+      console.log('state', this.state);
         return (
             <div className="analysis-results__select-form-container">
               <div className='analysis-results__select-form custom-scroll'>
