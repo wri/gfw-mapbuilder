@@ -1,5 +1,4 @@
 @require 'variables'
-//@require 'loader'
 @require 'modal'
 @require 'grid'
 @require 'base'
@@ -47,10 +46,11 @@ body
     width 50px
     left 50%
     top 40%
-
-@require 'grid'
-@require 'base'
-@require 'results'
+    
+#logo-anchor
+  width 100%
+  padding 0 !important
+  border none !important
 
 .vega-chart-container,
 .vega-chart > canvas {
@@ -435,7 +435,6 @@ body
 .vega-chart-label
   text-transform uppercase
   text-align left
-  margin-bottom 0.5rem
 
 .vega-chart_download-options-report
   width 150px
