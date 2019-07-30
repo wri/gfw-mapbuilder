@@ -928,10 +928,6 @@ export default class Report extends Component {
     const language = params.lang;
     //const settings = params.settings;
     
-    console.log('params in report', params);
-    console.log('settings in report', appSettings);
-    console.log('map in report', map);
-    
     return (
       <div>
         <ReportHeader />

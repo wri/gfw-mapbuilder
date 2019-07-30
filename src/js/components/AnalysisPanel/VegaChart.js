@@ -133,7 +133,6 @@ export default class VegaChart extends Component {
         } else {
           res.json().then(json => {
             charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
-            console.log('inside componentDidMount', this.chart);
             const downloadOptions = [];
             if (json.data && json.data.attributes && json.data.attributes.downloadUrls && !config.title) {
               const downloadUrls = json.data.attributes.downloadUrls;

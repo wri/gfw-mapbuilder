@@ -279,9 +279,11 @@ export default class ReportSettings extends Component {
   };
   
   runAnalysis = () => {
-    console.log('all props', this.props);
     const { analysisParams, activeAnalysisType, selectedFeature, selectedFeats, canopyDensity, module, reRenderChart } = this.props;
-    const { analysisModules, language } = this.props;
+    
+    const reportParams = module.reportParams;
+    reportParams.thresh = this.state.canopyDensity;
+    // const { analysisModules, language } = this.props;
     //Insert old code back here! Need to update reportParams thresh value still so that we can update
     // the url inside of widgetConfig.data.url
 
@@ -338,10 +340,10 @@ export default class ReportSettings extends Component {
   //       });
   //     }
   //   });
-          console.log('reportParams', module.reportParams);
+          console.log('reportParams', reportParams);
        
           //analysisSettings.chartType = 'vega';
-          analysisUtils.getCustomAnalysis(module, module.reportParams).then(results => {
+          analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             //this.renderResults(analysisId, results, language, analysisSettings);
             console.log('results', results);
             reRenderChart(results);
