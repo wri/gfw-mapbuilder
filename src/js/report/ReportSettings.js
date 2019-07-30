@@ -120,13 +120,13 @@ export default class ReportSettings extends Component {
               throw new Error(`analysis id: '${analysisItemConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
             }
   
-            if (analysisItemConfig.analysisId === 'TC_LOSS') {
-              const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.state;
-              initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
-              initialEndValue = Number(lossOptions[lossToSelectIndex].label);
-              //initialStartValue = 2;
-              //initialEndValue = 3;
-            }
+            // if (analysisItemConfig.analysisId === 'TC_LOSS') {
+            //   const { lossToSelectIndex, lossFromSelectIndex, lossOptions } = this.state;
+            //   console.log('lossOptions for TC_LOSS', lossOptions);
+            //   initialStartValue = Number(lossOptions[lossFromSelectIndex].label);
+            //   initialEndValue = Number(lossOptions[lossToSelectIndex].label);
+            // }
+            
             formComponents.push(
               <AnalysisItemWrapper
                 key={analysisItemConfig.analysisId + inputType + idx}
