@@ -11,7 +11,7 @@ describe('An actual test on our app', function () {
 
       const constructorParams = app.constructorArgs;
       const config = constructorParams.config;
-      cy.wait(2000);
+      cy.wait(3000);
 
       cy.get('.app-header__title').should(($div) => {
         const titleText = $div.get(0).innerText;
@@ -28,15 +28,29 @@ describe('An actual test on our app', function () {
       cy.get('.app-header__nav-link--map-themes').should('have.length', 1);
       cy.get('.app-header__nav-link--gfw-login').should('have.length', 1);
       cy.get('.app-header__nav-link--language').should('have.length', 1);
+
       cy.get('.app-header__language-list').children().should('have.length', 2);
       cy.get('.app-header__language').first().should('have.attr', 'data-lang').should('include', 'en');
       cy.get('.app-header__language').last().should('have.attr', 'data-lang').should('include', 'fr');
       cy.get('.app-header__language').first().should('have.class', 'active');
-      //.app-header__language.active
 
       cy.get('[data-value="MEASUREMENT"]').should('have.length', 1);
       cy.get('[data-value="DOCUMENTS"]').should('have.length', 1);
       cy.get('[data-value="NARRATIVE"]').should('have.length', 1);
+      cy.get('[data-value="NARRATIVE"]').should('have.class', 'active');
+      cy.get('.tab-view__content').first().should('have.class', 'selected');
+      cy.get('.tab-view__narrative').should(($div) => {
+        const divText = $div.get(0).innerText;
+        expect(divText.toLowerCase()).to.eq('This is a test mapbuilder');
+      });
+      cy.get('.tab-view__narrative').should(($div) => {
+        const divText = $div.get(1).innerText;
+        expect(divText.toLowerCase()).to.eq('This text is bold');
+      });
+
+      cy.get('.control-panel__share-map').should('have.length', 1);
+
+
 
     });
 
