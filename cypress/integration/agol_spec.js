@@ -22,9 +22,21 @@ describe('An actual test on our app', function () {
         expect(subtitleText.toLowerCase()).to.not.eq(config.subtitle.toLowerCase());
       });
 
-      cy.get('.app-header__nav-list').children().should('have.length', 5);
-
       cy.get('.app-header__logo-container').find('img').should('have.attr', 'src').should('not.include', config.logoUrl);
+      cy.get('.app-header__logo-container').find('a').should('have.attr', 'href').should('not.include', config.logoLinkUrl);
+
+      cy.get('.app-header__nav-link--map-themes').should('have.length', 1);
+      cy.get('.app-header__nav-link--gfw-login').should('have.length', 1);
+      cy.get('.app-header__nav-link--language').should('have.length', 1);
+      cy.get('.app-header__language-list').children().should('have.length', 2);
+      cy.get('.app-header__language').first().should('have.attr', 'data-lang').should('include', 'en');
+      cy.get('.app-header__language').last().should('have.attr', 'data-lang').should('include', 'fr');
+      cy.get('.app-header__language').first().should('have.class', 'active');
+      //.app-header__language.active
+
+      cy.get('[data-value="MEASUREMENT"]').should('have.length', 1);
+      cy.get('[data-value="DOCUMENTS"]').should('have.length', 1);
+      cy.get('[data-value="NARRATIVE"]').should('have.length', 1);
 
     });
 
@@ -54,6 +66,29 @@ describe('An actual test on our app', function () {
       cy.get('.app-header__nav-list').children().should('have.length', 1);
 
       cy.get('.app-header__logo-container').find('img').should('have.attr', 'src').should('include', config.logoUrl);
+      cy.get('.app-header__logo-container').find('a').should('have.attr', 'href').should('include', config.logoLinkUrl);
+
+      cy.get('.app-header__nav-link--map-themes').should('have.length', 0);
+      cy.get('.app-header__nav-link--gfw-login').should('have.length', 1);
+      cy.get('.app-header__nav-link--language').should('have.length', 0);
+
+      if (config.includeMeasurementTab) {
+        cy.get('[data-value="MEASUREMENT"]').should('have.length', 1);
+      } else {
+        cy.get('[data-value="MEASUREMENT"]').should('have.length', 0);
+      }
+
+      if (config.includeDocumentsTab) {
+        cy.get('[data-value="DOCUMENTS"]').should('have.length', 1);
+      } else {
+        cy.get('[data-value="DOCUMENTS"]').should('have.length', 0);
+      }
+
+      if (config.narrative) {
+        cy.get('[data-value="NARRATIVE"]').should('have.length', 1);
+      } else {
+        cy.get('[data-value="NARRATIVE"]').should('have.length', 0);
+      }
 
     });
 
