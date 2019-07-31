@@ -236,9 +236,11 @@ export default class VegaChart extends Component {
               </div>
             </div>
           }
-          <div className={`vega-chart-report-settings-container ${showSettings ? '' : 'vega-chart-hide'}`}>
-            <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
-          </div>
+          {component === 'Report' &&
+            <div className={`vega-chart-report-settings-container ${showSettings ? '' : 'vega-chart-hide'}`}>
+              <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
+            </div>
+          }
           { showDownloadOptions &&
             <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
               {downloadOptions.map(this.renderdownloadOptions)}
