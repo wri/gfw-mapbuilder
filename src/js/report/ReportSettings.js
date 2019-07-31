@@ -316,7 +316,7 @@ export default class ReportSettings extends Component {
     if (reportParams.thresh){
       reportParams.thresh = this.state.canopyDensity;
     }
-    if (this.state.gladStartDate._i && this.state.gladEndDate._i){
+    if (module.analysisId === "GLAD_ALERTS_Badge"){
       reportParams.period = `${this.state.gladStartDate._i},${this.state.gladEndDate._i}`;
     } else {
       reportParams.period = `${this.state.lossOptions[0]},${this.state.lossOptions[1]}`;
