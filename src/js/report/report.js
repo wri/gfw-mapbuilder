@@ -17,6 +17,7 @@ import locale from 'dojo/date/locale';
 import Deferred from 'dojo/Deferred';
 import symbols from 'utils/symbols';
 import arcgisUtils from 'esri/arcgis/utils';
+import webmercatorUtils from 'esri/geometry/webMercatorUtils';
 import analysisUtils from 'utils/analysisUtils';
 import {formatters} from 'utils/analysisUtils';
 import all from 'dojo/promise/all';
@@ -38,6 +39,7 @@ import LossGainBadge from 'components/AnalysisPanel/LossGainBadge';
 import Badge from 'components/AnalysisPanel/Badge';
 
 let map;
+let selectedFeat;
 
 const getWebmapInfo = function getWebmapInfo (webmap) {
 
@@ -244,6 +246,9 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     if (map.getZoom() > 9) {
       map.setExtent(map.extent, true); //To trigger our custom layers' refresh above certain zoom leves (10 or 11)
     }
+    console.log('');
+    console.log('feature', feature);
+    console.log('');
 
     addTitleAndAttributes(params, feature);
     // If there is an error with a particular layer, handle that here
@@ -332,15 +337,56 @@ const createMap = function createMap (params) {
       //- Add the settings to the params so we can omit layers or do other things if necessary
       //- If no appid is provided, the value here is essentially resources.js
       params.settings = info.settings;
+      // console.log('params', params);
+      // console.log('feature', feature);
+      // debugger
 
-      //- Make sure highcharts is loaded before using it
-      // if (window.highchartsPromise.isResolved()) {
-      //   runAnalysis(params, feature);
-      // } else {
-        // window.highchartsPromise.then(() => {
+      // const fieldsWeNeed = [];
+      // params.settings.analysisModules.forEach(mod => {
+      //   if (mod && mod.featureDataFieldsToPass && mod.featureDataFieldsToPass.length) {
+      //     mod.featureDataFieldsToPass.forEach(field => {
+      //       if (fieldsWeNeed.indexOf(field)) {
+      //         fieldsWeNeed.push(field);
+      //       }
+      //     });
+      //   }
+      //
+      //   if (params.settings.fieldToSubstitute && fieldsWeNeed.indexOf(params.settings.fieldToSubstitute) === -1) {
+      //     fieldsWeNeed.push(params.settings.fieldToSubstitute);
+      //   }
+      // });
+
+
+      const { layerId, OBJECTID, OBJECTID_Field } = params;
+
+      if (layerId && OBJECTID) {
+
+        const hashDecoupled = layerId.split('--');
+        const url = hashDecoupled[0];
+
+        const queryTask = new QueryTask(url);
+        const query = new Query();
+        query.where = OBJECTID_Field + ' = ' + OBJECTID;
+        console.log('query.where', query.where);
+        query.returnGeometry = false;
+        // query.outFields = fieldsWeNeed;
+        query.outFields = ['*'];
+
+        queryTask.execute(query).then(res => {
+          if (res.features && res.features.length > 0) {
+            // debugger
+            selectedFeat = res.features[0];
+          }
           runAnalysis(params, feature);
-        // });
-      // }
+        }, () => {
+          runAnalysis(params, feature);
+        });
+      } else {
+        runAnalysis(params, feature);
+      }
+
+      // runAnalysis(params, feature);
+
     });
 	});
 };
@@ -576,8 +622,10 @@ const renderResults = (results, lang, config, params) => {
   }
 
   const { chartType, label, colors, analysisId } = config;
+  console.log('config');
   const defaultColors = ['#cf5188'];
   let chartComponent = null;
+  console.log('chartTypechartType', chartType);
 
   switch (chartType) {
     case 'bar': {
@@ -698,6 +746,26 @@ const renderResults = (results, lang, config, params) => {
             timelineEndLabel={text[lang].TIMELINE_END}
           />;
           break;
+        case 'FRAGMENTATION':
+          console.log('results', results);
+          console.log('config', config);
+          console.log('config.startYear', config.startYear);
+          // results.startYearValue = startCount;
+          // results.totalRangeValue = totalCount;
+          const diff = results.totalRangeValue - results.startYearValue;
+          console.log('diff', diff);
+          // debugger
+
+          const style = {
+            borderColor: 'purple',
+            color: 'purple'
+          };
+          chartComponent = <div className='results__badge' style={style}>
+            <div className='results__badge-label'>Frag Loss {config.startYear}-{config.endYear}</div>
+            <div className='results__badge-value'>{diff.toFixed(3)}</div>
+          </div>;
+
+          break;
         default:
           chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[lang]} />;
 
@@ -741,12 +809,16 @@ const renderResults = (results, lang, config, params) => {
       break;
     }
     case 'vega':
-      chartComponent = <VegaChart results={results} />;
+      chartComponent = <VegaChart results={results} selectedFeature={selectedFeat ? selectedFeat : null} />;
+      console.log('results report', results);
+      console.log('paramsparams', params);
+      console.log('configgg', config);
+      //chartComponent = <VegaChart results={results} selectedFeature={this.props.selectedFeature} setLoading={() => this.setState({isLoading: false})}/>;
       break;
     default:
       break;
   }
-
+  console.log('chartComponent', chartComponent);
   return chartComponent;
 };
 
@@ -847,6 +919,7 @@ const runAnalysis = function runAnalysis (params, feature) {
 
   analysisModules.forEach((module) => {
     let uiParamsToAppend = {};
+    console.log('mod', module);
 
     if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {
       module.uiParams.forEach((uiParam) => {
@@ -890,29 +963,123 @@ const runAnalysis = function runAnalysis (params, feature) {
       });
       return;
     }
+    console.log('module.analysisUrl', module.analysisUrl);
+    if (module.analysisId === 'FRAGMENTATION') {
+      // debugger
 
-    esriRequest({
-      url: module.analysisUrl,
-      callbackParamName: 'callback',
-      content: uiParamsToAppend,
-      handleAs: 'json',
-      timeout: 30000
-    }, { usePost: false }).then(results => {
-      const div = document.createElement('div');
-      div.id = module.analysisId;
-      div.classList.add('results-chart');
-      resultsContainer.appendChild(div);
-
-      const chartComponent = renderResults(results, language, module, params);
-
-      if (!chartComponent) {
-        div.remove();
-      } else {
-        ReactDOM.render(chartComponent, div);
+      if (feature.geometry.spatialReference.isWebMercator()) {
+        feature.geometry = webmercatorUtils.webMercatorToGeographic(feature.geometry);
       }
-    }, (error) => {
-      console.error(error);
-    });
+
+      const geojson = geojsonUtil.arcgisToGeoJSON(feature.geometry);
+
+      const content = {
+        polygon: geojson.coordinates
+      };
+      console.log('content', content);
+      // debugger
+
+
+
+      fetch(
+        module.analysisUrl,
+        {
+          method: 'POST',
+          // mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(content)
+        }
+      ).then(results => {
+        console.log('results', results);
+
+        if (results.json) {
+
+          results.json().then(newRes => {
+            console.log('newResss', newRes);
+            console.log('uiParamsToAppend.period', uiParamsToAppend.period);
+            const dates = uiParamsToAppend.period.split(',');
+
+            const startYear = dates[0].split('-')[0];
+            const endYear = dates[1].split('-')[0];
+            module.startYear = parseInt(startYear);
+            module.endYear = parseInt(endYear);
+            let startCount;
+            let totalCount = 0;
+            console.log('module.startYear', module.startYear);
+            console.log('module.endYear', module.endYear);
+            Object.keys(newRes).forEach(year => {
+              console.log(year, typeof year);
+              if (parseInt(year) === module.startYear) {
+                startCount = newRes[year];
+              } else if (parseInt(year) > module.startYear && parseInt(year) <= module.endYear) {
+                totalCount += newRes[year];
+              }
+            });
+            newRes.startYearValue = startCount;
+            newRes.totalRangeValue = totalCount;
+            // this.setState({ isLoading: false });
+            module.chartType = 'badge';
+            module.analysisId = 'FRAGMENTATION';
+
+            const div = document.createElement('div');
+            div.id = module.analysisId;
+            div.classList.add('results-chart');
+            resultsContainer.appendChild(div);
+            // chartTypechartType
+            // renderResults(module.analysisId, newRes, language, module);
+            // const renderResults = (results, lang, config, params) => {
+            const fragBadge = renderResults(newRes, language, module, params);
+            // const chartComponent = renderResults(results, language, module, params);
+
+            if (!fragBadge) {
+              div.remove();
+            } else {
+              ReactDOM.render(fragBadge, div);
+            }
+          });
+        }
+
+      }, (error) => {
+        console.log('err!', error);
+        // this.setState({
+        //   isLoading: false,
+        //   results: {
+        //     error: error,
+        //     message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+        //   },
+        // }, () => {
+        //   this.renderResults(analysisId, this.state.results, language, module);
+        // });
+      });
+    } else {
+
+      esriRequest({
+        url: module.analysisUrl,
+        callbackParamName: 'callback',
+        content: uiParamsToAppend,
+        handleAs: 'json',
+        timeout: 30000
+      }, { usePost: false }).then(results => {
+        console.log('results', results);
+        const div = document.createElement('div');
+        div.id = module.analysisId;
+        div.classList.add('results-chart');
+        resultsContainer.appendChild(div);
+
+        const chartComponent = renderResults(results, language, module, params);
+
+        if (!chartComponent) {
+          div.remove();
+        } else {
+          ReactDOM.render(chartComponent, div);
+        }
+      }, (error) => {
+        console.log('err');
+        console.error(error);
+      });
+    }
   });
 };
 
