@@ -689,7 +689,7 @@ export default {
       },
       "layers": [{
         "order": 1,
-        "id": "TREE_COVER_LOSS 2",
+        "id": "TREE_COVER_LOSS",
         "type": "loss",
         "url": "https://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png",
         "technicalName": "tree_cover_loss",
