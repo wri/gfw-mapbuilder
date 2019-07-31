@@ -149,7 +149,8 @@ export default {
     },
     "useGfwWidget": true,
     "widgetId": "00629c5f-8d51-4373-86da-53222d36bac0",
-    "uiParams": "none"
+    "uiParams": "none",
+   // "featureDataFieldsToPass": ["polygonname"],
   }, {
     "analysisId": "WCS_LEMEffectivenessPatrolsYear_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
     "label": {
