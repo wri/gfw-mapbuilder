@@ -316,7 +316,7 @@ export default class ReportSettings extends Component {
     if (reportParams.thresh){
       reportParams.thresh = this.state.canopyDensity;
     }
-    if (module.analysisId === "GLAD_ALERTS_Badge"){
+    if (module.uiParams && module.uiParams.some(uiParam => uiParam.inputType === "datepicker")) {
       reportParams.period = `${this.state.gladStartDate._i},${this.state.gladEndDate._i}`;
     } else {
       reportParams.period = `${this.state.lossOptions[0]},${this.state.lossOptions[1]}`;
