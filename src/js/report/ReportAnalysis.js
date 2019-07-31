@@ -13,7 +13,6 @@ export default class ReportAnalysis extends Component {
 
     createReportAnalysis = () => {
         const {module} = this.props;
-        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({

@@ -151,7 +151,6 @@ export default class VegaChart extends Component {
     if (module && module.analysisId){
       analysisId = module.analysisId;
     }
-
     if (isError) {
       return (
         <div className='data-error'>
@@ -166,12 +165,10 @@ export default class VegaChart extends Component {
           }
           {component === 'Report' ?
           <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
-            {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
             <h3 className="vega-chart-label">{reportLabel}</h3>
             <div className='vega-chart-menu-container'>
               <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
                 <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
-                {/* <span className="vega-chart-menu-text">SETTINGS</span> */}
               </div>
               <div className="vega-chart-divider"></div>
               <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
