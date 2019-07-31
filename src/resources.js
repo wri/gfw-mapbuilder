@@ -1,11 +1,11 @@
 export default {
-  "webmap": "7b64776e2f8b4280a806b7b46ccddc78",
-  "title": "Natures Strongholds Impact Platform",
+  "webmap": "fd99107f138d43dbbe0b13c7fc101b33",
+  "title": "Natures Strongholds Impact Platform - Sample Demonstration Data",
   "subtitle": "Demonstrating Our Global Impact",
   "logoUrl": "https://measures.wcs.org/Portals/_default/Skins/WCS_2016/images/wcsPeru_logo.png",
   "logoLinkUrl": "https://www.wcs.org",
   "aboutLinkUrl": "",
-  "downloadLinkUrl": "",
+  "downloadLinkUrl": "https://measures.wcs.org/beta/NSIPdownloadlinks",
   "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export Web Map",
   "maskServiceUrl": "",
   "mapThemeIds": "",
@@ -17,9 +17,9 @@ export default {
   "hideHeader": false,
   "hideFooter": false,
   "language": "en",
-  "useAlternativeLanguage": false,
+  "useAlternativeLanguage": true,
   "alternativeWebmap": "",
-  "alternativeLanguage": "",
+  "alternativeLanguage": "fr",
   "alternativeLanguageTitle": "",
   "alternativeLanguageSubtitle": "",
   "alternativeMapThemes": "",
@@ -31,9 +31,9 @@ export default {
   "iso": "",
   "activeFires": false,
   "initialExtent": {
-    "x": "",
-    "y": "",
-    "z": ""
+    "x": "7.52",
+    "y": "4.74",
+    "z": "3"
   },
   "viirsFires": true,
   "modisFires": true,
@@ -76,7 +76,8 @@ export default {
     "useGfwWidget": true,
     "widgetId": "53a2ad48-46c2-41b0-9a72-8d6ef34131c9",
     "uiParams": "none",
-    "featureDataFieldsToPass": ['polygonname'],
+    "featureDataFieldsToPass": ["polygonname", "analysisId"],
+    "fieldToSubstitute": "AnnualPopulationTrend"
   }, {
     "analysisId": "FRAGMENTATION",
     "label": {
@@ -108,9 +109,18 @@ export default {
     },
     "chartType": "badge",
     "valueAttribute": "data",
+    "badgeLabel": {
+      "en": "Active Fires",
+      "fr": "Feux actifs",
+      "es": "Incendios activos",
+      "pt": "IncÃªndios ativos",
+      "id": "Active fires",
+      "zh": "æ´»è·ƒç«ç‚¹",
+      "ka": "áƒáƒ¥áƒ¢áƒ˜áƒ£áƒ áƒ˜ áƒ®áƒáƒœáƒ«áƒ áƒ”áƒ‘áƒ˜"
+    },
     "analysisUrl": "https://us-central1-ambell-166721.cloudfunctions.net/wcs-ee-deforestation-debug",
     "uiParams": [{
-      "inputType": 'rangeSlider',
+      "inputType": "rangeSlider",
       "startParamName": "period",
       "combineParams": true,
       "valueSeparator": ",",
@@ -126,6 +136,258 @@ export default {
         "ka": "Select range for analysis"
       }
     }]
+  }, {
+    "analysisId": "WCS_LEMEffectivenessPatrolTeams_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "LEM: Effectiveness Patrol Teams"
+    },
+    "title": {
+      "en": "LEM: Effectiveness Patrol Teams"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Law Enforcement Monitoring - Effectiveness Patrol Teams"
+    },
+    "useGfwWidget": true,
+    "widgetId": "00629c5f-8d51-4373-86da-53222d36bac0",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_LEMEffectivenessPatrolsYear_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "LEM: Effectiveness Patrols/Year"
+    },
+    "title": {
+      "en": "LEM: Effectiveness Patrols/Year"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Law Enforcement Monitoring - Effectiveness Patrols/Year"
+    },
+    "useGfwWidget": true,
+    "widgetId": "6a6158bd-02a8-4053-9e4e-b8fb10777ea0",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_LEMEffectivenessAverageDistancePerPatrol_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "LEM: Effectiveness Average Distance Per Patrol"
+    },
+    "title": {
+      "en": "LEM: Effectiveness Average Distance Per Patrol"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Law Enforcement Monitoring - Effectiveness Average Distance Per Patrol"
+    },
+    "useGfwWidget": true,
+    "widgetId": "c682ae57-8918-48e6-8f43-164c43c07811",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_LEMPresenceDaysPerMonth_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "LEM: Presence Days Per Month"
+    },
+    "title": {
+      "en": "LEM: Presence Days Per Month"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Law Enforcement Monitoring - Presence Days Per Month"
+    },
+    "useGfwWidget": true,
+    "widgetId": "c746e150-892a-4b27-bc2c-dd49c7a1ad40",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_LEMIllegalIncidents_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "LEM: IllegalIncidents"
+    },
+    "title": {
+      "en": "LEM: IllegalIncidents"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Law Enforcement Monitoring - IllegalIncidents"
+    },
+    "useGfwWidget": true,
+    "widgetId": "91292286-6dbf-48a8-a600-56e2b4513a72",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_LEMArrestsPer100kmPatrol_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "LEM: Arrests Per 100km Patrol"
+    },
+    "title": {
+      "en": "LEM: Arrests Per 100km Patrol"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Law Enforcement Monitoring - Arrests Per 100km Patrol"
+    },
+    "useGfwWidget": true,
+    "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_LivelihoodsBNSAverageNoActivities_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Livelihoods: BNS Average Number of Livelihoods Activities"
+    },
+    "title": {
+      "en": "Livelihoods: BNS Average Number of Livelihoods Activities"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Livelihoods: BNS Average Number of Livelihoods Activities"
+    },
+    "useGfwWidget": true,
+    "widgetId": "47b78588-9dc7-4591-bd0d-72839532eadb",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceLegitimacy_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Legitimacy"
+    },
+    "title": {
+      "en": "Governance: Legitimacy"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Legitimacy"
+    },
+    "useGfwWidget": true,
+    "widgetId": "5bb4844d-4c98-4dbc-a156-0150f6645ed4",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceAccountability_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Accountability"
+    },
+    "title": {
+      "en": "Governance: Accountability"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Accountability"
+    },
+    "useGfwWidget": true,
+    "widgetId": "7e562354-1a35-4ea6-9a72-410a837d75f1",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceTransparency_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Transparency"
+    },
+    "title": {
+      "en": "Governance: Transparency"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Transparency"
+    },
+    "useGfwWidget": true,
+    "widgetId": "180fd1cb-73be-4637-aaa4-07a2683830a1",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceParticipation_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Participation"
+    },
+    "title": {
+      "en": "Governance: Participation"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Participation"
+    },
+    "useGfwWidget": true,
+    "widgetId": "7c9ba495-5bc6-4a31-87b4-0eff67e25ef8",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceFairness_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Fairness"
+    },
+    "title": {
+      "en": "Governance: Fairness"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Fairness"
+    },
+    "useGfwWidget": true,
+    "widgetId": "90c1c1be-e8e2-494f-834b-e05a7fc19fc0",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceMotivation_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Motivation"
+    },
+    "title": {
+      "en": "Governance: Motivation"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Motivation"
+    },
+    "useGfwWidget": true,
+    "widgetId": "b83916c5-17d8-4ed5-a0a5-79e447d6b8df",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceKnowledgeSkills_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Knowledge Skills"
+    },
+    "title": {
+      "en": "Governance: Knowledge Skills"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Knowledge Skills"
+    },
+    "useGfwWidget": true,
+    "widgetId": "eaa88911-882e-4796-9cc6-35a62bc3651b",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceResources_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Resources"
+    },
+    "title": {
+      "en": "Governance: Resources"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Resources"
+    },
+    "useGfwWidget": true,
+    "widgetId": "cf2aeaef-d842-4471-875f-21b463f0e787",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceHeldAccountable_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Held Accountable"
+    },
+    "title": {
+      "en": "Governance: Held Accountable"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Held Accountable"
+    },
+    "useGfwWidget": true,
+    "widgetId": "e58f9cdf-4da4-4a5b-ba82-8ad1e7d4a1c1",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceEnactDecision_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Enact Decision"
+    },
+    "title": {
+      "en": "Governance: Enact Decision"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Enact Decision"
+    },
+    "useGfwWidget": true,
+    "widgetId": "026a09c6-5527-4fe3-a8bc-a007a96f97f6",
+    "uiParams": "none"
+  }, {
+    "analysisId": "WCS_GovernanceDiversity_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+    "label": {
+      "en": "Governance: Diversity"
+    },
+    "title": {
+      "en": "Governance: Diversity"
+    },
+    "description": {
+      "en": "Click below to run the analysis for Governance: Diversity"
+    },
+    "useGfwWidget": true,
+    "widgetId": "84db730b-28c0-4395-a00f-f88780e5a508",
+    "uiParams": "none"
   }, {
     "analysisId": "TC_LOSS_GAIN",
     "label": {
@@ -155,40 +417,38 @@ export default {
       "zh": "Select range and tree cover density then click the run analysis button to see results",
       "ka": "Select range and tree cover density then click the run analysis button to see results"
     },
-    // "chartTyp
-    useGfwWidget: true,
-       widgetId: 'e6c01eff-0d79-4865-a431-65d6adb89589',
-       uiParams: [{
-       inputType: 'rangeSlider',
-       startParamName: 'period',
-       combineParams: true,
-       valueSeparator: ',',
-       bounds: [2001, 2018],
-       valueType: 'date',
-       label: {
-         en: 'Select range for analysis',
-         fr: 'Sélectionner une plage pour l’analyse:',
-         es: 'Seleccione un rango para el análisis:',
-         pt: 'Selecione o período para análise:',
-         id: 'Pilih rentang untuk analisis:',
-         zh: '选择分析范围:',
-         ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-       }
-     },
-     {
-       name: 'thresh',
-       inputType: 'tcd',
-       label: {
-         en: 'Select tree cover density: ',
-         fr: 'Sélectionner la densité de couverture arborée: ',
-         es: 'Seleccione la densidad de la cobertura arbórea: ',
-         pt: 'Selecione a densidade de cobertura arbórea: ',
-         id: 'Pilih kerapatan tutupan pohon: ',
-         zh: '选择森林覆盖密度: ',
-         ka: 'ხის ვარჯის სიხშირის შერჩევა: '
-       }
-     }
-   ]
+    "chartType": "badge",
+    "valueAttribute": "data.attributes.loss",
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/umd-loss-gain",
+    "uiParams": [{
+      "inputType": "rangeSlider",
+      "startParamName": "period",
+      "combineParams": true,
+      "valueSeparator": ",",
+      "bounds": [2001, 2017],
+      "valueType": "date",
+      "label": {
+        "en": "Select range for analysis",
+        "fr": "Select range for analysis",
+        "es": "Select range for analysis",
+        "pt": "Select range for analysis",
+        "id": "Select range for analysis",
+        "zh": "Select range for analysis",
+        "ka": "Select range for analysis"
+      }
+    }, {
+      "name": "thresh",
+      "inputType": "tcd",
+      "label": {
+        "en": "Select tree cover density: ",
+        "fr": "Select tree cover density: ",
+        "es": "Select tree cover density: ",
+        "pt": "Select tree cover density: ",
+        "id": "Select tree cover density: ",
+        "zh": "Select tree cover density: ",
+        "ka": "Select tree cover density: "
+      }
+    }]
   }, {
     "analysisId": "TC_LOSS",
     "label": {
@@ -218,75 +478,42 @@ export default {
       "zh": "Select range and tree cover density then click the run analysis button to see results",
       "ka": "Select range and tree cover density then click the run analysis button to see results"
     },
-    useGfwWidget: true,
-       widgetId: '23c064f5-fc93-4888-9db7-6d34c8681dd6',
-       uiParams: [{
-       inputType: 'rangeSlider',
-       startParamName: 'period',
-       combineParams: true,
-       valueSeparator: ',',
-       bounds: [2001, 2018],
-       valueType: 'date',
-       label: {
-         en: 'Select range for analysis',
-         fr: 'Sélectionner une plage pour l’analyse:',
-         es: 'Seleccione un rango para el análisis:',
-         pt: 'Selecione o período para análise:',
-         id: 'Pilih rentang untuk analisis:',
-         zh: '选择分析范围:',
-         ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-       }
-     },
-     {
-       name: 'thresh',
-       inputType: 'tcd',
-       label: {
-         en: 'Select tree cover density: ',
-         fr: 'Sélectionner la densité de couverture arborée: ',
-         es: 'Seleccione la densidad de la cobertura arbórea: ',
-         pt: 'Selecione a densidade de cobertura arbórea: ',
-         id: 'Pilih kerapatan tutupan pohon: ',
-         zh: '选择森林覆盖密度: ',
-         ka: 'ხის ვარჯის სიხშირის შერჩევა: '
-       }
-     }
-   ]
-    // "chartType": "bar",
-    // "chartBounds": [2001, 2017],
-    // "analysisUrl": "https://production-api.globalforestwatch.org/v1/umd-loss-gain",
-    // "uiParams": [{
-    //   "inputType": "rangeSlider",
-    //   "startParamName": "period",
-    //   "combineParams": true,
-    //   "valueSeparator": ",",
-    //   "bounds": [2001, 2017],
-    //   "valueType": "date",
-    //   "label": {
-    //     "en": "Select range for analysis",
-    //     "fr": "Select range for analysis",
-    //     "es": "Select range for analysis",
-    //     "pt": "Select range for analysis",
-    //     "id": "Select range for analysis",
-    //     "zh": "Select range for analysis",
-    //     "ka": "Select range for analysis"
-    //   }
-    // }, {
-    //   "name": "thresh",
-    //   "inputType": "tcd",
-    //   "label": {
-    //     "en": "Select tree cover density: ",
-    //     "fr": "Select tree cover density: ",
-    //     "es": "Select tree cover density: ",
-    //     "pt": "Select tree cover density: ",
-    //     "id": "Select tree cover density: ",
-    //     "zh": "Select tree cover density: ",
-    //     "ka": "Select tree cover density: "
-    //   }
-    // }],
-    // "params": [{
-    //   "name": "aggregate_values",
-    //   "value": "false"
-    // }]
+    "chartType": "bar",
+    "chartBounds": [2001, 2017],
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/umd-loss-gain",
+    "uiParams": [{
+      "inputType": "rangeSlider",
+      "startParamName": "period",
+      "combineParams": true,
+      "valueSeparator": ",",
+      "bounds": [2001, 2017],
+      "valueType": "date",
+      "label": {
+        "en": "Select range for analysis",
+        "fr": "Select range for analysis",
+        "es": "Select range for analysis",
+        "pt": "Select range for analysis",
+        "id": "Select range for analysis",
+        "zh": "Select range for analysis",
+        "ka": "Select range for analysis"
+      }
+    }, {
+      "name": "thresh",
+      "inputType": "tcd",
+      "label": {
+        "en": "Select tree cover density: ",
+        "fr": "Select tree cover density: ",
+        "es": "Select tree cover density: ",
+        "pt": "Select tree cover density: ",
+        "id": "Select tree cover density: ",
+        "zh": "Select tree cover density: ",
+        "ka": "Select tree cover density: "
+      }
+    }],
+    "params": [{
+      "name": "aggregate_values",
+      "value": "false"
+    }]
   }, {
     "analysisId": "BIO_LOSS",
     "label": {
@@ -307,74 +534,41 @@ export default {
       "zh": "Aboveground Live Woody Biomass Density",
       "ka": "მიწისზედა ცოცხალი ტყის ბიომასის სიხშირე"
     },
-    // "chartType": "biomassLoss",
-    // "colors": {
-    //   "loss": "#FF6699",
-    //   "carbon": "#BEBCC2"
-    // },
-    // "analysisUrl": "https://production-api.globalforestwatch.org/v1/biomass-loss",
-    // "uiParams": [{
-    //   "inputType": "rangeSlider",
-    //   "startParamName": "period",
-    //   "combineParams": true,
-    //   "valueSeparator": ",",
-    //   "bounds": [2001, 2014],
-    //   "valueType": "date",
-    //   "label": {
-    //     "en": "Select range for analysis",
-    //     "fr": "Select range for analysis",
-    //     "es": "Select range for analysis",
-    //     "pt": "Select range for analysis",
-    //     "id": "Select range for analysis",
-    //     "zh": "Select range for analysis",
-    //     "ka": "Select range for analysis"
-    //   }
-    // }, {
-    //   "name": "thresh",
-    //   "inputType": "tcd",
-    //   "label": {
-    //     "en": "Select tree cover density: ",
-    //     "fr": "Select tree cover density: ",
-    //     "es": "Select tree cover density: ",
-    //     "pt": "Select tree cover density: ",
-    //     "id": "Select tree cover density: ",
-    //     "zh": "Select tree cover density: ",
-    //     "ka": "Select tree cover density: "
-    //   }
-    // }]
-    useGfwWidget: true,
-    widgetId: '937a74e7-f616-4d1d-91b3-e69c68e278aa',
-    uiParams: [{
-       inputType: 'rangeSlider',
-       startParamName: 'period',
-       combineParams: true,
-       valueSeparator: ',',
-       bounds: [2001, 2018],
-       valueType: 'date',
-       label: {
-         en: 'Select range for analysis',
-         fr: 'Sélectionner une plage pour l’analyse:',
-         es: 'Seleccione un rango para el análisis:',
-         pt: 'Selecione o período para análise:',
-         id: 'Pilih rentang untuk analisis:',
-         zh: '选择分析范围:',
-         ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-       }
-     },
-     {
-       name: 'thresh',
-       inputType: 'tcd',
-       label: {
-         en: 'Select tree cover density: ',
-         fr: 'Sélectionner la densité de couverture arborée: ',
-         es: 'Seleccione la densidad de la cobertura arbórea: ',
-         pt: 'Selecione a densidade de cobertura arbórea: ',
-         id: 'Pilih kerapatan tutupan pohon: ',
-         zh: '选择森林覆盖密度: ',
-         ka: 'ხის ვარჯის სიხშირის შერჩევა: '
-       }
-     }
-    ]
+    "chartType": "biomassLoss",
+    "colors": {
+      "loss": "#FF6699",
+      "carbon": "#BEBCC2"
+    },
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/biomass-loss",
+    "uiParams": [{
+      "inputType": "rangeSlider",
+      "startParamName": "period",
+      "combineParams": true,
+      "valueSeparator": ",",
+      "bounds": [2001, 2014],
+      "valueType": "date",
+      "label": {
+        "en": "Select range for analysis",
+        "fr": "Select range for analysis",
+        "es": "Select range for analysis",
+        "pt": "Select range for analysis",
+        "id": "Select range for analysis",
+        "zh": "Select range for analysis",
+        "ka": "Select range for analysis"
+      }
+    }, {
+      "name": "thresh",
+      "inputType": "tcd",
+      "label": {
+        "en": "Select tree cover density: ",
+        "fr": "Select tree cover density: ",
+        "es": "Select tree cover density: ",
+        "pt": "Select tree cover density: ",
+        "id": "Select tree cover density: ",
+        "zh": "Select tree cover density: ",
+        "ka": "Select tree cover density: "
+      }
+    }]
   }, {
     "analysisId": "IFL",
     "label": {
@@ -386,80 +580,43 @@ export default {
       "zh": "åŽŸç”Ÿæ£®æž—æ™¯è§‚",
       "ka": "áƒ®áƒ”áƒšáƒ£áƒ®áƒšáƒ”áƒ‘áƒ”áƒšáƒ˜ áƒ¢áƒ§áƒ˜áƒ¡ áƒšáƒáƒœáƒ“áƒ¨áƒáƒ¤áƒ¢áƒ˜"
     },
-    // "chartType": "bar",
-    // "chartBounds": [2001, 2015],
-    // "colors": ["#186513"],
-    // "analysisUrl": "https://production-api.globalforestwatch.org/v1/loss-by-landcover",
-    // "uiParams": [{
-    //   "inputType": "rangeSlider",
-    //   "startParamName": "period",
-    //   "combineParams": true,
-    //   "valueSeparator": ",",
-    //   "bounds": [2001, 2015],
-    //   "valueType": "date",
-    //   "label": {
-    //     "en": "Select range for analysis",
-    //     "fr": "Select range for analysis",
-    //     "es": "Select range for analysis",
-    //     "pt": "Select range for analysis",
-    //     "id": "Select range for analysis",
-    //     "zh": "Select range for analysis",
-    //     "ka": "Select range for analysis"
-    //   }
-    // }, {
-    //   "name": "thresh",
-    //   "inputType": "tcd",
-    //   "label": {
-    //     "en": "Select tree cover density: ",
-    //     "fr": "Select tree cover density: ",
-    //     "es": "Select tree cover density: ",
-    //     "pt": "Select tree cover density: ",
-    //     "id": "Select tree cover density: ",
-    //     "zh": "Select tree cover density: ",
-    //     "ka": "Select tree cover density: "
-    //   }
-    // }],
-    // "params": [{
-    //   "name": "layer",
-    //   "value": "ifl2000"
-    // }]
-    "useGfwWidget": true,
-       "widgetId": "d0d22aeb-9642-4c4d-a310-f7fb95a48c21",
-       params: [{
-         name: 'layer',
-         value: 'ifl2000'
-       }],
-       uiParams: [{
-       inputType: 'rangeSlider',
-       startParamName: 'period',
-       combineParams: true,
-       valueSeparator: ',',
-       bounds: [2001, 2018],
-       valueType: 'date',
-       label: {
-         en: 'Select range for analysis',
-         fr: 'Sélectionner une plage pour l’analyse:',
-         es: 'Seleccione un rango para el análisis:',
-         pt: 'Selecione o período para análise:',
-         id: 'Pilih rentang untuk analisis:',
-         zh: '选择分析范围:',
-         ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-       }
-     },
-     {
-       name: 'thresh',
-       inputType: 'tcd',
-       label: {
-         en: 'Select tree cover density: ',
-         fr: 'Sélectionner la densité de couverture arborée: ',
-         es: 'Seleccione la densidad de la cobertura arbórea: ',
-         pt: 'Selecione a densidade de cobertura arbórea: ',
-         id: 'Pilih kerapatan tutupan pohon: ',
-         zh: '选择森林覆盖密度: ',
-         ka: 'ხის ვარჯის სიხშირის შერჩევა: '
-       }
-     }
-   ]
+    "chartType": "bar",
+    "chartBounds": [2001, 2015],
+    "colors": ["#186513"],
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/loss-by-landcover",
+    "uiParams": [{
+      "inputType": "rangeSlider",
+      "startParamName": "period",
+      "combineParams": true,
+      "valueSeparator": ",",
+      "bounds": [2001, 2015],
+      "valueType": "date",
+      "label": {
+        "en": "Select range for analysis",
+        "fr": "Select range for analysis",
+        "es": "Select range for analysis",
+        "pt": "Select range for analysis",
+        "id": "Select range for analysis",
+        "zh": "Select range for analysis",
+        "ka": "Select range for analysis"
+      }
+    }, {
+      "name": "thresh",
+      "inputType": "tcd",
+      "label": {
+        "en": "Select tree cover density: ",
+        "fr": "Select tree cover density: ",
+        "es": "Select tree cover density: ",
+        "pt": "Select tree cover density: ",
+        "id": "Select tree cover density: ",
+        "zh": "Select tree cover density: ",
+        "ka": "Select tree cover density: "
+      }
+    }],
+    "params": [{
+      "name": "layer",
+      "value": "ifl2000"
+    }]
   }, {
     "analysisId": "GLAD_ALERTS",
     "label": {
@@ -480,36 +637,33 @@ export default {
       "zh": "GLAD Alerts",
       "ka": "GLAD შეტყობინებები"
     },
-    useGfwWidget: true,
-    widgetId: '0e2da211-a9b2-4271-a437-5de56e437df2',
-    uiParams: 'none'
-    // "chartType": "timeSeries",
-    // "analysisUrl": "https://production-api.globalforestwatch.org/v1/glad-alerts",
-    // "uiParams": [{
-    //   "inputType": "datepicker",
-    //   "startParamName": "period",
-    //   "combineParams": true,
-    //   "valueSeparator": ",",
-    //   "multi": true,
-    //   "defaultStartDate": "2016-01-01",
-    //   "minDate": "2015-01-01",
-    //   "label": {
-    //     "en": "Select range for analysis",
-    //     "fr": "Select range for analysis",
-    //     "es": "Select range for analysis",
-    //     "pt": "Select range for analysis",
-    //     "id": "Select range for analysis",
-    //     "zh": "Select range for analysis",
-    //     "ka": "Select range for analysis"
-    //   }
-    // }],
-    // "params": [{
-    //   "name": "aggregate_values",
-    //   "value": "true"
-    // }, {
-    //   "name": "aggregate_by",
-    //   "value": "day"
-    // }]
+    "chartType": "timeSeries",
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/glad-alerts",
+    "uiParams": [{
+      "inputType": "datepicker",
+      "startParamName": "period",
+      "combineParams": true,
+      "valueSeparator": ",",
+      "multi": true,
+      "defaultStartDate": "2016-01-01",
+      "minDate": "2015-01-01",
+      "label": {
+        "en": "Select range for analysis",
+        "fr": "Select range for analysis",
+        "es": "Select range for analysis",
+        "pt": "Select range for analysis",
+        "id": "Select range for analysis",
+        "zh": "Select range for analysis",
+        "ka": "Select range for analysis"
+      }
+    }],
+    "params": [{
+      "name": "aggregate_values",
+      "value": "true"
+    }, {
+      "name": "aggregate_by",
+      "value": "day"
+    }]
   }, {
     "analysisId": "TERRAI_ALERTS",
     "label": {
@@ -572,27 +726,24 @@ export default {
       "ka": "áƒáƒ¥áƒ¢áƒ˜áƒ£áƒ áƒ˜ áƒ®áƒáƒœáƒ«áƒ áƒ”áƒ‘áƒ˜"
     },
     "color": "#5ea1ed",
-    useGfwWidget: true,
-    widgetId: '97b82853-d9fb-4e74-b9b3-2fac7937f38f',
-    uiParams: 'none'
-    // "analysisUrl": "https://production-api.globalforestwatch.org/v1/viirs-active-fires",
-    // "uiParams": [{
-    //   "inputType": "datepicker",
-    //   "startParamName": "period",
-    //   "combineParams": true,
-    //   "valueSeparator": ",",
-    //   "multi": true,
-    //   "minDate": "2004-01-01",
-    //   "label": {
-    //     "en": "Select date(s) for analysis",
-    //     "fr": "Select date(s) for analysis",
-    //     "es": "Select date(s) for analysis",
-    //     "pt": "Select date(s) for analysis",
-    //     "id": "Select date(s) for analysis",
-    //     "zh": "Select date(s) for analysis",
-    //     "ka": "Select date(s) for analysis"
-    //   }
-    // }]
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/viirs-active-fires",
+    "uiParams": [{
+      "inputType": "datepicker",
+      "startParamName": "period",
+      "combineParams": true,
+      "valueSeparator": ",",
+      "multi": true,
+      "minDate": "2004-01-01",
+      "label": {
+        "en": "Select date(s) for analysis",
+        "fr": "Select date(s) for analysis",
+        "es": "Select date(s) for analysis",
+        "pt": "Select date(s) for analysis",
+        "id": "Select date(s) for analysis",
+        "zh": "Select date(s) for analysis",
+        "ka": "Select date(s) for analysis"
+      }
+    }]
   }, {
     "analysisId": "LCC",
     "label": {
@@ -606,14 +757,21 @@ export default {
     },
     "chartType": "lccPie",
     "colors": ["#D2A965", "#157764", "#CCDB98", "#596B2C", "#D5C998", "#2789D4", "#E9462B", "#F6F0EA", "#A3DCFF", "#FFFFFF"],
-    // "analysisUrl": "https://production-api.globalforestwatch.org/v1/loss-by-landcover",
-    useGfwWidget: true,
-       widgetId: '65dc8170-0049-48e7-94ba-fa846fcb295c',
-       uiParams: 'none',
-       params: [{
-         name: 'layer',
-         value: 'gfw-landcover-2015'
-       }],
+    "analysisUrl": "https://production-api.globalforestwatch.org/v1/loss-by-landcover",
+    "uiParams": "none",
+    "params": [{
+      "name": "layer",
+      "value": "gfw-landcover-2015"
+    }],
+    "classes": {
+      "en": ["Land Cover", "Agriculture", "Forest", "Grassland", "Shrubland", "Sparse vegetation", "Wetland", "Settlement", "Bare", "Water", "Permanent snow and ice"],
+      "fr": ["Irrigated croplands", "Rainfed croplands", "Cropland forest mosaic", "Broadleaved evergreen or semi-deciduous forest", "Broadleaved deciduous forest", "Needleleaved evergreen or deciduous forest", "Mixed broadleaved and needleleaved forest", "Mosaic of forest, shrubland and grassland", "Shrubland", "Grassland", "Sparse vegetation", "Flooded broadleaved forest", "Flooded vegetation", "Artificial areas", "Bare areas", "Permanent snow and ice"],
+      "es": ["Irrigated croplands", "Rainfed croplands", "Cropland forest mosaic", "Broadleaved evergreen or semi-deciduous forest", "Broadleaved deciduous forest", "Needleleaved evergreen or deciduous forest", "Mixed broadleaved and needleleaved forest", "Mosaic of forest, shrubland and grassland", "Shrubland", "Grassland", "Sparse vegetation", "Flooded broadleaved forest", "Flooded vegetation", "Artificial areas", "Bare areas", "Permanent snow and ice"],
+      "pt": ["Culturas Irrigadas", "Rainfed croplands", "Mosaico de areas florestais e de cultivo", "Floresta verde ou semi-decÃ­dua", "Floresta decÃ­dua de folha larga", "Floresta verde de conÃ­feras ou Floresta decÃ­dua", "Misto de floresta de conifera e de folha larga", "Mosaic of forest, shrubland and grassland ", "Shrubland ", "Grassland ", "Sparse vegetation ", "Flooded broadleaved forest ", "Flooded vegetation ", "Artificial areas ", "Bare areas ", "Permanent snow and ice "],
+      "id": ["Irrigated croplands", "Rainfed croplands", "Cropland forest mosaic", "Broadleaved evergreen or semi-deciduous forest", "Broadleaved deciduous forest", "Needleleaved evergreen or deciduous forest", "Mixed broadleaved and needleleaved forest", "Mosaic of forest, shrubland and grassland", "Shrubland", "Grassland", "Sparse vegetation", "Flooded broadleaved forest", "Flooded vegetation", "Artificial areas", "Bare areas", "Permanent snow and ice"],
+      "zh": ["Irrigated croplands", "Rainfed croplands", "Cropland forest mosaic", "Broadleaved evergreen or semi-deciduous forest", "Broadleaved deciduous forest", "Needleleaved evergreen or deciduous forest", "Mixed broadleaved and needleleaved forest", "Mosaic of forest, shrubland and grassland", "Shrubland", "Grassland", "Sparse vegetation", "Flooded broadleaved forest", "Flooded vegetation", "Artificial areas", "Bare areas", "Permanent snow and ice"],
+      "ka": ["áƒ›áƒáƒ áƒ¬áƒ§áƒ•áƒáƒ“áƒ˜ áƒ¡/áƒ¡ áƒ™áƒ£áƒšáƒ¢áƒ£áƒ áƒ”áƒ‘áƒ˜", "áƒ¬áƒ•áƒ˜áƒ›áƒ˜áƒ— áƒ›áƒáƒ áƒ¬áƒ§áƒ•áƒáƒ“áƒ˜ áƒ™áƒ£áƒšáƒ¢áƒ£áƒ áƒ”áƒ‘áƒ˜", "áƒ¡/áƒ¡ áƒ™áƒ£áƒšáƒ¢áƒ£áƒ áƒ”áƒ‘áƒ˜áƒ¡ áƒ“áƒ áƒ¢áƒ§áƒ˜áƒ¡ áƒ›áƒáƒ–áƒáƒ˜áƒ™áƒ", "áƒ¤áƒáƒ áƒ—áƒáƒ¤áƒáƒ—áƒšáƒáƒ•áƒáƒœáƒ˜ áƒ›áƒáƒ áƒáƒ“áƒ›áƒ¬áƒ•áƒáƒœáƒ” áƒáƒœ áƒœáƒáƒ®áƒ”áƒ•áƒ áƒáƒ“-áƒ¤áƒáƒ—áƒáƒšáƒ›áƒªáƒ•áƒ”áƒœáƒ˜ áƒ¢áƒ§áƒ”", "áƒ¤áƒáƒ áƒ—áƒáƒ¤áƒáƒ—áƒšáƒáƒ•áƒáƒœáƒ˜ áƒ¤áƒáƒ—áƒáƒšáƒ›áƒªáƒ•áƒ”áƒœáƒ˜ áƒ¢áƒ§áƒ”", "áƒ¬áƒ˜áƒ¬áƒ•áƒáƒ•áƒáƒœáƒ˜ áƒ›áƒáƒ áƒáƒ“áƒ›áƒ¬áƒ•áƒáƒœáƒ” áƒáƒœ áƒ¤áƒáƒ—áƒáƒšáƒ›áƒªáƒ•áƒ”áƒœáƒ˜ áƒ¢áƒ§áƒ”", "áƒ¨áƒ”áƒ áƒ”áƒ£áƒšáƒ˜ áƒ¤áƒáƒ áƒ—áƒáƒ¤áƒáƒ—áƒšáƒáƒ•áƒáƒœáƒ˜ áƒ“áƒ áƒ¬áƒ˜áƒ¬áƒ•áƒáƒ•áƒáƒœáƒ˜ áƒ¢áƒ§áƒ”", "áƒ¢áƒ§áƒ˜áƒ¡, áƒ‘áƒ£áƒ©áƒ¥áƒœáƒáƒ áƒ˜áƒ¡ áƒ“áƒ áƒ›áƒ˜áƒœáƒ“áƒáƒ áƒ˜áƒ¡ áƒ›áƒáƒ–áƒáƒ˜áƒ™áƒ", "áƒ‘áƒ£áƒ©áƒ¥áƒœáƒáƒ áƒ˜", "áƒ›áƒ˜áƒœáƒ“áƒáƒ áƒ˜", "áƒ›áƒ”áƒ©áƒ®áƒ”áƒ áƒ˜ áƒ›áƒªáƒ”áƒœáƒáƒ áƒ”áƒ£áƒšáƒáƒ‘áƒ", "áƒ“áƒáƒ¢áƒ‘áƒáƒ áƒ˜áƒšáƒ˜ áƒ¤áƒáƒ áƒ—áƒáƒ¤áƒáƒ—áƒšáƒáƒ•áƒáƒœáƒ˜ áƒ¢áƒ§áƒ”", "áƒ“áƒáƒ¢áƒ‘áƒáƒ áƒ˜áƒšáƒ˜ áƒ›áƒªáƒ”áƒœáƒáƒ áƒ”áƒ£áƒšáƒáƒ‘áƒ", "áƒ¡áƒáƒ®áƒ”áƒªáƒ•áƒšáƒ˜áƒšáƒ˜ (áƒ®áƒ”áƒšáƒáƒ•áƒœáƒ£áƒ áƒ˜) áƒáƒ“áƒ’áƒ˜áƒšáƒ”áƒ‘áƒ˜", "áƒ›áƒáƒ¨áƒ˜áƒ¨áƒ•áƒšáƒ”áƒ‘áƒ£áƒšáƒ˜ áƒáƒ“áƒ’áƒ˜áƒšáƒ”áƒ‘áƒ˜", "áƒ›áƒ£áƒ“áƒ›áƒ˜áƒ•áƒ˜ áƒ—áƒáƒ•áƒšáƒ˜ áƒ“áƒ áƒ§áƒ˜áƒœáƒ£áƒšáƒ˜"]
+    }
   }, {
     "analysisId": "VEGA_RESTORATION_TREE_COVER",
     "label": {
@@ -622,7 +780,7 @@ export default {
     "title": {
       "en": "Tree cover analysis"
     },
-    'description': {
+    "description": {
       "en": "Restoration potential per tree cover class"
     },
     "useGfwWidget": true,
@@ -707,11 +865,12 @@ export default {
       },
       "layers": [{
         "order": 1,
-        "id": "TREE_COVER_LOSS",
+        "id": "TREE_COVER_LOSS 2",
         "type": "loss",
         "url": "https://storage.googleapis.com/wri-public/Hansen_16/tiles/hansen_world/v1/tc30/{z}/{x}/{y}.png",
         "technicalName": "tree_cover_loss",
         "legendLayer": [0],
+        "layerIds": [3],
         "label": {
           "en": "Tree Cover Loss",
           "fr": "Perte en couvert arbor?",
@@ -1128,8 +1287,60 @@ export default {
         "outputRange": [1]
       }]
     },
-    "GROUP_Other": {
+    "GROUP_Range": {
       "order": 4,
+      "label": {
+        "en": "Species Ranges"
+      },
+      "layers": [{
+        "order": 1,
+        "id": "Elephant_Current",
+        "type": "feature",
+        "url": "https://services.arcgis.com/x494PplYsmeeZsYB/arcgis/rest/services/AfricanEle/FeatureServer/0",
+        "label": {
+          "en": "Elephant Current Range",
+          "fr": "Elephant Current Range"
+        }
+      }, {
+        "order": 2,
+        "id": "Gorilla_Gorilla_Current",
+        "type": "feature",
+        "url": "https://services.arcgis.com/x494PplYsmeeZsYB/arcgis/rest/services/Gorilla_Chimp/FeatureServer/0",
+        "label": {
+          "en": "Gorilla Gorilla - Currrent Range",
+          "fr": "Gorilla Gorilla - Current Range"
+        }
+      }, {
+        "order": 3,
+        "id": "Gorilla_Gorilla_Historic",
+        "type": "feature",
+        "url": "https://services.arcgis.com/x494PplYsmeeZsYB/arcgis/rest/services/Gorilla_Chimp/FeatureServer/1",
+        "label": {
+          "en": "Gorilla Gorilla - Historic Range",
+          "fr": "Gorilla Gorilla - Historic Range"
+        }
+      }, {
+        "order": 4,
+        "id": "Chimp_Current",
+        "type": "feature",
+        "url": "https://services.arcgis.com/x494PplYsmeeZsYB/arcgis/rest/services/Gorilla_Chimp/FeatureServer/2",
+        "label": {
+          "en": "Chimp - Current Range",
+          "fr": "Chimp - Current Range"
+        }
+      }, {
+        "order": 5,
+        "id": "Chimp_Historic",
+        "type": "feature",
+        "url": "https://services.arcgis.com/x494PplYsmeeZsYB/arcgis/rest/services/Gorilla_Chimp/FeatureServer/3",
+        "label": {
+          "en": "Chimp - Historic Range",
+          "fr": "Chimp - Historic Range"
+        }
+      }]
+    },
+    "GROUP_Other": {
+      "order": 5,
       "label": {
         "en": "Other"
       },
@@ -1173,7 +1384,7 @@ export default {
     },
     "GROUP_BASEMAP": {
       "groupType": "basemap",
-      "order": 5,
+      "order": 6,
       "label": {
         "en": "Basemap",
         "fr": "Basemap",
