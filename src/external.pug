@@ -6,7 +6,7 @@ html
 	body.tundra
 		#root
 		div#share-modal.modal-wrapper.hidden
-		script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/391-adjust-chart-settings-revert/1.4.0.js' version='1.4.0')
+		script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/452-update-resources-to-distinguish-chart-types/1.4.0.js' version='1.4.0')
 		//- script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/246-report-build-merge/1.4.0.js')
 		//- script(id='library-load' src='js/library.js')
 		script.
@@ -105,7 +105,7 @@ html
 					analysisModules: [{
 						analysisId: 'TC_LOSS_GAIN',
 						chart: 'vega',
-                        chartType: 'badge',
+						chartType: 'badge',
 						label: {
 							en: 'Total tree cover loss/ gain',
 							fr: 'Perte/gain total de la couverture arborée',
@@ -170,7 +170,7 @@ html
 						{
 							analysisId: 'TC_LOSS',
 							chart: 'vega',
-                            chartType: 'bar',
+							chartType: 'bar',
 							label: {
 								en: 'Annual Tree cover loss',
 								fr: 'Pertes de la couverture arborée annuelles',
@@ -235,7 +235,7 @@ html
 						{
 							analysisId: 'IFL',
 							chart: 'vega',
-                            chartType: 'bar',
+							chartType: 'bar',
 							label: {
 								en: 'Annual tree cover loss in IFL',
 								fr: 'Perte annuelle de la couverture arborée en PFI',
@@ -304,7 +304,7 @@ html
 						{
 							analysisId: 'Loss_LandCover',
 							chart: 'vega',
-                            chartType: 'bar',
+							chartType: 'bar',
 							label: {
 								en: 'Annual tree cover loss by land cover class',
 								fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
@@ -373,7 +373,7 @@ html
 						{
 							analysisId: 'BIO_LOSS',
 							chart: 'vega',
-                            chartType: 'bar',
+							chartType: 'bar',
 							label: {
 								en: 'CO2 emissions from biomass loss',
 								fr: 'Émissions de Co2 de la perte de biomasse',
@@ -438,7 +438,7 @@ html
 						{
 							analysisId: 'GLAD_ALERTS',
 							chart: 'vega',
-                            chartType: 'line',
+							chartType: 'line',
 							label: {
 								en: 'GLAD alerts per month',
 								fr: 'Alertes GLAD par mois',
@@ -473,7 +473,7 @@ html
 						{
 							analysisId: 'TOTAL_GLAD_ALERTS',
 							chart: 'vega',
-                            chartType: 'badge',
+							chartType: 'badge',
 							label: {
 								en: 'Total GLAD Alerts',
 								fr: 'Total des alertes GLAD',
@@ -525,7 +525,7 @@ html
 						{
 							analysisId: 'VIIRS_FIRES',
 							chart: 'vega',
-                            chartType: 'bar',
+							chartType: 'bar',
 							label: {
 								en: 'VIIRS Active Fires',
 								fr: 'Feux actifs VIIRS',
@@ -559,8 +559,8 @@ html
 						},
 						{
 							analysisId: 'LCC',
-							 chart: 'vega',
-                            chartType: 'pie',
+								chart: 'vega',
+							chartType: 'pie',
 							label: {
 								en: 'Land Cover Composition',
 								fr: 'Composition de la couverture terrestre',
