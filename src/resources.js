@@ -90,7 +90,6 @@ export default {
    */
   analysisModules: [{
       analysisId: 'TC_LOSS_GAIN',
-      chart: 'vega',
       chartType: 'badge',
       label: {
         en: 'Total tree cover loss/ gain',
@@ -155,7 +154,6 @@ export default {
     },
     {
       analysisId: 'TC_LOSS',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'Annual Tree cover loss',
@@ -220,7 +218,6 @@ export default {
     },
     {
       analysisId: 'IFL',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'Annual tree cover loss in IFL',
@@ -289,7 +286,6 @@ export default {
     },
     {
       analysisId: 'Loss_LandCover',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'Annual tree cover loss by land cover class',
@@ -358,7 +354,6 @@ export default {
     },
     {
       analysisId: 'BIO_LOSS',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'CO2 emissions from biomass loss',
@@ -423,7 +418,6 @@ export default {
     },
     {
       analysisId: 'GLAD_ALERTS',
-      chart: 'vega',
       chartType: 'line',
       label: {
         en: 'GLAD alerts per month',
@@ -458,7 +452,6 @@ export default {
     },
     {
       analysisId: 'TOTAL_GLAD_ALERTS',
-      chart: 'vega',
       chartType: 'badge',
       label: {
         en: 'Total GLAD Alerts',
@@ -510,7 +503,6 @@ export default {
     },
     {
       analysisId: 'VIIRS_FIRES',
-      chart: 'vega',
       chartType: 'badge',
       label: {
         en: 'VIIRS Active Fires',
@@ -545,7 +537,6 @@ export default {
     },
     {
       analysisId: 'LCC',
-      chart: 'vega',
       chartType: 'pie',
       label: {
         en: 'Land Cover Composition',
