@@ -511,7 +511,7 @@
      {
        analysisId: 'VIIRS_FIRES',
        chart: 'vega',
-       chartType: 'bar',
+       chartType: 'badge',
        label: {
          en: 'VIIRS Active Fires',
          fr: 'Feux actifs VIIRS',
