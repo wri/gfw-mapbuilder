@@ -208,7 +208,7 @@ export default class VegaChart extends Component {
                   analysisId === 'IFL' ||
                   analysisId === 'Loss_LandCover' ||
                   analysisId === 'BIO_LOSS' ||
-                  analysisId === 'GLAD_ALERTS_Badge'
+                  analysisId === 'TOTAL_GLAD_ALERTS'
                   ) ?
                   <div className="vega-chart-menu-settings">
                     <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
@@ -266,7 +266,7 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
+                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'TOTAL_GLAD_ALERTS' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
                     <div width={width} height={height} className={`vega-chart ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
