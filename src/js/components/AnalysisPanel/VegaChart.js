@@ -182,7 +182,7 @@ export default class VegaChart extends Component {
   render() {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, isLoading, showSettings } = this.state;
     const {width, height} = this.state.dimensions;
-    const { results, component, reportLabel, module, params, language, analysisId} = this.props;
+    const { results, component, reportLabel, module, params, language, analysisId, chartType} = this.props;
     
     if (isError) {
       return (
@@ -266,7 +266,15 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'TOTAL_GLAD_ALERTS' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
+                  <div
+                    ref={measureRef}
+                    className={
+                    `${chartType && chartType === 'bar' && 'vega-chart-bar-container'}
+                    ${chartType && chartType === 'line' && 'vega-chart-line-container'}
+                    ${chartType && chartType === 'badge' && 'vega-chart-badge-container'}
+                    ${chartType && chartType === 'pie' && 'vega-chart-pie-container'}`
+                    }
+                  >
                     <div width={width} height={height} className={`vega-chart ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}

@@ -29,8 +29,13 @@ export default class ReportAnalysis extends Component {
         if (module && module.analysisId) {
             analysisId = module.analysisId;
         }
+        let chartType = null;
+        if (module && module.chartType) {
+            chartType = module.chartType;
+        }
+       
         return (
-          <VegaChart module={module} params={params} analysisId={analysisId} reportLabel={reportLabel} component='Report' results={results} language={language} />
+          <VegaChart module={module} params={params} chartType={chartType} analysisId={analysisId} reportLabel={reportLabel} component='Report' results={results} language={language} />
         );
     };
 
