@@ -6,14 +6,12 @@ export default class ReportAnalysis extends Component {
         super(props);
         this.state = {
             results: {},
-            chartComponent: null,
-            //isLoading: true
+            chartComponent: null
         };
     }
 
     createReportAnalysis = () => {
         const {module} = this.props;
-        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
@@ -22,13 +20,22 @@ export default class ReportAnalysis extends Component {
         });
     };
 
-    renderReportAnalysis = (module, results, language) => {
+    renderReportAnalysis = (module, params, results, language) => {
         let reportLabel = '';
         if (results.data) {
           reportLabel = module.label[language];
         }
+        let analysisId = null;
+        if (module && module.analysisId) {
+            analysisId = module.analysisId;
+        }
+        let chartType = null;
+        if (module && module.chartType) {
+            chartType = module.chartType;
+        }
+       
         return (
-          <VegaChart reportLabel={reportLabel} component='Report' results={results} language={language} />
+          <VegaChart module={module} params={params} chartType={chartType} analysisId={analysisId} reportLabel={reportLabel} component='Report' results={results} language={language} />
         );
     };
 
@@ -52,7 +59,7 @@ export default class ReportAnalysis extends Component {
             <div className="report-container">
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && this.renderReportAnalysis(module, results, language)}
+                    {results.data && this.renderReportAnalysis(module, params, results, language)}
                 </div>
             </div>
         );

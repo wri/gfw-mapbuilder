@@ -16,7 +16,6 @@ class ReportMain extends Component {
       debug: location.search.slice(1).search('debug=true') > -1
     };
     corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
-    console.log('report share modal', ShareModal);
   }
 
   render() {

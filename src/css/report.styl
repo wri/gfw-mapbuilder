@@ -1,9 +1,17 @@
 @require 'variables'
-//@require 'loader'
 @require 'modal'
 @require 'grid'
 @require 'base'
 @require 'results'
+@require 'analysisPanel'
+@require 'layerPanel'
+@require 'reportSubButtons'
+
+@keyframes loader
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
 
 @keyframes loader
   from
@@ -18,13 +26,18 @@ body
   width 100%
   padding 0
   margin 0
+  
+.loader-wrapper 
+  width 100%
+  max-width 60rem
+  
 .app-loader__active
   background rgba(220,220,220,0.75)
   height 20rem
   width 100%
   z-index 5
   position relative
-  margin-bottom 2rem
+  margin 1rem 0
   & .foreground
     animation loader 0.95s cubic-bezier(0.645, 0.045, 0.355, 1.000) infinite
   .app-loader__spinner
@@ -33,20 +46,39 @@ body
     width 50px
     left 50%
     top 40%
-
-@require 'grid'
-@require 'base'
-@require 'results'
-
-.vega-chart-container,
+    
+#logo-anchor
+  width 100%
+  padding 0 !important
+  border none !important
+  
 .vega-chart > canvas {
-  min-width: 250px !important
-  margin: 1rem auto
+  max-width 60rem
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-bar-container {
+  max-width 60rem
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-line-container {
+  max-width 60rem
+  width 100%
+  margin 1rem auto
 }
 
 .vega-chart-badge-container {
-  min-width 250px !important
-  max-width 500px
+  max-width 30rem
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-pie-container {
+  max-width 290px
+  width 100%
   margin 1rem auto
 }
 
@@ -269,6 +301,7 @@ body
   .vega-chart-error
       font-weight bold
       width 100%
+      max-width 60rem
       border-bottom 1px solid #ccc
       text-align center
       padding-bottom 1.75rem
@@ -279,15 +312,15 @@ body
     margin 0 auto
     display flex
   .vega-chart-info-container
-    width 100%
-    padding 1rem 0
+    max-width 60rem
+    margin 1rem auto
     .vega-chart-info
       color #555
       padding 0.5rem
       font-size x-small
-      width 75%
+      width 100%
+      max-width 60rem
       margin 0 auto
-      text-align center
       border 1px solid #eee
     .data-error
       display flex
@@ -312,6 +345,8 @@ body
       flex-flow row
       align-items center
       justify-content center
+      .vega-chart-menu-settings
+        display flex
       .vega-chart-menu
         display flex
         align-items center
@@ -419,7 +454,6 @@ body
 .vega-chart-label
   text-transform uppercase
   text-align left
-  margin-bottom 0.5rem
 
 .vega-chart_download-options-report
   width 150px
@@ -450,6 +484,63 @@ body
 
 .vega-chart-hide
   display none
+
+.vega-chart-hidden
+  visibility hidden
+  
+.vega-chart-report-settings-container
+  width 100%
+  max-width 60rem
+  margin 1rem
+  .analysis-item-wrapper
+    width 100%
+    display flex
+    flex-flow column
+    justify-content center
+    align-items center
+  
+.analysis-results__select-form-container
+  width 100%
+
+.no-report-settings
+  font-weight bold
+  text-transform uppercase
+  text-align center
+  margin 1rem
+  color orangered
+  
+.run-report-analysis-button-container
+  display flex
+  flex-direction column
+  justify-content space-around
+  align-items center
+  width 100%
+  max-width 60rem
+  border-bottom 1px solid rgba(0,0,0,0.2)
+  margin-bottom 10px
+  .run-report-analysis-button
+    border 2px solid $goldTheme
+    height 32px
+    color #ffffff
+    width 10rem
+    border-radius 16px
+    background-color $goldTheme
+    font-size 16px
+    text-transform uppercase
+    margin-bottom 0.75rem
+    
+.analysis-results__select-form-item-container
+  display flex
+  flex-direction column
+  width 100%
+  height 60px
+  padding none !important
+  justify-content center
+  align-items center
+  margin 0.5rem 0 !important
+    
+.analysis-results__select-form-item-container > .tree-cover-canopy-display
+  margin 0 auto
 
 @media (max-width 550px)
   .report-header__title

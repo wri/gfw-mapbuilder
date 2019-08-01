@@ -366,11 +366,11 @@ export default class Analysis extends Component {
 
   renderResults = (type, results, language, config) => {
 
-    const { chartType, label, colors } = config;
+    const { chart, label, colors } = config;
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
 
-    switch (chartType) {
+    switch (chart) {
       case 'bar': {
         const { chartBounds, analysisId, valueAttribute } = config;
         const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
@@ -587,7 +587,7 @@ export default class Analysis extends Component {
         }
 
         if (analysisSettings.useGfwWidget) {
-          analysisSettings.chartType = 'vega';
+          //analysisSettings.chartType = 'vega';
 
           analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
             this.renderResults(analysisId, results, language, analysisSettings);

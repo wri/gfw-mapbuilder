@@ -34,9 +34,11 @@ import ReportHeader from './ReportHeader';
 import ReportAnalysisArea from './ReportAnalysisArea';
 import ReportAnalysis from './ReportAnalysis';
 import ReportTable from './ReportTable';
-
+import CanopyModal from './../components/Modals/CanopyModal';
+import MapStore from '../stores/MapStore';
 
 let map;
+let appSettings;
 let constructorParams = null;
 
 export default class Report extends Component {
@@ -47,7 +49,8 @@ export default class Report extends Component {
       sections: [],
       analysisModules: [],
       mapForTable: null,
-      paramsForTable: null
+      paramsForTable: null,
+      ...MapStore.getState()
     };
   }
 
@@ -234,7 +237,6 @@ export default class Report extends Component {
               layer.layerIds = versionConfig.layerIds;
             }
           }
-          console.log(layer.layerIds, versionConfig.layerIds);
         }
         // return layerFactory(layer, language);
         const mapLayer = layerFactory(layer, language);
@@ -309,7 +311,7 @@ export default class Report extends Component {
         }
       });
 
-      layersHelper.updateTreeCoverDefinitions(tcd, map, layerPanel);
+      layersHelper.updateTreeCoverDefinitions(tcd, map, resources.layerPanel);
       layersHelper.updateAGBiomassLayer(tcd, map);
 
       if (map.getZoom() > 9) {
@@ -377,7 +379,9 @@ export default class Report extends Component {
         }
         //- Add the settings to the params so we can omit layers or do other things if necessary
         //- If no appid is provided, the value here is essentially resources.js
+
         params.settings = info.settings;
+        appSettings = info.settings;
 
         //- Make sure highcharts is loaded before using it
         // if (window.highchartsPromise.isResolved()) {
@@ -562,186 +566,6 @@ export default class Report extends Component {
     return table;
   };
 
-  renderResults = (results, lang, config, params) => {
-    if (results.hasOwnProperty('error')) {
-      return null;
-    }
-
-    const { chartType, label, colors, analysisId } = config;
-    const defaultColors = ['#cf5188'];
-    let chartComponent = null;
-
-    switch (chartType) {
-      case 'bar': {
-        const { chartBounds, valueAttribute } = config;
-        const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
-        .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
-
-        let counts = [];
-
-        switch (analysisId) {
-          case 'TC_LOSS': {
-            let lossObj = null;
-            if (!results.hasOwnProperty('error')) {
-              lossObj = results.data.attributes.loss;
-              counts = Object.values(lossObj);
-            }
-            break;
-          }
-          case 'IFL': {
-            if (!results.hasOwnProperty('error')) {
-
-              results.data.attributes.histogram[0].result.forEach(histo => {
-                counts.push(Math.round(histo.result * 100) / 100);
-              });
-            }
-            break;
-          }
-          default: {
-            counts = results;
-            if (valueAttribute) {
-              counts = valueAttribute.split('.').reduce((prevVal, currentVal) => {
-                if (!prevVal.hasOwnProperty(currentVal)) {
-                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
-                }
-                return prevVal[currentVal];
-              }, results);
-            }
-          }
-        }
-
-        const chartColors = colors || defaultColors;
-
-        chartComponent = <BarChart
-          name={label[lang]}
-          counts={counts}
-          colors={chartColors}
-          labels={labels}
-          results={results}
-          encoder={null}
-        />;
-        break;
-      }
-      case 'timeSeries': {
-        const { valueAttribute } = config;
-
-        let data = [];
-
-        switch (analysisId) {
-          case 'GLAD_ALERTS': {
-            if (!results.hasOwnProperty('error')) {
-              data = formatters.alerts(results.data.attributes.value);
-            }
-            break;
-          }
-          case 'TERRAI_ALERTS': {
-            if (!results.hasOwnProperty('error')) {
-              data = formatters.alerts(results.data.attributes.value);
-            }
-            break;
-          }
-          default: {
-            data = results;
-
-            if (valueAttribute) {
-              // see https://github.com/wri/gfw-mapbuilder/wiki/Chart-Types:-Bar#valueattribute-string
-              // for more information on using the valueAttribute property
-              data = valueAttribute.split('.').reduce((prevVal, currentVal) => {
-                if (!prevVal.hasOwnProperty(currentVal)) {
-                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
-                }
-                return prevVal[currentVal];
-              }, results);
-            }
-          }
-        }
-        chartComponent = <TimeSeriesChart data={data} name={label[lang] ? label[lang] : ''} />;
-        break;
-      }
-      case 'badge': {
-        const {
-          tcLossFrom,
-          tcLossTo,
-          viirsEndDate,
-          viirsStartDate,
-        } = params;
-
-        const { valueAttribute, color, badgeLabel } = config;
-
-        switch (analysisId) {
-          case 'TC_LOSS_GAIN':
-            chartComponent = <LossGainBadge
-              results={results}
-              lossFromSelectIndex={Number(tcLossFrom)}
-              lossToSelectIndex={Number(tcLossTo)}
-              totalLossLabel={text[lang].ANALYSIS_TOTAL_LOSS_LABEL}
-              totalGainLabel={text[lang].ANALYSIS_TOTAL_GAIN_LABEL}
-              totalGainRange={text[lang].ANALYSIS_TOTAL_GAIN_RANGE}
-            />;
-            break;
-          case 'VIIRS_FIRES':
-            chartComponent = <FiresBadge
-              results={results}
-              from={viirsStartDate}
-              to={viirsEndDate}
-              preLabel={text[lang].ANALYSIS_FIRES_PRE}
-              firesLabel={text[lang].ANALYSIS_FIRES_ACTIVE}
-              timelineStartLabel={text[lang].TIMELINE_START}
-              timelineEndLabel={text[lang].TIMELINE_END}
-            />;
-            break;
-          default:
-            chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[lang]} />;
-
-        }
-        break;
-      }
-      case 'biomassLoss': {
-        const chartColors = colors || { loss: '#FF6699', carbon: '#BEBCC2' };
-
-        chartComponent = <BiomassChart
-          payload={results}
-          colors={chartColors}
-          lossName={text[lang].ANALYSIS_CARBON_LOSS}
-          carbonName={text[lang].ANALYSIS_CARBON_EMISSION}
-          />;
-        break;
-      }
-      case 'lccPie': {
-        const data = {
-          counts: []
-        };
-        if (!results.hasOwnProperty('error')) {
-          results.data.attributes.histogram.forEach(histo => {
-            if (!data[histo.className]) {
-              data[histo.className] = 0;
-            }
-            histo.result.forEach(year => {
-              data[histo.className] += year.result;
-            });
-            data.counts.push(Math.round(data[histo.className] * 100) / 100);
-          });
-        }
-
-        chartComponent = <CompositionPieChart
-          results={results}
-          name={label[lang]}
-          counts={data.counts}
-          colors={colors}
-          labels={config.classes[lang]}
-        />;
-        break;
-      }
-      case 'vega':
-        chartComponent = <VegaChart component='Report' results={results} language={lang} />;
-        break;
-      default:
-        break;
-    }
-
-    return chartComponent;
-  };
-
   handleRangeSliderParams = (paramsObject, paramModule) => {
     const { bounds, valueType, combineParams, startParamName, endParamName, valueSeparator } = paramModule;
     let startValue = bounds[0];
@@ -867,7 +691,7 @@ export default class Report extends Component {
       uiParamsToAppend.geostore = geostoreId;
 
       if (module.useGfwWidget) {
-        module.chartType = 'vega';
+        //module.chartType = 'vega';
         module.reportParams = uiParamsToAppend;
       }
     });
@@ -910,11 +734,20 @@ export default class Report extends Component {
   componentDidMount() {
     const params = getUrlParams(location.href);
     this.createMap(params);
+    MapStore.listen(this.storeDidUpdate);
   }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   render () {
     const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
+    const language = params.lang;
+    //const settings = params.settings;
+    console.log('analysisModules', analysisModules);
+    
     return (
       <div>
         <ReportHeader />
@@ -930,6 +763,9 @@ export default class Report extends Component {
             }
           </div>
         }
+        <div className={`canopy-modal-container modal-wrapper ${this.state.canopyModalVisible ? '' : 'hidden'}`}>
+          <CanopyModal language={language} map={map} settings={appSettings} canopyDensity={this.state.canopyDensity} />
+        </div>
       </div>
     );
   }
