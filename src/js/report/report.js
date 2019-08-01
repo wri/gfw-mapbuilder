@@ -896,13 +896,6 @@ const runAnalysis = function runAnalysis (params, feature) {
   const { settings } = params;
   const language = params.lang;
 
-  let analysisModules;
-  const stringMods = localStorage.getItem('analysisMods');
-  analysisModules = stringMods ? JSON.parse(stringMods) : '';
-
-  if (!analysisModules) {
-    analysisModules = settings.analysisModules;
-  }
 
   const { geostoreId } = feature;
   const resultsContainer = document.getElementById('results-container');
@@ -912,7 +905,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   // and call a separate function that makes an esriRequest (like below) but with the updated
   // params that were passed into the report
 
-  analysisModules.forEach((module) => {
+  settings.analysisModules.forEach((module) => {
     let uiParamsToAppend = {};
 
     if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {

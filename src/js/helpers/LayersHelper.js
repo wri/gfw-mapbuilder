@@ -65,23 +65,18 @@ const LayersHelper = {
             case '4': //past 7 days
               const queryString = this.generateFiresQuery(startDate, endDate);
               const defs = [];
-              firesLayer.hide();
-              if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
-                firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-                firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-                firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              }
-              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-              firesLayer.setLayerDefinitions(defs, false);
-              firesLayer.show();
 
+              firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              console.log('defs', defs);
+              firesLayer.setLayerDefinitions(defs);
               break;
             default:
               console.log('default');
               break;
           }
-
-          firesLayer.setLayerDefinitions(layaDefs);
           firesLayer.refresh();
           firesLayer.show();
         }
