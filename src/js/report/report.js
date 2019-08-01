@@ -239,7 +239,10 @@ export default class Report extends Component {
           }
         }
         // return layerFactory(layer, language);
+        
+        //Need to get layer in order to grab correct name of map layer for report!!!!
         const mapLayer = layerFactory(layer, language);
+        console.log('mapLayer', mapLayer);
 
         // If there are active filters, set definition expressions on layer.
         if (filterField && layer.type === 'feature') {

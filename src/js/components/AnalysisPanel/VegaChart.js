@@ -198,7 +198,6 @@ export default class VegaChart extends Component {
           }
           {component === 'Report' ?
             <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
-              {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
               <h3 className="vega-chart-label">{reportLabel}</h3>
               <div className='vega-chart-menu-container'>
                 {

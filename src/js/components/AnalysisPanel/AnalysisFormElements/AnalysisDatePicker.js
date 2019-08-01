@@ -72,17 +72,17 @@ export default class AnalysisDatePicker extends Component {
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <div className="report-date-picker">
-        <DatePicker
-          customInput={<Button />}
-          showMonthDropdown
-          showYearDropdown
-          dropdownMode="select"
-          todayButton='Jump to today'
-          minDate={moment(minDate)}
-          maxDate={moment(maxDate || new Date())}
-          selected={dateSelected}
-          onChange={this.handleChange}
-        />
+          <DatePicker
+            customInput={<Button />}
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            todayButton='Jump to today'
+            minDate={moment(minDate)}
+            maxDate={moment(maxDate || new Date())}
+            selected={dateSelected}
+            onChange={this.handleChange}
+          />
         </div>
       </div>
     );

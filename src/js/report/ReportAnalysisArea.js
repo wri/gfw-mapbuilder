@@ -5,7 +5,7 @@ export default class ReportAnalysisArea extends Component {
 
     render() {
         const {customFeatureTitle} = this.props.params;
-        //This will be useful later when we do have have mutiple titles to display in the Analysis ReportAnalysisArea.
+        // This will be useful later when we do have have multiple titles to display in the Analysis ReportAnalysisArea.
         const titlesArray = customFeatureTitle.split(',');
         return (
             <div className="map-analysis-area-container">
