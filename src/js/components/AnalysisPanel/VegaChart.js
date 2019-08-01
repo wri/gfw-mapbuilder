@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import ReportSettings from '../../report/ReportSettings';
 import Loader from '../Loader';
 import Measure from 'react-measure';
 
@@ -18,12 +19,13 @@ export default class VegaChart extends Component {
       chartImgDownloadUrl: null,
       chartName: '',
       toggle: false,
+      description: '',
+      showSettings: false,
       isLoading: false,
       dimensions: {
         width: -1,
         height: -1
-      },
-      description: ''
+      }
     };
   }
 
@@ -44,6 +46,13 @@ export default class VegaChart extends Component {
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
       if (this.props.component === 'Report') {
+        if (!config.signals) {
+          config.signals = [];
+        }
+        config.autosize = {
+          type: 'fit',
+          resize: true
+        };
 
         const resizeWidthSignal = {
           name: "width",
@@ -59,16 +68,10 @@ export default class VegaChart extends Component {
             }
           ]
         };
-
-        config.autosize = {type: 'fit', resize: true};
-        if (!config.signals) {
-          config.signals = [];
-        }
-
         config.signals.push(resizeWidthSignal);
       }
 
-      const {setLoading, language, results} = this.props;
+      const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
@@ -125,7 +128,7 @@ export default class VegaChart extends Component {
   }
 
   addChartDownload = (url) => {
-    this.setState({ chartImgDownloadUrl: url });
+    this.setState({ chartImgDownloadUrl: url, isLoading: false });
   };
 
   renderdownloadOptions = (option, i) => {
@@ -142,15 +145,45 @@ export default class VegaChart extends Component {
       toggle: !this.state.toggle
     });
   };
+  
+  reRenderChart = (config) => {
+    this.setState({
+      isLoading: true
+    });
+    const {language, setLoading} = this.props;
+    const widgetConfig = config.data.attributes.widgetConfig;
+    widgetConfig.autosize = {
+      type: 'fit',
+      resize: true
+    };
+    if (!widgetConfig.signals) {
+      widgetConfig.signals = [];
+    }
+    const resizeWidthSignal = {
+      name: "width",
+      update: "containerSize()[0]*0.95",
+      value: "",
+      on: [
+        {
+          events: {
+            source: "window",
+            type: "resize"
+          },
+          update: "containerSize()[0]*0.95"
+        }
+      ]
+    };
+    widgetConfig.signals.push(resizeWidthSignal);
+    charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
+  };
+  
+  
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, isLoading } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, isLoading, showSettings } = this.state;
     const {width, height} = this.state.dimensions;
-    const { results, component, reportLabel, module } = this.props;
-    let analysisId = null;
-    if (module && module.analysisId){
-      analysisId = module.analysisId;
-    }
+    const { results, component, reportLabel, module, params, language, analysisId, chartType} = this.props;
+    
     if (isError) {
       return (
         <div className='data-error'>
@@ -164,30 +197,48 @@ export default class VegaChart extends Component {
             <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div>
           }
           {component === 'Report' ?
-          <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
-            <h3 className="vega-chart-label">{reportLabel}</h3>
-            <div className='vega-chart-menu-container'>
-              <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
-                <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
+            <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
+              <h3 className="vega-chart-label">{reportLabel}</h3>
+              <div className='vega-chart-menu-container'>
+                {
+                  (
+                  analysisId === 'TC_LOSS' ||
+                  analysisId === 'TC_LOSS_GAIN' ||
+                  analysisId === 'IFL' ||
+                  analysisId === 'Loss_LandCover' ||
+                  analysisId === 'BIO_LOSS' ||
+                  analysisId === 'TOTAL_GLAD_ALERTS'
+                  ) ?
+                  <div className="vega-chart-menu-settings">
+                    <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
+                      <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
+                    </div>
+                    <div className="vega-chart-divider"></div>
+                  </div> :
+                  null
+                }
+                <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+                  <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
+                </div>
+                <div className="vega-chart-divider"></div>
+                <div className={`vega-chart-toggle-${toggle}`} onClick={this.toggleChart}>
+                  <span className="vega-chart-toggle-dot"></span>
+                </div>
               </div>
-              <div className="vega-chart-divider"></div>
-              <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
-              </div>
-              <div className="vega-chart-divider"></div>
-              <div className={`vega-chart-toggle-${toggle}`} onClick={this.toggleChart}>
-                <span className="vega-chart-toggle-dot"></span>
+            </div> :
+            <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
+              <h3 className="vega-chart-label">{reportLabel}</h3>
+              <div className='vega-chart-menu-container'>
+                <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+                  <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
+                </div>
               </div>
             </div>
-          </div> :
-          <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
-            <h3 className="vega-chart-label">{reportLabel}</h3>
-            <div className='vega-chart-menu-container'>
-              <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
-              </div>
+          }
+          {component === 'Report' &&
+            <div className={`vega-chart-report-settings-container ${showSettings ? '' : 'vega-chart-hide'}`}>
+              <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
             </div>
-          </div>
           }
           { showDownloadOptions &&
             <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
@@ -200,13 +251,13 @@ export default class VegaChart extends Component {
             </div>
           }
           {component === 'Report' ?
-          <div>
-            {
-              isLoading ?
-              <div className="loader">
-                <Loader active={isLoading} />
-              </div> :
-              <div>
+          <div className="loader-wrapper">
+              {
+                isLoading &&
+                <div className="loader">
+                  <Loader active={isLoading} />
+                </div>
+              }
               <Measure
                 bounds
                 onResize={contentRect => {
@@ -214,21 +265,26 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
-                    <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  <div
+                    ref={measureRef}
+                    className={
+                    `${chartType && chartType === 'bar' && 'vega-chart-bar-container'}
+                    ${chartType && chartType === 'line' && 'vega-chart-line-container'}
+                    ${chartType && chartType === 'badge' && 'vega-chart-badge-container'}
+                    ${chartType && chartType === 'pie' && 'vega-chart-pie-container'}`
+                    }
+                  >
+                    <div width={width} height={height} className={`vega-chart ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
               </Measure>
-              {description && description !== '' &&
-                <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
+              {!isLoading && description && description !== '' &&
+                <div className={`vega-chart-info-container ${toggle ? 'vega-chart-hide' : ''}`}>
                   <div className="vega-chart-info">
                       {description}
                   </div>
                 </div>
               }
-              </div>
-            }
-
             </div>
             :
             <div className="vega-chart-container">
