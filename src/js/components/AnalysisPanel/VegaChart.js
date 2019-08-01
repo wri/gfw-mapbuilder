@@ -45,6 +45,7 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
+      console.log('config', config);
       if (this.props.component === 'Report') {
         if (!config.signals) {
           config.signals = [];
@@ -86,7 +87,7 @@ export default class VegaChart extends Component {
           res.json().then(json => {
             if (res.status !== 200) {
               this.setState({
-                description: 'Error retrieving description'
+                description: `Error retrieving description for ${this.props.reportLabel}`
               });
             } else {
               if (json.data && json.data.length > 0 && json.data[0].attributes) {
@@ -101,7 +102,7 @@ export default class VegaChart extends Component {
 
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
-          this.handleError('Error creating analysis.');
+          this.handleError(`Error creating analysis for ${this.props.reportLabel}`);
         } else {
           res.json().then(json => {
             charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
@@ -123,7 +124,7 @@ export default class VegaChart extends Component {
           );
         }
       })
-      .catch(() => this.handleError('Error creating analysis.'));
+      .catch(() => this.handleError(`Error creating analysis for ${this.props.reportLabel}`));
     }
   }
 
