@@ -45,7 +45,6 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      console.log('config', config);
       if (this.props.component === 'Report') {
         if (!config.signals) {
           config.signals = [];
