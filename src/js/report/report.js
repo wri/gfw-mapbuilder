@@ -748,8 +748,6 @@ export default class Report extends Component {
     const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
     const language = params.lang;
-    //const settings = params.settings;
-    console.log('analysisModules', analysisModules);
     
     return (
       <div>
