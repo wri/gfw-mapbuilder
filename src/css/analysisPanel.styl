@@ -299,7 +299,6 @@
     justify-content space-between
     width 100%
     cursor pointer
-
   .svg-icon
     width 18px
     height 18px
@@ -312,7 +311,6 @@
   top 0
   left 0
 
-
 .vega-chart_download-options
     overflow: auto;
     max-height: 110px;
@@ -324,19 +322,17 @@
     z-index: 2;
     margin-left: auto;
     margin-top: 0.25rem;
-
-  a
+  .download-option
     width 100%
     padding 8px 10px
     text-decoration none
     color #555
     font-size 12px
     background #fff
-    border-top 0.75px #eee solid
-    border-bottom 0.75px #eee solid
-
-  a:hover
+    border 0.75px #eee solid
+  &:hover
     background #eee
+    text-decoration underline
 
   .download-option-label
     text-transform uppercase
