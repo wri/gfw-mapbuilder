@@ -86,7 +86,7 @@ export default class VegaChart extends Component {
           res.json().then(json => {
             if (res.status !== 200) {
               this.setState({
-                description: 'Error retrieving description'
+                description: `Error retrieving description for ${this.props.reportLabel}`
               });
             } else {
               if (json.data && json.data.length > 0 && json.data[0].attributes) {
@@ -101,7 +101,7 @@ export default class VegaChart extends Component {
 
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
-          this.handleError('Error creating analysis.');
+          this.handleError(`Error creating analysis for ${this.props.reportLabel}`);
         } else {
           res.json().then(json => {
             charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
@@ -123,7 +123,7 @@ export default class VegaChart extends Component {
           );
         }
       })
-      .catch(() => this.handleError('Error creating analysis.'));
+      .catch(() => this.handleError(`Error creating analysis for ${this.props.reportLabel}`));
     }
   }
 
@@ -236,7 +236,7 @@ export default class VegaChart extends Component {
             </div>
           }
           {component === 'Report' &&
-            <div className={`vega-chart-report-settings-container ${showSettings ? '' : 'vega-chart-hide'}`}>
+            <div className={`vega-chart-report-settings-container ${(showSettings && !toggle) ? '' : 'vega-chart-hide'}`}>
               <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
             </div>
           }
@@ -251,7 +251,7 @@ export default class VegaChart extends Component {
             </div>
           }
           {component === 'Report' ?
-          <div className="loader-wrapper">
+          <div className={`loader-wrapper ${toggle ? 'vega-chart-hide' : ''}`}>
               {
                 isLoading &&
                 <div className="loader">
@@ -271,7 +271,8 @@ export default class VegaChart extends Component {
                     `${chartType && chartType === 'bar' && 'vega-chart-bar-container'}
                     ${chartType && chartType === 'line' && 'vega-chart-line-container'}
                     ${chartType && chartType === 'badge' && 'vega-chart-badge-container'}
-                    ${chartType && chartType === 'pie' && 'vega-chart-pie-container'}`
+                    ${chartType && chartType === 'pie' && 'vega-chart-pie-container'}
+                    ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`
                     }
                   >
                     <div width={width} height={height} className={`vega-chart ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>

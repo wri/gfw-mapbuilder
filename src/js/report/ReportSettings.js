@@ -29,14 +29,20 @@ export default class ReportSettings extends Component {
      ...MapStore.getState()
     };
   }
-  
+
   componentDidMount() {
     MapStore.listen(this.storeDidUpdate);
   }
-  
+
   storeDidUpdate = () => {
-    this.setState(MapStore.getState());
+    if (this && this.setState) {
+      this.setState(MapStore.getState());
+    }
   };
+
+  componentWillUnmount () {
+    MapStore.unlisten();
+  }
 
   rangeSliderCallback = (rangeSliderValue, id, combineParams, startParam, endParam, valueSeparator, valueType) => {
     let startValue = rangeSliderValue[0];
@@ -46,7 +52,7 @@ export default class ReportSettings extends Component {
       startValue = `${startValue}-01-01`;
       endValue = `${endValue}-12-31`;
     }
-    
+
     layerActions.setLossOptions([startValue, endValue]);
 
     if (combineParams) {
@@ -78,12 +84,12 @@ export default class ReportSettings extends Component {
   calendarCallback = (startDate, endDate, id, combineParams, multi, startParam, endParam, valueSeparator) => {
     const gladStartDate = moment(startDate);
     const gladEndDate = moment(endDate);
-    
+
     layerActions.updateGladStartDate(gladStartDate);
     layerActions.updateGladEndDate(gladEndDate);
-    
+
     const gladDates = [gladStartDate._i, gladEndDate._i];
-    
+
     this.setState({
       gladDates
     });
@@ -129,11 +135,11 @@ export default class ReportSettings extends Component {
           </div>
         );
       }
-  
+
       if (!uiParams || uiParams.length === 0) {
         throw new Error("you either didn't supply an 'uiParams' property on your module or it contained 0 items. Please check your analysis module config. If you don't need UI elements, add `uiParams: 'none'`");
       }
-  
+
       analysisItemConfig.uiParams.forEach((param, idx) => {
         switch (param.inputType) {
           case 'rangeSlider': {
@@ -148,14 +154,14 @@ export default class ReportSettings extends Component {
               valueType,
               valueSeparator,
             } = param;
-  
+
             const initialStartValue = null;
             const initialEndValue = null;
-  
+
             if (!bounds || bounds.length !== 2 || (bounds[1] - bounds[0] < 1)) {
               throw new Error(`analysis id: '${analysisItemConfig.analysisId}', UI Element type: 'rangeSlider' -> 'bounds' is incorrectly configured. Please check your analysis module config`);
             }
-            
+
             formComponents.push(
               <AnalysisItemWrapper
                 key={analysisItemConfig.analysisId + inputType + idx}
@@ -212,50 +218,50 @@ export default class ReportSettings extends Component {
               minDate,
               maxDate,
             } = param;
-  
+
             let {
               defaultStartDate,
               defaultEndDate,
             } = param;
-  
+
             let initialStartDate = null;
             let initialEndDate = null;
-  
+
             if (analysisItemConfig.analysisId === 'GLAD_ALERTS') {
               const { gladStartDate, gladEndDate } = this.props;
               initialStartDate = moment(gladStartDate);
               initialEndDate = moment(gladEndDate);
             }
-  
+
             if (analysisItemConfig.analysisId === 'FORMA_ALERTS') {
               const { formaStartDate, formaEndDate } = this.props;
               initialStartDate = moment(formaStartDate);
               initialEndDate = moment(formaEndDate);
             }
-  
+
             if (analysisItemConfig.analysisId === 'TERRAI_ALERTS') {
               const { terraIStartDate, terraIEndDate } = this.props;
               initialStartDate = moment(terraIStartDate);
               initialEndDate = moment(terraIEndDate);
             }
-  
+
             if (analysisItemConfig.analysisId === 'VIIRS_FIRES') {
               const { viirsStartDate, viirsEndDate } = this.props;
               initialStartDate = moment(viirsStartDate);
               initialEndDate = moment(viirsEndDate);
             }
-  
+
             if (initialStartDate) { defaultStartDate = initialStartDate; }
             if (initialEndDate) { defaultEndDate = initialEndDate; }
-  
+
             if (!defaultStartDate && minDate) {
               defaultStartDate = minDate;
             }
-  
+
             if (!defaultEndDate && maxDate) {
               defaultEndDate = maxDate;
             }
-  
+
             if (multi === true || multi === 'true') {
               formComponents.push(
                 <AnalysisItemWrapper
@@ -280,7 +286,7 @@ export default class ReportSettings extends Component {
               );
               break;
             }
-  
+
             formComponents.push(
               <AnalysisItemWrapper
                 key={analysisItemConfig.analysisId + param.inputType + idx}
@@ -300,7 +306,7 @@ export default class ReportSettings extends Component {
                 />
               </AnalysisItemWrapper>
             );
-  
+
             break;
           }
           default:
@@ -309,7 +315,7 @@ export default class ReportSettings extends Component {
       });
       return formComponents;
   };
-  
+
   runAnalysis = () => {
     const { module, reRenderChart } = this.props;
     const reportParams = module.reportParams;

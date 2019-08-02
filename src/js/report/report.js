@@ -242,7 +242,7 @@ export default class Report extends Component {
         
         //Need to get layer in order to grab correct name of map layer for report!!!!
         const mapLayer = layerFactory(layer, language);
-        console.log('mapLayer', mapLayer);
+        
 
         // If there are active filters, set definition expressions on layer.
         if (filterField && layer.type === 'feature') {
@@ -749,6 +749,7 @@ export default class Report extends Component {
     const params = getUrlParams(location.href);
     const language = params.lang;
     const selectedFeatureTitles = params.selectedFeatureTitles;
+
     return (
       <div>
         <ReportHeader />
