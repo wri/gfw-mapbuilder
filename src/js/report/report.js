@@ -745,10 +745,10 @@ export default class Report extends Component {
   };
 
   render () {
-    const {analysisModules, mapForTable, paramsForTable, selectedFeatureTitles} = this.state;
+    const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
     const language = params.lang;
-    console.log('selected feature titles in report???', selectedFeatureTitles);
+    const selectedFeatureTitles = params.selectedFeatureTitles;
     return (
       <div>
         <ReportHeader />
