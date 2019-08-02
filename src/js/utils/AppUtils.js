@@ -182,9 +182,7 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
-      //Eventually if we add ability to list more than one feature in the report, we will need to store the array of titles in the query!
-      //customFeatureTitle: selectedFeatureTitles || 'Feature Analysis',
-      selectedFeatureTitles: selectedFeatureTitles || options.selectedFeature.attributes.title || 'Feature Analysis',
+      selectedFeatureTitles: selectedFeatureTitles || '',
       sharinghost: settings.sharinghost,
       activeFilters: activeFilters,
       activeVersions: activeVersions,
