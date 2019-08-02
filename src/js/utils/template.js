@@ -291,8 +291,12 @@ export default {
   * @return {promise} promise
   */
   getAppInfo: (id, constructorParams) => {
+    console.log('getAppInfo', id);
     const promise = new Deferred();
     const appid = id ? id : getUrlParams(location.href).appid;
+
+    console.log('appid', appid);
+    console.log('constructorParams', constructorParams);
 
     // Set the sharinghost to the correct location so the app can find the webmap content
     if (!resources.sharinghost) { resources.sharinghost = 'https://www.arcgis.com'; }
@@ -307,13 +311,17 @@ export default {
         //- This will merge all the settings in
         lang.mixin(resources, constructorParams);
       }
+      console.log(' new constructorParams', constructorParams);
 
       //- Format the resources before resolving
       formatResources().then(formattedResources => {
+        console.log('formattedResources', formattedResources);
         promise.resolve(formattedResources);
       });
       return promise;
     }
+    console.log('we here??');
+    // debugger
 
     arcgisUtils.getItem(appid).then(res => {
       let agolValues = res.itemData && res.itemData.values;
@@ -330,6 +338,7 @@ export default {
       if (!agolValues) {
         //- Format the resources before resolving
         formatResources().then(formattedResources => {
+          console.log('formattedResources2 ', formattedResources);
           promise.resolve(formattedResources);
         });
         return promise;
@@ -345,6 +354,7 @@ export default {
 
         //- Format the resources before resolving
         formatResources().then(formattedResources => {
+          console.log('formattedResources3 ', formattedResources);
           promise.resolve(formattedResources);
         });
 
@@ -353,6 +363,7 @@ export default {
     }, err => {
       if (brApp.debug) { console.warn(`template.getAppInfo >> ${err.message}`); }
       formatResources().then(formattedResources => {
+        console.log('formattedResources4', formattedResources);
         promise.resolve(formattedResources);
       });
     });
