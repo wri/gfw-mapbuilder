@@ -748,7 +748,7 @@ export default class Report extends Component {
     const {analysisModules, mapForTable, paramsForTable, selectedFeatureTitles} = this.state;
     const params = getUrlParams(location.href);
     const language = params.lang;
-    console.log('titles in report', selectedFeatureTitles);
+    console.log('selected feature titles in report???', selectedFeatureTitles);
     return (
       <div>
         <ReportHeader />

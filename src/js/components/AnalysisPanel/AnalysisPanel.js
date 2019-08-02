@@ -51,7 +51,7 @@ export default class AnalysisPanel extends Component {
     let selectedFeature, selectedFeats;
     let content;
     
-    //console.log('selected feature titles!!!', this.state.selectedFeatureTitles);
+    console.log('selected feature in analysis panel!!!', this.state.selectedFeatureTitles);
 
     //- Infer the selected feature from the info window
     if (map.infoWindow && map.infoWindow.getSelectedFeature()) {

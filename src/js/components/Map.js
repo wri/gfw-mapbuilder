@@ -167,9 +167,8 @@ export default class Map extends Component {
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
       selectedFeats = brApp.map.infoWindow.features;
       selectedFeats.forEach(selectedFeat => selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat)));
+      layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
     }
-    layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
-    console.log('titles in map', this.state.selectedFeatureTitles);
   };
 
   createMap = (webmap, options) => {
