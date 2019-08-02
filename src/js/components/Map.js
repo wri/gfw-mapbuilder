@@ -160,6 +160,17 @@ export default class Map extends Component {
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };
+  
+  getSelectedFeatureTitles = () => {
+    let selectedFeats;
+    const selectedFeatureTitlesArray = [];
+    if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
+      selectedFeats = brApp.map.infoWindow.features;
+      selectedFeats.forEach(selectedFeat => selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat)));
+    }
+    layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
+    console.log('titles in map', this.state.selectedFeatureTitles);
+  };
 
   createMap = (webmap, options) => {
     const {language, settings} = this.context;
@@ -174,6 +185,7 @@ export default class Map extends Component {
       response.map.graphics.clear();
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
+      response.map.infoWindow.on('set-features, selection-change', this.getSelectedFeatureTitles);
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar

@@ -3,6 +3,8 @@ import DrawTools from 'components/AnalysisPanel/DrawTools';
 import Upload from 'components/AnalysisPanel/Upload';
 import Analysis from 'components/AnalysisPanel/Analysis';
 import analysisKeys from 'constants/AnalysisConstants';
+import layerActions from '../../actions/LayerActions';
+import MapStore from '../../stores/MapStore';
 import React, {
   Component,
   PropTypes
@@ -14,23 +16,49 @@ export default class AnalysisPanel extends Component {
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
+  
+  constructor(props){
+    super(props);
+    this.state = {
+      ...MapStore.getState()
+    };
+  }
+ 
+  
+  // getSelectedFeatureTitles = () => {
+  //   const {map} = this.context;
+  //   let selectedFeats;
+  //   const selectedFeatureTitlesArray = [];
+  //   if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
+  //     selectedFeats = map.infoWindow.features;
+  //     selectedFeats.forEach(selectedFeat => selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat)));
+  //     layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
+  //   }
+  //   console.log('selectedFeatureTitlesArray', selectedFeatureTitlesArray);
+  // };
+  
+  componentDidMount() {
+    MapStore.listen(this.storeDidUpdate);
+    //this.getSelectedFeatureTitles();
+  }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   render () {
     const {map} = this.context;
     let selectedFeature, selectedFeats;
-    const selectedFeatureTitles = [];
     let content;
-
+    
+    //console.log('selected feature titles!!!', this.state.selectedFeatureTitles);
 
     //- Infer the selected feature from the info window
     if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
       selectedFeats = map.infoWindow.features;
       selectedFeature = map.infoWindow.getSelectedFeature();
-      selectedFeats.forEach(selectedFeat => selectedFeatureTitles.push(selectedFeat._layer.infoTemplate.title(selectedFeat)));
-      //selectedFeatureTitle = selectedFeature._layer.infoTemplate.title(selectedFeature);
     }
     
-    console.log('selectedFeatureTitles', selectedFeatureTitles);
 
     if (selectedFeature !== undefined &&
       selectedFeature.geometry &&
