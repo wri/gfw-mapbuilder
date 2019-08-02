@@ -182,7 +182,7 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
-      selectedFeatureTitles: selectedFeatureTitles || '',
+      selectedFeatureTitles: selectedFeatureTitles || options.selectedFeature.attributes.title || 'Feature Analysis',
       sharinghost: settings.sharinghost,
       activeFilters: activeFilters,
       activeVersions: activeVersions,
