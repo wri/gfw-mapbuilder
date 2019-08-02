@@ -30,6 +30,7 @@ export default class ReportSubscribeButtons extends Component {
   printReport = () => {
     const { map, settings, language } = this.context;
     const selectedFeature = map.infoWindow && map.infoWindow.getSelectedFeature();
+    //const selectedFeatureTitle = selectedFeature._layer.infoTemplate.title(selectedFeature);
     //This will create an array of the titles when we add in functionality for more than one feature to be displayed in the analysis area in the report
     // const selectedFeatureObj = map.infoWindow.getSelectedFeature();
     // const selectedFeatureTitles = selectedFeatureObj.attributes.title.split(',');
@@ -75,7 +76,7 @@ export default class ReportSubscribeButtons extends Component {
         settings,
         activeFilters: [],
         activeVersions: [],
-        //selectedFeatureTitles
+        //selectedFeatureTitle: selectedFeatureTitle
       };
 
       if (params.appid) {

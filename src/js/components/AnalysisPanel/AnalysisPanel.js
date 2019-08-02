@@ -18,6 +18,7 @@ export default class AnalysisPanel extends Component {
   render () {
     const {map} = this.context;
     let selectedFeature, selectedFeats;
+    const selectedFeatureTitles = [];
     let content;
 
 
@@ -25,7 +26,11 @@ export default class AnalysisPanel extends Component {
     if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
       selectedFeats = map.infoWindow.features;
       selectedFeature = map.infoWindow.getSelectedFeature();
+      selectedFeats.forEach(selectedFeat => selectedFeatureTitles.push(selectedFeat._layer.infoTemplate.title(selectedFeat)));
+      //selectedFeatureTitle = selectedFeature._layer.infoTemplate.title(selectedFeature);
     }
+    
+    console.log('selectedFeatureTitles', selectedFeatureTitles);
 
     if (selectedFeature !== undefined &&
       selectedFeature.geometry &&

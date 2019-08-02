@@ -745,16 +745,14 @@ export default class Report extends Component {
   };
 
   render () {
-    const {analysisModules, mapForTable, paramsForTable} = this.state;
+    const {analysisModules, mapForTable, paramsForTable, selectedFeatureTitles} = this.state;
     const params = getUrlParams(location.href);
     const language = params.lang;
-    //const settings = params.settings;
-    console.log('analysisModules', analysisModules);
     
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea params={params} />
+        <ReportAnalysisArea params={params} selectedFeatureTitles={selectedFeatureTitles} />
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {
