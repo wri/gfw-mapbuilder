@@ -216,7 +216,7 @@ export default {
             ka: 'ხის ვარჯის სიხშირის შერჩევა: '
           }
         }
-      ],
+      ]
     },
     {
       analysisId: 'IFL',
