@@ -44,6 +44,9 @@ export default class VegaChart extends Component {
     if (this.props.results.hasOwnProperty('error')) {
       this.handleError();
     } else {
+      this.setState({
+        isLoading: true
+      });
       const config = this.props.results.data.attributes.widgetConfig;
       if (this.props.component === 'Report') {
         if (!config.signals) {
@@ -75,9 +78,6 @@ export default class VegaChart extends Component {
       if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
-        this.setState({
-          isLoading: true
-        });
       }
       const dataset = this.props.results.data.attributes.dataset;
       const id = this.props.results.data.id;
