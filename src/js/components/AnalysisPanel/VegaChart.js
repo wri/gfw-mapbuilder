@@ -286,6 +286,7 @@ export default class VegaChart extends Component {
                   </div>
                 </div>
               }
+              <div className="page-break"></div>
             </div>
             :
             <div className="vega-chart-container">
