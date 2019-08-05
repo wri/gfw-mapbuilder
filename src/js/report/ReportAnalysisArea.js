@@ -16,7 +16,7 @@ export default class ReportAnalysisArea extends Component {
                         {titlesArray && titlesArray.map((title, index) => <li key={`analysis-area-${index}`} className="analysis-area-list-item">{title}</li>)}
                     </ul>
                 </div>
-                <div className="page-break"></div>
+                <div className="page-break-after"></div>
             </div>
         );
     }
