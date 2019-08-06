@@ -753,16 +753,17 @@ export default class Report extends Component {
       <div>
         <ReportHeader />
         <ReportAnalysisArea params={params} />
-        {/* {
+        {
+          (mapForTable !== null && paramsForTable !== null) &&
+          <ReportTable map={mapForTable} params={paramsForTable} />
+        }
+        <div className="page-break-before"></div>
+        {analysisModules.length > 0 &&
+          <div className="analysis-modules-container">
+            {/* {
               (mapForTable !== null && paramsForTable !== null) &&
               <ReportTable map={mapForTable} params={paramsForTable} />
             } */}
-        {analysisModules.length > 0 &&
-          <div className="analysis-modules-container">
-            {
-              (mapForTable !== null && paramsForTable !== null) &&
-              <ReportTable map={mapForTable} params={paramsForTable} />
-            }
             {
               analysisModules.map((module, index) => {
                 return (

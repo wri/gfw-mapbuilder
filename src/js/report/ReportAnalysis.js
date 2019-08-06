@@ -57,6 +57,7 @@ export default class ReportAnalysis extends Component {
         const {results} = this.state;
         return (
             <div className="report-container">
+                {/* <div className="page-break-before"></div> */}
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
                     {results.data && this.renderReportAnalysis(module, params, results, language)}
