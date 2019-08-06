@@ -626,15 +626,19 @@ body
 @media print
 
   html
+    min-height 100%
+    position relative
   body
-    // height 100%
-    // position absolute
-    // top 0
-    // bottom 0
-    // margin auto
-    // margin-top 0px !important 
+    height 100%
     
-  //.map-analysis-area-container
+  .map-analysis-area-container
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    right 0
+    overflow hidden
+    border 1px solid pink
   .analysis-area
     height 50vh
     max-height 50vh
@@ -647,18 +651,32 @@ body
     .analysis-area-list
       font-size 2rem
     
-  // .analysis-modules-container
-  //   margin 0 !important
-  //   border 1px solid red
+  .vega-chart-bar-container
+    margin 0 !important
+    width 50rem !important
+    
+  .vega-chart-line-container
+    margin 0 !important
+    max-width 50rem !important
+    
+  .vega-chart-bar-container > .vega-chart > canvas
+    width 50rem !important
+    
+  .vega-chart-line-container > .vega-chart > canvas
+    width 50rem !important
+    
+  .vega-chart-info
+    width 50rem !important
   
   .report-container
     height 100vh
-    width 100vw
+    //width 100vw
     border 1px solid blue
     margin 0 !important
     
   .vega-chart_container
-    margin 1rem
+    margin 0 !important
+    max-width 50rem !important
   
   .report-header
     background-color #555 !important
