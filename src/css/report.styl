@@ -199,6 +199,7 @@ body
   display flex
   flex-wrap wrap
   margin-top 5rem
+  width 100%
   .esriAttributionList
     display none !important
 
@@ -608,7 +609,9 @@ body
     color #555
     width 50%
 
-.page-break
+.page-break-before
+.page-break-after
+.page-break-inside
   display none
 
 @media (max-width: $mobileBreak)
@@ -621,6 +624,42 @@ body
     margin 0 5px
 
 @media print
+
+  html
+  body
+    // height 100%
+    // position absolute
+    // top 0
+    // bottom 0
+    // margin auto
+    // margin-top 0px !important 
+    
+  //.map-analysis-area-container
+  .analysis-area
+    height 50vh
+    max-height 50vh
+    margin 0
+    border 1px solid black
+    justify-content flex-start
+    .analysis-area-subtitle
+      font-size 3rem
+      margin-top 1rem
+    .analysis-area-list
+      font-size 2rem
+    
+  // .analysis-modules-container
+  //   margin 0 !important
+  //   border 1px solid red
+  
+  .report-container
+    height 100vh
+    width 100vw
+    border 1px solid blue
+    margin 0 !important
+    
+  .vega-chart_container
+    margin 1rem
+  
   .report-header
     background-color #555 !important
     -webkit-print-color-adjust exact
@@ -640,6 +679,10 @@ body
   .page-break-before
     display block
     page-break-before always
+    
+   .page-break-after
+    display block
+    page-break-after always
     
   .page-break-inside
     display block
