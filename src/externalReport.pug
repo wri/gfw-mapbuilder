@@ -1,12 +1,12 @@
 doctype
 html
   head
+    meta(charset='utf-8')
   body
     div#report.report
     div#share-modal.share-modal.hidden
-
-    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/452-update-resources-to-distinguish-chart-types/reportLib.1.4.0.js')
-    meta(charset='utf-8')
+    
+    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/482-print-formatting-issue/reportLib.1.4.0.js')
     script.
       var customApp = new MapBuilderReport({
         config: {
@@ -162,7 +162,7 @@ html
                   ka: 'ხის ვარჯის სიხშირის შერჩევა: '
                 }
               }
-            ],
+            ]
             },
             {
               analysisId: 'TC_LOSS',

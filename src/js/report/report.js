@@ -475,6 +475,9 @@ export default class Report extends Component {
     map.graphics.add(graphic);
 
     const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
+    
+    console.log('hasGraphicsLayers', hasGraphicsLayers);
+    // hasGraphicsLayers is not being used anywhere in our app! So none of the code below will run
 
     if (hasGraphicsLayers) {
       map.graphicsLayerIds.forEach(id => {
@@ -753,15 +756,23 @@ export default class Report extends Component {
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea params={params} selectedFeatureTitles={selectedFeatureTitles} />
+        <ReportAnalysisArea params={params} />
+        {
+          (mapForTable !== null && paramsForTable !== null) &&
+          <ReportTable map={mapForTable} params={paramsForTable} />
+        }
+        <div className="page-break-before"></div>
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {
-              (mapForTable !== null && paramsForTable !== null) &&
-              <ReportTable map={mapForTable} params={paramsForTable} />
-            }
-            {
-              analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
+              analysisModules.map((module, index) => {
+                return (
+                  <div key={`analysis-module-${index}`}>
+                    {/* <div className="page-break-before"></div> */}
+                    <ReportAnalysis params={params} module={module} />
+                  </div>
+                );
+              })
             }
           </div>
         }

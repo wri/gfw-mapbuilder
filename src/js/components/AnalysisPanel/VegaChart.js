@@ -18,7 +18,6 @@ export default class VegaChart extends Component {
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
       chartName: '',
-      toggle: false,
       description: '',
       showSettings: false,
       isLoading: false,
@@ -44,6 +43,9 @@ export default class VegaChart extends Component {
     if (this.props.results.hasOwnProperty('error')) {
       this.handleError();
     } else {
+      this.setState({
+        isLoading: true
+      });
       const config = this.props.results.data.attributes.widgetConfig;
       if (this.props.component === 'Report') {
         if (!config.signals) {
@@ -75,9 +77,6 @@ export default class VegaChart extends Component {
       if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
-        this.setState({
-          isLoading: true
-        });
       }
       const dataset = this.props.results.data.attributes.dataset;
       const id = this.props.results.data.id;
@@ -140,12 +139,6 @@ export default class VegaChart extends Component {
     );
   };
 
-  toggleChart = () => {
-    this.setState({
-      toggle: !this.state.toggle
-    });
-  };
-  
   reRenderChart = (config) => {
     this.setState({
       isLoading: true
@@ -176,14 +169,11 @@ export default class VegaChart extends Component {
     widgetConfig.signals.push(resizeWidthSignal);
     charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
-  
-  
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description, isLoading, showSettings } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, description, isLoading, showSettings } = this.state;
     const {width, height} = this.state.dimensions;
-    const { results, component, reportLabel, module, params, language, analysisId, chartType} = this.props;
-    
+    const { results, component, reportLabel, module, params, language, analysisId, chartType, toggle, toggleChart} = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -198,7 +188,7 @@ export default class VegaChart extends Component {
           }
           {component === 'Report' ?
             <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
-              <h3 className="vega-chart-label">{reportLabel}</h3>
+              <h3 className={`vega-chart-label ${toggle ? 'print-hide' : ''}`}>{reportLabel}</h3>
               <div className='vega-chart-menu-container'>
                 {
                   (
@@ -221,7 +211,7 @@ export default class VegaChart extends Component {
                   <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
                 </div>
                 <div className="vega-chart-divider"></div>
-                <div className={`vega-chart-toggle-${toggle}`} onClick={this.toggleChart}>
+                <div className={`vega-chart-toggle-${toggle}`} onClick={toggleChart}>
                   <span className="vega-chart-toggle-dot"></span>
                 </div>
               </div>
