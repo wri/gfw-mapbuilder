@@ -199,6 +199,7 @@ body
   display flex
   flex-wrap wrap
   margin-top 5rem
+  width 100%
   .esriAttributionList
     display none !important
 
@@ -276,6 +277,7 @@ body
     width 20%
 
 .report-container
+.report-container-hide //pseudo class to use for print!
   display flex
   flex-direction column
   align-items flex-start
@@ -608,6 +610,16 @@ body
     color #555
     width 50%
 
+.page-break-before
+.page-break-after
+.page-break-inside
+  display none
+  
+.esriMapLayers  
+.esriMapLayers > svg
+  width 100vw
+  margin 0 auto
+
 @media (max-width: $mobileBreak)
   .restoration-table
   .restoration__chart
@@ -618,6 +630,71 @@ body
     margin 0 5px
 
 @media print
+
+  html
+    min-height 100%
+    position relative
+  body
+    height 100%
+    
+  .map-analysis-area-container
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    right 0
+    overflow hidden
+  
+  .analysis-modules-container
+      position absolute
+      top 100vh
+
+  .analysis-area
+    height 50vh
+    max-height 50vh
+    margin 0
+    justify-content flex-start
+    .analysis-area-subtitle
+      font-size 3rem
+      margin-top 1rem
+    .analysis-area-list
+      font-size 2rem
+  
+  .report-container
+    height 100vh
+    width 100vw
+    margin 0 !important
+    
+  .report-container-hide
+    height 0 !important
+    width 0 !important
+    display none !important
+    
+  .vega-chart-wrapper
+  .vega-chart_container
+    margin 0 !important
+    width 500px !important
+    margin auto !important
+    padding 0 !important
+    
+  .vega-chart-bar-container
+    margin 0 !important
+    width 500px !important
+    
+  .vega-chart-line-container
+    margin 0 !important
+    width 500px !important
+    
+  .vega-chart-bar-container > .vega-chart > canvas
+    width 500px !important
+    
+  .vega-chart-line-container > .vega-chart > canvas
+    width 500px !important
+  
+  .vega-chart-info
+    width 500px !important
+    margin 0 auto !important
+  
   .report-header
     background-color #555 !important
     -webkit-print-color-adjust exact
@@ -625,9 +702,31 @@ body
       .report-header__title
         color #fff !important
         -webkit-print-color-adjust exact
-  .analysis-area
-    background-color #eee !important
-    -webkit-print-color-adjust exact
+        
+  .vega-chart_download-container-report
+    .vega-chart-label
+      margin 20px auto !important
+    
   .report-header__icon-container
   .vega-chart-menu-container
     display none !important
+  
+  .page-break-before
+    display block
+    page-break-before always
+    
+   .page-break-after
+    display block
+    page-break-after always
+    
+  .page-break-inside
+    display block
+    page-break-inside always
+  
+  .app-loader__active
+    background: rgba(220,220,220,0.75) !important
+    -webkit-print-color-adjust exact
+  
+  .print-hide
+    display none !important
+

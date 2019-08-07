@@ -90,6 +90,8 @@ export default {
    */
   analysisModules: [{
       analysisId: 'TC_LOSS_GAIN',
+      chart: 'vega',
+      chartType: 'badge',
       label: {
         en: 'Total tree cover loss/ gain',
         fr: 'Perte/gain total de la couverture arborée',
@@ -149,10 +151,12 @@ export default {
             ka: 'ხის ვარჯის სიხშირის შერჩევა: '
           }
         }
-      ],
+      ]
     },
     {
       analysisId: 'TC_LOSS',
+      chart: 'vega',
+      chartType: 'bar',
       label: {
         en: 'Annual Tree cover loss',
         fr: 'Pertes de la couverture arborée annuelles',
@@ -212,7 +216,7 @@ export default {
             ka: 'ხის ვარჯის სიხშირის შერჩევა: '
           }
         }
-      ],
+      ]
     },
     {
       analysisId: 'IFL',
