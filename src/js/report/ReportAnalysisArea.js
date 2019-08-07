@@ -5,7 +5,10 @@ export default class ReportAnalysisArea extends Component {
 
     render() {
         const {selectedFeatureTitles} = this.props;
-        const selectedFeatureTitlesArray = selectedFeatureTitles.split(',');
+        let selectedFeatureTitlesArray = [];
+        if (selectedFeatureTitles) {
+            selectedFeatureTitlesArray = selectedFeatureTitles.split(',');
+        }
         return (
             <div className="map-analysis-area-container">
                 <div id="map" className="map"></div>
