@@ -13,7 +13,7 @@ export default class ReportAnalysisArea extends Component {
                 <div id="analysis-area" className="analysis-area">
                     <span className="analysis-area-subtitle">AREA OF ANALYSIS</span>
                     <ul className="analysis-area-list">
-                        {titlesArray && titlesArray.map((title, index) => <li key={`analysis-area-${index}`}className="analysis-area-list-item">{title}</li>)}
+                        {titlesArray && titlesArray.map((title, index) => <li key={`analysis-area-${index}`} className="analysis-area-list-item">{title}</li>)}
                     </ul>
                 </div>
             </div>

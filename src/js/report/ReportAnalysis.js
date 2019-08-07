@@ -6,9 +6,16 @@ export default class ReportAnalysis extends Component {
         super(props);
         this.state = {
             results: {},
-            chartComponent: null
+            chartComponent: null,
+            toggle: false
         };
     }
+    
+    toggleChart = () => {
+        this.setState({
+          toggle: !this.state.toggle
+        });
+      };
 
     createReportAnalysis = () => {
         const {module} = this.props;
@@ -20,7 +27,7 @@ export default class ReportAnalysis extends Component {
         });
     };
 
-    renderReportAnalysis = (module, params, results, language) => {
+    renderReportAnalysis = (module, params, results, language, toggle) => {
         let reportLabel = '';
         if (results.data) {
           reportLabel = module.label[language];
@@ -35,7 +42,7 @@ export default class ReportAnalysis extends Component {
         }
        
         return (
-          <VegaChart module={module} params={params} chartType={chartType} analysisId={analysisId} reportLabel={reportLabel} component='Report' results={results} language={language} />
+          <VegaChart toggle={toggle} toggleChart={this.toggleChart} module={module} params={params} chartType={chartType} analysisId={analysisId} reportLabel={reportLabel} component='Report' results={results} language={language} />
         );
     };
 
@@ -54,12 +61,13 @@ export default class ReportAnalysis extends Component {
     render(){
         const {module, params} = this.props;
         const language = params.lang;
-        const {results} = this.state;
+        const {results, toggle} = this.state;
         return (
-            <div className="report-container">
+            <div className={`${toggle ? 'report-container-hide' : 'report-container'}`}>
+                <div className="page-break-before"></div>
                 <div className="vega-chart-wrapper">
                     {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && this.renderReportAnalysis(module, params, results, language)}
+                    {results.data && this.renderReportAnalysis(module, params, results, language, toggle)}
                 </div>
             </div>
         );
