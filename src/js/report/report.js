@@ -772,9 +772,9 @@ export default class Report extends Component {
             {
               analysisModules.map((module, index) => {
                 return (
-                  <div>
+                  <div key={`analysis-module-${index}`}>
                     <div className="page-break-before"></div>
-                    <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />
+                    <ReportAnalysis params={params} module={module} />
                   </div>
                 );
               })
