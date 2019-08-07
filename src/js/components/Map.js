@@ -218,8 +218,8 @@ export default class Map extends Component {
           const mapPt = response.map.toMap(screenPt);
           // Note: Lat and lon are intentionally reversed until imagery api is fixed.
           // The imagery API only returns the correct image for that lat/lon if they are reversed.
-          params.lon = mapPt.getLatitude();
-          params.lat = mapPt.getLongitude();
+          params.lat = mapPt.getLatitude();
+          params.lon = mapPt.getLongitude();
 
           mapActions.getSatelliteImagery(params);
         });

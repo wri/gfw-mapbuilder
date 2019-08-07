@@ -73,6 +73,8 @@ export default class ImageryModal extends Component {
         visible: true
       };
 
+      console.log('options', options);
+
       imageryLayer = new GFWImageryLayer(options);
       map.addLayer(imageryLayer);
       map.reorderLayer(layerKeys.RECENT_IMAGERY, 1); // Should be underneath all other layers
