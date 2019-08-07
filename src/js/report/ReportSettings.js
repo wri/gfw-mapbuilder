@@ -339,7 +339,7 @@ export default class ReportSettings extends Component {
               <div className='analysis-results__select-form custom-scroll'>
                 {this.getFormComponents()}
               </div>
-              <div className='run-report-analysis-button-container'>
+              <div className='run-report-analysis-button-container print-hide'>
                 <button className='run-report-analysis-button pointer' onClick={this.runAnalysis}>
                   {text[language].RUN_ANALYSIS_BUTTON_TEXT}
                 </button>

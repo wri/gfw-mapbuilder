@@ -477,8 +477,6 @@ export default class Report extends Component {
     const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
     
     console.log('hasGraphicsLayers', hasGraphicsLayers);
-    console.log('map', map);
-    
     // hasGraphicsLayers is not being used anywhere in our app! So none of the code below will run
 
     if (hasGraphicsLayers) {
