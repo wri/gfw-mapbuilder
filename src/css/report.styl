@@ -343,6 +343,7 @@ body
     align-items center
     justify-content space-between
     width 100%
+    max-width 60rem 
     .vega-chart-menu-container
       display flex
       flex-flow row
@@ -545,6 +546,10 @@ body
     
 .analysis-results__select-form-item-container > .tree-cover-canopy-display
   margin 0 auto
+  
+.report-table-container
+  max-width 60rem
+  margin 0 auto
 
 @media (max-width 550px)
   .report-header__title
@@ -564,6 +569,7 @@ body
         align-items center
         justify-content center
         width: 100%
+        max-width 60rem
       .vega-chart-label
         text-transform uppercase
         text-align center
@@ -694,6 +700,9 @@ body
   .vega-chart-info
     width 500px !important
     margin 0 auto !important
+    
+  .report-table-container
+    width 500px !important
   
   .report-header
     background-color #555 !important
@@ -704,6 +713,7 @@ body
         -webkit-print-color-adjust exact
         
   .vega-chart_download-container-report
+    width 500px !important
     .vega-chart-label
       margin 20px auto !important
     
@@ -729,4 +739,3 @@ body
   
   .print-hide
     display none !important
-

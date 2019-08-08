@@ -764,15 +764,10 @@ export default class Report extends Component {
         <div className="page-break-before"></div>
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
-            {/* {
-              (mapForTable !== null && paramsForTable !== null) &&
-              <ReportTable map={mapForTable} params={paramsForTable} />
-            } */}
             {
               analysisModules.map((module, index) => {
                 return (
                   <div key={`analysis-module-${index}`}>
-                    {/* <div className="page-break-before"></div> */}
                     <ReportAnalysis params={params} module={module} />
                   </div>
                 );
