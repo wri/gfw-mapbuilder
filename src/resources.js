@@ -92,7 +92,7 @@ export default {
         "zh": "选择森林覆盖密度: ",
         "ka": "ხის ვარჯის სიხშირის შერჩევა: "
       }
-    ]
+    }]
     },
     {
       analysisId: 'TC_LOSS',
