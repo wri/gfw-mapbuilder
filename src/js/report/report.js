@@ -751,11 +751,12 @@ export default class Report extends Component {
     const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
     const language = params.lang;
-    
+    const selectedFeatureTitles = params.selectedFeatureTitles;
+
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea params={params} />
+        <ReportAnalysisArea params={params} selectedFeatureTitles={selectedFeatureTitles} />
         {
           (mapForTable !== null && paramsForTable !== null) &&
           <ReportTable map={mapForTable} params={paramsForTable} />
@@ -763,15 +764,10 @@ export default class Report extends Component {
         <div className="page-break-before"></div>
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
-            {/* {
-              (mapForTable !== null && paramsForTable !== null) &&
-              <ReportTable map={mapForTable} params={paramsForTable} />
-            } */}
             {
               analysisModules.map((module, index) => {
                 return (
                   <div key={`analysis-module-${index}`}>
-                    {/* <div className="page-break-before"></div> */}
                     <ReportAnalysis params={params} module={module} />
                   </div>
                 );

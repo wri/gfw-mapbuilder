@@ -30,9 +30,6 @@ export default class ReportSubscribeButtons extends Component {
   printReport = () => {
     const { map, settings, language } = this.context;
     const selectedFeature = map.infoWindow && map.infoWindow.getSelectedFeature();
-    //This will create an array of the titles when we add in functionality for more than one feature to be displayed in the analysis area in the report
-    // const selectedFeatureObj = map.infoWindow.getSelectedFeature();
-    // const selectedFeatureTitles = selectedFeatureObj.attributes.title.split(',');
     const {
       canopyDensity,
       activeSlopeClass,
@@ -49,9 +46,10 @@ export default class ReportSubscribeButtons extends Component {
       modisStartDate,
       modisEndDate,
       activeFilters,
-      activeVersions
+      activeVersions,
+      selectedFeatureTitles
     } = mapStore.getState();
-
+    
     if (selectedFeature) {
 
       const params = getUrlParams(location.href);
@@ -75,7 +73,7 @@ export default class ReportSubscribeButtons extends Component {
         settings,
         activeFilters: [],
         activeVersions: [],
-        //selectedFeatureTitles
+        selectedFeatureTitles: selectedFeatureTitles
       };
 
       if (params.appid) {
