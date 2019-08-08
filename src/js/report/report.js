@@ -207,9 +207,8 @@ export default class Report extends Component {
       //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
       //- sort by order from the layer config
       //- return an arcgis layer for each config object
-      //esriLayers returns an empty array!!!
-      const esriLayers = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
-      esriLayers.map((layer) => {
+      const esriLayersConfig = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
+      const esriLayers = esriLayersConfig.map((layer) => {
         // Check for active versions matching the layer id
         let layerConfig, filterField;
         Object.keys(resources.layerPanel).forEach((group) => {
@@ -240,9 +239,7 @@ export default class Report extends Component {
         }
         // return layerFactory(layer, language);
         
-        //Need to get layer in order to grab correct name of map layer for report!!!!
         const mapLayer = layerFactory(layer, language);
-        
 
         // If there are active filters, set definition expressions on layer.
         if (filterField && layer.type === 'feature') {
