@@ -244,7 +244,6 @@ const request = {
 
     const recentTilesUrl = new URL(urls.satelliteImageService);
     Object.keys(params).forEach(key => recentTilesUrl.searchParams.append(key, params[key]));
-    console.log('params', params);
 
     this.fetchTiles(recentTilesUrl).then(response => {
       if (response.errors) {
