@@ -216,8 +216,7 @@ export default class Map extends Component {
           const screenPt = new ScreenPoint(xVal, yVal);
           // Convert screen point to map point and zoom to point;
           const mapPt = response.map.toMap(screenPt);
-          // Note: Lat and lon are intentionally reversed until imagery api is fixed.
-          // The imagery API only returns the correct image for that lat/lon if they are reversed.
+
           params.lat = mapPt.getLatitude();
           params.lon = mapPt.getLongitude();
 
