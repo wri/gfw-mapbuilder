@@ -138,9 +138,9 @@ describe('An actual test on our app', function () {
 
             if (module.useGfwWidget) {
               expect(module).to.have.property('widgetId');
-              expect(module).not.to.have.property('chart');
+              expect(module).to.have.property('chartType');
             } else {
-              expect(module).to.have.property('chart');
+              expect(module).not.to.have.property('chartType');
             }
 
             // if (module.params) {
@@ -153,21 +153,21 @@ describe('An actual test on our app', function () {
             // }
 
             if (module.analysisId !== 'LCC') {
-              // expect(module.chart).not.toEqual('lccPie');
-              expect(module.chart).to.not.equal('lccPie');
+              // expect(module.chartType).not.toEqual('lccPie');
+              expect(module.chartType).to.not.equal('pie');
             }
 
             if (module.analysisId !== 'BIO_LOSS') {
-              expect(module.chart).to.not.equal('biomassLoss');
-              // expect(module.chart).not.toEqual('biomassLoss');
+              expect(module.chartType).to.not.equal('bar');
+              // expect(module.chartType).not.toEqual('biomassLoss');
             }
 
-            if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chart === 'badge') {
+            if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chartType === 'badge') {
               expect(module).to.have.property('badgeLabel');
               expect(module.badgeLabel).to.have.property(config.language);
             }
 
-            if (module.chart === 'bar') {
+            if (module.chartType === 'bar') {
               expect(module).to.have.property('chartBounds');
               expect(module.chartBounds).to.have.lengthOf(2);
             }

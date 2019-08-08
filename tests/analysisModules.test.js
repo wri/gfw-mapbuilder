@@ -16,9 +16,9 @@ test('analysis module spec', () => {
 
     if (module.useGfwWidget) {
       expect(module).toHaveProperty('widgetId');
-      expect(module).not.toHaveProperty('chart');
+      expect(module).toHaveProperty('chartType');
     } else {
-      expect(module).toHaveProperty('chart');
+      expect(module).not.toHaveProperty('chartType');
     }
 
     if (module.params) {
@@ -31,19 +31,19 @@ test('analysis module spec', () => {
     }
 
     if (module.analysisId !== 'LCC') {
-      expect(module.chart).not.toEqual('lccPie');
+      expect(module.chartType).not.toEqual('pie');
     }
 
     if (module.analysisId !== 'BIO_LOSS') {
-      expect(module.chart).not.toEqual('biomassLoss');
+      expect(module.chartType).not.toEqual('bar');
     }
 
-    if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chart === 'badge') {
+    if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chartType === 'badge') {
       expect(module).toHaveProperty('badgeLabel');
       expect(module.badgeLabel).toHaveProperty(resources.language);
     }
 
-    if (module.chart === 'bar') {
+    if (module.chartType === 'bar') {
       expect(module).toHaveProperty('chartBounds');
       expect(module.chartBounds).toBeInstanceOf(Array);
       expect(module.chartBounds).toHaveLength(2);

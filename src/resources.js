@@ -89,45 +89,8 @@ export default {
   * (geostore is automatically appended with each request)
   */
   analysisModules: [{
-    analysisId: 'TC_LOSS_GAIN',
-    chart: 'vega',
-    chartType: 'badge',
-    label: {
-      en: 'Total tree cover loss/ gain',
-      fr: 'Perte/gain total de la couverture arborée',
-      es: 'Pérdida/ganancia de cobertura arbórea total',
-      pt: 'Perda/ganho total de cobertura arbórea',
-      id: 'Total kehilangan/perolehan tutupan pohon ',
-      zh: '总森林覆盖减少/增加面积量',
-      ka: 'ხის ვარჯის საერთო კარგვა / მატება'
-    },
-    title: {
-      en: 'Total tree cover loss/ gain',
-      fr: 'Perte/gain total de la couverture arborée',
-      es: 'Pérdida/ganancia de cobertura arbórea total',
-      pt: 'Perda/ganho total de cobertura arbórea',
-      id: 'Total kehilangan/perolehan tutupan pohon ',
-      zh: '总森林覆盖减少/增加面积量',
-      ka: 'ხის ვარჯის საერთო კარგვა / მატება'
-    },
-    description: {
-      en: 'Select range and tree cover density for loss data then click the run analysis button to see results. Gain data is currently only available for 2000 – 2012 and the gain analysis will always reflect the full 12-year time-period.',
-      fr: 'Sélectionner la plage et la densité de couverture arborée pour les données de perte, puis cliquer sur le bouton « lancer l’analyse » pour voir les résultats. Les données de gain ne sont actuellement disponibles que pour 2000 – 2012 et l’analyse de gain reflétera toujours la plage de 12 ans entière.',
-      es: 'Para obtener los datos sobre pérdida, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis para ver los resultados. Los datos sobre ganancia actualmente solo están disponibles para los años 2000 a 2012 y el análisis de la ganancia siempre reflejará el periodo de 12 años completo.',
-      pt: 'Selecione o período e a densidade de cobertura arbórea para dados de perda; em seguida, clique no botão para executar a análise e ver os resultados. Os dados de ganho estão disponíveis atualmente apenas para o período 2000 – 2012 e a análise de ganho sempre refletirá o período completo de 12 anos.',
-      id: 'Pilih rentang dan kerapatan tutupan pohon untuk data yang hilang, kemudian klik tombol mulai analisis untuk melihat hasilnya. Data perolehan saat ini hanya tersedia untuk periode 2000 – 2012 dan analisis perolehan akan selalu mencerminkan periode waktu 12 tahun penuh.',
-      zh: '选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。',
-      ka: 'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
-    },
-    useGfwWidget: true,
-    widgetId: '95c2c559-ca78-4b7a-b18b-7b2bca14ce83',
-    uiParams: [{
-      inputType: 'rangeSlider',
-      startParamName: 'period',
-      combineParams: true,
-      valueSeparator: ',',
-      bounds: [2001, 2018],
-      valueType: 'date',
+      analysisId: 'TC_LOSS_GAIN',
+      chartType: 'badge',
       label: {
         en: 'Select range for analysis',
         fr: 'Sélectionner une plage pour l’analyse:',
@@ -155,7 +118,6 @@ export default {
     },
     {
       analysisId: 'TC_LOSS',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'Annual Tree cover loss',
@@ -220,7 +182,6 @@ export default {
     },
     {
       analysisId: 'IFL',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'Annual tree cover loss in IFL',
@@ -289,7 +250,6 @@ export default {
     },
     {
       analysisId: 'Loss_LandCover',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'Annual tree cover loss by land cover class',
@@ -358,7 +318,6 @@ export default {
     },
     {
       analysisId: 'BIO_LOSS',
-      chart: 'vega',
       chartType: 'bar',
       label: {
         en: 'CO2 emissions from biomass loss',
@@ -423,7 +382,6 @@ export default {
     },
     {
       analysisId: 'GLAD_ALERTS',
-      chart: 'vega',
       chartType: 'line',
       label: {
         en: 'GLAD alerts per month',
@@ -458,7 +416,6 @@ export default {
     },
     {
       analysisId: 'TOTAL_GLAD_ALERTS',
-      chart: 'vega',
       chartType: 'badge',
       label: {
         en: 'Total GLAD Alerts',
@@ -510,7 +467,6 @@ export default {
     },
     {
       analysisId: 'VIIRS_FIRES',
-      chart: 'vega',
       chartType: 'badge',
       label: {
         en: 'VIIRS Active Fires',
@@ -545,7 +501,6 @@ export default {
     },
     {
       analysisId: 'LCC',
-      chart: 'vega',
       chartType: 'pie',
       label: {
         en: 'Land Cover Composition',

@@ -694,7 +694,6 @@ export default class Report extends Component {
       uiParamsToAppend.geostore = geostoreId;
 
       if (module.useGfwWidget) {
-        //module.chartType = 'vega';
         module.reportParams = uiParamsToAppend;
       }
     });
