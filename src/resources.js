@@ -734,7 +734,6 @@ export default {
       }]
     },
     "otherFieldsModules": ""
-  }
 };
 
 // Congo Config for testing
