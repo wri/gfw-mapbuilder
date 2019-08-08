@@ -87,6 +87,7 @@ class MapStore {
     this.imageryParams = null;
     this.imageryHoverInfo = null;
     this.activeFilters = {};
+    this.selectedFeatureTitles = [];
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -135,6 +136,7 @@ class MapStore {
       updateViirsEndDate: layerActions.updateViirsEndDate,
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
+      updateSelectedFeatureTitles: layerActions.updateSelectedFeatureTitles,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -523,6 +525,10 @@ class MapStore {
 
   updateModisEndDate (endDate) {
     this.modisEndDate = endDate;
+  }
+  
+  updateSelectedFeatureTitles (selectedFeatureTitles) {
+    this.selectedFeatureTitles = selectedFeatureTitles;
   }
 
   showLayerInfo (layer) {

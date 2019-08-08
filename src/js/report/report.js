@@ -207,9 +207,8 @@ export default class Report extends Component {
       //- remove layers from config that have no url unless they are of type graphic(which have no url) or if it has multiple versions.
       //- sort by order from the layer config
       //- return an arcgis layer for each config object
-      //esriLayers returns an empty array!!!
-      const esriLayers = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
-      esriLayers.map((layer) => {
+      const esriLayersConfig = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
+      const esriLayers = esriLayersConfig.map((layer) => {
         // Check for active versions matching the layer id
         let layerConfig, filterField;
         Object.keys(resources.layerPanel).forEach((group) => {
@@ -240,9 +239,7 @@ export default class Report extends Component {
         }
         // return layerFactory(layer, language);
         
-        //Need to get layer in order to grab correct name of map layer for report!!!!
         const mapLayer = layerFactory(layer, language);
-        console.log('mapLayer', mapLayer);
 
         // If there are active filters, set definition expressions on layer.
         if (filterField && layer.type === 'feature') {
@@ -475,6 +472,9 @@ export default class Report extends Component {
     map.graphics.add(graphic);
 
     const hasGraphicsLayers = map.graphicsLayerIds.length > 0;
+    
+    console.log('hasGraphicsLayers', hasGraphicsLayers);
+    // hasGraphicsLayers is not being used anywhere in our app! So none of the code below will run
 
     if (hasGraphicsLayers) {
       map.graphicsLayerIds.forEach(id => {
@@ -747,21 +747,27 @@ export default class Report extends Component {
     const {analysisModules, mapForTable, paramsForTable} = this.state;
     const params = getUrlParams(location.href);
     const language = params.lang;
-    //const settings = params.settings;
-    console.log('analysisModules', analysisModules);
-    
+    const selectedFeatureTitles = params.selectedFeatureTitles;
+
     return (
       <div>
         <ReportHeader />
-        <ReportAnalysisArea params={params} />
+        <ReportAnalysisArea params={params} selectedFeatureTitles={selectedFeatureTitles} />
+        {
+          (mapForTable !== null && paramsForTable !== null) &&
+          <ReportTable map={mapForTable} params={paramsForTable} />
+        }
+        <div className="page-break-before"></div>
         {analysisModules.length > 0 &&
           <div className="analysis-modules-container">
             {
-              (mapForTable !== null && paramsForTable !== null) &&
-              <ReportTable map={mapForTable} params={paramsForTable} />
-            }
-            {
-              analysisModules.map((module, index) => <ReportAnalysis params={params} module={module} key={`analysis-module-${index}`} />)
+              analysisModules.map((module, index) => {
+                return (
+                  <div key={`analysis-module-${index}`}>
+                    <ReportAnalysis params={params} module={module} />
+                  </div>
+                );
+              })
             }
           </div>
         }

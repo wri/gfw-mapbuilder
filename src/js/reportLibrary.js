@@ -63,10 +63,8 @@ var MapBuilderReport = function(args){
 
   };
 
-  window.customApp = {
-    ...args
-  };
-
+  window.customApp = args;
+  
   this.constructorArgs = args;
   this.init(args);
 };
