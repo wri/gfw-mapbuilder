@@ -98,7 +98,7 @@
     padding-bottom 10px
     font-size 13px
   & .share-items
-    justify-content space-evenly
+    justify-content center
     display flex
     & svg
       transform translate(-50%, -50%)
@@ -122,17 +122,19 @@
 
 .facebook-modal
   background $facebookBlue
+  margin 0 0.5rem
   &:hover
     background darken($facebookBlue, 25%)
 
 .twitter-modal
   background $twitterBlue
+  margin 0 0.5rem
   &:hover
     background darken($twitterBlue, 25%)
 
 .share-input
   margin-bottom 15px
-  height 40px
+  //height 40px
   & input
     border 1px solid $lightGrayBorder
     text-align center
