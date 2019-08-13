@@ -7,12 +7,9 @@
 .analysis-instructions
 .analysis-instructions__draw
 .analysis-instructions__upload
-  color $grayFont
-  padding 10px
-  
 .analysis-instructions__coordinates
   color $grayFont
-  padding 0 3rem
+  padding 10px
 
 .analysis-instructions__header
   font-weight 400
@@ -71,9 +68,20 @@
     fill $darkGray
 
 .analysis-instructions__draw-button
+  // text-transform uppercase
+  // font-weight bold
+  // margin 15px
+  // min-width 175px
   text-transform uppercase
   font-weight bold
   margin 15px
+  display flex
+  align-items center
+  justify-content center
+  margin-bottom 35px
+  min-width 175px
+  .analysis-instructions__enter-values-icon
+    margin 0 0.5rem
   
 .analysis-instructions__coordinates-button
   text-transform uppercase
@@ -83,6 +91,7 @@
   align-items center
   justify-content center
   margin-bottom 35px
+  min-width 175px
   .analysis-instructions__enter-values-icon
     margin 0 0.5rem
 
