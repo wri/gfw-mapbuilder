@@ -1,32 +1,51 @@
 import React, {Component} from 'react';
 import analysisUtils from 'utils/analysisUtils';
 import VegaChart from '../components/AnalysisPanel/VegaChart';
-import Loader from './../components/Loader';
-
 export default class ReportAnalysis extends Component {
     constructor(props){
         super(props);
         this.state = {
             results: {},
-            isLoading: false
+            chartComponent: null,
+            toggle: false
         };
     }
     
-    createReportAnalysis = () => {
+    toggleChart = () => {
         this.setState({
-            isLoading: true
+          toggle: !this.state.toggle
         });
+      };
+
+    createReportAnalysis = () => {
         const {module} = this.props;
-        console.log('module', module);
         const reportParams = module.reportParams;
         analysisUtils.getCustomAnalysis(module, reportParams).then(results => {
             this.setState({
-                results: results,
-                isLoading: false
+                results
             });
         });
-    }
-    
+    };
+
+    renderReportAnalysis = (module, params, results, language, toggle) => {
+        let reportLabel = '';
+        if (results.data) {
+          reportLabel = module.label[language];
+        }
+        let analysisId = null;
+        if (module && module.analysisId) {
+            analysisId = module.analysisId;
+        }
+        let chartType = null;
+        if (module && module.chartType) {
+            chartType = module.chartType;
+        }
+       
+        return (
+          <VegaChart toggle={toggle} toggleChart={this.toggleChart} module={module} params={params} chartType={chartType} analysisId={analysisId} reportLabel={reportLabel} component='Report' results={results} language={language} />
+        );
+    };
+
     handleReportAnalysisError = analysisId => {
         return (
             <div className="vega-chart-error">
@@ -34,25 +53,21 @@ export default class ReportAnalysis extends Component {
             </div>
         );
     }
-    
+
     componentDidMount(){
         this.createReportAnalysis();
     }
-    
+
     render(){
         const {module, params} = this.props;
         const language = params.lang;
-        const {results, isLoading} = this.state;
-        let reportLabel = '';
-        if(results.data){
-            reportLabel = module.label[language];
-        }
+        const {results, toggle} = this.state;
         return (
-            <div className="report-container">
+            <div className={`${toggle ? 'report-container-hide' : 'report-container'}`}>
+                <div className="page-break-before"></div>
                 <div className="vega-chart-wrapper">
-                    <Loader active={isLoading} />
-                    {!results.data && results.error && this.handleReportAnalysisError(module.analysisId)}
-                    {results.data && <VegaChart module={module} reportLabel={reportLabel} component='Report' results={results} language={language} setLoading={() => this.setState({isLoading: false})} />}
+                    {(!results.data && results.error) && this.handleReportAnalysisError(module.analysisId)}
+                    {results.data && this.renderReportAnalysis(module, params, results, language, toggle)}
                 </div>
             </div>
         );

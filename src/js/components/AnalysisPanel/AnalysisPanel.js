@@ -21,7 +21,6 @@ export default class AnalysisPanel extends Component {
     let selectedFeature, selectedFeats;
     let content;
 
-
     //- Infer the selected feature from the info window
     if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
       selectedFeats = map.infoWindow.features;

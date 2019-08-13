@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import charts from 'utils/charts';
 import SVGIcon from 'utils/svgIcon';
 import { urls } from 'js/config';
+import ReportSettings from '../../report/ReportSettings';
+import Loader from '../Loader';
 import Measure from 'react-measure';
 
 export default class VegaChart extends Component {
@@ -16,17 +18,22 @@ export default class VegaChart extends Component {
       chartDownloadTitle: 'analysis.png',
       chartImgDownloadUrl: null,
       chartName: '',
-      toggle: false,
+      description: '',
+      showSettings: false,
+      isLoading: false,
       dimensions: {
         width: -1,
         height: -1
-      },
-      description: ''
+      }
     };
   }
 
   handleError(errorMsg) {
-    this.setState({ isError: true, errorMsg });
+    this.setState({
+      isError: true,
+      errorMsg,
+      isLoading: false
+    });
     if (this.props.setLoading) {
       this.props.setLoading();
     }
@@ -36,9 +43,19 @@ export default class VegaChart extends Component {
     if (this.props.results.hasOwnProperty('error')) {
       this.handleError();
     } else {
+      this.setState({
+        isLoading: true
+      });
       const config = this.props.results.data.attributes.widgetConfig;
       if (this.props.component === 'Report') {
-          
+        if (!config.signals) {
+          config.signals = [];
+        }
+        config.autosize = {
+          type: 'fit',
+          resize: true
+        };
+
         const resizeWidthSignal = {
           name: "width",
           update: "containerSize()[0]*0.95",
@@ -53,16 +70,10 @@ export default class VegaChart extends Component {
             }
           ]
         };
-        
-        config.autosize = {type: 'fit', resize: true};
-        if (!config.signals) {
-          config.signals = [];
-        }
-        
         config.signals.push(resizeWidthSignal);
       }
 
-      const {setLoading, language, results} = this.props;
+      const {setLoading, language} = this.props;
       if (config.data[0].url.indexOf('?&') > -1) {
         const urlPieces = config.data[0].url.split('?&');
         config.data[0].url = `${urlPieces[0]}?${urlPieces[1]}`;
@@ -74,12 +85,14 @@ export default class VegaChart extends Component {
           res.json().then(json => {
             if (res.status !== 200) {
               this.setState({
-                description: 'Error retrieving description'
+                description: `Error retrieving description for ${this.props.reportLabel}`
               });
             } else {
-              this.setState({
-                description: json.data[0].attributes.description
-              });
+              if (json.data && json.data.length > 0 && json.data[0].attributes) {
+                this.setState({
+                  description: json.data[0].attributes.description
+                });
+              }
             }
           });
         });
@@ -87,7 +100,7 @@ export default class VegaChart extends Component {
 
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
-          this.handleError('Error creating analysis.');
+          this.handleError(`Error creating analysis for ${this.props.reportLabel}`);
         } else {
           res.json().then(json => {
             charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
@@ -98,42 +111,69 @@ export default class VegaChart extends Component {
               downloadOptions.push({label, url: downloadUrls[label]});
             }
             const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
-            this.setState({ downloadOptions, chartDownloadTitle });
-          });
+            this.setState({
+              downloadOptions,
+              chartDownloadTitle
+            });
+          }).then(
+            this.setState({
+              isLoading: false
+            })
+          );
         }
       })
-      .catch(() => this.handleError('Error creating analysis.'));
+      .catch(() => this.handleError(`Error creating analysis for ${this.props.reportLabel}`));
     }
   }
 
   addChartDownload = (url) => {
-    this.setState({ chartImgDownloadUrl: url });
+    this.setState({ chartImgDownloadUrl: url, isLoading: false });
   };
 
   renderdownloadOptions = (option, i) => {
     const baseUrl = urls.analysisDataBaseUrl;
     return (
-      <a href={option.url.includes('cartodb') ? option.url : baseUrl + option.url} target="_blank" download key={`option-${i}`}>
+      <a className="download-option" href={option.url.includes('cartodb') ? option.url : baseUrl + option.url} target="_blank" download key={`option-${i}`}>
         <span className='download-option-label'>Download Alerts as .CSV</span>
       </a>
     );
   };
 
-  toggleChart = () => {
+  reRenderChart = (config) => {
     this.setState({
-      toggle: !this.state.toggle
+      isLoading: true
     });
+    const {language, setLoading} = this.props;
+    const widgetConfig = config.data.attributes.widgetConfig;
+    widgetConfig.autosize = {
+      type: 'fit',
+      resize: true
+    };
+    if (!widgetConfig.signals) {
+      widgetConfig.signals = [];
+    }
+    const resizeWidthSignal = {
+      name: "width",
+      update: "containerSize()[0]*0.95",
+      value: "",
+      on: [
+        {
+          events: {
+            source: "window",
+            type: "resize"
+          },
+          update: "containerSize()[0]*0.95"
+        }
+      ]
+    };
+    widgetConfig.signals.push(resizeWidthSignal);
+    charts.makeVegaChart(this.chart, widgetConfig, language, setLoading, this.addChartDownload);
   };
 
   render() {
-    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, toggle, description } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, description, isLoading, showSettings } = this.state;
     const {width, height} = this.state.dimensions;
-    const { results, component, reportLabel, module } = this.props;
-    let analysisId = null;
-    if (module && module.analysisId){
-      analysisId = module.analysisId;
-    }
-
+    const { results, component, reportLabel, module, params, language, analysisId, chartType, toggle, toggleChart} = this.props;
     if (isError) {
       return (
         <div className='data-error'>
@@ -147,35 +187,51 @@ export default class VegaChart extends Component {
             <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div>
           }
           {component === 'Report' ?
-          <div className='vega-chart_download-container'>
-            {/* <h3 className="vega-chart-label">{results.data.attributes.name}</h3> */}
-            <h3 className="vega-chart-label">{reportLabel}</h3>
-            <div className='vega-chart-menu-container'>
-              <div className='vega-chart-menu' onClick={() => console.log('clicked')}>
-                <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
-                {/* <span className="vega-chart-menu-text">SETTINGS</span> */}
+            <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
+              <h3 className={`vega-chart-label ${toggle ? 'print-hide' : ''}`}>{reportLabel}</h3>
+              <div className='vega-chart-menu-container'>
+                {
+                  (
+                  analysisId === 'TC_LOSS' ||
+                  analysisId === 'TC_LOSS_GAIN' ||
+                  analysisId === 'IFL' ||
+                  analysisId === 'Loss_LandCover' ||
+                  analysisId === 'BIO_LOSS' ||
+                  analysisId === 'TOTAL_GLAD_ALERTS'
+                  ) ?
+                  <div className="vega-chart-menu-settings">
+                    <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
+                      <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
+                    </div>
+                    <div className="vega-chart-divider"></div>
+                  </div> :
+                  null
+                }
+                <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+                  <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
+                </div>
+                <div className="vega-chart-divider"></div>
+                <div className={`vega-chart-toggle-${toggle}`} onClick={toggleChart}>
+                  <span className="vega-chart-toggle-dot"></span>
+                </div>
               </div>
-              <div className="vega-chart-divider"></div>
-              <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
-              </div>
-              <div className="vega-chart-divider"></div>
-              <div className={`vega-chart-toggle-${toggle}`} onClick={this.toggleChart}>
-                <span className="vega-chart-toggle-dot"></span>
+            </div> :
+            <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
+              <h3 className="vega-chart-label">{reportLabel}</h3>
+              <div className='vega-chart-menu-container'>
+                <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+                  <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
+                </div>
               </div>
             </div>
-          </div> :
-          <div className='vega-chart_download-container'>
-            <h3 className="vega-chart-label">{reportLabel}</h3>
-            <div className='vega-chart-menu-container'>
-              <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
-                <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
-              </div>
+          }
+          {component === 'Report' &&
+            <div className={`vega-chart-report-settings-container ${(showSettings && !toggle) ? '' : 'vega-chart-hide'}`}>
+              <ReportSettings module={module} params={params} language={language} reRenderChart={this.reRenderChart} />
             </div>
-          </div>
           }
           { showDownloadOptions &&
-            <div className='vega-chart_download-options' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+            <div className={component === 'Report' ? 'vega-chart_download-options-report' : 'vega-chart_download-options'} onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
               {downloadOptions.map(this.renderdownloadOptions)}
               {this.chart &&
                 <a className="download-option" href={chartImgDownloadUrl} download={chartDownloadTitle}>
@@ -185,7 +241,13 @@ export default class VegaChart extends Component {
             </div>
           }
           {component === 'Report' ?
-          <div>
+          <div className={`loader-wrapper ${toggle ? 'vega-chart-hide' : ''}`}>
+              {
+                isLoading &&
+                <div className="loader">
+                  <Loader active={isLoading} />
+                </div>
+              }
               <Measure
                 bounds
                 onResize={contentRect => {
@@ -193,16 +255,27 @@ export default class VegaChart extends Component {
                 }}
               >
                 {({ measureRef }) => (
-                  <div className={`${analysisId && (analysisId === 'TC_LOSS_GAIN' || analysisId === 'GLAD_ALERTS_Badge' || analysisId === 'VIIRS_FIRES') ? 'vega-chart-badge-container' : 'vega-chart-container'}`} ref={measureRef}>
-                    <div width={width} height={height} className={`vega-chart ${toggle && 'vega-chart-hide'}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+                  <div
+                    ref={measureRef}
+                    className={
+                    `${chartType && chartType === 'bar' && 'vega-chart-bar-container'}
+                    ${chartType && chartType === 'line' && 'vega-chart-line-container'}
+                    ${chartType && chartType === 'badge' && 'vega-chart-badge-container'}
+                    ${chartType && chartType === 'pie' && 'vega-chart-pie-container'}
+                    ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`
+                    }
+                  >
+                    <div width={width} height={height} className={`vega-chart ${(toggle || isLoading) ? 'vega-chart-hidden' : ''}`} id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
                   </div>
                 )}
               </Measure>
-              <div className={`vega-chart-info-container ${toggle && 'vega-chart-hide'}`}>
-                <div className="vega-chart-info">
-                    {description}
+              {!isLoading && description && description !== '' &&
+                <div className={`vega-chart-info-container ${toggle ? 'vega-chart-hide' : ''}`}>
+                  <div className="vega-chart-info">
+                      {description}
+                  </div>
                 </div>
-              </div>
+              }
             </div>
             :
             <div className="vega-chart-container">

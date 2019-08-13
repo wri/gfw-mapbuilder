@@ -6,6 +6,7 @@ import Report from './report/report';
 import ShareModal from './components/Modals/ShareModal';
 import 'babel-polyfill';
 
+
 class ReportMain extends Component {
   constructor(props) {
     super(props);
@@ -26,4 +27,3 @@ class ReportMain extends Component {
 
 ReactDOM.render(<ReportMain />, document.getElementById('report'));
 ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
-
