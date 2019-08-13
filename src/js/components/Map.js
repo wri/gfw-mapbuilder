@@ -3,6 +3,7 @@
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
 import AnalysisModal from 'components/Modals/AnalysisModal';
+import CoordinatesModal from 'components/Modals/CoordinatesModal';
 import Controls from 'components/MapControls/ControlPanel';
 import TimeWidget from 'components/MapControls/TimeWidget';
 import CanopyModal from 'components/Modals/CanopyModal';
@@ -883,6 +884,7 @@ export default class Map extends Component {
       currentTimeExtent,
       printModalVisible,
       analysisModalVisible,
+      coordinatesModalVisible,
       searchModalVisible,
       canopyModalVisible,
       layerModalVisible,
@@ -951,6 +953,9 @@ export default class Map extends Component {
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
+        </div>
+        <div className={`coordinates-modal-container modal-wrapper ${coordinatesModalVisible ? '' : 'hidden'}`}>
+          <CoordinatesModal />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />

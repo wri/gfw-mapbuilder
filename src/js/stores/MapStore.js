@@ -52,6 +52,7 @@ class MapStore {
     this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
+    this.coordinatesModalVisible = false;
     this.printModalVisible = false;
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
@@ -79,6 +80,7 @@ class MapStore {
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
+    this.enterValuesButtonActive = false;
     this.imageryModalVisible = false;
     this.imageryData = [];
     this.loadingImagery = false;
@@ -100,6 +102,7 @@ class MapStore {
       toggleSearchModal: mapActions.toggleSearchModal,
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
+      toggleCoordinatesModal: mapActions.toggleCoordinatesModal,
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
@@ -149,6 +152,7 @@ class MapStore {
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
+      activateEnterValuesButton: mapActions.activateEnterValuesButton,
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
@@ -409,6 +413,10 @@ class MapStore {
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
   }
+  
+  toggleCoordinatesModal (payload) {
+    this.coordinatesModalVisible = payload.visible;
+  }
 
   togglePrintModal (payload) {
     this.printModalVisible = payload.visible;
@@ -631,6 +639,10 @@ class MapStore {
 
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
+  }
+  
+  activateEnterValuesButton(bool) {
+    this.enterValuesButtonActive = bool;
   }
 
   toggleImageryVisible(bool) {

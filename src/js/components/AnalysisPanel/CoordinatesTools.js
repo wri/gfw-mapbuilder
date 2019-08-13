@@ -20,7 +20,7 @@ export default class CoordinatesTools extends Component {
       constructor (props) {
         super(props);
         this.state = {
-          enterValues: false
+          enterValuesActive: false
         };
       }
     
@@ -49,25 +49,54 @@ export default class CoordinatesTools extends Component {
       };
       
       enterValues = () => {
-        this.setState({
-          enterValues: !this.state.enterValues
-        });
+       // if active, toggle it off
+        if (this.props.drawButtonActive) {
+          if (this.toolbar._graphic && this.toolbar._graphic.geometry && this.toolbar._graphic.geometry.rings) { // && this.toolbar._graphic.geometry.rings.length > 1
+            this.toolbar.finishDrawing();
+            mapActions.activateDrawButton(false);
+            mapActions.toggleAnalysisModal({ visible: false });
+          } else {
+            this.deactivate();
+          }
+        } else {
+          this.activate();
+          //- If the analysis modal is visible, hide it
+          mapActions.togglesModal({ visible: false });
+        }
       };
       
-      createToolbar = (map) => {
-        this.toolbar = new Draw(map);
-        this.toolbar.on('draw-end', (evt) => {
-          this.deactivate();
-          // Add graphic to map and set as active feature
-          geometryUtils.generateDrawnPolygon(evt.geometry).then(graphic => {
-            const layer = map.getLayer(layerKeys.USER_FEATURES);
-            if (layer) {
-              layer.add(graphic);
-              map.infoWindow.setFeatures([graphic]);
-            }
-          });
-        });
+      activate = () => {
+        // const {map} = this.context;
+        // this.toolbar.activate(Draw.POLYGON);
+        // mapActions.activateDrawButton(true);
+        // Disable popups while this is active, this function is only available to webmaps when usePopupManager is true
+        // 
+        mapActions.toggleCoordinatesModal({ visible: true });
       };
+    
+      deactivate = () => {
+        // const {map} = this.context;
+        // this.toolbar.deactivate();
+        // mapActions.activateDrawButton(false);
+        // Reconnect the popups, this function is only available to webmaps when usePopupManager is true
+        // map.setInfoWindowOnClick(true);
+        mapActions.toggleCoordinatesModal({ visible: true });
+      };
+      
+      // createToolbar = (map) => {
+      //   this.toolbar = new Draw(map);
+      //   this.toolbar.on('draw-end', (evt) => {
+      //     this.deactivate();
+      //     // Add graphic to map and set as active feature
+      //     geometryUtils.generateDrawnPolygon(evt.geometry).then(graphic => {
+      //       const layer = map.getLayer(layerKeys.USER_FEATURES);
+      //       if (layer) {
+      //         layer.add(graphic);
+      //         map.infoWindow.setFeatures([graphic]);
+      //       }
+      //     });
+      //   });
+      // };
 
       render() {
         const {language} = this.context;
@@ -80,7 +109,8 @@ export default class CoordinatesTools extends Component {
             <ol className='analysis-instructions__olist'>
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
-            <div className={`fa-button gold analysis-instructions__coordinates-button`} onClick={this.enterValues}>
+            <div className={`fa-button gold analysis-instructions__coordinates-button ${this.state.drawButtonActive ? 'active' : ''}`} 
+            onClick={this.enterValues}>
               <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-coordinates'} /></span>
               <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>
             </div>
