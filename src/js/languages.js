@@ -85,18 +85,18 @@ strings.en.ANALYSIS_COORDINATES_INSTRUCTIONS = [
   `Add up to 10 points to make shapes`
 ];
 strings.en.ANALYSIS_COORDINATES_BUTTONS = [
-  `Enter values`,
+  `Enter Values`,
   `Add More`,
   `Make Shape`
 ];
-strings.en.ANALYSIS_COORDINATES_FORMATS = [
-  `Select Format`,
-  `Degrees Decimal Minutes (DMS)`,
-  `Decimal Degrees (DD)`
-];
 strings.en.ANALYSIS_COORDINATES_LABELS = [
   `Latitude`,
-  `Longitude`
+  `Longitude`,
+  `Select Format`
+];
+strings.en.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Minutes (DMS)`,
+  `Decimal Degrees (DD)`
 ];
 strings.en.ANALYSIS_COORDINATES_DIRECTIONS = [
   `N`,
