@@ -76,50 +76,78 @@ export default class AnalysisModal extends Component {
           </select>
           <div className='analysis-coordinates__select-arrow'></div>
         </div>
-        <div className="analysis-coordinates__inputs-container">
-          <div className="analysis-coordinates__divider"></div>
-          <div className="analysis-coordinates__latitude-container">
-            <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
-            <div className="analysis-coordinates__latitude">
-              <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-degrees' name='latitude-degrees' />
-              <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
-              <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-decimals' name='latitude-decimals' />
-              <span className="analysis-coordinates__latitude-measurement-label">'</span>
-              <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-minutes' name='latitude-minutes' />
-              <span className="analysis-coordinates__latitude-measurement-label">"</span>
-              <select
-                value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
-                className='analysis-coordinates-directions__select pointer'
-                onChange={this.handleCoordinatesFormatChange}
-                id="coordinates-directions"
-              >
-                {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
-              </select>
-              <div className='analysis-coordinates-directions__select-arrow'></div>
+        
+        {(coordinatesFormat === 'Degrees Decimal Minutes (DMS)' || coordinatesFormat === '') &&
+          <div className="analysis-coordinates__inputs-container">
+            <div className="analysis-coordinates__divider"></div>
+            <div className="analysis-coordinates__latitude-container">
+              <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
+              <div className="analysis-coordinates__latitude">
+                <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-degrees' name='latitude-degrees' />
+                <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
+                <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-decimals' name='latitude-decimals' />
+                <span className="analysis-coordinates__latitude-measurement-label">'</span>
+                <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-minutes' name='latitude-minutes' />
+                <span className="analysis-coordinates__latitude-measurement-label">"</span>
+                <select
+                  value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
+                  className='analysis-coordinates-directions__select pointer'
+                  onChange={this.handleCoordinatesFormatChange}
+                  id="coordinates-directions"
+                >
+                  {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
+                </select>
+                <div className='analysis-coordinates-directions__select-arrow'></div>
+              </div>
             </div>
-          </div>
-          <div className="analysis-coordinates__longitude-container">
-            <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
-            <div className="analysis-coordinates__longitude">
-              <input className="analysis-coordinates__longitude-measurement" type='number' id='longitude-degrees' name='longitude-degrees' />
-              <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
-              <input className="analysis-coordinates__longitude-measurement" type='number' id='longitude-decimals' name='longitude-decimals' />
-              <span className="analysis-coordinates__longitude-measurement-label">'</span>
-              <input className="analysis-coordinates__longitude-measurement" type='number' id='longitude-minutes' name='longitude-minutes' />
-              <span className="analysis-coordinates__longitude-measurement-label">"</span>
-              <select
-                value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
-                className='analysis-coordinates-directions__select pointer'
-                onChange={this.handleCoordinatesDirectionChange}
-                id="coordinates-directions"
-              >
-                {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
-              </select>
-              <div className='analysis-coordinates-directions__select-arrow'></div>
+            <div className="analysis-coordinates__longitude-container">
+              <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
+              <div className="analysis-coordinates__longitude">
+                <input className="analysis-coordinates__longitude-measurement" type='number' id='longitude-degrees' name='longitude-degrees' />
+                <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
+                <input className="analysis-coordinates__longitude-measurement" type='number' id='longitude-decimals' name='longitude-decimals' />
+                <span className="analysis-coordinates__longitude-measurement-label">'</span>
+                <input className="analysis-coordinates__longitude-measurement" type='number' id='longitude-minutes' name='longitude-minutes' />
+                <span className="analysis-coordinates__longitude-measurement-label">"</span>
+                <select
+                  value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
+                  className='analysis-coordinates-directions__select pointer'
+                  onChange={this.handleCoordinatesDirectionChange}
+                  id="coordinates-directions"
+                >
+                  {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
+                </select>
+                <div className='analysis-coordinates-directions__select-arrow'></div>
+              </div>
             </div>
+            <div className="analysis-coordinates__divider"></div>
           </div>
-          <div className="analysis-coordinates__divider"></div>
-        </div>
+        }
+        
+        {coordinatesFormat === 'Decimal Degrees (DD)' &&
+          <div className="analysis-coordinates__inputs-container">
+            <div className="analysis-coordinates__divider"></div>
+            <div className="analysis-coordinates-lat-lng-container">
+            
+            <div className="analysis-coordinates__latitude-container">
+              <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
+              <div className="analysis-coordinates__latitude">
+                <input className="analysis-coordinates__latitude-measurement" type='number' id='latitude-degrees' name='latitude-degrees' />
+                <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
+              </div>
+            </div>
+            <div className="analysis-coordinates__longitude-container">
+              <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
+              <div className="analysis-coordinates__longitude">
+                <input className="analysis-coordinates__longitude-measurement" type='number' id='latitude-decimals' name='latitude-decimals' />
+                <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
+              </div>
+            </div>
+            </div>
+            <div className="analysis-coordinates__divider"></div>
+          </div>
+        }
+        
         <div className="fa-button analysis-instructions__add-more-button" onClick={this.addMore}>
           <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
