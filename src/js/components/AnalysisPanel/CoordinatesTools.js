@@ -17,13 +17,6 @@ export default class CoordinatesTools extends Component {
         map: PropTypes.object.isRequired
       };
     
-      constructor (props) {
-        super(props);
-        this.state = {
-          enterValuesActive: false
-        };
-      }
-    
       componentDidMount () {
         const {map} = this.context;
         // If this component unmounts and destroys itself, recreate it
@@ -103,7 +96,7 @@ export default class CoordinatesTools extends Component {
             <ol className='analysis-instructions__olist'>
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
-            <div className={`fa-button gold analysis-instructions__coordinates-button ${this.state.drawButtonActive ? 'active' : ''}`} 
+            <div className="fa-button gold analysis-instructions__coordinates-button"
             onClick={this.enterValues}>
               <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-coordinates'} /></span>
               <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>

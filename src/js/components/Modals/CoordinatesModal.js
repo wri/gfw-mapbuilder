@@ -105,6 +105,11 @@ export default class AnalysisModal extends Component {
           </div>
           <div className="analysis-coordinates__divider"></div>
         </div>
+        <div className="fa-button gold analysis-instructions__coordinates-button"
+          onClick={this.enterValues}>
+          {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
+          <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
+        </div>
       </ControlledModalWrapper>
     );
   }

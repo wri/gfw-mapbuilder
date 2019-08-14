@@ -117,7 +117,7 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          className={`fa-button gold analysis-instructions__draw-button ${this.state.drawButtonActive ? 'active' : ''}`}
+          className="fa-button gold analysis-instructions__draw-button"
           onClick={this.draw}>
           <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
           <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_DRAW_BUTTON}</span>
