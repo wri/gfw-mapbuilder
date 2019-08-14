@@ -951,7 +951,7 @@ export default class Map extends Component {
 
           </svg>
         </div>
-        <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
+        <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
         <div className={`coordinates-modal-container modal-wrapper ${coordinatesModalVisible ? '' : 'hidden'}`}>

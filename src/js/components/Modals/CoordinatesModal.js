@@ -20,6 +20,7 @@ export default class AnalysisModal extends Component {
 
   close = () => {
     mapActions.toggleCoordinatesModal({ visible: false });
+    mapActions.toggleAnalysisModal({visible: false});
   };
 
   handleCoordinatesFormatChange = () => {
