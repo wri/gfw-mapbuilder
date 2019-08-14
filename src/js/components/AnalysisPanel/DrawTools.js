@@ -119,8 +119,8 @@ export default class DrawTools extends Component {
         <div
           className="fa-button gold analysis-instructions__draw-button"
           onClick={this.draw}>
-          <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
-          <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_DRAW_BUTTON}</span>
+          <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
+          <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>
         </div>
         <div className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>

@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import React, { Component, PropTypes } from 'react';
 import text from '../../../js/languages';
+import SVGIcon from '../../utils/svgIcon';
 
 export default class AnalysisModal extends Component {
 
@@ -13,8 +14,8 @@ export default class AnalysisModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      DMS: true,
-      DD: false
+      coordinatesFormat: '',
+      count: 0
     };
   }
 
@@ -23,11 +24,17 @@ export default class AnalysisModal extends Component {
     mapActions.toggleAnalysisModal({visible: false});
   };
 
-  handleCoordinatesFormatChange = () => {
+  handleCoordinatesFormatChange = evt => {
     this.setState({
-      DMS: !this.state.DMS,
-      DD: !this.state.DD
+      coordinatesFormat: evt.target.value
     });
+  };
+  
+  handleCoordinatesDirectionChange = evt => {
+    // this.setState({
+    //   coordinatesFormat: evt.target.value
+    // });
+    console.log('direction changed!!!');
   };
   
   createOptions = (option, index) => {
@@ -40,9 +47,18 @@ export default class AnalysisModal extends Component {
       </option>
     );
   };
+  
+  addMore = () => {
+    console.log('make shape!!!');
+  };
+  
+  makeShape = () => {
+    console.log('make shape!!!');
+  };
 
   render () {
     const {language} = this.context;
+    const {coordinatesFormat, count} = this.state; 
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
     const coordinateDirectionOptions = text[language].ANALYSIS_COORDINATES_DIRECTIONS;
     return (
@@ -51,18 +67,17 @@ export default class AnalysisModal extends Component {
         <div className='relative analysis-coordinates__select-container'>
           <label htmlFor="coordinates-formats" className="analysis-coordinates__label">{text[language].ANALYSIS_COORDINATES_LABELS[2]}</label>
           <select
-            value={coordinateFormatOptions && coordinateFormatOptions[0]}
+            value={coordinatesFormat ? coordinatesFormat : coordinateFormatOptions[0]}
             className='analysis-coordinates__select pointer'
-            onChange={this.handleCoordinatesFormatChange}
+            onChange={evt => this.handleCoordinatesFormatChange(evt)}
             id="coordinates-formats"
           >
             {coordinateFormatOptions && coordinateFormatOptions.map(this.createOptions)}
           </select>
           <div className='analysis-coordinates__select-arrow'></div>
         </div>
-        <div className="analysis-coordinates__divider"></div>
-        
         <div className="analysis-coordinates__inputs-container">
+          <div className="analysis-coordinates__divider"></div>
           <div className="analysis-coordinates__latitude-container">
             <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
             <div className="analysis-coordinates__latitude">
@@ -95,7 +110,7 @@ export default class AnalysisModal extends Component {
               <select
                 value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
                 className='analysis-coordinates-directions__select pointer'
-                onChange={this.handleCoordinatesFormatChange}
+                onChange={this.handleCoordinatesDirectionChange}
                 id="coordinates-directions"
               >
                 {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
@@ -105,8 +120,11 @@ export default class AnalysisModal extends Component {
           </div>
           <div className="analysis-coordinates__divider"></div>
         </div>
-        <div className="fa-button gold analysis-instructions__coordinates-button"
-          onClick={this.enterValues}>
+        <div className="fa-button analysis-instructions__add-more-button" onClick={this.addMore}>
+          <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
+          <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
+        </div>
+        <div className="fa-button gold analysis-instructions__make-shape-button" onClick={this.makeShape}>
           {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
           <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
         </div>

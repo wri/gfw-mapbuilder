@@ -96,9 +96,9 @@ export default class CoordinatesTools extends Component {
             <ol className='analysis-instructions__olist'>
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
-            <div className="fa-button gold analysis-instructions__coordinates-button"
+            <div className="fa-button gold analysis-instructions__enter-values-button"
             onClick={this.enterValues}>
-              <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-coordinates'} /></span>
+              <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-enter-values'} /></span>
               <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>
             </div>
             <div className='analysis-instructions__separator'>
