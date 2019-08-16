@@ -44,10 +44,13 @@ export default class AnalysisModal extends Component {
     console.log('direction changed!!!');
   };
   
-  renderDMS = (language, coordinateDirectionOptions, index) => {
+  renderDMS = (count, index) => {
+    const {language} = this.context;
+    const coordinateDirectionOptions = text[language].ANALYSIS_COORDINATES_DIRECTIONS;
     return (
-      <div key={`DMS-${index}`} className="analysis-coordinates__inputs-container">
-        {index !== 0 && <div className="analysis-coordinates__divider"></div>}
+      <div key={`DMS-${index}`}>
+      {index === 0 && <div className="analysis-coordinates__divider-dms"></div>}
+      <div className="analysis-coordinates__inputs-container-dms">
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
@@ -88,15 +91,17 @@ export default class AnalysisModal extends Component {
             <div className='analysis-coordinates-directions__select-arrow'></div>
           </div>
         </div>
-        {/* {index > 0 && <div className="analysis-coordinates__divider"></div>} */}
+      </div>
+      <div className="analysis-coordinates__divider-dms"></div>
       </div>
     );
   };
   
-  renderDD = (language, index) => {
+  renderDD = (count, index) => {
+    const {language} = this.context;
     return (
-      <div key={`DD-${index}`} className="analysis-coordinates__inputs-container">
-        {index > 0 && <div className="analysis-coordinates__divider"></div>}
+      <div key={`DD-${index}`} className="analysis-coordinates__inputs-container-dd">
+        {index > 0 && <div className="analysis-coordinates__divider-dd"></div>}
         <div className="analysis-coordinates-lat-lng-container">
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
@@ -163,12 +168,12 @@ export default class AnalysisModal extends Component {
           <div className='analysis-coordinates__select-arrow'></div>
         </div>
         
-        <div className="analysis-coordinates__divider"></div>
+        {coordinatesFormat === 'Decimal Degrees (DD)' && <div className="analysis-coordinates__divider-dd"></div>}
         {(coordinatesFormat === 'Degrees Decimal Minutes (DMS)' || coordinatesFormat === '') &&
-        countArray.map((count, index) => this.renderDMS(language, coordinateDirectionOptions, index))}
+        countArray.map((count, index) => this.renderDMS(count, index))}
         {coordinatesFormat === 'Decimal Degrees (DD)' &&
-        countArray.map((count, index) => this.renderDD(language, index))}
-        <div className="analysis-coordinates__divider"></div>
+        countArray.map((count, index) => this.renderDD(count, index))}
+        {coordinatesFormat === 'Decimal Degrees (DD)' && <div className="analysis-coordinates__divider-dd"></div>}
         
         <div className="fa-button analysis-instructions__add-more-button" onClick={this.addMore}>
           <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
