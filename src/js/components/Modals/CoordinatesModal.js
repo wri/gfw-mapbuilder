@@ -54,6 +54,8 @@ export default class AnalysisModal extends Component {
     // Create an object copy of the current dmsLatValues state to preserve any latitude arrays already stored
     const dmsLatValuesCopy = Object.assign({}, this.state.dmsLatValues);
     
+    // Grab only the number that is on the end of the name.
+    // This will be used later as an object key in dmsValues to combine both the latitude and longitude values for the same geometry point together.
     const index = evt.target.name.slice(-1);
     
     // Assign latitude array as new property on the copy object or overwrite if it already exists
@@ -61,9 +63,10 @@ export default class AnalysisModal extends Component {
     
     
     // Update state of dmsLatValues to the copy object
+    // Call updateDMSValues to update the latitude values for the corresponding geometry point by passing in the index value.
     this.setState({
       dmsLatValues: dmsLatValuesCopy
-    }, this.updateDMSValues(index));
+    }, () => this.updateDMSValues(index));
     
   };
   
@@ -77,25 +80,36 @@ export default class AnalysisModal extends Component {
     // Create an object copy of the current dmsLngValues state to preserve any longitude arrays already stored
     const dmsLngValuesCopy = Object.assign({}, this.state.dmsLngValues);
     
+    // Grab only the number that is on the end of the name.
+    // This will be used later as an object key in dmsValues to combine both the latitude and longitude arrays for the same geometry point together.
     const index = evt.target.name.slice(-1);
     
     // Assign longitude array as new property on the copy object or overwrite if it already exists
     dmsLngValuesCopy[index] = dmsLngs;
     
     // Update state of dmsLngValues to the copy object
+    // Call updateDMSValues to update the longitude values for the corresponding geometry point by passing in the index value.
     this.setState({
       dmsLngValues: dmsLngValuesCopy
     }, () => this.updateDMSValues(index));
   };
   
   updateDMSValues = index => {
+    // Create copy of dmsValues in order to retain other geometry point's latitude and longitude arrays.
+    // We only want to update the longitude or latitude value that was just changed for a particular geometry point.
     const dmsValuesCopy = Object.assign({}, this.state.dmsValues);
-    const latitude = this.state.dmsLatValues;
-    const longitude = this.state.dmsLngValues;
+    
+    // Get all of the latValues and lngValues from state
+    const latValues = this.state.dmsLatValues;
+    const lngValues = this.state.dmsLngValues;
+    
+    // Only update the latitude and longitude properties for the geometry point at the index value
     dmsValuesCopy[index] = {
-      latitude: latitude[index],
-      longitude: longitude[index]
+      latitude: latValues[index],
+      longitude: lngValues[index]
     };
+    
+    // Finally set the state of dmsValues
     this.setState({
       dmsValues: dmsValuesCopy
     }, () => console.log(this.state.dmsValues));
@@ -161,13 +175,25 @@ export default class AnalysisModal extends Component {
   };
   
   updateDDValues = evt => {
-    let ddVals = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
-    ddVals = ddVals.map(ddVal => ddVal.value);
+    // Get both latitude and longitude inputs and convert into an array
+    let ddLatLngValues = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
+    
+    // Map over the array and only grab the input values
+    ddLatLngValues = ddLatLngValues.map(ddLatLngValue => ddLatLngValue.value);
+    
+    // Make an object copy of ddVals in order to preserve existing geometry points' values
     const ddValuesCopy = Object.assign({}, this.state.ddValues);
-    ddValuesCopy[evt.target.name] = ddVals;
+    
+    // Grab the number off the end of the event target's name which will be used as the object key in ddValues
+    const index = evt.target.name.slice(-1);
+    
+    // Set the latitude and longitude values at the key index.
+    ddValuesCopy[index] = ddLatLngValues;
+    
+    // Set the state of ddValues
     this.setState({
       ddValues: ddValuesCopy
-    });
+    }, () => console.log('ddValues', this.state.ddValues));
   };
   
   renderDD = (item, index) => {
