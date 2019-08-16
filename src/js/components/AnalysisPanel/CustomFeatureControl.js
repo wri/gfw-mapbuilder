@@ -45,7 +45,7 @@ export default class CustomFeatureControl extends Component {
       <div className='custom-feature__header'>
         <input className='custom-feature__input' type='text' value={this.state.title} onChange={this.editName} />
         <div className='edit-delete-container'>
-          <div className='custom-feature__delete pointer-custom' onClick={this.editPolygon}>{this.props.editingEnabled ? text[language].EDIT_SAVE : text[language].EDIT_EDIT}</div>
+          <div className='custom-feature__edit pointer-custom' onClick={this.editPolygon}>{this.props.editingEnabled ? text[language].EDIT_SAVE : text[language].EDIT_EDIT}</div>
           <div className='custom-feature__delete pointer-custom' onClick={this.deleteFeature}>{text[language].DELETE}</div>
         </div>
       </div>
