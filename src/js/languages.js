@@ -107,6 +107,8 @@ strings.en.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
   `S`
 ];
 
+strings.en.ANALYSIS_COORDINATES_ERROR = 'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.';
+
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;
 strings.en.ANALYSIS_SHAPEFILE_UPLOAD = 'or drop a custom shapefile here';
 strings.en.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 5MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';

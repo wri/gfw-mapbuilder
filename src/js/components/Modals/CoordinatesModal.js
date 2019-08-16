@@ -6,7 +6,7 @@ import SVGIcon from '../../utils/svgIcon';
 
 let count = 3;
 
-export default class AnalysisModal extends Component {
+export default class CoordinatesModal extends Component {
 
   static contextTypes = {
     settings: PropTypes.object.isRequired,
@@ -22,7 +22,8 @@ export default class AnalysisModal extends Component {
       dmsLatValues: {},
       dmsLngValues: {},
       ddValues: {},
-      dmsValues: {}
+      dmsValues: {},
+      error: false
     };
   }
 
@@ -34,13 +35,22 @@ export default class AnalysisModal extends Component {
       coordinatesFormat: '',
       countArray: [1, 2, 3],
       dmsLatValues: {},
-      dmsLngValues: {}
+      dmsLngValues: {},
+      dmsValues: {},
+      ddValues: {},
+      error: false
     });
   };
 
   switchCoordinatesFormat = evt => {
     this.setState({
-      coordinatesFormat: evt.target.value
+      coordinatesFormat: evt.target.value,
+      countArray: [1, 2, 3],
+      dmsLatValues: {},
+      dmsLngValues: {},
+      dmsValues: {},
+      ddValues: {},
+      error: false
     });
   };
   
@@ -115,6 +125,108 @@ export default class AnalysisModal extends Component {
     }, () => console.log(this.state.dmsValues));
   };
   
+  updateDDValues = evt => {
+    // Get both latitude and longitude inputs and convert into an array
+    let ddLatLngValues = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
+    
+    // Map over the array and only grab the input values
+    ddLatLngValues = ddLatLngValues.map(ddLatLngValue => ddLatLngValue.value);
+    
+    // Make an object copy of ddVals in order to preserve existing geometry points' values
+    const ddValuesCopy = Object.assign({}, this.state.ddValues);
+    
+    // Grab the number off the end of the event target's name which will be used as the object key in ddValues
+    const index = evt.target.name.slice(-1);
+    
+    // Set the latitude and longitude values at the key index.
+    ddValuesCopy[index] = ddLatLngValues;
+    
+    // Set the state of ddValues
+    this.setState({
+      ddValues: ddValuesCopy
+    }, () => console.log('ddValues', this.state.ddValues));
+  };
+  
+  addMore = () => {
+    count = count + 1;
+    const countArray = this.state.countArray;
+    countArray.push(count);
+    this.setState({
+      countArray
+    });
+  };
+  
+  makeShape = () => {
+    const {language} = this.context;
+    const coordinatesFormat = this.state.coordinatesFormat;
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+      const values = Object.values(this.state.dmsValues);
+      const latitudes = [];
+      const longitudes = [];
+      
+      if (values) {
+        values.forEach(value => {
+          const {latitude, longitude} = value;
+          if (latitude) {
+            latitudes.push(latitude);
+          }
+          if (longitude) {
+            longitudes.push(longitude);
+          }
+        });
+        
+        if (latitudes.length > 0) {
+          latitudes.forEach(lat => {
+            if (lat.includes('')) {
+              this.setState({
+                error: true
+              });
+            }
+          });
+        } else {
+          this.setState({
+            error: true
+          });
+        }
+        if (longitudes.length > 0) {
+          longitudes.forEach(lng => {
+            if (lng.includes('')) {
+              this.setState({
+                error: true
+              });
+            }
+          });
+        } else {
+          this.setState({
+            error: true
+          });
+        }
+      }
+    }
+    
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]){
+      const values = Object.values(this.state.ddValues);
+      if (values) {
+        values.forEach(value => {
+          if (value.includes('')){
+            this.setState({
+              error: true
+            });
+          }
+        });
+      } else {
+        this.setState({
+          error: true
+        });
+      }
+    }
+  };
+  
+  resetError = () => {
+    this.setState({
+      error: false
+    }, () => this.makeShape());
+  };
   
   renderDMS = (item, index) => {
     const {language} = this.context;
@@ -174,28 +286,6 @@ export default class AnalysisModal extends Component {
     );
   };
   
-  updateDDValues = evt => {
-    // Get both latitude and longitude inputs and convert into an array
-    let ddLatLngValues = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
-    
-    // Map over the array and only grab the input values
-    ddLatLngValues = ddLatLngValues.map(ddLatLngValue => ddLatLngValue.value);
-    
-    // Make an object copy of ddVals in order to preserve existing geometry points' values
-    const ddValuesCopy = Object.assign({}, this.state.ddValues);
-    
-    // Grab the number off the end of the event target's name which will be used as the object key in ddValues
-    const index = evt.target.name.slice(-1);
-    
-    // Set the latitude and longitude values at the key index.
-    ddValuesCopy[index] = ddLatLngValues;
-    
-    // Set the state of ddValues
-    this.setState({
-      ddValues: ddValuesCopy
-    }, () => console.log('ddValues', this.state.ddValues));
-  };
-  
   renderDD = (item, index) => {
     const {language} = this.context;
     return (
@@ -220,7 +310,7 @@ export default class AnalysisModal extends Component {
     </div>
     );
   };
-  
+
   createOptions = (option, index) => {
     return (
       <option
@@ -231,23 +321,10 @@ export default class AnalysisModal extends Component {
       </option>
     );
   };
-  
-  addMore = () => {
-    count = count + 1;
-    const countArray = this.state.countArray;
-    countArray.push(count);
-    this.setState({
-      countArray
-    });
-  };
-  
-  makeShape = () => {
-    console.log('make shape!!!');
-  };
 
   render () {
     const {language} = this.context;
-    const {coordinatesFormat, countArray} = this.state;
+    const {coordinatesFormat, countArray, error} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
 
     return (
@@ -265,14 +342,14 @@ export default class AnalysisModal extends Component {
           </select>
           <div className='analysis-coordinates__select-arrow'></div>
         </div>
-        
-        {coordinatesFormat === 'Decimal Degrees (DD)' && <div className="analysis-coordinates__divider-dd"></div>}
-        {(coordinatesFormat === 'Degrees Decimal Minutes (DMS)' || coordinatesFormat === '') &&
+
+        {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
+        {(coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') &&
         countArray.map((item, index) => this.renderDMS(item, index))}
-        {coordinatesFormat === 'Decimal Degrees (DD)' &&
+        {coordinatesFormat === coordinateFormatOptions[1] &&
         countArray.map((item, index) => this.renderDD(item, index))}
-        {coordinatesFormat === 'Decimal Degrees (DD)' && <div className="analysis-coordinates__divider-dd"></div>}
-        
+        {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
+
         <div className="fa-button analysis-instructions__add-more-button" onClick={this.addMore}>
           <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
@@ -281,6 +358,7 @@ export default class AnalysisModal extends Component {
           {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
           <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
         </div>
+        {error && <div className="analysis-coordinates-error">{text[language].ANALYSIS_COORDINATES_ERROR}</div>}
       </ControlledModalWrapper>
     );
   }
