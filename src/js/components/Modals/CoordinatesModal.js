@@ -32,8 +32,7 @@ export default class AnalysisModal extends Component {
       coordinatesFormat: '',
       countArray: [1, 2, 3],
       dmsLatValues: {},
-      dmsLngValues: {},
-      dmsDirectionValues: {}
+      dmsLngValues: {}
     });
   };
 
@@ -43,19 +42,12 @@ export default class AnalysisModal extends Component {
     });
   };
   
-  updateDMSDirectionValues = (evt) => {
-    // this.setState({
-    //   coordinatesFormat: evt.target.value
-    // });
-    console.log('TEST');
-  };
-  
   updateDMSLatValues = (evt) => {
     // Get all latitude inputs and convert into a regular array
     let dmsLats = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
     
     // Create array with only the input values
-    dmsLats = dmsLats.map(dmsLat => parseInt(dmsLat.value));
+    dmsLats = dmsLats.map(dmsLat => dmsLat.value);
     
     // Create an object copy of the current dmsLatValues state to preserve any latitude arrays already stored
     const dmsLatValuesCopy = Object.assign({}, this.state.dmsLatValues);
@@ -74,7 +66,7 @@ export default class AnalysisModal extends Component {
     let dmsLngs = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
     
     // Create array with only the input values
-    dmsLngs = dmsLngs.map(dmsLng => parseInt(dmsLng.value));
+    dmsLngs = dmsLngs.map(dmsLng => dmsLng.value);
     
     // Create an object copy of the current dmsLngValues state to preserve any longitude arrays already stored
     const dmsLngValuesCopy = Object.assign({}, this.state.dmsLngValues);
@@ -100,18 +92,18 @@ export default class AnalysisModal extends Component {
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
-            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-degrees-${count}`} name={`dms-latitude-${count}`} />
+            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-degrees-${item}`} name={`dms-latitude-${item}`} />
             <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
-            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-decimals-${count}`} name={`dms-latitude-${count}`} />
+            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-decimals-${item}`} name={`dms-latitude-${item}`} />
             <span className="analysis-coordinates__latitude-measurement-label">'</span>
-            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-minutes-${count}`} name={`dms-latitude-${count}`} />
+            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-minutes-${item}`} name={`dms-latitude-${item}`} />
             <span className="analysis-coordinates__latitude-measurement-label">"</span>
             <select
               value={latitudeDirectionOptions && latitudeDirectionOptions[0]}
               className='analysis-coordinates-directions__select pointer'
-              onChange={this.updateDMSDirectionValues}
-              id={`dms-latitude-direction-${count}`}
-              name={`dms-latitude-${count}`}
+              onChange={this.updateDMSLatValues}
+              id={`dms-latitude-direction-${item}`}
+              name={`dms-latitude-${item}`}
             >
               {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
@@ -122,18 +114,18 @@ export default class AnalysisModal extends Component {
         <div className="analysis-coordinates__longitude-container">
           <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
           <div className="analysis-coordinates__longitude">
-            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-degrees-${count}`} name={`dms-longitude-${count}`} />
+            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-degrees-${item}`} name={`dms-longitude-${item}`} />
             <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
-            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-decimals-${count}`} name={`dms-longitude-${count}`} />
+            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-decimals-${item}`} name={`dms-longitude-${item}`} />
             <span className="analysis-coordinates__longitude-measurement-label">'</span>
-            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-minutes-${count}`} name={`dms-longitude-${count}`} />
+            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-minutes-${item}`} name={`dms-longitude-${item}`} />
             <span className="analysis-coordinates__longitude-measurement-label">"</span>
             <select
               value={longitudeDirectionOptions && longitudeDirectionOptions[0]}
               className='analysis-coordinates-directions__select pointer'
-              onChange={this.updateDMSDirectionValues}
-              id={`dms-longitude-direction-${count}`}
-              name={`dms-longitude-${count}`}
+              onChange={this.updateDMSLngValues}
+              id={`dms-longitude-direction-${item}`}
+              name={`dms-longitude-${item}`}
             >
               {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
@@ -201,7 +193,8 @@ export default class AnalysisModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, countArray} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    
+    console.log('LAT', this.state.dmsLatValues);
+    console.log('LNG', this.state.dmsLngValues);
     return (
       <ControlledModalWrapper onClose={this.close}>
         <h4 className="analysis-instructions__header">{text[language].ANALYSIS_COORDINATES_HEADER}</h4>
