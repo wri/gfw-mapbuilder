@@ -98,11 +98,13 @@ strings.en.ANALYSIS_COORDINATES_FORMATS = [
   `Degrees Decimal Minutes (DMS)`,
   `Decimal Degrees (DD)`
 ];
-strings.en.ANALYSIS_COORDINATES_DIRECTIONS = [
-  `N`,
-  `S`,
+strings.en.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
   `E`,
   `W`
+];
+strings.en.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `N`,
+  `S`
 ];
 
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;

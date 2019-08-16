@@ -32,21 +32,22 @@ export default class AnalysisModal extends Component {
       coordinatesFormat: '',
       countArray: [1, 2, 3],
       dmsLatValues: {},
-      dmsLngValues: {}
+      dmsLngValues: {},
+      dmsDirectionValues: {}
     });
   };
 
-  handleCoordinatesFormatChange = evt => {
+  switchCoordinatesFormat = evt => {
     this.setState({
       coordinatesFormat: evt.target.value
     });
   };
   
-  handleCoordinatesDirectionChange = evt => {
+  updateDMSDirectionValues = (evt) => {
     // this.setState({
     //   coordinatesFormat: evt.target.value
     // });
-    console.log('direction changed!!!');
+    console.log('TEST');
   };
   
   updateDMSLatValues = (evt) => {
@@ -87,9 +88,11 @@ export default class AnalysisModal extends Component {
     });
   };
   
-  renderDMS = (count, index) => {
+  renderDMS = (item, index) => {
     const {language} = this.context;
-    const coordinateDirectionOptions = text[language].ANALYSIS_COORDINATES_DIRECTIONS;
+    const latitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS;
+    const longitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS;
+    
     return (
       <div key={`DMS-${index}`}>
       {index === 0 && <div className="analysis-coordinates__divider-dms"></div>}
@@ -104,16 +107,18 @@ export default class AnalysisModal extends Component {
             <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-minutes-${count}`} name={`dms-latitude-${count}`} />
             <span className="analysis-coordinates__latitude-measurement-label">"</span>
             <select
-              value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
+              value={latitudeDirectionOptions && latitudeDirectionOptions[0]}
               className='analysis-coordinates-directions__select pointer'
-              onChange={this.handleCoordinatesFormatChange}
-              id="coordinates-directions"
+              onChange={this.updateDMSDirectionValues}
+              id={`dms-latitude-direction-${count}`}
+              name={`dms-latitude-${count}`}
             >
-              {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
+              {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
             <div className='analysis-coordinates-directions__select-arrow'></div>
           </div>
         </div>
+        
         <div className="analysis-coordinates__longitude-container">
           <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
           <div className="analysis-coordinates__longitude">
@@ -124,12 +129,13 @@ export default class AnalysisModal extends Component {
             <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-minutes-${count}`} name={`dms-longitude-${count}`} />
             <span className="analysis-coordinates__longitude-measurement-label">"</span>
             <select
-              value={coordinateDirectionOptions && coordinateDirectionOptions[0]}
+              value={longitudeDirectionOptions && longitudeDirectionOptions[0]}
               className='analysis-coordinates-directions__select pointer'
-              onChange={this.handleCoordinatesDirectionChange}
-              id="coordinates-directions"
+              onChange={this.updateDMSDirectionValues}
+              id={`dms-longitude-direction-${count}`}
+              name={`dms-longitude-${count}`}
             >
-              {coordinateDirectionOptions && coordinateDirectionOptions.map(this.createOptions)}
+              {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
             <div className='analysis-coordinates-directions__select-arrow'></div>
           </div>
@@ -140,7 +146,7 @@ export default class AnalysisModal extends Component {
     );
   };
   
-  renderDD = (count, index) => {
+  renderDD = (item, index) => {
     const {language} = this.context;
     return (
       <div key={`DD-${index}`} className="analysis-coordinates__inputs-container-dd">
@@ -195,9 +201,6 @@ export default class AnalysisModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, countArray} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    const coordinateDirectionOptions = text[language].ANALYSIS_COORDINATES_DIRECTIONS;
-    console.log('dmsLatValues:', this.state.dmsLatValues);
-    console.log('dmsLngValues:', this.state.dmsLngValues);
     
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -207,7 +210,7 @@ export default class AnalysisModal extends Component {
           <select
             value={coordinatesFormat ? coordinatesFormat : coordinateFormatOptions[0]}
             className='analysis-coordinates__select pointer'
-            onChange={evt => this.handleCoordinatesFormatChange(evt)}
+            onChange={evt => this.switchCoordinatesFormat(evt)}
             id="coordinates-formats"
           >
             {coordinateFormatOptions && coordinateFormatOptions.map(this.createOptions)}
@@ -217,9 +220,9 @@ export default class AnalysisModal extends Component {
         
         {coordinatesFormat === 'Decimal Degrees (DD)' && <div className="analysis-coordinates__divider-dd"></div>}
         {(coordinatesFormat === 'Degrees Decimal Minutes (DMS)' || coordinatesFormat === '') &&
-        countArray.map((count, index) => this.renderDMS(count, index))}
+        countArray.map((item, index) => this.renderDMS(item, index))}
         {coordinatesFormat === 'Decimal Degrees (DD)' &&
-        countArray.map((count, index) => this.renderDD(count, index))}
+        countArray.map((item, index) => this.renderDD(item, index))}
         {coordinatesFormat === 'Decimal Degrees (DD)' && <div className="analysis-coordinates__divider-dd"></div>}
         
         <div className="fa-button analysis-instructions__add-more-button" onClick={this.addMore}>
