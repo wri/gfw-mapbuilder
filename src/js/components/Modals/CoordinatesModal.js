@@ -21,7 +21,8 @@ export default class AnalysisModal extends Component {
       countArray: [1, 2, 3],
       dmsLatValues: {},
       dmsLngValues: {},
-      ddValues: {}
+      ddValues: {},
+      dmsValues: {}
     };
   }
 
@@ -53,13 +54,17 @@ export default class AnalysisModal extends Component {
     // Create an object copy of the current dmsLatValues state to preserve any latitude arrays already stored
     const dmsLatValuesCopy = Object.assign({}, this.state.dmsLatValues);
     
+    const index = evt.target.name.slice(-1);
+    
     // Assign latitude array as new property on the copy object or overwrite if it already exists
-    dmsLatValuesCopy[evt.target.name] = dmsLats;
+    dmsLatValuesCopy[index] = dmsLats;
+    
     
     // Update state of dmsLatValues to the copy object
     this.setState({
       dmsLatValues: dmsLatValuesCopy
-    });
+    }, this.updateDMSValues(index));
+    
   };
   
   updateDMSLngValues = evt => {
@@ -72,14 +77,30 @@ export default class AnalysisModal extends Component {
     // Create an object copy of the current dmsLngValues state to preserve any longitude arrays already stored
     const dmsLngValuesCopy = Object.assign({}, this.state.dmsLngValues);
     
+    const index = evt.target.name.slice(-1);
+    
     // Assign longitude array as new property on the copy object or overwrite if it already exists
-    dmsLngValuesCopy[evt.target.name] = dmsLngs;
+    dmsLngValuesCopy[index] = dmsLngs;
     
     // Update state of dmsLngValues to the copy object
     this.setState({
       dmsLngValues: dmsLngValuesCopy
-    });
+    }, () => this.updateDMSValues(index));
   };
+  
+  updateDMSValues = index => {
+    const dmsValuesCopy = Object.assign({}, this.state.dmsValues);
+    const latitude = this.state.dmsLatValues;
+    const longitude = this.state.dmsLngValues;
+    dmsValuesCopy[index] = {
+      latitude: latitude[index],
+      longitude: longitude[index]
+    };
+    this.setState({
+      dmsValues: dmsValuesCopy
+    }, () => console.log(this.state.dmsValues));
+  };
+  
   
   renderDMS = (item, index) => {
     const {language} = this.context;
@@ -189,8 +210,6 @@ export default class AnalysisModal extends Component {
     count = count + 1;
     const countArray = this.state.countArray;
     countArray.push(count);
-    console.log('countArray', countArray);
-    console.log('current count:', count);
     this.setState({
       countArray
     });
@@ -204,9 +223,7 @@ export default class AnalysisModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, countArray} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    // console.log('LAT', this.state.dmsLatValues);
-    // console.log('LNG', this.state.dmsLngValues);
-    console.log('DD', this.state.ddValues);
+
     return (
       <ControlledModalWrapper onClose={this.close}>
         <h4 className="analysis-instructions__header">{text[language].ANALYSIS_COORDINATES_HEADER}</h4>
