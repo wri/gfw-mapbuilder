@@ -4,6 +4,8 @@ import React, { Component, PropTypes } from 'react';
 import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
 
+let count = 3;
+
 export default class AnalysisModal extends Component {
 
   static contextTypes = {
@@ -20,7 +22,6 @@ export default class AnalysisModal extends Component {
       dmsLatValues: {},
       dmsLngValues: {}
     };
-    this.count = 3;
   }
 
   close = () => {
@@ -29,7 +30,9 @@ export default class AnalysisModal extends Component {
     this.count = 3;
     this.setState({
       coordinatesFormat: '',
-      countArray: [1, 2, 3]
+      countArray: [1, 2, 3],
+      dmsLatValues: {},
+      dmsLngValues: {}
     });
   };
 
@@ -174,9 +177,11 @@ export default class AnalysisModal extends Component {
   };
   
   addMore = () => {
-    this.count = this.count++;
+    count = count + 1;
     const countArray = this.state.countArray;
-    countArray.push(this.count);
+    countArray.push(count);
+    console.log('countArray', countArray);
+    console.log('current count:', count);
     this.setState({
       countArray
     });
