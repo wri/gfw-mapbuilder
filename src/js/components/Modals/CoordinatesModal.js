@@ -224,35 +224,33 @@ export default class CoordinatesModal extends Component {
     const selectedFeature = map.infoWindow.getSelectedFeature();
     
     map.infoWindow.clearFeatures();
-    const layer = map.getLayer(layerKeys.USER_FEATURES);
+    let layer = map.getLayer(layerKeys.USER_FEATURES);
     layer.remove(selectedFeature);
     brApp.map.graphics.clear();
-    
-    //Do I need to reset analysis type???
     mapActions.setAnalysisType('default');
    
     
-    // if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
-    //   const values = Object.values(dmsCoordinates);
-    //   const latlngs = [];
-    //   const points = [];
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+      const values = Object.values(dmsCoordinates);
+      const latlngs = [];
+      const points = [];
       
-    //   if (values) {
-    //     values.forEach(value => {
-    //       const {lat, lng} = value;
-    //       latlngs.push(`${lat.hours} ${lat.minutes} ${lat.seconds}${lat.direction} ${lng.hours} ${lng.minutes} ${lng.seconds}${lng.direction}`)
-    //     });
+      if (values) {
+        values.forEach(value => {
+          const {lat, lng} = value;
+          latlngs.push(`${lat.hours} ${lat.minutes} ${lat.seconds}${lat.direction} ${lng.hours} ${lng.minutes} ${lng.seconds}${lng.direction}`)
+        });
         
-    //   coordinateFormatter.load().then(() => {
-    //     latlngs.forEach(latlng => {
-    //       const point = coordinateFormatter.fromLatitudeLongitude(latlng);
-    //       points.push(point);
-    //     });
-    //   });
-    //   // Can polygon take in single points???
-    //   polygon = new Polygon([...points]);
-    //   }
-    // }
+      coordinateFormatter.load().then(() => {
+        latlngs.forEach(latlng => {
+          const point = coordinateFormatter.fromLatitudeLongitude(latlng);
+          points.push(point);
+        });
+      });
+      console.log('points', points);
+      polygon = new Polygon([...points]);
+      }
+    }
     
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]) {
       const values = Object.values(ddCoordinates);
@@ -268,7 +266,7 @@ export default class CoordinatesModal extends Component {
     }
 
     geometryUtils.generateDrawnPolygon(polygon).then(graphic => {
-      const layer = map.getLayer(layerKeys.USER_FEATURES);
+      layer = map.getLayer(layerKeys.USER_FEATURES);
       if (layer) {
         layer.add(graphic);
         map.infoWindow.setFeatures([graphic]);
