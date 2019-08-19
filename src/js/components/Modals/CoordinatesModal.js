@@ -19,6 +19,11 @@ const defaultDMS = {
   }
 };
 
+const defaultDD = {
+  lat: "",
+  lng: ""
+};
+
 export default class CoordinatesModal extends Component {
 
   static contextTypes = {
@@ -30,12 +35,15 @@ export default class CoordinatesModal extends Component {
   constructor(props) {
     super(props);
     this.dmsCoordinates = [];
+    this.ddCoordinates = [];
     for (let i = 0; i < 3; i++){
       this.dmsCoordinates.push(defaultDMS);
+      this.ddCoordinates.push(defaultDD);
     }
     this.state = {
       coordinatesFormat: '',
       dmsCoordinates: this.dmsCoordinates,
+      ddCoordinates: this.ddCoordinates,
       error: false
     };
   }
@@ -44,24 +52,30 @@ export default class CoordinatesModal extends Component {
     mapActions.toggleCoordinatesModal({ visible: false });
     mapActions.toggleAnalysisModal({visible: false});
     const dmsCoordinates = [];
+    const ddCoordinates = [];
     for (let i = 0; i < 3; i++){
       dmsCoordinates.push(defaultDMS);
+      ddCoordinates.push(defaultDD);
     }
     this.setState({
       coordinatesFormat: '',
       dmsCoordinates,
+      ddCoordinates,
       error: false
     });
   };
 
   switchCoordinatesFormat = evt => {
     const dmsCoordinates = [];
+    const ddCoordinates = [];
     for (let i = 0; i < 3; i++){
       dmsCoordinates.push(defaultDMS);
+      ddCoordinates.push(defaultDD);
     }
     this.setState({
       coordinatesFormat: evt.target.value,
       dmsCoordinates,
+      ddCoordinates,
       error: false
     });
   };
@@ -86,34 +100,44 @@ export default class CoordinatesModal extends Component {
     });
   };
   
-  // updateDDValues = evt => {
-  //   // Get both latitude and longitude inputs and convert into an array
-  //   let ddLatLngValues = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
+  updateDD = (evt, index, latlng) => {
+    const ddCoordinate = Object.assign({}, this.state.ddCoordinates[index]);
     
-  //   // Map over the array and only grab the input values
-  //   ddLatLngValues = ddLatLngValues.map(ddLatLngValue => ddLatLngValue.value);
+    if (latlng === 'lat'){
+      ddCoordinate['lat'] = parseInt(evt.target.value);
+    } 
     
-  //   // Make an object copy of ddVals in order to preserve existing geometry points' values
-  //   const ddValuesCopy = Object.assign({}, this.state.ddValues);
+    if (latlng === 'lng'){
+      ddCoordinate['lng'] = parseInt(evt.target.value);
+    } 
     
-  //   // Grab the number off the end of the event target's name which will be used as the object key in ddValues
-  //   const index = evt.target.name.slice(-1);
-    
-  //   // Set the latitude and longitude values at the key index.
-  //   ddValuesCopy[index] = ddLatLngValues;
-    
-  //   // Set the state of ddValues
-  //   this.setState({
-  //     ddValues: ddValuesCopy
-  //   }, () => console.log('ddValues', this.state.ddValues));
-  // };
+    this.setState({
+      ddCoordinates: [
+        ...this.state.ddCoordinates.slice(0, index),
+         ddCoordinate,
+         ...this.state.ddCoordinates.slice(index + 1)
+      ]
+    });
+  };
   
   addMore = () => {
-    const dmsCoordinatesCopy = this.state.dmsCoordinates;
-    dmsCoordinatesCopy.push(defaultDMS);
-    this.setState({
-      dmsCoordinates: dmsCoordinatesCopy
-    });
+    const {language} = this.context;
+    const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
+    const coordinatesFormat = this.state.coordinatesFormat;
+    if (coordinatesFormat === coordinateFormatOptions[0]) {
+      const dmsCoordinatesCopy = this.state.dmsCoordinates;
+      dmsCoordinatesCopy.push(defaultDMS);
+      this.setState({
+        dmsCoordinates: dmsCoordinatesCopy
+      });
+    }
+    if (coordinatesFormat === coordinateFormatOptions[1]) {
+      const ddCoordinatesCopy = this.state.ddCoordinates;
+      ddCoordinatesCopy.push(defaultDD);
+      this.setState({
+        ddCoordinates: ddCoordinatesCopy
+      });
+    }
   };
   
   makeShape = () => {
@@ -134,9 +158,6 @@ export default class CoordinatesModal extends Component {
             longitudes.push(lng);
           }
         });
-        
-        console.log('latitudes', latitudes);
-        console.log('longitudes', longitudes);
         
         if (latitudes.length > 0) {
           latitudes.forEach(latitude => {
@@ -167,18 +188,14 @@ export default class CoordinatesModal extends Component {
     }
     
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]){
-      const values = Object.values(this.state.dmsCoordinates);
+      const values = Object.values(this.state.ddCoordinates);
       if (values) {
         values.forEach(value => {
-          if (value.includes('')){
+          if (value.lat === '' || value.lng === ''){
             this.setState({
               error: true
             });
           }
-        });
-      } else {
-        this.setState({
-          error: true
         });
       }
     }
@@ -230,11 +247,11 @@ export default class CoordinatesModal extends Component {
             />
             <span className="analysis-coordinates__latitude-measurement-label">"</span>
             <select
-              value={item.lat.direction}
               className='analysis-coordinates-directions__select pointer'
               onChange={evt => this.updateDMS(evt, index, 'direction', 'lat')}
               id={`dms-latitude-direction-${item}`}
               name={`dms-latitude-${item}`}
+              value={item.lat.direction}
             >
               {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
@@ -272,11 +289,11 @@ export default class CoordinatesModal extends Component {
             />
             <span className="analysis-coordinates__longitude-measurement-label">"</span>
             <select
-              value={item.lng.direction}
               className='analysis-coordinates-directions__select pointer'
               onChange={evt => this.updateDMS(evt, index, 'direction', 'lng')}
               id={`dms-longitude-direction-${item}`}
               name={`dms-longitude-${item}`}
+              value={item.lng.direction}
             >
               {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
@@ -298,14 +315,28 @@ export default class CoordinatesModal extends Component {
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
-            <input onChange={this.updateDDValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dd-latitude-degrees-${item}`} name={`dd-${item}`} />
+            <input
+              onChange={evt => this.updateDD(evt, index, 'lat')}
+              className="analysis-coordinates__latitude-measurement"
+              type='number' id={`dd-latitude-degrees-${item}`}
+              name={`dd-${item}`}
+              value={item.lat}
+            />
             <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
           </div>
         </div>
+        
         <div className="analysis-coordinates__longitude-container">
           <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
           <div className="analysis-coordinates__longitude">
-            <input onChange={this.updateDDValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dd-longitude-degrees-${item}`} name={`dd-${item}`} />
+            <input
+              onChange={evt => this.updateDD(evt, index, 'lng')}
+              className="analysis-coordinates__longitude-measurement"
+              type='number'
+              id={`dd-longitude-degrees-${item}`}
+              name={`dd-${item}`}
+              value={item.lng}
+            />
             <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
           </div>
         </div>
@@ -327,9 +358,9 @@ export default class CoordinatesModal extends Component {
 
   render () {
     const {language} = this.context;
-    const {coordinatesFormat, countArray, error, dmsCoordinates} = this.state;
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates, error} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-
+    
     return (
       <ControlledModalWrapper onClose={this.close}>
         <h4 className="analysis-instructions__header">{text[language].ANALYSIS_COORDINATES_HEADER}</h4>
@@ -350,7 +381,7 @@ export default class CoordinatesModal extends Component {
         {(coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') &&
         dmsCoordinates.map((item, index) => this.renderDMS(item, index))}
         {coordinatesFormat === coordinateFormatOptions[1] &&
-        countArray.map((item, index) => this.renderDD(item, index))}
+        ddCoordinates.map((item, index) => this.renderDD(item, index))}
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
 
         <div className="fa-button analysis-instructions__add-more-button" onClick={this.addMore}>
