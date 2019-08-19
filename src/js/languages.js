@@ -99,12 +99,12 @@ strings.en.ANALYSIS_COORDINATES_FORMATS = [
   `Decimal Degrees (DD)`
 ];
 strings.en.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
-  `E`,
-  `W`
-];
-strings.en.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
   `N`,
   `S`
+];
+strings.en.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
 ];
 
 strings.en.ANALYSIS_COORDINATES_ERROR = 'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.';

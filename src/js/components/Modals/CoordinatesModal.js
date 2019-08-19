@@ -9,13 +9,13 @@ const defaultDMS = {
     hours: "",
     minutes: "",
     seconds: "",
-    direction: "E"
+    direction: "N"
   },
   lng: {
     hours: "",
     minutes: "",
     seconds: "",
-    direction: "N"
+    direction: "E"
   }
 };
 
