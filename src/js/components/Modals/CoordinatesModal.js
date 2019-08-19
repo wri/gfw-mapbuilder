@@ -4,7 +4,20 @@ import React, { Component, PropTypes } from 'react';
 import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
 
-let count = 3;
+const defaultDMS = {
+  lat: {
+    hours: "",
+    minutes: "",
+    seconds: "",
+    direction: "E"
+  },
+  lng: {
+    hours: "",
+    minutes: "",
+    seconds: "",
+    direction: "N"
+  }
+};
 
 export default class CoordinatesModal extends Component {
 
@@ -16,13 +29,13 @@ export default class CoordinatesModal extends Component {
 
   constructor(props) {
     super(props);
+    this.dmsCoordinates = [];
+    for (let i = 0; i < 3; i++){
+      this.dmsCoordinates.push(defaultDMS);
+    }
     this.state = {
       coordinatesFormat: '',
-      countArray: [1, 2, 3],
-      dmsLatValues: {},
-      dmsLngValues: {},
-      ddValues: {},
-      dmsValues: {},
+      dmsCoordinates: this.dmsCoordinates,
       error: false
     };
   }
@@ -30,129 +43,76 @@ export default class CoordinatesModal extends Component {
   close = () => {
     mapActions.toggleCoordinatesModal({ visible: false });
     mapActions.toggleAnalysisModal({visible: false});
-    this.count = 3;
+    const dmsCoordinates = [];
+    for (let i = 0; i < 3; i++){
+      dmsCoordinates.push(defaultDMS);
+    }
     this.setState({
       coordinatesFormat: '',
-      countArray: [1, 2, 3],
-      dmsLatValues: {},
-      dmsLngValues: {},
-      dmsValues: {},
-      ddValues: {},
+      dmsCoordinates,
       error: false
     });
   };
 
   switchCoordinatesFormat = evt => {
+    const dmsCoordinates = [];
+    for (let i = 0; i < 3; i++){
+      dmsCoordinates.push(defaultDMS);
+    }
     this.setState({
       coordinatesFormat: evt.target.value,
-      countArray: [1, 2, 3],
-      dmsLatValues: {},
-      dmsLngValues: {},
-      dmsValues: {},
-      ddValues: {},
+      dmsCoordinates,
       error: false
     });
   };
   
-  updateDMSLatValues = evt => {
-    // Get all latitude inputs and convert into a regular array
-    let dmsLats = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
+  updateDMS = (evt, index, type, latlng) => {
+    const dmsCoordinate = {lat: {}, lng: {}};
+    dmsCoordinate.lat = Object.assign({}, this.state.dmsCoordinates[index].lat);
+    dmsCoordinate.lng = Object.assign({}, this.state.dmsCoordinates[index].lng);
     
-    // Create array with only the input values
-    dmsLats = dmsLats.map(dmsLat => dmsLat.value);
+    if (type !== 'direction'){
+      dmsCoordinate[latlng][type] = parseInt(evt.target.value);
+    } else {
+      dmsCoordinate[latlng][type] = evt.target.value;
+    }
     
-    // Create an object copy of the current dmsLatValues state to preserve any latitude arrays already stored
-    const dmsLatValuesCopy = Object.assign({}, this.state.dmsLatValues);
-    
-    // Grab only the number that is on the end of the name.
-    // This will be used later as an object key in dmsValues to combine both the latitude and longitude values for the same geometry point together.
-    const index = evt.target.name.slice(-1);
-    
-    // Assign latitude array as new property on the copy object or overwrite if it already exists
-    dmsLatValuesCopy[index] = dmsLats;
-    
-    
-    // Update state of dmsLatValues to the copy object
-    // Call updateDMSValues to update the latitude values for the corresponding geometry point by passing in the index value.
     this.setState({
-      dmsLatValues: dmsLatValuesCopy
-    }, () => this.updateDMSValues(index));
-    
+      dmsCoordinates: [
+        ...this.state.dmsCoordinates.slice(0, index),
+         dmsCoordinate,
+         ...this.state.dmsCoordinates.slice(index + 1)
+      ]
+    });
   };
   
-  updateDMSLngValues = evt => {
-    // Get all longitude inputs and convert into a regular array
-    let dmsLngs = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
+  // updateDDValues = evt => {
+  //   // Get both latitude and longitude inputs and convert into an array
+  //   let ddLatLngValues = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
     
-    // Create array with only the input values
-    dmsLngs = dmsLngs.map(dmsLng => dmsLng.value);
+  //   // Map over the array and only grab the input values
+  //   ddLatLngValues = ddLatLngValues.map(ddLatLngValue => ddLatLngValue.value);
     
-    // Create an object copy of the current dmsLngValues state to preserve any longitude arrays already stored
-    const dmsLngValuesCopy = Object.assign({}, this.state.dmsLngValues);
+  //   // Make an object copy of ddVals in order to preserve existing geometry points' values
+  //   const ddValuesCopy = Object.assign({}, this.state.ddValues);
     
-    // Grab only the number that is on the end of the name.
-    // This will be used later as an object key in dmsValues to combine both the latitude and longitude arrays for the same geometry point together.
-    const index = evt.target.name.slice(-1);
+  //   // Grab the number off the end of the event target's name which will be used as the object key in ddValues
+  //   const index = evt.target.name.slice(-1);
     
-    // Assign longitude array as new property on the copy object or overwrite if it already exists
-    dmsLngValuesCopy[index] = dmsLngs;
+  //   // Set the latitude and longitude values at the key index.
+  //   ddValuesCopy[index] = ddLatLngValues;
     
-    // Update state of dmsLngValues to the copy object
-    // Call updateDMSValues to update the longitude values for the corresponding geometry point by passing in the index value.
-    this.setState({
-      dmsLngValues: dmsLngValuesCopy
-    }, () => this.updateDMSValues(index));
-  };
-  
-  updateDMSValues = index => {
-    // Create copy of dmsValues in order to retain other geometry point's latitude and longitude arrays.
-    // We only want to update the longitude or latitude value that was just changed for a particular geometry point.
-    const dmsValuesCopy = Object.assign({}, this.state.dmsValues);
-    
-    // Get all of the latValues and lngValues from state
-    const latValues = this.state.dmsLatValues;
-    const lngValues = this.state.dmsLngValues;
-    
-    // Only update the latitude and longitude properties for the geometry point at the index value
-    dmsValuesCopy[index] = {
-      latitude: latValues[index],
-      longitude: lngValues[index]
-    };
-    
-    // Finally set the state of dmsValues
-    this.setState({
-      dmsValues: dmsValuesCopy
-    }, () => console.log(this.state.dmsValues));
-  };
-  
-  updateDDValues = evt => {
-    // Get both latitude and longitude inputs and convert into an array
-    let ddLatLngValues = [...document.querySelectorAll(`[name=${evt.target.name}]`)];
-    
-    // Map over the array and only grab the input values
-    ddLatLngValues = ddLatLngValues.map(ddLatLngValue => ddLatLngValue.value);
-    
-    // Make an object copy of ddVals in order to preserve existing geometry points' values
-    const ddValuesCopy = Object.assign({}, this.state.ddValues);
-    
-    // Grab the number off the end of the event target's name which will be used as the object key in ddValues
-    const index = evt.target.name.slice(-1);
-    
-    // Set the latitude and longitude values at the key index.
-    ddValuesCopy[index] = ddLatLngValues;
-    
-    // Set the state of ddValues
-    this.setState({
-      ddValues: ddValuesCopy
-    }, () => console.log('ddValues', this.state.ddValues));
-  };
+  //   // Set the state of ddValues
+  //   this.setState({
+  //     ddValues: ddValuesCopy
+  //   }, () => console.log('ddValues', this.state.ddValues));
+  // };
   
   addMore = () => {
-    count = count + 1;
-    const countArray = this.state.countArray;
-    countArray.push(count);
+    const dmsCoordinatesCopy = this.state.dmsCoordinates;
+    dmsCoordinatesCopy.push(defaultDMS);
     this.setState({
-      countArray
+      dmsCoordinates: dmsCoordinatesCopy
     });
   };
   
@@ -160,7 +120,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const coordinatesFormat = this.state.coordinatesFormat;
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
-      const values = Object.values(this.state.dmsValues);
+      const values = Object.values(this.state.dmsCoordinates);
       const latitudes = [];
       const longitudes = [];
       
@@ -205,7 +165,7 @@ export default class CoordinatesModal extends Component {
     }
     
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]){
-      const values = Object.values(this.state.ddValues);
+      const values = Object.values(this.state.dmsCoordinates);
       if (values) {
         values.forEach(value => {
           if (value.includes('')){
@@ -240,16 +200,37 @@ export default class CoordinatesModal extends Component {
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
-            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-degrees-${item}`} name={`dms-latitude-${item}`} />
+            <input
+              onChange={evt => this.updateDMS(evt, index, 'hours', 'lat')}
+              className="analysis-coordinates__latitude-measurement"
+              type='number'
+              id={`dms-latitude-hours-${item}`}
+              name={`dms-latitude-${item}`}
+              value={item.lat.hours}
+            />
             <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
-            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-minutes-${item}`} name={`dms-latitude-${item}`} />
+            <input
+              onChange={evt => this.updateDMS(evt, index, 'minutes', 'lat')}
+              className="analysis-coordinates__latitude-measurement"
+              type='number'
+              id={`dms-latitude-minutes-${item}`}
+              name={`dms-latitude-${item}`}
+              value={item.lat.minutes}
+            />
             <span className="analysis-coordinates__latitude-measurement-label">'</span>
-            <input onChange={this.updateDMSLatValues} className="analysis-coordinates__latitude-measurement" type='number' id={`dms-latitude-seconds-${item}`} name={`dms-latitude-${item}`} />
+            <input
+              onChange={evt => this.updateDMS(evt, index, 'seconds', 'lat')}
+              className="analysis-coordinates__latitude-measurement"
+              type='number'
+              id={`dms-latitude-seconds-${item}`}
+              name={`dms-latitude-${item}`}
+              value={item.lat.seconds}
+            />
             <span className="analysis-coordinates__latitude-measurement-label">"</span>
             <select
-              value={latitudeDirectionOptions && latitudeDirectionOptions[0]}
+              value={item.lat.direction}
               className='analysis-coordinates-directions__select pointer'
-              onChange={this.updateDMSLatValues}
+              onChange={evt => this.updateDMS(evt, index, 'direction', 'lat')}
               id={`dms-latitude-direction-${item}`}
               name={`dms-latitude-${item}`}
             >
@@ -262,16 +243,36 @@ export default class CoordinatesModal extends Component {
         <div className="analysis-coordinates__longitude-container">
           <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
           <div className="analysis-coordinates__longitude">
-            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-degrees-${item}`} name={`dms-longitude-${item}`} />
+            <input
+              onChange={evt => this.updateDMS(evt, index, 'hours', 'lng')}
+              className="analysis-coordinates__longitude-measurement"
+              type='number'
+              id={`dms-longitude-hours-${item}`}
+              name={`dms-longitude-${item}`}
+              value={item.lng.hours}
+            />
             <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
-            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-minutes-${item}`} name={`dms-longitude-${item}`} />
+            <input
+              onChange={evt => this.updateDMS(evt, index, 'minutes', 'lng')}
+              className="analysis-coordinates__longitude-measurement"
+              type='number'
+              id={`dms-longitude-minutes-${item}`}
+              name={`dms-longitude-${item}`}
+              value={item.lng.minutes}
+            />
             <span className="analysis-coordinates__longitude-measurement-label">'</span>
-            <input onChange={this.updateDMSLngValues} className="analysis-coordinates__longitude-measurement" type='number' id={`dms-longitude-seconds-${item}`} name={`dms-longitude-${item}`} />
+            <input
+              onChange={evt => this.updateDMS(evt, index, 'seconds', 'lng')}
+              className="analysis-coordinates__longitude-measurement"
+              type='number' id={`dms-longitude-seconds-${item}`}
+              name={`dms-longitude-${item}`}
+              value={item.lng.seconds}
+            />
             <span className="analysis-coordinates__longitude-measurement-label">"</span>
             <select
-              value={longitudeDirectionOptions && longitudeDirectionOptions[0]}
+              value={item.lng.direction}
               className='analysis-coordinates-directions__select pointer'
-              onChange={this.updateDMSLngValues}
+              onChange={evt => this.updateDMS(evt, index, 'direction', 'lng')}
               id={`dms-longitude-direction-${item}`}
               name={`dms-longitude-${item}`}
             >
@@ -324,7 +325,7 @@ export default class CoordinatesModal extends Component {
 
   render () {
     const {language} = this.context;
-    const {coordinatesFormat, countArray, error} = this.state;
+    const {coordinatesFormat, countArray, error, dmsCoordinates} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
 
     return (
@@ -345,7 +346,7 @@ export default class CoordinatesModal extends Component {
 
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
         {(coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') &&
-        countArray.map((item, index) => this.renderDMS(item, index))}
+        dmsCoordinates.map((item, index) => this.renderDMS(item, index))}
         {coordinatesFormat === coordinateFormatOptions[1] &&
         countArray.map((item, index) => this.renderDD(item, index))}
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
@@ -354,7 +355,7 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
         </div>
-        <div className="fa-button gold analysis-instructions__make-shape-button" onClick={this.makeShape}>
+        <div className="fa-button gold analysis-instructions__make-shape-button" onClick={this.resetError}>
           {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
           <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
         </div>
