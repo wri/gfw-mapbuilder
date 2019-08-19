@@ -3,6 +3,10 @@ import mapActions from 'actions/MapActions';
 import React, { Component, PropTypes } from 'react';
 import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
+import geometryUtils from '../../utils/geometryUtils';
+import Polygon from 'esri/geometry/Polygon';
+import layerKeys from '../../constants/LayerConstants';
+//import coordinateFormatter from "esri/geometry/coordinateFormatter";
 
 const defaultDMS = {
   lat: {
@@ -28,9 +32,10 @@ export default class CoordinatesModal extends Component {
 
   static contextTypes = {
     settings: PropTypes.object.isRequired,
-    language: PropTypes.string.isRequired
+    language: PropTypes.string.isRequired,
+    map: PropTypes.object.isRequired
   };
-  
+
 
   constructor(props) {
     super(props);
@@ -86,7 +91,7 @@ export default class CoordinatesModal extends Component {
     dmsCoordinate.lng = Object.assign({}, this.state.dmsCoordinates[index].lng);
     
     if (type !== 'direction'){
-      dmsCoordinate[latlng][type] = parseInt(evt.target.value);
+      dmsCoordinate[latlng][type] = parseFloat(evt.target.value);
     } else {
       dmsCoordinate[latlng][type] = evt.target.value;
     }
@@ -104,11 +109,11 @@ export default class CoordinatesModal extends Component {
     const ddCoordinate = Object.assign({}, this.state.ddCoordinates[index]);
     
     if (latlng === 'lat'){
-      ddCoordinate['lat'] = parseInt(evt.target.value);
+      ddCoordinate['lat'] = parseFloat(evt.target.value);
     } 
     
     if (latlng === 'lng'){
-      ddCoordinate['lng'] = parseInt(evt.target.value);
+      ddCoordinate['lng'] = parseFloat(evt.target.value);
     } 
     
     this.setState({
@@ -140,9 +145,13 @@ export default class CoordinatesModal extends Component {
     }
   };
   
-  makeShape = () => {
+  validateShape = () => {
+    this.setState({
+      error: false
+    });
     const {language} = this.context;
     const coordinatesFormat = this.state.coordinatesFormat;
+    let validated = true;
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
       const values = Object.values(this.state.dmsCoordinates);
       const latitudes = [];
@@ -168,6 +177,7 @@ export default class CoordinatesModal extends Component {
               this.setState({
                 error: true
               });
+              validated = false;
             }
           });
         }
@@ -181,6 +191,7 @@ export default class CoordinatesModal extends Component {
               this.setState({
                 error: true
               });
+              validated = false;
             }
           });
         }
@@ -195,17 +206,82 @@ export default class CoordinatesModal extends Component {
             this.setState({
               error: true
             });
+            validated = false;
           }
         });
       }
     }
+    
+    if (validated){
+      this.makeShape();
+    }
   };
   
-  resetError = () => {
-    this.setState({
-      error: false
-    }, () => this.makeShape());
-  };
+  makeShape = () => {
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
+    const {language, map} = this.context;
+    let polygon;
+    const selectedFeature = map.infoWindow.getSelectedFeature();
+    
+    map.infoWindow.clearFeatures();
+    const layer = map.getLayer(layerKeys.USER_FEATURES);
+    layer.remove(selectedFeature);
+    brApp.map.graphics.clear();
+    
+    //Do I need to reset analysis type???
+    mapActions.setAnalysisType('default');
+   
+    
+    // if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+    //   const values = Object.values(dmsCoordinates);
+    //   const latlngs = [];
+    //   const points = [];
+      
+    //   if (values) {
+    //     values.forEach(value => {
+    //       const {lat, lng} = value;
+    //       latlngs.push(`${lat.hours} ${lat.minutes} ${lat.seconds}${lat.direction} ${lng.hours} ${lng.minutes} ${lng.seconds}${lng.direction}`)
+    //     });
+        
+    //   coordinateFormatter.load().then(() => {
+    //     latlngs.forEach(latlng => {
+    //       const point = coordinateFormatter.fromLatitudeLongitude(latlng);
+    //       points.push(point);
+    //     });
+    //   });
+    //   // Can polygon take in single points???
+    //   polygon = new Polygon([...points]);
+    //   }
+    // }
+    
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]) {
+      const values = Object.values(ddCoordinates);
+      const latlngs = [];
+      values.forEach(value => {
+        latlngs.push([value.lat, value.lng]);
+      });
+      
+      const first = latlngs[0];
+      latlngs.push(first);
+      
+      polygon = new Polygon([...latlngs]);
+    }
+
+    geometryUtils.generateDrawnPolygon(polygon).then(graphic => {
+      const layer = map.getLayer(layerKeys.USER_FEATURES);
+      if (layer) {
+        layer.add(graphic);
+        map.infoWindow.setFeatures([graphic]);
+      }
+    });
+    this.close();
+  }
+  
+  // resetError = () => {
+  //   this.setState({
+  //     error: false
+  //   }, () => this.validateShape());
+  // };
   
   renderDMS = (item, index) => {
     const {language} = this.context;
@@ -388,7 +464,7 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
         </div>
-        <div className="fa-button gold analysis-instructions__make-shape-button" onClick={this.resetError}>
+        <div className="fa-button gold analysis-instructions__make-shape-button" onClick={this.validateShape}>
           {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
           <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
         </div>
