@@ -126,39 +126,41 @@ export default class CoordinatesModal extends Component {
       
       if (values) {
         values.forEach(value => {
-          const {latitude, longitude} = value;
-          if (latitude) {
-            latitudes.push(latitude);
+          const {lat, lng} = value;
+          if (lat) {
+            latitudes.push(lat);
           }
-          if (longitude) {
-            longitudes.push(longitude);
+          if (lng) {
+            longitudes.push(lng);
           }
         });
         
+        console.log('latitudes', latitudes);
+        console.log('longitudes', longitudes);
+        
         if (latitudes.length > 0) {
-          latitudes.forEach(lat => {
-            if (lat.includes('')) {
+          latitudes.forEach(latitude => {
+            if (
+            latitude.hours === '' ||
+            latitude.minutes === '' ||
+            latitude.seconds === '') {
               this.setState({
                 error: true
               });
             }
-          });
-        } else {
-          this.setState({
-            error: true
           });
         }
+        
         if (longitudes.length > 0) {
-          longitudes.forEach(lng => {
-            if (lng.includes('')) {
+          longitudes.forEach(longitude => {
+            if (
+            longitude.hours === '' ||
+            longitude.minutes === '' ||
+            longitude.seconds === '') {
               this.setState({
                 error: true
               });
             }
-          });
-        } else {
-          this.setState({
-            error: true
           });
         }
       }
