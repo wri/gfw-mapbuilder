@@ -50,7 +50,7 @@ export default class CoordinatesModal extends Component {
       coordinatesFormat: '',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
-      error: false
+      errors: []
     };
   }
 
@@ -67,7 +67,7 @@ export default class CoordinatesModal extends Component {
       coordinatesFormat: '',
       dmsCoordinates,
       ddCoordinates,
-      error: false
+      errors: []
     });
   };
 
@@ -82,7 +82,7 @@ export default class CoordinatesModal extends Component {
       coordinatesFormat: evt.target.value,
       dmsCoordinates,
       ddCoordinates,
-      error: false
+      errors: []
     });
   };
   
@@ -148,11 +148,12 @@ export default class CoordinatesModal extends Component {
   
   validateShape = () => {
     this.setState({
-      error: false
+      errors: []
     });
     const {language} = this.context;
     const coordinatesFormat = this.state.coordinatesFormat;
     let validated = true;
+    const errors = [];
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
       const values = Object.values(this.state.dmsCoordinates);
       const latitudes = [];
@@ -172,12 +173,27 @@ export default class CoordinatesModal extends Component {
         if (latitudes.length > 0) {
           latitudes.forEach(latitude => {
             if (
-            latitude.degrees === '' ||
-            latitude.minutes === '' ||
-            latitude.seconds === '') {
-              this.setState({
-                error: true
-              });
+              latitude.degrees === '' ||
+              latitude.minutes === '' ||
+              latitude.seconds === ''
+            ) {
+              errors.push(0);
+              validated = false;
+            }
+            if (
+              latitude.degrees < 0 ||
+              latitude.minutes < 0 ||
+              latitude.seconds < 0
+            ) {
+              errors.push(1);
+              validated = false;
+            }
+            if (
+              latitude.degrees > 90 ||
+              latitude.minutes > 90 ||
+              latitude.seconds > 90
+            ) {
+              errors.push(2);
               validated = false;
             }
           });
@@ -188,14 +204,33 @@ export default class CoordinatesModal extends Component {
             if (
             longitude.degrees === '' ||
             longitude.minutes === '' ||
-            longitude.seconds === '') {
-              this.setState({
-                error: true
-              });
+            longitude.seconds === ''
+            ) {
+              errors.push(0);
+              validated = false;
+            }
+            if (
+              longitude.degrees < 0 ||
+              longitude.minutes < 0 ||
+              longitude.seconds < 0
+            ) {
+              errors.push(1);
+              validated = false;
+            }
+            if (
+              longitude.degrees > 180 ||
+              longitude.minutes > 180 ||
+              longitude.seconds > 180
+            ) {
+              errors.push(3);
               validated = false;
             }
           });
         }
+        const filteredErrors = [...new Set(errors)];
+        this.setState({
+          errors: filteredErrors
+        });
       }
     }
     
@@ -203,16 +238,34 @@ export default class CoordinatesModal extends Component {
       const values = Object.values(this.state.ddCoordinates);
       if (values) {
         values.forEach(value => {
-          if (value.lat === '' || value.lng === ''){
-            this.setState({
-              error: true
-            });
+          if (
+            value.lat === '' ||
+            value.lng === ''
+          ){
+            errors.push(0);
+            validated = false;
+          }
+          if (
+            value.lat < -90 ||
+            value.lat > 90
+          ){
+            errors.push(4);
+            validated = false;
+          }
+          if (
+            value.lng < -180 ||
+            value.lng > 180
+          ){
+            errors.push(5);
             validated = false;
           }
         });
+        const filteredErrors = [...new Set(errors)];
+        this.setState({
+          errors: filteredErrors
+        });
       }
     }
-    
     if (validated){
       this.makeShape();
     }
@@ -256,10 +309,6 @@ export default class CoordinatesModal extends Component {
         polygon = new Polygon([...latlngs]);
       }
     }
-    
-    // Tallinn: [59.43, 24.75] 59°26'13.06"N, 24°45'12.71"E
-    // Helsinki: [60.17, 24.94] 60°10'10.27"N, 24°56'7.62"E
-    // Oslo: [59.91, 10.74] 59°54'45.83"N, 10°44'45.92"E
     
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]) {
       const values = Object.values(ddCoordinates);
@@ -433,7 +482,7 @@ export default class CoordinatesModal extends Component {
 
   render () {
     const {language} = this.context;
-    const {coordinatesFormat, dmsCoordinates, ddCoordinates, error} = this.state;
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
     
     return (
@@ -467,7 +516,7 @@ export default class CoordinatesModal extends Component {
           {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
           <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
         </div>
-        {error && <div className="analysis-coordinates-error">{text[language].ANALYSIS_COORDINATES_ERROR}</div>}
+        {errors !== [] && <div className="analysis-coordinates-errors">{errors.map(error => <div className="analysis-coordinates-error"> {text[language].ANALYSIS_COORDINATES_ERROR[error]}</div>)}</div>}
       </ControlledModalWrapper>
     );
   }

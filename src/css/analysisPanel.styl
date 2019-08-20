@@ -507,14 +507,20 @@
       .analysis-coordinates__longitude-measurement-label
         margin-right 0
         
-.analysis-coordinates-error
+.analysis-coordinates-errors
   display flex
-  justify-content center
-  align-items center
-  font-weight bold
-  color orangered
+  flex-direction column
+  flex-wrap nowrap
   width 100%
-  font-size 0.75rem
+  .analysis-coordinates-error
+    display flex
+    justify-content center
+    align-items center
+    font-weight bold
+    color orangered
+    width 100%
+    font-size 0.75rem
+    margin 0.5rem 0
 
 @media (min-width: $mobileBreak)
   .analysis__chart-container
