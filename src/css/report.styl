@@ -634,7 +634,39 @@ body
   h3
   h4
     margin 0 5px
+    
+  .report-header
+    background-color #555
+    box-sizing border-box
+    height $headerHeight
+    display flex
+    width 100%
+    z-index 10
+    height 5rem
 
+  .report-header__logo-container
+    padding 1rem
+    .report-header__logo
+      height 7rem
+    
+  .map-analysis-area-container
+    margin-top 10rem
+    
+  .report-header__icon-print
+    height 3rem
+    width 3rem
+    margin-right 0.5rem
+    
+  .report-header__icon-share
+    height 3rem
+    width 3rem
+    margin-left 0.5rem
+    
+  .vega-chart-menu
+    .svg-icon
+      width 2rem
+      height 2rem
+     
 @media print
 
   html
