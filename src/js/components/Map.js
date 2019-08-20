@@ -881,6 +881,8 @@ export default class Map extends Component {
 
     const timeSlider = webmapInfo && webmapInfo.widgets && webmapInfo.widgets.timeSlider;
     const timeWidgets = [];
+    const zoomLevel = map && map.getZoom ? map.getZoom() : 0;
+
 
     if (timeSlider) {
       const layer = getTimeEnabledLayer(webmapInfo);
@@ -960,7 +962,7 @@ export default class Map extends Component {
             imageryHoverVisible={this.state.imageryHoverVisible}
           />
         </div>
-        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible &&
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel > 11 &&
             <ImageryHoverModal
               selectedImagery={this.state.selectedImagery}
               top={this.state.imageryHoverInfo.top}
