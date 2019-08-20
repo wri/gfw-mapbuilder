@@ -88,6 +88,12 @@ export default class DrawTools extends Component {
     mapActions.activateDrawButton(false);
     // Reconnect the popups, this function is only available to webmaps when usePopupManager is true
     map.setInfoWindowOnClick(true);
+    const selectedFeature = map.infoWindow.getSelectedFeature();
+    map.infoWindow.clearFeatures();
+    const layer = map.getLayer(layerKeys.USER_FEATURES);
+    layer.remove(selectedFeature);
+    brApp.map.graphics.clear();
+    mapActions.setAnalysisType('default');
   };
 
   renderInstructionList = (instruction, index) => {

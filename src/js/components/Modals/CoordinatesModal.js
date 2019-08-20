@@ -223,7 +223,6 @@ export default class CoordinatesModal extends Component {
     const {language, map} = this.context;
     let polygon;
     const selectedFeature = map.infoWindow.getSelectedFeature();
-    
     map.infoWindow.clearFeatures();
     let layer = map.getLayer(layerKeys.USER_FEATURES);
     layer.remove(selectedFeature);
