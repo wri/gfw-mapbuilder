@@ -643,6 +643,35 @@ body
   body
     height 100%
     
+  .report-header
+    background-color: #555;
+    box-sizing: border-box;
+    height: 5rem;
+    display: flex;
+    width: 100%;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    .report-header__logo-container
+      padding: 5px 10px 5px 20px;
+      position: absolute;
+      top: 1rem;
+      .logo-anchor
+        .report-header__logo
+          height 100px
+    .report-header__title-container
+      .report-header__title
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 2rem;
+        margin: 0 auto;
+      .report-header__icon-container
+        .report-header__icon-print
+        .report-header__icon-share
+          height 3rem
+          width 3rem
+    
   .map-analysis-area-container
     position absolute
     top 0
