@@ -6,7 +6,8 @@ import SVGIcon from '../../utils/svgIcon';
 import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
 import layerKeys from '../../constants/LayerConstants';
-//import coordinateFormatter from "esri/geometry/coordinateFormatter";
+import webMercatorUtils from 'esri/geometry/webMercatorUtils';
+import SpatialReference from 'esri/SpatialReference';
 
 const defaultDMS = {
   lat: {
@@ -233,22 +234,26 @@ export default class CoordinatesModal extends Component {
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
       const values = Object.values(dmsCoordinates);
       const latlngs = [];
-      const points = [];
+      const converted = [];
+      let latitude;
+      let longitude;
       
       if (values) {
         values.forEach(value => {
           const {lat, lng} = value;
-          latlngs.push(`${lat.hours} ${lat.minutes} ${lat.seconds}${lat.direction} ${lng.hours} ${lng.minutes} ${lng.seconds}${lng.direction}`)
+          if (lat.hours < 0) {
+            latitude = -(lat.seconds / 3600) - (lat.minutes / 60) + lat.hours;
+          } else {
+            latitude = (lat.seconds / 3600) + (lat.minutes / 60) + lat.hours;
+          }
+          if (lng.hours < 0) {
+            longitude = -(lng.seconds / 3600) - (lng.minutes / 60) + lng.hours;
+          } else {
+            longitude = (lng.seconds / 3600) + (lng.minutes / 60) + lng.hours;
+          }
+          
+          
         });
-        
-      coordinateFormatter.load().then(() => {
-        latlngs.forEach(latlng => {
-          const point = coordinateFormatter.fromLatitudeLongitude(latlng);
-          points.push(point);
-        });
-      });
-      console.log('points', points);
-      polygon = new Polygon([...points]);
       }
     }
     
@@ -258,13 +263,11 @@ export default class CoordinatesModal extends Component {
       values.forEach(value => {
         latlngs.push([value.lat, value.lng]);
       });
-      
       const first = latlngs[0];
       latlngs.push(first);
-      
       polygon = new Polygon([...latlngs]);
     }
-
+    
     geometryUtils.generateDrawnPolygon(polygon).then(graphic => {
       layer = map.getLayer(layerKeys.USER_FEATURES);
       if (layer) {
@@ -274,12 +277,6 @@ export default class CoordinatesModal extends Component {
     });
     this.close();
   }
-  
-  // resetError = () => {
-  //   this.setState({
-  //     error: false
-  //   }, () => this.validateShape());
-  // };
   
   renderDMS = (item, index) => {
     const {language} = this.context;
