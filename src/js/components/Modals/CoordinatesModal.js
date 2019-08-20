@@ -11,13 +11,13 @@ import SpatialReference from 'esri/SpatialReference';
 
 const defaultDMS = {
   lat: {
-    hours: "",
+    degrees: "",
     minutes: "",
     seconds: "",
     direction: "N"
   },
   lng: {
-    hours: "",
+    degrees: "",
     minutes: "",
     seconds: "",
     direction: "E"
@@ -172,7 +172,7 @@ export default class CoordinatesModal extends Component {
         if (latitudes.length > 0) {
           latitudes.forEach(latitude => {
             if (
-            latitude.hours === '' ||
+            latitude.degrees === '' ||
             latitude.minutes === '' ||
             latitude.seconds === '') {
               this.setState({
@@ -186,7 +186,7 @@ export default class CoordinatesModal extends Component {
         if (longitudes.length > 0) {
           longitudes.forEach(longitude => {
             if (
-            longitude.hours === '' ||
+            longitude.degrees === '' ||
             longitude.minutes === '' ||
             longitude.seconds === '') {
               this.setState({
@@ -234,34 +234,39 @@ export default class CoordinatesModal extends Component {
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
       const values = Object.values(dmsCoordinates);
       const latlngs = [];
-      const converted = [];
       let latitude;
       let longitude;
       
       if (values) {
         values.forEach(value => {
           const {lat, lng} = value;
-          if (lat.hours < 0) {
-            latitude = -(lat.seconds / 3600) - (lat.minutes / 60) + lat.hours;
+          if (lat.direction === 'S') {
+            latitude = -(lat.seconds / 3600) - (lat.minutes / 60) + lat.degrees;
           } else {
-            latitude = (lat.seconds / 3600) + (lat.minutes / 60) + lat.hours;
+            latitude = (lat.seconds / 3600) + (lat.minutes / 60) + lat.degrees;
           }
-          if (lng.hours < 0) {
-            longitude = -(lng.seconds / 3600) - (lng.minutes / 60) + lng.hours;
+          if (lng.direction === 'W') {
+            longitude = -(lng.seconds / 3600) - (lng.minutes / 60) + lng.degrees;
           } else {
-            longitude = (lng.seconds / 3600) + (lng.minutes / 60) + lng.hours;
+            longitude = (lng.seconds / 3600) + (lng.minutes / 60) + lng.degrees;
           }
-          
-          
+          latlngs.push([longitude, latitude]);
         });
+        const first = latlngs[0];
+        latlngs.push(first);
+        polygon = new Polygon([...latlngs]);
       }
     }
+    
+    // Tallinn: [59.43, 24.75] 59°26'13.06"N, 24°45'12.71"E
+    // Helsinki: [60.17, 24.94] 60°10'10.27"N, 24°56'7.62"E
+    // Oslo: [59.91, 10.74] 59°54'45.83"N, 10°44'45.92"E
     
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]) {
       const values = Object.values(ddCoordinates);
       const latlngs = [];
       values.forEach(value => {
-        latlngs.push([value.lat, value.lng]);
+        latlngs.push([value.lng, value.lat]);
       });
       const first = latlngs[0];
       latlngs.push(first);
@@ -291,12 +296,12 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
             <input
-              onChange={evt => this.updateDMS(evt, index, 'hours', 'lat')}
+              onChange={evt => this.updateDMS(evt, index, 'degrees', 'lat')}
               className="analysis-coordinates__latitude-measurement"
               type='number'
-              id={`dms-latitude-hours-${item}`}
+              id={`dms-latitude-degrees-${item}`}
               name={`dms-latitude-${item}`}
-              value={item.lat.hours}
+              value={item.lat.degrees}
             />
             <span className="analysis-coordinates__latitude-measurement-label">&deg;</span>
             <input
@@ -334,12 +339,12 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-coordinates__longitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[1]}</span>
           <div className="analysis-coordinates__longitude">
             <input
-              onChange={evt => this.updateDMS(evt, index, 'hours', 'lng')}
+              onChange={evt => this.updateDMS(evt, index, 'degrees', 'lng')}
               className="analysis-coordinates__longitude-measurement"
               type='number'
-              id={`dms-longitude-hours-${item}`}
+              id={`dms-longitude-degrees-${item}`}
               name={`dms-longitude-${item}`}
-              value={item.lng.hours}
+              value={item.lng.degrees}
             />
             <span className="analysis-coordinates__longitude-measurement-label">&deg;</span>
             <input
