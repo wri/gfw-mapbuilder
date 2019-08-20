@@ -293,12 +293,12 @@ export default class CoordinatesModal extends Component {
         values.forEach(value => {
           const {lat, lng} = value;
           if (lat.direction === 'S') {
-            latitude = -(lat.seconds / 3600) - (lat.minutes / 60) + lat.degrees;
+            latitude = ((lat.seconds / 3600) - (lat.minutes / 60) + lat.degrees) * -1;
           } else {
             latitude = (lat.seconds / 3600) + (lat.minutes / 60) + lat.degrees;
           }
           if (lng.direction === 'W') {
-            longitude = -(lng.seconds / 3600) - (lng.minutes / 60) + lng.degrees;
+            longitude = ((lng.seconds / 3600) - (lng.minutes / 60) + lng.degrees) * -1;
           } else {
             longitude = (lng.seconds / 3600) + (lng.minutes / 60) + lng.degrees;
           }
