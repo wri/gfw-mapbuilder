@@ -380,7 +380,7 @@ export default {
     }
 
     new vega.View(vega.parse(config))
-    .renderer('canvas')
+    .renderer('svg')
     .initialize(el)
     .hover()
     .run()
