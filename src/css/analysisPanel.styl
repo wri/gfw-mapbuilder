@@ -5,13 +5,16 @@
   height 100%
 
 .analysis-instructions
-.analysis-instructions__draw
 .analysis-instructions__upload
+.analysis-instructions__coordinates
   color $grayFont
   padding 10px
+  
+.analysis-instructions__draw
+  color $grayFont
+  padding 0 10px
 
 .analysis-instructions__header
-.analysis-instructions__header--draw
   font-weight 400
   margin 5px 0
 
@@ -57,7 +60,7 @@
 
 .analysis-instructions__draw-icon
   display block
-  margin auto
+  margin 1rem auto
   height 75px
   width 100px
   &.cls-3
@@ -68,9 +71,59 @@
     fill $darkGray
 
 .analysis-instructions__draw-button
+  // text-transform uppercase
+  // font-weight bold
+  // margin 15px
+  // min-width 175px
   text-transform uppercase
   font-weight bold
   margin 15px
+  display flex
+  align-items center
+  justify-content center
+  margin-bottom 35px
+  min-width 175px
+  .analysis-instructions__draw-upload-icon
+    margin 0 0.5rem
+  
+.analysis-instructions__enter-values-button
+  text-transform uppercase
+  font-weight bold
+  margin 15px
+  display flex
+  align-items center
+  justify-content center
+  margin-bottom 35px
+  min-width 175px
+  .analysis-instructions__enter-values-icon
+    margin 0 0.5rem
+    
+.analysis-instructions__make-shape-button
+  text-transform uppercase
+  font-weight bold
+  margin 15px
+  display flex
+  align-items center
+  justify-content center
+  min-width 175px
+  .analysis-instructions__make-shape-icon
+    margin 0 0.5rem
+    
+.analysis-instructions__add-more-button
+  text-transform uppercase
+  font-weight bold
+  margin 0.5rem 0
+  display flex
+  align-items center
+  justify-content center
+  min-width 175px
+  font-size 0.75rem
+  color #555
+  &:hover
+    text-decoration underline
+    text-decoration-color #e6a912
+  .analysis-instructions__add-more-icon
+    margin 0 0.5rem
 
 .analysis-instructions__upload-container
   background-color $lightGrayHighlight
@@ -112,7 +165,7 @@
   color black
 
 .analysis-results__select-container
-  height: 25px;
+  height 25px
 
 .analysis-results__select
   -webkit-appearance none
@@ -338,7 +391,136 @@
     text-transform uppercase
 
 
+.analysis-coordinates__select-container
+  margin 1rem 0
+  
+.analysis-coordinates__inputs-container-dms
+  padding 0.75rem 0
+  
+.analysis-coordinates__select
+  -webkit-appearance none
+  height 25px
+  width 100%
+  background transparent
+  border-radius 0
+  padding-left 10px
+  left 0
+  top 0
+  &::after
+    pointer-events none
+    position absolute
+    content '\25BC'
+    font-size 10px
+    right 5px
+    top 5px
+    
+.analysis-coordinates__select-arrow:after
+  pointer-events none
+  position absolute
+  content '\25BC'
+  font-size 12px
+  color #e6a912
+  right 8px
+  top 21px
+  
+.analysis-coordinates-directions__select
+  -webkit-appearance none
+  height 25px
+  width 18%
+  background transparent
+  border-radius 0
+  padding-left 3px
+  left 0
+  top 0
+  &::after
+    pointer-events none
+    position absolute
+    content '\25BC'
+    font-size 10px
+    right 5px
+    top 5px
+  
+.analysis-coordinates-directions__select-arrow:after
+  pointer-events none
+  position absolute
+  content '\25BC'
+  font-size 12px
+  color #e6a912
+  right 5px
+  bottom 5px
+  
+.analysis-coordinates__label
+.analysis-coordinates__latitude-label
+.analysis-coordinates__longitude-label
+  font-size 0.75rem
+  
+.analysis-coordinates__divider-dd
+  width 100%
+  height 1px
+  background-color #ccc
+  margin 1rem 0
 
+.analysis-coordinates__divider-dms
+  width 100%
+  height 1px
+  background-color #ccc
+  
+.analysis-coordinates__latitude-container  
+.analysis-coordinates__longitude-container
+  position relative
+  margin 0.5rem 0
+  
+.analysis-coordinates__latitude
+.analysis-coordinates__longitude
+    display flex
+    flex-direction row
+    justify-content space-between
+    flex-wrap nowrap
+    
+.analysis-coordinates__latitude-measurement
+.analysis-coordinates__longitude-measurement
+  width 18%
+    
+.analysis-coordinates__latitude-measurement-label
+.analysis-coordinates__longitude-measurement-label
+  margin-right 1rem
+  margin-left 0.25rem
+  font-weight bold
+  
+.analysis-coordinates-lat-lng-container
+  display flex
+  justify-content space-between
+  align-items center
+  .analysis-coordinates__latitude-container
+  .analysis-coordinates__longitude-container
+    display flex
+    flex-flow column
+    position none
+    margin 0
+    .analysis-coordinates__latitude
+    .analysis-coordinates__longitude
+      justify-content flex-start
+      .analysis-coordinates__latitude-measurement
+      .analysis-coordinates__longitude-measurement
+        width 100%
+        height 25px
+      .analysis-coordinates__longitude-measurement-label
+        margin-right 0
+        
+.analysis-coordinates-errors
+  display flex
+  flex-direction column
+  flex-wrap nowrap
+  width 100%
+  .analysis-coordinates-error
+    display flex
+    justify-content center
+    align-items center
+    font-weight bold
+    color orangered
+    width 100%
+    font-size 0.75rem
+    margin 0.5rem 0
 
 @media (min-width: $mobileBreak)
   .analysis__chart-container

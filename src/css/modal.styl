@@ -43,13 +43,15 @@
   right 0
   top 0
   z-index 10
+  
   & svg
-    transform translate(-50%, -50%)
+    //transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    left 50%
-    top 50%
+    //left 50%
+    top 60%
+    margin-left 0.25rem
 
 .mobile-show.close-icon
   height 60px
@@ -75,16 +77,18 @@
 
 //- Analysis Modal
 .analysis-modal-container .modal
+.coordinates-modal-container .modal
   overflow-y auto
   width 320px
   height 500px
-  & .analysis-instructions__separator
-    display none
+  // & .analysis-instructions__separator
+  //   display none
   & .modal-content
     max-height 100%
 
 @media (min-width: $mobileBreak)
   .analysis-modal-container
+  .coordinates-modal-container
     & .analysis-instructions__header--additional
       font-size inherit
       margin 5px 0

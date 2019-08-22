@@ -39,6 +39,7 @@ class MapActions {
   * @return {object} - data
   */
   toggleAnalysisModal = (data) => data;
+  toggleCoordinatesModal = (data) => data;
   togglePrintModal = (data) => data;
   toggleSearchModal = (data) => data;
   toggleCanopyModal = (data) => data;
@@ -234,6 +235,10 @@ class MapActions {
   updateAnalysisSliderIndices = params => params;
 
   activateDrawButton(bool) {
+    return bool;
+  }
+  
+  activateEnterValuesButton(bool) {
     return bool;
   }
 
