@@ -25,6 +25,7 @@ class MapStore {
     this.activeTab = '';
 
     this.activeLayers = [];
+    this.activeVersions = {};
     this.allLayers = [];
     this.basemap = null;
     this.legendOpen = false;
@@ -85,6 +86,7 @@ class MapStore {
     this.selectedImagery = null;
     this.imageryParams = null;
     this.imageryHoverInfo = null;
+    this.activeFilters = {};
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -148,7 +150,10 @@ class MapStore {
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
-      setImageryHoverInfo: mapActions.setImageryHoverInfo
+      setImageryHoverInfo: mapActions.setImageryHoverInfo,
+      setActiveFilters: mapActions.setActiveFilters,
+      changeLayerVersion: mapActions.changeLayerVersion
+
     });
   }
 
@@ -343,9 +348,11 @@ class MapStore {
           mapActions.toggleAnalysisTab.defer(true);
 
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
+            //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
+            const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
             analysisUtils.registerGeom(exactGeom).then(res => {
               selectedFeature.attributes.geostoreId = res.data.id;
-              selectedFeature.setGeometry(exactGeom);
+              selectedFeature.setGeometry(geomToRegister);
               mapActions.toggleAnalysisTab(false);
               isRegistering = false;
             });
@@ -364,6 +371,7 @@ class MapStore {
 
   createLayers (payload) {
     const {map, layers} = payload;
+
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
         return prevArray.concat(...currentItem.nestedLayers);
@@ -693,6 +701,30 @@ class MapStore {
 
   setImageryHoverInfo(obj) {
     this.imageryHoverInfo = obj;
+  }
+
+  setActiveFilters(obj) {
+    const { layerId, value } = obj;
+
+    if (!value && this.activeFilters[layerId]) {
+      delete this.activeFilters[layerId];
+    } else {
+      this.activeFilters[layerId] = value;
+    }
+  }
+
+  changeLayerVersion(obj) {
+    const { id, newLayer, versionIndex } = obj;
+    const allLayersCopy = this.allLayers.map((layer) => {
+      if (layer.id === id) {
+        layer = newLayer;
+      }
+      return layer;
+    });
+    this.allLayers = allLayersCopy;
+    this.activeVersions[id] = versionIndex;
+    this.emitChange();
+
   }
 }
 

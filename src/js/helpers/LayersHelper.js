@@ -2,6 +2,7 @@ import layerKeys from 'constants/LayerConstants';
 import rasterFuncs from 'utils/rasterFunctions';
 import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
+import {shortTermServices} from '../config';
 
 const LayersHelper = {
 
@@ -28,20 +29,73 @@ const LayersHelper = {
     esriLayer.setVisibleLayers(esriLayer.visibleLayers);
   },
 
-  /**
-  * @param {number} optionIndex - Index of the selected option in the UI, see js/config
-  * @param {boolean} dontRefresh - Whether or not to not fetch a new image
-  */
-  updateFiresLayerDefinitions (startDate, endDate, layer, dontRefresh) {
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
     if (brApp.map) {
-      const queryString = this.generateFiresQuery(startDate, endDate);
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      const defs = [];
+      const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? 'viirs' : 'modis';
+      if (selectValue) {
+        if (firesLayer && firesLayer.visible) {
+        // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
+        // We are hiding and showing the layer to avoid calling the service multiple times.
 
-      if (firesLayer) {
-        firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-        firesLayer.setLayerDefinitions(defs, dontRefresh);
+          firesLayer.hide();
+          const layaDefs = [];
+          switch (selectValue) {
+            case '0': //past 24 hours
+              firesLayer.url = shortTermServices[`${fireID}24HR`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+              break;
+            case '1': //past 48 hours
+              firesLayer.url = shortTermServices[`${fireID}48HR`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+              break;
+            case '2': //past 72 hours
+              firesLayer.url = shortTermServices[`${fireID}7D`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              break;
+            case '3': //past 7 days
+              firesLayer.url = shortTermServices[`${fireID}7D`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              break;
+            case '4': //past 7 days
+              const queryString = this.generateFiresQuery(startDate, endDate);
+              const defs = [];
+
+              firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              console.log('defs', defs);
+              firesLayer.setLayerDefinitions(defs);
+              break;
+            default:
+              console.log('default');
+              break;
+          }
+          firesLayer.refresh();
+          firesLayer.show();
+        }
       }
+      // else {
+      //   const queryString = this.generateFiresQuery(startDate, endDate);
+      //   const defs = [];
+      //   if (firesLayer) {
+      //     firesLayer.hide();
+      //     if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
+      //       firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+      //       firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+      //       firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+      //     }
+      //     firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+      //     firesLayer.setLayerDefinitions(defs, dontRefresh);
+      //     firesLayer.show();
+      //   }
+      // }
     }
   },
 

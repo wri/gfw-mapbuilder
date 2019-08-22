@@ -6,6 +6,7 @@ import WebMapLegend from 'components/LegendPanel/WebMapLegend';
 import WMSLegend from 'components/LegendPanel/WMSLegend';
 import WebMapFeatureLayerLegend from 'components/LegendPanel/WebMapFeatureLayerLegend';
 import LayerLegend from 'components/LegendPanel/LayerLegend';
+import ApiLegend from 'components/LegendPanel/ApiLegend';
 import {urls} from 'js/config';
 import text from 'js/languages';
 import CartoLegend from './CartoLegend';
@@ -49,6 +50,28 @@ export default class LegendPanel extends Component {
 
     const {activeLayers, legendOpacity, initialLayerOpacities} = this.props;
     const { language } = this.context;
+
+    if (layer.metadata && layer.metadata.legendConfig && layer.metadata.legendConfig.type) {
+      let visibility = activeLayers.indexOf(layer.id) > -1;
+      if (typeof layer.visibleAtMapScale !== 'undefined') {
+        visibility = activeLayers.indexOf(layer.id && layer.visibleAtMapScale);
+      }
+
+      return <ApiLegend
+        key={layer.id}
+        label={layer.label ? layer.label[language] : ''}
+        url={layer.url}
+        visibleLayers={activeLayers}
+        layerIds={layer.layerIds}
+        layerId={layer.id}
+        legendOpacity={legendOpacity}
+        initialLayerOpacities={initialLayerOpacities}
+        defaultOpacity={layer.opacity || 1}
+        metadata={layer.metadata}
+        visibility={visibility}
+        language={this.context.language}
+      />;
+    }
 
     switch(layer.id) {
       case 'IFL':
@@ -236,7 +259,7 @@ export default class LegendPanel extends Component {
       default:
         if (layer.hasOwnProperty('nestedLayers')) {
           childComponent = this.createNestedLegendGroups(layer);
-        } else if (layer.type === 'feature') {
+        } else if (layer.type === 'feature' && !layer.url) {
           childComponent = <WebMapFeatureLayerLegend
             key={layer.id}
             layer={layer}

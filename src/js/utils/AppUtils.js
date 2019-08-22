@@ -144,6 +144,8 @@ const utils = {
       OBJECTID_Field,
       activeSlopeClass,
       activeLayers,
+      activeFilters,
+      activeVersions,
       dynamicLayers,
       tcLossFrom,
       tcLossTo,
@@ -180,6 +182,8 @@ const utils = {
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
       sharinghost: settings.sharinghost,
+      activeFilters: activeFilters,
+      activeVersions: activeVersions,
       ...(layerId ? {layerId} : {}),
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})
@@ -203,28 +207,24 @@ const utils = {
 
     const path = toQuerystring(query);
 
-    if (window._app.base === window._app.cache) {
-      window.open(`report.html?${path}`);
-    } else {
-      let appBase = window._app.base;
+    // if (window._app.base === window._app.cache) {
+    //   console.log('window._app.base === window._app.cache', window._app.base, window._app.cache)
+    //   window.open(`report.html?${path}`);
+    // }
+    let appBase = window.location.origin + window.location.pathname;
 
-      if (!appBase) {
-        appBase = window.location.origin + window.location.pathname;
-      }
-
-      if (appBase.slice(-1) !== '/') {
-        appBase += '/';
-      }
-      //We are no longer using localStorage as it won't persist across domains!
-      window.addEventListener('message', function(e) {
-        // We need the report's origin; AKA appBase minus a couple things
-        if (appBase.indexOf(e.origin) > -1 && e.data === 'send-info') {
-          e.source.postMessage({command: 'info', info: settings.analysisModules}, e.origin);
-        }
-      }, false);
-
-      window.open(`${appBase}report.html?${path}`);
+    if (appBase.slice(-1) !== '/') {
+      appBase += '/';
     }
+    //We are no longer using localStorage as it won't persist across domains!
+    window.addEventListener('message', function(e) {
+      // We need the report's origin; AKA appBase minus a couple things
+      if (appBase.indexOf(e.origin) > -1 && e.data === 'send-info') {
+        e.source.postMessage({command: 'info', info: settings.analysisModules}, e.origin);
+      }
+    }, false);
+
+    window.open(`${appBase}report.html?${path}`);
   },
 
   geometryFailure: (err) => {

@@ -26,3 +26,4 @@ export default {
   EXTRA_LAYERS: 'extraLayers',
   RECENT_IMAGERY: 'RECENT_IMAGERY'
 };
+

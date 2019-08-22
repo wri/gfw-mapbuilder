@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import charts from 'utils/charts';
+import SVGIcon from 'utils/svgIcon';
+import { urls } from 'js/config';
 
 export default class VegaChart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isError: false, errorMsg: null };
+    this.state = {
+      isError: false,
+      errorMsg: null,
+      showDownloadOptions: false,
+      downloadOptions: [],
+      chartDownloadTitle: 'analysis.png',
+      chartImgDownloadUrl: null,
+    };
   }
 
   handleError(errorMsg) {
     this.setState({ isError: true, errorMsg });
-    this.props.setLoading();
+    if (this.props.setLoading) {
+      this.props.setLoading();
+    }
   }
 
   componentDidMount() {
@@ -18,28 +29,50 @@ export default class VegaChart extends Component {
       this.handleError();
     } else {
       const config = this.props.results.data.attributes.widgetConfig;
-      const url = config.data[0].url;
+      const {setLoading, language} = this.props;
+      if (config.data[0].url.indexOf('?&') > -1){
+        const urlPieces = config.data[0].url.split('?&');
+        config.data[0].url = urlPieces[0] + '?' + urlPieces[1];
+      }
 
-      fetch(url).then(res => {
+      fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError('Error creating analysis.');
         } else {
           res.json().then(json => {
-            // We used to have this 'json' object for validation and error-checking, but now
-            // we leave that up to the Widget API!
-            charts.makeVegaChart(this.chart, config, this.props.setLoading);
+            charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
+            const downloadOptions = [];
+            if (json.data && json.data.attributes && json.data.attributes.downloadUrls && !config.title) {
+              const downloadUrls = json.data.attributes.downloadUrls;
+              const label = 'csv';
+              downloadOptions.push({label, url: downloadUrls[label]});
+            }
+            const chartDownloadTitle = json.data && json.data.type ? json.data.type + '-analysis.png' : 'analysis.png';
+            this.setState({ downloadOptions, chartDownloadTitle });
           });
         }
-
-      }).catch(() => {
-        this.handleError('Error creating analysis.');
-      });
+      })
+      .catch(() => this.handleError('Error creating analysis.'));
     }
   }
 
+  addChartDownload = (url) => {
+    this.setState({ chartImgDownloadUrl: url });
+  };
+
+  renderdownloadOptions = (option, i) => {
+    const baseUrl = urls.analysisDataBaseUrl;
+    return (
+      <a href={option.url.includes('cartodb') ? option.url : baseUrl + option.url} target="_blank" download key={`option-${i}`}>
+        <span className='download-option-label'>Download Alerts as .CSV</span>
+      </a>
+    );
+  };
+
   render() {
-    const { isError, errorMsg } = this.state;
+    const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl } = this.state;
     const { results } = this.props;
+
     if (isError) {
       return (
         <div className='data-error'>
@@ -47,7 +80,27 @@ export default class VegaChart extends Component {
         </div>
       );
     } else {
-      return <div className='vega-chart' ref={(chart) => { this.chart = chart; }}></div>;
+      return (
+        <div className='vega-chart_container'>
+          { showDownloadOptions &&
+            <div className='vega-chart_click-area' onClick={() => this.setState({ showDownloadOptions: false })}></div> }
+          <div className='vega-chart_download-container'>
+            <div className='pointer' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}><SVGIcon id={'icon-menu'} /></div>
+
+            { showDownloadOptions &&
+              <div className='vega-chart_download-options shadow' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+                {downloadOptions.map(this.renderdownloadOptions)}
+                {this.chart &&
+                  <a href={chartImgDownloadUrl} download={chartDownloadTitle}>
+                    <span className='download-option-label'>Download PNG</span>
+                  </a>
+                }
+              </div> }
+
+          </div>
+          <div className='vega-chart' id='AnalysisVegaChart' ref={(chart) => { this.chart = chart; }}></div>
+        </div>
+      );
     }
   }
 }

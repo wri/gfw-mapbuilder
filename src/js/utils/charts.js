@@ -370,14 +370,29 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, callback) => {
-    new vega.View(vega.parse(config))
-      .renderer('canvas')
-      .initialize(el)
-      .hover()
-      .run();
+  makeVegaChart: (el, config, language, loadingCallback, downloadCallback) => {
+    if (config.signals && config.signals.length > 0) {
+        const signalLanguage = config.signals.find(signal => signal.name === 'language');
+        const signalIndex = config.signals.findIndex(signal => signal.name === 'language');
+        if (signalLanguage && signalLanguage.value !== language) {
+            config.signals[signalIndex].value = language;
+        }
+    }
 
-    if (callback) { callback(); }
+    new vega.View(vega.parse(config))
+    .renderer('canvas')
+    .initialize(el)
+    .hover()
+    .run()
+    .toImageURL('png')
+    .then((url) => {
+      if (downloadCallback) {
+        downloadCallback(url);
+      }
+      if (loadingCallback){
+        loadingCallback();
+      }
+    });
   },
 
 	/**

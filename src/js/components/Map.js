@@ -216,10 +216,9 @@ export default class Map extends Component {
           const screenPt = new ScreenPoint(xVal, yVal);
           // Convert screen point to map point and zoom to point;
           const mapPt = response.map.toMap(screenPt);
-          // Note: Lat and lon are intentionally reversed until imagery api is fixed.
-          // The imagery API only returns the correct image for that lat/lon if they are reversed.
-          params.lon = mapPt.getLatitude();
-          params.lat = mapPt.getLongitude();
+
+          params.lat = mapPt.getLatitude();
+          params.lon = mapPt.getLongitude();
 
           mapActions.getSatelliteImagery(params);
         });
@@ -669,7 +668,7 @@ export default class Map extends Component {
             },
             opacity: 1,
             visible: visible,
-            order: (layerIndex + 1) * 100 + sublayerIndex,
+            order: (layerIndex + 1) + sublayerIndex,
             esriLayer: layer.layerObject,
             itemId: layer.itemId
           };
@@ -882,6 +881,8 @@ export default class Map extends Component {
 
     const timeSlider = webmapInfo && webmapInfo.widgets && webmapInfo.widgets.timeSlider;
     const timeWidgets = [];
+    const zoomLevel = map && map.getZoom ? map.getZoom() : 0;
+
 
     if (timeSlider) {
       const layer = getTimeEnabledLayer(webmapInfo);
@@ -961,7 +962,7 @@ export default class Map extends Component {
             imageryHoverVisible={this.state.imageryHoverVisible}
           />
         </div>
-        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible &&
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 &&
             <ImageryHoverModal
               selectedImagery={this.state.selectedImagery}
               top={this.state.imageryHoverInfo.top}

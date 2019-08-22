@@ -1,16 +1,24 @@
 doctype
 html
 	head
-		meta(charset='utf-8')
+
 	body.tundra
-		#root
-		div#share-modal.modal-wrapper.hidden
-		script(id='library-load' src='https://library.gfw-mapbuilder.org/1.4.0.js' version='1.4.0')
-		//- script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/smoother-loading-v2/1.4.0.js')
-		//- script(id='library-load' src='./1.4.0.js')
+		div.report.inner
+			header.report-header.flex
+				div.report-header__logo-container
+					a#logo-anchor(target='_blank')
+						img#logo.report-header__logo
+				div.report-header__title-container
+					h1#report-title.report-header__title
+					h2#report-subtitle.report-header__subtitle
+
+			div#map.map
+			div#popup-content.popup-content
+			div#results-container.results-container
+		script(id='report-load' src='https://library.gfw-mapbuilder.org/reportLib.1.4.0.js')
+		meta(charset='utf-8')
 		script.
-			var customApp = new MapBuilder({
-				el: 'root',
+			var customApp = new MapBuilderReport({
 				config: {
 					//- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
 					//- General Settings

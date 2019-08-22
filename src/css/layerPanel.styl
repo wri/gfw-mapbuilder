@@ -95,6 +95,25 @@
 .layer-panel .layer-content-container
   margin 0 30px
 
+.active-fires-controls-container
+  display flex
+  align-items center
+  justify-content center
+  flex-wrap wrap
+  padding 10px 0
+  
+.active-fires-custom-range-container
+  display flex
+  align-items center
+  justify-content center
+  flex-wrap wrap
+  flex-flow column
+
+.active-fires-time-range
+.active-fires-custom-range
+  padding 5px
+  margin 0 !important
+
 //- Legends
 .water-stress-legend
 .major-dams-legend
@@ -121,6 +140,45 @@ div.legend-icon
   width 18px
   height 18px
   margin 2px
+.api-legend
+  div.legend-icon
+    width 16px
+    height 16px
+    margin: 2px
+    &.centered
+      display: flex
+      align-items: center
+      justify-content: center
+  .legend-label
+    max-width: calc(100% - 30px)
+    margin: 4px 0 0 10px
+  .legend-labels
+    float: left
+    padding-top: 2px
+  .label-container
+    strong
+      margin: 5px 0
+  .legend-container
+    margin: 5px 0 8px
+  .legend-row
+    display: flex
+    line-height: 13px
+  .legend-line
+    width 16px
+  .legend-point
+    border: 1px solid
+    border-radius: 50%
+  .gradient-legend
+    .gradient {
+      width: 16px
+      border: 1px solid #555555
+      clear: none
+      display: inline-block
+      margin 2px 0 2px 2px
+      float: left
+    }
+    .legend-label
+      max-width: 100%
 
 .water-stress-legend .no-data-labels div:nth-child(2)
 .water-stress-legend .no-data-labels img:nth-child(4)
@@ -592,3 +650,40 @@ div.legend-icon
 
 .react-datepicker__triangle
   display none !important
+
+.layer-field-filter
+  width 100%
+  max-width 250px
+  margin 8px 5px
+
+.layer-field-filter:hover
+  cursor text
+
+.layer-field-filter p
+  font-size 11px
+  margin 5px 0
+
+.layer-field-filter-select .css-1ep9fjw
+  padding 0 6px
+
+.layer-field-filter-select svg
+  width 15px
+  height 15px
+  cursor pointer
+
+.layer-versions
+  margin 5px 0
+  width 100%
+
+.layer-versions select
+  -webkit-appearance none
+  position absolute
+  height 100%
+  width 100%
+  opacity 0
+  left 0
+  top 0
+
+.layer-versions p
+  font-size 12px
+  margin 5px 0

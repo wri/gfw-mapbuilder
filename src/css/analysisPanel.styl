@@ -252,6 +252,7 @@
       width 80%
       color $darkGray
       font-size 16px
+      margin-top 10px
   .other-options-info
     position: absolute;
     bottom: 5;
@@ -289,6 +290,58 @@
 .vega-chart
   width 100%
   margin-top 20px
+
+.vega-chart_download-container
+  position relative
+  overflow visible
+  float right
+
+  .svg-icon
+    width 18px
+    height 18px
+
+.vega-chart_click-area
+  width 100%
+  height 100%
+  opacity 0.5
+  position absolute
+  top 0
+  left 0
+
+
+.vega-chart_download-options
+  position absolute
+  overflow auto
+  top 24px
+  right 0
+  max-height 110px
+  min-width 150px
+  display flex
+  flex-direction column
+  justify-content flex-start
+  border 0.75px solid #eee
+  z-index 2
+
+  a
+    width 100%
+    padding 8px 10px
+    text-decoration none
+    color #555
+    font-size 12px
+    background #fff
+    border-top 0.75px #eee solid
+
+  a:nth-child(1)
+    border none
+
+  a:hover
+    background #eee
+
+  .download-option-label
+    text-transform uppercase
+
+
+
 
 @media (min-width: $mobileBreak)
   .analysis__chart-container
