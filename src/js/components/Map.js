@@ -962,7 +962,7 @@ export default class Map extends Component {
             imageryHoverVisible={this.state.imageryHoverVisible}
           />
         </div>
-        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel > 11 &&
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 &&
             <ImageryHoverModal
               selectedImagery={this.state.selectedImagery}
               top={this.state.imageryHoverInfo.top}
