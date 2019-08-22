@@ -1,12 +1,12 @@
 doctype
 html
   head
-    meta(charset='utf-8')
+    include jade/meta.pug
   body
     div#report.report
     div#share-modal.share-modal.hidden
 
-    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/466-tooltips/reportLib.1.4.0.js')
+    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/502-increase-header-size/reportLib.1.4.0.js')
     script.
       var customApp = new MapBuilderReport({
         config: {
