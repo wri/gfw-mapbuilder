@@ -553,8 +553,32 @@ body
 .report-table-container
   max-width 60rem
   margin 0 auto
+  
+.report-table
+  font-size 12px
+  width 90%
+  margin 1rem auto
+  .field-row:nth-child(even)
+    background-color $selectionGray
+  .field-label
+    font-weight bold
+    color #555
+    width 50%
+  .field-value
+    color #555
+    width 50%
 
-@media (max-width 550px)
+.page-break-before
+.page-break-after
+.page-break-inside
+  display none
+  
+.esriMapLayers  
+.esriMapLayers > svg
+  width 100vw
+  margin 0 auto
+
+@media only screen and (max-width: 550px)
   .report-header__title
     display none
 
@@ -604,30 +628,38 @@ body
       &:hover
         background #eee
         text-decoration underline
-
-.report-table
-  font-size 12px
-  width 90%
-  margin 1rem auto
-  .field-row:nth-child(even)
-    background-color $selectionGray
-  .field-label
-    font-weight bold
-    color #555
-    width 50%
-  .field-value
-    color #555
-    width 50%
-
-.page-break-before
-.page-break-after
-.page-break-inside
-  display none
   
-.esriMapLayers  
-.esriMapLayers > svg
-  width 100vw
-  margin 0 auto
+  .report-header
+    background-color #555
+    box-sizing border-box
+    height $headerHeight
+    display flex
+    width 100%
+    z-index 10
+    height 5rem
+
+  .report-header__logo-container
+    padding 1rem
+    .report-header__logo
+      height 7rem
+    
+  .map-analysis-area-container
+    margin-top 10rem
+    
+  .report-header__icon-print
+    height 3rem
+    width 3rem
+    margin-right 0.5rem
+    
+  .report-header__icon-share
+    height 3rem
+    width 3rem
+    margin-left 0.5rem
+    
+  .vega-chart-menu
+    .svg-icon
+      width 2rem
+      height 2rem
 
 @media (max-width: $mobileBreak)
   .restoration-table
@@ -637,7 +669,7 @@ body
   h3
   h4
     margin 0 5px
-
+     
 @media print
 
   html
@@ -645,6 +677,35 @@ body
     position relative
   body
     height 100%
+    
+  .report-header
+    background-color: #555;
+    box-sizing: border-box;
+    height: 5rem;
+    display: flex;
+    width: 100%;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    .report-header__logo-container
+      padding: 5px 10px 5px 20px;
+      position: absolute;
+      top: 1rem;
+      .logo-anchor
+        .report-header__logo
+          height 100px
+    .report-header__title-container
+      .report-header__title
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 2rem;
+        margin: 0 auto;
+      .report-header__icon-container
+        .report-header__icon-print
+        .report-header__icon-share
+          height 3rem
+          width 3rem
     
   .map-analysis-area-container
     position absolute

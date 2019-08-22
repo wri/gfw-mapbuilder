@@ -3,6 +3,7 @@
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
 import AnalysisModal from 'components/Modals/AnalysisModal';
+import CoordinatesModal from 'components/Modals/CoordinatesModal';
 import Controls from 'components/MapControls/ControlPanel';
 import TimeWidget from 'components/MapControls/TimeWidget';
 import CanopyModal from 'components/Modals/CanopyModal';
@@ -249,7 +250,7 @@ export default class Map extends Component {
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {
-          if (this.state.drawButtonActive) {
+          if (this.state.drawButtonActive || this.state.enterValuesButtonActive) {
             // don't run this function if we are drawing a custom shape
             return;
           }
@@ -885,6 +886,7 @@ export default class Map extends Component {
       currentTimeExtent,
       printModalVisible,
       analysisModalVisible,
+      coordinatesModalVisible,
       searchModalVisible,
       canopyModalVisible,
       layerModalVisible,
@@ -951,8 +953,11 @@ export default class Map extends Component {
 
           </svg>
         </div>
-        <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
+        <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
+        </div>
+        <div className={`coordinates-modal-container modal-wrapper ${coordinatesModalVisible ? '' : 'hidden'}`}>
+          <CoordinatesModal enterValuesButtonActive={this.state.enterValuesButtonActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />

@@ -1,5 +1,6 @@
 import Instructions from 'components/AnalysisPanel/Instructions';
 import DrawTools from 'components/AnalysisPanel/DrawTools';
+import CoordinatesTools from 'components/AnalysisPanel/CoordinatesTools';
 import Upload from 'components/AnalysisPanel/Upload';
 import Analysis from 'components/AnalysisPanel/Analysis';
 import analysisKeys from 'constants/AnalysisConstants';
@@ -32,7 +33,7 @@ export default class AnalysisPanel extends Component {
     ) {
       content = <Analysis selectedFeature={selectedFeature} selectedFeats={selectedFeats} {...this.props} />;
     } else {
-      content = [<Instructions key='instructions' />, <DrawTools key='tools' />, <Upload key='upload'/>];
+      content = [<Instructions key='instructions' />, <DrawTools key='draw-tools' />, <CoordinatesTools key="coordinates-tools" />, <Upload key='upload'/>];
     }
 
     return (
