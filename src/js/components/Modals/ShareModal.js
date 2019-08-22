@@ -12,7 +12,7 @@ export default class ShareModal extends React.Component {
   constructor (props) {
     super(props);
 
-    modalStore.listen(this.storeUpdated);
+    modalStore.listen(this.storeUpdated.bind(this));
     const defaultState = modalStore.getState();
     this.state = {
       bitlyUrl: defaultState.bitlyUrl,
