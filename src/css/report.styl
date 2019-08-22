@@ -550,8 +550,32 @@ body
 .report-table-container
   max-width 60rem
   margin 0 auto
+  
+.report-table
+  font-size 12px
+  width 90%
+  margin 1rem auto
+  .field-row:nth-child(even)
+    background-color $selectionGray
+  .field-label
+    font-weight bold
+    color #555
+    width 50%
+  .field-value
+    color #555
+    width 50%
 
-@media (max-width 550px)
+.page-break-before
+.page-break-after
+.page-break-inside
+  display none
+  
+.esriMapLayers  
+.esriMapLayers > svg
+  width 100vw
+  margin 0 auto
+
+@media (max-width: 550px)
   .report-header__title
     display none
 
@@ -601,40 +625,7 @@ body
       &:hover
         background #eee
         text-decoration underline
-
-.report-table
-  font-size 12px
-  width 90%
-  margin 1rem auto
-  .field-row:nth-child(even)
-    background-color $selectionGray
-  .field-label
-    font-weight bold
-    color #555
-    width 50%
-  .field-value
-    color #555
-    width 50%
-
-.page-break-before
-.page-break-after
-.page-break-inside
-  display none
   
-.esriMapLayers  
-.esriMapLayers > svg
-  width 100vw
-  margin 0 auto
-
-@media (max-width: $mobileBreak)
-  .restoration-table
-  .restoration__chart
-    margin 10px auto
-    width 90%
-  h3
-  h4
-    margin 0 5px
-    
   .report-header
     background-color #555
     box-sizing border-box
@@ -666,6 +657,15 @@ body
     .svg-icon
       width 2rem
       height 2rem
+
+@media (max-width: $mobileBreak)
+  .restoration-table
+  .restoration__chart
+    margin 10px auto
+    width 90%
+  h3
+  h4
+    margin 0 5px
      
 @media print
 
