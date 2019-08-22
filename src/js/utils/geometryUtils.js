@@ -20,11 +20,8 @@ export default {
   */
   generateDrawnPolygon: (geom) => {
     let geometry = geom;
-    console.log('geom', geometry);
-    
     if (geometry.spatialReference.isWebMercator() === false) {
       geometry = webMercatorUtils.geographicToWebMercator(geometry);
-      console.log('geom after', geometry);
     }
     const deferred = new Deferred();
     analysisUtils.registerGeom(geometry).then(res => {
