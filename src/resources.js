@@ -1,87 +1,140 @@
 export default {
-  "webmap": "6c64177abcc74dbc80227c09635907ef",
-  "title": "Tierras Indígenas",
-  "subtitle": "",
-  "webmapMenuName": "CAPAS",
-  "logoUrl": "https://www.tierrasindigenas.org/system/site_settings/images/000/000/614/original/tierras2.png?1510952832",
-  "logoLinkUrl": "https://www.tierrasindigenas.org",
-  "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
-  "narrative": "\u003cp\u003eEl compendio de datos presentados en esta Plataforma fue colectado gracias a la colaboración de Instituciones Gubernamentales, Organizaciones no Gubernamentales, Investigadores Independientes, Comunidades y Organizaciones Indígenas. Las informaciones fueron depuradas e integradas, dicho proceso es continuo y abierto a nuevos aportes.\u003c/p\u003e",
-  "includeSubscribeButton": true,
-  "sharinghost": "https://www.arcgis.com",
-  "analyticsCode": "UA-62288390-21",
-  "iso": "PRY",
-  "language": "es",
-  "useAlternativeLanguage": false,
-  "alternativeLanguage": "en",
-  "alternativeWebmap": "",
-  "alternativeLanguageTitle": "",
-  "alternativeLanguageSubtitle": "",
-  "alternativeNarrative": "",
-  "alternativeWebmapMenuName": "Land Use",
-  "includeDocumentsTab": false,
-  "includeMeasurementTab": false,
-  "viirsFires": true,
-  "modisFires": true,
-  "intactForests": true,
-  "aboveGroundBiomass": true,
-  "landCover": true,
-  "mangroves": false,
-  "sadAlerts": false,
-  "gladAlerts": true,
-  "terraIAlerts": true,
-  "forma": true,
-  "primaryForests": true,
-  "recentImagery": true,
-  "analysisModules": [{
-      "analysisId": "TC_LOSS_GAIN",
-      "chartType": "badge",
-      "label": {
-        "en": "Total tree cover loss/ gain",
-        "fr": "Perte/gain total de la couverture arborée",
-        "es": "Pérdida/ganancia de cobertura arbórea total",
-        "pt": "Perda/ganho total de cobertura arbórea",
-        "id": "Total kehilangan/perolehan tutupan pohon",
-        "zh": "总森林覆盖减少/增加面积量",
-        "ka": "ხის ვარჯის საერთო კარგვა / მატება"
+  //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
+  //- General Settings
+  // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
+  // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
+  // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
+  // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
+  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  title: 'GFW Mapbuilder',
+  subtitle: 'Make maps that matter',
+  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
+  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
+  downloadLinkUrl: '', // http://data.globalforestwatch.org/
+  printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+  maskServiceUrl: '', // e.g. http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_00_Africa/MapServer
+  mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
+  mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+  narrative: '',
+  hideHeader: false,
+  hideFooter: false,
+  includeMyGFWLogin: true,
+  navLinksInNewTab: false,
+  //- Language Settings
+  language: 'en',
+  useAlternativeLanguage: false,
+  alternativeWebmap: '',
+  alternativeLanguage: 'fr',
+  alternativeLanguageTitle: 'GFW Mapbuilder',
+  alternativeLanguageSubtitle: 'Make maps that matter',
+  alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+  alternativeNarrative: '',
+  alternativeWebmapMenuName: 'Land Use',
+  initialExtent: {
+    x: null, // -122.3,
+    y: null, // 47.6,
+    z: null, // 9,
+  },
+  //- Tab Settings
+  includeDocumentsTab: false,
+  includeMeasurementTab: false,
+  //- Layers/Analysis Settings
+  iso: '',
+  viirsFires: true,
+  modisFires: true,
+  intactForests: true,
+  primaryForests: true,
+  forma: false,
+  aboveGroundBiomass: true,
+  landCover: true,
+  mangroves: false,
+  sadAlerts: true,
+  gladAlerts: true,
+  terraIAlerts: true,
+  recentImagery: true,
+  webmapMenuName: 'Land Use',
+  // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
+  sharinghost: 'https://www.arcgis.com',
+  analyticsCode: '',
+  includeCartoTemplateLayers: false,
+  cartoUser: 'wri-01',
+  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  cartoApiKey: 'your key here',
+  cartoGroupLabel: {
+    en: 'Carto Layers',
+    fr: 'Carto Layers',
+  },
+
+  /**
+   * Custom Analysis Module Configuration
+   * This section provides the opportunity to define additional custom analysis modules.
+   * The modules are dependent on gfw widgets registered to the GFW API, so if you would
+   * like to define a custom module, you must first create a widget and register it.
+   *
+   * (we probably will NOT use the value property. we will just loop through all analysisModules
+   * and create a dropdown option for each if they have all of the required properties. maybe they have an order to sort them? This also
+   * means that all of the standard analyses will get their own entry in this array.)
+   * @property {string} value - a unique value for this analysis module
+   * @property {string} label - the label for the analysis in the dropdown
+   * @property {string} group - what group this analysis belongs to (maybe this is how we can differentiate
+   * the 'standard' analyses any thing with group 'standard' will not be required to have a widget
+   * until we get widgets for all of them)
+   * @property {string} widgetId - the widgetId from the gfw-api
+   * @property {string} queryUrl - the url to query for the analysis data
+   * @property {object[]} params - any params to pass along with the query url
+   * @property {string} params[].key - query param key
+   * @property {string} params[].value - query param value
+   *
+   * (geostore is automatically appended with each request)
+   */
+  analysisModules: [{
+      analysisId: 'TC_LOSS_GAIN',
+      chartType: 'badge',
+      label: {
+        en: 'Total tree cover loss/ gain',
+        fr: 'Perte/gain total de la couverture arborée',
+        es: 'Pérdida/ganancia de cobertura arbórea total',
+        pt: 'Perda/ganho total de cobertura arbórea',
+        id: 'Total kehilangan/perolehan tutupan pohon ',
+        zh: '总森林覆盖减少/增加面积量',
+        ka: 'ხის ვარჯის საერთო კარგვა / მატება'
       },
-      "title": {
-        "en": "Total tree cover loss/ gain",
-        "fr": "Perte/gain total de la couverture arborée",
-        "es": "Pérdida/ganancia de cobertura arbórea total",
-        "pt": "Perda/ganho total de cobertura arbórea",
-        "id": "Total kehilangan/perolehan tutupan pohon ",
-        "zh": "总森林覆盖减少/增加面积量",
-        "ka": "ხის ვარჯის საერთო კარგვა / მატება"
+      title: {
+        en: 'Total tree cover loss/ gain',
+        fr: 'Perte/gain total de la couverture arborée',
+        es: 'Pérdida/ganancia de cobertura arbórea total',
+        pt: 'Perda/ganho total de cobertura arbórea',
+        id: 'Total kehilangan/perolehan tutupan pohon ',
+        zh: '总森林覆盖减少/增加面积量',
+        ka: 'ხის ვარჯის საერთო კარგვა / მატება'
       },
-      "description": {
-        "en": "Select range and tree cover density for loss data then click the run analysis button to see results. Gain data is currently only available for 2000 – 2012 and the gain analysis will always reflect the full 12-year time-period.",
-        "fr": "Sélectionner la plage et la densité de couverture arborée pour les données de perte, puis cliquer sur le bouton « Exécuter l’analyse » pour voir les résultats. Les données de gain ne sont actuellement disponibles que pour 2000 – 2012 et l’analyse de gain reflétera toujours la plage de 12 ans entière.",
-        "es": "Para obtener los datos sobre pérdida, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis para ver los resultados. Los datos sobre ganancia actualmente solo están disponibles para los años 2000 a 2012 y el análisis de la ganancia siempre reflejará el periodo de 12 años completo.",
-        "pt": "Selecione o período e a densidade de cobertura arbórea para dados de perda; em seguida, clique no botão para executar a análise e ver os resultados. Os dados de ganho estão disponíveis atualmente apenas para o período 2000 – 2012 e a análise de ganho sempre refletirá o período completo de 12 anos.",
-        "id": "Pilih rentang dan kerapatan tutupan pohon untuk data yang hilang, kemudian klik tombol mulai analisis untuk melihat hasilnya. Data perolehan saat ini hanya tersedia untuk periode 2000 – 2012 dan analisis perolehan akan selalu mencerminkan periode waktu 12 tahun penuh.",
-        "zh": "选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。",
-        "ka": "შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს."
+      description: {
+        en: 'Select range and tree cover density for loss data then click the run analysis button to see results. Gain data is currently only available for 2000 – 2012 and the gain analysis will always reflect the full 12-year time-period.',
+        fr: 'Sélectionner la plage et la densité de couverture arborée pour les données de perte, puis cliquer sur le bouton « lancer l’analyse » pour voir les résultats. Les données de gain ne sont actuellement disponibles que pour 2000 – 2012 et l’analyse de gain reflétera toujours la plage de 12 ans entière.',
+        es: 'Para obtener los datos sobre pérdida, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis para ver los resultados. Los datos sobre ganancia actualmente solo están disponibles para los años 2000 a 2012 y el análisis de la ganancia siempre reflejará el periodo de 12 años completo.',
+        pt: 'Selecione o período e a densidade de cobertura arbórea para dados de perda; em seguida, clique no botão para executar a análise e ver os resultados. Os dados de ganho estão disponíveis atualmente apenas para o período 2000 – 2012 e a análise de ganho sempre refletirá o período completo de 12 anos.',
+        id: 'Pilih rentang dan kerapatan tutupan pohon untuk data yang hilang, kemudian klik tombol mulai analisis untuk melihat hasilnya. Data perolehan saat ini hanya tersedia untuk periode 2000 – 2012 dan analisis perolehan akan selalu mencerminkan periode waktu 12 tahun penuh.',
+        zh: '选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。',
+        ka: 'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
       },
-      "useGfwWidget": true,
-      "widgetId": "95c2c559-ca78-4b7a-b18b-7b2bca14ce83",
-      "uiParams": [{
-          "inputType": "rangeSlider",
-          "startParamName": "period",
-          "combineParams": true,
-          "valueSeparator": ",",
-          "bounds": [2001,
-            2018
-          ],
-          "valueType": "date",
-          "label": {
-            "en": "Select range for analysis:",
-            "fr": "Sélectionner une plage pour l’analyse:",
-            "es": "Seleccione un rango para el análisis:",
-            "pt": "Selecione o período para análise:",
-            "id": "Pilih rentang untuk analisis:",
-            "zh": "选择分析范围:",
-            "ka": "საზღვრების შერჩევა ანალიზისთვის:"
+      useGfwWidget: true,
+      widgetId: '95c2c559-ca78-4b7a-b18b-7b2bca14ce83',
+      uiParams: [{
+          inputType: 'rangeSlider',
+          startParamName: 'period',
+          combineParams: true,
+          valueSeparator: ',',
+          bounds: [2001, 2018],
+          valueType: 'date',
+          label: {
+            en: 'Select range for analysis',
+            fr: 'Sélectionner une plage pour l’analyse:',
+            es: 'Seleccione un rango para el análisis:',
+            pt: 'Selecione o período para análise:',
+            id: 'Pilih rentang untuk analisis:',
+            zh: '选择分析范围:',
+            ka: 'საზღვრების შერჩევა ანალიზისთვის:'
           }
         },
         {
@@ -100,54 +153,52 @@ export default {
       ]
     },
     {
-      "analysisId": "TC_LOSS",
-      "chartType": "bar",
-      "label": {
-        "en": "Annual Tree cover loss",
-        "fr": "Pertes de la couverture arborée annuelles",
-        "es": "Pérdida de cobertura arbórea anual",
-        "pt": "Perda anual de cobertura arbórea",
-        "id": "Kehilangan tutupan pohon tahunan",
-        "zh": "年度森林覆盖减少量面积",
-        "ka": "წლიური ხის ვარჯის კარგვა"
+      analysisId: 'TC_LOSS',
+      chartType: 'bar',
+      label: {
+        en: 'Annual Tree cover loss',
+        fr: 'Pertes de la couverture arborée annuelles',
+        es: 'Pérdida de cobertura arbórea anual',
+        pt: 'Perda anual de cobertura arbórea',
+        id: 'Kehilangan tutupan pohon tahunan',
+        zh: '年度森林覆盖减少量面积',
+        ka: 'წლიური ხის ვარჯის კარგვა'
       },
-      "title": {
-        "en": "Annual Tree cover loss",
-        "fr": "Pertes de la couverture arborée annuelles",
-        "es": "Pérdida de cobertura arbórea anual",
-        "pt": "Perda anual de cobertura arbórea",
-        "id": "Kehilangan tutupan pohon tahunan",
-        "zh": "年度森林覆盖减少量面积",
-        "ka": "წლიური ხის ვარჯის კარგვა"
+      title: {
+        en: 'Annual Tree cover loss',
+        fr: 'Pertes de la couverture arborée annuelles',
+        es: 'Pérdida de cobertura arbórea anual',
+        pt: 'Perda anual de cobertura arbórea',
+        id: 'Kehilangan tutupan pohon tahunan',
+        zh: '年度森林覆盖减少量面积',
+        ka: 'წლიური ხის ვარჯის კარგვა'
       },
-      "description": {
-        "en": "Select range and tree cover density then click the run analysis button to see results.",
-        "fr": "Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Exécuter l’analyse » pour voir les résultats.",
-        "es": "Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.",
-        "pt": "Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.",
-        "id": "Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.",
-        "zh": "选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。",
-        "ka": "შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგებს სანახავად."
+      description: {
+        en: 'Select range and tree cover density then click the run analysis button to see results.',
+        fr: 'Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+        es: 'Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+        pt: 'Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
+        id: 'Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
+        zh: '选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+        ka: 'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგებს სანახავად.'
       },
-      "useGfwWidget": true,
-      "widgetId": "e53e541c-92cd-4b00-9aa7-2c7bb36d4697",
-      "uiParams": [{
-          "inputType": "rangeSlider",
-          "startParamName": "period",
-          "combineParams": true,
-          "valueSeparator": ",",
-          "bounds": [2001,
-            2018
-          ],
-          "valueType": "date",
-          "label": {
-            "en": "Select range for analysis",
-            "fr": "Sélectionner une plage pour l’analyse:",
-            "es": "Seleccione un rango para el análisis:",
-            "pt": "Selecione o período para análise:",
-            "id": "Pilih rentang untuk analisis:",
-            "zh": "选择分析范围:",
-            "ka": "საზღვრების შერჩევა ანალიზისთვის:"
+      useGfwWidget: true,
+      widgetId: 'e53e541c-92cd-4b00-9aa7-2c7bb36d4697',
+      uiParams: [{
+          inputType: 'rangeSlider',
+          startParamName: 'period',
+          combineParams: true,
+          valueSeparator: ',',
+          bounds: [2001, 2018],
+          valueType: 'date',
+          label: {
+            en: 'Select range for analysis',
+            fr: 'Sélectionner une plage pour l’analyse:',
+            es: 'Seleccione un rango para el análisis:',
+            pt: 'Selecione o período para análise:',
+            id: 'Pilih rentang untuk analisis:',
+            zh: '选择分析范围:',
+            ka: 'საზღვრების შერჩევა ანალიზისთვის:'
           }
         },
         {
@@ -166,34 +217,34 @@ export default {
       ],
     },
     {
-      "analysisId": "IFL",
-      "chartType": "bar",
-      "label": {
-        "en": "Annual tree cover loss in IFL",
-        "fr": "Perte annuelle de la couverture arborée en PFI",
-        "es": "Pérdida de cobertura arbórea anual en IFL",
-        "pt": "Perda anual de cobertura arbórea em IFL",
-        "id": "Kehilangan tutupan pohon tahunan di IFL",
-        "zh": "年度原生森林（IFL）覆盖减面积",
-        "ka": "ყოველწლიური ხის ვარჯის კარგვა ხტლ-ში"
+      analysisId: 'IFL',
+      chartType: 'bar',
+      label: {
+        en: 'Annual tree cover loss in IFL',
+        fr: 'Perte annuelle de la couverture arborée en PFI',
+        es: 'Pérdida de cobertura arbórea anual en IFL',
+        pt: 'Perda anual de cobertura arbórea em IFL',
+        id: 'Kehilangan tutupan pohon tahunan di IFL',
+        zh: '年度原生森林（IFL）覆盖减面积',
+        ka: 'ყოველწლიური ხის ვარჯის კარგვა ხტლ-ში'
       },
-      "title": {
-        "en": "Annual Tree Cover Loss in Intact Forest Landscapes (IFL)",
-        "fr": "Perte annuelle de la couverture arborée en Paysage Forestier Intact (PFI)",
-        "es": "Pérdida de cobertura arbórea anual en Paisajes Forestales Intactos (Intact Forest Landscapes, IFL)",
-        "pt": "Perda anual de cobertura arbórea em paisagens florestais intactas (IFL)",
-        "id": "Kehilangan Tutupan Pohon Tahunan di Lanskap Hutan Utuh (IFL)",
-        "zh": "年度原生森林（IFL）树木覆盖减面积",
-        "ka": "ყოველწლიური ხის ვარჯის კარგვა ხელუხლებელი ტყის ლანდშაფტებში (ხტლ)"
+      title: {
+        en: 'Annual Tree Cover Loss in Intact Forest Landscapes (IFL)',
+        fr: 'Perte annuelle de la couverture arborée en Paysage Forestier Intact (PFI)',
+        es: 'Pérdida de cobertura arbórea anual en Paisajes Forestales Intactos (Intact Forest Landscapes, IFL)',
+        pt: 'Perda anual de cobertura arbórea em paisagens florestais intactas (IFL)',
+        id: 'Kehilangan Tutupan Pohon Tahunan di Lanskap Hutan Utuh (IFL)',
+        zh: '年度原生森林（IFL）树木覆盖减面积',
+        ka: 'ყოველწლიური ხის ვარჯის კარგვა ხელუხლებელი ტყის ლანდშაფტებში (ხტლ)'
       },
-      "description": {
-        "en": "Results will not be available if the area you selected does not include IFL. Select range and tree cover density then click the run analysis button to see results.",
-        "fr": "Les résultats ne seront pas disponibles si la zone que vous avez sélectionnée n’inclut pas de PFI. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Exécuter l’analyse » pour voir les résultats.",
-        "es": "Los resultados no estarán disponibles si el área que seleccionó no incluye IFL. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.",
-        "pt": "Os resultados não estarão disponíveis se a área selecionada não for considerada IFL. Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.",
-        "id": "Hasil tidak akan tersedia jika kawasan yang Anda pilih tidak mencakup Lanskap Hutan Utuh (IFL). Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.",
-        "zh": "如果您选择的区域不包括原生森林，将不会提供结果。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。",
-        "ka": "შედეგები არ იქნება ხელმისაწვდომი, თუკი თქვენ მიერ შერჩეული ფართობი არ შეიცავს ხტლ-ს. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად."
+      description: {
+        en: 'Results will not be available if the area you selected does not include IFL. Select range and tree cover density then click the run analysis button to see results.',
+        fr: 'Les résultats ne seront pas disponibles si la zone que vous avez sélectionnée n’inclut pas de PFI. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+        es: 'Los resultados no estarán disponibles si el área que seleccionó no incluye IFL. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+        pt: 'Os resultados não estarão disponíveis se a área selecionada não for considerada IFL. Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
+        id: 'Hasil tidak akan tersedia jika kawasan yang Anda pilih tidak mencakup Lanskap Hutan Utuh (IFL). Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
+        zh: '如果您选择的区域不包括原生森林，将不会提供结果。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+        ka: 'შედეგები არ იქნება ხელმისაწვდომი, თუკი თქვენ მიერ შერჩეული ფართობი არ შეიცავს ხტლ-ს. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
       },
       "useGfwWidget": true,
       "widgetId": "2083a1bc-440d-43fe-8b50-ff9918a37c57",
@@ -234,40 +285,40 @@ export default {
       ]
     },
     {
-      "analysisId": "Loss_LandCover",
-      "chartType": "bar",
-      "label": {
-        "en": "Annual tree cover loss by land cover class",
-        "fr": "Perte annuelle de la couverture arborée par catégorie de couverture terrestre",
-        "es": "Pérdida de cobertura arbórea anual por clase de cobertura de tierra",
-        "pt": "Perda anual de cobertura arbórea por classe de cobertura de terra",
-        "id": "Kehilangan tutupan pohon tahunan berdasarkan kelas tutupan lahan",
-        "zh": "年度森林覆盖减少量（按土地覆盖分类）",
-        "ka": "ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით"
+      analysisId: 'Loss_LandCover',
+      chartType: 'bar',
+      label: {
+        en: 'Annual tree cover loss by land cover class',
+        fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
+        es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
+        pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
+        id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+        zh: '年度森林覆盖减少量（按土地覆盖分类）',
+        ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
       },
-      "title": {
-        "en": "Annual tree cover loss by land cover class",
-        "fr": "Perte annuelle de la couverture arborée par catégorie de couverture terrestre",
-        "es": "Pérdida de cobertura arbórea anual por clase de cobertura de tierra",
-        "pt": "Perda anual de cobertura arbórea por classe de cobertura de terra",
-        "id": "Kehilangan tutupan pohon tahunan berdasarkan kelas tutupan lahan",
-        "zh": "年度森林覆盖减少量（按土地覆盖分类）",
-        "ka": "ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით"
+      title: {
+        en: 'Annual tree cover loss by land cover class',
+        fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
+        es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
+        pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
+        id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+        zh: '年度森林覆盖减少量（按土地覆盖分类）',
+        ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
       },
-      "description": {
-        "en": "Land cover data from 2000 and provided by the European Space Agency (ESA) and UCLouvain. Select range and tree cover density then click the run analysis button to see results.",
-        "fr": "Données de couverture du sol datant de 2000 et fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Exécuter l’analyse » pour voir les résultats.",
-        "es": "Los datos de la cobertura de tierra son de 2000 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.",
-        "pt": "Dados de cobertura de terra relativos ao período posterior a 2000 e fornecidos pela Agência Espacial Europeia (ESA) e pela Universidade Católica da Lovaina (UCLouvain). Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.",
-        "id": "Data tutupan lahan dari tahun 2000 dan disediakan oleh Badan Antariksa Eropa –(ESA) dan UCLouvain. Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.",
-        "zh": "自 2000 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。",
-        "ka": "მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად."
+      description: {
+        en: 'Land cover data from 2000 and provided by the European Space Agency (ESA) and UCLouvain. Select range and tree cover density then click the run analysis button to see results.',
+        fr: 'Données de couverture du sol datant de 2000 et fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+        es: 'Los datos de la cobertura de tierra son de 2000 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+        pt: 'Dados de cobertura de terra relativos ao período posterior a 2000 e fornecidos pela Agência Espacial Europeia (ESA) e pela Universidade Católica da Lovaina (UCLouvain). Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
+        id: 'Data tutupan lahan dari tahun 2000 dan disediakan oleh Badan Antariksa Eropa –(ESA) dan UCLouvain. Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
+        zh: '自 2000 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+        ka: 'მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
       },
-      "useGfwWidget": true,
-      "widgetId": "31f78466-fc0b-42f9-a7ae-bea8559740d8",
-      "params": [{
-        "name": "layer",
-        "value": "gfw-landcover-2000"
+      useGfwWidget: true,
+      widgetId: '31f78466-fc0b-42f9-a7ae-bea8559740d8',
+      params: [{
+        name: 'layer',
+        value: 'gfw-landcover-2000'
       }],
       uiParams: [{
           inputType: 'rangeSlider',
@@ -302,54 +353,52 @@ export default {
       ]
     },
     {
-      "analysisId": "BIO_LOSS",
-      "chartType": "bar",
-      "label": {
-        "en": "CO2 emissions from biomass loss",
-        "fr": "Émissions de Co2 de la perte de biomasse",
-        "es": "Emisiones de CO2 provenientes de la pérdida de biomasa",
-        "pt": "Emissões de CO₂ por perda de biomassa",
-        "id": "Emisi CO2 dari kehilangan biomassa",
-        "zh": "生物量损失导致的二氧化碳排放量",
-        "ka": "CO2 ემისია ბიომასის კარგვის გამო"
+      analysisId: 'BIO_LOSS',
+      chartType: 'bar',
+      label: {
+        en: 'CO2 emissions from biomass loss',
+        fr: 'Émissions de Co2 de la perte de biomasse',
+        es: 'Emisiones de CO2 provenientes de la pérdida de biomasa',
+        pt: 'Emissões de CO₂ por perda de biomassa',
+        id: 'Emisi CO2 dari kehilangan biomassa',
+        zh: '生物量损失导致的二氧化碳排放量',
+        ka: 'CO2 ემისია ბიომასის კარგვის გამო'
       },
-      "title": {
-        "en": "Carbon Dioxide Emissions from Above Ground Live Woody Biomass Loss",
-        "fr": "Émissions de dioxyde de carbone de la perte de biomasse ligneuse vivante aérienne",
-        "es": "Emisiones de dióxido de carbono provenientes de la pérdida de biomasa leñosa viva en superficie",
-        "pt": "Emissões de dióxido de carbono por perda de biomassa de vegetação lenhosa viva acima do solo",
-        "id": "Emisi Karbon Dioksida dari kehilangan biomassa vegetasi berkayu di atas permukaan tanah",
-        "zh": "地上活木生物量损失导致的二氧化碳排放",
-        "ka": "ნახშირორჟანგის ემისია მიწისზედა ცოცხალი ბიომასის კარგვის გამო"
+      title: {
+        en: 'Carbon Dioxide Emissions from Above Ground Live Woody Biomass Loss',
+        fr: 'Émissions de dioxyde de carbone de la perte de biomasse ligneuse vivante aérienne',
+        es: 'Emisiones de dióxido de carbono provenientes de la pérdida de biomasa leñosa viva en superficie',
+        pt: 'Emissões de dióxido de carbono por perda de biomassa de vegetação lenhosa viva acima do solo',
+        id: 'Emisi Karbon Dioksida dari kehilangan biomassa vegetasi berkayu di atas permukaan tanah',
+        zh: '地上活木生物量损失导致的二氧化碳排放',
+        ka: 'ნახშირორჟანგის ემისია მიწისზედა ცოცხალი ბიომასის კარგვის გამო'
       },
-      "description": {
-        "en": "Emissions do not include carbon emissions from other sources besides woody biomass (tree cover) loss. Select range and tree cover density then click the run analysis button to see results.",
-        "fr": "Les émissions n’incluent pas les émissions de carbone d’autres sources que la perte de biomasse (couverture arborée). Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Exécuter l’analyse » pour voir les résultats.",
-        "es": "Las emisiones no incluyen las emisiones de carbono de otras fuentes además de la pérdida de biomasa leñosa (cobertura arbórea). Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.",
-        "pt": "As estimativas não incluem emissões de carbono geradas por fontes diferentes de perda (de cobertura arbórea) de biomassa de material lenhoso. Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.",
-        "id": "Emisi tidak termasuk emisi karbon dari sumber lain selain kehilangan biomasa kayu (tutupan pohon). Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.",
-        "zh": "排放量不包括除树木生物量（森林覆盖）损失之外的其他来源导致的碳排放量。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。总碳排放量 (吨 二氧化碳)",
-        "ka": "ემისიები არ შეიცავენ ნახშირის ემისიებს სხვა წყაროებიდან, გარდა ცოცხალი ბიომასის (ხის ვარჯი) კარგვის. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად."
+      description: {
+        en: 'Emissions do not include carbon emissions from other sources besides woody biomass (tree cover) loss. Select range and tree cover density then click the run analysis button to see results.',
+        fr: 'Les émissions n’incluent pas les émissions de carbone d’autres sources que la perte de biomasse (couverture arborée). Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+        es: 'Las emisiones no incluyen las emisiones de carbono de otras fuentes además de la pérdida de biomasa leñosa (cobertura arbórea). Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+        pt: 'As estimativas não incluem emissões de carbono geradas por fontes diferentes de perda (de cobertura arbórea) de biomassa de material lenhoso. Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
+        id: 'Emisi tidak termasuk emisi karbon dari sumber lain selain kehilangan biomasa kayu (tutupan pohon). Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
+        zh: '排放量不包括除树木生物量（森林覆盖）损失之外的其他来源导致的碳排放量。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。总碳排放量 (吨 二氧化碳)',
+        ka: 'ემისიები არ შეიცავენ ნახშირის ემისიებს სხვა წყაროებიდან, გარდა ცოცხალი ბიომასის (ხის ვარჯი) კარგვის. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
       },
-      "useGfwWidget": true,
-      "widgetId": "ac38fdbd-fdb1-4d8e-9109-674013fb51a2",
-      "uiParams": [{
-          "inputType": "rangeSlider",
-          "startParamName": "period",
-          "combineParams": true,
-          "valueSeparator": ",",
-          "bounds": [2001,
-            2018
-          ],
-          "valueType": "date",
-          "label": {
-            "en": "Select range for analysis",
-            "fr": "Sélectionner une plage pour l’analyse:",
-            "es": "Seleccione un rango para el análisis:",
-            "pt": "Selecione o período para análise:",
-            "id": "Pilih rentang untuk analisis:",
-            "zh": "选择分析范围:",
-            "ka": "საზღვრების შერჩევა ანალიზისთვის:"
+      useGfwWidget: true,
+      widgetId: 'ac38fdbd-fdb1-4d8e-9109-674013fb51a2',
+      uiParams: [{
+          inputType: 'rangeSlider',
+          startParamName: 'period',
+          combineParams: true,
+          valueSeparator: ',',
+          bounds: [2001, 2018],
+          valueType: 'date',
+          label: {
+            en: 'Select range for analysis',
+            fr: 'Sélectionner une plage pour l’analyse:',
+            es: 'Seleccione un rango para el análisis:',
+            pt: 'Selecione o período para análise:',
+            id: 'Pilih rentang untuk analisis:',
+            zh: '选择分析范围:',
+            ka: 'საზღვრების შერჩევა ანალიზისთვის:'
           }
         },
         {
@@ -487,43 +536,43 @@ export default {
       uiParams: 'none'
     },
     {
-      "analysisId": "LCC",
-      "chartType": "pie",
-      "label": {
-        "en": "Land Cover Composition",
-        "fr": "Composition de la couverture terrestre",
-        "es": "Cobertura terrestre",
-        "pt": "Cobertura do Solo",
-        "id": "Komposisi tutupan lahan",
-        "zh": "土地覆盖构成",
-        "ka": "მიწის საფარის შემადგენლობა"
+      analysisId: 'LCC',
+      chartType: 'pie',
+      label: {
+        en: 'Land Cover Composition',
+        fr: 'Composition de la couverture terrestre',
+        es: 'Cobertura terrestre',
+        pt: 'Cobertura do Solo',
+        id: 'Komposisi tutupan lahan',
+        zh: '土地覆盖构成',
+        ka: 'მიწის საფარის შემადგენლობა'
       },
-      "title": {
-        "en": "Land Cover Composition",
-        "fr": "Composition de la couverture terrestre",
-        "es": "Composición de la cobertura de tierra",
-        "pt": "Composição da cobertura de terra",
-        "id": "Komposisi tutupan lahan",
-        "zh": "土地覆盖构成",
-        "ka": "მიწის საფარის შემადგენლობა"
+      title: {
+        en: 'Land Cover Composition',
+        fr: 'Composition de la couverture terrestre',
+        es: 'Composición de la cobertura de tierra',
+        pt: 'Composição da cobertura de terra',
+        id: 'Komposisi tutupan lahan',
+        zh: '土地覆盖构成',
+        ka: 'მიწის საფარის შემადგენლობა'
       },
-      "description": {
-        "en": "Land cover data is from 2015 and provided by the European Space Agency (ESA) and UCLouvain.",
-        "fr": "Les données de la couverture terrestre datent de 2015 et sont fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain.",
-        "es": "Los datos de la cobertura de tierra son de 2015 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. ",
-        "pt": "Dados de cobertura de terra relativos ao período posterior a 2015 e fornecidos pela Agência Espacial Europeia (ESA) e pela UCLouvain. ",
-        "id": "Data tutupan lahan dari tahun 2015 yang disediakan oleh Badan Antariksa Eropa () dan UCLouvain.",
-        "zh": "自 2015 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。 ",
-        "ka": "მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ."
+      description: {
+        en: 'Land cover data is from 2015 and provided by the European Space Agency (ESA) and UCLouvain.',
+        fr: 'Les données de la couverture terrestre datent de 2015 et sont fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain.',
+        es: 'Los datos de la cobertura de tierra son de 2015 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. ',
+        pt: 'Dados de cobertura de terra relativos ao período posterior a 2015 e fornecidos pela Agência Espacial Europeia (ESA) e pela UCLouvain. ',
+        id: 'Data tutupan lahan dari tahun 2015 yang disediakan oleh Badan Antariksa Eropa () dan UCLouvain.',
+        zh: '自 2015 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。 ',
+        ka: 'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA)  და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
       },
-      "useGfwWidget": true,
-      "widgetId": "1b84364d-0efd-4d60-81ef-870f7d13ee7b",
-      "uiParams": "none",
-      "params": [{
-        "name": "layer",
-        "value": "gfw-landcover-2015"
+      useGfwWidget: true,
+      widgetId: '1b84364d-0efd-4d60-81ef-870f7d13ee7b',
+      uiParams: 'none',
+      params: [{
+        name: 'layer',
+        value: 'gfw-landcover-2015'
       }]
-    }
+    },
   ],
 
   /**
@@ -557,47 +606,33 @@ export default {
       label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
       layers: [] // Will get filled in with layers from the webmap
     },
-    "GROUP_LCD": {
-      "grouptype": "default",
-      "order": 1,
-      "label": {
-        "en": "Land Cover Dynamics",
-        "fr": "Evolution de la couverture des sols",
-        "es": "Dinámica de la Cobertura del Suelo",
-        "pt": "Dinâmica de cobertura da terra",
-        "id": "Land Cover Dynamics",
-        "zh": "土地覆盖动态数据",
-        "ka": "მიწის საფარის დინამიკა"
+    GROUP_LCD: {
+      groupType: 'default',
+      order: 1,
+      label: {
+        en: 'Land Cover Dynamics',
+        fr: 'Evolution de la couverture des sols',
+        es: 'Dinámica de la Cobertura del Suelo',
+        pt: 'Dinâmica de cobertura da terra ',
+        id: 'Land Cover Dynamics',
+        zh: '土地覆盖动态数据',
+        ka: 'მიწის საფარის დინამიკა'
       },
-      "layers": [{
-          "order": 1,
-          "id": "TREE_COVER_LOSS",
-          "type": "remoteDataLayer",
-          "uuid": "2aed67b3-3643-40d3-9c1e-8af9afb5d9e2"
-        },
-        {
-          "order": 2,
-          "type": "remoteDataLayer",
-          "id": "TREE_COVER_GAIN",
-          "uuid": "cb016f17-f12d-463a-9dc2-aabcf5db566c"
-        },
-        {
-          "order": 3,
-          "type": "remoteDataLayer",
-          "id": "IMAZON_SAD",
-          "uuid": "3e9e86ae-e38d-4c59-8484-c8214ca5186a"
-        },
-        {
-          "order": 4,
-          "id": "GLAD_ALERTS",
-          "type": "remoteDataLayer",
-          "uuid": "356f862b-3e70-493a-997b-dc2a193410e9"
-        },
-        {
-          "order": 5,
-          "id": "FORMA_ALERTS",
-          "type": "remoteDataLayer",
-          "uuid": "56aa7e57-0ac4-446c-a82d-7713904b17c3"
+      layers: [{
+          id: 'TREE_COVER_LOSS',
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
+        }, {
+          id: 'TREE_COVER_GAIN',
+          order: 2,
+          type: 'remoteDataLayer',
+          uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
+        }, {
+          id: 'IMAZON_SAD',
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
         },
         {
           id: 'FORMA_ALERTS',
@@ -628,55 +663,49 @@ export default {
         }
       ]
     },
-    "GROUP_LC": {
-      "groupttype": "default",
-      "order": 3,
-      "label": {
-        "en": "Land Cover",
-        "fr": "Couverture des sols",
-        "es": "Cobertura terrestre",
-        "pt": "Cobertura do Solo",
-        "id": "Land Cover",
-        "zh": "土地覆盖",
-        "ka": "მიწის საფარი"
+    GROUP_LC: {
+      groupType: 'default',
+      order: 3,
+      label: {
+        en: 'Land Cover',
+        fr: 'Couverture des sols',
+        es: 'Cobertura terrestre',
+        pt: 'Cobertura do Solo',
+        id: 'Land Cover',
+        zh: '土地覆盖',
+        ka: 'მიწის საფარი'
       },
-      "layers": [{
-          "order": 1,
-          "id": "GLOB_MANGROVE",
-          "type": "remoteDataLayer",
-          "uuid": "533cbe18-22a6-46ac-99ca-027c96f33ac3"
-        },
-        {
-          "order": 2,
-          "id": "IFL",
-          "type": "remoteDataLayer",
-          "uuid": "5f815a7d-457e-4eae-a8e5-8864a60696ad"
-        },
-        {
-          "order": 3,
-          "id": "PRIMARY_FORESTS",
-          "type": "remoteDataLayer",
-          "uuid": "edffb745-e523-462d-ad1e-3052006a3dbc"
-        },
-        {
-          "order": 4,
-          "id": "AG_BIOMASS",
-          "type": "remoteDataLayer",
-          "uuid": "04526d47-f3f5-4f76-a939-e5f7861fd085"
-        },
-        {
-          "order": 5,
-          "id": "LAND_COVER",
-          "type": "remoteDataLayer",
-          "uuid": "b8d3f175-0565-443f-839a-49eb890a4b3d"
-        },
-        {
-          "order": 6,
-          "id": "TREE_COVER",
-          "type": "remoteDataLayer",
-          "uuid": "2569adca-ef87-42c4-a153-57c5e8ba0ef7"
-        }
-      ]
+      layers: [{
+        id: 'GLOB_MANGROVE',
+        order: 1,
+        type: 'remoteDataLayer',
+        uuid: '533cbe18-22a6-46ac-99ca-027c96f33ac3'
+      }, {
+        id: 'IFL',
+        order: 2,
+        type: 'remoteDataLayer',
+        uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
+      }, {
+        id: 'PRIMARY_FORESTS',
+        order: 3,
+        type: 'remoteDataLayer',
+        uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
+      }, {
+        id: 'AG_BIOMASS',
+        order: 4,
+        type: 'remoteDataLayer',
+        uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
+      }, {
+        id: 'LAND_COVER',
+        order: 5,
+        type: 'remoteDataLayer',
+        uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
+      }, {
+        id: 'TREE_COVER',
+        order: 6,
+        type: 'remoteDataLayer',
+        uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
+      }]
     },
     GROUP_IMAGERY: {
       groupType: 'imagery',
