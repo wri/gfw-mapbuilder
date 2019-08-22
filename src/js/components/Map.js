@@ -169,6 +169,8 @@ export default class Map extends Component {
       selectedFeats.forEach(selectedFeat => {
       if (selectedFeat && selectedFeat._layer && selectedFeat._layer.infoTemplate && selectedFeat._layer.infoTemplate.title) {
         selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat));
+      } else if (selectedFeat && selectedFeat._layer && selectedFeat._layer.name) {
+        selectedFeatureTitlesArray.push(selectedFeat._layer.name);
       }
       });
       layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
