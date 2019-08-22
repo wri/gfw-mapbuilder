@@ -203,8 +203,19 @@ export default class VegaChart extends Component {
                     <div className='vega-chart-menu' onClick={() => this.setState({ showSettings: !showSettings })}>
                       <SVGIcon className="vega-chart-menu-icon" id={'icon-gear'} />
                     </div>
-                    <div className="vega-chart-divider"></div>
                   </div> :
+                  null
+                }
+                {
+                  (
+                  analysisId === 'TC_LOSS' ||
+                  analysisId === 'TC_LOSS_GAIN' ||
+                  analysisId === 'IFL' ||
+                  analysisId === 'Loss_LandCover' ||
+                  analysisId === 'BIO_LOSS' ||
+                  analysisId === 'TOTAL_GLAD_ALERTS'
+                  ) ?
+                  <div className="vega-chart-divider"></div> :
                   null
                 }
                 <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
