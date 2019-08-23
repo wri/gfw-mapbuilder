@@ -368,7 +368,7 @@ export default class CoordinatesModal extends Component {
       <div className="analysis-coordinates__inputs-container-dms">
         {index > 2 &&
           <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>
-            <span className="analysis-coordinates-remove-text">REMOVE</span>
+            <span className="analysis-coordinates-remove-text">{text[language].ANALYSIS_COORDINATES_BUTTONS[3]}</span>
             <SVGIcon id={'icon-analysis-remove'} />
           </div>
         }
@@ -469,7 +469,7 @@ export default class CoordinatesModal extends Component {
         {index > 0 && <div className="analysis-coordinates__divider-dd"></div>}
         {index > 2 &&
           <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>
-            <span className="analysis-coordinates-remove-text">REMOVE</span>
+            <span className="analysis-coordinates-remove-text">{text[language].ANALYSIS_COORDINATES_BUTTONS[3]}</span>
             <SVGIcon id={'icon-analysis-remove'} />
           </div>
         }
