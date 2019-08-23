@@ -466,15 +466,22 @@
   background-color #ccc
   
 .analysis-coordinates-remove
-  font-size 0.5rem
-  width 2rem
-  margin-left auto
-  margin-right 0.75rem
+  font-size 0.75rem
   font-weight bold
   cursor pointer
+  display flex
+  align-items center
+  justify-content flex-end
+  margin 0.26rem 0
   &:hover
     text-decoration underline
     text-decoration-color #e6a912
+  .analysis-coordinates-remove-text
+    margin-top 0.1rem
+  .svg-icon
+    margin 0 !important
+    height 1rem !important
+    width 1rem !important
   
 .analysis-coordinates__latitude-container  
 .analysis-coordinates__longitude-container

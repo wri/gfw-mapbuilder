@@ -358,7 +358,12 @@ export default class CoordinatesModal extends Component {
       <div key={`DMS-${index}`}>
       {index === 0 && <div className="analysis-coordinates__divider-dms"></div>}
       <div className="analysis-coordinates__inputs-container-dms">
-        {index > 2 && <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>REMOVE</div>}
+        {index > 2 &&
+          <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>
+            <span className="analysis-coordinates-remove-text">REMOVE</span>
+            <SVGIcon id={'icon-analysis-remove'} />
+          </div>
+        }
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
@@ -454,7 +459,12 @@ export default class CoordinatesModal extends Component {
     return (
       <div key={`DD-${index}`} className="analysis-coordinates__inputs-container-dd">
         {index > 0 && <div className="analysis-coordinates__divider-dd"></div>}
-        {index > 2 && <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>REMOVE</div>}
+        {index > 2 &&
+          <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>
+            <span className="analysis-coordinates-remove-text">REMOVE</span>
+            <SVGIcon id={'icon-analysis-remove'} />
+          </div>
+        }
         <div className="analysis-coordinates-lat-lng-container">
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
