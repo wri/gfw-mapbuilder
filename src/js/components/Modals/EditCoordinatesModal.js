@@ -34,21 +34,6 @@ export default class EditCoordinatesModal extends Component {
       coordinateValue: ''
     });
   };
-
-  switchCoordinatesFormat = evt => {
-    const dmsCoordinates = [];
-    const ddCoordinates = [];
-    for (let i = 0; i < 3; i++){
-      dmsCoordinates.push(defaultDMS);
-      ddCoordinates.push(defaultDD);
-    }
-    this.setState({
-      coordinatesFormat: evt.target.value,
-      dmsCoordinates,
-      ddCoordinates,
-      errors: []
-    });
-  };
   
   editCoordinate = evt => {
     console.log('edit coordinate!');
