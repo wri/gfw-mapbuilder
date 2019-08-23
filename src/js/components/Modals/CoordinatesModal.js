@@ -5,6 +5,7 @@ import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
 import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
+import Point from 'esri/geometry/Point';
 import layerKeys from '../../constants/LayerConstants';
 
 const defaultDMS = {
@@ -345,6 +346,13 @@ export default class CoordinatesModal extends Component {
         layer.add(graphic);
         map.infoWindow.setFeatures([graphic]);
       }
+      const graphicExtent = graphic.geometry.getExtent();
+      if (graphicExtent) {
+        map.setExtent(graphicExtent, true);
+      } else {
+        map.centerAndZoom(new Point(graphic.geometry), 15);
+      }
+      map.graphics.add(graphic);
     });
     this.close();
   }
