@@ -166,14 +166,17 @@ export default class Map extends Component {
     let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
-      selectedFeats = brApp.map.infoWindow.features;
-      selectedFeats.forEach(selectedFeat => {
-      if (selectedFeat && selectedFeat._layer && selectedFeat._layer.infoTemplate && selectedFeat._layer.infoTemplate.title) {
-        selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat));
-      } else if (selectedFeat && selectedFeat._layer && selectedFeat._layer.name) {
-        selectedFeatureTitlesArray.push(selectedFeat._layer.name);
-      }
-      });
+      // Save this if later on we support getting multiple selected features in the report
+      // selectedFeats = brApp.map.infoWindow.features;
+      // selectedFeats.forEach(selectedFeat => {
+      // if (selectedFeat && selectedFeat._layer && selectedFeat._layer.infoTemplate && selectedFeat._layer.infoTemplate.title) {
+      //   selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat));
+      // } else if (selectedFeat && selectedFeat._layer && selectedFeat._layer.name) {
+      //   selectedFeatureTitlesArray.push(selectedFeat._layer.name);
+      // }
+      // });
+      const selectedFeat = brApp.map.infoWindow.getSelectedFeature();
+      selectedFeatureTitlesArray.push(selectedFeat._layer.name);
       layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
     }
   };
