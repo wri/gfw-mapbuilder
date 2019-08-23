@@ -53,6 +53,7 @@ class MapStore {
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
     this.coordinatesModalVisible = false;
+    this.editCoordinatesModalVisible = false;
     this.printModalVisible = false;
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
@@ -103,6 +104,7 @@ class MapStore {
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
       toggleCoordinatesModal: mapActions.toggleCoordinatesModal,
+      toggleEditCoordinatesModal: mapActions.toggleEditCoordinatesModal,
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
@@ -416,6 +418,10 @@ class MapStore {
   
   toggleCoordinatesModal (payload) {
     this.coordinatesModalVisible = payload.visible;
+  }
+  
+  toggleEditCoordinatesModal (payload) {
+    this.editCoordinatesModalVisible = payload.visible;
   }
 
   togglePrintModal (payload) {

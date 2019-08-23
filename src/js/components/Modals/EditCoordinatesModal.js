@@ -19,24 +19,21 @@ export default class EditCoordinatesModal extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      coordinateValue: ''
+    };
   }
 
   close = () => {
     mapActions.toggleCoordinatesModal({ visible: false });
     mapActions.toggleAnalysisModal({visible: false});
-    const dmsCoordinates = [];
-    const ddCoordinates = [];
-    for (let i = 0; i < 3; i++){
-      dmsCoordinates.push(defaultDMS);
-      ddCoordinates.push(defaultDD);
-    }
     this.setState({
       coordinateValue: ''
     });
   };
   
   editCoordinate = evt => {
-    console.log('edit coordinate!');
+    console.log('value', evt.target.value);
   };
 
   render () {
