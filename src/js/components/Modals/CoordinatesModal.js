@@ -6,8 +6,6 @@ import SVGIcon from '../../utils/svgIcon';
 import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
 import layerKeys from '../../constants/LayerConstants';
-import webMercatorUtils from 'esri/geometry/webMercatorUtils';
-import SpatialReference from 'esri/SpatialReference';
 
 const defaultDMS = {
   lat: {
@@ -130,7 +128,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
     const coordinatesFormat = this.state.coordinatesFormat;
-    if (coordinatesFormat === coordinateFormatOptions[0]) {
+    if (coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') {
       const dmsCoordinatesCopy = this.state.dmsCoordinates;
       dmsCoordinatesCopy.push(defaultDMS);
       this.setState({
@@ -331,6 +329,19 @@ export default class CoordinatesModal extends Component {
     this.close();
   }
   
+  
+  removeCoordinates = (evt, item, index) => {
+    const {language} = this.context;
+    const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
+    if (coordinatesFormat === coordinateFormatOptions[0]) {
+      console.log('dmsCoordinates', dmsCoordinates);
+    }
+    if (coordinatesFormat === coordinateFormatOptions[1]) {
+      console.log('ddCoordinates', ddCoordinates);
+    }
+  };
+  
   renderDMS = (item, index) => {
     const {language} = this.context;
     const latitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS;
@@ -340,6 +351,7 @@ export default class CoordinatesModal extends Component {
       <div key={`DMS-${index}`}>
       {index === 0 && <div className="analysis-coordinates__divider-dms"></div>}
       <div className="analysis-coordinates__inputs-container-dms">
+        {index > 2 && <div className="analysis-coordinates-remove" onClick={evt => this.removeCoordinates(evt, item, index)}>REMOVE</div>}
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
