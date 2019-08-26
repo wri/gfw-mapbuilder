@@ -82,6 +82,7 @@ class MapStore {
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
     this.enterValuesButtonActive = false;
+    this.editCoordinatesActive = false;
     this.imageryModalVisible = false;
     this.imageryData = [];
     this.loadingImagery = false;
@@ -155,6 +156,7 @@ class MapStore {
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
       activateEnterValuesButton: mapActions.activateEnterValuesButton,
+      activateEditCoordinates: mapActions.activateEditCoordinates,
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
@@ -649,6 +651,10 @@ class MapStore {
   
   activateEnterValuesButton(bool) {
     this.enterValuesButtonActive = bool;
+  }
+  
+  activateEditCoordinates(bool) {
+    this.editCoordinatesActive = bool;
   }
 
   toggleImageryVisible(bool) {

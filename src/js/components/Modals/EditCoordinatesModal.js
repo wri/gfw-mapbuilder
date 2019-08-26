@@ -25,8 +25,8 @@ export default class EditCoordinatesModal extends Component {
   }
 
   close = () => {
-    mapActions.toggleCoordinatesModal({ visible: false });
-    mapActions.toggleAnalysisModal({visible: false});
+    mapActions.toggleEditCoordinatesModal({ visible: false });
+    //mapActions.toggleAnalysisModal({visible: false});
     this.setState({
       coordinateValue: ''
     });

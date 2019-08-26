@@ -242,6 +242,10 @@ class MapActions {
   activateEnterValuesButton(bool) {
     return bool;
   }
+  
+  activateEditCoordinates(bool) {
+    return bool;
+  }
 
   toggleImageryVisible(bool) {
     return bool;
