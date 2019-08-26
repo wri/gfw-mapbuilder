@@ -92,6 +92,7 @@ class MapStore {
     this.imageryHoverInfo = null;
     this.activeFilters = {};
     this.selectedFeatureTitles = [];
+    this.coordinatesFormat = 'Degrees Decimal Minutes (DMS)';
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -162,7 +163,8 @@ class MapStore {
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
       setActiveFilters: mapActions.setActiveFilters,
-      changeLayerVersion: mapActions.changeLayerVersion
+      changeLayerVersion: mapActions.changeLayerVersion,
+      updateCoordinatesFormat: mapActions.updateCoordinatesFormat
 
     });
   }
@@ -655,6 +657,10 @@ class MapStore {
   
   activateEditCoordinates(bool) {
     this.editCoordinatesActive = bool;
+  }
+  
+  updateCoordinatesFormat(string) {
+    this.coordinatesFormat = string;
   }
 
   toggleImageryVisible(bool) {

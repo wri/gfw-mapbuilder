@@ -959,7 +959,7 @@ export default class Map extends Component {
         <div className={`coordinates-modal-container modal-wrapper ${coordinatesModalVisible ? '' : 'hidden'}`}>
           <CoordinatesModal enterValuesButtonActive={this.state.enterValuesButtonActive} />
         </div>
-        <div className={`coordinates-modal-container modal-wrapper ${editCoordinatesModalVisible ? '' : 'hidden'}`}>
+        <div className={`edit-coordinates-modal-container ${editCoordinatesModalVisible ? '' : 'hidden'}`}>
           <EditCoordinatesModal editCoordinatesActive={this.state.editCoordinatesActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>

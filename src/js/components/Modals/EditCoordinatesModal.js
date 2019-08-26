@@ -1,5 +1,6 @@
-import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
+import ControlledEditModalWrapper from 'components/Modals/ControlledEditModalWrapper';
 import mapActions from 'actions/MapActions';
+import mapStore from '../../stores/MapStore';
 import React, { Component, PropTypes } from 'react';
 import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
@@ -8,7 +9,7 @@ import Polygon from 'esri/geometry/Polygon';
 import layerKeys from '../../constants/LayerConstants';
 
 
-export default class EditCoordinatesModal extends Component {
+export default class editCoordinatessModal extends Component {
 
   static contextTypes = {
     settings: PropTypes.object.isRequired,
@@ -20,19 +21,20 @@ export default class EditCoordinatesModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coordinateValue: ''
+      coordinateValue: '',
+      ...mapStore.getState()
     };
   }
 
   close = () => {
     mapActions.toggleEditCoordinatesModal({ visible: false });
-    //mapActions.toggleAnalysisModal({visible: false});
+    mapActions.toggleEditing();
     this.setState({
       coordinateValue: ''
     });
   };
   
-  editCoordinate = evt => {
+  editCoordinates = evt => {
     console.log('value', evt.target.value);
   };
 
@@ -41,25 +43,24 @@ export default class EditCoordinatesModal extends Component {
     const {coordinateValue} = this.state;
     
     return (
-      <ControlledModalWrapper onClose={this.close}>
-        <div className="edit-coordinate-header">
-          <h4 className="edit-coordinate-title">{text[language].EDIT_COORDINATE_LABELS[0]}</h4>
-          <div className="edit-coordinate-delete">
-            <span className="edit-coordinate-delete-text">{text[language].EDIT_COORDINATE_LABELS[1]}</span>
-            <SVGIcon id={'icon-analysis-remove'} />
+      <ControlledEditModalWrapper onClose={this.close}>
+        <div className="edit-coordinates-header">
+          <h4 className="edit-coordinates-title">{text[language].EDIT_COORDINATE_LABELS[0]}</h4>
+          <div className="edit-coordinates-delete">
+            <span className="edit-coordinates-delete-text">{text[language].EDIT_COORDINATE_LABELS[1]}</span>
           </div>
         </div>
-        <div className='edit-coordinate-input-container'>
+        <div className='edit-coordinates-input-container'>
           <input
-            onChange={evt => this.editCoordinate(evt)}
-            className="edit-coordinate-input"
+            onChange={evt => this.editCoordinates(evt)}
+            className="edit-coordinates-input"
             type='number'
-            id="edit-coordinate"
-            name="edit-coordinate"
+            id="edit-coordinates"
+            name="edit-coordinates"
             value={coordinateValue}
           />
         </div>
-      </ControlledModalWrapper>
+      </ControlledEditModalWrapper>
     );
   }
 

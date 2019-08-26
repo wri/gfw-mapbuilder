@@ -270,6 +270,10 @@ class MapActions {
   changeLayerVersion(obj) {
     return obj;
   }
+  
+  updateCoordinatesFormat(string) {
+    return string;
+  }
 
 }
 

@@ -1,5 +1,6 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
+import mapStore from '../../stores/MapStore';
 import React, { Component, PropTypes } from 'react';
 import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
@@ -46,12 +47,21 @@ export default class CoordinatesModal extends Component {
       this.ddCoordinates.push(defaultDD);
     }
     this.state = {
-      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
+      //coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
-      errors: []
+      errors: [],
+      ...mapStore.getState()
     };
   }
+  
+  componentDidMount() {
+    mapStore.listen(this.storeDidUpdate);
+  }
+
+  storeDidUpdate = () => {
+      this.setState(mapStore.getState());
+  };
 
   close = () => {
     mapActions.toggleCoordinatesModal({ visible: false });
@@ -67,6 +77,7 @@ export default class CoordinatesModal extends Component {
       dmsCoordinates,
       ddCoordinates,
       errors: []
+      
     });
   };
 
