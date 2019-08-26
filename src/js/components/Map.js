@@ -180,7 +180,7 @@ export default class Map extends Component {
       const name = selectedFeat._layer.name;
       const fieldName = selectedFeat.attributes[displayField];
       if (fieldName){
-      selectedFeatureTitlesArray.push(`${name} ${fieldName}`);
+      selectedFeatureTitlesArray.push(`${name}: ${fieldName}`);
       } else {
         selectedFeatureTitlesArray.push(name);
       }
