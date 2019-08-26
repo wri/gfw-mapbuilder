@@ -748,7 +748,6 @@ export default class Report extends Component {
     const params = getUrlParams(location.href);
     const language = params.lang;
     const selectedFeatureTitles = params.selectedFeatureTitles;
-
     return (
       <div>
         <ReportHeader />
