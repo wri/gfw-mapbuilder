@@ -25,6 +25,14 @@ export default class editCoordinatessModal extends Component {
       ...mapStore.getState()
     };
   }
+  
+  componentDidMount() {
+    mapStore.listen(this.storeDidUpdate);
+  }
+
+  storeDidUpdate = () => {
+      this.setState(mapStore.getState());
+  };
 
   close = () => {
     mapActions.toggleEditCoordinatesModal({ visible: false });
@@ -40,14 +48,19 @@ export default class editCoordinatessModal extends Component {
 
   render () {
     const {language} = this.context;
-    const {coordinateValue} = this.state;
-    
+    const {coordinateValue, coordinatesFormat} = this.state;
+    console.log('coordinatesFormat', coordinatesFormat);
     return (
       <ControlledEditModalWrapper onClose={this.close}>
         <div className="edit-coordinates-header">
-          <h4 className="edit-coordinates-title">{text[language].EDIT_COORDINATE_LABELS[0]}</h4>
+          <h4 className="edit-coordinates-title">
+            {
+              `${text[language].EDIT_COORDINATES_LABELS[0]}
+              ${coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] ? text[language].EDIT_COORDINATES_FORMATS[0] : text[language].EDIT_COORDINATES_FORMATS[1]  }`
+            }
+          </h4>
           <div className="edit-coordinates-delete">
-            <span className="edit-coordinates-delete-text">{text[language].EDIT_COORDINATE_LABELS[1]}</span>
+            <span className="edit-coordinates-delete-text">{text[language].EDIT_COORDINATES_LABELS[1]}</span>
           </div>
         </div>
         <div className='edit-coordinates-input-container'>

@@ -23,6 +23,10 @@ class MapActions {
       id: tabId
     };
   }
+  
+  updateCoordinatesFormat(string) {
+    return string;
+  }
 
   setAnalysisType (value) {
     return value;
@@ -269,10 +273,6 @@ class MapActions {
 
   changeLayerVersion(obj) {
     return obj;
-  }
-  
-  updateCoordinatesFormat(string) {
-    return string;
   }
 
 }

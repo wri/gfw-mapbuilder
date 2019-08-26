@@ -47,7 +47,6 @@ export default class CoordinatesModal extends Component {
       this.ddCoordinates.push(defaultDD);
     }
     this.state = {
-      //coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
       errors: [],
@@ -73,11 +72,9 @@ export default class CoordinatesModal extends Component {
       ddCoordinates.push(defaultDD);
     }
     this.setState({
-      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates,
       ddCoordinates,
       errors: []
-      
     });
   };
 
@@ -88,8 +85,9 @@ export default class CoordinatesModal extends Component {
       dmsCoordinates.push(defaultDMS);
       ddCoordinates.push(defaultDD);
     }
+    mapActions.updateCoordinatesFormat(evt.target.value);
     this.setState({
-      coordinatesFormat: evt.target.value,
+      //coordinatesFormat: evt.target.value,
       dmsCoordinates,
       ddCoordinates,
       errors: []
@@ -308,7 +306,6 @@ export default class CoordinatesModal extends Component {
     brApp.map.graphics.clear();
     mapActions.setAnalysisType('default');
    
-    
     if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0]) {
       const values = Object.values(dmsCoordinates);
       const latlngs = [];
@@ -527,7 +524,6 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    
     return (
       <ControlledModalWrapper onClose={this.close}>
         <h4 className="analysis-instructions__header">{text[language].ANALYSIS_COORDINATES_HEADER}</h4>
