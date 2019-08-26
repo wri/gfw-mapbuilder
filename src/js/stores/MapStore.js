@@ -16,6 +16,26 @@ import { urls } from 'js/config';
 
 let isRegistering = false;
 
+const defaultDMS = {
+  lat: {
+    degrees: "",
+    minutes: "",
+    seconds: "",
+    direction: "N"
+  },
+  lng: {
+    degrees: "",
+    minutes: "",
+    seconds: "",
+    direction: "E"
+  }
+};
+
+const defaultDD = {
+  lat: "",
+  lng: ""
+};
+
 class MapStore {
 
   constructor () {
@@ -93,6 +113,12 @@ class MapStore {
     this.activeFilters = {};
     this.selectedFeatureTitles = [];
     this.coordinatesFormat = 'Degrees Decimal Minutes (DMS)';
+    this.dmsCoordinates = [];
+    this.ddCoordinates = [];
+    for (let i = 0; i < 3; i++){
+      this.dmsCoordinates.push(defaultDMS);
+      this.ddCoordinates.push(defaultDD);
+    }
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -164,8 +190,9 @@ class MapStore {
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
       setActiveFilters: mapActions.setActiveFilters,
       changeLayerVersion: mapActions.changeLayerVersion,
-      updateCoordinatesFormat: mapActions.updateCoordinatesFormat
-
+      updateCoordinatesFormat: mapActions.updateCoordinatesFormat,
+      updateDMSCoordinates: mapActions.updateDMSCoordinates,
+      updateDDCoordinates: mapActions.updateDDCoordinates
     });
   }
 
@@ -661,6 +688,14 @@ class MapStore {
   
   updateCoordinatesFormat(string) {
     this.coordinatesFormat = string;
+  }
+  
+  updateDMSCoordinates(array) {
+    this.dmsCoordinates = array;
+  }
+  
+  updateDDCoordinates(array) {
+    this.ddCoordinates = array;
   }
 
   toggleImageryVisible(bool) {

@@ -40,15 +40,15 @@ export default class CoordinatesModal extends Component {
 
   constructor(props) {
     super(props);
-    this.dmsCoordinates = [];
-    this.ddCoordinates = [];
-    for (let i = 0; i < 3; i++){
-      this.dmsCoordinates.push(defaultDMS);
-      this.ddCoordinates.push(defaultDD);
-    }
+    // this.dmsCoordinates = [];
+    // this.ddCoordinates = [];
+    // for (let i = 0; i < 3; i++){
+    //   this.dmsCoordinates.push(defaultDMS);
+    //   this.ddCoordinates.push(defaultDD);
+    // }
     this.state = {
-      dmsCoordinates: this.dmsCoordinates,
-      ddCoordinates: this.ddCoordinates,
+      // dmsCoordinates: this.dmsCoordinates,
+      // ddCoordinates: this.ddCoordinates,
       errors: [],
       ...mapStore.getState()
     };
@@ -65,15 +65,15 @@ export default class CoordinatesModal extends Component {
   close = () => {
     mapActions.toggleCoordinatesModal({ visible: false });
     mapActions.toggleAnalysisModal({visible: false});
-    const dmsCoordinates = [];
-    const ddCoordinates = [];
-    for (let i = 0; i < 3; i++){
-      dmsCoordinates.push(defaultDMS);
-      ddCoordinates.push(defaultDD);
-    }
+    //const dmsCoordinates = [];
+    //const ddCoordinates = [];
+    // for (let i = 0; i < 3; i++){
+    //   dmsCoordinates.push(defaultDMS);
+    //   ddCoordinates.push(defaultDD);
+    // }
     this.setState({
-      dmsCoordinates,
-      ddCoordinates,
+      //dmsCoordinates,
+      //ddCoordinates,
       errors: []
     });
   };
@@ -86,10 +86,12 @@ export default class CoordinatesModal extends Component {
       ddCoordinates.push(defaultDD);
     }
     mapActions.updateCoordinatesFormat(evt.target.value);
+    mapActions.updateDMSCoordinates(dmsCoordinates);
+    mapActions.updateDDCoordinates(ddCoordinates);
     this.setState({
       //coordinatesFormat: evt.target.value,
-      dmsCoordinates,
-      ddCoordinates,
+      //dmsCoordinates,
+      //ddCoordinates,
       errors: []
     });
   };
@@ -105,13 +107,19 @@ export default class CoordinatesModal extends Component {
       dmsCoordinate[latlng][type] = evt.target.value;
     }
     
-    this.setState({
-      dmsCoordinates: [
-        ...this.state.dmsCoordinates.slice(0, index),
-         dmsCoordinate,
-         ...this.state.dmsCoordinates.slice(index + 1)
-      ]
-    });
+    // this.setState({
+    //   dmsCoordinates: [
+    //     ...this.state.dmsCoordinates.slice(0, index),
+    //      dmsCoordinate,
+    //      ...this.state.dmsCoordinates.slice(index + 1)
+    //   ]
+    // });
+    
+    mapActions.updateDMSCoordinates([
+      ...this.state.dmsCoordinates.slice(0, index),
+       dmsCoordinate,
+       ...this.state.dmsCoordinates.slice(index + 1)
+    ]);
   };
   
   updateDD = (evt, index, latlng) => {
@@ -125,13 +133,19 @@ export default class CoordinatesModal extends Component {
       ddCoordinate['lng'] = parseFloat(evt.target.value);
     } 
     
-    this.setState({
-      ddCoordinates: [
-        ...this.state.ddCoordinates.slice(0, index),
-         ddCoordinate,
-         ...this.state.ddCoordinates.slice(index + 1)
-      ]
-    });
+    // this.setState({
+    //   ddCoordinates: [
+    //     ...this.state.ddCoordinates.slice(0, index),
+    //      ddCoordinate,
+    //      ...this.state.ddCoordinates.slice(index + 1)
+    //   ]
+    // });
+    
+    mapActions.updateDDCoordinates([
+     ...this.state.ddCoordinates.slice(0, index),
+      ddCoordinate,
+      ...this.state.ddCoordinates.slice(index + 1)
+    ]);
   };
   
   addMore = () => {
@@ -141,15 +155,17 @@ export default class CoordinatesModal extends Component {
     if (coordinatesFormat === coordinateFormatOptions[0]) {
       const dmsCoordinatesCopy = dmsCoordinates;
       dmsCoordinatesCopy.push(defaultDMS);
-      this.setState({
-        dmsCoordinates: dmsCoordinatesCopy
-      });
+      // this.setState({
+      //   dmsCoordinates: dmsCoordinatesCopy
+      // });
+      mapActions.updateDMSCoordinates(dmsCoordinatesCopy);
     } else {
       const ddCoordinatesCopy = ddCoordinates;
       ddCoordinatesCopy.push(defaultDD);
-      this.setState({
-        ddCoordinates: ddCoordinatesCopy
-      });
+      // this.setState({
+      //   ddCoordinates: ddCoordinatesCopy
+      // });
+      mapActions.updateDDCoordinates(ddCoordinatesCopy);
     }
   };
   
@@ -160,15 +176,17 @@ export default class CoordinatesModal extends Component {
     if (coordinatesFormat === coordinateFormatOptions[0]) {
       const dmsCoordinatesCopy = dmsCoordinates;
       dmsCoordinatesCopy.splice(index, 1);
-      this.setState({
-        dmsCoordinates: dmsCoordinatesCopy
-      });
+      // this.setState({
+      //   dmsCoordinates: dmsCoordinatesCopy
+      // });
+      mapActions.updateDMSCoordinates(dmsCoordinatesCopy);
     } else {
       const ddCoordinatesCopy = ddCoordinates;
       ddCoordinatesCopy.splice(index, 1);
-      this.setState({
-        ddCoordinates: ddCoordinatesCopy
-      });
+      // this.setState({
+      //   ddCoordinates: ddCoordinatesCopy
+      // });
+      mapActions.updateDDCoordinates(ddCoordinatesCopy);
     }
   };
   

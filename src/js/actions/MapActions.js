@@ -27,6 +27,14 @@ class MapActions {
   updateCoordinatesFormat(string) {
     return string;
   }
+  
+  updateDMSCoordinates(array) {
+    return array;
+  }
+  
+  updateDDCoordinates(array) {
+    return array;
+  }
 
   setAnalysisType (value) {
     return value;

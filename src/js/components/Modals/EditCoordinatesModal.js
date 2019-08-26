@@ -48,8 +48,10 @@ export default class editCoordinatessModal extends Component {
 
   render () {
     const {language} = this.context;
-    const {coordinateValue, coordinatesFormat} = this.state;
+    const {coordinateValue, coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
     console.log('coordinatesFormat', coordinatesFormat);
+    console.log('dmsCoordinates', dmsCoordinates);
+    console.log('ddCoordinates', ddCoordinates);
     return (
       <ControlledEditModalWrapper onClose={this.close}>
         <div className="edit-coordinates-header">
