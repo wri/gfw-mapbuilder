@@ -46,7 +46,7 @@ export default class CoordinatesModal extends Component {
       this.ddCoordinates.push(defaultDD);
     }
     this.state = {
-      coordinatesFormat: '',
+      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
       errors: []
@@ -63,7 +63,7 @@ export default class CoordinatesModal extends Component {
       ddCoordinates.push(defaultDD);
     }
     this.setState({
-      coordinatesFormat: '',
+      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates,
       ddCoordinates,
       errors: []
@@ -129,14 +129,13 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
     const {coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
-    if (coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') {
+    if (coordinatesFormat === coordinateFormatOptions[0]) {
       const dmsCoordinatesCopy = dmsCoordinates;
       dmsCoordinatesCopy.push(defaultDMS);
       this.setState({
         dmsCoordinates: dmsCoordinatesCopy
       });
-    }
-    if (coordinatesFormat === coordinateFormatOptions[1]) {
+    } else {
       const ddCoordinatesCopy = ddCoordinates;
       ddCoordinatesCopy.push(defaultDD);
       this.setState({
@@ -149,14 +148,13 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
     const {coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
-    if (coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') {
+    if (coordinatesFormat === coordinateFormatOptions[0]) {
       const dmsCoordinatesCopy = dmsCoordinates;
       dmsCoordinatesCopy.splice(index, 1);
       this.setState({
         dmsCoordinates: dmsCoordinatesCopy
       });
-    }
-    if (coordinatesFormat === coordinateFormatOptions[1]) {
+    } else {
       const ddCoordinatesCopy = ddCoordinates;
       ddCoordinatesCopy.splice(index, 1);
       this.setState({
@@ -173,7 +171,7 @@ export default class CoordinatesModal extends Component {
     const coordinatesFormat = this.state.coordinatesFormat;
     let validated = true;
     const errors = [];
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0]) {
       const values = Object.values(this.state.dmsCoordinates);
       const latitudes = [];
       const longitudes = [];
@@ -251,9 +249,7 @@ export default class CoordinatesModal extends Component {
           errors: filteredErrors
         });
       }
-    }
-    
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]){
+    } else {
       const values = Object.values(this.state.ddCoordinates);
       if (values) {
         values.forEach(value => {
@@ -302,7 +298,7 @@ export default class CoordinatesModal extends Component {
     mapActions.setAnalysisType('default');
    
     
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0]) {
       const values = Object.values(dmsCoordinates);
       const latlngs = [];
       let latitude;
@@ -327,9 +323,7 @@ export default class CoordinatesModal extends Component {
         latlngs.push(first);
         polygon = new Polygon([...latlngs]);
       }
-    }
-    
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]) {
+    } else {
       const values = Object.values(ddCoordinates);
       const latlngs = [];
       values.forEach(value => {
@@ -529,7 +523,7 @@ export default class CoordinatesModal extends Component {
         <div className='relative analysis-coordinates__select-container'>
           <label htmlFor="coordinates-formats" className="analysis-coordinates__label">{text[language].ANALYSIS_COORDINATES_LABELS[2]}</label>
           <select
-            value={coordinatesFormat ? coordinatesFormat : coordinateFormatOptions[0]}
+            value={coordinatesFormat}
             className='analysis-coordinates__select pointer'
             onChange={evt => this.switchCoordinatesFormat(evt)}
             id="coordinates-formats"
@@ -540,7 +534,7 @@ export default class CoordinatesModal extends Component {
         </div>
 
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
-        {(coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') &&
+        {coordinatesFormat === coordinateFormatOptions[0] &&
         dmsCoordinates.map((item, index) => this.renderDMS(item, index))}
         {coordinatesFormat === coordinateFormatOptions[1] &&
         ddCoordinates.map((item, index) => this.renderDD(item, index))}
