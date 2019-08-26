@@ -163,7 +163,7 @@ export default class Map extends Component {
   };
   
   getSelectedFeatureTitles = () => {
-    let selectedFeats;
+    // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
       // Save this if later on we support getting multiple selected features in the report
