@@ -5,9 +5,8 @@ import text from '../../../js/languages';
 import SVGIcon from '../../utils/svgIcon';
 import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
+import Point from 'esri/geometry/Point';
 import layerKeys from '../../constants/LayerConstants';
-import webMercatorUtils from 'esri/geometry/webMercatorUtils';
-import SpatialReference from 'esri/SpatialReference';
 
 const defaultDMS = {
   lat: {
@@ -47,7 +46,7 @@ export default class CoordinatesModal extends Component {
       this.ddCoordinates.push(defaultDD);
     }
     this.state = {
-      coordinatesFormat: '',
+      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
       errors: []
@@ -64,7 +63,7 @@ export default class CoordinatesModal extends Component {
       ddCoordinates.push(defaultDD);
     }
     this.setState({
-      coordinatesFormat: '',
+      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
       dmsCoordinates,
       ddCoordinates,
       errors: []
@@ -129,17 +128,35 @@ export default class CoordinatesModal extends Component {
   addMore = () => {
     const {language} = this.context;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    const coordinatesFormat = this.state.coordinatesFormat;
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
     if (coordinatesFormat === coordinateFormatOptions[0]) {
-      const dmsCoordinatesCopy = this.state.dmsCoordinates;
+      const dmsCoordinatesCopy = dmsCoordinates;
       dmsCoordinatesCopy.push(defaultDMS);
       this.setState({
         dmsCoordinates: dmsCoordinatesCopy
       });
-    }
-    if (coordinatesFormat === coordinateFormatOptions[1]) {
-      const ddCoordinatesCopy = this.state.ddCoordinates;
+    } else {
+      const ddCoordinatesCopy = ddCoordinates;
       ddCoordinatesCopy.push(defaultDD);
+      this.setState({
+        ddCoordinates: ddCoordinatesCopy
+      });
+    }
+  };
+  
+  remove = (index) => {
+    const {language} = this.context;
+    const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates} = this.state;
+    if (coordinatesFormat === coordinateFormatOptions[0]) {
+      const dmsCoordinatesCopy = dmsCoordinates;
+      dmsCoordinatesCopy.splice(index, 1);
+      this.setState({
+        dmsCoordinates: dmsCoordinatesCopy
+      });
+    } else {
+      const ddCoordinatesCopy = ddCoordinates;
+      ddCoordinatesCopy.splice(index, 1);
       this.setState({
         ddCoordinates: ddCoordinatesCopy
       });
@@ -154,7 +171,7 @@ export default class CoordinatesModal extends Component {
     const coordinatesFormat = this.state.coordinatesFormat;
     let validated = true;
     const errors = [];
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0]) {
       const values = Object.values(this.state.dmsCoordinates);
       const latitudes = [];
       const longitudes = [];
@@ -232,9 +249,7 @@ export default class CoordinatesModal extends Component {
           errors: filteredErrors
         });
       }
-    }
-    
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]){
+    } else {
       const values = Object.values(this.state.ddCoordinates);
       if (values) {
         values.forEach(value => {
@@ -283,7 +298,7 @@ export default class CoordinatesModal extends Component {
     mapActions.setAnalysisType('default');
    
     
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0] || coordinatesFormat === '') {
+    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[0]) {
       const values = Object.values(dmsCoordinates);
       const latlngs = [];
       let latitude;
@@ -308,9 +323,7 @@ export default class CoordinatesModal extends Component {
         latlngs.push(first);
         polygon = new Polygon([...latlngs]);
       }
-    }
-    
-    if (coordinatesFormat === text[language].ANALYSIS_COORDINATES_FORMATS[1]) {
+    } else {
       const values = Object.values(ddCoordinates);
       const latlngs = [];
       values.forEach(value => {
@@ -327,6 +340,13 @@ export default class CoordinatesModal extends Component {
         layer.add(graphic);
         map.infoWindow.setFeatures([graphic]);
       }
+      const graphicExtent = graphic.geometry.getExtent();
+      if (graphicExtent) {
+        map.setExtent(graphicExtent, true);
+      } else {
+        map.centerAndZoom(new Point(graphic.geometry), 15);
+      }
+      map.graphics.add(graphic);
     });
     this.close();
   }
@@ -340,6 +360,12 @@ export default class CoordinatesModal extends Component {
       <div key={`DMS-${index}`}>
       {index === 0 && <div className="analysis-coordinates__divider-dms"></div>}
       <div className="analysis-coordinates__inputs-container-dms">
+        {index > 2 &&
+          <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>
+            <span className="analysis-coordinates-remove-text">{text[language].ANALYSIS_COORDINATES_BUTTONS[3]}</span>
+            <SVGIcon id={'icon-analysis-remove'} />
+          </div>
+        }
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
           <div className="analysis-coordinates__latitude">
@@ -435,6 +461,12 @@ export default class CoordinatesModal extends Component {
     return (
       <div key={`DD-${index}`} className="analysis-coordinates__inputs-container-dd">
         {index > 0 && <div className="analysis-coordinates__divider-dd"></div>}
+        {index > 2 &&
+          <div className="analysis-coordinates-remove" onClick={() => this.remove(index)}>
+            <span className="analysis-coordinates-remove-text">{text[language].ANALYSIS_COORDINATES_BUTTONS[3]}</span>
+            <SVGIcon id={'icon-analysis-remove'} />
+          </div>
+        }
         <div className="analysis-coordinates-lat-lng-container">
         <div className="analysis-coordinates__latitude-container">
           <span className="analysis-coordinates__latitude-label">{text[language].ANALYSIS_COORDINATES_LABELS[0]}</span>
@@ -491,7 +523,7 @@ export default class CoordinatesModal extends Component {
         <div className='relative analysis-coordinates__select-container'>
           <label htmlFor="coordinates-formats" className="analysis-coordinates__label">{text[language].ANALYSIS_COORDINATES_LABELS[2]}</label>
           <select
-            value={coordinatesFormat ? coordinatesFormat : coordinateFormatOptions[0]}
+            value={coordinatesFormat}
             className='analysis-coordinates__select pointer'
             onChange={evt => this.switchCoordinatesFormat(evt)}
             id="coordinates-formats"
@@ -502,7 +534,7 @@ export default class CoordinatesModal extends Component {
         </div>
 
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
-        {(coordinatesFormat === coordinateFormatOptions[0] || coordinatesFormat === '') &&
+        {coordinatesFormat === coordinateFormatOptions[0] &&
         dmsCoordinates.map((item, index) => this.renderDMS(item, index))}
         {coordinatesFormat === coordinateFormatOptions[1] &&
         ddCoordinates.map((item, index) => this.renderDD(item, index))}

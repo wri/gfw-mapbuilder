@@ -87,7 +87,8 @@ strings.en.ANALYSIS_COORDINATES_INSTRUCTIONS = [
 strings.en.ANALYSIS_COORDINATES_BUTTONS = [
   `Enter Values`,
   `Add More`,
-  `Make Shape`
+  `Make Shape`,
+  `Remove`
 ];
 strings.en.ANALYSIS_COORDINATES_LABELS = [
   `Latitude`,
