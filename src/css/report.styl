@@ -722,17 +722,6 @@ body
           
   .map
     width 100%
-    
-  .map-analysis-area-container
-    position absolute
-    top 0
-    bottom 0
-    left 0
-    right 0
-    overflow hidden
-    margin-top 6rem
-    margin-left auto
-    margin-right auto
   
   .analysis-modules-container
       position absolute
@@ -816,16 +805,21 @@ body
     display none !important
   
   .map-analysis-area-container
-  #map
-  #map_root
-  #map_container
-  #map_layers
-  // .esriMapLayers > div
-  // .esriMapLayers > svg
-  // .esriMapContainer
-  // .esriMapLayers
-    max-width 70em !important
-    width 100% !important
-    margin-right auto !important
+    // position absolute
+    // top 0
+    // bottom 0
+    // left 0
+    // right 0
+    overflow hidden
+    margin-top 6rem
     margin-left auto !important
+    margin-right auto !important
+    width 100% !important
+    display flex
+    justify-content center
+    align-items center
+  
+  #map
+    width 70em !important 
+    margin-right auto !important
   
