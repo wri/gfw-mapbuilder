@@ -658,6 +658,20 @@ body
     .svg-icon
       width 2rem
       height 2rem
+      
+.map-analysis-area-container
+#map
+#map_root
+#map_container
+#map_layers
+.esriMapLayers > div
+.esriMapLayers > svg
+.esriMapContainer
+.esriMapLayers
+  max-width 70em !important
+  width 100% !important
+  margin-right auto !important
+  margin-left auto !important
 
 @media (max-width: $mobileBreak)
   .restoration-table
@@ -748,30 +762,22 @@ body
   .vega-chart-wrapper
   .vega-chart_container
     margin 0 !important
-    width 500px !important
+    width 70em !important
     margin auto !important
     padding 0 !important
     
-  .vega-chart-bar-container
-    margin 0 !important
-    width 500px !important
-    
-  .vega-chart-line-container
-    margin 0 !important
-    width 500px !important
-    
-  .vega-chart-bar-container > .vega-chart > canvas
-    width 500px !important
-    
-  .vega-chart-line-container > .vega-chart > canvas
-    width 500px !important
+  .vega-chart-bar-container > .vega-chart > svg
+  .vega-chart-line-container > .vega-chart > svg
+    width 100% !important
+    margin-right auto !important
+    margin-left auto !important
   
   .vega-chart-info
-    width 500px !important
+    width 70em !important
     margin 0 auto !important
     
   .report-table-container
-    width 500px !important
+    width 70em !important
   
   .report-header
     background-color #555 !important
@@ -782,7 +788,7 @@ body
         -webkit-print-color-adjust exact
         
   .vega-chart_download-container-report
-    width 500px !important
+    width 70em !important
     .vega-chart-label
       margin 20px auto !important
     
@@ -808,3 +814,18 @@ body
   
   .print-hide
     display none !important
+  
+  .map-analysis-area-container
+  #map
+  #map_root
+  #map_container
+  #map_layers
+  // .esriMapLayers > div
+  // .esriMapLayers > svg
+  // .esriMapContainer
+  // .esriMapLayers
+    max-width 70em !important
+    width 100% !important
+    margin-right auto !important
+    margin-left auto !important
+  
