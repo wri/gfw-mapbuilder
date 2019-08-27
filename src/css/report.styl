@@ -577,6 +577,20 @@ body
 .esriMapLayers > svg
   width 100vw
   margin 0 auto
+  
+.map-analysis-area-container
+#map
+#map_root
+#map_container
+#map_layers
+.esriMapLayers > div
+.esriMapLayers > svg
+.esriMapContainer
+.esriMapLayers
+  max-width 70em !important
+  width 100% !important
+  margin-right auto !important
+  margin-left auto !important
 
 @media only screen and (max-width: 550px)
   .report-header__title
@@ -660,20 +674,6 @@ body
     .svg-icon
       width 2rem
       height 2rem
-      
-.map-analysis-area-container
-#map
-#map_root
-#map_container
-#map_layers
-.esriMapLayers > div
-.esriMapLayers > svg
-.esriMapContainer
-.esriMapLayers
-  max-width 70em !important
-  width 100% !important
-  margin-right auto !important
-  margin-left auto !important
 
 @media (max-width: $mobileBreak)
   .restoration-table
@@ -683,7 +683,6 @@ body
   h3
   h4
     margin 0 5px
- 
  
 @media print
   html
@@ -721,9 +720,15 @@ body
         .report-header__icon-share
           height 3rem
           width 3rem
-          
-  .map
-    width 100%
+    
+  .map-analysis-area-container
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    right 0
+    overflow hidden
+    margin-top 6rem
   
   .analysis-modules-container
       position absolute
@@ -735,7 +740,7 @@ body
     margin 0
     justify-content flex-start
     .analysis-area-subtitle
-      font-size 2.5rem
+      font-size 3rem
       margin-top 1rem
     .analysis-area-list
       font-size 2rem
@@ -753,22 +758,30 @@ body
   .vega-chart-wrapper
   .vega-chart_container
     margin 0 !important
-    width 70em !important
+    width 500px !important
     margin auto !important
     padding 0 !important
     
+  // .vega-chart-bar-container
+  //   margin 0 !important
+  //   width 500px !important
+    
+  // .vega-chart-line-container
+  //   margin 0 !important
+  //   width 500px !important
+    
   .vega-chart-bar-container > .vega-chart > svg
+    width 500px !important
+    
   .vega-chart-line-container > .vega-chart > svg
-    width 100% !important
-    margin-right auto !important
-    margin-left auto !important
+    width 500px !important
   
   .vega-chart-info
-    width 70em !important
+    width 500px !important
     margin 0 auto !important
     
   .report-table-container
-    width 70em !important
+    width 500px !important
   
   .report-header
     background-color #555 !important
@@ -779,7 +792,7 @@ body
         -webkit-print-color-adjust exact
         
   .vega-chart_download-container-report
-    width 70em !important
+    width 500px !important
     .vega-chart-label
       margin 20px auto !important
     
@@ -805,23 +818,3 @@ body
   
   .print-hide
     display none !important
-  
-  .map-analysis-area-container
-    position absolute
-    top 0
-    bottom 0
-    left 0
-    right 0
-    overflow hidden
-    margin-top 6rem
-    margin-left auto !important
-    margin-right auto !important
-    width 100% !important
-    display flex
-    justify-content center
-    align-items center
-  
-  #map
-    width 70em !important 
-    margin-right auto !important
-  
