@@ -11,6 +11,13 @@ import React, {
 
 export default class InfoWindow extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeSelectedFeature: ''
+    };
+  }
+
   static contextTypes = {
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
@@ -47,18 +54,30 @@ export default class InfoWindow extends Component {
       <li key={index}>{instruction}</li>
     );
   };
+  
+  selectedFeatureOption = (feature, index) => <option key={`selected-feature-${index}`} value={feature.attributes[feature._layer.displayField]}>{feature.attributes[feature._layer.displayField]}</option>;
+  
+  changeSelectedFeature = (evt) => {
+    this.setState({
+      activeSelectedFeature: evt.target.value
+    });
+    console.log(this.state.activeSelectedFeature);
+  }
 
   render () {
     const {infoWindow} = this.props.map;
     const {language} = this.context;
     let count = 0, selectedIndex = 0;
-    let selectedFeature, content, title, footer;
+    let selectedFeature, content, title, footer, dropdown, features;
+    
+    console.log('infoWindow', infoWindow);
 
     if ( infoWindow && infoWindow.getSelectedFeature ) {
       count = infoWindow.count;
       selectedFeature = infoWindow.getSelectedFeature();
       selectedIndex = infoWindow.selectedIndex;
       content = infoWindow._contentPane.innerHTML;
+      features = infoWindow.features;
     }
 
     if (selectedFeature) {
@@ -85,12 +104,20 @@ export default class InfoWindow extends Component {
           <ReportSubscribeButtons />
         </div>
       );
+      
+      // Add the dropdown for multiple selected features
+      dropdown = (
+        <select className='selected-features-dropdown' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
+          {features.map(this.selectedFeatureOption)}
+        </select>
+      );
     }
 
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
           <div className='feature-controls'>
+            {dropdown}
             <span>{count} features selected.</span>
             <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
               <SVGIcon id={'shape-close'} />
