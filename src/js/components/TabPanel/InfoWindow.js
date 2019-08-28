@@ -107,9 +107,12 @@ export default class InfoWindow extends Component {
       
       // Add the dropdown for multiple selected features
       dropdown = (
-        <select className='selected-features-dropdown' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
-          {features.map(this.selectedFeatureOption)}
-        </select>
+        <div className="relative infoWindow__select-container">=
+          <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
+            {features.map(this.selectedFeatureOption)}
+          </select>
+          <div className='infoWindow__select-arrow' />
+        </div>
       );
     }
 
