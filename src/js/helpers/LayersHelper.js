@@ -4,6 +4,11 @@ import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
 import {shortTermServices} from '../config';
 
+
+import layerUtils from 'utils/layerUtils';
+import DynamicLayer from 'esri/layers/ArcGISDynamicMapServiceLayer';
+import resources from 'resources';
+
 const LayersHelper = {
 
   /**
@@ -47,9 +52,47 @@ const LayersHelper = {
               firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
               break;
             case '1': //past 48 hours
-              firesLayer.url = shortTermServices[`${fireID}48HR`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+              // firesLayer.url = shortTermServices[`${fireID}48HR`].url;
+              // firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+              console.log(resources);
+              // debugger
+
+
+
+              const options = {};
+              const layerObj = resources.layerPanel.GROUP_LCD.layers[5];
+
+              // Populate the options and then add the layerObj
+              options.id = layerObj.id;
+              options.visible = layerObj.visible || false;
+              options.opacity = layerObj.opacity || 1.0;
+              //- Add a popup template if configuration is present
+              if (layerObj.popup && layerObj.layerIds) {
+                options.infoTemplates = {};
+                const template = layerUtils.makeInfoTemplate(layerObj.popup, 'en');
+                layerObj.layerIds.forEach((id) => {
+                  options.infoTemplates[id] = { infoTemplate: template };
+                });
+              }
+
+              layer.url = layerObj.url;
+
+
+              const esriLayer = new DynamicLayer(layer.url, options);
+              // const esriLayer = layerFactory(layer, context.langggg);
+
+              esriLayer.legendLayer = layerObj.legendLayer || null;
+              esriLayer.layerIds = layerObj.layerIds;
+              esriLayer.order = layerObj.order;
+              esriLayer.label = layerObj.label;
+
+              brApp.map.removeLayer(firesLayer);
+
+              brApp.map.addLayer(esriLayer);
+
+              console.log('esriLayer', esriLayer);
+
               break;
             case '2': //past 72 hours
               firesLayer.url = shortTermServices[`${fireID}7D`].url;
