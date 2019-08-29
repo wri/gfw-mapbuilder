@@ -37,7 +37,7 @@ export default class FiresControls extends React.Component {
   componentDidUpdate(prevProps, prevState, prevContext) {
 
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, '4');
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, this.context.language, '4');
     }
 
     // Anytime the map changes to a new map, update that here
@@ -45,7 +45,7 @@ export default class FiresControls extends React.Component {
     if (prevContext.map !== map && prevContext.map.loaded) {
       const signal = map.on('update-end', () => {
         signal.remove();
-        LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer);
+        LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, this.context.language);
       });
     }
   }
@@ -65,7 +65,7 @@ export default class FiresControls extends React.Component {
   };
 
   updateActiveFires = (evt, fireOptions) => {
-    LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
+    LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, this.context.language, evt.target.value);
     this.setState({
       activeFireOption: evt.target.value,
       activeFireOptionLabel: fireOptions[evt.target.value].label,

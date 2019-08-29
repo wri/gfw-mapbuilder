@@ -35,7 +35,7 @@ const LayersHelper = {
     esriLayer.setVisibleLayers(esriLayer.visibleLayers);
   },
 
-  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, language, selectValue = null) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
       console.log('fires layer', firesLayer);
@@ -47,7 +47,7 @@ const LayersHelper = {
       options.opacity = layerObj.opacity || 1.0;
       if (layerObj.popup && layerObj.layerIds) {
         options.infoTemplates = {};
-        const template = layerUtils.makeInfoTemplate(layerObj.popup, 'en');
+        const template = layerUtils.makeInfoTemplate(layerObj.popup, language);
         layerObj.layerIds.forEach((id) => {
           options.infoTemplates[id] = { infoTemplate: template };
         });
