@@ -3,6 +3,7 @@ import rasterFuncs from 'utils/rasterFunctions';
 import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
 import {shortTermServices} from '../config';
+import layerFactory from '../utils/layerFactory';
 
 
 import layerUtils from 'utils/layerUtils';
@@ -37,62 +38,62 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
+      console.log('fires layer', firesLayer);
+      
+      const options = {};
+      const layerObj = resources.layerPanel.GROUP_LCD.layers[5];
+      options.id = layerObj.id;
+      options.visible = layerObj.visible || false;
+      options.opacity = layerObj.opacity || 1.0;
+      if (layerObj.popup && layerObj.layerIds) {
+        options.infoTemplates = {};
+        const template = layerUtils.makeInfoTemplate(layerObj.popup, 'en');
+        layerObj.layerIds.forEach((id) => {
+          options.infoTemplates[id] = { infoTemplate: template };
+        });
+       }
+       
+       const esriLayer = layerFactory(layerObj, 'en');
+       esriLayer.legendLayer = layerObj.legendLayer || null;
+       esriLayer.layerIds = layerObj.layerIds;
+       esriLayer.order = layerObj.order;
+       esriLayer.label = layerObj.label;
+      //  brApp.map.removeLayer(firesLayer);
+      //  brApp.map.addLayer(esriLayer);
+
       const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? 'viirs' : 'modis';
+      
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
         // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
         // We are hiding and showing the layer to avoid calling the service multiple times.
 
-          firesLayer.hide();
+          //firesLayer.hide();
           const layaDefs = [];
           switch (selectValue) {
             case '0': //past 24 hours
-              firesLayer.url = shortTermServices[`${fireID}24HR`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+              // firesLayer.esriLayer.url = shortTermServices[`${fireID}24HR`].url;
+              // firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+              esriLayer.url = shortTermServices[`${fireID}24HR`].url;
+              esriLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+              esriLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+              brApp.map.removeLayer(firesLayer);
+              brApp.map.addLayer(esriLayer);
+              console.log('esriLayer', esriLayer);
               break;
             case '1': //past 48 hours
               // firesLayer.url = shortTermServices[`${fireID}48HR`].url;
               // firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
               // firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
-              console.log(resources);
+              //layerObj.url = shortTermServices[`${fireID}48HR`].url;
               // debugger
-
-
-
-              const options = {};
-              const layerObj = resources.layerPanel.GROUP_LCD.layers[5];
-
-              // Populate the options and then add the layerObj
-              options.id = layerObj.id;
-              options.visible = layerObj.visible || false;
-              options.opacity = layerObj.opacity || 1.0;
-              //- Add a popup template if configuration is present
-              if (layerObj.popup && layerObj.layerIds) {
-                options.infoTemplates = {};
-                const template = layerUtils.makeInfoTemplate(layerObj.popup, 'en');
-                layerObj.layerIds.forEach((id) => {
-                  options.infoTemplates[id] = { infoTemplate: template };
-                });
-              }
-
-              layer.url = layerObj.url;
-
-
-              const esriLayer = new DynamicLayer(layer.url, options);
-              // const esriLayer = layerFactory(layer, context.langggg);
-
-              esriLayer.legendLayer = layerObj.legendLayer || null;
-              esriLayer.layerIds = layerObj.layerIds;
-              esriLayer.order = layerObj.order;
-              esriLayer.label = layerObj.label;
-
+              esriLayer.url = shortTermServices[`${fireID}48HR`].url;
+              esriLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+              esriLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
               brApp.map.removeLayer(firesLayer);
-
               brApp.map.addLayer(esriLayer);
-
               console.log('esriLayer', esriLayer);
-
               break;
             case '2': //past 72 hours
               firesLayer.url = shortTermServices[`${fireID}7D`].url;
@@ -120,8 +121,17 @@ const LayersHelper = {
               console.log('default');
               break;
           }
-          firesLayer.refresh();
-          firesLayer.show();
+          
+          // const esriLayer = layerFactory(layerObj, 'en');
+          // esriLayer.legendLayer = layerObj.legendLayer || null;
+          // esriLayer.layerIds = layerObj.layerIds;
+          // esriLayer.order = layerObj.order;
+          // esriLayer.label = layerObj.label;
+          // brApp.map.removeLayer(firesLayer);
+          // brApp.map.addLayer(esriLayer);
+          // console.log('esriLayer', esriLayer);
+          //firesLayer.refresh();
+          //firesLayer.show();
         }
       }
       // else {
