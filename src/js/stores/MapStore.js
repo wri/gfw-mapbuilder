@@ -352,7 +352,6 @@ class MapStore {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
-
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
