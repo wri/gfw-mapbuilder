@@ -176,6 +176,7 @@ export default class Map extends Component {
       // }
       // });
       const selectedFeat = brApp.map.infoWindow.getSelectedFeature();
+      console.log('selectedFeat', selectedFeat);
       const displayField = selectedFeat._layer.displayField;
       const name = selectedFeat._layer.name;
       const fieldName = selectedFeat.attributes[displayField];
