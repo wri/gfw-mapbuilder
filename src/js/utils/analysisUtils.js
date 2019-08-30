@@ -563,7 +563,6 @@ export default {
   },
 
   getExactGeom: (selectedFeature) => {
-    console.log('selectedFeature', selectedFeature);
     const promise = new Deferred();
     const url = selectedFeature._layer.url;
 

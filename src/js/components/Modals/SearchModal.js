@@ -29,8 +29,6 @@ export default class SearchModal extends Component {
       if (this.searchWidget) {
         if (layers && layers.length) {
           layers.forEach((layer) => {
-          console.log('layer', layer);
-          console.log('layer type', layer.layerType);
             // If this is a dynamic layer
             if (layer.layerType === esriType.DYNAMIC) {
               // If we have layer infos in a dynamic layer, push each one into the sources array
