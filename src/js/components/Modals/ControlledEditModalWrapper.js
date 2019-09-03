@@ -4,12 +4,11 @@ import SVGIcon from 'utils/svgIcon';
 /**
 * Should be wrapped in a component with relative or absolute position
 */
-export default function ControlledModalWrapper (props) {
+export default function ControlledEditModalWrapper (props) {
   const contentClass = `modal-content custom-scroll ${props.theme ? props.theme : ''}`;
   return (
     <div className='modal-container'>
-      <div className='modal-background' onClick={props.onClose} />
-      <article className={`modal ${props.shadow ? 'shadow' : ''}`}>
+      <article className='modal shadow'>
         <div title='close' className='close-icon pointer' onClick={props.onClose} >
           <svg>
             <SVGIcon id={'shape-close'} />
@@ -23,7 +22,7 @@ export default function ControlledModalWrapper (props) {
   );
 }
 
-ControlledModalWrapper.propTypes = {
+ControlledEditModalWrapper.propTypes = {
   onClose: PropTypes.func.isRequired,
   theme: PropTypes.string
 };

@@ -53,6 +53,7 @@ class MapStore {
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
     this.coordinatesModalVisible = false;
+    this.editCoordinatesModalVisible = false;
     this.printModalVisible = false;
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
@@ -81,6 +82,7 @@ class MapStore {
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
     this.enterValuesButtonActive = false;
+    this.editCoordinatesActive = false;
     this.imageryModalVisible = false;
     this.imageryData = [];
     this.loadingImagery = false;
@@ -103,6 +105,7 @@ class MapStore {
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
       toggleCoordinatesModal: mapActions.toggleCoordinatesModal,
+      toggleEditCoordinatesModal: mapActions.toggleEditCoordinatesModal,
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
@@ -153,6 +156,7 @@ class MapStore {
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
       activateEnterValuesButton: mapActions.activateEnterValuesButton,
+      activateEditCoordinates: mapActions.activateEditCoordinates,
       toggleImageryVisible: mapActions.toggleImageryVisible,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
@@ -417,6 +421,10 @@ class MapStore {
   toggleCoordinatesModal (payload) {
     this.coordinatesModalVisible = payload.visible;
   }
+  
+  toggleEditCoordinatesModal (payload) {
+    this.editCoordinatesModalVisible = payload.visible;
+  }
 
   togglePrintModal (payload) {
     this.printModalVisible = payload.visible;
@@ -643,6 +651,10 @@ class MapStore {
   
   activateEnterValuesButton(bool) {
     this.enterValuesButtonActive = bool;
+  }
+  
+  activateEditCoordinates(bool) {
+    this.editCoordinatesActive = bool;
   }
 
   toggleImageryVisible(bool) {

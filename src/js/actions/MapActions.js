@@ -40,6 +40,7 @@ class MapActions {
   */
   toggleAnalysisModal = (data) => data;
   toggleCoordinatesModal = (data) => data;
+  toggleEditCoordinatesModal = (data) => data;
   togglePrintModal = (data) => data;
   toggleSearchModal = (data) => data;
   toggleCanopyModal = (data) => data;
@@ -239,6 +240,10 @@ class MapActions {
   }
   
   activateEnterValuesButton(bool) {
+    return bool;
+  }
+  
+  activateEditCoordinates(bool) {
     return bool;
   }
 

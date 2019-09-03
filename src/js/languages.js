@@ -116,7 +116,12 @@ strings.en.ANALYSIS_COORDINATES_ERROR = [
 'Error: Latitude values must be no greater than 90.',
 'Error: Longitude values must be no greater than 180.',
 'Error: Latitude must be within the range of -90 and 90.',
-'Error: Longitude must be within the range of -180 and 180.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.en.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values (Decimal Degrees)`,
+  `Delete`
 ];
 
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;
