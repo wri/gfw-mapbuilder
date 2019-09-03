@@ -121,7 +121,8 @@ strings.en.ANALYSIS_COORDINATES_ERROR = [
 
 strings.en.EDIT_COORDINATES_LABELS = [
   `Coordinate Values (Decimal Degrees)`,
-  `Delete`
+  `Latitude:`,
+  `Longitude:`
 ];
 
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;

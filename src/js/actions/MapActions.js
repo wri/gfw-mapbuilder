@@ -54,6 +54,8 @@ class MapActions {
   toggleEditing = () => { return {}; };
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
+  updateCurrentLat = (data) => data;
+  updateCurrentLng = (data) => data;
 
   toggleLogin = (data) => data;
 

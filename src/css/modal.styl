@@ -13,6 +13,11 @@
   width 100%
   left 0
   top 0
+  
+.edit-modal-container
+  position absolute
+  left 45%
+  top 13%
 
 .modal-background
   background-color rgba(0, 0, 0, 0.35)
@@ -30,7 +35,19 @@
   & a
     word-break break-word
     word-wrap break-word
-
+  &.draggable
+    top 250px
+    cursor grab
+    z-index 100
+    
+.edit-modal
+  background-color white
+  max-height 100%
+  height auto
+  //padding 1rem
+  & a
+    word-break break-word
+    word-wrap break-word
   &.draggable
     top 250px
     cursor grab
@@ -43,7 +60,6 @@
   right 0
   top 0
   z-index 10
-  
   & svg
     //transform translate(-50%, -50%)
     position absolute
@@ -52,6 +68,21 @@
     //left 50%
     top 60%
     margin-left 0.25rem
+    
+.edit-close-icon
+  height 20px
+  width 20px
+  z-index 10
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-right: 0.25rem;
+  & svg
+    height 100%
+    width 100%
+    top 60%
+    margin-left 0.25rem
+    
 
 .mobile-show.close-icon
   height 60px
@@ -69,6 +100,19 @@
   overflow-y auto
   color $darkGray
   height 100%
+  
+.edit-modal-content
+  overflow-x hidden
+  max-height 450px
+  overflow-y auto
+  color $darkGray
+  height 100%
+  padding 0.25rem 1rem 1rem 1rem
+  .edit-coordinates-title
+    margin-bottom 0.25rem
+  .edit-coordinates-longitude-label
+  .edit-coordinates-latitude-label
+    margin-right 0.25rem
 
 .no-info-available
   text-align center

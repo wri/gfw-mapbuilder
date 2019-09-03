@@ -330,6 +330,15 @@ export default class Map extends Component {
             });
           }
         });
+        
+        editToolbar.on('vertex-move', evt => {
+          // create new point geometry from evt.vertexinfo.graphic.geometry
+          const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
+          mapActions.updateCurrentLat(currentCoords[1]);
+          mapActions.updateCurrentLng(currentCoords[0]);
+          console.log('lng', this.state.currentLng);
+          console.log('lat', this.state.currentLat);
+        });
 
         // This function needs to happen after the layer has loaded
         // otherwise the layer breaks until you manually set the canopyDensity
