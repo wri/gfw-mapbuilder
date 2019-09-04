@@ -94,6 +94,8 @@ class MapStore {
     this.selectedFeatureTitles = [];
     this.currentLat = 0;
     this.currentLng = 0;
+    this.currentX = 0;
+    this.currentY = 0;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -147,6 +149,8 @@ class MapStore {
       updateSelectedFeatureTitles: layerActions.updateSelectedFeatureTitles,
       updateCurrentLat: mapActions.updateCurrentLat,
       updateCurrentLng: mapActions.updateCurrentLng,
+      updateCurrentX: mapActions.updateCurrentX,
+      updateCurrentY: mapActions.updateCurrentY,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -557,6 +561,14 @@ class MapStore {
   
   updateCurrentLng (longitude) {
     this.currentLng = longitude;
+  }
+  
+  updateCurrentX (x) {
+    this.currentX = x;
+  }
+  
+  updateCurrentY (y) {
+    this.currentY = y;
   }
 
   showLayerInfo (layer) {

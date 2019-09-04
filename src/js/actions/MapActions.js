@@ -56,6 +56,8 @@ class MapActions {
   toggleMobileTimeWidgetVisible = () => { return {}; };
   updateCurrentLat = (data) => data;
   updateCurrentLng = (data) => data;
+  updateCurrentX = (data) => data;
+  updateCurrentY = (data) => data;
 
   toggleLogin = (data) => data;
 

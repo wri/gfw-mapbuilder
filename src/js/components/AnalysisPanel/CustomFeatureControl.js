@@ -32,6 +32,7 @@ export default class CustomFeatureControl extends Component {
     layer.remove(feature);
     brApp.map.graphics.clear();
     mapActions.setAnalysisType('default');
+    mapActions.toggleEditCoordinatesModal({ visible: false});
   };
 
   editPolygon = () => {

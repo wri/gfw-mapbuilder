@@ -52,6 +52,8 @@ import SVGIcon from 'utils/svgIcon';
 import ImageryModal from 'components/Modals/ImageryModal';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
+import screenUtils from 'esri/geometry/screenUtils';
+import SpatialReference from 'esri/SpatialReference';
 
 import React, {
   Component,
@@ -331,20 +333,30 @@ export default class Map extends Component {
           }
         });
         
-        editToolbar.on('vertex-click', evt => {
+        editToolbar.on('vertex-mouse-over', evt => {
           if (!this.state.editCoordinatesModalVisible) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
           }
+          
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          console.log('evt', evt);
+          
+          const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
+          const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
+          mapActions.updateCurrentX(screenPoint.x);
+          mapActions.updateCurrentY(screenPoint.y);
         });
         
+       
+        
+        // editToolbar.on('vertex-mouse-out', evt => {
+        //   if (this.state.editCoordinatesModalVisible) {
+        //     mapActions.toggleEditCoordinatesModal({ visible: false });
+        //   }
+        // });
+        
         editToolbar.on('vertex-move', evt => {
-          if (!this.state.editCoordinatesModalVisible) {
-            mapActions.toggleEditCoordinatesModal({ visible: true });
-          }
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);

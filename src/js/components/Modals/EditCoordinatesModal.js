@@ -44,9 +44,9 @@ export default class EditCoordinatesModal extends Component {
 
   render () {
     const {language} = this.context;
-    const {currentLat, currentLng} = this.state;
+    const {currentLat, currentLng, currentX, currentY} = this.state;
     return (
-      <DraggableEditModalWrapper onDragEnd={this.onDragEnd} onClose={this.close}>
+      <DraggableEditModalWrapper left={currentX} top={currentY} onDragEnd={this.onDragEnd} onClose={this.close}>
         <div className="edit-coordinates-header">
             <h4 className="edit-coordinates-title">
                 {`${text[language].EDIT_COORDINATES_LABELS[0]}`}

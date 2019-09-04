@@ -14,9 +14,6 @@
   left 0
   top 0
   
-.edit-modal-container
-  position relative
-
 .modal-background
   background-color rgba(0, 0, 0, 0.35)
   height 100%
@@ -54,27 +51,24 @@
     margin-right 5px
 
 .edit-modal
-  background-color white
   max-height 100%
   height auto
-  transform translate(-50%, -50%)
-  background-color white
   max-height 100%
   position fixed
   height auto
-  left 50%
-  top 50%
-  padding 10px
+  margin: 0.5rem 1rem;
+  padding 0.25rem
   font-size 12px
   background #fffee2
   box-shadow 0px 0px 2px 0 rgba(0, 0, 0, 0.2)
+  z-index 5
   & a
     word-break break-word
     word-wrap break-word
   &.draggable
     top 250px
     cursor grab
-    z-index 100
+    z-index 5
 
 .close-icon
   position absolute
@@ -93,13 +87,12 @@
     margin-left 0.25rem
     
 .edit-close-icon
-  height 20px
-  width 20px
+  height 15px
+  width 15px
   z-index 10
   display: flex;
   justify-content: flex-end;
   margin-left: auto;
-  margin-right: 0.25rem;
   & svg
     height 100%
     width 100%
@@ -130,7 +123,6 @@
   overflow-y auto
   color $darkGray
   height 100%
-  padding 0.25rem 1rem 1rem 1rem
   .edit-coordinates-title
     margin-bottom 0.25rem
   .edit-coordinates-longitude-label
