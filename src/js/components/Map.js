@@ -336,8 +336,9 @@ export default class Map extends Component {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          console.log('lng', this.state.currentLng);
-          console.log('lat', this.state.currentLat);
+          //console.log('lng', this.state.currentLng);
+          //console.log('lat', this.state.currentLat);
+          console.log('evt', evt);
         });
 
         // This function needs to happen after the layer has loaded

@@ -98,7 +98,7 @@ strings.en.ANALYSIS_COORDINATES_LABELS = [
   `Select Format`
 ];
 strings.en.ANALYSIS_COORDINATES_FORMATS = [
-  `Degrees Decimal Minutes (DMS)`,
+  `Degrees Decimal Seconds (DMS)`,
   `Decimal Degrees (DD)`
 ];
 strings.en.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
