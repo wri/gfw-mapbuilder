@@ -1,4 +1,4 @@
-import ControlledEditModalWrapper from 'components/Modals/ControlledEditModalWrapper';
+import DraggableEditModalWrapper from 'components/Modals/DraggableEditModalWrapper';
 import mapActions from 'actions/MapActions';
 import MapStore from '../../stores/MapStore';
 import React, { Component, PropTypes } from 'react';
@@ -35,14 +35,18 @@ export default class EditCoordinatesModal extends Component {
 
   close = () => {
     mapActions.toggleEditCoordinatesModal({ visible: false });
-    mapActions.toggleEditing();
+  };
+  
+  onDragEnd = (event) => {
+    event.target.style.top = event.clientY;
+    event.target.style.left = event.clientX;
   };
 
   render () {
     const {language} = this.context;
     const {currentLat, currentLng} = this.state;
     return (
-      <ControlledEditModalWrapper onClose={this.close}>
+      <DraggableEditModalWrapper onDragEnd={this.onDragEnd} onClose={this.close}>
         <div className="edit-coordinates-header">
             <h4 className="edit-coordinates-title">
                 {`${text[language].EDIT_COORDINATES_LABELS[0]}`}
@@ -58,7 +62,7 @@ export default class EditCoordinatesModal extends Component {
                   <span className="edit-coordinates-longitude">{currentLng.toFixed(2)}</span>
               </div>
           </div>
-      </ControlledEditModalWrapper>
+      </DraggableEditModalWrapper>
     );
   }
 }

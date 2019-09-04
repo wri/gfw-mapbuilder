@@ -6,16 +6,11 @@ import text from '../../languages';
 * Should be wrapped in a component with relative or absolute position
 */
 
-const onDragEnd = (event) => {
-    event.target.style.top = event.clientY;
-    event.target.style.left = event.clientX;
-  };
-
-export default function ControlledEditModalWrapper (props) {
+export default function DraggableEditModalWrapper (props) {
   const contentClass = `edit-modal-content custom-scroll ${props.theme ? props.theme : ''}`;
   return (
     <div className='edit-modal-container'>
-        <article className='edit-modal draggable' draggable='true' onDragEnd={onDragEnd}>
+        <article className='edit-modal draggable' draggable='true' onDragEnd={props.onDragEnd}>
             <div title='close' className='edit-close-icon pointer' onClick={props.onClose} >
                 <svg>
                     <SVGIcon id={'shape-close'} />
@@ -29,7 +24,7 @@ export default function ControlledEditModalWrapper (props) {
   );
 }
 
-ControlledEditModalWrapper.propTypes = {
+DraggableEditModalWrapper.propTypes = {
   onClose: PropTypes.func.isRequired,
   theme: PropTypes.string
 };
