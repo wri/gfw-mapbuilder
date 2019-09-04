@@ -36,7 +36,7 @@ export default class CustomFeatureControl extends Component {
 
   editPolygon = () => {
     mapActions.toggleEditing();
-    this.props.editingEnabled ? mapActions.toggleEditCoordinatesModal({ visible: false}) : mapActions.toggleEditCoordinatesModal({ visible: true });
+    //this.props.editingEnabled ? mapActions.toggleEditCoordinatesModal({ visible: false}) : mapActions.toggleEditCoordinatesModal({ visible: true });
   };
 
   render () {
