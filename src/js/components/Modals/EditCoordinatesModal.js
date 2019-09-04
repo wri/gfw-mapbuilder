@@ -51,14 +51,17 @@ export default class EditCoordinatesModal extends Component {
             <h4 className="edit-coordinates-title">
                 {`${text[language].EDIT_COORDINATES_LABELS[0]}`}
             </h4>
+            <h4 className="edit-coordinates-title">
+                {`${text[language].EDIT_COORDINATES_LABELS[1]}`}
+            </h4>
         </div>
           <div className="edit-coordinates-container">
               <div className="edit-coordinates-latitude-container">
-                  <span className="edit-coordinates-latitude-label">{`${text[language].EDIT_COORDINATES_LABELS[1]}`}</span>
+                  <span className="edit-coordinates-latitude-label">{`${text[language].EDIT_COORDINATES_LABELS[2]}`}</span>
                   <span className="edit-coordinates-latitude">{currentLat.toFixed(2)}</span>
               </div>
               <div className="edit-coordinates-longitude-container">
-                  <span className="edit-coordinates-longitude-label">{`${text[language].EDIT_COORDINATES_LABELS[2]}`}</span>
+                  <span className="edit-coordinates-longitude-label">{`${text[language].EDIT_COORDINATES_LABELS[3]}`}</span>
                   <span className="edit-coordinates-longitude">{currentLng.toFixed(2)}</span>
               </div>
           </div>

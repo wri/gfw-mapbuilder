@@ -120,7 +120,8 @@ strings.en.ANALYSIS_COORDINATES_ERROR = [
 ];
 
 strings.en.EDIT_COORDINATES_LABELS = [
-  `Coordinate Values (Decimal Degrees)`,
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
   `Latitude:`,
   `Longitude:`
 ];
