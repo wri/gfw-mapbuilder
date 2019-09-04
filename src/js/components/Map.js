@@ -332,15 +332,19 @@ export default class Map extends Component {
         });
         
         editToolbar.on('vertex-click', evt => {
-          mapActions.toggleEditCoordinatesModal({ visible: false });
+          if (!this.state.editCoordinatesModalVisible) {
+            mapActions.toggleEditCoordinatesModal({ visible: true });
+          }
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          mapActions.toggleEditCoordinatesModal({ visible: true });
           console.log('evt', evt);
         });
         
         editToolbar.on('vertex-move', evt => {
+          if (!this.state.editCoordinatesModalVisible) {
+            mapActions.toggleEditCoordinatesModal({ visible: true });
+          }
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
