@@ -67,17 +67,22 @@ export default class InfoWindow extends Component {
   render () {
     const {infoWindow} = this.props.map;
     const {language} = this.context;
+    const {activeSelectedFeature} = this.state;
     let count = 0, selectedIndex = 0;
     let selectedFeature, content, title, footer, dropdown, features;
     
     console.log('infoWindow', infoWindow);
-
-    if ( infoWindow && infoWindow.getSelectedFeature ) {
-      count = infoWindow.count;
-      selectedFeature = infoWindow.getSelectedFeature();
-      selectedIndex = infoWindow.selectedIndex;
-      content = infoWindow._contentPane.innerHTML;
-      features = infoWindow.features;
+    
+    if(activeSelectedFeature) {
+      selectedFeature = activeSelectedFeature;
+    } else {
+      if ( infoWindow && infoWindow.getSelectedFeature ) {
+        count = infoWindow.count;
+        selectedFeature = infoWindow.getSelectedFeature();
+        selectedIndex = infoWindow.selectedIndex;
+        content = infoWindow._contentPane.innerHTML;
+        features = infoWindow.features;
+      }
     }
 
     if (selectedFeature) {
