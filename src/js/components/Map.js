@@ -336,7 +336,7 @@ export default class Map extends Component {
         });
         
         editToolbar.on('vertex-mouse-over', evt => {
-          if (!this.state.editCoordinatesModalVisible && this.state.editingEnabled) {
+          if (!this.state.editCoordinatesModalVisible) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
           }
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
@@ -347,14 +347,6 @@ export default class Map extends Component {
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
-        });
-        
-       
-        
-        editToolbar.on('vertex-mouse-out', evt => {
-          if (!this.state.editingEnabled) {
-            mapActions.toggleEditCoordinatesModal({ visible: false });
-          }
         });
         
         editToolbar.on('vertex-move-stop', evt => {
