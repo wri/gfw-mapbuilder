@@ -40,6 +40,7 @@ class MapActions {
   */
   toggleAnalysisModal = (data) => data;
   toggleCoordinatesModal = (data) => data;
+  toggleEditCoordinatesModal = (data) => data;
   togglePrintModal = (data) => data;
   toggleSearchModal = (data) => data;
   toggleCanopyModal = (data) => data;
@@ -51,8 +52,13 @@ class MapActions {
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;
   toggleEditing = () => { return {}; };
+  resetEditing = () => {return {}; };
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
+  updateCurrentLat = (data) => data;
+  updateCurrentLng = (data) => data;
+  updateCurrentX = (data) => data;
+  updateCurrentY = (data) => data;
 
   toggleLogin = (data) => data;
 
@@ -239,6 +245,10 @@ class MapActions {
   }
   
   activateEnterValuesButton(bool) {
+    return bool;
+  }
+  
+  activateEditCoordinates(bool) {
     return bool;
   }
 
