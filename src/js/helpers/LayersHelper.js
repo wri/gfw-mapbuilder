@@ -35,12 +35,12 @@ const LayersHelper = {
       const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? 'viirs' : 'modis';
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
-        // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
-        // We are hiding and showing the layer to avoid calling the service multiple times.
+          // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
+          // We are hiding and showing the layer to avoid calling the service multiple times.
+          const defs = [];
 
           firesLayer.hide();
-          const layaDefs = [];
-          switch (selectValue) {
+          switch (selectValue.toString()) {
             case '0': //past 24 hours
               firesLayer.url = shortTermServices[`${fireID}24HR`].url;
               firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
@@ -55,7 +55,7 @@ const LayersHelper = {
               firesLayer.url = shortTermServices[`${fireID}7D`].url;
               firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
               firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-              layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
               break;
             case '3': //past 7 days
               firesLayer.url = shortTermServices[`${fireID}7D`].url;
@@ -64,24 +64,18 @@ const LayersHelper = {
               break;
             case '4': //past 7 days
               const queryString = this.generateFiresQuery(startDate, endDate);
-              const defs = [];
-              firesLayer.hide();
-              if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
-                firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-                firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-                firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              }
-              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-              firesLayer.setLayerDefinitions(defs, false);
-              firesLayer.show();
 
+              firesLayer.url = shortTermServices[`${fireID}1YR`].url;
+              firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+              firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
               break;
             default:
               console.log('default');
               break;
           }
 
-          firesLayer.setLayerDefinitions(layaDefs);
+          firesLayer.setLayerDefinitions(defs);
           firesLayer.refresh();
           firesLayer.show();
         }
