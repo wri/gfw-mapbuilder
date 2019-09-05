@@ -336,7 +336,7 @@ export default class Map extends Component {
         });
         
         editToolbar.on('vertex-mouse-over', evt => {
-          if (!this.state.editCoordinatesModalVisible) {
+          if (!this.state.editCoordinatesModalVisible && this.state.editingEnabled) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
           }
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
@@ -351,13 +351,13 @@ export default class Map extends Component {
         
        
         
-        // editToolbar.on('vertex-mouse-out', evt => {
-        //   if (this.state.editCoordinatesModalVisible) {
-        //     mapActions.toggleEditCoordinatesModal({ visible: false });
-        //   }
-        // });
+        editToolbar.on('vertex-mouse-out', evt => {
+          if (!this.state.editingEnabled) {
+            mapActions.toggleEditCoordinatesModal({ visible: false });
+          }
+        });
         
-        editToolbar.on('vertex-move', evt => {
+        editToolbar.on('vertex-move-stop', evt => {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
