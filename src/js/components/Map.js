@@ -181,15 +181,17 @@ export default class Map extends Component {
       // }
       // });
       const selectedFeat = brApp.map.infoWindow.getSelectedFeature();
-      const displayField = selectedFeat._layer.displayField;
-      const name = selectedFeat._layer.name;
-      const fieldName = selectedFeat.attributes[displayField];
-      if (fieldName){
-      selectedFeatureTitlesArray.push(`${name}: ${fieldName}`);
-      } else {
-        selectedFeatureTitlesArray.push(name);
+      if (selectedFeat._layer) {
+        const displayField = selectedFeat._layer.displayField;
+        const name = selectedFeat._layer.name;
+        const fieldName = selectedFeat.attributes[displayField];
+        if (fieldName){
+        selectedFeatureTitlesArray.push(`${name}: ${fieldName}`);
+        } else {
+          selectedFeatureTitlesArray.push(name);
+        }
+        layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
       }
-      layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
     }
   };
   
