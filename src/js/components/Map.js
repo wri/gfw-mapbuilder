@@ -155,7 +155,9 @@ export default class Map extends Component {
       } else {
         if (map.infoWindow && map.infoWindow.getSelectedFeature) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
-          editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
+          if (selectedFeature && selectedFeature.geometry) {
+            editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
+          }
         }
       }
     }
@@ -337,7 +339,6 @@ export default class Map extends Component {
           if (!this.state.editCoordinatesModalVisible) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
           }
-          
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
@@ -360,7 +361,11 @@ export default class Map extends Component {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          console.log('evt', evt);
+          
+          const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
+          const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
+          mapActions.updateCurrentX(screenPoint.x);
+          mapActions.updateCurrentY(screenPoint.y);
         });
 
         // This function needs to happen after the layer has loaded

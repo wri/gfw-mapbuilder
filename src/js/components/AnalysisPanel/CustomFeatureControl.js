@@ -7,6 +7,7 @@ const getFeatureName = (feature) => {
   return feature.attributes && feature.attributes.title || '';
 };
 
+
 export default class CustomFeatureControl extends Component {
 
   static contextTypes = {
@@ -14,9 +15,12 @@ export default class CustomFeatureControl extends Component {
     map: PropTypes.object.isRequired
   };
 
-  state = {
-    title: getFeatureName(this.props.feature)
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: getFeatureName(this.props.feature)
+    };
+  }
 
   editName = ({target}) => {
     const {feature} = this.props;
@@ -33,21 +37,22 @@ export default class CustomFeatureControl extends Component {
     brApp.map.graphics.clear();
     mapActions.setAnalysisType('default');
     mapActions.toggleEditCoordinatesModal({ visible: false});
+    mapActions.toggleEditing();
   };
 
   editPolygon = () => {
-    mapActions.toggleEditing();
-    //this.props.editingEnabled ? mapActions.toggleEditCoordinatesModal({ visible: false}) : mapActions.toggleEditCoordinatesModal({ visible: true });
+   mapActions.toggleEditing();
   };
 
   render () {
     const {language} = this.context;
+    const {editingEnabled} = this.props;
 
     return (
       <div className='custom-feature__header'>
         <input className='custom-feature__input' type='text' value={this.state.title} onChange={this.editName} />
         <div className='edit-delete-container'>
-          <div className='custom-feature__edit pointer-custom' onClick={this.editPolygon}>{this.props.editingEnabled ? text[language].EDIT_SAVE : text[language].EDIT_EDIT}</div>
+          <div className='custom-feature__edit pointer-custom' onClick={() => this.editPolygon(language)}>{editingEnabled ? text[language].EDIT[1] : text[language].EDIT[0]}</div>
           <div className='custom-feature__delete pointer-custom' onClick={this.deleteFeature}>{text[language].DELETE}</div>
         </div>
       </div>

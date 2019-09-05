@@ -88,7 +88,7 @@ export default class TabView extends Component {
 
           </div>
           <h3 className='tab-view__mobile-header mobile-show'>{text[language].DATA}</h3>
-          <InfoWindow map={map} />
+          <InfoWindow map={map} {...this.props} />
         </div>
         {!settings.includeMeasurementTab ? null :
           <div className={this.getClassName(MEASUREMENT)}>

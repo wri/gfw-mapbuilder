@@ -13,6 +13,7 @@ import request from 'utils/request';
 import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
 import { urls } from 'js/config';
+import text from '../languages';
 
 let isRegistering = false;
 
@@ -487,7 +488,11 @@ class MapStore {
   }
 
   toggleEditing () {
-    this.editingEnabled = !this.editingEnabled;
+    if (this.editingEnabled) {
+      this.editingEnabled = false;
+    } else {
+      this.editingEnabled = true;
+    }
   }
 
   openTOCAccordion (groupKey) {

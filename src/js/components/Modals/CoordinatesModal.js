@@ -46,7 +46,7 @@ export default class CoordinatesModal extends Component {
       this.ddCoordinates.push(defaultDD);
     }
     this.state = {
-      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
+      coordinatesFormat: 'Degrees Decimal Seconds (DMS)',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
       errors: []
@@ -63,7 +63,7 @@ export default class CoordinatesModal extends Component {
       ddCoordinates.push(defaultDD);
     }
     this.setState({
-      coordinatesFormat: 'Degrees Decimal Minutes (DMS)',
+      coordinatesFormat: 'Degrees Decimal Seconds (DMS)',
       dmsCoordinates,
       ddCoordinates,
       errors: []
