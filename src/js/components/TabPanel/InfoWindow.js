@@ -3,7 +3,6 @@ import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import {attributes} from 'constants/AppConstants';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
-import MapStore from '../../stores/MapStore';
 
 import React, {
   Component,
@@ -15,21 +14,6 @@ export default class InfoWindow extends Component {
   static contextTypes = {
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
-  };
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...MapStore.getState()
-    };
-  }
-  
-  componentDidMount() {
-    MapStore.listen(this.storeDidUpdate);
-  }
-  
-  storeDidUpdate = () => {
-    this.setState(MapStore.getState());
   };
 
   previous = () => {
