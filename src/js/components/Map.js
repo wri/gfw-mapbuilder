@@ -361,6 +361,10 @@ export default class Map extends Component {
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
+        
+        editToolbar.on('vertex-delete', evt => {
+          mapActions.toggleEditCoordinatesModal({ visible: false });
+        });
 
         // This function needs to happen after the layer has loaded
         // otherwise the layer breaks until you manually set the canopyDensity
