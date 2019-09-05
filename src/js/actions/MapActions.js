@@ -52,6 +52,7 @@ class MapActions {
   showLayerInfo = (layer) => layer;
   updateTimeExtent = (timeExtent) => timeExtent;
   toggleEditing = () => { return {}; };
+  resetEditing = () => {return {}; };
   toggleLegendVisible = () => { return {}; };
   toggleMobileTimeWidgetVisible = () => { return {}; };
   updateCurrentLat = (data) => data;

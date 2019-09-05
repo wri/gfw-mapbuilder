@@ -121,6 +121,7 @@ class MapStore {
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
       toggleEditing: mapActions.toggleEditing,
+      resetEditing: mapActions.resetEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -494,6 +495,10 @@ class MapStore {
     } else {
       this.editingEnabled = true;
     }
+  }
+  
+  resetEditing () {
+    this.editingEnabled = false;
   }
 
   openTOCAccordion (groupKey) {
