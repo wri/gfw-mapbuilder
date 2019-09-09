@@ -20,24 +20,25 @@ import RadioButton from './RadioButton';
   toggleLayer = (layer) => {
     const { allRadioLayers, activeLayers } = this.props;
 
-    const layersAlreadyHidden = [];
+    //const layersAlreadyHidden = [];
+    console.log('allRadioLayers', allRadioLayers);
+    console.log('activeLayers', activeLayers);
+    //allRadioLayers.forEach(l => {
+      //if (l.id === layer.id) {
+        //if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
+        //return;
+      //}
+      // if (layersAlreadyHidden.indexOf(l.id) > -1) {
+      //   return;
+      // }
 
-    allRadioLayers.forEach(l => {
-      if (l.id === layer.id) {
-        if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
-        return;
-      }
-      if (layersAlreadyHidden.indexOf(l.id) > -1) {
-        return;
-      }
+      //layerActions.removeActiveLayer(l.subId || l.id);
+      //if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
+      //layersAlreadyHidden.push(l.id);
+    //});
 
-      layerActions.removeActiveLayer(l.subId || l.id);
-      if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
-      layersAlreadyHidden.push(l.id);
-    });
-
-    // If the item you clicked is already on
-    // turn it off and return from the fucntion.
+    //If the item you clicked is already on
+   // turn it off and return from the function.
     if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
       layerActions.removeActiveLayer(layer.subId || layer.id);
       if (layer.subId || layer.layerIds) { layerActions.removeAllSubLayers(layer.esriLayer); }
