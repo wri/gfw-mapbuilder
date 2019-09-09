@@ -63,24 +63,8 @@ strings.en.INFO_WINDOW_INSTRUCTION_LIST = [
   'Use the layers tab to turn on a data layer',
   'Select a shape on the map'
 ];
-//- Analysis
-strings.en.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
-strings.en.ANALYSIS_INSTRUCTION_LIST = [
-  'Use the layers tab to turn on a data layer',
-  'Select a shape on the map',
-  'Click on the analyze tab'
-];
-strings.en.ANALYSIS_OR = 'Or';
-strings.en.ANALYSIS_DRAW_HEADER = 'Analyze your own shape';
-//- ${drawIcon} references a variable above, do not translate
-strings.en.ANALYSIS_DRAW_INSTRUCTIONS = [
-  `Choose the draw tool ${drawIcon} in the toolbox`,
-  'Draw a shape anywhere on the map',
-  'Select the shape to run the analysis'
-];
-strings.en.ANALYSIS_DRAW_BUTTON = 'Start drawing';
 
-// Coordinates
+//- Coordinates
 strings.en.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
 strings.en.ANALYSIS_COORDINATES_INSTRUCTIONS = [
   `Enter at least 3 coordinates`,
@@ -126,6 +110,22 @@ strings.en.EDIT_COORDINATES_LABELS = [
   `Longitude:`
 ];
 
+//- Analysis
+strings.en.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
+strings.en.ANALYSIS_INSTRUCTION_LIST = [
+  'Use the layers tab to turn on a data layer',
+  'Select a shape on the map',
+  'Click on the analyze tab'
+];
+strings.en.ANALYSIS_OR = 'Or';
+strings.en.ANALYSIS_DRAW_HEADER = 'Analyze your own shape';
+//- ${drawIcon} references a variable above, do not translate
+strings.en.ANALYSIS_DRAW_INSTRUCTIONS = [
+  `Choose the draw tool ${drawIcon} in the toolbox`,
+  'Draw a shape anywhere on the map',
+  'Select the shape to run the analysis'
+];
+strings.en.ANALYSIS_DRAW_BUTTON = 'Start drawing';
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;
 strings.en.ANALYSIS_SHAPEFILE_UPLOAD = 'or drop a custom shapefile here';
 strings.en.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 5MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';
@@ -335,45 +335,6 @@ strings.ka.LANG_ID = 'Indonesian';
 strings.ka.LANG_ZH = 'Mandarin';
 strings.ka.LANG_KA = 'ქართული';
 
-// Coordinates
-strings.ka.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
-strings.ka.ANALYSIS_COORDINATES_INSTRUCTIONS = [
-  `Enter at least 3 coordinates`,
-  `Add up to 10 points to make shapes`
-];
-strings.ka.ANALYSIS_COORDINATES_BUTTONS = [
-  `Enter Values`,
-  `Add More`,
-  `Make Shape`,
-  `Remove`
-];
-strings.ka.ANALYSIS_COORDINATES_LABELS = [
-  `Latitude`,
-  `Longitude`,
-  `Select Format`
-];
-strings.ka.ANALYSIS_COORDINATES_FORMATS = [
-  `Degrees Decimal Minutes (DMS)`,
-  `Decimal Degrees (DD)`
-];
-strings.ka.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
-  `N`,
-  `S`
-];
-strings.ka.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
-  `E`,
-  `W`
-];
-
-strings.ka.ANALYSIS_COORDINATES_ERROR = [
-'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
-'Error: You can only enter positive values for degrees, minutes, and seconds.',
-'Error: Latitude values must be no greater than 90.',
-'Error: Longitude values must be no greater than 180.',
-'Error: Latitude must be within the range of -90 and 90.',
-'Error: Longitude must be within the range of -180 and 180.',
-];
-
 //- Header
 strings.ka.NAV_ABOUT = 'პროექტის შესახებ';
 strings.ka.NAV_DOWNLOAD = 'მონაცემების გადმოწერა';
@@ -425,6 +386,53 @@ strings.ka.INFO_WINDOW_INSTRUCTION_LIST = [
   'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
   'აარჩიეთ ფიგურა რუკაზე'
 ];
+
+//- Coordinates
+strings.ka.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.ka.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.ka.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter Values`,
+  `Add More`,
+  `Make Shape`,
+  `Remove`
+];
+strings.ka.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`,
+  `Select Format`
+];
+strings.ka.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Minutes (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.ka.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
+  `N`,
+  `S`
+];
+strings.ka.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
+];
+
+strings.ka.ANALYSIS_COORDINATES_ERROR = [
+'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
+'Error: You can only enter positive values for degrees, minutes, and seconds.',
+'Error: Latitude values must be no greater than 90.',
+'Error: Longitude values must be no greater than 180.',
+'Error: Latitude must be within the range of -90 and 90.',
+'Error: Longitude must be within the range of -180 and 180.',
+];
+
+strings.ka.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Analysis
 strings.ka.ANALYSIS_INSTRUCTION_HEADER = 'ჩაატარეთ ფიგურის ანალიზი რუკაზე';
 strings.ka.ANALYSIS_INSTRUCTION_LIST = [
@@ -685,6 +693,13 @@ strings.fr.ANALYSIS_COORDINATES_ERROR = [
 'Error: Longitude must be within the range of -180 and 180.',
 ];
 
+strings.fr.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Header
 strings.fr.NAV_ABOUT = 'A Propos';
 strings.fr.NAV_DOWNLOAD = 'Téléchargez les Données';
@@ -735,6 +750,53 @@ strings.fr.INFO_WINDOW_INSTRUCTION_LIST = [
   'Utiliser l\'onglet Couches pour activer une couche de données',
   'Sélectionnez un polygone sur la carte'
 ];
+
+//- Coordinates
+strings.fr.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.fr.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.fr.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter Values`,
+  `Add More`,
+  `Make Shape`,
+  `Remove`
+];
+strings.fr.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`,
+  `Select Format`
+];
+strings.fr.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Seconds (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.fr.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
+  `N`,
+  `S`
+];
+strings.fr.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
+];
+
+strings.fr.ANALYSIS_COORDINATES_ERROR = [
+'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
+'Error: You can only enter positive values for degrees, minutes, and seconds.',
+'Error: Latitude values must be no greater than 90.',
+'Error: Longitude values must be no greater than 180.',
+'Error: Latitude must be within the range of -90 and 90.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.fr.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Analysis
 strings.fr.ANALYSIS_INSTRUCTION_HEADER = 'Analysez un polygone sur la carte';
 strings.fr.ANALYSIS_INSTRUCTION_LIST = [
@@ -992,7 +1054,14 @@ strings.es.ANALYSIS_COORDINATES_ERROR = [
 'Error: Latitude values must be no greater than 90.',
 'Error: Longitude values must be no greater than 180.',
 'Error: Latitude must be within the range of -90 and 90.',
-'Error: Longitude must be within the range of -180 and 180.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.es.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
 ];
 
 //- Header
@@ -1045,6 +1114,53 @@ strings.es.INFO_WINDOW_INSTRUCTION_LIST = [
   'Usar la pestaña de capas para encender una capa',
   'Seleccionar un polígono en el mapa'
 ];
+
+//- Coordinates
+strings.es.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.es.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.es.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter Values`,
+  `Add More`,
+  `Make Shape`,
+  `Remove`
+];
+strings.es.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`,
+  `Select Format`
+];
+strings.es.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Seconds (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.es.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
+  `N`,
+  `S`
+];
+strings.es.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
+];
+
+strings.es.ANALYSIS_COORDINATES_ERROR = [
+'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
+'Error: You can only enter positive values for degrees, minutes, and seconds.',
+'Error: Latitude values must be no greater than 90.',
+'Error: Longitude values must be no greater than 180.',
+'Error: Latitude must be within the range of -90 and 90.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.es.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Analysis
 strings.es.ANALYSIS_INSTRUCTION_HEADER = 'Analizar un polígono  en el mapa';
 strings.es.ANALYSIS_INSTRUCTION_LIST = [
@@ -1295,13 +1411,20 @@ strings.pt.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
   `W`
 ];
 
-strings.en.ANALYSIS_COORDINATES_ERROR = [
+strings.pt.ANALYSIS_COORDINATES_ERROR = [
 'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
 'Error: You can only enter positive values for degrees, minutes, and seconds.',
 'Error: Latitude values must be no greater than 90.',
 'Error: Longitude values must be no greater than 180.',
 'Error: Latitude must be within the range of -90 and 90.',
 'Error: Longitude must be within the range of -180 and 180.',
+];
+
+strings.pt.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
 ];
 
 //- Header
@@ -1354,6 +1477,53 @@ strings.pt.INFO_WINDOW_INSTRUCTION_LIST = [
   'Use a guia camadas para ativar os dados da camada',
   'Selecione uma área no mapa'
 ];
+
+//- Coordinates
+strings.pt.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.pt.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.pt.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter Values`,
+  `Add More`,
+  `Make Shape`,
+  `Remove`
+];
+strings.pt.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`,
+  `Select Format`
+];
+strings.pt.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Seconds (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.pt.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
+  `N`,
+  `S`
+];
+strings.pt.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
+];
+
+strings.pt.ANALYSIS_COORDINATES_ERROR = [
+'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
+'Error: You can only enter positive values for degrees, minutes, and seconds.',
+'Error: Latitude values must be no greater than 90.',
+'Error: Longitude values must be no greater than 180.',
+'Error: Latitude must be within the range of -90 and 90.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.pt.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Analysis
 strings.pt.ANALYSIS_INSTRUCTION_HEADER = 'Analise a área selecionada no mapa';
 strings.pt.ANALYSIS_INSTRUCTION_LIST = [
@@ -1613,6 +1783,13 @@ strings.id.ANALYSIS_COORDINATES_ERROR = [
 'Error: Longitude must be within the range of -180 and 180.',
 ];
 
+strings.id.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Header
 strings.id.NAV_ABOUT = 'About';
 strings.id.NAV_DOWNLOAD = 'Download Data';
@@ -1663,6 +1840,53 @@ strings.id.INFO_WINDOW_INSTRUCTION_LIST = [
   'Use the layers tab to turn on a data layer',
   'Select a shape on the map'
 ];
+
+//- Coordinates
+strings.id.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.id.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.id.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter Values`,
+  `Add More`,
+  `Make Shape`,
+  `Remove`
+];
+strings.id.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`,
+  `Select Format`
+];
+strings.id.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Seconds (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.id.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
+  `N`,
+  `S`
+];
+strings.id.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
+];
+
+strings.id.ANALYSIS_COORDINATES_ERROR = [
+'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
+'Error: You can only enter positive values for degrees, minutes, and seconds.',
+'Error: Latitude values must be no greater than 90.',
+'Error: Longitude values must be no greater than 180.',
+'Error: Latitude must be within the range of -90 and 90.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.id.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Analysis
 strings.id.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
 strings.id.ANALYSIS_INSTRUCTION_LIST = [
@@ -1922,6 +2146,13 @@ strings.zh.ANALYSIS_COORDINATES_ERROR = [
 'Error: Longitude must be within the range of -180 and 180.',
 ];
 
+strings.zh.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Header
 strings.zh.NAV_ABOUT = '关于';
 strings.zh.NAV_DOWNLOAD = '下载数据';
@@ -1972,6 +2203,53 @@ strings.zh.INFO_WINDOW_INSTRUCTION_LIST = [
   '使用图层键来打开图层',
   '在地图上选择图形'
 ];
+
+//- Coordinates
+strings.zh.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.zh.ANALYSIS_COORDINATES_INSTRUCTIONS = [
+  `Enter at least 3 coordinates`,
+  `Add up to 10 points to make shapes`
+];
+strings.zh.ANALYSIS_COORDINATES_BUTTONS = [
+  `Enter Values`,
+  `Add More`,
+  `Make Shape`,
+  `Remove`
+];
+strings.zh.ANALYSIS_COORDINATES_LABELS = [
+  `Latitude`,
+  `Longitude`,
+  `Select Format`
+];
+strings.zh.ANALYSIS_COORDINATES_FORMATS = [
+  `Degrees Decimal Seconds (DMS)`,
+  `Decimal Degrees (DD)`
+];
+strings.zh.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
+  `N`,
+  `S`
+];
+strings.zh.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
+  `E`,
+  `W`
+];
+
+strings.zh.ANALYSIS_COORDINATES_ERROR = [
+'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
+'Error: You can only enter positive values for degrees, minutes, and seconds.',
+'Error: Latitude values must be no greater than 90.',
+'Error: Longitude values must be no greater than 180.',
+'Error: Latitude must be within the range of -90 and 90.',
+'Error: Longitude must be within the range of -180 and 180.'
+];
+
+strings.zh.EDIT_COORDINATES_LABELS = [
+  `Coordinate Values`,
+  `(Decimal Degrees)`,
+  `Latitude:`,
+  `Longitude:`
+];
+
 //- Analysis
 strings.zh.ANALYSIS_INSTRUCTION_HEADER = '分析地图上的图形';
 strings.zh.ANALYSIS_INSTRUCTION_LIST = [
