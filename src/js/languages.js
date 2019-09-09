@@ -56,6 +56,7 @@ strings.en.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.en.NAV_LANGUAGE = 'Select Language';
 strings.en.SUBSCRIBE_BACK = 'Back';
 strings.en.SUBSCRIBE_NEXT = 'Next';
+strings.en.SUBSCRIBE_SAVE = 'Save';
 //- Documents
 strings.en.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
 strings.en.DOCS_NOT_AVAILABLE = 'There are no documents available for this area';
@@ -124,6 +125,7 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.en.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.en.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+strings.en.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
 
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -1427,7 +1429,8 @@ strings.id.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.id.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.id.NAV_LANGUAGE = 'Select Language';
 strings.id.SUBSCRIBE_BACK = 'Kembali';
-strings.id.SUBSCRIBE_BACK = 'Next';
+strings.id.SUBSCRIBE_NEXT = 'Next';
+strings.id.SUBSCRIBE_SAVE = 'Simpan';
 //- Documents
 strings.id.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
 strings.id.DOCS_NOT_AVAILABLE = 'There are no documents available for this area';
@@ -1496,6 +1499,7 @@ strings.id.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.id.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.id.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+strings.id.ANALYSIS_ERROR = 'Terjadi kesalahan saat melakukan analisis yang dipilih. Pilihlah kawasan yang lebih kecil, analisis lain atau coba lagi nanti.';
 
 //- Group and value should not be modified
 strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [

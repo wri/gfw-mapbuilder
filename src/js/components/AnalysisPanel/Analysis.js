@@ -609,7 +609,7 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+              message: text[language].ANALYSIS_ERROR
             },
           }, () => {
             this.renderResults(analysisId, this.state.results, language, analysisSettings);

@@ -312,7 +312,7 @@ export default class SubscribeModal extends Component {
           {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>OK!</button> : null }
           {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>{text[language].SUBSCRIBE_BACK}</button> : null }
           {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>{text[language].SUBSCRIBE_NEXT}</button> : null }
-          {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>Save</button> : null }
+          {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>{text[language].SUBSCRIBE_NEXT}</button> : null }
         </div>
 
       </ControlledModalWrapper>
