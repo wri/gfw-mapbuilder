@@ -273,19 +273,19 @@ export default class SubscribeModal extends Component {
             </div>
 
             <div className='custom-checkbox'>
-              GLAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+            {text[language].SUBSCRIBE_ALERTS_GLAD}<input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
             </div>
             <div className='custom-checkbox'>
-              SAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+            {text[language].SUBSCRIBE_ALERTS_SAD}<input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
             </div>
             <div className='custom-checkbox'>
-              FORMA alerts data<input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+            {text[language].SUBSCRIBE_ALERTS_FORMA}<input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
             </div>
             <div className='custom-checkbox'>
-              Terra-i tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+            {text[language].SUBSCRIBE_ALERTS_TERRA}<input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
             </div>
             <div className='custom-checkbox'>
-              PRODES deforestation data<input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+            {text[language].SUBSCRIBE_ALERTS_PRODES}<input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
             </div>
           </div>
         </div>
@@ -297,11 +297,11 @@ export default class SubscribeModal extends Component {
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
-          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
+          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME_SUBSCRIPTION}</h3>
           <div className='alert-checkbox'>
-            <p>Name</p>
+            <p>{text[language].SUBSCRIBE_NAME_SUBSCRIPTION}</p>
             <input className="subscription-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
-            <p>Receive Alert Emails In...</p>
+            <p>{text[language].SUBSCRIBE_EMAIL_TITLE}</p>
             <select className='language-selector' onChange={this.changeLanguage} value={this.state.activeLanguage}>
               {langs.map(this.optionMapper)}
             </select>
@@ -310,8 +310,8 @@ export default class SubscribeModal extends Component {
         </div>
         <div className='subscription-sub-buttons'>
           {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>OK!</button> : null }
-          {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>Back</button> : null }
-          {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>Next</button> : null }
+          {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>{text[language].SUBSCRIBE_BACK}</button> : null }
+          {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>{text[language].SUBSCRIBE_NEXT}</button> : null }
           {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>Save</button> : null }
         </div>
 

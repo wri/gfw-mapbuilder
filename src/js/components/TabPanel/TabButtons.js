@@ -176,7 +176,7 @@ export default class TabButtons extends Component {
             <svg className='svg-icon'>
               <SVGIcon id={'icon-analysis'} />
             </svg>
-            <span className='tab-tooltip'>Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily</span>
+            <span className='tab-tooltip'>{text[language].ANALYSIS_TOOLTIP}</span>
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].ANALYZE}
             </span>
