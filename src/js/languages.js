@@ -73,6 +73,10 @@ strings.en.INFO_WINDOW_INSTRUCTION_LIST = [
   'Select a shape on the map'
 ];
 //- Analysis
+strings.en.ANALYSIS_NOT_SELECTED = [
+  'Analysis not selected',
+  'Select an analysis from the drop-down menu to begin.'
+];
 strings.en.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
 strings.en.ANALYSIS_INSTRUCTION_LIST = [
   'Use the layers tab to turn on a data layer',
@@ -217,6 +221,15 @@ strings.en.LEARN_MORE = 'learn More';
 strings.en.DOWNLOAD_DATA = 'download data';
 strings.en.DESCRIPTION = 'description';
 
+//Measurement
+strings.en.MEASUREMENT = 'Measurement';
+strings.en.RESULT = 'Result';
+strings.en.AREA = 'Area';
+strings.en.DISTANCE = 'Distance';
+strings.en.LOCATION = 'Location';
+strings.en.LATITUDE = 'Latitude';
+strings.en.LONGITUDE = 'Longitude';
+
 //- Miscellaneous
 strings.en.PRINT_BUTTON_LABEL = 'Choose a print output';
 strings.en.PRINT_REPORT = 'Print Report';
@@ -225,7 +238,6 @@ strings.en.EDIT_EDIT = 'Edit';
 strings.en.SUBSCRIBE = 'Subscribe';
 strings.en.LAYERS = 'Layers';
 strings.en.DATA = 'Data';
-strings.en.MEASUREMENT = 'Measurement';
 strings.en.ANALYZE = 'Analyze';
 strings.en.DOCS = 'Docs';
 strings.en.NARRATIVE = 'Narrative';
@@ -354,6 +366,10 @@ strings.ka.INFO_WINDOW_INSTRUCTION_LIST = [
   'აარჩიეთ ფიგურა რუკაზე'
 ];
 //- Analysis
+strings.ka.ANALYSIS_NOT_SELECTED = [
+  'Analysis not selected',
+  'Select an analysis from the drop-down menu to begin.'
+];
 strings.ka.ANALYSIS_INSTRUCTION_HEADER = 'ჩაატარეთ ფიგურის ანალიზი რუკაზე';
 strings.ka.ANALYSIS_INSTRUCTION_LIST = [
   'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
@@ -490,6 +506,15 @@ strings.ka.LEARN_MORE = 'მეტი ინფო';
 strings.ka.DOWNLOAD_DATA = 'მონაცემების ჩამოტვირთვა';
 strings.ka.DESCRIPTION = 'აღწერა';
 
+//Measurement
+strings.ka.MEASUREMENT = 'Measurement';
+strings.ka.RESULT = 'Result';
+strings.ka.AREA = 'Area';
+strings.ka.DISTANCE = 'Distance';
+strings.ka.LOCATION = 'Location';
+strings.ka.LATITUDE = 'Latitude';
+strings.ka.LONGITUDE = 'Longitude';
+
 //- Miscellaneous
 strings.ka.PRINT_BUTTON_LABEL = 'აარჩიეთ ბეჭდვის ფორმატი';
 strings.ka.PRINT_REPORT = 'ანგარიშის ბეჭდვა';
@@ -498,7 +523,6 @@ strings.ka.EDIT_EDIT = 'Edit';
 strings.ka.SUBSCRIBE = 'გამოწერა';
 strings.ka.LAYERS = 'ფენები';
 strings.ka.DATA = 'მონაცემები';
-strings.ka.MEASUREMENT = 'Measurement';
 strings.ka.ANALYZE = 'ანალიზი';
 strings.ka.DOCS = 'დოკუმენტები';
 strings.ka.NARRATIVE = 'ტექსტი/ ნარატივი';
@@ -626,6 +650,10 @@ strings.fr.INFO_WINDOW_INSTRUCTION_LIST = [
   'Sélectionnez un polygone sur la carte'
 ];
 //- Analysis
+strings.fr.ANALYSIS_NOT_SELECTED = [
+  'Analysis not selected',
+  'Select an analysis from the drop-down menu to begin.'
+];
 strings.fr.ANALYSIS_INSTRUCTION_HEADER = 'Analysez un polygone sur la carte';
 strings.fr.ANALYSIS_INSTRUCTION_LIST = [
   'Utilisez l\'onglet Couches pour activer une couche de données',
@@ -762,6 +790,15 @@ strings.fr.LEARN_MORE = 'En savoir plus';
 strings.fr.DOWNLOAD_DATA = 'Téléchargez les données';
 strings.fr.DESCRIPTION = 'description';
 
+//Measurement
+strings.fr.MEASUREMENT = 'Measurement';
+strings.fr.RESULT = 'Result';
+strings.fr.AREA = 'Area';
+strings.fr.DISTANCE = 'Distance';
+strings.fr.LOCATION = 'Location';
+strings.fr.LATITUDE = 'Latitude';
+strings.fr.LONGITUDE = 'Longitude';
+
 //- Miscellaneous
 strings.fr.PRINT_BUTTON_LABEL = 'Choisissez un format d\'impression';
 strings.fr.PRINT_REPORT = 'Imprimer le Rapport';
@@ -770,7 +807,6 @@ strings.fr.EDIT_EDIT = 'Edit';
 strings.fr.SUBSCRIBE = 'S\'abonner';
 strings.fr.LAYERS = 'Couches';
 strings.fr.DATA = 'Données';
-strings.fr.MEASUREMENT = 'Measurement';
 strings.fr.ANALYZE = 'Analyser';
 strings.fr.DOCS = 'Documents';
 strings.fr.NARRATIVE = 'Texte';
@@ -898,6 +934,10 @@ strings.es.INFO_WINDOW_INSTRUCTION_LIST = [
   'Seleccionar un polígono en el mapa'
 ];
 //- Analysis
+strings.es.ANALYSIS_NOT_SELECTED = [
+  'Analysis not selected',
+  'Select an analysis from the drop-down menu to begin.'
+];
 strings.es.ANALYSIS_INSTRUCTION_HEADER = 'Analizar un polígono  en el mapa';
 strings.es.ANALYSIS_INSTRUCTION_LIST = [
   'Usar la pestaña de capas para encender una capa',
@@ -1034,6 +1074,15 @@ strings.es.LEARN_MORE = 'Conozca más';
 strings.es.DOWNLOAD_DATA = 'Descarga información';
 strings.es.DESCRIPTION = 'Descripción';
 
+//Measurement
+strings.es.MEASUREMENT = 'Measurement';
+strings.es.RESULT = 'Result';
+strings.es.AREA = 'Area';
+strings.es.DISTANCE = 'Distance';
+strings.es.LOCATION = 'Location';
+strings.es.LATITUDE = 'Latitude';
+strings.es.LONGITUDE = 'Longitude';
+
 //- Miscellaneous
 strings.es.PRINT_BUTTON_LABEL = 'Elegir diseño de página';
 strings.es.PRINT_REPORT = 'Imprimir Informe';
@@ -1042,7 +1091,6 @@ strings.es.EDIT_EDIT = 'Edit';
 strings.es.SUBSCRIBE = 'Subscribirse';
 strings.es.LAYERS = 'Capas';
 strings.es.DATA = 'Datos';
-strings.es.MEASUREMENT = 'Measurement';
 strings.es.ANALYZE = 'Análisis';
 strings.es.DOCS = 'Documentos';
 strings.es.NARRATIVE = 'Narrativa';
@@ -1169,6 +1217,10 @@ strings.pt.INFO_WINDOW_INSTRUCTION_LIST = [
   'Selecione uma área no mapa'
 ];
 //- Analysis
+strings.pt.ANALYSIS_NOT_SELECTED = [
+  'Analysis not selected',
+  'Select an analysis from the drop-down menu to begin.'
+];
 strings.pt.ANALYSIS_INSTRUCTION_HEADER = 'Analise a área selecionada no mapa';
 strings.pt.ANALYSIS_INSTRUCTION_LIST = [
   'Use a guia camadas para ativar os dados da camada',
@@ -1305,6 +1357,15 @@ strings.pt.LEARN_MORE = 'Saiba mais';
 strings.pt.DOWNLOAD_DATA = 'Baixar dados';
 strings.pt.DESCRIPTION = 'Descrição';
 
+//Measurement
+strings.pt.MEASUREMENT = 'Measurement';
+strings.pt.RESULT = 'Result';
+strings.pt.AREA = 'Area';
+strings.pt.DISTANCE = 'Distance';
+strings.pt.LOCATION = 'Location';
+strings.pt.LATITUDE = 'Latitude';
+strings.pt.LONGITUDE = 'Longitude';
+
 //- Miscellaneous
 strings.pt.PRINT_BUTTON_LABEL = 'Escolher saída de impressão.';
 strings.pt.PRINT_REPORT = 'Imprimir Relatório';
@@ -1313,7 +1374,6 @@ strings.pt.EDIT_EDIT = 'Edit';
 strings.pt.SUBSCRIBE = 'Inscrever-se';
 strings.pt.LAYERS = 'Camadas';
 strings.pt.DATA = 'Dados';
-strings.pt.MEASUREMENT = 'Measurement';
 strings.pt.ANALYZE = 'Analisar';
 strings.pt.DOCS = 'Docs';
 strings.pt.NARRATIVE = 'Narrativa';
@@ -1449,6 +1509,10 @@ strings.id.INFO_WINDOW_INSTRUCTION_LIST = [
   'Select a shape on the map'
 ];
 //- Analysis
+strings.id.ANALYSIS_NOT_SELECTED = [
+  'Analisis tidak dipilih',
+  'Pilih analisis dari menu tarik turun untuk memulai.'
+];
 strings.id.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
 strings.id.ANALYSIS_INSTRUCTION_LIST = [
   'Use the layers tab to turn on a data layer',
@@ -1589,6 +1653,15 @@ strings.id.LEARN_MORE = 'learn More';
 strings.id.DOWNLOAD_DATA = 'download data';
 strings.id.DESCRIPTION = 'description';
 
+//Measurement
+strings.id.MEASUREMENT = 'Pengukuran';
+strings.id.RESULT = 'Hasil';
+strings.id.AREA = 'Kawasan';
+strings.id.DISTANCE = 'Jarak';
+strings.id.LOCATION = 'Lokasi';
+strings.id.LATITUDE = 'Garis Lintang';
+strings.id.LONGITUDE = 'Garis Bujur';
+
 //- Miscellaneous
 strings.id.PRINT_BUTTON_LABEL = 'Choose a print output';
 strings.id.PRINT_REPORT = 'Print Report';
@@ -1597,7 +1670,6 @@ strings.id.EDIT_EDIT = 'Edit';
 strings.id.SUBSCRIBE = 'Subscribe';
 strings.id.LAYERS = 'Layers';
 strings.id.DATA = 'Data';
-strings.id.MEASUREMENT = 'Measurement';
 strings.id.ANALYZE = 'Analyze';
 strings.id.DOCS = 'Docs';
 strings.id.NARRATIVE = 'Narrative';
@@ -1724,6 +1796,10 @@ strings.zh.INFO_WINDOW_INSTRUCTION_LIST = [
   '在地图上选择图形'
 ];
 //- Analysis
+strings.pt.ANALYSIS_NOT_SELECTED = [
+  'Analysis not selected',
+  'Select an analysis from the drop-down menu to begin.'
+];
 strings.zh.ANALYSIS_INSTRUCTION_HEADER = '分析地图上的图形';
 strings.zh.ANALYSIS_INSTRUCTION_LIST = [
   '使用图层键来打开图层',
@@ -1860,6 +1936,15 @@ strings.zh.LEARN_MORE = '了解更多';
 strings.zh.DOWNLOAD_DATA = '下载数据';
 strings.zh.DESCRIPTION = '说明';
 
+//Measurement
+strings.en.MEASUREMENT = 'Measurement';
+strings.en.RESULT = 'Result';
+strings.en.AREA = 'Area';
+strings.en.DISTANCE = 'Distance';
+strings.en.LOCATION = 'Location';
+strings.en.LATITUDE = 'Latitude';
+strings.en.LONGITUDE = 'Longitude';
+
 //- Miscellaneous
 strings.zh.PRINT_BUTTON_LABEL = '选择打印模板';
 strings.zh.PRINT_REPORT = '打印报告';
@@ -1869,7 +1954,6 @@ strings.zh.SUBSCRIBE = '订阅';
 strings.zh.SEARCH = '搜寻';
 strings.zh.LAYERS = '图层';
 strings.zh.DATA = '数据';
-strings.zh.MEASUREMENT = 'Measurement';
 strings.zh.ANALYZE = '分析';
 strings.zh.DOCS = '文本文件';
 strings.zh.NARRATIVE = '说明';
