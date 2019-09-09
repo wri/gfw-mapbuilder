@@ -126,6 +126,8 @@ strings.en.ANALYSIS_SAD_ALERT_NAMES = {
 strings.en.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.en.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
 strings.en.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
+strings.en.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
+strings.en.ANALYSIS_NO_DATA = 'No data available';
 
 //- Group and value should not be modified
 strings.en.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -1500,6 +1502,8 @@ strings.id.ANALYSIS_SAD_ALERT_NAMES = {
 strings.id.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.id.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
 strings.id.ANALYSIS_ERROR = 'Terjadi kesalahan saat melakukan analisis yang dipilih. Pilihlah kawasan yang lebih kecil, analisis lain atau coba lagi nanti.';
+strings.id.RUN_ANALYSIS_INSTRUCTIONS = 'Klik tombol “jalankan analisis” untuk melihat hasilnya';
+strings.id.ANALYSIS_NO_DATA = 'Data tidak tersedia';
 
 //- Group and value should not be modified
 strings.id.ANALYSIS_SELECT_TYPE_OPTIONS = [

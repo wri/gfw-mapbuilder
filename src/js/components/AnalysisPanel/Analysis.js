@@ -79,7 +79,7 @@ export default class Analysis extends Component {
         <div
           className='analysis-results__select-form-item-container'
         >
-          Click the &lsquo;Run Analysis&rsquo; button see analysis
+          {text[language].RUN_ANALYSIS_INSTRUCTIONS}
         </div>
       );
     }
