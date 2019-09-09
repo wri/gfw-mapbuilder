@@ -874,7 +874,9 @@ export default class Map extends Component {
       map,
       activeLayers,
       imageryModalVisible,
-      imageryError
+      imageryFetchFailed,
+      imageryError,
+      imageryData
     } = this.state;
 
     const { settings } = this.context;
@@ -955,14 +957,14 @@ export default class Map extends Component {
         </div>
         <div className={`imagery-modal-container ${imageryModalVisible ? '' : 'collapse'}`}>
           <ImageryModal
-            imageryData={this.state.imageryData}
+            imageryData={imageryData}
             loadingImagery={this.state.loadingImagery}
             imageryModalVisible={imageryModalVisible}
             imageryError={imageryError}
             imageryHoverVisible={this.state.imageryHoverVisible}
           />
         </div>
-        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 &&
+        { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 && !imageryFetchFailed &&
             <ImageryHoverModal
               selectedImagery={this.state.selectedImagery}
               top={this.state.imageryHoverInfo.top}

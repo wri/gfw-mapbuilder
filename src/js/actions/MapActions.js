@@ -241,6 +241,10 @@ class MapActions {
     return bool;
   }
 
+  imageryFetchUpdate(bool) {
+    return bool;
+  }
+
   getSatelliteImagery(params) {
     return params;
   }
