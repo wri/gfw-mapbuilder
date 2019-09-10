@@ -9,7 +9,7 @@ const strings = { en: {}, fr: {}, es: {}, pt: {}, id: {}, zh: {}, ka: {} };
 strings.en.LANG_EN = 'English';
 strings.en.LANG_FR = 'French';
 strings.en.LANG_ES = 'Spanish';
-strings.en.LANG_PT = 'Portugese';
+strings.en.LANG_PT = 'Portuguese';
 strings.en.LANG_ID = 'Indonesian';
 strings.en.LANG_ZH = 'Mandarin';
 strings.en.LANG_KA = 'Georgian';
@@ -79,6 +79,11 @@ strings.en.INFO_WINDOW_INSTRUCTION_LIST = [
 strings.en.ANALYSIS_NOT_SELECTED = [
   'Analysis not selected',
   'Select an analysis from the drop-down menu to begin.'
+];
+strings.en.ANALYSIS_SELECTED = [
+  'Select date(s) for analysis',
+  'Select range for analysis',
+  'Select tree cover density'
 ];
 strings.en.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
 strings.en.ANALYSIS_INSTRUCTION_LIST = [
@@ -330,7 +335,7 @@ strings.en.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire co
 strings.ka.LANG_EN = 'English';
 strings.ka.LANG_FR = 'French';
 strings.ka.LANG_ES = 'Spanish';
-strings.ka.LANG_PT = 'Portugese';
+strings.ka.LANG_PT = 'Portuguese';
 strings.ka.LANG_ID = 'Indonesian';
 strings.ka.LANG_ZH = 'Mandarin';
 strings.ka.LANG_KA = 'ქართული';
@@ -401,12 +406,18 @@ strings.ka.ANALYSIS_NOT_SELECTED = [
   'Analysis not selected',
   'Select an analysis from the drop-down menu to begin.'
 ];
+strings.ka.ANALYSIS_SELECTED = [
+  'Select date(s) for analysis',
+  'Select range for analysis',
+  'Select tree cover density'
+];
 strings.ka.ANALYSIS_INSTRUCTION_HEADER = 'ჩაატარეთ ფიგურის ანალიზი რუკაზე';
 strings.ka.ANALYSIS_INSTRUCTION_LIST = [
   'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
   'აარჩიეთ ფიგურა რუკაზე',
   'დააჭირეთ ანალიზისი მენიუს'
 ];
+strings.ka.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
 strings.ka.ANALYSIS_OR = 'ან';
 strings.ka.ANALYSIS_DRAW_HEADER = 'ჩაატარეთ თქვენი ფიგურის ანალიზი';
 //- ${drawIcon} references a variable above, do not translate
@@ -452,6 +463,9 @@ strings.ka.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.ka.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.ka.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+strings.ka.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
+strings.ka.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
+strings.ka.ANALYSIS_NO_DATA = 'No data available';
 
 //- Group and value should not be modified
 strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -715,12 +729,18 @@ strings.fr.ANALYSIS_NOT_SELECTED = [
   'Analysis not selected',
   'Select an analysis from the drop-down menu to begin.'
 ];
+strings.fr.ANALYSIS_SELECTED = [
+  'Select date(s) for analysis',
+  'Select range for analysis',
+  'Select tree cover density'
+];
 strings.fr.ANALYSIS_INSTRUCTION_HEADER = 'Analysez un polygone sur la carte';
 strings.fr.ANALYSIS_INSTRUCTION_LIST = [
   'Utilisez l\'onglet Couches pour activer une couche de données',
   'Sélectionnez une entité sur la carte',
   'Cliquez sur l\'onglet analyse'
 ];
+strings.fr.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
 strings.fr.ANALYSIS_OR = 'Ou';
 strings.fr.ANALYSIS_DRAW_HEADER = 'Analysez votre propre polygone';
 //- ${drawIcon} references a variable above, do not translate
@@ -766,6 +786,9 @@ strings.fr.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.fr.DEFAULT_ANALYSIS_LABEL = "Sélectionner l'analyse...";
 strings.fr.RUN_ANALYSIS_BUTTON_TEXT = "Exécuter L'analyse";
+strings.fr.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
+strings.fr.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
+strings.fr.ANALYSIS_NO_DATA = 'No data available';
 
 //- Group and value should not be modified
 strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -958,8 +981,8 @@ strings.fr.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire co
 strings.es.LANG_EN = 'Inglés';
 strings.es.LANG_FR = 'Francés';
 strings.es.LANG_ES = 'Español';
-strings.es.LANG_PT = 'Portugese';
-strings.es.LANG_ID = 'Portugués';
+strings.es.LANG_PT = 'Portugués';
+strings.es.LANG_ID = 'Indonésio';
 strings.es.LANG_ZH = 'Mandarín';
 strings.es.LANG_KA = 'Georgian';
 
@@ -1029,12 +1052,18 @@ strings.es.ANALYSIS_NOT_SELECTED = [
   'Analysis not selected',
   'Select an analysis from the drop-down menu to begin.'
 ];
+strings.es.ANALYSIS_SELECTED = [
+  'Select date(s) for analysis',
+  'Select range for analysis',
+  'Select tree cover density'
+];
 strings.es.ANALYSIS_INSTRUCTION_HEADER = 'Analizar un polígono  en el mapa';
 strings.es.ANALYSIS_INSTRUCTION_LIST = [
   'Usar la pestaña de capas para encender una capa',
   'Seleccionar un polígono en el mapa',
   'Hacer clic en la pestaña de analizar'
 ];
+strings.es.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
 strings.es.ANALYSIS_OR = 'O';
 strings.es.ANALYSIS_DRAW_HEADER = 'Analizar su propio polígono';
 //- ${drawIcon} references a variable above, do not translate
@@ -1080,6 +1109,9 @@ strings.es.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.es.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.es.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+strings.es.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
+strings.es.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
+strings.es.ANALYSIS_NO_DATA = 'No data available';
 
 //- Group and value should not be modified
 strings.es.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -1342,12 +1374,18 @@ strings.pt.ANALYSIS_NOT_SELECTED = [
   'Analysis not selected',
   'Select an analysis from the drop-down menu to begin.'
 ];
+strings.pt.ANALYSIS_SELECTED = [
+  'Select date(s) for analysis',
+  'Select range for analysis',
+  'Select tree cover density'
+];
 strings.pt.ANALYSIS_INSTRUCTION_HEADER = 'Analise a área selecionada no mapa';
 strings.pt.ANALYSIS_INSTRUCTION_LIST = [
   'Use a guia camadas para ativar os dados da camada',
   'Selecione uma área no mapa',
   'Clique na guia de Análise'
 ];
+strings.pt.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
 strings.pt.ANALYSIS_OR = 'Ou';
 strings.pt.ANALYSIS_DRAW_HEADER = 'Use sua propria área de Análise';
 //- ${drawIcon} references a variable above, do not translate
@@ -1393,6 +1431,9 @@ strings.pt.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.pt.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.pt.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+strings.pt.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
+strings.pt.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
+strings.pt.ANALYSIS_NO_DATA = 'No data available';
 
 //- Group and value should not be modified
 strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -1654,6 +1695,11 @@ strings.id.INFO_WINDOW_INSTRUCTION_LIST = [
 strings.id.ANALYSIS_NOT_SELECTED = [
   'Analisis tidak dipilih',
   'Pilih analisis dari menu tarik turun untuk memulai.'
+];
+strings.id.ANALYSIS_SELECTED = [
+  'Pilih tanggal untuk analisis',
+  'Pilih rentang untuk analisis',
+  'Pilih kerapatan tutupan pohon'
 ];
 strings.id.ANALYSIS_INSTRUCTION_HEADER = 'Analyze a shape on the map';
 strings.id.ANALYSIS_INSTRUCTION_LIST = [
@@ -1965,9 +2011,14 @@ strings.zh.INFO_WINDOW_INSTRUCTION_LIST = [
   '在地图上选择图形'
 ];
 //- Analysis
-strings.pt.ANALYSIS_NOT_SELECTED = [
-  'Analysis not selected',
-  'Select an analysis from the drop-down menu to begin.'
+strings.zh.ANALYSIS_NOT_SELECTED = [
+  '未选择分析。',
+  '从下拉菜单中选择一项分析以开始'
+];
+strings.zh.ANALYSIS_SELECTED = [
+  '选择分析日期',
+  '选择分析范围',
+  '选择森林覆盖密度'
 ];
 strings.zh.ANALYSIS_INSTRUCTION_HEADER = '分析地图上的图形';
 strings.zh.ANALYSIS_INSTRUCTION_LIST = [
@@ -1975,6 +2026,7 @@ strings.zh.ANALYSIS_INSTRUCTION_LIST = [
   '在地图上选择一个图形',
   '点击分析键'
 ];
+strings.zh.ANALYSIS_TOOLTIP = '您选择的几何形状正在 GeoStore 注册。分析选项卡即刻可用';
 strings.zh.ANALYSIS_OR = '或者';
 strings.zh.ANALYSIS_DRAW_HEADER = '分析自定义图形';
 //- ${drawIcon} references a variable above, do not translate
@@ -2020,6 +2072,9 @@ strings.zh.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.zh.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.zh.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
+strings.zh.ANALYSIS_ERROR = '执行所选分析时出现错误。请选择一个更小的区域、其他分析或稍后重试。';
+strings.zh.RUN_ANALYSIS_INSTRUCTIONS = '点击“运行分析”按钮查看结果';
+strings.zh.ANALYSIS_NO_DATA = '无可用数据';
 
 //- Group and value should not be modified
 strings.zh.ANALYSIS_SELECT_TYPE_OPTIONS = [
