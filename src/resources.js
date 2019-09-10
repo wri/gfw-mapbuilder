@@ -705,7 +705,7 @@
          en: 'Recent Imagery',
          fr: 'Imagerie récente',
          es: 'Imágenes recientes',
-         pt: 'Recent Imagery',
+         pt: 'Imagens recentes',
          id: 'Citra Satelit Terbaru',
          zh: '近期图像',
          ka: 'ბოლო გამოსახულება'
@@ -720,7 +720,7 @@
            en: 'Recent Hi-Res Satellite Imagery',
            fr: 'Imagerie satellitaire haute résolution récente',
            es: 'Imágenes satelitales de alta resolución recientes',
-           pt: 'Recent Imagery',
+           pt: 'Imagens de satélite recentes de alta resolução',
            id: 'Citra Satelit Resolusi Tinggi Terbaru',
            zh: '近期高分辨率卫星图像',
            ka: 'ბოლო მაღალი გარჩევადობის სატელიტური გამოსახულება'
@@ -729,7 +729,7 @@
            en: '({DATE_TIME}, {CLOUD_COVERAGE}% Cloud Coverage, {INSTRUMENT})',
            fr: '({DATE_TIME}, {CLOUD_COVERAGE}% Couverture Nuageuse, {INSTRUMENT})',
            es: '({DATE_TIME}, {CLOUD_COVERAGE}% Cobertura de Nubes, {INSTRUMENT})',
-           pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+           pt: '({DATE_TIME}, {CLOUD_COVERAGE}% Cobertura de Nuvens, {INSTRUMENT})',
            id: '({DATE_TIME}, {CLOUD_COVERAGE}% Tutupan Awan, {INSTRUMENT})',
            zh: '({DATE_TIME}, {CLOUD_COVERAGE}% 云层覆盖, {INSTRUMENT})',
            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% ღრუბლიანობა, {INSTRUMENT})'

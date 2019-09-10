@@ -1351,29 +1351,29 @@ strings.pt.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on t
 strings.pt.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
 strings.pt.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
 strings.pt.SUBSCRIBE_SAVED_END = ' to manage them.';
-strings.pt.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.pt.SUBSCRIBE_ALERTS_TITLE = 'Alertas de alterações florestais';
 strings.pt.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
-strings.pt.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
-strings.pt.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
-strings.pt.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
-strings.pt.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
-strings.pt.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
-strings.pt.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
-strings.pt.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
-strings.pt.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
-strings.pt.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
-strings.pt.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
-strings.pt.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
+strings.pt.SUBSCRIBE_ALERTS_VIIRS = 'Alertas de incêndios ativos VIIRS';
+strings.pt.SUBSCRIBE_ALERTS_TCL = 'Dados de perda de cobertura arbórea';
+strings.pt.SUBSCRIBE_ALERTS_GLAD = 'Alertas de perda de cobertura arbórea GLAD';
+strings.pt.SUBSCRIBE_ALERTS_FORMA = 'Dados de alertas FORMA';
+strings.pt.SUBSCRIBE_ALERTS_PRODES = 'Dados de desmatamento PRODES';
+strings.pt.SUBSCRIBE_ALERTS_SAD = 'Alertas de perda de cobertura arbórea SAD';
+strings.pt.SUBSCRIBE_ALERTS_TERRA = 'Alertas de perda de cobertura arbórea Terra-I';
+strings.pt.SUBSCRIBE_EMAIL_TITLE = 'Inscreva-se para receber alertas';
+strings.pt.SUBSCRIBE_EMAIL = 'Insira a seguir seu e-mail para receber uma notificação quando houver novos dados anuais de perda de cobertura arbórea disponíveis para essa área.';
+strings.pt.SUBSCRIBE_EMAIL_ALERTS = 'Receber alertas por e-mail em…';
+strings.pt.SUBSCRIBE_NAME_SUBSCRIPTION = 'Nomeie sua assinatura';
 strings.pt.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.pt.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.pt.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.pt.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.pt.SUBSCRIBE_BACK = 'Back';
+strings.pt.SUBSCRIBE_BACK = 'Voltar';
 strings.pt.SUBSCRIBE_NEXT = 'Next';
-strings.pt.SUBSCRIBE_SAVE = 'Save';
+strings.pt.SUBSCRIBE_SAVE = 'Salvar';
 strings.pt.SUBSCRIBE_OK = 'OK';
 strings.pt.SUBSCRIBE_NAME = 'Nome';
-strings.pt.SUBSCRIBE_AREA = 'Area Name';
+strings.pt.SUBSCRIBE_AREA = 'Nome da área';
 strings.pt.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
@@ -1393,13 +1393,13 @@ strings.pt.INFO_WINDOW_INSTRUCTION_LIST = [
 ];
 //- Analysis
 strings.pt.ANALYSIS_NOT_SELECTED = [
-  'Analysis not selected',
-  'Select an analysis from the drop-down menu to begin.'
+  'Análise não selecionada.',
+  'Selecione uma análise do menu suspenso para começar.'
 ];
 strings.pt.ANALYSIS_SELECTED = [
-  'Select date(s) for analysis',
-  'Select range for analysis',
-  'Select tree cover density'
+  'Selecione a(s) data(s) para análise',
+  'Selecione o período para análise',
+  'Selecione a densidade de cobertura arbórea'
 ];
 strings.pt.ANALYSIS_INSTRUCTION_HEADER = 'Analise a área selecionada no mapa';
 strings.pt.ANALYSIS_INSTRUCTION_LIST = [
@@ -1407,7 +1407,7 @@ strings.pt.ANALYSIS_INSTRUCTION_LIST = [
   'Selecione uma área no mapa',
   'Clique na guia de Análise'
 ];
-strings.pt.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
+strings.pt.ANALYSIS_TOOLTIP = 'A geometria selecionada está sendo registrada na geostore. A guia de análise estará disponível em breve';
 strings.pt.ANALYSIS_OR = 'Ou';
 strings.pt.ANALYSIS_DRAW_HEADER = 'Use sua propria área de Análise';
 //- ${drawIcon} references a variable above, do not translate
@@ -1453,9 +1453,9 @@ strings.pt.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.pt.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.pt.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
-strings.pt.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
-strings.pt.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
-strings.pt.ANALYSIS_NO_DATA = 'No data available';
+strings.pt.ANALYSIS_ERROR = 'Ocorreu um erro ao executar a análise selecionada. Selecione uma área menor, outra análise ou tente novamente mais tarde.';
+strings.pt.RUN_ANALYSIS_INSTRUCTIONS = 'Para ver os resultados, clique no botão “executar a análise”';
+strings.pt.ANALYSIS_NO_DATA = 'Sem dados disponíveis';
 
 //- Group and value should not be modified
 strings.pt.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -1527,20 +1527,20 @@ strings.pt.SEARCH_CLICK_FOR_MORE = 'Por favor clique no recurso selecionado para
 
 //- Imagery Modal
 strings.pt.IMAGERY = [
-  'Recent Imagery',
-  'Recent Hi-Res Satellite Imagery'
+  'Imagens recentes',
+  'Imagens de satélite recentes de alta resolução'
 ];
-strings.pt.ACQUISITION = 'Acquisition Date';
-strings.pt.DATE = 'Date';
-strings.pt.NATURAL_COLOR = 'Natural Color';
-strings.pt.VEGETATION = 'Vegetation Health';
-strings.pt.INSTRUMENT = 'Instrument';
-strings.pt.CLOUD = 'Cloud Coverage';
-strings.pt.MONTHS = 'Months';
-strings.pt.WEEKS = 'Weeks';
-strings.pt.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.pt.EDIT = 'Edit';
-strings.pt.BEFORE = 'Before';
+strings.pt.ACQUISITION = 'Data de aquisição';
+strings.pt.DATE = 'Data';
+strings.pt.NATURAL_COLOR = 'Cor natural';
+strings.pt.VEGETATION = 'Vitalidade da vegetação';
+strings.pt.INSTRUMENT = 'Instrumento';
+strings.pt.CLOUD = 'Cobertura de nuvens';
+strings.pt.MONTHS = 'Meses';
+strings.pt.WEEKS = 'Semanas';
+strings.pt.CLOUD_PERCENTAGE = 'Percentual máximo de cobertura de nuvens';
+strings.pt.EDIT = 'Editar';
+strings.pt.BEFORE = 'Antes';
 strings.pt.LOAD_ERROR = 'Error loading recent imagery.';
 strings.pt.MATCH_ERROR = 'No results match the selected criteria.';
 
@@ -1562,19 +1562,19 @@ strings.pt.DOWNLOAD_DATA = 'Baixar dados';
 strings.pt.DESCRIPTION = 'Descrição';
 
 //- Measurement
-strings.pt.MEASUREMENT = 'Measurement';
-strings.pt.RESULT = 'Result';
-strings.pt.AREA = 'Area';
-strings.pt.DISTANCE = 'Distance';
-strings.pt.LOCATION = 'Location';
+strings.pt.MEASUREMENT = 'Medição';
+strings.pt.RESULT = 'Resultado';
+strings.pt.AREA = 'Área';
+strings.pt.DISTANCE = 'Distância';
+strings.pt.LOCATION = 'Localização';
 strings.pt.LATITUDE = 'Latitude';
 strings.pt.LONGITUDE = 'Longitude';
 
 //- Miscellaneous
 strings.pt.PRINT_BUTTON_LABEL = 'Escolher saída de impressão.';
 strings.pt.PRINT_REPORT = 'Imprimir Relatório';
-strings.pt.EDIT_SAVE = 'Save';
-strings.pt.EDIT_EDIT = 'Edit';
+strings.pt.EDIT_SAVE = 'Salvar';
+strings.pt.EDIT_EDIT = 'Editar';
 strings.pt.SUBSCRIBE = 'Inscrever-se';
 strings.pt.LAYERS = 'Camadas';
 strings.pt.DATA = 'Dados';
