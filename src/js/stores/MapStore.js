@@ -679,12 +679,14 @@ class MapStore {
 
           if (responseCount === tileArrays.length) {
             this.loadingImagery = false;
+            this.imageryModalVisible = true;
           }
           this.emitChange();
         }, () => {
           responseCount++;
           if (responseCount === tileArrays.length) {
             this.loadingImagery = false;
+            this.imageryModalVisible = true;
           }
         });
 
@@ -694,6 +696,7 @@ class MapStore {
       this.imageryParams = null;
       this.selectedImagery = null;
       this.loadingImagery = false;
+      this.imageryModalVisible = true;
       this.imageryError = true;
       this.imageryData = [];
       this.emitChange();
