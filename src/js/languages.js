@@ -58,7 +58,9 @@ strings.en.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.en.SUBSCRIBE_BACK = 'Back';
 strings.en.SUBSCRIBE_NEXT = 'Next';
 strings.en.SUBSCRIBE_SAVE = 'Save';
+strings.en.SUBSCRIBE_OK = 'OK';
 strings.en.SUBSCRIBE_AREA = 'Area Name';
+strings.en.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.en.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
@@ -384,7 +386,9 @@ strings.ka.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.ka.SUBSCRIBE_BACK = 'Back';
 strings.ka.SUBSCRIBE_NEXT = 'Next';
 strings.ka.SUBSCRIBE_SAVE = 'Save';
+strings.ka.SUBSCRIBE_OK = 'OK';
 strings.ka.SUBSCRIBE_AREA = 'Area Name';
+strings.ka.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.ka.DOCS_INSTRUCTIONS = 'შეარჩიეთ საინტერესო ტერიტორია, და ნახეთ არის თუ არა მასთან დაკავშირებული დოკუმენტები';
@@ -707,7 +711,9 @@ strings.fr.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.fr.SUBSCRIBE_BACK = 'Back';
 strings.fr.SUBSCRIBE_NEXT = 'Next';
 strings.fr.SUBSCRIBE_SAVE = 'Save';
+strings.fr.SUBSCRIBE_OK = 'OK';
 strings.fr.SUBSCRIBE_AREA = 'Area Name';
+strings.fr.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.fr.DOCS_INSTRUCTIONS = 'Choisisez une région d\'intérêt pour voir les documents associés';
@@ -1030,7 +1036,9 @@ strings.es.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.es.SUBSCRIBE_BACK = 'Back';
 strings.es.SUBSCRIBE_NEXT = 'Next';
 strings.es.SUBSCRIBE_SAVE = 'Save';
+strings.es.SUBSCRIBE_OK = 'OK';
 strings.es.SUBSCRIBE_AREA = 'Area Name';
+strings.es.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.es.DOCS_INSTRUCTIONS = 'Seleccionar una área de interés para ver si haya algún documento relacionado';
@@ -1352,7 +1360,9 @@ strings.pt.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.pt.SUBSCRIBE_BACK = 'Back';
 strings.pt.SUBSCRIBE_NEXT = 'Next';
 strings.pt.SUBSCRIBE_SAVE = 'Save';
+strings.pt.SUBSCRIBE_OK = 'OK';
 strings.pt.SUBSCRIBE_AREA = 'Area Name';
+strings.pt.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.pt.DOCS_INSTRUCTIONS = 'Selecione área de interesse para verificar a existência de documentos relacionados';
@@ -1674,7 +1684,9 @@ strings.id.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.id.SUBSCRIBE_BACK = 'Kembali';
 strings.id.SUBSCRIBE_NEXT = 'Next';
 strings.id.SUBSCRIBE_SAVE = 'Simpan';
+strings.id.SUBSCRIBE_OK = 'OK';
 strings.id.SUBSCRIBE_AREA = 'Nama Kawasan';
+strings.id.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.id.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
@@ -1993,7 +2005,9 @@ strings.zh.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
 strings.zh.SUBSCRIBE_BACK = '后退';
 strings.zh.SUBSCRIBE_NEXT = 'Next';
 strings.zh.SUBSCRIBE_SAVE = '保存';
+strings.zh.SUBSCRIBE_OK = 'OK';
 strings.zh.SUBSCRIBE_AREA = '区域名称';
+strings.zh.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
 strings.zh.DOCS_INSTRUCTIONS = '选择感兴趣区域来查看相关文件';

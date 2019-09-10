@@ -306,10 +306,10 @@ export default class SubscribeModal extends Component {
               {langs.map(this.optionMapper)}
             </select>
           </div>
-          <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
+          <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>{text[language].SUBSCRIBE_ERROR}</div>
         </div>
         <div className='subscription-sub-buttons'>
-          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>OK!</button> : null }
+          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>{text[language].SUBSCRIBE_OK}</button> : null }
           {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>{text[language].SUBSCRIBE_BACK}</button> : null }
           {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>{text[language].SUBSCRIBE_NEXT}</button> : null }
           {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>{text[language].SUBSCRIBE_NEXT}</button> : null }
