@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 import RadioButton from './RadioButton';
+import resources from './../../../resources';
 
  export default class RadioGroup extends Component {
 
@@ -18,11 +19,33 @@ import RadioButton from './RadioButton';
   }
 
   toggleLayer = (layer) => {
-    const { allRadioLayers, activeLayers } = this.props;
+    const { activeLayers } = this.props;
+    const layerPanel = resources.layerPanel;
+    const layerPanelGroups = Object.keys(layerPanel);
+    let matchedGroup;
+    
+    console.log('layerPanel', resources.layerPanel);
+    console.log('activeLayers', activeLayers);
+    console.log('layer', layer);
+    
+    layerPanelGroups.forEach(group => {
+      if (layerPanel[group].layers && layerPanel[group].layers.length > 0) {
+        layerPanel[group].layers.forEach(groupLayer => {
+          if (groupLayer.id && groupLayer.id === layer.id) {
+            matchedGroup = group;
+          }
+        });
+      }
+    });
+    
+    console.log('matchedGroup', matchedGroup);
+
+    // if (activeLayers.includes(groupID)) {
+    //   const index = activeLayers.indexOf(groupID);
+    //   activeLayers.splice(index, 1);
+    // }
 
     //const layersAlreadyHidden = [];
-    console.log('allRadioLayers', allRadioLayers);
-    console.log('activeLayers', activeLayers);
     //allRadioLayers.forEach(l => {
       //if (l.id === layer.id) {
         //if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
@@ -39,25 +62,38 @@ import RadioButton from './RadioButton';
 
     //If the item you clicked is already on
    // turn it off and return from the function.
+   
     if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
+      console.log('1');
       layerActions.removeActiveLayer(layer.subId || layer.id);
       if (layer.subId || layer.layerIds) { layerActions.removeAllSubLayers(layer.esriLayer); }
       return;
     }
 
     if (layer.hasOwnProperty('subId')) {
+      console.log('2');
       layerActions.setSubLayers(layer, layer.subIndex);
       layer.esriLayer.setVisibleLayers([layer.subIndex]);
       return;
     }
 
     if (layer.hasOwnProperty('layerIds')) {
+      console.log('3');
       layerActions.setSubLayers(layer, ...layer.layerIds);
       layer.esriLayer.setVisibleLayers(layer.layerIds);
       return;
     }
-
+    
+    console.log('4');
     layerActions.addActiveLayer(layer.id);
+    
+    if (layerPanel[matchedGroup].layers && layerPanel[matchedGroup].layers.length > 0) {
+      layerPanel[matchedGroup].layers.forEach(groupLayer => {
+        if (activeLayers.includes(groupLayer.id) && activeLayers.includes(layer.id)) {
+          layerActions.removeActiveLayer(groupLayer.id);
+        }
+      });
+    }
   }
 
   renderRadioButton = layer => {
