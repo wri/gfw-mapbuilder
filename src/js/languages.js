@@ -28,7 +28,9 @@ strings.en.NAV_SUBSCRIPTIONS = 'My Subscriptions';
 strings.en.NAV_STORIES = 'My Stories';
 strings.en.NAV_PROFILE = 'My GFW Profile';
 strings.en.NAV_LOGOUT = 'Log Out';
+strings.en.NAV_LANGUAGE = 'Select Language';
 
+//-Subscription
 strings.en.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.en.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.en.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -53,10 +55,11 @@ strings.en.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.en.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.en.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.en.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.en.NAV_LANGUAGE = 'Select Language';
 strings.en.SUBSCRIBE_BACK = 'Back';
 strings.en.SUBSCRIBE_NEXT = 'Next';
 strings.en.SUBSCRIBE_SAVE = 'Save';
+strings.en.SUBSCRIBE_AREA = 'Area Name';
+
 //- Documents
 strings.en.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
 strings.en.DOCS_NOT_AVAILABLE = 'There are no documents available for this area';
@@ -347,7 +350,9 @@ strings.ka.NAV_SUBSCRIPTIONS = '';
 strings.ka.NAV_STORIES = 'My Stories';
 strings.ka.NAV_PROFILE = 'My GFW Profile';
 strings.ka.NAV_LOGOUT = 'Log Out';
+strings.ka.NAV_LANGUAGE = 'ენის არჩევა';
 
+// - Subscription
 strings.ka.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.ka.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.ka.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -358,17 +363,25 @@ strings.ka.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
 strings.ka.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
 strings.ka.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
 strings.ka.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.ka.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
+strings.ka.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
+strings.ka.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
+strings.ka.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
+strings.ka.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
 strings.ka.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.ka.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.ka.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
 strings.ka.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
 strings.ka.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.ka.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.ka.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.ka.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.ka.NAV_LANGUAGE = 'Select Language';
-strings.ka.NAV_LANGUAGE = 'ენის არჩევა';
-//- Documents
+strings.ka.SUBSCRIBE_BACK = 'Back';
+strings.ka.SUBSCRIBE_NEXT = 'Next';
+strings.ka.SUBSCRIBE_SAVE = 'Save';
+strings.ka.SUBSCRIBE_AREA = 'Area Name';
 
+//- Documents
 strings.ka.DOCS_INSTRUCTIONS = 'შეარჩიეთ საინტერესო ტერიტორია, და ნახეთ არის თუ არა მასთან დაკავშირებული დოკუმენტები';
 strings.ka.DOCS_NOT_AVAILABLE = 'ამ ტერიტორიისთვის დოკუმენტები არ იძებნება';
 strings.ka.DOCS_TYPE = 'ტიპი';
@@ -651,7 +664,9 @@ strings.fr.NAV_SUBSCRIPTIONS = 'Mes abonnements';
 strings.fr.NAV_STORIES = 'Mes histoires';
 strings.fr.NAV_PROFILE = 'Mon profil';
 strings.fr.NAV_LOGOUT = 'Déconnecter';
+strings.fr.NAV_LANGUAGE = 'Choisir Langue';
 
+//- Subscription
 strings.fr.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.fr.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.fr.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -662,15 +677,24 @@ strings.fr.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
 strings.fr.SUBSCRIBE_ALERTS_SELECT = 'Sélectionnez les alertes de changement forestier que vous souhaitez recevoir';
 strings.fr.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
 strings.fr.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.fr.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
+strings.fr.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
+strings.fr.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
+strings.fr.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
+strings.fr.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
 strings.fr.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.fr.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.fr.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
 strings.fr.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
 strings.fr.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.fr.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.fr.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.fr.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.fr.NAV_LANGUAGE = 'Select Language';
-strings.fr.NAV_LANGUAGE = 'Choisir Langue';
+strings.fr.SUBSCRIBE_BACK = 'Back';
+strings.fr.SUBSCRIBE_NEXT = 'Next';
+strings.fr.SUBSCRIBE_SAVE = 'Save';
+strings.fr.SUBSCRIBE_AREA = 'Area Name';
+
 //- Documents
 strings.fr.DOCS_INSTRUCTIONS = 'Choisisez une région d\'intérêt pour voir les documents associés';
 strings.fr.DOCS_NOT_AVAILABLE = 'Pas de documents disponibles pour cette région';
@@ -954,7 +978,9 @@ strings.es.NAV_SUBSCRIPTIONS = 'Mis suscripciones';
 strings.es.NAV_STORIES = 'Mis historias';
 strings.es.NAV_PROFILE = 'Mon profil';
 strings.es.NAV_LOGOUT = 'Cerrar sesión';
+strings.es.NAV_LANGUAGE = 'Seleccionar idioma';
 
+//- Subscription
 strings.es.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.es.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.es.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -965,15 +991,24 @@ strings.es.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
 strings.es.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
 strings.es.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
 strings.es.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.es.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
+strings.es.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
+strings.es.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
+strings.es.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
+strings.es.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
 strings.es.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.es.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.es.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
 strings.es.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
 strings.es.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.es.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.es.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.es.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.es.NAV_LANGUAGE = 'Select Language';
-strings.es.NAV_LANGUAGE = 'Seleccionar idioma';
+strings.es.SUBSCRIBE_BACK = 'Back';
+strings.es.SUBSCRIBE_NEXT = 'Next';
+strings.es.SUBSCRIBE_SAVE = 'Save';
+strings.es.SUBSCRIBE_AREA = 'Area Name';
+
 //- Documents
 strings.es.DOCS_INSTRUCTIONS = 'Seleccionar una área de interés para ver si haya algún documento relacionado';
 strings.es.DOCS_NOT_AVAILABLE = 'No hay documentos disponibles para esta área';
@@ -1255,7 +1290,10 @@ strings.pt.NAV_SUBSCRIPTIONS = 'Minhas Assinaturas';
 strings.pt.NAV_STORIES = 'My Stories';
 strings.pt.NAV_PROFILE = 'Mon profil';
 strings.pt.NAV_LOGOUT = 'Sair';
+strings.pt.NAV_LANGUAGE = 'Selecionar Idioma';
 
+
+//-Subscription
 strings.pt.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.pt.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.pt.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -1266,15 +1304,24 @@ strings.pt.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
 strings.pt.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
 strings.pt.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
 strings.pt.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
+strings.pt.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
+strings.pt.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
+strings.pt.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
+strings.pt.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
+strings.pt.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
 strings.pt.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
 strings.pt.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
+strings.pt.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
 strings.pt.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
 strings.pt.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.pt.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.pt.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.pt.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.pt.NAV_LANGUAGE = 'Select Language';
-strings.pt.NAV_LANGUAGE = 'Selecionar Idioma';
+strings.pt.SUBSCRIBE_BACK = 'Back';
+strings.pt.SUBSCRIBE_NEXT = 'Next';
+strings.pt.SUBSCRIBE_SAVE = 'Save';
+strings.pt.SUBSCRIBE_AREA = 'Area Name';
+
 //- Documents
 strings.pt.DOCS_INSTRUCTIONS = 'Selecione área de interesse para verificar a existência de documentos relacionados';
 strings.pt.DOCS_NOT_AVAILABLE = 'Não existem documentos disponíveis para esta área';
@@ -1556,7 +1603,9 @@ strings.id.NAV_SUBSCRIPTIONS = 'Berlangganan Saya';
 strings.id.NAV_STORIES = 'Cerita Saya';
 strings.id.NAV_PROFILE = 'Mon profil';
 strings.id.NAV_LOGOUT = 'Keluar';
+strings.id.NAV_LANGUAGE = 'Select Language';
 
+//- Subscription
 strings.id.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.id.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.id.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -1581,10 +1630,11 @@ strings.id.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.id.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.id.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.id.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.id.NAV_LANGUAGE = 'Select Language';
 strings.id.SUBSCRIBE_BACK = 'Kembali';
 strings.id.SUBSCRIBE_NEXT = 'Next';
 strings.id.SUBSCRIBE_SAVE = 'Simpan';
+strings.id.SUBSCRIBE_AREA = 'Nama Kawasan';
+
 //- Documents
 strings.id.DOCS_INSTRUCTIONS = 'Select an area of interest to see if there are any related documents';
 strings.id.DOCS_NOT_AVAILABLE = 'There are no documents available for this area';
@@ -1868,26 +1918,37 @@ strings.zh.NAV_SUBSCRIPTIONS = '我的订阅';
 strings.zh.NAV_STORIES = '我的故事';
 strings.zh.NAV_PROFILE = '我的概述';
 strings.zh.NAV_LOGOUT = '注销';
+strings.zh.NAV_LANGUAGE = '选择语言';
 
+//- Subscription
 strings.zh.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.zh.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.zh.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
 strings.zh.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
 strings.zh.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
 strings.zh.SUBSCRIBE_SAVED_END = ' to manage them.';
-strings.zh.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.zh.SUBSCRIBE_ALERTS_TITLE = '森林变化预警';
 strings.zh.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
-strings.zh.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
+strings.zh.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS 活跃火点预警';
 strings.zh.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
-strings.zh.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
-strings.zh.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
-strings.zh.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
+strings.zh.SUBSCRIBE_ALERTS_GLAD = 'GLAD 森林覆盖减少预警';
+strings.zh.SUBSCRIBE_ALERTS_FORMA = 'FORMA 预警数据';
+strings.zh.SUBSCRIBE_ALERTS_PRODES = 'PRODES 毁林数据';
+strings.zh.SUBSCRIBE_ALERTS_SAD = 'SAD 森林覆盖减少预警';
+strings.zh.SUBSCRIBE_ALERTS_TERRA = 'Terra-i 森林覆盖减少预警';
+strings.zh.SUBSCRIBE_EMAIL_TITLE = '订阅预警';
+strings.zh.SUBSCRIBE_EMAIL = '在下方输入您的电子邮箱，您将在此区域有新的年度森林覆盖减少数据时收到电子邮件通知。';
+strings.zh.SUBSCRIBE_EMAIL_ALERTS = '接收预警电子邮件频率';
+strings.zh.SUBSCRIBE_NAME_SUBSCRIPTION = '为您的订阅命名';
 strings.zh.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.zh.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.zh.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.zh.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.zh.NAV_LANGUAGE = 'Select Language';
-strings.zh.NAV_LANGUAGE = '选择语言';
+strings.zh.SUBSCRIBE_BACK = '后退';
+strings.zh.SUBSCRIBE_NEXT = 'Next';
+strings.zh.SUBSCRIBE_SAVE = '保存';
+strings.zh.SUBSCRIBE_AREA = '区域名称';
+
 //- Documents
 strings.zh.DOCS_INSTRUCTIONS = '选择感兴趣区域来查看相关文件';
 strings.zh.DOCS_NOT_AVAILABLE = '此区域没有相关文件';
@@ -1895,7 +1956,7 @@ strings.zh.DOCS_TYPE = '类别';
 strings.zh.DOCS_AUTHOR = '作者';
 strings.zh.DOCS_YEAR = '年份';
 strings.zh.DOCS_PDF = 'PDF';
-strings.zh.DOCS_NAME = 'Name';
+strings.zh.DOCS_NAME = '姓名';
 strings.zh.DOCS_SIZE = 'Size';
 //- Info Window
 strings.zh.INFO_WINDOW_INSTRUCTION_HEADER = '在地图上选择图形';
