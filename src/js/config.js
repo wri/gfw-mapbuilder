@@ -1,4 +1,5 @@
 import analysisKeys from 'constants/AnalysisConstants';
+import text from './languages';
 
 const analysisImageService = 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/analysis/ImageServer';
 
@@ -162,17 +163,30 @@ const config = {
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
     },
     imagery: {
+      
+      // Placeholder for now. We need to figure out a way to get language out of context or move this over to languages.js!
+      // monthsOptions: [
+      //   { label: `4 ${text[language].MONTHS}`, value: 4 },
+      //   { label: `3 ${text[language].MONTHS}`, value: 3},
+      //   { label: `6 ${text[language].MONTHS}`, value: 6},
+      //   { label: `12 ${text[language].MONTHS}`, value: 12}
+      // ],
 
+      // imageStyleOptions: [
+      //   { label: `${text[language].NATURAL_COLOR}`},
+      //   { label: `${text[language].VEGETATION}`}
+      // ],
+      
       monthsOptions: [
-        { label: '4 weeks', value: 4 },
-        { label: '3 months', value: 3},
-        { label: '6 months', value: 6},
-        { label: '12 months', value: 12}
+        { label: `4 months`, value: 4 },
+        { label: `3 months`, value: 3},
+        { label: `6 months`, value: 6},
+        { label: `12 months`, value: 12}
       ],
 
       imageStyleOptions: [
-        { label: 'Natural Color'},
-        { label: 'Vegetation Health'}
+        { label: `Natural Color`},
+        { label: `Vegetation Health`}
       ],
     },
   },

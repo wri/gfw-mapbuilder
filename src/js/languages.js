@@ -204,6 +204,24 @@ strings.en.DENSITY_FIRST = 'Displaying';
 strings.en.DENSITY_SECOND = 'canopy density.';
 strings.en.SEARCH_WIDGET_TITLE = 'Search for feature:';
 strings.en.SEARCH_CLICK_FOR_MORE = 'Please click on the selected feature for more info.';
+
+//- Imagery Modal
+strings.en.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.en.ACQUISITION = 'Acquisition Date';
+strings.en.DATE = 'Date';
+strings.en.NATURAL_COLOR = 'Natural Color';
+strings.en.VEGETATION = 'Vegetation Health';
+strings.en.INSTRUMENT = 'Instrument';
+strings.en.CLOUD = 'Cloud Coverage';
+strings.en.MONTHS = 'Months';
+strings.en.WEEKS = 'Weeks';
+strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.en.EDIT = 'Edit';
+strings.en.BEFORE = 'Before';
+
 //- Layer Info Modal
 strings.en.NO_INFO = 'No Information Available';
 strings.en.OVERVIEW = 'Overview';
@@ -489,6 +507,25 @@ strings.ka.DENSITY_FIRST = 'წარმოდგენილია';
 strings.ka.DENSITY_SECOND = 'ვარჯის სიმჭიდროვე.';
 strings.ka.SEARCH_WIDGET_TITLE = 'პარამეტრის ძიება:';
 strings.ka.SEARCH_CLICK_FOR_MORE = 'გთხოვთ დააჭიროთ შერჩეულ პარამეტრს მეტი ინფოსთვის.';
+
+//- Imagery Modal
+strings.en.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.en.ACQUISITION = 'Acquisition Date';
+strings.en.DATE = 'Date';
+strings.en.NATURAL_COLOR = 'Natural Color';
+strings.en.VEGETATION = 'Vegetation Health';
+strings.en.INSTRUMENT = 'Instrument';
+strings.en.CLOUD = 'Cloud Coverage';
+strings.en.MONTHS = 'Months';
+strings.en.WEEKS = 'Weeks';
+strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.en.EDIT = 'Edit';
+strings.en.BEFORE = 'Before';
+
+
 //- Layer Info Modal
 strings.ka.NO_INFO = 'ინფორმაცია არ არსებობს';
 strings.ka.OVERVIEW = 'მიმოხილვა';
@@ -773,6 +810,25 @@ strings.fr.DENSITY_FIRST = 'Affichage';
 strings.fr.DENSITY_SECOND = 'Densité de la canopée.';
 strings.fr.SEARCH_WIDGET_TITLE = 'Recherche de polygones:';
 strings.fr.SEARCH_CLICK_FOR_MORE = 'Cliquez sur la géométrie sélectionnée pour plus d\'info.';
+
+//- Imagery Modal
+strings.fr.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.fr.ACQUISITION = 'Acquisition Date';
+strings.fr.DATE = 'Date';
+strings.fr.NATURAL_COLOR = 'Natural Color';
+strings.fr.VEGETATION = 'Vegetation Health';
+strings.fr.INSTRUMENT = 'Instrument';
+strings.fr.CLOUD = 'Cloud Coverage';
+strings.fr.MONTHS = 'Months';
+strings.fr.WEEKS = 'Weeks';
+strings.fr.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.fr.EDIT = 'Edit';
+strings.fr.BEFORE = 'Before';
+
+
 //- Layer Info Modal
 strings.fr.NO_INFO = 'Pas d\'informations disponibles';
 strings.fr.OVERVIEW = 'Vue d\'ensemble';
@@ -1057,6 +1113,24 @@ strings.es.DENSITY_FIRST = 'Mostrando';
 strings.es.DENSITY_SECOND = 'densidad de follaje.';
 strings.es.SEARCH_WIDGET_TITLE = 'Buscar polígono:';
 strings.es.SEARCH_CLICK_FOR_MORE = 'Haz clic en el elemento seleccionado para más información';
+
+//- Imagery Modal
+strings.es.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.es.ACQUISITION = 'Acquisition Date';
+strings.es.DATE = 'Date';
+strings.es.NATURAL_COLOR = 'Natural Color';
+strings.es.VEGETATION = 'Vegetation Health';
+strings.es.INSTRUMENT = 'Instrument';
+strings.es.CLOUD = 'Cloud Coverage';
+strings.es.MONTHS = 'Months';
+strings.es.WEEKS = 'Weeks';
+strings.es.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.es.EDIT = 'Edit';
+strings.es.BEFORE = 'Before';
+
 //- Layer Info Modal
 strings.es.NO_INFO = 'No hay información disponible';
 strings.es.OVERVIEW = 'Resumen';
@@ -1340,6 +1414,24 @@ strings.pt.DENSITY_FIRST = 'Exibindo';
 strings.pt.DENSITY_SECOND = 'densidade de dossel';
 strings.pt.SEARCH_WIDGET_TITLE = 'Buscar recurso:';
 strings.pt.SEARCH_CLICK_FOR_MORE = 'Por favor clique no recurso selecionado para mais informações.';
+
+//- Imagery Modal
+strings.pt.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.pt.ACQUISITION = 'Acquisition Date';
+strings.pt.DATE = 'Date';
+strings.pt.NATURAL_COLOR = 'Natural Color';
+strings.pt.VEGETATION = 'Vegetation Health';
+strings.pt.INSTRUMENT = 'Instrument';
+strings.pt.CLOUD = 'Cloud Coverage';
+strings.pt.MONTHS = 'Months';
+strings.pt.WEEKS = 'Weeks';
+strings.pt.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.pt.EDIT = 'Edit';
+strings.pt.BEFORE = 'Before';
+
 //- Layer Info Modal
 strings.pt.NO_INFO = 'Sem informação disponível.';
 strings.pt.OVERVIEW = 'Visão geral';
@@ -1636,6 +1728,23 @@ strings.id.DENSITY_FIRST = 'Displaying';
 strings.id.DENSITY_SECOND = 'canopy density.';
 strings.id.SEARCH_WIDGET_TITLE = 'Search for feature:';
 strings.id.SEARCH_CLICK_FOR_MORE = 'Please click on the selected feature for more info.';
+
+//- Imagery Modal
+strings.en.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.en.ACQUISITION = 'Acquisition Date';
+strings.en.NATURAL_COLOR = 'Natural Color';
+strings.en.VEGETATION = 'Vegetation Health';
+strings.en.INSTRUMENT = 'Instrument';
+strings.en.CLOUD = 'Cloud Coverage';
+strings.en.MONTHS = 'Months';
+strings.en.WEEKS = 'Weeks';
+strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.en.EDIT = 'Edit';
+strings.en.BEFORE = 'Before';
+
 //- Layer Info Modal
 strings.id.NO_INFO = 'No Information Available';
 strings.id.OVERVIEW = 'Overview';
@@ -1692,7 +1801,6 @@ strings.id.TOOL_PRINT = 'Print';
 strings.id.TOOL_ANALYSIS = 'Analysis';
 strings.id.TOOL_TOGGLE = 'Toggle Panel';
 strings.id.TOOL_RESET = 'Reset';
-
 
 strings.id.ANALYSIS_CARBON_EMISSION = 'Gross carbon emissions';
 strings.id.ANALYSIS_CARBON_LOSS = 'Tree cover loss';
@@ -1919,6 +2027,23 @@ strings.zh.DENSITY_FIRST = '显示中';
 strings.zh.DENSITY_SECOND = '林冠覆盖密度';
 strings.zh.SEARCH_WIDGET_TITLE = '搜寻特征：';
 strings.zh.SEARCH_CLICK_FOR_MORE = '请点击选中图形来获取更多信息';
+
+//- Imagery Modal
+strings.en.IMAGERY = [
+  'Recent Imagery',
+  'Recent Hi-Res Satellite Imagery'
+];
+strings.en.ACQUISITION = 'Acquisition Date';
+strings.en.NATURAL_COLOR = 'Natural Color';
+strings.en.VEGETATION = 'Vegetation Health';
+strings.en.INSTRUMENT = 'Instrument';
+strings.en.CLOUD = 'Cloud Coverage';
+strings.en.MONTHS = 'Months';
+strings.en.WEEKS = 'Weeks';
+strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.en.EDIT = 'Edit';
+strings.en.BEFORE = 'Before';
+
 //- Layer Info Modal
 strings.zh.NO_INFO = '没有相关信息';
 strings.zh.OVERVIEW = '概述';

@@ -18,11 +18,13 @@ import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
 import { modalText } from 'js/config';
+import text from '../../languages';
 
 export default class ImageryModal extends Component {
 
   static contextTypes = {
-    map: PropTypes.object.isRequired
+    map: PropTypes.object.isRequired,
+    language: PropTypes.string.isRequired
   };
 
   constructor (props) {
@@ -267,18 +269,19 @@ export default class ImageryModal extends Component {
   render () {
     const { monthsVal, imageStyleVal, cloudScore, hoveredThumb, selectedThumb } = this.state;
     const { imageryData, loadingImagery, imageryError} = this.props;
+    const {language} = this.context;
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
         <div className='imagery-modal__wrapper'>
-          <div className='imagery-modal__title'>Recent Hi-Res Satellite Imagery</div>
+          <div className='imagery-modal__title'>{text[language].IMAGERY[1]}</div>
 
           <div className='imagery-modal__section filters flex'>
 
             <div className='imagery-modal__item'>
-              <div className='imagery-modal_section-title'>Aquisition Date</div>
+              <div className='imagery-modal_section-title'>{text[language].ACQUISITION}</div>
               <div className='flex'>
 
                 <div className='relative'>
@@ -290,7 +293,7 @@ export default class ImageryModal extends Component {
                   <div className='fa-button sml white'>{monthsVal}</div>
                 </div>
 
-                <div className='imagery-modal_section-text'>before</div>
+                <div className='imagery-modal_section-text'>{text[language].BEFORE}</div>
 
                 <ImageryDatePicker
                   minDate={'2012-01-01'}
@@ -299,7 +302,7 @@ export default class ImageryModal extends Component {
             </div>
 
             <div className='imagery-modal__item'>
-              <div className='imagery-modal_section-title'>Maximum Cloud Cover Percentage</div>
+              <div className='imagery-modal_section-title'>{text[language].CLOUD_PERCENTAGE}</div>
 
               <ImageryModalSlider
                 rangeSliderCallback={this.rangeSliderCallback}
