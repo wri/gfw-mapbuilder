@@ -707,7 +707,7 @@
          es: 'Recent Imagery',
          pt: 'Recent Imagery',
          id: 'Citra Satelit Terbaru',
-         zh: 'Recent Imagery',
+         zh: '近期图像',
          ka: 'Recent Imagery'
        },
        layers: [{
@@ -722,7 +722,7 @@
            es: 'Recent Imagery',
            pt: 'Recent Imagery',
            id: 'Citra Satelit Resolusi Tinggi Terbaru',
-           zh: 'Recent Imagery',
+           zh: '近期高分辨率卫星图像',
            ka: 'Recent Imagery'
          },
          dynamicSublabel: {
@@ -731,7 +731,7 @@
            es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
            pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
            id: '({DATE_TIME}, {CLOUD_COVERAGE}% Tutupan Awan, {INSTRUMENT})',
-           zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
+           zh: '({DATE_TIME}, {CLOUD_COVERAGE}% 云层覆盖, {INSTRUMENT})',
            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
          }
        }]

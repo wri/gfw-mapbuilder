@@ -536,21 +536,21 @@ strings.ka.SEARCH_WIDGET_TITLE = 'პარამეტრის ძიება
 strings.ka.SEARCH_CLICK_FOR_MORE = 'გთხოვთ დააჭიროთ შერჩეულ პარამეტრს მეტი ინფოსთვის.';
 
 //- Imagery Modal
-strings.en.IMAGERY = [
+strings.ka.IMAGERY = [
   'Recent Imagery',
   'Recent Hi-Res Satellite Imagery'
 ];
-strings.en.ACQUISITION = 'Acquisition Date';
-strings.en.DATE = 'Date';
-strings.en.NATURAL_COLOR = 'Natural Color';
-strings.en.VEGETATION = 'Vegetation Health';
-strings.en.INSTRUMENT = 'Instrument';
-strings.en.CLOUD = 'Cloud Coverage';
-strings.en.MONTHS = 'Months';
-strings.en.WEEKS = 'Weeks';
-strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.en.EDIT = 'Edit';
-strings.en.BEFORE = 'Before';
+strings.ka.ACQUISITION = 'Acquisition Date';
+strings.ka.DATE = 'Date';
+strings.ka.NATURAL_COLOR = 'Natural Color';
+strings.ka.VEGETATION = 'Vegetation Health';
+strings.ka.INSTRUMENT = 'Instrument';
+strings.ka.CLOUD = 'Cloud Coverage';
+strings.ka.MONTHS = 'Months';
+strings.ka.WEEKS = 'Weeks';
+strings.ka.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
+strings.ka.EDIT = 'Edit';
+strings.ka.BEFORE = 'Before';
 
 
 //- Layer Info Modal
@@ -1826,20 +1826,20 @@ strings.id.SEARCH_WIDGET_TITLE = 'Search for feature:';
 strings.id.SEARCH_CLICK_FOR_MORE = 'Please click on the selected feature for more info.';
 
 //- Imagery Modal
-strings.en.IMAGERY = [
-  'Recent Imagery',
-  'Recent Hi-Res Satellite Imagery'
+strings.id.IMAGERY = [
+  'Citra Satelit Terbaru',
+  'Citra Satelit Resolusi Tinggi Terbaru'
 ];
-strings.en.ACQUISITION = 'Acquisition Date';
-strings.en.NATURAL_COLOR = 'Natural Color';
-strings.en.VEGETATION = 'Vegetation Health';
-strings.en.INSTRUMENT = 'Instrument';
-strings.en.CLOUD = 'Cloud Coverage';
-strings.en.MONTHS = 'Months';
-strings.en.WEEKS = 'Weeks';
-strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.en.EDIT = 'Edit';
-strings.en.BEFORE = 'Before';
+strings.id.ACQUISITION = 'Tanggal Akuisisi';
+strings.id.NATURAL_COLOR = 'Warna Alami';
+strings.id.VEGETATION = 'Kelestarian Vegetasi';
+strings.id.INSTRUMENT = 'Instrumen';
+strings.id.CLOUD = 'Tutupan Awan';
+strings.id.MONTHS = 'Bulan';
+strings.id.WEEKS = 'Minggu';
+strings.id.CLOUD_PERCENTAGE = 'Persentase Tutupan Awan Maksimum';
+strings.id.EDIT = 'Ubah';
+strings.id.BEFORE = 'Sebelum';
 
 //- Layer Info Modal
 strings.id.NO_INFO = 'No Information Available';
@@ -1871,7 +1871,7 @@ strings.id.LONGITUDE = 'Garis Bujur';
 strings.id.PRINT_BUTTON_LABEL = 'Choose a print output';
 strings.id.PRINT_REPORT = 'Print Report';
 strings.id.EDIT_SAVE = 'Simpan';
-strings.id.EDIT_EDIT = 'Edit';
+strings.id.EDIT_EDIT = 'Ubah';
 strings.id.SUBSCRIBE = 'Subscribe';
 strings.id.LAYERS = 'Layers';
 strings.id.DATA = 'Data';
@@ -2145,20 +2145,20 @@ strings.zh.SEARCH_WIDGET_TITLE = '搜寻特征：';
 strings.zh.SEARCH_CLICK_FOR_MORE = '请点击选中图形来获取更多信息';
 
 //- Imagery Modal
-strings.en.IMAGERY = [
-  'Recent Imagery',
-  'Recent Hi-Res Satellite Imagery'
+strings.zh.IMAGERY = [
+  '近期图像',
+  '近期高分辨率卫星图像'
 ];
-strings.en.ACQUISITION = 'Acquisition Date';
-strings.en.NATURAL_COLOR = 'Natural Color';
-strings.en.VEGETATION = 'Vegetation Health';
-strings.en.INSTRUMENT = 'Instrument';
-strings.en.CLOUD = 'Cloud Coverage';
-strings.en.MONTHS = 'Months';
-strings.en.WEEKS = 'Weeks';
-strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.en.EDIT = 'Edit';
-strings.en.BEFORE = 'Before';
+strings.zh.ACQUISITION = '采集日期';
+strings.zh.NATURAL_COLOR = '自然色';
+strings.zh.VEGETATION = '植被健康状况';
+strings.zh.INSTRUMENT = '工具';
+strings.zh.CLOUD = '云层覆盖';
+strings.zh.MONTHS = '月份';
+strings.zh.WEEKS = '周';
+strings.zh.CLOUD_PERCENTAGE = '最大云层覆盖百分比';
+strings.zh.EDIT = '编辑';
+strings.zh.BEFORE = '之前';
 
 //- Layer Info Modal
 strings.zh.NO_INFO = '没有相关信息';
@@ -2189,8 +2189,8 @@ strings.zh.LONGITUDE = '经度';
 //- Miscellaneous
 strings.zh.PRINT_BUTTON_LABEL = '选择打印模板';
 strings.zh.PRINT_REPORT = '打印报告';
-strings.zh.EDIT_SAVE = 'Save';
-strings.zh.EDIT_EDIT = 'Edit';
+strings.zh.EDIT_SAVE = '保存';
+strings.zh.EDIT_EDIT = '编辑';
 strings.zh.SUBSCRIBE = '订阅';
 strings.zh.SEARCH = '搜寻';
 strings.zh.LAYERS = '图层';
@@ -2227,18 +2227,18 @@ strings.zh.ANALYSIS_POPULATION_CHART_HEADER = 'Population Density';
 strings.zh.ANALYSIS_TREE_COVER_CHART_HEADER = '% Tree cover';
 strings.zh.ANALYSIS_RAINFALL_CHART_HEADER = 'Rainfall';
 strings.zh.MONTHS_LIST = [
-  { name: 'January', abbr: 'Jan'},
-  { name: 'February', abbr: 'Feb'},
-  { name: 'March', abbr: 'Mar'},
-  { name: 'April', abbr: 'Apr'},
-  { name: 'May', abbr: 'May'},
-  { name: 'June', abbr: 'Jun'},
-  { name: 'July', abbr: 'Jul'},
-  { name: 'August', abbr: 'Aug'},
-  { name: 'September', abbr: 'Sep'},
-  { name: 'October', abbr: 'Oct'},
-  { name: 'November', abbr: 'Nov'},
-  { name: 'December', abbr: 'Dec'}
+  { name: '一月', abbr: '一月'},
+  { name: '二月', abbr: '二月'},
+  { name: '三月', abbr: '三月'},
+  { name: '四月', abbr: '四月'},
+  { name: '五月', abbr: '五月'},
+  { name: '六月', abbr: '六月'},
+  { name: '七月', abbr: '七月'},
+  { name: '八月', abbr: '八月'},
+  { name: '九月', abbr: '九月'},
+  { name: '十月', abbr: '十月'},
+  { name: '十一月', abbr: '十一月'},
+  { name: '十二月', abbr: '十二月'}
 ];
 
 strings.zh.REPORT_TABLE_TOTAL = 'Total';
