@@ -739,13 +739,13 @@ strings.fr.INFO_WINDOW_INSTRUCTION_LIST = [
 ];
 //- Analysis
 strings.fr.ANALYSIS_NOT_SELECTED = [
-  'Analysis not selected',
-  'Select an analysis from the drop-down menu to begin.'
+  'Analyse non sélectionnée.',
+  'Sélectionner une analyse dans le menu déroulant pour débuter.'
 ];
 strings.fr.ANALYSIS_SELECTED = [
-  'Select date(s) for analysis',
-  'Select range for analysis',
-  'Select tree cover density'
+  'Sélectionner une (des) date(s) pour l’analyse',
+  'Sélectionner une plage pour l’analyse',
+  'Sélectionner la densité de couverture arborée'
 ];
 strings.fr.ANALYSIS_INSTRUCTION_HEADER = 'Analysez un polygone sur la carte';
 strings.fr.ANALYSIS_INSTRUCTION_LIST = [
@@ -753,7 +753,7 @@ strings.fr.ANALYSIS_INSTRUCTION_LIST = [
   'Sélectionnez une entité sur la carte',
   'Cliquez sur l\'onglet analyse'
 ];
-strings.fr.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
+strings.fr.ANALYSIS_TOOLTIP = 'Votre sélection géométrique est en cours d’enregistrement avec le geostore. Onglet d’analyse disponible dans un instant.';
 strings.fr.ANALYSIS_OR = 'Ou';
 strings.fr.ANALYSIS_DRAW_HEADER = 'Analysez votre propre polygone';
 //- ${drawIcon} references a variable above, do not translate
@@ -799,9 +799,9 @@ strings.fr.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.fr.DEFAULT_ANALYSIS_LABEL = "Sélectionner l'analyse...";
 strings.fr.RUN_ANALYSIS_BUTTON_TEXT = "Exécuter L'analyse";
-strings.fr.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
-strings.fr.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
-strings.fr.ANALYSIS_NO_DATA = 'No data available';
+strings.fr.ANALYSIS_ERROR = 'Erreur durant la réalisation des analyses sélectionnées. Veuillez sélectionner une zone plus petite, une autre analyse ou réessayer plus tard.';
+strings.fr.RUN_ANALYSIS_INSTRUCTIONS = 'Cliquez sur le bouton « Lancer l’analyse » pour voir les résultats';
+strings.fr.ANALYSIS_NO_DATA = 'Aucune donnée disponible';
 
 //- Group and value should not be modified
 strings.fr.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -873,20 +873,20 @@ strings.fr.SEARCH_CLICK_FOR_MORE = 'Cliquez sur la géométrie sélectionnée po
 
 //- Imagery Modal
 strings.fr.IMAGERY = [
-  'Recent Imagery',
-  'Recent Hi-Res Satellite Imagery'
+  'Imagerie récente',
+  'Imagerie satellitaire haute résolution récente'
 ];
-strings.fr.ACQUISITION = 'Acquisition Date';
+strings.fr.ACQUISITION = 'Date d’acquisition';
 strings.fr.DATE = 'Date';
-strings.fr.NATURAL_COLOR = 'Natural Color';
-strings.fr.VEGETATION = 'Vegetation Health';
+strings.fr.NATURAL_COLOR = 'Couleur naturelle';
+strings.fr.VEGETATION = 'Santé de la végétation';
 strings.fr.INSTRUMENT = 'Instrument';
-strings.fr.CLOUD = 'Cloud Coverage';
-strings.fr.MONTHS = 'Months';
-strings.fr.WEEKS = 'Weeks';
-strings.fr.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.fr.EDIT = 'Edit';
-strings.fr.BEFORE = 'Before';
+strings.fr.CLOUD = 'Couverture nuageuse';
+strings.fr.MONTHS = 'Mois';
+strings.fr.WEEKS = 'Semaines';
+strings.fr.CLOUD_PERCENTAGE = 'Pourcentage maximum de couverture nuageuse';
+strings.fr.EDIT = 'Modifier';
+strings.fr.BEFORE = 'Avant';
 strings.fr.LOAD_ERROR = 'Error loading recent imagery.';
 strings.fr.MATCH_ERROR = 'No results match the selected criteria.';
 
@@ -908,19 +908,19 @@ strings.fr.DOWNLOAD_DATA = 'Téléchargez les données';
 strings.fr.DESCRIPTION = 'description';
 
 //- Measurement
-strings.fr.MEASUREMENT = 'Measurement';
-strings.fr.RESULT = 'Result';
-strings.fr.AREA = 'Area';
+strings.fr.MEASUREMENT = 'Mesure';
+strings.fr.RESULT = 'Résultat';
+strings.fr.AREA = 'Zone';
 strings.fr.DISTANCE = 'Distance';
-strings.fr.LOCATION = 'Location';
+strings.fr.LOCATION = 'Localisation';
 strings.fr.LATITUDE = 'Latitude';
 strings.fr.LONGITUDE = 'Longitude';
 
 //- Miscellaneous
 strings.fr.PRINT_BUTTON_LABEL = 'Choisissez un format d\'impression';
 strings.fr.PRINT_REPORT = 'Imprimer le Rapport';
-strings.fr.EDIT_SAVE = 'Save';
-strings.fr.EDIT_EDIT = 'Edit';
+strings.fr.EDIT_SAVE = 'Sauvegarder';
+strings.fr.EDIT_EDIT = 'Modifier';
 strings.fr.SUBSCRIBE = 'S\'abonner';
 strings.fr.LAYERS = 'Couches';
 strings.fr.DATA = 'Données';
