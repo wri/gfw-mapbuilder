@@ -301,18 +301,18 @@ strings.en.ANALYSIS_POPULATION_CHART_HEADER = 'Population Density';
 strings.en.ANALYSIS_TREE_COVER_CHART_HEADER = '% Tree cover';
 strings.en.ANALYSIS_RAINFALL_CHART_HEADER = 'Rainfall';
 strings.en.MONTHS_LIST = [
-  { name: 'January', abbr: 'იან.'},
-  { name: 'February', abbr: 'თებ.'},
-  { name: 'March', abbr: 'მარ.'},
-  { name: 'April', abbr: 'აპრ.'},
-  { name: 'May', abbr: 'მაის.'},
-  { name: 'June', abbr: 'ივნ.'},
-  { name: 'July', abbr: 'ივლ.'},
-  { name: 'August', abbr: 'აგვ.'},
-  { name: 'September', abbr: 'Sსექ.'},
-  { name: 'October', abbr: 'ოქტ.'},
-  { name: 'November', abbr: 'ნოე.'},
-  { name: 'December', abbr: 'დეკ.'}
+  { name: 'January', abbr: 'Jan'},
+  { name: 'February', abbr: 'Feb'},
+  { name: 'March', abbr: 'Mar'},
+  { name: 'April', abbr: 'Apr'},
+  { name: 'May', abbr: 'May'},
+  { name: 'June', abbr: 'Jun'},
+  { name: 'July', abbr: 'Jul'},
+  { name: 'August', abbr: 'Aug'},
+  { name: 'September', abbr: 'Sep'},
+  { name: 'October', abbr: 'Oct'},
+  { name: 'November', abbr: 'Nov'},
+  { name: 'December', abbr: 'Dec'}
 ];
 
 strings.en.REPORT_TABLE_TOTAL = 'Total';
