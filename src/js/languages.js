@@ -247,7 +247,7 @@ strings.en.LEARN_MORE = 'learn More';
 strings.en.DOWNLOAD_DATA = 'download data';
 strings.en.DESCRIPTION = 'description';
 
-//Measurement
+//- Measurement
 strings.en.MEASUREMENT = 'Measurement';
 strings.en.RESULT = 'Result';
 strings.en.AREA = 'Area';
@@ -570,7 +570,7 @@ strings.ka.LEARN_MORE = 'მეტი ინფო';
 strings.ka.DOWNLOAD_DATA = 'მონაცემების ჩამოტვირთვა';
 strings.ka.DESCRIPTION = 'აღწერა';
 
-//Measurement
+//- Measurement
 strings.ka.MEASUREMENT = 'Measurement';
 strings.ka.RESULT = 'Result';
 strings.ka.AREA = 'Area';
@@ -893,7 +893,7 @@ strings.fr.LEARN_MORE = 'En savoir plus';
 strings.fr.DOWNLOAD_DATA = 'Téléchargez les données';
 strings.fr.DESCRIPTION = 'description';
 
-//Measurement
+//- Measurement
 strings.fr.MEASUREMENT = 'Measurement';
 strings.fr.RESULT = 'Result';
 strings.fr.AREA = 'Area';
@@ -1215,7 +1215,7 @@ strings.es.LEARN_MORE = 'Conozca más';
 strings.es.DOWNLOAD_DATA = 'Descarga información';
 strings.es.DESCRIPTION = 'Descripción';
 
-//Measurement
+//- Measurement
 strings.es.MEASUREMENT = 'Measurement';
 strings.es.RESULT = 'Result';
 strings.es.AREA = 'Area';
@@ -1537,7 +1537,7 @@ strings.pt.LEARN_MORE = 'Saiba mais';
 strings.pt.DOWNLOAD_DATA = 'Baixar dados';
 strings.pt.DESCRIPTION = 'Descrição';
 
-//Measurement
+//- Measurement
 strings.pt.MEASUREMENT = 'Measurement';
 strings.pt.RESULT = 'Result';
 strings.pt.AREA = 'Area';
@@ -1858,7 +1858,7 @@ strings.id.LEARN_MORE = 'learn More';
 strings.id.DOWNLOAD_DATA = 'download data';
 strings.id.DESCRIPTION = 'description';
 
-//Measurement
+//- Measurement
 strings.id.MEASUREMENT = 'Pengukuran';
 strings.id.RESULT = 'Hasil';
 strings.id.AREA = 'Kawasan';
@@ -2178,13 +2178,13 @@ strings.zh.DOWNLOAD_DATA = '下载数据';
 strings.zh.DESCRIPTION = '说明';
 
 //Measurement
-strings.en.MEASUREMENT = 'Measurement';
-strings.en.RESULT = 'Result';
-strings.en.AREA = 'Area';
-strings.en.DISTANCE = 'Distance';
-strings.en.LOCATION = 'Location';
-strings.en.LATITUDE = 'Latitude';
-strings.en.LONGITUDE = 'Longitude';
+strings.zh.MEASUREMENT = '测量';
+strings.zh.RESULT = '结果';
+strings.zh.AREA = '区域';
+strings.zh.DISTANCE = '距离';
+strings.zh.LOCATION = '位置';
+strings.zh.LATITUDE = '纬度';
+strings.zh.LONGITUDE = '经度';
 
 //- Miscellaneous
 strings.zh.PRINT_BUTTON_LABEL = '选择打印模板';
