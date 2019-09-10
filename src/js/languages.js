@@ -30,7 +30,7 @@ strings.en.NAV_PROFILE = 'My GFW Profile';
 strings.en.NAV_LOGOUT = 'Log Out';
 strings.en.NAV_LANGUAGE = 'Select Language';
 
-//-Subscription
+//- Subscription
 strings.en.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.en.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.en.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
@@ -362,36 +362,36 @@ strings.ka.NAV_PROFILE = 'My GFW Profile';
 strings.ka.NAV_LOGOUT = 'Log Out';
 strings.ka.NAV_LANGUAGE = 'ენის არჩევა';
 
-// - Subscription
+//- Subscription
 strings.ka.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.ka.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.ka.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
 strings.ka.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
 strings.ka.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
 strings.ka.SUBSCRIBE_SAVED_END = ' to manage them.';
-strings.ka.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.ka.SUBSCRIBE_ALERTS_TITLE = 'ტყის ცვლილების შეტყობინებები';
 strings.ka.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
-strings.ka.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
-strings.ka.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
-strings.ka.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
-strings.ka.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
-strings.ka.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
-strings.ka.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
-strings.ka.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
-strings.ka.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
-strings.ka.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
-strings.ka.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
-strings.ka.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
+strings.ka.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS აქტიური ხანძრების შეტყობინებები';
+strings.ka.SUBSCRIBE_ALERTS_TCL = 'ხის ვარჯის კარგვის მონაცემები';
+strings.ka.SUBSCRIBE_ALERTS_GLAD = 'GLAD ხის ვარჯის კარგვის შეტყობინებები';
+strings.ka.SUBSCRIBE_ALERTS_FORMA = 'FORMA შეტყობინებების მონაცემები';
+strings.ka.SUBSCRIBE_ALERTS_PRODES = 'PRODES გაუტყევების მონაცემები';
+strings.ka.SUBSCRIBE_ALERTS_SAD = 'SAD ხის ვარჯის კარგვის შეტყობინებები';
+strings.ka.SUBSCRIBE_ALERTS_TERRA = 'Terra-i  ხის ვარჯის კარგვის შეტყობინებები';
+strings.ka.SUBSCRIBE_EMAIL_TITLE = 'ხელმოწერა შეტყობინებებზე';
+strings.ka.SUBSCRIBE_EMAIL = 'ქვემოთ შეიყვანეთ თქვენი ელფოსტა, რათა მიიღოთ ელ.ფოსტით შეტყობინება, როდესაც ამ ტერიტორიისთვის იქნება ხელმისაწვდომი ახალი ყოველწლიური მონაცემები ხის ვარჯის კარგვაზე';
+strings.ka.SUBSCRIBE_EMAIL_ALERTS = 'შეტყობინებების ელფოსტის მიღება ...-ში';
+strings.ka.SUBSCRIBE_NAME_SUBSCRIPTION = 'დაარქვით თქვენ ხელმოწერას';
 strings.ka.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.ka.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.ka.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.ka.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.ka.SUBSCRIBE_BACK = 'Back';
+strings.ka.SUBSCRIBE_BACK = 'უკან';
 strings.ka.SUBSCRIBE_NEXT = 'Next';
-strings.ka.SUBSCRIBE_SAVE = 'Save';
+strings.ka.SUBSCRIBE_SAVE = 'დამახსოვრება';
 strings.ka.SUBSCRIBE_OK = 'OK';
-strings.ka.SUBSCRIBE_NAME = 'Name';
-strings.ka.SUBSCRIBE_AREA = 'Area Name';
+strings.ka.SUBSCRIBE_NAME = 'გვარი';
+strings.ka.SUBSCRIBE_AREA = 'ტერიტორიის დასახელება';
 strings.ka.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
@@ -1344,7 +1344,7 @@ strings.pt.NAV_LOGOUT = 'Sair';
 strings.pt.NAV_LANGUAGE = 'Selecionar Idioma';
 
 
-//-Subscription
+//- Subscription
 strings.pt.SUBSCRIBE_SAVED_TITLE = 'Subscription saved!';
 strings.pt.SUBSCRIBE_SAVED_DESC = 'This subscription has been added to your profile. ';
 strings.pt.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on the link to confirm your subscription.';
