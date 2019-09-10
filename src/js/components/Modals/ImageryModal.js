@@ -17,7 +17,6 @@ import layerKeys from 'constants/LayerConstants';
 import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
-import { modalText } from 'js/config';
 import text from '../../languages';
 
 export default class ImageryModal extends Component {
@@ -29,9 +28,10 @@ export default class ImageryModal extends Component {
 
   constructor (props) {
     super(props);
+    const {language} = this.context;
     this.state = {
-      monthsVal: modalText.imagery.monthsOptions[1].label,
-      imageStyleVal: modalText.imagery.imageStyleOptions[0].label,
+      monthsVal: text[language].MONTHS_OPTIONS[1].label,
+      imageStyleVal: text[language].IMAGE_STYLE_OPTIONS[0].label,
       cloudScore: [0, 25],
       start: null,
       end: null,
@@ -288,7 +288,7 @@ export default class ImageryModal extends Component {
                   <select
                     value={monthsVal}
                     onChange={this.onChangeStart}>
-                    {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
+                    {text[language].MONTHS_OPTIONS.map(this.renderDropdownOptions)}
                   </select>
                   <div className='fa-button sml white'>{monthsVal}</div>
                 </div>
@@ -324,7 +324,7 @@ export default class ImageryModal extends Component {
               <select
                 value={imageStyleVal}
                 onChange={this.onChangeImageStyle}>
-                {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
+                {text[language].IMAGE_STYLE_OPTIONS.map(this.renderDropdownOptions)}
               </select>
               <div className='fa-button sml white'>{imageStyleVal}</div>
             </div>

@@ -234,6 +234,16 @@ strings.en.EDIT = 'Edit';
 strings.en.BEFORE = 'Before';
 strings.en.LOAD_ERROR = 'Error loading recent imagery.';
 strings.en.MATCH_ERROR = 'No results match the selected criteria.';
+strings.en.MONTHS_OPTIONS = [
+  { label: `4 months`, value: 4 },
+  { label: `3 months`, value: 3},
+  { label: `6 months`, value: 6},
+  { label: `12 months`, value: 12}
+];
+strings.en.IMAGE_STYLE_OPTIONS = [
+  { label: `Natural Color`},
+  { label: `Vegetation Health`}
+];
 
 //- Layer Info Modal
 strings.en.NO_INFO = 'No Information Available';
@@ -561,7 +571,16 @@ strings.ka.EDIT = 'რედაქტირება';
 strings.ka.BEFORE = 'უწინ';
 strings.ka.LOAD_ERROR = 'Error loading recent imagery.';
 strings.ka.MATCH_ERROR = 'No results match the selected criteria.';
-
+strings.ka.MONTHS_OPTIONS = [
+  { label: `4 თვეები`, value: 4 },
+  { label: `3 თვეები`, value: 3},
+  { label: `6 თვეები`, value: 6},
+  { label: `12 თვეები`, value: 12}
+];
+strings.ka.IMAGE_STYLE_OPTIONS = [
+  { label: `ბუნებრივი ფერი`},
+  { label: `მცენარეულობის მდგომარეობა`}
+];
 
 //- Layer Info Modal
 strings.ka.NO_INFO = 'ინფორმაცია არ არსებობს';
@@ -889,6 +908,16 @@ strings.fr.EDIT = 'Modifier';
 strings.fr.BEFORE = 'Avant';
 strings.fr.LOAD_ERROR = 'Error loading recent imagery.';
 strings.fr.MATCH_ERROR = 'No results match the selected criteria.';
+strings.fr.MONTHS_OPTIONS = [
+  { label: `4 Mois`, value: 4 },
+  { label: `3 Mois`, value: 3},
+  { label: `6 Mois`, value: 6},
+  { label: `12 Mois`, value: 12}
+];
+strings.fr.IMAGE_STYLE_OPTIONS = [
+  { label: `Couleur naturelle`},
+  { label: `Santé de la végétation`}
+];
 
 //- Layer Info Modal
 strings.fr.NO_INFO = 'Pas d\'informations disponibles';
@@ -1216,6 +1245,16 @@ strings.es.EDIT = 'Editar';
 strings.es.BEFORE = 'Antes';
 strings.es.LOAD_ERROR = 'Error loading recent imagery.';
 strings.es.MATCH_ERROR = 'No results match the selected criteria.';
+strings.es.MONTHS_OPTIONS = [
+  { label: `4 Meses`, value: 4 },
+  { label: `3 Meses`, value: 3},
+  { label: `6 Meses`, value: 6},
+  { label: `12 Meses`, value: 12}
+];
+strings.es.IMAGE_STYLE_OPTIONS = [
+  { label: `Color natural`},
+  { label: `Salud de la vegetación`}
+];
 
 //- Layer Info Modal
 strings.es.NO_INFO = 'No hay información disponible';
@@ -1543,6 +1582,16 @@ strings.pt.EDIT = 'Editar';
 strings.pt.BEFORE = 'Antes';
 strings.pt.LOAD_ERROR = 'Error loading recent imagery.';
 strings.pt.MATCH_ERROR = 'No results match the selected criteria.';
+strings.pt.MONTHS_OPTIONS = [
+  { label: `4 Meses`, value: 4 },
+  { label: `3 Meses`, value: 3},
+  { label: `6 Meses`, value: 6},
+  { label: `12 Meses`, value: 12}
+];
+strings.pt.IMAGE_STYLE_OPTIONS = [
+  { label: `Cor natural`},
+  { label: `Vitalidade da vegetação`}
+];
 
 //- Layer Info Modal
 strings.pt.NO_INFO = 'Sem informação disponível.';
@@ -1870,6 +1919,16 @@ strings.id.EDIT = 'Ubah';
 strings.id.BEFORE = 'Sebelum';
 strings.id.LOAD_ERROR = 'Error loading recent imagery.';
 strings.id.MATCH_ERROR = 'No results match the selected criteria.';
+strings.ANALYSIS_INSTRUCTION_ADDITIONAL.MONTHS_OPTIONS = [
+  { label: `4 Bulan`, value: 4 },
+  { label: `3 Bulan`, value: 3},
+  { label: `6 Bulan`, value: 6},
+  { label: `12 Bulan`, value: 12}
+];
+strings.id.IMAGE_STYLE_OPTIONS = [
+  { label: `Warna Alami`},
+  { label: `Kelestarian Vegetasi`}
+];
 
 //- Layer Info Modal
 strings.id.NO_INFO = 'No Information Available';
@@ -2195,6 +2254,16 @@ strings.zh.EDIT = '编辑';
 strings.zh.BEFORE = '之前';
 strings.zh.LOAD_ERROR = 'Error loading recent imagery.';
 strings.zh.MATCH_ERROR = 'No results match the selected criteria.';
+strings.zh.MONTHS_OPTIONS = [
+  { label: `4 月份`, value: 4 },
+  { label: `3 月份`, value: 3},
+  { label: `6 月份`, value: 6},
+  { label: `12 月份`, value: 12}
+];
+strings.zh.IMAGE_STYLE_OPTIONS = [
+  { label: `自然色`},
+  { label: `植被健康状况`}
+];
 
 //- Layer Info Modal
 strings.zh.NO_INFO = '没有相关信息';
@@ -2296,5 +2365,5 @@ strings.zh.ANALYSIS_ERROR_SLOPE = 'An error occurred while fetching slope analys
 strings.zh.ANALYSIS_ERROR_TERRA_I = 'An error occurred while fetching TERRA I analysis. Please select another analysis.';
 strings.zh.ANALYSIS_ERROR_BIO_LOSS = 'An error occurred while fetching biomass loss analysis. Please select another analysis.';
 strings.zh.ANALYSIS_ERROR_FIRE_COUNT = 'An error occurred while fetching fire count analysis. Please select another analysis.';
-
+  
 export { strings as default };
