@@ -301,18 +301,18 @@ strings.en.ANALYSIS_POPULATION_CHART_HEADER = 'Population Density';
 strings.en.ANALYSIS_TREE_COVER_CHART_HEADER = '% Tree cover';
 strings.en.ANALYSIS_RAINFALL_CHART_HEADER = 'Rainfall';
 strings.en.MONTHS_LIST = [
-  { name: 'January', abbr: 'Jan'},
-  { name: 'February', abbr: 'Feb'},
-  { name: 'March', abbr: 'Mar'},
-  { name: 'April', abbr: 'Apr'},
-  { name: 'May', abbr: 'May'},
-  { name: 'June', abbr: 'Jun'},
-  { name: 'July', abbr: 'Jul'},
-  { name: 'August', abbr: 'Aug'},
-  { name: 'September', abbr: 'Sep'},
-  { name: 'October', abbr: 'Oct'},
-  { name: 'November', abbr: 'Nov'},
-  { name: 'December', abbr: 'Dec'}
+  { name: 'January', abbr: 'იან.'},
+  { name: 'February', abbr: 'თებ.'},
+  { name: 'March', abbr: 'მარ.'},
+  { name: 'April', abbr: 'აპრ.'},
+  { name: 'May', abbr: 'მაის.'},
+  { name: 'June', abbr: 'ივნ.'},
+  { name: 'July', abbr: 'ივლ.'},
+  { name: 'August', abbr: 'აგვ.'},
+  { name: 'September', abbr: 'Sსექ.'},
+  { name: 'October', abbr: 'ოქტ.'},
+  { name: 'November', abbr: 'ნოე.'},
+  { name: 'December', abbr: 'დეკ.'}
 ];
 
 strings.en.REPORT_TABLE_TOTAL = 'Total';
@@ -411,13 +411,13 @@ strings.ka.INFO_WINDOW_INSTRUCTION_LIST = [
 ];
 //- Analysis
 strings.ka.ANALYSIS_NOT_SELECTED = [
-  'Analysis not selected',
-  'Select an analysis from the drop-down menu to begin.'
+  'ანალიზი არ არის შერჩეული.',
+  'დაწყებისთვის შეარჩიეთ ანალიზი ჩამოშლადი მენიუდან.'
 ];
 strings.ka.ANALYSIS_SELECTED = [
-  'Select date(s) for analysis',
-  'Select range for analysis',
-  'Select tree cover density'
+  'თარიღ(ებ)ის შერჩევა ანალიზისთვის',
+  'საზღვრების შერჩევა ანალიზისთვის',
+  'ხის ვარჯის სიხშირის შერჩევა'
 ];
 strings.ka.ANALYSIS_INSTRUCTION_HEADER = 'ჩაატარეთ ფიგურის ანალიზი რუკაზე';
 strings.ka.ANALYSIS_INSTRUCTION_LIST = [
@@ -425,7 +425,7 @@ strings.ka.ANALYSIS_INSTRUCTION_LIST = [
   'აარჩიეთ ფიგურა რუკაზე',
   'დააჭირეთ ანალიზისი მენიუს'
 ];
-strings.ka.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
+strings.ka.ANALYSIS_TOOLTIP = 'თქვენ მიერ შერჩეული გეომეტრია რეგისტრირებულია geostore-თან. ანალიზის ნიშანი ხელმისაწვდომია მომენტალურად';
 strings.ka.ANALYSIS_OR = 'ან';
 strings.ka.ANALYSIS_DRAW_HEADER = 'ჩაატარეთ თქვენი ფიგურის ანალიზი';
 //- ${drawIcon} references a variable above, do not translate
@@ -471,9 +471,9 @@ strings.ka.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.ka.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.ka.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
-strings.ka.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
-strings.ka.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
-strings.ka.ANALYSIS_NO_DATA = 'No data available';
+strings.ka.ANALYSIS_ERROR = 'შერჩეული ანალიზის ჩატარების დროს შეცდომა მოხდა. შეარჩიეთ უფრო ნაკლები ფართობი, სხვა ანალიზი ან  კიდევ სცადეთ მოგვიანებით. ';
+strings.ka.RUN_ANALYSIS_INSTRUCTIONS = 'დააჭირეთ ღილაკს „ანალიზის ჩატარება“ შედეგების სანახავად';
+strings.ka.ANALYSIS_NO_DATA = 'მონაცემები არ არის ხელმისაწვდომი';
 
 //- Group and value should not be modified
 strings.ka.ANALYSIS_SELECT_TYPE_OPTIONS = [
@@ -545,20 +545,20 @@ strings.ka.SEARCH_CLICK_FOR_MORE = 'გთხოვთ დააჭიროთ 
 
 //- Imagery Modal
 strings.ka.IMAGERY = [
-  'Recent Imagery',
-  'Recent Hi-Res Satellite Imagery'
+  'ბოლო გამოსახულება',
+  'ბოლო მაღალი გარჩევადობის სატელიტური გამოსახულება'
 ];
-strings.ka.ACQUISITION = 'Acquisition Date';
+strings.ka.ACQUISITION = 'გადაღების თარიღი';
 strings.ka.DATE = 'Date';
-strings.ka.NATURAL_COLOR = 'Natural Color';
-strings.ka.VEGETATION = 'Vegetation Health';
-strings.ka.INSTRUMENT = 'Instrument';
-strings.ka.CLOUD = 'Cloud Coverage';
-strings.ka.MONTHS = 'Months';
-strings.ka.WEEKS = 'Weeks';
-strings.ka.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.ka.EDIT = 'Edit';
-strings.ka.BEFORE = 'Before';
+strings.ka.NATURAL_COLOR = 'ბუნებრივი ფერი';
+strings.ka.VEGETATION = 'მცენარეულობის მდგომარეობა';
+strings.ka.INSTRUMENT = 'ინსტრუმენტი';
+strings.ka.CLOUD = 'ღრუბლიანობა';
+strings.ka.MONTHS = 'თვეები';
+strings.ka.WEEKS = 'კვირები';
+strings.ka.CLOUD_PERCENTAGE = 'ღრუბლების მაქსიმალური პროცენტი';
+strings.ka.EDIT = 'რედაქტირება';
+strings.ka.BEFORE = 'უწინ';
 strings.ka.LOAD_ERROR = 'Error loading recent imagery.';
 strings.ka.MATCH_ERROR = 'No results match the selected criteria.';
 
@@ -581,19 +581,19 @@ strings.ka.DOWNLOAD_DATA = 'მონაცემების ჩამოტვ
 strings.ka.DESCRIPTION = 'აღწერა';
 
 //- Measurement
-strings.ka.MEASUREMENT = 'Measurement';
-strings.ka.RESULT = 'Result';
-strings.ka.AREA = 'Area';
-strings.ka.DISTANCE = 'Distance';
-strings.ka.LOCATION = 'Location';
-strings.ka.LATITUDE = 'Latitude';
-strings.ka.LONGITUDE = 'Longitude';
+strings.ka.MEASUREMENT = 'გაზომვა';
+strings.ka.RESULT = 'შედეგი';
+strings.ka.AREA = 'ფართობი';
+strings.ka.DISTANCE = 'მანძილი';
+strings.ka.LOCATION = 'ლოკაცია ';
+strings.ka.LATITUDE = 'განედი';
+strings.ka.LONGITUDE = 'გრძედი';
 
 //- Miscellaneous
 strings.ka.PRINT_BUTTON_LABEL = 'აარჩიეთ ბეჭდვის ფორმატი';
 strings.ka.PRINT_REPORT = 'ანგარიშის ბეჭდვა';
-strings.ka.EDIT_SAVE = 'Save';
-strings.ka.EDIT_EDIT = 'Edit';
+strings.ka.EDIT_SAVE = 'დამახსოვრება';
+strings.ka.EDIT_EDIT = 'რედაქტირება';
 strings.ka.SUBSCRIBE = 'გამოწერა';
 strings.ka.LAYERS = 'ფენები';
 strings.ka.DATA = 'მონაცემები';

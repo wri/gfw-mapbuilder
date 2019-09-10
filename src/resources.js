@@ -708,7 +708,7 @@
          pt: 'Recent Imagery',
          id: 'Citra Satelit Terbaru',
          zh: '近期图像',
-         ka: 'Recent Imagery'
+         ka: 'ბოლო გამოსახულება'
        },
        layers: [{
          order: 1,
@@ -723,7 +723,7 @@
            pt: 'Recent Imagery',
            id: 'Citra Satelit Resolusi Tinggi Terbaru',
            zh: '近期高分辨率卫星图像',
-           ka: 'Recent Imagery'
+           ka: 'ბოლო მაღალი გარჩევადობის სატელიტური გამოსახულება'
          },
          dynamicSublabel: {
            en: '({DATE_TIME}, {CLOUD_COVERAGE}% Cloud Coverage, {INSTRUMENT})',
@@ -732,7 +732,7 @@
            pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
            id: '({DATE_TIME}, {CLOUD_COVERAGE}% Tutupan Awan, {INSTRUMENT})',
            zh: '({DATE_TIME}, {CLOUD_COVERAGE}% 云层覆盖, {INSTRUMENT})',
-           ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
+           ka: '({DATE_TIME}, {CLOUD_COVERAGE}% ღრუბლიანობა, {INSTRUMENT})'
          }
        }]
      },
