@@ -59,6 +59,7 @@ strings.en.SUBSCRIBE_BACK = 'Back';
 strings.en.SUBSCRIBE_NEXT = 'Next';
 strings.en.SUBSCRIBE_SAVE = 'Save';
 strings.en.SUBSCRIBE_OK = 'OK';
+strings.en.SUBSCRIBE_NAME = 'Name';
 strings.en.SUBSCRIBE_AREA = 'Area Name';
 strings.en.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
@@ -389,6 +390,7 @@ strings.ka.SUBSCRIBE_BACK = 'Back';
 strings.ka.SUBSCRIBE_NEXT = 'Next';
 strings.ka.SUBSCRIBE_SAVE = 'Save';
 strings.ka.SUBSCRIBE_OK = 'OK';
+strings.ka.SUBSCRIBE_NAME = 'Name';
 strings.ka.SUBSCRIBE_AREA = 'Area Name';
 strings.ka.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
@@ -695,28 +697,29 @@ strings.fr.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on t
 strings.fr.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
 strings.fr.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
 strings.fr.SUBSCRIBE_SAVED_END = ' to manage them.';
-strings.fr.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.fr.SUBSCRIBE_ALERTS_TITLE = 'Alertes sur l’évolution des forêts';
 strings.fr.SUBSCRIBE_ALERTS_SELECT = 'Sélectionnez les alertes de changement forestier que vous souhaitez recevoir';
-strings.fr.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
-strings.fr.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
-strings.fr.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
-strings.fr.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
-strings.fr.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
-strings.fr.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
+strings.fr.SUBSCRIBE_ALERTS_VIIRS = 'Alertes incendies actifs VIIRS';
+strings.fr.SUBSCRIBE_ALERTS_TCL = 'Données sur la perte de la couverture arborée';
+strings.fr.SUBSCRIBE_ALERTS_GLAD = 'Alertes GLAD sur les pertes de couvert arboré';
+strings.fr.SUBSCRIBE_ALERTS_FORMA = 'Données d’alertes FORMA';
+strings.fr.SUBSCRIBE_ALERTS_PRODES = 'Données PRODES sur la déforestation';
+strings.fr.SUBSCRIBE_ALERTS_SAD = 'Alertes SAD sur les pertes de la couverture arborée';
 strings.fr.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
-strings.fr.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
-strings.fr.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
-strings.fr.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
-strings.fr.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
+strings.fr.SUBSCRIBE_EMAIL_TITLE = 'S’abonner aux alertes';
+strings.fr.SUBSCRIBE_EMAIL = 'Renseignez votre adresse e-mail ci-dessous pour recevoir une notification par e-mail lorsque de nouvelles données annuelles de perte de la couverture arborée sont disponibles pour cette zone.';
+strings.fr.SUBSCRIBE_EMAIL_ALERTS = 'Recevoir les e-mails d’alerte en…';
+strings.fr.SUBSCRIBE_NAME_SUBSCRIPTION = 'Nommer votre abonnement';
 strings.fr.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.fr.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.fr.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.fr.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.fr.SUBSCRIBE_BACK = 'Back';
+strings.fr.SUBSCRIBE_BACK = 'Précédent';
 strings.fr.SUBSCRIBE_NEXT = 'Next';
-strings.fr.SUBSCRIBE_SAVE = 'Save';
+strings.fr.SUBSCRIBE_SAVE = 'Sauvegarder';
 strings.fr.SUBSCRIBE_OK = 'OK';
-strings.fr.SUBSCRIBE_AREA = 'Area Name';
+strings.fr.SUBSCRIBE_NAME = 'Nom';
+strings.fr.SUBSCRIBE_AREA = 'Nom de zone';
 strings.fr.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
@@ -1021,28 +1024,29 @@ strings.es.SUBSCRIBE_SAVED_DESC_STRONG = 'Please check your email and click on t
 strings.es.SUBSCRIBE_SAVED_DESC_END = 'Visit your';
 strings.es.SUBSCRIBE_SAVED_LINK = 'saved subscriptions';
 strings.es.SUBSCRIBE_SAVED_END = ' to manage them.';
-strings.es.SUBSCRIBE_ALERTS_TITLE = 'Forest change alerts';
+strings.es.SUBSCRIBE_ALERTS_TITLE = 'Alertas de cambio forestal';
 strings.es.SUBSCRIBE_ALERTS_SELECT = 'Select the forest change alerts you would like to receive';
-strings.es.SUBSCRIBE_ALERTS_VIIRS = 'VIIRS active fire alerts';
-strings.es.SUBSCRIBE_ALERTS_TCL = 'Tree cover loss data';
-strings.es.SUBSCRIBE_ALERTS_GLAD = 'GLAD tree cover loss alerts';
-strings.es.SUBSCRIBE_ALERTS_FORMA = 'FORMA alerts data';
-strings.es.SUBSCRIBE_ALERTS_PRODES = 'PRODES deforestation data';
-strings.es.SUBSCRIBE_ALERTS_SAD = 'SAD tree cover loss alerts';
-strings.es.SUBSCRIBE_ALERTS_TERRA = 'Terra-i tree cover loss alerts';
-strings.es.SUBSCRIBE_EMAIL_TITLE = 'Subscribe to alerts';
-strings.es.SUBSCRIBE_EMAIL = 'Enter your email below to receive an email notification when there are new annual tree cover loss data available for this area.';
-strings.es.SUBSCRIBE_EMAIL_ALERTS = 'Receive Alert Emails In...';
-strings.es.SUBSCRIBE_NAME_SUBSCRIPTION = 'Name your subscription';
+strings.es.SUBSCRIBE_ALERTS_VIIRS = 'Alertas VIIRS sobre incendios activos';
+strings.es.SUBSCRIBE_ALERTS_TCL = 'Datos sobre la pérdida de cobertura arbórea';
+strings.es.SUBSCRIBE_ALERTS_GLAD = 'Alertas GLAD sobre pérdida de cobertura arbórea';
+strings.es.SUBSCRIBE_ALERTS_FORMA = 'Datos de alertas FORMA';
+strings.es.SUBSCRIBE_ALERTS_PRODES = 'Datos PRODES sobre deforestación';
+strings.es.SUBSCRIBE_ALERTS_SAD = 'Alertas SAD sobre pérdida de cobertura arbórea';
+strings.es.SUBSCRIBE_ALERTS_TERRA = 'Alertas Terra-i sobre pérdida de cobertura arbórea';
+strings.es.SUBSCRIBE_EMAIL_TITLE = 'Suscribirse a las alertas';
+strings.es.SUBSCRIBE_EMAIL = 'Ingrese su correo electrónico a continuación para recibir una notificación por correo electrónico cuando estén disponibles nuevos datos sobre pérdida de cobertura arbórea anuales para esta área.';
+strings.es.SUBSCRIBE_EMAIL_ALERTS = 'Recibir correos electrónicos de alerta en...';
+strings.es.SUBSCRIBE_NAME_SUBSCRIPTION = 'Denomine su suscripción';
 strings.es.SUBSCRIBE_DELETE_TITLE = 'Delete this subscription';
 strings.es.SUBSCRIBE_DELETE_DESC = 'This will delete the subscription from your profile. Are you sure?';
 strings.es.SUBSCRIBE_DELETE_CONFIRM = 'Delete';
 strings.es.SUBSCRIBE_DELETE_CANCEL = 'Cancel';
-strings.es.SUBSCRIBE_BACK = 'Back';
+strings.es.SUBSCRIBE_BACK = 'Atrás';
 strings.es.SUBSCRIBE_NEXT = 'Next';
-strings.es.SUBSCRIBE_SAVE = 'Save';
+strings.es.SUBSCRIBE_SAVE = 'Guardar';
 strings.es.SUBSCRIBE_OK = 'OK';
-strings.es.SUBSCRIBE_AREA = 'Area Name';
+strings.es.SUBSCRIBE_NAME = 'Nombre';
+strings.es.SUBSCRIBE_AREA = 'Nombre del área';
 strings.es.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
 //- Documents
@@ -1052,7 +1056,7 @@ strings.es.DOCS_TYPE = 'Tipo';
 strings.es.DOCS_AUTHOR = 'Autor';
 strings.es.DOCS_YEAR = 'Año';
 strings.es.DOCS_PDF = 'PDF';
-strings.es.DOCS_NAME = 'Name';
+strings.es.DOCS_NAME = 'Nombre';
 strings.es.DOCS_SIZE = 'Size';
 //- Info Window
 strings.es.INFO_WINDOW_INSTRUCTION_HEADER = 'Seleccionar un polígono en el mapa';
@@ -1062,13 +1066,13 @@ strings.es.INFO_WINDOW_INSTRUCTION_LIST = [
 ];
 //- Analysis
 strings.es.ANALYSIS_NOT_SELECTED = [
-  'Analysis not selected',
-  'Select an analysis from the drop-down menu to begin.'
+  'No se seleccionó un análisis.',
+  'Para empezar, seleccione un análisis del menú desplegable.'
 ];
 strings.es.ANALYSIS_SELECTED = [
-  'Select date(s) for analysis',
-  'Select range for analysis',
-  'Select tree cover density'
+  'Seleccione la fecha del análisis',
+  'Seleccione un rango para el análisis',
+  'Seleccione la densidad de la cobertura arbórea'
 ];
 strings.es.ANALYSIS_INSTRUCTION_HEADER = 'Analizar un polígono  en el mapa';
 strings.es.ANALYSIS_INSTRUCTION_LIST = [
@@ -1076,7 +1080,7 @@ strings.es.ANALYSIS_INSTRUCTION_LIST = [
   'Seleccionar un polígono en el mapa',
   'Hacer clic en la pestaña de analizar'
 ];
-strings.es.ANALYSIS_TOOLTIP = 'Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily';
+strings.es.ANALYSIS_TOOLTIP = 'La geometría que seleccionó se está registrando en geostore. La pestaña de análisis estará disponible en un  momento';
 strings.es.ANALYSIS_OR = 'O';
 strings.es.ANALYSIS_DRAW_HEADER = 'Analizar su propio polígono';
 //- ${drawIcon} references a variable above, do not translate
@@ -1122,8 +1126,8 @@ strings.es.ANALYSIS_SAD_ALERT_NAMES = {
 
 strings.es.DEFAULT_ANALYSIS_LABEL = 'Select analysis...';
 strings.es.RUN_ANALYSIS_BUTTON_TEXT = 'Run Analysis';
-strings.es.ANALYSIS_ERROR = 'An error occurred performing selected analysis. Please select a smaller area, another analysis or try again later.';
-strings.es.RUN_ANALYSIS_INSTRUCTIONS = 'Click the “run analysis” button to see results';
+strings.es.ANALYSIS_ERROR = 'Ocurrió un error al realizar el análisis que se seleccionó. Seleccione un área más pequeña.';
+strings.es.RUN_ANALYSIS_INSTRUCTIONS = 'Para ver los resultados, haga clic en el botón “ejecutar análisis"';
 strings.es.ANALYSIS_NO_DATA = 'No data available';
 
 //- Group and value should not be modified
@@ -1196,20 +1200,20 @@ strings.es.SEARCH_CLICK_FOR_MORE = 'Haz clic en el elemento seleccionado para m�
 
 //- Imagery Modal
 strings.es.IMAGERY = [
-  'Recent Imagery',
-  'Recent Hi-Res Satellite Imagery'
+  'Imágenes recientes',
+  'Imágenes satelitales de alta resolución recientes'
 ];
-strings.es.ACQUISITION = 'Acquisition Date';
-strings.es.DATE = 'Date';
-strings.es.NATURAL_COLOR = 'Natural Color';
-strings.es.VEGETATION = 'Vegetation Health';
-strings.es.INSTRUMENT = 'Instrument';
-strings.es.CLOUD = 'Cloud Coverage';
-strings.es.MONTHS = 'Months';
-strings.es.WEEKS = 'Weeks';
-strings.es.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
-strings.es.EDIT = 'Edit';
-strings.es.BEFORE = 'Before';
+strings.es.ACQUISITION = 'Fecha de adquisición';
+strings.es.DATE = 'Fecha';
+strings.es.NATURAL_COLOR = 'Color natural';
+strings.es.VEGETATION = 'Salud de la vegetación';
+strings.es.INSTRUMENT = 'Instrumento';
+strings.es.CLOUD = 'Cobertura de nubes';
+strings.es.MONTHS = 'Meses';
+strings.es.WEEKS = 'Semanas';
+strings.es.CLOUD_PERCENTAGE = 'Porcentaje máximo de cobertura de nubes';
+strings.es.EDIT = 'Editar';
+strings.es.BEFORE = 'Antes';
 strings.es.LOAD_ERROR = 'Error loading recent imagery.';
 strings.es.MATCH_ERROR = 'No results match the selected criteria.';
 
@@ -1231,19 +1235,19 @@ strings.es.DOWNLOAD_DATA = 'Descarga información';
 strings.es.DESCRIPTION = 'Descripción';
 
 //- Measurement
-strings.es.MEASUREMENT = 'Measurement';
-strings.es.RESULT = 'Result';
-strings.es.AREA = 'Area';
-strings.es.DISTANCE = 'Distance';
-strings.es.LOCATION = 'Location';
-strings.es.LATITUDE = 'Latitude';
-strings.es.LONGITUDE = 'Longitude';
+strings.es.MEASUREMENT = 'Medición';
+strings.es.RESULT = 'Resultado';
+strings.es.AREA = 'Área';
+strings.es.DISTANCE = 'Distancia';
+strings.es.LOCATION = 'Ubicación';
+strings.es.LATITUDE = 'Latitud';
+strings.es.LONGITUDE = 'Longitud';
 
 //- Miscellaneous
 strings.es.PRINT_BUTTON_LABEL = 'Elegir diseño de página';
 strings.es.PRINT_REPORT = 'Imprimir Informe';
-strings.es.EDIT_SAVE = 'Save';
-strings.es.EDIT_EDIT = 'Edit';
+strings.es.EDIT_SAVE = 'Guardar';
+strings.es.EDIT_EDIT = 'Editar';
 strings.es.SUBSCRIBE = 'Subscribirse';
 strings.es.LAYERS = 'Capas';
 strings.es.DATA = 'Datos';
@@ -1368,6 +1372,7 @@ strings.pt.SUBSCRIBE_BACK = 'Back';
 strings.pt.SUBSCRIBE_NEXT = 'Next';
 strings.pt.SUBSCRIBE_SAVE = 'Save';
 strings.pt.SUBSCRIBE_OK = 'OK';
+strings.pt.SUBSCRIBE_NAME = 'Nome';
 strings.pt.SUBSCRIBE_AREA = 'Area Name';
 strings.pt.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
@@ -1694,6 +1699,7 @@ strings.id.SUBSCRIBE_BACK = 'Kembali';
 strings.id.SUBSCRIBE_NEXT = 'Next';
 strings.id.SUBSCRIBE_SAVE = 'Simpan';
 strings.id.SUBSCRIBE_OK = 'OK';
+strings.id.SUBSCRIBE_NAME = 'Nama';
 strings.id.SUBSCRIBE_AREA = 'Nama Kawasan';
 strings.id.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
@@ -1852,6 +1858,7 @@ strings.id.IMAGERY = [
   'Citra Satelit Resolusi Tinggi Terbaru'
 ];
 strings.id.ACQUISITION = 'Tanggal Akuisisi';
+strings.id.DATE = 'Tanggal';
 strings.id.NATURAL_COLOR = 'Warna Alami';
 strings.id.VEGETATION = 'Kelestarian Vegetasi';
 strings.id.INSTRUMENT = 'Instrumen';
@@ -2017,6 +2024,7 @@ strings.zh.SUBSCRIBE_BACK = '后退';
 strings.zh.SUBSCRIBE_NEXT = 'Next';
 strings.zh.SUBSCRIBE_SAVE = '保存';
 strings.zh.SUBSCRIBE_OK = 'OK';
+strings.zh.SUBSCRIBE_NAME = '姓名';
 strings.zh.SUBSCRIBE_AREA = '区域名称';
 strings.zh.SUBSCRIBE_ERROR = 'You must have an alert subscription, valid email, and area name!';
 
@@ -2175,6 +2183,7 @@ strings.zh.IMAGERY = [
   '近期高分辨率卫星图像'
 ];
 strings.zh.ACQUISITION = '采集日期';
+strings.zh.DATE = '日期';
 strings.zh.NATURAL_COLOR = '自然色';
 strings.zh.VEGETATION = '植被健康状况';
 strings.zh.INSTRUMENT = '工具';
