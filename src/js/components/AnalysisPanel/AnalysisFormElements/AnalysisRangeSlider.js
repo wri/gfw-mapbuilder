@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import resources from '../../../../resources';
 import Slider from 'rc-slider';
 import MapActions from 'actions/MapActions';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -110,10 +110,10 @@ export default class AnalysisRangeSlider extends Component {
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: '#F0AB00'}]}
-          handleStyle={[{borderColor: '#F0AB00'}]}
+          trackStyle={[{backgroundColor: resources.colorTheme}]}
+          handleStyle={[{borderColor: resources.colorTheme}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #F0AB00'}}
+          activeDotStyle={{border: `1px solid ${resources.colorTheme}`}}
         />
       </div>
     );

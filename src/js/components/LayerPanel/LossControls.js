@@ -5,6 +5,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
+import resources from '../../../resources';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -158,7 +159,7 @@ export default class LossControls extends Component {
           }} : {}),
           [currentValue]: {
             style: {
-              color: '#F0AB00'
+              color: resources.colorTheme
             },
             label: <small>{lossOptions[currentValue - 1].label}</small>
           },
@@ -234,10 +235,10 @@ export default class LossControls extends Component {
           tipFormatter={value => 2000 + value}
           dots={true}
           marks={sliderMarks}
-          trackStyle={[{backgroundColor: '#F0AB00'}]}
-          handleStyle={[{borderColor: '#F0AB00'}]}
+          trackStyle={[{backgroundColor: resources.colorTheme}]}
+          handleStyle={[{borderColor: resources.colorTheme}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #F0AB00'}}
+          activeDotStyle={{border: `1px solid ${resources.colorTheme}`}}
         />
         <div
           id="lossPlayButton"
