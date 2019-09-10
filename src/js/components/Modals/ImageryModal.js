@@ -335,7 +335,7 @@ export default class ImageryModal extends Component {
             { imageryError &&
               <div className='imagery-modal__error'>
                 <SVGIcon id={'icon-alerts'} />
-                <p>Error loading recent imagery.</p>
+                <p>{text[language].LOAD_ERROR}</p>
               </div>
             }
 
@@ -343,7 +343,7 @@ export default class ImageryModal extends Component {
 
             {!loadingImagery && !filteredImageryData.length &&
               <div className='imagery-modal__error'>
-                <p>No results match the selected criteria.</p>
+                <p>{text[language].MATCH_ERROR}</p>
               </div>
             }
             {filteredImageryData.map(this.renderThumbnails.bind(this))}

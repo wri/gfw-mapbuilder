@@ -231,6 +231,8 @@ strings.en.WEEKS = 'Weeks';
 strings.en.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
 strings.en.EDIT = 'Edit';
 strings.en.BEFORE = 'Before';
+strings.en.LOAD_ERROR = 'Error loading recent imagery.';
+strings.en.MATCH_ERROR = 'No results match the selected criteria.';
 
 //- Layer Info Modal
 strings.en.NO_INFO = 'No Information Available';
@@ -555,6 +557,8 @@ strings.ka.WEEKS = 'Weeks';
 strings.ka.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
 strings.ka.EDIT = 'Edit';
 strings.ka.BEFORE = 'Before';
+strings.ka.LOAD_ERROR = 'Error loading recent imagery.';
+strings.ka.MATCH_ERROR = 'No results match the selected criteria.';
 
 
 //- Layer Info Modal
@@ -880,7 +884,8 @@ strings.fr.WEEKS = 'Weeks';
 strings.fr.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
 strings.fr.EDIT = 'Edit';
 strings.fr.BEFORE = 'Before';
-
+strings.fr.LOAD_ERROR = 'Error loading recent imagery.';
+strings.fr.MATCH_ERROR = 'No results match the selected criteria.';
 
 //- Layer Info Modal
 strings.fr.NO_INFO = 'Pas d\'informations disponibles';
@@ -1205,6 +1210,8 @@ strings.es.WEEKS = 'Weeks';
 strings.es.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
 strings.es.EDIT = 'Edit';
 strings.es.BEFORE = 'Before';
+strings.es.LOAD_ERROR = 'Error loading recent imagery.';
+strings.es.MATCH_ERROR = 'No results match the selected criteria.';
 
 //- Layer Info Modal
 strings.es.NO_INFO = 'No hay información disponible';
@@ -1529,6 +1536,8 @@ strings.pt.WEEKS = 'Weeks';
 strings.pt.CLOUD_PERCENTAGE = 'Maximum Cloud Cover Percentage';
 strings.pt.EDIT = 'Edit';
 strings.pt.BEFORE = 'Before';
+strings.pt.LOAD_ERROR = 'Error loading recent imagery.';
+strings.pt.MATCH_ERROR = 'No results match the selected criteria.';
 
 //- Layer Info Modal
 strings.pt.NO_INFO = 'Sem informação disponível.';
@@ -1852,6 +1861,8 @@ strings.id.WEEKS = 'Minggu';
 strings.id.CLOUD_PERCENTAGE = 'Persentase Tutupan Awan Maksimum';
 strings.id.EDIT = 'Ubah';
 strings.id.BEFORE = 'Sebelum';
+strings.id.LOAD_ERROR = 'Error loading recent imagery.';
+strings.id.MATCH_ERROR = 'No results match the selected criteria.';
 
 //- Layer Info Modal
 strings.id.NO_INFO = 'No Information Available';
@@ -2173,6 +2184,8 @@ strings.zh.WEEKS = '周';
 strings.zh.CLOUD_PERCENTAGE = '最大云层覆盖百分比';
 strings.zh.EDIT = '编辑';
 strings.zh.BEFORE = '之前';
+strings.zh.LOAD_ERROR = 'Error loading recent imagery.';
+strings.zh.MATCH_ERROR = 'No results match the selected criteria.';
 
 //- Layer Info Modal
 strings.zh.NO_INFO = '没有相关信息';
