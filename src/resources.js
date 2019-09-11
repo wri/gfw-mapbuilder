@@ -17,7 +17,7 @@
 //    mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
 //    mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
 //    customColorTheme: '#49E20E',
-//    defaultColorTheme: '#F0AB00', // This is the gold color that will serve as the default theme
+//    defaultColorTheme: '#F0AB00',
 //    narrative: '',
 //    hideHeader: false,
 //    hideFooter: false,
@@ -859,7 +859,7 @@ export default {
   "title": "FLUIDS Georgia",
   "subtitle": "",
   customColorTheme: '#49E20E',
-  defaultColorTheme: '#F0AB00', // This is the gold color that will serve as the default theme
+  defaultColorTheme: '#F0AB00',
   "webmapMenuName": "მიწათსარგებლობა",
   "logoUrl": "https://geo.forest-atlas.org/system/site_settings/images/000/000/140/original/mepa.png?1530171023",
   "logoLinkUrl": "https://geo.forest-atlas.org",

@@ -5,6 +5,7 @@ import text from 'js/languages';
 import Search from 'esri/dijit/Search';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import InfoTemplate from 'esri/InfoTemplate';
+import resources from '../../../resources';
 import React, {
   Component,
   PropTypes
@@ -17,6 +18,13 @@ export default class SearchModal extends Component {
     webmapInfo: PropTypes.object.isRequired,
     map: PropTypes.object.isRequired
   };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      buttonHover: false
+    };
+  }
 
   componentDidUpdate(prevProps, prevState, prevContext) {
     const {map, webmapInfo, language} = this.context;
@@ -96,10 +104,24 @@ export default class SearchModal extends Component {
   onClose = () => {
     mapActions.toggleSearchModal({ visible: false });
   };
+  
+  toggleHover = () => {
+    if(this.state.buttonHover){
+      this.setState({
+        buttonHover: false
+      });
+    } else {
+      this.setState({
+        buttonHover: true
+      });
+    }
+  };
 
   render () {
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = resources;
+    const {buttonHover} = this.state;
+    
     return (
       <ControlledModalWrapper onClose={this.onClose}>
         <div className='deg-box'>
@@ -108,7 +130,16 @@ export default class SearchModal extends Component {
         <div className='deg-box'>
           <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
         </div>
-        <button className='search-submit-button fa-button gold' onClick={this.decimalDegreeSearch}>Search</button>
+        <button
+          style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+          {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='search-submit-button fa-button color'
+          onClick={this.decimalDegreeSearch}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
+        >
+          Search
+        </button>
         <div className='search-widget-label'>
           {text[language].SEARCH_WIDGET_TITLE}
         </div>

@@ -30,7 +30,7 @@ import resources from '../../../resources';
   } else if (selected === 'active' && customColorTheme === '') {
       colorTheme = defaultColorTheme;
   } else {
-      colorTheme = '#929292';
+      colorTheme = '#ffffff';
   }
 
   return (

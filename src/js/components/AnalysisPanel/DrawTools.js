@@ -22,7 +22,7 @@ export default class DrawTools extends Component {
     super(props);
     this.state = {
       drawButtonActive: false,
-      drawButtonHover: false
+      buttonHover: false
     };
   }
 
@@ -99,13 +99,13 @@ export default class DrawTools extends Component {
   };
   
   toggleHover = () => {
-    if(this.state.drawButtonHover){
+    if(this.state.buttonHover){
       this.setState({
-        drawButtonHover: false
+        buttonHover: false
       });
     } else {
       this.setState({
-        drawButtonHover: true
+        buttonHover: true
       });
     }
   };
@@ -115,7 +115,7 @@ export default class DrawTools extends Component {
     const {language} = this.context;
     const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
     const { customColorTheme, defaultColorTheme } = resources;
-    const {drawButtonActive, drawButtonHover} = this.state;
+    const {drawButtonActive, buttonHover} = this.state;
 
     return (
       <div className='analysis-instructions__draw'>
@@ -131,7 +131,7 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          style={drawButtonActive || drawButtonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
           {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
           onClick={this.draw}

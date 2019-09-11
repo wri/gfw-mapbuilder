@@ -13,18 +13,18 @@ export default class Modal extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      drawButtonHover: false
+      buttonHover: false
     };
   }
   
   toggleHover = () => {
-    if(this.state.drawButtonHover){
+    if(this.state.buttonHover){
       this.setState({
-        drawButtonHover: false
+        buttonHover: false
       });
     } else {
       this.setState({
-        drawButtonHover: true
+        buttonHover: true
       });
     }
   };
@@ -37,7 +37,7 @@ export default class Modal extends Component {
       info.license = info.licenseInfo;
     }
     const { customColorTheme, defaultColorTheme } = resources;
-    const {drawButtonHover} = this.state;
+    const {buttonHover} = this.state;
     
     return (
       <div className='layer-modal-content'>
@@ -82,7 +82,7 @@ export default class Modal extends Component {
           <div className='source-footer'>
             <a href={info.download_data}
             target='_blank'
-            style={drawButtonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
             {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}

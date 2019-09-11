@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import resources from '../../../resources';
 
 const initialState = {
   currentStep: 1,
@@ -15,7 +16,8 @@ const initialState = {
   formaAlerts: false,
   terraI: false,
   prodes: false,
-  warnings: false
+  warnings: false,
+  buttonHover: false
 };
 
 export default class SubscribeModal extends Component {
@@ -248,11 +250,25 @@ export default class SubscribeModal extends Component {
       });
     }
   }
+  
+  toggleHover = () => {
+    if(this.state.buttonHover){
+      this.setState({
+        buttonHover: false
+      });
+    } else {
+      this.setState({
+        buttonHover: true
+      });
+    }
+  };
 
   render () {
     const {language} = this.context;
     const langs = ['English', '中文', 'Français', 'Bahasa Indonesia', 'Português (Brasil)', 'Español (Mexico)']; //TODO: Get from resources or config!
-
+    const { customColorTheme, defaultColorTheme } = resources;
+    const {buttonHover} = this.state;
+    
     return (
       <ControlledModalWrapper onClose={this.close}>
         <div className={`subscribe-step ${this.state.currentStep === 0 ? '' : 'hidden'}`}>
@@ -309,10 +325,50 @@ export default class SubscribeModal extends Component {
           <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
         </div>
         <div className='subscription-sub-buttons'>
-          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>OK!</button> : null }
-          {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>Back</button> : null }
-          {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>Next</button> : null }
-          {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>Save</button> : null }
+          {this.state.currentStep === 0 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.refreshSubscriptions}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            OK!
+          </button> : null }
+          {this.state.currentStep > 1 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.back}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            Back
+          </button> : null }
+          {this.state.currentStep === 1 || this.state.currentStep === 2 ? 
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.next}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            Next
+          </button> : null }
+          {this.state.currentStep === 3 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.save}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            Save
+          </button> : null }
         </div>
 
       </ControlledModalWrapper>
