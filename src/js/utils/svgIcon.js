@@ -3,7 +3,7 @@ import resources from '../../resources';
 
 export default (props) => {
   let icon = null;
-
+  const { customColorTheme, defaultColorTheme } = resources;
   switch (props.id) {
 
     case 'shape-close':
@@ -16,7 +16,7 @@ export default (props) => {
     case 'shape-warning':
       icon = <svg className='svg-icon'><svg id="shape-warning" viewBox="0 0 483.537 483.537" width="100%" height="100%">
       <title>Analysis Warning</title>
-      <path fill={resources.colorTheme} d="M479.963,425.047L269.051,29.854c-5.259-9.88-15.565-16.081-26.782-16.081h-0.03 c-11.217,0-21.492,6.171-26.782,16.051L3.603,425.016c-5.046,9.485-4.773,20.854,0.699,29.974 c5.502,9.15,15.413,14.774,26.083,14.774H453.12c10.701,0,20.58-5.594,26.083-14.774 C484.705,445.84,484.979,434.471,479.963,425.047z M242.239,408.965c-16.781,0-30.399-13.619-30.399-30.399  c0-16.78,13.619-30.399,30.399-30.399c16.75,0,30.399,13.619,30.399,30.399C272.638,395.346,259.02,408.965,242.239,408.965z M272.669,287.854c0,16.811-13.649,30.399-30.399,30.399c-16.781,0-30.399-13.589-30.399-30.399V166.256 c0-16.781,13.619-30.399,30.399-30.399c16.75,0,30.399,13.619,30.399,30.399V287.854z"></path>
+      <path fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme} d="M479.963,425.047L269.051,29.854c-5.259-9.88-15.565-16.081-26.782-16.081h-0.03 c-11.217,0-21.492,6.171-26.782,16.051L3.603,425.016c-5.046,9.485-4.773,20.854,0.699,29.974 c5.502,9.15,15.413,14.774,26.083,14.774H453.12c10.701,0,20.58-5.594,26.083-14.774 C484.705,445.84,484.979,434.471,479.963,425.047z M242.239,408.965c-16.781,0-30.399-13.619-30.399-30.399  c0-16.78,13.619-30.399,30.399-30.399c16.75,0,30.399,13.619,30.399,30.399C272.638,395.346,259.02,408.965,242.239,408.965z M272.669,287.854c0,16.811-13.649,30.399-30.399,30.399c-16.781,0-30.399-13.589-30.399-30.399V166.256 c0-16.781,13.619-30.399,30.399-30.399c16.75,0,30.399,13.619,30.399,30.399V287.854z"></path>
       </svg></svg>;
       break;
 
@@ -176,19 +176,19 @@ export default (props) => {
       icon = <svg className='svg-icon'><svg id="icon-analysis-draw" viewBox="0 0 145 101">
       <title>Analysis Draw</title>
       <g>
-        <path fill={resources.colorTheme} d="M135.726,62.687 C135.726,62.687 134.274,65.313 134.274,65.313 C134.274,65.313 52.274,12.313 52.274,12.313 C52.274,12.313 53.726,9.687 53.726,9.687 C53.726,9.687 135.726,62.687 135.726,62.687 Z" fillRule="evenodd"></path>
-        <path fill={resources.colorTheme}  d="M105.726,90.687 C105.726,90.687 104.274,93.313 104.274,93.313 C104.274,93.313 42.274,83.313 42.274,83.313 C42.274,83.313 43.726,80.687 43.726,80.687 C43.726,80.687 105.726,90.687 105.726,90.687 Z" fillRule="evenodd"></path>
-        <path fill={resources.colorTheme}  d="M105.153,92.235 C105.153,92.235 102.760,90.425 102.760,90.425 C102.760,90.425 134.847,60.765 134.847,60.765 C134.847,60.765 137.240,62.575 137.240,62.575 C137.240,62.575 105.153,92.235 105.153,92.235 Z" fillRule="evenodd"></path>
-        <path fill={resources.colorTheme}  d="M43.793,81.207 C43.793,81.207 44.153,82.235 44.153,82.235 C44.153,82.235 41.760,80.425 41.760,80.425 C41.760,80.425 26.847,37.765 26.847,37.765 C26.847,37.765 28.207,38.793 28.207,38.793 C28.207,38.793 27.847,37.765 27.847,37.765 C27.847,37.765 30.240,39.575 30.240,39.575 C30.240,39.575 45.153,82.235 45.153,82.235 C45.153,82.235 43.793,81.207 43.793,81.207 Z" fillRule="evenodd"></path>
-        <circle fill={resources.colorTheme}  cx="49" cy="9" r="9"></circle>
+        <path fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme} d="M135.726,62.687 C135.726,62.687 134.274,65.313 134.274,65.313 C134.274,65.313 52.274,12.313 52.274,12.313 C52.274,12.313 53.726,9.687 53.726,9.687 C53.726,9.687 135.726,62.687 135.726,62.687 Z" fillRule="evenodd"></path>
+        <path fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M105.726,90.687 C105.726,90.687 104.274,93.313 104.274,93.313 C104.274,93.313 42.274,83.313 42.274,83.313 C42.274,83.313 43.726,80.687 43.726,80.687 C43.726,80.687 105.726,90.687 105.726,90.687 Z" fillRule="evenodd"></path>
+        <path fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M105.153,92.235 C105.153,92.235 102.760,90.425 102.760,90.425 C102.760,90.425 134.847,60.765 134.847,60.765 C134.847,60.765 137.240,62.575 137.240,62.575 C137.240,62.575 105.153,92.235 105.153,92.235 Z" fillRule="evenodd"></path>
+        <path fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M43.793,81.207 C43.793,81.207 44.153,82.235 44.153,82.235 C44.153,82.235 41.760,80.425 41.760,80.425 C41.760,80.425 26.847,37.765 26.847,37.765 C26.847,37.765 28.207,38.793 28.207,38.793 C28.207,38.793 27.847,37.765 27.847,37.765 C27.847,37.765 30.240,39.575 30.240,39.575 C30.240,39.575 45.153,82.235 45.153,82.235 C45.153,82.235 43.793,81.207 43.793,81.207 Z" fillRule="evenodd"></path>
+        <circle fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="49" cy="9" r="9"></circle>
         <circle fill="#FFFFFF" cx="49" cy="9" r="6"></circle>
-        <circle fill={resources.colorTheme}  cx="136" cy="65" r="9"></circle>
+        <circle fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="136" cy="65" r="9"></circle>
         <circle fill="#FFFFFF" cx="136" cy="65" r="6"></circle>
-        <circle fill={resources.colorTheme}  cx="106" cy="92" r="9"></circle>
+        <circle fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="106" cy="92" r="9"></circle>
         <circle fill="#FFFFFF" cx="106" cy="92" r="6"></circle>
-        <circle fill={resources.colorTheme}  cx="43" cy="82" r="9"></circle>
+        <circle fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="43" cy="82" r="9"></circle>
         <circle fill="#FFFFFF" cx="43" cy="82" r="6"></circle>
-        <circle fill={resources.colorTheme}  cx="29" cy="39" r="9"></circle>
+        <circle fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="29" cy="39" r="9"></circle>
         <circle fill="#FFFFFF" cx="29" cy="39" r="6"></circle>
         <path fill="#555555" d="M13.896,14.212 C13.896,14.212 15.096,13.010 15.096,13.010 C15.096,13.010 23.668,21.597 23.668,21.597 C23.668,21.597 22.468,22.799 22.468,22.799 C22.468,22.799 13.896,14.212 13.896,14.212 ZM5.324,19.879 C5.324,19.879 13.896,11.293 13.896,11.293 C13.896,11.293 15.096,12.495 15.096,12.495 C15.096,12.495 6.524,21.081 6.524,21.081 C6.524,21.081 5.324,19.879 5.324,19.879 ZM5.838,16.617 C4.467,17.990 4.809,17.819 3.438,19.192 C3.438,19.192 1.038,16.617 1.038,16.617 C-0.334,15.414 -0.334,13.182 1.038,11.808 C1.038,11.808 5.838,7.000 5.838,7.000 C7.210,5.626 9.267,5.626 10.638,7.000 C10.638,7.000 13.210,9.404 13.210,9.404 C11.839,10.606 12.010,10.434 10.638,11.808 C10.638,11.808 5.838,16.617 5.838,16.617 ZM16.811,28.466 C16.811,28.466 15.610,29.668 15.610,29.668 C15.610,29.668 7.038,21.081 7.038,21.081 C7.038,21.081 8.238,19.879 8.238,19.879 C8.238,19.879 16.811,28.466 16.811,28.466 ZM11.667,16.445 C11.667,16.445 20.239,25.031 20.239,25.031 C20.239,25.031 19.039,26.233 19.039,26.233 C19.039,26.233 10.467,17.647 10.467,17.647 C10.467,17.647 11.667,16.445 11.667,16.445 ZM24.011,30.011 C24.011,30.011 17.325,29.324 17.325,29.324 C17.325,29.324 23.325,23.314 23.325,23.314 C23.325,23.314 24.011,30.011 24.011,30.011 Z" fillRule="evenodd"></path>
       </g>
@@ -199,21 +199,21 @@ export default (props) => {
       icon = <svg className='svg-icon'><svg id="icon-analysis-poly" viewBox="0 0 109 86">
       <title>Analysis Click Polygon</title>
       <g>
-        <path className="cls-3" fill={resources.colorTheme}  opacity="0.2" d="M19.000,74.000 C19.000,74.000 8.000,35.000 8.000,35.000 C8.000,35.000 50.000,10.000 50.000,10.000 C50.000,10.000 54.000,9.000 54.000,9.000 C54.000,9.000 99.000,35.000 99.000,35.000 C99.000,35.000 91.000,74.000 91.000,74.000 C91.000,74.000 19.000,74.000 19.000,74.000 Z" fillRule="evenodd"></path>
-        <path className="cls-4" fill={resources.colorTheme}  d="M9.772,35.286 C9.772,35.286 8.228,32.714 8.228,32.714 C8.228,32.714 53.228,5.714 53.228,5.714 C53.228,5.714 54.772,8.286 54.772,8.286 C54.772,8.286 9.772,35.286 9.772,35.286 Z" fillRule="evenodd"></path>
-        <path className="cls-4" fill={resources.colorTheme}  d="M19.438,70.573 C19.438,70.573 16.562,71.427 16.562,71.427 C16.562,71.427 5.562,34.427 5.562,34.427 C5.562,34.427 8.438,33.573 8.438,33.573 C8.438,33.573 19.438,70.573 19.438,70.573 Z" fillRule="evenodd"></path>
-        <path className="cls-4" fill={resources.colorTheme}  d="M17.020,74.500 C17.020,74.500 16.980,71.500 16.980,71.500 C16.980,71.500 91.980,70.500 91.980,70.500 C91.980,70.500 92.020,73.500 92.020,73.500 C92.020,73.500 17.020,74.500 17.020,74.500 Z" fillRule="evenodd"></path>
-        <path className="cls-4" fill={resources.colorTheme}  d="M92.462,72.337 C92.462,72.337 89.538,71.663 89.538,71.663 C89.538,71.663 98.538,32.663 98.538,32.663 C98.538,32.663 101.462,33.337 101.462,33.337 C101.462,33.337 92.462,72.337 92.462,72.337 Z" fillRule="evenodd"></path>
-        <path className="cls-4" fill={resources.colorTheme}  d="M99.726,31.687 C99.726,31.687 98.274,34.313 98.274,34.313 C98.274,34.313 51.274,8.313 51.274,8.313 C51.274,8.313 52.726,5.687 52.726,5.687 C52.726,5.687 99.726,31.687 99.726,31.687 Z" fillRule="evenodd"></path>
-        <circle className="cls-4" fill={resources.colorTheme}  cx="54" cy="9" r="9"></circle>
+        <path className="cls-3" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  opacity="0.2" d="M19.000,74.000 C19.000,74.000 8.000,35.000 8.000,35.000 C8.000,35.000 50.000,10.000 50.000,10.000 C50.000,10.000 54.000,9.000 54.000,9.000 C54.000,9.000 99.000,35.000 99.000,35.000 C99.000,35.000 91.000,74.000 91.000,74.000 C91.000,74.000 19.000,74.000 19.000,74.000 Z" fillRule="evenodd"></path>
+        <path className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M9.772,35.286 C9.772,35.286 8.228,32.714 8.228,32.714 C8.228,32.714 53.228,5.714 53.228,5.714 C53.228,5.714 54.772,8.286 54.772,8.286 C54.772,8.286 9.772,35.286 9.772,35.286 Z" fillRule="evenodd"></path>
+        <path className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M19.438,70.573 C19.438,70.573 16.562,71.427 16.562,71.427 C16.562,71.427 5.562,34.427 5.562,34.427 C5.562,34.427 8.438,33.573 8.438,33.573 C8.438,33.573 19.438,70.573 19.438,70.573 Z" fillRule="evenodd"></path>
+        <path className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M17.020,74.500 C17.020,74.500 16.980,71.500 16.980,71.500 C16.980,71.500 91.980,70.500 91.980,70.500 C91.980,70.500 92.020,73.500 92.020,73.500 C92.020,73.500 17.020,74.500 17.020,74.500 Z" fillRule="evenodd"></path>
+        <path className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M92.462,72.337 C92.462,72.337 89.538,71.663 89.538,71.663 C89.538,71.663 98.538,32.663 98.538,32.663 C98.538,32.663 101.462,33.337 101.462,33.337 C101.462,33.337 92.462,72.337 92.462,72.337 Z" fillRule="evenodd"></path>
+        <path className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  d="M99.726,31.687 C99.726,31.687 98.274,34.313 98.274,34.313 C98.274,34.313 51.274,8.313 51.274,8.313 C51.274,8.313 52.726,5.687 52.726,5.687 C52.726,5.687 99.726,31.687 99.726,31.687 Z" fillRule="evenodd"></path>
+        <circle className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="54" cy="9" r="9"></circle>
         <circle className="cls-10" fill="#FFFFFF" cx="54" cy="9" r="6"></circle>
-        <circle className="cls-4" fill={resources.colorTheme}  cx="9" cy="35" r="9"></circle>
+        <circle className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="9" cy="35" r="9"></circle>
         <circle className="cls-10" fill="#FFFFFF" cx="9" cy="35" r="6"></circle>
-        <circle className="cls-4" fill={resources.colorTheme}  cx="100" cy="35" r="9"></circle>
+        <circle className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="100" cy="35" r="9"></circle>
         <circle className="cls-10" fill="#FFFFFF" cx="100" cy="35" r="6"></circle>
-        <circle className="cls-4" fill={resources.colorTheme}  cx="90" cy="72" r="9"></circle>
+        <circle className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="90" cy="72" r="9"></circle>
         <circle className="cls-10" fill="#FFFFFF" cx="90" cy="72" r="6"></circle>
-        <circle className="cls-4" fill={resources.colorTheme}  cx="18" cy="72" r="9"></circle>
+        <circle className="cls-4" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}  cx="18" cy="72" r="9"></circle>
         <circle className="cls-10" fill="#FFFFFF" cx="18" cy="72" r="6"></circle>
         <path className="cls-19" fill="#FFFFFF" stroke="#555555" strokeLinejoin="round" strokeWidth="2px" d="M69.990,83.228 C69.990,83.228 69.937,71.694 69.937,71.694 C69.932,70.823 69.524,70.051 68.894,69.562 C68.447,69.215 67.891,69.011 67.286,69.014 C66.881,69.016 66.498,69.111 66.155,69.280 C66.114,68.459 65.715,67.738 65.115,67.272 C64.668,66.925 64.112,66.721 63.508,66.725 C62.770,66.729 62.105,67.042 61.627,67.541 C61.627,67.541 61.626,67.117 61.626,67.117 C61.622,66.247 61.214,65.475 60.583,64.986 C60.137,64.640 59.581,64.436 58.978,64.439 C58.239,64.443 57.572,64.756 57.099,65.255 C57.099,65.255 57.069,58.680 57.069,58.680 C57.064,57.810 56.656,57.038 56.026,56.548 C55.579,56.202 55.022,55.998 54.418,56.001 C52.962,56.008 51.787,57.220 51.794,58.705 C51.794,58.705 51.869,75.182 51.869,75.182 C51.869,75.182 50.733,73.637 50.733,73.637 C50.583,73.434 50.409,73.256 50.219,73.109 C49.305,72.400 48.008,72.361 47.042,73.102 C45.877,73.994 45.643,75.681 46.517,76.871 C46.517,76.871 52.436,84.919 52.436,84.919 C52.585,85.121 52.759,85.299 52.948,85.445 C53.398,85.794 53.944,85.984 54.507,85.993 C54.507,85.993 67.365,85.930 67.365,85.930 C68.821,85.924 69.997,84.714 69.990,83.228 Z" fillRule="evenodd"></path>
       </g>

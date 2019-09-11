@@ -110,7 +110,7 @@ export default class CanopyModal extends Component {
     const { sliderMarks } = this.state;
     const { canopyDensity } = this.props;
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = resources;
     const sliderValue = this.discernDensityValue(canopyDensity);
 
     return (
@@ -129,11 +129,11 @@ export default class CanopyModal extends Component {
           step={null}
           onChange={this.handleSliderChange}
           tipFormatter={value => sliderMarks[value].label}
-          railStyle={{backgroundColor: resources.colorTheme, height: 10}}
+          railStyle={{backgroundColor: customColorTheme !== '' ? customColorTheme : defaultColorTheme, height: 10}}
           trackStyle={{backgroundColor: '#e9e9e9', height: 10}}
-          dotStyle={{border: `2px solid ${resources.colorTheme}`, height: 10, width: 10, bottom: -6, marginLeft: -7}}
+          dotStyle={{border: `2px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, height: 10, width: 10, bottom: -6, marginLeft: -7}}
           activeDotStyle={{border: '2px solid #e9e9e9'}}
-          handleStyle={[{border: `2px solid ${resources.colorTheme}`, height: 20, width: 20, marginLeft: -13}]}
+          handleStyle={[{border: `2px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, height: 20, width: 20, marginLeft: -13}]}
         />
         </div>
       </ControlledModalWrapper>

@@ -132,6 +132,7 @@ export default class LossControls extends Component {
     const start = sliderValue[0];
     let currentValue = start;
     const stop = sliderValue[1];
+    const { customColorTheme, defaultColorTheme } = resources;
 
     const visualizeLoss = () => {
       if (currentValue === stop + 1) {
@@ -159,7 +160,7 @@ export default class LossControls extends Component {
           }} : {}),
           [currentValue]: {
             style: {
-              color: resources.colorTheme
+              color: customColorTheme !== '' ? customColorTheme : defaultColorTheme
             },
             label: <small>{lossOptions[currentValue - 1].label}</small>
           },
@@ -219,6 +220,7 @@ export default class LossControls extends Component {
       color: '#aaa',
       cursor: 'default'
     };
+    const { customColorTheme, defaultColorTheme } = resources;
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
@@ -235,10 +237,10 @@ export default class LossControls extends Component {
           tipFormatter={value => 2000 + value}
           dots={true}
           marks={sliderMarks}
-          trackStyle={[{backgroundColor: resources.colorTheme}]}
-          handleStyle={[{borderColor: resources.colorTheme}]}
+          trackStyle={[{backgroundColor: customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
+          handleStyle={[{borderColor: customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: `1px solid ${resources.colorTheme}`}}
+          activeDotStyle={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
         />
         <div
           id="lossPlayButton"
