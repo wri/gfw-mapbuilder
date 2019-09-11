@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 const START = 'START',
       END = 'END';
@@ -56,6 +57,7 @@ export default class MobileTimeWidget extends Component {
       visible,
       currentTimeExtent
     } = this.props;
+    const { customColorTheme, defaultColorTheme } = resources;
 
     return (
       <div className={`mobile-time-widget map-component mobile-show ${visible ? '' : 'hidden'}`}>
@@ -70,14 +72,24 @@ export default class MobileTimeWidget extends Component {
             <select onChange={this.updateTimeExtentStart} value={currentTimeExtent.start}>
               {values.map(this.optionMapper({ type: START, ...currentTimeExtent}))}
             </select>
-            <div className='fa-button sml white'>{currentTimeExtent.start}</div>
+            <div
+              style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className='fa-button sml white'
+            >
+              {currentTimeExtent.start}
+            </div>
           </div>
           <div className='time-widget__select-label'>{text[language].TIMELINE_END}</div>
           <div className='relative'>
             <select onChange={this.updateTimeExtentEnd} value={currentTimeExtent.end}>
               {values.map(this.optionMapper({ type: END, ...currentTimeExtent}))}
             </select>
-            <div className='fa-button sml white'>{currentTimeExtent.end}</div>
+            <div
+              style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className='fa-button sml white'
+            >
+              {currentTimeExtent.end}
+            </div>
           </div>
         </div>
       </div>

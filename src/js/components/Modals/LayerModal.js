@@ -72,7 +72,12 @@ export default class Modal extends Component {
           }
           {!info.learn_more ? null :
             <div className='source-learn-more flex'>
-              <a href={info.learn_more} className='source-learn-more-link fa-button white' target='_blank'>
+              <a
+                href={info.learn_more}
+                style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='source-learn-more-link fa-button white'
+                target='_blank'
+              >
                 {text[language].LEARN_MORE}
               </a>
             </div>

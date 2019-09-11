@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-
-
+import resources from '../../../../resources';
 
 export default class AnalysisMultiDatePicker extends Component {
   constructor(props) {
@@ -124,26 +123,34 @@ export default class AnalysisMultiDatePicker extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <div>
-    <label className='analysis-datepicker-button-label'>Start: </label>
-    <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-    >
-    {value}
-    </button>
-  </div>
-);
+const StartButton = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <div>
+      <label className='analysis-datepicker-button-label'>Start: </label>
+      <button
+      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+      >
+      {value}
+      </button>
+    </div>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <div>
-    <label className='analysis-datepicker-button-label'>End: </label>
-    <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-    >
-    {value}
-    </button>
-  </div>
-);
+const EndButton = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <div>
+      <label className='analysis-datepicker-button-label'>End: </label>
+      <button
+      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+      >
+      {value}
+      </button>
+    </div>
+  );
+};

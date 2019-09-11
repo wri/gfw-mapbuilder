@@ -4,6 +4,7 @@ import text from 'js/languages';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import resources from '../../../resources';
 
 export default class FiresControls extends React.Component {
 
@@ -77,6 +78,7 @@ export default class FiresControls extends React.Component {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
     const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
+    const { customColorTheme, defaultColorTheme } = resources;
     return (
       <div>
         <div className="active-fires-controls-container">
@@ -89,10 +91,14 @@ export default class FiresControls extends React.Component {
               >
               {this.renderActiveFireOptions(this.fireOptions)}
               </select>
-              <div className='fa-button sml white pointer'>{activeFireOptionLabel}</div>
+              <div
+                style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='fa-button sml white pointer'>{activeFireOptionLabel}
+              </div>
             </div>
           </div>
           <div
+            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="fa-button sml white pointer"
             onClick={() => this.setState({
               customRange: !customRange,
@@ -143,20 +149,28 @@ export default class FiresControls extends React.Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const StartButton = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const EndButton = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};

@@ -5,6 +5,7 @@ import text from 'js/languages';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import resources from '../../../resources';
 
 export default class FormaControls extends Component {
 
@@ -88,20 +89,28 @@ export default class FormaControls extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const StartButton = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const EndButton = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};

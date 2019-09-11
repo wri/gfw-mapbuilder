@@ -4,6 +4,7 @@ import {modalText} from 'js/config';
 import utils from 'utils/AppUtils';
 import React from 'react';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
@@ -61,13 +62,20 @@ export default class ShareModal extends React.Component {
   }
 
   render () {
+    const { customColorTheme, defaultColorTheme } = resources;
     return (
       <ModalWrapper>
         <div className='modal-title'>{modalText.share.title}</div>
         <div className='share-instructions'>{modalText.share.linkInstructions}</div>
         <div className='share-input'>
           <input ref='shareInput' type='text' readOnly value={this.state.bitlyUrl} onClick={this.handleFocus} />
-          <button className='gfw-btn white pointer' onClick={this.copyShare.bind(this)}>{this.state.copyText}</button>
+          <button
+            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='gfw-btn white pointer'
+            onClick={this.copyShare.bind(this)}
+          >
+            {this.state.copyText}
+          </button>
         </div>
         <div className='share-items'>
           <div title='Google Plus' className='share-card googleplus-modal pointer' onClick={this.shareGoogle.bind(this)}>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-
-
+import resources from '../../../resources';
 
 export default class AnalysisDatePicker extends Component {
   constructor(props) {
@@ -95,13 +94,17 @@ export default class AnalysisDatePicker extends Component {
   }
 }
 
-const Button = ({ onClick, value }) => (
-  <div>
-    <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-    >
-    {value}
-    </button>
-  </div>
-);
+const Button = ({ onClick, value }) => {
+  const { customColorTheme, defaultColorTheme } = resources;
+  return (
+    <div>
+      <button
+        style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+        className='fa-button sml white pointer'
+        onClick={onClick}
+      >
+      {value}
+      </button>
+    </div>
+  );
+};

@@ -18,6 +18,7 @@ import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
 import { modalText } from 'js/config';
+import resources from '../../../resources';
 
 export default class ImageryModal extends Component {
 
@@ -278,6 +279,8 @@ export default class ImageryModal extends Component {
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
+    const { customColorTheme, defaultColorTheme } = resources;
+    
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
         <div className='imagery-modal__wrapper'>
@@ -295,7 +298,12 @@ export default class ImageryModal extends Component {
                     onChange={this.onChangeStart}>
                     {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
                   </select>
-                  <div className='fa-button sml white'>{monthsVal}</div>
+                  <div
+                    style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                    className='fa-button sml white'
+                  >
+                    {monthsVal}
+                  </div>
                 </div>
 
                 <div className='imagery-modal_section-text'>before</div>
@@ -331,7 +339,12 @@ export default class ImageryModal extends Component {
                 onChange={this.onChangeImageStyle}>
                 {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
               </select>
-              <div className='fa-button sml white'>{imageStyleVal}</div>
+              <div
+                style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='fa-button sml white'
+              >
+                {imageStyleVal}
+              </div>
             </div>
 
           </div>
