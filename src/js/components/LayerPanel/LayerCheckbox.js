@@ -4,6 +4,7 @@ import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 import React, {
   Component,
@@ -131,10 +132,20 @@ export default class LayerCheckbox extends Component {
     }
 
     const {sublabel} = layer;
+    
+    let colorTheme = '';
+    const { customColorTheme, defaultColorTheme } = resources;
+    if (checked === 'active' && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (checked === 'active' && customColorTheme === '') {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = '#929292';
+    }
 
     return (
       <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
-        <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
+        <span onClick={this.toggleLayer.bind(this)} style={{backgroundColor: `${colorTheme}`}} className='toggle-switch pointer'><span /></span>
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>

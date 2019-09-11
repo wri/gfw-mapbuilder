@@ -4,6 +4,7 @@ import React, {
   PropTypes
 } from 'react';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 export default class Instructions extends Component {
 
@@ -19,7 +20,8 @@ export default class Instructions extends Component {
 
   render () {
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = resources;
+    
     return (
       <div className='analysis-instructions'>
         <h4 className='analysis-instructions__header'>
@@ -33,7 +35,7 @@ export default class Instructions extends Component {
             <SVGIcon id={'icon-analysis-poly'} />
           </svg>
         </div>
-        <div className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

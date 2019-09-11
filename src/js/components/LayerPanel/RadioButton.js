@@ -1,6 +1,7 @@
 import React from 'react';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
  const RadioButton = ({
   selected,
@@ -21,10 +22,20 @@ import SVGIcon from 'utils/svgIcon';
   const handleShowInfo = () => {
     showInfo(layer);
   };
+  
+  let colorTheme = '';
+  const { customColorTheme, defaultColorTheme } = resources;
+  if (selected === 'active' && customColorTheme !== '') {
+      colorTheme = customColorTheme;
+  } else if (selected === 'active' && customColorTheme === '') {
+      colorTheme = defaultColorTheme;
+  } else {
+      colorTheme = '#929292';
+  }
 
   return (
     <div className={`layer-radio relative ${selected}`} >
-      <span onClick={handleToggleLayer} className='radio-switch pointer'></span>
+      <span onClick={handleToggleLayer} style={{backgroundColor: `${colorTheme}`}} className='radio-switch pointer'></span>
       <span onClick={handleToggleLayer} className='layer-radio-label pointer'>
         {label}
       </span>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LayerCheckbox from './LayerCheckbox';
 import LayerActions from 'actions/LayerActions';
+import resources from '../../../resources';
 
 export default class NestedCheckbox extends Component {
 
@@ -65,11 +66,20 @@ export default class NestedCheckbox extends Component {
   render() {
     const { groupLabel, layers } = this.props;
     const checked = this.props.checked ? 'active' : '';
+    let colorTheme = '';
+    const { customColorTheme, defaultColorTheme } = resources;
+    if (checked === 'active' && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (checked === 'active' && customColorTheme === '') {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = '#929292';
+    }
 
     return (
       <div>
         <div className={`layer-checkbox relative ${checked}`}>
-          <span onClick={this.toggleGroup} className='toggle-switch pointer'><span /></span>
+          <span onClick={this.toggleGroup} style={{backgroundColor: `${colorTheme}`}} className='toggle-switch pointer'><span /></span>
           <span onClick={this.toggleGroup} className='layer-checkbox-label pointer'>
             <strong>{groupLabel}</strong>
           </span>

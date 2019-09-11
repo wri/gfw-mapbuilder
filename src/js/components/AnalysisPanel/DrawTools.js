@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 import React, {
   Component,
@@ -99,9 +100,8 @@ export default class DrawTools extends Component {
   render () {
     const {embeddedInModal} = this.props;
     const {language} = this.context;
-    const instructions = embeddedInModal ?
-            text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) :
-            text[language].ANALYSIS_DRAW_INSTRUCTIONS;
+    const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
+    const { customColorTheme, defaultColorTheme } = resources;
 
     return (
       <div className='analysis-instructions__draw'>
@@ -121,7 +121,7 @@ export default class DrawTools extends Component {
           onClick={this.draw}>
           {text[language].ANALYSIS_DRAW_BUTTON}
         </div>
-        <div className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

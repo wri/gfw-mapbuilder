@@ -1,7 +1,7 @@
 import Loader from 'components/Loader';
 // import request from 'utils/request';
 import SVGIcon from 'utils/svgIcon';
-
+import resources from '../../../resources';
 import text from 'js/languages';
 import React, {
   Component,
@@ -101,6 +101,7 @@ class DocumentResults extends Component {
   }
 
   renderDocuments (documents, language) {
+    const { customColorTheme, defaultColorTheme } = resources;
     return (
       <table className='documents-table'>
         <thead>
@@ -116,7 +117,7 @@ class DocumentResults extends Component {
                 <td>{doc.size}</td>
                 <td className='documents-table__link'>
                   <a href={doc.url} target='_blank'>
-                    <svg className='svg-icon'>
+                    <svg style={{fill: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='svg-icon'>
                       <SVGIcon id={'icon-documents'} />
                     </svg>
                   </a>
