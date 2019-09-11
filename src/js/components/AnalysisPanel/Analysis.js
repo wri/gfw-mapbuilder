@@ -53,6 +53,7 @@ export default class Analysis extends Component {
   state = {
     isLoading: false,
     chartComponent: null,
+    buttonHover: false
   };
 
   componentDidMount() {
@@ -619,10 +620,22 @@ export default class Analysis extends Component {
       }
     });
   }
+  
+  toggleHover = () => {
+    if(this.state.buttonHover){
+      this.setState({
+        buttonHover: false
+      });
+    } else {
+      this.setState({
+        buttonHover: true
+      });
+    }
+  };
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent, showDownloadOptions} = this.state;
+    const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
@@ -691,12 +704,12 @@ export default class Analysis extends Component {
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
               <button
-                style={{
-                  backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`,
-                  border: `2px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`
-                }}
+                style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+                {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='run-analysis-button pointer'
                 onClick={this.runAnalysis}
+                onMouseEnter={this.toggleHover}
+                onMouseLeave={this.toggleHover}
               >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
