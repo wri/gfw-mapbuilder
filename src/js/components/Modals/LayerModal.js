@@ -2,11 +2,31 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import resources from '../../../resources';
 
 export default class Modal extends Component {
 
   static contextTypes = {
     language: PropTypes.string.isRequired
+  };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      drawButtonHover: false
+    };
+  }
+  
+  toggleHover = () => {
+    if(this.state.drawButtonHover){
+      this.setState({
+        drawButtonHover: false
+      });
+    } else {
+      this.setState({
+        drawButtonHover: true
+      });
+    }
   };
 
   renderMetadata(info) {
@@ -16,7 +36,9 @@ export default class Modal extends Component {
     } else if(info.licenseInfo && !info.license) {
       info.license = info.licenseInfo;
     }
-
+    const { customColorTheme, defaultColorTheme } = resources;
+    const {drawButtonHover} = this.state;
+    
     return (
       <div className='layer-modal-content'>
         <div className='source-header'>
@@ -58,7 +80,13 @@ export default class Modal extends Component {
         </div>
         {!info.download_data ? null :
           <div className='source-footer'>
-            <a href={info.download_data} className='source-download fa-button gold' target='_blank'>
+            <a href={info.download_data}
+            target='_blank'
+            style={drawButtonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+            >
               {text[language].DOWNLOAD_DATA}
             </a>
           </div>

@@ -21,7 +21,8 @@ export default class DrawTools extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      drawButtonActive: false
+      drawButtonActive: false,
+      drawButtonHover: false
     };
   }
 
@@ -96,12 +97,25 @@ export default class DrawTools extends Component {
       <li key={index} dangerouslySetInnerHTML={{ __html: instruction }}></li>
     );
   };
+  
+  toggleHover = () => {
+    if(this.state.drawButtonHover){
+      this.setState({
+        drawButtonHover: false
+      });
+    } else {
+      this.setState({
+        drawButtonHover: true
+      });
+    }
+  };
 
   render () {
     const {embeddedInModal} = this.props;
     const {language} = this.context;
     const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
     const { customColorTheme, defaultColorTheme } = resources;
+    const {drawButtonActive, drawButtonHover} = this.state;
 
     return (
       <div className='analysis-instructions__draw'>
@@ -117,8 +131,13 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          className={`fa-button gold analysis-instructions__draw-button ${this.state.drawButtonActive ? 'active' : ''}`}
-          onClick={this.draw}>
+          style={drawButtonActive || drawButtonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+          {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
+          onClick={this.draw}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
+          >
           {text[language].ANALYSIS_DRAW_BUTTON}
         </div>
         <div style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>

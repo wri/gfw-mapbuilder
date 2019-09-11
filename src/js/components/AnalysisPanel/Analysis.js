@@ -25,6 +25,7 @@ import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 import moment from 'moment';
 import text from 'js/languages';
+import resources from '../../../resources';
 
 import React, {
   Component,
@@ -660,7 +661,8 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-
+    const { customColorTheme, defaultColorTheme } = resources;
+    
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
@@ -688,7 +690,14 @@ export default class Analysis extends Component {
         {showFooter &&
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
-              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+              <button
+                style={{
+                  backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`,
+                  border: `2px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`
+                }}
+                className='run-analysis-button pointer'
+                onClick={this.runAnalysis}
+              >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
             </div>
