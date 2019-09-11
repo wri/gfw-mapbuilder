@@ -16,7 +16,7 @@
    maskServiceUrl: '', // e.g. http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_00_Africa/MapServer
    mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
    mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-   customColorTheme: '#ff69b4',
+   customColorTheme: '#49E20E',
    defaultColorTheme: '#F0AB00', // This is the gold color that will serve as the default theme
    narrative: '',
    hideHeader: false,

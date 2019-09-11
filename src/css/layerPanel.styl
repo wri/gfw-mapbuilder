@@ -215,9 +215,7 @@ div.legend-icon
   margin 5px 0
 
 .canopy-button
-  //box-shadow 0 0 0 2px $colorTheme
   display inline-block
-  //background $colorTheme
   border-radius 10px
   padding 0px 4px
   margin 0 5px
@@ -283,8 +281,6 @@ div.legend-icon
     & .info-icon
       background $disabledBackground
   &.active
-    & > .toggle-switch
-      //background $colorTheme
     & > .toggle-switch span
       left 9px
     &.loss .toggle-switch
@@ -477,9 +473,6 @@ div.legend-icon
       color $disabledFont
     & .info-icon
       background $disabledBackground
-  &.active
-    & > .radio-switch
-      //background $colorTheme
 
 .radio-switch
   transition all 0.3s ease
@@ -498,12 +491,12 @@ div.legend-icon
   margin-top 4px
 
 .toggle-switch-subscription.active-subscription
-  background $colorTheme
+  //background $colorTheme
 .toggle-switch-subscription.active-subscription span
   left 9px
 
 .layer-info
-  background-color $colorTheme
+  //background-color $colorTheme
   display inline-block
   position absolute
   border-radius 50%
@@ -524,7 +517,6 @@ div.legend-icon
   top 0
 
 .info-icon
-  background-color $colorTheme
   display inline-block
   position absolute
   border-radius 50%
@@ -610,7 +602,6 @@ div.legend-icon
   top 50px
   left 0
   cursor pointer
-  color $colorTheme
 
 .slider-tooltip
   position absolute
@@ -644,9 +635,9 @@ div.legend-icon
 .rc-slider-tooltip
   z-index 101
 
-.rc-slider-handle
-  &:active
-    box-shadow 0 0 5px $colorTheme unless $colorTheme !important
+// .rc-slider-handle
+//   &:active
+//     box-shadow 0 0 5px $colorTheme !important
 
 .react-datepicker__triangle
   display none !important

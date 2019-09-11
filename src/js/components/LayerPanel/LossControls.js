@@ -220,10 +220,10 @@ export default class LossControls extends Component {
       color: '#aaa',
       cursor: 'default'
     };
-    const { customColorTheme, defaultColorTheme } = resources;
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
+    const { customColorTheme, defaultColorTheme } = resources;
 
     return (
       <div className='timeline-container loss'>
@@ -245,7 +245,7 @@ export default class LossControls extends Component {
         <div
           id="lossPlayButton"
           className={`${playing ? ' hidden' : ''}`}
-          style={disabled ? disabledStyles : {}}
+          style={disabled ? disabledStyles : {color: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           onClick={disabled ? null : this.startVisualization}
           title={disabled ? 'Please select a range to view animation' : ''}
         >

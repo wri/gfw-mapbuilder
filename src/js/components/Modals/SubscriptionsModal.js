@@ -10,6 +10,7 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 const datasets = ['viirs-active-fires', 'umd-loss-gain', 'glad-alerts', 'imazon-alerts', 'forma-alerts', 'terrai-alerts', 'prodes-loss'];
 
@@ -96,8 +97,18 @@ export default class SubscriptionsModal extends Component {
       default:
         break;
     }
+    
+    let colorTheme = '';
+    const { customColorTheme, defaultColorTheme } = resources;
+    if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme === '') {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = 'inherit';
+    }
 
-    return <p key={dataset}>{datasetName} <span onClick={() => this.updateSubscription(dataset, subscription)} className={`toggle-switch-subscription pointer ${subscription.attributes.datasets.indexOf(dataset) === -1 ? '' : 'active-subscription'}`}><span /></span></p>;
+    return <p key={dataset}>{datasetName} <span onClick={() => this.updateSubscription(dataset, subscription)} style={{backgroundColor: `${colorTheme}`}} className={`toggle-switch-subscription pointer ${subscription.attributes.datasets.indexOf(dataset) === -1 ? '' : 'active-subscription'}`}><span /></span></p>;
   }
 
   updateSubscription = (dataset, subscription) => {

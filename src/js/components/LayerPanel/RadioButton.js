@@ -39,7 +39,7 @@ import resources from '../../../resources';
       <span onClick={handleToggleLayer} className='layer-radio-label pointer'>
         {label}
       </span>
-      <span className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`} onClick={handleShowInfo}>
+      <span style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`} onClick={handleShowInfo}>
         <SVGIcon id={'shape-info'} />
       </span>
       {sublabel && <div className='layer-checkbox-sublabel'>{sublabel}</div>}
