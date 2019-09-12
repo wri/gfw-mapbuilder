@@ -30,23 +30,12 @@ test('analysis module spec', () => {
       });
     }
 
-    if (module.analysisId !== 'LCC') {
-      expect(module.chartType).not.toEqual('pie');
+    if (module.analysisId === 'LCC') {
+      expect(module.chartType).toEqual('pie');
     }
 
-    if (module.analysisId !== 'BIO_LOSS') {
-      expect(module.chartType).not.toEqual('bar');
-    }
-
-    if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chartType === 'badge') {
-      expect(module).toHaveProperty('badgeLabel');
-      expect(module.badgeLabel).toHaveProperty(resources.language);
-    }
-
-    if (module.chartType === 'bar') {
-      expect(module).toHaveProperty('chartBounds');
-      expect(module.chartBounds).toBeInstanceOf(Array);
-      expect(module.chartBounds).toHaveLength(2);
+    if (module.analysisId === 'BIO_LOSS') {
+      expect(module.chartType).toEqual('bar');
     }
 
     if (typeof module.uiParams === 'string') {
