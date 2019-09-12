@@ -85,6 +85,7 @@ class MapStore {
     this.enterValuesButtonActive = false;
     this.editCoordinatesActive = false;
     this.imageryModalVisible = false;
+    this.imageryFetchFailed = false;
     this.imageryData = [];
     this.loadingImagery = false;
     this.imageryError = false;
@@ -168,6 +169,7 @@ class MapStore {
       activateEnterValuesButton: mapActions.activateEnterValuesButton,
       activateEditCoordinates: mapActions.activateEditCoordinates,
       toggleImageryVisible: mapActions.toggleImageryVisible,
+      imageryFetchUpdate: mapActions.imageryFetchUpdate,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
@@ -695,6 +697,10 @@ class MapStore {
   toggleImageryVisible(bool) {
     this.imageryModalVisible = bool;
     this.imageryError = false;
+  }
+
+  imageryFetchUpdate(bool) {
+    this.imageryFetchFailed = bool;
   }
 
   getSatelliteImagery(params) {

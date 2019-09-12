@@ -56,6 +56,8 @@ export default class ImageryModal extends Component {
       // Select first tile in the filteredImageryData array to display.
       if (filteredImageryData[0]) {
         this.selectThumbnail(filteredImageryData[0], 0);
+      } else {
+        mapActions.imageryFetchUpdate(true);
       }
     }
   }
@@ -64,24 +66,32 @@ export default class ImageryModal extends Component {
     const { map } = this.context;
     let imageryLayer = map.getLayer(layerKeys.RECENT_IMAGERY);
 
-    if (imageryLayer) {
-      imageryLayer.setUrl(tileObj.tileUrl || tileObj.attributes.tile_url);
+    const layerUrl = tileObj.tileUrl ? tileObj.tileUrl : tileObj.attributes.tile_url;
+
+    if (imageryLayer && layerUrl) {
+      imageryLayer.setUrl(layerUrl);
+      mapActions.imageryFetchUpdate(false);
     } else {
       const options = {
         id: layerKeys.RECENT_IMAGERY,
-        url: tileObj.tileUrl || tileObj.attributes.tile_url,
+        url: layerUrl,
         visible: true
       };
 
-      imageryLayer = new GFWImageryLayer(options);
-      map.addLayer(imageryLayer);
-      map.reorderLayer(layerKeys.RECENT_IMAGERY, 1); // Should be underneath all other layers
-      imageryLayer._extentChanged();
+      if (options.url) {
+        imageryLayer = new GFWImageryLayer(options);
+        map.addLayer(imageryLayer);
+        map.reorderLayer(layerKeys.RECENT_IMAGERY, 1); // Should be underneath all other layers
+        imageryLayer._extentChanged();
+        mapActions.imageryFetchUpdate(false);
+      } else {
+        mapActions.imageryFetchUpdate(true);
+      }
+
     }
 
     this.setState({ selectedThumb: {index: i, tileObj} });
     mapActions.setSelectedImagery(tileObj);
-
 
     // Add graphic to the map for hover effect on tile.
     let imageryGraphicsLayer = map.getLayer('imageryGraphicsLayer');
@@ -183,12 +193,13 @@ export default class ImageryModal extends Component {
     const { hoveredThumb, selectedThumb } = this.state;
 
     const thumbnailText = hoveredThumb || selectedThumb.tileObj;
+    const instrument = thumbnailText.attributes.instrument;
 
     return (
       <div>
         <p>{moment(thumbnailText.attributes.date_time).format('DD MMM YYYY')}</p>
         <p>{`${thumbnailText.attributes.cloud_score.toFixed(0)}% cloud coverage`}</p>
-        <p>{thumbnailText.attributes.instrument.replace('_', ' ')}</p>
+        <p>{instrument && instrument.indexOf('_') > -1 ? instrument.replace('_', ' ') : ''}</p>
       </div>
     );
   };
@@ -220,7 +231,6 @@ export default class ImageryModal extends Component {
     this.setState({ cloudScore: range, selectedThumb: null });
   }
 
-
   onDragEnd = (event) => {
     event.target.style.top = event.clientY;
     event.target.style.left = event.clientX;
@@ -241,10 +251,9 @@ export default class ImageryModal extends Component {
 
     // Convert screen point to map point and zoom to point;
     const mapPt = map.toMap(screenPt);
-    // Note: Lat and lon are intentionally reversed until imagery api is fixed.
-    // The imagery API only returns the correct image for that lat/lon if they are reversed.
-    const lon = mapPt.getLatitude();
-    const lat = mapPt.getLongitude();
+
+    const lat = mapPt.getLatitude();
+    const lon = mapPt.getLongitude();
 
     const params = { lon, lat, start, end };
 

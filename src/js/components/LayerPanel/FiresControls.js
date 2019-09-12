@@ -37,7 +37,7 @@ export default class FiresControls extends React.Component {
   componentDidUpdate(prevProps, prevState, prevContext) {
 
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 4);
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, '4');
     }
 
     // Anytime the map changes to a new map, update that here

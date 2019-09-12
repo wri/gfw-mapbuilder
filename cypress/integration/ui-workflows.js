@@ -5,7 +5,7 @@ describe('User workflows that have been known to fail', function () {
 
     let constructorParams, config;
 
-    cy.visit('https://beta.blueraster.io/mapbuilder/external-debugging/index.html')
+    cy.visit('https://my.gfw-mapbuilder.org/v1.4.0/index.html')
     cy.title().should('include', 'GFW Mapbuilder')
     cy.wait(1000)
 
