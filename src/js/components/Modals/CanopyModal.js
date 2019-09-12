@@ -92,8 +92,18 @@ export default class CanopyModal extends Component {
 
   handleSliderChange = sliderValue => {
     const { sliderMarks } = this.state;
-    const {map, settings} = this.context;
-
+    let settings;
+    let map;
+    if (this.context.settings){
+      settings = this.context.settings;
+    } else {
+      settings = this.props.settings;
+    }
+    if (this.context.map){
+      map = this.context.map;
+    } else {
+      map = this.props.map;
+    }
     const densityValue = sliderMarks[sliderValue].density;
 
     layersHelper.updateTreeCoverDefinitions(densityValue, map, settings.layerPanel);
@@ -108,10 +118,14 @@ export default class CanopyModal extends Component {
   render() {
     const { sliderMarks } = this.state;
     const { canopyDensity } = this.props;
-    const {language} = this.context;
+    let language;
+    if (this.context.language) {
+      language = this.context.language;
+    } else {
+      language = this.props.language;
+    }
 
     const sliderValue = this.discernDensityValue(canopyDensity);
-
     return (
       <ControlledModalWrapper onClose={this.close}>
         <div className='canopy-modal-title'>{text[language].CANOPY_MODAL_TEXT}</div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 
@@ -70,17 +71,19 @@ export default class AnalysisDatePicker extends Component {
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
-        <DatePicker
-          customInput={<Button />}
-          showMonthDropdown
-          showYearDropdown
-          dropdownMode="select"
-          todayButton='Jump to today'
-          minDate={moment(minDate)}
-          maxDate={moment(maxDate || new Date())}
-          selected={dateSelected}
-          onChange={this.handleChange}
-        />
+        <div className="report-date-picker">
+          <DatePicker
+            customInput={<Button />}
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            todayButton='Jump to today'
+            minDate={moment(minDate)}
+            maxDate={moment(maxDate || new Date())}
+            selected={dateSelected}
+            onChange={this.handleChange}
+          />
+        </div>
       </div>
     );
   }

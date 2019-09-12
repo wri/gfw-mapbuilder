@@ -3,6 +3,8 @@
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
 import AnalysisModal from 'components/Modals/AnalysisModal';
+import CoordinatesModal from 'components/Modals/CoordinatesModal';
+import EditCoordinatesModal from 'components/Modals/EditCoordinatesModal';
 import Controls from 'components/MapControls/ControlPanel';
 import TimeWidget from 'components/MapControls/TimeWidget';
 import CanopyModal from 'components/Modals/CanopyModal';
@@ -50,6 +52,8 @@ import SVGIcon from 'utils/svgIcon';
 import ImageryModal from 'components/Modals/ImageryModal';
 import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
+import screenUtils from 'esri/geometry/screenUtils';
+import SpatialReference from 'esri/SpatialReference';
 
 import React, {
   Component,
@@ -151,7 +155,9 @@ export default class Map extends Component {
       } else {
         if (map.infoWindow && map.infoWindow.getSelectedFeature) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
-          editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
+          if (selectedFeature && selectedFeature.geometry) {
+            editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
+          }
         }
       }
     }
@@ -159,6 +165,39 @@ export default class Map extends Component {
 
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
+  };
+  
+  getSelectedFeatureTitles = () => {
+    // let selectedFeats;
+    const selectedFeatureTitlesArray = [];
+    if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
+      // Save this if later on we support getting multiple selected features in the report
+      // selectedFeats = brApp.map.infoWindow.features;
+      // selectedFeats.forEach(selectedFeat => {
+      // if (selectedFeat && selectedFeat._layer && selectedFeat._layer.infoTemplate && selectedFeat._layer.infoTemplate.title) {
+      //   selectedFeatureTitlesArray.push(selectedFeat._layer.infoTemplate.title(selectedFeat));
+      // } else if (selectedFeat && selectedFeat._layer && selectedFeat._layer.name) {
+      //   selectedFeatureTitlesArray.push(selectedFeat._layer.name);
+      // }
+      // });
+      const selectedFeat = brApp.map.infoWindow.getSelectedFeature();
+      if (selectedFeat._layer) {
+        const displayField = selectedFeat._layer.displayField;
+        const name = selectedFeat._layer.name;
+        const fieldName = selectedFeat.attributes[displayField];
+        if (fieldName){
+        selectedFeatureTitlesArray.push(`${name}: ${fieldName}`);
+        } else {
+          selectedFeatureTitlesArray.push(name);
+        }
+        layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
+      }
+    }
+  };
+  
+  clearSelectedFeaturesTitles = () => {
+    const emptyArray = [];
+    layerActions.updateSelectedFeatureTitles.defer(emptyArray);
   };
 
   createMap = (webmap, options) => {
@@ -174,6 +213,8 @@ export default class Map extends Component {
       response.map.graphics.clear();
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
+      response.map.infoWindow.on('set-features, selection-change', this.getSelectedFeatureTitles);
+      response.map.infoWindow.on('hide', this.clearSelectedFeatureTitles);
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
@@ -225,7 +266,7 @@ export default class Map extends Component {
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {
-          if (this.state.drawButtonActive) {
+          if (this.state.drawButtonActive || this.state.enterValuesButtonActive || this.state.editCoordinatesActive) {
             // don't run this function if we are drawing a custom shape
             return;
           }
@@ -293,6 +334,35 @@ export default class Map extends Component {
               }
             });
           }
+        });
+        
+        editToolbar.on('vertex-mouse-over', evt => {
+          if (!this.state.editCoordinatesModalVisible) {
+            mapActions.toggleEditCoordinatesModal({ visible: true });
+          }
+          const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
+          mapActions.updateCurrentLat(currentCoords[1]);
+          mapActions.updateCurrentLng(currentCoords[0]);
+          
+          const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
+          const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
+          mapActions.updateCurrentX(screenPoint.x);
+          mapActions.updateCurrentY(screenPoint.y);
+        });
+        
+        editToolbar.on('vertex-move-stop', evt => {
+          const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
+          mapActions.updateCurrentLat(currentCoords[1]);
+          mapActions.updateCurrentLng(currentCoords[0]);
+          
+          const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
+          const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
+          mapActions.updateCurrentX(screenPoint.x);
+          mapActions.updateCurrentY(screenPoint.y);
+        });
+        
+        editToolbar.on('vertex-delete', evt => {
+          mapActions.toggleEditCoordinatesModal({ visible: false });
         });
 
         // This function needs to happen after the layer has loaded
@@ -861,6 +931,8 @@ export default class Map extends Component {
       currentTimeExtent,
       printModalVisible,
       analysisModalVisible,
+      coordinatesModalVisible,
+      editCoordinatesModalVisible,
       searchModalVisible,
       canopyModalVisible,
       layerModalVisible,
@@ -931,8 +1003,14 @@ export default class Map extends Component {
 
           </svg>
         </div>
-        <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible ? '' : 'hidden'}`}>
+        <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
+        </div>
+        <div className={`coordinates-modal-container modal-wrapper ${coordinatesModalVisible ? '' : 'hidden'}`}>
+          <CoordinatesModal enterValuesButtonActive={this.state.enterValuesButtonActive} />
+        </div>
+        <div className={`edit-coordinates-modal-container ${editCoordinatesModalVisible ? '' : 'hidden'}`}>
+          <EditCoordinatesModal editCoordinatesActive={this.state.editCoordinatesActive} />
         </div>
         <div className={`print-modal-container modal-wrapper ${printModalVisible ? '' : 'hidden'}`}>
           <PrintModal />

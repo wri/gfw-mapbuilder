@@ -7,18 +7,22 @@ block append styles
 
 
 block append content
-  div.report.inner
-    header.report-header.flex
-      div.report-header__logo-container
-        a#logo-anchor(target='_blank')
-          img#logo.report-header__logo
-      div.report-header__title-container
-        h1#report-title.report-header__title
-        h2#report-subtitle.report-header__subtitle
+  div#report.report
+    div#report-table.report-table
+  div#share-modal.share-modal.hidden
+    //- header.report-header
+    //-   div.report-header__logo-container
+    //-     a#logo-anchor(target='_blank')
+    //-   div.report-header__title-container
+    //-     h1#report-title.report-header__title
+    //-     //- h2#report-subtitle.report-header__subtitle
+    //-     div#report-icons.report-header__icon-container
 
-    div#map.map
-    div#popup-content.popup-content
-    div#results-container.results-container
+    //- div.map-analysis-area-container
+    //-   div#map.map
+    //-   div#analysis-area.analysis-area
+    //- div#popup-content.popup-content
+    //- div#results-container.results-container
 
 block append esri-script
   script.
@@ -50,9 +54,9 @@ block append esri-script
     const reportParams = toObject(querystring);
 
     var _app = {
-        cache: reportParams.cache,
-        esri: %ESRI_VERSION%,
-        base: ''
+      cache: reportParams.cache,
+      esri: %ESRI_VERSION%,
+      base: ''
     };
 
     function makePath (base, path) {
@@ -68,7 +72,7 @@ block append esri-script
       var position = path.length - 1;
       return path.indexOf('/', position) === position ? path.slice(0, -1) : path;
     }
-    // Change this to '' if _app.base is a remote url
+    // Change this to '' if _app.base is a remote url 
     var base = location.href.replace(/\/[^/]+$/, '');
     // Add trailing slash if it is not present
     base = makePath(base);

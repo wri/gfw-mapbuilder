@@ -13,6 +13,7 @@ import request from 'utils/request';
 import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
 import { urls } from 'js/config';
+import text from '../languages';
 
 let isRegistering = false;
 
@@ -52,6 +53,8 @@ class MapStore {
     this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
     this.analysisModalVisible = false;
+    this.coordinatesModalVisible = false;
+    this.editCoordinatesModalVisible = false;
     this.printModalVisible = false;
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
@@ -79,6 +82,8 @@ class MapStore {
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
+    this.enterValuesButtonActive = false;
+    this.editCoordinatesActive = false;
     this.imageryModalVisible = false;
     this.imageryFetchFailed = false;
     this.imageryData = [];
@@ -88,6 +93,11 @@ class MapStore {
     this.imageryParams = null;
     this.imageryHoverInfo = null;
     this.activeFilters = {};
+    this.selectedFeatureTitles = [];
+    this.currentLat = 0;
+    this.currentLng = 0;
+    this.currentX = 0;
+    this.currentY = 0;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -100,6 +110,8 @@ class MapStore {
       toggleSearchModal: mapActions.toggleSearchModal,
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
+      toggleCoordinatesModal: mapActions.toggleCoordinatesModal,
+      toggleEditCoordinatesModal: mapActions.toggleEditCoordinatesModal,
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
@@ -110,6 +122,7 @@ class MapStore {
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
       toggleEditing: mapActions.toggleEditing,
+      resetEditing: mapActions.resetEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -136,6 +149,11 @@ class MapStore {
       updateViirsEndDate: layerActions.updateViirsEndDate,
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
+      updateSelectedFeatureTitles: layerActions.updateSelectedFeatureTitles,
+      updateCurrentLat: mapActions.updateCurrentLat,
+      updateCurrentLng: mapActions.updateCurrentLng,
+      updateCurrentX: mapActions.updateCurrentX,
+      updateCurrentY: mapActions.updateCurrentY,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -148,6 +166,8 @@ class MapStore {
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
       activateDrawButton: mapActions.activateDrawButton,
+      activateEnterValuesButton: mapActions.activateEnterValuesButton,
+      activateEditCoordinates: mapActions.activateEditCoordinates,
       toggleImageryVisible: mapActions.toggleImageryVisible,
       imageryFetchUpdate: mapActions.imageryFetchUpdate,
       getSatelliteImagery: mapActions.getSatelliteImagery,
@@ -348,7 +368,6 @@ class MapStore {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
-
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
@@ -411,6 +430,14 @@ class MapStore {
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
   }
+  
+  toggleCoordinatesModal (payload) {
+    this.coordinatesModalVisible = payload.visible;
+  }
+  
+  toggleEditCoordinatesModal (payload) {
+    this.editCoordinatesModalVisible = payload.visible;
+  }
 
   togglePrintModal (payload) {
     this.printModalVisible = payload.visible;
@@ -465,7 +492,15 @@ class MapStore {
   }
 
   toggleEditing () {
-    this.editingEnabled = !this.editingEnabled;
+    if (this.editingEnabled) {
+      this.editingEnabled = false;
+    } else {
+      this.editingEnabled = true;
+    }
+  }
+  
+  resetEditing () {
+    this.editingEnabled = false;
   }
 
   openTOCAccordion (groupKey) {
@@ -527,6 +562,26 @@ class MapStore {
 
   updateModisEndDate (endDate) {
     this.modisEndDate = endDate;
+  }
+  
+  updateSelectedFeatureTitles (selectedFeatureTitles) {
+    this.selectedFeatureTitles = selectedFeatureTitles;
+  }
+  
+  updateCurrentLat (latitude) {
+    this.currentLat = latitude;
+  }
+  
+  updateCurrentLng (longitude) {
+    this.currentLng = longitude;
+  }
+  
+  updateCurrentX (x) {
+    this.currentX = x;
+  }
+  
+  updateCurrentY (y) {
+    this.currentY = y;
   }
 
   showLayerInfo (layer) {
@@ -629,6 +684,14 @@ class MapStore {
 
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
+  }
+  
+  activateEnterValuesButton(bool) {
+    this.enterValuesButtonActive = bool;
+  }
+  
+  activateEditCoordinates(bool) {
+    this.editCoordinatesActive = bool;
   }
 
   toggleImageryVisible(bool) {
