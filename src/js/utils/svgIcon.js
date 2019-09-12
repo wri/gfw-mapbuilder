@@ -423,7 +423,7 @@ export default (props) => {
         <svg width="20px" height="21px" viewBox="0 0 20 21" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <title>add-circle-outline</title>
           <g id="Coordinates" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-              <g id="coordinates-b" transform="translate(-580.000000, -687.000000)" fill="#e6a912">
+              <g id="coordinates-b" transform="translate(-580.000000, -687.000000)" fill={customColorTheme !== '' ? customColorTheme : defaultColorTheme}>
                   <g id="Group-12" transform="translate(560.000000, 192.000000)">
                       <g id="Group-9">
                           <g id="Group-8" transform="translate(20.000000, 495.500000)">
