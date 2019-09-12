@@ -89,6 +89,7 @@ export default class Modal extends Component {
             target='_blank'
             style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
             {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className="source-download fa-button color"
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
             >
