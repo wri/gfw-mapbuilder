@@ -1289,7 +1289,6 @@ export default {
 //         }
 //       }]
 //     },
-
 //     /**
 //      * CUSTOM GROUPS
 //      * Add your custom groups below. The custom groups are similar to the groups defined above.
