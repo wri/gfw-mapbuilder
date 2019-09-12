@@ -705,7 +705,7 @@ strings.ka.LONGITUDE = 'გრძედი';
 //- Miscellaneous
 strings.ka.PRINT_BUTTON_LABEL = 'აარჩიეთ ბეჭდვის ფორმატი';
 strings.ka.PRINT_REPORT = 'ანგარიშის ბეჭდვა';
-strings.ka.EDIT = ['რედაქტირება', 'დამახსოვრება];
+strings.ka.EDIT = ['რედაქტირება', 'დამახსოვრება'];
 strings.ka.SUBSCRIBE = 'გამოწერა';
 strings.ka.LAYERS = 'ფენები';
 strings.ka.DATA = 'მონაცემები';
