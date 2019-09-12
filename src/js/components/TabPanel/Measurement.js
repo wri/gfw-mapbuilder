@@ -37,7 +37,7 @@ export default class InfoWindow extends Component {
 
     if (prevProps.activeWebmap !== undefined && prevProps.activeWebmap !== this.props.activeWebmap) {
       if (this.context.map.destroy && this.initialized) {
-        this.measurement.destroy();
+        this.measurement.clearResult();
         this.initialized = false;
       }
     }
