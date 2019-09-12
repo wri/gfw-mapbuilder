@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 import React, {
   Component,
@@ -16,6 +17,14 @@ export default class CoordinatesTools extends Component {
         language: PropTypes.string.isRequired,
         map: PropTypes.object.isRequired
       };
+      
+      constructor (props) {
+        super(props);
+        this.state = {
+          drawButtonActive: false,
+          buttonHover: false
+        };
+      }
     
       componentDidMount () {
         const {map} = this.context;
@@ -66,10 +75,25 @@ export default class CoordinatesTools extends Component {
           });
         });
       };
+      
+      toggleHover = () => {
+        if(this.state.buttonHover){
+          this.setState({
+            buttonHover: false
+          });
+        } else {
+          this.setState({
+            buttonHover: true
+          });
+        }
+      };
+    
 
       render() {
         const {language} = this.context;
-       
+        const { customColorTheme, defaultColorTheme } = resources;
+        const {drawButtonActive, buttonHover} = this.state;
+        
         return (
           <div className='analysis-instructions__coordinates'>
             <h4 className='analysis-instructions__header'>
@@ -78,12 +102,18 @@ export default class CoordinatesTools extends Component {
             <ol className='analysis-instructions__olist'>
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
-            <div className="fa-button gold analysis-instructions__enter-values-button"
-            onClick={this.enterValues}>
+            <div
+              style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+              {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className="fa-button color analysis-instructions__enter-values-button"
+              onClick={this.enterValues}
+              onMouseEnter={this.toggleHover}
+              onMouseLeave={this.toggleHover}
+            >
               <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-enter-values'} /></span>
               <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>
             </div>
-            <div className='analysis-instructions__separator'>
+            <div style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
               <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
             </div>
           </div>
