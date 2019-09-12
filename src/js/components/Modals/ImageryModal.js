@@ -35,7 +35,7 @@ export default class ImageryModal extends Component {
       start: null,
       end: null,
       selectedThumb: null,
-      hoveredThumb: null,
+      hoveredThumb: null
     };
   }
 
@@ -258,7 +258,7 @@ export default class ImageryModal extends Component {
     const lat = mapPt.getLatitude();
     const lon = mapPt.getLongitude();
 
-    const params = { lat, lon, start, end };
+    const params = { lon, lat, start, end };
 
     if (imageStyleVal === 'Vegetation Health') {
       params.bands = '[B8,B11,B2]';

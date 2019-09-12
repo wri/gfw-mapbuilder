@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import resources from '../../../../resources';
 import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
 import MapActions from 'actions/MapActions';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);

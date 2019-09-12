@@ -6,6 +6,7 @@ import symbols from 'utils/symbols';
 import Graphic from 'esri/graphic';
 import Deferred from 'dojo/Deferred';
 import analysisUtils from 'utils/analysisUtils';
+import webMercatorUtils from 'esri/geometry/webMercatorUtils';
 
 //- Really crappy UUID generator but it works
 let cfid = 0;
@@ -17,7 +18,11 @@ export default {
   * @param {object} geometry - Valid esri grometry from the draw tool, any valid polygon geo would work
   * @return {Graphic}
   */
-  generateDrawnPolygon: (geometry) => {
+  generateDrawnPolygon: (geom) => {
+    let geometry = geom;
+    if (geometry.spatialReference.isWebMercator() === false) {
+      geometry = webMercatorUtils.geographicToWebMercator(geometry);
+    }
     const deferred = new Deferred();
     analysisUtils.registerGeom(geometry).then(res => {
       const id = customFeatureUUIDGenerator();
