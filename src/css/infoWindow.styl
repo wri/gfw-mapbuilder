@@ -85,15 +85,13 @@
 
 .edit-delete-container
   display flex
+  margin 0.5rem 0
 
 .custom-feature__input
   -webkit-appearance none
   outline none
   border none
-
-.custom-feature__delete
-  margin-left 5px
-  align-self flex-end
+  width 8rem
 
 .pointer-custom
   cursor pointer
@@ -108,9 +106,25 @@
 .esriViewPopup .header
 .infoWindow__title
 .custom-feature__input
-.custom-feature__delete
   color $grayFont
   font-size 14px
+
+.custom-feature__delete
+  margin-left 10px
+  align-self flex-end
+  color $grayFont
+  font-size 14px
+  padding 0.5rem 0
+  &:hover
+    text-decoration underline
+  
+.custom-feature__edit
+  color #ffffff
+  background-color #e6a912
+  padding 0.5rem 1rem
+  font-size 14px
+  &:hover
+    text-decoration underline
 
 .esriViewPopup .hzLine
   margin 5px 10px
