@@ -31,14 +31,14 @@ export default class ModalWrapper extends React.Component {
 
     return (
       <div className='modal-container'>
-        <div className='modal-background' onClick={::this.close} />
+        <div className='modal-background' onClick={() => this.close()}/>
         <article className='modal shadow'>
-          <div title='close' className='close-icon pointer' onClick={::this.close} >
+          <div title='close' className='close-icon pointer' onClick={() => this.close()}>
             <SVGIcon id={'shape-close'} />
           </div>
-            <div className={contentClass}>
-              {children}
-            </div>
+          <div className={contentClass}>
+            {children}
+          </div>
         </article>
       </div>
     );

@@ -2,7 +2,7 @@
 describe('An actual test on our app', function () {
   it('Ensures our external constructor has the correct properties', function () {
 
-    cy.visit('https://my.gfw-mapbuilder.org/v1.4.0/index.html', {
+    cy.visit('https://my.gfw-mapbuilder.org/v1.4.1/index.html', {
       onLoad: (winn) => {
         const app = winn.customApp;
         expect(app).to.not.be.an('undefined');
@@ -24,7 +24,7 @@ describe('An actual test on our app', function () {
 
   it('Tests our library constructor parameters', function () {
 
-    cy.visit('https://my.gfw-mapbuilder.org/v1.4.0/index.html', {
+    cy.visit('https://my.gfw-mapbuilder.org/v1.4.1/index.html', {
 
       onLoad: (winn) => {
 
@@ -138,8 +138,6 @@ describe('An actual test on our app', function () {
 
             if (module.useGfwWidget) {
               expect(module).to.have.property('widgetId');
-              expect(module).not.to.have.property('chartType');
-            } else {
               expect(module).to.have.property('chartType');
             }
 
@@ -152,24 +150,14 @@ describe('An actual test on our app', function () {
             //   });
             // }
 
-            if (module.analysisId !== 'LCC') {
+            if (module.analysisId === 'LCC') {
               // expect(module.chartType).not.toEqual('lccPie');
-              expect(module.chartType).to.not.equal('lccPie');
+              expect(module.chartType).to.equal('pie');
             }
 
-            if (module.analysisId !== 'BIO_LOSS') {
-              expect(module.chartType).to.not.equal('biomassLoss');
+            if (module.analysisId === 'BIO_LOSS') {
+              expect(module.chartType).to.equal('bar');
               // expect(module.chartType).not.toEqual('biomassLoss');
-            }
-
-            if (module.analysisId !== 'TC_LOSS_GAIN' && module.analysisId !== 'VIIRS_FIRES' && module.chartType === 'badge') {
-              expect(module).to.have.property('badgeLabel');
-              expect(module.badgeLabel).to.have.property(config.language);
-            }
-
-            if (module.chartType === 'bar') {
-              expect(module).to.have.property('chartBounds');
-              expect(module.chartBounds).to.have.lengthOf(2);
             }
 
             if (typeof module.uiParams === 'string') {
