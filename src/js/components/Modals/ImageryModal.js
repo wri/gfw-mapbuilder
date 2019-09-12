@@ -153,7 +153,7 @@ export default class ImageryModal extends Component {
   renderThumbnails = (tileObj, i) => {
 
       let reloadCount = 0;
-
+      const { customColorTheme, defaultColorTheme } = resources;
       const handleError = (event) => {
         if (reloadCount < 20) {
           event.persist();
@@ -182,7 +182,9 @@ export default class ImageryModal extends Component {
             onClick={() => this.selectThumbnail(tileObj, i)}
             onMouseEnter={() => this.hoverThumbnail(tileObj)}
             onMouseLeave={() => this.hoverThumbnail(null)}
-            className={`thumbnail ${this.state.selectedThumb && this.state.selectedThumb.index === i ? 'selected' : ''}`}
+            className='thumbnail'
+            style={this.state.selectedThumb && this.state.selectedThumb.index === i ?
+            {border: `4px solid ${customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
             key={`thumb-${i}`}>
               <img src={tileObj.thumbUrl} onError={handleError} />
           </div>

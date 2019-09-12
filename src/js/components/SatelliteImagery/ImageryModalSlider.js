@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-
 import Slider from 'rc-slider';
 import MapActions from 'actions/MapActions';
+import resources from '../../../resources';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -70,6 +70,7 @@ export default class AnalysisRangeSlider extends Component {
   render() {
     const { bounds, step, rangeSliderCallback } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
+    const { customColorTheme, defaultColorTheme } = resources;
     return (
       <div className='analysis-results__select-form-item-container'>
         <Range
@@ -83,10 +84,10 @@ export default class AnalysisRangeSlider extends Component {
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: '#f0ab00'}]}
-          handleStyle={[{borderColor: '#f0ab00'}]}
-          dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #f0ab00'}}
+          trackStyle={[{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}]}
+          handleStyle={[{borderColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}]}
+          dotStyle={{border: `1px solid ${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+          activeDotStyle={{border: `1px solid ${customColorTheme ? customColorTheme : defaultColorTheme}`}}
         />
       </div>
     );
