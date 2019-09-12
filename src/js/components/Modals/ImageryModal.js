@@ -34,7 +34,7 @@ export default class ImageryModal extends Component {
       start: null,
       end: null,
       selectedThumb: null,
-      hoveredThumb: null,
+      hoveredThumb: null
     };
   }
 
@@ -56,6 +56,8 @@ export default class ImageryModal extends Component {
       // Select first tile in the filteredImageryData array to display.
       if (filteredImageryData[0]) {
         this.selectThumbnail(filteredImageryData[0], 0);
+      } else {
+        mapActions.imageryFetchUpdate(true);
       }
     }
   }
@@ -64,12 +66,15 @@ export default class ImageryModal extends Component {
     const { map } = this.context;
     let imageryLayer = map.getLayer(layerKeys.RECENT_IMAGERY);
 
-    if (imageryLayer && (tileObj.tileUrl || tileObj.attributes.tile_url)) {
-      imageryLayer.setUrl(tileObj.tileUrl || tileObj.attributes.tile_url);
+    const layerUrl = tileObj.tileUrl ? tileObj.tileUrl : tileObj.attributes.tile_url;
+
+    if (imageryLayer && layerUrl) {
+      imageryLayer.setUrl(layerUrl);
+      mapActions.imageryFetchUpdate(false);
     } else {
       const options = {
         id: layerKeys.RECENT_IMAGERY,
-        url: tileObj.tileUrl || tileObj.attributes.tile_url,
+        url: layerUrl,
         visible: true
       };
 
@@ -78,6 +83,9 @@ export default class ImageryModal extends Component {
         map.addLayer(imageryLayer);
         map.reorderLayer(layerKeys.RECENT_IMAGERY, 1); // Should be underneath all other layers
         imageryLayer._extentChanged();
+        mapActions.imageryFetchUpdate(false);
+      } else {
+        mapActions.imageryFetchUpdate(true);
       }
 
     }
@@ -247,7 +255,7 @@ export default class ImageryModal extends Component {
     const lat = mapPt.getLatitude();
     const lon = mapPt.getLongitude();
 
-    const params = { lat, lon, start, end };
+    const params = { lon, lat, start, end };
 
     if (imageStyleVal === 'Vegetation Health') {
       params.bands = '[B8,B11,B2]';
