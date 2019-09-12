@@ -158,7 +158,7 @@ const config = {
       copyButton: 'Copy',
       copiedButton: 'Copied',
       googleUrl: url => `https://plus.google.com/share?url=${url}`,
-      twitterUrl: url => `https://twitter.com/share?url=${url}&via=gfw-water`,
+      twitterUrl: url => `https://twitter.com/share?url=${url}`,
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
     }
   },

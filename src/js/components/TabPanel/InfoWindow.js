@@ -53,6 +53,7 @@ export default class InfoWindow extends Component {
     const {language} = this.context;
     let count = 0, selectedIndex = 0;
     let selectedFeature, content, title, footer;
+    const {editingEnabled} = this.props;
 
     if ( infoWindow && infoWindow.getSelectedFeature ) {
       count = infoWindow.count;
@@ -75,7 +76,7 @@ export default class InfoWindow extends Component {
       ) {
         title = (
           <div className='infoWindow__title'>
-            <CustomFeatureControl feature={selectedFeature} />
+            <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
           </div>
         );
       }

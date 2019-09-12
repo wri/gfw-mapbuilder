@@ -91,6 +91,10 @@ class LayerActions {
   updateModisEndDate (endDate) {
     return endDate;
   }
+  
+  updateSelectedFeatureTitles (selectedFeatureTitles) {
+    return selectedFeatureTitles;
+  }
 
   setLossOptions (lossOptionsData) {
     return lossOptionsData;
