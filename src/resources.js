@@ -21,6 +21,8 @@ export default {
   hideFooter: false,
   includeMyGFWLogin: true,
   navLinksInNewTab: false,
+  customColorTheme: '#FF69B4',
+  defaultColorTheme: '#F0AB00', //Default gold theme
   //- Language Settings
   language: 'en',
   useAlternativeLanguage: false,
@@ -34,7 +36,7 @@ export default {
   initialExtent: {
     x: null, // -122.3,
     y: null, // 47.6,
-    z: null, // 9,
+    z: null // 9,
   },
   //- Tab Settings
   includeDocumentsTab: false,
