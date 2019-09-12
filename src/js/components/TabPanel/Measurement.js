@@ -28,11 +28,6 @@ export default class InfoWindow extends Component {
         map: this.context.map
       }, measurementDiv);
       this.measurement.startup();
-      // this.measurement.on('measure-end', (event) => {
-      //   // deactivate the tool after drawing
-      //   const toolName = event.toolName;
-      //   this.measurement.setTool(toolName, false);
-      // });
     }
 
     if (prevProps.activeWebmap !== undefined && prevProps.activeWebmap !== this.props.activeWebmap) {
