@@ -21,7 +21,7 @@ export default class CoordinatesTools extends Component {
       constructor (props) {
         super(props);
         this.state = {
-          drawButtonActive: false,
+          enterValuesButtonActive: false,
           buttonHover: false
         };
       }
@@ -92,7 +92,7 @@ export default class CoordinatesTools extends Component {
       render() {
         const {language} = this.context;
         const { customColorTheme, defaultColorTheme } = resources;
-        const {drawButtonActive, buttonHover} = this.state;
+        const {enterValuesButtonActive, buttonHover} = this.state;
         
         return (
           <div className='analysis-instructions__coordinates'>
@@ -103,7 +103,7 @@ export default class CoordinatesTools extends Component {
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
             <div
-              style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
               {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className="fa-button color analysis-instructions__enter-values-button"
               onClick={this.enterValues}

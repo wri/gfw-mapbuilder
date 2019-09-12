@@ -143,7 +143,6 @@ export default class DrawTools extends Component {
           onClick={this.draw}
           onMouseEnter={this.toggleHover}
           onMouseLeave={this.toggleHover}
-          className="fa-button color analysis-instructions__draw-button"
           onClick={this.draw}>
           <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
           <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>

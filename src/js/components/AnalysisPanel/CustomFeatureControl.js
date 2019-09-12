@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import resources from '../../../resources';
 
 const getFeatureName = (feature) => {
   return feature.attributes && feature.attributes.title || '';
@@ -18,7 +19,8 @@ export default class CustomFeatureControl extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: getFeatureName(this.props.feature)
+      title: getFeatureName(this.props.feature),
+      buttonHover: false
     };
   }
 
@@ -44,16 +46,39 @@ export default class CustomFeatureControl extends Component {
     mapActions.toggleEditing();
     mapActions.toggleEditCoordinatesModal({ visible: false});
   };
+  
+  toggleHover = () => {
+    if(this.state.buttonHover){
+      this.setState({
+        buttonHover: false
+      });
+    } else {
+      this.setState({
+        buttonHover: true
+      });
+    }
+  };
 
   render () {
     const {language} = this.context;
     const {editingEnabled} = this.props;
+    const {buttonHover} = this.state;
+    const { customColorTheme, defaultColorTheme } = resources;
 
     return (
       <div className='custom-feature__header'>
         <input className='custom-feature__input' type='text' value={this.state.title} onChange={this.editName} />
         <div className='edit-delete-container'>
-          <div className='custom-feature__edit pointer-custom' onClick={this.editPolygon}>{editingEnabled ? text[language].EDIT[1] : text[language].EDIT[0]}</div>
+          <div
+            style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+                {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color pointer-custom'
+            onClick={this.editPolygon}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {editingEnabled ? text[language].EDIT[1] : text[language].EDIT[0]}
+          </div>
           <div className='custom-feature__delete pointer-custom' onClick={this.deleteFeature}>{text[language].DELETE}</div>
         </div>
       </div>
