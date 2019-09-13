@@ -252,15 +252,9 @@ export default class SubscribeModal extends Component {
   }
   
   toggleHover = () => {
-    if(this.state.buttonHover){
-      this.setState({
-        buttonHover: false
-      });
-    } else {
-      this.setState({
-        buttonHover: true
-      });
-    }
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
   };
 
   render () {
