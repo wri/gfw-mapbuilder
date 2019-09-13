@@ -8,7 +8,7 @@ import Report from './report/report';
 import ShareModal from './components/Modals/ShareModal';
 
 // if (!_babelPolyfill) { console.log('Missing Babel Polyfill.  May experience some weirdness in IE < 9.'); }
-    
+
 // window.brApp = {
 //   debugEnabled: true,
 //   debug: function (message) {
@@ -41,14 +41,25 @@ import ShareModal from './components/Modals/ShareModal';
       };
       corsServers.forEach((server) => { esriConfig.defaults.io.corsEnabledServers.push(server); });
     }
-  
+
     render() {
       return (
         <Report />
       );
     }
   }
-  
-  ReactDOM.render(<ReportLibraryMain />, document.getElementById('report'));
-  ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
 
+  let reportNode = document.getElementById('report');
+  if (!reportNode) {
+    const reportNodes = document.getElementsByClassName('report');
+    reportNode = reportNodes.item(0);
+  }
+
+  const shareNode = document.getElementById('share-modal');
+
+  ReactDOM.render(<ReportLibraryMain />, reportNode);
+  // ReactDOM.render(<ReportLibraryMain />, document.getElementById('report'));
+
+  if (shareNode) {
+    ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
+  }
