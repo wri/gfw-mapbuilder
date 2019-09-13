@@ -58,8 +58,7 @@ import ShareModal from './components/Modals/ShareModal';
   const shareNode = document.getElementById('share-modal');
 
   ReactDOM.render(<ReportLibraryMain />, reportNode);
-  // ReactDOM.render(<ReportLibraryMain />, document.getElementById('report'));
 
   if (shareNode) {
-    ReactDOM.render(<ShareModal url={window.location.href} />, document.getElementById('share-modal'));
+    ReactDOM.render(<ShareModal url={window.location.href} />, shareNode);
   }
