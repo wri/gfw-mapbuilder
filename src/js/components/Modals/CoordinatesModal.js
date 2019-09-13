@@ -7,6 +7,7 @@ import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
 import Point from 'esri/geometry/Point';
 import layerKeys from '../../constants/LayerConstants';
+import resources from '../../../resources';
 
 const defaultDMS = {
   lat: {
@@ -355,6 +356,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const latitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS;
     const longitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS;
+    const { customColorTheme, defaultColorTheme } = resources;
     
     return (
       <div key={`DMS-${index}`}>
@@ -405,7 +407,10 @@ export default class CoordinatesModal extends Component {
             >
               {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
-            <div className='analysis-coordinates-directions__select-arrow'></div>
+            <div
+              style={{color: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className='analysis-coordinates-directions__select-arrow'
+            ></div>
           </div>
         </div>
         
@@ -447,7 +452,10 @@ export default class CoordinatesModal extends Component {
             >
               {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
-            <div className='analysis-coordinates-directions__select-arrow'></div>
+            <div
+              style={{color: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className='analysis-coordinates-directions__select-arrow'
+            ></div>
           </div>
         </div>
       </div>
@@ -516,6 +524,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
+    const { customColorTheme, defaultColorTheme } = resources;
     
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -530,7 +539,11 @@ export default class CoordinatesModal extends Component {
           >
             {coordinateFormatOptions && coordinateFormatOptions.map(this.createOptions)}
           </select>
-          <div className='analysis-coordinates__select-arrow'></div>
+          <div
+            style={{color: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='analysis-coordinates__select-arrow'
+          >
+          </div>
         </div>
 
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
