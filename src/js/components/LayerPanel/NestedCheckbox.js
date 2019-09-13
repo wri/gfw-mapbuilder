@@ -72,7 +72,7 @@ export default class NestedCheckbox extends Component {
     const { customColorTheme, defaultColorTheme } = this.context.settings;
     if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (checked === 'active' && customColorTheme && customColorTheme === '') {
+    } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';

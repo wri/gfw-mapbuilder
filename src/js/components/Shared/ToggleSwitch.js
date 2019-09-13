@@ -9,11 +9,11 @@ export default class ToggleSwitch extends Component {
     const {checked, label, onChange, disabled} = this.props;
     const checkedClass = checked ? 'active' : '';
     const disabledClass = disabled ? 'disabled' : '';
-    let colorTheme = '';
+    let colorTheme;
     const { customColorTheme, defaultColorTheme } = this.context.settings;
     if (checkedClass === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (checkedClass === 'active' && customColorTheme && customColorTheme === '') {
+    } else if (checkedClass === 'active' && (!customColorTheme || customColorTheme === '')) {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';

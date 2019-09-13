@@ -5,6 +5,7 @@ import { urls } from 'js/config';
 import ReportSettings from '../../report/ReportSettings';
 import Loader from '../Loader';
 import Measure from 'react-measure';
+import resources from '../../../resources';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -174,6 +175,17 @@ export default class VegaChart extends Component {
     const { isError, errorMsg, showDownloadOptions, downloadOptions, chartDownloadTitle, chartImgDownloadUrl, description, isLoading, showSettings } = this.state;
     const {width, height} = this.state.dimensions;
     const { results, component, reportLabel, module, params, language, analysisId, chartType, toggle, toggleChart} = this.props;
+    
+    let colorTheme;
+    const { customColorTheme, defaultColorTheme } = resources;
+    if (!toggle && customColorTheme && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (toggle && (!customColorTheme || customColorTheme === '')) {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = '#929292';
+    }
+    
     if (isError) {
       return (
         <div className='data-error'>
@@ -222,7 +234,7 @@ export default class VegaChart extends Component {
                   <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
                 </div>
                 <div className="vega-chart-divider"></div>
-                <div className={`vega-chart-toggle-${toggle}`} onClick={toggleChart}>
+                <div style={{backgroundColor: `${colorTheme}`}} className={`vega-chart-toggle-${toggle}`} onClick={toggleChart}>
                   <span className="vega-chart-toggle-dot"></span>
                 </div>
               </div>

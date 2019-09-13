@@ -102,10 +102,10 @@ export default class SubscriptionsModal extends Component {
     const { customColorTheme, defaultColorTheme } = this.context.settings;
     if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme === '') {
+    } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && (!customColorTheme || customColorTheme === '')) {
         colorTheme = defaultColorTheme;
     } else {
-        colorTheme = 'inherit';
+        colorTheme = '#929292';
     }
 
     return <p key={dataset}>{datasetName} <span onClick={() => this.updateSubscription(dataset, subscription)} style={{backgroundColor: `${colorTheme}`}} className={`toggle-switch-subscription pointer ${subscription.attributes.datasets.indexOf(dataset) === -1 ? '' : 'active-subscription'}`}><span /></span></p>;

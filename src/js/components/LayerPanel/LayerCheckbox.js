@@ -134,9 +134,9 @@ export default class LayerCheckbox extends Component {
     
     let colorTheme = '';
     const { customColorTheme, defaultColorTheme } = this.context.settings;
-    if (checked === 'active' && customColorTheme !== '') {
+    if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (checked === 'active' && customColorTheme === '') {
+    } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';
