@@ -68,25 +68,26 @@ export default class AnalysisMultiDatePicker extends Component {
 
   handleStartChange = date => {
     this.setState({
-      selectedStartDate: date,
+      selectedStartDate: date
     });
   }
 
   handleEndChange = date => {
     this.setState({
-      selectedEndDate: date,
+      selectedEndDate: date
     });
   }
 
   render() {
     const { label, minDate, maxDate } = this.props;
     const { selectedStartDate, selectedEndDate } = this.state;
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <DatePicker
-          customInput={<StartButton />}
+          customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -104,7 +105,7 @@ export default class AnalysisMultiDatePicker extends Component {
 
         />
         <DatePicker
-          customInput={<EndButton />}
+          customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -126,8 +127,7 @@ export default class AnalysisMultiDatePicker extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = this.context.settings;
+const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
   return (
     <div>
       <label className='analysis-datepicker-button-label'>Start: </label>
@@ -142,8 +142,7 @@ const StartButton = ({ onClick, value }) => {
   );
 };
 
-const EndButton = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = this.context.settings;
+const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
   return (
     <div>
       <label className='analysis-datepicker-button-label'>End: </label>

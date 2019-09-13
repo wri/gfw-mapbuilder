@@ -61,14 +61,15 @@ export default class TerraIControls extends Component {
     const { startDate, endDate } = this.props;
     const { min, max } = this.state;
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    
     return (
       <div className='terra-i-controls'>
         <div className='terra-i-controls__calendars'>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
             {startDate && <DatePicker
-              customInput={<StartButton />}
+              customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -82,7 +83,7 @@ export default class TerraIControls extends Component {
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
             {endDate && <DatePicker
-              customInput={<EndButton />}
+              customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -99,8 +100,7 @@ export default class TerraIControls extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = this.context.settings;
+const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
   return (
     <button
       style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
@@ -112,8 +112,7 @@ const StartButton = ({ onClick, value }) => {
   );
 };
 
-const EndButton = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = this.context.settings;
+const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
   return (
     <button
       style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}

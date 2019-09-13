@@ -68,11 +68,12 @@ export default class AnalysisDatePicker extends Component {
   render() {
     const { minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
+    const {customColorTheme, defaultColorTheme} = this.context.settings;
 
     return (
       <div className='analysis-results__select-form-item-container'>
         <DatePicker
-          customInput={<Button />}
+          customInput={<Button customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -97,8 +98,7 @@ export default class AnalysisDatePicker extends Component {
   }
 }
 
-const Button = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = this.context.settings;
+const Button = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
   return (
     <div>
       <button
