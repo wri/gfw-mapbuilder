@@ -4,6 +4,7 @@ import {modalText} from 'js/config';
 import utils from 'utils/AppUtils';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
@@ -59,8 +60,16 @@ export default class ShareModal extends Component {
   }
 
   render () {
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
     const {url} = this.props;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
     return (
       <ModalWrapper>
         <div className='modal-title'>{modalText.share.title}</div>

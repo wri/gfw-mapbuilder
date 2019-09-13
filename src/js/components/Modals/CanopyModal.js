@@ -7,6 +7,7 @@ import React, {
   PropTypes
 } from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
+import resources from '../../../resources';
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export default class CanopyModal extends Component {
@@ -118,7 +119,15 @@ export default class CanopyModal extends Component {
   render() {
     const { sliderMarks } = this.state;
     const { canopyDensity } = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
     let language;
     if (this.context.language) {
       language = this.context.language;

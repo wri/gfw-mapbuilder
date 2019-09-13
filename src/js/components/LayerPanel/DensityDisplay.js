@@ -1,5 +1,6 @@
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import resources from '../../../resources';
 import React, {
   Component,
   PropTypes
@@ -25,7 +26,15 @@ export default class DensityDisplay extends Component {
     }
     const { label, canopyDensity } = this.props;
     const hideDefaultLabel = label === '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
 
     return (
     

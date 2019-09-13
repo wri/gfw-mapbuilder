@@ -3,6 +3,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import MapActions from 'actions/MapActions';
+import resources from '../../../../resources';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -102,7 +103,16 @@ export default class AnalysisRangeSlider extends Component {
   render() {
     const { bounds, step } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
+    
     return (
       <div className='analysis-results__select-form-item-container'>
         <Range
