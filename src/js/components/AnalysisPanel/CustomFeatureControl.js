@@ -65,7 +65,7 @@ export default class CustomFeatureControl extends Component {
           <div
             style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
                 {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
-            className='fa-button color pointer-custom'
+            className='edit-save-button fa-button color pointer-custom'
             onClick={this.editPolygon}
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
