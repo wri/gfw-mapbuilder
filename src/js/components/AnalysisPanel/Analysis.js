@@ -515,7 +515,7 @@ export default class Analysis extends Component {
               <button
                 style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
                 {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
-                className='run-analysis-button pointer'
+                className='run-analysis-button fa-button color pointer'
                 onClick={this.runAnalysis}
                 onMouseEnter={this.toggleHover}
                 onMouseLeave={this.toggleHover}
