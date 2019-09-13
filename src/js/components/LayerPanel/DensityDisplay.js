@@ -16,6 +16,19 @@ export default class DensityDisplay extends Component {
     settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
   };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      buttonHover: false
+    };
+  }
+
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     let language;
@@ -25,6 +38,7 @@ export default class DensityDisplay extends Component {
       language = this.props.language;
     }
     const { label, canopyDensity } = this.props;
+    const {buttonHover} = this.state;
     const hideDefaultLabel = label === '';
     let customColorTheme;
     let defaultColorTheme;
@@ -37,17 +51,18 @@ export default class DensityDisplay extends Component {
     }
 
     return (
-    
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
-        <span
-          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`,
-          boxShadow: `0 0 0 2px ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+        <div
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className='canopy-button pointer'
           onClick={showModal}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
         >
           {canopyDensity}
-        </span>
+        </div>
         <span className='canopy-label'>{!label && !hideDefaultLabel && text[language].DENSITY_SECOND}</span>
       </div>
     );
