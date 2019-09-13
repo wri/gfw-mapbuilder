@@ -81,7 +81,7 @@ export default class Modal extends Component {
           <div className='source-footer'>
             <a href={info.download_data}
             target='_blank'
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="source-download fa-button color"
             onMouseEnter={this.toggleHover}

@@ -513,7 +513,7 @@ export default class Analysis extends Component {
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
               <button
-                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
                 {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='run-analysis-button pointer'
                 onClick={this.runAnalysis}

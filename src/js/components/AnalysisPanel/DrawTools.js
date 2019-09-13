@@ -130,7 +130,7 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
           {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
           onClick={this.draw}

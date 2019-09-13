@@ -63,7 +63,7 @@ export default class CustomFeatureControl extends Component {
         <input className='custom-feature__input' type='text' value={this.state.title} onChange={this.editName} />
         <div className='edit-delete-container'>
           <div
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
                 {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button color pointer-custom'
             onClick={this.editPolygon}

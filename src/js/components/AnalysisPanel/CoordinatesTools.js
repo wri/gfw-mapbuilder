@@ -96,7 +96,7 @@ export default class CoordinatesTools extends Component {
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
             <div
-              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
               {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className="fa-button color analysis-instructions__enter-values-button"
               onClick={this.enterValues}

@@ -321,7 +321,7 @@ export default class SubscribeModal extends Component {
         <div className='subscription-sub-buttons'>
           {this.state.currentStep === 0 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button color'
             onClick={this.refreshSubscriptions}
@@ -332,7 +332,7 @@ export default class SubscribeModal extends Component {
           </button> : null }
           {this.state.currentStep > 1 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button color'
             onClick={this.back}
@@ -343,7 +343,7 @@ export default class SubscribeModal extends Component {
           </button> : null }
           {this.state.currentStep === 1 || this.state.currentStep === 2 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button color'
             onClick={this.next}
@@ -354,7 +354,7 @@ export default class SubscribeModal extends Component {
           </button> : null }
           {this.state.currentStep === 3 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button color'
             onClick={this.save}
