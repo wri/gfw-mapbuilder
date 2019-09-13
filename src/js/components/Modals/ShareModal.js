@@ -2,14 +2,16 @@ import ModalWrapper from 'components/Modals/ModalWrapper';
 import modalStore from 'stores/ModalStore';
 import {modalText} from 'js/config';
 import utils from 'utils/AppUtils';
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
-import resources from '../../../resources';
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
-export default class ShareModal extends React.Component {
-
+export default class ShareModal extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor (props) {
     super(props);
 
@@ -57,7 +59,7 @@ export default class ShareModal extends React.Component {
   }
 
   render () {
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     const {url} = this.props;
     return (
       <ModalWrapper>
@@ -66,7 +68,7 @@ export default class ShareModal extends React.Component {
         <div className='share-input'>
           <input ref='shareInput' type='text' readOnly value={url ? url : this.state.bitlyUrl} onClick={this.handleFocus} />
           <button
-            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='gfw-btn white pointer'
             onClick={() => this.copyShare()}
           >

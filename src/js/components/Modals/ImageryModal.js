@@ -18,11 +18,11 @@ import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
 import { modalText } from 'js/config';
-import resources from '../../../resources';
 
 export default class ImageryModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     map: PropTypes.object.isRequired
   };
 
@@ -153,7 +153,7 @@ export default class ImageryModal extends Component {
   renderThumbnails = (tileObj, i) => {
 
       let reloadCount = 0;
-      const { customColorTheme, defaultColorTheme } = resources;
+      const { customColorTheme, defaultColorTheme } = this.context.settings;
       const handleError = (event) => {
         if (reloadCount < 20) {
           event.persist();
@@ -184,7 +184,7 @@ export default class ImageryModal extends Component {
             onMouseLeave={() => this.hoverThumbnail(null)}
             className='thumbnail'
             style={this.state.selectedThumb && this.state.selectedThumb.index === i ?
-            {border: `4px solid ${customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
+            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
             key={`thumb-${i}`}>
               <img src={tileObj.thumbUrl} onError={handleError} />
           </div>
@@ -281,7 +281,7 @@ export default class ImageryModal extends Component {
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
@@ -301,7 +301,7 @@ export default class ImageryModal extends Component {
                     {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
                   </select>
                   <div
-                    style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                     className='fa-button sml white'
                   >
                     {monthsVal}
@@ -342,7 +342,7 @@ export default class ImageryModal extends Component {
                 {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
               </select>
               <div
-                style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='fa-button sml white'
               >
                 {imageStyleVal}

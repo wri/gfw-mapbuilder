@@ -5,7 +5,6 @@ import text from 'js/languages';
 import Search from 'esri/dijit/Search';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import InfoTemplate from 'esri/InfoTemplate';
-import resources from '../../../resources';
 import React, {
   Component,
   PropTypes
@@ -14,6 +13,7 @@ import React, {
 export default class SearchModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     webmapInfo: PropTypes.object.isRequired,
     map: PropTypes.object.isRequired
@@ -119,7 +119,7 @@ export default class SearchModal extends Component {
 
   render () {
     const {language} = this.context;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (
@@ -131,8 +131,8 @@ export default class SearchModal extends Component {
           <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
         </div>
         <button
-          style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
-          {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className='search-submit-button fa-button color'
           onClick={this.decimalDegreeSearch}
           onMouseEnter={this.toggleHover}

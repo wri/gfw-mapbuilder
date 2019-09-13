@@ -6,11 +6,11 @@ import text from 'js/languages';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import resources from '../../../resources';
 
 export default class GladControls extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -104,10 +104,10 @@ export default class GladControls extends Component {
 }
 
 const StartButton = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = resources;
+  const { customColorTheme, defaultColorTheme } = this.context.settings;
   return (
     <button
-      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
     >
@@ -117,10 +117,10 @@ const StartButton = ({ onClick, value }) => {
 };
 
 const EndButton = ({ onClick, value }) => {
-  const { customColorTheme, defaultColorTheme } = resources;
+  const { customColorTheme, defaultColorTheme } = this.context.settings;
   return (
     <button
-      style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
     >

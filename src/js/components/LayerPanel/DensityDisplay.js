@@ -1,6 +1,5 @@
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
-import resources from '../../../resources';
 import React, {
   Component,
   PropTypes
@@ -13,6 +12,7 @@ const showModal = function showModal () {
 export default class DensityDisplay extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
   };
 
@@ -25,15 +25,15 @@ export default class DensityDisplay extends Component {
     }
     const { label, canopyDensity } = this.props;
     const hideDefaultLabel = label === '';
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
 
     return (
     
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
         <span
-          style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`,
-          boxShadow: `0 0 0 2px ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`,
+          boxShadow: `0 0 0 2px ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className='canopy-button pointer'
           onClick={showModal}
         >

@@ -1,51 +1,61 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
-import resources from '../../../resources';
 
- const RadioButton = ({
-  selected,
-  id,
-  label,
-  iconLoading,
-  sublabel,
-  layer,
-  showInfo,
-  toggleLayer,
-  initialLayerOpacities
-}) => {
-
-  const handleToggleLayer = () => {
-    toggleLayer(layer);
-  };
-
-  const handleShowInfo = () => {
-    showInfo(layer);
+export default class RadioButton extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
   };
   
-  let colorTheme = '';
-  const { customColorTheme, defaultColorTheme } = resources;
-  if (selected === 'active' && customColorTheme !== '') {
-      colorTheme = customColorTheme;
-  } else if (selected === 'active' && customColorTheme === '') {
-      colorTheme = defaultColorTheme;
-  } else {
-      colorTheme = '#ffffff';
+  constructor(props) {
+    super(props);
   }
 
-  return (
-    <div className={`layer-radio relative ${selected}`} >
-      <span onClick={handleToggleLayer} style={{backgroundColor: `${colorTheme}`}} className='radio-switch pointer'></span>
-      <span onClick={handleToggleLayer} className='layer-radio-label pointer'>
-        {label}
-      </span>
-      <span style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`} onClick={handleShowInfo}>
-        <SVGIcon id={'shape-info'} />
-      </span>
-      {sublabel && <div className='layer-checkbox-sublabel'>{sublabel}</div>}
-      <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={selected}></LayerTransparency>
-    </div>
-  );
-};
+  handleToggleLayer = () => {
+    this.props.toggleLayer(this.props.layer);
+  };
 
-export default RadioButton;
+  handleShowInfo = () => {
+    this.props.showInfo(this.props.layer);
+  };
+  
+  render() {
+    const {
+      selected,
+      id,
+      label,
+      iconLoading,
+      sublabel,
+      layer,
+      initialLayerOpacities
+    } = this.props;
+    let colorTheme = '';
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    if (selected === 'active' && customColorTheme && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (selected === 'active' && customColorTheme && customColorTheme === '') {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = '#ffffff';
+    }
+    
+    return (
+      <div className={`layer-radio relative ${selected}`} >
+        <span onClick={this.handleToggleLayer} style={{backgroundColor: `${colorTheme}`}} className='radio-switch pointer'></span>
+        <span onClick={this.handleToggleLayer} className='layer-radio-label pointer'>
+          {label}
+        </span>
+        <span
+          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`}
+          onClick={this.handleShowInfo}
+        >
+          <SVGIcon id={'shape-info'} />
+        </span>
+        {sublabel && <div className='layer-checkbox-sublabel'>{sublabel}</div>}
+        <LayerTransparency initialLayerOpacities={initialLayerOpacities} layer={layer} visible={selected}></LayerTransparency>
+      </div>
+    );
+  }
+}
+

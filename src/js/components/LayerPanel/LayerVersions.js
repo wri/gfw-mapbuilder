@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import layerFactory from 'utils/layerFactory';
 import mapActions from 'actions/MapActions';
 import on from 'dojo/on';
-import resources from '../../../resources';
 
 export default class LayerVersions extends Component {
 
@@ -66,8 +65,8 @@ export default class LayerVersions extends Component {
     const { versions, selected } = this.state;
     const { layer } = this.props;
     const { language } = this.context;
-    const { customColorTheme, defaultColorTheme } = resources;
-    
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+
     return (
       <div className='relative layer-versions'>
         <p>{layer.versionHeaderText[language]}:</p>
@@ -75,7 +74,7 @@ export default class LayerVersions extends Component {
           {versions.map(this.renderVersionOptions)}
         </select>
         <div
-          style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className='fa-button sml white'
         >
           {selected}

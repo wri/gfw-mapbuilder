@@ -10,7 +10,6 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
-import resources from '../../../resources';
 
 const datasets = ['viirs-active-fires', 'umd-loss-gain', 'glad-alerts', 'imazon-alerts', 'forma-alerts', 'terrai-alerts', 'prodes-loss'];
 
@@ -18,6 +17,7 @@ const datasets = ['viirs-active-fires', 'umd-loss-gain', 'glad-alerts', 'imazon-
 export default class SubscriptionsModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -99,10 +99,10 @@ export default class SubscriptionsModal extends Component {
     }
     
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = resources;
-    if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme !== '') {
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme === '') {
+    } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme === '') {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = 'inherit';

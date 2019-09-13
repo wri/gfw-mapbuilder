@@ -4,7 +4,6 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
-import resources from '../../../resources';
 
 import React, {
   Component,
@@ -15,7 +14,8 @@ export default class DrawTools extends Component {
 
   static contextTypes = {
     language: PropTypes.string.isRequired,
-    map: PropTypes.object.isRequired
+    map: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired
   };
 
   constructor (props) {
@@ -120,9 +120,8 @@ export default class DrawTools extends Component {
     const {embeddedInModal} = this.props;
     const {language} = this.context;
     const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     const {drawButtonActive, buttonHover} = this.state;
-
     return (
       <div className='analysis-instructions__draw'>
         <h4 className='analysis-instructions__header'>
@@ -137,8 +136,8 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
-          {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
           onClick={this.draw}
           onMouseEnter={this.toggleHover}
@@ -147,7 +146,7 @@ export default class DrawTools extends Component {
           <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
           <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>
         </div>
-        <div style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

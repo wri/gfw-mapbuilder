@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
-import resources from '../../../resources';
 
 const START = 'START',
       END = 'END';
@@ -10,6 +9,7 @@ const START = 'START',
 export default class MobileTimeWidget extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
   };
 
@@ -57,7 +57,7 @@ export default class MobileTimeWidget extends Component {
       visible,
       currentTimeExtent
     } = this.props;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
 
     return (
       <div className={`mobile-time-widget map-component mobile-show ${visible ? '' : 'hidden'}`}>
@@ -73,7 +73,7 @@ export default class MobileTimeWidget extends Component {
               {values.map(this.optionMapper({ type: START, ...currentTimeExtent}))}
             </select>
             <div
-              style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='fa-button sml white'
             >
               {currentTimeExtent.start}
@@ -85,7 +85,7 @@ export default class MobileTimeWidget extends Component {
               {values.map(this.optionMapper({ type: END, ...currentTimeExtent}))}
             </select>
             <div
-              style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='fa-button sml white'
             >
               {currentTimeExtent.end}

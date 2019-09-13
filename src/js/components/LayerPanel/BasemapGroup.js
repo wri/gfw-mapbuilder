@@ -1,6 +1,5 @@
 import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
-import resources from '../../../resources';
 import React, {
   Component,
   PropTypes
@@ -11,18 +10,22 @@ const closeSymbolCode = 9660,
 
 export default class BasemapGroup extends Component {
 
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+
   render() {
     const {activeTOCGroup, label} = this.props;
     const active = activeTOCGroup === layerKeys.GROUP_BASEMAP;
     const styles = { display: active ? 'block' : 'none' };
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
 
     return (
       <div className='layer-category'>
         <div className='layer-category-label-container pointer' onClick={this.toggle}>
           <div className='layer-category-label'>{label}</div>
           <span
-          style={{color: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme} !important`}}
+          style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme} !important`}}
           className='layer-category-caret'
           >
             {String.fromCharCode(active ? closeSymbolCode : openSymbolCode)}

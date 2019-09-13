@@ -5,7 +5,6 @@ import request from 'utils/request';
 import utils from 'utils/AppUtils';
 import all from 'dojo/promise/all';
 import text from 'js/languages';
-import resources from '../../../resources';
 
 const STATS = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
@@ -16,6 +15,7 @@ const STATS = {
 export default class SadControls extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -146,7 +146,7 @@ export default class SadControls extends Component {
     const {startMonth, startYear, endMonth, endYear} = this.props;
     const {language} = this.context;
     const {min_year} = this.state;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     //- If min_year, or any year value for that matter, is still 0, don't render the UI
     if (!min_year) { return <div />; }
 
@@ -159,7 +159,7 @@ export default class SadControls extends Component {
             {this.renderMonthOptions('start')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {text[language].MONTHS_LIST[startMonth].abbr}
@@ -172,7 +172,7 @@ export default class SadControls extends Component {
             {this.renderYearOptions('start')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {startYear}
@@ -186,7 +186,7 @@ export default class SadControls extends Component {
             {this.renderMonthOptions('end')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {text[language].MONTHS_LIST[endMonth].abbr}
@@ -199,7 +199,7 @@ export default class SadControls extends Component {
             {this.renderYearOptions('end')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {endYear}

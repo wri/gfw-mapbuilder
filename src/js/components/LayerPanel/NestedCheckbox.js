@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import LayerCheckbox from './LayerCheckbox';
 import LayerActions from 'actions/LayerActions';
-import resources from '../../../resources';
 
 export default class NestedCheckbox extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -67,10 +69,10 @@ export default class NestedCheckbox extends Component {
     const { groupLabel, layers } = this.props;
     const checked = this.props.checked ? 'active' : '';
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = resources;
-    if (checked === 'active' && customColorTheme !== '') {
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (checked === 'active' && customColorTheme === '') {
+    } else if (checked === 'active' && customColorTheme && customColorTheme === '') {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';

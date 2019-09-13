@@ -25,7 +25,6 @@ import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 import moment from 'moment';
 import text from 'js/languages';
-import resources from '../../../resources';
 
 import React, {
   Component,
@@ -490,7 +489,7 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-results'>
@@ -520,8 +519,8 @@ export default class Analysis extends Component {
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
               <button
-                style={buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
-                {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='run-analysis-button pointer'
                 onClick={this.runAnalysis}
                 onMouseEnter={this.toggleHover}

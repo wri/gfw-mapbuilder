@@ -1,17 +1,19 @@
 import React, {Component, PropTypes} from 'react';
-import resources from '../../../resources';
 
 export default class ToggleSwitch extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
   
   render () {
     const {checked, label, onChange, disabled} = this.props;
     const checkedClass = checked ? 'active' : '';
     const disabledClass = disabled ? 'disabled' : '';
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = resources;
-    if (checkedClass === 'active' && customColorTheme !== '') {
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    if (checkedClass === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (checkedClass === 'active' && customColorTheme === '') {
+    } else if (checkedClass === 'active' && customColorTheme && customColorTheme === '') {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';

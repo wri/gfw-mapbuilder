@@ -4,7 +4,6 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
-import resources from '../../../resources';
 
 import React, {
   Component,
@@ -14,6 +13,7 @@ import React, {
 export default class CoordinatesTools extends Component {
 
     static contextTypes = {
+        settings: PropTypes.object.isRequired,
         language: PropTypes.string.isRequired,
         map: PropTypes.object.isRequired
       };
@@ -91,7 +91,7 @@ export default class CoordinatesTools extends Component {
 
       render() {
         const {language} = this.context;
-        const { customColorTheme, defaultColorTheme } = resources;
+        const { customColorTheme, defaultColorTheme } = this.context.settings;
         const {enterValuesButtonActive, buttonHover} = this.state;
         
         return (
@@ -103,8 +103,8 @@ export default class CoordinatesTools extends Component {
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
             <div
-              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
-              {backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: `0.85`} :
+              {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className="fa-button color analysis-instructions__enter-values-button"
               onClick={this.enterValues}
               onMouseEnter={this.toggleHover}
@@ -113,7 +113,7 @@ export default class CoordinatesTools extends Component {
               <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-enter-values'} /></span>
               <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>
             </div>
-            <div style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
+            <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
               <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
             </div>
           </div>

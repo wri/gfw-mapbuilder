@@ -1,7 +1,6 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
-import resources from '../../../resources';
 
 import React, {Component, PropTypes} from 'react';
 
@@ -9,6 +8,7 @@ import React, {Component, PropTypes} from 'react';
 export default class ConfirmModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -52,7 +52,7 @@ export default class ConfirmModal extends Component {
   render () {
     const {language} = this.context;
     const {subscriptionToDelete} = this.props;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -62,8 +62,8 @@ export default class ConfirmModal extends Component {
         <p>{text[language].SUBSCRIBE_DELETE_DESC}</p>
 
         <div className='subscription-sub-buttons'>
-          <button style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
-          <button style={{backgroundColor: `${customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
         </div>
 
       </ControlledModalWrapper>
