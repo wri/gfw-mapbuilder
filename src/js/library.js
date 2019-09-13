@@ -4,83 +4,83 @@ var MapBuilder = function(args){
 
     //Add the loader div & its styles next to our root element while hiding the root
     //HTML
-    const root = document.getElementById('root');
-    if (root) {
-      const loaderDiv = document.createElement('div');
-      loaderDiv.classList.add('landing-loader__active');
-      loaderDiv.classList.add('hidden');
-      root.parentNode.insertBefore(loaderDiv, root.nextSibling);
-
-      const loaderSpinner = document.createElement('div');
-      loaderSpinner.classList.add('landing-loader__spinner');
-      loaderDiv.appendChild(loaderSpinner);
-
-      const loaderSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      loaderSvg.setAttribute('width', '50');
-      loaderSvg.setAttribute('height', '50');
-      loaderSpinner.appendChild(loaderSvg);
-
-      const loaderG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      loaderG.setAttribute('transform', 'translate(25,25) rotate(-90)');
-      loaderSvg.appendChild(loaderG);
-
-      const loaderPathOne = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      loaderPathOne.setAttribute('d', 'M0,25A25,25 0 1,1 0,-25A25,25 0 1,1 0,25M0,20A20,20 0 1,0 0,-20A20,20 0 1,0 0,20Z');
-      loaderPathOne.setAttribute('style', 'fill: rgb(255, 255, 255); stroke: rgb(204, 204, 204)');
-      loaderG.appendChild(loaderPathOne);
-
-      const loaderPathTwo = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      loaderPathTwo.classList.add('foreground');
-      loaderPathTwo.setAttribute('d', 'M1.5308084989341915e-15,-25A25,25 0 0,1 25,0L20,0A20,20 0 0,0 1.2246467991473533e-15,-20Z');
-      loaderPathTwo.setAttribute('style', 'fill: rgb(85, 85, 85)');
-      loaderPathTwo.setAttribute('transform', 'rotate(709.287459262793)');
-      loaderG.appendChild(loaderPathTwo);
-
-      // Associated CSS
-      const styles = `
-      #root {
-        display: none;
-      }
-      #share-modal {
-        display: none;
-      }
-      @keyframes hold-loader {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .landing-loader__active {
-        display: block;
-        background: rgba(220, 220, 220, 0.75);
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        z-index: 5;
-        left: 0;
-        top: 0;
-      }
-      .landing-loader__active .foreground {
-        animation: hold-loader 0.95s cubic-bezier(0.645, 0.045, 0.355, 1.000) infinite;
-      }
-      .landing-loader__spinner {
-        transform: translate(-50%, -50%);
-        position: absolute;
-        height: 50px;
-        width: 50px;
-        left: 50%;
-        top: 50%;
-      }
-      `;
-
-      const styleSheet = document.createElement('style');
-      styleSheet.type = 'text/css';
-      styleSheet.innerText = styles;
-      document.head.appendChild(styleSheet);
-    }
+    // const root = document.getElementById('root');
+    // if (root) {
+    //   const loaderDiv = document.createElement('div');
+    //   loaderDiv.classList.add('landing-loader__active');
+    //   loaderDiv.classList.add('hidden');
+    //   root.parentNode.insertBefore(loaderDiv, root.nextSibling);
+    //
+    //   const loaderSpinner = document.createElement('div');
+    //   loaderSpinner.classList.add('landing-loader__spinner');
+    //   loaderDiv.appendChild(loaderSpinner);
+    //
+    //   const loaderSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    //   loaderSvg.setAttribute('width', '50');
+    //   loaderSvg.setAttribute('height', '50');
+    //   loaderSpinner.appendChild(loaderSvg);
+    //
+    //   const loaderG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    //   loaderG.setAttribute('transform', 'translate(25,25) rotate(-90)');
+    //   loaderSvg.appendChild(loaderG);
+    //
+    //   const loaderPathOne = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    //   loaderPathOne.setAttribute('d', 'M0,25A25,25 0 1,1 0,-25A25,25 0 1,1 0,25M0,20A20,20 0 1,0 0,-20A20,20 0 1,0 0,20Z');
+    //   loaderPathOne.setAttribute('style', 'fill: rgb(255, 255, 255); stroke: rgb(204, 204, 204)');
+    //   loaderG.appendChild(loaderPathOne);
+    //
+    //   const loaderPathTwo = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    //   loaderPathTwo.classList.add('foreground');
+    //   loaderPathTwo.setAttribute('d', 'M1.5308084989341915e-15,-25A25,25 0 0,1 25,0L20,0A20,20 0 0,0 1.2246467991473533e-15,-20Z');
+    //   loaderPathTwo.setAttribute('style', 'fill: rgb(85, 85, 85)');
+    //   loaderPathTwo.setAttribute('transform', 'rotate(709.287459262793)');
+    //   loaderG.appendChild(loaderPathTwo);
+    //
+    //   // Associated CSS
+    //   const styles = `
+    //   #root {
+    //     display: none;
+    //   }
+    //   #share-modal {
+    //     display: none;
+    //   }
+    //   @keyframes hold-loader {
+    //     from {
+    //       transform: rotate(0deg);
+    //     }
+    //     to {
+    //       transform: rotate(360deg);
+    //     }
+    //   }
+    //
+    //   .landing-loader__active {
+    //     display: block;
+    //     background: rgba(220, 220, 220, 0.75);
+    //     position: absolute;
+    //     height: 100%;
+    //     width: 100%;
+    //     z-index: 5;
+    //     left: 0;
+    //     top: 0;
+    //   }
+    //   .landing-loader__active .foreground {
+    //     animation: hold-loader 0.95s cubic-bezier(0.645, 0.045, 0.355, 1.000) infinite;
+    //   }
+    //   .landing-loader__spinner {
+    //     transform: translate(-50%, -50%);
+    //     position: absolute;
+    //     height: 50px;
+    //     width: 50px;
+    //     left: 50%;
+    //     top: 50%;
+    //   }
+    //   `;
+    //
+    //   const styleSheet = document.createElement('style');
+    //   styleSheet.type = 'text/css';
+    //   styleSheet.innerText = styles;
+    //   document.head.appendChild(styleSheet);
+    // }
 
 
     // Dynamically add meta tags if they don't already exist
