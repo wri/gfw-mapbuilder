@@ -587,7 +587,6 @@ class MapStore {
   showLayerInfo (layer) {
     if (layer.metadata.metadata.error) {
         this.modalLayerInfo = null;
-        this.iconLoading = '';
         this.layerModalVisible = true;
         this.emitChange();
     } else {
