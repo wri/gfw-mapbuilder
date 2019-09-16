@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 import RadioButton from './RadioButton';
-import resources from './../../../resources';
 
  export default class RadioGroup extends Component {
 
@@ -19,8 +18,9 @@ import resources from './../../../resources';
   }
 
   toggleLayer = (layer) => {
+    const {settings} = this.context;
     const { activeLayers } = this.props;
-    const layerPanel = resources.layerPanel;
+    const layerPanel = settings.layerPanel;
     const layerPanelGroups = Object.keys(layerPanel);
     let matchedGroup;
     
