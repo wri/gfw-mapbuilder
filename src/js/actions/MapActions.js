@@ -15,12 +15,7 @@ class MapActions {
   mapUpdated () { return {}; }
 
   infoWindowUpdated ({target}) {
-    // if (window.mm.getTool()) {
-    //   // return;
-    //   console.log('toool');
-    // } else {
       return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
-    // }
   }
 
   changeActiveTab (tabId) {
