@@ -22,13 +22,13 @@
   top 0
   
 .measurement-modal
-  transform translate(-50%, -50%)
-  background-color white
-  max-height 100%
-  position fixed
-  height auto
-  left 50%
-  top 50%
+  transform: translate(50%, -50%);
+  background-color: #fff;
+  max-height: 100%;
+  position: fixed;
+  height: auto;
+  left: 59%;
+  top: 24%;
   & a
     word-break break-word
     word-wrap break-word
@@ -105,6 +105,22 @@
     top 60%
     margin-left 0.25rem
     
+.measurement-close-icon
+  position absolute
+  height 40px
+  width 40px
+  right 0
+  top -15
+  z-index 10
+  & svg
+    //transform translate(-50%, -50%)
+    position absolute
+    height 50%
+    width 50%
+    //left 50%
+    top 60%
+    margin-left 0.25rem
+    
 .edit-close-icon
   height 15px
   width 15px
@@ -136,6 +152,21 @@
   color $darkGray
   height 100%
   
+.measurement-modal-content
+  padding 1rem
+  overflow-x hidden
+  max-height 450px
+  overflow-y auto
+  color $darkGray
+  height 100%
+  .measurement-container
+    .esriMeasurementButtonContainer
+      margin-top 1rem
+      span.esriButtonChecked ~ span.esriToggleButton
+        visibility visible !important
+      .esriToggleButton
+        visibility visible !important
+
 .edit-modal-content
   overflow-x hidden
   max-height 450px

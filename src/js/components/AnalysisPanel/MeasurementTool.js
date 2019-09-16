@@ -4,7 +4,7 @@ import React, {
   PropTypes
 } from 'react';
 
-export default class Measure extends Component {
+export default class MeasurementTool extends Component {
   static contextTypes = {
     map: PropTypes.object.isRequired
   }
@@ -51,6 +51,6 @@ export default class Measure extends Component {
 
 }
 
-Measure.propTypes = {
+MeasurementTool.propTypes = {
   embeddedInModal: PropTypes.bool
 };
