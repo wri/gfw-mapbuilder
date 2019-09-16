@@ -7,9 +7,8 @@ import SVGIcon from 'utils/svgIcon';
 export default function MeasurementModalWrapper (props) {
   const contentClass = `modal-content custom-scroll ${props.theme ? props.theme : ''}`;
   return (
-    <div className='modal-container'>
-      <div className='modal-background' onClick={props.onClose} />
-      <article className={`modal ${props.shadow ? 'shadow' : ''}`}>
+    <div className='measurement-modal-container'>
+      <article className='measurement-modal'>
         <div title='close' className='close-icon pointer' onClick={props.onClose} >
           <svg>
             <SVGIcon id={'shape-close'} />
