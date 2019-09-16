@@ -2,6 +2,7 @@
 /* Creating some esri dijits needs the above rule disabled, choosing this over no-new */
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
+import MeasurementModal from 'components/Modals/MeasurementModal';
 import AnalysisModal from 'components/Modals/AnalysisModal';
 import CoordinatesModal from 'components/Modals/CoordinatesModal';
 import EditCoordinatesModal from 'components/Modals/EditCoordinatesModal';
@@ -930,6 +931,7 @@ export default class Map extends Component {
       mobileTimeWidgetVisible,
       currentTimeExtent,
       printModalVisible,
+      measurementModalVisible,
       analysisModalVisible,
       coordinatesModalVisible,
       editCoordinatesModalVisible,
@@ -1002,6 +1004,9 @@ export default class Map extends Component {
             <SVGIcon id={'shape-crosshairs'} />
 
           </svg>
+        </div>
+        <div className={`analysis-modal-container modal-wrapper ${measurementModalVisible ? '' : 'hidden'}`}>
+          <MeasurementModal />
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />

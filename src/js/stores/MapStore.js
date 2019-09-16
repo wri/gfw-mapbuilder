@@ -52,6 +52,7 @@ class MapStore {
     this.tableOfContentsVisible = true;
     this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
+    this.measurementModalVisible = false;
     this.analysisModalVisible = false;
     this.coordinatesModalVisible = false;
     this.editCoordinatesModalVisible = false;
@@ -106,6 +107,7 @@ class MapStore {
       createLayers: mapActions.createLayers,
       changeActiveTab: mapActions.changeActiveTab,
       setAnalysisType: mapActions.setAnalysisType,
+      toggleMeasurementModal: mapActions.toggleMeasurementModal,
       togglePrintModal: mapActions.togglePrintModal,
       toggleSearchModal: mapActions.toggleSearchModal,
       toggleCanopyModal: mapActions.toggleCanopyModal,
@@ -165,6 +167,7 @@ class MapStore {
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
+      activateMeasurementButton: mapActions.activateMeasurementButton,
       activateDrawButton: mapActions.activateDrawButton,
       activateEnterValuesButton: mapActions.activateEnterValuesButton,
       activateEditCoordinates: mapActions.activateEditCoordinates,
@@ -426,6 +429,10 @@ class MapStore {
   setAnalysisType (payload) {
     this.activeAnalysisType = payload;
   }
+  
+  toggleMeasurementModal (payload) {
+    this.measurementModalVisible = payload.visible;
+  }
 
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
@@ -680,6 +687,10 @@ class MapStore {
 
   updateAnalysisSliderIndices(params) {
     this.analysisSliderIndices[params.id] = params.indices;
+  }
+  
+  activateMeasurementButton(bool) {
+    this.activateMeasurementButton = bool;
   }
 
   activateDrawButton(bool) {

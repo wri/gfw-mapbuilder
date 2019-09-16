@@ -38,6 +38,7 @@ class MapActions {
   * @param {boolean} - data.visible
   * @return {object} - data
   */
+  toggleMeasurementModal = (data) => data;
   toggleAnalysisModal = (data) => data;
   toggleCoordinatesModal = (data) => data;
   toggleEditCoordinatesModal = (data) => data;
@@ -239,6 +240,10 @@ class MapActions {
   }
 
   updateAnalysisSliderIndices = params => params;
+  
+  activateMeasurementButton(bool) {
+    return bool;
+  }
 
   activateDrawButton(bool) {
     return bool;

@@ -150,7 +150,7 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          {!settings.includeMeasurementTab ? null :
+          {/* {!settings.includeMeasurementTab ? null :
             <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
               <svg className='svg-icon'>
                 <SVGIcon id={'icon-measure'} />
@@ -161,7 +161,7 @@ export default class TabButtons extends Component {
                 {text[language].MEASUREMENT}
               </span>
             </li>
-          }
+          } */}
           {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-analysis'} />

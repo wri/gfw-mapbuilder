@@ -83,6 +83,7 @@ export default class ControlPanel extends Component {
       canopyDensity: canopyDensity
     })));
   };
+  
 
   showAnalysisTools = () => {
     mapActions.toggleAnalysisModal({ visible: true });
@@ -104,9 +105,9 @@ export default class ControlPanel extends Component {
     mapActions.toggleTOCVisible({ visible: !this.props.tableOfContentsVisible });
   };
 
-  resetPage = () => {
-    window.location.reload();
-  };
+  showMeasurement = () => {
+    mapActions.toggleMeasurementModal({ visible: true });
+  }
 
   render () {
     const {tableOfContentsVisible, timeEnabled} = this.props;
@@ -139,8 +140,8 @@ export default class ControlPanel extends Component {
               <SVGIcon id={'icon-controls-toggle__off'} />
             }
           </li>
-          <li className='control-panel__reset pointer mobile-hide' title={text[language].TOOL_RESET} onClick={this.resetPage}>
-            <SVGIcon id={'icon-reset'} />
+          <li className='control-panel__legend pointer' title={text[language].MEASUREMENT} onClick={this.showMeasurement}>
+            <SVGIcon id={'icon-measure'} />
           </li>
           <li className='control-panel__legend pointer mobile-show' title={text[language].LEGEND} onClick={this.showLegend}>
             <SVGIcon id={'icon-legend'} />
