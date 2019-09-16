@@ -586,7 +586,10 @@ class MapStore {
 
   showLayerInfo (layer) {
     if (layer.metadata.metadata.error) {
-      layerInfoCache.fetch(layer).then(layerInfo => {
+      const promise = new Promise((resolve) => {
+        resolve();
+      });
+      promise.then(() => {
         this.modalLayerInfo = null;
         this.iconLoading = '';
         this.layerModalVisible = true;
