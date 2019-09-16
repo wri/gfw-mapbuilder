@@ -586,9 +586,12 @@ class MapStore {
 
   showLayerInfo (layer) {
     if (layer.metadata.metadata.error) {
+      layerInfoCache.fetch(layer).then(layerInfo => {
         this.modalLayerInfo = null;
+        this.iconLoading = '';
         this.layerModalVisible = true;
         this.emitChange();
+      });
     } else {
       // Grab the id of the sublayer if it exists, else, grab the normal id
       const id = layer.subId ? layer.subId : layer.id;
