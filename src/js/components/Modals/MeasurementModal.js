@@ -1,4 +1,4 @@
-import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
+import MeasurementModalWrapper from 'components/Modals/MeasurementModalWrapper';
 import Measure from 'components/AnalysisPanel/Measurement';
 import mapActions from 'actions/MapActions';
 import React, { Component } from 'react';
@@ -11,9 +11,9 @@ export default class MeasurementModal extends Component {
 
   render () {
     return (
-      <ControlledModalWrapper onClose={this.close}>
+      <MeasurementModalWrapper onClose={this.close}>
         <Measure embeddedInModal={true} />
-      </ControlledModalWrapper>
+      </MeasurementModalWrapper>
     );
   }
 }
