@@ -585,29 +585,38 @@ class MapStore {
   }
 
   showLayerInfo (layer) {
-    // Grab the id of the sublayer if it exists, else, grab the normal id
-    const id = layer.subId ? layer.subId : layer.id;
-    const info = layerInfoCache.get(id);
-
-    if (info) {
-      const promise = new Promise((resolve) => {
-        resolve();
-      });
-
-      promise.then(() => {
-        this.iconLoading = '';
-        this.modalLayerInfo = info;
-        this.layerModalVisible = true;
-        this.emitChange();
-      });
-
-    } else {
+    if (layer.metadata.metadata.error) {
       layerInfoCache.fetch(layer).then(layerInfo => {
+        layerInfo.error = '<p>Error: No metadata returned</p>';
+        this.modalLayerInfo = null;
         this.iconLoading = '';
-        this.modalLayerInfo = layerInfo;
         this.layerModalVisible = true;
         this.emitChange();
       });
+    } else {
+      // Grab the id of the sublayer if it exists, else, grab the normal id
+      const id = layer.subId ? layer.subId : layer.id;
+      const info = layerInfoCache.get(id);
+      if (info) {
+        const promise = new Promise((resolve) => {
+          resolve();
+        });
+  
+        promise.then(() => {
+          this.iconLoading = '';
+          this.modalLayerInfo = info;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+  
+      } else {
+        layerInfoCache.fetch(layer).then(layerInfo => {
+          this.iconLoading = '';
+          this.modalLayerInfo = layerInfo;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+      }
     }
   }
 
