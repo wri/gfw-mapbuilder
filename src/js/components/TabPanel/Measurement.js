@@ -28,6 +28,7 @@ export default class InfoWindow extends Component {
         map: this.context.map
       }, measurementDiv);
       this.measurement.startup();
+      window.mm = this.measurement;
     }
 
     if (prevProps.activeWebmap !== undefined && prevProps.activeWebmap !== this.props.activeWebmap) {

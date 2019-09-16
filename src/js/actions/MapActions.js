@@ -15,7 +15,12 @@ class MapActions {
   mapUpdated () { return {}; }
 
   infoWindowUpdated ({target}) {
-    return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
+    // if (window.mm.getTool()) {
+    //   // return;
+    //   console.log('toool');
+    // } else {
+      return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
+    // }
   }
 
   changeActiveTab (tabId) {
@@ -243,11 +248,11 @@ class MapActions {
   activateDrawButton(bool) {
     return bool;
   }
-  
+
   activateEnterValuesButton(bool) {
     return bool;
   }
-  
+
   activateEditCoordinates(bool) {
     return bool;
   }

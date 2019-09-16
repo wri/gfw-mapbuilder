@@ -166,8 +166,12 @@ export default class Map extends Component {
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };
-  
+
   getSelectedFeatureTitles = () => {
+
+    if (window.mm.getTool()) {
+      return;
+    }
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
@@ -194,7 +198,7 @@ export default class Map extends Component {
       }
     }
   };
-  
+
   clearSelectedFeaturesTitles = () => {
     const emptyArray = [];
     layerActions.updateSelectedFeatureTitles.defer(emptyArray);
@@ -335,7 +339,7 @@ export default class Map extends Component {
             });
           }
         });
-        
+
         editToolbar.on('vertex-mouse-over', evt => {
           if (!this.state.editCoordinatesModalVisible) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
@@ -343,24 +347,24 @@ export default class Map extends Component {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          
+
           const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
-        
+
         editToolbar.on('vertex-move-stop', evt => {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          
+
           const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
-        
+
         editToolbar.on('vertex-delete', evt => {
           mapActions.toggleEditCoordinatesModal({ visible: false });
         });
