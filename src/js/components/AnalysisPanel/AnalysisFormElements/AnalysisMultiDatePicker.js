@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import resources from '../../../../resources';
 
 export default class AnalysisMultiDatePicker extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor(props) {
     super(props);
 
@@ -78,8 +82,15 @@ export default class AnalysisMultiDatePicker extends Component {
   render() {
     const { label, minDate, maxDate } = this.props;
     const { selectedStartDate, selectedEndDate } = this.state;
-    const customColorTheme = resources.customColorTheme;
-    const defaultColorTheme = resources.defaultColorTheme;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
     
     return (
       <div className='analysis-results__select-form-item-container'>

@@ -2,7 +2,8 @@ import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import resources from '../../../resources';
 import React, {
-  Component
+  Component,
+  PropTypes
 } from 'react';
 
 const showModal = function showModal () {
@@ -10,6 +11,12 @@ const showModal = function showModal () {
 };
 
 export default class DensityDisplay extends Component {
+
+  static contextTypes = {
+    settings: PropTypes.object.isRequired,
+    language: PropTypes.string.isRequired
+  };
+  
   constructor (props) {
     super(props);
     this.state = {
@@ -24,12 +31,24 @@ export default class DensityDisplay extends Component {
   };
 
   render () {
-    const language = this.props.language;
+    let language;
+    if (this.context.language){
+      language = this.context.language;
+    } else {
+      language = this.props.language;
+    }
     const { label, canopyDensity } = this.props;
     const {buttonHover} = this.state;
     const hideDefaultLabel = label === '';
-    const customColorTheme = resources.customColorTheme;
-    const defaultColorTheme = resources.defaultColorTheme;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
 
     return (
       <div className='tree-cover-canopy-display'>

@@ -2,13 +2,17 @@ import ModalWrapper from 'components/Modals/ModalWrapper';
 import modalStore from 'stores/ModalStore';
 import {modalText} from 'js/config';
 import utils from 'utils/AppUtils';
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
 import resources from '../../../resources';
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
 export default class ShareModal extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor (props) {
     super(props);
 
@@ -57,9 +61,15 @@ export default class ShareModal extends Component {
 
   render () {
     const {url} = this.props;
-    const customColorTheme = resources.customColorTheme;
-    const defaultColorTheme = resources.defaultColorTheme;
-
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
     return (
       <ModalWrapper>
         <div className='modal-title'>{modalText.share.title}</div>

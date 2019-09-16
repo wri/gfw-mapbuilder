@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
@@ -8,6 +8,10 @@ const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
 export default class AnalysisRangeSlider extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor(props) {
     super(props);
 
@@ -99,8 +103,15 @@ export default class AnalysisRangeSlider extends Component {
   render() {
     const { bounds, step } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
-    const customColorTheme = resources.customColorTheme;
-    const defaultColorTheme = resources.defaultColorTheme;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
     
     return (
       <div className='analysis-results__select-form-item-container'>
