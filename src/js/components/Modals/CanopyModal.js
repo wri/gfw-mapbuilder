@@ -3,21 +3,13 @@ import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
 import React, {
-  Component,
-  PropTypes
+  Component
 } from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import resources from '../../../resources';
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export default class CanopyModal extends Component {
-
-  static contextTypes = {
-    language: PropTypes.string.isRequired,
-    settings: PropTypes.object.isRequired,
-    map: PropTypes.object.isRequired
-  };
-
   constructor(props) {
     super(props);
 
@@ -93,18 +85,8 @@ export default class CanopyModal extends Component {
 
   handleSliderChange = sliderValue => {
     const { sliderMarks } = this.state;
-    let settings;
-    let map;
-    if (this.context.settings){
-      settings = this.context.settings;
-    } else {
-      settings = this.props.settings;
-    }
-    if (this.context.map){
-      map = this.context.map;
-    } else {
-      map = this.props.map;
-    }
+    const settings = this.props.settings;
+    const map = this.props.map;
     const densityValue = sliderMarks[sliderValue].density;
 
     layersHelper.updateTreeCoverDefinitions(densityValue, map, settings.layerPanel);
@@ -119,21 +101,9 @@ export default class CanopyModal extends Component {
   render() {
     const { sliderMarks } = this.state;
     const { canopyDensity } = this.props;
-    let customColorTheme;
-    let defaultColorTheme;
-    if (this.context.settings) {
-      customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
-    } else {
-      customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
-    }
-    let language;
-    if (this.context.language) {
-      language = this.context.language;
-    } else {
-      language = this.props.language;
-    }
+    const customColorTheme = resources.customColorTheme;
+    const defaultColorTheme = resources.defaultColorTheme;
+    const language = this.props.language;
 
     const sliderValue = this.discernDensityValue(canopyDensity);
     return (

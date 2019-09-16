@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component } from 'react';
 import MapStore from 'stores/MapStore';
 import moment from 'moment';
 import AnalysisRangeSlider from '../components/AnalysisPanel/AnalysisFormElements/AnalysisRangeSlider';
@@ -343,15 +343,9 @@ export default class ReportSettings extends Component {
   render() {
     const {language} = this.props;
     const {buttonHover} = this.state;
-    let customColorTheme;
-    let defaultColorTheme;
-    if (this.context.settings) {
-      customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
-    } else {
-      customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
-    }
+    const customColorTheme = resources.customColorTheme;
+    const defaultColorTheme = resources.defaultColorTheme;
+
       return (
           <div className="analysis-results__select-form-container">
             <div className='analysis-results__select-form custom-scroll'>
