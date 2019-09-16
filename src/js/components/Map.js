@@ -294,6 +294,8 @@ export default class Map extends Component {
             });
           }
         });
+        
+        //WIP here for tomorrow!!!! 
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);

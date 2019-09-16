@@ -384,7 +384,13 @@ class MapStore {
       }
       this.activeAnalysisType = 'default';
     } else if (window.mm.getTool()) {
-      console.log(brApp.map.graphics);
+      const graphics = brApp.map.graphics;
+      for (let i = 0; i < graphics.length; i++) {
+        if (graphics[i].geometry.type !== 'polygon' && !graphics[i].symbol.type) {
+          brApp.map.graphics.remove(graphics[i]);
+          i--;
+        }
+      }
       // brApp.map.graphics.clear();
     }
   }

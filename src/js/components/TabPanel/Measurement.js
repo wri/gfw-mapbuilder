@@ -20,6 +20,7 @@ export default class InfoWindow extends Component {
       && !this.initialized
     ) {
       this.initialized = true;
+      console.log('graphics start', brApp.map.graphics);
 
       const measurementDiv = document.createElement('DIV');
       this.measurementContainer.appendChild(measurementDiv);
@@ -28,6 +29,19 @@ export default class InfoWindow extends Component {
         map: this.context.map
       }, measurementDiv);
       this.measurement.startup();
+      // this.measurement.on('measure-start', (event) => {
+      //   console.log('graphics start', brApp.map.graphics);
+      // });
+      this.measurement.on('measure', (event) => {
+        //console.log('graphics end', brApp.map.graphics);
+        const graphics = brApp.map.graphics;
+        for (let i = 0; i < graphics.length; i++) {
+          if (graphics[i].geometry.type !== 'polygon' && !graphics[i].symbol.type) {
+            brApp.map.graphics.remove(graphics[i]);
+            i--;
+          }
+        }
+      });
       window.mm = this.measurement;
     }
 
