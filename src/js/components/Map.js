@@ -519,24 +519,17 @@ export default class Map extends Component {
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
-
-
-      // debugger
-      setTimeout(function () {
+      on.once(map, 'update-end', () => {
         if (settings.language !== l) {
           appActions.setLanguage.defer(l);
         }
-        // on.once(map, 'extent-change', () => {
-        //   appActions.setLanguage.defer(l);
-        // });
-        //
-        //
+
         map.centerAndZoom([x, y], z);
-      }, 10);
+      });
     } else if (x && y && z) {
-      setTimeout(function () {
+      on.once(map, 'update-end', () => {
         map.centerAndZoom([x, y], z);
-      }, 10);
+      });
     } else if (l && langKeys.indexOf(l) > -1 && settings.language !== l) {
       appActions.setLanguage.defer(l);
     }
