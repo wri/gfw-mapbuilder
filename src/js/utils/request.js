@@ -48,8 +48,8 @@ const request = {
         });
         deferred.resolve(legendInfos || []);
       }
-    }, err => {
-      console.error(err);
+    }, () => {
+      console.error('Legend Info request error');
       deferred.resolve([]);
     });
 
