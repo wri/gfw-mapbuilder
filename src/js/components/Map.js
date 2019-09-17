@@ -169,7 +169,7 @@ export default class Map extends Component {
 
   getSelectedFeatureTitles = () => {
 
-    if (window.mm.getTool()) {
+    if (brApp.map.measurement.getTool()) {
       return;
     }
     // let selectedFeats;
@@ -287,6 +287,7 @@ export default class Map extends Component {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
                   createWMSGraphics(responses, layerId, wmsGraphics);
                   brApp.map.infoWindow.setFeatures(wmsGraphics);
+                  console.log(brApp.map.infoWindow);
                 } else {
                   console.error(`error: ${responses[layerId].error}`);
                 }
@@ -295,7 +296,6 @@ export default class Map extends Component {
           }
         });
         
-        //WIP here for tomorrow!!!! 
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);

@@ -20,29 +20,31 @@ export default class InfoWindow extends Component {
       && !this.initialized
     ) {
       this.initialized = true;
-      console.log('graphics start', brApp.map.graphics);
-
       const measurementDiv = document.createElement('DIV');
       this.measurementContainer.appendChild(measurementDiv);
-
       this.measurement = new Measurement({
         map: this.context.map
       }, measurementDiv);
       this.measurement.startup();
-      // this.measurement.on('measure-start', (event) => {
-      //   console.log('graphics start', brApp.map.graphics);
-      // });
-      this.measurement.on('measure', (event) => {
-        //console.log('graphics end', brApp.map.graphics);
-        const graphics = brApp.map.graphics;
-        for (let i = 0; i < graphics.length; i++) {
-          if (graphics[i].geometry.type !== 'polygon' && !graphics[i].symbol.type) {
-            brApp.map.graphics.remove(graphics[i]);
-            i--;
-          }
-        }
+      
+      //- Hide the selected feature highlight if using the measurement tool
+      this.measurement.on('measure-start', evt => {
+        const highlight = brApp.map.infoWindow._highlighted;
+          highlight.hide = true;
+          console.log('highlight hidden', brApp.map.infoWindow._highlighted);
       });
-      window.mm = this.measurement;
+        
+      this.measurement.on('tool-change', evt => {
+          if (!evt.toolName) {
+            const highlight = brApp.map.infoWindow._highlighted;
+            delete highlight.hide;
+            highlight._visible = true;
+            highlight.visible = true;
+            console.log('highlight shown', brApp.map.infoWindow._highlighted);
+          }
+        });
+
+      brApp.map.measurement = this.measurement;
     }
 
     if (prevProps.activeWebmap !== undefined && prevProps.activeWebmap !== this.props.activeWebmap) {

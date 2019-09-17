@@ -358,7 +358,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    if (selectedFeature && !window.mm.getTool()) {
+    if (selectedFeature && !brApp.map.measurement.getTool()) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)
@@ -383,15 +383,6 @@ class MapStore {
         }
       }
       this.activeAnalysisType = 'default';
-    } else if (window.mm.getTool()) {
-      const graphics = brApp.map.graphics;
-      for (let i = 0; i < graphics.length; i++) {
-        if (graphics[i].geometry.type !== 'polygon' && !graphics[i].symbol.type) {
-          brApp.map.graphics.remove(graphics[i]);
-          i--;
-        }
-      }
-      // brApp.map.graphics.clear();
     }
   }
 
