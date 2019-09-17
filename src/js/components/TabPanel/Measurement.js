@@ -27,21 +27,15 @@ export default class InfoWindow extends Component {
       }, measurementDiv);
       this.measurement.startup();
       
-      //- Hide the selected feature highlight if using the measurement tool
-      this.measurement.on('measure-start', evt => {
-        const highlight = brApp.map.infoWindow._highlighted;
-          highlight.hide = true;
-          console.log('highlight hidden', brApp.map.infoWindow._highlighted);
-      });
-        
+      //- Show the selected feature highlight again if not using the measurement tool
       this.measurement.on('tool-change', evt => {
-          if (!evt.toolName) {
-            const highlight = brApp.map.infoWindow._highlighted;
-            delete highlight.hide;
-            highlight._visible = true;
-            highlight.visible = true;
-            console.log('highlight shown', brApp.map.infoWindow._highlighted);
-          }
+        if (!evt.toolName) {
+          const highlight = brApp.map.infoWindow._highlighted;
+          delete highlight.hide;
+          highlight._visible = true;
+          highlight.visible = true;
+          console.log('highlight shown', brApp.map.infoWindow._highlighted);
+        }
         });
 
       brApp.map.measurement = this.measurement;

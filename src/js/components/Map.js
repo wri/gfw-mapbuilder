@@ -153,12 +153,14 @@ export default class Map extends Component {
       if (!editingEnabled) {
         editToolbar.deactivate();
       } else {
-        if (map.infoWindow && map.infoWindow.getSelectedFeature) {
+        if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
+          console.log('selectedFeature', selectedFeature);
           if (selectedFeature && selectedFeature.geometry) {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
           }
         }
+        return;
       }
     }
   }
@@ -312,6 +314,15 @@ export default class Map extends Component {
             }
           }
         });
+        
+      //- Hide the selected feature highlight if using the measurement tool
+      response.map.on('click', evt => {
+        if (brApp.map.measurement.getTool()) {
+          const highlight = brApp.map.infoWindow._highlighted;
+          highlight.hide = true;
+          console.log('highlight hidden', brApp.map.infoWindow._highlighted);
+        }
+      });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
