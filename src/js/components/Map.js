@@ -1005,7 +1005,7 @@ export default class Map extends Component {
 
           </svg>
         </div>
-        <div className={`analysis-modal-container modal-wrapper ${measurementModalVisible ? '' : 'hidden'}`}>
+        <div className={`measurement-modal-container ${measurementModalVisible ? '' : 'hidden'}`}>
           <MeasurementModal />
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
