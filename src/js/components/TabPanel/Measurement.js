@@ -1,4 +1,7 @@
 import Measurement from 'esri/dijit/Measurement';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
+import SimpleLineSymbol from 'esri/symbols/SimpleLineSymbol';
+import Color from 'esri/Color';
 import React, {
   Component,
   PropTypes
@@ -30,13 +33,11 @@ export default class InfoWindow extends Component {
       //- Show the selected feature highlight again if not using the measurement tool
       this.measurement.on('tool-change', evt => {
         if (!evt.toolName) {
-          const highlight = brApp.map.infoWindow._highlighted;
-          delete highlight.hide;
-          highlight._visible = true;
-          highlight.visible = true;
-          console.log('highlight shown', brApp.map.infoWindow._highlighted);
+          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol()
+          .setOutline(new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 255, 255, 1]), 2))
+          .setColor(new Color([0, 0, 0, 0]));
         }
-        });
+      });
 
       brApp.map.measurement = this.measurement;
     }

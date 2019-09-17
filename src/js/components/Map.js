@@ -54,6 +54,7 @@ import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
 import screenUtils from 'esri/geometry/screenUtils';
 import SpatialReference from 'esri/SpatialReference';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 
 import React, {
   Component,
@@ -318,9 +319,7 @@ export default class Map extends Component {
       //- Hide the selected feature highlight if using the measurement tool
       response.map.on('click', evt => {
         if (brApp.map.measurement.getTool()) {
-          const highlight = brApp.map.infoWindow._highlighted;
-          highlight.hide = true;
-          console.log('highlight hidden', brApp.map.infoWindow._highlighted);
+          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
         }
       });
 
