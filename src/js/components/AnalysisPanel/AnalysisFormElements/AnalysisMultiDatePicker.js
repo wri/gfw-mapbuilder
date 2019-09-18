@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-
-
+import resources from '../../../../resources';
 
 export default class AnalysisMultiDatePicker extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor(props) {
     super(props);
 
@@ -66,25 +69,34 @@ export default class AnalysisMultiDatePicker extends Component {
 
   handleStartChange = date => {
     this.setState({
-      selectedStartDate: date,
+      selectedStartDate: date
     });
   }
 
   handleEndChange = date => {
     this.setState({
-      selectedEndDate: date,
+      selectedEndDate: date
     });
   }
 
   render() {
     const { label, minDate, maxDate } = this.props;
     const { selectedStartDate, selectedEndDate } = this.state;
-
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
+    
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <DatePicker
-          customInput={<StartButton />}
+          customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -102,7 +114,7 @@ export default class AnalysisMultiDatePicker extends Component {
 
         />
         <DatePicker
-          customInput={<EndButton />}
+          customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -124,26 +136,32 @@ export default class AnalysisMultiDatePicker extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <div>
-    <label className='analysis-datepicker-button-label'>Start: </label>
-    <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-    >
-    {value}
-    </button>
-  </div>
-);
+const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+  return (
+    <div>
+      <label className='analysis-datepicker-button-label'>Start: </label>
+      <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+      >
+      {value}
+      </button>
+    </div>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <div>
-    <label className='analysis-datepicker-button-label'>End: </label>
-    <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-    >
-    {value}
-    </button>
-  </div>
-);
+const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+  return (
+    <div>
+      <label className='analysis-datepicker-button-label'>End: </label>
+      <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+      >
+      {value}
+      </button>
+    </div>
+  );
+};

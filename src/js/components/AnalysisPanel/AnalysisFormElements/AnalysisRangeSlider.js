@@ -1,12 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import MapActions from 'actions/MapActions';
+import resources from '../../../../resources';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
 export default class AnalysisRangeSlider extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor(props) {
     super(props);
 
@@ -98,6 +103,16 @@ export default class AnalysisRangeSlider extends Component {
   render() {
     const { bounds, step } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
+    
     return (
       <div className='analysis-results__select-form-item-container'>
         <Range
@@ -111,10 +126,10 @@ export default class AnalysisRangeSlider extends Component {
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: '#F0AB00'}]}
-          handleStyle={[{borderColor: '#F0AB00'}]}
+          trackStyle={[{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
+          handleStyle={[{borderColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #F0AB00'}}
+          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
         />
       </div>
     );

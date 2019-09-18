@@ -3,7 +3,6 @@ import layerFactory from 'utils/layerFactory';
 import mapActions from 'actions/MapActions';
 import on from 'dojo/on';
 
-
 export default class LayerVersions extends Component {
 
   static contextTypes = {
@@ -66,6 +65,7 @@ export default class LayerVersions extends Component {
     const { versions, selected } = this.state;
     const { layer } = this.props;
     const { language } = this.context;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
 
     return (
       <div className='relative layer-versions'>
@@ -73,7 +73,12 @@ export default class LayerVersions extends Component {
         <select onChange={this.onSelectVersion} value={selected}>
           {versions.map(this.renderVersionOptions)}
         </select>
-        <div className='fa-button sml white'>{selected}</div>
+        <div
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='fa-button sml white'
+        >
+          {selected}
+        </div>
       </div>
     );
   }

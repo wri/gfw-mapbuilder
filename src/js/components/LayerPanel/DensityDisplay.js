@@ -1,5 +1,6 @@
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import resources from '../../../resources';
 import React, {
   Component,
   PropTypes
@@ -12,7 +13,21 @@ const showModal = function showModal () {
 export default class DensityDisplay extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
+  };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      buttonHover: false
+    };
+  }
+
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
   };
 
   render () {
@@ -23,13 +38,31 @@ export default class DensityDisplay extends Component {
       language = this.props.language;
     }
     const { label, canopyDensity } = this.props;
+    const {buttonHover} = this.state;
     const hideDefaultLabel = label === '';
+    let customColorTheme;
+    let defaultColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+      defaultColorTheme = this.context.settings.defaultColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+      defaultColorTheme = resources.defaultColorTheme;
+    }
 
     return (
-    
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
-        <span className='canopy-button pointer' onClick={showModal}>{canopyDensity}</span>
+        <div
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='canopy-button pointer'
+          onClick={showModal}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
+        >
+          {canopyDensity}
+        </div>
         <span className='canopy-label'>{!label && !hideDefaultLabel && text[language].DENSITY_SECOND}</span>
       </div>
     );

@@ -31,11 +31,23 @@ export default class Navigation extends Component {
   };
 
   renderLanguageButtons = (currentLanguage, settings) => {
+    // Not sure how to test this out in the mobile navigation!
+    let colorTheme = '';
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+
     if (settings.useAlternativeLanguage) {
       return Object.keys(settings.labels).map((language) => {
+        if (currentLanguage === language && customColorTheme && customColorTheme !== '') {
+          colorTheme = customColorTheme;
+        } else if (currentLanguage === language && customColorTheme && customColorTheme === '') {
+            colorTheme = defaultColorTheme;
+        } else {
+            colorTheme = 'inherit';
+        }
         return (
           <li
             key={language}
+            style={{backgroundColor: `${colorTheme}`}}
             className={`mobile-menu__nav-link pointer ${currentLanguage === language ? 'active' : ''}`}
             data-lang={language}
             onClick={this.toggleLanguage}>

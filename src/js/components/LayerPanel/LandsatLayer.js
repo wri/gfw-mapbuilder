@@ -29,6 +29,7 @@ export default class LandsatLayer extends Component {
       backgroundImage: `url('${this.props.icon}')`,
       backgroundRepeat: 'no-repeat'
     };
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     return (
       <div className={classes}>
         <span style={imgStyles} className='layer-basemap-icon landsat' onClick={this.toggle}></span>
@@ -37,7 +38,12 @@ export default class LandsatLayer extends Component {
           <select className='pointer' onChange={this.changeYear.bind(this)} value={this.state.yearSelected}>
             {this.props.years.map(this.yearOption.bind(this))}
           </select>
-          <div className='fa-button sml white'>{this.state.yearSelected}</div>
+          <div
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button sml white'
+          >
+            {this.state.yearSelected}
+          </div>
         </div>
       </div>
     );

@@ -13,10 +13,18 @@ import React, {
 export default class SearchModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     webmapInfo: PropTypes.object.isRequired,
     map: PropTypes.object.isRequired
   };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      buttonHover: false
+    };
+  }
 
   componentDidUpdate(prevProps, prevState, prevContext) {
     const {map, webmapInfo, language} = this.context;
@@ -96,10 +104,18 @@ export default class SearchModal extends Component {
   onClose = () => {
     mapActions.toggleSearchModal({ visible: false });
   };
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const {buttonHover} = this.state;
+    
     return (
       <ControlledModalWrapper onClose={this.onClose}>
         <div className='deg-box'>
@@ -108,7 +124,16 @@ export default class SearchModal extends Component {
         <div className='deg-box'>
           <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
         </div>
-        <button className='search-submit-button fa-button gold' onClick={this.decimalDegreeSearch}>Search</button>
+        <button
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='search-submit-button fa-button color'
+          onClick={this.decimalDegreeSearch}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
+        >
+          Search
+        </button>
         <div className='search-widget-label'>
           {text[language].SEARCH_WIDGET_TITLE}
         </div>

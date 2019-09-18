@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 export default class GladControls extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -63,7 +64,8 @@ export default class GladControls extends Component {
     const {startDate, endDate} = this.props;
     const {unconfirmed} = this.state;
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    
     return (
       <div className='glad-controls'>
         <ToggleSwitch label='Hide unconfirmed alerts' checked={unconfirmed} onChange={this.toggleConfirmedAlerts} />
@@ -71,7 +73,7 @@ export default class GladControls extends Component {
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
             {startDate && <DatePicker
-              customInput={<StartButton />}
+              customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -85,7 +87,7 @@ export default class GladControls extends Component {
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
             {endDate && <DatePicker
-              customInput={<EndButton />}
+              customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -102,20 +104,26 @@ export default class GladControls extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};

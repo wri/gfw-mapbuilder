@@ -49,7 +49,8 @@ export default class CoordinatesModal extends Component {
       coordinatesFormat: 'Degrees Decimal Seconds (DMS)',
       dmsCoordinates: this.dmsCoordinates,
       ddCoordinates: this.ddCoordinates,
-      errors: []
+      errors: [],
+      buttonHover: false
     };
   }
 
@@ -355,6 +356,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const latitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS;
     const longitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     
     return (
       <div key={`DMS-${index}`}>
@@ -405,7 +407,10 @@ export default class CoordinatesModal extends Component {
             >
               {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
-            <div className='analysis-coordinates-directions__select-arrow'></div>
+            <div
+              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className='analysis-coordinates-directions__select-arrow'
+            ></div>
           </div>
         </div>
         
@@ -447,7 +452,10 @@ export default class CoordinatesModal extends Component {
             >
               {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
-            <div className='analysis-coordinates-directions__select-arrow'></div>
+            <div
+              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              className='analysis-coordinates-directions__select-arrow'
+            ></div>
           </div>
         </div>
       </div>
@@ -511,11 +519,18 @@ export default class CoordinatesModal extends Component {
       </option>
     );
   };
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {language} = this.context;
-    const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors} = this.state;
+    const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors, buttonHover} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
     
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -530,7 +545,11 @@ export default class CoordinatesModal extends Component {
           >
             {coordinateFormatOptions && coordinateFormatOptions.map(this.createOptions)}
           </select>
-          <div className='analysis-coordinates__select-arrow'></div>
+          <div
+            style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='analysis-coordinates__select-arrow'
+          >
+          </div>
         </div>
 
         {coordinatesFormat === coordinateFormatOptions[1] && <div className="analysis-coordinates__divider-dd"></div>}
@@ -544,7 +563,14 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-instructions__add-more-icon"><SVGIcon id={'icon-add-more'} /></span>
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
         </div>
-        <div className="fa-button gold analysis-instructions__make-shape-button" onClick={this.validateShape}>
+        <div
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className="fa-button color analysis-instructions__make-shape-button"
+          onClick={this.validateShape}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
+        >
           {/* <span className="analysis-instructions__make-shape-icon"><SVGIcon id={'icon-shape'} /></span> */}
           <span className="analysis-instructions__make-shape">{text[language].ANALYSIS_COORDINATES_BUTTONS[2]}</span>
         </div>

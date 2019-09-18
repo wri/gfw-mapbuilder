@@ -8,6 +8,7 @@ import React, {Component, PropTypes} from 'react';
 export default class ConfirmModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -51,7 +52,8 @@ export default class ConfirmModal extends Component {
   render () {
     const {language} = this.context;
     const {subscriptionToDelete} = this.props;
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    
     return (
       <ControlledModalWrapper onClose={this.close}>
         <h2 className='delete-header'>{text[language].SUBSCRIBE_DELETE_TITLE}</h2>
@@ -60,8 +62,8 @@ export default class ConfirmModal extends Component {
         <p>{text[language].SUBSCRIBE_DELETE_DESC}</p>
 
         <div className='subscription-sub-buttons'>
-          <button className='fa-button gold' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
-          <button className='fa-button gold' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
         </div>
 
       </ControlledModalWrapper>
