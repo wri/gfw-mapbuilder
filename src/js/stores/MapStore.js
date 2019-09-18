@@ -358,7 +358,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    if (selectedFeature) {
+    if (selectedFeature && !brApp.map.measurement.getTool()) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)
@@ -430,11 +430,11 @@ class MapStore {
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
   }
-  
+
   toggleCoordinatesModal (payload) {
     this.coordinatesModalVisible = payload.visible;
   }
-  
+
   toggleEditCoordinatesModal (payload) {
     this.editCoordinatesModalVisible = payload.visible;
   }
@@ -498,7 +498,7 @@ class MapStore {
       this.editingEnabled = true;
     }
   }
-  
+
   resetEditing () {
     this.editingEnabled = false;
   }
@@ -563,51 +563,62 @@ class MapStore {
   updateModisEndDate (endDate) {
     this.modisEndDate = endDate;
   }
-  
+
   updateSelectedFeatureTitles (selectedFeatureTitles) {
     this.selectedFeatureTitles = selectedFeatureTitles;
   }
-  
+
   updateCurrentLat (latitude) {
     this.currentLat = latitude;
   }
-  
+
   updateCurrentLng (longitude) {
     this.currentLng = longitude;
   }
-  
+
   updateCurrentX (x) {
     this.currentX = x;
   }
-  
+
   updateCurrentY (y) {
     this.currentY = y;
   }
 
   showLayerInfo (layer) {
-    // Grab the id of the sublayer if it exists, else, grab the normal id
-    const id = layer.subId ? layer.subId : layer.id;
-    const info = layerInfoCache.get(id);
-
-    if (info) {
+    if (layer.metadata.metadata.error) {
       const promise = new Promise((resolve) => {
         resolve();
       });
-
       promise.then(() => {
+        this.modalLayerInfo = null;
         this.iconLoading = '';
-        this.modalLayerInfo = info;
         this.layerModalVisible = true;
         this.emitChange();
       });
-
     } else {
-      layerInfoCache.fetch(layer).then(layerInfo => {
-        this.iconLoading = '';
-        this.modalLayerInfo = layerInfo;
-        this.layerModalVisible = true;
-        this.emitChange();
-      });
+      // Grab the id of the sublayer if it exists, else, grab the normal id
+      const id = layer.subId ? layer.subId : layer.id;
+      const info = layerInfoCache.get(id);
+      if (info) {
+        const promise = new Promise((resolve) => {
+          resolve();
+        });
+  
+        promise.then(() => {
+          this.iconLoading = '';
+          this.modalLayerInfo = info;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+  
+      } else {
+        layerInfoCache.fetch(layer).then(layerInfo => {
+          this.iconLoading = '';
+          this.modalLayerInfo = layerInfo;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+      }
     }
   }
 
@@ -685,11 +696,11 @@ class MapStore {
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
   }
-  
+
   activateEnterValuesButton(bool) {
     this.enterValuesButtonActive = bool;
   }
-  
+
   activateEditCoordinates(bool) {
     this.editCoordinatesActive = bool;
   }

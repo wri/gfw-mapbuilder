@@ -54,6 +54,7 @@ import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
 import screenUtils from 'esri/geometry/screenUtils';
 import SpatialReference from 'esri/SpatialReference';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 
 import React, {
   Component,
@@ -153,8 +154,9 @@ export default class Map extends Component {
       if (!editingEnabled) {
         editToolbar.deactivate();
       } else {
-        if (map.infoWindow && map.infoWindow.getSelectedFeature) {
+        if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
+          console.log('selectedFeature', selectedFeature);
           if (selectedFeature && selectedFeature.geometry) {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
           }
@@ -166,8 +168,12 @@ export default class Map extends Component {
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };
-  
+
   getSelectedFeatureTitles = () => {
+
+    if (brApp.map.measurement.getTool()) {
+      return;
+    }
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
@@ -194,7 +200,7 @@ export default class Map extends Component {
       }
     }
   };
-  
+
   clearSelectedFeaturesTitles = () => {
     const emptyArray = [];
     layerActions.updateSelectedFeatureTitles.defer(emptyArray);
@@ -214,7 +220,6 @@ export default class Map extends Component {
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
       response.map.infoWindow.on('set-features, selection-change', this.getSelectedFeatureTitles);
-      response.map.infoWindow.on('hide', this.clearSelectedFeatureTitles);
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
@@ -283,6 +288,7 @@ export default class Map extends Component {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
                   createWMSGraphics(responses, layerId, wmsGraphics);
                   brApp.map.infoWindow.setFeatures(wmsGraphics);
+                  console.log(brApp.map.infoWindow);
                 } else {
                   console.error(`error: ${responses[layerId].error}`);
                 }
@@ -290,6 +296,7 @@ export default class Map extends Component {
             });
           }
         });
+        
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -306,6 +313,13 @@ export default class Map extends Component {
             }
           }
         });
+        
+      //- Hide the selected feature highlight if using the measurement tool
+      response.map.on('click', evt => {
+        if (brApp.map.measurement.getTool()) {
+          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+        }
+      });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
@@ -335,7 +349,7 @@ export default class Map extends Component {
             });
           }
         });
-        
+
         editToolbar.on('vertex-mouse-over', evt => {
           if (!this.state.editCoordinatesModalVisible) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
@@ -343,24 +357,24 @@ export default class Map extends Component {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          
+
           const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
-        
+
         editToolbar.on('vertex-move-stop', evt => {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          
+
           const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
-        
+
         editToolbar.on('vertex-delete', evt => {
           mapActions.toggleEditCoordinatesModal({ visible: false });
         });
