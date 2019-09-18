@@ -106,7 +106,7 @@ export default class ControlPanel extends Component {
   };
 
   showMeasurement = () => {
-    mapActions.toggleMeasurementModal({ visible: true });
+    mapActions.toggleMeasurementModal();
   }
 
   render () {
@@ -140,7 +140,7 @@ export default class ControlPanel extends Component {
               <SVGIcon id={'icon-controls-toggle__off'} />
             }
           </li>
-          <li className='control-panel__legend pointer' title={text[language].MEASUREMENT} onClick={this.showMeasurement}>
+          <li className='control-panel__measurement pointer' title={text[language].MEASUREMENT} onClick={this.showMeasurement}>
             <SVGIcon id={'icon-measure'} />
           </li>
           <li className='control-panel__legend pointer mobile-show' title={text[language].LEGEND} onClick={this.showLegend}>

@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 export default class MeasurementModal extends Component {
 
   close = () => {
-    mapActions.toggleMeasurementModal({ visible: false });
+    mapActions.toggleMeasurementModal();
   };
 
   render () {

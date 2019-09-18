@@ -430,8 +430,8 @@ class MapStore {
     this.activeAnalysisType = payload;
   }
   
-  toggleMeasurementModal (payload) {
-    this.measurementModalVisible = payload.visible;
+  toggleMeasurementModal () {
+    this.measurementModalVisible = !this.measurementModalVisible;
   }
 
   toggleAnalysisModal (payload) {

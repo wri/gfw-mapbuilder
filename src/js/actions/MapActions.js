@@ -38,7 +38,7 @@ class MapActions {
   * @param {boolean} - data.visible
   * @return {object} - data
   */
-  toggleMeasurementModal = (data) => data;
+  toggleMeasurementModal = () => { return {}; };
   toggleAnalysisModal = (data) => data;
   toggleCoordinatesModal = (data) => data;
   toggleEditCoordinatesModal = (data) => data;
