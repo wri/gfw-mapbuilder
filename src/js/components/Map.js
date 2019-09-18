@@ -221,7 +221,6 @@ export default class Map extends Component {
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
       response.map.infoWindow.on('set-features, selection-change', this.getSelectedFeatureTitles);
-      response.map.infoWindow.on('hide', this.clearSelectedFeatureTitles);
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
