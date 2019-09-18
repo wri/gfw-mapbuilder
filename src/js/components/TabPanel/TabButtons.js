@@ -133,7 +133,6 @@ export default class TabButtons extends Component {
           <li className={this.getClassName(LAYERS)} data-value={LAYERS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-basemap'} />
-
             </svg>
             <span className='tab-tooltip'>{text[language].LAYERS}</span>
             <span className='tab-buttons__tab-label mobile-show'>
