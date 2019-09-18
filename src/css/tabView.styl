@@ -16,10 +16,18 @@
   position static
   display none
   height 100%
-
+  
 .tab-view__content.selected
   flex-direction column
   display flex
+  .measurement-container
+    .esriMeasurementButtonContainer
+      span.esriButtonChecked ~ span.esriToggleButton
+        display block !important
+        margin 0 auto
+    .esriToggleButton
+      display none !important
+      margin 0 auto
 
 .tab-view__narrative
   margin 10px
