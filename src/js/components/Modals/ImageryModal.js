@@ -13,7 +13,6 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Polygon from 'esri/geometry/Polygon';
 import symbols from 'utils/symbols';
 import layerKeys from 'constants/LayerConstants';
-
 import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
@@ -28,10 +27,9 @@ export default class ImageryModal extends Component {
 
   constructor (props) {
     super(props);
-    const {language} = this.context;
     this.state = {
-      monthsVal: text[language].MONTHS_OPTIONS[1].label,
-      imageStyleVal: text[language].IMAGE_STYLE_OPTIONS[0].label,
+      monthsVal: text[this.props.language].MONTHS_OPTIONS[1].label,
+      imageStyleVal: text[this.props.language].IMAGE_STYLE_OPTIONS[0].label,
       cloudScore: [0, 25],
       start: null,
       end: null,

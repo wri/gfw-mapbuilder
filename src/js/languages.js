@@ -2381,7 +2381,7 @@ strings.id.EDIT = 'Ubah';
 strings.id.BEFORE = 'Sebelum';
 strings.id.LOAD_ERROR = 'Error loading recent imagery.';
 strings.id.MATCH_ERROR = 'No results match the selected criteria.';
-strings.ANALYSIS_INSTRUCTION_ADDITIONAL.MONTHS_OPTIONS = [
+strings.id.MONTHS_OPTIONS = [
   { label: `4 Bulan`, value: 4 },
   { label: `3 Bulan`, value: 3},
   { label: `6 Bulan`, value: 6},
