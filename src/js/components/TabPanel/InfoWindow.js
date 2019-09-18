@@ -99,7 +99,7 @@ export default class InfoWindow extends Component {
       ) {
         title = (
           <div className='infoWindow__title'>
-            <CustomFeatureControl feature={selectedFeature} />
+            <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
           </div>
         );
       }

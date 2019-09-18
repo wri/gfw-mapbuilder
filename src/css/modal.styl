@@ -13,7 +13,7 @@
   width 100%
   left 0
   top 0
-
+  
 .modal-background
   background-color rgba(0, 0, 0, 0.35)
   height 100%
@@ -30,11 +30,45 @@
   & a
     word-break break-word
     word-wrap break-word
-
   &.draggable
     top 250px
     cursor grab
     z-index 100
+    
+.imagery-hover-modal
+  padding 10px
+  position absolute
+  cursor pointer
+  transform translate(-50%, 30%)
+  font-size 12px
+  background #fffee2
+  box-shadow 0px 0px 2px 0 rgba(0, 0, 0, 0.2)
+  div
+    display flex
+    margin-bottom 5px
+
+  h4
+    margin-right 5px
+
+.edit-modal
+  max-height 100%
+  height auto
+  max-height 100%
+  position fixed
+  height auto
+  margin: 0.5rem 1rem;
+  padding 0.25rem
+  font-size 12px
+  background #fffee2
+  box-shadow 0px 0px 2px 0 rgba(0, 0, 0, 0.2)
+  z-index 5
+  & a
+    word-break break-word
+    word-wrap break-word
+  &.draggable
+    top 250px
+    cursor grab
+    z-index 5
 
 .close-icon
   position absolute
@@ -44,12 +78,27 @@
   top 0
   z-index 10
   & svg
-    transform translate(-50%, -50%)
+    //transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    left 50%
-    top 50%
+    //left 50%
+    top 60%
+    margin-left 0.25rem
+    
+.edit-close-icon
+  height 15px
+  width 15px
+  z-index 10
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  & svg
+    height 100%
+    width 100%
+    top 60%
+    margin-left 0.25rem
+    
 
 .mobile-show.close-icon
   height 60px
@@ -67,37 +116,62 @@
   overflow-y auto
   color $darkGray
   height 100%
+  
+.edit-modal-content
+  overflow-x hidden
+  max-height 450px
+  overflow-y auto
+  color $darkGray
+  height 100%
+  .edit-coordinates-subtitle
+    margin-bottom 0.25rem
+  .edit-coordinates-longitude-label
+  .edit-coordinates-latitude-label
+    margin-right 0.25rem
 
 .no-info-available
   text-align center
-  line-height 40px
-  height 40px
+  margin 1rem
 
 //- Analysis Modal
 .analysis-modal-container .modal
+.coordinates-modal-container .modal
   overflow-y auto
   width 320px
   height 500px
-  & .analysis-instructions__separator
-    display none
+  // & .analysis-instructions__separator
+  //   display none
   & .modal-content
     max-height 100%
 
+// Edit coordinates modal styles
+.edit-coordinates-modal-container
+  .modal-container
+    .modal
+      z-index 10
+      overflow-y auto
+      width 200px
+      height 100px
+      & .modal-content
+        max-height 100%
+
 @media (min-width: $mobileBreak)
   .analysis-modal-container
+  .coordinates-modal-container
     & .analysis-instructions__header--additional
       font-size inherit
       margin 5px 0
 
 //- Share Modal
 #share-modal
+  z-index 10
   & .modal-content
     width 300px
   & .share-instructions
     padding-bottom 10px
     font-size 13px
   & .share-items
-    justify-content space-around
+    justify-content center
     display flex
     & svg
       transform translate(-50%, -50%)
@@ -121,11 +195,13 @@
 
 .facebook-modal
   background $facebookBlue
+  margin 0 0.5rem
   &:hover
     background darken($facebookBlue, 25%)
 
 .twitter-modal
   background $twitterBlue
+  margin 0 0.5rem
   &:hover
     background darken($twitterBlue, 25%)
 
@@ -155,7 +231,9 @@
 .canopy-modal-container
   & .modal-content
     width 340px
-    height 210px
+    height 240px
+    overflow-y hidden
+    padding 1.5rem 1.25rem 1rem 1rem
   & .irs-line-left
   & .irs-line-right
   & .irs-line-mid
@@ -187,11 +265,13 @@
   height 41px
   float left
   width 25px
+  background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
 
 .forest-icon
   float right
   height 60px
   width 91px
+  background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
 
 .slider-container
   margin 5px 10px

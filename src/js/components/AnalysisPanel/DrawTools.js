@@ -88,6 +88,12 @@ export default class DrawTools extends Component {
     mapActions.activateDrawButton(false);
     // Reconnect the popups, this function is only available to webmaps when usePopupManager is true
     map.setInfoWindowOnClick(true);
+    const selectedFeature = map.infoWindow.getSelectedFeature();
+    map.infoWindow.clearFeatures();
+    const layer = map.getLayer(layerKeys.USER_FEATURES);
+    layer.remove(selectedFeature);
+    brApp.map.graphics.clear();
+    mapActions.setAnalysisType('default');
   };
 
   renderInstructionList = (instruction, index) => {
@@ -117,9 +123,10 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          className={`fa-button gold analysis-instructions__draw-button ${this.state.drawButtonActive ? 'active' : ''}`}
+          className="fa-button gold analysis-instructions__draw-button"
           onClick={this.draw}>
-          {text[language].ANALYSIS_DRAW_BUTTON}
+          <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
+          <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>
         </div>
         <div className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>

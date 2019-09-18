@@ -46,9 +46,10 @@ export default class ReportSubscribeButtons extends Component {
       modisStartDate,
       modisEndDate,
       activeFilters,
-      activeVersions
+      activeVersions,
+      selectedFeatureTitles
     } = mapStore.getState();
-
+    
     if (selectedFeature) {
 
       const params = getUrlParams(location.href);
@@ -71,7 +72,8 @@ export default class ReportSubscribeButtons extends Component {
         canopyDensity,
         settings,
         activeFilters: [],
-        activeVersions: []
+        activeVersions: [],
+        selectedFeatureTitles: selectedFeatureTitles
       };
 
       if (params.appid) {
