@@ -161,7 +161,6 @@ export default class Map extends Component {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
           }
         }
-        return;
       }
     }
   }
