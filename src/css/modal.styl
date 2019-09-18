@@ -22,6 +22,7 @@
   right 6.9rem
   top 5.1rem
   max-width 15rem
+  z-index 5
   & a
     word-break break-word
     word-wrap break-word
@@ -100,9 +101,9 @@
     
 .measurement-close-icon
   position absolute
-  height 40px
-  width 40px
-  right 0
+  height 30px
+  width 30px
+  right -5
   top -15
   z-index 10
   & svg
@@ -146,7 +147,7 @@
   height 100%
   
 .measurement-modal-content
-  padding 1rem
+  padding 0.5rem
   overflow-x hidden
   max-height 450px
   overflow-y auto
@@ -155,10 +156,29 @@
   .measurement-container
     .esriMeasurementButtonContainer
       margin-top 1rem
-      span.esriButtonChecked ~ span.esriToggleButton
-        visibility visible !important
+      //span.esriButton ~ span.esriToggleButton
+      span.esriButton ~ span.esriToggleButton
+        #dijit_form_DropDownButton_0
+          background-color #ededed
+          cursor not-allowed
+          .dijitButtonText
+          .dijitArrowButtonInner
+            cursor not-allowed
+      //span.esriButton.esriButtonChecked ~ span.esriToggleButton
+      span.esriButton.esriButtonChecked.dijitChecked ~ span.esriToggleButton
+        #dijit_form_DropDownButton_0
+          background-color #fff
+          cursor pointer
+          .dijitButtonText
+          .dijitArrowButtonInner
+            cursor pointer
       .esriToggleButton
         visibility visible !important
+    .esriMeasurementResultLabel
+    .esriMeasurementResultTable
+      font-size 0.75rem
+    .esriMeasurementResultValue
+      text-align center
 
 .edit-modal-content
   overflow-x hidden
@@ -775,6 +795,7 @@ hr
     right 5.75rem
     top 4rem
     max-width 15rem
+    z-index 5
     & a
       word-break break-word
       word-wrap break-word
