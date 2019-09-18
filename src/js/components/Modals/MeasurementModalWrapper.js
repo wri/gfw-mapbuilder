@@ -8,7 +8,7 @@ export default function MeasurementModalWrapper (props) {
   const contentClass = `measurement-modal-content custom-scroll ${props.theme ? props.theme : ''}`;
   return (
     <div className='measurement-modal-container'>
-      <article className='measurement-modal'>
+      <article className='measurement-modal shadow'>
         <div title='close' className='measurement-close-icon pointer' onClick={props.onClose} >
           <svg>
             <SVGIcon id={'shape-close'} />
