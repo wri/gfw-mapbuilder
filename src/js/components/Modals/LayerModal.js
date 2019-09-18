@@ -6,7 +6,21 @@ import React, {Component, PropTypes} from 'react';
 export default class Modal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
+  };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      buttonHover: false
+    };
+  }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
   };
 
   renderMetadata(info) {
@@ -16,7 +30,9 @@ export default class Modal extends Component {
     } else if(info.licenseInfo && !info.license) {
       info.license = info.licenseInfo;
     }
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const {buttonHover} = this.state;
+    
     return (
       <div className='layer-modal-content'>
         <div className='source-header'>
@@ -50,7 +66,12 @@ export default class Modal extends Component {
           }
           {!info.learn_more ? null :
             <div className='source-learn-more flex'>
-              <a href={info.learn_more} className='source-learn-more-link fa-button white' target='_blank'>
+              <a
+                href={info.learn_more}
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='source-learn-more-link fa-button white'
+                target='_blank'
+              >
                 {text[language].LEARN_MORE}
               </a>
             </div>
@@ -58,7 +79,14 @@ export default class Modal extends Component {
         </div>
         {!info.download_data ? null :
           <div className='source-footer'>
-            <a href={info.download_data} className='source-download fa-button gold' target='_blank'>
+            <a href={info.download_data}
+            target='_blank'
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className="source-download fa-button color"
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+            >
               {text[language].DOWNLOAD_DATA}
             </a>
           </div>

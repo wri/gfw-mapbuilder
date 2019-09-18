@@ -5,6 +5,7 @@ import text from 'js/languages';
 import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
 
 //- Parse Keys for easier access
 const {
@@ -114,7 +115,7 @@ export default class TabButtons extends Component {
     const {settings, language} = this.context;
     const {tableOfContentsVisible} = this.props;
     const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
-
+    const {customColorTheme, defaultColorTheme} = resources;
     return (
       <nav className={`tab-buttons map-component ${tableOfContentsVisible ? '' : 'hidden'}`}>
         <ul className='tab-buttons__header'>
@@ -162,7 +163,8 @@ export default class TabButtons extends Component {
               </span>
             </li>
           }
-          {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
+          {!this.props.analysisDisabled ?
+          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-analysis'} />
 
@@ -171,7 +173,8 @@ export default class TabButtons extends Component {
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].ANALYZE}
             </span>
-          </li> ||
+          </li>
+          :
           <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)} analysis-disabled`} data-value={ANALYSIS}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-analysis'} />
@@ -180,18 +183,38 @@ export default class TabButtons extends Component {
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].ANALYZE}
             </span>
-          </li>}
+          </li>
+          }
+          {!this.props.analysisDisabled && this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
+            <span
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              className="tab-dot"
+            >
+            </span>
+            : null
+          }
           {!settings.includeDocumentsTab ? null :
-            <li className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`} data-value={DOCUMENTS} onClick={this.changeTab}>
+            <li
+              className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`}
+              data-value={DOCUMENTS}
+              onClick={this.changeTab}
+            >
               <svg className='svg-icon'>
                 <SVGIcon id={'icon-documents'} />
-
               </svg>
               <span className='tab-tooltip'>{text[language].DOCUMENTS}</span>
               <span className='tab-buttons__tab-label mobile-show'>
                 {text[language].DOCS}
               </span>
             </li>
+          }
+          {this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
+            <span
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              className="tab-dot"
+            >
+            </span>
+            : null
           }
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>

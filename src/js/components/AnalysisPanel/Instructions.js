@@ -8,6 +8,7 @@ import SVGIcon from 'utils/svgIcon';
 export default class Instructions extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
   };
 
@@ -19,7 +20,8 @@ export default class Instructions extends Component {
 
   render () {
     const {language} = this.context;
-
+    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    
     return (
       <div className='analysis-instructions'>
         <h4 className='analysis-instructions__header'>
@@ -33,7 +35,7 @@ export default class Instructions extends Component {
             <SVGIcon id={'icon-analysis-poly'} />
           </svg>
         </div>
-        <div className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

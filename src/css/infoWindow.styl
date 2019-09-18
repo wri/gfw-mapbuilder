@@ -28,7 +28,6 @@
 
   .actions
     button
-      background $goldTheme
       border 0
       border-radius 12px
       box-sizing border-box
@@ -86,6 +85,9 @@
 .edit-delete-container
   display flex
   margin 0.5rem 0
+  .edit-save-button
+    height 30px !important 
+    line-height 30px !important
 
 .custom-feature__input
   -webkit-appearance none
@@ -115,14 +117,6 @@
   color $grayFont
   font-size 14px
   padding 0.5rem 0
-  &:hover
-    text-decoration underline
-  
-.custom-feature__edit
-  color #ffffff
-  background-color #e6a912
-  padding 0.5rem 1rem
-  font-size 14px
   &:hover
     text-decoration underline
 

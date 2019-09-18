@@ -11,6 +11,9 @@
 		"logoLinkUrl": "http://developers.globalforestwatch.org/map-builder/",
 		"aboutLinkUrl": "",
 		"downloadLinkUrl": "",
+		
+		"customColorTheme": "",
+		"defaultColorTheme": "#F0AB00",
 
 		"useAlternativeLanguage": false,
 		"alternativeLanguage": "fr",
@@ -35,7 +38,7 @@
 		"hideFooter": false,
 		"includeMyGFWLogin": false,
 		"includeDocumentsTab": false,
-    "includeMeasurementTab": false,
+        "includeMeasurementTab": false,
 
 		"mapThemeIds": "",
 		"mapThemes": "",
