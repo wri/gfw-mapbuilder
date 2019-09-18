@@ -7,6 +7,12 @@ export default class MeasurementModal extends Component {
 
   close = () => {
     mapActions.toggleMeasurementModal();
+    // Clears graphics from map and resets the buttons
+    brApp.map.measurement.clearResult();
+    const currentTool = brApp.map.measurement.getTool();
+    if (currentTool) {
+        brApp.map.measurement.setTool(currentTool.toolName, false);
+    }
   };
 
   render () {
