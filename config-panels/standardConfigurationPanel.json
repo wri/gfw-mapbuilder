@@ -353,13 +353,6 @@
 			"tooltip": "Attachments of feature layers will be shown in a separate tab",
 			"label": "Show attached documents in separate tab",
 			"value": false
-		},
-		{
-			"type": "boolean",
-			"fieldName": "includeMeasurementTab",
-			"tooltip": "Show measurement tools in separate tab",
-			"label": "Show measurement tool in separate tab",
-			"value": false
 		}]
 	}],
 	"values": {
@@ -372,7 +365,6 @@
 		"includeMyGFWLogin": true,
 		"hideHeader": false,
 		"hideFooter": false,
-		"includeDocumentsTab": false,
-		"includeMeasurementTab": false
+		"includeDocumentsTab": false
 	}
 }

@@ -21,7 +21,6 @@ export default {
 	"alternativeNarrative": "",
 	"alternativeWebmapMenuName": "",
 	"includeDocumentsTab": false,
-	"includeMeasurementTab": false,
 	"viirsFires": false,
 	"modisFires": false,
 	"intactForests": false,
