@@ -70,8 +70,7 @@ export default class InfoWindow extends Component {
     const {activeSelectedFeature} = this.state;
     let count = 0, selectedIndex = 0;
     let selectedFeature, content, title, footer, dropdown, features;
-    
-    console.log('infoWindow', infoWindow);
+    const {editingEnabled} = this.props;
     
     if(activeSelectedFeature) {
       selectedFeature = activeSelectedFeature;

@@ -97,6 +97,7 @@ export default class DrawTools extends Component {
     layer.remove(selectedFeature);
     brApp.map.graphics.clear();
     mapActions.setAnalysisType('default');
+    map.setInfoWindowOnClick(true);
   };
 
   renderInstructionList = (instruction, index) => {
