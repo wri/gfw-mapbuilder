@@ -14,7 +14,6 @@ const {
   LAYERS,
   ANALYSIS,
   INFO_WINDOW,
-  MEASUREMENT,
   NARRATIVE,
   MORE
 } = tabKeys;
@@ -135,7 +134,6 @@ export default class TabButtons extends Component {
           <li className={this.getClassName(LAYERS)} data-value={LAYERS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-basemap'} />
-
             </svg>
             <span className='tab-tooltip'>{text[language].LAYERS}</span>
             <span className='tab-buttons__tab-label mobile-show'>
@@ -152,39 +150,16 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          {!settings.includeMeasurementTab ? null :
-            <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
+          {!this.props.analysisDisabled &&
+            <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
               <svg className='svg-icon'>
-                <SVGIcon id={'icon-measure'} />
-
+                <SVGIcon id={'icon-analysis'} />
               </svg>
-              <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
+              <span className='tab-tooltip'>{text[language].ANALYZE}</span>
               <span className='tab-buttons__tab-label mobile-show'>
-                {text[language].MEASUREMENT}
+                {text[language].ANALYZE}
               </span>
             </li>
-          }
-          {!this.props.analysisDisabled ?
-          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
-            <svg className='svg-icon'>
-              <SVGIcon id={'icon-analysis'} />
-
-            </svg>
-            <span className='tab-tooltip'>{text[language].ANALYZE}</span>
-            <span className='tab-buttons__tab-label mobile-show'>
-              {text[language].ANALYZE}
-            </span>
-          </li>
-          :
-          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)} analysis-disabled`} data-value={ANALYSIS}>
-            <svg className='svg-icon'>
-              <SVGIcon id={'icon-analysis'} />
-            </svg>
-            <span className='tab-tooltip'>Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily</span>
-            <span className='tab-buttons__tab-label mobile-show'>
-              {text[language].ANALYZE}
-            </span>
-          </li>
           }
           {!this.props.analysisDisabled && this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
             <span
