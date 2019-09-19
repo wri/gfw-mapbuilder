@@ -5,7 +5,7 @@ html
   body
     div#report.report
     div#share-modal.share-modal.hidden
-    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/custom-color-theme-refactor/reportLib.1.4.1.js')
+    script(id='report-load' src='https://library.gfw-mapbuilder.org/reportLib.1.4.1.js')
     script.
       var customApp = new MapBuilderReport({
         config: {
@@ -31,7 +31,8 @@ html
           hideFooter: false,
           includeMyGFWLogin: true,
           navLinksInNewTab: false,
-          customColorTheme: '#17eae7',
+          //- Color Settings
+          customColorTheme: '',
           //- Language Settings
           language: 'en',
           useAlternativeLanguage: false,
