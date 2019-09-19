@@ -1,5 +1,6 @@
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -26,7 +27,7 @@ export default class MapThemes extends Component {
   render () {
     const {language} = this.context;
     const {themes} = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <li className='app-header__nav-link app-header__nav-link--map-themes pointer'>
         <svg className='svg-icon__nav'>

@@ -16,7 +16,7 @@ import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePic
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
 import {attributes} from 'constants/AppConstants';
-import {analysisConfig} from 'js/config';
+import {defaultColorTheme} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
@@ -483,7 +483,7 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-results'>

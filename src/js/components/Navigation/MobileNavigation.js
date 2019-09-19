@@ -1,5 +1,6 @@
 import appActions from 'actions/AppActions';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -33,7 +34,7 @@ export default class Navigation extends Component {
   renderLanguageButtons = (currentLanguage, settings) => {
     // Not sure how to test this out in the mobile navigation!
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     if (settings.useAlternativeLanguage) {
       return Object.keys(settings.labels).map((language) => {

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../../config';
 
 
 
@@ -71,14 +72,14 @@ export default class AnalysisDatePicker extends Component {
   render() {
     const { label, minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <div className="report-date-picker">
           <DatePicker
-            customInput={<Button customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+            customInput={<Button customColorTheme={customColorTheme} />}
             showMonthDropdown
             showYearDropdown
             dropdownMode="select"
@@ -94,7 +95,7 @@ export default class AnalysisDatePicker extends Component {
   }
 }
 
-const Button = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const Button = ({ onClick, value, customColorTheme }) => {
   return (<div>
     <label className='analysis-datepicker-button-label'>Date: </label>
     <button

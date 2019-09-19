@@ -1,9 +1,8 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
-
+import {defaultColorTheme} from '../../config';
 import React, {Component, PropTypes} from 'react';
-
 
 export default class ConfirmModal extends Component {
 
@@ -52,7 +51,7 @@ export default class ConfirmModal extends Component {
   render () {
     const {language} = this.context;
     const {subscriptionToDelete} = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <ControlledModalWrapper onClose={this.close}>

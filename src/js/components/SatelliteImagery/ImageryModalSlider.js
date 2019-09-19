@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
 import MapActions from 'actions/MapActions';
+import {defaultColorTheme} from '../../config';
+
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -73,7 +75,7 @@ export default class AnalysisRangeSlider extends Component {
   render() {
     const { bounds, step, rangeSliderCallback } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <div className='analysis-results__select-form-item-container'>
         <Range

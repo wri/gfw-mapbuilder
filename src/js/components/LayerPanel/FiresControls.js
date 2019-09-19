@@ -4,6 +4,7 @@ import text from 'js/languages';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../config';
 
 export default class FiresControls extends React.Component {
 
@@ -78,7 +79,7 @@ export default class FiresControls extends React.Component {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
     const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <div>
         <div className="active-fires-controls-container">
@@ -115,7 +116,7 @@ export default class FiresControls extends React.Component {
                 <div className='glad-controls__calendars--row'>
                   <label>{text[language].TIMELINE_START}</label>
                   <DatePicker
-                    customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+                    customInput={<StartButton customColorTheme={customColorTheme} />}
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
@@ -129,7 +130,7 @@ export default class FiresControls extends React.Component {
                 <div className='glad-controls__calendars--row'>
                   <label>{text[language].TIMELINE_END}</label>
                   <DatePicker
-                    customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+                    customInput={<EndButton customColorTheme={customColorTheme} />}
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
@@ -149,7 +150,7 @@ export default class FiresControls extends React.Component {
   }
 }
 
-const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const StartButton = ({ onClick, value, customColorTheme }) => {
   return (
     <button
       style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
@@ -161,7 +162,7 @@ const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) =>
   );
 };
 
-const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const EndButton = ({ onClick, value, customColorTheme }) => {
   return (
     <button
       style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}

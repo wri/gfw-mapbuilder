@@ -5,6 +5,7 @@ import utils from 'utils/AppUtils';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
@@ -62,13 +63,10 @@ export default class ShareModal extends Component {
   render () {
     const {url} = this.props;
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
     return (
       <ModalWrapper>

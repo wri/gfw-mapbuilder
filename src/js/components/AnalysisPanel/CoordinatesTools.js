@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 import React, {
   Component,
@@ -84,7 +85,7 @@ export default class CoordinatesTools extends Component {
     
       render() {
         const {language} = this.context;
-        const { customColorTheme, defaultColorTheme } = this.context.settings;
+        const { customColorTheme } = this.context.settings;
         const {enterValuesButtonActive, buttonHover} = this.state;
         
         return (

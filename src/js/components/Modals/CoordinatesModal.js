@@ -7,6 +7,7 @@ import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
 import Point from 'esri/geometry/Point';
 import layerKeys from '../../constants/LayerConstants';
+import {defaultColorTheme} from '../../config';
 
 const defaultDMS = {
   lat: {
@@ -356,7 +357,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const latitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS;
     const longitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div key={`DMS-${index}`}>
@@ -530,7 +531,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors, buttonHover} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <ControlledModalWrapper onClose={this.close}>

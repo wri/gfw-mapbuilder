@@ -1,7 +1,7 @@
 import appActions from 'actions/AppActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -45,7 +45,7 @@ export default class LanguageToggle extends Component {
     for (const lang in settings.labels) {
       languageButtons.push(this.createListButton(language, lang));
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <li className='app-header__nav-link app-header__nav-link--language pointer'>

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 export default class RadioButton extends Component {
   static contextTypes = {
@@ -30,7 +31,7 @@ export default class RadioButton extends Component {
       initialLayerOpacities
     } = this.props;
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (selected === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (selected === 'active' && customColorTheme && customColorTheme === '') {

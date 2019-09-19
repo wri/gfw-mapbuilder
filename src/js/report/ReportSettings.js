@@ -10,6 +10,7 @@ import mapActions from '../actions/MapActions';
 import layerActions from '../actions/LayerActions';
 import analysisUtils from './../utils/analysisUtils';
 import resources from '../../resources';
+import {defaultColorTheme} from '../config';
 
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
@@ -344,13 +345,10 @@ export default class ReportSettings extends Component {
     const {language} = this.props;
     const {buttonHover} = this.state;
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
       return (
           <div className="analysis-results__select-form-container">

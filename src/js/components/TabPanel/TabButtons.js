@@ -6,6 +6,7 @@ import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
 //- Parse Keys for easier access
 const {
@@ -114,7 +115,7 @@ export default class TabButtons extends Component {
     const {settings, language} = this.context;
     const {tableOfContentsVisible} = this.props;
     const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
-    const {customColorTheme, defaultColorTheme} = resources;
+    const { customColorTheme } = resources;
     return (
       <nav className={`tab-buttons map-component ${tableOfContentsVisible ? '' : 'hidden'}`}>
         <ul className='tab-buttons__header'>

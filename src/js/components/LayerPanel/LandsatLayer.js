@@ -2,11 +2,12 @@ import LayerKeys from 'constants/LayerConstants';
 import basemapUtils from 'utils/basemapUtils';
 import mapActions from 'actions/MapActions';
 import utils from 'utils/AppUtils';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
 } from 'react';
+
 
 export default class LandsatLayer extends Component {
 
@@ -29,7 +30,7 @@ export default class LandsatLayer extends Component {
       backgroundImage: `url('${this.props.icon}')`,
       backgroundRepeat: 'no-repeat'
     };
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <div className={classes}>
         <span style={imgStyles} className='layer-basemap-icon landsat' onClick={this.toggle}></span>

@@ -6,6 +6,7 @@ import ReportSettings from '../../report/ReportSettings';
 import Loader from '../Loader';
 import Measure from 'react-measure';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
 export default class VegaChart extends Component {
   constructor(props) {
@@ -177,7 +178,7 @@ export default class VegaChart extends Component {
     const { results, component, reportLabel, module, params, language, analysisId, chartType, toggle, toggleChart} = this.props;
     
     let colorTheme;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme } = resources;
     if (!toggle && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (toggle && (!customColorTheme || customColorTheme === '')) {

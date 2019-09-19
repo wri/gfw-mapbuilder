@@ -5,6 +5,7 @@ import text from 'js/languages';
 import Search from 'esri/dijit/Search';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import InfoTemplate from 'esri/InfoTemplate';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -113,7 +114,7 @@ export default class SearchModal extends Component {
 
   render () {
     const {language} = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (

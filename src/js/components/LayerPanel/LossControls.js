@@ -5,6 +5,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
+import {defaultColorTheme} from '../../config';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -132,7 +133,7 @@ export default class LossControls extends Component {
     const start = sliderValue[0];
     let currentValue = start;
     const stop = sliderValue[1];
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     const visualizeLoss = () => {
       if (currentValue === stop + 1) {
@@ -223,7 +224,7 @@ export default class LossControls extends Component {
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='timeline-container loss'>

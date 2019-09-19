@@ -4,6 +4,7 @@ import React, {
   PropTypes
 } from 'react';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 export default class Instructions extends Component {
 
@@ -20,7 +21,7 @@ export default class Instructions extends Component {
 
   render () {
     const {language} = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-instructions'>

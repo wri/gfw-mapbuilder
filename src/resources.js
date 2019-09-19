@@ -1,60 +1,105 @@
 export default {
-	"webmap": "0ef9a90ee2cb48bb9b66bbcc6831278e",
-	"title": "ETHIOPIA TREE-BASED LANDSCAPE RESTORATION POTENTIAL ATLAS",
-	"subtitle": "Ministry of Environment, Forest \u0026 Climate Change",
-	"webmapMenuName": "Restoration Potential",
-	"logoUrl": "https://assets.forest-atlas.org/eth/img/logo/Coat_of_arms_of_Ethiopia.png",
-	"logoLinkUrl": "http://mefcc.gov.et/",
-	"printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
-	"narrative": "\u003cp\u003eThis interface shows the extent of combined potential for tree-based landscape restoration, that is, areas with potential for trees irrespective of the individual restoration option (e.g., restocking degraded natural forests, silvo-pastoralism, plantations around protected areas and national forest priority areas, etc.).\u003c/p\u003e\u003cp\u003eThis interface also shows biophysical and socioeconomic factors that could influence implementation. For example, population density can inform restoration implementation strategies in terms of opportunities (e.g., high population density can drive demand for tree products) and challenges (e.g., in areas with high population density, pressure on restored trees and forests needs to be managed). Similarly, slope steepness will dictate the type of soil and water conservation measures to be implemented as per the 2005 Federal Rural Land Administration and Use Proclamation and the average annual rainfall will influence the choice of tree species to be planted and indicate if supplementary irrigation would be required.\u003c/p\u003e\u003cp\u003e\u003cb\u003eDisclaimer:\u003c/b\u003e The national, regional, zonal and woreda boundaries are not authoritative. They were defined for the purpose of the 2007 census.\u003c/p\u003e",
-	"includeSubscribeButton": false,
-	"sharinghost": "https://www.arcgis.com",
-	"analyticsCode": "UA-62288390-16",
-	"iso": "ETH",
-	"customColorTheme": "#62c8ff",
-	"language": "en",
-	"useAlternativeLanguage": false,
-	"alternativeLanguage": "",
-	"alternativeWebmap": "",
-	"alternativeLanguageTitle": "",
-	"alternativeLanguageSubtitle": "",
-	"alternativeNarrative": "",
-	"alternativeWebmapMenuName": "",
-	"includeDocumentsTab": false,
-	"viirsFires": false,
-	"modisFires": false,
-	"intactForests": false,
-	"aboveGroundBiomass": false,
-	"landCover": false,
-	"mangroves": false,
-	"sadAlerts": false,
-	"gladAlerts": false,
-	"terraIAlerts": false,
-	"forma": false,
-	"primaryForests": false,
-	"recentImagery": true,
-	"analysisModules": [{
-		"analysisId": "VEGA_RESTORATION_TOTAL_AREA",
-		"chartType": "badge",
-		"label": {
-		  "en": "Total area with combined potential"
-		},
-		"title": {
-		  "en": "Total area with combined potential"
-		},
-		"description": {
-		  "en": "Note: The boundaries of large areas of interest are simplified to enhance calculation performance. Area statistics were rounded down to the nearest hundred."
-		},
-		"chartType": "badge",
-		"useGfwWidget": true,
-		"widgetId": "cd1eda73-e276-4137-a21f-2ccea5dc4914",
-		"uiParams": "none"
-	  },
-	  {
-		"analysisId": "VEGA_RESTORATION_LAND_COVER",
-		"chartType": "badge",
-		"label": {
-		  "en": "Land use-land cover in areas with combined potential"
+	//- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
+	//- General Settings
+	// webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
+	// webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
+	// webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
+	// webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
+	webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+	title: 'GFW Mapbuilder',
+	subtitle: 'Make maps that matter',
+	logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
+	logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+	aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
+	downloadLinkUrl: '', // http://data.globalforestwatch.org/
+	printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+	maskServiceUrl: '', // e.g. http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_00_Africa/MapServer
+	mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
+	mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+	narrative: '',
+	hideHeader: false,
+	hideFooter: false,
+	includeMyGFWLogin: true,
+	navLinksInNewTab: false,
+	customColorTheme: '#17eae7',
+	//- Language Settings
+	language: 'en',
+	useAlternativeLanguage: false,
+	alternativeWebmap: '',
+	alternativeLanguage: 'fr',
+	alternativeLanguageTitle: 'GFW Mapbuilder',
+	alternativeLanguageSubtitle: 'Make maps that matter',
+	alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+	alternativeNarrative: '',
+	alternativeWebmapMenuName: 'Land Use',
+	initialExtent: {
+	  x: null, // -122.3,
+	  y: null, // 47.6,
+	  z: null, // 9,
+	},
+	//- Tab Settings
+	includeDocumentsTab: false,
+	includeMeasurementTab: false,
+	//- Layers/Analysis Settings
+	iso: '',
+	viirsFires: true,
+	modisFires: true,
+	intactForests: true,
+	primaryForests: true,
+	forma: false,
+	aboveGroundBiomass: true,
+	landCover: true,
+	mangroves: false,
+	sadAlerts: true,
+	gladAlerts: true,
+	terraIAlerts: true,
+	recentImagery: true,
+	webmapMenuName: 'Land Use',
+	// DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
+	sharinghost: 'https://www.arcgis.com',
+	analyticsCode: '',
+	includeCartoTemplateLayers: false,
+	cartoUser: 'wri-01',
+	cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+	cartoApiKey: 'your key here',
+	cartoGroupLabel: {
+	  en: 'Carto Layers',
+	  fr: 'Carto Layers',
+	},
+  
+	/**
+	 * Custom Analysis Module Configuration
+	 * This section provides the opportunity to define additional custom analysis modules.
+	 * The modules are dependent on gfw widgets registered to the GFW API, so if you would
+	 * like to define a custom module, you must first create a widget and register it.
+	 *
+	 * (we probably will NOT use the value property. we will just loop through all analysisModules
+	 * and create a dropdown option for each if they have all of the required properties. maybe they have an order to sort them? This also
+	 * means that all of the standard analyses will get their own entry in this array.)
+	 * @property {string} value - a unique value for this analysis module
+	 * @property {string} label - the label for the analysis in the dropdown
+	 * @property {string} group - what group this analysis belongs to (maybe this is how we can differentiate
+	 * the 'standard' analyses any thing with group 'standard' will not be required to have a widget
+	 * until we get widgets for all of them)
+	 * @property {string} widgetId - the widgetId from the gfw-api
+	 * @property {string} queryUrl - the url to query for the analysis data
+	 * @property {object[]} params - any params to pass along with the query url
+	 * @property {string} params[].key - query param key
+	 * @property {string} params[].value - query param value
+	 *
+	 * (geostore is automatically appended with each request)
+	 */
+	analysisModules: [{
+		analysisId: 'TC_LOSS_GAIN',
+		chartType: 'badge',
+		label: {
+		  en: 'Total tree cover loss/ gain',
+		  fr: 'Perte/gain total de la couverture arborée',
+		  es: 'Pérdida/ganancia de cobertura arbórea total',
+		  pt: 'Perda/ganho total de cobertura arbórea',
+		  id: 'Total kehilangan/perolehan tutupan pohon ',
+		  zh: '总森林覆盖减少/增加面积量',
+		  ka: 'ხის ვარჯის საერთო კარგვა / მატება'
 		},
 		"title": {
 		  "en": "Land use-land cover in areas with combined potential"

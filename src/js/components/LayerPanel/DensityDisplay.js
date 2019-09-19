@@ -5,6 +5,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import {defaultColorTheme} from '../../config';
 
 const showModal = function showModal () {
   mapActions.toggleCanopyModal({ visible: true });
@@ -41,13 +42,10 @@ export default class DensityDisplay extends Component {
     const {buttonHover} = this.state;
     const hideDefaultLabel = label === '';
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
 
     return (

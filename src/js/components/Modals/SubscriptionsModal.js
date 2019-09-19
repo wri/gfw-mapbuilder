@@ -10,6 +10,7 @@ import Polygon from 'esri/geometry/Polygon';
 import Graphic from 'esri/graphic';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 const datasets = ['viirs-active-fires', 'umd-loss-gain', 'glad-alerts', 'imazon-alerts', 'forma-alerts', 'terrai-alerts', 'prodes-loss'];
 
@@ -99,7 +100,7 @@ export default class SubscriptionsModal extends Component {
     }
     
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && (!customColorTheme || customColorTheme === '')) {

@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 import React, {
   Component,
@@ -114,7 +115,7 @@ export default class DrawTools extends Component {
     const {embeddedInModal} = this.props;
     const {language} = this.context;
     const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {drawButtonActive, buttonHover} = this.state;
     return (
       <div className='analysis-instructions__draw'>

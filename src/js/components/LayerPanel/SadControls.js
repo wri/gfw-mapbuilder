@@ -5,6 +5,7 @@ import request from 'utils/request';
 import utils from 'utils/AppUtils';
 import all from 'dojo/promise/all';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 
 const STATS = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
@@ -146,7 +147,7 @@ export default class SadControls extends Component {
     const {startMonth, startYear, endMonth, endYear} = this.props;
     const {language} = this.context;
     const {min_year} = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     //- If min_year, or any year value for that matter, is still 0, don't render the UI
     if (!min_year) { return <div />; }
 

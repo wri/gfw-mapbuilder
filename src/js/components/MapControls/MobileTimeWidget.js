@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 const START = 'START',
       END = 'END';
@@ -57,7 +58,7 @@ export default class MobileTimeWidget extends Component {
       visible,
       currentTimeExtent
     } = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className={`mobile-time-widget map-component mobile-show ${visible ? '' : 'hidden'}`}>

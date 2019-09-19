@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import layerFactory from 'utils/layerFactory';
 import mapActions from 'actions/MapActions';
 import on from 'dojo/on';
+import {defaultColorTheme} from '../../config';
 
 export default class LayerVersions extends Component {
 
@@ -65,7 +66,7 @@ export default class LayerVersions extends Component {
     const { versions, selected } = this.state;
     const { layer } = this.props;
     const { language } = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='relative layer-versions'>

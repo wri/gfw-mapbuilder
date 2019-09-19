@@ -2,6 +2,7 @@ import Loader from 'components/Loader';
 // import request from 'utils/request';
 import SVGIcon from 'utils/svgIcon';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -103,7 +104,7 @@ class DocumentResults extends Component {
   }
 
   renderDocuments (documents, language) {
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <table className='documents-table'>
         <thead>

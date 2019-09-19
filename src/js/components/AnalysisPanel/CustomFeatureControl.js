@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import layerKeys from 'constants/LayerConstants';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 
 const getFeatureName = (feature) => {
   return feature.attributes && feature.attributes.title || '';
@@ -56,7 +57,7 @@ export default class CustomFeatureControl extends Component {
     const {language} = this.context;
     const {editingEnabled} = this.props;
     const {buttonHover} = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='custom-feature__header'>

@@ -3,6 +3,7 @@
 import mapActions from 'actions/MapActions';
 // import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -37,7 +38,7 @@ export default class AnalysisTypeSelect extends Component {
   render () {
     const { activeAnalysisType, analysisItems } = this.props;
     const { language } = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <div className='analysis-results__container'>
         <div className='relative analysis-results__select-container'>

@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import {defaultColorTheme} from '../../config';
 
 const initialState = {
   currentStep: 1,
@@ -260,7 +261,7 @@ export default class SubscribeModal extends Component {
   render () {
     const {language} = this.context;
     const langs = ['English', '中文', 'Français', 'Bahasa Indonesia', 'Português (Brasil)', 'Español (Mexico)']; //TODO: Get from resources or config!
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (

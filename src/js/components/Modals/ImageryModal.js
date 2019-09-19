@@ -13,11 +13,11 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Polygon from 'esri/geometry/Polygon';
 import symbols from 'utils/symbols';
 import layerKeys from 'constants/LayerConstants';
-
 import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
 import { modalText } from 'js/config';
+import {defaultColorTheme} from '../../config';
 
 export default class ImageryModal extends Component {
 
@@ -153,7 +153,7 @@ export default class ImageryModal extends Component {
   renderThumbnails = (tileObj, i) => {
 
       let reloadCount = 0;
-      const { customColorTheme, defaultColorTheme } = this.context.settings;
+      const { customColorTheme } = this.context.settings;
       const handleError = (event) => {
         if (reloadCount < 20) {
           event.persist();
@@ -281,7 +281,7 @@ export default class ImageryModal extends Component {
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>

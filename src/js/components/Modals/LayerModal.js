@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import {defaultColorTheme} from '../../config';
 
 export default class Modal extends Component {
 
@@ -30,7 +31,7 @@ export default class Modal extends Component {
     } else if(info.licenseInfo && !info.license) {
       info.license = info.licenseInfo;
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (

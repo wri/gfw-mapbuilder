@@ -6,6 +6,7 @@ import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 import moment from 'moment';
+import {defaultColorTheme} from '../../config';
 
 export default class ReportSubscribeButtons extends Component {
   constructor(props) {
@@ -132,7 +133,7 @@ export default class ReportSubscribeButtons extends Component {
     const {
       isLoggedIn
     } = mapStore.getState();
-    const {customColorTheme, defaultColorTheme} = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='report-sub-button-container'>

@@ -4,6 +4,8 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import MapActions from 'actions/MapActions';
 import resources from '../../../../resources';
+import {defaultColorTheme} from '../../../config';
+
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -104,13 +106,10 @@ export default class AnalysisRangeSlider extends Component {
     const { bounds, step } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
     
     return (

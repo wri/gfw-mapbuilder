@@ -1,9 +1,10 @@
 import React from 'react';
 import resources from '../../resources';
+import {defaultColorTheme} from '../config';
 
 export default (props) => {
   let icon = null;
-  const { customColorTheme, defaultColorTheme } = resources;
+  const { customColorTheme } = resources;
   switch (props.id) {
 
     case 'shape-close':

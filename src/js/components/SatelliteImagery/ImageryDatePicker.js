@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import {defaultColorTheme} from '../../config';
 
 export default class AnalysisDatePicker extends Component {
   static contextTypes = {
@@ -68,12 +69,12 @@ export default class AnalysisDatePicker extends Component {
   render() {
     const { minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
-    const {customColorTheme, defaultColorTheme} = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='analysis-results__select-form-item-container'>
         <DatePicker
-          customInput={<Button customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+          customInput={<Button customColorTheme={customColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -98,7 +99,7 @@ export default class AnalysisDatePicker extends Component {
   }
 }
 
-const Button = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const Button = ({ onClick, value, customColorTheme }) => {
   return (
     <div>
       <button

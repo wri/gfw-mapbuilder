@@ -4,7 +4,7 @@ import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -132,7 +132,7 @@ export default class LayerCheckbox extends Component {
     const {sublabel} = layer;
     
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
