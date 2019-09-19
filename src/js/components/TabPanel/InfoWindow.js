@@ -120,12 +120,12 @@ export default class InfoWindow extends Component {
         </div>
       );
     }
-
+    console.log('selected feature', selectedFeature);
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
           <div className='feature-controls'>
-            {dropdown}
+            {selectedFeature && selectedFeature.attributes.source === 'draw' ? null : dropdown}
             <span>{count} features selected.</span>
             <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
               <SVGIcon id={'shape-close'} />
