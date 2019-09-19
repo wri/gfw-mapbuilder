@@ -7,7 +7,7 @@ import React, {
   PropTypes
 } from 'react';
 
-export default class InfoWindow extends Component {
+export default class MeasurementTool extends Component {
   static contextTypes = {
     map: PropTypes.object.isRequired
   }
@@ -36,6 +36,7 @@ export default class InfoWindow extends Component {
           brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol()
           .setOutline(new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 255, 255, 1]), 2))
           .setColor(new Color([0, 0, 0, 0]));
+          brApp.map.setInfoWindowOnClick(true);
         }
       });
 
@@ -48,9 +49,8 @@ export default class InfoWindow extends Component {
         this.initialized = false;
       }
     }
-
   }
-
+  
   componentWillUnmount() {
     this.measurement.destroy();
   }
@@ -61,4 +61,9 @@ export default class InfoWindow extends Component {
       className='measurement-container'
     />;
   }
+
 }
+
+MeasurementTool.propTypes = {
+  embeddedInModal: PropTypes.bool
+};

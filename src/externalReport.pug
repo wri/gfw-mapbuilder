@@ -5,7 +5,7 @@ html
   body
     div#report.report
     div#share-modal.share-modal.hidden
-    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/460-custom-color-theme/reportLib.1.4.1.js')
+    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/458-measurement-tool-redesign/reportLib.1.4.1.js')
     script.
       var customApp = new MapBuilderReport({
         config: {
@@ -50,7 +50,6 @@ html
           },
           //- Tab Settings
           includeDocumentsTab: false,
-          includeMeasurementTab: false,
           //- Layers/Analysis Settings
           iso: '',
           viirsFires: true,
@@ -702,49 +701,17 @@ html
                 "uuid": "2569adca-ef87-42c4-a153-57c5e8ba0ef7"
               }]
             },
-          ],
-          /**
-          * Layer panel configuration, anything with an = is optional, {object=}
-          * Order at the group level controls the order of the accordions, the top most accordion's layers
-          * will also be the top most layers on the map. The order in the layer level controls how those layers
-          * are organized within their own group
-          ** @name layerPanel
-          ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
-          ** and values are string labels
-          * @property {object=} label - Label for the group in the layer panel
-          * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
-          * @property {object[]=} layers - Layers placed in the various accordions
-          * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
-          * @property {number} layers[].order - Order of this layer in this section only
-          * @property {string} layers[].id - Must be a unique id for the layer
-          * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
-          ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
-          * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
-          * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
-          * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
-          * @property {string} layers[].url - URL for the service
-          * @property {object=} layers[].label - Label for the layer in the UI
-          * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
-          * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
-          * @property {object=} popup - Popup configuration for the layer if it is available
-          */
-          layerPanel: {
-            GROUP_WEBMAP: {
-              order: 2,
-              label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
-              layers: [] // Will get filled in with layers from the webmap
-            },
-            GROUP_LCD: {
-              groupType: 'default',
-              order: 1,
-              label: {
-                en: 'Land Cover Dynamics',
-                fr: 'Evolution de la couverture des sols',
-                es: 'Dinámica de la Cobertura del Suelo',
-                pt: 'Dinâmica de cobertura da terra ',
-                id: 'Land Cover Dynamics',
-                zh: '土地覆盖动态数据',
-                ka: 'მიწის საფარის დინამიკა'
+            "GROUP_IMAGERY": {
+              "grouptype": "imagery",
+              "order": 4,
+              "label": {
+                "en": "Recent Imagery",
+                "fr": "Imagerie récente",
+                "es": "Imágenes recientes",
+                "pt": "Imagens recentes",
+                "id": "Citra Satelit Terbaru",
+                "zh": "Recent Imagery",
+                "ka": "ბოლო გამოსახულება"
               },
               "layers": [{
                 "order": 1,
@@ -843,65 +810,29 @@ html
                 }
               }]
             },
-            /**
-            * CUSTOM GROUPS
-            * Add your custom groups below. The custom groups are similar to the groups defined above.
-            * They are an object defined with a unique key (this key MUST be unique).
-            * There are three (3) group types that you may choose from:
-            *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
-            *               With this group type, more than one layer may be on at a time
-            *
-            *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
-            *            Only one layer may be on at a time within the same group
-            *            You may optionally choose to turn this group off when any other radio group is selected
-            *
-            *    nested - This group allows for layers to be grouped further within a layer panel
-            *
-            * COMMON GROUP PROPERTIES
-            * @property {string} groupType - the group type, one of checkbox, radio, nested
-            * @property {number} order - the order of the group in the layer panel
-            * @property {object} label - the label for the group in the layer panel
-            * @property {object[]} layers - the layers to be placed in the group
-            * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
-            * @property {number} layers[].order - the order of the layer within the group
-            * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
-            *
-            * RADIO GROUP PROPERTIES
-            * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
-            * sublayers you would like to include in the group. This property is required, so if you
-            * wish to include all sublayers, you must still provide this property with all sublayers
-            * @property {object} sublabel - for a dynamic layer the sublabel property must specify
-            * which sublayer the sublabel belongs to
-            *
-            * NESTED GROUP PROPERTIES
-            * @property {number} layers[].order - the order of the nested group within the panel group
-            * @property {object} layers[].label - the label for the nested group
-            * @property {object[]} layers[].nestedLayers - the layers for the nested group
-            */
-
-            extraLayers: [{
-              id: 'MASK',
-              type: 'dynamic',
-              order: 10000,
-              url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-              opacity: 0.35,
-              layerIds: [0]
-              },
-              {
-                id: 'LEGEND_LAYER',
-                type: 'dynamic',
-                url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-                visible: false,
-                opacity: 0,
-                layerIds: []
-              },
-              {
-                id: 'USER_FEATURES',
-                type: 'graphic',
-                visible: true
-              }
-            ]
-          }
+            "extraLayers": [{
+              "id": "MASK",
+              "type": "dynamic",
+              "order": 10000,
+              "url": "https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer",
+              "opacity": 0.35,
+              "layerIds": [0]
+            },
+            {
+              "id": "LEGEND_LAYER",
+              "type": "dynamic",
+              "url": "https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer",
+              "visible": false,
+              "opacity": 0,
+              "layerIds": []
+            },
+            {
+              "id": "USER_FEATURES",
+              "type": "graphic",
+              "visible": true
+            }]
+          },
+          "otherFieldsModules": ""
         },
         version: "1.4.1" // we'll eventually have to affiliate this w/ the "library-load" script's src
       });

@@ -2,6 +2,7 @@
 /* Creating some esri dijits needs the above rule disabled, choosing this over no-new */
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
+import MeasurementModal from 'components/Modals/MeasurementModal';
 import AnalysisModal from 'components/Modals/AnalysisModal';
 import CoordinatesModal from 'components/Modals/CoordinatesModal';
 import EditCoordinatesModal from 'components/Modals/EditCoordinatesModal';
@@ -313,12 +314,13 @@ export default class Map extends Component {
           }
         });
         
-        //- Hide the selected feature highlight if using the measurement tool
-        response.map.on('click', evt => {
-          if (brApp.map.measurement && brApp.map.measurement.getTool()) {
-            brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
-          }
-        });
+      //- Hide the selected feature highlight if using the measurement tool
+      response.map.on('click', evt => {
+        if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+          brApp.map.setInfoWindowOnClick(false);
+          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+        }
+      });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
@@ -943,6 +945,7 @@ export default class Map extends Component {
       mobileTimeWidgetVisible,
       currentTimeExtent,
       printModalVisible,
+      measurementModalVisible,
       analysisModalVisible,
       coordinatesModalVisible,
       editCoordinatesModalVisible,
@@ -1015,6 +1018,9 @@ export default class Map extends Component {
             <SVGIcon id={'shape-crosshairs'} />
 
           </svg>
+        </div>
+        <div className={`measurement-modal-container ${measurementModalVisible ? '' : 'hidden'}`}>
+          <MeasurementModal />
         </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
