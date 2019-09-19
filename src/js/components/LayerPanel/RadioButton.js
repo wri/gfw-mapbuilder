@@ -30,11 +30,11 @@ export default class RadioButton extends Component {
       initialLayerOpacities
     } = this.props;
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (selected === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (selected === 'active' && customColorTheme && customColorTheme === '') {
-        colorTheme = defaultColorTheme;
+        colorTheme = '#F0AB00';
     } else {
         colorTheme = '#ffffff';
     }
@@ -46,7 +46,7 @@ export default class RadioButton extends Component {
           {label}
         </span>
         <span
-          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`}
           onClick={this.handleShowInfo}
         >

@@ -115,7 +115,7 @@ export default class TabButtons extends Component {
     const {settings, language} = this.context;
     const {tableOfContentsVisible} = this.props;
     const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
-    const {customColorTheme, defaultColorTheme} = resources;
+    const { customColorTheme } = resources;
     return (
       <nav className={`tab-buttons map-component ${tableOfContentsVisible ? '' : 'hidden'}`}>
         <ul className='tab-buttons__header'>
@@ -187,7 +187,7 @@ export default class TabButtons extends Component {
           }
           {!this.props.analysisDisabled && this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
             <span
-              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : '#F0AB00'}`}}
               className="tab-dot"
             >
             </span>
@@ -210,7 +210,7 @@ export default class TabButtons extends Component {
           }
           {this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
             <span
-              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : '#F0AB00'}`}}
               className="tab-dot"
             >
             </span>

@@ -57,7 +57,7 @@ export default class MobileTimeWidget extends Component {
       visible,
       currentTimeExtent
     } = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className={`mobile-time-widget map-component mobile-show ${visible ? '' : 'hidden'}`}>
@@ -73,7 +73,7 @@ export default class MobileTimeWidget extends Component {
               {values.map(this.optionMapper({ type: START, ...currentTimeExtent}))}
             </select>
             <div
-              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
               className='fa-button sml white'
             >
               {currentTimeExtent.start}
@@ -85,7 +85,7 @@ export default class MobileTimeWidget extends Component {
               {values.map(this.optionMapper({ type: END, ...currentTimeExtent}))}
             </select>
             <div
-              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
               className='fa-button sml white'
             >
               {currentTimeExtent.end}

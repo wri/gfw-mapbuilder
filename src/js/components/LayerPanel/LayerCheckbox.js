@@ -132,11 +132,11 @@ export default class LayerCheckbox extends Component {
     const {sublabel} = layer;
     
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
-        colorTheme = defaultColorTheme;
+        colorTheme = '#F0AB00';
     } else {
         colorTheme = '#929292';
     }
@@ -149,14 +149,14 @@ export default class LayerCheckbox extends Component {
         </span>
         {onEdit && this.props.checked &&
         <div
-          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className='fa-button sml white layer-edit'
           onClick={onEdit}
         >
           <span className='layer-edit-text'>Edit</span>
         </div>}
 
-        <span style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
+        <span style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}

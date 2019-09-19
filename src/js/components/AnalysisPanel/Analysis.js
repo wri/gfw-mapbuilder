@@ -483,7 +483,7 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-results'>
@@ -513,8 +513,8 @@ export default class Analysis extends Component {
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
               <button
-                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
                 className='run-analysis-button fa-button color pointer'
                 onClick={this.runAnalysis}
                 onMouseEnter={this.toggleHover}

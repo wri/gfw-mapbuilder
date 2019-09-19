@@ -110,9 +110,9 @@ export default class TimeWidget extends Component {
   }
 
   render () {
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
-      <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='time-widget map-component shadow mobile-hide'>
+      <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='time-widget map-component shadow mobile-hide'>
         <div ref='timeSlider'></div>
       </div>
     );

@@ -51,7 +51,7 @@ export default class FormaControls extends Component {
   render () {
     const {startDate, endDate} = this.props;
     const {language} = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='glad-controls forma-controls'>
@@ -59,7 +59,7 @@ export default class FormaControls extends Component {
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
             {startDate && <DatePicker
-              customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+              customInput={<StartButton customColorTheme={customColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -73,7 +73,7 @@ export default class FormaControls extends Component {
           <div className='glad-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
             {endDate && <DatePicker
-              customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+              customInput={<EndButton customColorTheme={customColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -90,10 +90,10 @@ export default class FormaControls extends Component {
   }
 }
 
-const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const StartButton = ({ onClick, value, customColorTheme }) => {
   return (
     <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
     >
@@ -102,10 +102,10 @@ const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) =>
   );
 };
 
-const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const EndButton = ({ onClick, value, customColorTheme }) => {
   return (
     <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
     >

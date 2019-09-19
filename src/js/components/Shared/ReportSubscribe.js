@@ -132,7 +132,7 @@ export default class ReportSubscribeButtons extends Component {
     const {
       isLoggedIn
     } = mapStore.getState();
-    const {customColorTheme, defaultColorTheme} = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='report-sub-button-container'>
@@ -140,7 +140,7 @@ export default class ReportSubscribeButtons extends Component {
           className='report-sub-buttons'
         >
           <button
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='report-sub-button pointer'
             id='print'
             onClick={this.printReport}

@@ -26,14 +26,14 @@ export default class MapThemes extends Component {
   render () {
     const {language} = this.context;
     const {themes} = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <li className='app-header__nav-link app-header__nav-link--map-themes pointer'>
         <svg className='svg-icon__nav'>
           <SVGIcon id={'icon-h-themes'} />
         </svg>
         {text[language].NAV_MAP_THEMES}
-        <ul style={{borderTop: `3px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='app-header__theme-list shadow'>
+        <ul style={{borderTop: `3px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='app-header__theme-list shadow'>
           {themes.map(this.renderThemeList(language))}
         </ul>
       </li>

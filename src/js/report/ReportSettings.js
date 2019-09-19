@@ -344,13 +344,10 @@ export default class ReportSettings extends Component {
     const {language} = this.props;
     const {buttonHover} = this.state;
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
       return (
           <div className="analysis-results__select-form-container">
@@ -359,8 +356,8 @@ export default class ReportSettings extends Component {
             </div>
             <div className='run-report-analysis-button-container print-hide'>
               <button
-                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
                 className='run-report-analysis-button fa-button color pointer'
                 onClick={this.runAnalysis}
                 onMouseEnter={this.toggleHover}

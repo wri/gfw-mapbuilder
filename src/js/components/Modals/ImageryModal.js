@@ -153,7 +153,7 @@ export default class ImageryModal extends Component {
   renderThumbnails = (tileObj, i) => {
 
       let reloadCount = 0;
-      const { customColorTheme, defaultColorTheme } = this.context.settings;
+      const { customColorTheme } = this.context.settings;
       const handleError = (event) => {
         if (reloadCount < 20) {
           event.persist();
@@ -184,7 +184,7 @@ export default class ImageryModal extends Component {
             onMouseLeave={() => this.hoverThumbnail(null)}
             className='thumbnail'
             style={this.state.selectedThumb && this.state.selectedThumb.index === i ?
-            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
+            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : '#F0AB00'}`} : {}}
             key={`thumb-${i}`}>
               <img src={tileObj.thumbUrl} onError={handleError} />
           </div>
@@ -281,7 +281,7 @@ export default class ImageryModal extends Component {
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
@@ -301,7 +301,7 @@ export default class ImageryModal extends Component {
                     {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
                   </select>
                   <div
-                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
                     className='fa-button sml white'
                   >
                     {monthsVal}
@@ -342,7 +342,7 @@ export default class ImageryModal extends Component {
                 {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
               </select>
               <div
-                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
                 className='fa-button sml white'
               >
                 {imageStyleVal}

@@ -114,7 +114,7 @@ export default class DrawTools extends Component {
     const {embeddedInModal} = this.props;
     const {language} = this.context;
     const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {drawButtonActive, buttonHover} = this.state;
     return (
       <div className='analysis-instructions__draw'>
@@ -130,8 +130,8 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
           onClick={this.draw}
           onMouseEnter={this.toggleHover}
@@ -140,7 +140,7 @@ export default class DrawTools extends Component {
           <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
           <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>
         </div>
-        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

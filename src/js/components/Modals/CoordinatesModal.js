@@ -356,7 +356,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const latitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS;
     const longitudeDirectionOptions = text[language].ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div key={`DMS-${index}`}>
@@ -408,7 +408,7 @@ export default class CoordinatesModal extends Component {
               {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
             <div
-              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
               className='analysis-coordinates-directions__select-arrow'
             ></div>
           </div>
@@ -453,7 +453,7 @@ export default class CoordinatesModal extends Component {
               {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
             <div
-              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
               className='analysis-coordinates-directions__select-arrow'
             ></div>
           </div>
@@ -530,7 +530,7 @@ export default class CoordinatesModal extends Component {
     const {language} = this.context;
     const {coordinatesFormat, dmsCoordinates, ddCoordinates, errors, buttonHover} = this.state;
     const coordinateFormatOptions = text[language].ANALYSIS_COORDINATES_FORMATS;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -546,7 +546,7 @@ export default class CoordinatesModal extends Component {
             {coordinateFormatOptions && coordinateFormatOptions.map(this.createOptions)}
           </select>
           <div
-            style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='analysis-coordinates__select-arrow'
           >
           </div>
@@ -564,8 +564,8 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
         </div>
         <div
-          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className="fa-button color analysis-instructions__make-shape-button"
           onClick={this.validateShape}
           onMouseEnter={this.toggleHover}

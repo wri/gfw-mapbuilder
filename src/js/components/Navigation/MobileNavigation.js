@@ -33,14 +33,14 @@ export default class Navigation extends Component {
   renderLanguageButtons = (currentLanguage, settings) => {
     // Not sure how to test this out in the mobile navigation!
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     if (settings.useAlternativeLanguage) {
       return Object.keys(settings.labels).map((language) => {
         if (currentLanguage === language && customColorTheme && customColorTheme !== '') {
           colorTheme = customColorTheme;
         } else if (currentLanguage === language && customColorTheme && customColorTheme === '') {
-            colorTheme = defaultColorTheme;
+            colorTheme = '#F0AB00';
         } else {
             colorTheme = 'inherit';
         }

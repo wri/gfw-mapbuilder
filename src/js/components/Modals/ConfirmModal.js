@@ -52,7 +52,7 @@ export default class ConfirmModal extends Component {
   render () {
     const {language} = this.context;
     const {subscriptionToDelete} = this.props;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <ControlledModalWrapper onClose={this.close}>
@@ -62,8 +62,8 @@ export default class ConfirmModal extends Component {
         <p>{text[language].SUBSCRIBE_DELETE_DESC}</p>
 
         <div className='subscription-sub-buttons'>
-          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
-          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
         </div>
 
       </ControlledModalWrapper>

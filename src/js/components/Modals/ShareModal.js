@@ -62,13 +62,10 @@ export default class ShareModal extends Component {
   render () {
     const {url} = this.props;
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
     return (
       <ModalWrapper>
@@ -77,7 +74,7 @@ export default class ShareModal extends Component {
         <div className='share-input'>
           <input ref='shareInput' type='text' readOnly value={url ? url : this.state.bitlyUrl} onClick={this.handleFocus} />
           <button
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='gfw-btn white pointer'
             onClick={() => this.copyShare()}
           >

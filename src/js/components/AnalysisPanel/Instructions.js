@@ -20,7 +20,7 @@ export default class Instructions extends Component {
 
   render () {
     const {language} = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-instructions'>
@@ -35,7 +35,7 @@ export default class Instructions extends Component {
             <SVGIcon id={'icon-analysis-poly'} />
           </svg>
         </div>
-        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

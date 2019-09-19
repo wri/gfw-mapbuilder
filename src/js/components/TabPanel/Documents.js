@@ -103,7 +103,7 @@ class DocumentResults extends Component {
   }
 
   renderDocuments (documents, language) {
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <table className='documents-table'>
         <thead>
@@ -119,7 +119,7 @@ class DocumentResults extends Component {
                 <td>{doc.size}</td>
                 <td className='documents-table__link'>
                   <a href={doc.url} target='_blank'>
-                    <svg style={{fill: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='svg-icon'>
+                    <svg style={{fill: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='svg-icon'>
                       <SVGIcon id={'icon-documents'} />
                     </svg>
                   </a>

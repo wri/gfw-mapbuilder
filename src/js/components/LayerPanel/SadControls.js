@@ -146,7 +146,7 @@ export default class SadControls extends Component {
     const {startMonth, startYear, endMonth, endYear} = this.props;
     const {language} = this.context;
     const {min_year} = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     //- If min_year, or any year value for that matter, is still 0, don't render the UI
     if (!min_year) { return <div />; }
 
@@ -159,7 +159,7 @@ export default class SadControls extends Component {
             {this.renderMonthOptions('start')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button sml white'
           >
             {text[language].MONTHS_LIST[startMonth].abbr}
@@ -172,7 +172,7 @@ export default class SadControls extends Component {
             {this.renderYearOptions('start')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button sml white'
           >
             {startYear}
@@ -186,7 +186,7 @@ export default class SadControls extends Component {
             {this.renderMonthOptions('end')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button sml white'
           >
             {text[language].MONTHS_LIST[endMonth].abbr}
@@ -199,7 +199,7 @@ export default class SadControls extends Component {
             {this.renderYearOptions('end')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button sml white'
           >
             {endYear}

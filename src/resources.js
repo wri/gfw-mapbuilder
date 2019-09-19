@@ -22,7 +22,6 @@ export default {
 	includeMyGFWLogin: true,
 	navLinksInNewTab: false,
 	customColorTheme: '#17eae7',
-	defaultColorTheme: '#F0AB00', //Default gold theme
 	//- Language Settings
 	language: 'en',
 	useAlternativeLanguage: false,

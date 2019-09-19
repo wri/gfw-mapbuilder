@@ -113,7 +113,7 @@ export default class SearchModal extends Component {
 
   render () {
     const {language} = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (
@@ -125,8 +125,8 @@ export default class SearchModal extends Component {
           <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
         </div>
         <button
-          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className='search-submit-button fa-button color'
           onClick={this.decimalDegreeSearch}
           onMouseEnter={this.toggleHover}

@@ -69,11 +69,11 @@ export default class NestedCheckbox extends Component {
     const { groupLabel, layers } = this.props;
     const checked = this.props.checked ? 'active' : '';
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
-        colorTheme = defaultColorTheme;
+        colorTheme = '#F0AB00';
     } else {
         colorTheme = '#929292';
     }

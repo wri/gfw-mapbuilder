@@ -71,14 +71,14 @@ export default class AnalysisDatePicker extends Component {
   render() {
     const { label, minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <div className="report-date-picker">
           <DatePicker
-            customInput={<Button customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+            customInput={<Button customColorTheme={customColorTheme} />}
             showMonthDropdown
             showYearDropdown
             dropdownMode="select"
@@ -94,11 +94,11 @@ export default class AnalysisDatePicker extends Component {
   }
 }
 
-const Button = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const Button = ({ onClick, value, customColorTheme }) => {
   return (<div>
     <label className='analysis-datepicker-button-label'>Date: </label>
     <button
-    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
     className='fa-button sml white pointer'
     onClick={onClick}
     >

@@ -41,21 +41,18 @@ export default class DensityDisplay extends Component {
     const {buttonHover} = this.state;
     const hideDefaultLabel = label === '';
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
 
     return (
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
         <div
-          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className='canopy-button pointer'
           onClick={showModal}
           onMouseEnter={this.toggleHover}

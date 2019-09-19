@@ -5,7 +5,7 @@ import Select from 'react-select';
 import mapActions from 'actions/MapActions';
 import resources from '../../../resources';
 
-const colorTheme = resources.customColorTheme ? resources.customColorTheme : resources.defaultColorTheme;
+const colorTheme = resources.customColorTheme ? resources.customColorTheme : '#F0AB00';
 
 const customStyles = {
   option: (provided, state) => ({

@@ -30,7 +30,7 @@ export default class Modal extends Component {
     } else if(info.licenseInfo && !info.license) {
       info.license = info.licenseInfo;
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (
@@ -68,7 +68,7 @@ export default class Modal extends Component {
             <div className='source-learn-more flex'>
               <a
                 href={info.learn_more}
-                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
                 className='source-learn-more-link fa-button white'
                 target='_blank'
               >
@@ -81,8 +81,8 @@ export default class Modal extends Component {
           <div className='source-footer'>
             <a href={info.download_data}
             target='_blank'
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className="source-download fa-button color"
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}

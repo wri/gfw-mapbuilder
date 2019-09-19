@@ -83,20 +83,17 @@ export default class AnalysisMultiDatePicker extends Component {
     const { label, minDate, maxDate } = this.props;
     const { selectedStartDate, selectedEndDate } = this.state;
     let customColorTheme;
-    let defaultColorTheme;
     if (this.context.settings) {
       customColorTheme = this.context.settings.customColorTheme;
-      defaultColorTheme = this.context.settings.defaultColorTheme;
     } else {
       customColorTheme = resources.customColorTheme;
-      defaultColorTheme = resources.defaultColorTheme;
     }
     
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
         <DatePicker
-          customInput={<StartButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+          customInput={<StartButton customColorTheme={customColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -114,7 +111,7 @@ export default class AnalysisMultiDatePicker extends Component {
 
         />
         <DatePicker
-          customInput={<EndButton customColorTheme={customColorTheme} defaultColorTheme={defaultColorTheme} />}
+          customInput={<EndButton customColorTheme={customColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -136,12 +133,12 @@ export default class AnalysisMultiDatePicker extends Component {
   }
 }
 
-const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const StartButton = ({ onClick, value, customColorTheme }) => {
   return (
     <div>
       <label className='analysis-datepicker-button-label'>Start: </label>
       <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
       >
@@ -151,12 +148,12 @@ const StartButton = ({ onClick, value, customColorTheme, defaultColorTheme }) =>
   );
 };
 
-const EndButton = ({ onClick, value, customColorTheme, defaultColorTheme }) => {
+const EndButton = ({ onClick, value, customColorTheme }) => {
   return (
     <div>
       <label className='analysis-datepicker-button-label'>End: </label>
       <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
       >

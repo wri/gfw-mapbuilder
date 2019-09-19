@@ -13,7 +13,7 @@
 		"downloadLinkUrl": "",
 		
 		"customColorTheme": "",
-		"defaultColorTheme": "#F0AB00",
+		"'#F0AB00'": "#F0AB00",
 
 		"useAlternativeLanguage": false,
 		"alternativeLanguage": "fr",

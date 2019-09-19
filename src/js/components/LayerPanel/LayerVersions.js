@@ -65,7 +65,7 @@ export default class LayerVersions extends Component {
     const { versions, selected } = this.state;
     const { layer } = this.props;
     const { language } = this.context;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='relative layer-versions'>
@@ -74,7 +74,7 @@ export default class LayerVersions extends Component {
           {versions.map(this.renderVersionOptions)}
         </select>
         <div
-          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           className='fa-button sml white'
         >
           {selected}

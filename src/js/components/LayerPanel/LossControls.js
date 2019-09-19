@@ -132,7 +132,7 @@ export default class LossControls extends Component {
     const start = sliderValue[0];
     let currentValue = start;
     const stop = sliderValue[1];
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     const visualizeLoss = () => {
       if (currentValue === stop + 1) {
@@ -160,7 +160,7 @@ export default class LossControls extends Component {
           }} : {}),
           [currentValue]: {
             style: {
-              color: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme
+              color: customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'
             },
             label: <small>{lossOptions[currentValue - 1].label}</small>
           },
@@ -223,7 +223,7 @@ export default class LossControls extends Component {
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='timeline-container loss'>
@@ -237,15 +237,15 @@ export default class LossControls extends Component {
           tipFormatter={value => 2000 + value}
           dots={true}
           marks={sliderMarks}
-          trackStyle={[{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
-          handleStyle={[{borderColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
+          trackStyle={[{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}]}
+          handleStyle={[{borderColor: customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
         />
         <div
           id="lossPlayButton"
           className={`${playing ? ' hidden' : ''}`}
-          style={disabled ? disabledStyles : {color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          style={disabled ? disabledStyles : {color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
           onClick={disabled ? null : this.startVisualization}
           title={disabled ? 'Please select a range to view animation' : ''}
         >

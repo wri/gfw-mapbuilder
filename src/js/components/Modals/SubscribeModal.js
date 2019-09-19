@@ -260,7 +260,7 @@ export default class SubscribeModal extends Component {
   render () {
     const {language} = this.context;
     const langs = ['English', '中文', 'Français', 'Bahasa Indonesia', 'Português (Brasil)', 'Español (Mexico)']; //TODO: Get from resources or config!
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     const {buttonHover} = this.state;
     
     return (
@@ -321,8 +321,8 @@ export default class SubscribeModal extends Component {
         <div className='subscription-sub-buttons'>
           {this.state.currentStep === 0 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button color'
             onClick={this.refreshSubscriptions}
             onMouseEnter={this.toggleHover}
@@ -332,8 +332,8 @@ export default class SubscribeModal extends Component {
           </button> : null }
           {this.state.currentStep > 1 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button color'
             onClick={this.back}
             onMouseEnter={this.toggleHover}
@@ -343,8 +343,8 @@ export default class SubscribeModal extends Component {
           </button> : null }
           {this.state.currentStep === 1 || this.state.currentStep === 2 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button color'
             onClick={this.next}
             onMouseEnter={this.toggleHover}
@@ -354,8 +354,8 @@ export default class SubscribeModal extends Component {
           </button> : null }
           {this.state.currentStep === 3 ?
           <button
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
             className='fa-button color'
             onClick={this.save}
             onMouseEnter={this.toggleHover}

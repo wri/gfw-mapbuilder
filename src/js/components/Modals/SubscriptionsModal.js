@@ -99,11 +99,11 @@ export default class SubscriptionsModal extends Component {
     }
     
     let colorTheme = '';
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && (!customColorTheme || customColorTheme === '')) {
-        colorTheme = defaultColorTheme;
+        colorTheme = '#F0AB00';
     } else {
         colorTheme = '#929292';
     }

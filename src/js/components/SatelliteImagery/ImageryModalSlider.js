@@ -73,7 +73,7 @@ export default class AnalysisRangeSlider extends Component {
   render() {
     const { bounds, step, rangeSliderCallback } = this.props;
     const { rangeSliderValue, sliderMarks } = this.state;
-    const { customColorTheme, defaultColorTheme } = this.context.settings;
+    const { customColorTheme } = this.context.settings;
     return (
       <div className='analysis-results__select-form-item-container'>
         <Range
@@ -87,10 +87,10 @@ export default class AnalysisRangeSlider extends Component {
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: `${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`}]}
-          handleStyle={[{borderColor: `${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`}]}
-          dotStyle={{border: `1px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`}}
-          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`}}
+          trackStyle={[{backgroundColor: `${customColorTheme && customColorTheme ? customColorTheme : '#F0AB00'}`}]}
+          handleStyle={[{borderColor: `${customColorTheme && customColorTheme ? customColorTheme : '#F0AB00'}`}]}
+          dotStyle={{border: `1px solid ${customColorTheme && customColorTheme ? customColorTheme : '#F0AB00'}`}}
+          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme ? customColorTheme : '#F0AB00'}`}}
         />
       </div>
     );

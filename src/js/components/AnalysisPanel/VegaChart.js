@@ -177,11 +177,11 @@ export default class VegaChart extends Component {
     const { results, component, reportLabel, module, params, language, analysisId, chartType, toggle, toggleChart} = this.props;
     
     let colorTheme;
-    const { customColorTheme, defaultColorTheme } = resources;
+    const { customColorTheme } = resources;
     if (!toggle && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (toggle && (!customColorTheme || customColorTheme === '')) {
-        colorTheme = defaultColorTheme;
+        colorTheme = '#F0AB00';
     } else {
         colorTheme = '#929292';
     }
