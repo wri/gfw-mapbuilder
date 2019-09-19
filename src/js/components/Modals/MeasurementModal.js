@@ -13,6 +13,7 @@ export default class MeasurementModal extends Component {
     if (currentTool) {
         brApp.map.measurement.setTool(currentTool.toolName, false);
     }
+    brApp.map.setInfoWindowOnClick(true);
   };
 
   render () {
