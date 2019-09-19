@@ -361,7 +361,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    if (selectedFeature && !brApp.map.measurement.getTool()) {
+    if (selectedFeature && brApp.map.measurement && brApp.map.measurement.getTool() === undefined) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)

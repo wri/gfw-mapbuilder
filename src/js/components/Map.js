@@ -171,7 +171,7 @@ export default class Map extends Component {
 
   getSelectedFeatureTitles = () => {
 
-    if (brApp.map.measurement.getTool()) {
+    if (brApp.map.measurement && brApp.map.measurement.getTool()) {
       return;
     }
     // let selectedFeats;
@@ -316,7 +316,7 @@ export default class Map extends Component {
         
       //- Hide the selected feature highlight if using the measurement tool
       response.map.on('click', evt => {
-        if (brApp.map.measurement.getTool()) {
+        if (brApp.map.measurement && brApp.map.measurement.getTool()) {
           response.map.setInfoWindowOnClick(false);
           brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
         }
