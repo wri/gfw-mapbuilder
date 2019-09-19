@@ -21,7 +21,6 @@
   height auto
   right 110px
   top 80px
-  max-width 15rem
   z-index 5
   border 1px solid #aaa
   & a
@@ -156,7 +155,15 @@
   height 100%
   .measurement-container
     .esriMeasurementButtonContainer
-      margin-top 1rem
+      display flex
+      flex-wrap nowrap
+      justify-content space-evenly
+      margin 1rem 0.5rem
+      .esriButton
+        margin 0 0.25rem
+      .esriToggleButton
+        visibility visible !important
+        margin 0 0.25rem
       span.esriButton ~ span.esriToggleButton
         #dijit_form_DropDownButton_0
           background-color #ededed
@@ -171,8 +178,6 @@
           .dijitButtonText
           .dijitArrowButtonInner
             cursor pointer
-      .esriToggleButton
-        visibility visible !important
     .esriMeasurementResultLabel
     .esriMeasurementResultTable
       font-size 0.75rem
@@ -786,7 +791,6 @@ hr
     height auto
     right 20px
     top 90px
-    max-width 15rem
     z-index 5
     border none
     & a
