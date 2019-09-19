@@ -111,6 +111,7 @@ export default class InfoWindow extends Component {
       );
       
       // Add the dropdown for multiple selected features
+      // WIP for tomorrow
       dropdown = (
         <div className="relative infoWindow__select-container">=
           <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
