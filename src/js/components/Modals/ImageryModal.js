@@ -13,11 +13,11 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Polygon from 'esri/geometry/Polygon';
 import symbols from 'utils/symbols';
 import layerKeys from 'constants/LayerConstants';
-
 import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
 import { modalText } from 'js/config';
+import {defaultColorTheme} from '../../config';
 
 export default class ImageryModal extends Component {
 
@@ -184,7 +184,7 @@ export default class ImageryModal extends Component {
             onMouseLeave={() => this.hoverThumbnail(null)}
             className='thumbnail'
             style={this.state.selectedThumb && this.state.selectedThumb.index === i ?
-            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : '#F0AB00'}`} : {}}
+            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
             key={`thumb-${i}`}>
               <img src={tileObj.thumbUrl} onError={handleError} />
           </div>
@@ -301,7 +301,7 @@ export default class ImageryModal extends Component {
                     {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
                   </select>
                   <div
-                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                     className='fa-button sml white'
                   >
                     {monthsVal}
@@ -342,7 +342,7 @@ export default class ImageryModal extends Component {
                 {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
               </select>
               <div
-                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='fa-button sml white'
               >
                 {imageStyleVal}

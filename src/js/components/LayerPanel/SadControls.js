@@ -5,6 +5,7 @@ import request from 'utils/request';
 import utils from 'utils/AppUtils';
 import all from 'dojo/promise/all';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 
 const STATS = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
@@ -159,7 +160,7 @@ export default class SadControls extends Component {
             {this.renderMonthOptions('start')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {text[language].MONTHS_LIST[startMonth].abbr}
@@ -172,7 +173,7 @@ export default class SadControls extends Component {
             {this.renderYearOptions('start')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {startYear}
@@ -186,7 +187,7 @@ export default class SadControls extends Component {
             {this.renderMonthOptions('end')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {text[language].MONTHS_LIST[endMonth].abbr}
@@ -199,7 +200,7 @@ export default class SadControls extends Component {
             {this.renderYearOptions('end')}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {endYear}

@@ -5,6 +5,7 @@ import utils from 'utils/AppUtils';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
 const windowOptions = 'toolbar=0,status=0,height=650,width=450';
 
@@ -74,7 +75,7 @@ export default class ShareModal extends Component {
         <div className='share-input'>
           <input ref='shareInput' type='text' readOnly value={url ? url : this.state.bitlyUrl} onClick={this.handleFocus} />
           <button
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='gfw-btn white pointer'
             onClick={() => this.copyShare()}
           >

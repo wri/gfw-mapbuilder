@@ -16,7 +16,7 @@ import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePic
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
 import {attributes} from 'constants/AppConstants';
-import {analysisConfig} from 'js/config';
+import {defaultColorTheme} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
@@ -513,8 +513,8 @@ export default class Analysis extends Component {
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
               <button
-                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='run-analysis-button fa-button color pointer'
                 onClick={this.runAnalysis}
                 onMouseEnter={this.toggleHover}

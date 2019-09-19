@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import LayerCheckbox from './LayerCheckbox';
 import LayerActions from 'actions/LayerActions';
+import {defaultColorTheme} from '../../config';
 
 export default class NestedCheckbox extends Component {
   static contextTypes = {
@@ -73,7 +74,7 @@ export default class NestedCheckbox extends Component {
     if (checked === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
-        colorTheme = '#F0AB00';
+        colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';
     }

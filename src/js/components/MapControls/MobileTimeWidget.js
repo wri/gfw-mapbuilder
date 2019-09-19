@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 const START = 'START',
       END = 'END';
@@ -73,7 +74,7 @@ export default class MobileTimeWidget extends Component {
               {values.map(this.optionMapper({ type: START, ...currentTimeExtent}))}
             </select>
             <div
-              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='fa-button sml white'
             >
               {currentTimeExtent.start}
@@ -85,7 +86,7 @@ export default class MobileTimeWidget extends Component {
               {values.map(this.optionMapper({ type: END, ...currentTimeExtent}))}
             </select>
             <div
-              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='fa-button sml white'
             >
               {currentTimeExtent.end}

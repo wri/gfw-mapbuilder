@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import resources from '../../../../resources';
+import {defaultColorTheme} from '../../../config';
 
 export default class AnalysisMultiDatePicker extends Component {
   static contextTypes = {
@@ -138,7 +139,7 @@ const StartButton = ({ onClick, value, customColorTheme }) => {
     <div>
       <label className='analysis-datepicker-button-label'>Start: </label>
       <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
       >
@@ -153,7 +154,7 @@ const EndButton = ({ onClick, value, customColorTheme }) => {
     <div>
       <label className='analysis-datepicker-button-label'>End: </label>
       <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
       >

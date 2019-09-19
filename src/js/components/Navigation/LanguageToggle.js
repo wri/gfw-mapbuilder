@@ -1,7 +1,7 @@
 import appActions from 'actions/AppActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -53,7 +53,7 @@ export default class LanguageToggle extends Component {
           <SVGIcon id={'icon-h-language'} />
         </svg>
         {text[language].NAV_LANGUAGE}
-        <ul style={{borderTop: `3px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='app-header__language-list shadow pointer'>
+        <ul style={{borderTop: `3px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='app-header__language-list shadow pointer'>
           {languageButtons}
         </ul>
       </li>

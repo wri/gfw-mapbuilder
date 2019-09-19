@@ -6,6 +6,7 @@ import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 import moment from 'moment';
+import {defaultColorTheme} from '../../config';
 
 export default class ReportSubscribeButtons extends Component {
   constructor(props) {
@@ -140,7 +141,7 @@ export default class ReportSubscribeButtons extends Component {
           className='report-sub-buttons'
         >
           <button
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='report-sub-button pointer'
             id='print'
             onClick={this.printReport}

@@ -8,6 +8,8 @@ import React, {
 } from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
+
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export default class CanopyModal extends Component {
@@ -149,11 +151,11 @@ export default class CanopyModal extends Component {
           step={null}
           onChange={this.handleSliderChange}
           tipFormatter={value => sliderMarks[value].label}
-          railStyle={{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00', height: 10}}
+          railStyle={{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme, height: 10}}
           trackStyle={{backgroundColor: '#e9e9e9', height: 10}}
-          dotStyle={{border: `2px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, height: 10, width: 10, bottom: -6, marginLeft: -7}}
+          dotStyle={{border: `2px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, height: 10, width: 10, bottom: -6, marginLeft: -7}}
           activeDotStyle={{border: '2px solid #e9e9e9'}}
-          handleStyle={[{border: `2px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, height: 20, width: 20, marginLeft: -13}]}
+          handleStyle={[{border: `2px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, height: 20, width: 20, marginLeft: -13}]}
         />
         </div>
       </ControlledModalWrapper>

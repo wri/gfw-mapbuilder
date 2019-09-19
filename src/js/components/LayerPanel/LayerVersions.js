@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import layerFactory from 'utils/layerFactory';
 import mapActions from 'actions/MapActions';
 import on from 'dojo/on';
+import {defaultColorTheme} from '../../config';
 
 export default class LayerVersions extends Component {
 
@@ -74,7 +75,7 @@ export default class LayerVersions extends Component {
           {versions.map(this.renderVersionOptions)}
         </select>
         <div
-          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className='fa-button sml white'
         >
           {selected}

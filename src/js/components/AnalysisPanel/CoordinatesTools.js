@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 import React, {
   Component,
@@ -96,8 +97,8 @@ export default class CoordinatesTools extends Component {
               {text[language].ANALYSIS_COORDINATES_INSTRUCTIONS.map(this.renderInstructionList)}
             </ol>
             <div
-              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-              {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+              style={enterValuesButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+              {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className="fa-button color analysis-instructions__enter-values-button"
               onClick={this.enterValues}
               onMouseEnter={this.toggleHover}
@@ -106,7 +107,7 @@ export default class CoordinatesTools extends Component {
               <span className="analysis-instructions__enter-values-icon"><SVGIcon id={'icon-enter-values'} /></span>
               <span className="analysis-instructions__enter-values">{text[language].ANALYSIS_COORDINATES_BUTTONS[0]}</span>
             </div>
-            <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='analysis-instructions__separator'>
+            <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
               <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
             </div>
           </div>

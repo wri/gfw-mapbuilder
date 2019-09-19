@@ -1,5 +1,6 @@
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -33,7 +34,7 @@ export default class MapThemes extends Component {
           <SVGIcon id={'icon-h-themes'} />
         </svg>
         {text[language].NAV_MAP_THEMES}
-        <ul style={{borderTop: `3px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='app-header__theme-list shadow'>
+        <ul style={{borderTop: `3px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='app-header__theme-list shadow'>
           {themes.map(this.renderThemeList(language))}
         </ul>
       </li>

@@ -4,6 +4,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import {defaultColorTheme} from '../../config';
 
 const closeSymbolCode = 9660,
     openSymbolCode = 9650;
@@ -25,7 +26,7 @@ export default class BasemapGroup extends Component {
         <div className='layer-category-label-container pointer' onClick={this.toggle}>
           <div className='layer-category-label'>{label}</div>
           <span
-          style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'} !important`}}
+          style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme} !important`}}
           className='layer-category-caret'
           >
             {String.fromCharCode(active ? closeSymbolCode : openSymbolCode)}

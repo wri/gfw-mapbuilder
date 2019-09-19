@@ -1,3 +1,4 @@
+import {defaultColorTheme} from '../../config';
 import React, {Component, PropTypes} from 'react';
 
 export default class ToggleSwitch extends Component {
@@ -14,7 +15,7 @@ export default class ToggleSwitch extends Component {
     if (checkedClass === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (checkedClass === 'active' && (!customColorTheme || customColorTheme === '')) {
-        colorTheme = '#F0AB00';
+        colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';
     }

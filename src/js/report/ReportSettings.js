@@ -10,6 +10,7 @@ import mapActions from '../actions/MapActions';
 import layerActions from '../actions/LayerActions';
 import analysisUtils from './../utils/analysisUtils';
 import resources from '../../resources';
+import {defaultColorTheme} from '../config';
 
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
@@ -356,8 +357,8 @@ export default class ReportSettings extends Component {
             </div>
             <div className='run-report-analysis-button-container print-hide'>
               <button
-                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='run-report-analysis-button fa-button color pointer'
                 onClick={this.runAnalysis}
                 onMouseEnter={this.toggleHover}

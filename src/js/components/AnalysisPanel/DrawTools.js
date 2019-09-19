@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 import React, {
   Component,
@@ -130,8 +131,8 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
           onClick={this.draw}
           onMouseEnter={this.toggleHover}
@@ -140,7 +141,7 @@ export default class DrawTools extends Component {
           <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
           <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>
         </div>
-        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>

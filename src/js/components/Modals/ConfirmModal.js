@@ -1,9 +1,8 @@
 import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
-
+import {defaultColorTheme} from '../../config';
 import React, {Component, PropTypes} from 'react';
-
 
 export default class ConfirmModal extends Component {
 
@@ -62,8 +61,8 @@ export default class ConfirmModal extends Component {
         <p>{text[language].SUBSCRIBE_DELETE_DESC}</p>
 
         <div className='subscription-sub-buttons'>
-          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
-          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>
+          <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.cancelDeletion}>{text[language].SUBSCRIBE_DELETE_CANCEL}</button>
         </div>
 
       </ControlledModalWrapper>

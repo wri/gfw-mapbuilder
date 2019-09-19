@@ -6,6 +6,7 @@ import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
 //- Parse Keys for easier access
 const {
@@ -187,7 +188,7 @@ export default class TabButtons extends Component {
           }
           {!this.props.analysisDisabled && this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
             <span
-              style={{backgroundColor: `${customColorTheme ? customColorTheme : '#F0AB00'}`}}
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
               className="tab-dot"
             >
             </span>
@@ -210,7 +211,7 @@ export default class TabButtons extends Component {
           }
           {this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
             <span
-              style={{backgroundColor: `${customColorTheme ? customColorTheme : '#F0AB00'}`}}
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
               className="tab-dot"
             >
             </span>

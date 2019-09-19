@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../../config';
 
 
 
@@ -98,7 +99,7 @@ const Button = ({ onClick, value, customColorTheme }) => {
   return (<div>
     <label className='analysis-datepicker-button-label'>Date: </label>
     <button
-    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
     className='fa-button sml white pointer'
     onClick={onClick}
     >

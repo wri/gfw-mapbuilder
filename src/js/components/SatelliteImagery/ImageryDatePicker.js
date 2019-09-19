@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import {defaultColorTheme} from '../../config';
 
 export default class AnalysisDatePicker extends Component {
   static contextTypes = {
@@ -102,7 +103,7 @@ const Button = ({ onClick, value, customColorTheme }) => {
   return (
     <div>
       <button
-        style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+        style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
         className='fa-button sml white pointer'
         onClick={onClick}
       >

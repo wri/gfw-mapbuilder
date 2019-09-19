@@ -7,6 +7,7 @@ import geometryUtils from '../../utils/geometryUtils';
 import Polygon from 'esri/geometry/Polygon';
 import Point from 'esri/geometry/Point';
 import layerKeys from '../../constants/LayerConstants';
+import {defaultColorTheme} from '../../config';
 
 const defaultDMS = {
   lat: {
@@ -408,7 +409,7 @@ export default class CoordinatesModal extends Component {
               {latitudeDirectionOptions && latitudeDirectionOptions.map(this.createOptions)}
             </select>
             <div
-              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='analysis-coordinates-directions__select-arrow'
             ></div>
           </div>
@@ -453,7 +454,7 @@ export default class CoordinatesModal extends Component {
               {longitudeDirectionOptions && longitudeDirectionOptions.map(this.createOptions)}
             </select>
             <div
-              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+              style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='analysis-coordinates-directions__select-arrow'
             ></div>
           </div>
@@ -546,7 +547,7 @@ export default class CoordinatesModal extends Component {
             {coordinateFormatOptions && coordinateFormatOptions.map(this.createOptions)}
           </select>
           <div
-            style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='analysis-coordinates__select-arrow'
           >
           </div>
@@ -564,8 +565,8 @@ export default class CoordinatesModal extends Component {
           <span className="analysis-instructions__add-more">{text[language].ANALYSIS_COORDINATES_BUTTONS[1]}</span>
         </div>
         <div
-          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className="fa-button color analysis-instructions__make-shape-button"
           onClick={this.validateShape}
           onMouseEnter={this.toggleHover}

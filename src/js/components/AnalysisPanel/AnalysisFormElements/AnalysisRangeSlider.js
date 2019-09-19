@@ -4,6 +4,8 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import MapActions from 'actions/MapActions';
 import resources from '../../../../resources';
+import {defaultColorTheme} from '../../../config';
+
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -123,10 +125,10 @@ export default class AnalysisRangeSlider extends Component {
           step={step}
           marks={sliderMarks}
           dots={bounds[1] - bounds[0] <= 20}
-          trackStyle={[{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}]}
-          handleStyle={[{borderColor: customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}]}
+          trackStyle={[{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
+          handleStyle={[{borderColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
         />
       </div>
     );

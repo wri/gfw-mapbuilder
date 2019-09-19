@@ -2,11 +2,12 @@ import LayerKeys from 'constants/LayerConstants';
 import basemapUtils from 'utils/basemapUtils';
 import mapActions from 'actions/MapActions';
 import utils from 'utils/AppUtils';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
 } from 'react';
+
 
 export default class LandsatLayer extends Component {
 
@@ -39,7 +40,7 @@ export default class LandsatLayer extends Component {
             {this.props.years.map(this.yearOption.bind(this))}
           </select>
           <div
-            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='fa-button sml white'
           >
             {this.state.yearSelected}

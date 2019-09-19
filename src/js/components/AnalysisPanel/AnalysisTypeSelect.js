@@ -3,6 +3,7 @@
 import mapActions from 'actions/MapActions';
 // import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -54,7 +55,7 @@ export default class AnalysisTypeSelect extends Component {
             </option>
             {analysisItems.map(this.createOptions)}
           </select>
-          <div style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}} className='analysis-results__select-arrow' />
+          <div style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-results__select-arrow' />
         </div>
         {activeAnalysisType === 'default' &&
           <div className='analysis-results__none-selected'>

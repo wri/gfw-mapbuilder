@@ -5,6 +5,7 @@ import React, {
   Component,
   PropTypes
 } from 'react';
+import {defaultColorTheme} from '../../config';
 
 const showModal = function showModal () {
   mapActions.toggleCanopyModal({ visible: true });
@@ -51,8 +52,8 @@ export default class DensityDisplay extends Component {
       <div className='tree-cover-canopy-display'>
         <span className='canopy-label'>{label || hideDefaultLabel ? label : text[language].DENSITY_FIRST}</span>
         <div
-          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className='canopy-button pointer'
           onClick={showModal}
           onMouseEnter={this.toggleHover}

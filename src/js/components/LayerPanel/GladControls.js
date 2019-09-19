@@ -6,6 +6,7 @@ import text from 'js/languages';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../config';
 
 export default class GladControls extends Component {
 
@@ -107,7 +108,7 @@ export default class GladControls extends Component {
 const StartButton = ({ onClick, value, customColorTheme }) => {
   return (
     <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
     >
@@ -119,7 +120,7 @@ const StartButton = ({ onClick, value, customColorTheme }) => {
 const EndButton = ({ onClick, value, customColorTheme }) => {
   return (
     <button
-      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
       className='fa-button sml white pointer'
       onClick={onClick}
     >

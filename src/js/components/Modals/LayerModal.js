@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import {defaultColorTheme} from '../../config';
 
 export default class Modal extends Component {
 
@@ -68,7 +69,7 @@ export default class Modal extends Component {
             <div className='source-learn-more flex'>
               <a
                 href={info.learn_more}
-                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
                 className='source-learn-more-link fa-button white'
                 target='_blank'
               >
@@ -81,8 +82,8 @@ export default class Modal extends Component {
           <div className='source-footer'>
             <a href={info.download_data}
             target='_blank'
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="source-download fa-button color"
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}

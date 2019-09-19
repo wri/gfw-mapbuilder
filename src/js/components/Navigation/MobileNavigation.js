@@ -1,5 +1,6 @@
 import appActions from 'actions/AppActions';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -40,7 +41,7 @@ export default class Navigation extends Component {
         if (currentLanguage === language && customColorTheme && customColorTheme !== '') {
           colorTheme = customColorTheme;
         } else if (currentLanguage === language && customColorTheme && customColorTheme === '') {
-            colorTheme = '#F0AB00';
+            colorTheme = defaultColorTheme;
         } else {
             colorTheme = 'inherit';
         }

@@ -4,8 +4,9 @@ import Query from 'esri/tasks/query';
 import Select from 'react-select';
 import mapActions from 'actions/MapActions';
 import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
-const colorTheme = resources.customColorTheme ? resources.customColorTheme : '#F0AB00';
+const colorTheme = resources.customColorTheme ? resources.customColorTheme : defaultColorTheme;
 
 const customStyles = {
   option: (provided, state) => ({

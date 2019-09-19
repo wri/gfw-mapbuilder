@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 export default class RadioButton extends Component {
   static contextTypes = {
@@ -34,7 +35,7 @@ export default class RadioButton extends Component {
     if (selected === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
     } else if (selected === 'active' && customColorTheme && customColorTheme === '') {
-        colorTheme = '#F0AB00';
+        colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#ffffff';
     }
@@ -46,7 +47,7 @@ export default class RadioButton extends Component {
           {label}
         </span>
         <span
-          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : '#F0AB00'}`}}
+          style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           className={`info-icon pointer ${iconLoading === id ? 'iconLoading' : ''}`}
           onClick={this.handleShowInfo}
         >
