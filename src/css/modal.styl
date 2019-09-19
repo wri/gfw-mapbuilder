@@ -14,6 +14,20 @@
   left 0
   top 0
   
+.measurement-modal
+  background-color #fff
+  max-height 100%
+  position fixed
+  height auto
+  right 110px
+  top 80px
+  z-index 5
+  border 1px solid #aaa
+  max-width 17rem
+  & a
+    word-break break-word
+    word-wrap break-word
+  
 .modal-background
   background-color rgba(0, 0, 0, 0.35)
   height 100%
@@ -86,6 +100,22 @@
     top 60%
     margin-left 0.25rem
     
+.measurement-close-icon
+  position absolute
+  height 30px
+  width 30px
+  right -5
+  top -15
+  z-index 10
+  & svg
+    //transform translate(-50%, -50%)
+    position absolute
+    height 50%
+    width 50%
+    //left 50%
+    top 60%
+    margin-left 0.25rem
+    
 .edit-close-icon
   height 15px
   width 15px
@@ -117,6 +147,44 @@
   color $darkGray
   height 100%
   
+.measurement-modal-content
+  padding 0.5rem
+  overflow-x hidden
+  max-height 450px
+  overflow-y auto
+  color $darkGray
+  height 100%
+  .measurement-container
+    .esriMeasurementButtonContainer
+      display flex
+      flex-wrap nowrap
+      justify-content space-evenly
+      margin 1rem 0.5rem
+      .esriButton
+        margin 0 0.25rem
+      .esriToggleButton
+        visibility visible !important
+        margin 0 0.25rem
+      span.esriButton ~ span.esriToggleButton
+        #dijit_form_DropDownButton_0
+          background-color #ededed
+          cursor not-allowed
+          .dijitButtonText
+          .dijitArrowButtonInner
+            cursor not-allowed
+      span.esriButton.esriButtonChecked.dijitChecked ~ span.esriToggleButton
+        #dijit_form_DropDownButton_0
+          background-color #fff
+          cursor pointer
+          .dijitButtonText
+          .dijitArrowButtonInner
+            cursor pointer
+    .esriMeasurementResultLabel
+    .esriMeasurementResultTable
+      font-size 0.75rem
+    .esriMeasurementResultValue
+      text-align center
+
 .edit-modal-content
   overflow-x hidden
   max-height 450px
@@ -244,7 +312,6 @@
   & .irs-to
     display none
   & .irs-bar
-    background $goldTheme
     border-radius 5px
     height 7px
   & .irs-grid-pol
@@ -593,9 +660,6 @@
     display flex
     align-items center
 
-  .fa-button.white
-    border 1px solid #f0ab00
-
   select
     -webkit-appearance none
     position absolute
@@ -669,9 +733,6 @@
     &:hover
       border #555 solid 4px;
 
-    &.selected
-      border #f0ab00 solid 4px;
-
 .imagery-modal__error
   display flex
   align-items center
@@ -723,3 +784,17 @@ hr
     bottom 0px
     transform none
     left unset
+    
+  .measurement-modal
+    background-color #fff
+    max-height 100%
+    position fixed
+    height auto
+    right 20px
+    top 90px
+    z-index 5
+    border none
+    max-width 17rem
+    & a
+      word-break break-word
+      word-wrap break-word

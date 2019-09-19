@@ -1,7 +1,8 @@
 import TimeSlider from 'esri/dijit/TimeSlider';
 import mapActions from 'actions/MapActions';
 import TimeExtent from 'esri/TimeExtent';
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
+import {defaultColorTheme} from '../../config';
 
 /**
 * Make a date object for time extent using a year, date should be Dec 31 for the given year
@@ -26,6 +27,9 @@ const getYear = (timestamp) => {
 };
 
 export default class TimeWidget extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
 
   componentDidMount () {
     const {timeInfo, sliderProps} = this.props;
@@ -107,8 +111,9 @@ export default class TimeWidget extends Component {
   }
 
   render () {
+    const { customColorTheme } = this.context.settings;
     return (
-      <div className='time-widget map-component shadow mobile-hide'>
+      <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='time-widget map-component shadow mobile-hide'>
         <div ref='timeSlider'></div>
       </div>
     );
