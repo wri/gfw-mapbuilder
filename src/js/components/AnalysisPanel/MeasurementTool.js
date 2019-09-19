@@ -36,7 +36,6 @@ export default class MeasurementTool extends Component {
           brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol()
           .setOutline(new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 255, 255, 1]), 2))
           .setColor(new Color([0, 0, 0, 0]));
-          brApp.map.setInfoWindowOnClick(true);
         }
       });
 
