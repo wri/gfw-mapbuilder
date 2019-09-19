@@ -157,11 +157,11 @@ export default class Map extends Component {
       } else {
         if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
-          console.log('selectedFeature', selectedFeature);
           if (selectedFeature && selectedFeature.geometry) {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
           }
         }
+       //return;
       }
     }
   }
