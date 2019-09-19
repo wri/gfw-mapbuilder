@@ -156,7 +156,6 @@ export default class Map extends Component {
       } else {
         if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
-          console.log('selectedFeature', selectedFeature);
           if (selectedFeature && selectedFeature.geometry) {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
           }
@@ -171,7 +170,7 @@ export default class Map extends Component {
 
   getSelectedFeatureTitles = () => {
 
-    if (brApp.map.measurement.getTool()) {
+    if (brApp.map.measurement && brApp.map.measurement.getTool()) {
       return;
     }
     // let selectedFeats;
@@ -314,12 +313,12 @@ export default class Map extends Component {
           }
         });
         
-      //- Hide the selected feature highlight if using the measurement tool
-      response.map.on('click', evt => {
-        if (brApp.map.measurement.getTool()) {
-          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
-        }
-      });
+        //- Hide the selected feature highlight if using the measurement tool
+        response.map.on('click', evt => {
+          if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+            brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+          }
+        });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
