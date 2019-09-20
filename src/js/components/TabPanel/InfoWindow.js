@@ -87,7 +87,7 @@ export default class InfoWindow extends Component {
         <div className="infoWindow__prev-next-container">
           <span
             style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            {backgroundColor: `${selectedIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow prev ${selectedIndex > 0 ? '' : 'disabled'}`}
             onClick={this.previous}
           >
@@ -95,7 +95,7 @@ export default class InfoWindow extends Component {
           </span>
           <span
             style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
-            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            {backgroundColor: `${selectedIndex < count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow next ${selectedIndex < count - 1 ? '' : 'disabled'}`}
             onClick={this.next}
           >
