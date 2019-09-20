@@ -21,7 +21,8 @@ export default class InfoWindow extends Component {
     super(props);
     this.state = {
       activeSelectedFeature: '',
-      buttonHover: false
+      prevButtonHover: false,
+      nextButtonHover: false
     };
   }
 
@@ -66,15 +67,21 @@ export default class InfoWindow extends Component {
     //console.log(this.state.activeSelectedFeature);
   }
   
-  toggleHover = () => {
+  prevToggleHover = () => {
     this.setState({
-      buttonHover: !this.state.buttonHover
+      prevButtonHover: !this.state.prevButtonHover
+    });
+  };
+  
+  nextToggleHover = () => {
+    this.setState({
+      nextButtonHover: !this.state.nextButtonHover
     });
   };
 
   createDropdown = (features, selectedIndex, count) => {
     const { customColorTheme } = this.context.settings;
-    const {buttonHover} = this.state;
+    const {prevButtonHover, nextButtonHover} = this.state;
     return (
       <div className="relative infoWindow__select-container">
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
@@ -86,18 +93,22 @@ export default class InfoWindow extends Component {
         />
         <div className="infoWindow__prev-next-container">
           <span
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            style={prevButtonHover ? {backgroundColor: `${selectedIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectedIndex > 0 ? '0.8' : '1'}`} :
             {backgroundColor: `${selectedIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow prev ${selectedIndex > 0 ? '' : 'disabled'}`}
             onClick={this.previous}
+            onMouseEnter={this.prevToggleHover}
+            onMouseLeave={this.prevToggleHover}
           >
             Prev
           </span>
           <span
-            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            style={nextButtonHover ? {backgroundColor: `${selectedIndex < count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee' }`, opacity: `${selectedIndex < count - 1 ? '0.8' : '1'}`} :
             {backgroundColor: `${selectedIndex < count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow next ${selectedIndex < count - 1 ? '' : 'disabled'}`}
             onClick={this.next}
+            onMouseEnter={this.nextToggleHover}
+            onMouseLeave={this.nextToggleHover}
           >
             Next
           </span>
