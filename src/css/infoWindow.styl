@@ -105,12 +105,16 @@
 .infoWindow__select-container
   height 25px
   margin 10px 0
+  display flex
+  flex-wrap nowrap
+  justify-content space-between
+  align-items center
   
 .infoWindow__select
   -webkit-appearance none
-  position absolute
+  position relative
   height 100%
-  width 100%
+  width 75%
   background #fff
   border-radius 0
   padding-left 10px
@@ -130,7 +134,7 @@
   content '\25BC'
   font-size 12px
   color #e6a912
-  right 8px
+  right 26%
   top 5px
 
 //- Esri Overrides

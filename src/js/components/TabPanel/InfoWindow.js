@@ -112,25 +112,26 @@ export default class InfoWindow extends Component {
       // Add the dropdown for multiple selected features
       // WIP for tomorrow
       dropdown = (
-        <div className="relative infoWindow__select-container">=
+        <div className="relative infoWindow__select-container">
           <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
             {features.map(this.selectedFeatureOption)}
           </select>
           <div className='infoWindow__select-arrow' />
+          <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
+            <SVGIcon id={'shape-close'} />
+          </svg>
         </div>
       );
     }
     console.log('selected feature', selectedFeature);
+    console.log('features', features);
+    
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
           <div className='feature-controls'>
             {selectedFeature && selectedFeature.attributes.source === 'draw' ? null : dropdown}
             <span>{count} features selected.</span>
-            <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
-              <SVGIcon id={'shape-close'} />
-
-            </svg>
             <span className={`arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`} onClick={this.next}>Next</span>
             <span className={`arrow left ${selectedIndex > 0 ? '' : 'disabled'}`} onClick={this.previous}>Prev</span>
           </div>
