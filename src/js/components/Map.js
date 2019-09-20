@@ -227,8 +227,12 @@ export default class Map extends Component {
           }
         }
 
-        mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
+        const urlState = this.applyLayerStateFromUrl(response.map, itemData);
+        const cDensityFromHash = urlState.cDensity;
+        const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
+        // mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
+        // mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
+        mapActions.createLayers(response.map, settings.layerPanel, [], language);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -548,6 +552,20 @@ export default class Map extends Component {
     const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
+    let activeLayers;
+    console.log('params', params);
+
+    // const returnObj = {
+    //   cDensity: null,
+    //   activeLayers: null
+    // };
+    const returnObj = {};
+
+    if (!params) {
+      return returnObj;
+    } else if (Object.keys(params).length < 2) {
+      return returnObj;
+    }
 
 
     //- Set the default basemap in the store
@@ -557,6 +575,7 @@ export default class Map extends Component {
       mapActions.changeBasemap(params.b);
     }
     if (params.a) {
+      //todo: cast same clearAll function if we don't!!
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
@@ -651,6 +670,22 @@ export default class Map extends Component {
       }
 
       layerActions.setOpacities(opacityObjs);
+    } else {
+
+      returnObj.activeLayers = [];
+      // setTimeout(function () {
+      //mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
+      console.log(this.state);
+      console.log(settings.layerPanel);
+      // debugger
+      // setTimeout(function () {
+      //
+      //   console.log('are we here even without a url..? we should make a check for like "?" or something');
+      //   // layerActions.removeAll.defer(); //maybe we have to do the visible layers one by one!?
+      //   layerActions.removeAllLayers();
+      // }, 5000);
+
+      // }, 9000);
     }
 
     if (params.ls && params.le) {
@@ -696,7 +731,12 @@ export default class Map extends Component {
       mapActions.updateCanopyDensity(parseInt(params.c));
     }
 
-    return params.c ? parseInt(params.c) : false;
+    if (params.c) {
+      returnObj.cDensity = parseInt(params.c);
+    }
+
+    return returnObj;
+    // return params.c ? parseInt(params.c) : false;
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {

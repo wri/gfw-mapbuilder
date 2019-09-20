@@ -91,7 +91,7 @@ class LayerActions {
   updateModisEndDate (endDate) {
     return endDate;
   }
-  
+
   updateSelectedFeatureTitles (selectedFeatureTitles) {
     return selectedFeatureTitles;
   }
@@ -113,6 +113,10 @@ class LayerActions {
   }
 
   removeAll () {
+    return {};
+  }
+
+  removeAllLayers () {
     return {};
   }
 

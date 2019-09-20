@@ -136,6 +136,7 @@ class MapStore {
       setSubLayers: layerActions.setSubLayers,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
+      removeAllLayers: layerActions.removeAllLayers,
       setLossOptions: layerActions.setLossOptions,
       shouldResetSlider: layerActions.shouldResetSlider,
       updateLossTimeline: layerActions.updateLossTimeline,
@@ -355,6 +356,10 @@ class MapStore {
     this.terraIEndDate = new Date('2016', 6, 12);
   }
 
+  removeAllLayers () {
+    this.activeLayers = [];
+  }
+
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
@@ -430,11 +435,11 @@ class MapStore {
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
   }
-  
+
   toggleCoordinatesModal (payload) {
     this.coordinatesModalVisible = payload.visible;
   }
-  
+
   toggleEditCoordinatesModal (payload) {
     this.editCoordinatesModalVisible = payload.visible;
   }
@@ -498,7 +503,7 @@ class MapStore {
       this.editingEnabled = true;
     }
   }
-  
+
   resetEditing () {
     this.editingEnabled = false;
   }
@@ -563,23 +568,23 @@ class MapStore {
   updateModisEndDate (endDate) {
     this.modisEndDate = endDate;
   }
-  
+
   updateSelectedFeatureTitles (selectedFeatureTitles) {
     this.selectedFeatureTitles = selectedFeatureTitles;
   }
-  
+
   updateCurrentLat (latitude) {
     this.currentLat = latitude;
   }
-  
+
   updateCurrentLng (longitude) {
     this.currentLng = longitude;
   }
-  
+
   updateCurrentX (x) {
     this.currentX = x;
   }
-  
+
   updateCurrentY (y) {
     this.currentY = y;
   }
@@ -603,14 +608,14 @@ class MapStore {
         const promise = new Promise((resolve) => {
           resolve();
         });
-  
+
         promise.then(() => {
           this.iconLoading = '';
           this.modalLayerInfo = info;
           this.layerModalVisible = true;
           this.emitChange();
         });
-  
+
       } else {
         layerInfoCache.fetch(layer).then(layerInfo => {
           this.iconLoading = '';
@@ -696,11 +701,11 @@ class MapStore {
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
   }
-  
+
   activateEnterValuesButton(bool) {
     this.enterValuesButtonActive = bool;
   }
-  
+
   activateEditCoordinates(bool) {
     this.editCoordinatesActive = bool;
   }

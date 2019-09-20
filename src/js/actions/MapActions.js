@@ -243,11 +243,11 @@ class MapActions {
   activateDrawButton(bool) {
     return bool;
   }
-  
+
   activateEnterValuesButton(bool) {
     return bool;
   }
-  
+
   activateEditCoordinates(bool) {
     return bool;
   }
