@@ -103,7 +103,7 @@
   
 .infoWindow__select-container
   height 25px
-  margin 5px 0
+  margin-top 0.5rem
   display flex
   flex-wrap nowrap
   justify-content space-between
@@ -151,9 +151,18 @@
     height 25px
     line-height 25px
 
+.infoWindow__count
+  color $darkGray
+  margin-left auto
+  margin-bottom 0.25rem
+  width 100%
+  display flex
+  justify-content flex-end
+  font-size 0.75rem
+
 //- Esri Overrides
 .esriViewPopup .header
-  padding 0 10px
+  margin 0.5rem 0
 
 .esriViewPopup .header
 .infoWindow__title
@@ -178,7 +187,6 @@
   width 100%
 
 .map .esriViewPopup .mainSection .attrTable td.attrName
-  padding-left 10px
   font-weight bold
   color #555
 
@@ -187,4 +195,15 @@
 
 .esriPopup, .attachmentsSection
   display none
+  
+.esriViewPopup .mainSection .attrTable td
+  padding 0 !important
+  padding-bottom 5px !important
+  
+td.attrName
+  text-align left
+  
+td.attrValue
+  text-align right
+  
 //- Esri Overrides

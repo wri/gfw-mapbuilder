@@ -175,12 +175,15 @@ export default class InfoWindow extends Component {
             <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
               <SVGIcon id={'shape-close'} />
             </svg>
-            {selectedFeature && selectedFeature.attributes.source === 'draw' ? null : dropdown}
-            <span>{count} features selected.</span>
+            {selectedFeature && selectedFeature.attributes && selectedFeature.attributes.source === 'draw' ? null : dropdown}
+          </div>
+          <div className="infoWindow__title">
+            <div dangerouslySetInnerHTML={{__html: content }} />
+            <div className="infoWindow__count">{features ? `${selectedIndex + 1} / ${features.length}` : null}</div>
           </div>
           <div className='infoWindow__attribute-display custom-scroll'>
             {title}
-            <div dangerouslySetInnerHTML={{__html: content }} />
+            {/* <div dangerouslySetInnerHTML={{__html: content }} /> */}
           </div>
         </div>
         <div className={`infoWindow__instructions ${selectedFeature ? 'hidden' : ''}`}>
