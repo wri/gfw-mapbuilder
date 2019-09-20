@@ -3,6 +3,7 @@ import ReportSubscribeButtons from 'components/Shared/ReportSubscribe';
 import {attributes} from 'constants/AppConstants';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 import React, {
   Component,
@@ -20,7 +21,12 @@ export default class InfoWindow extends Component {
 
   static contextTypes = {
     language: PropTypes.string.isRequired,
-    map: PropTypes.object.isRequired
+    map: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired
+  };
+  
+  state = {
+    buttonHover: false
   };
 
   previous = () => {
@@ -63,6 +69,43 @@ export default class InfoWindow extends Component {
     });
     console.log(this.state.activeSelectedFeature);
   }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
+
+  createDropdown = (features, selectedIndex, count) => {
+    const { customColorTheme } = this.context.settings;
+    const {buttonHover} = this.state;
+    return (
+      <div className="relative infoWindow__select-container">
+        <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
+          {features.map(this.selectedFeatureOption)}
+        </select>
+        <div className='infoWindow__select-arrow' />
+        <div className="infowWindow__arrow-container">
+          <span
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className={`fa-button white arrow left ${selectedIndex > 0 ? '' : 'disabled'}`}
+            onClick={this.previous}
+          >
+            Prev
+          </span>
+          <span
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className={`fa-button color arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`}
+            onClick={this.next}
+          >
+            Next
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   render () {
     const {infoWindow} = this.props.map;
@@ -110,30 +153,20 @@ export default class InfoWindow extends Component {
       );
       
       // Add the dropdown for multiple selected features
-      // WIP for tomorrow
-      dropdown = (
-        <div className="relative infoWindow__select-container">
-          <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
-            {features.map(this.selectedFeatureOption)}
-          </select>
-          <div className='infoWindow__select-arrow' />
-          <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
-            <SVGIcon id={'shape-close'} />
-          </svg>
-        </div>
-      );
+      dropdown = this.createDropdown(features, selectedIndex, count);
     }
-    console.log('selected feature', selectedFeature);
-    console.log('features', features);
+    // console.log('selected feature', selectedFeature);
+    // console.log('features', features);
     
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
           <div className='feature-controls'>
+            <svg onClick={this.clearFeatures} className='infoWindow__clearFeatures-icon pointer-custom'>
+              <SVGIcon id={'shape-close'} />
+            </svg>
             {selectedFeature && selectedFeature.attributes.source === 'draw' ? null : dropdown}
             <span>{count} features selected.</span>
-            <span className={`arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`} onClick={this.next}>Next</span>
-            <span className={`arrow left ${selectedIndex > 0 ? '' : 'disabled'}`} onClick={this.previous}>Prev</span>
           </div>
           <div className='infoWindow__attribute-display custom-scroll'>
             {title}

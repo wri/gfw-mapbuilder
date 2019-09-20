@@ -19,9 +19,7 @@
 
   .arrow
     cursor pointer
-    float right
-  .arrow.right
-    margin-left 1em;
+    
   .arrow.disabled
     color $lightGray
     cursor default
@@ -70,10 +68,11 @@
   left 0
 
 .infoWindow__clearFeatures-icon
-  margin-left 1em
-  float right
   height 20px
   width 20px
+  display flex
+  flex-wrap nowrap
+  margin-left auto
 
 .infoWindow__no-configure
   margin 10px
@@ -114,7 +113,7 @@
   -webkit-appearance none
   position relative
   height 100%
-  width 75%
+  width 50%
   background #fff
   border-radius 0
   padding-left 10px
@@ -134,8 +133,11 @@
   content '\25BC'
   font-size 12px
   color #e6a912
-  right 26%
+  left 45%
   top 5px
+  
+.infoWindow__arrow-container
+  margin-left auto
 
 //- Esri Overrides
 .esriViewPopup .header
