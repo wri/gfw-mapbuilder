@@ -11,23 +11,19 @@ import React, {
 } from 'react';
 
 export default class InfoWindow extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeSelectedFeature: ''
-    };
-  }
-
   static contextTypes = {
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired,
     settings: PropTypes.object.isRequired
   };
-  
-  state = {
-    buttonHover: false
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeSelectedFeature: '',
+      buttonHover: false
+    };
+  }
 
   previous = () => {
     this.context.map.infoWindow.selectPrevious();
@@ -67,7 +63,7 @@ export default class InfoWindow extends Component {
     this.setState({
       activeSelectedFeature: evt.target.value
     });
-    console.log(this.state.activeSelectedFeature);
+    //console.log(this.state.activeSelectedFeature);
   }
   
   toggleHover = () => {
@@ -84,12 +80,15 @@ export default class InfoWindow extends Component {
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
           {features.map(this.selectedFeatureOption)}
         </select>
-        <div className='infoWindow__select-arrow' />
-        <div className="infowWindow__arrow-container">
+        <div
+        style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+        className='infoWindow__select-arrow'
+        />
+        <div className="infoWindow__prev-next-container">
           <span
             style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
-            className={`fa-button white arrow left ${selectedIndex > 0 ? '' : 'disabled'}`}
+            className={`fa-button color arrow prev ${selectedIndex > 0 ? '' : 'disabled'}`}
             onClick={this.previous}
           >
             Prev
@@ -97,7 +96,7 @@ export default class InfoWindow extends Component {
           <span
             style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
             {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
-            className={`fa-button color arrow right ${selectedIndex < count - 1 ? '' : 'disabled'}`}
+            className={`fa-button color arrow next ${selectedIndex < count - 1 ? '' : 'disabled'}`}
             onClick={this.next}
           >
             Next

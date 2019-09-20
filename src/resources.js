@@ -11,6 +11,7 @@ export default {
   "sharinghost": "https://www.arcgis.com",
   "analyticsCode": "UA-62288390-16",
   "iso": "ETH",
+  "customColorTheme": "62c8ff",
   "language": "en",
   "useAlternativeLanguage": false,
   "alternativeLanguage": "",
