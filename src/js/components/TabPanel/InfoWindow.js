@@ -28,10 +28,18 @@ export default class InfoWindow extends Component {
 
   previous = () => {
     this.context.map.infoWindow.selectPrevious();
+    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    this.setState({
+      activeSelectedFeature: selectedFeature.attributes[selectedFeature._layer.displayField]
+    });
   };
 
   next = () => {
     this.context.map.infoWindow.selectNext();
+    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    this.setState({
+      activeSelectedFeature: selectedFeature.attributes[selectedFeature._layer.displayField]
+    });
   };
 
   clearFeatures = () => {
@@ -58,19 +66,26 @@ export default class InfoWindow extends Component {
     );
   };
   
-  selectedFeatureOption = (feature, index) => <option key={`selected-feature-${index}`} value={feature.attributes[feature._layer.displayField]}>{feature.attributes[feature._layer.displayField]}</option>;
+  selectedFeatureOption = (feature, index) =>
+  <option
+    key={`selected-feature-${index}`}
+    value={feature.attributes[feature._layer.displayField]}>{feature.attributes[feature._layer.displayField]}
+  </option>;
   
-  changeSelectedFeature = (evt) => {
-    //WIP for Monday
-    console.log('active', this.context.map.infoWindow.getSelectedFeature());
-    const features = this.context.map.infoWindow.features;
-    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    const index = features.findIndex(feature => feature.attributes.OBJECTID === selectedFeature.attributes.OBJECTID);
-    console.log('index', index);
-    this.context.map.infoWindow.select(index);
-    console.log('active', this.context.map.infoWindow.getSelectedFeature());
+  changeSelectedFeature = evt => {
     this.setState({
       activeSelectedFeature: evt.target.value
+    }, () => {
+      const features = this.context.map.infoWindow.features;
+      const featureNames = features.map(feature => feature.attributes[feature._layer.displayField]);
+      const selectedFeatureName = this.state.activeSelectedFeature;
+      let index = 0;
+      featureNames.forEach(objectId => {
+        if (objectId === selectedFeatureName) {
+          index = featureNames.indexOf(selectedFeatureName);
+        }
+      });
+      this.context.map.infoWindow.select(index);
     });
   }
   
@@ -88,13 +103,12 @@ export default class InfoWindow extends Component {
 
   createDropdown = (selectedIndex, count) => {
     const { customColorTheme } = this.context.settings;
-    const {prevButtonHover, nextButtonHover} = this.state;
+    const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
-    console.log('features', features);
     return (
       <div className="relative infoWindow__select-container">
-        <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={this.state.selectedFeature}>
-          {features.map(this.selectedFeatureOption)}
+        <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={activeSelectedFeature}>
+          {features && features.length ? features.map(this.selectedFeatureOption) : null}
         </select>
         <div
         style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
@@ -129,21 +143,17 @@ export default class InfoWindow extends Component {
   render () {
     const {infoWindow} = this.context.map;
     const {language} = this.context;
-    const {activeSelectedFeature} = this.state;
-    let count = 0, selectedIndex = 0;
+    let count = 0;
+    let selectedIndex = 0;
     let selectedFeature, content, title, footer, dropdown, features;
     const {editingEnabled} = this.props;
     
-    if(activeSelectedFeature) {
-      selectedFeature = activeSelectedFeature;
-    } else {
-      if ( infoWindow && infoWindow.getSelectedFeature ) {
-        count = infoWindow.count;
-        selectedFeature = infoWindow.getSelectedFeature();
-        selectedIndex = infoWindow.selectedIndex;
-        content = infoWindow._contentPane.innerHTML;
-        features = infoWindow.features;
-      }
+    if ( infoWindow && infoWindow.getSelectedFeature ) {
+      count = infoWindow.count;
+      selectedFeature = infoWindow.getSelectedFeature();
+      selectedIndex = infoWindow.selectedIndex;
+      content = infoWindow._contentPane.innerHTML;
+      features = infoWindow.features;
     }
 
     if (selectedFeature) {
@@ -174,8 +184,6 @@ export default class InfoWindow extends Component {
       // Add the dropdown for multiple selected features
       dropdown = this.createDropdown(selectedIndex, count);
     }
-    // console.log('selected feature', selectedFeature);
-    // console.log('features', features);
     
     return (
       <div className='infoWindow relative'>
