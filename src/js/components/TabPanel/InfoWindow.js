@@ -29,21 +29,16 @@ export default class InfoWindow extends Component {
   previous = () => {
     this.context.map.infoWindow.selectPrevious();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    // this.setState({
-    //   activeSelectedFeature: {
-    //     name: selectedFeature.attributes[selectedFeature._layer.displayField],
-    //     id: selectedFeature.attributes[selectedFeature._layer.objectIdField]}
-    // });
+    this.setState({
+      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
+    });
   };
 
   next = () => {
     this.context.map.infoWindow.selectNext();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     this.setState({
-      activeSelectedFeature: `{
-        "name": "${selectedFeature.attributes[selectedFeature._layer.displayField]}",
-        "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"
-        }`
+      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
     });
   };
 
