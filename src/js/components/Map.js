@@ -206,6 +206,7 @@ export default class Map extends Component {
 
       // Add operational layers from the webmap to the array of layers from the config file.
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
+      console.log('itemData.operationalLayers', itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
       //- Attach events I need for the info window
@@ -230,9 +231,10 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
-        // mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
+        console.log('activeLayers', activeLayers);
+        mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
         // mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        mapActions.createLayers(response.map, settings.layerPanel, [], language);
+        // mapActions.createLayers(response.map, settings.layerPanel, [], language);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -957,6 +959,8 @@ export default class Map extends Component {
         default:
       }
     });
+
+    console.log('layers', layers);
 
     const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
     webmapGroup.layers = layers;

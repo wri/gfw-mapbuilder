@@ -7,6 +7,8 @@ import resources from 'resources';
 import Point from 'esri/geometry/Point';
 import AppUtils from '../utils/AppUtils';
 
+import layerActions from 'actions/LayerActions';
+
 let layersCreated = false;
 
 class MapActions {
@@ -138,9 +140,10 @@ class MapActions {
       });
     //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
     //- Make those updates here to the config as this will trickle down
-    uniqueLayers.forEach(layer => {
-      layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
-    });
+    // uniqueLayers.forEach(layer => {
+    //   layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
+    //   // layer.visible = activeLayers.indexOf(layer.id) > -1;
+    // });
     //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
@@ -149,10 +152,14 @@ class MapActions {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
 
+    // console.log(map);
+    // debugger
+
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
+      console.log('addedLayers', addedLayers);
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
@@ -171,8 +178,35 @@ class MapActions {
 
       uniqueLayers.sort((a, b) => a.order - b.order);
 
+      console.log('uniqueLayers', uniqueLayers); //TODO: Is the issue that we are doing this ONLY ONCE when we need to do it twice..? (with different `subIndex` values)
+      console.log('activeLayers', activeLayers);
+
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
+        if (l.esriLayer) {
+          if (activeLayers.indexOf(l.esriLayer.id) === -1) {
+            if (l.subId) {
+              console.log('l', l);
+              layerActions.removeSubLayer(l);
+              l.visible = false;
+              // console.log(l);
+            } else {
+              layerActions.removeActiveLayer(l.id);
+              l.visible = false;
+            }
+            // l.esriLayer.hide();
+          } else {
+            if (l.subId) {
+              layerActions.addSubLayer(l);
+              l.visible = true;
+              console.log(l);
+            } else {
+              l.visible = true;
+              layerActions.addActiveLayer(l.id);
+            }
+            // l.esriLayer.show();
+          }
+        }
       });
 
       if (map.getLayer('labels')) {
@@ -220,6 +254,7 @@ class MapActions {
     layersCreated = true;
 
     //- Return the layers through the dispatcher so the mapstore can update visible layers
+    console.log('layers', layers);
     return {
       layers,
       map

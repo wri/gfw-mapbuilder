@@ -84,6 +84,8 @@ export default class LayerCheckbox extends Component {
     const {map} = this.context;
 
     if (layer.disabled) { return; }
+    // console.log('layer', layer);
+    // debugger
     if (layer.subId) {
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
