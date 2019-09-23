@@ -29,16 +29,21 @@ export default class InfoWindow extends Component {
   previous = () => {
     this.context.map.infoWindow.selectPrevious();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    this.setState({
-      activeSelectedFeature: selectedFeature.attributes[selectedFeature._layer.displayField]
-    });
+    // this.setState({
+    //   activeSelectedFeature: {
+    //     name: selectedFeature.attributes[selectedFeature._layer.displayField],
+    //     id: selectedFeature.attributes[selectedFeature._layer.objectIdField]}
+    // });
   };
 
   next = () => {
     this.context.map.infoWindow.selectNext();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     this.setState({
-      activeSelectedFeature: selectedFeature.attributes[selectedFeature._layer.displayField]
+      activeSelectedFeature: `{
+        "name": "${selectedFeature.attributes[selectedFeature._layer.displayField]}",
+        "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"
+        }`
     });
   };
 
@@ -66,23 +71,18 @@ export default class InfoWindow extends Component {
     );
   };
   
-  selectedFeatureOption = (feature, index) =>
-  <option
-    key={`selected-feature-${index}`}
-    value={feature.attributes[feature._layer.displayField]}>{feature.attributes[feature._layer.displayField]}
-  </option>;
-  
   changeSelectedFeature = evt => {
     this.setState({
       activeSelectedFeature: evt.target.value
     }, () => {
+      const selectedFeature = JSON.parse(this.state.activeSelectedFeature);
+      const name = selectedFeature.name;
+      const id = selectedFeature.id;
       const features = this.context.map.infoWindow.features;
-      const featureNames = features.map(feature => feature.attributes[feature._layer.displayField]);
-      const selectedFeatureName = this.state.activeSelectedFeature;
       let index = 0;
-      featureNames.forEach(objectId => {
-        if (objectId === selectedFeatureName) {
-          index = featureNames.indexOf(selectedFeatureName);
+      features.forEach(feature => {
+        if (feature.attributes[feature._layer.displayField] === name && feature.attributes[feature._layer.objectIdField].toString() === id) {
+          index = features.indexOf(feature);
         }
       });
       this.context.map.infoWindow.select(index);
@@ -100,19 +100,28 @@ export default class InfoWindow extends Component {
       nextButtonHover: !this.state.nextButtonHover
     });
   };
+  
+  selectedFeatureOption = (feature, index) =>
+  <option
+    value={`{"name": "${feature.attributes[feature._layer.displayField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
+    key={`selected-feature-${index}`}
+  >
+    {feature.attributes[feature._layer.displayField]}
+  </option>;
 
   createDropdown = (selectedIndex, count) => {
     const { customColorTheme } = this.context.settings;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
+    
     return (
       <div className="relative infoWindow__select-container">
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={activeSelectedFeature}>
           {features && features.length ? features.map(this.selectedFeatureOption) : null}
         </select>
         <div
-        style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
-        className='infoWindow__select-arrow'
+          style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='infoWindow__select-arrow'
         />
         <div className="infoWindow__prev-next-container">
           <span
