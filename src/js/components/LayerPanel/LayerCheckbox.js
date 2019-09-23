@@ -74,7 +74,6 @@ export default class LayerCheckbox extends Component {
 
   showInfo () {
     const {layer} = this.props;
-    console.log('layer', layer);
     if (layer.disabled) { return; }
     mapActions.showLayerInfo(layer);
     layerActions.showLoading(layer.id);
