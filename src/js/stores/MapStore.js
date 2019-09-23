@@ -211,11 +211,14 @@ class MapStore {
   }
 
   removeSubLayer (info) {
-    const subLayerIndex = this.dynamicLayers[info.id].indexOf(info.subIndex);
-    if (subLayerIndex > -1) {
-      this.dynamicLayers[info.id].splice(subLayerIndex, 1);
+    if (this.dynamicLayers[info.id]) {
+
+      const subLayerIndex = this.dynamicLayers[info.id].indexOf(info.subIndex);
+      if (subLayerIndex > -1) {
+        this.dynamicLayers[info.id].splice(subLayerIndex, 1);
+      }
+      this.removeActiveLayer(info.subId);
     }
-    this.removeActiveLayer(info.subId);
   }
 
   removeAllSubLayers(info) {
