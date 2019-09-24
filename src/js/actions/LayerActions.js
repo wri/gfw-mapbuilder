@@ -27,7 +27,7 @@ class LayerActions {
   }
 
   removeSubLayer (info) {
-    console.log('info', info);
+    // console.log('info', info);
     return info;
   }
 

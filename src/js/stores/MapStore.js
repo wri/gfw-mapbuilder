@@ -420,6 +420,7 @@ class MapStore {
         }
         if (layer.subId && layer.esriLayer.visibleLayers.indexOf(layer.subIndex) > -1) {
           if (LayersHelper.isLayerVisible(map, layer)) {
+            console.log('visbile!', layer.subId);
             this.activeLayers.push(layer.subId);
           }
         }

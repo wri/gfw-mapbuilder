@@ -624,8 +624,17 @@ export default class Map extends Component {
               layerActions.addActiveLayer(webmapLayerConfig.id);
             }
           } else {
+            console.log('');
+            console.log(webmapLayerConfig);
+            // debugger
+
+            //TODO: Its a scale thing - we aren't getting into here because visible is FALSE
+            //TODO MORE IMPORTANT AND OVERRIDE - above: its NOT a onLoad, its on a map-zoom change! Our zoomTo is causing this!!
+              // we need to check if we should relly be turning these layers on!!!
+            //TODO: wait, I think we still DO need these layers to get turned off my bad!
             if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
             (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible)) {
+              console.log('in');
 
               if (!webmapIdConfig[webmapLayerConfig.id]) {
                 webmapIdConfig[webmapLayerConfig.id] = {
@@ -636,18 +645,21 @@ export default class Map extends Component {
 
               if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) {
                 webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
-              } else {
+              } else { // should this get turned into anesle if...?
                 webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
               }
+              console.log(webmapIdConfig);
             }
           }
 
         });
 
         console.log('webmapIdConfig', webmapIdConfig);
+        //TODO: the left-over layers in updateableVisibleLayers are all the notVisible at Scale layers which Should be hidden!
 
         Object.keys(webmapIdConfig).forEach(webmapId => {
           const mapLaya = map.getLayer(webmapId);
+          console.log('mapLaya', mapLaya.visibleLayers);
           const updateableVisibleLayers = mapLaya.visibleLayers.slice();
 
           webmapIdConfig[webmapId].layersToHide.forEach(layerToHide => {
@@ -662,6 +674,8 @@ export default class Map extends Component {
               layerActions.addSubLayer(subLayerConfig);
             }
           });
+
+          console.log('updateableVisibleLayers', updateableVisibleLayers);
 
           mapLaya.setVisibleLayers(updateableVisibleLayers);
 

@@ -94,6 +94,7 @@ class MapActions {
   }
 
   createLayers (map, layerPanel, activeLayers, language) {
+    console.log('createLayers');
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -189,6 +190,8 @@ class MapActions {
       }
 
       console.log('adjustLayerVis', adjustLayerVis);
+      console.log('uniqueLayers', uniqueLayers);
+      console.log('activeLayers', activeLayers);
 
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
@@ -225,7 +228,7 @@ class MapActions {
             // l.esriLayer.hide(); //TODO: needs work on whether different layer checkboxes are IN the same layer
 
 
-            if (!l.subId && l.visible) {
+            if (!l.subId) {
               // console.log('iddd', l.id);
 
               layerActions.removeActiveLayer(l.id);
