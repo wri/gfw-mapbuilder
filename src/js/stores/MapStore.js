@@ -206,6 +206,10 @@ class MapStore {
   }
 
   addSubLayer (info) {
+    console.log(this.dynamicLayers);
+    if (!this.dynamicLayers[info.id]) {
+      this.dynamicLayers[info.id] = [];
+    }
     this.dynamicLayers[info.id].push(info.subIndex);
     this.addActiveLayer(info.subId);
   }

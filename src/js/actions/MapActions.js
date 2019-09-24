@@ -8,6 +8,7 @@ import Point from 'esri/geometry/Point';
 import AppUtils from '../utils/AppUtils';
 
 import layerActions from 'actions/LayerActions';
+import {getUrlParams} from 'utils/params';
 
 let layersCreated = false;
 
@@ -152,9 +153,6 @@ class MapActions {
         return layerFactory(layer, language);
       }).sort((a, b) => a.order - b.order);
 
-    // console.log(map);
-    // debugger
-
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
@@ -178,24 +176,64 @@ class MapActions {
 
       uniqueLayers.sort((a, b) => a.order - b.order);
 
-      console.log('uniqueLayers', uniqueLayers); //TODO: Is the issue that we are doing this ONLY ONCE when we need to do it twice..? (with different `subIndex` values)
-      console.log('activeLayers', activeLayers);
+      const params = getUrlParams(location.href);
+
+      let adjustLayerVis;
+
+      if (!params) {
+        adjustLayerVis = false;
+      } else if (Object.keys(params).length < 2) {
+        adjustLayerVis = false;
+      } else {
+        adjustLayerVis = true;
+      }
+
+      console.log('adjustLayerVis', adjustLayerVis);
 
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
-        if (l.esriLayer) {
+
+        if (adjustLayerVis && l.esriLayer) {
           if (activeLayers.indexOf(l.esriLayer.id) === -1) {
-            if (l.subId) {
-              console.log('l', l);
-              layerActions.removeSubLayer(l);
-              l.visible = false;
-              // console.log(l);
-            } else {
+            // if (l.subId) {
+            //   console.log('l', l);
+            //   //
+            //   // //Not doing AnyThing when we have actual layers in the url works - it turns on the correct layers annnd somehow turns OFF the on-by-default layer!
+            //   //   //this leaves ON our on-by-deault layer when we share with NO layers!
+            //   //
+            //   // //Running the `removeAllSubLayers` action removes all the turned-on layers in Both scenarios
+            //   //   //so, if we don't do Anything in the 1st, how does that originally-turned-on-layer get removed..??
+            //   //
+            //   // // layerActions.removeSubLayer(l);
+            //   // // if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
+            //   //
+            //   // // layerActions.removeActiveLayer(l.id); //TODO: needs work on whether different layer checkboxes are IN the same layer
+            //   // console.log('l.esriLayer', l.esriLayer);
+            //   // // layerActions.removeAllSubLayers(l.esriLayer);
+            //   //
+            //   // // l.visible = false;
+            // } else {
+              // debugger
+              //TODO: onLoad of a shared app with layers on from 3 different groups, only the layer from the webmap group still stays on!
+              // if (l.visible) {
+              //   // console.log('iddd', l.id);
+              //
+              //   layerActions.removeActiveLayer(l.id);
+              //   l.visible = false;
+              // }
+            // }
+            // l.esriLayer.hide(); //TODO: needs work on whether different layer checkboxes are IN the same layer
+
+
+            if (!l.subId && l.visible) {
+              // console.log('iddd', l.id);
+
               layerActions.removeActiveLayer(l.id);
               l.visible = false;
             }
-            // l.esriLayer.hide();
-          } else {
+          }
+          else {
+            // console.log('ohh??', l.id);
             if (l.subId) {
               layerActions.addSubLayer(l);
               l.visible = true;
@@ -204,7 +242,7 @@ class MapActions {
               l.visible = true;
               layerActions.addActiveLayer(l.id);
             }
-            // l.esriLayer.show();
+            l.esriLayer.show();
           }
         }
       });
@@ -254,7 +292,6 @@ class MapActions {
     layersCreated = true;
 
     //- Return the layers through the dispatcher so the mapstore can update visible layers
-    console.log('layers', layers);
     return {
       layers,
       map

@@ -206,7 +206,6 @@ export default class Map extends Component {
 
       // Add operational layers from the webmap to the array of layers from the config file.
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
-      console.log('itemData.operationalLayers', itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
       //- Attach events I need for the info window
@@ -231,7 +230,6 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
-        console.log('activeLayers', activeLayers);
         mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
         // mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         // mapActions.createLayers(response.map, settings.layerPanel, [], language);
@@ -554,13 +552,9 @@ export default class Map extends Component {
     const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
-    let activeLayers;
-    console.log('params', params);
 
-    // const returnObj = {
-    //   cDensity: null,
-    //   activeLayers: null
-    // };
+    let activeLayers;
+
     const returnObj = {};
 
     if (!params) {
@@ -576,6 +570,7 @@ export default class Map extends Component {
     if (params.b) {
       mapActions.changeBasemap(params.b);
     }
+
     if (params.a) {
       //todo: cast same clearAll function if we don't!!
 
@@ -673,21 +668,47 @@ export default class Map extends Component {
 
       layerActions.setOpacities(opacityObjs);
     } else {
+      const webmapIdConfig = {};
 
+      webmapLayerConfigs.forEach(webmapLayerConfig => {
+
+        if (webmapLayerConfig.subIndex === undefined) {
+          const featLayer = map.getLayer(webmapLayerConfig.id);
+          if (webmapLayerConfig.visible) {
+            featLayer.hide();
+            layerActions.removeActiveLayer(webmapLayerConfig.id);
+          }
+        } else {
+          if (webmapLayerConfig.visible) {
+
+            if (!webmapIdConfig[webmapLayerConfig.id]) {
+              webmapIdConfig[webmapLayerConfig.id] = {
+                layersToHide: []
+              };
+            }
+
+            if (webmapLayerConfig.visible) {
+              webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
+            }
+          }
+        }
+
+      });
+
+      Object.keys(webmapIdConfig).forEach(webmapId => {
+        const mapLaya = map.getLayer(webmapId);
+        const updateableVisibleLayers = mapLaya.visibleLayers.slice();
+
+        webmapIdConfig[webmapId].layersToHide.forEach(layerToHide => {
+          updateableVisibleLayers.splice(updateableVisibleLayers.indexOf(layerToHide), 1);
+          const subLayerConfig = utils.getObject(webmapLayerConfigs, 'subId', `${webmapId}_${layerToHide}`);
+          layerActions.removeSubLayer(subLayerConfig);
+        });
+
+        mapLaya.setVisibleLayers(updateableVisibleLayers);
+
+      });
       returnObj.activeLayers = [];
-      // setTimeout(function () {
-      //mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-      console.log(this.state);
-      console.log(settings.layerPanel);
-      // debugger
-      // setTimeout(function () {
-      //
-      //   console.log('are we here even without a url..? we should make a check for like "?" or something');
-      //   // layerActions.removeAll.defer(); //maybe we have to do the visible layers one by one!?
-      //   layerActions.removeAllLayers();
-      // }, 5000);
-
-      // }, 9000);
     }
 
     if (params.ls && params.le) {
@@ -959,8 +980,6 @@ export default class Map extends Component {
         default:
       }
     });
-
-    console.log('layers', layers);
 
     const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
     webmapGroup.layers = layers;
