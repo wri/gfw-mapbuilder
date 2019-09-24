@@ -755,55 +755,7 @@ hr
 
 .imagery-modal_section-text
   margin 0 10px
-
-@media (max-width: 600px)
-
-  .imagery-modal-container
-    &.collapse
-      display none
-
-      .imagery-modal__wrapper
-        height 0px
-        transition all 1s
-
-  .imagery-modal__wrapper
-    width 100vw
-    height 400px
-    transition all 1s
-
-    .imagery-modal__section
-      flex-wrap wrap
-      justify-content space-between
-
-      &.thumbnail_container
-        width 100%
-        max-height 150px
-
-      .imagery-modal__item
-        margin 0 0 15 0
-        min-width 80vw
-
-  .modal.draggable
-    top unset
-    cursor default
-    bottom 0px
-    transform none
-    left unset
-    
-  .measurement-modal
-    background-color #fff
-    max-height 100%
-    position fixed
-    height auto
-    right 20px
-    top 90px
-    z-index 5
-    border none
-    max-width 17rem
-    & a
-      word-break break-word
-      word-wrap break-word
-      
+  
 .subscription-sub-buttons
   display flex
   justify-content center
@@ -853,3 +805,52 @@ hr
   .subscribe-dataset
     display flex
     justify-content space-between
+
+@media (max-width: 600px)
+
+  .imagery-modal-container
+    &.collapse
+      display none
+
+      .imagery-modal__wrapper
+        height 0px
+        transition all 1s
+
+  .imagery-modal__wrapper
+    width 100vw
+    height 400px
+    transition all 1s
+
+    .imagery-modal__section
+      flex-wrap wrap
+      justify-content space-between
+
+      &.thumbnail_container
+        width 100%
+        max-height 150px
+
+      .imagery-modal__item
+        margin 0 0 15 0
+        min-width 80vw
+
+  .modal.draggable
+    top unset
+    cursor default
+    bottom 0px
+    transform none
+    left unset
+    
+  .measurement-modal
+    background-color #fff
+    max-height 100%
+    position fixed
+    height auto
+    right 20px
+    top 90px
+    z-index 5
+    border none
+    max-width 17rem
+    & a
+      word-break break-word
+      word-wrap break-word
+      
