@@ -30,7 +30,7 @@ export default class InfoWindow extends Component {
     this.context.map.infoWindow.selectPrevious();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     this.setState({
-      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
+      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
     });
   };
 
@@ -38,7 +38,7 @@ export default class InfoWindow extends Component {
     this.context.map.infoWindow.selectNext();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     this.setState({
-      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
+      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
     });
   };
 
@@ -76,7 +76,7 @@ export default class InfoWindow extends Component {
       const features = this.context.map.infoWindow.features;
       let index = 0;
       features.forEach(feature => {
-        if (feature.attributes[feature._layer.displayField] === name && feature.attributes[feature._layer.objectIdField].toString() === id) {
+        if (feature.attributes[feature._layer.displayField] || feature.attributes[feature._layer.objectIdField] === name && feature.attributes[feature._layer.objectIdField].toString() === id) {
           index = features.indexOf(feature);
         }
       });
