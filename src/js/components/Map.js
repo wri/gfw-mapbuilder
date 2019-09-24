@@ -230,6 +230,8 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
+        console.log('urlState.activeLayers', urlState.activeLayers);
+        console.log('this.state.activeLayers', this.state.activeLayers);
         mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
         // mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         // mapActions.createLayers(response.map, settings.layerPanel, [], language);
@@ -552,6 +554,8 @@ export default class Map extends Component {
     const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
+    const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+    const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
 
     let activeLayers;
 
@@ -562,7 +566,6 @@ export default class Map extends Component {
     } else if (Object.keys(params).length < 2) {
       return returnObj;
     }
-
 
     //- Set the default basemap in the store
     basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
@@ -577,9 +580,6 @@ export default class Map extends Component {
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
       const opacityObjs = [];
-
-      const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
-      const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
 
       layerIds.forEach((layerId, j) => {
         if (webmapLayerIds.indexOf(layerId) === -1) {
@@ -644,6 +644,8 @@ export default class Map extends Component {
 
         });
 
+        console.log('webmapIdConfig', webmapIdConfig);
+
         Object.keys(webmapIdConfig).forEach(webmapId => {
           const mapLaya = map.getLayer(webmapId);
           const updateableVisibleLayers = mapLaya.visibleLayers.slice();
@@ -667,6 +669,8 @@ export default class Map extends Component {
       }
 
       layerActions.setOpacities(opacityObjs);
+
+      returnObj.activeLayers = layerIds;
     } else {
       const webmapIdConfig = {};
 
@@ -980,6 +984,7 @@ export default class Map extends Component {
         default:
       }
     });
+
 
     const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
     webmapGroup.layers = layers;
