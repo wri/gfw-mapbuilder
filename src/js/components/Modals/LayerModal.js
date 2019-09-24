@@ -131,7 +131,7 @@ export default class Modal extends Component {
       // );
 
     return (
-      <ControlledModalWrapper onClose={this.close} theme={theme}>
+      <ControlledModalWrapper layer onClose={this.close} theme={theme}>
         {content}
       </ControlledModalWrapper>
     );
