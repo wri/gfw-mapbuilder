@@ -277,45 +277,70 @@ export default class SubscribeModal extends Component {
           <p>{text[language].SUBSCRIBE_ALERTS_SELECT}</p>
           <div className='alert-checkbox'>
             <div className='custom-checkbox'>
-              {text[language].SUBSCRIBE_ALERTS_VIIRS}<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+                {text[language].SUBSCRIBE_ALERTS_VIIRS}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              {text[language].SUBSCRIBE_ALERTS_TCL}<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+                {text[language].SUBSCRIBE_ALERTS_TCL}
+              </label>
             </div>
 
             <div className='custom-checkbox'>
-              GLAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+                GLAD tree cover loss alerts
+              </label>
             </div>
             <div className='custom-checkbox'>
-              SAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+                SAD tree cover loss alerts
+              </label>
             </div>
             <div className='custom-checkbox'>
-              FORMA alerts data<input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+                FORMA alerts data
+              </label>
             </div>
             <div className='custom-checkbox'>
-              Terra-i tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+                Terra-i tree cover loss alerts
+              </label>
             </div>
             <div className='custom-checkbox'>
-              PRODES deforestation data<input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+                PRODES deforestation data
+              </label>
             </div>
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 2 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_EMAIL_TITLE}</h3>
           <p>{text[language].SUBSCRIBE_EMAIL}</p>
-          <div className='alert-checkbox'>
+          <div className='alert-email'>
             <input className="alert-input" placeholder='Enter email' value={this.state.email} onChange={this.updateEmail} />
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
-          <div className='alert-checkbox'>
-            <p>Name</p>
-            <input className="subscription-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
-            <p>Receive Alert Emails In...</p>
-            <select className='language-selector' onChange={this.changeLanguage} value={this.state.activeLanguage}>
-              {langs.map(this.optionMapper)}
-            </select>
+          <div className='alert-email-settings'>
+            <label>
+              Name
+              <input className="alert-input" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
+            </label>
+            <label>
+              Receive Alert Emails In...
+              <select className='alert-dropdown' onChange={this.changeLanguage} value={this.state.activeLanguage}>
+                {langs.map(this.optionMapper)}
+              </select>
+            </label>
           </div>
           <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
         </div>

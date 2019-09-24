@@ -88,7 +88,7 @@
   position absolute
   height 40px
   width 40px
-  right 0
+  right 10
   top 0
   z-index 10
   & svg
@@ -144,7 +144,6 @@
   overflow-x hidden
   max-height 450px
   overflow-y auto
-  -ms-overflow-style scrollbar
   color $darkGray
   height 100%
   
@@ -349,7 +348,8 @@
   cursor pointer
 
 .subscription-unconfirmed
-  margin-bottom -10px
+  display flex
+  align-items center
   .subscription-uncle
     position relative
 
@@ -454,8 +454,9 @@
 
 .name-row
   font-weight bold
-  margin-left 20px
-  margin-top 15px
+  margin-left 5px
+  margin-top 0
+  margin-bottom 0
   &.no-warning
     margin-left 0
 
@@ -469,7 +470,8 @@
   &.subscribe-row
     padding 5px
   .other-row
-    font-size 15px
+    font-size 14px
+    width 13rem
     &.date-created
       font-style italic
     p
@@ -516,10 +518,11 @@
   -ms-flex-align center
   align-items center
   font-size 14px
-
-.delete-row, .map-row
-  float right
-  padding 10px 0
+  
+.subscribe-button-container
+  display flex
+  justify-content space-between
+  align-items center
 
 .delete-row-label
   padding-top 3px
@@ -643,7 +646,8 @@
 
 .delete-header
   text-align center
-
+  margin 0.25rem 0
+  
 // Imagery Modal specific styling
 .imagery-modal-container
   display block
@@ -799,3 +803,53 @@ hr
     & a
       word-break break-word
       word-wrap break-word
+      
+.subscription-sub-buttons
+  display flex
+  justify-content center
+  align-items center
+  margin-top 0.5rem
+  button
+    margin 0 0.5rem
+    border none
+    width 5rem
+    font-size 14px
+
+.alert-email
+  display flex
+  justify-content center
+  align-items center
+  margin-bottom 2rem
+
+.alert-input
+  height 2rem
+  font-size 14px
+  padding-left 5px
+  width 100%
+  margin-top 0.25rem
+  margin-bottom 0.5rem
+  
+.alert-dropdown
+  display flex
+  justify-content center
+  align-items center
+  height 2rem
+  margin-top 0.25rem
+  margin-bottom 0.5rem
+
+.alert-email-settings
+  display flex
+  flex-direction column
+  label
+    display flex
+    flex-direction column
+
+.subscribe-step
+  min-width 30rem
+  
+.subscribe-datasets
+  display flex
+  flex-direction column
+  .subscribe-dataset
+    display flex
+    justify-content space-between
