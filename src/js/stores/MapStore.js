@@ -592,7 +592,7 @@ class MapStore {
   }
 
   showLayerInfo (layer) {
-    if (layer.metadata.metadata.error) {
+    if (layer.metadata && layer.metadata.metadata && layer.metadata.metadata.error) {
       const promise = new Promise((resolve) => {
         resolve();
       });
