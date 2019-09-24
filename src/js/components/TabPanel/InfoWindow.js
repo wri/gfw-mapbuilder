@@ -101,7 +101,7 @@ export default class InfoWindow extends Component {
     value={`{"name": "${feature.attributes[feature._layer.displayField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
     key={`selected-feature-${index}`}
   >
-    {feature.attributes[feature._layer.displayField]}
+    {feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}
   </option>;
 
   createDropdown = (selectedIndex, count) => {
