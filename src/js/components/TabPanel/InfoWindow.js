@@ -98,7 +98,7 @@ export default class InfoWindow extends Component {
   
   selectedFeatureOption = (feature, index) =>
   <option
-    value={`{"name": "${feature.attributes[feature._layer.displayField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
+    value={`{"name": "${feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
     key={`selected-feature-${index}`}
   >
     {feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}
