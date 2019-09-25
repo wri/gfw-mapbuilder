@@ -100,7 +100,7 @@ export default class InfoWindow extends Component {
   return (
     <option
       //value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].feature.attributes[featuresCategorized[key].feature._layer.objectIdField]}"}`}
-      value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].featureList}"}`}
+      value={`{"name": "${featuresCategorized[key].name}", "features": "${featuresCategorized[key].featureList}"}`}
       key={`selected-feature-${index}`}
     >
       {`${featuresCategorized[key].name} (${featuresCategorized[key].count})`}
@@ -112,7 +112,6 @@ export default class InfoWindow extends Component {
     const { customColorTheme } = this.context.settings;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
-    console.log('features', features);
     const featuresCategorized = {};
     features.forEach(feature => {
       if (featuresCategorized[feature._layer.name]) {
@@ -122,8 +121,6 @@ export default class InfoWindow extends Component {
         featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
       }
     });
-    
-    console.log('featuresCategorized after', featuresCategorized);
     
     return (
       <div className="relative infoWindow__select-container">
