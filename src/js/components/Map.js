@@ -1059,6 +1059,7 @@ export default class Map extends Component {
             imageryModalVisible={imageryModalVisible}
             imageryError={imageryError}
             imageryHoverVisible={this.state.imageryHoverVisible}
+            language={this.context.language}
           />
         </div>
         { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 && !imageryFetchFailed &&

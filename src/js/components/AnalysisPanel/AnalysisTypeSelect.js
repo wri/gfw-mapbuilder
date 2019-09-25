@@ -61,8 +61,8 @@ export default class AnalysisTypeSelect extends Component {
           <div className='analysis-results__none-selected'>
             <div className='analysis-results__info-container'>
               <div className='analysis-results__info'>
-                <div><strong>Analysis not selected</strong></div>
-                <div>Select an analysis from the drop-down menu to begin</div>
+                <div><strong>{text[language].ANALYSIS_NOT_SELECTED[0]}</strong></div>
+                <div>{text[language].ANALYSIS_NOT_SELECTED[1]}</div>
               </div>
               <div className='analysis-results__chart-icon chart-icon' />
             </div>
