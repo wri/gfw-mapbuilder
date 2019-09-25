@@ -113,8 +113,9 @@ export default class InfoWindow extends Component {
     const features = this.context.map.infoWindow.features;
     const featuresCategorized = {};
     features.forEach(feature => {
+      console.log('featuresCategorized', featuresCategorized);
       if (featuresCategorized.hasOwnProperty(featuresCategorized[feature._layer.name])) {
-        featuresCategorized[feature._layer.name].count = featuresCategorized[feature].count + 1;
+        featuresCategorized[feature._layer.name].count++;
       } else {
         featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, feature: feature};
       }
