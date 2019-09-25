@@ -17,12 +17,15 @@ import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
 import text from '../../languages';
+import { modalText } from 'js/config';
+import {defaultColorTheme} from '../../config';
 
 export default class ImageryModal extends Component {
 
   static contextTypes = {
     map: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired
+    settings: PropTypes.object.isRequired,
   };
 
   constructor (props) {
@@ -152,7 +155,7 @@ export default class ImageryModal extends Component {
   renderThumbnails = (tileObj, i) => {
 
       let reloadCount = 0;
-
+      const { customColorTheme } = this.context.settings;
       const handleError = (event) => {
         if (reloadCount < 20) {
           event.persist();
@@ -181,7 +184,9 @@ export default class ImageryModal extends Component {
             onClick={() => this.selectThumbnail(tileObj, i)}
             onMouseEnter={() => this.hoverThumbnail(tileObj)}
             onMouseLeave={() => this.hoverThumbnail(null)}
-            className={`thumbnail ${this.state.selectedThumb && this.state.selectedThumb.index === i ? 'selected' : ''}`}
+            className='thumbnail'
+            style={this.state.selectedThumb && this.state.selectedThumb.index === i ?
+            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
             key={`thumb-${i}`}>
               <img src={tileObj.thumbUrl} onError={handleError} />
           </div>
@@ -279,6 +284,8 @@ export default class ImageryModal extends Component {
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
         <div className='imagery-modal__wrapper'>
@@ -296,7 +303,12 @@ export default class ImageryModal extends Component {
                     onChange={this.onChangeStart}>
                     {text[language].MONTHS_OPTIONS.map(this.renderDropdownOptions)}
                   </select>
-                  <div className='fa-button sml white'>{monthsVal}</div>
+                  <div
+                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                    className='fa-button sml white'
+                  >
+                    {monthsVal}
+                  </div>
                 </div>
 
                 <div className='imagery-modal_section-text'>{text[language].BEFORE}</div>
@@ -332,7 +344,12 @@ export default class ImageryModal extends Component {
                 onChange={this.onChangeImageStyle}>
                 {text[language].IMAGE_STYLE_OPTIONS.map(this.renderDropdownOptions)}
               </select>
-              <div className='fa-button sml white'>{imageStyleVal}</div>
+              <div
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='fa-button sml white'
+              >
+                {imageStyleVal}
+              </div>
             </div>
 
           </div>

@@ -5,6 +5,8 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
+import {defaultColorTheme} from '../../config';
+
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -131,6 +133,7 @@ export default class LossControls extends Component {
     const start = sliderValue[0];
     let currentValue = start;
     const stop = sliderValue[1];
+    const { customColorTheme } = this.context.settings;
 
     const visualizeLoss = () => {
       if (currentValue === stop + 1) {
@@ -158,7 +161,7 @@ export default class LossControls extends Component {
           }} : {}),
           [currentValue]: {
             style: {
-              color: '#F0AB00'
+              color: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme
             },
             label: <small>{lossOptions[currentValue - 1].label}</small>
           },
@@ -221,6 +224,7 @@ export default class LossControls extends Component {
     if (lossOptions.length === 0) {
       return <div className='timeline-container loss flex'>loading...</div>;
     }
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='timeline-container loss'>
@@ -234,15 +238,15 @@ export default class LossControls extends Component {
           tipFormatter={value => 2000 + value}
           dots={true}
           marks={sliderMarks}
-          trackStyle={[{backgroundColor: '#F0AB00'}]}
-          handleStyle={[{borderColor: '#F0AB00'}]}
+          trackStyle={[{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
+          handleStyle={[{borderColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}]}
           dotStyle={{border: '1px solid #e9e9e9'}}
-          activeDotStyle={{border: '1px solid #F0AB00'}}
+          activeDotStyle={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
         />
         <div
           id="lossPlayButton"
           className={`${playing ? ' hidden' : ''}`}
-          style={disabled ? disabledStyles : {}}
+          style={disabled ? disabledStyles : {color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
           onClick={disabled ? null : this.startVisualization}
           title={disabled ? 'Please select a range to view animation' : ''}
         >

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import MapStore from 'stores/MapStore';
 import moment from 'moment';
 import AnalysisRangeSlider from '../components/AnalysisPanel/AnalysisFormElements/AnalysisRangeSlider';
@@ -9,6 +9,8 @@ import text from 'js/languages';
 import mapActions from '../actions/MapActions';
 import layerActions from '../actions/LayerActions';
 import analysisUtils from './../utils/analysisUtils';
+import resources from '../../resources';
+import {defaultColorTheme} from '../config';
 
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
@@ -26,7 +28,8 @@ export default class ReportSettings extends Component {
   constructor(props){
     super(props);
     this.state = {
-     ...MapStore.getState()
+      buttonHover: false,
+      ...MapStore.getState()
     };
   }
 
@@ -331,20 +334,40 @@ export default class ReportSettings extends Component {
       reRenderChart(results);
     });
   };
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
-    render() {
-      const {language} = this.props;
-        return (
-            <div className="analysis-results__select-form-container">
-              <div className='analysis-results__select-form custom-scroll'>
-                {this.getFormComponents()}
-              </div>
-              <div className='run-report-analysis-button-container print-hide'>
-                <button className='run-report-analysis-button pointer' onClick={this.runAnalysis}>
-                  {text[language].RUN_ANALYSIS_BUTTON_TEXT}
-                </button>
-            </div>
-            </div>
-        );
+  render() {
+    const {language} = this.props;
+    const {buttonHover} = this.state;
+    let customColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
     }
+      return (
+          <div className="analysis-results__select-form-container">
+            <div className='analysis-results__select-form custom-scroll'>
+              {this.getFormComponents()}
+            </div>
+            <div className='run-report-analysis-button-container print-hide'>
+              <button
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='run-report-analysis-button fa-button color pointer'
+                onClick={this.runAnalysis}
+                onMouseEnter={this.toggleHover}
+                onMouseLeave={this.toggleHover}
+              >
+                {text[language].RUN_ANALYSIS_BUTTON_TEXT}
+              </button>
+          </div>
+          </div>
+      );
+  }
 }

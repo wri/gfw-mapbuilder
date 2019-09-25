@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import {defaultColorTheme} from '../../config';
 
 const initialState = {
   currentStep: 1,
@@ -15,12 +16,14 @@ const initialState = {
   formaAlerts: false,
   terraI: false,
   prodes: false,
-  warnings: false
+  warnings: false,
+  buttonHover: false
 };
 
 export default class SubscribeModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -248,11 +251,19 @@ export default class SubscribeModal extends Component {
       });
     }
   }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {language} = this.context;
     const langs = ['English', '中文', 'Français', 'Bahasa Indonesia', 'Português (Brasil)', 'Español (Mexico)']; //TODO: Get from resources or config!
-
+    const { customColorTheme } = this.context.settings;
+    const {buttonHover} = this.state;
+    
     return (
       <ControlledModalWrapper onClose={this.close}>
         <div className={`subscribe-step ${this.state.currentStep === 0 ? '' : 'hidden'}`}>
@@ -309,10 +320,50 @@ export default class SubscribeModal extends Component {
           <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>{text[language].SUBSCRIBE_ERROR}</div>
         </div>
         <div className='subscription-sub-buttons'>
-          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>{text[language].SUBSCRIBE_OK}</button> : null }
-          {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>{text[language].SUBSCRIBE_BACK}</button> : null }
-          {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>{text[language].SUBSCRIBE_NEXT}</button> : null }
-          {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>{text[language].SUBSCRIBE_NEXT}</button> : null }
+          {this.state.currentStep === 0 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.refreshSubscriptions}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_OK}
+          </button> : null }
+          {this.state.currentStep > 1 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.back}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_BACK}
+          </button> : null }
+          {this.state.currentStep === 1 || this.state.currentStep === 2 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.next}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_NEXT}
+          </button> : null }
+          {this.state.currentStep === 3 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.save}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            Save
+          </button> : null }
         </div>
 
       </ControlledModalWrapper>
