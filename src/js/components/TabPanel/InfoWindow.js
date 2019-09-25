@@ -72,7 +72,6 @@ export default class InfoWindow extends Component {
     }, () => {
       const selectedFeature = JSON.parse(this.state.activeSelectedFeature);
       const featuresList = selectedFeature.featuresList.split(',');
-      console.log('featuresList', featuresList);
       const features = this.context.map.infoWindow.features;
       let index = 0;
       for (const feature of features) {
@@ -82,7 +81,6 @@ export default class InfoWindow extends Component {
           }
         }
       }
-      console.log('index', index);
       this.context.map.infoWindow.select(index);
     });
   }
@@ -102,7 +100,6 @@ export default class InfoWindow extends Component {
   selectedFeatureOption = (key, index, featuresCategorized) => {
   return (
     <option
-      //value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].feature.attributes[featuresCategorized[key].feature._layer.objectIdField]}"}`}
       value={`{"name": "${featuresCategorized[key].name}", "featuresList": "${featuresCategorized[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
       key={`selected-feature-${index}`}
     >
@@ -214,9 +211,9 @@ export default class InfoWindow extends Component {
             </svg>
             {selectedFeature && selectedFeature.attributes && selectedFeature.attributes.source === 'draw' ? null : dropdown}
           </div>
+          <div className="infoWindow__count">{features ? `${selectedIndex + 1} / ${features.length}` : null}</div>
           <div className="infoWindow__title">
             <div dangerouslySetInnerHTML={{__html: content }} />
-            <div className="infoWindow__count">{features ? `${selectedIndex + 1} / ${features.length}` : null}</div>
           </div>
           <div className='infoWindow__attribute-display custom-scroll'>
             {title}
