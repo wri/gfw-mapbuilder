@@ -99,7 +99,8 @@ export default class InfoWindow extends Component {
   selectedFeatureOption = (key, index, featuresCategorized) => {
   return (
     <option
-      value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].feature.attributes[featuresCategorized[key].feature._layer.objectIdField]}"}`}
+      //value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].feature.attributes[featuresCategorized[key].feature._layer.objectIdField]}"}`}
+      value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].featureList}"}`}
       key={`selected-feature-${index}`}
     >
       {`${featuresCategorized[key].name} (${featuresCategorized[key].count})`}
@@ -111,16 +112,18 @@ export default class InfoWindow extends Component {
     const { customColorTheme } = this.context.settings;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
-    console.log('brApp', brApp);
+    console.log('features', features);
     const featuresCategorized = {};
     features.forEach(feature => {
-      console.log('featuresCategorized', featuresCategorized);
-      if (featuresCategorized.hasOwnProperty(featuresCategorized[feature._layer.name])) {
-        featuresCategorized[feature._layer.name].count = featuresCategorized[feature._layer.name].count++;
+      if (featuresCategorized[feature._layer.name]) {
+        featuresCategorized[feature._layer.name].count = featuresCategorized[feature._layer.name].count + 1;
+        featuresCategorized[feature._layer.name].featuresList = [...featuresCategorized[feature._layer.name].featuresList, feature];
       } else {
-        featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, feature: feature};
+        featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
       }
     });
+    
+    console.log('featuresCategorized after', featuresCategorized);
     
     return (
       <div className="relative infoWindow__select-container">
