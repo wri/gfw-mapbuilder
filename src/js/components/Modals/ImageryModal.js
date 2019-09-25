@@ -24,8 +24,8 @@ export default class ImageryModal extends Component {
 
   static contextTypes = {
     map: PropTypes.object.isRequired,
-    language: PropTypes.string.isRequired
-    settings: PropTypes.object.isRequired,
+    language: PropTypes.string.isRequired,
+    settings: PropTypes.object.isRequired
   };
 
   constructor (props) {
