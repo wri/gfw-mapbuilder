@@ -96,13 +96,19 @@ export default class InfoWindow extends Component {
     });
   };
   
-  selectedFeatureOption = (feature, index) =>
-  <option
-    value={`{"name": "${feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
-    key={`selected-feature-${index}`}
-  >
-    {feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}
-  </option>;
+  selectedFeatureOption = (feature, index) => {
+  console.log('feature', feature);
+  const features = this.context.map.infoWindow.features;
+  return (
+    <option
+      value={`{"name": "${feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
+      key={`selected-feature-${index}`}
+    >
+      {/* {feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]} */}
+      {`${feature._layer.name} (${features && features.length ? features.length : 0})`}
+    </option>
+  );
+  };
 
   createDropdown = (selectedIndex, count) => {
     const { customColorTheme } = this.context.settings;
