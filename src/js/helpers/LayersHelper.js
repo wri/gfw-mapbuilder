@@ -42,7 +42,30 @@ const LayersHelper = {
       
       const options = {};
       const layerObj = resources.layerPanel.GROUP_LCD.layers[5];
-      options.id = layerObj.id;
+      
+      if (selectValue) {
+        switch (selectValue) {
+          case '0':
+            options.id = 'VIIRS_ACTIVE_FIRES_24HRS';
+            break;
+          case '1':
+            options.id = 'VIIRS_ACTIVE_FIRES_48HRS';
+            break;
+          case '2':
+            options.id = 'VIIRS_ACTIVE_FIRES_72HRS';
+            break;
+          case '3':
+            options.id = 'VIIRS_ACTIVE_FIRES_7DAYS';
+            break;
+          case '4':
+            options.id = 'VIIRS_ACTIVE_FIRES_1YR';
+            break;
+          default:
+            options.id = layerObj.id;
+            break;
+        }
+      }
+      console.log('options id', options.id);
       options.visible = layerObj.visible || false;
       options.opacity = layerObj.opacity || 1.0;
       if (layerObj.popup && layerObj.layerIds) {
