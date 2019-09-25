@@ -468,10 +468,9 @@
   &:nth-child(even)
     background #F2F2F3
   &.subscribe-row
-    padding 5px
+    padding 10px
   .other-row
     font-size 14px
-    width 13rem
     &.date-created
       font-style italic
     p
@@ -518,6 +517,15 @@
   -ms-flex-align center
   align-items center
   font-size 14px
+  
+.subscription-modal-container
+  .modal-content
+    padding 20px 40px 20px 20px
+    overflow-x hidden
+    max-height 450px
+    overflow-y auto
+    color #555
+    height 100%
   
 .subscribe-button-container
   display flex
@@ -777,7 +785,7 @@ hr
   height 2rem
   font-size 14px
   padding-left 5px
-  width 100%
+  width 55%
   margin-top 0.25rem
   margin-bottom 0.5rem
   
@@ -788,13 +796,20 @@ hr
   height 2rem
   margin-top 0.25rem
   margin-bottom 0.5rem
+  width 55%
 
 .alert-email-settings
   display flex
   flex-direction column
-  label
+  align-items center
+  margin 0.25rem 0
+  label 
+    width 55%
+  input
     display flex
     flex-direction column
+    align-items center
+    width 55%
 
 .subscribe-step
   min-width 30rem

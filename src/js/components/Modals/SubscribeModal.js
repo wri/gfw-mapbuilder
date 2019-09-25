@@ -331,16 +331,16 @@ export default class SubscribeModal extends Component {
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
           <div className='alert-email-settings'>
-            <label>
+            <label htmlFor="area-name">
               Name
-              <input className="alert-input" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
             </label>
+            <input className="alert-input" id="area-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
             <label>
               Receive Alert Emails In...
-              <select className='alert-dropdown' onChange={this.changeLanguage} value={this.state.activeLanguage}>
-                {langs.map(this.optionMapper)}
-              </select>
             </label>
+            <select className='alert-dropdown' id="alert-email" onChange={this.changeLanguage} value={this.state.activeLanguage}>
+              {langs.map(this.optionMapper)}
+            </select>
           </div>
           <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
         </div>
