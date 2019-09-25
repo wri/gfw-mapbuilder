@@ -71,15 +71,18 @@ export default class InfoWindow extends Component {
       activeSelectedFeature: evt.target.value
     }, () => {
       const selectedFeature = JSON.parse(this.state.activeSelectedFeature);
-      const name = selectedFeature.name;
-      const id = selectedFeature.id;
+      const featuresList = selectedFeature.featuresList.split(',');
+      console.log('featuresList', featuresList);
       const features = this.context.map.infoWindow.features;
       let index = 0;
-      features.forEach(feature => {
-        if (feature.attributes[feature._layer.displayField] || feature.attributes[feature._layer.objectIdField] === name && feature.attributes[feature._layer.objectIdField].toString() === id) {
-          index = features.indexOf(feature);
+      for (const feature of features) {
+        for (const featureItem of featuresList) {
+            if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
+            index = features.indexOf(feature);
+          }
         }
-      });
+      }
+      console.log('index', index);
       this.context.map.infoWindow.select(index);
     });
   }
@@ -100,7 +103,7 @@ export default class InfoWindow extends Component {
   return (
     <option
       //value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].feature.attributes[featuresCategorized[key].feature._layer.objectIdField]}"}`}
-      value={`{"name": "${featuresCategorized[key].name}", "features": "${featuresCategorized[key].featureList}"}`}
+      value={`{"name": "${featuresCategorized[key].name}", "featuresList": "${featuresCategorized[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
       key={`selected-feature-${index}`}
     >
       {`${featuresCategorized[key].name} (${featuresCategorized[key].count})`}
