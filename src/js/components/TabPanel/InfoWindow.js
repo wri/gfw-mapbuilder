@@ -111,11 +111,12 @@ export default class InfoWindow extends Component {
     const { customColorTheme } = this.context.settings;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
+    console.log('brApp', brApp);
     const featuresCategorized = {};
     features.forEach(feature => {
       console.log('featuresCategorized', featuresCategorized);
       if (featuresCategorized.hasOwnProperty(featuresCategorized[feature._layer.name])) {
-        featuresCategorized[feature._layer.name].count++;
+        featuresCategorized[feature._layer.name].count = featuresCategorized[feature._layer.name].count++;
       } else {
         featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, feature: feature};
       }
