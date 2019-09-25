@@ -96,16 +96,13 @@ export default class InfoWindow extends Component {
     });
   };
   
-  selectedFeatureOption = (feature, index) => {
-  console.log('feature', feature);
-  const features = this.context.map.infoWindow.features;
+  selectedFeatureOption = (key, index, featuresCategorized) => {
   return (
     <option
-      value={`{"name": "${feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]}", "id": "${feature.attributes[feature._layer.objectIdField]}"}`}
+      value={`{"name": "${featuresCategorized[key].name}", "id": "${featuresCategorized[key].feature.attributes[featuresCategorized[key].feature._layer.objectIdField]}"}`}
       key={`selected-feature-${index}`}
     >
-      {/* {feature.attributes[feature._layer.displayField] ? feature.attributes[feature._layer.displayField] : feature.attributes[feature._layer.objectIdField]} */}
-      {`${feature._layer.name} (${features && features.length ? features.length : 0})`}
+      {`${featuresCategorized[key].name} (${featuresCategorized[key].count})`}
     </option>
   );
   };
@@ -114,11 +111,19 @@ export default class InfoWindow extends Component {
     const { customColorTheme } = this.context.settings;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
+    const featuresCategorized = {};
+    features.forEach(feature => {
+      if (featuresCategorized.hasOwnProperty(featuresCategorized[feature._layer.name])) {
+        featuresCategorized[feature._layer.name].count = featuresCategorized[feature].count + 1;
+      } else {
+        featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, feature: feature};
+      }
+    });
     
     return (
       <div className="relative infoWindow__select-container">
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={activeSelectedFeature}>
-          {features && features.length ? features.map(this.selectedFeatureOption) : null}
+          {features && features.length ? Object.keys(featuresCategorized).map((key, index) => this.selectedFeatureOption(key, index, featuresCategorized)) : null}
         </select>
         <div
           style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
