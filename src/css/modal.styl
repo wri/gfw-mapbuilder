@@ -92,11 +92,23 @@
   top 0
   z-index 10
   & svg
-    //transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    //left 50%
+    top 60%
+    margin-left 0.25rem
+    
+.layer-close-icon
+  position absolute
+  height 40px
+  width 40px
+  right 0
+  top -7px
+  z-index 10
+  & svg
+    position absolute
+    height 50%
+    width 50%
     top 60%
     margin-left 0.25rem
     
@@ -108,11 +120,9 @@
   top -15
   z-index 10
   & svg
-    //transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    //left 50%
     top 60%
     margin-left 0.25rem
     
@@ -120,9 +130,9 @@
   height 15px
   width 15px
   z-index 10
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto;
+  display flex
+  justify-content flex-end
+  margin-left auto
   & svg
     height 100%
     width 100%
@@ -133,6 +143,8 @@
 .mobile-show.close-icon
   height 60px
   width 60px
+  right -15px
+  top -20px
 
 .modal-title
   padding 10px 20px 0
