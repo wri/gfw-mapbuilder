@@ -611,30 +611,32 @@ export default class Map extends Component {
 
       if (webmapLayerIds.length > 0) {
         const webmapIdConfig = {};
+        const mapScale = map.getScale();
 
         webmapLayerConfigs.forEach(webmapLayerConfig => {
 
           if (webmapLayerConfig.subIndex === undefined) {
             const featLayer = map.getLayer(webmapLayerConfig.id);
             if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
-              featLayer.hide();
+              if (featLayer) {
+
+                featLayer.hide();
+              }
               layerActions.removeActiveLayer(webmapLayerConfig.id);
             } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
-              featLayer.show();
+              if (featLayer) {
+
+                featLayer.show();
+              }
               layerActions.addActiveLayer(webmapLayerConfig.id);
             }
           } else {
-            console.log('');
             console.log(webmapLayerConfig);
-            // debugger
 
-            //TODO: Its a scale thing - we aren't getting into here because visible is FALSE
-            //TODO MORE IMPORTANT AND OVERRIDE - above: its NOT a onLoad, its on a map-zoom change! Our zoomTo is causing this!!
-              // we need to check if we should relly be turning these layers on!!!
-            //TODO: wait, I think we still DO need these layers to get turned off my bad!
+
             if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
-            (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible)) {
-              console.log('in');
+              (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible) ||
+              (webmapLayerConfig.hasScaleDependency)) {
 
               if (!webmapIdConfig[webmapLayerConfig.id]) {
                 webmapIdConfig[webmapLayerConfig.id] = {
@@ -642,10 +644,17 @@ export default class Map extends Component {
                   layersToShow: []
                 };
               }
+              let inScale = true;
 
-              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) {
+              if (webmapLayerConfig.hasScaleDependency) {
+                if (webmapLayerConfig.maxScale < mapScale && webmapLayerConfig.minScale > mapScale) {
+                  inScale = false;
+                }
+              }
+
+              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && (webmapLayerConfig.visible || inScale)) {
                 webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
-              } else { // should this get turned into anesle if...?
+              } else {
                 webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
               }
               console.log(webmapIdConfig);
@@ -851,7 +860,9 @@ export default class Map extends Component {
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
-          sublayer.layerObject.setOpacity(0.6);
+          if (sublayer.layerObject) {
+            sublayer.layerObject.setOpacity(0.6);
+          }
           layers.unshift(layerInfo);
           if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
@@ -867,11 +878,13 @@ export default class Map extends Component {
           visible: layer.visibility,
           esriLayer: {
             ...layer.layerObject,
-            type: layer.layerType,
+            type: layer.layerType
           },
           itemId: layer.itemId
         };
-        layer.layerObject.setOpacity(0.6);
+        if (layer.layerObject) {
+          layer.layerObject.setOpacity(0.6);
+        }
         layers.unshift(layerInfo);
         if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
