@@ -292,31 +292,31 @@ export default class SubscribeModal extends Component {
             <div className='custom-checkbox'>
               <label>
                 <input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
-                GLAD tree cover loss alerts
+                {text[language].SUBSCRIBE_ALERTS_GLAD}
               </label>
             </div>
             <div className='custom-checkbox'>
               <label>
                 <input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
-                SAD tree cover loss alerts
+                {text[language].SUBSCRIBE_ALERTS_SAD}
               </label>
             </div>
             <div className='custom-checkbox'>
               <label>
                 <input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
-                FORMA alerts data
+                {text[language].SUBSCRIBE_ALERTS_FORMA}
               </label>
             </div>
             <div className='custom-checkbox'>
               <label>
                 <input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
-                Terra-i tree cover loss alerts
+                {text[language].SUBSCRIBE_ALERTS_TERRA}
               </label>
             </div>
             <div className='custom-checkbox'>
               <label>
                 <input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
-                PRODES deforestation data
+                {text[language].SUBSCRIBE_ALERTS_PRODES}
               </label>
             </div>
           </div>
@@ -329,20 +329,20 @@ export default class SubscribeModal extends Component {
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
-          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
+          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME_SUBSCRIPTION}</h3>
           <div className='alert-email-settings'>
             <label htmlFor="area-name">
-              Name
+              {text[language].SUBSCRIBE_NAME_SUBSCRIPTION}
             </label>
             <input className="alert-input" id="area-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
             <label>
-              Receive Alert Emails In...
+              {text[language].SUBSCRIBE_EMAIL_TITLE}
             </label>
             <select className='alert-dropdown' id="alert-email" onChange={this.changeLanguage} value={this.state.activeLanguage}>
               {langs.map(this.optionMapper)}
             </select>
           </div>
-          <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
+          <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>{text[language].SUBSCRIBE_ERROR}</div>
         </div>
         <div className='subscription-sub-buttons'>
           {this.state.currentStep === 0 ?
@@ -354,7 +354,7 @@ export default class SubscribeModal extends Component {
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
           >
-            OK!
+            {text[language].SUBSCRIBE_OK}
           </button> : null }
           {this.state.currentStep > 1 ?
           <button
@@ -365,7 +365,7 @@ export default class SubscribeModal extends Component {
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
           >
-            Back
+            {text[language].SUBSCRIBE_BACK}
           </button> : null }
           {this.state.currentStep === 1 || this.state.currentStep === 2 ?
           <button
@@ -376,7 +376,7 @@ export default class SubscribeModal extends Component {
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
           >
-            Next
+            {text[language].SUBSCRIBE_NEXT}
           </button> : null }
           {this.state.currentStep === 3 ?
           <button
@@ -387,7 +387,7 @@ export default class SubscribeModal extends Component {
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
           >
-            Save
+            {text[language].SUBSCRIBE_NEXT}
           </button> : null }
         </div>
 
