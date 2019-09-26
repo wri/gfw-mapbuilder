@@ -34,12 +34,31 @@ export default class InfoWindow extends Component {
     });
   };
 
+  //WIP for tomorrow
   next = () => {
-    this.context.map.infoWindow.selectNext();
-    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    this.setState({
-      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
-    });
+    // this.context.map.infoWindow.selectNext();
+    // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    // this.setState({
+    //   activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
+    // });
+    const {activeSelectedFeature} = this.state;
+    const selectedFeature = JSON.parse(activeSelectedFeature);
+      const featuresList = selectedFeature.featuresList.split(',');
+      const features = this.context.map.infoWindow.features;
+      let index = 0;
+      for (const feature of features) {
+        for (const featureItem of featuresList) {
+            if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
+            index = features.indexOf(feature) + 1;
+          }
+        }
+      }
+      this.context.map.infoWindow.select(index);
+      const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+      console.log('newSelectedFeature', newSelectedFeature);
+      // this.setState({
+      //   activeSelectedFeature: `{"name": "${featuresCategorized[key].name}", "featuresList": "${featuresCategorized[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+      // });
   };
 
   clearFeatures = () => {
