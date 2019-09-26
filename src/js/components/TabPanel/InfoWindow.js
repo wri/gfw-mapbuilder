@@ -23,6 +23,7 @@ export default class InfoWindow extends Component {
     super(props);
     this.state = {
       activeSelectedFeature: '',
+      selectedIndex: 0,
       prevButtonHover: false,
       nextButtonHover: false
     };
@@ -32,32 +33,34 @@ export default class InfoWindow extends Component {
     this.context.map.infoWindow.selectPrevious();
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     this.setState({
+      selectedIndex: this.state.selectedIndex - 1,
       activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
     });
   };
 
-  //WIP for tomorrow
   next = () => {
-    // this.context.map.infoWindow.selectNext();
-    // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    // this.setState({
-    //   activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
-    // });
-    const {activeSelectedFeature} = this.state;
-    const selectedFeature = JSON.parse(activeSelectedFeature);
-      const featuresList = selectedFeature.featuresList.split(',');
-      const features = this.context.map.infoWindow.features;
-      let index = 0;
-      for (const feature of features) {
-        for (const featureItem of featuresList) {
-            if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
-            index = features.indexOf(feature) + 1;
-          }
-        }
-      }
-      this.context.map.infoWindow.select(index);
-      const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-      console.log('newSelectedFeature', newSelectedFeature);
+    this.context.map.infoWindow.selectNext();
+    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    this.setState({
+      selectedIndex: this.state.selectedIndex + 1,
+      activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
+    });
+    
+    // const {activeSelectedFeature} = this.state;
+    // const selectedFeature = JSON.parse(activeSelectedFeature);
+    //   const featuresList = selectedFeature.featuresList.split(',');
+    //   const features = this.context.map.infoWindow.features;
+    //   let index = 0;
+    //   for (const feature of features) {
+    //     for (const featureItem of featuresList) {
+    //         if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
+    //         index = features.indexOf(feature) + 1;
+    //       }
+    //     }
+    //   }
+    //   this.context.map.infoWindow.select(index);
+    //   const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    //   console.log('newSelectedFeature', newSelectedFeature);
       // this.setState({
       //   activeSelectedFeature: `{"name": "${featuresCategories[key].name}", "featuresList": "${featuresCategories[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       // });
@@ -183,14 +186,15 @@ export default class InfoWindow extends Component {
     const {infoWindow} = this.context.map;
     const {language} = this.context;
     let count = 0;
-    let selectedIndex = 0;
+    //let selectedIndex = 0;
+    const {selectedIndex} = this.state;
     let selectedFeature, content, title, footer, dropdown, features;
     const {editingEnabled} = this.props;
     
     if ( infoWindow && infoWindow.getSelectedFeature ) {
       count = infoWindow.count;
       selectedFeature = infoWindow.getSelectedFeature();
-      selectedIndex = infoWindow.selectedIndex;
+      //selectedIndex = infoWindow.selectedIndex;
       content = infoWindow._contentPane.innerHTML;
       features = infoWindow.features;
     }
@@ -240,7 +244,8 @@ export default class InfoWindow extends Component {
           </div>
           <div className="infoWindow__count">
             {featuresCategories && selectedFeature && selectedFeature._layer && selectedFeature._layer.name && featuresCategories[selectedFeature._layer.name] ?
-            `${featuresCategories[selectedFeature._layer.name].featuresList.indexOf(featuresCategories[selectedFeature._layer.name].featuresList[selectedIndex]) + 1} / ${featuresCategories[selectedFeature._layer.name].count}` : null}
+            `${featuresCategories[selectedFeature._layer.name].featuresList.indexOf(featuresCategories[selectedFeature._layer.name].featuresList[selectedIndex]) + 1} /
+            ${featuresCategories[selectedFeature._layer.name].count}` : null}
           </div>
           <div className="infoWindow__title">
             <div dangerouslySetInnerHTML={{__html: content }} />
