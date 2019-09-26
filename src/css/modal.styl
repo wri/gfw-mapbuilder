@@ -7,8 +7,8 @@
   left 0
   top 0
   .modal
-    width 320px !important
-    margin 0 !important
+    width 320px 
+    margin 0 
 
 .modal-container
   position absolute
@@ -365,11 +365,16 @@
 .layer-modal-container .modal-content:not(.no-download)
   margin-bottom 60px
 
-.layer-modal-content
-  width 500px
-  & p
-    line-height 1.5
-    margin-top 10px
+.layer-modal-container
+  article.modal
+    width 500px
+  .modal-content
+    width 500px
+    max-height 400px
+    .layer-modal-content
+      & p
+        line-height 1.5
+        margin-top 10px
 
 .source-header
   margin-bottom 5px
