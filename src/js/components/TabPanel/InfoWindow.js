@@ -10,6 +10,8 @@ import React, {
   PropTypes
 } from 'react';
 
+let featuresCategories = {};
+
 export default class InfoWindow extends Component {
   static contextTypes = {
     language: PropTypes.string.isRequired,
@@ -57,7 +59,7 @@ export default class InfoWindow extends Component {
       const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
       console.log('newSelectedFeature', newSelectedFeature);
       // this.setState({
-      //   activeSelectedFeature: `{"name": "${featuresCategorized[key].name}", "featuresList": "${featuresCategorized[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+      //   activeSelectedFeature: `{"name": "${featuresCategories[key].name}", "featuresList": "${featuresCategories[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       // });
   };
 
@@ -116,35 +118,36 @@ export default class InfoWindow extends Component {
     });
   };
   
-  selectedFeatureOption = (key, index, featuresCategorized) => {
-  return (
-    <option
-      value={`{"name": "${featuresCategorized[key].name}", "featuresList": "${featuresCategorized[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
-      key={`selected-feature-${index}`}
-    >
-      {`${featuresCategorized[key].name} (${featuresCategorized[key].count})`}
-    </option>
-  );
+  selectedFeatureOption = (key, index, features) => {
+    return (
+      <option
+        value={`{"name": "${features[key].name}", "featuresList": "${features[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
+        key={`selected-feature-${index}`}
+      >
+        {`${features[key].name} (${features[key].count})`}
+      </option>
+    );
   };
 
   createDropdown = (selectedIndex, count) => {
     const { customColorTheme } = this.context.settings;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
     const features = this.context.map.infoWindow.features;
-    const featuresCategorized = {};
+    //const featuresCategories = {};
+    featuresCategories = {};
     features.forEach(feature => {
-      if (featuresCategorized[feature._layer.name]) {
-        featuresCategorized[feature._layer.name].count = featuresCategorized[feature._layer.name].count + 1;
-        featuresCategorized[feature._layer.name].featuresList = [...featuresCategorized[feature._layer.name].featuresList, feature];
+      if (featuresCategories[feature._layer.name]) {
+        featuresCategories[feature._layer.name].count = featuresCategories[feature._layer.name].count + 1;
+        featuresCategories[feature._layer.name].featuresList = [...featuresCategories[feature._layer.name].featuresList, feature];
       } else {
-        featuresCategorized[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
+        featuresCategories[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
       }
     });
     
     return (
       <div className="relative infoWindow__select-container">
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={activeSelectedFeature}>
-          {features && features.length ? Object.keys(featuresCategorized).map((key, index) => this.selectedFeatureOption(key, index, featuresCategorized)) : null}
+          {features && features.length ? Object.keys(featuresCategories).map((key, index) => this.selectedFeatureOption(key, index, featuresCategories)) : null}
         </select>
         <div
           style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
@@ -191,6 +194,9 @@ export default class InfoWindow extends Component {
       content = infoWindow._contentPane.innerHTML;
       features = infoWindow.features;
     }
+    
+    console.log('featuresCategories', featuresCategories);
+    console.log('selected feature', selectedFeature);
 
     if (selectedFeature) {
       if (selectedFeature.attributes && selectedFeature.attributes.source && selectedFeature.attributes.source === attributes.SOURCE_SEARCH) {
@@ -220,7 +226,9 @@ export default class InfoWindow extends Component {
       // Add the dropdown for multiple selected features
       dropdown = this.createDropdown(selectedIndex, count);
     }
-    
+    if (featuresCategories && selectedFeature){
+      console.log('featuresList', featuresCategories[selectedFeature._layer.name].featuresList);
+    }
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
@@ -230,7 +238,10 @@ export default class InfoWindow extends Component {
             </svg>
             {selectedFeature && selectedFeature.attributes && selectedFeature.attributes.source === 'draw' ? null : dropdown}
           </div>
-          <div className="infoWindow__count">{features ? `${selectedIndex + 1} / ${features.length}` : null}</div>
+          <div className="infoWindow__count">
+            {featuresCategories && selectedFeature && selectedFeature._layer && selectedFeature._layer.name && featuresCategories[selectedFeature._layer.name] ?
+            `${featuresCategories[selectedFeature._layer.name].featuresList.indexOf(featuresCategories[selectedFeature._layer.name].featuresList[selectedIndex]) + 1} / ${featuresCategories[selectedFeature._layer.name].count}` : null}
+          </div>
           <div className="infoWindow__title">
             <div dangerouslySetInnerHTML={{__html: content }} />
           </div>
