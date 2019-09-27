@@ -24,70 +24,89 @@ export default class InfoWindow extends Component {
     this.state = {
       activeSelectedFeature: '',
       selectedIndex: 0,
-      featuresCount: 0,
+      featuresCount: 1,
       prevButtonHover: false,
       nextButtonHover: false
     };
   }
 
   previous = () => {
-    //this.context.map.infoWindow.selectPrevious();
-    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    const features = this.context.map.infoWindow.features;
-    console.log('selectedFeature prev', selectedFeature);
-    console.log('features prev', features);
-    //let count = 0;
-    features.forEach(feature => {
-      if (feature._layer.name === selectedFeature._layer.name) {
-        //count++;
-        if (layersCategories[feature._layer.name]) {
-          layersCategories[feature._layer.name].count = layersCategories[feature._layer.name].count + 1;
-          layersCategories[feature._layer.name].featuresList = [...layersCategories[feature._layer.name].featuresList, feature];
-        }
-      }
-    });
+    // //this.context.map.infoWindow.selectPrevious();
+    // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    // const features = this.context.map.infoWindow.features;
+    // console.log('selectedFeature prev', selectedFeature);
+    // console.log('features prev', features);
+    // //let count = 0;
+    // features.forEach(feature => {
+    //   if (feature._layer.name === selectedFeature._layer.name) {
+    //     //count++;
+    //     if (layersCategories[feature._layer.name]) {
+    //       layersCategories[feature._layer.name].count = layersCategories[feature._layer.name].count + 1;
+    //       layersCategories[feature._layer.name].featuresList = [...layersCategories[feature._layer.name].featuresList, feature];
+    //     }
+    //   }
+    // });
     
-    layersCategories = {};
-    features.forEach(feature => {
-      if (layersCategories[feature._layer.name]) {
-        layersCategories[feature._layer.name].count = layersCategories[feature._layer.name].count + 1;
-        layersCategories[feature._layer.name].featuresList = [...layersCategories[feature._layer.name].featuresList, feature];
-      } else {
-        layersCategories[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
-      }
-    });
+    // layersCategories = {};
+    // features.forEach(feature => {
+    //   if (layersCategories[feature._layer.name]) {
+    //     layersCategories[feature._layer.name].count = layersCategories[feature._layer.name].count + 1;
+    //     layersCategories[feature._layer.name].featuresList = [...layersCategories[feature._layer.name].featuresList, feature];
+    //   } else {
+    //     layersCategories[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
+    //   }
+    // });
+    // this.setState({
+    //   selectedIndex: this.state.selectedIndex - 1
+    //   //activeSelectedFeature: `{"name": "${selectedFeature._layer.name}", "count": "${count}", "featuresList": "${selectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+    // });
+    
     this.setState({
-      selectedIndex: this.state.selectedIndex - 1,
-      //activeSelectedFeature: `{"name": "${selectedFeature._layer.name}", "count": "${count}", "featuresList": "${selectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+      selectedIndex: this.state.selectedIndex - 1
     });
   };
 
   next = () => {
-    // this.context.map.infoWindow.selectNext();
-    // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    // this.setState({
-    //   selectedIndex: this.state.selectedIndex + 1,
-    //   activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
-    // });
+    // // this.context.map.infoWindow.selectNext();
+    // // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    // // this.setState({
+    // //   selectedIndex: this.state.selectedIndex + 1,
+    // //   activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
+    // // });
     
-    // const {activeSelectedFeature} = this.state;
+    // const {activeSelectedFeature, featuresCount} = this.state;
     // const selectedFeature = JSON.parse(activeSelectedFeature);
-    //   const featuresList = selectedFeature.featuresList.split(',');
-    //   const features = this.context.map.infoWindow.features;
-    //   let index = 0;
-    //   for (const feature of features) {
-    //     for (const featureItem of featuresList) {
-    //         if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
-    //         index = features.indexOf(feature) + 1;
-    //       }
+    // const featuresList = selectedFeature.featuresList.split(',');
+    // const features = this.context.map.infoWindow.features;
+    // const lastFeature = featuresList[featuresList.length - 1];
+    // let lastIndex = 0;
+    // let index = 0;
+    // for (const feature of features) {
+    //   for (const featureItem of featuresList) {
+    //       if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
+    //       index = features.indexOf(feature) + 1;
+    //       lastIndex = features.indexOf(lastFeature);
     //     }
     //   }
-    //   this.context.map.infoWindow.select(index);
+    // }
+    // if (index < lastIndex) {
+    //   //this.context.map.infoWindow.select(index);
+    //   this.context.map.infoWindow.selectNext();
     //   const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
     //   console.log('newSelectedFeature', newSelectedFeature);
     //   this.setState({
-    //     activeSelectedFeature: `{"name": "${layersCategories[key].name}", "featuresList": "${layersCategories[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+    //     selectedIndex: this.state.selectedIndex + 1
+    //     //activeSelectedFeature: `{"name": "${selectedFeature._layer.name}", "count": "${count}", "featuresList": "${selectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
     //   });
+      
+    //   // this.setState({
+    //   //   activeSelectedFeature: `{"name": "${layersCategories[key].name}", "featuresList": "${layersCategories[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+    //   // });
+    // }
+    
+    this.setState({
+      selectedIndex: this.state.selectedIndex + 1
+    });
   };
 
   clearFeatures = () => {
@@ -115,21 +134,22 @@ export default class InfoWindow extends Component {
   };
   
   changeSelectedFeature = evt => {
-    this.setState({
-      activeSelectedFeature: evt.target.value
-    }, () => {
-      const selectedFeature = JSON.parse(this.state.activeSelectedFeature);
-      const featuresList = selectedFeature.featuresList.split(',');
-      const features = this.context.map.infoWindow.features;
-      let index = 0;
-      for (const feature of features) {
-        for (const featureItem of featuresList) {
-            if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
-            index = features.indexOf(feature);
-          }
+    const features = this.context.map.infoWindow.features;
+    const selectedFeature = JSON.parse(evt.target.value);
+    const featuresList = selectedFeature.featuresList.split(',');
+    let index = 0;
+    for (const feature of features) {
+      for (const featureItem of featuresList) {
+        if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
+          index = features.indexOf(feature);
         }
       }
-      this.context.map.infoWindow.select(index);
+    }
+    this.context.map.infoWindow.select(index);
+    this.setState({
+      activeSelectedFeature: evt.target.value,
+      featuresCount: featuresList.length,
+      selectedIndex: 0
     });
   }
   
@@ -156,9 +176,9 @@ export default class InfoWindow extends Component {
     );
   };
 
-  createDropdown = (selectedIndex, featuresCount) => {
+  createDropdown = () => {
     const { customColorTheme } = this.context.settings;
-    const {prevButtonHover, nextButtonHover, activeSelectedFeature} = this.state;
+    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectedIndex, featuresCount} = this.state;
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
@@ -191,9 +211,9 @@ export default class InfoWindow extends Component {
             Prev
           </span>
           <span
-            style={nextButtonHover ? {backgroundColor: `${selectedIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee' }`, opacity: `${selectedIndex < featuresCount - 1 ? '0.8' : '1'}`} :
-            {backgroundColor: `${selectedIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
-            className={`fa-button color arrow next ${selectedIndex < featuresCount - 1 ? '' : 'disabled'}`}
+            style={nextButtonHover ? {backgroundColor: `${(selectedIndex !== 0 && featuresCount !== 1) && selectedIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee' }`, opacity: `${selectedIndex < featuresCount - 1 ? '0.8' : '1'}`} :
+            {backgroundColor: `${(selectedIndex !== 0 && featuresCount !== 1) && selectedIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
+            className={`fa-button color arrow next ${(selectedIndex !== 0 && featuresCount !== 1) && selectedIndex < featuresCount - 1 ? '' : 'disabled'}`}
             onClick={this.next}
             onMouseEnter={this.nextToggleHover}
             onMouseLeave={this.nextToggleHover}
@@ -251,7 +271,7 @@ export default class InfoWindow extends Component {
       );
       
       // Add the dropdown for multiple selected features
-      dropdown = this.createDropdown(selectedIndex, featuresCount);
+      dropdown = this.createDropdown();
     }
     
     return (
