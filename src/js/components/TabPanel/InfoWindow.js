@@ -79,26 +79,25 @@ export default class InfoWindow extends Component {
     }
   };
 
-  next = () => {    
+  next = () => {
     const {activeSelectedFeature, selectIndex} = this.state;
     const selectedFeature = JSON.parse(activeSelectedFeature);
     const featuresList = selectedFeature.featuresList.split(',');
 
     if (selectIndex < featuresList.length && selectIndex !== featuresList.length - 1) {
       //this.context.map.infoWindow.select(index);
-      this.context.map.infoWindow.selectNext();
-      mapActions.increaseSelectIndex(); 
+      //this.context.map.infoWindow.selectNext();
+      mapActions.increaseSelectIndex();
       const features = this.context.map.infoWindow.features;
-      let index = 0;
-      for (const feature of features) {
-        for (const featureId of featuresList) {
-            if (feature.attributes[feature._layer.objectIdField].toString() === featureId) {
-            index = features.indexOf(feature) + 1;
-          }
-        }
-      }
-     const newFeature = features[index];
-     const newFeatureName = newFeature._layer.name;
+      const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+     
+      const currentFilteredFeature = features.filter(feature => feature === currentSelectedFeature)[0];
+      const currentIndex = features.indexOf(currentFilteredFeature);
+      console.log('currentIndex', currentIndex);
+      const newIndex = currentIndex + 1;
+      const newFeature = features[newIndex];
+      const newFeatureName = newFeature._layer.name;
+      this.context.map.infoWindow.select(newIndex);
       //const newSelectedFeatureName = features[index]._layer.name;
       // let count = 0;
       // for (const feature of features) {
@@ -106,8 +105,10 @@ export default class InfoWindow extends Component {
       //     count++;
       //   }
       // }
-      
+      console.log('features', features);
       const newSelectedFeature = layersCategories[newFeatureName];
+      console.log('newFeature', newFeature);
+      console.log('layersCategories', layersCategories);
       this.setState({
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       }, () => console.log('activeSelectedFeature', this.state.activeSelectedFeature));
