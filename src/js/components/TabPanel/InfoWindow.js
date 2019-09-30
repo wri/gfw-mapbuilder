@@ -79,49 +79,38 @@ export default class InfoWindow extends Component {
     }
   };
 
-  next = () => {
-    // // this.context.map.infoWindow.selectNext();
-    // // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    // // this.setState({
-    // //   selectIndex: this.state.selectIndex + 1,
-    // //   activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
-    // // });
-    //const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+  next = () => {    
     const {activeSelectedFeature, selectIndex} = this.state;
     const selectedFeature = JSON.parse(activeSelectedFeature);
     const featuresList = selectedFeature.featuresList.split(',');
-    // const features = this.context.map.infoWindow.features;
-    // const lastFeature = featuresList[featuresList.length - 1];
-    // let lastIndex = 0;
-    // let index = 0;
-    // for (const feature of features) {
-    //   for (const featureItem of featuresList) {
-    //       if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
-    //       index = features.indexOf(feature) + 1;
-    //       lastIndex = features.indexOf(lastFeature);
-    //     }
-    //   }
-    // }
-    // if (index < lastIndex) {
-    //   //this.context.map.infoWindow.select(index);
-    //   this.context.map.infoWindow.selectNext();
-    //   const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    //   console.log('newSelectedFeature', newSelectedFeature);
-    //   this.setState({
-    //     selectIndex: this.state.selectIndex + 1
-    //     //activeSelectedFeature: `{"name": "${selectedFeature._layer.name}", "count": "${count}", "featuresList": "${selectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
-    //   });
-      
-    //   // this.setState({
-    //   //   activeSelectedFeature: `{"name": "${layersCategories[key].name}", "featuresList": "${layersCategories[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
-    //   // });
-    // }
-    
-    // this.setState({
-    //   selectIndex: this.state.selectIndex + 1
-    // });
+
     if (selectIndex < featuresList.length && selectIndex !== featuresList.length - 1) {
-      mapActions.increaseSelectIndex();
+      //this.context.map.infoWindow.select(index);
+      this.context.map.infoWindow.selectNext();
+      mapActions.increaseSelectIndex(); 
+      const features = this.context.map.infoWindow.features;
+      let index = 0;
+      for (const feature of features) {
+        for (const featureId of featuresList) {
+            if (feature.attributes[feature._layer.objectIdField].toString() === featureId) {
+            index = features.indexOf(feature) + 1;
+          }
+        }
+      }
+     const newFeature = features[index];
+     const newFeatureName = newFeature._layer.name;
+      //const newSelectedFeatureName = features[index]._layer.name;
+      // let count = 0;
+      // for (const feature of features) {
+      //   if (feature._layer.name === newSelectedFeatureName) {
+      //     count++;
+      //   }
+      // }
+      
+      const newSelectedFeature = layersCategories[newFeatureName];
+      this.setState({
+        activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+      }, () => console.log('activeSelectedFeature', this.state.activeSelectedFeature));
     } else {
       return;
     }
@@ -147,7 +136,7 @@ export default class InfoWindow extends Component {
 
   renderInstructionList = (instruction, index) => {
     return (
-      <li key={index}>{instruction}</li>
+      <li key={`step-${index + 1}`}>{instruction}</li>
     );
   };
   
@@ -157,18 +146,18 @@ export default class InfoWindow extends Component {
     const featuresList = selectedFeature.featuresList.split(',');
     let index = 0;
     for (const feature of features) {
-      for (const featureItem of featuresList) {
-        if (feature.attributes[feature._layer.objectIdField].toString() === featureItem) {
+      for (const featureId of featuresList) {
+        if (feature.attributes[feature._layer.objectIdField].toString() === featureId) {
           index = features.indexOf(feature);
         }
       }
     }
     this.context.map.infoWindow.select(index);
+    mapActions.resetSelectIndex();
     this.setState({
       activeSelectedFeature: evt.target.value,
       featuresCount: featuresList.length
     });
-    mapActions.resetSelectIndex();
   }
   
   prevToggleHover = () => {
@@ -314,7 +303,6 @@ export default class InfoWindow extends Component {
       dropdown = this.createDropdown();
     }
     
-    console.log('info window index', this.state.selectIndex);
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
