@@ -133,23 +133,18 @@ export default class InfoWindow extends Component {
   changeSelectedFeature = evt => {
     const features = this.context.map.infoWindow.features;
     const selectedFeature = JSON.parse(evt.target.value);
-    const featuresList = selectedFeature.featuresList.split(',');
+    //const featuresList = selectedFeature.featuresList.split(',');
     const count = selectedFeature.count;
-    let index = 0;
-    for (const feature of features) {
-      for (const featureId of featuresList) {
-        if (feature.attributes[feature._layer.objectIdField].toString() === featureId) {
-          index = features.indexOf(feature);
-        }
-      }
-    }
+    const name = selectedFeature.name;
+    const layerCategory = layersCategories[name];
+    const index = features.indexOf(layerCategory.featuresList[0]);
     this.context.map.infoWindow.select(index);
-    mapActions.resetSelectIndex();
     this.setState({
       activeSelectedFeature: evt.target.value,
       featuresCount: count
     });
-  }
+    mapActions.resetSelectIndex();
+  };
   
   prevToggleHover = () => {
     this.setState({
