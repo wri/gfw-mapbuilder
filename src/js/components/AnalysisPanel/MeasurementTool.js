@@ -21,6 +21,7 @@ export default class MeasurementTool extends Component {
       // need to explicitly check for that before starting the widget
       && this.context.map.navigationManager
       && !this.initialized
+      && this.measurementContainer
     ) {
       this.initialized = true;
       const measurementDiv = document.createElement('DIV');

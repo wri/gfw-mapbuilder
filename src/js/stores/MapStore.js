@@ -99,6 +99,7 @@ class MapStore {
     this.currentLng = 0;
     this.currentX = 0;
     this.currentY = 0;
+    this.selectIndex = 0;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -156,6 +157,9 @@ class MapStore {
       updateCurrentLng: mapActions.updateCurrentLng,
       updateCurrentX: mapActions.updateCurrentX,
       updateCurrentY: mapActions.updateCurrentY,
+      resetSelectIndex: mapActions.resetSelectIndex,
+      increaseSelectIndex: mapActions.increaseSelectIndex,
+      decreaseSelectIndex: mapActions.decreaseSelectIndex,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -589,6 +593,18 @@ class MapStore {
 
   updateCurrentY (y) {
     this.currentY = y;
+  }
+  
+  resetSelectIndex() {
+    this.selectIndex = 0;
+  }
+  
+  increaseSelectIndex() {
+    this.selectIndex = this.selectIndex + 1;
+  }
+  
+  decreaseSelectIndex() {
+    this.selectIndex = this.selectIndex - 1;
   }
 
   showLayerInfo (layer) {

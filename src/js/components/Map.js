@@ -174,6 +174,8 @@ export default class Map extends Component {
     if (brApp.map.measurement && brApp.map.measurement.getTool()) {
       return;
     }
+    
+    mapActions.resetSelectIndex();
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {

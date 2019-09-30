@@ -60,6 +60,9 @@ class MapActions {
   updateCurrentLng = (data) => data;
   updateCurrentX = (data) => data;
   updateCurrentY = (data) => data;
+  resetSelectIndex = () => { return {}; };
+  increaseSelectIndex = () => { return {}; };
+  decreaseSelectIndex = () => { return {}; };
 
   toggleLogin = (data) => data;
 

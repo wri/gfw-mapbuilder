@@ -4,6 +4,8 @@ import {attributes} from 'constants/AppConstants';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
 import {defaultColorTheme} from '../../config';
+import mapActions from '../../actions/MapActions';
+import MapStore from '../../stores/MapStore';
 
 import React, {
   Component,
@@ -23,12 +25,20 @@ export default class InfoWindow extends Component {
     super(props);
     this.state = {
       activeSelectedFeature: '',
-      selectedIndex: 0,
       featuresCount: 1,
       prevButtonHover: false,
-      nextButtonHover: false
+      nextButtonHover: false,
+      ...MapStore.getState()
     };
   }
+  
+  componentDidMount() {
+    MapStore.listen(this.storeDidUpdate);
+  }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   previous = () => {
     // //this.context.map.infoWindow.selectPrevious();
@@ -57,26 +67,29 @@ export default class InfoWindow extends Component {
     //   }
     // });
     // this.setState({
-    //   selectedIndex: this.state.selectedIndex - 1
+    //   selectIndex: this.state.selectIndex - 1
     //   //activeSelectedFeature: `{"name": "${selectedFeature._layer.name}", "count": "${count}", "featuresList": "${selectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
     // });
-    
-    this.setState({
-      selectedIndex: this.state.selectedIndex - 1
-    });
+
+    // this.setState({
+    //   selectIndex: this.state.selectIndex - 1
+    // });
+    if (this.state.selectIndex > 0) {
+      mapActions.decreaseSelectIndex();
+    }
   };
 
   next = () => {
     // // this.context.map.infoWindow.selectNext();
     // // const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     // // this.setState({
-    // //   selectedIndex: this.state.selectedIndex + 1,
+    // //   selectIndex: this.state.selectIndex + 1,
     // //   activeSelectedFeature: `{"name": "${selectedFeature.attributes[selectedFeature._layer.displayField] ? selectedFeature.attributes[selectedFeature._layer.displayField] : selectedFeature.attributes[selectedFeature._layer.objectIdField]}", "id": "${selectedFeature.attributes[selectedFeature._layer.objectIdField]}"}`
     // // });
-    
-    // const {activeSelectedFeature, featuresCount} = this.state;
-    // const selectedFeature = JSON.parse(activeSelectedFeature);
-    // const featuresList = selectedFeature.featuresList.split(',');
+    //const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    const {activeSelectedFeature, selectIndex} = this.state;
+    const selectedFeature = JSON.parse(activeSelectedFeature);
+    const featuresList = selectedFeature.featuresList.split(',');
     // const features = this.context.map.infoWindow.features;
     // const lastFeature = featuresList[featuresList.length - 1];
     // let lastIndex = 0;
@@ -95,7 +108,7 @@ export default class InfoWindow extends Component {
     //   const newSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
     //   console.log('newSelectedFeature', newSelectedFeature);
     //   this.setState({
-    //     selectedIndex: this.state.selectedIndex + 1
+    //     selectIndex: this.state.selectIndex + 1
     //     //activeSelectedFeature: `{"name": "${selectedFeature._layer.name}", "count": "${count}", "featuresList": "${selectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
     //   });
       
@@ -104,19 +117,24 @@ export default class InfoWindow extends Component {
     //   // });
     // }
     
-    this.setState({
-      selectedIndex: this.state.selectedIndex + 1
-    });
+    // this.setState({
+    //   selectIndex: this.state.selectIndex + 1
+    // });
+    if (selectIndex < featuresList.length && selectIndex !== featuresList.length - 1) {
+      mapActions.increaseSelectIndex();
+    } else {
+      return;
+    }
   };
 
   clearFeatures = () => {
     const {map} = this.context;
     const features = map.infoWindow.features;
-    const selectedIndex = map.infoWindow.selectedIndex;
+    const selectIndex = map.infoWindow.selectIndex;
 
     const newFeatures = [
-      ...features.slice(0, selectedIndex),
-      ...features.slice(selectedIndex + 1)
+      ...features.slice(0, selectIndex),
+      ...features.slice(selectIndex + 1)
     ];
 
     map.infoWindow.clearFeatures();
@@ -148,9 +166,9 @@ export default class InfoWindow extends Component {
     this.context.map.infoWindow.select(index);
     this.setState({
       activeSelectedFeature: evt.target.value,
-      featuresCount: featuresList.length,
-      selectedIndex: 0
+      featuresCount: featuresList.length
     });
+    mapActions.resetSelectIndex();
   }
   
   prevToggleHover = () => {
@@ -175,10 +193,32 @@ export default class InfoWindow extends Component {
       </option>
     );
   };
+  
+  componentDidUpdate(prevProps, prevState) {
+      if (this.context.map.infoWindow.features && prevState.activeSelectedFeature === '') {
+      const features = this.context.map.infoWindow.features;
+      layersCategories = {};
+      features.forEach(feature => {
+        if (layersCategories[feature._layer.name]) {
+          layersCategories[feature._layer.name].count = layersCategories[feature._layer.name].count + 1;
+          layersCategories[feature._layer.name].featuresList = [...layersCategories[feature._layer.name].featuresList, feature];
+        } else {
+          layersCategories[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
+        }
+      });
+      const layersKeys = Object.keys(layersCategories);
+      const firstFeature = layersCategories[layersKeys[0]];
+      const activeSelectedFeature = `{"name": "${firstFeature.name}", "count": "${firstFeature.count}", "featuresList": "${firstFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`;
+      this.setState({
+        activeSelectedFeature,
+        featuresCount: firstFeature.count
+      });
+    }
+  }
 
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
-    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectedIndex, featuresCount} = this.state;
+    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex, featuresCount} = this.state;
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
@@ -189,11 +229,11 @@ export default class InfoWindow extends Component {
         layersCategories[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
       }
     });
-    
+    const layersKeys = Object.keys(layersCategories);
     return (
       <div className="relative infoWindow__select-container">
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={activeSelectedFeature}>
-          {features && features.length ? Object.keys(layersCategories).map((key, index) => this.selectedFeatureOption(key, index, layersCategories)) : null}
+          {features && features.length ? layersKeys.map((key, index) => this.selectedFeatureOption(key, index, layersCategories)) : null}
         </select>
         <div
           style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
@@ -201,9 +241,9 @@ export default class InfoWindow extends Component {
         />
         <div className="infoWindow__prev-next-container">
           <span
-            style={prevButtonHover ? {backgroundColor: `${selectedIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectedIndex > 0 ? '0.8' : '1'}`} :
-            {backgroundColor: `${selectedIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
-            className={`fa-button color arrow prev ${selectedIndex > 0 ? '' : 'disabled'}`}
+            style={prevButtonHover ? {backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex > 0 ? '0.8' : '1'}`} :
+            {backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
+            className={`fa-button color arrow prev ${selectIndex > 0 ? '' : 'disabled'}`}
             onClick={this.previous}
             onMouseEnter={this.prevToggleHover}
             onMouseLeave={this.prevToggleHover}
@@ -211,9 +251,9 @@ export default class InfoWindow extends Component {
             Prev
           </span>
           <span
-            style={nextButtonHover ? {backgroundColor: `${(selectedIndex !== 0 && featuresCount !== 1) && selectedIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee' }`, opacity: `${selectedIndex < featuresCount - 1 ? '0.8' : '1'}`} :
-            {backgroundColor: `${(selectedIndex !== 0 && featuresCount !== 1) && selectedIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
-            className={`fa-button color arrow next ${(selectedIndex !== 0 && featuresCount !== 1) && selectedIndex < featuresCount - 1 ? '' : 'disabled'}`}
+            style={nextButtonHover ? {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${layersCategories[layersKeys[selectIndex]].count > 1 || selectIndex < featuresCount - 1 ? '0.8' : '1'}`} :
+            {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
+            className={`fa-button color arrow next ${selectIndex < featuresCount - 1 ? '' : 'disabled'}`}
             onClick={this.next}
             onMouseEnter={this.nextToggleHover}
             onMouseLeave={this.nextToggleHover}
@@ -229,22 +269,22 @@ export default class InfoWindow extends Component {
     const {infoWindow} = this.context.map;
     const {language} = this.context;
     //let count = 0;
-    //let selectedIndex = 0;
-    const {selectedIndex, featuresCount} = this.state;
+    //let selectIndex = 0;
+    const {selectIndex, featuresCount} = this.state;
     let selectedFeature, content, title, footer, dropdown, features;
     const {editingEnabled} = this.props;
     
     if ( infoWindow && infoWindow.getSelectedFeature ) {
       //count = infoWindow.count;
       selectedFeature = infoWindow.getSelectedFeature();
-      //selectedIndex = infoWindow.selectedIndex;
+      //selectIndex = infoWindow.selectIndex;
       content = infoWindow._contentPane.innerHTML;
       features = infoWindow.features;
     }
     
     // console.log('layersCategories', layersCategories);
     // console.log('selected feature', selectedFeature);
-
+    
     if (selectedFeature) {
       if (selectedFeature.attributes && selectedFeature.attributes.source && selectedFeature.attributes.source === attributes.SOURCE_SEARCH) {
         title = (
@@ -274,6 +314,7 @@ export default class InfoWindow extends Component {
       dropdown = this.createDropdown();
     }
     
+    console.log('info window index', this.state.selectIndex);
     return (
       <div className='infoWindow relative'>
         <div className={`infoWindow__content ${selectedFeature ? '' : 'hidden'}`}>
@@ -285,7 +326,7 @@ export default class InfoWindow extends Component {
           </div>
           <div className="infoWindow__count">
             {layersCategories && selectedFeature && selectedFeature._layer && selectedFeature._layer.name && layersCategories[selectedFeature._layer.name] ?
-            `${layersCategories[selectedFeature._layer.name].featuresList.indexOf(layersCategories[selectedFeature._layer.name].featuresList[selectedIndex]) + 1} /
+            `${layersCategories[selectedFeature._layer.name].featuresList.indexOf(layersCategories[selectedFeature._layer.name].featuresList[selectIndex]) + 1} /
             ${layersCategories[selectedFeature._layer.name].count}` : null}
           </div>
           <div className="infoWindow__title">
