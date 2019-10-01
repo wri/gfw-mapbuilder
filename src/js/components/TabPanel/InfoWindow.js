@@ -116,11 +116,6 @@ export default class InfoWindow extends Component {
       ...features.slice(0, currentIndex),
       ...features.slice(currentIndex + 1)
     ];
-    map.infoWindow.clearFeatures();
-    map.infoWindow.hide();
-    map.infoWindow.setFeatures(newFeatures);
-    map.infoWindow.show();
-    map.infoWindow.select(0);
     layersCategories = {};
     newFeatures.forEach(feature => {
       if (layersCategories[feature._layer.name]) {
@@ -131,12 +126,24 @@ export default class InfoWindow extends Component {
       }
     });
     if (newFeatures.length > 0) {
-      const newFeature = newFeatures[0];
+      const newFeature = newFeatures[currentIndex] ? newFeatures[currentIndex] : newFeatures[0];
       const newFeatureName = newFeature._layer.name;
       const newSelectedFeature = layersCategories[newFeatureName];
+      map.infoWindow.clearFeatures();
+      map.infoWindow.hide();
+      map.infoWindow.setFeatures(newFeatures);
+      map.infoWindow.show();
+      map.infoWindow.select(newFeatures.indexOf(newFeature));
       this.setState({
         featuresCount: newSelectedFeature.count,
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+      });
+      mapActions.resetSelectIndex();
+    } else {
+      map.infoWindow.clearFeatures();
+      this.setState({
+        featuresCount: 1,
+        activeSelectedFeature: ''
       });
       mapActions.resetSelectIndex();
     }
@@ -222,7 +229,7 @@ export default class InfoWindow extends Component {
             Prev
           </span>
           <span
-            style={nextButtonHover ? {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${layersCategories[layersKeys[selectIndex]].count > 1 || selectIndex < featuresCount - 1 ? '0.8' : '1'}`} :
+            style={nextButtonHover ? {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex < featuresCount - 1 ? '0.8' : '1'}`} :
             {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow next ${selectIndex < featuresCount - 1 ? '' : 'disabled'}`}
             onClick={this.next}
