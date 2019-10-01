@@ -126,7 +126,7 @@ export default class InfoWindow extends Component {
       }
     });
     if (newFeatures.length > 0) {
-      const newFeature = newFeatures[currentIndex] ? newFeatures[currentIndex] : newFeatures[0];
+      const newFeature = newFeatures[currentIndex - 1] ? newFeatures[currentIndex - 1] : newFeatures[0];
       const newFeatureName = newFeature._layer.name;
       const newSelectedFeature = layersCategories[newFeatureName];
       map.infoWindow.clearFeatures();
@@ -138,7 +138,9 @@ export default class InfoWindow extends Component {
         featuresCount: newSelectedFeature.count,
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
-      mapActions.resetSelectIndex();
+      if (this.state.selectIndex > 0) {
+        mapActions.decreaseSelectIndex();
+      }
     } else {
       map.infoWindow.clearFeatures();
       this.setState({
