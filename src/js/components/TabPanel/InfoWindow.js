@@ -112,21 +112,15 @@ export default class InfoWindow extends Component {
     const currentSelectedFeature = map.infoWindow.getSelectedFeature();
     const currentFilteredFeature = features.filter(feature => feature === currentSelectedFeature)[0];
     const currentIndex = features.indexOf(currentFilteredFeature);
-    const {activeSelectedFeature, featuresCount, selectIndex} = this.state;
-    console.log('activeSelectedFeature BEFORE', activeSelectedFeature);
-    console.log('featuresCount BEFORE', featuresCount);
-    console.log('selectIndex BEFORE', selectIndex);
     const newFeatures = [
       ...features.slice(0, currentIndex),
       ...features.slice(currentIndex + 1)
     ];
-
     map.infoWindow.clearFeatures();
     map.infoWindow.hide();
     map.infoWindow.setFeatures(newFeatures);
     map.infoWindow.show();
     map.infoWindow.select(0);
-    
     layersCategories = {};
     newFeatures.forEach(feature => {
       if (layersCategories[feature._layer.name]) {
@@ -136,7 +130,6 @@ export default class InfoWindow extends Component {
         layersCategories[feature._layer.name] = {name: feature._layer.name, count: 1, featuresList: [feature]};
       }
     });
-   
     if (newFeatures.length > 0) {
       const newFeature = newFeatures[0];
       const newFeatureName = newFeature._layer.name;
@@ -144,9 +137,8 @@ export default class InfoWindow extends Component {
       this.setState({
         featuresCount: newSelectedFeature.count,
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
-      }, () => {console.log('featuresCount AFTER', this.state.featuresCount); console.log('activeSelectedFeature AFTER', activeSelectedFeature)});
+      });
       mapActions.resetSelectIndex();
-      console.log('selectIndex AFTER', this.state.selectIndex);
     }
   };
 
@@ -182,7 +174,7 @@ export default class InfoWindow extends Component {
       nextButtonHover: !this.state.nextButtonHover
     });
   };
-  
+
   selectedFeatureOption = (key, index, layers) => {
     return (
       <option
@@ -208,6 +200,7 @@ export default class InfoWindow extends Component {
       }
     });
     const layersKeys = Object.keys(layersCategories);
+    
     return (
       <div className="relative infoWindow__select-container">
         <select className='infoWindow__select' onChange={this.changeSelectedFeature} value={activeSelectedFeature}>
@@ -246,16 +239,12 @@ export default class InfoWindow extends Component {
   render () {
     const {infoWindow} = this.context.map;
     const {language} = this.context;
-    //let count = 0;
-    //let selectIndex = 0;
     const {selectIndex, featuresCount} = this.state;
     let selectedFeature, content, title, footer, dropdown, features;
     const {editingEnabled} = this.props;
     
     if ( infoWindow && infoWindow.getSelectedFeature ) {
-      //count = infoWindow.count;
       selectedFeature = infoWindow.getSelectedFeature();
-      //selectIndex = infoWindow.selectIndex;
       content = infoWindow._contentPane.innerHTML;
       features = infoWindow.features;
     }
