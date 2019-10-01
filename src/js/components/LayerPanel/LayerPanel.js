@@ -322,6 +322,7 @@ export default class LayerPanel extends Component {
     const {settings, language} = this.context;
     //- Create the layerGroup components
     const layerGroups = settings.layerPanel || {};
+    console.log('settings layer panel', settings.layerPanel);
     const groups = this.renderLayerGroups(layerGroups, language);
 
     return (

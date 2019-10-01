@@ -46,22 +46,22 @@ const LayersHelper = {
       if (selectValue) {
         switch (selectValue) {
           case '0':
-            options.id = 'VIIRS_ACTIVE_FIRES_24HRS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_24HRS';
             break;
           case '1':
-            options.id = 'VIIRS_ACTIVE_FIRES_48HRS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_48HRS';
             break;
           case '2':
-            options.id = 'VIIRS_ACTIVE_FIRES_72HRS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_72HRS';
             break;
           case '3':
-            options.id = 'VIIRS_ACTIVE_FIRES_7DAYS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_7DAYS';
             break;
           case '4':
-            options.id = 'VIIRS_ACTIVE_FIRES_1YR';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_1YR';
             break;
           default:
-            options.id = layerObj.id;
+            //options.id = layerObj.id;
             break;
         }
       }
@@ -84,7 +84,8 @@ const LayersHelper = {
       //  brApp.map.removeLayer(firesLayer);
       //  brApp.map.addLayer(esriLayer);
 
-      const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? 'viirs' : 'modis';
+      const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
+      console.log('fireID', fireID);
       
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {

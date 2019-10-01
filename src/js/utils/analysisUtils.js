@@ -563,9 +563,31 @@ export default {
   },
 
   getExactGeom: (selectedFeature) => {
-    const promise = new Deferred();
-    const url = selectedFeature._layer.url;
-
+     //Pull in fires layer here and check the ID. If ID matches, check _layer.url to fires url, If they don't match, use fires url
+     const viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
+     console.log('viirsFiresLayer', viirsFiresLayer);
+     const viirsLayerID = viirsFiresLayer.layerIds[0];
+     console.log('viirsLayerID', viirsLayerID);
+     const viirsID = `VIIRS_ACTIVE_FIRES_${viirsLayerID}`;
+ 
+     const modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
+     const modisLayerID = modisFiresLayer.layerIds[0];
+     const modisID = `MODIS_ACTIVE_FIRES_${modisLayerID}`;
+     const promise = new Deferred();
+     let url = selectedFeature._layer.url;
+ 
+     if (selectedFeature._layer.id === viirsID) {
+       if (selectedFeature._layer.url !== viirsFiresLayer.url) {
+         url = `${viirsFiresLayer.url}/${viirsLayerID}`;
+       }
+     }
+ 
+     if (selectedFeature._layer.id === modisID) {
+       if (selectedFeature._layer.url !== modisFiresLayer.url) {
+         url = `${viirsFiresLayer.url}/${modisLayerID}`;
+       }
+     }
+     
     if (!url) {
       return promise.resolve(selectedFeature.geometry);
     }
