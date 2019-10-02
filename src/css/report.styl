@@ -1,4 +1,23 @@
 @require 'variables'
+@require 'modal'
+@require 'grid'
+@require 'base'
+@require 'results'
+@require 'analysisPanel'
+@require 'layerPanel'
+@require 'reportSubButtons'
+
+@keyframes loader
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
+
+@keyframes loader
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
 
 html
 body
@@ -7,43 +26,211 @@ body
   width 100%
   padding 0
   margin 0
+  
+.loader-wrapper 
+  width 100%
+  max-width 60rem
+  
+.app-loader__active
+  background rgba(220,220,220,0.75)
+  height 20rem
+  width 100%
+  z-index 5
+  position relative
+  margin 1rem 0
+  & .foreground
+    animation loader 0.95s cubic-bezier(0.645, 0.045, 0.355, 1.000) infinite
+  .app-loader__spinner
+    position absolute
+    height 50px
+    width 50px
+    left 50%
+    top 40%
+    
+#logo-anchor
+  width 100%
+  padding 0 !important
+  border none !important
+  
+.vega-chart > canvas {
+  max-width 60rem
+  width 100%
+  margin 1rem auto
+}
 
-@require 'grid'
-@require 'base'
-@require 'results'
+.vega-chart-bar-container {
+  max-width 60rem
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-line-container {
+  max-width 60rem
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-badge-container {
+  max-width 30rem
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-pie-container {
+  max-width 290px
+  width 100%
+  margin 1rem auto
+}
+
+.vega-chart-toggle-true
+  cursor pointer
+  transition all 0.3s ease
+  background #888
+  display inline-block
+  border-radius 10px
+  position relative
+  height 15px
+  width 30px
+  .vega-chart-toggle-dot
+    transition all 0.3s ease
+    border-radius 50%
+    position absolute
+    background #fff
+    height 10px
+    width 10px
+    left 0.2rem
+    top 0.14rem
+
+.vega-chart-toggle-false
+  cursor pointer
+  transition all 0.3s ease
+  background #F0AB00
+  display inline-block
+  border-radius 10px
+  position relative
+  height 15px
+  width 30px
+  .vega-chart-toggle-dot
+    transition all 0.3s ease
+    border-radius 50%
+    position absolute
+    background #fff
+    height 10px
+    width 10px
+    left 1rem
+    top 0.14rem
 
 //- Since this CSS is inlined, this will prevent the map from snapping down when
 //- the title gets injected
 .report-header
+  position absolute
+  background-color #555
+  box-sizing border-box
+  height $headerHeight
+  display flex
   width 100%
+  z-index 10
+  left 0
+  top 0
 
 .report-header__logo-container
-  padding 5px 10px 5px 0
+  padding 5px 10px 5px 20px
 
 .report-header__logo
   height 60px
 
 .report-header__title-container
-  flex-direction column
+  // flex-direction column
   align-items center
   display flex
-  flex-grow 1
+  flex-wrap nowrap
+  justify-content space-between
+  // flex-grow 1
+  // background-color #555
+  // padding 0.5rem 0
+  overflow hidden
+  padding-top 5px
+  width 100%
 
 .report-header__title
-  text-transform uppercase
+  color #fff
+  white-space nowrap
+  line-height 25px
+  overflow hidden
+  font-size 20px
 
 .report-header__subtitle
   font-weight normal
   line-height 20px
 
+.report-header__icon-container
+  display flex
+  align-items center
+  justify-content space-between
+  flex-wrap nowrap
+  flex-direction row
+  margin-left auto
+  margin-right 1.25rem
+
+.report-header__icon
+  fill #eee
+  padding 0 0.25rem
+  height 2.5rem
+  width 2.5rem
+  cursor pointer
+  &:hover
+    fill #fff
+
+.report-header__icon-print
+  height 2rem
+  width 2rem
+
+.report-header__icon-info
+  height 1.25rem
+  width 2rem
+  margin-left 0.5rem
+
+
 .feature-title
   min-height 30px
   margin 5px 0
 
+.map-analysis-area-container
+  display flex
+  flex-wrap wrap
+  margin-top 5rem
+  width 100%
+  .esriAttributionList
+    display none !important
+
 .map
-  margin 10px auto
+  margin 0 auto
   height 400px
   width 100%
+
+.analysis-area
+  margin 1rem auto
+  width 100%
+  position relative
+  display flex
+  justify-content center
+  flex-direction column
+  align-items center
+  .analysis-area-subtitle
+    font-size 1.5rem
+    font-weight bold
+
+.analysis-area-list
+  list-style none
+  margin 1rem 0
+  font-size 1.25rem
+  .analysis-area-list-item:before
+    content "•"
+    color #96BD3D
+    margin-right 0.5rem
+
+.analysis-area-selected-feature-title
+  font-size 1.25rem
 
 .popup-content
   margin 20px auto
@@ -91,16 +278,122 @@ body
     text-align right
     width 20%
 
-.results-container
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+.report-container
+.report-container-hide //pseudo class to use for print!
+  display flex
+  flex-direction column
+  align-items flex-start
+  width 100%
+  .report-section
+    margin 0.5rem 2rem
+    border-bottom 2px solid #888
+    width: calc(100% - 4rem);
+    h1
+      margin-bottom 0.5rem
+
+.analysis-modules-container
   .results-chart
-    width 100%
     margin-top 100px
-  .vega-chart
-    margin-top 30px
+
+.vega-chart-wrapper
+  display flex
+  flex-wrap nowrap
+  flex-direction column
+  justify-content center
+  align-items center
+  width 100%
+  padding 1rem 2rem
+  .vega-chart-error
+      font-weight bold
+      width 100%
+      max-width 60rem
+      border-bottom 1px solid #ccc
+      text-align center
+      padding-bottom 1.75rem
+  canvas
+    margin 0 auto
+    display flex
+  .vega-bindings
+    margin 0 auto
+    display flex
+  .vega-chart-info-container
+    max-width 60rem
+    margin 1rem auto
+    .vega-chart-info
+      color #555
+      padding 0.5rem
+      font-size x-small
+      width 100%
+      max-width 60rem
+      margin 0 auto
+      border 1px solid #eee
+    .data-error
+      display flex
+      justify-content center
+      margin-bottom 0.5rem
+
+.vega-chart_container
+  width 100%
+  max-width 60rem
+  .vega-chart-separator
+    border-bottom 1px solid #ccc
+    height 1rem
+    width 100%
+  .vega-chart_download-container-report
+    display flex
+    flex-flow row
+    flex-wrap nowrap
+    align-items center
+    justify-content space-between
+    width 100%
+    max-width 60rem 
+    .vega-chart-menu-container
+      display flex
+      flex-flow row
+      align-items center
+      justify-content center
+      .vega-chart-menu-settings
+        display flex
+      .vega-chart-menu
+        display flex
+        align-items center
+        cursor pointer
+        .vega-chart-menu-icon
+          .svg-icon
+            svg
+              .path1
+              .path2
+                fill #888 !important
+        .vega-chart-menu-text
+          color #888
+          font-size x-small
+          margin 0 0.5rem
+          &:hover
+            text-decoration underline
+            text-decoration-color #888
+      .vega-chart-divider
+        width 1px
+        height 20px
+        margin 0 1rem
+        background-color #888
+      .vega-chart-toggle
+        transition all 0.3s ease
+        background #888
+        display inline-block
+        border-radius 10px
+        position relative
+        height 15px
+        width 30px
+        cursor pointer
+        .vega-chart-toggle-dot
+          transition all 0.3s ease
+          border-radius 50%
+          position absolute
+          background #fff
+          height 10px
+          width 10px
+          left 3px
+          top 2px
 
 // Restoration Module Styling
 .results__restoration
@@ -164,34 +457,221 @@ body
 
 .restoration__description
   padding 0 10px 10px
-  
-.vega-chart_download-options
-  overflow auto
-  max-height 110px
-  min-width 150px
+
+.vega-chart-label
+  text-transform uppercase
+  text-align left
+
+.vega-chart_download-options-report
+  width 150px
   display flex
   flex-direction column
-  justify-content flex-start
-  border 0.75px solid #eee
+  justify-content flex-end
   z-index 2
-
-  a
-    width 100%
+  margin-left auto
+  margin-top 0.25rem
+  .download-option
     padding 8px 10px
     text-decoration none
     color #555
     font-size 12px
     background #fff
-    border-top 0.75px #eee solid
-
-  a:nth-child(1)
-    border none
-
-  a:hover
-    background #eee
+    border 0.75px solid #eee
+    text-align center
+    &:hover
+      background #eee
+      text-decoration underline
 
   .download-option-label
     text-transform uppercase
+
+.vega-chart_divider
+  color #ddd
+
+
+.vega-chart-hide
+  display none
+
+.vega-chart-hidden
+  visibility hidden
+  height 0
+  
+.vega-chart-report-settings-container
+  width 100%
+  max-width 60rem
+  margin 1rem
+  .analysis-item-wrapper
+    width 100%
+    display flex
+    flex-flow column
+    justify-content center
+    align-items center
+  
+.analysis-results__select-form-container
+  width 100%
+
+.no-report-settings
+  font-weight bold
+  text-transform uppercase
+  text-align center
+  margin 1rem
+  color orangered
+  
+.run-report-analysis-button-container
+  display flex
+  flex-direction column
+  justify-content space-around
+  align-items center
+  width 100%
+  max-width 60rem
+  border-bottom 1px solid rgba(0,0,0,0.2)
+  margin-bottom 10px
+  .run-report-analysis-button
+    color #fff
+    width 15rem
+    border none
+    border-radius 16px
+    font-size 16px
+    text-transform uppercase
+    margin-bottom 0.75rem
+    
+.analysis-results__select-form-item-container
+  display flex
+  flex-direction column
+  width 100%
+  height 60px
+  padding none !important
+  justify-content center
+  align-items center
+  margin 0.5rem 0 !important
+    
+.analysis-results__select-form-item-container > .tree-cover-canopy-display
+  margin 0 auto
+  
+.report-table-container
+  max-width 60rem
+  margin 0 auto
+  
+.report-table
+  font-size 12px
+  width 90%
+  margin 1rem auto
+  .field-row:nth-child(even)
+    background-color $selectionGray
+  .field-label
+    font-weight bold
+    color #555
+    width 50%
+  .field-value
+    color #555
+    width 50%
+
+.page-break-before
+.page-break-after
+.page-break-inside
+  display none
+  
+.esriMapLayers  
+.esriMapLayers > svg
+  width 100vw
+  margin 0 auto
+  
+.map-analysis-area-container
+#map
+#map_root
+#map_container
+#map_layers
+.esriMapLayers > div
+.esriMapLayers > svg
+.esriMapContainer
+.esriMapLayers
+  max-width 60rem !important
+  width 100% !important
+  margin-right auto !important
+  margin-left auto !important
+
+@media only screen and (max-width: 550px)
+  .report-header__title
+    display none
+
+  .report-section
+    margin 0.5rem 2rem
+    border-bottom 2px solid #888
+    width calc(100% - 4rem)
+    text-align center
+
+  .vega-chart_container
+    .vega-chart_download-container-report
+        display flex
+        flex-flow row
+        flex-wrap wrap
+        align-items center
+        justify-content center
+        width: 100%
+        max-width 60rem
+      .vega-chart-label
+        text-transform uppercase
+        text-align center
+      .vega-chart-menu
+        display flex
+        align-items center
+        cursor pointer
+        margin 0.25rem 0
+
+  .vega-chart_download-options-report
+    max-height 110px
+    min-width 150px
+    width 100%
+    display flex
+    flex-direction column
+    justify-content center
+    z-index 2
+    .download-option
+      flex 0 1 100%
+      overflow auto
+      max-height 110px
+      min-width 150px
+      display flex
+      flex-direction column
+      justify-content center
+      z-index 2
+      margin 0
+      text-align center
+      &:hover
+        background #eee
+        text-decoration underline
+  
+  .report-header
+    background-color #555
+    box-sizing border-box
+    height $headerHeight
+    display flex
+    width 100%
+    z-index 10
+    height 5rem
+
+  .report-header__logo-container
+    padding 1rem
+    .report-header__logo
+      height 7rem
+    
+  .map-analysis-area-container
+    margin-top 10rem
+    
+  .report-header__icon-print
+    height 3rem
+    width 3rem
+    margin-right 0.5rem
+    
+  .report-header__icon-share
+    height 3rem
+    width 3rem
+    margin-left 0.5rem
+    
+  .vega-chart-menu
+    .svg-icon
+      width 2rem
+      height 2rem
 
 @media (max-width: $mobileBreak)
   .restoration-table
@@ -201,3 +681,139 @@ body
   h3
   h4
     margin 0 5px
+ 
+@media print
+  html
+    min-height 100%
+    position relative
+  body
+    height 100%
+  
+  .report-header
+    background-color #555
+    box-sizing border-box
+    height 4rem
+    display flex
+    width 100%
+    z-index 10
+    left 0
+    top 0
+    .report-header__logo-container
+      padding 5px 10px 5px 20px
+      position absolute
+      top: 0.5rem
+      #logo-anchor
+        .report-header__logo
+          height 70px
+    .report-header__title-container
+      .report-header__title
+        color #fff
+        white-space nowrap
+        overflow hidden
+        font-size 1.5rem
+        height 2rem
+        margin 0 auto
+      .report-header__icon-container
+        .report-header__icon-print
+        .report-header__icon-share
+          height 3rem
+          width 3rem
+    
+  .map-analysis-area-container
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    right 0
+    overflow hidden
+    margin-top 6rem
+    width 100%
+  
+  .analysis-modules-container
+      position absolute
+      top 100vh
+
+  .analysis-area
+    height 50vh
+    max-height 50vh
+    margin 0
+    justify-content flex-start
+    .analysis-area-subtitle
+      font-size 2rem
+      margin-top 1rem
+    .analysis-area-list
+      font-size 2rem
+  
+  .report-container
+    height 100vh
+    width 100vw
+    margin 0 !important
+    
+  .report-container-hide
+    height 0 !important
+    width 0 !important
+    display none !important
+    
+  .vega-chart-wrapper
+  .vega-chart_container
+    margin 0 !important
+    width 500px !important
+    margin auto !important
+    padding 0 !important
+    
+  // .vega-chart-bar-container
+  //   margin 0 !important
+  //   width 500px !important
+    
+  // .vega-chart-line-container
+  //   margin 0 !important
+  //   width 500px !important
+    
+  .vega-chart-bar-container > .vega-chart > svg
+    width 500px !important
+    
+  .vega-chart-line-container > .vega-chart > svg
+    width 500px !important
+  
+  .vega-chart-info
+    width 500px !important
+    margin 0 auto !important
+    
+  .report-table-container
+    width 500px !important
+  
+  .report-header
+    background-color #555 !important
+    -webkit-print-color-adjust exact
+    .report-header__title-container
+      .report-header__title
+        color #fff !important
+        -webkit-print-color-adjust exact
+        
+  .vega-chart_download-container-report
+    width 500px !important
+    .vega-chart-label
+      margin 20px auto !important
+    
+  .report-header__icon-container
+  .vega-chart-menu-container
+    display none !important
+  
+  .page-break-before
+    display block
+    page-break-before always
+    
+   .page-break-after
+    display block
+    page-break-after always
+    
+  .page-break-inside
+    display block
+    page-break-inside always
+  
+  .app-loader__active
+    background: rgba(220,220,220,0.75) !important
+    -webkit-print-color-adjust exact
+  
+  .print-hide
+    display none !important

@@ -5,6 +5,11 @@ import text from 'js/languages';
 import number from 'dojo/number';
 
 export default class BiomassChart extends Component {
+  
+  static contextTypes = {
+    language: PropTypes.string.isRequired
+  };
+  
   constructor (props) {
     super(props);
     this.state = {
@@ -54,6 +59,7 @@ export default class BiomassChart extends Component {
     const {grossEmissions, grossLoss, loading, isEmpty, isError} = this.state;
     const results = this.props.payload;
     const { lossName, carbonName } = this.props;
+    const {language} = this.context;
 
     if (isError) {
       return (
@@ -76,7 +82,7 @@ export default class BiomassChart extends Component {
               <span>{number.format(grossEmissions, { places: 0 })} t CO<sub>2</sub></span>
             </div>
           </div>
-          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>{text[language].ANALYSIS_NO_DATA}</div>
         </div>
       );
     }

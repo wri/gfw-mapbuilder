@@ -1,6 +1,6 @@
 {
   "name": "forest_atlas_template",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
   "main": "webpack.config.js",
   "scripts": {
@@ -85,6 +85,7 @@
     "pug": "^2.0.4",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
+    "react-measure": "^2.3.0",
     "react-test-renderer": "^15",
     "vega": "^3.0.7"
   },

@@ -127,12 +127,10 @@ const LayersHelper = {
       
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
-        // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
-        // We are hiding and showing the layer to avoid calling the service multiple times.
-
-          //firesLayer.hide();
-          const layaDefs = [];
-          switch (selectValue) {
+          // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
+          // We are hiding and showing the layer to avoid calling the service multiple times.
+          const defs = [];
+          switch (selectValue.toString()) {
             case '0': //past 24 hours
               newFiresLayer.url = shortTermServices[`${fireID}24HR`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}24HR`].url;
@@ -153,7 +151,7 @@ const LayersHelper = {
               newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-              layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
               break;
@@ -166,12 +164,10 @@ const LayersHelper = {
               break;
             case '4': //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
-              const defs = [];
               newFiresLayer.url = shortTermServices[`${fireID}1YR`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}1YR`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
               newFiresLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-              newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
               break;
@@ -179,17 +175,7 @@ const LayersHelper = {
               console.log('default');
               break;
           }
-          
-          // const esriLayer = layerFactory(layerObj, 'en');
-          // esriLayer.legendLayer = layerObj.legendLayer || null;
-          // esriLayer.layerIds = layerObj.layerIds;
-          // esriLayer.order = layerObj.order;
-          // esriLayer.label = layerObj.label;
-          // brApp.map.removeLayer(firesLayer);
-          // brApp.map.addLayer(esriLayer);
-          // console.log('esriLayer', esriLayer);
-          //firesLayer.refresh();
-          //firesLayer.show();
+          newFiresLayer.setLayerDefinitions(defs);
         }
       }
       // else {

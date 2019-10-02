@@ -16,7 +16,7 @@ import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePic
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
 import {attributes} from 'constants/AppConstants';
-import {analysisConfig} from 'js/config';
+import {defaultColorTheme} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
@@ -52,6 +52,7 @@ export default class Analysis extends Component {
   state = {
     isLoading: false,
     chartComponent: null,
+    buttonHover: false
   };
 
   componentDidMount() {
@@ -79,7 +80,7 @@ export default class Analysis extends Component {
         <div
           className='analysis-results__select-form-item-container'
         >
-          Click the &lsquo;Run Analysis&rsquo; button see analysis
+          {text[language].RUN_ANALYSIS_INSTRUCTIONS}
         </div>
       );
     }
@@ -365,191 +366,7 @@ export default class Analysis extends Component {
   }
 
   renderResults = (type, results, language, config) => {
-
-    const { chartType, label, colors } = config;
-    const { analysisSliderIndices } = this.props;
-    let chartComponent = null;
-
-    switch (chartType) {
-      case 'bar': {
-        const { chartBounds, analysisId, valueAttribute } = config;
-        const labels = [...Array(chartBounds[1] + 1 - chartBounds[0])] // create a new arr out of the bounds difference
-        .map((i, idx) => idx + chartBounds[0]); // fill in the values based on the bounds
-
-        let startIndex = 0;
-        let endIndex = labels.length - 1;
-
-        if (analysisSliderIndices[analysisId]) {
-          startIndex = analysisSliderIndices[analysisId][0];
-          endIndex = analysisSliderIndices[analysisId][1];
-        }
-
-        let counts = [];
-
-        switch (analysisId) {
-          case 'TC_LOSS': {
-            let lossObj = null;
-            if (!results.hasOwnProperty('error')) {
-              lossObj = results.data.attributes.loss;
-              counts = Object.values(lossObj);
-            }
-            break;
-          }
-          case 'IFL': {
-            if (!results.hasOwnProperty('error')) {
-
-              results.data.attributes.histogram[0].result.forEach(histo => {
-                counts.push(Math.round(histo.result * 100) / 100);
-              });
-            }
-            break;
-          }
-          default: {
-            counts = results;
-            if (valueAttribute) {
-              counts = valueAttribute.split('.').reduce((prevVal, currentVal) => {
-                if (!prevVal.hasOwnProperty(currentVal)) {
-                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
-                }
-                return prevVal[currentVal];
-              }, results);
-            }
-          }
-        }
-
-        chartComponent = <BarChart
-          name={label[language]}
-          counts={counts}
-          colors={colors ? colors : ['#cf5188']}
-          labels={labels.slice(startIndex, endIndex + 1)}
-          results={results}
-          encoder={null}
-        />;
-        break;
-      }
-      case 'timeSeries': {
-        const { analysisId, valueAttribute } = config;
-
-        let data = [];
-
-        switch (analysisId) {
-          case 'GLAD_ALERTS': {
-            if (!results.hasOwnProperty('error')) {
-              data = formatters.alerts(results.data.attributes.value);
-            }
-            break;
-          }
-          case 'FORMA_ALERTS': {
-            if (!results.hasOwnProperty('error')) {
-              data = formatters.alerts(results.data.attributes.alertCounts);
-            }
-            break;
-          }
-          case 'TERRAI_ALERTS': {
-            if (!results.hasOwnProperty('error')) {
-              data = formatters.alerts(results.data.attributes.value);
-            }
-            break;
-          }
-          default: {
-            data = results;
-
-            if (valueAttribute) {
-              data = valueAttribute.split('.').reduce((prevVal, currentVal) => {
-                if (!prevVal.hasOwnProperty(currentVal)) {
-                  throw new Error(`response object does not contain property: '${currentVal}'. Check the 'valueAttribute' config`);
-                }
-                return prevVal[currentVal];
-              }, results);
-            }
-          }
-        }
-        chartComponent = <TimeSeriesChart data={data} name={label[language] ? label[language] : ''} />;
-        break;
-      }
-      case 'badge': {
-        const {
-          activeAnalysisType,
-          lossFromSelectIndex,
-          lossToSelectIndex,
-          viirsEndDate,
-          viirsStartDate,
-        } = this.props;
-
-        const { valueAttribute, color, badgeLabel } = config;
-
-        switch (activeAnalysisType) {
-          case 'TC_LOSS_GAIN':
-            chartComponent = <LossGainBadge
-              results={results}
-              lossFromSelectIndex={lossFromSelectIndex}
-              lossToSelectIndex={lossToSelectIndex}
-              totalLossLabel={text[language].ANALYSIS_TOTAL_LOSS_LABEL}
-              totalGainLabel={text[language].ANALYSIS_TOTAL_GAIN_LABEL}
-              totalGainRange={text[language].ANALYSIS_TOTAL_GAIN_RANGE}
-            />;
-            break;
-          case 'VIIRS_FIRES':
-            chartComponent = <FiresBadge
-              results={results}
-              from={viirsStartDate}
-              to={viirsEndDate}
-              preLabel={text[language].ANALYSIS_FIRES_PRE}
-              firesLabel={text[language].ANALYSIS_FIRES_ACTIVE}
-              timelineStartLabel={text[language].TIMELINE_START}
-              timelineEndLabel={text[language].TIMELINE_END}
-            />;
-            break;
-          default:
-            chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
-
-        }
-        break;
-      }
-      case 'biomassLoss': {
-        chartComponent = <BiomassChart
-          payload={results}
-          colors={analysisConfig.BIO_LOSS.colors}
-          lossName={text[language].ANALYSIS_CARBON_LOSS}
-          carbonName={text[language].ANALYSIS_CARBON_EMISSION}
-          />;
-        break;
-      }
-      case 'lccPie': {
-        const data = {
-          counts: []
-        };
-        if (!results.hasOwnProperty('error')) {
-          results.data.attributes.histogram.forEach(histo => {
-            if (!data[histo.className]) {
-              data[histo.className] = 0;
-            }
-            histo.result.forEach(year => {
-              data[histo.className] += year.result;
-            });
-            data.counts.push(Math.round(data[histo.className] * 100) / 100);
-          });
-        }
-
-        chartComponent = <CompositionPieChart
-          results={results}
-          name={label[language]}
-          counts={data.counts}
-          colors={config.colors}
-          labels={config.classes[language]}
-        />;
-        break;
-      }
-      case 'gfwWidget':
-        chartComponent = <VegaChart language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
-        break;
-      case 'vega':
-        chartComponent = <VegaChart language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
-        break;
-      default:
-        break;
-    }
-
+    const chartComponent = <VegaChart component='Analysis' language={language} results={results} setLoading={() => this.setState({isLoading: false})}/>;
     this.setState({ chartComponent });
   }
 
@@ -587,7 +404,7 @@ export default class Analysis extends Component {
         }
 
         if (analysisSettings.useGfwWidget) {
-          analysisSettings.chartType = 'vega';
+          //analysisSettings.chartType = 'vega';
 
           analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
             this.renderResults(analysisId, results, language, analysisSettings);
@@ -609,7 +426,7 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'An error occured performing selected analysis. Please select another analysis or try again later.'
+              message: text[language].ANALYSIS_ERROR
             },
           }, () => {
             this.renderResults(analysisId, this.state.results, language, analysisSettings);
@@ -618,10 +435,16 @@ export default class Analysis extends Component {
       }
     });
   }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent, showDownloadOptions} = this.state;
+    const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
@@ -660,7 +483,8 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
@@ -688,7 +512,14 @@ export default class Analysis extends Component {
         {showFooter &&
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
-              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+              <button
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='run-analysis-button fa-button color pointer'
+                onClick={this.runAnalysis}
+                onMouseEnter={this.toggleHover}
+                onMouseLeave={this.toggleHover}
+              >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
             </div>

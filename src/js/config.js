@@ -158,23 +158,9 @@ const config = {
       copyButton: 'Copy',
       copiedButton: 'Copied',
       googleUrl: url => `https://plus.google.com/share?url=${url}`,
-      twitterUrl: url => `https://twitter.com/share?url=${url}&via=gfw-water`,
+      twitterUrl: url => `https://twitter.com/share?url=${url}`,
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
-    },
-    imagery: {
-
-      monthsOptions: [
-        { label: '4 weeks', value: 4 },
-        { label: '3 months', value: 3},
-        { label: '6 months', value: 6},
-        { label: '12 months', value: 12}
-      ],
-
-      imageStyleOptions: [
-        { label: 'Natural Color'},
-        { label: 'Vegetation Health'}
-      ],
-    },
+    }
   },
 
   //- Analysis for individual layers are defined below so we can use common keys
@@ -304,6 +290,8 @@ config.analysis[analysisKeys.IFL] = {
   analysisUrl: 'https://production-api.globalforestwatch.org/widget/d0d22aeb-9642-4c4d-a310-f7fb95a48c21',
 };
 
+config.defaultColorTheme = '#F0AB00'; // default gold color theme
+
 export const mapConfig = config.map;
 export const uploadConfig = config.upload;
 export const analysisConfig = config.analysis;
@@ -314,3 +302,4 @@ export const modalText = config.modals;
 export const errors = config.errors;
 export const urls = config.urls;
 export const shortTermServices = config.shortTermServices;
+export const defaultColorTheme = config.defaultColorTheme;

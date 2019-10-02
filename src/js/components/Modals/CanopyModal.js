@@ -7,6 +7,9 @@ import React, {
   PropTypes
 } from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
+import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
+
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export default class CanopyModal extends Component {
@@ -92,8 +95,18 @@ export default class CanopyModal extends Component {
 
   handleSliderChange = sliderValue => {
     const { sliderMarks } = this.state;
-    const {map, settings} = this.context;
-
+    let settings;
+    let map;
+    if (this.context.settings){
+      settings = this.context.settings;
+    } else {
+      settings = this.props.settings;
+    }
+    if (this.context.map){
+      map = this.context.map;
+    } else {
+      map = this.props.map;
+    }
     const densityValue = sliderMarks[sliderValue].density;
 
     layersHelper.updateTreeCoverDefinitions(densityValue, map, settings.layerPanel);
@@ -108,10 +121,20 @@ export default class CanopyModal extends Component {
   render() {
     const { sliderMarks } = this.state;
     const { canopyDensity } = this.props;
-    const {language} = this.context;
+    let customColorTheme;
+    if (this.context.settings) {
+      customColorTheme = this.context.settings.customColorTheme;
+    } else {
+      customColorTheme = resources.customColorTheme;
+    }
+    let language;
+    if (this.context.language) {
+      language = this.context.language;
+    } else {
+      language = this.props.language;
+    }
 
     const sliderValue = this.discernDensityValue(canopyDensity);
-
     return (
       <ControlledModalWrapper onClose={this.close}>
         <div className='canopy-modal-title'>{text[language].CANOPY_MODAL_TEXT}</div>
@@ -128,11 +151,11 @@ export default class CanopyModal extends Component {
           step={null}
           onChange={this.handleSliderChange}
           tipFormatter={value => sliderMarks[value].label}
-          railStyle={{backgroundColor: '#F0AB00', height: 10}}
+          railStyle={{backgroundColor: customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme, height: 10}}
           trackStyle={{backgroundColor: '#e9e9e9', height: 10}}
-          dotStyle={{border: '2px solid #F0AB00', height: 10, width: 10, bottom: -6, marginLeft: -7}}
+          dotStyle={{border: `2px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, height: 10, width: 10, bottom: -6, marginLeft: -7}}
           activeDotStyle={{border: '2px solid #e9e9e9'}}
-          handleStyle={[{border: '2px solid #F0AB00', height: 20, width: 20, marginLeft: -13}]}
+          handleStyle={[{border: `2px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, height: 20, width: 20, marginLeft: -13}]}
         />
         </div>
       </ControlledModalWrapper>

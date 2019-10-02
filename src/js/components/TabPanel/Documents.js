@@ -1,8 +1,8 @@
 import Loader from 'components/Loader';
 // import request from 'utils/request';
 import SVGIcon from 'utils/svgIcon';
-
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -36,7 +36,10 @@ const DocumentsNotAvailable = ({language}) => {
 };
 
 class DocumentResults extends Component {
-
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   state = this.getDefaultState();
 
   componentDidMount () {
@@ -101,6 +104,7 @@ class DocumentResults extends Component {
   }
 
   renderDocuments (documents, language) {
+    const { customColorTheme } = this.context.settings;
     return (
       <table className='documents-table'>
         <thead>
@@ -116,7 +120,7 @@ class DocumentResults extends Component {
                 <td>{doc.size}</td>
                 <td className='documents-table__link'>
                   <a href={doc.url} target='_blank'>
-                    <svg className='svg-icon'>
+                    <svg style={{fill: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='svg-icon'>
                       <SVGIcon id={'icon-documents'} />
                     </svg>
                   </a>

@@ -13,7 +13,21 @@
   width 100%
   left 0
   top 0
-
+  
+.measurement-modal
+  background-color #fff
+  max-height 100%
+  position fixed
+  height auto
+  right 110px
+  top 80px
+  z-index 5
+  border 1px solid #aaa
+  max-width 17rem
+  & a
+    word-break break-word
+    word-wrap break-word
+  
 .modal-background
   background-color rgba(0, 0, 0, 0.35)
   height 100%
@@ -30,11 +44,45 @@
   & a
     word-break break-word
     word-wrap break-word
-
   &.draggable
     top 250px
     cursor grab
     z-index 100
+    
+.imagery-hover-modal
+  padding 10px
+  position absolute
+  cursor pointer
+  transform translate(-50%, 30%)
+  font-size 12px
+  background #fffee2
+  box-shadow 0px 0px 2px 0 rgba(0, 0, 0, 0.2)
+  div
+    display flex
+    margin-bottom 5px
+
+  h4
+    margin-right 5px
+
+.edit-modal
+  max-height 100%
+  height auto
+  max-height 100%
+  position fixed
+  height auto
+  margin: 0.5rem 1rem;
+  padding 0.25rem
+  font-size 12px
+  background #fffee2
+  box-shadow 0px 0px 2px 0 rgba(0, 0, 0, 0.2)
+  z-index 5
+  & a
+    word-break break-word
+    word-wrap break-word
+  &.draggable
+    top 250px
+    cursor grab
+    z-index 5
 
 .close-icon
   position absolute
@@ -44,16 +92,59 @@
   top 0
   z-index 10
   & svg
-    transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    left 50%
-    top 50%
+    top 60%
+    margin-left 0.25rem
+    
+.layer-close-icon
+  position absolute
+  height 40px
+  width 40px
+  right 0
+  top -7px
+  z-index 10
+  & svg
+    position absolute
+    height 50%
+    width 50%
+    top 60%
+    margin-left 0.25rem
+    
+.measurement-close-icon
+  position absolute
+  height 30px
+  width 30px
+  right -5
+  top -15
+  z-index 10
+  & svg
+    position absolute
+    height 50%
+    width 50%
+    top 60%
+    margin-left 0.25rem
+    
+.edit-close-icon
+  height 15px
+  width 15px
+  z-index 10
+  display flex
+  justify-content flex-end
+  margin-left auto
+  & svg
+    height 100%
+    width 100%
+    top 60%
+    margin-left 0.25rem
+    
 
 .mobile-show.close-icon
   height 60px
   width 60px
+  right -15px
+  top -20px
 
 .modal-title
   padding 10px 20px 0
@@ -67,37 +158,100 @@
   overflow-y auto
   color $darkGray
   height 100%
+  
+.measurement-modal-content
+  padding 0.5rem
+  overflow-x hidden
+  max-height 450px
+  overflow-y auto
+  color $darkGray
+  height 100%
+  .measurement-container
+    .esriMeasurementButtonContainer
+      display flex
+      flex-wrap nowrap
+      justify-content space-evenly
+      margin 1rem 0.5rem
+      .esriButton
+        margin 0 0.25rem
+      .esriToggleButton
+        visibility visible !important
+        margin 0 0.25rem
+      span.esriButton ~ span.esriToggleButton
+        #dijit_form_DropDownButton_0
+          background-color #ededed
+          cursor not-allowed
+          .dijitButtonText
+          .dijitArrowButtonInner
+            cursor not-allowed
+      span.esriButton.esriButtonChecked.dijitChecked ~ span.esriToggleButton
+        #dijit_form_DropDownButton_0
+          background-color #fff
+          cursor pointer
+          .dijitButtonText
+          .dijitArrowButtonInner
+            cursor pointer
+    .esriMeasurementResultLabel
+    .esriMeasurementResultTable
+      font-size 0.75rem
+    .esriMeasurementResultValue
+      text-align center
+
+.edit-modal-content
+  overflow-x hidden
+  max-height 450px
+  overflow-y auto
+  color $darkGray
+  height 100%
+  .edit-coordinates-subtitle
+    margin-bottom 0.25rem
+  .edit-coordinates-longitude-label
+  .edit-coordinates-latitude-label
+    margin-right 0.25rem
 
 .no-info-available
   text-align center
-  line-height 40px
-  height 40px
+  margin 1rem
 
 //- Analysis Modal
 .analysis-modal-container .modal
+.coordinates-modal-container .modal
   overflow-y auto
   width 320px
   height 500px
-  & .analysis-instructions__separator
-    display none
+  // & .analysis-instructions__separator
+  //   display none
   & .modal-content
     max-height 100%
 
+// Edit coordinates modal styles
+.edit-coordinates-modal-container
+  .modal-container
+    .modal
+      z-index 10
+      overflow-y auto
+      width 200px
+      height 100px
+      & .modal-content
+        max-height 100%
+
 @media (min-width: $mobileBreak)
   .analysis-modal-container
+  .coordinates-modal-container
     & .analysis-instructions__header--additional
       font-size inherit
       margin 5px 0
 
 //- Share Modal
 #share-modal
+  z-index 10
   & .modal-content
     width 300px
   & .share-instructions
     padding-bottom 10px
     font-size 13px
   & .share-items
-    justify-content space-around
+    justify-content center
     display flex
     & svg
       transform translate(-50%, -50%)
@@ -121,11 +275,13 @@
 
 .facebook-modal
   background $facebookBlue
+  margin 0 0.5rem
   &:hover
     background darken($facebookBlue, 25%)
 
 .twitter-modal
   background $twitterBlue
+  margin 0 0.5rem
   &:hover
     background darken($twitterBlue, 25%)
 
@@ -155,7 +311,9 @@
 .canopy-modal-container
   & .modal-content
     width 340px
-    height 210px
+    height 240px
+    overflow-y hidden
+    padding 1.5rem 1.25rem 1rem 1rem
   & .irs-line-left
   & .irs-line-right
   & .irs-line-mid
@@ -166,7 +324,6 @@
   & .irs-to
     display none
   & .irs-bar
-    background $goldTheme
     border-radius 5px
     height 7px
   & .irs-grid-pol
@@ -187,11 +344,13 @@
   height 41px
   float left
   width 25px
+  background: url('https://my.gfw-mapbuilder.org/img/tree.png') no-repeat center;
 
 .forest-icon
   float right
   height 60px
   width 91px
+  background: url('https://my.gfw-mapbuilder.org/img/forest.png') no-repeat center;
 
 .slider-container
   margin 5px 10px
@@ -513,9 +672,6 @@
     display flex
     align-items center
 
-  .fa-button.white
-    border 1px solid #f0ab00
-
   select
     -webkit-appearance none
     position absolute
@@ -589,9 +745,6 @@
     &:hover
       border #555 solid 4px;
 
-    &.selected
-      border #f0ab00 solid 4px;
-
 .imagery-modal__error
   display flex
   align-items center
@@ -643,3 +796,17 @@ hr
     bottom 0px
     transform none
     left unset
+    
+  .measurement-modal
+    background-color #fff
+    max-height 100%
+    position fixed
+    height auto
+    right 20px
+    top 90px
+    z-index 5
+    border none
+    max-width 17rem
+    & a
+      word-break break-word
+      word-wrap break-word

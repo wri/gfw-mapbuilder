@@ -3,7 +3,7 @@
 import mapActions from 'actions/MapActions';
 // import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -38,7 +38,7 @@ export default class AnalysisTypeSelect extends Component {
   render () {
     const { activeAnalysisType, analysisItems } = this.props;
     const { language } = this.context;
-
+    const { customColorTheme } = this.context.settings;
     return (
       <div className='analysis-results__container'>
         <div className='relative analysis-results__select-container'>
@@ -55,14 +55,14 @@ export default class AnalysisTypeSelect extends Component {
             </option>
             {analysisItems.map(this.createOptions)}
           </select>
-          <div className='analysis-results__select-arrow' />
+          <div style={{color: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-results__select-arrow' />
         </div>
         {activeAnalysisType === 'default' &&
           <div className='analysis-results__none-selected'>
             <div className='analysis-results__info-container'>
               <div className='analysis-results__info'>
-                <div><strong>Analysis not selected</strong></div>
-                <div>Select an analysis from the drop-down menu to begin</div>
+                <div><strong>{text[language].ANALYSIS_NOT_SELECTED[0]}</strong></div>
+                <div>{text[language].ANALYSIS_NOT_SELECTED[1]}</div>
               </div>
               <div className='analysis-results__chart-icon chart-icon' />
             </div>

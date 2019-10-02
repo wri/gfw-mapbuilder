@@ -1,10 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../../config';
 
 
 
 export default class AnalysisDatePicker extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor(props) {
     super(props);
 
@@ -66,34 +72,38 @@ export default class AnalysisDatePicker extends Component {
   render() {
     const { label, minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
-
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <div className='analysis-results__select-form-item-container'>
         <div className='select-form-item-label'>{label}</div>
-        <DatePicker
-          customInput={<Button />}
-          showMonthDropdown
-          showYearDropdown
-          dropdownMode="select"
-          todayButton='Jump to today'
-          minDate={moment(minDate)}
-          maxDate={moment(maxDate || new Date())}
-          selected={dateSelected}
-          onChange={this.handleChange}
-        />
+        <div className="report-date-picker">
+          <DatePicker
+            customInput={<Button customColorTheme={customColorTheme} />}
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            todayButton='Jump to today'
+            minDate={moment(minDate)}
+            maxDate={moment(maxDate || new Date())}
+            selected={dateSelected}
+            onChange={this.handleChange}
+          />
+        </div>
       </div>
     );
   }
 }
 
-const Button = ({ onClick, value }) => (
-  <div>
+const Button = ({ onClick, value, customColorTheme }) => {
+  return (<div>
     <label className='analysis-datepicker-button-label'>Date: </label>
     <button
+    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
     className='fa-button sml white pointer'
     onClick={onClick}
     >
     {value}
     </button>
-  </div>
-);
+  </div>);
+};

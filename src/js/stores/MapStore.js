@@ -13,6 +13,7 @@ import request from 'utils/request';
 import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
 import { urls } from 'js/config';
+import text from '../languages';
 
 let isRegistering = false;
 
@@ -51,7 +52,10 @@ class MapStore {
     this.tableOfContentsVisible = true;
     this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
+    this.measurementModalVisible = false;
     this.analysisModalVisible = false;
+    this.coordinatesModalVisible = false;
+    this.editCoordinatesModalVisible = false;
     this.printModalVisible = false;
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
@@ -79,7 +83,10 @@ class MapStore {
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
+    this.enterValuesButtonActive = false;
+    this.editCoordinatesActive = false;
     this.imageryModalVisible = false;
+    this.imageryFetchFailed = false;
     this.imageryData = [];
     this.loadingImagery = false;
     this.imageryError = false;
@@ -87,6 +94,11 @@ class MapStore {
     this.imageryParams = null;
     this.imageryHoverInfo = null;
     this.activeFilters = {};
+    this.selectedFeatureTitles = [];
+    this.currentLat = 0;
+    this.currentLng = 0;
+    this.currentX = 0;
+    this.currentY = 0;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -95,10 +107,13 @@ class MapStore {
       createLayers: mapActions.createLayers,
       changeActiveTab: mapActions.changeActiveTab,
       setAnalysisType: mapActions.setAnalysisType,
+      toggleMeasurementModal: mapActions.toggleMeasurementModal,
       togglePrintModal: mapActions.togglePrintModal,
       toggleSearchModal: mapActions.toggleSearchModal,
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
+      toggleCoordinatesModal: mapActions.toggleCoordinatesModal,
+      toggleEditCoordinatesModal: mapActions.toggleEditCoordinatesModal,
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
@@ -109,6 +124,7 @@ class MapStore {
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
       toggleEditing: mapActions.toggleEditing,
+      resetEditing: mapActions.resetEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -135,6 +151,11 @@ class MapStore {
       updateViirsEndDate: layerActions.updateViirsEndDate,
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
+      updateSelectedFeatureTitles: layerActions.updateSelectedFeatureTitles,
+      updateCurrentLat: mapActions.updateCurrentLat,
+      updateCurrentLng: mapActions.updateCurrentLng,
+      updateCurrentX: mapActions.updateCurrentX,
+      updateCurrentY: mapActions.updateCurrentY,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -146,8 +167,12 @@ class MapStore {
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
+      activateMeasurementButton: mapActions.activateMeasurementButton,
       activateDrawButton: mapActions.activateDrawButton,
+      activateEnterValuesButton: mapActions.activateEnterValuesButton,
+      activateEditCoordinates: mapActions.activateEditCoordinates,
       toggleImageryVisible: mapActions.toggleImageryVisible,
+      imageryFetchUpdate: mapActions.imageryFetchUpdate,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
@@ -336,7 +361,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    if (selectedFeature) {
+    if (selectedFeature && brApp.map.measurement && brApp.map.measurement.getTool() === undefined) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)
@@ -346,7 +371,6 @@ class MapStore {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
           mapActions.toggleAnalysisTab.defer(true);
-
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
@@ -405,9 +429,21 @@ class MapStore {
   setAnalysisType (payload) {
     this.activeAnalysisType = payload;
   }
+  
+  toggleMeasurementModal () {
+    this.measurementModalVisible = !this.measurementModalVisible;
+  }
 
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
+  }
+
+  toggleCoordinatesModal (payload) {
+    this.coordinatesModalVisible = payload.visible;
+  }
+
+  toggleEditCoordinatesModal (payload) {
+    this.editCoordinatesModalVisible = payload.visible;
   }
 
   togglePrintModal (payload) {
@@ -463,7 +499,15 @@ class MapStore {
   }
 
   toggleEditing () {
-    this.editingEnabled = !this.editingEnabled;
+    if (this.editingEnabled) {
+      this.editingEnabled = false;
+    } else {
+      this.editingEnabled = true;
+    }
+  }
+
+  resetEditing () {
+    this.editingEnabled = false;
   }
 
   openTOCAccordion (groupKey) {
@@ -527,30 +571,61 @@ class MapStore {
     this.modisEndDate = endDate;
   }
 
-  showLayerInfo (layer) {
-    // Grab the id of the sublayer if it exists, else, grab the normal id
-    const id = layer.subId ? layer.subId : layer.id;
-    const info = layerInfoCache.get(id);
+  updateSelectedFeatureTitles (selectedFeatureTitles) {
+    this.selectedFeatureTitles = selectedFeatureTitles;
+  }
 
-    if (info) {
+  updateCurrentLat (latitude) {
+    this.currentLat = latitude;
+  }
+
+  updateCurrentLng (longitude) {
+    this.currentLng = longitude;
+  }
+
+  updateCurrentX (x) {
+    this.currentX = x;
+  }
+
+  updateCurrentY (y) {
+    this.currentY = y;
+  }
+
+  showLayerInfo (layer) {
+    if (layer.metadata && layer.metadata.metadata && layer.metadata.metadata.error) {
       const promise = new Promise((resolve) => {
         resolve();
       });
-
       promise.then(() => {
+        this.modalLayerInfo = null;
         this.iconLoading = '';
-        this.modalLayerInfo = info;
         this.layerModalVisible = true;
         this.emitChange();
       });
-
     } else {
-      layerInfoCache.fetch(layer).then(layerInfo => {
-        this.iconLoading = '';
-        this.modalLayerInfo = layerInfo;
-        this.layerModalVisible = true;
-        this.emitChange();
-      });
+      // Grab the id of the sublayer if it exists, else, grab the normal id
+      const id = layer.subId ? layer.subId : layer.id;
+      const info = layerInfoCache.get(id);
+      if (info) {
+        const promise = new Promise((resolve) => {
+          resolve();
+        });
+  
+        promise.then(() => {
+          this.iconLoading = '';
+          this.modalLayerInfo = info;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+  
+      } else {
+        layerInfoCache.fetch(layer).then(layerInfo => {
+          this.iconLoading = '';
+          this.modalLayerInfo = layerInfo;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+      }
     }
   }
 
@@ -624,14 +699,30 @@ class MapStore {
   updateAnalysisSliderIndices(params) {
     this.analysisSliderIndices[params.id] = params.indices;
   }
+  
+  activateMeasurementButton(bool) {
+    this.activateMeasurementButton = bool;
+  }
 
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
   }
 
+  activateEnterValuesButton(bool) {
+    this.enterValuesButtonActive = bool;
+  }
+
+  activateEditCoordinates(bool) {
+    this.editCoordinatesActive = bool;
+  }
+
   toggleImageryVisible(bool) {
     this.imageryModalVisible = bool;
     this.imageryError = false;
+  }
+
+  imageryFetchUpdate(bool) {
+    this.imageryFetchFailed = bool;
   }
 
   getSatelliteImagery(params) {
