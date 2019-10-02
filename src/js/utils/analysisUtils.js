@@ -569,7 +569,7 @@ export default {
       viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_24HR");
      } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_48HR")) {
       viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_48HR");
-     } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_72HRS")) {
+     } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_72HR")) {
       viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_72HR");
      } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_7D")) {
       viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_7D");
@@ -584,8 +584,23 @@ export default {
      const viirsLayerID = viirsFiresLayer.layerIds[0];
      console.log('viirsLayerID', viirsLayerID);
      const viirsID = `VIIRS_ACTIVE_FIRES_${viirsLayerID}`;
+     
+     let modisFiresLayer;
+     if (brApp.map.getLayer("MODIS_ACTIVE_FIRES_24HR")) {
+      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES_24HR");
+     } else if (brApp.map.getLayer("MODIS_ACTIVE_FIRES_48HR")) {
+      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES_48HR");
+     } else if (brApp.map.getLayer("MODIS_ACTIVE_FIRES_72HR")) {
+      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES_72HR");
+     } else if (brApp.map.getLayer("MODIS_ACTIVE_FIRES_7D")) {
+      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES_7D");
+     } else if (brApp.map.getLayer("MODIS_ACTIVE_FIRES_1YR")) {
+      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES_1YR");
+     } else {
+      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
+     }
  
-     const modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
+     //const modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
      const modisLayerID = modisFiresLayer.layerIds[0];
      const modisID = `MODIS_ACTIVE_FIRES_${modisLayerID}`;
      const promise = new Deferred();

@@ -255,6 +255,66 @@ export default class LayerPanel extends Component {
           {...props}
         />;
         break;
+        case 'MODIS_ACTIVE_FIRES_24HR':
+          childComponent = <FiresControls
+            loaded={props.loaded}
+            layer={layer}
+            language={language}
+            updateStartDate={layerActions.updateModisStartDate}
+            updateEndDate={layerActions.updateModisEndDate}
+            startDate={modisStartDate}
+            endDate={modisEndDate}
+            {...props}
+          />;
+          break;
+          case 'MODIS_ACTIVE_FIRES_48HR':
+            childComponent = <FiresControls
+              loaded={props.loaded}
+              layer={layer}
+              language={language}
+              updateStartDate={layerActions.updateModisStartDate}
+              updateEndDate={layerActions.updateModisEndDate}
+              startDate={modisStartDate}
+              endDate={modisEndDate}
+              {...props}
+            />;
+            break;
+            case 'MODIS_ACTIVE_FIRES_72HR':
+              childComponent = <FiresControls
+                loaded={props.loaded}
+                layer={layer}
+                language={language}
+                updateStartDate={layerActions.updateModisStartDate}
+                updateEndDate={layerActions.updateModisEndDate}
+                startDate={modisStartDate}
+                endDate={modisEndDate}
+                {...props}
+              />;
+              break;
+              case 'MODIS_ACTIVE_FIRES_7D':
+                childComponent = <FiresControls
+                  loaded={props.loaded}
+                  layer={layer}
+                  language={language}
+                  updateStartDate={layerActions.updateModisStartDate}
+                  updateEndDate={layerActions.updateModisEndDate}
+                  startDate={modisStartDate}
+                  endDate={modisEndDate}
+                  {...props}
+                />;
+                break;
+                case 'MODIS_ACTIVE_FIRES_1YR':
+                  childComponent = <FiresControls
+                    loaded={props.loaded}
+                    layer={layer}
+                    language={language}
+                    updateStartDate={layerActions.updateModisStartDate}
+                    updateEndDate={layerActions.updateModisEndDate}
+                    startDate={modisStartDate}
+                    endDate={modisEndDate}
+                    {...props}
+                  />;
+                  break;
       case 'TREE_COVER_LOSS':
         childComponent = [
           <LossControls key='tcl_loss_control' layerId={layer.id} loaded={props.loaded} {...props} />,

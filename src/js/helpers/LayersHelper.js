@@ -49,7 +49,7 @@ const LayersHelper = {
         }
       });
      
-      if (selectValue && layerObj.id) {
+      if (selectValue && layerObj.id.includes('VIIRS_ACTIVE_FIRES')) {
         switch (selectValue) {
           case '0':
             layerObj.id = 'VIIRS_ACTIVE_FIRES_24HR';
@@ -69,6 +69,34 @@ const LayersHelper = {
             break;
           case '4':
             layerObj.id = 'VIIRS_ACTIVE_FIRES_1YR';
+            layerObj.layersId = [21];
+            break;
+          default:
+            console.log('default');
+            break;
+        }
+      }
+      
+      if (selectValue && layerObj.id.includes('MODIS_ACTIVE_FIRES')) {
+        switch (selectValue) {
+          case '0':
+            layerObj.id = 'MODIS_ACTIVE_FIRES_24HR';
+            layerObj.layersId = [21];
+            break;
+          case '1':
+            layerObj.id = 'MODIS_ACTIVE_FIRES_48HR';
+            layerObj.layersId = [21];
+            break;
+          case '2':
+            layerObj.id = 'MODIS_ACTIVE_FIRES_72HR';
+            layerObj.layersId = [21];
+            break;
+          case '3':
+            layerObj.id = 'MODIS_ACTIVE_FIRES_7D';
+            layerObj.layersId = [21];
+            break;
+          case '4':
+            layerObj.id = 'MODIS_ACTIVE_FIRES_1YR';
             layerObj.layersId = [21];
             break;
           default:
@@ -136,7 +164,7 @@ const LayersHelper = {
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
               break;
-            case '4': //past 7 days
+            case '4': //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
               const defs = [];
               newFiresLayer.url = shortTermServices[`${fireID}1YR`].url;
