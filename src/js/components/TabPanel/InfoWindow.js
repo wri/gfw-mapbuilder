@@ -79,8 +79,6 @@ export default class InfoWindow extends Component {
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
       mapActions.decreaseSelectIndex();
-    } else {
-      return;
     }
   };
 
@@ -101,8 +99,6 @@ export default class InfoWindow extends Component {
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
       mapActions.increaseSelectIndex();
-    } else {
-      return;
     }
   };
 
