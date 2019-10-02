@@ -4,7 +4,7 @@ import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
 import {shortTermServices} from '../config';
 import layerFactory from '../utils/layerFactory';
-
+import layerActions from '../actions/LayerActions';
 
 import layerUtils from 'utils/layerUtils';
 import DynamicLayer from 'esri/layers/ArcGISDynamicMapServiceLayer';
@@ -49,33 +49,33 @@ const LayersHelper = {
         }
       });
      
-      if (selectValue && layerObj.id.includes('VIIRS_ACTIVE_FIRES')) {
-        switch (selectValue) {
-          case '0':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_24HR';
-            layerObj.layersId = [21];
-            break;
-          case '1':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_48HR';
-            layerObj.layersId = [21];
-            break;
-          case '2':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_72HR';
-            layerObj.layersId = [21];
-            break;
-          case '3':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_7D';
-            layerObj.layersId = [21];
-            break;
-          case '4':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_1YR';
-            layerObj.layersId = [21];
-            break;
-          default:
-            console.log('default');
-            break;
-        }
-      }
+      // if (selectValue && layerObj.id.includes('VIIRS_ACTIVE_FIRES')) {
+      //   switch (selectValue) {
+      //     case '0':
+      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_24HR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '1':
+      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_48HR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '2':
+      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_72HR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '3':
+      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_7D';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '4':
+      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_1YR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     default:
+      //       console.log('default');
+      //       break;
+      //   }
+      // }
       
       if (selectValue && layerObj.id.includes('MODIS_ACTIVE_FIRES')) {
         switch (selectValue) {
@@ -123,12 +123,9 @@ const LayersHelper = {
        newFiresLayer.label = layerObj.label;
 
       const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
-      console.log('fireID', fireID);
       
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
-          // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
-          // We are hiding and showing the layer to avoid calling the service multiple times.
           const defs = [];
           switch (selectValue.toString()) {
             case '0': //past 24 hours
@@ -137,6 +134,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '1': //past 48 hours
@@ -145,15 +144,21 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              console.log('esriLayer', newFiresLayer);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
+              console.log('new fires layer', newFiresLayer);
               break;
             case '2': //past 72 hours
               newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
+              console.log('new fires layer', newFiresLayer);
               break;
             case '3': //past 7 days
               newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
@@ -161,6 +166,9 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
+              console.log('new fires layer', newFiresLayer);
               break;
             case '4': //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
@@ -168,14 +176,18 @@ const LayersHelper = {
               newFiresLayer._url.path = shortTermServices[`${fireID}1YR`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
               newFiresLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
+              console.log('new fires layer', newFiresLayer);
               break;
             default:
               console.log('default');
               break;
           }
-          newFiresLayer.setLayerDefinitions(defs);
+          //newFiresLayer.setLayerDefinitions(defs);
         }
       }
       // else {

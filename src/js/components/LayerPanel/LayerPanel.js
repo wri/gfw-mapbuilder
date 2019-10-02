@@ -377,6 +377,11 @@ export default class LayerPanel extends Component {
       checkbox = <LayerCheckbox initialLayerOpacities={initialLayerOpacities} key={layer.subId || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
         {childComponent}
       </LayerCheckbox>;
+    } else if (layer.hide) {
+      const checked = (dynamicLayers[layer.id] && dynamicLayers[layer.id].indexOf(layer.subIndex) > -1) || false;
+      checkbox = <div style={{display: 'none'}} key={layer.subId || `layer-checkbox-${Math.floor(Math.random() * 100000)}`}><LayerCheckbox initialLayerOpacities={initialLayerOpacities} layer={layer} subLayer={true} checked={checked} iconLoading={iconLoading}>
+        {childComponent}
+      </LayerCheckbox></div>;
     } else {
       checkbox = <LayerCheckbox layerLoading={layerLoading} onEdit={editCallback} dynamicSublabel={dynamicSublabel} initialLayerOpacities={initialLayerOpacities} key={layer.id || `layer-checkbox-${Math.floor(Math.random() * 100000)}`} layer={layer} checked={activeLayers.indexOf(layer.id) > -1 } iconLoading={iconLoading}>
         {childComponent}
