@@ -564,7 +564,22 @@ export default {
 
   getExactGeom: (selectedFeature) => {
      //Pull in fires layer here and check the ID. If ID matches, check _layer.url to fires url, If they don't match, use fires url
-     const viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
+     let viirsFiresLayer;
+     if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_24HR")) {
+      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_24HR");
+     } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_48HR")) {
+      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_48HR");
+     } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_72HRS")) {
+      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_72HR");
+     } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_7D")) {
+      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_7D");
+     } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_1YR")) {
+      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_1YR");
+     } else {
+      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
+     }
+     
+     //const viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
      console.log('viirsFiresLayer', viirsFiresLayer);
      const viirsLayerID = viirsFiresLayer.layerIds[0];
      console.log('viirsLayerID', viirsLayerID);
@@ -591,7 +606,7 @@ export default {
     if (!url) {
       return promise.resolve(selectedFeature.geometry);
     }
-
+    
     const queryTask = new QueryTask(url);
     const query = new Query();
 

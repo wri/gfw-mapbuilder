@@ -38,34 +38,46 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, language, selectValue = null) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      console.log('fires layer', firesLayer);
-      
+      let layerObj = {};
       const options = {};
-      const layerObj = resources.layerPanel.GROUP_LCD.layers[5];
-      
-      if (selectValue) {
+     
+      const layersPanel = resources.layerPanel.GROUP_LCD.layers;
+      layersPanel.forEach(layerPanel => {
+        if (firesLayer.id.includes(layerPanel.id)) {
+          const index = layersPanel.indexOf(layerPanel);
+          layerObj = resources.layerPanel.GROUP_LCD.layers[index];
+        }
+      });
+     
+      if (selectValue && layerObj.id) {
         switch (selectValue) {
           case '0':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_24HRS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_24HR';
+            layerObj.layersId = [21];
             break;
           case '1':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_48HRS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_48HR';
+            layerObj.layersId = [21];
             break;
           case '2':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_72HRS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_72HR';
+            layerObj.layersId = [21];
             break;
           case '3':
-            layerObj.id = 'VIIRS_ACTIVE_FIRES_7DAYS';
+            layerObj.id = 'VIIRS_ACTIVE_FIRES_7D';
+            layerObj.layersId = [21];
             break;
           case '4':
             layerObj.id = 'VIIRS_ACTIVE_FIRES_1YR';
+            layerObj.layersId = [21];
             break;
           default:
-            //options.id = layerObj.id;
+            console.log('default');
             break;
         }
       }
-      console.log('options id', options.id);
+      
+      options.id = layerObj.id;
       options.visible = layerObj.visible || false;
       options.opacity = layerObj.opacity || 1.0;
       if (layerObj.popup && layerObj.layerIds) {
@@ -76,13 +88,11 @@ const LayersHelper = {
         });
        }
        
-       const esriLayer = layerFactory(layerObj, 'en');
-       esriLayer.legendLayer = layerObj.legendLayer || null;
-       esriLayer.layerIds = layerObj.layerIds;
-       esriLayer.order = layerObj.order;
-       esriLayer.label = layerObj.label;
-      //  brApp.map.removeLayer(firesLayer);
-      //  brApp.map.addLayer(esriLayer);
+       const newFiresLayer = layerFactory(layerObj, language);
+       newFiresLayer.legendLayer = layerObj.legendLayer || null;
+       newFiresLayer.layerIds = layerObj.layerIds;
+       newFiresLayer.order = layerObj.order;
+       newFiresLayer.label = layerObj.label;
 
       const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
       console.log('fireID', fireID);
@@ -96,50 +106,46 @@ const LayersHelper = {
           const layaDefs = [];
           switch (selectValue) {
             case '0': //past 24 hours
-              // firesLayer.esriLayer.url = shortTermServices[`${fireID}24HR`].url;
-              // firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
-              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
-              esriLayer.url = shortTermServices[`${fireID}24HR`].url;
-              esriLayer._url.path = shortTermServices[`${fireID}24HR`].url;
-              esriLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+              newFiresLayer.url = shortTermServices[`${fireID}24HR`].url;
+              newFiresLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
               brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(esriLayer);
-              console.log('esriLayer', esriLayer);
+              brApp.map.addLayer(newFiresLayer);
+              console.log('new fires layer', newFiresLayer);
               break;
             case '1': //past 48 hours
-              // firesLayer.url = shortTermServices[`${fireID}48HR`].url;
-              // firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
-              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
-              //layerObj.url = shortTermServices[`${fireID}48HR`].url;
-              // debugger
-              esriLayer.url = shortTermServices[`${fireID}48HR`].url;
-              esriLayer._url.path = shortTermServices[`${fireID}48HR`].url;
-              esriLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+              newFiresLayer.url = shortTermServices[`${fireID}48HR`].url;
+              newFiresLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
               brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(esriLayer);
-              console.log('esriLayer', esriLayer);
+              brApp.map.addLayer(newFiresLayer);
+              console.log('esriLayer', newFiresLayer);
               break;
             case '2': //past 72 hours
-              firesLayer.url = shortTermServices[`${fireID}7D`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
+              newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
+              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               layaDefs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              brApp.map.removeLayer(firesLayer);
+              brApp.map.addLayer(newFiresLayer);
               break;
             case '3': //past 7 days
-              firesLayer.url = shortTermServices[`${fireID}7D`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
+              newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
+              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              brApp.map.removeLayer(firesLayer);
+              brApp.map.addLayer(newFiresLayer);
               break;
             case '4': //past 7 days
               const queryString = this.generateFiresQuery(startDate, endDate);
               const defs = [];
-
-              firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-              console.log('defs', defs);
-              firesLayer.setLayerDefinitions(defs);
+              newFiresLayer.url = shortTermServices[`${fireID}1YR`].url;
+              newFiresLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+              newFiresLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              newFiresLayer.setLayerDefinitions(defs);
+              brApp.map.removeLayer(firesLayer);
+              brApp.map.addLayer(newFiresLayer);
               break;
             default:
               console.log('default');

@@ -77,6 +77,7 @@ export default class FiresControls extends React.Component {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
     const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
+    console.log('fire control props', this.props);
     return (
       <div>
         <div className="active-fires-controls-container">

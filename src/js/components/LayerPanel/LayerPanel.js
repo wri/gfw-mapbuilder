@@ -183,6 +183,66 @@ export default class LayerPanel extends Component {
           {...props}
         />;
         break;
+        case 'VIIRS_ACTIVE_FIRES_24HR':
+          childComponent = <FiresControls
+            loaded={props.loaded}
+            layer={layer}
+            language={language}
+            updateStartDate={layerActions.updateViirsStartDate}
+            updateEndDate={layerActions.updateViirsEndDate}
+            startDate={viirsStartDate}
+            endDate={viirsEndDate}
+            {...props}
+          />;
+          break;
+          case 'VIIRS_ACTIVE_FIRES_48HR':
+            childComponent = <FiresControls
+              loaded={props.loaded}
+              layer={layer}
+              language={language}
+              updateStartDate={layerActions.updateViirsStartDate}
+              updateEndDate={layerActions.updateViirsEndDate}
+              startDate={viirsStartDate}
+              endDate={viirsEndDate}
+              {...props}
+            />;
+            break;
+            case 'VIIRS_ACTIVE_FIRES_72HR':
+              childComponent = <FiresControls
+                loaded={props.loaded}
+                layer={layer}
+                language={language}
+                updateStartDate={layerActions.updateViirsStartDate}
+                updateEndDate={layerActions.updateViirsEndDate}
+                startDate={viirsStartDate}
+                endDate={viirsEndDate}
+                {...props}
+              />;
+              break;
+              case 'VIIRS_ACTIVE_FIRES_7D':
+                childComponent = <FiresControls
+                  loaded={props.loaded}
+                  layer={layer}
+                  language={language}
+                  updateStartDate={layerActions.updateViirsStartDate}
+                  updateEndDate={layerActions.updateViirsEndDate}
+                  startDate={viirsStartDate}
+                  endDate={viirsEndDate}
+                  {...props}
+                />;
+                break;
+                case 'VIIRS_ACTIVE_FIRES_1YR':
+                  childComponent = <FiresControls
+                    loaded={props.loaded}
+                    layer={layer}
+                    language={language}
+                    updateStartDate={layerActions.updateViirsStartDate}
+                    updateEndDate={layerActions.updateViirsEndDate}
+                    startDate={viirsStartDate}
+                    endDate={viirsEndDate}
+                    {...props}
+                  />;
+                  break;
       case 'MODIS_ACTIVE_FIRES':
         childComponent = <FiresControls
           loaded={props.loaded}
@@ -322,7 +382,6 @@ export default class LayerPanel extends Component {
     const {settings, language} = this.context;
     //- Create the layerGroup components
     const layerGroups = settings.layerPanel || {};
-    console.log('settings layer panel', settings.layerPanel);
     const groups = this.renderLayerGroups(layerGroups, language);
 
     return (
