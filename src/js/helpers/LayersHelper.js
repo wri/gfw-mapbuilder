@@ -46,6 +46,7 @@ const LayersHelper = {
         if (firesLayer.id.includes(layerPanel.id)) {
           const index = layersPanel.indexOf(layerPanel);
           layerObj = resources.layerPanel.GROUP_LCD.layers[index];
+          layerObj.layersId = [21];
         }
       });
      
@@ -77,33 +78,33 @@ const LayersHelper = {
       //   }
       // }
       
-      if (selectValue && layerObj.id.includes('MODIS_ACTIVE_FIRES')) {
-        switch (selectValue) {
-          case '0':
-            layerObj.id = 'MODIS_ACTIVE_FIRES_24HR';
-            layerObj.layersId = [21];
-            break;
-          case '1':
-            layerObj.id = 'MODIS_ACTIVE_FIRES_48HR';
-            layerObj.layersId = [21];
-            break;
-          case '2':
-            layerObj.id = 'MODIS_ACTIVE_FIRES_72HR';
-            layerObj.layersId = [21];
-            break;
-          case '3':
-            layerObj.id = 'MODIS_ACTIVE_FIRES_7D';
-            layerObj.layersId = [21];
-            break;
-          case '4':
-            layerObj.id = 'MODIS_ACTIVE_FIRES_1YR';
-            layerObj.layersId = [21];
-            break;
-          default:
-            console.log('default');
-            break;
-        }
-      }
+      // if (selectValue && layerObj.id.includes('MODIS_ACTIVE_FIRES')) {
+      //   switch (selectValue) {
+      //     case '0':
+      //       layerObj.id = 'MODIS_ACTIVE_FIRES_24HR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '1':
+      //       layerObj.id = 'MODIS_ACTIVE_FIRES_48HR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '2':
+      //       layerObj.id = 'MODIS_ACTIVE_FIRES_72HR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '3':
+      //       layerObj.id = 'MODIS_ACTIVE_FIRES_7D';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     case '4':
+      //       layerObj.id = 'MODIS_ACTIVE_FIRES_1YR';
+      //       layerObj.layersId = [21];
+      //       break;
+      //     default:
+      //       console.log('default');
+      //       break;
+      //   }
+      // }
       
       options.id = layerObj.id;
       options.visible = layerObj.visible || false;

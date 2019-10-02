@@ -580,9 +580,7 @@ export default {
      }
      
      //const viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
-     console.log('viirsFiresLayer', viirsFiresLayer);
      const viirsLayerID = viirsFiresLayer.layerIds[0];
-     console.log('viirsLayerID', viirsLayerID);
      const viirsID = `VIIRS_ACTIVE_FIRES_${viirsLayerID}`;
      
      let modisFiresLayer;

@@ -694,31 +694,36 @@ export default {
 			id: 'MODIS_ACTIVE_FIRES_24HR',
 			order: 13,
 			type: 'remoteDataLayer',
-			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
+			hide: true
 		  },
 		  {
 			id: 'MODIS_ACTIVE_FIRES_48HR',
 			order: 14,
 			type: 'remoteDataLayer',
-			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
+			hide: true
 		  },
 		  {
 			id: 'MODIS_ACTIVE_FIRES_72HR',
 			order: 15,
 			type: 'remoteDataLayer',
-			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
+			hide: true
 		  },
 		  {
 			id: 'MODIS_ACTIVE_FIRES_7D',
 			order: 16,
 			type: 'remoteDataLayer',
-			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
+			hide: true
 		  },
 		  {
 			id: 'MODIS_ACTIVE_FIRES_1YR',
 			order: 17,
 			type: 'remoteDataLayer',
-			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+			uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
+			hide: true
 		  }
 		]
 	  },
