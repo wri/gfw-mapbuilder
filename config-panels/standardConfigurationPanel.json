@@ -224,13 +224,6 @@
 		},
 		{
 			"type": "boolean",
-			"fieldName": "forma",
-			"tooltip": "This will include/exclude this layer from the layer list",
-			"label": "Include forma alerts in your application",
-			"value": false
-		},
-		{
-			"type": "boolean",
 			"fieldName": "viirsFires",
 			"tooltip": "This will include/exclude this layer from the layer list",
 			"label": "Include VIIRS Active Fires in your application",
