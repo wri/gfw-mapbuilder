@@ -181,7 +181,6 @@ export default class Map extends Component {
       return;
     }
     
-    //mapActions.resetSelectIndex();
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {

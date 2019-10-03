@@ -260,8 +260,6 @@ export default class InfoWindow extends Component {
     let selectedFeature, content, title, footer, dropdown, features;
     const {editingEnabled} = this.props;
     
-    console.log('featuresCount', featuresCount);
-    
     if ( infoWindow && infoWindow.getSelectedFeature ) {
       selectedFeature = infoWindow.getSelectedFeature();
       content = infoWindow._contentPane.innerHTML;
