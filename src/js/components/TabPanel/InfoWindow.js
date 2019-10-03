@@ -69,7 +69,7 @@ export default class InfoWindow extends Component {
       const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
       const currentFilteredFeature = features.filter(feature => feature === currentSelectedFeature)[0];
       const currentIndex = features.indexOf(currentFilteredFeature);
-      const newIndex = currentIndex - 1;
+      const newIndex = currentIndex - 1 ? currentIndex - 1 : currentIndex;
       const newFeature = features[newIndex];
       const newFeatureName = newFeature._layer.name;
       this.context.map.infoWindow.select(newIndex);
@@ -89,7 +89,7 @@ export default class InfoWindow extends Component {
       const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
       const currentFilteredFeature = features.filter(feature => feature === currentSelectedFeature)[0];
       const currentIndex = features.indexOf(currentFilteredFeature);
-      const newIndex = currentIndex + 1;
+      const newIndex = currentIndex + 1 ? currentIndex + 1 : currentIndex;
       const newFeature = features[newIndex];
       const newFeatureName = newFeature._layer.name;
       this.context.map.infoWindow.select(newIndex);
