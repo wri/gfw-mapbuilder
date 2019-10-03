@@ -42,18 +42,21 @@ export default class InfoWindow extends Component {
   
   componentDidUpdate(prevProps, prevState) {
    
-    let foundFeature = true;
-    if (this.context.map.infoWindow.features && prevState.activeSelectedFeature !== '') {
-      const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-      if (currentSelectedFeature) {
-        const currentId = currentSelectedFeature.attributes[currentSelectedFeature._layer.objectIdField].toString();
-        const prevStateActiveSelectedFeature = JSON.parse(prevState.activeSelectedFeature);
-        const prevStateFeaturesList = prevStateActiveSelectedFeature.featuresList.split(',');
-        foundFeature = prevStateFeaturesList.filter(featureId => featureId === currentId)[0] ? true : false;
-      }
-    }
+    // let found = true;
+    // if (this.context.map.infoWindow.features && prevState.activeSelectedFeature !== '') {
+    //   const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    //   if (currentSelectedFeature) {
+    //     const currentId = currentSelectedFeature.attributes[currentSelectedFeature._layer.objectIdField].toString();
+    //     const prevStateActiveSelectedFeature = JSON.parse(prevState.activeSelectedFeature);
+    //     // const prevStateFeaturesList = prevStateActiveSelectedFeature.featuresList.split(',');
+    //     // foundFeature = prevStateFeaturesList.filter(featureId => featureId === currentId)[0] ? true : false;
+    //     const prevStateFeaturesList = prevStateActiveSelectedFeature.featuresList;
+    //     console.log('prevState list', prevStateFeaturesList);
+    //     found = prevStateFeaturesList.indexOf(currentId) !== -1 ? true : false;
+    //   }
+    // }
     
-    if ((this.context.map.infoWindow.features && prevState.activeSelectedFeature === '') || foundFeature === false) {
+    if ((this.context.map.infoWindow.features && prevState.activeSelectedFeature === '')) {
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
@@ -81,7 +84,13 @@ export default class InfoWindow extends Component {
       const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
       const currentFilteredFeature = features.filter(feature => feature === currentSelectedFeature)[0];
       const currentIndex = features.indexOf(currentFilteredFeature);
-      const newIndex = currentIndex - 1 ? currentIndex - 1 : currentIndex;
+      //const newIndex = currentIndex - 1 ? currentIndex - 1 : currentIndex;
+      let newIndex;
+      if (currentIndex - 1 > 0) {
+        newIndex = currentIndex - 1;
+      } else {
+        newIndex = currentIndex;
+      }
       const newFeature = features[newIndex];
       const newFeatureName = newFeature._layer.name;
       this.context.map.infoWindow.select(newIndex);
@@ -101,7 +110,13 @@ export default class InfoWindow extends Component {
       const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
       const currentFilteredFeature = features.filter(feature => feature === currentSelectedFeature)[0];
       const currentIndex = features.indexOf(currentFilteredFeature);
-      const newIndex = currentIndex + 1 ? currentIndex + 1 : currentIndex;
+      //const newIndex = currentIndex + 1 ? currentIndex + 1 : currentIndex;
+      let newIndex;
+      if (currentIndex + 1 > 0) {
+        newIndex = currentIndex + 1;
+      } else {
+        newIndex = currentIndex;
+      }
       const newFeature = features[newIndex];
       const newFeatureName = newFeature._layer.name;
       this.context.map.infoWindow.select(newIndex);
@@ -217,6 +232,7 @@ export default class InfoWindow extends Component {
       }
     });
     const layersKeys = Object.keys(layersCategories);
+    const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
     
     return (
       <div className="relative infoWindow__select-container">
@@ -239,9 +255,10 @@ export default class InfoWindow extends Component {
             Prev
           </span>
           <span
-            style={nextButtonHover ? {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex < featuresCount - 1 ? '0.8' : '1'}`} :
-            {backgroundColor: `${selectIndex < featuresCount - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
-            className={`fa-button color arrow next ${selectIndex < featuresCount - 1 ? '' : 'disabled'}`}
+            style={nextButtonHover ? {backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex < layersCategories[selectedFeature._layer.name].count ? '0.8' : '1'}`} :
+            {backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
+            className={`fa-button color arrow next ${selectIndex < layersCategories[selectedFeature._layer.name].count ? '' : 'disabled'}`}
+            
             onClick={this.next}
             onMouseEnter={this.nextToggleHover}
             onMouseLeave={this.nextToggleHover}
