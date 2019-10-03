@@ -84,6 +84,8 @@ const getTimeEnabledLayer = (webmapInfo) => {
   return timeLayer;
 };
 
+let extentChange;
+
 export default class Map extends Component {
 
   static contextTypes = {
@@ -238,7 +240,11 @@ export default class Map extends Component {
       on.once(response.map, 'update-end', () => {
         if (response.map.id !== 'esri.Map_0') {
           mapLoaded = false;
+          if (extentChange && extentChange.remove) {
+            extentChange.remove();
+          }
         }
+
         mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
         const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
         //- Apply the mask layer defintion if present
@@ -254,27 +260,29 @@ export default class Map extends Component {
           }
         }
 
-        response.map.on('extent-change', (evt) => {
-          const imageryLayer = response.map.getLayer(layerKeys.RECENT_IMAGERY);
-          if (!imageryLayer || !imageryLayer.visible || evt.lod.level > 9) { return; }
+        if (!extentChange) {
+          extentChange = response.map.on('extent-change', (evt) => {
+            const imageryLayer = response.map.getLayer(layerKeys.RECENT_IMAGERY);
+            if (!imageryLayer || !imageryLayer.visible || evt.lod.level > 9) { return; }
 
-          const { imageryParams } = this.state;
-          const params = imageryParams ? imageryParams : {};
+            const { imageryParams } = this.state;
+            const params = imageryParams ? imageryParams : {};
 
 
-          const xVal = window.innerWidth / 2;
-          const yVal = window.innerHeight / 2;
+            const xVal = window.innerWidth / 2;
+            const yVal = window.innerHeight / 2;
 
-          // Create new screen point at center;
-          const screenPt = new ScreenPoint(xVal, yVal);
-          // Convert screen point to map point and zoom to point;
-          const mapPt = response.map.toMap(screenPt);
+            // Create new screen point at center;
+            const screenPt = new ScreenPoint(xVal, yVal);
+            // Convert screen point to map point and zoom to point;
+            const mapPt = response.map.toMap(screenPt);
 
-          params.lat = mapPt.getLatitude();
-          params.lon = mapPt.getLongitude();
+            params.lat = mapPt.getLatitude();
+            params.lon = mapPt.getLongitude();
 
-          mapActions.getSatelliteImagery(params);
-        });
+            mapActions.getSatelliteImagery(params);
+          });
+        }
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {
@@ -539,14 +547,18 @@ export default class Map extends Component {
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
-      on.once(map, 'extent-change', () => {
-        appActions.setLanguage.defer(l);
-      });
+      on.once(map, 'update-end', () => {
+        if (settings.language !== l) {
+          appActions.setLanguage.defer(l);
+        }
 
-      map.centerAndZoom([x, y], z);
+        map.centerAndZoom([x, y], z);
+      });
     } else if (x && y && z) {
-      map.centerAndZoom([x, y], z);
-    } else if (l && langKeys.indexOf(l) > -1) {
+      on.once(map, 'update-end', () => {
+        map.centerAndZoom([x, y], z);
+      });
+    } else if (l && langKeys.indexOf(l) > -1 && settings.language !== l) {
       appActions.setLanguage.defer(l);
     }
 
@@ -1066,6 +1078,7 @@ export default class Map extends Component {
             imageryModalVisible={imageryModalVisible}
             imageryError={imageryError}
             imageryHoverVisible={this.state.imageryHoverVisible}
+            language={this.context.language}
           />
         </div>
         { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 && !imageryFetchFailed &&

@@ -80,7 +80,7 @@ export default class Analysis extends Component {
         <div
           className='analysis-results__select-form-item-container'
         >
-          Click the &lsquo;Run Analysis&rsquo; button see analysis
+          {text[language].RUN_ANALYSIS_INSTRUCTIONS}
         </div>
       );
     }
@@ -426,7 +426,7 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'An error occurred performing selected analysis. Please select another analysis or try again later.'
+              message: text[language].ANALYSIS_ERROR
             },
           }, () => {
             this.renderResults(analysisId, this.state.results, language, analysisSettings);
