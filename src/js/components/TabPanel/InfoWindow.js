@@ -41,7 +41,19 @@ export default class InfoWindow extends Component {
   };
   
   componentDidUpdate(prevProps, prevState) {
-    if (this.context.map.infoWindow.features && prevState.activeSelectedFeature === '') {
+   
+    let foundFeature = true;
+    if (this.context.map.infoWindow.features && prevState.activeSelectedFeature !== '') {
+      const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+      if (currentSelectedFeature) {
+        const currentId = currentSelectedFeature.attributes[currentSelectedFeature._layer.objectIdField].toString();
+        const prevStateActiveSelectedFeature = JSON.parse(prevState.activeSelectedFeature);
+        const prevStateFeaturesList = prevStateActiveSelectedFeature.featuresList.split(',');
+        foundFeature = prevStateFeaturesList.filter(featureId => featureId === currentId)[0] ? true : false;
+      }
+    }
+    
+    if ((this.context.map.infoWindow.features && prevState.activeSelectedFeature === '') || foundFeature === false) {
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
@@ -247,6 +259,8 @@ export default class InfoWindow extends Component {
     const {selectIndex, featuresCount} = this.state;
     let selectedFeature, content, title, footer, dropdown, features;
     const {editingEnabled} = this.props;
+    
+    console.log('featuresCount', featuresCount);
     
     if ( infoWindow && infoWindow.getSelectedFeature ) {
       selectedFeature = infoWindow.getSelectedFeature();
