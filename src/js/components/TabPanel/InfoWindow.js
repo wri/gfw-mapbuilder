@@ -25,7 +25,6 @@ export default class InfoWindow extends Component {
     super(props);
     this.state = {
       activeSelectedFeature: '',
-      featuresCount: 1,
       prevButtonHover: false,
       nextButtonHover: false,
       ...MapStore.getState()
@@ -42,21 +41,8 @@ export default class InfoWindow extends Component {
   
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectIndex !== -1 && this.state.selectIndex === -1) {
-      console.log('ALL FEATURES', this.context.map.infoWindow.features);
-      console.log('FEATURE YOU JUST CLICKED', this.context.map.infoWindow.getSelectedFeature());
-      // const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-      // console.log('current feature', currentSelectedFeature);
-      // const currentId = currentSelectedFeature.attributes[currentSelectedFeature._layer.objectIdField].toString();
-      // const prevStateSelectedFeature = JSON.parse(prevState.activeSelectedFeature);
-      // const prevStateFeaturesList = prevStateSelectedFeature.featuresList.split(',');
-      // const matchedFeature = prevStateFeaturesList.filter(featureId => featureId === currentId)[0];
-      // this.setState({
-      //   activeSelectedFeature: matchedFeature,
-      //   featuresCount: matchedFeature.count
-      // });
       this.setState({
-          activeSelectedFeature: '',
-          featuresCount: 1
+          activeSelectedFeature: ''
         });
       mapActions.updateSelectIndex.defer(0);
     }
@@ -76,8 +62,7 @@ export default class InfoWindow extends Component {
       const firstFeature = layersCategories[layersKeys[0]];
       const activeSelectedFeature = `{"name": "${firstFeature.name}", "count": "${firstFeature.count}", "featuresList": "${firstFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`;
       this.setState({
-        activeSelectedFeature,
-        featuresCount: firstFeature.count
+        activeSelectedFeature
       });
     }
   }
@@ -100,7 +85,6 @@ export default class InfoWindow extends Component {
       this.context.map.infoWindow.select(newIndex);
       const newSelectedFeature = layersCategories[newFeatureName];
       this.setState({
-        featuresCount: newSelectedFeature.count,
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
       mapActions.decreaseSelectIndex.defer();
@@ -124,7 +108,6 @@ export default class InfoWindow extends Component {
       this.context.map.infoWindow.select(newIndex);
       const newSelectedFeature = layersCategories[newFeature._layer.name];
       this.setState({
-        featuresCount: newSelectedFeature.count,
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
       mapActions.increaseSelectIndex.defer();
@@ -160,7 +143,6 @@ export default class InfoWindow extends Component {
       map.infoWindow.show();
       map.infoWindow.select(newFeatures.indexOf(newFeature));
       this.setState({
-        featuresCount: newSelectedFeature.count,
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
       if (this.state.selectIndex > 0) {
@@ -169,7 +151,6 @@ export default class InfoWindow extends Component {
     } else {
       map.infoWindow.clearFeatures();
       this.setState({
-        featuresCount: 1,
         activeSelectedFeature: ''
       });
       mapActions.updateSelectIndex.defer(0);
@@ -191,8 +172,7 @@ export default class InfoWindow extends Component {
     const index = features.indexOf(layerCategory.featuresList[0]);
     this.context.map.infoWindow.select(index);
     this.setState({
-      activeSelectedFeature: evt.target.value,
-      featuresCount: count
+      activeSelectedFeature: evt.target.value
     });
     mapActions.updateSelectIndex.defer(0);
   };
@@ -222,7 +202,7 @@ export default class InfoWindow extends Component {
 
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
-    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex, featuresCount} = this.state;
+    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex} = this.state;
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
