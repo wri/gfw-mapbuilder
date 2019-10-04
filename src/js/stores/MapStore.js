@@ -376,9 +376,12 @@ class MapStore {
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
             analysisUtils.registerGeom(exactGeom).then(res => {
               if (res.error) {
-                selectedFeature.setGeometry(geomToRegister);
-                mapActions.toggleAnalysisTab(false);
-                isRegistering = false;
+                analysisUtils.registerGeom(selectedFeature.geometry).then(geomRes => {
+                  selectedFeature.attributes.geostoreId = geomRes.error ? '' : geomRes.data.id;
+                  selectedFeature.setGeometry(geomToRegister);
+                  mapActions.toggleAnalysisTab(false);
+                  isRegistering = false;
+                });
               } else {
                 selectedFeature.attributes.geostoreId = res.data.id;
                 selectedFeature.setGeometry(geomToRegister);
@@ -435,7 +438,7 @@ class MapStore {
   setAnalysisType (payload) {
     this.activeAnalysisType = payload;
   }
-  
+
   toggleMeasurementModal () {
     this.measurementModalVisible = !this.measurementModalVisible;
   }
@@ -616,14 +619,14 @@ class MapStore {
         const promise = new Promise((resolve) => {
           resolve();
         });
-  
+
         promise.then(() => {
           this.iconLoading = '';
           this.modalLayerInfo = info;
           this.layerModalVisible = true;
           this.emitChange();
         });
-  
+
       } else {
         layerInfoCache.fetch(layer).then(layerInfo => {
           this.iconLoading = '';
@@ -705,7 +708,7 @@ class MapStore {
   updateAnalysisSliderIndices(params) {
     this.analysisSliderIndices[params.id] = params.indices;
   }
-  
+
   activateMeasurementButton(bool) {
     this.activateMeasurementButton = bool;
   }
