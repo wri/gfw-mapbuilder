@@ -157,9 +157,9 @@ class MapStore {
       updateCurrentLng: mapActions.updateCurrentLng,
       updateCurrentX: mapActions.updateCurrentX,
       updateCurrentY: mapActions.updateCurrentY,
-      resetSelectIndex: mapActions.resetSelectIndex,
       increaseSelectIndex: mapActions.increaseSelectIndex,
       decreaseSelectIndex: mapActions.decreaseSelectIndex,
+      updateSelectIndex: mapActions.updateSelectIndex,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -595,16 +595,16 @@ class MapStore {
     this.currentY = y;
   }
   
-  resetSelectIndex() {
-    this.selectIndex = 0;
-  }
-  
   increaseSelectIndex() {
     this.selectIndex = this.selectIndex + 1;
   }
   
   decreaseSelectIndex() {
     this.selectIndex = this.selectIndex - 1;
+  }
+  
+  updateSelectIndex(index) {
+    this.selectIndex = index;
   }
 
   showLayerInfo (layer) {
