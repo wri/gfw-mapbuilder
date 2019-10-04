@@ -38,17 +38,18 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, language, selectValue = null) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      let layerObj = {};
-      const options = {};
+      // let layerObj = {};
+      // const options = {};
      
-      const layersPanel = resources.layerPanel.GROUP_LCD.layers;
-      layersPanel.forEach(layerPanel => {
-        if (firesLayer.id.includes(layerPanel.id)) {
-          const index = layersPanel.indexOf(layerPanel);
-          layerObj = resources.layerPanel.GROUP_LCD.layers[index];
-          layerObj.layersId = [21];
-        }
-      });
+      // const layersPanel = resources.layerPanel.GROUP_LCD.layers;
+      // layersPanel.forEach(layerPanel => {
+      //   if (firesLayer.id.includes(layerPanel.id)) {
+      //     const index = layersPanel.indexOf(layerPanel);
+      //     layerObj = resources.layerPanel.GROUP_LCD.layers[index];
+      //     layerObj.layersId = [21];
+      //     layerObj.id = firesLayer.id;
+      //   }
+      // });
      
       // if (selectValue && layerObj.id.includes('VIIRS_ACTIVE_FIRES')) {
       //   switch (selectValue) {
@@ -106,23 +107,24 @@ const LayersHelper = {
       //   }
       // }
       
-      options.id = layerObj.id;
-      options.visible = layerObj.visible || false;
-      options.opacity = layerObj.opacity || 1.0;
-      if (layerObj.popup && layerObj.layerIds) {
-        options.infoTemplates = {};
-        const template = layerUtils.makeInfoTemplate(layerObj.popup, language);
-        layerObj.layerIds.forEach((id) => {
-          options.infoTemplates[id] = { infoTemplate: template };
-        });
-       }
+      // options.id = layerObj.id;
+      // options.visible = layerObj.visible || false;
+      // options.opacity = layerObj.opacity || 1.0;
+      // if (layerObj.popup && layerObj.layerIds) {
+      //   options.infoTemplates = {};
+      //   const template = layerUtils.makeInfoTemplate(layerObj.popup, language);
+      //   layerObj.layerIds.forEach((id) => {
+      //     options.infoTemplates[id] = { infoTemplate: template };
+      //   });
+      //  }
        
-       const newFiresLayer = layerFactory(layerObj, language);
-       newFiresLayer.legendLayer = layerObj.legendLayer || null;
-       newFiresLayer.layerIds = layerObj.layerIds;
-       newFiresLayer.order = layerObj.order;
-       newFiresLayer.label = layerObj.label;
+      //  const newFiresLayer = layerFactory(layerObj, language);
+      //  newFiresLayer.legendLayer = layerObj.legendLayer || null;
+      //  newFiresLayer.layerIds = layerObj.layerIds;
+      //  newFiresLayer.order = layerObj.order;
+      //  newFiresLayer.label = layerObj.label;
 
+      const newFiresLayer = firesLayer;
       const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
       
       if (selectValue) {
@@ -135,8 +137,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
+              //layerActions.removeActiveLayer(firesLayer.id);
+              //layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '1': //past 48 hours
@@ -145,8 +147,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
+              //layerActions.removeActiveLayer(firesLayer.id);
+              //layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '2': //past 72 hours
@@ -157,8 +159,8 @@ const LayersHelper = {
               newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
+              //layerActions.removeActiveLayer(firesLayer.id);
+              //layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '3': //past 7 days
@@ -167,8 +169,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
+              //layerActions.removeActiveLayer(firesLayer.id);
+              //layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '4': //past year
@@ -180,8 +182,8 @@ const LayersHelper = {
               newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
+              //layerActions.removeActiveLayer(firesLayer.id);
+              //layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             default:
