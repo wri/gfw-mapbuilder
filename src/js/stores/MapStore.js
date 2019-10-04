@@ -375,10 +375,16 @@ class MapStore {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
             analysisUtils.registerGeom(exactGeom).then(res => {
-              selectedFeature.attributes.geostoreId = res.data.id;
-              selectedFeature.setGeometry(geomToRegister);
-              mapActions.toggleAnalysisTab(false);
-              isRegistering = false;
+              if (res.error) {
+                selectedFeature.setGeometry(geomToRegister);
+                mapActions.toggleAnalysisTab(false);
+                isRegistering = false;
+              } else {
+                selectedFeature.attributes.geostoreId = res.data.id;
+                selectedFeature.setGeometry(geomToRegister);
+                mapActions.toggleAnalysisTab(false);
+                isRegistering = false;
+              }
             });
           });
         } else {
