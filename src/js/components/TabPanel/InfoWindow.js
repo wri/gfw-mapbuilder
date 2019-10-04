@@ -229,7 +229,7 @@ export default class InfoWindow extends Component {
             style={prevButtonHover ? {backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex > 0 ? '0.8' : '1'}`} :
             {backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow prev ${selectIndex > 0 ? '' : 'disabled'}`}
-            onClick={this.previous}
+            onClick={selectIndex > 0 ? this.previous : null}
             onMouseEnter={this.prevToggleHover}
             onMouseLeave={this.prevToggleHover}
           >
@@ -239,8 +239,7 @@ export default class InfoWindow extends Component {
             style={nextButtonHover ? {backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? '0.8' : '1'}`} :
             {backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
             className={`fa-button color arrow next ${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? '' : 'disabled'}`}
-            
-            onClick={this.next}
+            onClick={selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? this.next : null}
             onMouseEnter={this.nextToggleHover}
             onMouseLeave={this.nextToggleHover}
           >
