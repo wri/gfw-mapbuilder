@@ -68,50 +68,43 @@ export default class InfoWindow extends Component {
   }
 
   previous = () => {
-    const {selectIndex} = this.state;
-    if (selectIndex > 0) {
-      const features = this.context.map.infoWindow.features;
-      const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-      const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
-      const currentIndex = features.indexOf(matchedFeature);
-      let newIndex;
-      if (currentIndex - 1 > 0) {
-        newIndex = currentIndex - 1;
-      } else {
-        newIndex = currentIndex;
-      }
-      const newFeature = features[newIndex];
-      const newFeatureName = newFeature._layer.name;
-      this.context.map.infoWindow.select(newIndex);
-      const newSelectedFeature = layersCategories[newFeatureName];
-      this.setState({
-        activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
-      });
-      mapActions.decreaseSelectIndex.defer();
+    const features = this.context.map.infoWindow.features;
+    const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
+    const currentIndex = features.indexOf(matchedFeature);
+    let newIndex;
+    if (currentIndex - 1 > 0) {
+      newIndex = currentIndex - 1;
+    } else {
+      newIndex = currentIndex;
     }
+    const newFeature = features[newIndex];
+    const newFeatureName = newFeature._layer.name;
+    this.context.map.infoWindow.select(newIndex);
+    const newSelectedFeature = layersCategories[newFeatureName];
+    this.setState({
+      activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+    });
+    mapActions.decreaseSelectIndex.defer();
   };
 
   next = () => {
-    const {selectIndex} = this.state;
     const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    if (selectIndex < layersCategories[currentSelectedFeature._layer.name].count && selectIndex !== layersCategories[currentSelectedFeature._layer.name].count - 1) {
-      const features = this.context.map.infoWindow.features;
-      const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
-      const currentIndex = features.indexOf(matchedFeature);
-      let newIndex;
-      if (currentIndex + 1 > 0) {
-        newIndex = currentIndex + 1;
-      } else {
-        newIndex = currentIndex;
-      }
-      const newFeature = features[newIndex];
-      this.context.map.infoWindow.select(newIndex);
-      const newSelectedFeature = layersCategories[newFeature._layer.name];
-      this.setState({
-        activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
-      });
-      mapActions.increaseSelectIndex.defer();
+    const features = this.context.map.infoWindow.features;
+    const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
+    const currentIndex = features.indexOf(matchedFeature);
+    let newIndex;
+    if (currentIndex + 1 > 0) {
+      newIndex = currentIndex + 1;
+    } else {
+      newIndex = currentIndex;
     }
+    this.context.map.infoWindow.select(newIndex);
+    const newSelectedFeature = layersCategories[matchedFeature._layer.name];
+    this.setState({
+      activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+    });
+    mapActions.increaseSelectIndex.defer();
   };
 
   clearFeatures = () => {
@@ -166,7 +159,6 @@ export default class InfoWindow extends Component {
   changeSelectedFeature = evt => {
     const features = this.context.map.infoWindow.features;
     const selectedFeature = JSON.parse(evt.target.value);
-    const count = selectedFeature.count;
     const name = selectedFeature.name;
     const layerCategory = layersCategories[name];
     const index = features.indexOf(layerCategory.featuresList[0]);
