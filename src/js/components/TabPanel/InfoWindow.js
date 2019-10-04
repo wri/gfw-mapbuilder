@@ -85,7 +85,7 @@ export default class InfoWindow extends Component {
     this.setState({
       activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
     });
-    mapActions.decreaseSelectIndex.defer();
+    mapActions.decreaseSelectIndex();
   };
 
   next = () => {
@@ -104,7 +104,7 @@ export default class InfoWindow extends Component {
     this.setState({
       activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
     });
-    mapActions.increaseSelectIndex.defer();
+    mapActions.increaseSelectIndex();
   };
 
   clearFeatures = () => {
@@ -139,14 +139,14 @@ export default class InfoWindow extends Component {
         activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
       });
       if (this.state.selectIndex > 0) {
-        mapActions.decreaseSelectIndex.defer();
+        mapActions.decreaseSelectIndex();
       }
     } else {
       map.infoWindow.clearFeatures();
       this.setState({
         activeSelectedFeature: ''
       });
-      mapActions.updateSelectIndex.defer(0);
+      mapActions.updateSelectIndex(0);
     }
   };
 
@@ -166,7 +166,7 @@ export default class InfoWindow extends Component {
     this.setState({
       activeSelectedFeature: evt.target.value
     });
-    mapActions.updateSelectIndex.defer(0);
+    mapActions.updateSelectIndex(0);
   };
   
   prevToggleHover = () => {
