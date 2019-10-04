@@ -125,6 +125,7 @@ const LayersHelper = {
       //  newFiresLayer.label = layerObj.label;
 
       const newFiresLayer = firesLayer;
+      newFiresLayer.layersId = [21];
       const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
       
       if (selectValue) {
@@ -137,8 +138,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              //layerActions.removeActiveLayer(firesLayer.id);
-              //layerActions.addActiveLayer(newFiresLayer.id);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '1': //past 48 hours
@@ -147,8 +148,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              //layerActions.removeActiveLayer(firesLayer.id);
-              //layerActions.addActiveLayer(newFiresLayer.id);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '2': //past 72 hours
