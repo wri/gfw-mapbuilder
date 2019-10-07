@@ -571,15 +571,14 @@ export default class Map extends Component {
       mapActions.changeBasemap(params.b);
     }
 
+    const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+    const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
     if (params.a) {
-      //todo: cast same clearAll function if we don't!!
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
       const opacityObjs = [];
 
-      const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
-      const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
 
       layerIds.forEach((layerId, j) => {
         if (webmapLayerIds.indexOf(layerId) === -1) {
