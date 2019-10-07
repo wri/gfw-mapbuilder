@@ -16,8 +16,7 @@ import ConfirmModal from 'components/Modals/ConfirmModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
 import SearchModal from 'components/Modals/SearchModal';
-import PrintModal from 'components/Modals/PrintModal';
-import TabView from 'components/TabPanel/TabView';
+import PrintModal from 'components/Modals/Prinit ew';
 import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
@@ -288,6 +287,11 @@ export default class Map extends Component {
             // don't run this function if we are drawing a custom shape
             return;
           }
+          //- Hide the selected feature highlight if using the measurement tool
+          if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+            brApp.map.setInfoWindowOnClick(false);
+            brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+          }
           this.updateSelectIndex();
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
@@ -327,14 +331,6 @@ export default class Map extends Component {
             }
           }
         });
-        
-      //- Hide the selected feature highlight if using the measurement tool
-      response.map.on('click', evt => {
-        if (brApp.map.measurement && brApp.map.measurement.getTool()) {
-          brApp.map.setInfoWindowOnClick(false);
-          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
-        }
-      });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
