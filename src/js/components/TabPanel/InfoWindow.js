@@ -47,7 +47,7 @@ export default class InfoWindow extends Component {
       mapActions.updateSelectIndex.defer(0);
     }
     
-    if ((this.context.map.infoWindow.features && prevState.activeSelectedFeature === '')) {
+    if ((this.context.map && this.context.map.infoWindow && this.context.map.infoWindow.features && prevState.activeSelectedFeature === '')) {
       const features = this.context.map.infoWindow.features;
       layersCategories = {};
       features.forEach(feature => {
