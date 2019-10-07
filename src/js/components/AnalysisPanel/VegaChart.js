@@ -102,7 +102,7 @@ export default class VegaChart extends Component {
       
       console.log('config', config);
       //"https://production-api.globalforestwatch.org/v1/umd-loss-gain?period=2001-01-01,2018-12-31&geostore=0f85c27826220d1be38dc237d77a2d64&thresh=30"
-      // default: //from default config: "https://production-api.globalforestwatch.org/v1/umd-loss-gain?period=2001-01-01,2018-12-31&geostore=91279930911dfd02b4b4af36b2e6f581&thresh=30"
+      // "https://production-api.globalforestwatch.org/v1/umd-loss-gain?period=2001-01-01,2018-12-31&geostore=2b95f9737e3ccd03adc98055919f3344&thresh=30" - default
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError(`Error creating analysis for ${this.props.reportLabel}`);
