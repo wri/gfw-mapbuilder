@@ -44,29 +44,35 @@ export default class SubscriptionsModal extends Component {
 
     return (
       <div key={j} className='source-row subscribe-row'>
-        <div className='delete-row'>
-          <button title='Delete subscription' onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
-            <SVGIcon id={'icon-analysis-remove'} /><span className='delete-row-label'>Delete</span>
-          </button>
-        </div>
-        <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'>
-          <button title='Show on map' className='btn-delete-subscription'>
-            <SVGIcon id={'shape-world'} />
-          </button>
-        </div>
-        <div className='svg-icon subscription-svg' className='subscription-unconfirmed'>
-          <div className='svg-icon subscription-svg' className='svg-icon subscription-svg' className={`subscription-unconfirmed-wrap ${subscription.attributes.confirmed ? 'hidden' : ''}`}>
-            <a href={subscribeUrl} className='subscription-uncle'>
-              <svg className='svg-icon subscription-svg'>
-                <SVGIcon id={'shape-warning'} />
-              </svg>
-              <span className='subscribe-tooltipmap'>Subscription has not been confirmed, click here to resend the confirmation email</span>
-            </a>
+        <div className="subscribe-button-container">
+          <div className='svg-icon subscription-svg' className='subscription-unconfirmed'>
+              <div className='svg-icon subscription-svg' className='svg-icon subscription-svg' className={`subscription-unconfirmed-wrap ${subscription.attributes.confirmed ? 'hidden' : ''}`}>
+                <a href={subscribeUrl} className='subscription-uncle'>
+                  <svg className='svg-icon subscription-svg'>
+                    <SVGIcon id={'shape-warning'} />
+                  </svg>
+                  <span className='subscribe-tooltipmap'>Subscription has not been confirmed, click here to resend the confirmation email</span>
+                </a>
+              </div>
+              <p className={`name-row ${subscription.attributes.confirmed ? 'no-warning' : ''}`}>{subscription.attributes.name}</p>
+            </div>
+          <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'>
+            <button title='Show on map' className='btn-delete-subscription'>
+              <SVGIcon id={'shape-world'} />
+            </button>
           </div>
-          <p className={`name-row ${subscription.attributes.confirmed ? 'no-warning' : ''}`}>{subscription.attributes.name}</p>
+          <div className='delete-row'>
+            <button title='Delete subscription' onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'>
+              <SVGIcon id={'icon-analysis-remove'} /><span className='delete-row-label'>Delete</span>
+            </button>
+          </div>
         </div>
         <p className='other-row date-created'>Created on <br />{endDateString}</p>
-        <div className='other-row'>Data sets: <span>{datasets.map(dataset => this.listDataset(dataset, subscription))}</span></div>
+        <div className='other-row'>Data sets:
+          <div className="subscribe-datasets">
+            {datasets.map(dataset => this.listDataset(dataset, subscription))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -109,7 +115,18 @@ export default class SubscriptionsModal extends Component {
         colorTheme = '#929292';
     }
 
-    return <p key={dataset}>{datasetName} <span onClick={() => this.updateSubscription(dataset, subscription)} style={{backgroundColor: `${colorTheme}`}} className={`toggle-switch-subscription pointer ${subscription.attributes.datasets.indexOf(dataset) === -1 ? '' : 'active-subscription'}`}><span /></span></p>;
+    return (
+      <p className="subscribe-dataset" key={dataset}>{datasetName} 
+        <span
+          onClick={() => this.updateSubscription(dataset, subscription)} 
+          style={{backgroundColor: `${colorTheme}`}} 
+          className={`toggle-switch-subscription pointer ${subscription.attributes.datasets.indexOf(dataset) === -1 ? '' : 'active-subscription'}`}
+        >
+          <span>
+          </span>
+        </span>
+      </p>
+    );
   }
 
   updateSubscription = (dataset, subscription) => {
