@@ -3,6 +3,10 @@ import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/query';
 import Select from 'react-select';
 import mapActions from 'actions/MapActions';
+import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
+
+const colorTheme = resources.customColorTheme ? resources.customColorTheme : defaultColorTheme;
 
 const customStyles = {
   option: (provided, state) => ({
@@ -23,11 +27,11 @@ const customStyles = {
       minHeight: '30px',
       boxShadow: state.isFocused ? 0 : 0,
       borderColor: state.isFocused
-        ? '#f0ab00'
+        ? colorTheme
         : 'grey',
       '&:hover': {
         borderColor: state.isFocused
-          ? '#f0ab00'
+          ? colorTheme
           : 'grey',
       }
   }),

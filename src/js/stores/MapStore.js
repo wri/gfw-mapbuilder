@@ -52,6 +52,7 @@ class MapStore {
     this.tableOfContentsVisible = true;
     this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
+    this.measurementModalVisible = false;
     this.analysisModalVisible = false;
     this.coordinatesModalVisible = false;
     this.editCoordinatesModalVisible = false;
@@ -106,6 +107,7 @@ class MapStore {
       createLayers: mapActions.createLayers,
       changeActiveTab: mapActions.changeActiveTab,
       setAnalysisType: mapActions.setAnalysisType,
+      toggleMeasurementModal: mapActions.toggleMeasurementModal,
       togglePrintModal: mapActions.togglePrintModal,
       toggleSearchModal: mapActions.toggleSearchModal,
       toggleCanopyModal: mapActions.toggleCanopyModal,
@@ -166,6 +168,7 @@ class MapStore {
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
+      activateMeasurementButton: mapActions.activateMeasurementButton,
       activateDrawButton: mapActions.activateDrawButton,
       activateEnterValuesButton: mapActions.activateEnterValuesButton,
       activateEditCoordinates: mapActions.activateEditCoordinates,
@@ -370,7 +373,7 @@ class MapStore {
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    if (selectedFeature) {
+    if (selectedFeature && brApp.map.measurement && brApp.map.measurement.getTool() === undefined) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)
@@ -384,10 +387,19 @@ class MapStore {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
             analysisUtils.registerGeom(exactGeom).then(res => {
-              selectedFeature.attributes.geostoreId = res.data.id;
-              selectedFeature.setGeometry(geomToRegister);
-              mapActions.toggleAnalysisTab(false);
-              isRegistering = false;
+              if (res.error) {
+                analysisUtils.registerGeom(selectedFeature.geometry).then(geomRes => {
+                  selectedFeature.attributes.geostoreId = geomRes.error ? '' : geomRes.data.id;
+                  selectedFeature.setGeometry(geomToRegister);
+                  mapActions.toggleAnalysisTab(false);
+                  isRegistering = false;
+                });
+              } else {
+                selectedFeature.attributes.geostoreId = res.data.id;
+                selectedFeature.setGeometry(geomToRegister);
+                mapActions.toggleAnalysisTab(false);
+                isRegistering = false;
+              }
             });
           });
         } else {
@@ -437,6 +449,10 @@ class MapStore {
 
   setAnalysisType (payload) {
     this.activeAnalysisType = payload;
+  }
+
+  toggleMeasurementModal () {
+    this.measurementModalVisible = !this.measurementModalVisible;
   }
 
   toggleAnalysisModal (payload) {
@@ -597,7 +613,7 @@ class MapStore {
   }
 
   showLayerInfo (layer) {
-    if (layer.metadata.metadata.error) {
+    if (layer.metadata && layer.metadata.metadata && layer.metadata.metadata.error) {
       const promise = new Promise((resolve) => {
         resolve();
       });
@@ -703,6 +719,10 @@ class MapStore {
 
   updateAnalysisSliderIndices(params) {
     this.analysisSliderIndices[params.id] = params.indices;
+  }
+
+  activateMeasurementButton(bool) {
+    this.activateMeasurementButton = bool;
   }
 
   activateDrawButton(bool) {

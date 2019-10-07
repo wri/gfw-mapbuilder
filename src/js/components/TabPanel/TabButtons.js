@@ -5,6 +5,8 @@ import text from 'js/languages';
 import {getUrlParams} from 'utils/params';
 import React, {Component, PropTypes} from 'react';
 import SVGIcon from 'utils/svgIcon';
+import resources from '../../../resources';
+import {defaultColorTheme} from '../../config';
 
 //- Parse Keys for easier access
 const {
@@ -12,7 +14,6 @@ const {
   LAYERS,
   ANALYSIS,
   INFO_WINDOW,
-  MEASUREMENT,
   NARRATIVE,
   MORE
 } = tabKeys;
@@ -114,7 +115,7 @@ export default class TabButtons extends Component {
     const {settings, language} = this.context;
     const {tableOfContentsVisible} = this.props;
     const narrative = settings.labels && settings.labels[language] && settings.labels[language].narrative || '';
-
+    const { customColorTheme } = resources;
     return (
       <nav className={`tab-buttons map-component ${tableOfContentsVisible ? '' : 'hidden'}`}>
         <ul className='tab-buttons__header'>
@@ -133,7 +134,6 @@ export default class TabButtons extends Component {
           <li className={this.getClassName(LAYERS)} data-value={LAYERS} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-basemap'} />
-
             </svg>
             <span className='tab-tooltip'>{text[language].LAYERS}</span>
             <span className='tab-buttons__tab-label mobile-show'>
@@ -150,48 +150,47 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          {!settings.includeMeasurementTab ? null :
-            <li className={this.getClassName(MEASUREMENT)} data-value={MEASUREMENT} onClick={this.changeTab}>
+          {!this.props.analysisDisabled &&
+            <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
               <svg className='svg-icon'>
-                <SVGIcon id={'icon-measure'} />
-
+                <SVGIcon id={'icon-analysis'} />
               </svg>
-              <span className='tab-tooltip'>{text[language].MEASUREMENT}</span>
+              <span className='tab-tooltip'>{text[language].ANALYZE}</span>
               <span className='tab-buttons__tab-label mobile-show'>
-                {text[language].MEASUREMENT}
+                {text[language].ANALYZE}
               </span>
             </li>
           }
-          {!this.props.analysisDisabled && <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
-            <svg className='svg-icon'>
-              <SVGIcon id={'icon-analysis'} />
-
-            </svg>
-            <span className='tab-tooltip'>{text[language].ANALYZE}</span>
-            <span className='tab-buttons__tab-label mobile-show'>
-              {text[language].ANALYZE}
+          {!this.props.analysisDisabled && this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
+            <span
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              className="tab-dot"
+            >
             </span>
-          </li> ||
-          <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)} analysis-disabled`} data-value={ANALYSIS}>
-            <svg className='svg-icon'>
-              <SVGIcon id={'icon-analysis'} />
-            </svg>
-            <span className='tab-tooltip'>Your selected geometry is being registered with the geostore. Analysis tab will be available momentarily</span>
-            <span className='tab-buttons__tab-label mobile-show'>
-              {text[language].ANALYZE}
-            </span>
-          </li>}
+            : null
+          }
           {!settings.includeDocumentsTab ? null :
-            <li className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`} data-value={DOCUMENTS} onClick={this.changeTab}>
+            <li
+              className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`}
+              data-value={DOCUMENTS}
+              onClick={this.changeTab}
+            >
               <svg className='svg-icon'>
                 <SVGIcon id={'icon-documents'} />
-
               </svg>
               <span className='tab-tooltip'>{text[language].DOCUMENTS}</span>
               <span className='tab-buttons__tab-label mobile-show'>
                 {text[language].DOCS}
               </span>
             </li>
+          }
+          {this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
+            <span
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              className="tab-dot"
+            >
+            </span>
+            : null
           }
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>
