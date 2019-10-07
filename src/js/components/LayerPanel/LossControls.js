@@ -86,10 +86,7 @@ export default class LossControls extends Component {
           this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
         }
         if (resetSlider) {
-          // setTimeout(() => {
-
-            layerActions.shouldResetSlider(false);
-          // }, 10);
+          layerActions.shouldResetSlider(false);
           this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), lossOptions[0].label, lossOptions[lossOptions.length - 1].label);
           this.setState({sliderValue: [lossOptions[0].value, lossOptions[lossOptions.length - 1].value]});
         }

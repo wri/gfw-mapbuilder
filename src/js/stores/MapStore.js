@@ -186,6 +186,7 @@ class MapStore {
   }
 
   addActiveLayer (layerId) {
+    console.log('adddlayerId', layerId);
     const index = this.activeLayers.indexOf(layerId);
     if (index === -1) {
       // Create a copy of the strings array for easy change detection
@@ -196,6 +197,8 @@ class MapStore {
   }
 
   removeActiveLayer (layerId) {
+    console.log('remoiveelayerId', layerId);
+    debugger
     const index = this.activeLayers.indexOf(layerId);
     if (index !== -1) {
       // Create a copy of the strings array for easy change detection

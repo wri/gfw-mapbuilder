@@ -233,8 +233,6 @@ export default class Map extends Component {
         console.log('urlState.activeLayers', urlState.activeLayers);
         console.log('this.state.activeLayers', this.state.activeLayers);
         mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
-        // mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        // mapActions.createLayers(response.map, settings.layerPanel, [], language);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -574,8 +572,9 @@ export default class Map extends Component {
       mapActions.changeBasemap(params.b);
     }
 
+    // const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+    // const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
     if (params.a) {
-      //todo: cast same clearAll function if we don't!!
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
@@ -621,6 +620,12 @@ export default class Map extends Component {
               if (featLayer) {
 
                 featLayer.hide();
+                // if (featLayer.id === 'TileService_Metadata_Test_423') {
+                //
+                //   console.log(featLayer);
+                //   console.log('webmapLayerConfig', webmapLayerConfig);
+                //   debugger
+                // }
               }
               layerActions.removeActiveLayer(webmapLayerConfig.id);
             } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
@@ -631,7 +636,7 @@ export default class Map extends Component {
               layerActions.addActiveLayer(webmapLayerConfig.id);
             }
           } else {
-            console.log(webmapLayerConfig);
+            // console.log(webmapLayerConfig);
 
 
             if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
@@ -657,13 +662,13 @@ export default class Map extends Component {
               } else {
                 webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
               }
-              console.log(webmapIdConfig);
+              // console.log(webmapIdConfig);
             }
           }
 
         });
 
-        console.log('webmapIdConfig', webmapIdConfig);
+        // console.log('webmapIdConfig', webmapIdConfig);
         //TODO: the left-over layers in updateableVisibleLayers are all the notVisible at Scale layers which Should be hidden!
 
         Object.keys(webmapIdConfig).forEach(webmapId => {
@@ -786,7 +791,6 @@ export default class Map extends Component {
     }
 
     return returnObj;
-    // return params.c ? parseInt(params.c) : false;
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
