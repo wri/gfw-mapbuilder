@@ -371,7 +371,6 @@ class MapStore {
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)
       ) {
         this.activeTab = tabKeys.ANALYSIS;
-        console.log('#1');
       } else {
         if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
           isRegistering = true;
@@ -382,14 +381,12 @@ class MapStore {
             analysisUtils.registerGeom(exactGeom).then(res => {
               selectedFeature.attributes.geostoreId = res.data.id;
               selectedFeature.setGeometry(geomToRegister);
-              //Investigate on Monday!!!!
               mapActions.toggleAnalysisTab(false);
               isRegistering = false;
             });
           });
         } else {
           this.activeTab = tabKeys.INFO_WINDOW;
-          console.log('#2');
         }
       }
       this.activeAnalysisType = 'default';

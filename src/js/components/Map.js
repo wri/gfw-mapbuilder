@@ -315,6 +315,7 @@ export default class Map extends Component {
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
         userFeaturesLayer.on('click', (evt) => {
+          console.log('clicked');
           if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
             evt.stopPropagation();
             if (!evt.graphic.attributes.geostoreId) {
