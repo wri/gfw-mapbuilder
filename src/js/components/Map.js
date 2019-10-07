@@ -227,7 +227,6 @@ export default class Map extends Component {
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
       response.map.infoWindow.on('set-features, selection-change', this.getSelectedFeatureTitles);
-      response.map.on('click', this.updateSelectIndex);
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
@@ -289,6 +288,7 @@ export default class Map extends Component {
             // don't run this function if we are drawing a custom shape
             return;
           }
+          this.updateSelectIndex();
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
             .map(wmsId => brApp.map.getLayer(wmsId))
@@ -315,7 +315,6 @@ export default class Map extends Component {
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
         userFeaturesLayer.on('click', (evt) => {
-          console.log('clicked');
           if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
             evt.stopPropagation();
             if (!evt.graphic.attributes.geostoreId) {
