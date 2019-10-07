@@ -139,12 +139,7 @@ class MapActions {
           existingIds.push(layer.id);
         }
       });
-    //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
-    //- Make those updates here to the config as this will trickle down
-    // uniqueLayers.forEach(layer => {
-    //   layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
-    //   // layer.visible = activeLayers.indexOf(layer.id) > -1;
-    // });
+
     //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
@@ -157,7 +152,6 @@ class MapActions {
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
-      console.log('addedLayers', addedLayers);
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach((cartoLayer) => {
@@ -188,56 +182,21 @@ class MapActions {
         adjustLayerVis = true;
       }
 
-      console.log('adjustLayerVis', adjustLayerVis);
-
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
 
         if (adjustLayerVis && l.esriLayer) {
           if (activeLayers.indexOf(l.esriLayer.id) === -1) {
-            // if (l.subId) {
-            //   console.log('l', l);
-            //   //
-            //   // //Not doing AnyThing when we have actual layers in the url works - it turns on the correct layers annnd somehow turns OFF the on-by-default layer!
-            //   //   //this leaves ON our on-by-deault layer when we share with NO layers!
-            //   //
-            //   // //Running the `removeAllSubLayers` action removes all the turned-on layers in Both scenarios
-            //   //   //so, if we don't do Anything in the 1st, how does that originally-turned-on-layer get removed..??
-            //   //
-            //   // // layerActions.removeSubLayer(l);
-            //   // // if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
-            //   //
-            //   // // layerActions.removeActiveLayer(l.id); //TODO: needs work on whether different layer checkboxes are IN the same layer
-            //   // console.log('l.esriLayer', l.esriLayer);
-            //   // // layerActions.removeAllSubLayers(l.esriLayer);
-            //   //
-            //   // // l.visible = false;
-            // } else {
-              // debugger
-              //TODO: onLoad of a shared app with layers on from 3 different groups, only the layer from the webmap group still stays on!
-              // if (l.visible) {
-              //   // console.log('iddd', l.id);
-              //
-              //   layerActions.removeActiveLayer(l.id);
-              //   l.visible = false;
-              // }
-            // }
-            // l.esriLayer.hide(); //TODO: needs work on whether different layer checkboxes are IN the same layer
-
 
             if (!l.subId && l.visible) {
-              // console.log('iddd', l.id);
 
               layerActions.removeActiveLayer(l.id);
               l.visible = false;
             }
-          }
-          else {
-            // console.log('ohh??', l.id);
+          } else {
             if (l.subId) {
               layerActions.addSubLayer(l);
               l.visible = true;
-              console.log(l);
             } else {
               l.visible = true;
               layerActions.addActiveLayer(l.id);

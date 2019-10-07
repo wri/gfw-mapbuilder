@@ -231,8 +231,6 @@ export default class Map extends Component {
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
         mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
-        // mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        // mapActions.createLayers(response.map, settings.layerPanel, [], language);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -758,7 +756,6 @@ export default class Map extends Component {
     }
 
     return returnObj;
-    // return params.c ? parseInt(params.c) : false;
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
