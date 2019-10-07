@@ -597,14 +597,17 @@ class MapStore {
   
   increaseSelectIndex() {
     this.selectIndex = this.selectIndex + 1;
+    this.activeTab = tabKeys.INFO_WINDOW;
   }
   
   decreaseSelectIndex() {
     this.selectIndex = this.selectIndex - 1;
+    this.activeTab = tabKeys.INFO_WINDOW;
   }
   
   updateSelectIndex(index) {
     this.selectIndex = index;
+    this.activeTab = tabKeys.INFO_WINDOW;
   }
 
   showLayerInfo (layer) {
