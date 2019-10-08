@@ -230,8 +230,6 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
-        console.log('urlState.activeLayers', urlState.activeLayers);
-        console.log('this.state.activeLayers', this.state.activeLayers);
         mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
@@ -572,8 +570,6 @@ export default class Map extends Component {
       mapActions.changeBasemap(params.b);
     }
 
-    // const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
-    // const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
     if (params.a) {
 
       const layerIds = params.a.split(',');
@@ -661,7 +657,6 @@ export default class Map extends Component {
 
         Object.keys(webmapIdConfig).forEach(webmapId => {
           const mapLaya = map.getLayer(webmapId);
-          console.log('mapLaya', mapLaya.visibleLayers);
           const updateableVisibleLayers = mapLaya.visibleLayers.slice();
 
           webmapIdConfig[webmapId].layersToHide.forEach(layerToHide => {
@@ -676,8 +671,6 @@ export default class Map extends Component {
               layerActions.addSubLayer(subLayerConfig);
             }
           });
-
-          console.log('updateableVisibleLayers', updateableVisibleLayers);
 
           mapLaya.setVisibleLayers(updateableVisibleLayers);
 
