@@ -186,7 +186,6 @@ class MapStore {
   }
 
   addActiveLayer (layerId) {
-    console.log('adddlayerId', layerId);
     const index = this.activeLayers.indexOf(layerId);
     if (index === -1) {
       // Create a copy of the strings array for easy change detection
@@ -197,8 +196,6 @@ class MapStore {
   }
 
   removeActiveLayer (layerId) {
-    console.log('remoiveelayerId', layerId);
-    debugger
     const index = this.activeLayers.indexOf(layerId);
     if (index !== -1) {
       // Create a copy of the strings array for easy change detection
@@ -209,7 +206,6 @@ class MapStore {
   }
 
   addSubLayer (info) {
-    console.log(this.dynamicLayers);
     if (!this.dynamicLayers[info.id]) {
       this.dynamicLayers[info.id] = [];
     }
@@ -423,7 +419,6 @@ class MapStore {
         }
         if (layer.subId && layer.esriLayer.visibleLayers.indexOf(layer.subIndex) > -1) {
           if (LayersHelper.isLayerVisible(map, layer)) {
-            console.log('visbile!', layer.subId);
             this.activeLayers.push(layer.subId);
           }
         }

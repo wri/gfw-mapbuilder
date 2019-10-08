@@ -94,7 +94,6 @@ class MapActions {
   }
 
   createLayers (map, layerPanel, activeLayers, language) {
-    console.log('createLayers');
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -123,6 +122,16 @@ class MapActions {
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
+
+    layers.forEach(layer => {
+      if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
+        if (activeLayers.indexOf(layer.id) === -1) {
+          layer.visible = false;
+        } else {
+          layer.visible = true;
+        }
+      }
+    });
     //- make sure there's only one entry for each dynamic layer
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {

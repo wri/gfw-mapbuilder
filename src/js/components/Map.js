@@ -618,26 +618,18 @@ export default class Map extends Component {
             const featLayer = map.getLayer(webmapLayerConfig.id);
             if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
               if (featLayer) {
-
                 featLayer.hide();
-                // if (featLayer.id === 'TileService_Metadata_Test_423') {
-                //
-                //   console.log(featLayer);
-                //   console.log('webmapLayerConfig', webmapLayerConfig);
-                //   debugger
-                // }
               }
+
               layerActions.removeActiveLayer(webmapLayerConfig.id);
             } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
               if (featLayer) {
-
                 featLayer.show();
               }
+
               layerActions.addActiveLayer(webmapLayerConfig.id);
             }
           } else {
-            // console.log(webmapLayerConfig);
-
 
             if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
               (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible) ||
@@ -662,14 +654,10 @@ export default class Map extends Component {
               } else {
                 webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
               }
-              // console.log(webmapIdConfig);
             }
           }
 
         });
-
-        // console.log('webmapIdConfig', webmapIdConfig);
-        //TODO: the left-over layers in updateableVisibleLayers are all the notVisible at Scale layers which Should be hidden!
 
         Object.keys(webmapIdConfig).forEach(webmapId => {
           const mapLaya = map.getLayer(webmapId);
