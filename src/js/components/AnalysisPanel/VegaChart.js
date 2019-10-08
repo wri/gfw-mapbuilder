@@ -99,7 +99,7 @@ export default class VegaChart extends Component {
           });
         });
       }
-
+      
       fetch(config.data[0].url).then(res => {
         if (res.status !== 200) {
           this.handleError(`Error creating analysis for ${this.props.reportLabel}`);

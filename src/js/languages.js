@@ -1234,25 +1234,25 @@ strings.es.INFO_WINDOW_INSTRUCTION_LIST = [
 ];
 
 //- Coordinates
-strings.es.ANALYSIS_COORDINATES_HEADER = 'Enter your own coordinates';
+strings.es.ANALYSIS_COORDINATES_HEADER = 'Ingresa las coordenadas';
 strings.es.ANALYSIS_COORDINATES_INSTRUCTIONS = [
-  `Enter at least 3 coordinates`,
-  `Add up to 10 points to make shapes`
+  `Ingresa por lo menos 3 coordenadas`,
+  `Agrega hasta 10 puntos para generar el polígono`
 ];
 strings.es.ANALYSIS_COORDINATES_BUTTONS = [
-  `Enter Values`,
-  `Add More`,
-  `Make Shape`,
-  `Remove`
+  `Ingresa valores`,
+  `Agrega más`,
+  `Genera el polígno`,
+  `Borra`
 ];
 strings.es.ANALYSIS_COORDINATES_LABELS = [
-  `Latitude`,
-  `Longitude`,
-  `Select Format`
+  `Latitud`,
+  `Longitud`,
+  `Selecciona el Formato`
 ];
 strings.es.ANALYSIS_COORDINATES_FORMATS = [
-  `Degrees Decimal Seconds (DMS)`,
-  `Decimal Degrees (DD)`
+  `Grados y Minutos y Decimales`,
+  `Grados Decimales `
 ];
 strings.es.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
   `N`,
@@ -1260,16 +1260,16 @@ strings.es.ANALYSIS_COORDINATES_LATITUDE_DIRECTIONS = [
 ];
 strings.es.ANALYSIS_COORDINATES_LONGITUDE_DIRECTIONS = [
   `E`,
-  `W`
+  `O`
 ];
 
 strings.es.ANALYSIS_COORDINATES_ERROR = [
-'Error: Please fill in all latitude and longitude values. You must enter a minimum of 3 points to make a shape.',
-'Error: You can only enter positive values for degrees, minutes, and seconds.',
-'Error: Latitude values must be no greater than 90.',
-'Error: Longitude values must be no greater than 180.',
-'Error: Latitude must be within the range of -90 and 90.',
-'Error: Longitude must be within the range of -180 and 180.'
+'Error: Ingresa todos los valores de latitud y longitud. Debes ingresar por lo menos 3 puntos para crear el polígono',
+'Error: Solo puedes ingresar valores positivos para los grados, minutos y segundos',
+'Error: Los valores de la latitud no deben ser mayores de 90',
+'Error: Los valores de la longitud no deben ser mayores de 180',
+'Error: Los valores de latitud deben ser entre -90 y 90',
+'Error: Los valores de longitud deben ser entre -180 y 180'
 ];
 
 strings.es.EDIT_COORDINATES_LABELS = [
