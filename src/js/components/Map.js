@@ -256,17 +256,6 @@ export default class Map extends Component {
             maskLayer.setLayerDefinitions(layerDefs);
             maskLayer.show();
           }
-          
-          const firesLayer = response.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
-          if (firesLayer) {
-            const layerDefs = [];
-            firesLayer.visibleLayers.forEach((layerNum) => {
-              layerDefs[layerNum] = `code_iso3 <> '${encodeURIComponent(settings.iso)}'`;
-            });
-            firesLayer.setLayerDefinitions(layerDefs);
-            layerActions.removeActiveLayer(firesLayer.id);
-            firesLayer.show();
-          }
         }
 
         if (!extentChange) {
@@ -306,12 +295,12 @@ export default class Map extends Component {
           }
           this.updateSelectIndex();
           
-          // const firesLayer = response.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
-          // if (firesLayer) {
-          //   layerActions.removeActiveLayer(firesLayer);
-          //   layerActions.removeActiveLayer(firesLayer);
-          // }
-          // console.log('layerKeys', layerKeys);
+          const firesLayer = response.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
+          if (firesLayer) {
+            layerActions.removeActiveLayer(firesLayer);
+            layerActions.removeActiveLayer(firesLayer);
+          }
+          console.log('selected feature', brApp.map);
           
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
