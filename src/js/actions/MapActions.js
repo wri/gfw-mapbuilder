@@ -7,6 +7,9 @@ import resources from 'resources';
 import Point from 'esri/geometry/Point';
 import AppUtils from '../utils/AppUtils';
 
+import layerActions from 'actions/LayerActions';
+import {getUrlParams} from 'utils/params';
+
 let layersCreated = false;
 
 class MapActions {
@@ -123,6 +126,16 @@ class MapActions {
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
+
+    layers.forEach(layer => {
+      if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
+        if (activeLayers.indexOf(layer.id) === -1) {
+          layer.visible = false;
+        } else {
+          layer.visible = true;
+        }
+      }
+    });
     //- make sure there's only one entry for each dynamic layer
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
@@ -140,11 +153,7 @@ class MapActions {
           existingIds.push(layer.id);
         }
       });
-    //- If we are changing webmaps, and any layer is active, we want to make sure it shows up as active in the new map
-    //- Make those updates here to the config as this will trickle down
-    uniqueLayers.forEach(layer => {
-      layer.visible = activeLayers.indexOf(layer.id) > -1 || layer.visible;
-    });
+
     //- remove layers from config that have no url unless they are of type graphic (which have no url)
     //- sort by order from the layer config
     //- return an arcgis layer for each config object
@@ -175,8 +184,40 @@ class MapActions {
 
       uniqueLayers.sort((a, b) => a.order - b.order);
 
+      const params = getUrlParams(location.href);
+
+      let adjustLayerVis;
+
+      if (!params) {
+        adjustLayerVis = false;
+      } else if (Object.keys(params).length < 2) {
+        adjustLayerVis = false;
+      } else {
+        adjustLayerVis = true;
+      }
+
       uniqueLayers.forEach((l, i) => {
         map.reorderLayer(l, i + 1);
+
+        if (adjustLayerVis && l.esriLayer) {
+          if (activeLayers.indexOf(l.esriLayer.id) === -1) {
+
+            if (!l.subId && l.visible) {
+
+              layerActions.removeActiveLayer(l.id);
+              l.visible = false;
+            }
+          } else {
+            if (l.subId) {
+              layerActions.addSubLayer(l);
+              l.visible = true;
+            } else {
+              l.visible = true;
+              layerActions.addActiveLayer(l.id);
+            }
+            l.esriLayer.show();
+          }
+        }
       });
 
       if (map.getLayer('labels')) {
