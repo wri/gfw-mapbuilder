@@ -277,43 +277,68 @@ export default class SubscribeModal extends Component {
           <p>{text[language].SUBSCRIBE_ALERTS_SELECT}</p>
           <div className='alert-checkbox'>
             <div className='custom-checkbox'>
-              {text[language].SUBSCRIBE_ALERTS_VIIRS}<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+                {text[language].SUBSCRIBE_ALERTS_VIIRS}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              {text[language].SUBSCRIBE_ALERTS_TCL}<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+                {text[language].SUBSCRIBE_ALERTS_TCL}
+              </label>
             </div>
 
             <div className='custom-checkbox'>
-            {text[language].SUBSCRIBE_ALERTS_GLAD}<input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+                {text[language].SUBSCRIBE_ALERTS_GLAD}
+              </label>
             </div>
             <div className='custom-checkbox'>
-            {text[language].SUBSCRIBE_ALERTS_SAD}<input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+                {text[language].SUBSCRIBE_ALERTS_SAD}
+              </label>
             </div>
             <div className='custom-checkbox'>
-            {text[language].SUBSCRIBE_ALERTS_FORMA}<input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+                {text[language].SUBSCRIBE_ALERTS_FORMA}
+              </label>
             </div>
             <div className='custom-checkbox'>
-            {text[language].SUBSCRIBE_ALERTS_TERRA}<input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+                {text[language].SUBSCRIBE_ALERTS_TERRA}
+              </label>
             </div>
             <div className='custom-checkbox'>
-            {text[language].SUBSCRIBE_ALERTS_PRODES}<input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+                {text[language].SUBSCRIBE_ALERTS_PRODES}
+              </label>
             </div>
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 2 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_EMAIL_TITLE}</h3>
           <p>{text[language].SUBSCRIBE_EMAIL}</p>
-          <div className='alert-checkbox'>
+          <div className='alert-email'>
             <input className="alert-input" placeholder='Enter email' value={this.state.email} onChange={this.updateEmail} />
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_NAME_SUBSCRIPTION}</h3>
-          <div className='alert-checkbox'>
-            <p>{text[language].SUBSCRIBE_NAME_SUBSCRIPTION}</p>
-            <input className="subscription-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
-            <p>{text[language].SUBSCRIBE_EMAIL_TITLE}</p>
-            <select className='language-selector' onChange={this.changeLanguage} value={this.state.activeLanguage}>
+          <div className='alert-email-settings'>
+            <label htmlFor="area-name">
+              {text[language].SUBSCRIBE_NAME_SUBSCRIPTION}
+            </label>
+            <input className="alert-input" id="area-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
+            <label>
+              {text[language].SUBSCRIBE_EMAIL_TITLE}
+            </label>
+            <select className='alert-dropdown' id="alert-email" onChange={this.changeLanguage} value={this.state.activeLanguage}>
               {langs.map(this.optionMapper)}
             </select>
           </div>
@@ -362,7 +387,7 @@ export default class SubscribeModal extends Component {
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
           >
-            Save
+            {text[language].SUBSCRIBE_NEXT}
           </button> : null }
         </div>
 

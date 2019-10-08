@@ -15,9 +15,9 @@ import SubscribeModal from 'components/Modals/SubscribeModal';
 import ConfirmModal from 'components/Modals/ConfirmModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
+import TabView from 'components/TabPanel/TabView';
 import SearchModal from 'components/Modals/SearchModal';
 import PrintModal from 'components/Modals/PrintModal';
-import TabView from 'components/TabPanel/TabView';
 import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
@@ -170,12 +170,17 @@ export default class Map extends Component {
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };
+  
+  updateSelectIndex = () => {
+    mapActions.updateSelectIndex(-1);
+  };
 
   getSelectedFeatureTitles = () => {
 
     if (brApp.map.measurement && brApp.map.measurement.getTool()) {
       return;
     }
+    
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
@@ -285,6 +290,12 @@ export default class Map extends Component {
             // don't run this function if we are drawing a custom shape
             return;
           }
+          //- Hide the selected feature highlight if using the measurement tool
+          if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+            brApp.map.setInfoWindowOnClick(false);
+            brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+          }
+          this.updateSelectIndex();
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
             .map(wmsId => brApp.map.getLayer(wmsId))
@@ -323,14 +334,6 @@ export default class Map extends Component {
             }
           }
         });
-        
-      //- Hide the selected feature highlight if using the measurement tool
-      response.map.on('click', evt => {
-        if (brApp.map.measurement && brApp.map.measurement.getTool()) {
-          brApp.map.setInfoWindowOnClick(false);
-          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
-        }
-      });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
