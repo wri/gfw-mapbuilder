@@ -571,6 +571,8 @@ export default class Map extends Component {
     const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
+    const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+    const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
 
     let activeLayers;
 
@@ -582,7 +584,6 @@ export default class Map extends Component {
       return returnObj;
     }
 
-
     //- Set the default basemap in the store
     basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 
@@ -590,14 +591,11 @@ export default class Map extends Component {
       mapActions.changeBasemap(params.b);
     }
 
-    const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
-    const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
     if (params.a) {
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
       const opacityObjs = [];
-
 
       layerIds.forEach((layerId, j) => {
         if (webmapLayerIds.indexOf(layerId) === -1) {
@@ -629,21 +627,30 @@ export default class Map extends Component {
 
       if (webmapLayerIds.length > 0) {
         const webmapIdConfig = {};
+        const mapScale = map.getScale();
 
         webmapLayerConfigs.forEach(webmapLayerConfig => {
 
           if (webmapLayerConfig.subIndex === undefined) {
             const featLayer = map.getLayer(webmapLayerConfig.id);
             if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
-              featLayer.hide();
+              if (featLayer) {
+                featLayer.hide();
+              }
+
               layerActions.removeActiveLayer(webmapLayerConfig.id);
             } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
-              featLayer.show();
+              if (featLayer) {
+                featLayer.show();
+              }
+
               layerActions.addActiveLayer(webmapLayerConfig.id);
             }
           } else {
+
             if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
-            (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible)) {
+              (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible) ||
+              (webmapLayerConfig.hasScaleDependency)) {
 
               if (!webmapIdConfig[webmapLayerConfig.id]) {
                 webmapIdConfig[webmapLayerConfig.id] = {
@@ -651,8 +658,15 @@ export default class Map extends Component {
                   layersToShow: []
                 };
               }
+              let inScale = true;
 
-              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) {
+              if (webmapLayerConfig.hasScaleDependency) {
+                if (webmapLayerConfig.maxScale < mapScale && webmapLayerConfig.minScale > mapScale) {
+                  inScale = false;
+                }
+              }
+
+              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && (webmapLayerConfig.visible || inScale)) {
                 webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
               } else {
                 webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
@@ -685,6 +699,8 @@ export default class Map extends Component {
       }
 
       layerActions.setOpacities(opacityObjs);
+
+      returnObj.activeLayers = layerIds;
     } else {
       const webmapIdConfig = {};
 
@@ -850,7 +866,9 @@ export default class Map extends Component {
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
-          sublayer.layerObject.setOpacity(0.6);
+          if (sublayer.layerObject) {
+            sublayer.layerObject.setOpacity(0.6);
+          }
           layers.unshift(layerInfo);
           if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
@@ -866,11 +884,13 @@ export default class Map extends Component {
           visible: layer.visibility,
           esriLayer: {
             ...layer.layerObject,
-            type: layer.layerType,
+            type: layer.layerType
           },
           itemId: layer.itemId
         };
-        layer.layerObject.setOpacity(0.6);
+        if (layer.layerObject) {
+          layer.layerObject.setOpacity(0.6);
+        }
         layers.unshift(layerInfo);
         if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
@@ -997,6 +1017,7 @@ export default class Map extends Component {
         default:
       }
     });
+
 
     const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
     webmapGroup.layers = layers;
