@@ -171,14 +171,6 @@ export default class TabButtons extends Component {
             : null
           }
           </li>
-          {/* {this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
-            <span
-              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
-              className="tab-dot-analysis"
-            >
-            </span>
-            : null
-          } */}
           {!settings.includeDocumentsTab ? null :
             <li
               className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`}
@@ -202,14 +194,6 @@ export default class TabButtons extends Component {
           }
             </li>
           }
-          {/* {settings.includeDocumentsTab && this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
-            <span
-              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
-              className="tab-dot-documents"
-            >
-            </span>
-            : null
-          } */}
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-menu'} />
