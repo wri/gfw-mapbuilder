@@ -131,8 +131,8 @@ const LayersHelper = {
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
           const defs = [];
-          switch (selectValue.toString()) {
-            case '0': //past 24 hours
+          switch (parseInt(selectValue)) {
+            case 0: //past 24 hours
               newFiresLayer.url = shortTermServices[`${fireID}24HR`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}24HR`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
@@ -142,7 +142,7 @@ const LayersHelper = {
               layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
-            case '1': //past 48 hours
+            case 1: //past 48 hours
               newFiresLayer.url = shortTermServices[`${fireID}48HR`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}48HR`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
@@ -152,7 +152,7 @@ const LayersHelper = {
               layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
-            case '2': //past 72 hours
+            case 2: //past 72 hours
               newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
@@ -164,7 +164,7 @@ const LayersHelper = {
               layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
-            case '3': //past 7 days
+            case 3: //past 7 days
               newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
@@ -174,7 +174,7 @@ const LayersHelper = {
               layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
-            case '4': //past year
+            case 4: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
               newFiresLayer.url = shortTermServices[`${fireID}1YR`].url;
               newFiresLayer._url.path = shortTermServices[`${fireID}1YR`].url;
