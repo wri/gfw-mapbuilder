@@ -295,13 +295,6 @@ export default class Map extends Component {
           }
           this.updateSelectIndex();
           
-          const firesLayer = response.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
-          if (firesLayer) {
-            layerActions.removeActiveLayer(firesLayer);
-            layerActions.removeActiveLayer(firesLayer);
-          }
-          console.log('selected feature', brApp.map);
-          
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
             .map(wmsId => brApp.map.getLayer(wmsId))
@@ -310,7 +303,6 @@ export default class Map extends Component {
           if (wmsLayers.length) {
             wmsClick(evt, wmsLayers, brApp.map.extent).then(responses => {
               const wmsGraphics = [];
-
               Object.keys(responses).forEach(layerId => {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
                   createWMSGraphics(responses, layerId, wmsGraphics);
