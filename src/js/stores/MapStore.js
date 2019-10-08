@@ -139,6 +139,7 @@ class MapStore {
       setSubLayers: layerActions.setSubLayers,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
+      removeAllLayers: layerActions.removeAllLayers,
       setLossOptions: layerActions.setLossOptions,
       shouldResetSlider: layerActions.shouldResetSlider,
       updateLossTimeline: layerActions.updateLossTimeline,
@@ -212,16 +213,22 @@ class MapStore {
   }
 
   addSubLayer (info) {
+    if (!this.dynamicLayers[info.id]) {
+      this.dynamicLayers[info.id] = [];
+    }
     this.dynamicLayers[info.id].push(info.subIndex);
     this.addActiveLayer(info.subId);
   }
 
   removeSubLayer (info) {
-    const subLayerIndex = this.dynamicLayers[info.id].indexOf(info.subIndex);
-    if (subLayerIndex > -1) {
-      this.dynamicLayers[info.id].splice(subLayerIndex, 1);
+    if (this.dynamicLayers[info.id]) {
+
+      const subLayerIndex = this.dynamicLayers[info.id].indexOf(info.subIndex);
+      if (subLayerIndex > -1) {
+        this.dynamicLayers[info.id].splice(subLayerIndex, 1);
+      }
+      this.removeActiveLayer(info.subId);
     }
-    this.removeActiveLayer(info.subId);
   }
 
   removeAllSubLayers(info) {
@@ -360,6 +367,10 @@ class MapStore {
     //-Terra I
     this.terraIStartDate = new Date('2004', 0, 1);
     this.terraIEndDate = new Date('2016', 6, 12);
+  }
+
+  removeAllLayers () {
+    this.activeLayers = [];
   }
 
   mapUpdated () {}

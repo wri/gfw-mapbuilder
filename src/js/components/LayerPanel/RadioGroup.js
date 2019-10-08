@@ -97,8 +97,7 @@ import RadioButton from './RadioButton';
 
     });
 
-    if (layerToShow) {
-      // debugger;
+    if (layerToShow && layerToShow.esriLayer) {
       if (layerToShow.subId || layerToShow.layerIds) {
         layerToShow.esriLayer.setVisibleLayers(dynamicLayers[layerToShow.id]);
       }
