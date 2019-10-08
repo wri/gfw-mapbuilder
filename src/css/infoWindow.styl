@@ -38,6 +38,7 @@
 .infoWindow__title
   border-bottom 1px solid #efefef
   margin 0 10px
+  overflow-y auto
 
 .infoWindow__attribute-display
   overflow-y auto
@@ -58,7 +59,7 @@
 .infoWindow__footer
   display flex
   justify-content space-around
-  height 70px
+  height 80px
   padding-top 5px
   background-color white
   box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
@@ -117,6 +118,7 @@
   background #fff
   border-radius 0
   padding-left 5px
+  padding-right 20px
   left 0
   top 0
   &::after
@@ -153,12 +155,12 @@
 
 .infoWindow__count
   color $darkGray
-  margin-left auto
-  margin-bottom 0.25rem
+  margin 0.5rem 0
   width 100%
   display flex
   justify-content flex-end
   font-size 0.75rem
+  padding-right 1rem
 
 //- Esri Overrides
 .esriViewPopup .header

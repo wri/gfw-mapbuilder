@@ -735,7 +735,28 @@ html
                   uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
                   hide: true
                 }
-              ]
+              },
+              {
+                "id": "wri_contextual",
+                "thumbnailUrl": "https://my.gfw-mapbuilder.org/img/wri_contextual.png",
+                "title": {
+                  "en": "WRI Contextual",
+                  "fr": "WRI Contextual",
+                  "es": "WRI Contextual",
+                  "pt": "WRI Contextual",
+                  "id": "WRI Contextual",
+                  "zh": "WRI Contextual",
+                  "ka": "WRI Contextual"
+                }
+              }]
+            },
+            "extraLayers": [{
+              "id": "MASK",
+              "type": "dynamic",
+              "order": 10000,
+              "url": "https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer",
+              "opacity": 0.35,
+              "layerIds": [0]
             },
             GROUP_LC: {
               groupType: 'default',

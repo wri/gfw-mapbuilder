@@ -99,6 +99,7 @@ class MapStore {
     this.currentLng = 0;
     this.currentX = 0;
     this.currentY = 0;
+    this.selectIndex = 0;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -156,6 +157,9 @@ class MapStore {
       updateCurrentLng: mapActions.updateCurrentLng,
       updateCurrentX: mapActions.updateCurrentX,
       updateCurrentY: mapActions.updateCurrentY,
+      increaseSelectIndex: mapActions.increaseSelectIndex,
+      decreaseSelectIndex: mapActions.decreaseSelectIndex,
+      updateSelectIndex: mapActions.updateSelectIndex,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -375,10 +379,19 @@ class MapStore {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
             analysisUtils.registerGeom(exactGeom).then(res => {
-              selectedFeature.attributes.geostoreId = res.data.id;
-              selectedFeature.setGeometry(geomToRegister);
-              mapActions.toggleAnalysisTab(false);
-              isRegistering = false;
+              if (res.error) {
+                analysisUtils.registerGeom(selectedFeature.geometry).then(geomRes => {
+                  selectedFeature.attributes.geostoreId = geomRes.error ? '' : geomRes.data.id;
+                  selectedFeature.setGeometry(geomToRegister);
+                  mapActions.toggleAnalysisTab(false);
+                  isRegistering = false;
+                });
+              } else {
+                selectedFeature.attributes.geostoreId = res.data.id;
+                selectedFeature.setGeometry(geomToRegister);
+                mapActions.toggleAnalysisTab(false);
+                isRegistering = false;
+              }
             });
           });
         } else {
@@ -429,7 +442,7 @@ class MapStore {
   setAnalysisType (payload) {
     this.activeAnalysisType = payload;
   }
-  
+
   toggleMeasurementModal () {
     this.measurementModalVisible = !this.measurementModalVisible;
   }
@@ -590,6 +603,21 @@ class MapStore {
   updateCurrentY (y) {
     this.currentY = y;
   }
+  
+  increaseSelectIndex() {
+    this.selectIndex = this.selectIndex + 1;
+    this.activeTab = tabKeys.INFO_WINDOW;
+  }
+  
+  decreaseSelectIndex() {
+    this.selectIndex = this.selectIndex - 1;
+    this.activeTab = tabKeys.INFO_WINDOW;
+  }
+  
+  updateSelectIndex(index) {
+    this.selectIndex = index;
+    this.activeTab = tabKeys.INFO_WINDOW;
+  }
 
   showLayerInfo (layer) {
     if (layer.metadata && layer.metadata.metadata && layer.metadata.metadata.error) {
@@ -610,14 +638,14 @@ class MapStore {
         const promise = new Promise((resolve) => {
           resolve();
         });
-  
+
         promise.then(() => {
           this.iconLoading = '';
           this.modalLayerInfo = info;
           this.layerModalVisible = true;
           this.emitChange();
         });
-  
+
       } else {
         layerInfoCache.fetch(layer).then(layerInfo => {
           this.iconLoading = '';
@@ -699,7 +727,7 @@ class MapStore {
   updateAnalysisSliderIndices(params) {
     this.analysisSliderIndices[params.id] = params.indices;
   }
-  
+
   activateMeasurementButton(bool) {
     this.activateMeasurementButton = bool;
   }
