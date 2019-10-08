@@ -162,8 +162,7 @@ export default class TabButtons extends Component {
             <span className='tab-buttons__tab-label mobile-show'>
               {text[language].ANALYZE}
             </span>
-          </li>
-          {this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
+            {this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
             <span
               style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
               className="tab-dot-analysis"
@@ -171,6 +170,15 @@ export default class TabButtons extends Component {
             </span>
             : null
           }
+          </li>
+          {/* {this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
+            <span
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              className="tab-dot-analysis"
+            >
+            </span>
+            : null
+          } */}
           {!settings.includeDocumentsTab ? null :
             <li
               className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`}
@@ -184,9 +192,7 @@ export default class TabButtons extends Component {
               <span className='tab-buttons__tab-label mobile-show'>
                 {text[language].DOCS}
               </span>
-            </li>
-          }
-          {this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
+              {settings.includeDocumentsTab && this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
             <span
               style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
               className="tab-dot-documents"
@@ -194,6 +200,16 @@ export default class TabButtons extends Component {
             </span>
             : null
           }
+            </li>
+          }
+          {/* {settings.includeDocumentsTab && this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
+            <span
+              style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
+              className="tab-dot-documents"
+            >
+            </span>
+            : null
+          } */}
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>
               <SVGIcon id={'icon-menu'} />
