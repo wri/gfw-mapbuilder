@@ -579,7 +579,6 @@ export default {
       viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
      }
      
-     //const viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
      const viirsLayerID = viirsFiresLayer.layerIds[0];
      const viirsID = `VIIRS_ACTIVE_FIRES_${viirsLayerID}`;
      
@@ -598,7 +597,6 @@ export default {
       modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
      }
  
-     //const modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
      const modisLayerID = modisFiresLayer.layerIds[0];
      const modisID = `MODIS_ACTIVE_FIRES_${modisLayerID}`;
      const promise = new Deferred();

@@ -138,8 +138,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              // layerActions.removeActiveLayer(firesLayer.id);
-              // layerActions.addActiveLayer(newFiresLayer.id);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '1': //past 48 hours
@@ -148,8 +148,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              // layerActions.removeActiveLayer(firesLayer.id);
-              // layerActions.addActiveLayer(newFiresLayer.id);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '2': //past 72 hours
@@ -160,8 +160,8 @@ const LayersHelper = {
               newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              //layerActions.removeActiveLayer(firesLayer.id);
-              //layerActions.addActiveLayer(newFiresLayer.id);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '3': //past 7 days
@@ -170,8 +170,8 @@ const LayersHelper = {
               newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              //layerActions.removeActiveLayer(firesLayer.id);
-              //layerActions.addActiveLayer(newFiresLayer.id);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             case '4': //past year
@@ -183,8 +183,8 @@ const LayersHelper = {
               newFiresLayer.setLayerDefinitions(defs);
               brApp.map.removeLayer(firesLayer);
               brApp.map.addLayer(newFiresLayer);
-              //layerActions.removeActiveLayer(firesLayer.id);
-              //layerActions.addActiveLayer(newFiresLayer.id);
+              layerActions.removeActiveLayer(firesLayer.id);
+              layerActions.addActiveLayer(newFiresLayer.id);
               console.log('new fires layer', newFiresLayer);
               break;
             default:
