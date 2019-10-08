@@ -924,4 +924,3 @@ export default {
 	  ]
 	}
   };
-  
