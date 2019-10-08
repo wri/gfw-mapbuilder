@@ -577,7 +577,6 @@ export default class Map extends Component {
     const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
     const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
     const returnObj = {};
-    console.log('basemap', basemap);
 
     let activeLayers;
 
