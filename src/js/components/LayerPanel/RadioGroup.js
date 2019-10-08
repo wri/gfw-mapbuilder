@@ -18,45 +18,48 @@ import RadioButton from './RadioButton';
   }
 
   toggleLayer = (layer) => {
-    const { allRadioLayers, activeLayers } = this.props;
-
-    const layersAlreadyHidden = [];
-
-    allRadioLayers.forEach(l => {
-      if (l.id === layer.id) {
-        if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
-        return;
+    const {settings} = this.context;
+    const { activeLayers } = this.props;
+    const layerPanel = settings.layerPanel;
+    const layerPanelGroups = Object.keys(layerPanel);
+    let matchedGroup;
+    
+    layerPanelGroups.forEach(group => {
+      if (layerPanel[group].layers && layerPanel[group].layers.length > 0) {
+        layerPanel[group].layers.forEach(groupLayer => {
+          if (groupLayer.id && groupLayer.id === layer.id) {
+            matchedGroup = group;
+          }
+        });
       }
-      if (layersAlreadyHidden.indexOf(l.id) > -1) {
-        return;
-      }
-
-      layerActions.removeActiveLayer(l.subId || l.id);
-      if (l.subId || l.layerIds) { layerActions.removeAllSubLayers(l.esriLayer); }
-      layersAlreadyHidden.push(l.id);
     });
 
     // If the item you clicked is already on
-    // turn it off and return from the fucntion.
+    // turn it off and return from the function.
     if (activeLayers.indexOf(layer.subId || layer.id) > -1) {
       layerActions.removeActiveLayer(layer.subId || layer.id);
       if (layer.subId || layer.layerIds) { layerActions.removeAllSubLayers(layer.esriLayer); }
-      return;
     }
 
     if (layer.hasOwnProperty('subId')) {
       layerActions.setSubLayers(layer, layer.subIndex);
       layer.esriLayer.setVisibleLayers([layer.subIndex]);
-      return;
     }
 
     if (layer.hasOwnProperty('layerIds')) {
       layerActions.setSubLayers(layer, ...layer.layerIds);
       layer.esriLayer.setVisibleLayers(layer.layerIds);
-      return;
     }
-
+    
     layerActions.addActiveLayer(layer.id);
+    
+    if (layerPanel[matchedGroup].layers && layerPanel[matchedGroup].layers.length > 0) {
+      layerPanel[matchedGroup].layers.forEach(groupLayer => {
+        if (activeLayers.includes(groupLayer.id)) {
+          layerActions.removeActiveLayer(groupLayer.id);
+        }
+      });
+    }
   }
 
   renderRadioButton = layer => {

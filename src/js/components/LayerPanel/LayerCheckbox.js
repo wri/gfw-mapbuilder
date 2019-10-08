@@ -4,7 +4,7 @@ import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -130,16 +130,33 @@ export default class LayerCheckbox extends Component {
     }
 
     const {sublabel} = layer;
+    
+    let colorTheme = '';
+    const { customColorTheme } = this.context.settings;
+    if (checked === 'active' && customColorTheme && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = '#929292';
+    }
 
     return (
       <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
-        <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
+        <span onClick={this.toggleLayer.bind(this)} style={{backgroundColor: `${colorTheme}`}} className='toggle-switch pointer'><span /></span>
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
-        {onEdit && this.props.checked && <div className='fa-button sml white layer-edit' onClick={onEdit}><span className='layer-edit-text'>Edit</span></div>}
+        {onEdit && this.props.checked &&
+        <div
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='fa-button sml white layer-edit'
+          onClick={onEdit}
+        >
+          <span className='layer-edit-text'>Edit</span>
+        </div>}
 
-        <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
+        <span style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}

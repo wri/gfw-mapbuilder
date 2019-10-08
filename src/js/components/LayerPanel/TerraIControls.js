@@ -5,10 +5,12 @@ import layerActions from 'actions/LayerActions';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../config';
 
 export default class TerraIControls extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -60,14 +62,15 @@ export default class TerraIControls extends Component {
     const { startDate, endDate } = this.props;
     const { min, max } = this.state;
     const {language} = this.context;
-
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <div className='terra-i-controls'>
         <div className='terra-i-controls__calendars'>
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_START}</label>
             {startDate && <DatePicker
-              customInput={<StartButton />}
+              customInput={<StartButton customColorTheme={customColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -81,7 +84,7 @@ export default class TerraIControls extends Component {
           <div className='terra-i-controls__calendars--row'>
             <label>{text[language].TIMELINE_END}</label>
             {endDate && <DatePicker
-              customInput={<EndButton />}
+              customInput={<EndButton customColorTheme={customColorTheme} />}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -98,20 +101,26 @@ export default class TerraIControls extends Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const StartButton = ({ onClick, value, customColorTheme }) => {
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const EndButton = ({ onClick, value, customColorTheme }) => {
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};

@@ -5,6 +5,7 @@ import request from 'utils/request';
 import utils from 'utils/AppUtils';
 import all from 'dojo/promise/all';
 import text from 'js/languages';
+import {defaultColorTheme} from '../../config';
 
 const STATS = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer/2',
@@ -15,6 +16,7 @@ const STATS = {
 export default class SadControls extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -145,6 +147,7 @@ export default class SadControls extends Component {
     const {startMonth, startYear, endMonth, endYear} = this.props;
     const {language} = this.context;
     const {min_year} = this.state;
+    const { customColorTheme } = this.context.settings;
     //- If min_year, or any year value for that matter, is still 0, don't render the UI
     if (!min_year) { return <div />; }
 
@@ -156,7 +159,12 @@ export default class SadControls extends Component {
             onChange={this.updateSadAlerts.bind(this, actionTypes.UPDATE_IMAZON_START_MONTH)}>
             {this.renderMonthOptions('start')}
           </select>
-          <div className='fa-button sml white'>{text[language].MONTHS_LIST[startMonth].abbr}</div>
+          <div
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button sml white'
+          >
+            {text[language].MONTHS_LIST[startMonth].abbr}
+          </div>
         </div>
         <div className='relative'>
           <select
@@ -164,7 +172,12 @@ export default class SadControls extends Component {
             onChange={this.updateSadAlerts.bind(this, actionTypes.UPDATE_IMAZON_START_YEAR)}>
             {this.renderYearOptions('start')}
           </select>
-          <div className='fa-button sml white'>{startYear}</div>
+          <div
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button sml white'
+          >
+            {startYear}
+          </div>
         </div>
         <div className='loss-timeline-spacer'> - </div>
         <div className='relative'>
@@ -173,7 +186,12 @@ export default class SadControls extends Component {
             onChange={this.updateSadAlerts.bind(this, actionTypes.UPDATE_IMAZON_END_MONTH)}>
             {this.renderMonthOptions('end')}
           </select>
-          <div className='fa-button sml white'>{text[language].MONTHS_LIST[endMonth].abbr}</div>
+          <div
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button sml white'
+          >
+            {text[language].MONTHS_LIST[endMonth].abbr}
+          </div>
         </div>
         <div className='relative'>
           <select
@@ -181,7 +199,12 @@ export default class SadControls extends Component {
             onChange={this.updateSadAlerts.bind(this, actionTypes.UPDATE_IMAZON_END_YEAR)}>
             {this.renderYearOptions('end')}
           </select>
-          <div className='fa-button sml white'>{endYear}</div>
+          <div
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button sml white'
+          >
+            {endYear}
+          </div>
         </div>
       </div>
     );

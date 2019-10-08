@@ -18,7 +18,7 @@ class MapActions {
   mapUpdated () { return {}; }
 
   infoWindowUpdated ({target}) {
-    return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
+      return (target && target.getSelectedFeature && target.getSelectedFeature()) || false;
   }
 
   changeActiveTab (tabId) {
@@ -41,6 +41,7 @@ class MapActions {
   * @param {boolean} - data.visible
   * @return {object} - data
   */
+  toggleMeasurementModal = () => { return {}; };
   toggleAnalysisModal = (data) => data;
   toggleCoordinatesModal = (data) => data;
   toggleEditCoordinatesModal = (data) => data;
@@ -280,6 +281,10 @@ class MapActions {
   }
 
   updateAnalysisSliderIndices = params => params;
+  
+  activateMeasurementButton(bool) {
+    return bool;
+  }
 
   activateDrawButton(bool) {
     return bool;

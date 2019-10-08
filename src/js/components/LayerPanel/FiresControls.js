@@ -4,10 +4,12 @@ import text from 'js/languages';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import {defaultColorTheme} from '../../config';
 
 export default class FiresControls extends React.Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -77,6 +79,7 @@ export default class FiresControls extends React.Component {
     const { startDate, endDate } = this.props;
     const {language} = this.context;
     const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
+    const { customColorTheme } = this.context.settings;
     return (
       <div>
         <div className="active-fires-controls-container">
@@ -89,10 +92,14 @@ export default class FiresControls extends React.Component {
               >
               {this.renderActiveFireOptions(this.fireOptions)}
               </select>
-              <div className='fa-button sml white pointer'>{activeFireOptionLabel}</div>
+              <div
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='fa-button sml white pointer'>{activeFireOptionLabel}
+              </div>
             </div>
           </div>
           <div
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="fa-button sml white pointer"
             onClick={() => this.setState({
               customRange: !customRange,
@@ -109,7 +116,7 @@ export default class FiresControls extends React.Component {
                 <div className='glad-controls__calendars--row'>
                   <label>{text[language].TIMELINE_START}</label>
                   <DatePicker
-                    customInput={<StartButton />}
+                    customInput={<StartButton customColorTheme={customColorTheme} />}
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
@@ -123,7 +130,7 @@ export default class FiresControls extends React.Component {
                 <div className='glad-controls__calendars--row'>
                   <label>{text[language].TIMELINE_END}</label>
                   <DatePicker
-                    customInput={<EndButton />}
+                    customInput={<EndButton customColorTheme={customColorTheme} />}
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
@@ -143,20 +150,26 @@ export default class FiresControls extends React.Component {
   }
 }
 
-const StartButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const StartButton = ({ onClick, value, customColorTheme }) => {
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};
 
-const EndButton = ({ onClick, value }) => (
-  <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const EndButton = ({ onClick, value, customColorTheme }) => {
+  return (
+    <button
+      style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+      className='fa-button sml white pointer'
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};

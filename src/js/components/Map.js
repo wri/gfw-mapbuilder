@@ -2,6 +2,7 @@
 /* Creating some esri dijits needs the above rule disabled, choosing this over no-new */
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
+import MeasurementModal from 'components/Modals/MeasurementModal';
 import AnalysisModal from 'components/Modals/AnalysisModal';
 import CoordinatesModal from 'components/Modals/CoordinatesModal';
 import EditCoordinatesModal from 'components/Modals/EditCoordinatesModal';
@@ -54,6 +55,7 @@ import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
 import screenUtils from 'esri/geometry/screenUtils';
 import SpatialReference from 'esri/SpatialReference';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 
 import React, {
   Component,
@@ -155,7 +157,7 @@ export default class Map extends Component {
       if (!editingEnabled) {
         editToolbar.deactivate();
       } else {
-        if (map.infoWindow && map.infoWindow.getSelectedFeature) {
+        if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
           if (selectedFeature && selectedFeature.geometry) {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
@@ -170,6 +172,10 @@ export default class Map extends Component {
   };
 
   getSelectedFeatureTitles = () => {
+
+    if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+      return;
+    }
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
@@ -195,6 +201,11 @@ export default class Map extends Component {
         layerActions.updateSelectedFeatureTitles.defer(selectedFeatureTitlesArray);
       }
     }
+  };
+
+  clearSelectedFeaturesTitles = () => {
+    const emptyArray = [];
+    layerActions.updateSelectedFeatureTitles.defer(emptyArray);
   };
 
   createMap = (webmap, options) => {
@@ -287,6 +298,7 @@ export default class Map extends Component {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
                   createWMSGraphics(responses, layerId, wmsGraphics);
                   brApp.map.infoWindow.setFeatures(wmsGraphics);
+                  console.log(brApp.map.infoWindow);
                 } else {
                   console.error(`error: ${responses[layerId].error}`);
                 }
@@ -294,6 +306,7 @@ export default class Map extends Component {
             });
           }
         });
+        
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -310,6 +323,14 @@ export default class Map extends Component {
             }
           }
         });
+        
+      //- Hide the selected feature highlight if using the measurement tool
+      response.map.on('click', evt => {
+        if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+          brApp.map.setInfoWindowOnClick(false);
+          brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+        }
+      });
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
@@ -1016,6 +1037,7 @@ export default class Map extends Component {
       mobileTimeWidgetVisible,
       currentTimeExtent,
       printModalVisible,
+      measurementModalVisible,
       analysisModalVisible,
       coordinatesModalVisible,
       editCoordinatesModalVisible,
@@ -1089,6 +1111,9 @@ export default class Map extends Component {
 
           </svg>
         </div>
+        <div className={`measurement-modal-container ${measurementModalVisible ? '' : 'hidden'}`}>
+          <MeasurementModal />
+        </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
@@ -1126,6 +1151,7 @@ export default class Map extends Component {
             imageryModalVisible={imageryModalVisible}
             imageryError={imageryError}
             imageryHoverVisible={this.state.imageryHoverVisible}
+            language={this.context.language}
           />
         </div>
         { this.state.imageryHoverInfo && this.state.imageryHoverInfo.visible && zoomLevel < 10 && !imageryFetchFailed &&
