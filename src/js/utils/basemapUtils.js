@@ -135,21 +135,26 @@ export default {
     if (basemapLayers) {
       //- Basemaps can cause issues with layer ordering and other things,
       //- remove them here and read them above in updateBasemap
-      //- Here we remove them After the new basemap has rendered on the map to avoid a yucky Flash
-      on.once(map, 'basemap-change', change => {
-        if (change.current && change.current.layers) {
-          let layersUpdated = 0;
-          change.current.layers.forEach(bmLayer => {
-            on.once(bmLayer, 'update-end', () => {
-              layersUpdated++;
+      //- Here we remove them After a Special New Basemap has rendered on the map to avoid a yucky Flash
+      if (arcgisBasemap) {
+        on.once(map, 'basemap-change', change => {
+          if (change.current && change.current.layers) {
+            let layersUpdated = 0;
+            change.current.layers.forEach(bmLayer => {
+              on.once(bmLayer, 'update-end', () => {
+                layersUpdated++;
 
-              if (layersUpdated === change.current.layers.length) {
-                basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
-              }
+                if (layersUpdated === change.current.layers.length) {
+                  basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
+                }
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      } else {
+        // - If we have a generic ESRI or Mapbox basemap, remove these layers now
+        basemapLayers.forEach(bm => map.removeLayer(bm.layerObject));
+      }
     }
 
 
