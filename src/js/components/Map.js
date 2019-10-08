@@ -170,7 +170,7 @@ export default class Map extends Component {
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };
-  
+
   updateSelectIndex = () => {
     mapActions.updateSelectIndex(-1);
   };
@@ -180,7 +180,7 @@ export default class Map extends Component {
     if (brApp.map.measurement && brApp.map.measurement.getTool()) {
       return;
     }
-    
+
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
@@ -317,7 +317,7 @@ export default class Map extends Component {
             });
           }
         });
-        
+
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -576,19 +576,19 @@ export default class Map extends Component {
     const params = getUrlParams(location.href);
     const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
     const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
+    const returnObj = {};
+    console.log('basemap', basemap);
 
     let activeLayers;
 
-    const returnObj = {};
+    //- Set the default basemap in the store
+    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 
     if (!params) {
       return returnObj;
     } else if (Object.keys(params).length < 2) {
       return returnObj;
     }
-
-    //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
