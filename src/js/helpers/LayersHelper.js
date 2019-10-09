@@ -38,154 +38,105 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, language, selectValue = null) {
     if (brApp.map) {
       const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      // let layerObj = {};
-      // const options = {};
-     
-      // const layersPanel = resources.layerPanel.GROUP_LCD.layers;
-      // layersPanel.forEach(layerPanel => {
-      //   if (firesLayer.id.includes(layerPanel.id)) {
-      //     const index = layersPanel.indexOf(layerPanel);
-      //     layerObj = resources.layerPanel.GROUP_LCD.layers[index];
-      //     layerObj.layersId = [21];
-      //     layerObj.id = firesLayer.id;
-      //   }
-      // });
-     
-      // if (selectValue && layerObj.id.includes('VIIRS_ACTIVE_FIRES')) {
-      //   switch (selectValue) {
-      //     case '0':
-      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_24HR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '1':
-      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_48HR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '2':
-      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_72HR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '3':
-      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_7D';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '4':
-      //       layerObj.id = 'VIIRS_ACTIVE_FIRES_1YR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     default:
-      //       console.log('default');
-      //       break;
-      //   }
-      // }
+      //const newFiresLayer = firesLayer;
+      //newFiresLayer.layersId = [21];
+      //const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
       
-      // if (selectValue && layerObj.id.includes('MODIS_ACTIVE_FIRES')) {
-      //   switch (selectValue) {
-      //     case '0':
-      //       layerObj.id = 'MODIS_ACTIVE_FIRES_24HR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '1':
-      //       layerObj.id = 'MODIS_ACTIVE_FIRES_48HR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '2':
-      //       layerObj.id = 'MODIS_ACTIVE_FIRES_72HR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '3':
-      //       layerObj.id = 'MODIS_ACTIVE_FIRES_7D';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     case '4':
-      //       layerObj.id = 'MODIS_ACTIVE_FIRES_1YR';
-      //       layerObj.layersId = [21];
-      //       break;
-      //     default:
-      //       console.log('default');
-      //       break;
-      //   }
-      // }
-      
-      // options.id = layerObj.id;
-      // options.visible = layerObj.visible || false;
-      // options.opacity = layerObj.opacity || 1.0;
-      // if (layerObj.popup && layerObj.layerIds) {
-      //   options.infoTemplates = {};
-      //   const template = layerUtils.makeInfoTemplate(layerObj.popup, language);
-      //   layerObj.layerIds.forEach((id) => {
-      //     options.infoTemplates[id] = { infoTemplate: template };
-      //   });
-      //  }
-       
-      //  const newFiresLayer = layerFactory(layerObj, language);
-      //  newFiresLayer.legendLayer = layerObj.legendLayer || null;
-      //  newFiresLayer.layerIds = layerObj.layerIds;
-      //  newFiresLayer.order = layerObj.order;
-      //  newFiresLayer.label = layerObj.label;
-
-      const newFiresLayer = firesLayer;
-      newFiresLayer.layersId = [21];
-      const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'viirs' : 'modis';
+      const fireID = firesLayer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
+      const layer24HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_24HR`);
+      const layer48HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      const layer72HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      const layer7D = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
           const defs = [];
           switch (parseInt(selectValue)) {
             case 0: //past 24 hours
-              newFiresLayer.url = shortTermServices[`${fireID}24HR`].url;
-              newFiresLayer._url.path = shortTermServices[`${fireID}24HR`].url;
-              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
-              brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
-              console.log('new fires layer', newFiresLayer);
+              // newFiresLayer.url = shortTermServices[`${fireID}24HR`].url;
+              // newFiresLayer._url.path = shortTermServices[`${fireID}24HR`].url;
+              // newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+              // brApp.map.removeLayer(firesLayer);
+              // brApp.map.addLayer(newFiresLayer);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
+              // console.log('new fires layer', newFiresLayer);
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
+              firesLayer.show();
               break;
             case 1: //past 48 hours
-              newFiresLayer.url = shortTermServices[`${fireID}48HR`].url;
-              newFiresLayer._url.path = shortTermServices[`${fireID}48HR`].url;
-              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
-              brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
-              console.log('new fires layer', newFiresLayer);
+              // newFiresLayer.url = shortTermServices[`${fireID}48HR`].url;
+              // newFiresLayer._url.path = shortTermServices[`${fireID}48HR`].url;
+              // newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+              // brApp.map.removeLayer(firesLayer);
+              // brApp.map.addLayer(newFiresLayer);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
+              // console.log('new fires layer', newFiresLayer);
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
+              firesLayer.show();
               break;
             case 2: //past 72 hours
-              newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
-              newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-              defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
-              newFiresLayer.setLayerDefinitions(defs);
-              brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
-              console.log('new fires layer', newFiresLayer);
+              // newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
+              // newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
+              // newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              // defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              // newFiresLayer.setLayerDefinitions(defs);
+              // brApp.map.removeLayer(firesLayer);
+              // brApp.map.addLayer(newFiresLayer);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
+              // console.log('new fires layer', newFiresLayer);
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
+              firesLayer.show();
               break;
             case 3: //past 7 days
-              newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
-              newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-              brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
-              console.log('new fires layer', newFiresLayer);
+              // newFiresLayer.url = shortTermServices[`${fireID}7D`].url;
+              // newFiresLayer._url.path = shortTermServices[`${fireID}7D`].url;
+              // newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              // brApp.map.removeLayer(firesLayer);
+              // brApp.map.addLayer(newFiresLayer);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
+              // console.log('new fires layer', newFiresLayer);
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
+              firesLayer.show();
               break;
             case 4: //past year
-              const queryString = this.generateFiresQuery(startDate, endDate);
-              newFiresLayer.url = shortTermServices[`${fireID}1YR`].url;
-              newFiresLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-              newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              newFiresLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-              newFiresLayer.setLayerDefinitions(defs);
-              brApp.map.removeLayer(firesLayer);
-              brApp.map.addLayer(newFiresLayer);
-              layerActions.removeActiveLayer(firesLayer.id);
-              layerActions.addActiveLayer(newFiresLayer.id);
-              console.log('new fires layer', newFiresLayer);
+              // const queryString = this.generateFiresQuery(startDate, endDate);
+              // newFiresLayer.url = shortTermServices[`${fireID}1YR`].url;
+              // newFiresLayer._url.path = shortTermServices[`${fireID}1YR`].url;
+              // newFiresLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
+              // newFiresLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              // newFiresLayer.setLayerDefinitions(defs);
+              // brApp.map.removeLayer(firesLayer);
+              // brApp.map.addLayer(newFiresLayer);
+              // layerActions.removeActiveLayer(firesLayer.id);
+              // layerActions.addActiveLayer(newFiresLayer.id);
+              // console.log('new fires layer', newFiresLayer);
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
+              firesLayer.show();
               break;
             default:
               console.log('default');
@@ -194,21 +145,6 @@ const LayersHelper = {
           //newFiresLayer.setLayerDefinitions(defs);
         }
       }
-      // else {
-      //   const queryString = this.generateFiresQuery(startDate, endDate);
-      //   const defs = [];
-      //   if (firesLayer) {
-      //     firesLayer.hide();
-      //     if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
-      //       firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-      //       firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-      //       firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-      //     }
-      //     firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-      //     firesLayer.setLayerDefinitions(defs, dontRefresh);
-      //     firesLayer.show();
-      //   }
-      // }
     }
   },
 

@@ -37,8 +37,18 @@ const filterLayers = ({layers, layerKey}) => {
     layer = layerKey ? layer[layerKey] : layer;
     switch (layer.id) {
       case layerKeys.VIIRS_ACTIVE_FIRES:
+      case layerKeys.VIIRS_ACTIVE_FIRES_24HR:
+      case layerKeys.VIIRS_ACTIVE_FIRES_48HR:
+      case layerKeys.VIIRS_ACTIVE_FIRES_72HR:
+      case layerKeys.VIIRS_ACTIVE_FIRES_7D:
+      case layerKeys.VIIRS_ACTIVE_FIRES_1YR:
         return resources.viirsFires;
       case layerKeys.MODIS_ACTIVE_FIRES:
+      case layerKeys.MODIS_ACTIVE_FIRES_24HR:
+      case layerKeys.MODIS_ACTIVE_FIRES_48HR:
+      case layerKeys.MODIS_ACTIVE_FIRES_72HR:
+      case layerKeys.MODIS_ACTIVE_FIRES_7D:
+      case layerKeys.MODIS_ACTIVE_FIRES_1YR:
         return resources.modisFires;
       case layerKeys.LAND_COVER:
         return resources.landCover;
@@ -240,6 +250,46 @@ const formatResources = () => {
             }
           }
         });
+        
+        if (item && item.layer && item.layer.id) {
+          switch (item.layer.id) {
+            case 'VIIRS_ACTIVE_FIRES_24HR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer';
+              break;
+            case 'VIIRS_ACTIVE_FIRES_48HR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_48hrs/MapServer';
+              break;
+            case 'VIIRS_ACTIVE_FIRES_72HR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
+              break;
+            case 'VIIRS_ACTIVE_FIRES_7D':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
+              break;
+            case 'VIIRS_ACTIVE_FIRES_1YR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer';
+              break;
+            case 'MODIS_ACTIVE_FIRES_24HR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_24hrs/MapServer';
+              break;
+            case 'MODIS_ACTIVE_FIRES_48HR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_48hrs/MapServer';
+              break;
+            case 'MODIS_ACTIVE_FIRES_72HR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer';
+              break;
+            case 'MODIS_ACTIVE_FIRES_7D':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer';
+              break;
+            case 'MODIS_ACTIVE_FIRES_1YR':
+              layer.attributes.layerConfig.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer';
+              break;
+            default:
+              console.log('default');
+              break;
+          }
+        }
+        
+        
         item.layer = layer.attributes.layerConfig;
         item.group = itemGroup;
         item.layer.metadata = {
