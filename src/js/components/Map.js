@@ -580,8 +580,10 @@ export default class Map extends Component {
 
     let activeLayers;
 
-    //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
+    if (!settings.useWebmapBasemap) {
+      //- Set the default basemap in the store
+      basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
+    }
 
     if (!params) {
       return returnObj;
