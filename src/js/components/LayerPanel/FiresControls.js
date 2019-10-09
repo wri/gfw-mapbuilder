@@ -24,14 +24,14 @@ export default class FiresControls extends React.Component {
     this.min = moment(oneYearAgo);
     this.max = moment(max);
     this.fireOptions = [
-      {label: 'Past 24 hours', value: '0'},
-      {label: 'Past 48 hours', value: '1'},
-      {label: 'Past 72 hours', value: '2'},
-      {label: 'Past Week', value: '3'}
+      {label: 'Past 24 hours', value: 0},
+      {label: 'Past 48 hours', value: 1},
+      {label: 'Past 72 hours', value: 2},
+      {label: 'Past Week', value: 3}
     ];
     this.state = {
       customRange: false,
-      activeFireOption: '0',
+      activeFireOption: 0,
       activeFireOptionLabel: 'Past 24 hours'
     };
   }
@@ -39,7 +39,7 @@ export default class FiresControls extends React.Component {
   componentDidUpdate(prevProps, prevState, prevContext) {
 
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, '4');
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 4);
     }
 
     // Anytime the map changes to a new map, update that here
