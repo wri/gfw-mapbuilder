@@ -82,23 +82,50 @@ export default class LayerCheckbox extends Component {
   toggleLayer () {
     const {layer} = this.props;
     const {map} = this.context;
+    
+    const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
+    const layer24HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES`);
+    const layer48HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+    const layer72HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+    const layer7D = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+    const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
 
     if (layer.disabled) { return; }
     if (layer.subId) {
       if (this.props.checked) {
-        layerActions.removeSubLayer(layer);
         layer.visible = false;
+        layerActions.removeActiveLayer(layer.id);
+        layer24HR.hide();
+        layer48HR.hide();
+        layer72HR.hide();
+        layer7D.hide();
+        layer1YR.hide();
       } else {
-        layerActions.addSubLayer(layer);
         layer.visible = true;
+        layerActions.addActiveLayer(layer.id);
+        layer24HR.show();
+        layer48HR.show();
+        layer72HR.show();
+        layer7D.show();
+        layer1YR.show();
       }
     } else {
       if (this.props.checked) {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
+        layer24HR.hide();
+        layer48HR.hide();
+        layer72HR.hide();
+        layer7D.hide();
+        layer1YR.hide();
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
+        layer24HR.show();
+        layer48HR.show();
+        layer72HR.show();
+        layer7D.show();
+        layer1YR.show();
       }
     }
 
