@@ -39,7 +39,6 @@ import MapStore from '../stores/MapStore';
 
 let map;
 let appSettings;
-let constructorParams = null;
 
 export default class Report extends Component {
   constructor(props){
@@ -64,12 +63,13 @@ export default class Report extends Component {
   getApplicationInfo = (params) => {
     const { webmap, appid } = params;
     const promise = new Deferred();
+
     // //- Should probably get any needed params from map.html since it already has
     // //- appInfo, just pass everything needed, if the needed items are too much, then
     // //- fall back to this
     if (webmap) {
       all({
-        settings: template.getAppInfo(appid),
+        settings: template.getAppInfo(appid, this.props.constructorParams),
         webmap: this.getWebmapInfo(webmap)
       }).then((results) => {
         promise.resolve(results);
@@ -188,7 +188,7 @@ export default class Report extends Component {
 
       // format active version params into an object
       const versions = {};
-      if (activeVersions.length) {
+      if (activeVersions && activeVersions.length) {
         activeVersions.forEach((v) => {
           const version = v.split('|');
           versions[version[0]] = version[1];
@@ -238,7 +238,7 @@ export default class Report extends Component {
           }
         }
         // return layerFactory(layer, language);
-        
+
         const mapLayer = layerFactory(layer, language);
 
         // If there are active filters, set definition expressions on layer.
@@ -735,7 +735,7 @@ export default class Report extends Component {
     this.createMap(params);
     MapStore.listen(this.storeDidUpdate);
   }
-  
+
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };

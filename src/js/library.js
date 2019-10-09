@@ -5,38 +5,39 @@ var MapBuilder = function(args){
     //Add the loader div & its styles next to our root element while hiding the root
     //HTML
     const root = document.getElementById('root');
-    const loaderDiv = document.createElement('div');
-    loaderDiv.classList.add('landing-loader__active');
-    loaderDiv.classList.add('hidden');
-    root.parentNode.insertBefore(loaderDiv, root.nextSibling);
+    if (root) {
+      const loaderDiv = document.createElement('div');
+      loaderDiv.classList.add('landing-loader__active');
+      loaderDiv.classList.add('hidden');
+      root.parentNode.insertBefore(loaderDiv, root.nextSibling);
 
-    const loaderSpinner = document.createElement('div');
-    loaderSpinner.classList.add('landing-loader__spinner');
-    loaderDiv.appendChild(loaderSpinner);
+      const loaderSpinner = document.createElement('div');
+      loaderSpinner.classList.add('landing-loader__spinner');
+      loaderDiv.appendChild(loaderSpinner);
 
-    const loaderSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    loaderSvg.setAttribute('width', '50');
-    loaderSvg.setAttribute('height', '50');
-    loaderSpinner.appendChild(loaderSvg);
+      const loaderSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      loaderSvg.setAttribute('width', '50');
+      loaderSvg.setAttribute('height', '50');
+      loaderSpinner.appendChild(loaderSvg);
 
-    const loaderG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    loaderG.setAttribute('transform', 'translate(25,25) rotate(-90)');
-    loaderSvg.appendChild(loaderG);
+      const loaderG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      loaderG.setAttribute('transform', 'translate(25,25) rotate(-90)');
+      loaderSvg.appendChild(loaderG);
 
-    const loaderPathOne = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    loaderPathOne.setAttribute('d', 'M0,25A25,25 0 1,1 0,-25A25,25 0 1,1 0,25M0,20A20,20 0 1,0 0,-20A20,20 0 1,0 0,20Z');
-    loaderPathOne.setAttribute('style', 'fill: rgb(255, 255, 255); stroke: rgb(204, 204, 204)');
-    loaderG.appendChild(loaderPathOne);
+      const loaderPathOne = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      loaderPathOne.setAttribute('d', 'M0,25A25,25 0 1,1 0,-25A25,25 0 1,1 0,25M0,20A20,20 0 1,0 0,-20A20,20 0 1,0 0,20Z');
+      loaderPathOne.setAttribute('style', 'fill: rgb(255, 255, 255); stroke: rgb(204, 204, 204)');
+      loaderG.appendChild(loaderPathOne);
 
-    const loaderPathTwo = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    loaderPathTwo.classList.add('foreground');
-    loaderPathTwo.setAttribute('d', 'M1.5308084989341915e-15,-25A25,25 0 0,1 25,0L20,0A20,20 0 0,0 1.2246467991473533e-15,-20Z');
-    loaderPathTwo.setAttribute('style', 'fill: rgb(85, 85, 85)');
-    loaderPathTwo.setAttribute('transform', 'rotate(709.287459262793)');
-    loaderG.appendChild(loaderPathTwo);
+      const loaderPathTwo = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      loaderPathTwo.classList.add('foreground');
+      loaderPathTwo.setAttribute('d', 'M1.5308084989341915e-15,-25A25,25 0 0,1 25,0L20,0A20,20 0 0,0 1.2246467991473533e-15,-20Z');
+      loaderPathTwo.setAttribute('style', 'fill: rgb(85, 85, 85)');
+      loaderPathTwo.setAttribute('transform', 'rotate(709.287459262793)');
+      loaderG.appendChild(loaderPathTwo);
 
-    // Associated CSS
-    const styles = `
+      // Associated CSS
+      const styles = `
       #root {
         display: none;
       }
@@ -73,12 +74,13 @@ var MapBuilder = function(args){
         left: 50%;
         top: 50%;
       }
-    `;
+      `;
 
-    const styleSheet = document.createElement('style');
-    styleSheet.type = 'text/css';
-    styleSheet.innerText = styles;
-    document.head.appendChild(styleSheet);
+      const styleSheet = document.createElement('style');
+      styleSheet.type = 'text/css';
+      styleSheet.innerText = styles;
+      document.head.appendChild(styleSheet);
+    }
 
 
     // Dynamically add meta tags if they don't already exist

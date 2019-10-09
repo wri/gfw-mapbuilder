@@ -37,7 +37,7 @@ const config = {
       id: 0
     }
   },
-  
+
   map: {
     options: {
       navigationMode: 'css-transforms',
@@ -160,7 +160,22 @@ const config = {
       googleUrl: url => `https://plus.google.com/share?url=${url}`,
       twitterUrl: url => `https://twitter.com/share?url=${url}`,
       facebookUrl: url => `https://www.facebook.com/sharer.php?u=${url}`
-    }
+    },
+    imagery: {
+
+      monthsOptions: [
+        { label: '4 weeks', value: 4 },
+        { label: '3 months', value: 3},
+        { label: '6 months', value: 6},
+        { label: '12 months', value: 12}
+      ],
+
+      imageStyleOptions: [
+        { label: 'Natural Color'},
+        { label: 'Vegetation Health'}
+      ],
+      selectInstructions: 'Select an image once imagery is available'
+    },
   },
 
   //- Analysis for individual layers are defined below so we can use common keys
