@@ -49,6 +49,8 @@ const LayersHelper = {
       const layer7D = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
       const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
+      console.log('layer 48', layer48HR);
+      
       if (selectValue) {
         if (firesLayer && firesLayer.visible) {
           const defs = [];
