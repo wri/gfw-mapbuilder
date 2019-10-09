@@ -94,6 +94,39 @@ export default (layer, lang) => {
 
       if (!options || !options.id || (!layer.layerIds && !layer.versions)) { return false; }
       if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
+      if (layer.id === 'VIIRS_ACTIVE_FIRES') {
+        const fireLayers = [];
+        const fortyEightOptions = JSON.parse(JSON.stringify(layer));
+        fortyEightOptions.id = 'VIIRS_ACTIVE_FIRES_48HR';
+        fortyEightOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_48hrs/MapServer';
+        fortyEightOptions.visible = false;
+        const seventyTwoOptions = JSON.parse(JSON.stringify(layer));
+        seventyTwoOptions.id = 'VIIRS_ACTIVE_FIRES_72HR';
+        seventyTwoOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
+        seventyTwoOptions.visible = false;
+        const oneWeekOptions = JSON.parse(JSON.stringify(layer));
+        oneWeekOptions.id = 'VIIRS_ACTIVE_FIRES_7D';
+        oneWeekOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
+        oneWeekOptions.visible = false;
+        const oneYearOptions = JSON.parse(JSON.stringify(layer));
+        oneYearOptions.id = 'VIIRS_ACTIVE_FIRES_1YR';
+        oneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer';
+        oneYearOptions.visible = false;
+        const fortyEight = new DynamicLayer(fortyEightOptions.url, fortyEightOptions);
+        const seventyTwo = new DynamicLayer(seventyTwoOptions.url, seventyTwoOptions);
+        const oneWeek = new DynamicLayer(oneWeekOptions.url, oneWeekOptions);
+        const oneYear = new DynamicLayer(oneYearOptions.url, oneYearOptions);
+        console.log(seventyTwoOptions);
+        
+        
+        
+        fireLayers.push(fortyEight);
+        fireLayers.push(seventyTwo);
+        fireLayers.push(oneWeek);
+        fireLayers.push(oneYear);
+        brApp.map.addLayers(fireLayers);
+        console.log('fireLayers', fireLayers);
+      }
       esriLayer = new DynamicLayer(layer.url, options);
 
       esriLayer.legendLayer = layer.legendLayer || null;
