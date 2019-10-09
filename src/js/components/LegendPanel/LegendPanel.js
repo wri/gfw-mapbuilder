@@ -100,7 +100,11 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
-      case 'VIIRS_ACTIVE_FIRES':
+      case 'VIIRS_ACTIVE_FIRES_24HR':
+      case 'VIIRS_ACTIVE_FIRES_48HR':
+      case 'VIIRS_ACTIVE_FIRES_72HR':
+      case 'VIIRS_ACTIVE_FIRES_7D':
+      case 'VIIRS_ACTIVE_FIRES_1YR':
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}
@@ -113,7 +117,11 @@ export default class LegendPanel extends Component {
           defaultOpacity={layer.opacity || 1}
         />;
         break;
-      case 'MODIS_ACTIVE_FIRES':
+      case 'MODIS_ACTIVE_FIRES_24HR':
+      case 'MODIS_ACTIVE_FIRES_48HR':
+      case 'MODIS_ACTIVE_FIRES_72HR':
+      case 'MODIS_ACTIVE_FIRES_7D':
+      case 'MODIS_ACTIVE_FIRES_1YR':
         childComponent = <LayerLegend
           key={layer.id}
           label={layer.label ? layer.label[language] : ''}

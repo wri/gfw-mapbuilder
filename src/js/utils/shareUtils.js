@@ -80,6 +80,7 @@ export function prepareStateForShare (options) {
     shareState.iey = imazonEndYear;
   }
 
+  // Need to update this later for the share fires ticket!
   if (activeLayers.indexOf('VIIRS_ACTIVE_FIRES') > -1) {
     shareState.vs = viirsStartDate;
     shareState.ve = viirsEndDate;

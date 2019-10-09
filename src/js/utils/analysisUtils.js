@@ -576,7 +576,7 @@ export default {
      } else if (brApp.map.getLayer("VIIRS_ACTIVE_FIRES_1YR")) {
       viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES_1YR");
      } else {
-      viirsFiresLayer = brApp.map.getLayer("VIIRS_ACTIVE_FIRES");
+       console.log('No VIIRS');
      }
      
      const viirsLayerID = viirsFiresLayer.layerIds[0];
@@ -594,7 +594,7 @@ export default {
      } else if (brApp.map.getLayer("MODIS_ACTIVE_FIRES_1YR")) {
       modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES_1YR");
      } else {
-      modisFiresLayer = brApp.map.getLayer("MODIS_ACTIVE_FIRES");
+      console.log('No MODIS');
      }
  
      const modisLayerID = modisFiresLayer.layerIds[0];

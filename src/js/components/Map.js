@@ -611,7 +611,19 @@ export default class Map extends Component {
 
           const mapLayer = map.getLayer(layerId);
 
-          const dynamicLayers = [layerKeys.MODIS_ACTIVE_FIRES, layerKeys.VIIRS_ACTIVE_FIRES, layerKeys.IMAZON_SAD];
+          const dynamicLayers = [
+            layerKeys.VIIRS_ACTIVE_FIRES_24HR,
+            layerKeys.VIIRS_ACTIVE_FIRES_48HR,
+            layerKeys.VIIRS_ACTIVE_FIRES_72HR,
+            layerKeys.VIIRS_ACTIVE_FIRES_7D,
+            layerKeys.VIIRS_ACTIVE_FIRES_1YR,
+            layerKeys.MODIS_ACTIVE_FIRES_24HR,
+            layerKeys.MODIS_ACTIVE_FIRES_48HR,
+            layerKeys.MODIS_ACTIVE_FIRES_72HR,
+            layerKeys.MODIS_ACTIVE_FIRES_7D,
+            layerKeys.MODIS_ACTIVE_FIRES_1YR,
+            layerKeys.IMAZON_SAD
+          ];
 
           if ((mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) || (mapLayer && dynamicLayers.indexOf(mapLayer.id) > -1)) {
             mapLayer.setOpacity(opacityValues[j]);

@@ -259,8 +259,20 @@ export default class Report extends Component {
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
       const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
       const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
-      const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-      const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
+      const viirsFiresLayer = esriLayers.filter(layer =>
+        layer.id === layerKeys.VIIRS_ACTIVE_FIRES_24HR ||
+        layer.id === layerKeys.VIIRS_ACTIVE_FIRES_48HR ||
+        layer.id === layerKeys.VIIRS_ACTIVE_FIRES_72HR ||
+        layer.id === layerKeys.VIIRS_ACTIVE_FIRES_7D ||
+        layer.id === layerKeys.VIIRS_ACTIVE_FIRES_1YR
+      )[0];
+      const modisFiresLayer = esriLayers.filter(layer =>
+        layer.id === layerKeys.MODIS_ACTIVE_FIRES_24HR ||
+        layer.id === layerKeys.MODIS_ACTIVE_FIRES_48HR ||
+        layer.id === layerKeys.MODIS_ACTIVE_FIRES_72HR ||
+        layer.id === layerKeys.MODIS_ACTIVE_FIRES_7D ||
+        layer.id === layerKeys.MODIS_ACTIVE_FIRES_1YR
+      )[0];
 
       if (lossLayer && lossLayer.setDateRange) {
         const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
