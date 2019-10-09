@@ -40,6 +40,7 @@ const LayersHelper = {
       const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
       if (selectValue) {
+          let defs = [];
           switch (parseInt(selectValue)) {
             case 0: //past 24 hours
               brApp.map.infoWindow.clearFeatures();
@@ -58,6 +59,9 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 2: //past 72 hours
+              defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              layer72HR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}7D`].id]);
+              layer72HR.setLayerDefinitions(defs);
               brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
@@ -75,17 +79,16 @@ const LayersHelper = {
               break;
             case 4: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
-              const defs = [];
-              layer.setVisibleLayers([shortTermServices[`${fireID.toLocaleLowerCase()}1YR`].id]);
-              layer.visibleLayers.forEach(val => { defs[val] = queryString; });
-              layer.setLayerDefinitions(defs);
+              layer1YR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}1YR`].id]);
+              layer1YR.visibleLayers.forEach(val => { defs[val] = queryString; });
+              //defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
+              layer1YR.setLayerDefinitions(defs);
               brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
               layer7D.hide();
-              //layer1YR.show();
-              layer.show();
+              layer1YR.show();
               break;
             default:
               console.log('default');
