@@ -74,17 +74,18 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 4: //past year
-              // const queryString = this.generateFiresQuery(startDate, endDate);
-              // firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-              // firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              // firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              const queryString = this.generateFiresQuery(startDate, endDate);
+              const defs = [];
+              layer.setVisibleLayers([shortTermServices[`${fireID.toLocaleLowerCase()}1YR`].id]);
+              layer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              layer.setLayerDefinitions(defs);
               brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
               layer7D.hide();
-              layer1YR.show();
+              //layer1YR.show();
+              layer.show();
               break;
             default:
               console.log('default');
