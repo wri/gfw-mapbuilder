@@ -96,22 +96,39 @@ export default (layer, lang) => {
       if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
       if (layer.id === 'VIIRS_ACTIVE_FIRES') {
         const fireLayers = [];
+        const popTemplate = layerUtils.makeInfoTemplate(layer.popup, lang);
         const fortyEightOptions = JSON.parse(JSON.stringify(layer));
         fortyEightOptions.id = 'VIIRS_ACTIVE_FIRES_48HR';
         fortyEightOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_48hrs/MapServer';
         fortyEightOptions.visible = false;
+        console.log(options);
+
+        fortyEightOptions.infoTemplates = {};
+        fortyEightOptions.layerIds.forEach((id) => { fortyEightOptions.infoTemplates[id] = { infoTemplate: popTemplate }; });
+        
+        // debugger
         const seventyTwoOptions = JSON.parse(JSON.stringify(layer));
         seventyTwoOptions.id = 'VIIRS_ACTIVE_FIRES_72HR';
         seventyTwoOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
         seventyTwoOptions.visible = false;
+        seventyTwoOptions.infoTemplates = {};
+        seventyTwoOptions.layerIds.forEach((id) => { seventyTwoOptions.infoTemplates[id] = { infoTemplate: popTemplate }; });
+
+
         const oneWeekOptions = JSON.parse(JSON.stringify(layer));
         oneWeekOptions.id = 'VIIRS_ACTIVE_FIRES_7D';
         oneWeekOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
         oneWeekOptions.visible = false;
+        oneWeekOptions.infoTemplates = {};
+        oneWeekOptions.layerIds.forEach((id) => { oneWeekOptions.infoTemplates[id] = { infoTemplate: popTemplate }; });
+
         const oneYearOptions = JSON.parse(JSON.stringify(layer));
         oneYearOptions.id = 'VIIRS_ACTIVE_FIRES_1YR';
         oneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer';
         oneYearOptions.visible = false;
+        oneYearOptions.infoTemplates = {};
+        oneYearOptions.layerIds.forEach((id) => { oneYearOptions.infoTemplates[id] = { infoTemplate: popTemplate }; });
+
         const fortyEight = new DynamicLayer(fortyEightOptions.url, fortyEightOptions);
         const seventyTwo = new DynamicLayer(seventyTwoOptions.url, seventyTwoOptions);
         const oneWeek = new DynamicLayer(oneWeekOptions.url, oneWeekOptions);
@@ -124,6 +141,15 @@ export default (layer, lang) => {
         fireLayers.push(seventyTwo);
         fireLayers.push(oneWeek);
         fireLayers.push(oneYear);
+
+        fireLayers.forEach(fireLayer => {
+          fireLayer.legendLayer = layer.legendLayer || null;
+          fireLayer.layerIds = layer.layerIds;
+          fireLayer.order = layer.order;
+          fireLayer.label = layer.label;
+        });
+
+
         brApp.map.addLayers(fireLayers);
         console.log('fireLayers', fireLayers);
       }
