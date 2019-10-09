@@ -40,9 +40,9 @@ const LayersHelper = {
       const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
       if (selectValue) {
-          const defs = [];
           switch (parseInt(selectValue)) {
             case 0: //past 24 hours
+              brApp.map.infoWindow.clearFeatures();
               layer24HR.show();
               layer48HR.hide();
               layer72HR.hide();
@@ -50,6 +50,7 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 1: //past 48 hours
+              brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.show();
               layer72HR.hide();
@@ -57,10 +58,7 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 2: //past 72 hours
-              // firesLayer.url = shortTermServices[`${fireID}7D`].url;
-              // firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-              defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.show();
@@ -68,9 +66,7 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 3: //past 7 days
-              // firesLayer.url = shortTermServices[`${fireID}7D`].url;
-              // firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              // firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+              brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
@@ -79,11 +75,11 @@ const LayersHelper = {
               break;
             case 4: //past year
               // const queryString = this.generateFiresQuery(startDate, endDate);
-
               // firesLayer.url = shortTermServices[`${fireID}1YR`].url;
               // firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
               // firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
               // firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
