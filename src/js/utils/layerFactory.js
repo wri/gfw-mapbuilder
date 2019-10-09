@@ -193,6 +193,7 @@ export default (layer, lang) => {
           fireLayer.layerIds = layer.layerIds;
           fireLayer.order = layer.order;
           fireLayer.label = layer.label;
+          //fireLayer.visibleLayers = [21];
         });
         brApp.map.addLayers(fireLayers);
       }

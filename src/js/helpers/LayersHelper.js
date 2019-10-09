@@ -79,7 +79,8 @@ const LayersHelper = {
               break;
             case 4: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
-              layer1YR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}1YR`].id]);
+              //layer1YR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}1YR`].id]);
+              layer1YR.visibleLayers = [21];
               layer1YR.visibleLayers.forEach(val => { defs[val] = queryString; });
               //defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
               layer1YR.setLayerDefinitions(defs);
