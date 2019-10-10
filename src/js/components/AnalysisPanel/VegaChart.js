@@ -107,7 +107,7 @@ export default class VegaChart extends Component {
           res.json().then(json => {
             charts.makeVegaChart(this.chart, config, language, setLoading, this.addChartDownload);
             const downloadOptions = [];
-            if (json.data && json.data.attributes && json.data.attributes.downloadUrls && !config.title) {
+            if (json.data && json.data.attributes && json.data.attributes.downloadUrls && !json.data.attributes.downloadUrls.csv.includes("month") && !config.title) {
               const downloadUrls = json.data.attributes.downloadUrls;
               const label = 'csv';
               downloadOptions.push({label, url: downloadUrls[label]});
@@ -243,9 +243,9 @@ export default class VegaChart extends Component {
             <div className={component === 'Report' ? 'vega-chart_download-container-report' : 'vega-chart_download-container'}>
               <h3 className="vega-chart-label">{reportLabel}</h3>
               <div className='vega-chart-menu-container'>
-                <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
+              {!isLoading && <div className='vega-chart-menu' onClick={() => this.setState({showDownloadOptions: !showDownloadOptions})}>
                   <SVGIcon className="vega-chart-menu-icon" id={'icon-download-grey'} />
-                </div>
+                </div>}
               </div>
             </div>
           }
