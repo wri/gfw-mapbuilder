@@ -95,6 +95,7 @@ export default class LayerCheckbox extends Component {
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
         layer.visible = false;
+        layerActions.removeActiveLayer(layer);
         layer24HR.hide();
         layer48HR.hide();
         layer72HR.hide();
