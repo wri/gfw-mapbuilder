@@ -103,11 +103,6 @@ export default class LayerCheckbox extends Component {
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
-        layer24HR.show();
-        layer48HR.show();
-        layer72HR.show();
-        layer7D.show();
-        layer1YR.show();
       }
     } else {
       if (this.props.checked) {
@@ -121,11 +116,6 @@ export default class LayerCheckbox extends Component {
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
-        layer24HR.show();
-        layer48HR.show();
-        layer72HR.show();
-        layer7D.show();
-        layer1YR.show();
       }
     }
 
