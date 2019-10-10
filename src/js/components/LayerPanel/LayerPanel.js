@@ -15,6 +15,7 @@ import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
 import WRIBasemapLayer from 'components/LayerPanel/WRIBasemapLayer';
+import AGOLBasemap from 'components/LayerPanel/AGOLBasemap';
 import LandsatLayer from 'components/LayerPanel/LandsatLayer';
 import BasemapLayer from 'components/LayerPanel/BasemapLayer';
 import LayerKeys from 'constants/LayerConstants';
@@ -271,9 +272,7 @@ export default class LayerPanel extends Component {
     const { basemap, webmapInfo} = this.props;
     let basemapLayers = [];
     
-    console.log(settings);
-    // debugger
-    
+    console.log(settings);    
 
     //- Add Custom Basemaps
     configuredLayers.forEach((layer) => {
@@ -306,9 +305,14 @@ export default class LayerPanel extends Component {
     
     
 
-    // if (useWebmapBasemap) {
-    //   basemapLayers.push()
-    // }
+    if (settings.useWebmapBasemap) {
+      const bmLayerNames = webmapInfo.baseMap.baseMapLayers.map(baseMapLayer => baseMapLayer.id);
+      basemapLayers.push(
+        <AGOLBasemap
+          label={'Webmap Basemap'}
+          active={!basemap || bmLayerNames.includes(basemap)} />
+      );
+    }
 
     //- Add Esri Basemaps
     if (basemaps) {

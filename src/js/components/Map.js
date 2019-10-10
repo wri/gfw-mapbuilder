@@ -150,7 +150,7 @@ export default class Map extends Component {
     }
 
     if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
-      basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+      basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers, this.state.webmapInfo, settings.useWebmapBasemap);
     }
 
     if (prevState.editingEnabled !== editingEnabled) {
