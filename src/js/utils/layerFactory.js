@@ -112,8 +112,6 @@ export default (layer, lang) => {
         viirsSeventyTwoOptions.visible = false;
         viirsSeventyTwoOptions.infoTemplates = {};
         viirsSeventyTwoOptions.layerIds.forEach((id) => { viirsSeventyTwoOptions.infoTemplates[id] = { infoTemplate }; });
-        // const viirsSeventyTwoDefs = [];
-        // viirsSeventyTwoDefs[shortTermServices['viirs7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
 
         const viirsOneWeekOptions = JSON.parse(JSON.stringify(layer));
         viirsOneWeekOptions.id = 'VIIRS_ACTIVE_FIRES_7D';
@@ -133,8 +131,6 @@ export default (layer, lang) => {
         const viirsSeventyTwo = new DynamicLayer(viirsSeventyTwoOptions.url, viirsSeventyTwoOptions);
         const viirsOneWeek = new DynamicLayer(viirsOneWeekOptions.url, viirsOneWeekOptions);
         const viirsOneYear = new DynamicLayer(viirsOneYearOptions.url, viirsOneYearOptions);
-
-        //viirsSeventyTwo.setLayerDefinitions(viirsSeventyTwoDefs);
 
         fireLayers.push(viirsFortyEight);
         fireLayers.push(viirsSeventyTwo);
@@ -157,8 +153,6 @@ export default (layer, lang) => {
         modisSeventyTwoOptions.visible = false;
         modisSeventyTwoOptions.infoTemplates = {};
         modisSeventyTwoOptions.layerIds.forEach((id) => { modisSeventyTwoOptions.infoTemplates[id] = { infoTemplate }; });
-        // const modisSeventyTwoDefs = [];
-        // modisSeventyTwoDefs[shortTermServices['modis7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
 
         const modisOneWeekOptions = JSON.parse(JSON.stringify(layer));
         modisOneWeekOptions.id = 'MODIS_ACTIVE_FIRES_7D';
@@ -178,8 +172,6 @@ export default (layer, lang) => {
         const modisSeventyTwo = new DynamicLayer(modisSeventyTwoOptions.url, modisSeventyTwoOptions);
         const modisOneWeek = new DynamicLayer(modisOneWeekOptions.url, modisOneWeekOptions);
         const modisOneYear = new DynamicLayer(modisOneYearOptions.url, modisOneYearOptions);
-        
-        // modisSeventyTwo.setLayerDefinitions(modisSeventyTwoDefs);
 
         fireLayers.push(modisFortyEight);
         fireLayers.push(modisSeventyTwo);
@@ -193,7 +185,6 @@ export default (layer, lang) => {
           fireLayer.layerIds = layer.layerIds;
           fireLayer.order = layer.order;
           fireLayer.label = layer.label;
-          //fireLayer.visibleLayers = [21];
         });
         brApp.map.addLayers(fireLayers);
       }
