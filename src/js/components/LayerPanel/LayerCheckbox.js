@@ -101,6 +101,9 @@ export default class LayerCheckbox extends Component {
         layer72HR.hide();
         layer7D.hide();
         layer1YR.hide();
+        layerActions.updateCustomRange(false);
+        layerActions.updateActiveFireOption(0);
+        layerActions.updateActiveFireOptionLabel('Past 24 hours');
       } else {
         layerActions.addSubLayer(layer);
         layer.visible = true;
@@ -115,6 +118,9 @@ export default class LayerCheckbox extends Component {
         layer72HR.hide();
         layer7D.hide();
         layer1YR.hide();
+        layerActions.updateCustomRange(false);
+        layerActions.updateActiveFireOption(0);
+        layerActions.updateActiveFireOptionLabel('Past 24 hours');
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);

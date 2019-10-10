@@ -100,6 +100,9 @@ class MapStore {
     this.currentX = 0;
     this.currentY = 0;
     this.selectIndex = 0;
+    this.customRange = false;
+    this.activeFireOption = 0;
+    this.activeFireOptionLabel = 'Past 24 hours';
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -182,14 +185,28 @@ class MapStore {
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
       setActiveFilters: mapActions.setActiveFilters,
-      changeLayerVersion: mapActions.changeLayerVersion
-
+      changeLayerVersion: mapActions.changeLayerVersion,
+      updateCustomRange: layerActions.updateCustomRange,
+      updateActiveFireOption: layerActions.updateActiveFireOption,
+      updateActiveFireOptionLabel: layerActions.updateActiveFireOptionLabel
     });
   }
 
   setDefaults (settings) {
     //- Set the default value to the first actual value in the select, 0 is No Data
     this.activeSlopeClass = settings.slopeClasses && settings.slopeClasses[1];
+  }
+  
+  updateCustomRange(bool) {
+    this.customRange = bool;
+  }
+  
+  updateActiveFireOption(num) {
+    this.activeFireOption = num;
+  }
+  
+  updateActiveFireOptionLabel(str) {
+    this.activeFireOptionLabel = str;
   }
 
   addActiveLayer (layerId) {
