@@ -93,14 +93,15 @@ export default class LayerCheckbox extends Component {
     if (layer.disabled) { return; }
     if (layer.subId) {
       if (this.props.checked) {
+        layerActions.removeSubLayer(layer);
         layer.visible = false;
-        layerActions.removeActiveLayer(layer.id);
         layer24HR.hide();
         layer48HR.hide();
         layer72HR.hide();
         layer7D.hide();
         layer1YR.hide();
       } else {
+        layerActions.addSubLayer(layer);
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
       }

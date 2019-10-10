@@ -59,10 +59,10 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 2: //past 72 hours
+              brApp.map.infoWindow.clearFeatures();
               defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
               layer72HR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}7D`].id]);
               layer72HR.setLayerDefinitions(defs);
-              brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.show();
@@ -78,13 +78,13 @@ const LayersHelper = {
               layer1YR.hide();
               break;
             case 4: //past year
+              brApp.map.infoWindow.clearFeatures();
               const queryString = this.generateFiresQuery(startDate, endDate);
               //layer1YR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}1YR`].id]);
               layer1YR.visibleLayers = [21];
               layer1YR.visibleLayers.forEach(val => { defs[val] = queryString; });
               //defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
               layer1YR.setLayerDefinitions(defs);
-              brApp.map.infoWindow.clearFeatures();
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
