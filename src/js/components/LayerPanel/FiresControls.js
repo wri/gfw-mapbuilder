@@ -76,11 +76,6 @@ export default class FiresControls extends React.Component {
   updateActiveFires = (evt, fireOptions) => {
     brApp.map.infoWindow.clearFeatures();
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
-    // this.setState({
-    //   activeFireOption: evt.target.value,
-    //   activeFireOptionLabel: fireOptions[evt.target.value].label,
-    //   customRange: false
-    // });
     layerActions.updateCustomRange(false);
     layerActions.updateActiveFireOption(evt.target.value);
     layerActions.updateActiveFireOptionLabel(fireOptions[evt.target.value].label);
@@ -113,10 +108,6 @@ export default class FiresControls extends React.Component {
             style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="fa-button sml white pointer"
             onClick={() => {
-            // this.setState({
-            //   customRange: !customRange,
-            //   activeFireOptionLabel: 'Active Fires'
-            // })
                 layerActions.updateCustomRange(!this.state.customRange);
                 layerActions.updateActiveFireOptionLabel('Active Fires');
               }

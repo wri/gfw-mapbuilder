@@ -104,6 +104,7 @@ export default class LayerCheckbox extends Component {
         layerActions.updateCustomRange(false);
         layerActions.updateActiveFireOption(0);
         layerActions.updateActiveFireOptionLabel('Past 24 hours');
+        brApp.map.infoWindow.clearFeatures();
       } else {
         layerActions.addSubLayer(layer);
         layer.visible = true;
@@ -121,6 +122,7 @@ export default class LayerCheckbox extends Component {
         layerActions.updateCustomRange(false);
         layerActions.updateActiveFireOption(0);
         layerActions.updateActiveFireOptionLabel('Past 24 hours');
+        brApp.map.infoWindow.clearFeatures();
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
