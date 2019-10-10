@@ -125,7 +125,8 @@ export default (layer, lang) => {
         viirsOneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer';
         viirsOneYearOptions.visible = false;
         viirsOneYearOptions.infoTemplates = {};
-        viirsOneYearOptions.layerIds.forEach((id) => { viirsOneYearOptions.infoTemplates[id] = { infoTemplate }; });
+        viirsOneYearOptions.layerIds = [0];
+        viirsOneYearOptions.layerIds.forEach((id) => { viirsOneYearOptions.infoTemplates[id] = { infoTemplate }; });        
 
         const viirsFortyEight = new DynamicLayer(viirsFortyEightOptions.url, viirsFortyEightOptions);
         const viirsSeventyTwo = new DynamicLayer(viirsSeventyTwoOptions.url, viirsSeventyTwoOptions);

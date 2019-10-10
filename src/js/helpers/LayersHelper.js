@@ -80,9 +80,7 @@ const LayersHelper = {
             case 4: //past year
               //brApp.map.infoWindow.clearFeatures();
               const queryString = this.generateFiresQuery(startDate, endDate);
-              layer1YR.visibleLayers = [21];
-              layer1YR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}1YR`].id]);
-              layer1YR.visibleLayers.forEach(val => { defs[val] = queryString; });
+              layer1YR.visibleLayers = [0];
               defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
               layer1YR.setLayerDefinitions(defs);
               layer24HR.hide();
