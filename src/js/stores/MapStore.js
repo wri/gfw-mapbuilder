@@ -101,7 +101,7 @@ class MapStore {
     this.currentY = 0;
     this.selectIndex = 0;
     this.customRange = false;
-    this.activeFireOption = 0;
+    this.activeFireOption = 1;
     this.activeFireOptionLabel = 'Past 24 hours';
 
     this.bindListeners({
