@@ -7,6 +7,8 @@ import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 import moment from 'moment';
 import {defaultColorTheme} from '../../config';
+import layerActions from '../../actions/LayerActions';
+import MapStore from '../../stores/MapStore';
 
 export default class ReportSubscribeButtons extends Component {
   constructor(props) {
@@ -19,9 +21,10 @@ export default class ReportSubscribeButtons extends Component {
 
     this.state = {
       descriptionText: '',
+      ...MapStore.getState()
     };
   }
-
+  
   static contextTypes = {
     language: PropTypes.string.isRequired,
     settings: PropTypes.object.isRequired,
@@ -49,9 +52,29 @@ export default class ReportSubscribeButtons extends Component {
       activeFilters,
       activeVersions,
       selectedFeatureTitles
-    } = mapStore.getState();
+    } = MapStore.getState();
     
     if (selectedFeature) {
+    
+      // console.log('activeLayers before', activeLayers);
+      // if (activeLayers.includes("VIIRS_ACTIVE_FIRES")) {
+      //   const layer24HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES`);
+      //   console.log('layer 24HR', layer24HR);
+      //   const layer48HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_48HR`);
+      //   console.log('layer 48HR', layer48HR);
+      //   const layer72HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_72HR`);
+      //   const layer7D = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_7D`);
+      //   const layer1YR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_1YR`);
+      //   const viirsLayers = [layer48HR, layer72HR, layer7D, layer1YR];
+      //   viirsLayers.forEach(layer => {
+      //     if (layer.visible) {
+      //       layerActions.removeActiveLayer(layer24HR.id);
+      //       layerActions.addActiveLayer(layer.id);
+      //     }
+      //   });
+      // }
+    //}
+
 
       const params = getUrlParams(location.href);
       const payload = {
@@ -128,6 +151,7 @@ export default class ReportSubscribeButtons extends Component {
   }
 
   render () {
+    console.log('activeLayers after', this.state.activeLayers);
     const { language } = this.context;
     const { descriptionText } = this.state;
     const {
