@@ -77,8 +77,8 @@ export default class FiresControls extends React.Component {
     brApp.map.infoWindow.clearFeatures();
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
     layerActions.updateCustomRange(false);
-    layerActions.updateActiveFireOption(evt.target.value);
-    layerActions.updateActiveFireOptionLabel(fireOptions[evt.target.value].label);
+    layerActions.updateActiveFireOption(parseInt(evt.target.value));
+    layerActions.updateActiveFireOptionLabel(fireOptions[parseInt(evt.target.value)].label);
   };
 
   render () {
@@ -92,16 +92,15 @@ export default class FiresControls extends React.Component {
           <div className="active-fires-time-range timeline-container imazon-controls flex">
             <div className='relative'>
               <select
-                className={`${customRange ? 'not-allowed' : 'pointer'}`}
+                className='pointer'
                 value={activeFireOption}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
-                disabled={customRange}
               >
               {this.renderActiveFireOptions(this.fireOptions)}
               </select>
               <div
                 style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
-                className={`fa-button sml white ${customRange ? 'fa-button-disabled not-allowed' : 'pointer'}`}>{activeFireOptionLabel}
+                className='fa-button sml white pointer'>{activeFireOptionLabel}
               </div>
             </div>
           </div>
@@ -110,7 +109,7 @@ export default class FiresControls extends React.Component {
             className="fa-button sml white pointer"
             onClick={() => {
                 layerActions.updateCustomRange(!customRange);
-                layerActions.updateActiveFireOptionLabel.defer(!customRange ? 'Active Fires' : this.fireOptions[this.fireOptions.filter(fireOption => fireOption.value === activeFireOption)[0].value].label);
+                layerActions.updateActiveFireOptionLabel.defer(!customRange ? 'Active Fires' : this.fireOptions.filter(fireOption => fireOption.value === activeFireOption)[0].label);
               }
             }
           >
