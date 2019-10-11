@@ -31,15 +31,12 @@ export default {
   updateBasemap(map, basemap, customBasemaps, webmapInfo, useWebmapBasemap) {
     activeBasemap = basemap;
 
-    console.log('basemap', basemap, useWebmapBasemap);
-
     if (useWebmapBasemap && basemap && basemap !== 'agol') {
       webmapInfo.baseMap.baseMapLayers.forEach(baseMapLayer => {
         const mapBmLayer = map.getLayer(baseMapLayer.id);
         mapBmLayer.hide();
       });
     }
-    
 
     //- Remove custom basemap layer if it exists
     if (customBasemapLayer) {
@@ -74,7 +71,6 @@ export default {
       const landsatConfig = appUtils.getObject(customBasemaps, 'id', 'landsat');
       this.addLandsatBasemap(map, landsatConfig);
     } else if (basemap === 'agol') {
-      console.log(webmapInfo);
       webmapInfo.baseMap.baseMapLayers.forEach(baseMapLayer => {
         const mapBmLayer = map.getLayer(baseMapLayer.id);
         mapBmLayer.show();
@@ -149,8 +145,6 @@ export default {
       //- Here we remove them After a Special New Basemap has rendered on the map to avoid a yucky Flash
       if (arcgisBasemap) {
         on.once(map, 'basemap-change', change => {
-          
-          
           if (change.current && change.current.layers) {
             let layersUpdated = 0;
             change.current.layers.forEach(bmLayer => {
@@ -170,22 +164,6 @@ export default {
       }
     }
 
-    //TODO: Maybe what we could have is a boolean in resources - useWebmapBasemap - that simply doesn't fire prepareDefaultBasemap if true.
-      // then, when someone selects a different basemap in the UI, we simply grab the baseMapLayers from the property of the itemData we store in
-      // state as 'webmapInfo'. The only question then - how to get the Original basemap back into the map. Create some basemap UI if useWebmapBasemap is true?
-      // --> Maybe when the user clicks back on the Active generic basemap? (right now it does nothing, but it could check that boolean and make moves)
-
-    console.log('basemapLayers', basemapLayers);
-
-    // basemapLayers.forEach(bm => map.reorderLayer(bm.layerObject, 3));
-    
-
-    console.log('arcgisBasemap', arcgisBasemap);
-    console.log('wriName', wriName);
-    console.log('map.getBasemap()', map.getBasemap());
-    
-
-
     //- Set the default basemap, this will trigger an update from the LayerPanel
     //- It listens for changes to the basemap in the store, and then triggers updateBasemap above
     if (arcgisBasemap) {
@@ -197,15 +175,11 @@ export default {
       mapActions.changeBasemap(wriName);
     } else if (map.getBasemap()) {
       mapActions.changeBasemap(map.getBasemap());
-    } else {
-      console.log('monooo');
-      
+    } else {      
       //- Use this as a fallback
       mapActions.changeBasemap('wri_mono');
     }
 
-
-    //- TODO: Add support for a custom basemap
   }
 
 };

@@ -268,11 +268,8 @@ export default class LayerPanel extends Component {
 
   renderBasemaps = (configuredLayers) => {
     const {language, settings} = this.context;
-    
     const { basemap, webmapInfo} = this.props;
     let basemapLayers = [];
-    
-    console.log(settings);    
 
     //- Add Custom Basemaps
     configuredLayers.forEach((layer) => {
@@ -300,11 +297,6 @@ export default class LayerPanel extends Component {
       }
     });
 
-    console.log('active basemap', basemap);
-    console.log('webmapInfo.baseMap.baseMapLayers', webmapInfo.baseMap.baseMapLayers);
-    
-    
-
     if (settings.useWebmapBasemap) {
       const bmLayerNames = webmapInfo.baseMap.baseMapLayers.map(baseMapLayer => baseMapLayer.id);
       basemapLayers.push(
@@ -322,11 +314,6 @@ export default class LayerPanel extends Component {
         return basemapUtils.arcgisBasemaps.indexOf(bm) > -1;
       });
 
-      //useWebmapBasemap
-      console.log('basemapNames', basemapNames);
-      console.log('basemapLayers', basemapLayers);
-      
-      
       basemapLayers = basemapLayers.concat(basemapNames.map(bm => {
         return (
           <BasemapLayer
