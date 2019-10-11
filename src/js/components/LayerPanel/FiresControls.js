@@ -26,10 +26,11 @@ export default class FiresControls extends React.Component {
     this.min = moment(oneYearAgo);
     this.max = moment(max);
     this.fireOptions = [
-      {label: 'Past 24 hours', value: 0},
-      {label: 'Past 48 hours', value: 1},
-      {label: 'Past 72 hours', value: 2},
-      {label: 'Past Week', value: 3}
+      {label: '', value: 0},
+      {label: 'Past 24 hours', value: 1},
+      {label: 'Past 48 hours', value: 2},
+      {label: 'Past 72 hours', value: 3},
+      {label: 'Past Week', value: 4}
     ];
     this.state = {
       ...MapStore.getState()
@@ -47,7 +48,7 @@ export default class FiresControls extends React.Component {
   componentDidUpdate(prevProps, prevState, prevContext) {
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
       brApp.map.infoWindow.clearFeatures();
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 4);
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 5);
     }
     // Anytime the map changes to a new map, update that here
     const {map} = this.context;
@@ -69,7 +70,7 @@ export default class FiresControls extends React.Component {
 
   renderActiveFireOptions = fireOptions => {
     return fireOptions.map((fireOption, index) => {
-      return <option key={`option-${index}`} value={fireOption.value}>{fireOption.label}</option>;
+      return <option key={`option-${index}`} style={index === 0 ? {display: 'none'} : {}} value={fireOption.value}>{fireOption.label}</option>;
     });
   };
 
@@ -77,7 +78,9 @@ export default class FiresControls extends React.Component {
     brApp.map.infoWindow.clearFeatures();
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
     layerActions.updateCustomRange(false);
-    layerActions.updateActiveFireOption(parseInt(evt.target.value));
+    if (evt.target.value !== '') {
+      layerActions.updateActiveFireOption(parseInt(evt.target.value));
+    }
     layerActions.updateActiveFireOptionLabel(fireOptions[parseInt(evt.target.value)].label);
   };
 
@@ -93,7 +96,7 @@ export default class FiresControls extends React.Component {
             <div className='relative'>
               <select
                 className='pointer'
-                value={activeFireOption}
+                value={''}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
               >
               {this.renderActiveFireOptions(this.fireOptions)}
@@ -109,7 +112,9 @@ export default class FiresControls extends React.Component {
             className="fa-button sml white pointer"
             onClick={() => {
                 layerActions.updateCustomRange(!customRange);
-                layerActions.updateActiveFireOptionLabel.defer(!customRange ? 'Defined Range' : this.fireOptions.filter(fireOption => fireOption.value === activeFireOption)[0].label);
+                //layerActions.updateActiveFireOptionLabel.defer(!customRange ? 'Defined Range' : this.fireOptions.filter(fireOption => fireOption.value === activeFireOption)[0].label);
+                layerActions.updateActiveFireOptionLabel('Defined Range');
+                layerActions.updateActiveFireOption(0);
               }
             }
           >

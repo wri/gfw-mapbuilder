@@ -42,21 +42,21 @@ const LayersHelper = {
       if (selectValue) {
           let defs = [];
           switch (parseInt(selectValue)) {
-            case 0: //past 24 hours
+            case 1: //past 24 hours
               layer24HR.show();
               layer48HR.hide();
               layer72HR.hide();
               layer7D.hide();
               layer1YR.hide();
               break;
-            case 1: //past 48 hours
+            case 2: //past 48 hours
               layer24HR.hide();
               layer48HR.show();
               layer72HR.hide();
               layer7D.hide();
               layer1YR.hide();
               break;
-            case 2: //past 72 hours
+            case 3: //past 72 hours
               defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
               layer72HR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}7D`].id]);
               layer72HR.setLayerDefinitions(defs);
@@ -66,14 +66,14 @@ const LayersHelper = {
               layer7D.hide();
               layer1YR.hide();
               break;
-            case 3: //past 7 days
+            case 4: //past 7 days
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
               layer7D.show();
               layer1YR.hide();
               break;
-            case 4: //past year
+            case 5: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
               defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
               layer1YR.setLayerDefinitions(defs);
