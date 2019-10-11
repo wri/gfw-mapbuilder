@@ -279,7 +279,7 @@ export default class ImageryModal extends Component {
 
   render () {
     const { monthsVal, imageStyleVal, cloudScore, hoveredThumb, selectedThumb } = this.state;
-    const { imageryData, loadingImagery, imageryError} = this.props;
+    const { imageryData, loadingImagery, imageryError, imageryFetchFailed} = this.props;
     const {language} = this.context;
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
@@ -353,6 +353,7 @@ export default class ImageryModal extends Component {
             </div>
 
           </div>
+          <div className={`imagery-modal__section flex ${imageryFetchFailed ? '' : 'hidden'}`}>{modalText.imagery.selectInstructions}</div>
 
           <div className='imagery-modal__section thumbnail_container flex'>
             { imageryError &&
