@@ -302,7 +302,7 @@ export default class LayerPanel extends Component {
       basemapLayers.push(
         <AGOLBasemap
           label={'Webmap Basemap'}
-          active={!basemap || bmLayerNames.includes(basemap)} />
+          active={!basemap || basemap === 'agol' || bmLayerNames.includes(basemap)} />
       );
     }
 
