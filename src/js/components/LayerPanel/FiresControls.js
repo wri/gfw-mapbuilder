@@ -109,7 +109,7 @@ export default class FiresControls extends React.Component {
             className="fa-button sml white pointer"
             onClick={() => {
                 layerActions.updateCustomRange(!customRange);
-                layerActions.updateActiveFireOptionLabel.defer(!customRange ? 'Active Fires' : this.fireOptions.filter(fireOption => fireOption.value === activeFireOption)[0].label);
+                layerActions.updateActiveFireOptionLabel.defer(!customRange ? 'Defined Range' : this.fireOptions.filter(fireOption => fireOption.value === activeFireOption)[0].label);
               }
             }
           >
