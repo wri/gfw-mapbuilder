@@ -54,6 +54,7 @@ export default class ReportSubscribeButtons extends Component {
     
     if (selectedFeature) {
     
+      const newActiveLayers = [...activeLayers];
       if (activeLayers.includes("VIIRS_ACTIVE_FIRES")) {
         const layer24HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES`);
         const layer48HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_48HR`);
@@ -63,10 +64,29 @@ export default class ReportSubscribeButtons extends Component {
         const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
         viirsLayers.forEach(layer => {
           if (layer.visible && !activeLayers.includes(layer.id)) {
-            layerActions.addActiveLayer(layer.id);
+            newActiveLayers.push(layer.id);
           }
           if (!layer.visible && activeLayers.includes(layer.id)) {
-            layerActions.removeActiveLayer(layer.id);
+            const index = newActiveLayers.indexOf(layer);
+            newActiveLayers.splice(index, 1);
+          }
+        });
+      }
+      
+      if (activeLayers.includes("MODIS_ACTIVE_FIRES")) {
+        const layer24HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES`);
+        const layer48HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_48HR`);
+        const layer72HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_72HR`);
+        const layer7D = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_7D`);
+        const layer1YR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_1YR`);
+        const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+        modisLayers.forEach(layer => {
+          if (layer.visible && !activeLayers.includes(layer.id)) {
+            newActiveLayers.push(layer.id);
+          }
+          if (!layer.visible && activeLayers.includes(layer.id)) {
+            const index = newActiveLayers.indexOf(layer);
+            newActiveLayers.splice(index, 1);
           }
         });
       }
@@ -75,7 +95,7 @@ export default class ReportSubscribeButtons extends Component {
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
-        activeLayers,
+        newActiveLayers,
         dynamicLayers,
         tcLossFrom: lossFromSelectIndex,
         tcLossTo: lossToSelectIndex,

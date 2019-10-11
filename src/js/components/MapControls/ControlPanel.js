@@ -56,6 +56,42 @@ export default class ControlPanel extends Component {
         visibleLayers.push(activeLayer);
       }
     });
+    
+    if (activeLayers.includes("VIIRS_ACTIVE_FIRES")) {
+      const layer24HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES`);
+      const layer48HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_48HR`);
+      const layer72HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_72HR`);
+      const layer7D = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_7D`);
+      const layer1YR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_1YR`);
+      const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+      viirsLayers.forEach(layer => {
+        if (layer.visible && !visibleLayers.includes(layer.id)) {
+          visibleLayers.push(layer.id);
+        }
+        if (!layer.visible && visibleLayers.includes(layer.id)) {
+          const index = visibleLayers.indexOf(layer);
+          visibleLayers.splice(index, 1);
+        }
+      });
+    }
+    
+    if (activeLayers.includes("MODIS_ACTIVE_FIRES")) {
+      const layer24HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES`);
+      const layer48HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_48HR`);
+      const layer72HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_72HR`);
+      const layer7D = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_7D`);
+      const layer1YR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_1YR`);
+      const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+      modisLayers.forEach(layer => {
+        if (layer.visible && !visibleLayers.includes(layer.id)) {
+          visibleLayers.push(layer.id);
+        }
+        if (!layer.visible && visibleLayers.includes(layer.id)) {
+          const index = visibleLayers.indexOf(layer);
+          visibleLayers.splice(index, 1);
+        }
+      });
+    }
 
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,

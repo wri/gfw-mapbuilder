@@ -94,7 +94,7 @@ export default class FiresControls extends React.Component {
             <div className='relative'>
               <select
                 className='pointer'
-                value={''}
+                value={activeFireOption}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
               >
               {this.renderActiveFireOptions(this.fireOptions)}
