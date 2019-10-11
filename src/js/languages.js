@@ -154,7 +154,7 @@ strings.en.ANALYSIS_DRAW_INSTRUCTIONS = [
 strings.en.ANALYSIS_DRAW_BUTTON = 'Start drawing';
 strings.en.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;
 strings.en.ANALYSIS_SHAPEFILE_UPLOAD = 'or drop a custom shapefile here';
-strings.en.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 5MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';
+strings.en.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 1MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';
 strings.en.ANALYSIS_SELECT_TYPE_LABEL = 'Select Analysis:';
 //- Chart Labels in the Analysis
 strings.en.ANALYSIS_TC_CHART_NAME = 'Tree cover loss in Hectares';
@@ -924,7 +924,7 @@ strings.fr.ANALYSIS_DRAW_INSTRUCTIONS = [
 strings.fr.ANALYSIS_DRAW_BUTTON = 'Débutez le dessin';
 strings.fr.ANALYSIS_INSTRUCTION_ADDITIONAL = `Ajouter des polygones supplémentaires grâce à l\'outil dessin ${drawIcon}`;
 strings.fr.ANALYSIS_SHAPEFILE_UPLOAD = 'ou glissez un shapefile ici';
-strings.fr.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Fonctionne uniquement avec des données de type polygone avec la réérence spatiale WGS84. La taille maximale est de 5MB. Les fichiers shapefiles doivent être compressés(.zip) et les fichiers GeoJSON sous le format .json.';
+strings.fr.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Fonctionne uniquement avec des données de type polygone avec la réérence spatiale WGS84. La taille maximale est de 1MB. Les fichiers shapefiles doivent être compressés(.zip) et les fichiers GeoJSON sous le format .json.';
 strings.fr.ANALYSIS_SELECT_TYPE_LABEL = 'Choisissez le type d\'analyse:';
 //- Chart Labels in the Analysis
 strings.fr.ANALYSIS_TC_CHART_NAME = 'Perte de couvert arboré en Hectares';
@@ -1307,7 +1307,7 @@ strings.es.ANALYSIS_DRAW_INSTRUCTIONS = [
 strings.es.ANALYSIS_DRAW_BUTTON = 'Empezar a dibujar';
 strings.es.ANALYSIS_INSTRUCTION_ADDITIONAL = `Añadir polígonos adicionales en el futuro usando la herramienta de dibujo ${drawIcon}`;
 strings.es.ANALYSIS_SHAPEFILE_UPLOAD = 'o dejar un shapefile aquí';
-strings.es.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Solo están permitido datos en formato de polígono, con el Sistema de Referencia de Coordinados WGS84. Se recomienda un tamaño máximo de 5MB, más grande de 5MB puede no funcionar como era de esperar. Shapefiles de ESRI necesitan estar en formato .zip, y archivos de GeoJSON necesitan estar en formato .json.';
+strings.es.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Solo están permitido datos en formato de polígono, con el Sistema de Referencia de Coordinados WGS84. Se recomienda un tamaño máximo de 1MB, más grande de 1MB puede no funcionar como era de esperar. Shapefiles de ESRI necesitan estar en formato .zip, y archivos de GeoJSON necesitan estar en formato .json.';
 strings.es.ANALYSIS_SELECT_TYPE_LABEL = 'Seleccionar Análisis:';
 //- Chart Labels in the Analysis
 strings.es.ANALYSIS_TC_CHART_NAME = 'Pérdida de la cobertura arbórea (ha)';
@@ -2073,7 +2073,7 @@ strings.id.ANALYSIS_DRAW_INSTRUCTIONS = [
 strings.id.ANALYSIS_DRAW_BUTTON = 'Start drawing';
 strings.id.ANALYSIS_INSTRUCTION_ADDITIONAL = `Add additional shapes in the future by visiting the draw tool ${drawIcon}`;
 strings.id.ANALYSIS_SHAPEFILE_UPLOAD = 'or drop a custom shapefile here';
-strings.id.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 5MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';
+strings.id.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 1MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.';
 strings.id.ANALYSIS_SELECT_TYPE_LABEL = 'Select Analysis:';
 //- Chart Labels in the Analysis
 strings.id.ANALYSIS_TC_CHART_NAME = 'Tree cover loss in Hectares';
@@ -2454,7 +2454,7 @@ strings.zh.ANALYSIS_DRAW_INSTRUCTIONS = [
 strings.zh.ANALYSIS_DRAW_BUTTON = '开始绘画';
 strings.zh.ANALYSIS_INSTRUCTION_ADDITIONAL = `使用绘画工具来添加更多图形 ${drawIcon}`;
 strings.zh.ANALYSIS_SHAPEFILE_UPLOAD = '或者在这里添加自定义地理信息系统文件（shapefile）';
-strings.zh.ANALYSIS_SHAPEFILE_INSTRUCTIONS = '本网站仅支持空间参考系统为WGS84的图形数据文件。建议文件大小应小于5MB。ESRI文件必须为压缩文件（.zip）,GeoJSON 文件必须为后缀.json的文件。';
+strings.zh.ANALYSIS_SHAPEFILE_INSTRUCTIONS = '本网站仅支持空间参考系统为WGS84的图形数据文件。建议文件大小应小于1MB。ESRI文件必须为压缩文件（.zip）,GeoJSON 文件必须为后缀.json的文件。';
 strings.zh.ANALYSIS_SELECT_TYPE_LABEL = '选择分析方式：';
 //- Chart Labels in the Analysis
 strings.zh.ANALYSIS_TC_CHART_NAME = '森林覆盖损失（单位：公顷）';
