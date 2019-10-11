@@ -18,7 +18,7 @@ export default class AGOLBasemap extends Component {
 
         return (
             <div className={classes} onClick={this.changeBasemap}>
-                <span className='layer-basemap-icon wri'><img src={`${icon}`} /></span>
+                <span className='layer-basemap-icon wri'><img src='https://my.gfw-mapbuilder.org/img/custom_basemap.png' /></span>
                 <span className='layer-basemap-label'>{label}</span>
             </div>
         );
@@ -26,7 +26,6 @@ export default class AGOLBasemap extends Component {
 }
 
 AGOLBasemap.propTypes = {
-    icon: PropTypes.string.isRequired, //TODO: Get an image!
     label: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired
 };
