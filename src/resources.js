@@ -657,12 +657,6 @@ export default {
 				type: 'remoteDataLayer',
 				uuid: '15cb32c9-874f-4552-afdc-8a35ef70682f'
 			}, {
-				//Need other VIIRS layers here. Otherwise, report can't display correct active fires layer
-				id: 'VIIRS_ACTIVE_FIRES_48HR',
-				order: 8,
-				type: 'remoteDataLayer',
-				uuid: '15cb32c9-874f-4552-afdc-8a35ef70682f'
-			}, {
 				id: 'MODIS_ACTIVE_FIRES',
 				order: 9,
 				type: 'remoteDataLayer',

@@ -36,9 +36,9 @@ import moment, { isMoment } from 'moment';
 *   - ArcGISImageServiceLayer
 *   - FeatureLayer
 */
-export default (layer, lang) => {
+export default (layer, lang, map = brApp.map) => {
   // if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; } //Actually, let's re-create!
-
+  console.log('layer factory');
   if ((!layer.url && !layer.versions && layer.type !== 'graphic' && !layer.versions) || !layer.type) { throw new Error(errors.missingLayerConfig); }
 
   const options = {};
@@ -97,7 +97,7 @@ export default (layer, lang) => {
       if (!options || !options.id || (!layer.layerIds && !layer.versions)) { return false; }
       if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
       
-      if (brApp && brApp.map) {
+      if (layer) {
         const fireLayers = [];
         if (layer.id === 'VIIRS_ACTIVE_FIRES') {
           const infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang);
@@ -189,7 +189,7 @@ export default (layer, lang) => {
             fireLayer.order = layer.order;
             fireLayer.label = layer.label;
           });
-          brApp.map.addLayers(fireLayers);
+          map.addLayers(fireLayers);
         }
       }
       

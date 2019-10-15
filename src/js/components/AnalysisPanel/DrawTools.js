@@ -94,7 +94,9 @@ export default class DrawTools extends Component {
     const selectedFeature = map.infoWindow.getSelectedFeature();
     map.infoWindow.clearFeatures();
     const layer = map.getLayer(layerKeys.USER_FEATURES);
-    layer.remove(selectedFeature);
+    if (layer) {
+      layer.remove(selectedFeature);
+    }
     brApp.map.graphics.clear();
     mapActions.setAnalysisType('default');
     map.setInfoWindowOnClick(true);

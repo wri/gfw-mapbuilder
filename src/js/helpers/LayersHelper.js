@@ -30,18 +30,18 @@ const LayersHelper = {
     esriLayer.setVisibleLayers(esriLayer.visibleLayers);
   },
 
-  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
-    if (brApp.map) {
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, map = brApp.map) {
+    if (map) {
       const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
-
-      const layer24HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES`);
-      const layer48HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
-      const layer72HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
-      const layer7D = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
-      const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+      console.log('map', map);
+      const layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+      const layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      const layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      const layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      const layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
       if (selectValue) {
-          let defs = [];
+          const defs = [];
           switch (parseInt(selectValue)) {
             case 1: //past 24 hours
               layer24HR.show();
@@ -64,7 +64,9 @@ const LayersHelper = {
             case 3: //past 72 hours
               defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
               layer72HR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}7D`].id]);
-              layer72HR.setLayerDefinitions(defs);
+              if (defs) {
+                layer72HR.setLayerDefinitions(defs);
+              }
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.show();
@@ -85,7 +87,9 @@ const LayersHelper = {
             case 5: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
               defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
-              layer1YR.setLayerDefinitions(defs);
+              if (defs) {
+                layer1YR.setLayerDefinitions(defs);
+              }
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
