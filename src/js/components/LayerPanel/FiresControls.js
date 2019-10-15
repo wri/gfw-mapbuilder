@@ -5,6 +5,8 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import {defaultColorTheme} from '../../config';
+import layerActions from '../../actions/LayerActions';
+import MapStore from '../../stores/MapStore';
 
 export default class FiresControls extends React.Component {
 
@@ -24,24 +26,30 @@ export default class FiresControls extends React.Component {
     this.min = moment(oneYearAgo);
     this.max = moment(max);
     this.fireOptions = [
-      {label: 'Past 24 hours', value: '0'},
-      {label: 'Past 48 hours', value: '1'},
-      {label: 'Past 72 hours', value: '2'},
-      {label: 'Past Week', value: '3'}
+      {label: '', value: 0},
+      {label: 'Past 24 hours', value: 1},
+      {label: 'Past 48 hours', value: 2},
+      {label: 'Past 72 hours', value: 3},
+      {label: 'Past Week', value: 4}
     ];
     this.state = {
-      customRange: false,
-      activeFireOption: '0',
-      activeFireOptionLabel: 'Past 24 hours'
+      ...MapStore.getState()
     };
   }
+  
+  componentDidMount() {
+    MapStore.listen(this.storeDidUpdate);
+  }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   componentDidUpdate(prevProps, prevState, prevContext) {
-
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, '4');
+      brApp.map.infoWindow.clearFeatures();
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 5);
     }
-
     // Anytime the map changes to a new map, update that here
     const {map} = this.context;
     if (prevContext.map !== map && prevContext.map.loaded) {
@@ -62,17 +70,16 @@ export default class FiresControls extends React.Component {
 
   renderActiveFireOptions = fireOptions => {
     return fireOptions.map((fireOption, index) => {
-      return <option key={`option-${index}`} value={fireOption.value}>{fireOption.label}</option>;
+      return <option key={`option-${index}`} style={index === 0 ? {display: 'none'} : {}} value={fireOption.value}>{fireOption.label}</option>;
     });
   };
 
   updateActiveFires = (evt, fireOptions) => {
+    brApp.map.infoWindow.clearFeatures();
     LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
-    this.setState({
-      activeFireOption: evt.target.value,
-      activeFireOptionLabel: fireOptions[evt.target.value].label,
-      customRange: false
-    });
+    layerActions.updateCustomRange(false);
+    layerActions.updateActiveFireOption(parseInt(evt.target.value));
+    layerActions.updateActiveFireOptionLabel(fireOptions[parseInt(evt.target.value)].label);
   };
 
   render () {
@@ -86,7 +93,7 @@ export default class FiresControls extends React.Component {
           <div className="active-fires-time-range timeline-container imazon-controls flex">
             <div className='relative'>
               <select
-                className="pointer"
+                className='pointer'
                 value={activeFireOption}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
               >
@@ -101,10 +108,12 @@ export default class FiresControls extends React.Component {
           <div
             style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="fa-button sml white pointer"
-            onClick={() => this.setState({
-              customRange: !customRange,
-              activeFireOptionLabel: 'Active Fires'
-            })}
+            onClick={() => {
+                layerActions.updateCustomRange(!customRange);
+                layerActions.updateActiveFireOptionLabel('Defined Range');
+                layerActions.updateActiveFireOption(0);
+              }
+            }
           >
             Custom Range
           </div>

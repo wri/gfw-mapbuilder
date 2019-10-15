@@ -2,6 +2,18 @@ import dispatcher from 'js/dispatcher';
 
 class LayerActions {
 
+  updateCustomRange(bool) {
+    return bool;
+  }
+  
+  updateActiveFireOption(num) {
+    return num;
+  }
+  
+  updateActiveFireOptionLabel(str) {
+    return str;
+  }
+
   addActiveLayer (layerId) {
     return layerId;
     // TODO: Remove once current layer panel design is approved
