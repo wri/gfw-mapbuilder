@@ -28,8 +28,15 @@ export default {
   * then, add whichever basemap we need to, for custom layers, re add the layers, for
   * arcgis layers, just call setBasemap, this will unhide the layer if necessary
   */
-  updateBasemap (map, basemap, customBasemaps) {
+  updateBasemap(map, basemap, customBasemaps, webmapInfo, useWebmapBasemap) {
     activeBasemap = basemap;
+
+    if (useWebmapBasemap && basemap && basemap !== 'agol') {
+      webmapInfo.baseMap.baseMapLayers.forEach(baseMapLayer => {
+        const mapBmLayer = map.getLayer(baseMapLayer.id);
+        mapBmLayer.hide();
+      });
+    }
 
     //- Remove custom basemap layer if it exists
     if (customBasemapLayer) {
@@ -58,17 +65,17 @@ export default {
     //- if the basemap is a WRI Mono Basemap, add/update that here
     if (basemap === 'wri_mono') {
       this.addWRILayer(map, mono_mapboxid);
-    }
-
-    //- if the basemap is a WRI Contextual Basemap, add/update that here
-    if (basemap === 'wri_contextual') {
+    } else if (basemap === 'wri_contextual') {
       this.addWRILayer(map, contextual_mapboxid);
-    }
-
-    //- if it is a landsat basemap, add/update that here
-    if (basemap === 'landsat') {
+    } else if (basemap === 'landsat') {
       const landsatConfig = appUtils.getObject(customBasemaps, 'id', 'landsat');
       this.addLandsatBasemap(map, landsatConfig);
+    } else if (basemap === 'agol') {
+      webmapInfo.baseMap.baseMapLayers.forEach(baseMapLayer => {
+        const mapBmLayer = map.getLayer(baseMapLayer.id);
+        mapBmLayer.show();
+      });
+      
     }
 
   },
@@ -157,7 +164,6 @@ export default {
       }
     }
 
-
     //- Set the default basemap, this will trigger an update from the LayerPanel
     //- It listens for changes to the basemap in the store, and then triggers updateBasemap above
     if (arcgisBasemap) {
@@ -169,13 +175,11 @@ export default {
       mapActions.changeBasemap(wriName);
     } else if (map.getBasemap()) {
       mapActions.changeBasemap(map.getBasemap());
-    } else {
+    } else {      
       //- Use this as a fallback
       mapActions.changeBasemap('wri_mono');
     }
 
-
-    //- TODO: Add support for a custom basemap
   }
 
 };
