@@ -7,6 +7,7 @@ import basemapUtils from 'utils/basemapUtils';
 import text from 'js/languages';
 import moment from 'moment';
 import SVGIcon from 'utils/svgIcon';
+import MapStore from '../../stores/MapStore';
 import React, {
   Component,
   PropTypes
@@ -47,7 +48,7 @@ export default class ControlPanel extends Component {
       terraIStartDate, terraIEndDate, lossToSelectIndex, lossFromSelectIndex,
       imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear,
       viirsStartDate, viirsEndDate, modisStartDate, modisEndDate
-    } = this.props;
+    } = MapStore.getState();
 
     const visibleLayers = [];
 
@@ -57,7 +58,9 @@ export default class ControlPanel extends Component {
       }
     });
     
-    if (activeLayers.includes("VIIRS_ACTIVE_FIRES")) {
+    if (activeLayers.indexOf("VIIRS_ACTIVE_FIRES") > -1) {
+      const index = visibleLayers.indexOf("VIIRS_ACTIVE_FIRES");
+      visibleLayers.splice(index, 1);
       const layer24HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES`);
       const layer48HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_48HR`);
       const layer72HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_72HR`);
@@ -65,17 +68,15 @@ export default class ControlPanel extends Component {
       const layer1YR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_1YR`);
       const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
       viirsLayers.forEach(layer => {
-        if (layer.visible && !visibleLayers.includes(layer.id)) {
+        if (layer.visible === true) {
           visibleLayers.push(layer.id);
-        }
-        if (!layer.visible && visibleLayers.includes(layer.id)) {
-          const index = visibleLayers.indexOf(layer);
-          visibleLayers.splice(index, 1);
         }
       });
     }
     
-    if (activeLayers.includes("MODIS_ACTIVE_FIRES")) {
+    if (activeLayers.indexOf("MODIS_ACTIVE_FIRES") > -1) {
+      const index = visibleLayers.indexOf("MODIS_ACTIVE_FIRES");
+      visibleLayers.splice(index, 1);
       const layer24HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES`);
       const layer48HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_48HR`);
       const layer72HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_72HR`);
@@ -83,17 +84,13 @@ export default class ControlPanel extends Component {
       const layer1YR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_1YR`);
       const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
       modisLayers.forEach(layer => {
-        if (layer.visible && !visibleLayers.includes(layer.id)) {
+        if (layer.visible === true) {
           visibleLayers.push(layer.id);
-        }
-        if (!layer.visible && visibleLayers.includes(layer.id)) {
-          const index = visibleLayers.indexOf(layer);
-          visibleLayers.splice(index, 1);
         }
       });
     }
     
-    console.log('visibleLayers', visibleLayers);
+    console.log('visible layers share', visibleLayers);
 
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
