@@ -40,7 +40,7 @@ const LayersHelper = {
       const layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
       const layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
-      if (selectValue) {
+      if (selectValue && layer24HR && layer48HR && layer72HR && layer7D && layer1YR) {
           const defs = [];
           switch (parseInt(selectValue)) {
             case 1: //past 24 hours
