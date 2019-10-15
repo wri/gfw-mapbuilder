@@ -63,10 +63,10 @@ export default class ReportSubscribeButtons extends Component {
         const layer1YR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_1YR`);
         const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
         viirsLayers.forEach(layer => {
-          if (layer.visible && !activeLayers.includes(layer.id)) {
+          if (layer.visible === true) {
             newActiveLayers.push(layer.id);
           }
-          if (!layer.visible && activeLayers.includes(layer.id)) {
+          if (!layer.visible === false) {
             const index = newActiveLayers.indexOf(layer);
             newActiveLayers.splice(index, 1);
           }
@@ -81,21 +81,20 @@ export default class ReportSubscribeButtons extends Component {
         const layer1YR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_1YR`);
         const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
         modisLayers.forEach(layer => {
-          if (layer.visible && !activeLayers.includes(layer.id)) {
+          if (layer.visible === true) {
             newActiveLayers.push(layer.id);
           }
-          if (!layer.visible && activeLayers.includes(layer.id)) {
+          if (!layer.visible === false) {
             const index = newActiveLayers.indexOf(layer);
             newActiveLayers.splice(index, 1);
           }
         });
       }
 
-
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
-        newActiveLayers,
+        activeLayers: newActiveLayers,
         dynamicLayers,
         tcLossFrom: lossFromSelectIndex,
         tcLossTo: lossToSelectIndex,
@@ -167,7 +166,6 @@ export default class ReportSubscribeButtons extends Component {
   }
 
   render () {
-    console.log('activeLayers after', this.state.activeLayers);
     const { language } = this.context;
     const { descriptionText } = this.state;
     const {

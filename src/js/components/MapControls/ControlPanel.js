@@ -92,6 +92,8 @@ export default class ControlPanel extends Component {
         }
       });
     }
+    
+    console.log('visibleLayers', visibleLayers);
 
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
