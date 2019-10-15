@@ -33,7 +33,6 @@ const LayersHelper = {
   updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, map = brApp.map) {
     if (map) {
       const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
-      console.log('map', map);
       const layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
       const layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
       const layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
@@ -49,8 +48,6 @@ const LayersHelper = {
               layer72HR.hide();
               layer7D.hide();
               layer1YR.hide();
-              // layerActions.removeActiveLayer(layer.id);
-              // layerActions.addActiveLayer(layer24HR.id);
               break;
             case 2: //past 48 hours
               layer24HR.hide();
@@ -58,8 +55,6 @@ const LayersHelper = {
               layer72HR.hide();
               layer7D.hide();
               layer1YR.hide();
-              // layerActions.removeActiveLayer(layer.id);
-              // layerActions.addActiveLayer(layer48HR.id);
               break;
             case 3: //past 72 hours
               defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
@@ -72,8 +67,6 @@ const LayersHelper = {
               layer72HR.show();
               layer7D.hide();
               layer1YR.hide();
-              // layerActions.removeActiveLayer(layer.id);
-              // layerActions.addActiveLayer(layer72HR.id);
               break;
             case 4: //past 7 days
               layer24HR.hide();
@@ -81,8 +74,6 @@ const LayersHelper = {
               layer72HR.hide();
               layer7D.show();
               layer1YR.hide();
-              // layerActions.removeActiveLayer(layer.id);
-              // layerActions.addActiveLayer(layer7D.id);
               break;
             case 5: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
@@ -95,8 +86,6 @@ const LayersHelper = {
               layer72HR.hide();
               layer7D.hide();
               layer1YR.show();
-              // layerActions.removeActiveLayer(layer.id);
-              // layerActions.addActiveLayer(layer1YR.id);
               break;
             default:
               console.log('default');
