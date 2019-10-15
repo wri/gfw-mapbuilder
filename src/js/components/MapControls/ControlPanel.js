@@ -58,14 +58,14 @@ export default class ControlPanel extends Component {
       }
     });
     
-    if (activeLayers.indexOf("VIIRS_ACTIVE_FIRES") > -1) {
-      const index = visibleLayers.indexOf("VIIRS_ACTIVE_FIRES");
+    if (activeLayers.indexOf(layerKeys.VIIRS_ACTIVE_FIRES) > -1) {
+      const index = visibleLayers.indexOf(layerKeys.VIIRS_ACTIVE_FIRES);
       visibleLayers.splice(index, 1);
-      const layer24HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES`);
-      const layer48HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_48HR`);
-      const layer72HR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_72HR`);
-      const layer7D = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_7D`);
-      const layer1YR = brApp.map.getLayer(`VIIRS_ACTIVE_FIRES_1YR`);
+      const layer24HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
+      const layer48HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_48HR);
+      const layer72HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_72HR);
+      const layer7D = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_7D);
+      const layer1YR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_1YR);
       const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
       viirsLayers.forEach(layer => {
         if (layer.visible === true) {
@@ -74,14 +74,14 @@ export default class ControlPanel extends Component {
       });
     }
     
-    if (activeLayers.indexOf("MODIS_ACTIVE_FIRES") > -1) {
-      const index = visibleLayers.indexOf("MODIS_ACTIVE_FIRES");
+    if (activeLayers.indexOf(layerKeys.MODIS_ACTIVE_FIRES) > -1) {
+      const index = visibleLayers.indexOf(layerKeys.MODIS_ACTIVE_FIRES);
       visibleLayers.splice(index, 1);
-      const layer24HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES`);
-      const layer48HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_48HR`);
-      const layer72HR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_72HR`);
-      const layer7D = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_7D`);
-      const layer1YR = brApp.map.getLayer(`MODIS_ACTIVE_FIRES_1YR`);
+      const layer24HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES);
+      const layer48HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_48HR);
+      const layer72HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_72HR);
+      const layer7D = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_7D);
+      const layer1YR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_1YR);
       const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
       modisLayers.forEach(layer => {
         if (layer.visible === true) {

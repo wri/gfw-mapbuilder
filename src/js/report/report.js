@@ -259,8 +259,16 @@ export default class Report extends Component {
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
       const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
       const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
-      const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-      const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
+      const viirsFiresLayer24HR = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
+      const viirsFiresLayer48HR = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_48HR)[0];
+      const viirsFiresLayer72HR = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_72HR)[0];
+      const viirsFiresLayer7D = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_7D)[0];
+      const viirsFiresLayer1YR = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_1YR)[0];
+      const modisFiresLayer24HR = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
+      const modisFiresLayer48HR = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_48HR)[0];
+      const modisFiresLayer72HR = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_72HR)[0];
+      const modisFiresLayer7D = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_7D)[0];
+      const modisFiresLayer1YR = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_1YR)[0];
 
       if (lossLayer && lossLayer.setDateRange) {
         const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
@@ -284,13 +292,46 @@ export default class Report extends Component {
         terraILayer.setDateRange(julianFrom, julianTo);
       }
 
-      if (viirsFiresLayer) {
-        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer);
+      if (viirsFiresLayer24HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer24HR);
+      }
+      
+      if (viirsFiresLayer48HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer48HR);
+      }
+      
+      if (viirsFiresLayer72HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer72HR);
+      }
+      
+      if (viirsFiresLayer7D) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer7D);
+      }
+      
+      if (viirsFiresLayer1YR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer1YR);
       }
 
-      if (modisFiresLayer) {
-        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
+      if (modisFiresLayer24HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer24HR);
       }
+      
+      if (modisFiresLayer48HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer48HR);
+      }
+      
+      if (modisFiresLayer72HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer72HR);
+      }
+      
+      if (modisFiresLayer7D) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer7D);
+      }
+      
+      if (modisFiresLayer1YR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer1YR);
+      }
+      
       map.addLayers(esriLayers);
 
       reducedLayers.forEach(layer => {
