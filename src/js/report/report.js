@@ -165,9 +165,40 @@ export default class Report extends Component {
           return;
         }
       });
-      console.log('layers', layers);
-      //- make sure there's only one entry for each dynamic layer
+      console.log('layers before', layers);
+     
+      let viirsFiresLayers;
+      let modisFiresLayers;
+      layers.forEach(layer => {
+        if (layer.id === 'VIIRS_ACTIVE_FIRES') { 
+          const viirsFireLayers = layerFactory(layer, language, map);
+          //layers = layers.concat(viirsFireLayers);
+        }
+        if (layer.id === 'MODIS_ACTIVE_FIRES') { 
+          const modisFireLayers = layerFactory(layer, language, map);
+          //layers = layers.concat(modisFireLayers);
+        }
+      });
       
+      if (viirsFiresLayers.length > 0 ) {
+        viirsFiresLayers.forEach(layer => {
+          if (activeLayers.indexOf(layer.id) > -1) {
+            layer.visible = true;
+          }
+        });
+        layers = layers.concat(viirsFiresLayers);
+      }
+      
+      if (modisFiresLayers.length > 0 ) {
+        modisFiresLayers.forEach(layer => {
+          if (activeLayers.indexOf(layer.id) > -1) {
+            layer.visible = true;
+          }
+        });
+        layers = layers.concat(modisFiresLayers);
+      }
+      
+      console.log('layers after', layers);
       // if (activeLayers.includes(layerKeys.VIIRS_ACTIVE_FIRES)) {
       //   const layer = layers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
       //   const mapLayer = layerFactory(layer, language, map);
@@ -179,6 +210,7 @@ export default class Report extends Component {
       //   return mapLayer;
       // }
       
+       //- make sure there's only one entry for each dynamic layer
       const uniqueLayers = [];
       const existingIds = [];
       const reducedLayers = layers.filter(l => !l.url && !l.versions).reduce((prevArray, currentItem) => {
@@ -311,10 +343,12 @@ export default class Report extends Component {
       if (viirsFiresLayer24HR) {
         layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer24HR, map);
         map.addLayers(viirsFiresLayer24HR);
+        console.log('24HR');
       }
       
       if (viirsFiresLayer48HR) {
         layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer48HR, map);
+        console.log('48HR');
       }
       
       if (viirsFiresLayer72HR) {
