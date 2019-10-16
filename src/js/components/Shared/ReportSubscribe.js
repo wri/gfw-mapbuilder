@@ -87,8 +87,6 @@ export default class ReportSubscribeButtons extends Component {
           }
         });
       }
-      
-      console.log('visible layers report', visibleLayers);
 
       const params = getUrlParams(location.href);
       const payload = {

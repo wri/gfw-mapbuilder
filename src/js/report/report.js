@@ -20,7 +20,7 @@ import resources from 'resources';
 import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
-import moment from 'moment';
+import moment, { isMoment } from 'moment';
 import on from 'dojo/on';
 import VegaChart from 'components/AnalysisPanel/VegaChart';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -36,6 +36,7 @@ import ReportAnalysis from './ReportAnalysis';
 import ReportTable from './ReportTable';
 import CanopyModal from './../components/Modals/CanopyModal';
 import MapStore from '../stores/MapStore';
+import {shortTermServices} from '../config';
 
 let map;
 let appSettings;
@@ -119,7 +120,6 @@ export default class Report extends Component {
     // Esri layers have a specified order field within their layer group.
 
     // First need to add webmap layers to layer panel section GROUP_WEBMAP.
-    console.log('params', params);
     
     const webMapLayers = [];
     map.layerIds.forEach((layerId) => {
@@ -179,7 +179,30 @@ export default class Report extends Component {
 
       if (viirsFiresLayer) {
         activeLayers.forEach(activeLayer => {
-          if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES') > -1 && activeLayer !== 'VIIRS_ACTIVE_FIRES') {
+          if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_72HR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs72HR = [];
+            defs72HR[shortTermServices['viirs7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+            layer.setLayerDefinitions(defs72HR);
+            layer.show();
+          } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_1YR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs1YR = [];
+            let viirsStartDate = params.viirsStartDate;
+            let viirsEndDate = params.viirsEndDate;
+            if (!isMoment(viirsStartDate)) {
+                viirsStartDate = moment(viirsStartDate);
+              }
+            if (!isMoment(viirsEndDate)) {
+              viirsEndDate = moment(viirsEndDate);
+            }
+            const start = `${viirsStartDate.year()}-${viirsStartDate.month() + 1}-${viirsStartDate.date()} ${viirsStartDate.hours()}:${viirsStartDate.minutes()}:${viirsStartDate.seconds()}`;
+            const end = `${viirsEndDate.year()}-${viirsEndDate.month() + 1}-${viirsEndDate.date()} ${viirsEndDate.hours()}:${viirsEndDate.minutes()}:${viirsEndDate.seconds()}`;
+            const queryString = 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
+            defs1YR[shortTermServices['viirs1YR'].id] = queryString;
+            layer.setLayerDefinitions(defs1YR);
+            layer.show();
+          } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES') > -1 && activeLayer !== 'VIIRS_ACTIVE_FIRES') {
             map.getLayer(activeLayer).show();
           }
         });
@@ -187,7 +210,30 @@ export default class Report extends Component {
 
       if (modisFiresLayer) {
         activeLayers.forEach(activeLayer => {
-          if (activeLayer.indexOf('MODIS_ACTIVE_FIRES') > -1 && activeLayer !== 'MODIS_ACTIVE_FIRES') {
+          if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_72HR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs72HR = [];
+            defs72HR[shortTermServices['modis7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+            layer.setLayerDefinitions(defs72HR);
+            layer.show();
+          } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_1YR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs1YR = [];
+            let modisStartDate = params.modisStartDate;
+            let modisEndDate = params.modisEndDate;
+            if (!isMoment(modisStartDate)) {
+                modisStartDate = moment(modisStartDate);
+              }
+            if (!isMoment(modisEndDate)) {
+              modisEndDate = moment(modisEndDate);
+            }
+            const start = `${modisStartDate.year()}-${modisStartDate.month() + 1}-${modisStartDate.date()} ${modisStartDate.hours()}:${modisStartDate.minutes()}:${modisStartDate.seconds()}`;
+            const end = `${modisEndDate.year()}-${modisEndDate.month() + 1}-${modisEndDate.date()} ${modisEndDate.hours()}:${modisEndDate.minutes()}:${modisEndDate.seconds()}`;
+            const queryString = 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
+            defs1YR[shortTermServices['modis1YR'].id] = queryString;
+            layer.setLayerDefinitions(defs1YR);
+            layer.show();
+          } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES') > -1 && activeLayer !== 'MODIS_ACTIVE_FIRES') {
             map.getLayer(activeLayer).show();
           }
         });

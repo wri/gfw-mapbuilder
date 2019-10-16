@@ -67,6 +67,8 @@ export default class ControlPanel extends Component {
       const layer7D = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_7D);
       const layer1YR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_1YR);
       const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+      console.log('viirsLayers', viirsLayers);
+      console.log('active', activeLayers);
       viirsLayers.forEach(layer => {
         if (layer.visible === true) {
           visibleLayers.push(layer.id);
