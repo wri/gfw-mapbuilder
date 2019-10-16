@@ -84,11 +84,11 @@ export default class LayerCheckbox extends Component {
     const {map} = this.context;
     
     const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
-    const layer24HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES`);
-    const layer48HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
-    const layer72HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
-    const layer7D = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
-    const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+    const layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+    const layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+    const layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+    const layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+    const layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
 
     if (layer.disabled) { return; }
     if (layer.subId) {
@@ -102,13 +102,45 @@ export default class LayerCheckbox extends Component {
         layer7D.hide();
         layer1YR.hide();
         layerActions.updateCustomRange(false);
-        layerActions.updateActiveFireOption(0);
+        layerActions.updateActiveFireOption(1);
         layerActions.updateActiveFireOptionLabel('Past 24 hours');
-        brApp.map.infoWindow.clearFeatures();
+        map.infoWindow.clearFeatures();
       } else {
         layerActions.addSubLayer(layer);
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
+        // switch (layer.id) {
+        //   case 'VIIRS_ACTIVE_FIRES':
+        //   case 'MODIS_ACTIVE_FIRES':
+        //     layerActions.updateCustomRange(false);
+        //     layerActions.updateActiveFireOption(1);
+        //     layerActions.updateActiveFireOptionLabel('Past 24 hours');
+        //     break;
+        //   case 'VIIRS_ACTIVE_FIRES_48HR':
+        //   case 'MODIS_ACTIVE_FIRES_48HR':
+        //     layerActions.updateCustomRange(false);
+        //     layerActions.updateActiveFireOption(2);
+        //     layerActions.updateActiveFireOptionLabel('Past 48 hours');
+        //     break;
+        //   case 'VIIRS_ACTIVE_FIRES_72HR':
+        //   case 'MODIS_ACTIVE_FIRES_72HR':
+        //     layerActions.updateCustomRange(false);
+        //     layerActions.updateActiveFireOption(3);
+        //     layerActions.updateActiveFireOptionLabel('Past 72 hours');
+        //     break;
+        //   case 'VIIRS_ACTIVE_FIRES_7D':
+        //   case 'MODIS_ACTIVE_FIRES_7D':
+        //     layerActions.updateCustomRange(false);
+        //     layerActions.updateActiveFireOption(4);
+        //     layerActions.updateActiveFireOptionLabel('Past Week');
+        //     break;
+        //   case 'VIIRS_ACTIVE_FIRES_1YR':
+        //   case 'MODIS_ACTIVE_FIRES_1YR':
+        //       layerActions.updateActiveFireOption(5);
+        //       layerActions.updateActiveFireOptionLabel('Defined Range');
+        //       layerActions.updateCustomRange(true);
+        //       break;
+        // }
       }
     } else {
       if (this.props.checked) {
@@ -120,9 +152,9 @@ export default class LayerCheckbox extends Component {
         layer7D.hide();
         layer1YR.hide();
         layerActions.updateCustomRange(false);
-        layerActions.updateActiveFireOption(0);
+        layerActions.updateActiveFireOption(1);
         layerActions.updateActiveFireOptionLabel('Past 24 hours');
-        brApp.map.infoWindow.clearFeatures();
+        map.infoWindow.clearFeatures();
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);

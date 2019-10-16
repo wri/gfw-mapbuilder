@@ -67,8 +67,6 @@ export default class ControlPanel extends Component {
       const layer7D = map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_7D);
       const layer1YR = map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_1YR);
       const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
-      console.log('viirsLayers', viirsLayers);
-      console.log('active', activeLayers);
       viirsLayers.forEach(layer => {
         if (layer.visible === true) {
           visibleLayers.push(layer.id);
@@ -91,8 +89,6 @@ export default class ControlPanel extends Component {
         }
       });
     }
-    
-    console.log('visible layers share', visibleLayers);
 
     modalActions.showShareModal(toQuerystring(prepareStateForShare({
       map: map,
@@ -120,7 +116,6 @@ export default class ControlPanel extends Component {
       canopyDensity: canopyDensity
     })));
   };
-  
 
   showAnalysisTools = () => {
     mapActions.toggleAnalysisModal({ visible: true });
