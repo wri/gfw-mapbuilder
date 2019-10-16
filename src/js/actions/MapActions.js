@@ -6,9 +6,11 @@ import appActions from 'actions/AppActions';
 import resources from 'resources';
 import Point from 'esri/geometry/Point';
 import AppUtils from '../utils/AppUtils';
-
 import layerActions from 'actions/LayerActions';
 import {getUrlParams} from 'utils/params';
+import moment, { isMoment } from 'moment';
+import {shortTermServices} from '../config';
+
 
 let layersCreated = false;
 
@@ -136,6 +138,80 @@ class MapActions {
         }
       }
     });
+    
+    let viirsFiresLayer;
+    let modisFiresLayer;
+    layers.forEach(layer => {
+      if (layer.id === 'VIIRS_ACTIVE_FIRES') {
+         viirsFiresLayer = layerFactory(layer, language, map);
+      }
+      if (layer.id === 'MODIS_ACTIVE_FIRES') { 
+        modisFiresLayer = layerFactory(layer, language, map);
+      }
+    });
+
+    if (viirsFiresLayer) {
+      activeLayers.forEach(activeLayer => {
+        if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_72HR') > -1) {
+          const layer = map.getLayer(activeLayer);
+          const defs72HR = [];
+          defs72HR[shortTermServices['viirs7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+          layer.setLayerDefinitions(defs72HR);
+          layer.show();
+        } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_1YR') > -1) {
+          const layer = map.getLayer(activeLayer);
+          const defs1YR = [];
+          let viirsStartDate = params.viirsStartDate;
+          let viirsEndDate = params.viirsEndDate;
+          if (!isMoment(viirsStartDate)) {
+              viirsStartDate = moment(viirsStartDate);
+            }
+          if (!isMoment(viirsEndDate)) {
+            viirsEndDate = moment(viirsEndDate);
+          }
+          const start = `${viirsStartDate.year()}-${viirsStartDate.month() + 1}-${viirsStartDate.date()} ${viirsStartDate.hours()}:${viirsStartDate.minutes()}:${viirsStartDate.seconds()}`;
+          const end = `${viirsEndDate.year()}-${viirsEndDate.month() + 1}-${viirsEndDate.date()} ${viirsEndDate.hours()}:${viirsEndDate.minutes()}:${viirsEndDate.seconds()}`;
+          const queryString = 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
+          defs1YR[shortTermServices['viirs1YR'].id] = queryString;
+          layer.setLayerDefinitions(defs1YR);
+          layer.show();
+        } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES') > -1 && activeLayer !== 'VIIRS_ACTIVE_FIRES') {
+          map.getLayer(activeLayer).show();
+        }
+      });
+    }
+
+    if (modisFiresLayer) {
+      activeLayers.forEach(activeLayer => {
+        if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_72HR') > -1) {
+          const layer = map.getLayer(activeLayer);
+          const defs72HR = [];
+          defs72HR[shortTermServices['modis7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+          layer.setLayerDefinitions(defs72HR);
+          layer.show();
+        } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_1YR') > -1) {
+          const layer = map.getLayer(activeLayer);
+          const defs1YR = [];
+          let modisStartDate = params.modisStartDate;
+          let modisEndDate = params.modisEndDate;
+          if (!isMoment(modisStartDate)) {
+              modisStartDate = moment(modisStartDate);
+            }
+          if (!isMoment(modisEndDate)) {
+            modisEndDate = moment(modisEndDate);
+          }
+          const start = `${modisStartDate.year()}-${modisStartDate.month() + 1}-${modisStartDate.date()} ${modisStartDate.hours()}:${modisStartDate.minutes()}:${modisStartDate.seconds()}`;
+          const end = `${modisEndDate.year()}-${modisEndDate.month() + 1}-${modisEndDate.date()} ${modisEndDate.hours()}:${modisEndDate.minutes()}:${modisEndDate.seconds()}`;
+          const queryString = 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
+          defs1YR[shortTermServices['modis1YR'].id] = queryString;
+          layer.setLayerDefinitions(defs1YR);
+          layer.show();
+        } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES') > -1 && activeLayer !== 'MODIS_ACTIVE_FIRES') {
+          map.getLayer(activeLayer).show();
+        }
+      });
+    }
+    
     //- make sure there's only one entry for each dynamic layer
     const reducedLayers = layers.reduce((prevArray, currentItem) => {
       if (currentItem.hasOwnProperty('nestedLayers')) {
