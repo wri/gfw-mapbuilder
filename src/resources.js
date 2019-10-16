@@ -21,7 +21,7 @@ export default {
 	hideFooter: false,
 	includeMyGFWLogin: true,
 	navLinksInNewTab: false,
-	useWebmapBasemap: true,
+	useWebmapBasemap: false,
 	//- Color Settings
 	customColorTheme: '',
 	//- Language Settings
