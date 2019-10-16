@@ -165,51 +165,34 @@ export default class Report extends Component {
           return;
         }
       });
-      console.log('layers before', layers);
-     
-      let viirsFiresLayers;
-      let modisFiresLayers;
+      
+      let viirsFiresLayer;
+      let modisFiresLayer;
       layers.forEach(layer => {
-        if (layer.id === 'VIIRS_ACTIVE_FIRES') { 
-          const viirsFireLayers = layerFactory(layer, language, map);
-          //layers = layers.concat(viirsFireLayers);
+        if (layer.id === 'VIIRS_ACTIVE_FIRES') {
+           viirsFiresLayer = layerFactory(layer, language, map);
         }
         if (layer.id === 'MODIS_ACTIVE_FIRES') { 
-          const modisFireLayers = layerFactory(layer, language, map);
-          //layers = layers.concat(modisFireLayers);
+          modisFiresLayer = layerFactory(layer, language, map);
         }
       });
-      
-      if (viirsFiresLayers.length > 0 ) {
-        viirsFiresLayers.forEach(layer => {
-          if (activeLayers.indexOf(layer.id) > -1) {
-            layer.visible = true;
+
+      if (viirsFiresLayer) {
+        activeLayers.forEach(activeLayer => {
+          if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES') > -1 && activeLayer !== 'VIIRS_ACTIVE_FIRES') {
+            map.getLayer(activeLayer).show();
           }
         });
-        layers = layers.concat(viirsFiresLayers);
       }
-      
-      if (modisFiresLayers.length > 0 ) {
-        modisFiresLayers.forEach(layer => {
-          if (activeLayers.indexOf(layer.id) > -1) {
-            layer.visible = true;
+
+      if (modisFiresLayer) {
+        activeLayers.forEach(activeLayer => {
+          if (activeLayer.indexOf('MODIS_ACTIVE_FIRES') > -1 && activeLayer !== 'MODIS_ACTIVE_FIRES') {
+            map.getLayer(activeLayer).show();
           }
         });
-        layers = layers.concat(modisFiresLayers);
       }
-      
-      console.log('layers after', layers);
-      // if (activeLayers.includes(layerKeys.VIIRS_ACTIVE_FIRES)) {
-      //   const layer = layers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-      //   const mapLayer = layerFactory(layer, language, map);
-      //   return mapLayer;
-      // }
-      
-      // if (activeLayers.includes(layerKeys.MODIS_ACTIVE_FIRES)) {
-      //   const mapLayer = layerFactory(activeLayers[layerKeys.MODIS_ACTIVE_FIRES], language, map);
-      //   return mapLayer;
-      // }
-      
+
        //- make sure there's only one entry for each dynamic layer
       const uniqueLayers = [];
       const existingIds = [];
