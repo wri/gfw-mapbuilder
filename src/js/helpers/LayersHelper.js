@@ -59,9 +59,7 @@ const LayersHelper = {
             case 3: //past 72 hours
               defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
               layer72HR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}7D`].id]);
-              if (defs) {
-                layer72HR.setLayerDefinitions(defs);
-              }
+              layer72HR.setLayerDefinitions(defs);
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.show();
@@ -78,9 +76,7 @@ const LayersHelper = {
             case 5: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
               defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
-              if (defs) {
-                layer1YR.setLayerDefinitions(defs);
-              }
+              layer1YR.setLayerDefinitions(defs);
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();

@@ -167,16 +167,17 @@ export default class Report extends Component {
       });
       console.log('layers', layers);
       //- make sure there's only one entry for each dynamic layer
-      if (activeLayers.includes(layerKeys.VIIRS_ACTIVE_FIRES)) {
-        const layer = layers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-        const mapLayer = layerFactory(layer, language, map);
-        return mapLayer;
-      }
       
-      if (activeLayers.includes(layerKeys.MODIS_ACTIVE_FIRES)) {
-        const mapLayer = layerFactory(activeLayers[layerKeys.MODIS_ACTIVE_FIRES], language, map);
-        return mapLayer;
-      }
+      // if (activeLayers.includes(layerKeys.VIIRS_ACTIVE_FIRES)) {
+      //   const layer = layers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
+      //   const mapLayer = layerFactory(layer, language, map);
+      //   return mapLayer;
+      // }
+      
+      // if (activeLayers.includes(layerKeys.MODIS_ACTIVE_FIRES)) {
+      //   const mapLayer = layerFactory(activeLayers[layerKeys.MODIS_ACTIVE_FIRES], language, map);
+      //   return mapLayer;
+      // }
       
       const uniqueLayers = [];
       const existingIds = [];
@@ -307,48 +308,48 @@ export default class Report extends Component {
         terraILayer.setDateRange(julianFrom, julianTo);
       }
 
-      // if (viirsFiresLayer24HR) {
-      //   layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer24HR, map);
-      // }
+      if (viirsFiresLayer24HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer24HR, map);
+        map.addLayers(viirsFiresLayer24HR);
+      }
       
-      // if (viirsFiresLayer48HR) {
-      //   layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer48HR, map);
-      // }
+      if (viirsFiresLayer48HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer48HR, map);
+      }
       
-      // if (viirsFiresLayer72HR) {
-      //   layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer72HR, map);
-      // }
+      if (viirsFiresLayer72HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer72HR, map);
+      }
       
-      // if (viirsFiresLayer7D) {
-      //   layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer7D, map);
-      // }
+      if (viirsFiresLayer7D) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer7D, map);
+      }
       
-      // if (viirsFiresLayer1YR) {
-      //   layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer1YR, map);
-      // }
+      if (viirsFiresLayer1YR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer1YR, map);
+      }
 
-      // if (modisFiresLayer24HR) {
-      //   layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer24HR, map);
-      // }
+      if (modisFiresLayer24HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer24HR, map);
+      }
       
-      // if (modisFiresLayer48HR) {
-      //   layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer48HR, map);
-      // }
+      if (modisFiresLayer48HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer48HR, map);
+      }
       
-      // if (modisFiresLayer72HR) {
-      //   layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer72HR, map);
-      // }
+      if (modisFiresLayer72HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer72HR, map);
+      }
       
-      // if (modisFiresLayer7D) {
-      //   layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer7D, map);
-      // }
+      if (modisFiresLayer7D) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer7D, map);
+      }
       
-      // if (modisFiresLayer1YR) {
-      //   layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer1YR, map);
-      // }
+      if (modisFiresLayer1YR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer1YR, map);
+      }
       
       map.addLayers(esriLayers);
-      console.log('esri', esriLayers);
 
       reducedLayers.forEach(layer => {
         const mapLayer = map.getLayer(layer.id);
