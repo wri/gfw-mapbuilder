@@ -96,11 +96,13 @@ export default class LayerCheckbox extends Component {
         layerActions.removeSubLayer(layer);
         layer.visible = false;
         layerActions.removeActiveLayer(layer);
-        layer24HR.hide();
-        layer48HR.hide();
-        layer72HR.hide();
-        layer7D.hide();
-        layer1YR.hide();
+        if (fireID) {
+          layer24HR.hide();
+          layer48HR.hide();
+          layer72HR.hide();
+          layer7D.hide();
+          layer1YR.hide();
+        }
         if (fireID === 'VIIRS') {
           layerActions.updateViirsCustomRange(false);
           layerActions.updateActiveViirsOption(1);
@@ -120,11 +122,13 @@ export default class LayerCheckbox extends Component {
       if (this.props.checked) {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
-        layer24HR.hide();
-        layer48HR.hide();
-        layer72HR.hide();
-        layer7D.hide();
-        layer1YR.hide();
+        if (fireID) {
+          layer24HR.hide();
+          layer48HR.hide();
+          layer72HR.hide();
+          layer7D.hide();
+          layer1YR.hide();
+        }
         if (fireID === 'VIIRS') {
           layerActions.updateViirsCustomRange(false);
           layerActions.updateActiveViirsOption(1);
