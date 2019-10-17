@@ -100,7 +100,6 @@ class MapActions {
   }
 
   createLayers (map, layerPanel, activeLayers, language) {
-    console.log('activeLayaas', activeLayers);
     
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
@@ -347,9 +346,6 @@ class MapActions {
       });
 
     layersCreated = true;
-
-    console.log('layerslayerslayers', layers);
-    
 
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {
