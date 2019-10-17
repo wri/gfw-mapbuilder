@@ -443,7 +443,21 @@ class MapStore {
       }
       return prevArray.concat(currentItem);
     }, []);
+    console.log('this.activeLayers', this.activeLayers);
+    console.log('reducedLayers', reducedLayers);
+    const viirsOn = this.activeLayers.some(laya => laya.indexOf('VIIRS_ACTIVE_FIRES') > -1);
+    const modisOn = this.activeLayers.some(laya => laya.indexOf('MODIS_ACTIVE_FIRES') > -1);
+    
+    // debugger
     this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
+    if (viirsOn && this.activeLayers.indexOf('VIIRS_ACTIVE_FIRES') === -1) {
+      this.activeLayers.push('VIIRS_ACTIVE_FIRES');
+    }
+    if (modisOn && this.activeLayers.indexOf('MODIS_ACTIVE_FIRES') === -1) {
+      this.activeLayers.push('MODIS_ACTIVE_FIRES');
+    }
+    console.log('this.activeLayers', this.activeLayers);
+    // debugger
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -457,6 +471,10 @@ class MapStore {
         }
       }
     });
+
+    console.log('this.activeLayers', this.activeLayers);
+    // debugger
+    
   }
 
   updateCartoSymbol (symbol) {
