@@ -82,13 +82,20 @@ export default class LayerCheckbox extends Component {
   toggleLayer () {
     const {layer} = this.props;
     const {map} = this.context;
-    
-    const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
-    const layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
-    const layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
-    const layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
-    const layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
-    const layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+    let fireID,
+    layer24HR,
+    layer48HR,
+    layer72HR,
+    layer7D,
+    layer1YR;
+    if (layer.id.includes('VIIRS_ACTIVE_FIRES') || layer.id.includes('MODIS_ACTIVE_FIRES')) {
+      fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
+      layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+      layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+    }
 
     if (layer.disabled) { return; }
     if (layer.subId) {
@@ -103,7 +110,7 @@ export default class LayerCheckbox extends Component {
           layer7D.hide();
           layer1YR.hide();
         }
-        if (fireID === 'VIIRS') {
+        if (fireID && fireID === 'VIIRS') {
           layerActions.updateViirsCustomRange(false);
           layerActions.updateActiveViirsOption(1);
           layerActions.updateActiveViirsOptionLabel('Past 24 hours');
@@ -129,7 +136,7 @@ export default class LayerCheckbox extends Component {
           layer7D.hide();
           layer1YR.hide();
         }
-        if (fireID === 'VIIRS') {
+        if (fireID && fireID === 'VIIRS') {
           layerActions.updateViirsCustomRange(false);
           layerActions.updateActiveViirsOption(1);
           layerActions.updateActiveViirsOptionLabel('Past 24 hours');
