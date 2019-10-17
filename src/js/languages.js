@@ -541,7 +541,7 @@ strings.ka.ANALYSIS_DRAW_INSTRUCTIONS = [
 strings.ka.ANALYSIS_DRAW_BUTTON = 'დაიწყეთ ხაზვა';
 strings.ka.ANALYSIS_INSTRUCTION_ADDITIONAL = `მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ${drawIcon} მეშვეობით`;
 strings.ka.ANALYSIS_SHAPEFILE_UPLOAD = 'ან შემოიტანეთ სხვა შეიპფაილი';
-strings.ka.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'უნდა იყოს გამოყენებული მხოლოდ პოლიგონების მონაცემები WGS84 სივრცული რეფერენსებით. რეკომენდირებული მაქსიმალური ზომაა 5 მბ, უფრო დიდმა ფაილმა შეიძლება ვერ იმუშაოს კორექტულად.  Esri შეიპფაილები უნდა იყოს დაზიპული (.zip) ხოლო GeoJSON ფაილები უნდა იყოს  .json ფორმატით.';
+strings.ka.ANALYSIS_SHAPEFILE_INSTRUCTIONS = 'უნდა იყოს გამოყენებული მხოლოდ პოლიგონების მონაცემები WGS84 სივრცული რეფერენსებით. რეკომენდირებული მაქსიმალური ზომაა 1 მბ, უფრო დიდმა ფაილმა შეიძლება ვერ იმუშაოს კორექტულად.  Esri შეიპფაილები უნდა იყოს დაზიპული (.zip) ხოლო GeoJSON ფაილები უნდა იყოს  .json ფორმატით.';
 strings.ka.ANALYSIS_SELECT_TYPE_LABEL = 'აარჩიეთ ანალიზის ტიპი:';
 //- Chart Labels in the Analysis
 strings.ka.ANALYSIS_TC_CHART_NAME = 'ხის საფარის კარგვა ჰექტრებში ';
