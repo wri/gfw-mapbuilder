@@ -465,6 +465,31 @@ class MapStore {
     console.log('reducedLayers', reducedLayers);
     const viirsOn = this.activeLayers.some(laya => laya.indexOf('VIIRS_ACTIVE_FIRES') > -1);
     const modisOn = this.activeLayers.some(laya => laya.indexOf('MODIS_ACTIVE_FIRES') > -1);
+    this.activeLayers.forEach(laya => {
+      if (laya === 'VIIRS_ACTIVE_FIRES_48HR') {
+        this.activeViirsOption = 2;
+        this.activeViirsOptionLabel = 'Past 48 hours';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_72HR') {
+        this.activeViirsOption = 3;
+        this.activeViirsOptionLabel = 'Past 72 hours';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_7D') {
+        this.activeViirsOption = 4;
+        this.activeViirsOptionLabel = 'Past Week';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_1YR') {
+        this.activeViirsOptionLabel = 'Defined Range';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_48HR') {
+        this.activeModisOption = 2;
+        this.activeModisOptionLabel = 'Past 48 hours';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_72HR') {
+        this.activeModisOption = 3;
+        this.activeModisOptionLabel = 'Past 72 hours';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_7D') {
+        this.activeModisOption = 4;
+        this.activeModisOptionLabel = 'Past Week';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_1YR') {
+        this.activeModisOptionLabel = 'Defined Range';
+      }
+    });
     
     // debugger
     this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
