@@ -100,6 +100,8 @@ class MapActions {
   }
 
   createLayers (map, layerPanel, activeLayers, language) {
+    console.log('activeLayaas', activeLayers);
+    
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -158,6 +160,7 @@ class MapActions {
           defs72HR[shortTermServices['viirs7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
           layer.setLayerDefinitions(defs72HR);
           layer.show();
+          activeLayers.push('VIIRS_ACTIVE_FIRES');
         } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_1YR') > -1) {
           const layer = map.getLayer(activeLayer);
           const defs1YR = [];
@@ -175,8 +178,10 @@ class MapActions {
           defs1YR[shortTermServices['viirs1YR'].id] = queryString;
           layer.setLayerDefinitions(defs1YR);
           layer.show();
+          activeLayers.push('VIIRS_ACTIVE_FIRES');
         } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES') > -1 && activeLayer !== 'VIIRS_ACTIVE_FIRES') {
           map.getLayer(activeLayer).show();
+          activeLayers.push('VIIRS_ACTIVE_FIRES');
         }
       });
     }
@@ -189,6 +194,7 @@ class MapActions {
           defs72HR[shortTermServices['modis7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
           layer.setLayerDefinitions(defs72HR);
           layer.show();
+          activeLayers.push('MODIS_ACTIVE_FIRES');
         } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_1YR') > -1) {
           const layer = map.getLayer(activeLayer);
           const defs1YR = [];
@@ -206,8 +212,10 @@ class MapActions {
           defs1YR[shortTermServices['modis1YR'].id] = queryString;
           layer.setLayerDefinitions(defs1YR);
           layer.show();
+          activeLayers.push('MODIS_ACTIVE_FIRES');
         } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES') > -1 && activeLayer !== 'MODIS_ACTIVE_FIRES') {
           map.getLayer(activeLayer).show();
+          activeLayers.push('MODIS_ACTIVE_FIRES');
         }
       });
     }
@@ -339,6 +347,9 @@ class MapActions {
       });
 
     layersCreated = true;
+
+    console.log('layerslayerslayers', layers);
+    
 
     //- Return the layers through the dispatcher so the mapstore can update visible layers
     return {
