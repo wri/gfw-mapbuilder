@@ -29,9 +29,13 @@ export default {
   * arcgis layers, just call setBasemap, this will unhide the layer if necessary
   */
   updateBasemap(map, basemap, customBasemaps, webmapInfo, useWebmapBasemap) {
+    console.log('updateBasemap', basemap, customBasemaps, useWebmapBasemap);
+    
     activeBasemap = basemap;
 
     if (useWebmapBasemap && basemap && basemap !== 'agol') {
+      console.log('in??');
+      
       webmapInfo.baseMap.baseMapLayers.forEach(baseMapLayer => {
         const mapBmLayer = map.getLayer(baseMapLayer.id);
         mapBmLayer.hide();

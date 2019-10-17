@@ -197,6 +197,8 @@ class MapActions {
       }
 
       uniqueLayers.forEach((l, i) => {
+        console.log(l);
+        
         map.reorderLayer(l, i + 1);
 
         if (adjustLayerVis && l.esriLayer) {
