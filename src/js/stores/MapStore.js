@@ -100,9 +100,12 @@ class MapStore {
     this.currentX = 0;
     this.currentY = 0;
     this.selectIndex = 0;
-    this.customRange = false;
-    this.activeFireOption = 1;
-    this.activeFireOptionLabel = 'Past 24 hours';
+    this.customViirsRange = false;
+    this.activeViirsOption = 1;
+    this.activeViirsOptionLabel = 'Past 24 hours';
+    this.customModisRange = false;
+    this.activeModisOption = 1;
+    this.activeModisOptionLabel = 'Past 24 hours';
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -186,9 +189,12 @@ class MapStore {
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
       setActiveFilters: mapActions.setActiveFilters,
       changeLayerVersion: mapActions.changeLayerVersion,
-      updateCustomRange: layerActions.updateCustomRange,
-      updateActiveFireOption: layerActions.updateActiveFireOption,
-      updateActiveFireOptionLabel: layerActions.updateActiveFireOptionLabel
+      updateViirsCustomRange: layerActions.updateViirsCustomRange,
+      updateActiveViirsOption: layerActions.updateActiveViirsOption,
+      updateActiveViirsOptionLabel: layerActions.updateActiveViirsOptionLabel,
+      updateModisCustomRange: layerActions.updateModisCustomRange,
+      updateActiveModisOption: layerActions.updateActiveModisOption,
+      updateActiveModisOptionLabel: layerActions.updateActiveModisOptionLabel
     });
   }
 
@@ -197,16 +203,28 @@ class MapStore {
     this.activeSlopeClass = settings.slopeClasses && settings.slopeClasses[1];
   }
   
-  updateCustomRange(bool) {
-    this.customRange = bool;
+  updateViirsCustomRange(bool) {
+    this.customViirsRange = bool;
+  }
+
+  updateModisCustomRange(bool) {
+    this.customModisRange = bool;
   }
   
-  updateActiveFireOption(num) {
-    this.activeFireOption = num;
+  updateActiveViirsOption(num) {
+    this.activeViirsOption = num;
+  }
+
+  updateActiveModisOption(num) {
+    this.activeModisOption = num;
   }
   
-  updateActiveFireOptionLabel(str) {
-    this.activeFireOptionLabel = str;
+  updateActiveViirsOptionLabel(str) {
+    this.activeViirsOptionLabel = str;
+  }
+
+  updateActiveModisOptionLabel(str) {
+    this.activeModisOptionLabel = str;
   }
 
   addActiveLayer (layerId) {

@@ -2,15 +2,27 @@ import dispatcher from 'js/dispatcher';
 
 class LayerActions {
 
-  updateCustomRange(bool) {
+  updateViirsCustomRange(bool) {
+    return bool;
+  }
+
+  updateModisCustomRange(bool) {
     return bool;
   }
   
-  updateActiveFireOption(num) {
+  updateActiveViirsOption(num) {
+    return num;
+  }
+
+  updateActiveModisOption(num) {
     return num;
   }
   
-  updateActiveFireOptionLabel(str) {
+  updateActiveViirsOptionLabel(str) {
+    return str;
+  }
+
+  updateActiveModisOptionLabel(str) {
     return str;
   }
 

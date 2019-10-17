@@ -101,9 +101,15 @@ export default class LayerCheckbox extends Component {
         layer72HR.hide();
         layer7D.hide();
         layer1YR.hide();
-        layerActions.updateCustomRange(false);
-        layerActions.updateActiveFireOption(1);
-        layerActions.updateActiveFireOptionLabel('Past 24 hours');
+        if (fireID === 'VIIRS') {
+          layerActions.updateViirsCustomRange(false);
+          layerActions.updateActiveViirsOption(1);
+          layerActions.updateActiveViirsOptionLabel('Past 24 hours');
+        } else {
+          layerActions.updateModisCustomRange(false);
+          layerActions.updateActiveModisOption(1);
+          layerActions.updateActiveModisOptionLabel('Past 24 hours');
+        }
         map.infoWindow.clearFeatures();
       } else {
         layerActions.addSubLayer(layer);
@@ -151,9 +157,15 @@ export default class LayerCheckbox extends Component {
         layer72HR.hide();
         layer7D.hide();
         layer1YR.hide();
-        layerActions.updateCustomRange(false);
-        layerActions.updateActiveFireOption(1);
-        layerActions.updateActiveFireOptionLabel('Past 24 hours');
+        if (fireID === 'VIIRS') {
+          layerActions.updateViirsCustomRange(false);
+          layerActions.updateActiveViirsOption(1);
+          layerActions.updateActiveViirsOptionLabel('Past 24 hours');
+        } else {
+          layerActions.updateModisCustomRange(false);
+          layerActions.updateActiveModisOption(1);
+          layerActions.updateActiveModisOptionLabel('Past 24 hours');
+        }
         map.infoWindow.clearFeatures();
       } else {
         layer.visible = true;
