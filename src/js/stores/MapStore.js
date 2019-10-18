@@ -352,6 +352,10 @@ class MapStore {
       this.dynamicLayers[layerId] = [];
     });
     
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES').hide();
+    }
+    
     if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_48HR')) {
       brApp.map.getLayer('VIIRS_ACTIVE_FIRES_48HR').hide();
     }
@@ -366,6 +370,10 @@ class MapStore {
     
     if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_1YR')) {
       brApp.map.getLayer('VIIRS_ACTIVE_FIRES_1YR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES').hide();
     }
     
     if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_48HR')) {

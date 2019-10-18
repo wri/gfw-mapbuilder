@@ -22,6 +22,7 @@ export default class LayerToggles extends Component {
 
   clearAll () {
     layerActions.removeAll();
+    layerActions.removeAllLayers();
   }
 
   selectAll() {
