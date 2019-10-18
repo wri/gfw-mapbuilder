@@ -6,29 +6,29 @@ html
     div#report.report
     div#share-modal.share-modal.hidden
     //- script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/576-fix-styling-for-french-apps/reportLib.1.4.1.js')
-    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/info-window-debugging/reportLib.1.4.2.js')
+    script(id='report-load' src='http://alpha.blueraster.io/gfw-mapbuilder/598-MODIS-VIIRS-display-after-clearing-all-layers/reportLib.1.4.2.js')
     script.
       var customApp = new MapBuilderReport({
         config: {
-          "webmap": "249156099c444112a992cd91017fcf99",
-          "title": "Atlas Forestier du Gabon",
-          "subtitle": "Affectation des terres",
-          "webmapMenuName": "Affectation des terres",
-          "logoUrl": "https://gab.forest-atlas.org/system/site_settings/images/000/000/122/original/gabon-mefep-logo.png?1487328304",
-          "logoLinkUrl": "https://gab.forest-atlas.org/system/site_settings/images/000/000/122/original/gabon-mefep-logo.png?1487328304",
-          "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/gab/ExportWebMap/GPServer/Export%20Web%20Map",
-          "narrative": "",
+          "webmap": "6142e76453354c0b83633370e6a6f006 ",
+          "title": "Atlas Forestier du Cameroun",
+          "subtitle": "Ministère des Forêts et de la Faune",
+          "webmapMenuName": "Affectation des Terres",
+          "logoUrl": "https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590",
+          "logoLinkUrl": "http://www.minfof.cm/",
+          "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/cmr/ExportWebMap/GPServer/Export%20Web%20Map",
+          "narrative": "\u003cp\u003eCe thème présente la situation générale de l\'affectation des terres au Cameroun. Sont représentés : les permis minier (d\'exploitation et de recherche), les zones d\'intérêt cynégétique, les ventes de coupe, les forêts de production (UFA et forêt communale), les forêts communautaires, les aires protégées, les réserves forestières et les plantations agro industrielle.\u003cbr\u003e\u003c/p\u003e",
           "includeSubscribeButton": true,
           "sharinghost": "https://www.arcgis.com",
-          "analyticsCode": "UA-62288390-10",
-          "iso": "GAB",
+          "analyticsCode": "UA-62288390-1",
+          "iso": "CMR",
           "language": "fr",
           "useAlternativeLanguage": true,
           "alternativeLanguage": "en",
-          "alternativeWebmap": "5f3010b9257f4a35a5f1af74809b4a95",
-          "alternativeLanguageTitle": "Forest Atlas of Gabon",
-          "alternativeLanguageSubtitle": "Land Use Allocation",
-          "alternativeNarrative": "",
+          "alternativeWebmap": "b96ee7fcd75e405dbf9a8b5a44ae734a",
+          "alternativeLanguageTitle": "Forest Atlas of Cameroon",
+          "alternativeLanguageSubtitle": "Ministry of Forest and Wildlife",
+          "alternativeNarrative": "\u003cp\u003eThis map show the general land use allocation in Cameroon. It includes mining permits, hunting zones, various forest titles as well as agro-industrial plantations.\u003cbr\u003e\u003c/p\u003e",
           "alternativeWebmapMenuName": "Land Use",
           "includeDocumentsTab": true,
           "includeMeasurementTab": true,
@@ -42,7 +42,7 @@ html
           "gladAlerts": true,
           "terraIAlerts": true,
           "forma": true,
-          "primaryForests": false,
+          "primaryForests": true,
           "recentImagery": true,
           "analysisModules": [{
             "analysisId": "TC_LOSS_GAIN",
