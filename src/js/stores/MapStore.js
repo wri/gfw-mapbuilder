@@ -351,6 +351,39 @@ class MapStore {
     Object.keys(this.dynamicLayers).forEach((layerId) => {
       this.dynamicLayers[layerId] = [];
     });
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_48HR')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_48HR').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_72HR')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_72HR').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_7D')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_7D').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_1YR')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_1YR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_48HR')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_48HR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_72HR')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_72HR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_7D')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_7D').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_1YR')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_1YR').hide();
+    }
+   
 
     //- Reset all layer filters
     //- Loss

@@ -34,7 +34,7 @@ export default class RadioButton extends Component {
     const { customColorTheme } = this.context.settings;
     if (selected === 'active' && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (selected === 'active' && customColorTheme && customColorTheme === '') {
+    } else if (selected === 'active' && (!customColorTheme || customColorTheme === '')) {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#ffffff';
