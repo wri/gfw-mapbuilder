@@ -40,6 +40,7 @@ export default class MeasurementTool extends Component {
 
         const oldMeasure = document.getElementById(lastMapId + '-measure-div');
         oldMeasure.classList.add('hidden');
+        lastMapId = this.context.map.id;
       } else {
         measurementDiv = document.createElement('DIV');
         measurementDiv.setAttribute('id', this.context.map.id + '-measure-div');
