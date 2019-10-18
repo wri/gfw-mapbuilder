@@ -352,6 +352,14 @@ class MapStore {
       this.dynamicLayers[layerId] = [];
     });
     
+      //- FIRES
+      this.viirsStartDate = new Date();
+      this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
+      this.viirsEndDate = new Date();
+      this.modisStartDate = new Date();
+      this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
+      this.modisEndDate = new Date();
+    
     if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES')) {
       brApp.map.getLayer('VIIRS_ACTIVE_FIRES').hide();
     }
@@ -413,14 +421,6 @@ class MapStore {
     //- FORMA
     this.formaStartDate = new Date('2012', 0, 1);
     this.formaEndDate = new Date();
-
-    //- FIRES
-    this.viirsStartDate = new Date();
-    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
-    this.viirsEndDate = new Date();
-    this.modisStartDate = new Date();
-    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
-    this.modisEndDate = new Date();
 
     //-Terra I
     this.terraIStartDate = new Date('2004', 0, 1);

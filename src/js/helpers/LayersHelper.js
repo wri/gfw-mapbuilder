@@ -77,11 +77,13 @@ const LayersHelper = {
               const queryString = this.generateFiresQuery(startDate, endDate);
               defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
               layer1YR.setLayerDefinitions(defs);
+              if (layer24HR.visible || layer48HR.visible || layer72HR.visible || layer7D.visible) {
+                layer1YR.show();
+              }
               layer24HR.hide();
               layer48HR.hide();
               layer72HR.hide();
               layer7D.hide();
-              layer1YR.show();
               break;
             default:
               console.log('default');
