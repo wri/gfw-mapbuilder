@@ -281,6 +281,15 @@ export default class InfoWindow extends Component {
       // Add the dropdown for multiple selected features
       dropdown = this.createDropdown();
     }
+
+    if (layersCategories && selectedFeature && selectedFeature._layer && selectedFeature._layer.name) {
+      console.log('layersCategories', layersCategories);
+      console.log('selectedFeature._layer.name', selectedFeature._layer.name);
+      console.log('selectIndex', selectIndex);
+      
+    }
+    
+    
     
     return (
       <div className='infoWindow relative'>
