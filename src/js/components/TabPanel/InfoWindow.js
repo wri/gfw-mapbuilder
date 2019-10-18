@@ -72,13 +72,7 @@ export default class InfoWindow extends Component {
     const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
     const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
     const currentIndex = features.indexOf(matchedFeature);
-    let newIndex;
-    if (currentIndex - 1 > 0) {
-      newIndex = currentIndex - 1;
-    } else {
-      newIndex = currentIndex;
-    }
-    this.context.map.infoWindow.select(newIndex);
+    this.context.map.infoWindow.select(currentIndex);
     const newSelectedFeature = layersCategories[matchedFeature._layer.name];
     this.setState({
       activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
@@ -87,17 +81,13 @@ export default class InfoWindow extends Component {
   };
 
   next = () => {
+    
     const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    
     const features = this.context.map.infoWindow.features;
     const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
     const currentIndex = features.indexOf(matchedFeature);
-    let newIndex;
-    if (currentIndex + 1 > 0) {
-      newIndex = currentIndex + 1;
-    } else {
-      newIndex = currentIndex;
-    }
-    this.context.map.infoWindow.select(newIndex);
+    this.context.map.infoWindow.select(currentIndex);
     const newSelectedFeature = layersCategories[matchedFeature._layer.name];
     this.setState({
       activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
@@ -192,7 +182,7 @@ export default class InfoWindow extends Component {
 
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
-    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex} = this.state;
+    const { prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex } = this.state;
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
@@ -216,8 +206,8 @@ export default class InfoWindow extends Component {
         />
         <div className="infoWindow__prev-next-container">
           <span
-            style={prevButtonHover ? {backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex > 0 ? '0.8' : '1'}`} :
-            {backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
+            style={prevButtonHover ? { backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex > 0 ? '0.8' : '1'}` } :
+              { backgroundColor: `${selectIndex > 0 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}` }}
             className={`fa-button color arrow prev ${selectIndex > 0 ? '' : 'disabled'}`}
             onClick={selectIndex > 0 ? this.previous : null}
             onMouseEnter={this.prevToggleHover}
@@ -226,8 +216,8 @@ export default class InfoWindow extends Component {
             Prev
           </span>
           <span
-            style={nextButtonHover ? {backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? '0.8' : '1'}`} :
-            {backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`}}
+            style={nextButtonHover ? { backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}`, opacity: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? '0.8' : '1'}` } :
+              { backgroundColor: `${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? (customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme) : '#eee'}` }}
             className={`fa-button color arrow next ${selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? '' : 'disabled'}`}
             onClick={selectIndex < layersCategories[selectedFeature._layer.name].count - 1 ? this.next : null}
             onMouseEnter={this.nextToggleHover}
@@ -280,7 +270,7 @@ export default class InfoWindow extends Component {
       
       // Add the dropdown for multiple selected features
       dropdown = this.createDropdown();
-    }
+    }    
     
     return (
       <div className='infoWindow relative'>
