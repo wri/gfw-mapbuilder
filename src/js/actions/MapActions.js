@@ -100,6 +100,8 @@ class MapActions {
   createLayers (map, layerPanel, activeLayers, language) {
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
+    console.log('layerPanel', layerPanel);
+    
     let layers = Object.keys(layerPanel).filter((groupName) => {
       //- remove basemaps and extra layers, extra layers will be added later and basemaps
       //- handled differently elsewhere
@@ -118,7 +120,15 @@ class MapActions {
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
+          
           layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
+          // if (layer.id === "Stocktaking_Final_9294") {
+          console.log(layer.id, layer.order);
+            
+          // }
+          // console.log('layer', layer.id, groupName, layer.order);
+          // console.log('');
+          // debugger
         }
         return layer;
       });
@@ -126,6 +136,8 @@ class MapActions {
     }, []);
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
+    console.log('layers', layers);
+    
 
     layers.forEach(layer => {
       if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
@@ -145,6 +157,9 @@ class MapActions {
     }, []);
     const uniqueLayers = [];
     const existingIds = [];
+
+    console.log('reducedLayers', reducedLayers);
+    
 
     reducedLayers
       .forEach(layer => {
@@ -181,8 +196,14 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
+      // console.log('uniqueLayers', uniqueLayers);
+      // debugger
+      
 
       uniqueLayers.sort((a, b) => a.order - b.order);
+
+      // console.log('uniqueLayers', uniqueLayers);
+      // debugger
 
       const params = getUrlParams(location.href);
 
@@ -197,7 +218,7 @@ class MapActions {
       }
 
       uniqueLayers.forEach((l, i) => {
-        console.log(l);
+        // console.log(l);
         
         map.reorderLayer(l, i + 1);
 
