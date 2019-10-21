@@ -223,10 +223,10 @@ export default class Map extends Component {
           console.log(`${fireType}_ACTIVE_FIRES_${fireLength}`);
 
           if (map.getLayer(`${fireType}_ACTIVE_FIRES_${fireLength}`).visible) {
-            layerActions.addActiveLayer(
+            layerActions.addActiveLayer.defer(
               `${fireType}_ACTIVE_FIRES_${fireLength}`
             );
-            layerActions.removeActiveLayer(
+            layerActions.removeActiveLayer.defer(
               layerKeys[`${fireType}_ACTIVE_FIRES`]
             );
           }
