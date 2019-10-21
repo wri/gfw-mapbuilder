@@ -299,10 +299,14 @@ export default class LayerPanel extends Component {
 
     if (settings.useWebmapBasemap) {
       const bmLayerNames = webmapInfo.baseMap.baseMapLayers.map(baseMapLayer => baseMapLayer.id);
+      
       basemapLayers.push(
         <AGOLBasemap
-          label={'Webmap Basemap'}
-          active={!basemap || basemap === 'agol' || bmLayerNames.includes(basemap)} />
+          label={webmapInfo.baseMap.title}
+          active={
+            !basemap || basemap === 'agol' || bmLayerNames.includes(basemap)
+          }
+        />
       );
     }
 

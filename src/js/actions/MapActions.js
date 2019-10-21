@@ -97,9 +97,16 @@ class MapActions {
     return groupKey;
   }
 
-  createLayers (map, layerPanel, activeLayers, language) {
+  createLayers(map, layerPanel, activeLayers, language, itemData) {
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
+
+    const basemap = itemData && itemData.baseMap;
+    let baseMapLayers;
+    if (basemap) {
+      baseMapLayers = basemap.baseMapLayers;
+    }
+
     let layers = Object.keys(layerPanel).filter((groupName) => {
       //- remove basemaps and extra layers, extra layers will be added later and basemaps
       //- handled differently elsewhere
@@ -118,7 +125,7 @@ class MapActions {
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order)
         }
         return layer;
       });
@@ -223,6 +230,17 @@ class MapActions {
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);
       }
+
+      if (baseMapLayers) { //TODO: && settings.useWebmapBasemap
+        baseMapLayers.forEach((baseMapLayer, i) => {
+          if (baseMapLayer.id === 'defaultBasemap') {
+            map.reorderLayer(map.getLayer(baseMapLayer.id), 0);
+          } else {
+            map.reorderLayer(map.getLayer(baseMapLayer.id), 1);
+          }
+        });
+      }
+
       // Appending the mask to the end of the parent div to make sure mask is always on top of all layers
       var mask = document.getElementById('esri.Map_0_MASK');
       if (mask && mask.parentNode) {

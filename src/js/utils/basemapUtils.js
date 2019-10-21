@@ -28,7 +28,7 @@ export default {
   * then, add whichever basemap we need to, for custom layers, re add the layers, for
   * arcgis layers, just call setBasemap, this will unhide the layer if necessary
   */
-  updateBasemap(map, basemap, customBasemaps, webmapInfo, useWebmapBasemap) {
+  updateBasemap(map, basemap, customBasemaps, webmapInfo, useWebmapBasemap) {    
     activeBasemap = basemap;
 
     if (useWebmapBasemap && basemap && basemap !== 'agol') {
