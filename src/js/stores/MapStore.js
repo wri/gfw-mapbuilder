@@ -100,9 +100,12 @@ class MapStore {
     this.currentX = 0;
     this.currentY = 0;
     this.selectIndex = 0;
-    this.customRange = false;
-    this.activeFireOption = 1;
-    this.activeFireOptionLabel = 'Past 24 hours';
+    this.customViirsRange = false;
+    this.activeViirsOption = 1;
+    this.activeViirsOptionLabel = 'Past 24 hours';
+    this.customModisRange = false;
+    this.activeModisOption = 1;
+    this.activeModisOptionLabel = 'Past 24 hours';
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -186,9 +189,12 @@ class MapStore {
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
       setActiveFilters: mapActions.setActiveFilters,
       changeLayerVersion: mapActions.changeLayerVersion,
-      updateCustomRange: layerActions.updateCustomRange,
-      updateActiveFireOption: layerActions.updateActiveFireOption,
-      updateActiveFireOptionLabel: layerActions.updateActiveFireOptionLabel
+      updateViirsCustomRange: layerActions.updateViirsCustomRange,
+      updateActiveViirsOption: layerActions.updateActiveViirsOption,
+      updateActiveViirsOptionLabel: layerActions.updateActiveViirsOptionLabel,
+      updateModisCustomRange: layerActions.updateModisCustomRange,
+      updateActiveModisOption: layerActions.updateActiveModisOption,
+      updateActiveModisOptionLabel: layerActions.updateActiveModisOptionLabel
     });
   }
 
@@ -197,16 +203,28 @@ class MapStore {
     this.activeSlopeClass = settings.slopeClasses && settings.slopeClasses[1];
   }
   
-  updateCustomRange(bool) {
-    this.customRange = bool;
+  updateViirsCustomRange(bool) {
+    this.customViirsRange = bool;
+  }
+
+  updateModisCustomRange(bool) {
+    this.customModisRange = bool;
   }
   
-  updateActiveFireOption(num) {
-    this.activeFireOption = num;
+  updateActiveViirsOption(num) {
+    this.activeViirsOption = num;
+  }
+
+  updateActiveModisOption(num) {
+    this.activeModisOption = num;
   }
   
-  updateActiveFireOptionLabel(str) {
-    this.activeFireOptionLabel = str;
+  updateActiveViirsOptionLabel(str) {
+    this.activeViirsOptionLabel = str;
+  }
+
+  updateActiveModisOptionLabel(str) {
+    this.activeModisOptionLabel = str;
   }
 
   addActiveLayer (layerId) {
@@ -443,7 +461,43 @@ class MapStore {
       }
       return prevArray.concat(currentItem);
     }, []);
+
+    const viirsOn = this.activeLayers.some(laya => laya.indexOf('VIIRS_ACTIVE_FIRES') > -1);
+    const modisOn = this.activeLayers.some(laya => laya.indexOf('MODIS_ACTIVE_FIRES') > -1);
+    this.activeLayers.forEach(laya => {
+      if (laya === 'VIIRS_ACTIVE_FIRES_48HR') {
+        this.activeViirsOption = 2;
+        this.activeViirsOptionLabel = 'Past 48 hours';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_72HR') {
+        this.activeViirsOption = 3;
+        this.activeViirsOptionLabel = 'Past 72 hours';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_7D') {
+        this.activeViirsOption = 4;
+        this.activeViirsOptionLabel = 'Past Week';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_1YR') {
+        this.activeViirsOptionLabel = 'Defined Range';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_48HR') {
+        this.activeModisOption = 2;
+        this.activeModisOptionLabel = 'Past 48 hours';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_72HR') {
+        this.activeModisOption = 3;
+        this.activeModisOptionLabel = 'Past 72 hours';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_7D') {
+        this.activeModisOption = 4;
+        this.activeModisOptionLabel = 'Past Week';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_1YR') {
+        this.activeModisOptionLabel = 'Defined Range';
+      }
+    });
+    
     this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
+    if (viirsOn && this.activeLayers.indexOf('VIIRS_ACTIVE_FIRES') === -1) {
+      this.activeLayers.push('VIIRS_ACTIVE_FIRES');
+    }
+    if (modisOn && this.activeLayers.indexOf('MODIS_ACTIVE_FIRES') === -1) {
+      this.activeLayers.push('MODIS_ACTIVE_FIRES');
+    }
+
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -457,6 +511,7 @@ class MapStore {
         }
       }
     });
+    
   }
 
   updateCartoSymbol (symbol) {

@@ -309,7 +309,6 @@ export default class Map extends Component {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
                   createWMSGraphics(responses, layerId, wmsGraphics);
                   brApp.map.infoWindow.setFeatures(wmsGraphics);
-                  console.log(brApp.map.infoWindow);
                 } else {
                   console.error(`error: ${responses[layerId].error}`);
                 }
@@ -612,9 +611,9 @@ export default class Map extends Component {
           });
 
           const mapLayer = map.getLayer(layerId);
-
-          const dynamicLayers = [layerKeys.MODIS_ACTIVE_FIRES, layerKeys.VIIRS_ACTIVE_FIRES, layerKeys.IMAZON_SAD];
-
+          
+          const dynamicLayers = this.state.dynamicLayers;
+    
           if ((mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) || (mapLayer && dynamicLayers.indexOf(mapLayer.id) > -1)) {
             mapLayer.setOpacity(opacityValues[j]);
           } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
@@ -747,6 +746,10 @@ export default class Map extends Component {
 
       });
       returnObj.activeLayers = [];
+    }
+    
+    if (params.a && (params.a.includes('VIIRS') || params.a.includes('MODIS'))) {
+      mapActions.openTOCAccordion('GROUP_LCD');
     }
 
     if (params.ls && params.le) {

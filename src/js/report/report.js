@@ -20,7 +20,7 @@ import resources from 'resources';
 import number from 'dojo/number';
 import text from 'js/languages';
 import layersHelper from 'helpers/LayersHelper';
-import moment from 'moment';
+import moment, { isMoment } from 'moment';
 import on from 'dojo/on';
 import VegaChart from 'components/AnalysisPanel/VegaChart';
 import BarChart from 'components/AnalysisPanel/BarChart';
@@ -36,6 +36,7 @@ import ReportAnalysis from './ReportAnalysis';
 import ReportTable from './ReportTable';
 import CanopyModal from './../components/Modals/CanopyModal';
 import MapStore from '../stores/MapStore';
+import {shortTermServices} from '../config';
 
 let map;
 let appSettings;
@@ -119,6 +120,7 @@ export default class Report extends Component {
     // Esri layers have a specified order field within their layer group.
 
     // First need to add webmap layers to layer panel section GROUP_WEBMAP.
+    
     const webMapLayers = [];
     map.layerIds.forEach((layerId) => {
       if (params.hasOwnProperty(layerId)) {
@@ -163,8 +165,81 @@ export default class Report extends Component {
           return;
         }
       });
+      
+      let viirsFiresLayer;
+      let modisFiresLayer;
+      layers.forEach(layer => {
+        if (layer.id === 'VIIRS_ACTIVE_FIRES') {
+           viirsFiresLayer = layerFactory(layer, language, map);
+        }
+        if (layer.id === 'MODIS_ACTIVE_FIRES') { 
+          modisFiresLayer = layerFactory(layer, language, map);
+        }
+      });
 
-      //- make sure there's only one entry for each dynamic layer
+      if (viirsFiresLayer) {
+        activeLayers.forEach(activeLayer => {
+          if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_72HR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs72HR = [];
+            defs72HR[shortTermServices['viirs7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+            layer.setLayerDefinitions(defs72HR);
+            layer.show();
+          } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_1YR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs1YR = [];
+            let viirsStartDate = params.viirsStartDate;
+            let viirsEndDate = params.viirsEndDate;
+            if (!isMoment(viirsStartDate)) {
+                viirsStartDate = moment(viirsStartDate);
+              }
+            if (!isMoment(viirsEndDate)) {
+              viirsEndDate = moment(viirsEndDate);
+            }
+            const start = `${viirsStartDate.year()}-${viirsStartDate.month() + 1}-${viirsStartDate.date()} ${viirsStartDate.hours()}:${viirsStartDate.minutes()}:${viirsStartDate.seconds()}`;
+            const end = `${viirsEndDate.year()}-${viirsEndDate.month() + 1}-${viirsEndDate.date()} ${viirsEndDate.hours()}:${viirsEndDate.minutes()}:${viirsEndDate.seconds()}`;
+            const queryString = 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
+            defs1YR[shortTermServices['viirs1YR'].id] = queryString;
+            layer.setLayerDefinitions(defs1YR);
+            layer.show();
+          } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES') > -1 && activeLayer !== 'VIIRS_ACTIVE_FIRES') {
+            map.getLayer(activeLayer).show();
+          }
+        });
+      }
+
+      if (modisFiresLayer) {
+        activeLayers.forEach(activeLayer => {
+          if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_72HR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs72HR = [];
+            defs72HR[shortTermServices['modis7D'].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+            layer.setLayerDefinitions(defs72HR);
+            layer.show();
+          } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_1YR') > -1) {
+            const layer = map.getLayer(activeLayer);
+            const defs1YR = [];
+            let modisStartDate = params.modisStartDate;
+            let modisEndDate = params.modisEndDate;
+            if (!isMoment(modisStartDate)) {
+                modisStartDate = moment(modisStartDate);
+              }
+            if (!isMoment(modisEndDate)) {
+              modisEndDate = moment(modisEndDate);
+            }
+            const start = `${modisStartDate.year()}-${modisStartDate.month() + 1}-${modisStartDate.date()} ${modisStartDate.hours()}:${modisStartDate.minutes()}:${modisStartDate.seconds()}`;
+            const end = `${modisEndDate.year()}-${modisEndDate.month() + 1}-${modisEndDate.date()} ${modisEndDate.hours()}:${modisEndDate.minutes()}:${modisEndDate.seconds()}`;
+            const queryString = 'ACQ_DATE > date \'' + start + '\'' + ' AND ' + 'ACQ_DATE < date \'' + end + '\'';
+            defs1YR[shortTermServices['modis1YR'].id] = queryString;
+            layer.setLayerDefinitions(defs1YR);
+            layer.show();
+          } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES') > -1 && activeLayer !== 'MODIS_ACTIVE_FIRES') {
+            map.getLayer(activeLayer).show();
+          }
+        });
+      }
+
+       //- make sure there's only one entry for each dynamic layer
       const uniqueLayers = [];
       const existingIds = [];
       const reducedLayers = layers.filter(l => !l.url && !l.versions).reduce((prevArray, currentItem) => {
@@ -238,7 +313,7 @@ export default class Report extends Component {
           }
         }
         // return layerFactory(layer, language);
-
+   
         const mapLayer = layerFactory(layer, language);
 
         // If there are active filters, set definition expressions on layer.
@@ -259,8 +334,18 @@ export default class Report extends Component {
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
       const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
       const terraILayer = esriLayers.filter(layer => layer.id === layerKeys.TERRA_I_ALERTS)[0];
-      const viirsFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
-      const modisFiresLayer = esriLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
+      
+      
+      const viirsFiresLayer24HR = activeLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES)[0];
+      const viirsFiresLayer48HR = activeLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_48HR)[0];
+      const viirsFiresLayer72HR = activeLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_72HR)[0];
+      const viirsFiresLayer7D = activeLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_7D)[0];
+      const viirsFiresLayer1YR = activeLayers.filter(layer => layer.id === layerKeys.VIIRS_ACTIVE_FIRES_1YR)[0];
+      const modisFiresLayer24HR = activeLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES)[0];
+      const modisFiresLayer48HR = activeLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_48HR)[0];
+      const modisFiresLayer72HR = activeLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_72HR)[0];
+      const modisFiresLayer7D = activeLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_7D)[0];
+      const modisFiresLayer1YR = activeLayers.filter(layer => layer.id === layerKeys.MODIS_ACTIVE_FIRES_1YR)[0];
 
       if (lossLayer && lossLayer.setDateRange) {
         const yearsArray = analysisConfig[analysisKeys.TC_LOSS].labels;
@@ -284,13 +369,49 @@ export default class Report extends Component {
         terraILayer.setDateRange(julianFrom, julianTo);
       }
 
-      if (viirsFiresLayer) {
-        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer);
+      if (viirsFiresLayer24HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer24HR, map);
+        map.addLayers(viirsFiresLayer24HR);
+        console.log('24HR');
+      }
+      
+      if (viirsFiresLayer48HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer48HR, map);
+        console.log('48HR');
+      }
+      
+      if (viirsFiresLayer72HR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer72HR, map);
+      }
+      
+      if (viirsFiresLayer7D) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer7D, map);
+      }
+      
+      if (viirsFiresLayer1YR) {
+        layersHelper.updateFiresLayerDefinitions(viirsFrom, viirsTo, viirsFiresLayer1YR, map);
       }
 
-      if (modisFiresLayer) {
-        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer);
+      if (modisFiresLayer24HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer24HR, map);
       }
+      
+      if (modisFiresLayer48HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer48HR, map);
+      }
+      
+      if (modisFiresLayer72HR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer72HR, map);
+      }
+      
+      if (modisFiresLayer7D) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer7D, map);
+      }
+      
+      if (modisFiresLayer1YR) {
+        layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer1YR, map);
+      }
+      
       map.addLayers(esriLayers);
 
       reducedLayers.forEach(layer => {

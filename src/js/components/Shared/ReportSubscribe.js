@@ -7,6 +7,7 @@ import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 import moment from 'moment';
 import {defaultColorTheme} from '../../config';
+import layerActions from '../../actions/LayerActions';
 
 export default class ReportSubscribeButtons extends Component {
   constructor(props) {
@@ -18,10 +19,10 @@ export default class ReportSubscribeButtons extends Component {
     };
 
     this.state = {
-      descriptionText: '',
+      descriptionText: ''
     };
   }
-
+  
   static contextTypes = {
     language: PropTypes.string.isRequired,
     settings: PropTypes.object.isRequired,
@@ -52,11 +53,45 @@ export default class ReportSubscribeButtons extends Component {
     } = mapStore.getState();
     
     if (selectedFeature) {
+    
+      const visibleLayers = [...activeLayers];
+      
+      if (activeLayers.indexOf(layerKeys.VIIRS_ACTIVE_FIRES) > -1) {
+        const index = visibleLayers.indexOf(layerKeys.VIIRS_ACTIVE_FIRES);
+        visibleLayers.splice(index, 1);
+        const layer24HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
+        const layer48HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_48HR);
+        const layer72HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_72HR);
+        const layer7D = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_7D);
+        const layer1YR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_1YR);
+        const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+        viirsLayers.forEach(layer => {
+          if (layer.visible === true) {
+            visibleLayers.push(layer.id);
+          }
+        });
+      }
+      
+      if (activeLayers.indexOf(layerKeys.MODIS_ACTIVE_FIRES) > -1) {
+        const index = visibleLayers.indexOf(layerKeys.MODIS_ACTIVE_FIRES);
+        visibleLayers.splice(index, 1);
+        const layer24HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES);
+        const layer48HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_48HR);
+        const layer72HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_72HR);
+        const layer7D = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_7D);
+        const layer1YR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_1YR);
+        const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+        modisLayers.forEach(layer => {
+          if (layer.visible === true) {
+            visibleLayers.push(layer.id);
+          }
+        });
+      }
 
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
-        activeLayers,
+        activeLayers: visibleLayers,
         dynamicLayers,
         tcLossFrom: lossFromSelectIndex,
         tcLossTo: lossToSelectIndex,
