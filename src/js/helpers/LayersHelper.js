@@ -3,6 +3,7 @@ import rasterFuncs from 'utils/rasterFunctions';
 import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
 import {shortTermServices} from '../config';
+import layerActions from '../actions/LayerActions';
 
 const LayersHelper = {
 
@@ -29,18 +30,17 @@ const LayersHelper = {
     esriLayer.setVisibleLayers(esriLayer.visibleLayers);
   },
 
-  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
-    if (brApp.map) {
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, map = brApp.map) {
+    if (map) {
       const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
-
-      const layer24HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES`);
-      const layer48HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
-      const layer72HR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
-      const layer7D = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
-      const layer1YR = brApp.map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+      const layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+      const layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      const layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      const layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      const layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
       
-      if (selectValue) {
-          let defs = [];
+      if (selectValue && layer24HR && layer48HR && layer72HR && layer7D && layer1YR) {
+          const defs = [];
           switch (parseInt(selectValue)) {
             case 1: //past 24 hours
               layer24HR.show();

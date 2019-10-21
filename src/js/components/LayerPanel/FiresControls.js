@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {defaultColorTheme} from '../../config';
 import layerActions from '../../actions/LayerActions';
 import MapStore from '../../stores/MapStore';
+import layerKeys from 'constants/LayerConstants';
 
 export default class FiresControls extends React.Component {
 
@@ -46,16 +47,16 @@ export default class FiresControls extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState, prevContext) {
+    const {map} = this.context;
     if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
       brApp.map.infoWindow.clearFeatures();
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 5);
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 5, map);
     }
     // Anytime the map changes to a new map, update that here
-    const {map} = this.context;
     if (prevContext.map !== map && prevContext.map.loaded) {
       const signal = map.on('update-end', () => {
         signal.remove();
-        LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer);
+        LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, null, map);
       });
     }
   }
@@ -76,16 +77,27 @@ export default class FiresControls extends React.Component {
 
   updateActiveFires = (evt, fireOptions) => {
     brApp.map.infoWindow.clearFeatures();
-    LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
-    layerActions.updateCustomRange(false);
-    layerActions.updateActiveFireOption(parseInt(evt.target.value));
-    layerActions.updateActiveFireOptionLabel(fireOptions[parseInt(evt.target.value)].label);
+    LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value, this.context.map);
+
+    if (this.props.layer.id === layerKeys.VIIRS_ACTIVE_FIRES) {
+      layerActions.updateViirsCustomRange(false);
+      layerActions.updateActiveViirsOptionLabel(fireOptions[parseInt(evt.target.value)].label);
+      layerActions.updateActiveViirsOption(parseInt(evt.target.value));
+    } else {
+      layerActions.updateModisCustomRange(false);
+      layerActions.updateActiveModisOptionLabel(fireOptions[parseInt(evt.target.value)].label);
+      layerActions.updateActiveModisOption(parseInt(evt.target.value));
+    }
   };
 
   render () {
-    const { startDate, endDate } = this.props;
+    const { startDate, endDate, layer } = this.props;
     const {language} = this.context;
-    const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
+
+    const customRange = layer.id === layerKeys.VIIRS_ACTIVE_FIRES ? this.state.customViirsRange : this.state.customModisRange;
+    const activeFireOption = layer.id === layerKeys.VIIRS_ACTIVE_FIRES ? this.state.activeViirsOption : this.state.activeModisOption;    
+    const activeFireOptionLabel = layer.id === layerKeys.VIIRS_ACTIVE_FIRES ? this.state.activeViirsOptionLabel : this.state.activeModisOptionLabel;
+
     const { customColorTheme } = this.context.settings;
     return (
       <div>
@@ -109,9 +121,15 @@ export default class FiresControls extends React.Component {
             style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="fa-button sml white pointer"
             onClick={() => {
-                layerActions.updateCustomRange(!customRange);
-                layerActions.updateActiveFireOptionLabel('Defined Range');
-                layerActions.updateActiveFireOption(0);
+                if (layer.id === layerKeys.VIIRS_ACTIVE_FIRES) {
+                  layerActions.updateViirsCustomRange(!customRange);
+                  layerActions.updateActiveViirsOptionLabel('Defined Range');
+                  layerActions.updateActiveViirsOption(0);
+                } else {
+                  layerActions.updateModisCustomRange(!customRange);
+                  layerActions.updateActiveModisOptionLabel('Defined Range');
+                  layerActions.updateActiveModisOption(0);
+                }
               }
             }
           >

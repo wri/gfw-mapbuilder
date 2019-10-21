@@ -36,11 +36,10 @@ import moment, { isMoment } from 'moment';
 *   - ArcGISImageServiceLayer
 *   - FeatureLayer
 */
-export default (layer, lang) => {
+
+export default (layer, lang, map = brApp.map) => {
   // if (layer.hasOwnProperty('esriLayer')) { return layer.esriLayer; } //Actually, let's re-create!
-
   if ((!layer.url && !layer.versions && layer.type !== 'graphic' && !layer.versions) || !layer.type) { throw new Error(errors.missingLayerConfig); }
-
   const options = {};
   let esriLayer;
   switch (layer.type) {
@@ -97,7 +96,7 @@ export default (layer, lang) => {
       if (!options || !options.id || (!layer.layerIds && !layer.versions)) { return false; }
       if (!layer.url && layer.versions && layer.versions[0].url) { layer.url = layer.versions[0].url; }
       
-      if (brApp && brApp.map) {
+      if (layer && map) {
         const fireLayers = [];
         if (layer.id === 'VIIRS_ACTIVE_FIRES') {
           let viirsFortyEightOptions = {};
@@ -107,11 +106,19 @@ export default (layer, lang) => {
 
           if (layer.esriLayer) {
             Object.keys(layer).forEach(key => {
-              if (key !== 'esriLayer') {
-                viirsFortyEightOptions[key] = JSON.parse(JSON.stringify(layer[key]));
-                viirsSeventyTwoOptions[key] = JSON.parse(JSON.stringify(layer[key]));
-                viirsOneWeekOptions[key] = JSON.parse(JSON.stringify(layer[key]));
-                viirsOneYearOptions[key] = JSON.parse(JSON.stringify(layer[key]));
+              if (key !== 'esriLayer') {                
+                viirsFortyEightOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                viirsSeventyTwoOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                viirsOneWeekOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                viirsOneYearOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
               }
             });
           } else {
@@ -171,11 +178,19 @@ export default (layer, lang) => {
 
           if (layer.esriLayer) {
             Object.keys(layer).forEach(key => {
-              if (key !== 'esriLayer') {
-                modisFortyEightOptions[key] = JSON.parse(JSON.stringify(layer[key]));
-                modisSeventyTwoOptions[key] = JSON.parse(JSON.stringify(layer[key]));
-                modisOneWeekOptions[key] = JSON.parse(JSON.stringify(layer[key]));
-                modisOneYearOptions[key] = JSON.parse(JSON.stringify(layer[key]));
+              if (key !== 'esriLayer') {                
+                modisFortyEightOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                modisSeventyTwoOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                modisOneWeekOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                modisOneYearOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
               }
             });
           } else {
@@ -232,7 +247,7 @@ export default (layer, lang) => {
             fireLayer.order = layer.order;
             fireLayer.label = layer.label;
           });
-          brApp.map.addLayers(fireLayers);
+          map.addLayers(fireLayers);
         }
       }
       

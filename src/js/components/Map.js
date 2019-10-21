@@ -136,6 +136,8 @@ export default class Map extends Component {
       const options = mapConfig.options;
 
       if (map.destroy) {
+        this.allocateInitialFiresViz(map);
+
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
@@ -208,6 +210,32 @@ export default class Map extends Component {
     }
   };
 
+  allocateInitialFiresViz = (map) => {
+    const fireTypes = ['VIIRS', 'MODIS'];
+    const fireLengths = ['48HR', '72HR', '7D', '1YR'];    
+
+    fireTypes.forEach(fireType => {
+      if (
+        this.state.activeLayers.indexOf(layerKeys[`${fireType}_ACTIVE_FIRES`]) >
+        -1
+      ) {
+        fireLengths.forEach(fireLength => {
+          console.log(`${fireType}_ACTIVE_FIRES_${fireLength}`);
+
+          if (map.getLayer(`${fireType}_ACTIVE_FIRES_${fireLength}`).visible) {
+            layerActions.addActiveLayer(
+              `${fireType}_ACTIVE_FIRES_${fireLength}`
+            );
+            layerActions.removeActiveLayer(
+              layerKeys[`${fireType}_ACTIVE_FIRES`]
+            );
+          }
+        });
+      }
+    });
+
+  };
+
   clearSelectedFeaturesTitles = () => {
     const emptyArray = [];
     layerActions.updateSelectedFeatureTitles.defer(emptyArray);
@@ -246,7 +274,23 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
-        mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language, itemData);
+
+        const firesState = {
+          modisStartDate: this.state.modisStartDate,
+          modisEndDate: this.state.modisEndDate,
+          viirsEndDate: this.state.viirsEndDate,
+          viirsStartDate: this.state.viirsStartDate
+        };
+
+        mapActions.createLayers(
+          response.map,
+          settings.layerPanel,
+          activeLayers,
+          language,
+          firesState,
+          itemData
+        );
+        
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -309,7 +353,6 @@ export default class Map extends Component {
                 if (Array.isArray(responses[layerId]) && responses[layerId].length > 0) {
                   createWMSGraphics(responses, layerId, wmsGraphics);
                   brApp.map.infoWindow.setFeatures(wmsGraphics);
-                  console.log(brApp.map.infoWindow);
                 } else {
                   console.error(`error: ${responses[layerId].error}`);
                 }
@@ -612,9 +655,9 @@ export default class Map extends Component {
           });
 
           const mapLayer = map.getLayer(layerId);
-
-          const dynamicLayers = [layerKeys.MODIS_ACTIVE_FIRES, layerKeys.VIIRS_ACTIVE_FIRES, layerKeys.IMAZON_SAD];
-
+          
+          const dynamicLayers = this.state.dynamicLayers;
+    
           if ((mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) || (mapLayer && dynamicLayers.indexOf(mapLayer.id) > -1)) {
             mapLayer.setOpacity(opacityValues[j]);
           } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
@@ -747,6 +790,10 @@ export default class Map extends Component {
 
       });
       returnObj.activeLayers = [];
+    }
+    
+    if (params.a && (params.a.includes('VIIRS') || params.a.includes('MODIS'))) {
+      mapActions.openTOCAccordion('GROUP_LCD');
     }
 
     if (params.ls && params.le) {
