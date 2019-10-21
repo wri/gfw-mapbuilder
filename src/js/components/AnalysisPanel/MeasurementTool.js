@@ -7,6 +7,9 @@ import React, {
   PropTypes
 } from 'react';
 
+let measurementDiv;
+let lastMapId;
+
 export default class MeasurementTool extends Component {
   static contextTypes = {
     map: PropTypes.object.isRequired
@@ -14,7 +17,8 @@ export default class MeasurementTool extends Component {
 
   initialized = false
 
-  componentWillUpdate(prevProps) {
+  componentWillUpdate(prevProps, prevState, prevContext) {
+    
     if (
       this.context.map.loaded
       // the Measurement tool depends on navigationManager so we
@@ -24,13 +28,31 @@ export default class MeasurementTool extends Component {
       && this.measurementContainer
     ) {
       this.initialized = true;
-      const measurementDiv = document.createElement('DIV');
-      this.measurementContainer.appendChild(measurementDiv);
-      this.measurement = new Measurement({
-        map: this.context.map
-      }, measurementDiv);
-      this.measurement.startup();
-      
+
+      if (measurementDiv) {
+        measurementDiv = document.createElement('DIV');
+        measurementDiv.setAttribute('id', this.context.map.id + '-measure-div');
+        this.measurementContainer.appendChild(measurementDiv);
+        this.measurement = new Measurement({
+          map: this.context.map
+        }, measurementDiv);
+        this.measurement.startup();
+
+        const oldMeasure = document.getElementById(lastMapId + '-measure-div');
+        oldMeasure.classList.add('hidden');
+        lastMapId = this.context.map.id;
+      } else {
+        measurementDiv = document.createElement('DIV');
+        measurementDiv.setAttribute('id', this.context.map.id + '-measure-div');
+        this.measurementContainer.appendChild(measurementDiv);
+        this.measurement = new Measurement({
+          map: this.context.map
+        }, measurementDiv);
+        this.measurement.startup();
+        lastMapId = this.context.map.id;
+      }
+
+
       //- Show the selected feature highlight again if not using the measurement tool
       this.measurement.on('tool-change', evt => {
         if (!evt.toolName) {
@@ -44,7 +66,7 @@ export default class MeasurementTool extends Component {
       brApp.map.measurement = this.measurement;
     }
 
-    if (prevProps.activeWebmap !== undefined && prevProps.activeWebmap !== this.props.activeWebmap) {
+    if (prevContext.map !== undefined && prevContext.map.id !== this.context.map.id) {
       if (this.context.map.destroy && this.initialized) {
         this.measurement.clearResult();
         this.initialized = false;
