@@ -100,22 +100,34 @@ export default (layer, lang) => {
       if (brApp && brApp.map) {
         const fireLayers = [];
         if (layer.id === 'VIIRS_ACTIVE_FIRES') {
-          console.log('layer', layer);
 
           let viirsFortyEightOptions = {};
+          let viirsSeventyTwoOptions = {};
+          let viirsOneWeekOptions = {};
+          let viirsOneYearOptions = {};
 
           if (layer.esriLayer) {
             Object.keys(layer).forEach(key => {
-              if (key !== 'esriLayer') {
-                console.log('key', key);
-                // JSON.parse(JSON.stringify(layer[key]))
-                console.log(layer[key]);
-                
-                viirsFortyEightOptions[key] = JSON.parse(JSON.stringify(layer[key]));
+              if (key !== 'esriLayer') {                
+                viirsFortyEightOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                viirsSeventyTwoOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                viirsOneWeekOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                viirsOneYearOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
               }
             });
           } else {
             viirsFortyEightOptions = JSON.parse(JSON.stringify(layer));
+            viirsSeventyTwoOptions = JSON.parse(JSON.stringify(layer));
+            viirsOneWeekOptions = JSON.parse(JSON.stringify(layer));
+            viirsOneYearOptions = JSON.parse(JSON.stringify(layer));
           }
 
           console.log('viirsFortyEightOptions', viirsFortyEightOptions);
@@ -130,80 +142,109 @@ export default (layer, lang) => {
           viirsFortyEightOptions.layerIds.forEach((id) => { viirsFortyEightOptions.infoTemplates[id] = { infoTemplate }; });
           
           // const viirsSeventyTwoOptions = JSON.parse(JSON.stringify(layer));
-          // viirsSeventyTwoOptions.id = 'VIIRS_ACTIVE_FIRES_72HR';
-          // viirsSeventyTwoOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
-          // viirsSeventyTwoOptions.visible = false;
-          // viirsSeventyTwoOptions.infoTemplates = {};
-          // viirsSeventyTwoOptions.layerIds.forEach((id) => { viirsSeventyTwoOptions.infoTemplates[id] = { infoTemplate }; });
+          viirsSeventyTwoOptions.id = 'VIIRS_ACTIVE_FIRES_72HR';
+          viirsSeventyTwoOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
+          viirsSeventyTwoOptions.visible = false;
+          viirsSeventyTwoOptions.infoTemplates = {};
+          viirsSeventyTwoOptions.layerIds.forEach((id) => { viirsSeventyTwoOptions.infoTemplates[id] = { infoTemplate }; });
   
           // const viirsOneWeekOptions = JSON.parse(JSON.stringify(layer));
-          // viirsOneWeekOptions.id = 'VIIRS_ACTIVE_FIRES_7D';
-          // viirsOneWeekOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
-          // viirsOneWeekOptions.visible = false;
-          // viirsOneWeekOptions.infoTemplates = {};
-          // viirsOneWeekOptions.layerIds.forEach((id) => { viirsOneWeekOptions.infoTemplates[id] = { infoTemplate }; });
+          viirsOneWeekOptions.id = 'VIIRS_ACTIVE_FIRES_7D';
+          viirsOneWeekOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer';
+          viirsOneWeekOptions.visible = false;
+          viirsOneWeekOptions.infoTemplates = {};
+          viirsOneWeekOptions.layerIds.forEach((id) => { viirsOneWeekOptions.infoTemplates[id] = { infoTemplate }; });
   
           // const viirsOneYearOptions = JSON.parse(JSON.stringify(layer));
-          // viirsOneYearOptions.id = 'VIIRS_ACTIVE_FIRES_1YR';
-          // viirsOneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer';
-          // viirsOneYearOptions.visible = false;
-          // viirsOneYearOptions.infoTemplates = {};
-          // viirsOneYearOptions.layerIds = [0];
-          // viirsOneYearOptions.layerIds.forEach((id) => { viirsOneYearOptions.infoTemplates[id] = { infoTemplate }; });        
+          viirsOneYearOptions.id = 'VIIRS_ACTIVE_FIRES_1YR';
+          viirsOneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_1yr/MapServer';
+          viirsOneYearOptions.visible = false;
+          viirsOneYearOptions.infoTemplates = {};
+          viirsOneYearOptions.layerIds = [0];
+          viirsOneYearOptions.layerIds.forEach((id) => { viirsOneYearOptions.infoTemplates[id] = { infoTemplate }; });        
   
           const viirsFortyEight = new DynamicLayer(viirsFortyEightOptions.url, viirsFortyEightOptions);
-          // const viirsSeventyTwo = new DynamicLayer(viirsSeventyTwoOptions.url, viirsSeventyTwoOptions);
-          // const viirsOneWeek = new DynamicLayer(viirsOneWeekOptions.url, viirsOneWeekOptions);
-          // const viirsOneYear = new DynamicLayer(viirsOneYearOptions.url, viirsOneYearOptions);
+          const viirsSeventyTwo = new DynamicLayer(viirsSeventyTwoOptions.url, viirsSeventyTwoOptions);
+          const viirsOneWeek = new DynamicLayer(viirsOneWeekOptions.url, viirsOneWeekOptions);
+          const viirsOneYear = new DynamicLayer(viirsOneYearOptions.url, viirsOneYearOptions);
   
           fireLayers.push(viirsFortyEight);
-          // fireLayers.push(viirsSeventyTwo);
-          // fireLayers.push(viirsOneWeek);
-          // fireLayers.push(viirsOneYear);
+          fireLayers.push(viirsSeventyTwo);
+          fireLayers.push(viirsOneWeek);
+          fireLayers.push(viirsOneYear);
         }
         
-        // if (layer.id === 'MODIS_ACTIVE_FIRES') {
+        if (layer.id === 'MODIS_ACTIVE_FIRES') {
+
+          let modisFortyEightOptions = {};
+          let modisSeventyTwoOptions = {};
+          let modisOneWeekOptions = {};
+          let modisOneYearOptions = {};
+
+          if (layer.esriLayer) {
+            Object.keys(layer).forEach(key => {
+              if (key !== 'esriLayer') {                
+                modisFortyEightOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                modisSeventyTwoOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                modisOneWeekOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+                modisOneYearOptions[key] = JSON.parse(
+                  JSON.stringify(layer[key])
+                );
+              }
+            });
+          } else {
+            modisFortyEightOptions = JSON.parse(JSON.stringify(layer));
+            modisSeventyTwoOptions = JSON.parse(JSON.stringify(layer));
+            modisOneWeekOptions = JSON.parse(JSON.stringify(layer));
+            modisOneYearOptions = JSON.parse(JSON.stringify(layer));
+          }
           
           
-        //   const infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang);
-        //   const modisFortyEightOptions = JSON.parse(JSON.stringify(layer));
-        //   modisFortyEightOptions.id = 'MODIS_ACTIVE_FIRES_48HR';
-        //   modisFortyEightOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_48hrs/MapServer';
-        //   modisFortyEightOptions.visible = false;
-        //   modisFortyEightOptions.infoTemplates = {};
-        //   modisFortyEightOptions.layerIds.forEach((id) => { modisFortyEightOptions.infoTemplates[id] = { infoTemplate }; });
+          const infoTemplate = layerUtils.makeInfoTemplate(layer.popup, lang);
+          // const modisFortyEightOptions = JSON.parse(JSON.stringify(layer));
+          modisFortyEightOptions.id = 'MODIS_ACTIVE_FIRES_48HR';
+          modisFortyEightOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_48hrs/MapServer';
+          modisFortyEightOptions.visible = false;
+          modisFortyEightOptions.infoTemplates = {};
+          modisFortyEightOptions.layerIds.forEach((id) => { modisFortyEightOptions.infoTemplates[id] = { infoTemplate }; });
           
-        //   const modisSeventyTwoOptions = JSON.parse(JSON.stringify(layer));
-        //   modisSeventyTwoOptions.id = 'MODIS_ACTIVE_FIRES_72HR';
-        //   modisSeventyTwoOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer';
-        //   modisSeventyTwoOptions.visible = false;
-        //   modisSeventyTwoOptions.infoTemplates = {};
-        //   modisSeventyTwoOptions.layerIds.forEach((id) => { modisSeventyTwoOptions.infoTemplates[id] = { infoTemplate }; });
+          // const modisSeventyTwoOptions = JSON.parse(JSON.stringify(layer));
+          modisSeventyTwoOptions.id = 'MODIS_ACTIVE_FIRES_72HR';
+          modisSeventyTwoOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer';
+          modisSeventyTwoOptions.visible = false;
+          modisSeventyTwoOptions.infoTemplates = {};
+          modisSeventyTwoOptions.layerIds.forEach((id) => { modisSeventyTwoOptions.infoTemplates[id] = { infoTemplate }; });
   
-        //   const modisOneWeekOptions = JSON.parse(JSON.stringify(layer));
-        //   modisOneWeekOptions.id = 'MODIS_ACTIVE_FIRES_7D';
-        //   modisOneWeekOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer';
-        //   modisOneWeekOptions.visible = false;
-        //   modisOneWeekOptions.infoTemplates = {};
-        //   modisOneWeekOptions.layerIds.forEach((id) => { modisOneWeekOptions.infoTemplates[id] = { infoTemplate }; });
+          // const modisOneWeekOptions = JSON.parse(JSON.stringify(layer));
+          modisOneWeekOptions.id = 'MODIS_ACTIVE_FIRES_7D';
+          modisOneWeekOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer';
+          modisOneWeekOptions.visible = false;
+          modisOneWeekOptions.infoTemplates = {};
+          modisOneWeekOptions.layerIds.forEach((id) => { modisOneWeekOptions.infoTemplates[id] = { infoTemplate }; });
   
-        //   const modisOneYearOptions = JSON.parse(JSON.stringify(layer));
-        //   modisOneYearOptions.id = 'MODIS_ACTIVE_FIRES_1YR';
-        //   modisOneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer';
-        //   modisOneYearOptions.visible = false;
-        //   modisOneYearOptions.infoTemplates = {};
-        //   modisOneYearOptions.layerIds.forEach((id) => { modisOneYearOptions.infoTemplates[id] = { infoTemplate }; });
+          // const modisOneYearOptions = JSON.parse(JSON.stringify(layer));
+          modisOneYearOptions.id = 'MODIS_ACTIVE_FIRES_1YR';
+          modisOneYearOptions.url = 'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_1yr/MapServer';
+          modisOneYearOptions.visible = false;
+          modisOneYearOptions.infoTemplates = {};
+          modisOneYearOptions.layerIds.forEach((id) => { modisOneYearOptions.infoTemplates[id] = { infoTemplate }; });
   
-        //   const modisFortyEight = new DynamicLayer(modisFortyEightOptions.url, modisFortyEightOptions);
-        //   const modisSeventyTwo = new DynamicLayer(modisSeventyTwoOptions.url, modisSeventyTwoOptions);
-        //   const modisOneWeek = new DynamicLayer(modisOneWeekOptions.url, modisOneWeekOptions);
-        //   const modisOneYear = new DynamicLayer(modisOneYearOptions.url, modisOneYearOptions);
+          const modisFortyEight = new DynamicLayer(modisFortyEightOptions.url, modisFortyEightOptions);
+          const modisSeventyTwo = new DynamicLayer(modisSeventyTwoOptions.url, modisSeventyTwoOptions);
+          const modisOneWeek = new DynamicLayer(modisOneWeekOptions.url, modisOneWeekOptions);
+          const modisOneYear = new DynamicLayer(modisOneYearOptions.url, modisOneYearOptions);
   
-        //   fireLayers.push(modisFortyEight);
-        //   fireLayers.push(modisSeventyTwo);
-        //   fireLayers.push(modisOneWeek);
-        //   fireLayers.push(modisOneYear);
-        // }
+          fireLayers.push(modisFortyEight);
+          fireLayers.push(modisSeventyTwo);
+          fireLayers.push(modisOneWeek);
+          fireLayers.push(modisOneYear);
+        }
   
         if (fireLayers.length > 0) {
           fireLayers.forEach(fireLayer => {
