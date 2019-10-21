@@ -274,7 +274,20 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
-        mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
+        const firesState = {
+          modisStartDate: this.state.modisStartDate,
+          modisEndDate: this.state.modisEndDate,
+          viirsEndDate: this.state.viirsEndDate,
+          viirsStartDate: this.state.viirsStartDate
+        };
+
+        mapActions.createLayers(
+          response.map,
+          settings.layerPanel,
+          activeLayers,
+          language,
+          firesState
+        );
         
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {

@@ -99,7 +99,7 @@ class MapActions {
     return groupKey;
   }
 
-  createLayers (map, layerPanel, activeLayers, language) {
+  createLayers (map, layerPanel, activeLayers, language, firesState) {
     
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
@@ -163,8 +163,8 @@ class MapActions {
         } else if (activeLayer.indexOf('VIIRS_ACTIVE_FIRES_1YR') > -1) {
           const layer = map.getLayer(activeLayer);
           const defs1YR = [];
-          let viirsStartDate = params.viirsStartDate;
-          let viirsEndDate = params.viirsEndDate;
+          let viirsStartDate = firesState.viirsStartDate;
+          let viirsEndDate = firesState.viirsEndDate;
           if (!isMoment(viirsStartDate)) {
               viirsStartDate = moment(viirsStartDate);
             }
@@ -197,8 +197,8 @@ class MapActions {
         } else if (activeLayer.indexOf('MODIS_ACTIVE_FIRES_1YR') > -1) {
           const layer = map.getLayer(activeLayer);
           const defs1YR = [];
-          let modisStartDate = params.modisStartDate;
-          let modisEndDate = params.modisEndDate;
+          let modisStartDate = firesState.modisStartDate;
+          let modisEndDate = firesState.modisEndDate;
           if (!isMoment(modisStartDate)) {
               modisStartDate = moment(modisStartDate);
             }
