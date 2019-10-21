@@ -102,12 +102,11 @@ class MapActions {
     let maxOrder = 0;
 
     const basemap = itemData && itemData.baseMap;
-  
     let baseMapLayers;
     if (basemap) {
       baseMapLayers = basemap.baseMapLayers;
     }
-    
+
     let layers = Object.keys(layerPanel).filter((groupName) => {
       //- remove basemaps and extra layers, extra layers will be added later and basemaps
       //- handled differently elsewhere
@@ -126,14 +125,14 @@ class MapActions {
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!       
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order)
         }
         return layer;
       });
       return list.concat(orderedGroups);
     }, []);
     //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);    
+    layers = layers.concat(layerPanel.extraLayers);
 
     layers.forEach(layer => {
       if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
@@ -205,7 +204,6 @@ class MapActions {
       }
 
       uniqueLayers.forEach((l, i) => {
-        
         map.reorderLayer(l, i + 1);
 
         if (adjustLayerVis && l.esriLayer) {
