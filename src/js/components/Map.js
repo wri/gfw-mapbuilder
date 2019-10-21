@@ -248,7 +248,7 @@ export default class Map extends Component {
         //const basemap = itemData && itemData.baseMap;
         //basemap.baseMapLayers or itemData.operationalLayers
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
-        mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language);
+        mapActions.createLayers(response.map, settings.layerPanel, activeLayers, language, itemData);
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);

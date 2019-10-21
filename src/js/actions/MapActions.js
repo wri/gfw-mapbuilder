@@ -97,10 +97,16 @@ class MapActions {
     return groupKey;
   }
 
-  createLayers (map, layerPanel, activeLayers, language) {
+  createLayers(map, layerPanel, activeLayers, language, itemData) {
     //- Organize and order the layers before adding them to the map
     let maxOrder = 0;
-    console.log('layerPanel', layerPanel);
+
+    const basemap = itemData && itemData.baseMap;
+  
+    let baseMapLayers;
+    if (basemap) {
+      baseMapLayers = basemap.baseMapLayers;
+    }
     
     let layers = Object.keys(layerPanel).filter((groupName) => {
       //- remove basemaps and extra layers, extra layers will be added later and basemaps
@@ -120,24 +126,14 @@ class MapActions {
 
       const orderedGroups = layerPanel[groupName].layers.map((layer) => {
         if (layersCreated === false || groupName === 'GROUP_WEBMAP') {
-          
-          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!
-          // if (layer.id === "Stocktaking_Final_9294") {
-          console.log(layer.id, layer.order);
-            
-          // }
-          // console.log('layer', layer.id, groupName, layer.order);
-          // console.log('');
-          // debugger
+          layer.order = ((maxOrder - layerPanel[groupName].order) * 100) - (layer.order); //currently, only the GROUP_WEBMAP is getting here on 2nd map!       
         }
         return layer;
       });
       return list.concat(orderedGroups);
     }, []);
     //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);
-    console.log('layers', layers);
-    
+    layers = layers.concat(layerPanel.extraLayers);    
 
     layers.forEach(layer => {
       if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
@@ -157,9 +153,6 @@ class MapActions {
     }, []);
     const uniqueLayers = [];
     const existingIds = [];
-
-    console.log('reducedLayers', reducedLayers);
-    
 
     reducedLayers
       .forEach(layer => {
@@ -196,14 +189,8 @@ class MapActions {
       if (layerErrors.length > 0) { console.error(layerErrors); }
       //- Sort the layers, Webmap layers need to be ordered, unfortunately graphics/feature
       //- layers wont be sorted, they always show on top
-      // console.log('uniqueLayers', uniqueLayers);
-      // debugger
-      
 
       uniqueLayers.sort((a, b) => a.order - b.order);
-
-      // console.log('uniqueLayers', uniqueLayers);
-      // debugger
 
       const params = getUrlParams(location.href);
 
@@ -218,7 +205,6 @@ class MapActions {
       }
 
       uniqueLayers.forEach((l, i) => {
-        // console.log(l);
         
         map.reorderLayer(l, i + 1);
 
@@ -246,6 +232,17 @@ class MapActions {
       if (map.getLayer('labels')) {
         map.reorderLayer(map.getLayer('labels'), 200);
       }
+
+      if (baseMapLayers) { //TODO: && settings.useWebmapBasemap
+        baseMapLayers.forEach((baseMapLayer, i) => {
+          if (baseMapLayer.id === 'defaultBasemap') {
+            map.reorderLayer(map.getLayer(baseMapLayer.id), 0);
+          } else {
+            map.reorderLayer(map.getLayer(baseMapLayer.id), 1);
+          }
+        });
+      }
+
       // Appending the mask to the end of the parent div to make sure mask is always on top of all layers
       var mask = document.getElementById('esri.Map_0_MASK');
       if (mask && mask.parentNode) {
