@@ -118,9 +118,9 @@ class MapActions {
     return groupKey;
   }
 
-  createLayers(map, layerPanel, activeLayers, language, firesState, itemData) {
+  createLayers(map, layerPanel, activeLayers, language, firesState, itemData, defaultVisibility) {
     //- Organize and order the layers before adding them to the map
-    let maxOrder = 0;
+    let maxOrder = 0;    
 
     const basemap = itemData && itemData.baseMap;
     let baseMapLayers;
@@ -162,15 +162,17 @@ class MapActions {
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
 
-    layers.forEach(layer => {
-      if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
-        if (activeLayers.indexOf(layer.id) === -1) {
-          layer.visible = false;
-        } else {
-          layer.visible = true;
+    if (!defaultVisibility) {
+      layers.forEach(layer => {
+        if (layer.id !== 'MASK' && layer.id !== 'USER_FEATURES') {
+          if (activeLayers.indexOf(layer.id) === -1) {
+            layer.visible = false;
+          } else {
+            layer.visible = true;
+          }
         }
-      }
-    });
+      });
+    }
 
     let viirsFiresLayer;
     let modisFiresLayer;
@@ -317,6 +319,7 @@ class MapActions {
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
       const addedLayers = result.layers;
+      
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach(cartoLayer => {

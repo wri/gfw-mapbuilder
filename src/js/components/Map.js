@@ -274,6 +274,7 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
+        const defaultVisibility = urlState.activeLayers ? false : true;
 
         const firesState = {
           modisStartDate: this.state.modisStartDate,
@@ -288,7 +289,8 @@ export default class Map extends Component {
           activeLayers,
           language,
           firesState,
-          itemData
+          itemData,
+          defaultVisibility
         );
         
         //- Apply the mask layer defintion if present
