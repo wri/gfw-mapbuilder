@@ -642,7 +642,7 @@ export default class Map extends Component {
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
-      const opacityObjs = [];
+      const opacityObjs = [];      
 
       layerIds.forEach((layerId, j) => {
         if (webmapLayerIds.indexOf(layerId) === -1) {
@@ -655,9 +655,9 @@ export default class Map extends Component {
           });
 
           const mapLayer = map.getLayer(layerId);
-          
-          const dynamicLayers = this.state.dynamicLayers;
-    
+
+          const dynamicLayers = [layerKeys.MODIS_ACTIVE_FIRES, layerKeys.VIIRS_ACTIVE_FIRES, layerKeys.IMAZON_SAD];
+
           if ((mapLayer && !mapLayer.setLayerDrawingOptions && mapLayer.setOpacity) || (mapLayer && dynamicLayers.indexOf(mapLayer.id) > -1)) {
             mapLayer.setOpacity(opacityValues[j]);
           } else if (mapLayer && mapLayer.setLayerDrawingOptions) {
@@ -792,9 +792,9 @@ export default class Map extends Component {
       returnObj.activeLayers = [];
     }
     
-    if (params.a && (params.a.includes('VIIRS') || params.a.includes('MODIS'))) {
-      mapActions.openTOCAccordion('GROUP_LCD');
-    }
+    // if (params.a && (params.a.includes('VIIRS') || params.a.includes('MODIS'))) {
+    //   mapActions.openTOCAccordion('GROUP_LCD');
+    // }
 
     if (params.ls && params.le) {
       layerActions.updateLossTimeline({
