@@ -151,15 +151,19 @@ export default class ReportSubscribeButtons extends Component {
 
   updateDescriptionText = (evt) => {
     const { id } = evt.target;
-    this.setState({
-      descriptionText: this.descriptionOptions[id],
-    });
+    if (this.state.descriptionText === '') {
+      this.setState({
+        descriptionText: this.descriptionOptions[id]
+      });
+    }
   }
 
   clearDescriptionText = () => {
-    this.setState({
-      descriptionText: '',
-    });
+    if (this.state.descriptionText !== '') {
+      this.setState({
+        descriptionText: ''
+      });
+    }
   }
 
   render () {
@@ -188,6 +192,7 @@ export default class ReportSubscribeButtons extends Component {
           </button>
           {!isLoggedIn ? null :
             <button
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='report-sub-button pointer left-border-separator'
               id='subscribe'
               onClick={this.toggleSubscribe}

@@ -70,7 +70,7 @@ export default class InfoWindow extends Component {
       }
     }
   }
-
+  
   previous = () => {
     const {map} = this.context;
     const features = map.infoWindow.features;
@@ -220,7 +220,7 @@ export default class InfoWindow extends Component {
 
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
-    const { prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex } = this.state;
+    const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex} = this.state;
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
@@ -369,7 +369,7 @@ export default class InfoWindow extends Component {
     if (selectedFeature) {
       if (selectedFeature.attributes && selectedFeature.attributes.source && selectedFeature.attributes.source === attributes.SOURCE_SEARCH) {
         title = (
-          <div className='infoWindow__title'>
+          <div className='infoWindow__title custom-scroll'>
             {selectedFeature.infoTemplate.title}
           </div>
         );
@@ -379,7 +379,7 @@ export default class InfoWindow extends Component {
         selectedFeature.attributes && selectedFeature.attributes.source && selectedFeature.attributes.source === attributes.SOURCE_UPLOAD
       ) {
         title = (
-          <div className='infoWindow__title'>
+          <div className='infoWindow__title custom-scroll'>
             <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
           </div>
         );
@@ -393,7 +393,7 @@ export default class InfoWindow extends Component {
       
       // Add the dropdown for multiple selected features
       dropdown = this.createDropdown();
-    }    
+    }
     
     return (
       <div className='infoWindow relative'>
@@ -428,8 +428,8 @@ export default class InfoWindow extends Component {
                 }`
               : null}
           </div>
-          <div className='infoWindow__title'>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
+          <div className="infoWindow__title custom-scroll">
+            <div dangerouslySetInnerHTML={{__html: content }} />
           </div>
           <div className='infoWindow__attribute-display custom-scroll'>
             {title}
