@@ -246,7 +246,7 @@ export default class InfoWindow extends Component {
     if (selectedFeature) {
       if (selectedFeature.attributes && selectedFeature.attributes.source && selectedFeature.attributes.source === attributes.SOURCE_SEARCH) {
         title = (
-          <div className='infoWindow__title'>
+          <div className='infoWindow__title custom-scroll'>
             {selectedFeature.infoTemplate.title}
           </div>
         );
@@ -256,7 +256,7 @@ export default class InfoWindow extends Component {
         selectedFeature.attributes && selectedFeature.attributes.source && selectedFeature.attributes.source === attributes.SOURCE_UPLOAD
       ) {
         title = (
-          <div className='infoWindow__title'>
+          <div className='infoWindow__title custom-scroll'>
             <CustomFeatureControl feature={selectedFeature} editingEnabled={editingEnabled} />
           </div>
         );
@@ -285,7 +285,7 @@ export default class InfoWindow extends Component {
             {layersCategories && selectedFeature && selectedFeature._layer && selectedFeature._layer.name && layersCategories[selectedFeature._layer.name] ?
             `${selectIndex + 1} / ${layersCategories[selectedFeature._layer.name].count}` : null}
           </div>
-          <div className="infoWindow__title">
+          <div className="infoWindow__title custom-scroll">
             <div dangerouslySetInnerHTML={{__html: content }} />
           </div>
           <div className='infoWindow__attribute-display custom-scroll'>
