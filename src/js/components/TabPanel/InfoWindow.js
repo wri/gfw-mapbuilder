@@ -67,50 +67,44 @@ export default class InfoWindow extends Component {
     }
   }
 
-  previous = () => {
-    const features = this.context.map.infoWindow.features;
-    const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
-    const currentIndex = features.indexOf(matchedFeature);
-    let newIndex;
-    if (currentIndex - 1 > 0) {
-      newIndex = currentIndex - 1;
-    } else {
-      newIndex = currentIndex;
-    }
-    brApp.map.infoWindow.select(newIndex);
-    const newSelectedFeature = layersCategories[matchedFeature._layer.name];
-    this.setState({
-      activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
-    });
-    mapActions.decreaseSelectIndex();
-  };
-  
   // previous = () => {
   //   const features = this.context.map.infoWindow.features;
   //   const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
   //   const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
   //   const currentIndex = features.indexOf(matchedFeature);
-  //   this.context.map.infoWindow.select(currentIndex);
+  //   let newIndex;
+  //   if (currentIndex - 1 > 0) {
+  //     newIndex = currentIndex - 1;
+  //   } else {
+  //     newIndex = currentIndex;
+  //   }
+  //   brApp.map.infoWindow.select(newIndex);
   //   const newSelectedFeature = layersCategories[matchedFeature._layer.name];
   //   this.setState({
   //     activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
   //   });
   //   mapActions.decreaseSelectIndex();
   // };
+  
+  previous = () => {
+    const features = this.context.map.infoWindow.features;
+    const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
+    const currentIndex = features.indexOf(matchedFeature);
+    brApp.map.infoWindow.select(currentIndex);
+    const newSelectedFeature = layersCategories[matchedFeature._layer.name];
+    this.setState({
+      activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
+    });
+    mapActions.decreaseSelectIndex();
+  };
 
   next = () => {
     const currentSelectedFeature = this.context.map.infoWindow.getSelectedFeature();
     const features = this.context.map.infoWindow.features;
     const matchedFeature = features.filter(feature => feature === currentSelectedFeature)[0];
     const currentIndex = features.indexOf(matchedFeature);
-    let newIndex;
-    if (currentIndex + 1 > 0) {
-      newIndex = currentIndex + 1;
-    } else {
-      newIndex = currentIndex;
-    }
-    brApp.map.infoWindow.select(newIndex);
+    brApp.map.infoWindow.select(currentIndex);
     const newSelectedFeature = layersCategories[matchedFeature._layer.name];
     this.setState({
       activeSelectedFeature: `{"name": "${newSelectedFeature.name}", "count": "${newSelectedFeature.count}", "featuresList": "${newSelectedFeature.featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`
