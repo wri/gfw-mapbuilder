@@ -3,6 +3,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 import number from 'dojo/number';
 import Highcharts from 'highcharts';
 import enableExporting from 'highcharts/modules/exporting';
+import * as vega from 'vega';
 
 enableExporting(Highcharts);
 

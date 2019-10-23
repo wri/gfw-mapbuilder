@@ -16,7 +16,7 @@ import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePic
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
 import {attributes} from 'constants/AppConstants';
-import {analysisConfig} from 'js/config';
+import {defaultColorTheme} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
@@ -52,6 +52,7 @@ export default class Analysis extends Component {
   state = {
     isLoading: false,
     chartComponent: null,
+    buttonHover: false
   };
 
   componentDidMount() {
@@ -79,7 +80,7 @@ export default class Analysis extends Component {
         <div
           className='analysis-results__select-form-item-container'
         >
-          Click the &lsquo;Run Analysis&rsquo; button see analysis
+          {text[language].RUN_ANALYSIS_INSTRUCTIONS}
         </div>
       );
     }
@@ -425,7 +426,7 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'An error occurred performing selected analysis. Please select another analysis or try again later.'
+              message: text[language].ANALYSIS_ERROR
             },
           }, () => {
             this.renderResults(analysisId, this.state.results, language, analysisSettings);
@@ -434,10 +435,16 @@ export default class Analysis extends Component {
       }
     });
   }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent, showDownloadOptions} = this.state;
+    const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
@@ -476,7 +483,8 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
@@ -504,7 +512,14 @@ export default class Analysis extends Component {
         {showFooter &&
           <div className='analysis-results__footer'>
             <div className='run-analysis-button-container'>
-              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+              <button
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='run-analysis-button fa-button color pointer'
+                onClick={this.runAnalysis}
+                onMouseEnter={this.toggleHover}
+                onMouseLeave={this.toggleHover}
+              >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
             </div>

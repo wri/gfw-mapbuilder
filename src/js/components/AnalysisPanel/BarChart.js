@@ -1,8 +1,13 @@
 //- These charts have a dependency of highcharts
 import React, {PropTypes, Component} from 'react';
 import charts from 'utils/charts';
+import text from '../../languages';
 
 export default class BarChart extends Component {
+
+  static contextTypes = {
+    language: PropTypes.string.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -48,6 +53,7 @@ export default class BarChart extends Component {
   render () {
     const { isError } = this.state;
     const { results } = this.props;
+    const {language} = this.context;
 
     if (isError) {
       return (
@@ -59,7 +65,7 @@ export default class BarChart extends Component {
       return (
         <div>
           <div ref='chart' className='analysis__chart-container'></div>
-          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>{text[language].ANALYSIS_NO_DATA}</div>
         </div>
       );
     }

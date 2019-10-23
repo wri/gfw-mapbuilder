@@ -21,9 +21,13 @@ export default {
   hideFooter: false,
   includeMyGFWLogin: true,
   navLinksInNewTab: false,
+  //- Color Settings
+  customColorTheme: '',
   //- Language Settings
   language: 'en',
   useAlternativeLanguage: false,
+  //- Custom Basemap
+  useWebmapBasemap: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
   alternativeLanguageTitle: 'GFW Mapbuilder',
@@ -38,7 +42,6 @@ export default {
   },
   //- Tab Settings
   includeDocumentsTab: false,
-  includeMeasurementTab: false,
   //- Layers/Analysis Settings
   iso: '',
   viirsFires: true,

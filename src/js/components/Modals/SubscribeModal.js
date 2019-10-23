@@ -2,6 +2,7 @@ import ControlledModalWrapper from 'components/Modals/ControlledModalWrapper';
 import mapActions from 'actions/MapActions';
 import text from 'js/languages';
 import React, {Component, PropTypes} from 'react';
+import {defaultColorTheme} from '../../config';
 
 const initialState = {
   currentStep: 1,
@@ -15,12 +16,14 @@ const initialState = {
   formaAlerts: false,
   terraI: false,
   prodes: false,
-  warnings: false
+  warnings: false,
+  buttonHover: false
 };
 
 export default class SubscribeModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     map: PropTypes.object.isRequired
   };
@@ -248,11 +251,19 @@ export default class SubscribeModal extends Component {
       });
     }
   }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {language} = this.context;
     const langs = ['English', '中文', 'Français', 'Bahasa Indonesia', 'Português (Brasil)', 'Español (Mexico)']; //TODO: Get from resources or config!
-
+    const { customColorTheme } = this.context.settings;
+    const {buttonHover} = this.state;
+    
     return (
       <ControlledModalWrapper onClose={this.close}>
         <div className={`subscribe-step ${this.state.currentStep === 0 ? '' : 'hidden'}`}>
@@ -266,53 +277,118 @@ export default class SubscribeModal extends Component {
           <p>{text[language].SUBSCRIBE_ALERTS_SELECT}</p>
           <div className='alert-checkbox'>
             <div className='custom-checkbox'>
-              {text[language].SUBSCRIBE_ALERTS_VIIRS}<input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.viirsAlerts} onChange={this.updateVIIRS} />
+                {text[language].SUBSCRIBE_ALERTS_VIIRS}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              {text[language].SUBSCRIBE_ALERTS_TCL}<input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.treeCoverAlerts} onChange={this.updateLoss} />
+                {text[language].SUBSCRIBE_ALERTS_TCL}
+              </label>
             </div>
 
             <div className='custom-checkbox'>
-              GLAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.gladAlerts} onChange={this.updateGLAD} />
+                {text[language].SUBSCRIBE_ALERTS_GLAD}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              SAD tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.sadAlerts} onChange={this.updateSAD} />
+                {text[language].SUBSCRIBE_ALERTS_SAD}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              FORMA alerts data<input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.formaAlerts} onChange={this.updateForma} />
+                {text[language].SUBSCRIBE_ALERTS_FORMA}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              Terra-i tree cover loss alerts<input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.terraI} onChange={this.updateTerraI} />
+                {text[language].SUBSCRIBE_ALERTS_TERRA}
+              </label>
             </div>
             <div className='custom-checkbox'>
-              PRODES deforestation data<input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+              <label>
+                <input className="dataset-checkbox" type="checkbox" checked={this.state.prodes} onChange={this.updateProdes} />
+                {text[language].SUBSCRIBE_ALERTS_PRODES}
+              </label>
             </div>
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 2 ? '' : 'hidden'}`}>
           <h3 className='step-title'>{text[language].SUBSCRIBE_EMAIL_TITLE}</h3>
           <p>{text[language].SUBSCRIBE_EMAIL}</p>
-          <div className='alert-checkbox'>
+          <div className='alert-email'>
             <input className="alert-input" placeholder='Enter email' value={this.state.email} onChange={this.updateEmail} />
           </div>
         </div>
         <div className={`subscribe-step ${this.state.currentStep === 3 ? '' : 'hidden'}`}>
-          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME}</h3>
-          <div className='alert-checkbox'>
-            <p>Name</p>
-            <input className="subscription-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
-            <p>Receive Alert Emails In...</p>
-            <select className='language-selector' onChange={this.changeLanguage} value={this.state.activeLanguage}>
+          <h3 className='step-title'>{text[language].SUBSCRIBE_NAME_SUBSCRIPTION}</h3>
+          <div className='alert-email-settings'>
+            <label htmlFor="area-name">
+              {text[language].SUBSCRIBE_NAME_SUBSCRIPTION}
+            </label>
+            <input className="alert-input" id="area-name" placeholder='Area name' value={this.state.aoiName} onChange={this.updateAreaName} />
+            <label>
+              {text[language].SUBSCRIBE_EMAIL_TITLE}
+            </label>
+            <select className='alert-dropdown' id="alert-email" onChange={this.changeLanguage} value={this.state.activeLanguage}>
               {langs.map(this.optionMapper)}
             </select>
           </div>
-          <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>You must have an alert subscription, valid email, and area name!</div>
+          <div className={`subscribe-warnings ${this.state.warnings ? '' : 'hidden'}`}>{text[language].SUBSCRIBE_ERROR}</div>
         </div>
         <div className='subscription-sub-buttons'>
-          {this.state.currentStep === 0 ? <button className='fa-button gold' onClick={this.refreshSubscriptions}>OK!</button> : null }
-          {this.state.currentStep > 1 ? <button className='fa-button gold' onClick={this.back}>Back</button> : null }
-          {this.state.currentStep === 1 || this.state.currentStep === 2 ? <button className='fa-button gold' onClick={this.next}>Next</button> : null }
-          {this.state.currentStep === 3 ? <button className='fa-button gold' onClick={this.save}>Save</button> : null }
+          {this.state.currentStep === 0 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.refreshSubscriptions}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_OK}
+          </button> : null }
+          {this.state.currentStep > 1 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.back}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_BACK}
+          </button> : null }
+          {this.state.currentStep === 1 || this.state.currentStep === 2 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.next}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_NEXT}
+          </button> : null }
+          {this.state.currentStep === 3 ?
+          <button
+            style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+            {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+            className='fa-button color'
+            onClick={this.save}
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+          >
+            {text[language].SUBSCRIBE_NEXT}
+          </button> : null }
         </div>
 
       </ControlledModalWrapper>

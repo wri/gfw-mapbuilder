@@ -305,6 +305,8 @@ config.analysis[analysisKeys.IFL] = {
   analysisUrl: 'https://production-api.globalforestwatch.org/widget/d0d22aeb-9642-4c4d-a310-f7fb95a48c21',
 };
 
+config.defaultColorTheme = '#F0AB00'; // default gold color theme
+
 export const mapConfig = config.map;
 export const uploadConfig = config.upload;
 export const analysisConfig = config.analysis;
@@ -315,3 +317,4 @@ export const modalText = config.modals;
 export const errors = config.errors;
 export const urls = config.urls;
 export const shortTermServices = config.shortTermServices;
+export const defaultColorTheme = config.defaultColorTheme;

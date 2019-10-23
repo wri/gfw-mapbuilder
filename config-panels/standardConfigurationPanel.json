@@ -48,6 +48,13 @@
 		},
 		{
 			"type": "string",
+			"fieldName": "color",
+			"label": "Color theme for your application",
+			"tooltip": "Please enter your color theme value (in hexadecimal format)",
+			"placeholder": "e.g. #F0AB00"
+		},
+		{
+			"type": "string",
 			"fieldName": "title",
 			"label": "Title for your application",
 			"tooltip": "Please enter the title in your default language",
@@ -339,13 +346,6 @@
 			"tooltip": "Attachments of feature layers will be shown in a separate tab",
 			"label": "Show attached documents in separate tab",
 			"value": false
-		},
-		{
-			"type": "boolean",
-			"fieldName": "includeMeasurementTab",
-			"tooltip": "Show measurement tools in separate tab",
-			"label": "Show measurement tool in separate tab",
-			"value": false
 		}]
 	}],
 	"values": {
@@ -357,7 +357,6 @@
 		"includeMyGFWLogin": true,
 		"hideHeader": false,
 		"hideFooter": false,
-		"includeDocumentsTab": false,
-		"includeMeasurementTab": false
+		"includeDocumentsTab": false
 	}
 }

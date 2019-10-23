@@ -40,7 +40,6 @@
   padding 0 15px
 
 .analysis-instructions__separator
-  background-color $goldTheme
   position relative
   text-align center
   font-size 18px
@@ -63,18 +62,13 @@
   margin 1rem auto
   height 75px
   width 100px
-  &.cls-3
-    fill $goldTheme
   &.cls-8
     fill white
   &.cls-17
     fill $darkGray
 
 .analysis-instructions__draw-button
-  // text-transform uppercase
-  // font-weight bold
-  // margin 15px
-  // min-width 175px
+  line-height 15px
   text-transform uppercase
   font-weight bold
   margin 15px
@@ -98,6 +92,8 @@
   .analysis-instructions__enter-values-icon
     margin 0 0.5rem
     height 25px
+  .analysis-instructions__enter-values
+    line-height 15px
 
 .analysis-instructions__make-shape-button
   text-transform uppercase
@@ -122,7 +118,6 @@
   color #555
   &:hover
     text-decoration underline
-    text-decoration-color #e6a912
   .analysis-instructions__add-more-icon
     margin 0 0.5rem
     height 25px
@@ -177,6 +172,7 @@
   background transparent
   border-radius 0
   padding-left 10px
+  padding-right 25px
   left 0
   top 0
   &::after
@@ -259,7 +255,7 @@
   position absolute
   content '\25BC'
   font-size 12px
-  color #e6a912
+  color inherit
   right 8px
   top 5px
 
@@ -317,13 +313,14 @@
   display flex
   flex-direction column
   justify-content space-around
-  height 100px
+  height 130px
   box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
   position absolute
   bottom 0
   right 0
   left 0
   padding 8px 0px
+  background #fff
 
 .chart-error
   height auto
@@ -422,7 +419,7 @@
   position absolute
   content '\25BC'
   font-size 12px
-  color #e6a912
+  color inherit
   right 8px
   top 21px
 
@@ -449,7 +446,6 @@
   position absolute
   content '\25BC'
   font-size 12px
-  color #e6a912
   right 5px
   bottom 5px
 
@@ -480,7 +476,6 @@
   width 4rem
   &:hover
     text-decoration underline
-    text-decoration-color #e6a912
   .analysis-coordinates-remove-text
     margin-top 0.1rem
     text-transform uppercase

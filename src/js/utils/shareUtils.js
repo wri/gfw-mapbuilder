@@ -80,12 +80,22 @@ export function prepareStateForShare (options) {
     shareState.iey = imazonEndYear;
   }
 
-  if (activeLayers.indexOf('VIIRS_ACTIVE_FIRES') > -1) {
+  if (activeLayers.indexOf('VIIRS_ACTIVE_FIRES') > -1 ||
+      activeLayers.indexOf('VIIRS_ACTIVE_FIRES_48HR') > -1 ||
+      activeLayers.indexOf('VIIRS_ACTIVE_FIRES_72HR') > -1 ||
+      activeLayers.indexOf('VIIRS_ACTIVE_FIRES_7D') > -1 ||
+      activeLayers.indexOf('VIIRS_ACTIVE_FIRES_1YR') > -1)
+  {
     shareState.vs = viirsStartDate;
     shareState.ve = viirsEndDate;
   }
 
-  if (activeLayers.indexOf('MODIS_ACTIVE_FIRES') > -1) {
+  if (activeLayers.indexOf('MODIS_ACTIVE_FIRES') > -1 ||
+      activeLayers.indexOf('MODIS_ACTIVE_FIRES_48HR') > -1 ||
+      activeLayers.indexOf('MODIS_ACTIVE_FIRES_72HR') > -1 ||
+      activeLayers.indexOf('MODIS_ACTIVE_FIRES_7D') > -1 ||
+      activeLayers.indexOf('MODIS_ACTIVE_FIRES_1YR') > -1)
+  {
     shareState.ms = modisStartDate;
     shareState.me = modisEndDate;
   }

@@ -2,6 +2,7 @@
 /* Creating some esri dijits needs the above rule disabled, choosing this over no-new */
 import MobileTimeWidget from 'components/MapControls/MobileTimeWidget';
 import FooterInfos from 'components/MapControls/FooterInfos';
+import MeasurementModal from 'components/Modals/MeasurementModal';
 import AnalysisModal from 'components/Modals/AnalysisModal';
 import CoordinatesModal from 'components/Modals/CoordinatesModal';
 import EditCoordinatesModal from 'components/Modals/EditCoordinatesModal';
@@ -14,9 +15,9 @@ import SubscribeModal from 'components/Modals/SubscribeModal';
 import ConfirmModal from 'components/Modals/ConfirmModal';
 import Legend from 'components/LegendPanel/LegendPanel';
 import TabButtons from 'components/TabPanel/TabButtons';
+import TabView from 'components/TabPanel/TabView';
 import SearchModal from 'components/Modals/SearchModal';
 import PrintModal from 'components/Modals/PrintModal';
-import TabView from 'components/TabPanel/TabView';
 import layerKeys from 'constants/LayerConstants';
 import arcgisUtils from 'esri/arcgis/utils';
 import mapActions from 'actions/MapActions';
@@ -54,6 +55,7 @@ import ScreenPoint from 'esri/geometry/ScreenPoint';
 import ImageryHoverModal from 'components/SatelliteImagery/ImageryHoverModal';
 import screenUtils from 'esri/geometry/screenUtils';
 import SpatialReference from 'esri/SpatialReference';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 
 import React, {
   Component,
@@ -81,6 +83,8 @@ const getTimeEnabledLayer = (webmapInfo) => {
   }
   return timeLayer;
 };
+
+let extentChange;
 
 export default class Map extends Component {
 
@@ -132,6 +136,8 @@ export default class Map extends Component {
       const options = mapConfig.options;
 
       if (map.destroy) {
+        this.allocateInitialFiresViz(map);
+
         // Don't let the extent change to the new map
         options.extent = map.extent;
         map.destroy();
@@ -146,14 +152,14 @@ export default class Map extends Component {
     }
 
     if ((prevState.basemap !== basemap || prevState.map !== map) && map.loaded) {
-      basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+      basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers, this.state.webmapInfo, settings.useWebmapBasemap);
     }
 
     if (prevState.editingEnabled !== editingEnabled) {
       if (!editingEnabled) {
         editToolbar.deactivate();
       } else {
-        if (map.infoWindow && map.infoWindow.getSelectedFeature) {
+        if (map.infoWindow && map.infoWindow.getSelectedFeature()) {
           const selectedFeature = map.infoWindow.getSelectedFeature();
           if (selectedFeature && selectedFeature.geometry) {
             editToolbar.activate(Edit.EDIT_VERTICES, selectedFeature);
@@ -166,8 +172,17 @@ export default class Map extends Component {
   storeDidUpdate = () => {
     this.setState(MapStore.getState());
   };
-  
+
+  updateSelectIndex = () => {
+    mapActions.updateSelectIndex(-1);
+  };
+
   getSelectedFeatureTitles = () => {
+
+    if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+      return;
+    }
+
     // let selectedFeats;
     const selectedFeatureTitlesArray = [];
     if (brApp.map.infoWindow && brApp.map.infoWindow.getSelectedFeature()) {
@@ -194,7 +209,33 @@ export default class Map extends Component {
       }
     }
   };
-  
+
+  allocateInitialFiresViz = (map) => {
+    const fireTypes = ['VIIRS', 'MODIS'];
+    const fireLengths = ['48HR', '72HR', '7D', '1YR'];    
+
+    fireTypes.forEach(fireType => {
+      if (
+        this.state.activeLayers.indexOf(layerKeys[`${fireType}_ACTIVE_FIRES`]) >
+        -1
+      ) {
+        fireLengths.forEach(fireLength => {
+          console.log(`${fireType}_ACTIVE_FIRES_${fireLength}`);
+
+          if (map.getLayer(`${fireType}_ACTIVE_FIRES_${fireLength}`).visible) {
+            layerActions.addActiveLayer.defer(
+              `${fireType}_ACTIVE_FIRES_${fireLength}`
+            );
+            layerActions.removeActiveLayer.defer(
+              layerKeys[`${fireType}_ACTIVE_FIRES`]
+            );
+          }
+        });
+      }
+    });
+
+  };
+
   clearSelectedFeaturesTitles = () => {
     const emptyArray = [];
     layerActions.updateSelectedFeatureTitles.defer(emptyArray);
@@ -214,7 +255,6 @@ export default class Map extends Component {
       //- Attach events I need for the info window
       response.map.infoWindow.on('show, hide, set-features, selection-change', mapActions.infoWindowUpdated);
       response.map.infoWindow.on('set-features, selection-change', this.getSelectedFeatureTitles);
-      response.map.infoWindow.on('hide', this.clearSelectedFeatureTitles);
       response.map.on('zoom-end', mapActions.mapUpdated);
 
       //- Add a scalebar
@@ -226,9 +266,33 @@ export default class Map extends Component {
       on.once(response.map, 'update-end', () => {
         if (response.map.id !== 'esri.Map_0') {
           mapLoaded = false;
+          if (extentChange && extentChange.remove) {
+            extentChange.remove();
+          }
         }
-        mapActions.createLayers(response.map, settings.layerPanel, this.state.activeLayers, language);
-        const cDensityFromHash = this.applyLayerStateFromUrl(response.map, itemData);
+
+        const urlState = this.applyLayerStateFromUrl(response.map, itemData);
+        const cDensityFromHash = urlState.cDensity;
+        const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
+        const defaultVisibility = urlState.activeLayers ? false : true;
+
+        const firesState = {
+          modisStartDate: this.state.modisStartDate,
+          modisEndDate: this.state.modisEndDate,
+          viirsEndDate: this.state.viirsEndDate,
+          viirsStartDate: this.state.viirsStartDate
+        };
+
+        mapActions.createLayers(
+          response.map,
+          settings.layerPanel,
+          activeLayers,
+          language,
+          firesState,
+          itemData,
+          defaultVisibility
+        );
+        
         //- Apply the mask layer defintion if present
         if (settings.iso && settings.iso !== '') {
           const maskLayer = response.map.getLayer(layerKeys.MASK);
@@ -242,27 +306,29 @@ export default class Map extends Component {
           }
         }
 
-        response.map.on('extent-change', (evt) => {
-          const imageryLayer = response.map.getLayer(layerKeys.RECENT_IMAGERY);
-          if (!imageryLayer || !imageryLayer.visible || evt.lod.level > 9) { return; }
+        if (!extentChange) {
+          extentChange = response.map.on('extent-change', (evt) => {
+            const imageryLayer = response.map.getLayer(layerKeys.RECENT_IMAGERY);
+            if (!imageryLayer || !imageryLayer.visible || evt.lod.level > 9) { return; }
 
-          const { imageryParams } = this.state;
-          const params = imageryParams ? imageryParams : {};
+            const { imageryParams } = this.state;
+            const params = imageryParams ? imageryParams : {};
 
 
-          const xVal = window.innerWidth / 2;
-          const yVal = window.innerHeight / 2;
+            const xVal = window.innerWidth / 2;
+            const yVal = window.innerHeight / 2;
 
-          // Create new screen point at center;
-          const screenPt = new ScreenPoint(xVal, yVal);
-          // Convert screen point to map point and zoom to point;
-          const mapPt = response.map.toMap(screenPt);
+            // Create new screen point at center;
+            const screenPt = new ScreenPoint(xVal, yVal);
+            // Convert screen point to map point and zoom to point;
+            const mapPt = response.map.toMap(screenPt);
 
-          params.lat = mapPt.getLatitude();
-          params.lon = mapPt.getLongitude();
+            params.lat = mapPt.getLatitude();
+            params.lon = mapPt.getLongitude();
 
-          mapActions.getSatelliteImagery(params);
-        });
+            mapActions.getSatelliteImagery(params);
+          });
+        }
 
         // Get WMS Features on click
         response.map.on('click', (evt) => {
@@ -270,6 +336,12 @@ export default class Map extends Component {
             // don't run this function if we are drawing a custom shape
             return;
           }
+          //- Hide the selected feature highlight if using the measurement tool
+          if (brApp.map.measurement && brApp.map.measurement.getTool()) {
+            brApp.map.setInfoWindowOnClick(false);
+            brApp.map.infoWindow.fillSymbol = new SimpleFillSymbol().setOutline(null).setColor(null);
+          }
+          this.updateSelectIndex();
           const wmsLayers = brApp.map.layerIds
             .filter(id => id.toLowerCase().indexOf('wms') > -1)
             .map(wmsId => brApp.map.getLayer(wmsId))
@@ -290,6 +362,7 @@ export default class Map extends Component {
             });
           }
         });
+
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
@@ -335,7 +408,7 @@ export default class Map extends Component {
             });
           }
         });
-        
+
         editToolbar.on('vertex-mouse-over', evt => {
           if (!this.state.editCoordinatesModalVisible) {
             mapActions.toggleEditCoordinatesModal({ visible: true });
@@ -343,24 +416,24 @@ export default class Map extends Component {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          
+
           const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
-        
+
         editToolbar.on('vertex-move-stop', evt => {
           const currentCoords = webMercatorUtils.xyToLngLat(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y);
           mapActions.updateCurrentLat(currentCoords[1]);
           mapActions.updateCurrentLng(currentCoords[0]);
-          
+
           const point = new Point(evt.vertexinfo.graphic.geometry.x, evt.vertexinfo.graphic.geometry.y, new SpatialReference({wkid: evt.vertexinfo.graphic.geometry.spatialReference.wkid}));
           const screenPoint = screenUtils.toScreenPoint(evt.target.map.extent, evt.target.map.width, evt.target.map.height, point);
           mapActions.updateCurrentX(screenPoint.x);
           mapActions.updateCurrentY(screenPoint.y);
         });
-        
+
         editToolbar.on('vertex-delete', evt => {
           mapActions.toggleEditCoordinatesModal({ visible: false });
         });
@@ -517,14 +590,18 @@ export default class Map extends Component {
 
     // Set zoom. If we have a language, set that after we have gotten our hash-initiated extent
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
-      on.once(map, 'extent-change', () => {
-        appActions.setLanguage.defer(l);
-      });
+      on.once(map, 'update-end', () => {
+        if (settings.language !== l) {
+          appActions.setLanguage.defer(l);
+        }
 
-      map.centerAndZoom([x, y], z);
+        map.centerAndZoom([x, y], z);
+      });
     } else if (x && y && z) {
-      map.centerAndZoom([x, y], z);
-    } else if (l && langKeys.indexOf(l) > -1) {
+      on.once(map, 'update-end', () => {
+        map.centerAndZoom([x, y], z);
+      });
+    } else if (l && langKeys.indexOf(l) > -1 && settings.language !== l) {
       appActions.setLanguage.defer(l);
     }
 
@@ -542,22 +619,32 @@ export default class Map extends Component {
     const {settings} = this.context;
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
+    const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
+    const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
+    const returnObj = {};
 
+    let activeLayers;
 
-    //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
+    if (!settings.useWebmapBasemap) {
+      //- Set the default basemap in the store
+      basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
+    }
+
+    if (!params) {
+      return returnObj;
+    } else if (Object.keys(params).length < 2) {
+      return returnObj;
+    }
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
     }
+
     if (params.a) {
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
-      const opacityObjs = [];
-
-      const webmapLayerConfigs = settings.layerPanel.GROUP_WEBMAP.layers;
-      const webmapLayerIds = webmapLayerConfigs.map(config => config.subId ? config.subId : config.id);
+      const opacityObjs = [];      
 
       layerIds.forEach((layerId, j) => {
         if (webmapLayerIds.indexOf(layerId) === -1) {
@@ -589,21 +676,30 @@ export default class Map extends Component {
 
       if (webmapLayerIds.length > 0) {
         const webmapIdConfig = {};
+        const mapScale = map.getScale();
 
         webmapLayerConfigs.forEach(webmapLayerConfig => {
 
           if (webmapLayerConfig.subIndex === undefined) {
             const featLayer = map.getLayer(webmapLayerConfig.id);
             if (webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) === -1) {
-              featLayer.hide();
+              if (featLayer) {
+                featLayer.hide();
+              }
+
               layerActions.removeActiveLayer(webmapLayerConfig.id);
             } else if (!webmapLayerConfig.visible && layerIds.indexOf(webmapLayerConfig.id) > -1) {
-              featLayer.show();
+              if (featLayer) {
+                featLayer.show();
+              }
+
               layerActions.addActiveLayer(webmapLayerConfig.id);
             }
           } else {
+
             if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
-            (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible)) {
+              (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible) ||
+              (webmapLayerConfig.hasScaleDependency)) {
 
               if (!webmapIdConfig[webmapLayerConfig.id]) {
                 webmapIdConfig[webmapLayerConfig.id] = {
@@ -611,8 +707,15 @@ export default class Map extends Component {
                   layersToShow: []
                 };
               }
+              let inScale = true;
 
-              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) {
+              if (webmapLayerConfig.hasScaleDependency) {
+                if (webmapLayerConfig.maxScale < mapScale && webmapLayerConfig.minScale > mapScale) {
+                  inScale = false;
+                }
+              }
+
+              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && (webmapLayerConfig.visible || inScale)) {
                 webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
               } else {
                 webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
@@ -645,7 +748,55 @@ export default class Map extends Component {
       }
 
       layerActions.setOpacities(opacityObjs);
+
+      returnObj.activeLayers = layerIds;
+    } else {
+      const webmapIdConfig = {};
+
+      webmapLayerConfigs.forEach(webmapLayerConfig => {
+
+        if (webmapLayerConfig.subIndex === undefined) {
+          const featLayer = map.getLayer(webmapLayerConfig.id);
+          if (webmapLayerConfig.visible) {
+            featLayer.hide();
+            layerActions.removeActiveLayer(webmapLayerConfig.id);
+          }
+        } else {
+          if (webmapLayerConfig.visible) {
+
+            if (!webmapIdConfig[webmapLayerConfig.id]) {
+              webmapIdConfig[webmapLayerConfig.id] = {
+                layersToHide: []
+              };
+            }
+
+            if (webmapLayerConfig.visible) {
+              webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
+            }
+          }
+        }
+
+      });
+
+      Object.keys(webmapIdConfig).forEach(webmapId => {
+        const mapLaya = map.getLayer(webmapId);
+        const updateableVisibleLayers = mapLaya.visibleLayers.slice();
+
+        webmapIdConfig[webmapId].layersToHide.forEach(layerToHide => {
+          updateableVisibleLayers.splice(updateableVisibleLayers.indexOf(layerToHide), 1);
+          const subLayerConfig = utils.getObject(webmapLayerConfigs, 'subId', `${webmapId}_${layerToHide}`);
+          layerActions.removeSubLayer(subLayerConfig);
+        });
+
+        mapLaya.setVisibleLayers(updateableVisibleLayers);
+
+      });
+      returnObj.activeLayers = [];
     }
+    
+    // if (params.a && (params.a.includes('VIIRS') || params.a.includes('MODIS'))) {
+    //   mapActions.openTOCAccordion('GROUP_LCD');
+    // }
 
     if (params.ls && params.le) {
       layerActions.updateLossTimeline({
@@ -690,7 +841,11 @@ export default class Map extends Component {
       mapActions.updateCanopyDensity(parseInt(params.c));
     }
 
-    return params.c ? parseInt(params.c) : false;
+    if (params.c) {
+      returnObj.cDensity = parseInt(params.c);
+    }
+
+    return returnObj;
   }
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
@@ -764,7 +919,9 @@ export default class Map extends Component {
             esriLayer: sublayer.layerObject,
             itemId: layer.itemId
           };
-          sublayer.layerObject.setOpacity(0.6);
+          if (sublayer.layerObject) {
+            sublayer.layerObject.setOpacity(0.6);
+          }
           layers.unshift(layerInfo);
           if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
         });
@@ -780,11 +937,13 @@ export default class Map extends Component {
           visible: layer.visibility,
           esriLayer: {
             ...layer.layerObject,
-            type: layer.layerType,
+            type: layer.layerType
           },
           itemId: layer.itemId
         };
-        layer.layerObject.setOpacity(0.6);
+        if (layer.layerObject) {
+          layer.layerObject.setOpacity(0.6);
+        }
         layers.unshift(layerInfo);
         if (layerInfo.visible) { layerActions.addActiveLayer(layerInfo.id); }
       }
@@ -912,6 +1071,7 @@ export default class Map extends Component {
       }
     });
 
+
     const webmapGroup = settings.layerPanel.GROUP_WEBMAP;
     webmapGroup.layers = layers;
     if (!webmapGroup.label.hasOwnProperty(language)) {
@@ -930,6 +1090,7 @@ export default class Map extends Component {
       mobileTimeWidgetVisible,
       currentTimeExtent,
       printModalVisible,
+      measurementModalVisible,
       analysisModalVisible,
       coordinatesModalVisible,
       editCoordinatesModalVisible,
@@ -1003,6 +1164,9 @@ export default class Map extends Component {
 
           </svg>
         </div>
+        <div className={`measurement-modal-container ${measurementModalVisible ? '' : 'hidden'}`}>
+          <MeasurementModal />
+        </div>
         <div className={`analysis-modal-container modal-wrapper ${analysisModalVisible && !coordinatesModalVisible ? '' : 'hidden'}`}>
           <AnalysisModal drawButtonActive={this.state.drawButtonActive} />
         </div>
@@ -1040,6 +1204,7 @@ export default class Map extends Component {
             imageryModalVisible={imageryModalVisible}
             imageryError={imageryError}
             imageryHoverVisible={this.state.imageryHoverVisible}
+            language={this.context.language}
             imageryFetchFailed={imageryFetchFailed}
           />
         </div>
