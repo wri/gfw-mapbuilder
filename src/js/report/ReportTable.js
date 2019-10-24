@@ -23,7 +23,7 @@ export default class ReportTable extends Component {
         const mapLayer = map.getLayer(id);
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
-          const mapLayerId = id.substr(-2);
+          const mapLayerId = id.split("_").pop();
           url = `${newUrl}/${mapLayerId}`;
         }
         const queryTask = new QueryTask(url);
