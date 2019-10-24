@@ -11,6 +11,9 @@ import React, {
   PropTypes
 } from 'react';
 
+let lastMapId;
+let searchDiv;
+
 export default class SearchModal extends Component {
 
   static contextTypes = {
@@ -32,7 +35,7 @@ export default class SearchModal extends Component {
     const layers = webmapInfo.operationalLayers;
     let sources = [];
 
-    if (map.loaded && !prevContext.map.loaded && webmapInfo) {
+    if ((map.loaded && !prevContext.map.loaded && webmapInfo) || map.id !== prevContext.map.id) {
       this.createSearchWidget(map);
 
       if (this.searchWidget) {
@@ -85,12 +88,35 @@ export default class SearchModal extends Component {
   }
 
   createSearchWidget = (map) => {
-    this.searchWidget = new Search({
-      map: map,
-      enableHighlight: false,
-      showInfoWindowOnSelect: true
-    }, this.refs.searchNode);
+    if (searchDiv) {
 
+      searchDiv = document.createElement('DIV');
+      searchDiv.setAttribute('id', map.id + '-search-div');
+      
+      this.refs.searchNode.appendChild(searchDiv);
+      this.searchWidget = new Search({
+        map: map,
+        enableHighlight: false,
+        showInfoWindowOnSelect: true
+      }, searchDiv);
+
+      const oldSearch = document.getElementById(lastMapId + '-search-div');
+      oldSearch.classList.add('hidden');
+
+    } else {
+      searchDiv = document.createElement('DIV');
+      searchDiv.setAttribute('id', map.id + '-search-div');
+
+      this.refs.searchNode.appendChild(searchDiv);
+      this.searchWidget = new Search({
+        map: map,
+        enableHighlight: false,
+        showInfoWindowOnSelect: true
+      }, searchDiv);
+
+    }
+
+    lastMapId = map.id;
     this.searchWidget.startup();
   };
 
@@ -138,7 +164,7 @@ export default class SearchModal extends Component {
         <div className='search-widget-label'>
           {text[language].SEARCH_WIDGET_TITLE}
         </div>
-        <div id='search-widget' ref='searchNode' className='search-widget'></div>
+        <div ref='searchNode' className='search-widget'></div>
       </ControlledModalWrapper>
     );
   }
