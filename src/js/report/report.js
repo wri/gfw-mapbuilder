@@ -871,7 +871,7 @@ export default class Report extends Component {
         <ReportHeader />
         <ReportAnalysisArea params={params} selectedFeatureTitles={selectedFeatureTitles} />
         {
-          mapForTable !== null &&
+          (mapForTable !== null && paramsForTable !== null) &&
           <ReportTable map={mapForTable} params={paramsForTable} />
         }
         <div className="page-break-before"></div>
