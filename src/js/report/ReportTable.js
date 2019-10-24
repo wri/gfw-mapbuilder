@@ -14,71 +14,62 @@ export default class ReportTable extends Component {
     }
 
     addTableAttributes = () => {
-        const {map, params} = this.props;
-        console.log('params', params);
-        const { layerId, OBJECTID, OBJECTID_Field} = params;
-        if (layerId && OBJECTID) {
-          const hashDecoupled = layerId.split('--');
-          const url = hashDecoupled[0];
-          console.log('url', url);
-          const id = hashDecoupled[1];
-          const mapLayer = map.getLayer(id);
-          const queryTask = new QueryTask(url);
-          const query = new Query();
-          query.where = OBJECTID_Field + ' = ' + OBJECTID;
-          query.returnGeometry = false;
-          query.outFields = ['*'];
-          // queryTask.execute(query, lang.hitch(this, function(results) {
-          //   console.log(results.features);
-          //   }));
-          queryTask.execute(query, this.queryCallback);
-        }
-      };
-      
-      queryCallback = res => {
-        console.log('res', res);
-        const {map, params} = this.props;
-        const { layerId } = params;
+      const {map, params} = this.props;
+      const { layerId, OBJECTID, OBJECTID_Field} = params;
+      if (layerId && OBJECTID) {
         const hashDecoupled = layerId.split('--');
+        let url = hashDecoupled[0];
         const id = hashDecoupled[1];
         const mapLayer = map.getLayer(id);
-        if (res.features && res.features.length > 0) {
-          if (mapLayer && mapLayer.infoTemplate) {
-            const tableFields = [];
-            mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
-              let fieldValue = res.features[0].attributes[fieldInfo.fieldName];
-              console.log('fieldValue', fieldValue);
-              //- If it is a date, format that correctly
-              if (fieldInfo.format && fieldInfo.format.dateFormat) {
-                fieldValue = locale.format(new Date(fieldValue));
-              //- If it is a number, format that here, may need a better way
-              } else if (fieldInfo.format && fieldInfo.format.places !== undefined) {
-                fieldValue = number.format(fieldValue, fieldInfo.format);
-              }
-              if (fieldValue && fieldValue.trim) {
-                fieldValue = fieldValue.trim();
-                tableFields.push({
-                  fieldLabel: fieldInfo.label,
-                  fieldValue
-                });
-              }
-            });
-            this.setState({
-              tableFields
-            });
-          }
+        if (url.includes('dynamicLayer')) {
+          const newUrl = url.replace('//dynamicLayer', '');
+          const mapLayerId = id.substr(-2);
+          url = `${newUrl}/${mapLayerId}`;
         }
-      };
+        const queryTask = new QueryTask(url);
+        const query = new Query();
+        query.where = OBJECTID_Field + ' = ' + OBJECTID;
+        query.returnGeometry = false;
+        query.outFields = ['*'];
+        queryTask.execute(query).then(res => {
+          if (res.features && res.features.length > 0) {
+            if (mapLayer && mapLayer.infoTemplate) {
+              const tableFields = [];
+              mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
+                let fieldValue = res.features[0].attributes[fieldInfo.fieldName];
+                //- If it is a date, format that correctly
+                if (fieldInfo.format && fieldInfo.format.dateFormat) {
+                  fieldValue = locale.format(new Date(fieldValue));
+                //- If it is a number, format that here, may need a better way
+                } else if (fieldInfo.format && fieldInfo.format.places !== undefined) {
+                  fieldValue = number.format(fieldValue, fieldInfo.format);
+                }
+                if (fieldValue && fieldValue.trim) {
+                  fieldValue = fieldValue.trim();
+                  tableFields.push({
+                    fieldLabel: fieldInfo.label,
+                    fieldValue
+                  });
+                }
+              });
+              this.setState({
+                tableFields
+              });
+            }
+          }
+        });
+      }
+  };
       
-      //https://services8.arcgis.com/42b0Qdp06t8fyz6z/arcgis/rest/services/Comunidades_1/FeatureServer/0
-
+      https://services8.arcgis.com/42b0Qdp06t8fyz6z/arcgis/rest/services/Comunidades_1/FeatureServer/0
+      "atlas_forestier_fr_3504_68"
+      "https://gis.forest-atlas.org/server/rest/services/cmr/atlas_forestier_fr/MapServer/68"
     componentDidMount() {
       this.addTableAttributes();
     }
     
     render() {
         const {tableFields} = this.state;
-        console.log('table fields', tableFields);
         return (
           <div className="report-table-container">
             {tableFields.length > 0 &&
