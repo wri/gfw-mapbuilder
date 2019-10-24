@@ -181,7 +181,7 @@ export default class VegaChart extends Component {
     const { customColorTheme } = resources;
     if (!toggle && customColorTheme && customColorTheme !== '') {
         colorTheme = customColorTheme;
-    } else if (toggle && (!customColorTheme || customColorTheme === '')) {
+    } else if (!toggle && (!customColorTheme || customColorTheme === '')) {
         colorTheme = defaultColorTheme;
     } else {
         colorTheme = '#929292';
