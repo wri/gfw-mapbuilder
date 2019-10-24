@@ -61,9 +61,6 @@ export default class ReportTable extends Component {
       }
   };
       
-      https://services8.arcgis.com/42b0Qdp06t8fyz6z/arcgis/rest/services/Comunidades_1/FeatureServer/0
-      "atlas_forestier_fr_3504_68"
-      "https://gis.forest-atlas.org/server/rest/services/cmr/atlas_forestier_fr/MapServer/68"
     componentDidMount() {
       this.addTableAttributes();
     }
