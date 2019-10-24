@@ -3,7 +3,6 @@ import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/query';
 import locale from 'dojo/date/locale';
 import number from 'dojo/number';
-import lang from 'dojo/_base/lang';
 
 export default class ReportTable extends Component {
     constructor(props){
