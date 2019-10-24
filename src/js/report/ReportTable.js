@@ -69,6 +69,8 @@ export default class ReportTable extends Component {
           }
         }
       };
+      
+      //https://services8.arcgis.com/42b0Qdp06t8fyz6z/arcgis/rest/services/Comunidades_1/FeatureServer/0
 
     componentDidMount() {
       this.addTableAttributes();
