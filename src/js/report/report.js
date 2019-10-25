@@ -412,11 +412,15 @@ export default class Report extends Component {
         layersHelper.updateFiresLayerDefinitions(modisFrom, modisTo, modisFiresLayer1YR, map);
       }
       
-      map.addLayers(esriLayers);
+      if (esriLayers && esriLayers.length > 0) {
+        map.addLayers(esriLayers);
+      } else {
+        map.addLayers(uniqueLayers);
+      }
 
       reducedLayers.forEach(layer => {
         const mapLayer = map.getLayer(layer.id);
-        if (mapLayer) {
+        if (mapLayer && mapLayer.hide) {
           mapLayer.hide();
           activeLayers.forEach(id => {
             if (id.indexOf(layer.id) > -1) {
@@ -447,8 +451,21 @@ export default class Report extends Component {
         const layerErrors = addedLayers.filter(layer => layer.error);
         if (layerErrors.length > 0) { console.error(layerErrors); }
         const webMapLayerIds = map.layerIds.filter((layerId) => params.hasOwnProperty(layerId));
-        const esriLayerIds = esriLayers.map(esriLayer => esriLayer.id);
-        const baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && esriLayerIds.indexOf(layerId) === -1);
+        
+        let esriLayerIds;
+        let baseLayerIds;
+        let  uniqueLayerIds;
+        
+        if (esriLayers && esriLayers.length > 0) {
+          esriLayerIds = esriLayers.map(esriLayer => esriLayer.id);
+          baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && esriLayerIds.indexOf(layerId) === -1);
+        } 
+        
+        // else {
+        //   uniqueLayerIds = uniqueLayers.map(uniqueLayer => uniqueLayer.id);
+        //   baseLayerIds = map.layerIds.filter((layerId) => webMapLayerIds.indexOf(layerId) === -1 && uniqueLayerIds.indexOf(layerId) === -1);
+        // }
+        
         uniqueLayers.forEach((l, i) => {
           map.reorderLayer(l, i + baseLayerIds.length);
         });

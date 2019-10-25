@@ -142,9 +142,9 @@ const LayersHelper = {
       const layerConfig = utils.getObject(lcGroupLayers, 'id', layerKeys.TREE_COVER);
       const layer = map.getLayer(layerKeys.TREE_COVER);
 
-      if (layer && layerConfig) {
+      if (layer && layer.setRenderingRule && layerConfig) {
         const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
-        layer.setRenderingRule(renderingRule);
+          layer.setRenderingRule(renderingRule);
       }
     }
   },
@@ -154,7 +154,7 @@ const LayersHelper = {
       const layer = map.getLayer(layerKeys.AG_BIOMASS);
       const mosaicRule = rasterFuncs.getBiomassMosaicRule(density);
 
-      if (layer) {
+      if (layer && layer.setMosaicRule) {
         layer.setMosaicRule(mosaicRule);
       }
     }
