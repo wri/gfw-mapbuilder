@@ -385,14 +385,22 @@ export default class InfoWindow extends Component {
         );
       }
       // Add the footer
-      footer = (
-        <div className='infoWindow__footer'>
-          <ReportSubscribeButtons />
-        </div>
-      );
-      
+      if (selectedFeature.attributes && selectedFeature.attributes.searchResult){
+        footer = null;
+      } else {
+        footer = (
+          <div className='infoWindow__footer'>
+            <ReportSubscribeButtons />
+          </div>
+        );
+      }
+
       // Add the dropdown for multiple selected features
-      dropdown = this.createDropdown();
+      if (selectedFeature.attributes && selectedFeature.attributes.searchResult) {
+        dropdown = null;
+      } else {
+        dropdown = this.createDropdown();
+      }
     }
     
     return (
