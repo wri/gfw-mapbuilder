@@ -390,9 +390,13 @@ export default class InfoWindow extends Component {
           <ReportSubscribeButtons />
         </div>
       );
-      
+
       // Add the dropdown for multiple selected features
-      dropdown = this.createDropdown();
+      if (selectedFeature.attributes.searchResult) {
+        dropdown = null;
+      } else {
+        dropdown = this.createDropdown();
+      }
     }
     
     return (
