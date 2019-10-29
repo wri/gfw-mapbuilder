@@ -130,8 +130,7 @@ export default class Report extends Component {
     // webMapLayers.forEach((webMapLayer, i) => {
     //   webMapLayer.order = i;
     // })
-    layerPanel.GROUP_WEBMAP.layers = webMapLayers;
-
+    
     let maxOrder = 0;
     //- Organize and order the layers before adding them to the map
     let layers = Object.keys(layerPanel).filter((groupName) => {
@@ -154,8 +153,9 @@ export default class Report extends Component {
         return layer;
       });
       return list.concat(orderedGroups);
-
+      
     }, []);
+    layerPanel.GROUP_WEBMAP.layers = webMapLayers;
     //- Add the extra layers now that all the others have been sorted
     layers = layers.concat(layerPanel.extraLayers);
       //- remove custom features from the layersToAdd if we don't need it to avoid AGOL Auth
@@ -283,6 +283,7 @@ export default class Report extends Component {
       //- sort by order from the layer config
       //- return an arcgis layer for each config object
       const esriLayersConfig = uniqueLayers.filter(layer => layer && (activeLayers.indexOf(layer.id) > -1) && (layer.url || layer.type === 'graphic' || layer.versions));
+      
       const esriLayers = esriLayersConfig.map((layer) => {
         // Check for active versions matching the layer id
         let layerConfig, filterField;
@@ -329,7 +330,7 @@ export default class Report extends Component {
 
         return mapLayer;
       });
-
+      
       // Set the date range for the loss and glad layers
       const lossLayer = esriLayers.filter(layer => layer.id === layerKeys.TREE_COVER_LOSS)[0];
       const gladLayer = esriLayers.filter(layer => layer.id === layerKeys.GLAD_ALERTS)[0];
