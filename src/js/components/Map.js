@@ -271,7 +271,7 @@ export default class Map extends Component {
           }
         }
 
-        const urlState = this.applyLayerStateFromUrl(response.map, itemData);
+        const urlState = this.applyLayerStateFromUrl(response.map, itemData);        
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
         const defaultVisibility = urlState.activeLayers ? false : true;
@@ -644,7 +644,7 @@ export default class Map extends Component {
 
       const layerIds = params.a.split(',');
       const opacityValues = params.o.split(',');
-      const opacityObjs = [];      
+      const opacityObjs = [];
 
       layerIds.forEach((layerId, j) => {
         if (webmapLayerIds.indexOf(layerId) === -1) {
@@ -697,29 +697,26 @@ export default class Map extends Component {
             }
           } else {
 
-            if ((layerIds.indexOf(webmapLayerConfig.subId) === -1 && webmapLayerConfig.visible) ||
-              (layerIds.indexOf(webmapLayerConfig.subId) > -1 && !webmapLayerConfig.visible) ||
-              (webmapLayerConfig.hasScaleDependency)) {
+            if (!webmapIdConfig[webmapLayerConfig.id]) {
+              webmapIdConfig[webmapLayerConfig.id] = {
+                layersToHide: [],
+                layersToShow: []
+              };
+            }
+            let inScale = true;
 
-              if (!webmapIdConfig[webmapLayerConfig.id]) {
-                webmapIdConfig[webmapLayerConfig.id] = {
-                  layersToHide: [],
-                  layersToShow: []
-                };
+            if (webmapLayerConfig.hasScaleDependency) {
+              if (webmapLayerConfig.maxScale < mapScale && webmapLayerConfig.minScale > mapScale) {
+                inScale = false;
               }
-              let inScale = true;
+            }
 
-              if (webmapLayerConfig.hasScaleDependency) {
-                if (webmapLayerConfig.maxScale < mapScale && webmapLayerConfig.minScale > mapScale) {
-                  inScale = false;
-                }
-              }
-
-              if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && (webmapLayerConfig.visible || inScale)) {
-                webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
-              } else {
-                webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
-              }
+            
+            
+            if (layerIds.indexOf(webmapLayerConfig.subId) === -1 && (webmapLayerConfig.visible || inScale)) {
+              webmapIdConfig[webmapLayerConfig.id].layersToHide.push(webmapLayerConfig.subIndex);
+            } else {
+              webmapIdConfig[webmapLayerConfig.id].layersToShow.push(webmapLayerConfig.subIndex);
             }
           }
 
