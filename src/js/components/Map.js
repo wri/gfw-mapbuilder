@@ -592,10 +592,11 @@ export default class Map extends Component {
     if (x && y && z && l && langKeys.indexOf(l) > -1) {
       on.once(map, 'update-end', () => {
         if (settings.language !== l) {
-          appActions.setLanguage.defer(l);
+          on.once(map, 'extent-change', () => {
+            appActions.setLanguage.defer(l);
+          });
         }
-
-        map.centerAndZoom([x, y], z);
+        brApp.map.centerAndZoom([x, y], z);
       });
     } else if (x && y && z) {
       on.once(map, 'update-end', () => {
