@@ -177,8 +177,8 @@ export default class TabButtons extends Component {
               data-value={DOCUMENTS}
               onClick={this.changeTab}
             >
-              <svg className='svg-icon'>
-                <SVGIcon id={'icon-documents'} />
+              <svg style={{fill: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='svg-icon'>
+                <SVGIcon id={'icon-documents-tab'} />
               </svg>
               <span className='tab-tooltip'>{text[language].DOCUMENTS}</span>
               <span className='tab-buttons__tab-label mobile-show'>
