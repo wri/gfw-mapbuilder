@@ -49,6 +49,7 @@ export default class InfoWindow extends Component {
     
     if ((this.context.map && this.context.map.infoWindow && this.context.map.infoWindow.features && prevState.activeSelectedFeature === '')) {
       const features = this.context.map.infoWindow.features;
+      console.log('features :', features);
       layersCategories = {};
       features.forEach(feature => {
         if (feature._layer) {
@@ -207,7 +208,9 @@ export default class InfoWindow extends Component {
     });
   };
 
+//***
   selectedFeatureOption = (key, index, layers) => {
+    const {language} = this.context;
     return (
       <option
         value={`{"name": "${layers[key].name}", "count": "${layers[key].count}", "featuresList": "${layers[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
@@ -243,6 +246,7 @@ export default class InfoWindow extends Component {
     });
     const layersKeys = Object.keys(layersCategories);
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    console.log('layersCategories :', layersCategories);
     return (
       <div className='relative infoWindow__select-container'>
         <select

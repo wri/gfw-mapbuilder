@@ -301,6 +301,7 @@ export default {
     if (!appid) {
 
       if (constructorParams) {
+        console.log('constructorParams :', constructorParams);
         //- Prune constructorParams by removing null keys
         constructorParams = pruneValues(constructorParams);
 
@@ -334,6 +335,7 @@ export default {
         });
         return promise;
       } else {
+        console.log('agolValues :', agolValues);
         //- Prune agolValues by removing null keys
         agolValues = pruneValues(agolValues);
 
