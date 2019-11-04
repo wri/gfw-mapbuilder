@@ -6,6 +6,7 @@ import SVGIcon from 'utils/svgIcon';
 import {defaultColorTheme} from '../../config';
 import mapActions from '../../actions/MapActions';
 import MapStore from '../../stores/MapStore';
+import resources from '../../../resources';
 
 import React, {
   Component,
@@ -210,7 +211,6 @@ export default class InfoWindow extends Component {
 
 //***
   selectedFeatureOption = (key, index, layers) => {
-    const {language} = this.context;
     return (
       <option
         value={`{"name": "${layers[key].name}", "count": "${layers[key].count}", "featuresList": "${layers[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
@@ -221,13 +221,17 @@ export default class InfoWindow extends Component {
     );
   };
 
+
+//Check layerId to see if title is coming from webmap or our resources. If we have popup prop, then grab the title and content in the right language. If not, continnue as is.
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
+    const {language} = this.context;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex} = this.state;
     const features = this.context.map.infoWindow.features;
+    console.log('features :', features);
     layersCategories = {};
     features.forEach(feature => {
-      if (feature._layer) {
+      if (feature._layer && !feature.layerId) {
         if (layersCategories[feature._layer.name]) {
           layersCategories[feature._layer.name].count =
             layersCategories[feature._layer.name].count + 1;
@@ -241,6 +245,10 @@ export default class InfoWindow extends Component {
             count: 1,
             featuresList: [feature]
           };
+        }
+      } else {
+        if (feature._layer && feature.layerId) {
+        //figure out which group to grab from!
         }
       }
     });
