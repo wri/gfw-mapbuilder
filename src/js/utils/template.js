@@ -101,7 +101,10 @@ const formatResources = () => {
   }
 
   const langUrlParam = getUrlParams(location.href).l;
+  console.log('location', location.href);
+  console.log('langUrlParam :', getUrlParams(location.href));
   if (langUrlParam && langUrlParam === resources.alternativeLanguage) {
+    console.log('second language');
     resources.useAlternativeLanguage = true;
   }
   //- Add content for second language if configured
@@ -291,6 +294,7 @@ export default {
   * @return {promise} promise
   */
   getAppInfo: (id, constructorParams) => {
+    console.log('constructorParams :', constructorParams);
     const promise = new Deferred();
     const appid = id ? id : getUrlParams(location.href).appid;
 
