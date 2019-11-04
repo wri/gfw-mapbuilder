@@ -381,11 +381,14 @@ export default class Analysis extends Component {
       isLoading: true,
       results: null,
     });
+    
+    console.log('selected feature', selectedFeature);
+    console.log('selected feats', selectedFeats);
     Object.keys(analysisParams).forEach(analysisId => {
       if (analysisId === activeAnalysisType) {
         const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
-        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
-          selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
+        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 0) {
+          selectedFeature.attributes.geostoreId = selectedFeats[0].attributes.geostoreId;
         }
         const geostoreId = selectedFeature.attributes.geostoreId;
 
