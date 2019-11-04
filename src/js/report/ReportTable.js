@@ -20,10 +20,12 @@ export default class ReportTable extends Component {
         let url = hashDecoupled[0];
         const id = hashDecoupled[1];
         const mapLayer = map.getLayer(id);
+        const mapLayerId = id.split("_").pop();
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
-          const mapLayerId = id.split("_").pop();
           url = `${newUrl}/${mapLayerId}`;
+        } else {
+          url = `${url}/${mapLayerId}`;
         }
         const queryTask = new QueryTask(url);
         const query = new Query();
