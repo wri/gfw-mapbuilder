@@ -24,15 +24,8 @@ export default class ReportTable extends Component {
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
           url = `${newUrl}/${mapLayerId}`;
-          
-        } 
-        
-        // if (!id.includes('Comunidades')){
-        //   url = `${url}/${mapLayerId}`;
-        // }
-        
+        }
         const queryTask = new QueryTask(url);
-        console.log('queryTask :', queryTask);
         const query = new Query();
         query.where = OBJECTID_Field + ' = ' + OBJECTID;
         query.returnGeometry = false;
