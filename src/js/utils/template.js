@@ -101,10 +101,7 @@ const formatResources = () => {
   }
 
   const langUrlParam = getUrlParams(location.href).l;
-  console.log('location', location.href);
-  console.log('langUrlParam :', getUrlParams(location.href));
   if (langUrlParam && langUrlParam === resources.alternativeLanguage) {
-    console.log('second language');
     resources.useAlternativeLanguage = true;
   }
   //- Add content for second language if configured
@@ -294,7 +291,6 @@ export default {
   * @return {promise} promise
   */
   getAppInfo: (id, constructorParams) => {
-    console.log('constructorParams :', constructorParams);
     const promise = new Deferred();
     const appid = id ? id : getUrlParams(location.href).appid;
 
@@ -305,7 +301,6 @@ export default {
     if (!appid) {
 
       if (constructorParams) {
-        console.log('constructorParams :', constructorParams);
         //- Prune constructorParams by removing null keys
         constructorParams = pruneValues(constructorParams);
 
@@ -339,7 +334,6 @@ export default {
         });
         return promise;
       } else {
-        console.log('agolValues :', agolValues);
         //- Prune agolValues by removing null keys
         agolValues = pruneValues(agolValues);
 
