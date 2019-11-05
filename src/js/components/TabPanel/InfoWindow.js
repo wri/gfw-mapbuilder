@@ -50,7 +50,6 @@ export default class InfoWindow extends Component {
     
     if ((this.context.map && this.context.map.infoWindow && this.context.map.infoWindow.features && prevState.activeSelectedFeature === '')) {
       const features = this.context.map.infoWindow.features;
-      console.log('features :', features);
       layersCategories = {};
       features.forEach(feature => {
         if (feature._layer) {
@@ -248,7 +247,37 @@ export default class InfoWindow extends Component {
         }
       } else {
         if (feature._layer && feature.layerId) {
-        //figure out which group to grab from!
+          //figure out which group to grab from!
+          let id = feature._layer.id;
+          if (id === 'PA_4') {
+            id = 'PA';
+          }
+          const layerPanel = resources.layerPanel;
+          const groups = Object.keys(layerPanel);
+          groups.forEach(group => {
+            if (layerPanel[group] && layerPanel[group].layers){
+              const grouplayers = layerPanel[group].layers;
+              grouplayers.forEach(layer => {
+                if (layer.id === id) {
+                  const popup = layer.popup;
+                  if (layersCategories[popup.title]) {
+                    layersCategories[popup.title].count =
+                      layersCategories[popup.title].count + 1;
+                    layersCategories[popup.title].featuresList = [
+                      ...layersCategories[feature._layer.name].featuresList,
+                      feature
+                    ];
+                  } else {
+                    layersCategories[popup.title] = {
+                      name: popup.title,
+                      count: 1,
+                      featuresList: [feature]
+                    };
+                  }
+                }
+              });
+            }
+          });
         }
       }
     });
