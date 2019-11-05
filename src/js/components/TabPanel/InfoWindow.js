@@ -210,6 +210,8 @@ export default class InfoWindow extends Component {
 
 //***
   selectedFeatureOption = (key, index, layers) => {
+    console.log('key :', key);
+    console.log('layers :', layers);
     return (
       <option
         value={`{"name": "${layers[key].name}", "count": "${layers[key].count}", "featuresList": "${layers[key].featuresList.map(feature => feature.attributes[feature._layer.objectIdField]).join()}"}`}
@@ -230,7 +232,8 @@ export default class InfoWindow extends Component {
     console.log('features :', features);
     layersCategories = {};
     features.forEach(feature => {
-      if (feature._layer && !feature.layerId) {
+      if (feature._layer && !feature._layer.layerId) {
+        console.log('#1');
         if (layersCategories[feature._layer.name]) {
           layersCategories[feature._layer.name].count =
             layersCategories[feature._layer.name].count + 1;
@@ -246,8 +249,8 @@ export default class InfoWindow extends Component {
           };
         }
       } else {
-        if (feature._layer && feature.layerId) {
-          //figure out which group to grab from!
+        if (feature._layer && feature._layer.layerId) {
+          console.log('#2');
           let id = feature._layer.id;
           if (id === 'PA_4') {
             id = 'PA';
@@ -256,20 +259,24 @@ export default class InfoWindow extends Component {
           const groups = Object.keys(layerPanel);
           groups.forEach(group => {
             if (layerPanel[group] && layerPanel[group].layers){
-              const grouplayers = layerPanel[group].layers;
-              grouplayers.forEach(layer => {
+              const groupLayers = layerPanel[group].layers;
+              groupLayers.forEach(layer => {
                 if (layer.id === id) {
                   const popup = layer.popup;
-                  if (layersCategories[popup.title]) {
-                    layersCategories[popup.title].count =
-                      layersCategories[popup.title].count + 1;
-                    layersCategories[popup.title].featuresList = [
-                      ...layersCategories[feature._layer.name].featuresList,
+                  if (layersCategories[popup.title[language]]) {
+                    layersCategories[popup.title[language]].count =
+                      layersCategories[popup.title[language]].count + 1;
+                    feature._layer.name = popup.title[language];
+                    layersCategories[popup.title[language]].featuresList = [
+                      ...layersCategories[popup.title[language]].featuresList,
                       feature
                     ];
                   } else {
-                    layersCategories[popup.title] = {
-                      name: popup.title,
+                    feature._layer.name = popup.title[language];
+                    const index = features.indexOf(feature);
+                    //this.context.map.infoWindow.features[index]._layer.name = popup.title[language];
+                    layersCategories[popup.title[language]] = {
+                      name: popup.title[language],
                       count: 1,
                       featuresList: [feature]
                     };
@@ -291,10 +298,10 @@ export default class InfoWindow extends Component {
           onChange={this.changeSelectedFeature}
           value={activeSelectedFeature}
         >
-          {features && features.length
-            ? layersKeys.map((key, index) =>
+          {layersKeys.length > 0 ?
+            layersKeys.map((key, index) =>
                 this.selectedFeatureOption(key, index, layersCategories)
-              )
+            )
             : null}
         </select>
         <div
