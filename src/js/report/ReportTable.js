@@ -21,17 +21,16 @@ export default class ReportTable extends Component {
         const id = hashDecoupled[1];
         const mapLayer = map.getLayer(id);
         const mapLayerId = id.split("_").pop();
-        console.log('id :', id);
-        console.log('mapLayerId :', mapLayerId);
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
           url = `${newUrl}/${mapLayerId}`;
           
         } 
         
-        if (!id.includes('Comunidades')){
-          url = `${url}/${mapLayerId}`;
-        }
+        // if (!id.includes('Comunidades')){
+        //   url = `${url}/${mapLayerId}`;
+        // }
+        
         const queryTask = new QueryTask(url);
         console.log('queryTask :', queryTask);
         const query = new Query();
