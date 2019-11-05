@@ -165,6 +165,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @description Method to start the process for rendering canvases in tile grid
   */
   _extentChanged: function _extentChanged (urlChanged) {
+    if (!urlChanged) {
+      return;
+    }
+
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
     const resolution = this._map.getResolution(),
