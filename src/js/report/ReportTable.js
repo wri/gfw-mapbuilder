@@ -38,7 +38,6 @@ export default class ReportTable extends Component {
         query.returnGeometry = false;
         query.outFields = ['*'];
         queryTask.execute(query).then(res => {
-          console.log('res', res);
           if (res.features && res.features.length > 0) {
             if (mapLayer && mapLayer.infoTemplate) {
               const tableFields = [];
