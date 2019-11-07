@@ -461,7 +461,6 @@ class MapStore {
       } else {
         if (!selectedFeature.attributes.geostoreId && this.isRegistering === false) {
           mapActions.registeringGeometry.defer(true);
-          //mapActions.toggleAnalysisTab.defer(true);
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
@@ -471,13 +470,11 @@ class MapStore {
                   selectedFeature.attributes.geostoreId = geomRes.error ? '' : geomRes.data.id;
                   selectedFeature.setGeometry(geomToRegister);
                   mapActions.registeringGeometry.defer(false);
-                  //mapActions.toggleAnalysisTab.defer(false);
                 });
               } else {
                 selectedFeature.attributes.geostoreId = res.data.id;
                 selectedFeature.setGeometry(geomToRegister);
                 mapActions.registeringGeometry.defer(false);
-                //mapActions.toggleAnalysisTab.defer(false);
               }
             });
           });

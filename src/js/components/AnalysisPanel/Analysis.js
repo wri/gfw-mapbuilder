@@ -449,7 +449,6 @@ export default class Analysis extends Component {
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
-    console.log('isRegistering', isRegistering);
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
       slopeSelect = (
