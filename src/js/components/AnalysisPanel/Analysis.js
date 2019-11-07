@@ -52,8 +52,7 @@ export default class Analysis extends Component {
   state = {
     isLoading: false,
     chartComponent: null,
-    buttonHover: false,
-    ...MapStore.getState()
+    buttonHover: false
   };
 
   componentDidMount() {
@@ -63,12 +62,7 @@ export default class Analysis extends Component {
     analysisModules.forEach((analysisModule) => {
       MapActions.updateAnalysisParams.defer({ id: analysisModule.analysisId });
     });
-    MapStore.listen(this.storeDidUpdate);
   }
-  
-  storeDidUpdate = () => {
-    this.setState(MapStore.getState());
-  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.activeAnalysisType !== this.props.activeAnalysisType) {
@@ -450,8 +444,8 @@ export default class Analysis extends Component {
   };
 
   render () {
-    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent, showDownloadOptions, buttonHover, isRegistering} = this.state;
+    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled, isRegistering} = this.props;
+    const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
