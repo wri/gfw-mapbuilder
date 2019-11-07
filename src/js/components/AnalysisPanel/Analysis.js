@@ -25,12 +25,12 @@ import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 import moment from 'moment';
 import text from 'js/languages';
-
+import MapStore from '../../stores/MapStore';
+import MapActions from '../../actions/MapActions';
 import React, {
   Component,
   PropTypes
 } from 'react';
-import MapActions from '../../actions/MapActions';
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
   <div className='analysis-item-wrapper'>
@@ -52,7 +52,8 @@ export default class Analysis extends Component {
   state = {
     isLoading: false,
     chartComponent: null,
-    buttonHover: false
+    buttonHover: false,
+    ...MapStore.getState()
   };
 
   componentDidMount() {
@@ -62,7 +63,12 @@ export default class Analysis extends Component {
     analysisModules.forEach((analysisModule) => {
       MapActions.updateAnalysisParams.defer({ id: analysisModule.analysisId });
     });
+    MapStore.listen(this.storeDidUpdate);
   }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.activeAnalysisType !== this.props.activeAnalysisType) {
@@ -379,11 +385,9 @@ export default class Analysis extends Component {
     const { settings: { analysisModules }, language } = this.context;
     this.setState({
       isLoading: true,
-      results: null,
+      results: null
     });
     
-    console.log('selected feature', selectedFeature);
-    console.log('selected feats', selectedFeats);
     Object.keys(analysisParams).forEach(analysisId => {
       if (analysisId === activeAnalysisType) {
         const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
@@ -447,11 +451,11 @@ export default class Analysis extends Component {
 
   render () {
     const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
+    const { isLoading, chartComponent, showDownloadOptions, buttonHover, isRegistering} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
-
+    console.log('isRegistering', isRegistering);
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
       slopeSelect = (
@@ -514,6 +518,10 @@ export default class Analysis extends Component {
         </div>
         {showFooter &&
           <div className='analysis-results__footer'>
+            {isRegistering ?
+            <div className='analysis-results-registering-geometry'>
+              {text[language].ANALYSIS_TOOLTIP}
+            </div> :
             <div className='run-analysis-button-container'>
               <button
                 style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
@@ -525,8 +533,10 @@ export default class Analysis extends Component {
               >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
+              <ReportSubscribeButtons setLoader={this.setLoader} />
             </div>
-            <ReportSubscribeButtons setLoader={this.setLoader} />
+            
+            }
           </div>
         }
       </div>

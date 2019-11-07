@@ -15,8 +15,6 @@ import all from 'dojo/promise/all';
 import { urls } from 'js/config';
 import text from '../languages';
 
-let isRegistering = false;
-
 class MapStore {
 
   constructor () {
@@ -106,6 +104,7 @@ class MapStore {
     this.customModisRange = false;
     this.activeModisOption = 1;
     this.activeModisOptionLabel = 'Past 24 hours';
+    this.isRegistering = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -194,7 +193,8 @@ class MapStore {
       updateActiveViirsOptionLabel: layerActions.updateActiveViirsOptionLabel,
       updateModisCustomRange: layerActions.updateModisCustomRange,
       updateActiveModisOption: layerActions.updateActiveModisOption,
-      updateActiveModisOptionLabel: layerActions.updateActiveModisOptionLabel
+      updateActiveModisOptionLabel: layerActions.updateActiveModisOptionLabel,
+      registeringGeometry: mapActions.registeringGeometry
     });
   }
 
@@ -459,9 +459,9 @@ class MapStore {
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
-          isRegistering = true;
-          mapActions.toggleAnalysisTab.defer(true);
+        if (!selectedFeature.attributes.geostoreId && this.isRegistering === false) {
+          mapActions.registeringGeometry.defer(true);
+          //mapActions.toggleAnalysisTab.defer(true);
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
@@ -470,14 +470,14 @@ class MapStore {
                 analysisUtils.registerGeom(selectedFeature.geometry).then(geomRes => {
                   selectedFeature.attributes.geostoreId = geomRes.error ? '' : geomRes.data.id;
                   selectedFeature.setGeometry(geomToRegister);
-                  mapActions.toggleAnalysisTab(false);
-                  isRegistering = false;
+                  mapActions.registeringGeometry.defer(false);
+                  //mapActions.toggleAnalysisTab.defer(false);
                 });
               } else {
                 selectedFeature.attributes.geostoreId = res.data.id;
                 selectedFeature.setGeometry(geomToRegister);
-                mapActions.toggleAnalysisTab(false);
-                isRegistering = false;
+                mapActions.registeringGeometry.defer(false);
+                //mapActions.toggleAnalysisTab.defer(false);
               }
             });
           });
@@ -487,6 +487,10 @@ class MapStore {
       }
       this.activeAnalysisType = 'default';
     }
+  }
+  
+  registeringGeometry(bool) {
+    this.isRegistering = bool;
   }
 
   toggleAnalysisTab(bool) {
@@ -970,7 +974,6 @@ class MapStore {
     this.allLayers = allLayersCopy;
     this.activeVersions[id] = versionIndex;
     this.emitChange();
-
   }
 }
 
