@@ -399,7 +399,11 @@ export default {
       let analysisSuffix = '';
       if (baseConfig.analysisId) {
         analysisSuffix = encodeURI('analysisId=' + baseConfig.analysisId);
-        queryParams += '&' + analysisSuffix;
+		if (queryParams) {
+			queryParams += '&' + analysisSuffix;
+		} else {
+			queryParams = analysisSuffix;
+		}
       }
 
       function render(spec) {
