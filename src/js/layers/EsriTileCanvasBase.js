@@ -19,6 +19,8 @@ const TILEINFO = {
   }
 };
 
+let drawnOnce = false;
+
 //- Helper Functions
 /**
 * Test canvas support
@@ -133,6 +135,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @return {Element} must return a HTML element
   */
   _setMap: function _setMap (map) {
+    
     this._map = map;
     //- Create a container element for al the canvas tiles
     this._container = document.createElement('div');
@@ -165,12 +168,16 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @description Method to start the process for rendering canvases in tile grid
   */
   _extentChanged: function _extentChanged (urlChanged) {
-    if (!urlChanged) {
+    console.log('urlChanged', urlChanged);
+    console.log('drawnOnce', drawnOnce);
+    
+    if (!urlChanged && drawnOnce === true) {
       return;
     }
 
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
+    drawnOnce = true;
     const resolution = this._map.getResolution(),
           level = this._map.getLevel(),
           extent = this._map.extent;
