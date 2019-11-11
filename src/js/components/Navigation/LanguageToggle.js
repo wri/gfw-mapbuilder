@@ -2,6 +2,8 @@ import appActions from 'actions/AppActions';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
 import {defaultColorTheme} from '../../config';
+import mapActions from '../../actions/MapActions';
+import tabKeys from '../../constants/TabViewConstants';
 import React, {
   Component,
   PropTypes
