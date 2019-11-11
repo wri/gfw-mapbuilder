@@ -6,6 +6,7 @@ import SVGIcon from 'utils/svgIcon';
 import {defaultColorTheme} from '../../config';
 import mapActions from '../../actions/MapActions';
 import MapStore from '../../stores/MapStore';
+import resources from '../../../resources';
 
 import React, {
   Component,
@@ -207,6 +208,7 @@ export default class InfoWindow extends Component {
     });
   };
 
+//***
   selectedFeatureOption = (key, index, layers) => {
     return (
       <option
@@ -218,13 +220,16 @@ export default class InfoWindow extends Component {
     );
   };
 
+
+//Check layerId to see if title is coming from webmap or our resources. If we have popup prop, then grab the title and content in the right language. If not, continnue as is.
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
+    const {language} = this.context;
     const {prevButtonHover, nextButtonHover, activeSelectedFeature, selectIndex} = this.state;
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
-      if (feature._layer) {
+      if (feature._layer && !feature._layer.layerId) {
         if (layersCategories[feature._layer.name]) {
           layersCategories[feature._layer.name].count =
             layersCategories[feature._layer.name].count + 1;
@@ -239,6 +244,43 @@ export default class InfoWindow extends Component {
             featuresList: [feature]
           };
         }
+      } else {
+        if (feature._layer && feature._layer.layerId) {
+          let id = feature._layer.id;
+          if (id === 'PA_4') {
+            id = 'PA';
+          }
+          const layerPanel = resources.layerPanel;
+          const groups = Object.keys(layerPanel);
+          groups.forEach(group => {
+            if (layerPanel[group] && layerPanel[group].layers){
+              const groupLayers = layerPanel[group].layers;
+              groupLayers.forEach(layer => {
+                if (layer.id === id) {
+                  const popup = layer.popup;
+                  if (layersCategories[popup.title[language]]) {
+                    layersCategories[popup.title[language]].count =
+                      layersCategories[popup.title[language]].count + 1;
+                    feature._layer.name = popup.title[language];
+                    layersCategories[popup.title[language]].featuresList = [
+                      ...layersCategories[popup.title[language]].featuresList,
+                      feature
+                    ];
+                  } else {
+                    feature._layer.name = popup.title[language];
+                    const index = features.indexOf(feature);
+                    //this.context.map.infoWindow.features[index]._layer.name = popup.title[language];
+                    layersCategories[popup.title[language]] = {
+                      name: popup.title[language],
+                      count: 1,
+                      featuresList: [feature]
+                    };
+                  }
+                }
+              });
+            }
+          });
+        }
       }
     });
     const layersKeys = Object.keys(layersCategories);
@@ -250,10 +292,10 @@ export default class InfoWindow extends Component {
           onChange={this.changeSelectedFeature}
           value={activeSelectedFeature}
         >
-          {features && features.length
-            ? layersKeys.map((key, index) =>
+          {layersKeys.length > 0 ?
+            layersKeys.map((key, index) =>
                 this.selectedFeatureOption(key, index, layersCategories)
-              )
+            )
             : null}
         </select>
         <div
