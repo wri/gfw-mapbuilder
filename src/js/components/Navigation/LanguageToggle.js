@@ -44,7 +44,6 @@ export default class LanguageToggle extends Component {
         mapActions.changeActiveTab(LAYERS);
       }
       brApp.map.infoWindow.clearFeatures();
-      map.graphics.clear();
       mapActions.setAnalysisType('default');
     }
   };
