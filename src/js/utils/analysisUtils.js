@@ -634,6 +634,7 @@ export default {
         deferred.resolve({ error: 'There was an error while registering the shape in the geostore', status: http.status });
       }
     };
+    console.log('sent');
     http.send(params);
     return deferred;
   },

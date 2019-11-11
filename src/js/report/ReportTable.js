@@ -25,6 +25,7 @@ export default class ReportTable extends Component {
           const mapLayerId = id.split("_").pop();
           url = `${newUrl}/${mapLayerId}`;
         }
+
         const queryTask = new QueryTask(url);
         const query = new Query();
         query.where = OBJECTID_Field + ' = ' + OBJECTID;

@@ -25,12 +25,12 @@ import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 import moment from 'moment';
 import text from 'js/languages';
-
+import MapStore from '../../stores/MapStore';
+import MapActions from '../../actions/MapActions';
 import React, {
   Component,
   PropTypes
 } from 'react';
-import MapActions from '../../actions/MapActions';
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
   <div className='analysis-item-wrapper'>
@@ -379,13 +379,14 @@ export default class Analysis extends Component {
     const { settings: { analysisModules }, language } = this.context;
     this.setState({
       isLoading: true,
-      results: null,
+      results: null
     });
+    
     Object.keys(analysisParams).forEach(analysisId => {
       if (analysisId === activeAnalysisType) {
         const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
-        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
-          selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
+        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 0) {
+          selectedFeature.attributes.geostoreId = selectedFeats[0].attributes.geostoreId;
         }
         const geostoreId = selectedFeature.attributes.geostoreId;
 
@@ -443,12 +444,11 @@ export default class Analysis extends Component {
   };
 
   render () {
-    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
+    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled, isRegistering} = this.props;
     const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
-
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
       slopeSelect = (
@@ -511,6 +511,10 @@ export default class Analysis extends Component {
         </div>
         {showFooter &&
           <div className='analysis-results__footer'>
+            {isRegistering ?
+            <div className='analysis-results-registering-geometry'>
+              {text[language].ANALYSIS_TOOLTIP}
+            </div> :
             <div className='run-analysis-button-container'>
               <button
                 style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
@@ -522,8 +526,10 @@ export default class Analysis extends Component {
               >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
+              <ReportSubscribeButtons setLoader={this.setLoader} />
             </div>
-            <ReportSubscribeButtons setLoader={this.setLoader} />
+            
+            }
           </div>
         }
       </div>
