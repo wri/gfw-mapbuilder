@@ -8,7 +8,8 @@ export default class ReportTable extends Component {
     constructor(props){
         super(props);
         this.state = ({
-          tableFields: []
+          tableFields: [],
+          table: null
         });
     }
 
@@ -33,10 +34,11 @@ export default class ReportTable extends Component {
         
         const mapLayer = map.getLayer(id);
         console.log('mapLayer :', mapLayer);
+        
+        const mapLayerId = id.split("_").pop();
 
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
-          const mapLayerId = id.split("_").pop();
           url = `${newUrl}/${mapLayerId}`;
         }
 
@@ -69,6 +71,13 @@ export default class ReportTable extends Component {
               this.setState({
                 tableFields
               });
+            } else if (mapLayer && mapLayer.infoTemplates) {
+              const idForMapLayer = mapLayer.layerIds[0];
+              const table = mapLayer.infoTemplates[idForMapLayer].infoTemplate.content;
+              this.setState({
+                table
+              }, console.log('table', table) );
+              
             }
           }
         });
@@ -80,9 +89,11 @@ export default class ReportTable extends Component {
     }
     
     render() {
-        const {tableFields} = this.state;
+        const {tableFields, table} = this.state;
         return (
           <div className="report-table-container">
+            {table ? table :
+            <div>
             {tableFields.length > 0 &&
               <table className="report-table">
                 <tbody>
@@ -96,6 +107,8 @@ export default class ReportTable extends Component {
                 })}
                 </tbody>
               </table>
+            }
+            </div>
             }
           </div>
         );
