@@ -96,7 +96,7 @@ export default class TabButtons extends Component {
       this.setState({
         notifiers: notifiers.filter(notif => notif !== id)
       });
-    }
+    } 
   };
 
   getClassName = (id) => {
