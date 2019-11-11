@@ -496,6 +496,10 @@ class MapActions {
   changeLayerVersion(obj) {
     return obj;
   }
+  
+  registeringGeometry(bool) {
+    return bool;
+  }
 }
 
 export default dispatcher.createActions(MapActions);
