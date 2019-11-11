@@ -18,8 +18,22 @@ export default class ReportTable extends Component {
       if (layerId && OBJECTID) {
         const hashDecoupled = layerId.split('--');
         let url = hashDecoupled[0];
-        const id = hashDecoupled[1];
+        console.log('hashDecoupled', hashDecoupled);
+        let id = hashDecoupled[1];
+        console.log('id before:', id);
+        
+        const allMapLayerIds = map.layerIds;
+        allMapLayerIds.forEach(allMapLayerId => {
+          if (id.includes(allMapLayerId)) {
+            id = allMapLayerId;
+          }
+        });
+        
+        console.log('id after:', id);
+        
         const mapLayer = map.getLayer(id);
+        console.log('mapLayer :', mapLayer);
+
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
           const mapLayerId = id.split("_").pop();
