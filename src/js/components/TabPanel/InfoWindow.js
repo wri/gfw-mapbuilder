@@ -6,6 +6,7 @@ import SVGIcon from 'utils/svgIcon';
 import {defaultColorTheme} from '../../config';
 import mapActions from '../../actions/MapActions';
 import MapStore from '../../stores/MapStore';
+import resources from '../../../resources';
 
 import React, {
   Component,
