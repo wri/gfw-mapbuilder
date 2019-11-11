@@ -32,7 +32,7 @@ export default class LanguageToggle extends Component {
   toggleLanguage = (evt) => {
     const {target} = evt;
     const lang = target.getAttribute('data-lang');
-    const {map, settings} = this.context;
+    const {settings} = this.context;
     const narrativeTab = settings.labels && settings.labels[lang] && settings.labels[lang].narrative;
     const {NARRATIVE, LAYERS} = tabKeys;
 

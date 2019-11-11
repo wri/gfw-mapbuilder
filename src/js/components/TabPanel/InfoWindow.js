@@ -208,7 +208,6 @@ export default class InfoWindow extends Component {
     });
   };
 
-//***
   selectedFeatureOption = (key, index, layers) => {
     return (
       <option
@@ -220,8 +219,6 @@ export default class InfoWindow extends Component {
     );
   };
 
-
-//Check layerId to see if title is coming from webmap or our resources. If we have popup prop, then grab the title and content in the right language. If not, continnue as is.
   createDropdown = () => {
     const { customColorTheme } = this.context.settings;
     const {language} = this.context;
