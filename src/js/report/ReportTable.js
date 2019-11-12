@@ -3,6 +3,7 @@ import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/query';
 import locale from 'dojo/date/locale';
 import number from 'dojo/number';
+import resources from 'resources';
 
 export default class ReportTable extends Component {
     constructor(props){
@@ -16,10 +17,11 @@ export default class ReportTable extends Component {
       const {map, params} = this.props;
       const { layerId, OBJECTID, OBJECTID_Field} = params;
       if (layerId && OBJECTID) {
+        let resourceLayerId;
         const hashDecoupled = layerId.split('--');
         let url = hashDecoupled[0];
         const id = hashDecoupled[1];
-        const mapLayer = map.getLayer(id);
+        let mapLayer = map.getLayer(id);
         if (url.includes('dynamicLayer')) {
           const newUrl = url.replace('//dynamicLayer', '');
           const mapLayerId = id.split("_").pop();
@@ -33,6 +35,15 @@ export default class ReportTable extends Component {
         query.outFields = ['*'];
         queryTask.execute(query).then(res => {
           if (res.features && res.features.length > 0) {
+
+            //- If we don't have a map layer, this specific Id is from a sublayer; use it to get the maplayer itself
+            if (!mapLayer) {
+              if (id.indexOf('_') > -1) {
+                resourceLayerId = id.split('_')[0];
+                mapLayer = map.getLayer(resourceLayerId);
+              }
+            }
+
             if (mapLayer && mapLayer.infoTemplate) {
               const tableFields = [];
               mapLayer.infoTemplate.info.fieldInfos.filter(fieldInfo => fieldInfo.visible).forEach((fieldInfo) => {
@@ -55,6 +66,29 @@ export default class ReportTable extends Component {
               this.setState({
                 tableFields
               });
+            } else if (mapLayer && resourceLayerId) {
+              const resourceTableFields = [];
+              Object.keys(resources.layerPanel).forEach(key => {
+                if (resources.layerPanel[key].layers) {
+                  resources.layerPanel[key].layers.forEach(layer => {
+                    if (layer.id === resourceLayerId) {
+                      if (layer.popup) {
+                        layer.popup.content[params.lang].forEach(field => {
+                          resourceTableFields.push({
+                            fieldLabel: field.label,
+                            fieldValue: res.features[0].attributes[field.fieldExpression]
+                          });
+                        });
+                      }
+                    }
+                  });
+                }
+              });
+
+              this.setState({
+                tableFields: resourceTableFields
+              });
+              
             }
           }
         });
