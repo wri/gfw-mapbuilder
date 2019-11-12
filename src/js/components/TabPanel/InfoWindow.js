@@ -226,7 +226,8 @@ export default class InfoWindow extends Component {
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
-      if (feature._layer && !feature._layer.layerId) {
+
+      if (feature._layer && !feature._layer.layerId && feature._layer.layerId !== 0) {
         if (layersCategories[feature._layer.name]) {
           layersCategories[feature._layer.name].count =
             layersCategories[feature._layer.name].count + 1;
@@ -242,7 +243,7 @@ export default class InfoWindow extends Component {
           };
         }
       } else {
-        if (feature._layer && feature._layer.layerId) {
+        if (feature._layer && (feature._layer.layerId || feature._layer.layerId === 0)) {
           const id = feature._layer.id;
           const layerPanel = resources.layerPanel;
           const groups = Object.keys(layerPanel);
@@ -288,7 +289,7 @@ export default class InfoWindow extends Component {
                 
                 groupLayers.forEach(layer => {
                   if (layer.id === newId) {
-                    const popup = layer.popup;                    
+                    const popup = layer.popup;
                     if (popup) {
                       foundLayer = true;
 
@@ -337,10 +338,7 @@ export default class InfoWindow extends Component {
     });
     const layersKeys = Object.keys(layersCategories);
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
-    console.log('layersCategories', layersCategories);
-    
-    console.log('selectedFeature._layer', selectedFeature._layer);
-    
+
     return (
       <div className='relative infoWindow__select-container'>
         <select
