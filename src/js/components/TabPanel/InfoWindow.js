@@ -226,6 +226,10 @@ export default class InfoWindow extends Component {
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
+      console.log('feature._layer.layerId', feature._layer.layerId);
+      console.log('feature._layer.id', feature._layer.id);
+      
+      
       if (feature._layer && !feature._layer.layerId) {
         if (layersCategories[feature._layer.name]) {
           layersCategories[feature._layer.name].count =
@@ -243,18 +247,28 @@ export default class InfoWindow extends Component {
         }
       } else {
         if (feature._layer && feature._layer.layerId) {
-          let id = feature._layer.id;
-          if (id === 'PA_4') {
-            id = 'PA';
-          }
+          const id = feature._layer.id;
+          // if (id === 'PA_4') {
+          //   id = 'PA';
+          // }
+          console.log('id', id);
+          console.log('feature._layer.layerId', feature._layer.layerId);
+          
+          
           const layerPanel = resources.layerPanel;
+          console.log('layerPanel', layerPanel);
           const groups = Object.keys(layerPanel);
           groups.forEach(group => {
             if (layerPanel[group] && layerPanel[group].layers){
               const groupLayers = layerPanel[group].layers;
+              
               groupLayers.forEach(layer => {
+                console.log(layer.id);
                 if (layer.id === id) {
                   const popup = layer.popup;
+                  console.log('popup', popup);
+                  debugger
+                  
                   if (layersCategories[popup.title[language]]) {
                     layersCategories[popup.title[language]].count =
                       layersCategories[popup.title[language]].count + 1;
@@ -265,7 +279,7 @@ export default class InfoWindow extends Component {
                     ];
                   } else {
                     feature._layer.name = popup.title[language];
-                    const index = features.indexOf(feature);
+                    // const index = features.indexOf(feature);
                     //this.context.map.infoWindow.features[index]._layer.name = popup.title[language];
                     layersCategories[popup.title[language]] = {
                       name: popup.title[language],
@@ -282,6 +296,10 @@ export default class InfoWindow extends Component {
     });
     const layersKeys = Object.keys(layersCategories);
     const selectedFeature = this.context.map.infoWindow.getSelectedFeature();
+    console.log('layersCategories', layersCategories);
+    
+    console.log('selectedFeature._layer', selectedFeature._layer);
+    
     return (
       <div className='relative infoWindow__select-container'>
         <select
@@ -344,7 +362,7 @@ export default class InfoWindow extends Component {
                 ? {
                     backgroundColor: `${
                       selectIndex <
-                      layersCategories[selectedFeature._layer.name].count - 1
+                      layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
                         ? customColorTheme && customColorTheme !== ''
                           ? customColorTheme
                           : defaultColorTheme
@@ -352,7 +370,7 @@ export default class InfoWindow extends Component {
                     }`,
                     opacity: `${
                       selectIndex <
-                      layersCategories[selectedFeature._layer.name].count - 1
+                      layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
                         ? '0.8'
                         : '1'
                     }`
@@ -361,7 +379,7 @@ export default class InfoWindow extends Component {
                     backgroundColor: `${
                       selectedFeature._layer &&
                       selectIndex <
-                      layersCategories[selectedFeature._layer.name].count - 1
+                      layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
                         ? customColorTheme && customColorTheme !== ''
                           ? customColorTheme
                           : defaultColorTheme
@@ -372,14 +390,14 @@ export default class InfoWindow extends Component {
             className={`fa-button color arrow next ${
               selectedFeature._layer &&
               selectIndex <
-                layersCategories[selectedFeature._layer.name].count - 1
+                layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
                 ? ''
                 : 'disabled'
             }`}
             onClick={
               selectedFeature._layer &&
               selectIndex <
-                layersCategories[selectedFeature._layer.name].count - 1
+                layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
                 ? this.next
                 : null
             }
