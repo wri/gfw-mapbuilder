@@ -226,10 +226,6 @@ export default class InfoWindow extends Component {
     const features = this.context.map.infoWindow.features;
     layersCategories = {};
     features.forEach(feature => {
-      console.log('feature._layer.layerId', feature._layer.layerId);
-      console.log('feature._layer.id', feature._layer.id);
-      
-      
       if (feature._layer && !feature._layer.layerId) {
         if (layersCategories[feature._layer.name]) {
           layersCategories[feature._layer.name].count =
@@ -248,46 +244,36 @@ export default class InfoWindow extends Component {
       } else {
         if (feature._layer && feature._layer.layerId) {
           const id = feature._layer.id;
-          // if (id === 'PA_4') {
-          //   id = 'PA';
-          // }
-          console.log('id', id);
-          console.log('feature._layer.layerId', feature._layer.layerId);
-          
-          
           const layerPanel = resources.layerPanel;
-          console.log('layerPanel', layerPanel);
           const groups = Object.keys(layerPanel);
+
           let foundLayer = false;
           groups.forEach(group => {
             if (layerPanel[group] && layerPanel[group].layers){
               const groupLayers = layerPanel[group].layers;
-              
               groupLayers.forEach(layer => {
-                // console.log(layer.id);
+
                 if (layer.id === id) {
-                  foundLayer = true;
                   const popup = layer.popup;
-                  console.log('popup', popup);
-                  debugger
-                  
-                  if (layersCategories[popup.title[language]]) {
-                    layersCategories[popup.title[language]].count =
-                      layersCategories[popup.title[language]].count + 1;
-                    feature._layer.name = popup.title[language];
-                    layersCategories[popup.title[language]].featuresList = [
-                      ...layersCategories[popup.title[language]].featuresList,
-                      feature
-                    ];
-                  } else {
-                    feature._layer.name = popup.title[language];
-                    // const index = features.indexOf(feature);
-                    //this.context.map.infoWindow.features[index]._layer.name = popup.title[language];
-                    layersCategories[popup.title[language]] = {
-                      name: popup.title[language],
-                      count: 1,
-                      featuresList: [feature]
-                    };
+                  if (popup) {
+                    foundLayer = true;
+
+                    if (layersCategories[popup.title[language]]) {
+                      layersCategories[popup.title[language]].count =
+                        layersCategories[popup.title[language]].count + 1;
+                      feature._layer.name = popup.title[language];
+                      layersCategories[popup.title[language]].featuresList = [
+                        ...layersCategories[popup.title[language]].featuresList,
+                        feature
+                      ];
+                    } else {
+                      feature._layer.name = popup.title[language];
+                      layersCategories[popup.title[language]] = {
+                        name: popup.title[language],
+                        count: 1,
+                        featuresList: [feature]
+                      };
+                    }
                   }
                 }
               });
@@ -295,7 +281,56 @@ export default class InfoWindow extends Component {
           });
 
           if (!foundLayer) {
+            const newId = id.split('_' + feature._layer.layerId)[0];
+            groups.forEach(group => {
+              if (layerPanel[group] && layerPanel[group].layers){
+                const groupLayers = layerPanel[group].layers;
+                
+                groupLayers.forEach(layer => {
+                  if (layer.id === newId) {
+                    const popup = layer.popup;                    
+                    if (popup) {
+                      foundLayer = true;
 
+                      if (layersCategories[popup.title[language]]) {
+                        layersCategories[popup.title[language]].count =
+                          layersCategories[popup.title[language]].count + 1;
+                        feature._layer.name = popup.title[language];
+                        layersCategories[popup.title[language]].featuresList = [
+                          ...layersCategories[popup.title[language]].featuresList,
+                          feature
+                        ];
+                      } else {
+                        feature._layer.name = popup.title[language];
+                        layersCategories[popup.title[language]] = {
+                          name: popup.title[language],
+                          count: 1,
+                          featuresList: [feature]
+                        };
+                      }
+                    }
+                  }
+                });
+              }
+            });
+
+            if (!foundLayer) {
+              foundLayer = true;
+              if (layersCategories[feature._layer.name]) {
+                layersCategories[feature._layer.name].count =
+                  layersCategories[feature._layer.name].count + 1;
+                layersCategories[feature._layer.name].featuresList = [
+                  ...layersCategories[feature._layer.name].featuresList,
+                  feature
+                ];
+              } else {
+                layersCategories[feature._layer.name] = {
+                  name: feature._layer.name,
+                  count: 1,
+                  featuresList: [feature]
+                };
+              }
+            }
           }
         }
       }
@@ -368,7 +403,7 @@ export default class InfoWindow extends Component {
                 ? {
                     backgroundColor: `${
                       selectIndex <
-                      layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
+                      layersCategories[selectedFeature._layer.name].count - 1
                         ? customColorTheme && customColorTheme !== ''
                           ? customColorTheme
                           : defaultColorTheme
@@ -376,7 +411,7 @@ export default class InfoWindow extends Component {
                     }`,
                     opacity: `${
                       selectIndex <
-                      layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
+                      layersCategories[selectedFeature._layer.name].count - 1
                         ? '0.8'
                         : '1'
                     }`
@@ -385,7 +420,7 @@ export default class InfoWindow extends Component {
                     backgroundColor: `${
                       selectedFeature._layer &&
                       selectIndex <
-                      layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
+                      layersCategories[selectedFeature._layer.name].count - 1
                         ? customColorTheme && customColorTheme !== ''
                           ? customColorTheme
                           : defaultColorTheme
@@ -396,14 +431,14 @@ export default class InfoWindow extends Component {
             className={`fa-button color arrow next ${
               selectedFeature._layer &&
               selectIndex <
-                layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
+                layersCategories[selectedFeature._layer.name].count - 1
                 ? ''
                 : 'disabled'
             }`}
             onClick={
               selectedFeature._layer &&
               selectIndex <
-                layersCategories[selectedFeature._layer.name] && layersCategories[selectedFeature._layer.name].count - 1
+                layersCategories[selectedFeature._layer.name].count - 1
                 ? this.next
                 : null
             }
