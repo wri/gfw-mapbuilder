@@ -258,13 +258,15 @@ export default class InfoWindow extends Component {
           const layerPanel = resources.layerPanel;
           console.log('layerPanel', layerPanel);
           const groups = Object.keys(layerPanel);
+          let foundLayer = false;
           groups.forEach(group => {
             if (layerPanel[group] && layerPanel[group].layers){
               const groupLayers = layerPanel[group].layers;
               
               groupLayers.forEach(layer => {
-                console.log(layer.id);
+                // console.log(layer.id);
                 if (layer.id === id) {
+                  foundLayer = true;
                   const popup = layer.popup;
                   console.log('popup', popup);
                   debugger
@@ -291,6 +293,10 @@ export default class InfoWindow extends Component {
               });
             }
           });
+
+          if (!foundLayer) {
+
+          }
         }
       }
     });
