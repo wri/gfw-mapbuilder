@@ -85,7 +85,19 @@ export default class LossControls extends Component {
 
       if (this.props.lossOptions.length) {
         if (prevProps.canopyDensity !== canopyDensity) {
-          this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
+          const tclLayer = map.getLayer(layerKeys.TREE_COVER_LOSS);
+          if (tclLayer) {
+            this.updateDensity(tclLayer, canopyDensity);
+          } else {
+            const tclSignal = map.on('layers-add-result', () => {
+              tclSignal.remove();
+              const tclJustAdded = map.getLayer(layerKeys.TREE_COVER_LOSS);
+              if (tclJustAdded) {
+                this.updateDensity(tclJustAdded, canopyDensity);
+              }
+            });
+          }
+          
         }
         if (resetSlider) {
           layerActions.shouldResetSlider(false);
@@ -124,7 +136,9 @@ export default class LossControls extends Component {
     baseUrl += density;
     baseUrl += '/{z}/{x}/{y}.png';
 
-    layer.setUrl(baseUrl);
+    if (layer && layer.setUrl) {
+      layer.setUrl(baseUrl);
+    }
   }
 
   startVisualization = () => {
