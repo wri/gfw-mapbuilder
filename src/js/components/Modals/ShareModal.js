@@ -1,5 +1,5 @@
 import ModalWrapper from 'components/Modals/ModalWrapper';
-import modalStore from 'stores/ModalStore';
+import ModalStore from 'stores/ModalStore';
 import {modalText} from 'js/config';
 import utils from 'utils/AppUtils';
 import React, {Component, PropTypes} from 'react';
@@ -16,22 +16,19 @@ export default class ShareModal extends Component {
   
   constructor (props) {
     super(props);
-
-    modalStore.listen(this.storeUpdated.bind(this));
-    const defaultState = modalStore.getState();
     this.state = {
-      bitlyUrl: defaultState.bitlyUrl,
-      copyText: modalText.share.copyButton
+      copyText: modalText.share.copyButton,
+      ...ModalStore.getState()
     };
   }
-
-  storeUpdated () {
-    const newState = modalStore.getState();
-    this.setState({
-      bitlyUrl: newState.bitlyUrl,
-      copyText: modalText.share.copyButton
-    });
+  
+  componentDidMount() {
+    ModalStore.listen(this.storeDidUpdate);
   }
+  
+  storeDidUpdate = () => {
+    this.setState(ModalStore.getState());
+  };
 
   copyShare () {
     const element = this.refs.shareInput;
