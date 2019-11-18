@@ -5,6 +5,9 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import {defaultColorTheme} from '../../config';
+import layerActions from '../../actions/LayerActions';
+import MapStore from '../../stores/MapStore';
+import layerKeys from 'constants/LayerConstants';
 
 export default class FiresControls extends React.Component {
 
@@ -24,30 +27,36 @@ export default class FiresControls extends React.Component {
     this.min = moment(oneYearAgo);
     this.max = moment(max);
     this.fireOptions = [
-      {label: 'Past 24 hours', value: '0'},
-      {label: 'Past 48 hours', value: '1'},
-      {label: 'Past 72 hours', value: '2'},
-      {label: 'Past Week', value: '3'}
+      {label: '', value: 0},
+      {label: 'Past 24 hours', value: 1},
+      {label: 'Past 48 hours', value: 2},
+      {label: 'Past 72 hours', value: 3},
+      {label: 'Past Week', value: 4}
     ];
     this.state = {
-      customRange: false,
-      activeFireOption: '0',
-      activeFireOptionLabel: 'Past 24 hours'
+      ...MapStore.getState()
     };
   }
+  
+  componentDidMount() {
+    MapStore.listen(this.storeDidUpdate);
+  }
+  
+  storeDidUpdate = () => {
+    this.setState(MapStore.getState());
+  };
 
   componentDidUpdate(prevProps, prevState, prevContext) {
-
-    if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
-      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, '4');
-    }
-
-    // Anytime the map changes to a new map, update that here
     const {map} = this.context;
+    if (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate) {
+      brApp.map.infoWindow.clearFeatures();
+      LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, 5, map);
+    }
+    // Anytime the map changes to a new map, update that here
     if (prevContext.map !== map && prevContext.map.loaded) {
       const signal = map.on('update-end', () => {
         signal.remove();
-        LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer);
+        LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, null, map);
       });
     }
   }
@@ -62,23 +71,33 @@ export default class FiresControls extends React.Component {
 
   renderActiveFireOptions = fireOptions => {
     return fireOptions.map((fireOption, index) => {
-      return <option key={`option-${index}`} value={fireOption.value}>{fireOption.label}</option>;
+      return <option key={`option-${index}`} style={index === 0 ? {display: 'none'} : {}} value={fireOption.value}>{fireOption.label}</option>;
     });
   };
 
   updateActiveFires = (evt, fireOptions) => {
-    LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value);
-    this.setState({
-      activeFireOption: evt.target.value,
-      activeFireOptionLabel: fireOptions[evt.target.value].label,
-      customRange: false
-    });
+    brApp.map.infoWindow.clearFeatures();
+    LayersHelper.updateFiresLayerDefinitions(this.props.startDate, this.props.endDate, this.props.layer, evt.target.value, this.context.map);
+
+    if (this.props.layer.id === layerKeys.VIIRS_ACTIVE_FIRES) {
+      layerActions.updateViirsCustomRange(false);
+      layerActions.updateActiveViirsOptionLabel(fireOptions[parseInt(evt.target.value)].label);
+      layerActions.updateActiveViirsOption(parseInt(evt.target.value));
+    } else {
+      layerActions.updateModisCustomRange(false);
+      layerActions.updateActiveModisOptionLabel(fireOptions[parseInt(evt.target.value)].label);
+      layerActions.updateActiveModisOption(parseInt(evt.target.value));
+    }
   };
 
   render () {
-    const { startDate, endDate } = this.props;
+    const { startDate, endDate, layer } = this.props;
     const {language} = this.context;
-    const {customRange, activeFireOption, activeFireOptionLabel} = this.state;
+
+    const customRange = layer.id === layerKeys.VIIRS_ACTIVE_FIRES ? this.state.customViirsRange : this.state.customModisRange;
+    const activeFireOption = layer.id === layerKeys.VIIRS_ACTIVE_FIRES ? this.state.activeViirsOption : this.state.activeModisOption;    
+    const activeFireOptionLabel = layer.id === layerKeys.VIIRS_ACTIVE_FIRES ? this.state.activeViirsOptionLabel : this.state.activeModisOptionLabel;
+
     const { customColorTheme } = this.context.settings;
     return (
       <div>
@@ -86,7 +105,7 @@ export default class FiresControls extends React.Component {
           <div className="active-fires-time-range timeline-container imazon-controls flex">
             <div className='relative'>
               <select
-                className="pointer"
+                className='pointer'
                 value={activeFireOption}
                 onChange={evt => this.updateActiveFires(evt, this.fireOptions)}
               >
@@ -101,10 +120,18 @@ export default class FiresControls extends React.Component {
           <div
             style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className="fa-button sml white pointer"
-            onClick={() => this.setState({
-              customRange: !customRange,
-              activeFireOptionLabel: 'Active Fires'
-            })}
+            onClick={() => {
+                if (layer.id === layerKeys.VIIRS_ACTIVE_FIRES) {
+                  layerActions.updateViirsCustomRange(!customRange);
+                  layerActions.updateActiveViirsOptionLabel('Defined Range');
+                  layerActions.updateActiveViirsOption(0);
+                } else {
+                  layerActions.updateModisCustomRange(!customRange);
+                  layerActions.updateActiveModisOptionLabel('Defined Range');
+                  layerActions.updateActiveModisOption(0);
+                }
+              }
+            }
           >
             Custom Range
           </div>

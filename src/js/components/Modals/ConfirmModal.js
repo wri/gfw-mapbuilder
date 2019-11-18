@@ -58,7 +58,7 @@ export default class ConfirmModal extends Component {
         <h2 className='delete-header'>{text[language].SUBSCRIBE_DELETE_TITLE}</h2>
         {subscriptionToDelete.attributes ? <h3 className='delete-header'>{subscriptionToDelete.attributes.name}</h3> : null}
 
-        <p>{text[language].SUBSCRIBE_DELETE_DESC}</p>
+        <div className="delete-text">{text[language].SUBSCRIBE_DELETE_DESC}</div>
 
         <div className='subscription-sub-buttons'>
           <button style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='fa-button color' onClick={this.delete}>{text[language].SUBSCRIBE_DELETE_CONFIRM}</button>

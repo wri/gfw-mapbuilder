@@ -358,7 +358,8 @@ export default class LegendPanel extends Component {
           />;
         } else {
           if (!layer.layerIds && !esriLayer.tileInfo) {
-            throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
+            return null;
+            // throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
           }
 
           if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {

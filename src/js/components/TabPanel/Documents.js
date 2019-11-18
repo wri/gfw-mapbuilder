@@ -120,9 +120,7 @@ class DocumentResults extends Component {
                 <td>{doc.size}</td>
                 <td className='documents-table__link'>
                   <a href={doc.url} target='_blank'>
-                    <svg style={{fill: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='svg-icon'>
                       <SVGIcon id={'icon-documents'} />
-                    </svg>
                   </a>
                 </td>
               </tr>

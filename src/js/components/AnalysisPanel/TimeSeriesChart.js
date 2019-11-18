@@ -1,8 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import charts from 'utils/charts';
+import text from '../../languages';
 
 export default class TimeSeriesChart extends Component {
 
+  static contextTypes = {
+    language: PropTypes.string.isRequired
+  };
+  
   constructor(props) {
     super(props);
     this.state = { isEmpty: false, isError: false };
@@ -35,6 +40,7 @@ export default class TimeSeriesChart extends Component {
   render () {
     const { isError } = this.state;
     const { data } = this.props;
+    const {language} = this.context;
 
     if (isError) {
       return (
@@ -47,7 +53,7 @@ export default class TimeSeriesChart extends Component {
       return (
         <div>
           <div ref='chart' />
-          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>No data available.</div>
+          <div id='chartError' className={`chart-error ${this.state.isEmpty ? '' : ' hidden'}`}>{text[language].ANALYSIS_NO_DATA}</div>
         </div>
       );
     }

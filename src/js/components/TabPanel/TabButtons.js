@@ -150,47 +150,49 @@ export default class TabButtons extends Component {
               {text[language].DATA}
             </span>
           </li>
-          {!this.props.analysisDisabled &&
-            <li className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`} data-value={ANALYSIS} onClick={this.changeTab}>
-              <svg className='svg-icon'>
-                <SVGIcon id={'icon-analysis'} />
-              </svg>
-              <span className='tab-tooltip'>{text[language].ANALYZE}</span>
-              <span className='tab-buttons__tab-label mobile-show'>
-                {text[language].ANALYZE}
-              </span>
-            </li>
-          }
-          {!this.props.analysisDisabled && this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
+          <li
+            className={`${this.getClassName(ANALYSIS)}${this.getAnimateClassName(ANALYSIS)}`}
+            data-value={ANALYSIS}
+            onClick={this.changeTab}
+          >
+            <svg className='svg-icon'>
+              <SVGIcon id={'icon-analysis'} />
+            </svg>
+            <span className='tab-tooltip'>{text[language].ANALYZE}</span>
+            <span className='tab-buttons__tab-label mobile-show'>
+              {text[language].ANALYZE}
+            </span>
+            {this.props.activeTab !== ANALYSIS && this.state.notifiers.indexOf(ANALYSIS) > -1 ?
             <span
               style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
-              className="tab-dot"
+              className="tab-dot-analysis"
             >
             </span>
             : null
           }
+          </li>
           {!settings.includeDocumentsTab ? null :
             <li
               className={`${this.getClassName(DOCUMENTS)}${this.getAnimateClassName(DOCUMENTS)}`}
               data-value={DOCUMENTS}
               onClick={this.changeTab}
             >
-              <svg className='svg-icon'>
-                <SVGIcon id={'icon-documents'} />
+              <svg style={{fill: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='svg-icon'>
+                <SVGIcon id={'icon-documents-tab'} />
               </svg>
               <span className='tab-tooltip'>{text[language].DOCUMENTS}</span>
               <span className='tab-buttons__tab-label mobile-show'>
                 {text[language].DOCS}
               </span>
-            </li>
-          }
-          {this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
+              {settings.includeDocumentsTab && this.props.activeTab !== DOCUMENTS && this.state.notifiers.indexOf(DOCUMENTS) > -1 ?
             <span
               style={{backgroundColor: `${customColorTheme ? customColorTheme : defaultColorTheme}`}}
-              className="tab-dot"
+              className="tab-dot-documents"
             >
             </span>
             : null
+          }
+            </li>
           }
           <li className={`${this.getClassName(MORE)} mobile-show`} data-value={MORE} onClick={this.changeTab}>
             <svg className='svg-icon'>

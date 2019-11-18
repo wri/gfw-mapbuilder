@@ -6,6 +6,9 @@
   right 0
   left 0
   top 0
+  .modal
+    width 320px 
+    margin 0 
 
 .modal-container
   position absolute
@@ -17,7 +20,7 @@
 .measurement-modal
   background-color #fff
   max-height 100%
-  position fixed
+  position absolute
   height auto
   right 110px
   top 80px
@@ -48,7 +51,7 @@
     top 250px
     cursor grab
     z-index 100
-    
+
 .imagery-hover-modal
   padding 10px
   position absolute
@@ -88,15 +91,27 @@
   position absolute
   height 40px
   width 40px
-  right 0
-  top 0
+  right 10px
+  top 0px
   z-index 10
   & svg
-    //transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    //left 50%
+    top 60%
+    margin-left 0.25rem
+    
+.layer-close-icon
+  position absolute
+  height 40px
+  width 40px
+  right 0
+  top -7px
+  z-index 10
+  & svg
+    position absolute
+    height 50%
+    width 50%
     top 60%
     margin-left 0.25rem
     
@@ -104,35 +119,35 @@
   position absolute
   height 30px
   width 30px
-  right -5
-  top -15
+  right -5px
+  top -15px
   z-index 10
   & svg
-    //transform translate(-50%, -50%)
     position absolute
     height 50%
     width 50%
-    //left 50%
     top 60%
     margin-left 0.25rem
-    
+
 .edit-close-icon
   height 15px
   width 15px
   z-index 10
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto;
+  display flex
+  justify-content flex-end
+  margin-left auto
   & svg
     height 100%
     width 100%
     top 60%
     margin-left 0.25rem
-    
+
 
 .mobile-show.close-icon
   height 60px
   width 60px
+  right -15px
+  top -20px
 
 .modal-title
   padding 10px 20px 0
@@ -207,6 +222,8 @@
   overflow-y auto
   width 320px
   height 500px
+  max-height 100%
+  margin 0
   // & .analysis-instructions__separator
   //   display none
   & .modal-content
@@ -233,6 +250,7 @@
 //- Share Modal
 #share-modal
   z-index 10
+  display inherit
   & .modal-content
     width 300px
   & .share-instructions
@@ -348,7 +366,8 @@
   cursor pointer
 
 .subscription-unconfirmed
-  margin-bottom -10px
+  display flex
+  align-items center
   .subscription-uncle
     position relative
 
@@ -425,11 +444,16 @@
 .layer-modal-container .modal-content:not(.no-download)
   margin-bottom 60px
 
-.layer-modal-content
-  width 500px
-  & p
-    line-height 1.5
-    margin-top 10px
+.layer-modal-container
+  article.modal
+    width 500px
+  .modal-content
+    width 500px
+    max-height 400px
+    .layer-modal-content
+      & p
+        line-height 1.5
+        margin-top 10px
 
 .source-header
   margin-bottom 5px
@@ -453,8 +477,9 @@
 
 .name-row
   font-weight bold
-  margin-left 20px
-  margin-top 15px
+  margin-left 5px
+  margin-top 0
+  margin-bottom 0
   &.no-warning
     margin-left 0
 
@@ -466,9 +491,9 @@
   &:nth-child(even)
     background #F2F2F3
   &.subscribe-row
-    padding 5px
+    padding 10px
   .other-row
-    font-size 15px
+    font-size 14px
     &.date-created
       font-style italic
     p
@@ -515,10 +540,23 @@
   -ms-flex-align center
   align-items center
   font-size 14px
+  
+.subscription-modal-container
+  .modal-content
+    padding 20px 40px 20px 20px
+    overflow-x hidden
+    max-height 450px
+    overflow-y auto
+    color #555
+    height 100%
 
-.delete-row, .map-row
-  float right
-  padding 10px 0
+.subscription-modal-container.modal-wrapper .modal 
+  height 450px
+  
+.subscribe-button-container
+  display flex
+  justify-content space-between
+  align-items center
 
 .delete-row-label
   padding-top 3px
@@ -642,7 +680,8 @@
 
 .delete-header
   text-align center
-
+  margin 0.25rem 0
+  
 // Imagery Modal specific styling
 .imagery-modal-container
   display block
@@ -680,7 +719,7 @@
   margin 10px 20px 10px 20px
 
 .imagery-modal__section
-  padding 0px 20px 10px 20px
+  padding 0px 20px 0px 20px
   font-size 11px
   color #999
   justify-content space-between
@@ -750,6 +789,63 @@ hr
 
 .imagery-modal_section-text
   margin 0 10px
+  
+.subscription-sub-buttons
+  display flex
+  justify-content center
+  align-items center
+  margin-top 0.5rem
+  button
+    margin 0 0.5rem
+    border none
+    width 5rem
+    font-size 14px
+
+.alert-email
+  display flex
+  justify-content center
+  align-items center
+  margin-bottom 2rem
+
+.alert-input
+  height 2rem
+  font-size 14px
+  padding-left 5px
+  width 55%
+  margin-top 0.25rem
+  margin-bottom 0.5rem
+  
+.alert-dropdown
+  display flex
+  justify-content center
+  align-items center
+  height 2rem
+  margin-top 0.25rem
+  margin-bottom 0.5rem
+  width 55%
+
+.alert-email-settings
+  display flex
+  flex-direction column
+  align-items center
+  margin 0.25rem 0
+  label 
+    width 55%
+  input
+    display flex
+    flex-direction column
+    align-items center
+    width 55%
+
+.subscribe-step
+  min-width 10rem
+  
+.subscribe-datasets
+  display flex
+  flex-direction column
+  .subscribe-dataset
+    display flex
+    justify-content space-between
 
 @media (max-width: 600px)
 
@@ -798,3 +894,4 @@ hr
     & a
       word-break break-word
       word-wrap break-word
+      

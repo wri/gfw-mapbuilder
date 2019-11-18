@@ -37,7 +37,7 @@ const config = {
       id: 0
     }
   },
-  
+
   map: {
     options: {
       navigationMode: 'css-transforms',
@@ -174,6 +174,7 @@ const config = {
         { label: 'Natural Color'},
         { label: 'Vegetation Health'}
       ],
+      selectInstructions: 'Select an image once imagery is available'
     },
   },
 

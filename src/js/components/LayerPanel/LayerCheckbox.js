@@ -82,20 +82,70 @@ export default class LayerCheckbox extends Component {
   toggleLayer () {
     const {layer} = this.props;
     const {map} = this.context;
+    let fireID,
+    layer24HR,
+    layer48HR,
+    layer72HR,
+    layer7D,
+    layer1YR;
+    if (layer.id.includes('VIIRS_ACTIVE_FIRES') || layer.id.includes('MODIS_ACTIVE_FIRES')) {
+      fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
+      layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+      layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+    }
 
     if (layer.disabled) { return; }
     if (layer.subId) {
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
         layer.visible = false;
+        layerActions.removeActiveLayer(layer);
+        if (fireID) {
+          layer24HR.hide();
+          layer48HR.hide();
+          layer72HR.hide();
+          layer7D.hide();
+          layer1YR.hide();
+        }
+        if (fireID && fireID === 'VIIRS') {
+          layerActions.updateViirsCustomRange(false);
+          layerActions.updateActiveViirsOption(1);
+          layerActions.updateActiveViirsOptionLabel('Past 24 hours');
+        } else {
+          layerActions.updateModisCustomRange(false);
+          layerActions.updateActiveModisOption(1);
+          layerActions.updateActiveModisOptionLabel('Past 24 hours');
+        }
+        map.infoWindow.clearFeatures();
       } else {
         layerActions.addSubLayer(layer);
         layer.visible = true;
+        layerActions.addActiveLayer(layer.id);
       }
     } else {
       if (this.props.checked) {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
+        if (fireID) {
+          layer24HR.hide();
+          layer48HR.hide();
+          layer72HR.hide();
+          layer7D.hide();
+          layer1YR.hide();
+        }
+        if (fireID && fireID === 'VIIRS') {
+          layerActions.updateViirsCustomRange(false);
+          layerActions.updateActiveViirsOption(1);
+          layerActions.updateActiveViirsOptionLabel('Past 24 hours');
+        } else {
+          layerActions.updateModisCustomRange(false);
+          layerActions.updateActiveModisOption(1);
+          layerActions.updateActiveModisOptionLabel('Past 24 hours');
+        }
+        map.infoWindow.clearFeatures();
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);

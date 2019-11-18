@@ -191,6 +191,10 @@ const utils = {
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})
     };
 
+    if (settings.language !== lang) {
+      query.webmap = settings.alternativeWebmap;
+    }
+
     // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:
     // layerId: array of visible layers
     for (const key in dynamicLayers) {

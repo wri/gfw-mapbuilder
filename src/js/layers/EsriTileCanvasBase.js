@@ -133,6 +133,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @return {Element} must return a HTML element
   */
   _setMap: function _setMap (map) {
+    
     this._map = map;
     //- Create a container element for al the canvas tiles
     this._container = document.createElement('div');
@@ -165,6 +166,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @description Method to start the process for rendering canvases in tile grid
   */
   _extentChanged: function _extentChanged (urlChanged) {
+
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
     const resolution = this._map.getResolution(),
@@ -236,6 +238,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
     Object.keys(this.tiles).forEach(key => {
       delete this.tiles[key];
     });
+
     //- Reset the position and clear the container contents
     this.position = { x: 0, y: 0 };
     this._container.innerHTML = '';
@@ -380,10 +383,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
 
       this._container.appendChild(canvas);
 
-      const level = this._map.getLevel();
+      const level = this._map.getLevel();      
 
-      if (data.z === level) {
-        this._container.appendChild(canvas);
+      if (data.z !== level) {
+        this._container.removeChild(canvas);
       }
     }
   },

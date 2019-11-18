@@ -2,6 +2,30 @@ import dispatcher from 'js/dispatcher';
 
 class LayerActions {
 
+  updateViirsCustomRange(bool) {
+    return bool;
+  }
+
+  updateModisCustomRange(bool) {
+    return bool;
+  }
+  
+  updateActiveViirsOption(num) {
+    return num;
+  }
+
+  updateActiveModisOption(num) {
+    return num;
+  }
+  
+  updateActiveViirsOptionLabel(str) {
+    return str;
+  }
+
+  updateActiveModisOptionLabel(str) {
+    return str;
+  }
+
   addActiveLayer (layerId) {
     return layerId;
     // TODO: Remove once current layer panel design is approved
@@ -91,7 +115,7 @@ class LayerActions {
   updateModisEndDate (endDate) {
     return endDate;
   }
-  
+
   updateSelectedFeatureTitles (selectedFeatureTitles) {
     return selectedFeatureTitles;
   }
@@ -113,6 +137,10 @@ class LayerActions {
   }
 
   removeAll () {
+    return {};
+  }
+
+  removeAllLayers () {
     return {};
   }
 
