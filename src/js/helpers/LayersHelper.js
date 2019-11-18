@@ -140,22 +140,39 @@ const LayersHelper = {
       //- Get the layer config, I am hardcoding en becuase I do not need anything language specific, just its config
       const lcGroupLayers = layerPanel.GROUP_LC ? layerPanel.GROUP_LC.layers : [];
       const layerConfig = utils.getObject(lcGroupLayers, 'id', layerKeys.TREE_COVER);
-      const layer = map.getLayer(layerKeys.TREE_COVER);
+      let layer = map.getLayer(layerKeys.TREE_COVER);
 
       if (layer && layerConfig) {
         const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
         layer.setRenderingRule(renderingRule);
+      } else if (layerConfig) {
+        const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
+        const tcSignal = map.on('layers-add-result', () => {
+          tcSignal.remove();
+          layer = map.getLayer(layerKeys.TREE_COVER);
+          if (layer) {
+            layer.setRenderingRule(renderingRule);
+          }
+        });
       }
     }
   },
 
   updateAGBiomassLayer (density, map) {
     if (map.loaded) {
-      const layer = map.getLayer(layerKeys.AG_BIOMASS);
+      let layer = map.getLayer(layerKeys.AG_BIOMASS);
       const mosaicRule = rasterFuncs.getBiomassMosaicRule(density);
 
       if (layer) {
         layer.setMosaicRule(mosaicRule);
+      } else {
+        const bmSignal = map.on('layers-add-result', () => {
+          bmSignal.remove();
+          layer = map.getLayer(layerKeys.AG_BIOMASS);
+          if (layer) {
+            layer.setMosaicRule(mosaicRule);
+          }
+        });
       }
     }
   }
