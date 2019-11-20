@@ -194,7 +194,8 @@ class MapStore {
       updateModisCustomRange: layerActions.updateModisCustomRange,
       updateActiveModisOption: layerActions.updateActiveModisOption,
       updateActiveModisOptionLabel: layerActions.updateActiveModisOptionLabel,
-      registeringGeometry: mapActions.registeringGeometry
+      registeringGeometry: mapActions.registeringGeometry,
+      updateActiveLayers: mapActions.updateActiveLayers
     });
   }
 
@@ -492,6 +493,10 @@ class MapStore {
 
   toggleAnalysisTab(bool) {
     this.analysisDisabled = bool;
+  }
+  
+  updateActiveLayers(activeLayers) {
+    this.activeLayers = activeLayers;
   }
 
   createLayers (payload) {

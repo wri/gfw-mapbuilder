@@ -117,6 +117,10 @@ class MapActions {
   openTOCAccordion(groupKey) {
     return groupKey;
   }
+  
+  updateActiveLayers(activeLayers) {
+    return activeLayers;
+  }
 
   createLayers(map, layerPanel, activeLayers, language, firesState, itemData, defaultVisibility) {
     //- Organize and order the layers before adding them to the map
