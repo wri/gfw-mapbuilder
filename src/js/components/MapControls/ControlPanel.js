@@ -44,7 +44,6 @@ export default class ControlPanel extends Component {
 
   share = () => {
     const {map, language, settings} = this.context;
-    console.log('language :', language);
     const {activeLayers, activeTab, canopyDensity, gladStartDate, gladEndDate, formaStartDate, formaEndDate,
       terraIStartDate, terraIEndDate, lossToSelectIndex, lossFromSelectIndex,
       imazonStartMonth, imazonEndMonth, imazonStartYear, imazonEndYear,
