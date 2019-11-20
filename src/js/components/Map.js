@@ -274,6 +274,7 @@ export default class Map extends Component {
         const urlState = this.applyLayerStateFromUrl(response.map, itemData);        
         const cDensityFromHash = urlState.cDensity;
         const activeLayers = urlState.activeLayers ? urlState.activeLayers : this.state.activeLayers;
+        console.log('activeLayers :', activeLayers);
         const defaultVisibility = urlState.activeLayers ? false : true;
 
         const firesState = {
