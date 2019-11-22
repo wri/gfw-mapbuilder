@@ -132,7 +132,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @description Override _setMap method, called when the layer is added to the map
   * @return {Element} must return a HTML element
   */
-  _setMap: function _setMap (map) {
+  _setMap: function _setMap (map) {    
     
     this._map = map;
     //- Create a container element for al the canvas tiles
@@ -165,7 +165,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   /**
   * @description Method to start the process for rendering canvases in tile grid
   */
-  _extentChanged: function _extentChanged (urlChanged) {
+  _extentChanged: function _extentChanged (urlChanged) {    
 
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
@@ -188,9 +188,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
     const colMax = getColumn(extent.xmax, resolution);
     //- Get a range of tiles for this extent, each info contains x, y, z
     const tileInfos = getTileInfos(rowMin, colMin, rowMax, colMax, level);
+    
     //- Fetch the tile and update the map
     tileInfos.forEach(tile => this._fetchTile(tile, urlChanged));
-
+    
     const tilesToDelete = [];
 
     for (var c = 0; c < this._container.children.length; c++) {
@@ -331,6 +332,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   _drawTile: function _drawTile (data) {
     'use asm';
+    
+    if (!this._map) {
+      return;
+    }
     const longitude = longitudeFromTile(data.x, data.z),
           latitude = latitudeFromTile(data.y, data.z),
           coords = this._map.toScreen(new Point(longitude, latitude)),
