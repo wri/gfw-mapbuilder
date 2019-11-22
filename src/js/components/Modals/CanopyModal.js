@@ -99,22 +99,30 @@ export default class CanopyModal extends Component {
     mapActions.updateCanopyDensity(densityValue);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState, prevContext) {
+    let settings;
     if (this.props.canopyDensity !== prevProps.canopyDensity) {
-      let settings;
       let map;
       if (this.context.settings){
         settings = this.context.settings;
       } else {
         settings = this.props.settings;
       }
-      if (this.context.map){
+      if (this.context.map){        
         map = this.context.map;
-      } else {
+      } else {        
         map = this.props.map;
       }
+
       layersHelper.updateTreeCoverDefinitions(this.props.canopyDensity, map, settings.layerPanel);
       layersHelper.updateAGBiomassLayer(this.props.canopyDensity, map);
+    } else if (prevContext.map !== this.context.map && this.context.map.loaded) { // If the map changes, recreate it
+      if (this.context.settings){
+        settings = this.context.settings;
+      } else {
+        settings = this.props.settings;
+      }
+      layersHelper.updateTreeCoverDefinitions(this.props.canopyDensity, this.context.map, settings.layerPanel);
     }
   }
 
