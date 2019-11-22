@@ -109,6 +109,7 @@ export default class LossControls extends Component {
           const signal = map.on('update-end', () => {
             signal.remove();
             this.updateDates(map.getLayer(layerKeys.TREE_COVER_LOSS), fromYear, toYear);
+            this.updateDensity(map.getLayer(layerKeys.TREE_COVER_LOSS), canopyDensity);
           });
         }
       }
@@ -134,7 +135,7 @@ export default class LossControls extends Component {
     let baseUrl = layerConf.url;
     baseUrl = baseUrl.split('tc')[0] + 'tc';
     baseUrl += density;
-    baseUrl += '/{z}/{x}/{y}.png';
+    baseUrl += '/{z}/{x}/{y}.png';    
 
     if (layer && layer.setUrl) {
       layer.setUrl(baseUrl);
