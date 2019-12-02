@@ -387,7 +387,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
 
       this._container.appendChild(canvas);
 
-      const level = this._map.getLevel();      
+      const level = this._map.getLevel();
 
       if (data.z !== level) {
         this._container.removeChild(canvas);
@@ -400,6 +400,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   _fetchImage: function _fetchImage (url, callback) {
     const xhr = new XMLHttpRequest();
+    this.tileRequests.push(xhr);
 
     xhr.onload = function () {
       const objecturl = URL.createObjectURL(this.response);
