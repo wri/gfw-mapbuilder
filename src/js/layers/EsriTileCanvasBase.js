@@ -331,6 +331,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   _drawTile: function _drawTile (data) {
     'use asm';
+
+    if (!this._map) {
+      return;
+    }
     const longitude = longitudeFromTile(data.x, data.z),
           latitude = latitudeFromTile(data.y, data.z),
           coords = this._map.toScreen(new Point(longitude, latitude)),
