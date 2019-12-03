@@ -6,112 +6,78 @@ html
 	body.tundra
 		#root
 		div#share-modal.modal-wrapper.hidden
-		script(id='library-load' src='http://alpha.blueraster.io/gfw-mapbuilder/660-language-toggle/1.4.2.js' version='1.4.2')
-		//- script(id='library-load' src='https://library.gfw-mapbuilder.org/1.4.1.js' version='1.4.1')
+		script(id='library-load' src='https://library.gfw-mapbuilder.org/1.4.2.js' version='1.4.2')
 		//- script(id='library-load' src='js/library.js')
 		script.
 			var customApp = new MapBuilder({
 				el: 'root',
 				config: {
-					"webmap": "1293b7494e9f41eb9219d8b98b757290",
-					"title": "FLUIDS Georgia",
-					"subtitle": "",
-					"webmapMenuName": "მიწათსარგებლობა",
-					"logoUrl": "https://geo.forest-atlas.org/system/site_settings/images/000/000/140/original/mepa.png?1530171023",
-					"logoLinkUrl": "https://geo.forest-atlas.org",
-					"printServiceUrl": "https://gis.mepa.gov.ge/server/rest/services/PrintService/ExportWebMap2/GPServer/Export%20Web%20Map",
-					"narrative": "\u003cp\u003e ეს რუკები ასახავს ტყისა და მიწათსარგებლობის დინამიურ ცვლილებებს საქართველოს ტერიტორიაზე. რუკები მომზადდა Global Forest Watch პროექტის ფარგლებში, გარემოს დაცვისა და სოფლის მეურნეობის სამინისტროსა და მსოფლიო რესურსების ინსტიტუტის (WRI) ერთიანი ძალისხმევით, გაეროს გარემოსდაცვითი პროგრამის (UNEP) და მსოფლიო გარემოსდაცვითი ფონდის (GEF) დაფინანსებით.\u003c/p\u003e\u003cp\u003e\u003ci\u003e \u003ca href=http://www.moe.gov.ge/en/home target=_blank\u003eMEPA\u003c/a\u003e,\u003ca href=https://www.wri.org target=_blank\u003e WRI\u003c/a\u003e\u003c/i\u003e\u003c/p\u003e",
-					"includeSubscribeButton": true,
-					"sharinghost": "https://gis.mepa.gov.ge/portal",
-					"analyticsCode": "UA-62288390-18",
-					"iso": "GEO",
-					"language": "ka",
-					"useAlternativeLanguage": true,
-					"alternativeLanguage": "en",
-					"alternativeWebmap": "ad6eb30b32014a528423bfc068acebf3",
-					"alternativeLanguageTitle": "FLUIDS Georgia",
-					"alternativeLanguageSubtitle": "",
-					"alternativeNarrative": "\u003cp\u003e These maps represent the dynamics of land and forest use/cover change in the Republic of Georgia. This has been made possible through a partnership between the Ministry of Environment Protection and Agriculture of Georgia (MEPA), supported by the World Resources Institute (WRI) in the framework of Global Forest Watch Project, funded by UNEP and GEF.\u003c/p\u003e\u003cp\u003e\u003ci\u003e \u003ca href=http://www.moe.gov.ge/en/home target=_blank\u003eMEPA\u003c/a\u003e,\u003ca href=https://www.wri.org target=_blank\u003e WRI\u003c/a\u003e\u003c/i\u003e\u003c/p\u003e",
-					"alternativeWebmapMenuName": "Land Use",
-					"includeDocumentsTab": true,
-					"includeMeasurementTab": true,
-					"viirsFires": true,
-					"modisFires": true,
-					"intactForests": true,
-					"aboveGroundBiomass": false,
-					"landCover": true,
-					"mangroves": false,
-					"sadAlerts": false,
-					"gladAlerts": false,
-					"terraIAlerts": false,
-					"forma": false,
-					"primaryForests": false,
-					"recentImagery": false,
-					"analysisModules": [{
-						"analysisId": "TC_LOSS_GAIN",
-						"chartType": "badge",
-						"label": {
-							"en": "Total tree cover loss/ gain",
-							"fr": "Perte/gain total de la couverture arborée",
-							"es": "Pérdida/ganancia de cobertura arbórea total",
-							"pt": "Perda/ganho total de cobertura arbórea",
-							"id": "Total kehilangan/perolehan tutupan pohon",
-							"zh": "总森林覆盖减少/增加面积量",
-							"ka": "ხის ვარჯის საერთო კარგვა / მატება"
-						},
-						"title": {
-							"en": "Total tree cover loss/ gain",
-							"fr": "Perte/gain total de la couverture arborée",
-							"es": "Pérdida/ganancia de cobertura arbórea total",
-							"pt": "Perda/ganho total de cobertura arbórea",
-							"id": "Total kehilangan/perolehan tutupan pohon ",
-							"zh": "总森林覆盖减少/增加面积量",
-							"ka": "ხის ვარჯის საერთო კარგვა / მატება"
-						},
-						"description": {
-							"en": "Select range and tree cover density for loss data then click the run analysis button to see results. Gain data is currently only available for 2000 – 2012 and the gain analysis will always reflect the full 12-year time-period.",
-							"fr": "Sélectionner la plage et la densité de couverture arborée pour les données de perte, puis cliquer sur le bouton « lancer l’analyse » pour voir les résultats. Les données de gain ne sont actuellement disponibles que pour 2000 – 2012 et l’analyse de gain reflétera toujours la plage de 12 ans entière.",
-							"es": "Para obtener los datos sobre pérdida, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis para ver los resultados. Los datos sobre ganancia actualmente solo están disponibles para los años 2000 a 2012 y el análisis de la ganancia siempre reflejará el periodo de 12 años completo.",
-							"pt": "Selecione o período e a densidade de cobertura arbórea para dados de perda; em seguida, clique no botão para executar a análise e ver os resultados. Os dados de ganho estão disponíveis atualmente apenas para o período 2000 – 2012 e a análise de ganho sempre refletirá o período completo de 12 anos.",
-							"id": "Pilih rentang dan kerapatan tutupan pohon untuk data yang hilang, kemudian klik tombol mulai analisis untuk melihat hasilnya. Data perolehan saat ini hanya tersedia untuk periode 2000 – 2012 dan analisis perolehan akan selalu mencerminkan periode waktu 12 tahun penuh.",
-							"zh": "选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。",
-							"ka": "შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს."
-						},
-						"useGfwWidget": true,
-						"widgetId": "95c2c559-ca78-4b7a-b18b-7b2bca14ce83",
-						"uiParams": [{
-							"inputType": "rangeSlider",
-							"startParamName": "period",
-							"combineParams": true,
-							"valueSeparator": ",",
-							"bounds": [2001,
-								2018
-							],
-							"valueType": "date",
-							"label": {
-								"en": "Select range for analysis:",
-								"fr": "Sélectionner une plage pour l’analyse:",
-								"es": "Seleccione un rango para el análisis:",
-								"pt": "Selecione o período para análise:",
-								"id": "Pilih rentang untuk analisis:",
-								"zh": "选择分析范围:",
-								"ka": "საზღვრების შერჩევა ანალიზისთვის:"
-							}
-							},
-							{
-								"name": "thresh",
-								"inputType": "tcd",
-								"label": {
-									"en": "Select tree cover density: ",
-									"fr": "Sélectionner la densité de couverture arborée: ",
-									"es": "Seleccione la densidad de la cobertura arbórea: ",
-									"pt": "Selecione a densidade de cobertura arbórea: ",
-									"id": "Pilih kerapatan tutupan pohon: ",
-									"zh": "选择森林覆盖密度: ",
-									"ka": "ხის ვარჯის სიხშირის შერჩევა: "
-								}
-							}
-						]
+					//- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
+					//- General Settings
+					// webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
+					// webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
+					// webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
+					// webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
+					webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+					title: 'GFW Mapbuilder',
+					subtitle: 'Make maps that matter',
+					logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
+					logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+					aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
+					downloadLinkUrl: '', // http://data.globalforestwatch.org/
+					printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+					mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
+					mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+					narrative: '',
+					hideHeader: false,
+					hideFooter: false,
+					includeMyGFWLogin: true,
+					navLinksInNewTab: false,
+					//- Color Settings
+					customColorTheme: '',
+					//- Language Settings
+					language: 'en',
+					useAlternativeLanguage: false,
+					//- Custom Basemap
+					useWebmapBasemap: false,
+					alternativeWebmap: '',
+					alternativeLanguage: 'fr',
+					alternativeLanguageTitle: 'GFW Mapbuilder',
+					alternativeLanguageSubtitle: 'Make maps that matter',
+					alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
+					alternativeNarrative: '',
+					alternativeWebmapMenuName: 'Land Use',
+					initialExtent: {
+						x: null, // -122.3,
+						y: null, // 47.6,
+						z: null, // 9,
+					},
+					//- Tab Settings
+					includeDocumentsTab: false,
+					//- Layers/Analysis Settings
+					iso: '',
+					viirsFires: true,
+					modisFires: true,
+					intactForests: true,
+					primaryForests: true,
+					aboveGroundBiomass: true,
+					landCover: true,
+					mangroves: false,
+					sadAlerts: true,
+					gladAlerts: true,
+					terraIAlerts: true,
+					recentImagery: true,
+					webmapMenuName: 'Land Use',
+					// DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
+					sharinghost: 'https://www.arcgis.com',
+					analyticsCode: '',
+					includeCartoTemplateLayers: false,
+					cartoUser: 'wri-01',
+					cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+					cartoApiKey: 'your key here',
+					cartoGroupLabel: {
+						en: 'Carto Layers',
+						fr: 'Carto Layers',
 					},
 					{
 						"analysisId": "TC_LOSS",
