@@ -33,6 +33,40 @@ export default declare('TreeCoverLossLayer', [TileCanvasLayer], {
 
   setUrl: function (url) {
     this.options.url = url;
+    //- Delete tiles from other canopy densities
+    for (let i = 0; i < this.tiles.length; i++) {
+      this.tiles[i].canvas.remove();
+      delete this.tiles[i];
+    }
+
+    for (var t = 0; t < this.tileRequests.length; t++) {
+      this.tileRequests[t].abort();
+    }
+    this.tileRequests = [];
+
+    const tilesToDelete = [];
+
+    for (var c = 0; c < this._container.children.length; c++) {
+      var tileId = this._container.children[c].id;
+      tileId = tileId.split('_');
+      if (tileId.length > 0) {
+        let tileIdLevel = tileId[3];
+        if (tileIdLevel) {
+          tileIdLevel = parseInt(tileIdLevel);
+        }
+        let tileIdThresh = tileId[0];
+        if (tileIdThresh) {
+          tileIdThresh = parseInt(tileIdThresh);
+          if (tileIdThresh !== parseInt(this.options.url.split('tc')[1].substr(0, 2))) {
+            tilesToDelete.push(this._container.children[c]);
+          }
+        }
+      }
+    }
+    tilesToDelete.forEach(tile => {
+      tile.remove();
+    });
+
     if (this.visible) { this.show(); }
   },
 

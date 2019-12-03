@@ -120,7 +120,7 @@ class MapActions {
 
   createLayers(map, layerPanel, activeLayers, language, firesState, itemData, defaultVisibility) {
     //- Organize and order the layers before adding them to the map
-    let maxOrder = 0;    
+    let maxOrder = 0;
 
     const basemap = itemData && itemData.baseMap;
     let baseMapLayers;
@@ -318,8 +318,17 @@ class MapActions {
     map.addLayers(esriLayers);
     // If there is an error with a particular layer, handle that here
     map.on('layers-add-result', result => {
+      if (result && result.layers) {
+        if (result.layers.some(layerObj =>
+            layerObj.success &&
+            layerObj.layer &&
+            layerObj.layer.id &&
+            (layerObj.layer.id.indexOf('VIIRS') > -1 || layerObj.layer.id.indexOf('MODIS') > -1) &&
+            (layerObj.layer.id !== layerKeys.MODIS_ACTIVE_FIRES && layerObj.layer.id !== layerKeys.VIIRS_ACTIVE_FIRES))) {
+          return;
+        }
+      }
       const addedLayers = result.layers;
-      
       // Prepare the carto layer
       var cartoLayers = addedLayers.filter(layer => layer.layer.cartoUser);
       cartoLayers.forEach(cartoLayer => {
