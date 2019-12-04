@@ -16,7 +16,7 @@ import AnalysisMultiDatePicker from './AnalysisFormElements/AnalysisMultiDatePic
 import DensityDisplay from 'components/LayerPanel/DensityDisplay';
 import analysisKeys from 'constants/AnalysisConstants';
 import {attributes} from 'constants/AppConstants';
-import {analysisConfig} from 'js/config';
+import {defaultColorTheme} from 'js/config';
 import mapActions from 'actions/MapActions';
 import layerActions from 'actions/LayerActions';
 import {formatters, getCustomAnalysis} from 'utils/analysisUtils';
@@ -25,12 +25,12 @@ import Loader from 'components/Loader';
 import esriRequest from 'esri/request';
 import moment from 'moment';
 import text from 'js/languages';
-
+import MapStore from '../../stores/MapStore';
+import MapActions from '../../actions/MapActions';
 import React, {
   Component,
   PropTypes
 } from 'react';
-import MapActions from '../../actions/MapActions';
 
 const AnalysisItemWrapper = ({ title, itemNumber, children }) => (
   <div className='analysis-item-wrapper'>
@@ -52,6 +52,7 @@ export default class Analysis extends Component {
   state = {
     isLoading: false,
     chartComponent: null,
+    buttonHover: false
   };
 
   componentDidMount() {
@@ -79,7 +80,7 @@ export default class Analysis extends Component {
         <div
           className='analysis-results__select-form-item-container'
         >
-          Click the &lsquo;Run Analysis&rsquo; button see analysis
+          {text[language].RUN_ANALYSIS_INSTRUCTIONS}
         </div>
       );
     }
@@ -378,13 +379,14 @@ export default class Analysis extends Component {
     const { settings: { analysisModules }, language } = this.context;
     this.setState({
       isLoading: true,
-      results: null,
+      results: null
     });
+    
     Object.keys(analysisParams).forEach(analysisId => {
       if (analysisId === activeAnalysisType) {
         const analysisSettings = analysisModules.filter(cam => cam.analysisId === analysisId)[0];
-        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 1) {
-          selectedFeature.attributes.geostoreId = selectedFeats[1].attributes.geostoreId;
+        if (!selectedFeature.attributes.geostoreId && selectedFeats && selectedFeats.length > 0) {
+          selectedFeature.attributes.geostoreId = selectedFeats[0].attributes.geostoreId;
         }
         const geostoreId = selectedFeature.attributes.geostoreId;
 
@@ -425,7 +427,7 @@ export default class Analysis extends Component {
             isLoading: false,
             results: {
               error: error,
-              message: 'An error occurred performing selected analysis. Please select another analysis or try again later.'
+              message: text[language].ANALYSIS_ERROR
             },
           }, () => {
             this.renderResults(analysisId, this.state.results, language, analysisSettings);
@@ -434,14 +436,19 @@ export default class Analysis extends Component {
       }
     });
   }
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
-    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled} = this.props;
-    const { isLoading, chartComponent, showDownloadOptions} = this.state;
+    const {selectedFeature, activeAnalysisType, activeSlopeClass, editingEnabled, isRegistering} = this.props;
+    const { isLoading, chartComponent, showDownloadOptions, buttonHover} = this.state;
     const {language, settings} = this.context;
     const showFooter = activeAnalysisType !== 'default' && !chartComponent;
     let title, slopeSelect;
-
     // If we have the restoration module, add in the slope select
     if (settings.restorationModule) {
       slopeSelect = (
@@ -476,7 +483,8 @@ export default class Analysis extends Component {
       if (activeAnalysisItem.title) { activeItemTitle = activeAnalysisItem.title[language]; }
       if (activeAnalysisItem.description) { activeItemDescription = activeAnalysisItem.description[language]; }
     }
-
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <div className='analysis-results'>
         <Loader active={isLoading} />
@@ -503,12 +511,25 @@ export default class Analysis extends Component {
         </div>
         {showFooter &&
           <div className='analysis-results__footer'>
+            {isRegistering ?
+            <div className='analysis-results-registering-geometry'>
+              {text[language].ANALYSIS_TOOLTIP}
+            </div> :
             <div className='run-analysis-button-container'>
-              <button className='run-analysis-button pointer' onClick={this.runAnalysis}>
+              <button
+                style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+                {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='run-analysis-button fa-button color pointer'
+                onClick={this.runAnalysis}
+                onMouseEnter={this.toggleHover}
+                onMouseLeave={this.toggleHover}
+              >
                 {text[language].RUN_ANALYSIS_BUTTON_TEXT}
               </button>
+              <ReportSubscribeButtons setLoader={this.setLoader} />
             </div>
-            <ReportSubscribeButtons setLoader={this.setLoader} />
+            
+            }
           </div>
         }
       </div>

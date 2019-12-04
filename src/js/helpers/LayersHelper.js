@@ -3,6 +3,7 @@ import rasterFuncs from 'utils/rasterFunctions';
 import utils from 'utils/AppUtils';
 import moment, { isMoment } from 'moment';
 import {shortTermServices} from '../config';
+import layerActions from '../actions/LayerActions';
 
 const LayersHelper = {
 
@@ -29,72 +30,66 @@ const LayersHelper = {
     esriLayer.setVisibleLayers(esriLayer.visibleLayers);
   },
 
-  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null) {
-    if (brApp.map) {
-      const firesLayer = layer.hasOwnProperty('visibleLayers') ? layer : brApp.map.getLayer(layer.id);
-      const fireID = firesLayer.id === 'VIIRS_ACTIVE_FIRES' ? 'viirs' : 'modis';
-      if (selectValue) {
-        if (firesLayer && firesLayer.visible) {
-          // normally you wouldn't alter the urls for a layer but since we have moved from one behemoth service to 4 different services, we need to modify the layer url and id.
-          // We are hiding and showing the layer to avoid calling the service multiple times.
+  updateFiresLayerDefinitions (startDate = null, endDate = null, layer, selectValue = null, map = brApp.map) {
+    if (map) {
+      const fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
+      const layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+      const layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      const layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      const layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      const layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+      
+      if (selectValue && layer24HR && layer48HR && layer72HR && layer7D && layer1YR) {
           const defs = [];
-
-          firesLayer.hide();
-          switch (selectValue.toString()) {
-            case '0': //past 24 hours
-              firesLayer.url = shortTermServices[`${fireID}24HR`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}24HR`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}24HR`].id]);
+          switch (parseInt(selectValue)) {
+            case 1: //past 24 hours
+              layer24HR.show();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
               break;
-            case '1': //past 48 hours
-              firesLayer.url = shortTermServices[`${fireID}48HR`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}48HR`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}48HR`].id]);
+            case 2: //past 48 hours
+              layer24HR.hide();
+              layer48HR.show();
+              layer72HR.hide();
+              layer7D.hide();
+              layer1YR.hide();
               break;
-            case '2': //past 72 hours
-              firesLayer.url = shortTermServices[`${fireID}7D`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
-              defs[shortTermServices[`${fireID}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+            case 3: //past 72 hours
+              defs[shortTermServices[`${fireID.toLowerCase()}7D`].id] = `Date > date'${moment(new Date()).subtract(3, 'd').format('YYYY-MM-DD HH:mm:ss')}'`;
+              layer72HR.setVisibleLayers([shortTermServices[`${fireID.toLowerCase()}7D`].id]);
+              layer72HR.setLayerDefinitions(defs);
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.show();
+              layer7D.hide();
+              layer1YR.hide();
               break;
-            case '3': //past 7 days
-              firesLayer.url = shortTermServices[`${fireID}7D`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}7D`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}7D`].id]);
+            case 4: //past 7 days
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.show();
+              layer1YR.hide();
               break;
-            case '4': //past 7 days
+            case 5: //past year
               const queryString = this.generateFiresQuery(startDate, endDate);
-
-              firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-              firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-              firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-              firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
+              defs[shortTermServices[`${fireID.toLowerCase()}1YR`].id] = queryString;
+              layer1YR.setLayerDefinitions(defs);
+              if (layer24HR.visible || layer48HR.visible || layer72HR.visible || layer7D.visible) {
+                layer1YR.show();
+              }
+              layer24HR.hide();
+              layer48HR.hide();
+              layer72HR.hide();
+              layer7D.hide();
               break;
             default:
               console.log('default');
               break;
           }
-
-          firesLayer.setLayerDefinitions(defs);
-          firesLayer.refresh();
-          firesLayer.show();
-        }
       }
-      // else {
-      //   const queryString = this.generateFiresQuery(startDate, endDate);
-      //   const defs = [];
-      //   if (firesLayer) {
-      //     firesLayer.hide();
-      //     if (firesLayer.url !== shortTermServices[`${fireID}1YR`].url) {
-      //       firesLayer.url = shortTermServices[`${fireID}1YR`].url;
-      //       firesLayer._url.path = shortTermServices[`${fireID}1YR`].url;
-      //       firesLayer.setVisibleLayers([shortTermServices[`${fireID}1YR`].id]);
-      //     }
-      //     firesLayer.visibleLayers.forEach(val => { defs[val] = queryString; });
-      //     firesLayer.setLayerDefinitions(defs, dontRefresh);
-      //     firesLayer.show();
-      //   }
-      // }
     }
   },
 
@@ -145,22 +140,39 @@ const LayersHelper = {
       //- Get the layer config, I am hardcoding en becuase I do not need anything language specific, just its config
       const lcGroupLayers = layerPanel.GROUP_LC ? layerPanel.GROUP_LC.layers : [];
       const layerConfig = utils.getObject(lcGroupLayers, 'id', layerKeys.TREE_COVER);
-      const layer = map.getLayer(layerKeys.TREE_COVER);
+      let layer = map.getLayer(layerKeys.TREE_COVER);
 
       if (layer && layerConfig) {
         const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
         layer.setRenderingRule(renderingRule);
+      } else if (layerConfig) {
+        const renderingRule = rasterFuncs.getColormapRemap(layerConfig.colormap, [density, layerConfig.inputRange[1]], layerConfig.outputRange);
+        const tcSignal = map.on('layers-add-result', () => {
+          tcSignal.remove();
+          layer = map.getLayer(layerKeys.TREE_COVER);
+          if (layer) {
+            layer.setRenderingRule(renderingRule);
+          }
+        });
       }
     }
   },
 
   updateAGBiomassLayer (density, map) {
     if (map.loaded) {
-      const layer = map.getLayer(layerKeys.AG_BIOMASS);
+      let layer = map.getLayer(layerKeys.AG_BIOMASS);
       const mosaicRule = rasterFuncs.getBiomassMosaicRule(density);
 
       if (layer) {
         layer.setMosaicRule(mosaicRule);
+      } else {
+        const bmSignal = map.on('layers-add-result', () => {
+          bmSignal.remove();
+          layer = map.getLayer(layerKeys.AG_BIOMASS);
+          if (layer) {
+            layer.setMosaicRule(mosaicRule);
+          }
+        });
       }
     }
   }

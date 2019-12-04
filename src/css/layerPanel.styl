@@ -212,14 +212,12 @@ div.legend-icon
 
 .tree-cover-canopy-display
   line-height 11px
-  margin 5px 0
+  margin 5px auto
 
 .canopy-button
-  box-shadow 0 0 0 2px $goldTheme
   display inline-block
-  background $goldTheme
-  border-radius 10px
-  padding 0px 4px
+  border-radius 20px
+  padding 0.25rem 0.5rem
   margin 0 5px
   color white
   &:before
@@ -246,7 +244,6 @@ div.legend-icon
     & .irs-grid-pol.small
       display none
     & .irs-bar
-      background $goldTheme
       border-radius 5px
       height 7px
     & .irs-grid-pol
@@ -283,8 +280,6 @@ div.legend-icon
     & .info-icon
       background $disabledBackground
   &.active
-    & > .toggle-switch
-      background $goldTheme
     & > .toggle-switch span
       left 9px
     &.loss .toggle-switch
@@ -318,7 +313,9 @@ div.legend-icon
 
 
 .layer-checkbox-sublabel
-  padding 0 25px 0 35px
+  padding-top 0.25rem
+  padding-left 1.6rem
+  padding-right 2rem
   color $lightGray
   line-height 12px
   font-size 11px
@@ -477,9 +474,6 @@ div.legend-icon
       color $disabledFont
     & .info-icon
       background $disabledBackground
-  &.active
-    & > .radio-switch
-      background $goldTheme
 
 .radio-switch
   transition all 0.3s ease
@@ -498,12 +492,10 @@ div.legend-icon
   margin-top 4px
 
 .toggle-switch-subscription.active-subscription
-  background $goldTheme
-.toggle-switch-subscription.active-subscription span
-  left 9px
+  span
+    left 9px
 
 .layer-info
-  background-color $goldTheme
   display inline-block
   position absolute
   border-radius 50%
@@ -524,7 +516,6 @@ div.legend-icon
   top 0
 
 .info-icon
-  background-color $goldTheme
   display inline-block
   position absolute
   border-radius 50%
@@ -610,7 +601,6 @@ div.legend-icon
   top 50px
   left 0
   cursor pointer
-  color $goldTheme
 
 .slider-tooltip
   position absolute
@@ -643,10 +633,6 @@ div.legend-icon
 
 .rc-slider-tooltip
   z-index 101
-
-.rc-slider-handle
-  &:active
-    box-shadow 0 0 5px $goldTheme !important
 
 .react-datepicker__triangle
   display none !important

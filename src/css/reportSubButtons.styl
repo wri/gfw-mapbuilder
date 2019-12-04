@@ -9,8 +9,9 @@
     display flex
     height 32px
     padding 0 20px
-
-  .report-sub-buttons button, .subscription-sub-buttons button
+  
+  .report-sub-buttons button
+  .subscription-sub-buttons button
     position unset // remove absolute position from an esri class
     text-transform uppercase
     -webkit-appearance none
@@ -19,7 +20,6 @@
     font-weight 500
     font-size 12px
     outline none
-    border 1px solid $lightGrayHighlight
     line-height 14px
     display flex
     justify-content space-around
@@ -40,6 +40,7 @@
     display flex
     justify-content center
     align-items center
+    height 30px
 
     .button-description-text
       width 80%
@@ -54,14 +55,13 @@
   align-items center
   width 100%
   .run-analysis-button
-    border 2px solid $goldTheme
-    height 32px
-    color #ffffff
+    color #fff
     width 80%
+    border none
     border-radius 16px
-    background-color $goldTheme
     font-size 16px
     text-transform uppercase
+    margin 0.5rem 0
 
 // .subscription-sub-buttons button
 //   justify-content right

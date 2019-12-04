@@ -132,7 +132,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
   * @description Override _setMap method, called when the layer is added to the map
   * @return {Element} must return a HTML element
   */
-  _setMap: function _setMap (map) {
+  _setMap: function _setMap (map) {    
+    
     this._map = map;
     //- Create a container element for al the canvas tiles
     this._container = document.createElement('div');
@@ -164,7 +165,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
   /**
   * @description Method to start the process for rendering canvases in tile grid
   */
-  _extentChanged: function _extentChanged (urlChanged) {
+  _extentChanged: function _extentChanged (urlChanged) {    
+
     //- If the layer is not visible, bail
     if (!this.visible) { return; }
     const resolution = this._map.getResolution(),
@@ -186,9 +188,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
     const colMax = getColumn(extent.xmax, resolution);
     //- Get a range of tiles for this extent, each info contains x, y, z
     const tileInfos = getTileInfos(rowMin, colMin, rowMax, colMax, level);
+    
     //- Fetch the tile and update the map
     tileInfos.forEach(tile => this._fetchTile(tile, urlChanged));
-
+    
     const tilesToDelete = [];
 
     for (var c = 0; c < this._container.children.length; c++) {
@@ -236,6 +239,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
     Object.keys(this.tiles).forEach(key => {
       delete this.tiles[key];
     });
+
     //- Reset the position and clear the container contents
     this.position = { x: 0, y: 0 };
     this._container.innerHTML = '';
@@ -298,6 +302,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
 
       this._fetchImage(url, (image) => {
         const canvas = document.createElement('canvas');
+        const oldCanvas = document.getElementById(id);
+        if (oldCanvas && oldCanvas.remove) {
+          oldCanvas.remove();
+        }
         canvas.height = this.options.tileSize;
         canvas.width = this.options.tileSize;
         canvas.style.position = 'absolute';
@@ -328,6 +336,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   _drawTile: function _drawTile (data) {
     'use asm';
+
+    if (!this._map) {
+      return;
+    }
     const longitude = longitudeFromTile(data.x, data.z),
           latitude = latitudeFromTile(data.y, data.z),
           coords = this._map.toScreen(new Point(longitude, latitude)),
@@ -382,8 +394,8 @@ export default declare('EsriTileCanvasBase', [Layer], {
 
       const level = this._map.getLevel();
 
-      if (data.z === level) {
-        this._container.appendChild(canvas);
+      if (data.z !== level) {
+        this._container.removeChild(canvas);
       }
     }
   },
@@ -393,6 +405,7 @@ export default declare('EsriTileCanvasBase', [Layer], {
   */
   _fetchImage: function _fetchImage (url, callback) {
     const xhr = new XMLHttpRequest();
+    this.tileRequests.push(xhr);
 
     xhr.onload = function () {
       const objecturl = URL.createObjectURL(this.response);

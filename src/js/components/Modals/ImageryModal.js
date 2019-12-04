@@ -13,23 +13,26 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Polygon from 'esri/geometry/Polygon';
 import symbols from 'utils/symbols';
 import layerKeys from 'constants/LayerConstants';
-
 import ProjectParameters from 'esri/tasks/ProjectParameters';
 import GeometryService from 'esri/tasks/GeometryService';
 import SpatialReference from 'esri/SpatialReference';
+import text from '../../languages';
 import { modalText } from 'js/config';
+import {defaultColorTheme} from '../../config';
 
 export default class ImageryModal extends Component {
 
   static contextTypes = {
-    map: PropTypes.object.isRequired
+    map: PropTypes.object.isRequired,
+    language: PropTypes.string.isRequired,
+    settings: PropTypes.object.isRequired
   };
 
   constructor (props) {
     super(props);
     this.state = {
-      monthsVal: modalText.imagery.monthsOptions[1].label,
-      imageStyleVal: modalText.imagery.imageStyleOptions[0].label,
+      monthsVal: text[this.props.language].MONTHS_OPTIONS[1].label,
+      imageStyleVal: text[this.props.language].IMAGE_STYLE_OPTIONS[0].label,
       cloudScore: [0, 25],
       start: null,
       end: null,
@@ -152,7 +155,7 @@ export default class ImageryModal extends Component {
   renderThumbnails = (tileObj, i) => {
 
       let reloadCount = 0;
-
+      const { customColorTheme } = this.context.settings;
       const handleError = (event) => {
         if (reloadCount < 20) {
           event.persist();
@@ -181,7 +184,9 @@ export default class ImageryModal extends Component {
             onClick={() => this.selectThumbnail(tileObj, i)}
             onMouseEnter={() => this.hoverThumbnail(tileObj)}
             onMouseLeave={() => this.hoverThumbnail(null)}
-            className={`thumbnail ${this.state.selectedThumb && this.state.selectedThumb.index === i ? 'selected' : ''}`}
+            className='thumbnail'
+            style={this.state.selectedThumb && this.state.selectedThumb.index === i ?
+            {border: `4px solid ${customColorTheme && customColorTheme ? customColorTheme : defaultColorTheme}`} : {}}
             key={`thumb-${i}`}>
               <img src={tileObj.thumbUrl} onError={handleError} />
           </div>
@@ -275,30 +280,38 @@ export default class ImageryModal extends Component {
   render () {
     const { monthsVal, imageStyleVal, cloudScore, hoveredThumb, selectedThumb } = this.state;
     const { imageryData, loadingImagery, imageryError, imageryFetchFailed} = this.props;
+    const {language} = this.context;
     const filteredImageryData = imageryData.filter((data) => {
       return data.attributes.cloud_score >= cloudScore[0] && data.attributes.cloud_score <= cloudScore[1];
     });
+    const { customColorTheme } = this.context.settings;
+    
     return (
       <DraggableModalWrapper onClose={this.close} onDragEnd={this.onDragEnd}>
         <div className='imagery-modal__wrapper'>
-          <div className='imagery-modal__title'>Recent Hi-Res Satellite Imagery</div>
+          <div className='imagery-modal__title'>{text[language].IMAGERY[1]}</div>
 
           <div className='imagery-modal__section filters flex'>
 
             <div className='imagery-modal__item'>
-              <div className='imagery-modal_section-title'>Aquisition Date</div>
+              <div className='imagery-modal_section-title'>{text[language].ACQUISITION}</div>
               <div className='flex'>
 
                 <div className='relative'>
                   <select
                     value={monthsVal}
                     onChange={this.onChangeStart}>
-                    {modalText.imagery.monthsOptions.map(this.renderDropdownOptions)}
+                    {text[language].MONTHS_OPTIONS.map(this.renderDropdownOptions)}
                   </select>
-                  <div className='fa-button sml white'>{monthsVal}</div>
+                  <div
+                    style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                    className='fa-button sml white'
+                  >
+                    {monthsVal}
+                  </div>
                 </div>
 
-                <div className='imagery-modal_section-text'>before</div>
+                <div className='imagery-modal_section-text'>{text[language].BEFORE}</div>
 
                 <ImageryDatePicker
                   minDate={'2012-01-01'}
@@ -307,7 +320,7 @@ export default class ImageryModal extends Component {
             </div>
 
             <div className='imagery-modal__item'>
-              <div className='imagery-modal_section-title'>Maximum Cloud Cover Percentage</div>
+              <div className='imagery-modal_section-title'>{text[language].CLOUD_PERCENTAGE}</div>
 
               <ImageryModalSlider
                 rangeSliderCallback={this.rangeSliderCallback}
@@ -329,9 +342,14 @@ export default class ImageryModal extends Component {
               <select
                 value={imageStyleVal}
                 onChange={this.onChangeImageStyle}>
-                {modalText.imagery.imageStyleOptions.map(this.renderDropdownOptions)}
+                {text[language].IMAGE_STYLE_OPTIONS.map(this.renderDropdownOptions)}
               </select>
-              <div className='fa-button sml white'>{imageStyleVal}</div>
+              <div
+                style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+                className='fa-button sml white'
+              >
+                {imageStyleVal}
+              </div>
             </div>
 
           </div>
@@ -341,7 +359,7 @@ export default class ImageryModal extends Component {
             { imageryError &&
               <div className='imagery-modal__error'>
                 <SVGIcon id={'icon-alerts'} />
-                <p>Error loading recent imagery.</p>
+                <p>{text[language].LOAD_ERROR}</p>
               </div>
             }
 
@@ -349,7 +367,7 @@ export default class ImageryModal extends Component {
 
             {!loadingImagery && !filteredImageryData.length &&
               <div className='imagery-modal__error'>
-                <p>No results match the selected criteria.</p>
+                <p>{text[language].MATCH_ERROR}</p>
               </div>
             }
             {filteredImageryData.map(this.renderThumbnails.bind(this))}

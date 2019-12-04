@@ -4,6 +4,7 @@ import mapActions from 'actions/MapActions';
 import Draw from 'esri/toolbars/draw';
 import text from 'js/languages';
 import SVGIcon from 'utils/svgIcon';
+import {defaultColorTheme} from '../../config';
 
 import React, {
   Component,
@@ -14,13 +15,15 @@ export default class DrawTools extends Component {
 
   static contextTypes = {
     language: PropTypes.string.isRequired,
-    map: PropTypes.object.isRequired
+    map: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired
   };
 
   constructor (props) {
     super(props);
     this.state = {
-      drawButtonActive: false
+      drawButtonActive: false,
+      buttonHover: false
     };
   }
 
@@ -91,9 +94,12 @@ export default class DrawTools extends Component {
     const selectedFeature = map.infoWindow.getSelectedFeature();
     map.infoWindow.clearFeatures();
     const layer = map.getLayer(layerKeys.USER_FEATURES);
-    layer.remove(selectedFeature);
+    if (layer) {
+      layer.remove(selectedFeature);
+    }
     brApp.map.graphics.clear();
     mapActions.setAnalysisType('default');
+    map.setInfoWindowOnClick(true);
   };
 
   renderInstructionList = (instruction, index) => {
@@ -101,14 +107,19 @@ export default class DrawTools extends Component {
       <li key={index} dangerouslySetInnerHTML={{ __html: instruction }}></li>
     );
   };
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {embeddedInModal} = this.props;
     const {language} = this.context;
-    const instructions = embeddedInModal ?
-            text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) :
-            text[language].ANALYSIS_DRAW_INSTRUCTIONS;
-
+    const instructions = embeddedInModal ? text[language].ANALYSIS_DRAW_INSTRUCTIONS.slice(1) : text[language].ANALYSIS_DRAW_INSTRUCTIONS;
+    const { customColorTheme } = this.context.settings;
+    const {drawButtonActive, buttonHover} = this.state;
     return (
       <div className='analysis-instructions__draw'>
         <h4 className='analysis-instructions__header'>
@@ -123,18 +134,22 @@ export default class DrawTools extends Component {
           </svg>
         </div>
         <div
-          className="fa-button gold analysis-instructions__draw-button"
+          style={drawButtonActive || buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className={`fa-button color analysis-instructions__draw-button ${drawButtonActive ? 'active' : ''}`}
+          onClick={this.draw}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
           onClick={this.draw}>
           <span className="analysis-instructions__draw-upload-icon"><SVGIcon id={'icon-draw-upload-white'} /></span>
           <span className="analysis-instructions__draw-upload">{text[language].ANALYSIS_DRAW_BUTTON}</span>
         </div>
-        <div className='analysis-instructions__separator'>
+        <div style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className='analysis-instructions__separator'>
           <span className='analysis-instructions__separator-text'>{text[language].ANALYSIS_OR}</span>
         </div>
       </div>
     );
   }
-
 }
 
 DrawTools.propTypes = {
