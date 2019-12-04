@@ -224,13 +224,6 @@
 		},
 		{
 			"type": "boolean",
-			"fieldName": "forma",
-			"tooltip": "This will include/exclude this layer from the layer list",
-			"label": "Include forma alerts in your application",
-			"value": false
-		},
-		{
-			"type": "boolean",
 			"fieldName": "viirsFires",
 			"tooltip": "This will include/exclude this layer from the layer list",
 			"label": "Include VIIRS Active Fires in your application",
@@ -294,13 +287,6 @@
 		},
 		{
 			"type": "string",
-			"fieldName": "iso",
-			"label": "ISO Code for your mask layer (optional)",
-			"tooltip": "Please enter the 3-digit ISO code of your country of focus",
-			"placeholder": "e.g. CMR or COD"
-		},
-		{
-			"type": "string",
 			"fieldName": "mapThemeIds",
 			"label": "Enter a semi-colon separated list of web app ID's(Map Themes) for other GFW MapBuilder applications. (optional)",
 			"tooltip": "These will be linked to from within your application under the Map Themes header.",
@@ -361,7 +347,6 @@
 		"alternativeLanguage": "fr",
 		"mangroves": false,
 		"primaryForests": false,
-		"forma": false,
 		"includeMyGFWLogin": true,
 		"hideHeader": false,
 		"hideFooter": false,
