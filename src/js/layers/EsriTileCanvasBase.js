@@ -302,6 +302,10 @@ export default declare('EsriTileCanvasBase', [Layer], {
 
       this._fetchImage(url, (image) => {
         const canvas = document.createElement('canvas');
+        const oldCanvas = document.getElementById(id);
+        if (oldCanvas && oldCanvas.remove) {
+          oldCanvas.remove();
+        }
         canvas.height = this.options.tileSize;
         canvas.width = this.options.tileSize;
         canvas.style.position = 'absolute';
