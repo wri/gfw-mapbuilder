@@ -564,7 +564,7 @@ export default {
 
   getExactGeom: (selectedFeature) => {
     const promise = new Deferred();
-    const url = selectedFeature._layer.url;
+    const url = selectedFeature._layer ? selectedFeature._layer.url : null;
 
     if (!url) {
       return promise.resolve(selectedFeature.geometry);
@@ -634,6 +634,7 @@ export default {
         deferred.resolve({ error: 'There was an error while registering the shape in the geostore', status: http.status });
       }
     };
+    console.log('sent');
     http.send(params);
     return deferred;
   },

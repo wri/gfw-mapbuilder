@@ -12,7 +12,6 @@
 	"aboutLinkUrl": "",
 	"downloadLinkUrl": "",
 	"customColorTheme":"f0ab00",
-		
 	"useAlternativeLanguage": false,
 	"alternativeLanguage": "fr",
 	"alternativeWebmap": "",
@@ -20,7 +19,6 @@
 	"alternativeLanguageSubtitle": "",
 	"alternativeNarrative": "",
 	"alternativeWebmapMenuName": "",
-
 	"gladAlerts": true,
 	"terraIAlerts": true,
 	"sadAlerts": true,
@@ -33,15 +31,14 @@
 	"primaryForests": false,
 	"forma": true,
 	"recentImagery": true,
-
 	"iso": "",
 	"hideHeader": false,
 	"hideFooter": false,
 	"includeMyGFWLogin": false,
 	"includeDocumentsTab": false,
 	"includeMeasurementTab": false,
-   "mapThemeIds": "",
-   "mapThemes": "",
-   "alternativeMapThemes": ""
+	"mapThemeIds": "",
+	"mapThemes": "",
+	"alternativeMapThemes": ""
 	}
 }

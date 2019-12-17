@@ -3,6 +3,7 @@ import analysisKeys from 'constants/AnalysisConstants';
 import number from 'dojo/number';
 import Highcharts from 'highcharts';
 import enableExporting from 'highcharts/modules/exporting';
+import * as vega from 'vega';
 
 enableExporting(Highcharts);
 
@@ -380,7 +381,7 @@ export default {
     }
 
     new vega.View(vega.parse(config))
-    .renderer('canvas')
+    .renderer('svg') // Vega needs to be rendered in an svg, not canvas!
     .initialize(el)
     .hover()
     .run()

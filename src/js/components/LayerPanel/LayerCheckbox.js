@@ -4,7 +4,7 @@ import layerKeys from 'constants/LayerConstants';
 import LayersHelper from 'helpers/LayersHelper';
 import LayerTransparency from './LayerTransparency';
 import SVGIcon from 'utils/svgIcon';
-
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
@@ -74,7 +74,6 @@ export default class LayerCheckbox extends Component {
 
   showInfo () {
     const {layer} = this.props;
-
     if (layer.disabled) { return; }
     mapActions.showLayerInfo(layer);
     layerActions.showLoading(layer.id);
@@ -83,20 +82,70 @@ export default class LayerCheckbox extends Component {
   toggleLayer () {
     const {layer} = this.props;
     const {map} = this.context;
+    let fireID,
+    layer24HR,
+    layer48HR,
+    layer72HR,
+    layer7D,
+    layer1YR;
+    if (layer.id.includes('VIIRS_ACTIVE_FIRES') || layer.id.includes('MODIS_ACTIVE_FIRES')) {
+      fireID = layer.id.includes('VIIRS_ACTIVE_FIRES') ? 'VIIRS' : 'MODIS';
+      layer24HR = map.getLayer(`${fireID}_ACTIVE_FIRES`);
+      layer48HR = map.getLayer(`${fireID}_ACTIVE_FIRES_48HR`);
+      layer72HR = map.getLayer(`${fireID}_ACTIVE_FIRES_72HR`);
+      layer7D = map.getLayer(`${fireID}_ACTIVE_FIRES_7D`);
+      layer1YR = map.getLayer(`${fireID}_ACTIVE_FIRES_1YR`);
+    }
 
     if (layer.disabled) { return; }
     if (layer.subId) {
       if (this.props.checked) {
         layerActions.removeSubLayer(layer);
         layer.visible = false;
+        layerActions.removeActiveLayer(layer);
+        if (fireID) {
+          layer24HR.hide();
+          layer48HR.hide();
+          layer72HR.hide();
+          layer7D.hide();
+          layer1YR.hide();
+        }
+        if (fireID && fireID === 'VIIRS') {
+          layerActions.updateViirsCustomRange(false);
+          layerActions.updateActiveViirsOption(1);
+          layerActions.updateActiveViirsOptionLabel('Past 24 hours');
+        } else {
+          layerActions.updateModisCustomRange(false);
+          layerActions.updateActiveModisOption(1);
+          layerActions.updateActiveModisOptionLabel('Past 24 hours');
+        }
+        map.infoWindow.clearFeatures();
       } else {
         layerActions.addSubLayer(layer);
         layer.visible = true;
+        layerActions.addActiveLayer(layer.id);
       }
     } else {
       if (this.props.checked) {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
+        if (fireID) {
+          layer24HR.hide();
+          layer48HR.hide();
+          layer72HR.hide();
+          layer7D.hide();
+          layer1YR.hide();
+        }
+        if (fireID && fireID === 'VIIRS') {
+          layerActions.updateViirsCustomRange(false);
+          layerActions.updateActiveViirsOption(1);
+          layerActions.updateActiveViirsOptionLabel('Past 24 hours');
+        } else {
+          layerActions.updateModisCustomRange(false);
+          layerActions.updateActiveModisOption(1);
+          layerActions.updateActiveModisOptionLabel('Past 24 hours');
+        }
+        map.infoWindow.clearFeatures();
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
@@ -131,16 +180,33 @@ export default class LayerCheckbox extends Component {
     }
 
     const {sublabel} = layer;
+    
+    let colorTheme = '';
+    const { customColorTheme } = this.context.settings;
+    if (checked === 'active' && customColorTheme && customColorTheme !== '') {
+        colorTheme = customColorTheme;
+    } else if (checked === 'active' && (!customColorTheme || customColorTheme === '')) {
+        colorTheme = defaultColorTheme;
+    } else {
+        colorTheme = '#929292';
+    }
 
     return (
       <div className={`layer-checkbox relative ${checked} ${disabled} ${hidden}`} >
-        <span onClick={this.toggleLayer.bind(this)} className='toggle-switch pointer'><span /></span>
+        <span onClick={this.toggleLayer.bind(this)} style={{backgroundColor: `${colorTheme}`}} className='toggle-switch pointer'><span /></span>
         <span onClick={this.toggleLayer.bind(this)} className='layer-checkbox-label pointer'>
           {label}
         </span>
-        {onEdit && this.props.checked && <div className='fa-button sml white layer-edit' onClick={onEdit}><span className='layer-edit-text'>Edit</span></div>}
+        {onEdit && this.props.checked &&
+        <div
+          style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='fa-button sml white layer-edit'
+          onClick={onEdit}
+        >
+          <span className='layer-edit-text'>Edit</span>
+        </div>}
 
-        <span className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
+        <span style={{backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}} className={`info-icon pointer ${this.props.iconLoading === this.props.layer.id ? 'iconLoading' : ''}`} onClick={this.showInfo.bind(this)}>
           <SVGIcon id={'shape-info'} />
         </span>
         {!sublabel ? null : <div className='layer-checkbox-sublabel'>{sublabel[language]}</div>}

@@ -103,7 +103,7 @@ export default class WebMapFeatureLayerLegend extends React.Component {
 
         const border = symbol.outline;
 
-        if (border.style !== 'none') {
+        if (border && border.style !== 'none') {
           style.border = `1px ${this.borderStyleMap[border.style]} rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
         }
 

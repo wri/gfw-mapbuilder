@@ -1,6 +1,7 @@
 .infoWindow
   color $darkGray
   height 100%
+  min-height 300px
   position relative !important
 
   .feature-name
@@ -19,16 +20,13 @@
 
   .arrow
     cursor pointer
-    float right
-  .arrow.right
-    margin-left 1em;
+    
   .arrow.disabled
     color $lightGray
-    cursor default
+    cursor not-allowed
 
   .actions
     button
-      background $goldTheme
       border 0
       border-radius 12px
       box-sizing border-box
@@ -39,8 +37,12 @@
       width 40%
 
 .infoWindow__title
-  border-bottom 1px solid #efefef
-  margin 0 10px
+  overflow-y auto
+  color $grayFont
+  font-size 14px
+  text-align center
+  min-height 250px
+  margin-bottom 1rem
 
 .infoWindow__attribute-display
   overflow-y auto
@@ -61,7 +63,7 @@
 .infoWindow__footer
   display flex
   justify-content space-around
-  height 70px
+  height 80px
   padding-top 5px
   background-color white
   box-shadow 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
@@ -71,46 +73,121 @@
   left 0
 
 .infoWindow__clearFeatures-icon
-  margin-left 1em
-  float right
   height 20px
   width 20px
+  display flex
+  flex-wrap nowrap
+  margin-left auto
 
 .infoWindow__no-configure
   margin 10px
 
 .custom-feature__header
   display flex
-  justify-content space-between
+  justify-content center
+  flex-wrap wrap
 
 .edit-delete-container
   display flex
+  margin 0.5rem 0
+  align-items center
+  .edit-save-button
+    height 30px !important 
+    line-height 30px !important
+    padding 0 1rem !important
 
 .custom-feature__input
   -webkit-appearance none
   outline none
   border none
-
-.custom-feature__delete
-  margin-left 5px
-  align-self flex-end
+  width 8rem
 
 .pointer-custom
   cursor pointer
 
 .custom-feature__content
   padding 10px
+  
+.infoWindow__select-container
+  height 25px
+  margin-top 0.5rem
+  display flex
+  flex-wrap nowrap
+  justify-content space-between
+  align-items center
+  
+.infoWindow__select
+  -webkit-appearance none
+  position relative
+  height 100%
+  width 50%
+  background #fff
+  border-radius 0
+  padding-left 5px
+  padding-right 20px
+  left 0
+  top 0
+  &::after
+    pointer-events none
+    position absolute
+    content '\25BC'
+    font-size 10px
+    right 5px
+    top 2px
+    
+.infoWindow__select-arrow:after
+  pointer-events none
+  position absolute
+  content '\25BC'
+  font-size 12px
+  color inherit
+  left 42%
+  top 5px
+  
+.infoWindow__prev-next-container
+  display flex
+  justify-content space-between
+  align-items center
+  margin-left 1%
+  .prev
+    &:first-child
+      margin 0 0.3rem
+  .prev
+  .next
+    margin 0 0.15rem
+    padding 0 1rem
+    height 25px
+    line-height 25px
+
+.infoWindow__count
+  color $darkGray
+  margin 0.5rem 0
+  width 100%
+  display flex
+  justify-content flex-end
+  font-size 0.75rem
+  padding-right 1rem
 
 //- Esri Overrides
 .esriViewPopup .header
-  padding 0 10px
+  margin 0.5rem 0
 
 .esriViewPopup .header
-.infoWindow__title
 .custom-feature__input
-.custom-feature__delete
   color $grayFont
   font-size 14px
+  text-align center
+  margin 0 0.5rem
+  height 3rem
+
+.custom-feature__delete
+  margin-left 10px
+  align-self flex-end
+  color $grayFont
+  font-size 14px
+  padding 0.5rem 0
+  &:hover
+    text-decoration underline
 
 .esriViewPopup .hzLine
   margin 5px 10px
@@ -120,7 +197,6 @@
   width 100%
 
 .map .esriViewPopup .mainSection .attrTable td.attrName
-  padding-left 10px
   font-weight bold
   color #555
 
@@ -129,4 +205,14 @@
 
 .esriPopup, .attachmentsSection
   display none
+  
+.esriViewPopup .mainSection .attrTable td
+  padding 0.5rem !important
+  
+td.attrName
+  text-align left
+  
+td.attrValue
+  text-align right
+  
 //- Esri Overrides

@@ -5,25 +5,37 @@ import text from 'js/languages';
 import Search from 'esri/dijit/Search';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import InfoTemplate from 'esri/InfoTemplate';
+import {defaultColorTheme} from '../../config';
 import React, {
   Component,
   PropTypes
 } from 'react';
 
+let lastMapId;
+let searchDiv;
+
 export default class SearchModal extends Component {
 
   static contextTypes = {
+    settings: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     webmapInfo: PropTypes.object.isRequired,
     map: PropTypes.object.isRequired
   };
+  
+  constructor (props) {
+    super(props);
+    this.state = {
+      buttonHover: false
+    };
+  }
 
   componentDidUpdate(prevProps, prevState, prevContext) {
     const {map, webmapInfo, language} = this.context;
     const layers = webmapInfo.operationalLayers;
     let sources = [];
 
-    if (map.loaded && !prevContext.map.loaded && webmapInfo) {
+    if ((map.loaded && !prevContext.map.loaded && webmapInfo) || map.id !== prevContext.map.id) {
       this.createSearchWidget(map);
 
       if (this.searchWidget) {
@@ -76,12 +88,35 @@ export default class SearchModal extends Component {
   }
 
   createSearchWidget = (map) => {
-    this.searchWidget = new Search({
-      map: map,
-      enableHighlight: false,
-      showInfoWindowOnSelect: true
-    }, this.refs.searchNode);
+    if (searchDiv) {
 
+      searchDiv = document.createElement('DIV');
+      searchDiv.setAttribute('id', map.id + '-search-div');
+      
+      this.refs.searchNode.appendChild(searchDiv);
+      this.searchWidget = new Search({
+        map: map,
+        enableHighlight: false,
+        showInfoWindowOnSelect: true
+      }, searchDiv);
+
+      const oldSearch = document.getElementById(lastMapId + '-search-div');
+      oldSearch.classList.add('hidden');
+
+    } else {
+      searchDiv = document.createElement('DIV');
+      searchDiv.setAttribute('id', map.id + '-search-div');
+
+      this.refs.searchNode.appendChild(searchDiv);
+      this.searchWidget = new Search({
+        map: map,
+        enableHighlight: false,
+        showInfoWindowOnSelect: true
+      }, searchDiv);
+
+    }
+
+    lastMapId = map.id;
     this.searchWidget.startup();
   };
 
@@ -96,10 +131,18 @@ export default class SearchModal extends Component {
   onClose = () => {
     mapActions.toggleSearchModal({ visible: false });
   };
+  
+  toggleHover = () => {
+    this.setState({
+      buttonHover: !this.state.buttonHover
+    });
+  };
 
   render () {
     const {language} = this.context;
-
+    const { customColorTheme } = this.context.settings;
+    const {buttonHover} = this.state;
+    
     return (
       <ControlledModalWrapper onClose={this.onClose}>
         <div className='deg-box'>
@@ -108,11 +151,20 @@ export default class SearchModal extends Component {
         <div className='deg-box'>
           <span>Lon:</span><input ref='decimalDegreeLng' type='number' className='deg-input' id='deg-lng' name='deg-lng' />
         </div>
-        <button className='search-submit-button fa-button gold' onClick={this.decimalDegreeSearch}>Search</button>
+        <button
+          style={buttonHover ? {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`, opacity: '0.8'} :
+          {backgroundColor: `${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+          className='search-submit-button fa-button color'
+          onClick={this.decimalDegreeSearch}
+          onMouseEnter={this.toggleHover}
+          onMouseLeave={this.toggleHover}
+        >
+          Search
+        </button>
         <div className='search-widget-label'>
           {text[language].SEARCH_WIDGET_TITLE}
         </div>
-        <div id='search-widget' ref='searchNode' className='search-widget'></div>
+        <div ref='searchNode' className='search-widget'></div>
       </ControlledModalWrapper>
     );
   }

@@ -6,6 +6,8 @@ import mapActions from 'actions/MapActions';
 import appUtils from 'utils/AppUtils';
 import text from 'js/languages';
 import moment from 'moment';
+import {defaultColorTheme} from '../../config';
+import layerActions from '../../actions/LayerActions';
 
 export default class ReportSubscribeButtons extends Component {
   constructor(props) {
@@ -17,10 +19,10 @@ export default class ReportSubscribeButtons extends Component {
     };
 
     this.state = {
-      descriptionText: '',
+      descriptionText: ''
     };
   }
-
+  
   static contextTypes = {
     language: PropTypes.string.isRequired,
     settings: PropTypes.object.isRequired,
@@ -46,15 +48,50 @@ export default class ReportSubscribeButtons extends Component {
       modisStartDate,
       modisEndDate,
       activeFilters,
-      activeVersions
+      activeVersions,
+      selectedFeatureTitles
     } = mapStore.getState();
-
+    
     if (selectedFeature) {
+    
+      const visibleLayers = [...activeLayers];
+      
+      if (activeLayers.indexOf(layerKeys.VIIRS_ACTIVE_FIRES) > -1) {
+        const index = visibleLayers.indexOf(layerKeys.VIIRS_ACTIVE_FIRES);
+        visibleLayers.splice(index, 1);
+        const layer24HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES);
+        const layer48HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_48HR);
+        const layer72HR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_72HR);
+        const layer7D = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_7D);
+        const layer1YR = brApp.map.getLayer(layerKeys.VIIRS_ACTIVE_FIRES_1YR);
+        const viirsLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+        viirsLayers.forEach(layer => {
+          if (layer.visible === true) {
+            visibleLayers.push(layer.id);
+          }
+        });
+      }
+      
+      if (activeLayers.indexOf(layerKeys.MODIS_ACTIVE_FIRES) > -1) {
+        const index = visibleLayers.indexOf(layerKeys.MODIS_ACTIVE_FIRES);
+        visibleLayers.splice(index, 1);
+        const layer24HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES);
+        const layer48HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_48HR);
+        const layer72HR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_72HR);
+        const layer7D = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_7D);
+        const layer1YR = brApp.map.getLayer(layerKeys.MODIS_ACTIVE_FIRES_1YR);
+        const modisLayers = [layer24HR, layer48HR, layer72HR, layer7D, layer1YR];
+        modisLayers.forEach(layer => {
+          if (layer.visible === true) {
+            visibleLayers.push(layer.id);
+          }
+        });
+      }
 
       const params = getUrlParams(location.href);
       const payload = {
         lang: language,
-        activeLayers,
+        activeLayers: visibleLayers,
         dynamicLayers,
         tcLossFrom: lossFromSelectIndex,
         tcLossTo: lossToSelectIndex,
@@ -71,7 +108,8 @@ export default class ReportSubscribeButtons extends Component {
         canopyDensity,
         settings,
         activeFilters: [],
-        activeVersions: []
+        activeVersions: [],
+        selectedFeatureTitles: selectedFeatureTitles
       };
 
       if (params.appid) {
@@ -113,29 +151,36 @@ export default class ReportSubscribeButtons extends Component {
 
   updateDescriptionText = (evt) => {
     const { id } = evt.target;
-    this.setState({
-      descriptionText: this.descriptionOptions[id],
-    });
+    if (this.state.descriptionText === '') {
+      this.setState({
+        descriptionText: this.descriptionOptions[id]
+      });
+    }
   }
 
   clearDescriptionText = () => {
-    this.setState({
-      descriptionText: '',
-    });
+    if (this.state.descriptionText !== '') {
+      this.setState({
+        descriptionText: ''
+      });
+    }
   }
 
   render () {
     const { language } = this.context;
     const { descriptionText } = this.state;
-
     const {
       isLoggedIn
     } = mapStore.getState();
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='report-sub-button-container'>
-        <div className='report-sub-buttons'>
+        <div
+          className='report-sub-buttons'
+        >
           <button
+            style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
             className='report-sub-button pointer'
             id='print'
             onClick={this.printReport}
@@ -147,6 +192,7 @@ export default class ReportSubscribeButtons extends Component {
           </button>
           {!isLoggedIn ? null :
             <button
+              style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
               className='report-sub-button pointer left-border-separator'
               id='subscribe'
               onClick={this.toggleSubscribe}

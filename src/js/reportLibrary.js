@@ -38,8 +38,8 @@ var MapBuilderReport = function(args){
       deps: ['dojo/ready'],
       callback: function () {
         require(['js/reportLibraryMain'], function(reportLibraryMain) {
-          reportLibraryMain.default.lazyloadAssets(constructorParams);
-          reportLibraryMain.default.startup(constructorParams.config);
+          reportLibraryMain.default.lazyloadAssets();
+          reportLibraryMain.default.initializeApp(constructorParams.config);
 
         });
       }
@@ -62,9 +62,7 @@ var MapBuilderReport = function(args){
 
   };
 
-  window.customApp = {
-    ...args
-  };
+  window.customApp = args;
 
   this.constructorArgs = args;
   this.init(args);

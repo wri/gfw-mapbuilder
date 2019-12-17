@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-
-
+import {defaultColorTheme} from '../../config';
 
 export default class AnalysisDatePicker extends Component {
+  static contextTypes = {
+    settings: PropTypes.object.isRequired
+  };
+  
   constructor(props) {
     super(props);
 
@@ -66,11 +69,12 @@ export default class AnalysisDatePicker extends Component {
   render() {
     const { minDate, maxDate } = this.props;
     const { dateSelected } = this.state;
+    const { customColorTheme } = this.context.settings;
 
     return (
       <div className='analysis-results__select-form-item-container'>
         <DatePicker
-          customInput={<Button />}
+          customInput={<Button customColorTheme={customColorTheme} />}
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
@@ -85,7 +89,7 @@ export default class AnalysisDatePicker extends Component {
               enabled: false
             },
             preventOverflow: {
-              enabled: false,
+              enabled: false
             }
           }}
 
@@ -95,13 +99,16 @@ export default class AnalysisDatePicker extends Component {
   }
 }
 
-const Button = ({ onClick, value }) => (
-  <div>
-    <button
-    className='fa-button sml white pointer'
-    onClick={onClick}
-    >
-    {value}
-    </button>
-  </div>
-);
+const Button = ({ onClick, value, customColorTheme }) => {
+  return (
+    <div>
+      <button
+        style={{border: `1px solid ${customColorTheme && customColorTheme !== '' ? customColorTheme : defaultColorTheme}`}}
+        className='fa-button sml white pointer'
+        onClick={onClick}
+      >
+      {value}
+      </button>
+    </div>
+  );
+};

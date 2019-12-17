@@ -13,8 +13,7 @@ import request from 'utils/request';
 import moment, { relativeTimeThreshold } from 'moment';
 import all from 'dojo/promise/all';
 import { urls } from 'js/config';
-
-let isRegistering = false;
+import text from '../languages';
 
 class MapStore {
 
@@ -51,7 +50,10 @@ class MapStore {
     this.tableOfContentsVisible = true;
     this.editingEnabled = false;
     this.activeTOCGroup = layerKeys.GROUP_WEBMAP;
+    this.measurementModalVisible = false;
     this.analysisModalVisible = false;
+    this.coordinatesModalVisible = false;
+    this.editCoordinatesModalVisible = false;
     this.printModalVisible = false;
     this.searchModalVisible = false;
     this.canopyModalVisible = false;
@@ -79,7 +81,10 @@ class MapStore {
     this.analysisParams = {};
     this.analysisSliderIndices = {};
     this.drawButtonActive = false;
+    this.enterValuesButtonActive = false;
+    this.editCoordinatesActive = false;
     this.imageryModalVisible = false;
+    this.imageryFetchFailed = false;
     this.imageryData = [];
     this.loadingImagery = false;
     this.imageryError = false;
@@ -87,6 +92,19 @@ class MapStore {
     this.imageryParams = null;
     this.imageryHoverInfo = null;
     this.activeFilters = {};
+    this.selectedFeatureTitles = [];
+    this.currentLat = 0;
+    this.currentLng = 0;
+    this.currentX = 0;
+    this.currentY = 0;
+    this.selectIndex = 0;
+    this.customViirsRange = false;
+    this.activeViirsOption = 1;
+    this.activeViirsOptionLabel = 'Past 24 hours';
+    this.customModisRange = false;
+    this.activeModisOption = 1;
+    this.activeModisOptionLabel = 'Past 24 hours';
+    this.isRegistering = false;
 
     this.bindListeners({
       setDefaults: appActions.applySettings,
@@ -95,10 +113,13 @@ class MapStore {
       createLayers: mapActions.createLayers,
       changeActiveTab: mapActions.changeActiveTab,
       setAnalysisType: mapActions.setAnalysisType,
+      toggleMeasurementModal: mapActions.toggleMeasurementModal,
       togglePrintModal: mapActions.togglePrintModal,
       toggleSearchModal: mapActions.toggleSearchModal,
       toggleCanopyModal: mapActions.toggleCanopyModal,
       toggleAnalysisModal: mapActions.toggleAnalysisModal,
+      toggleCoordinatesModal: mapActions.toggleCoordinatesModal,
+      toggleEditCoordinatesModal: mapActions.toggleEditCoordinatesModal,
       toggleLayerModal: mapActions.toggleLayerModal,
       toggleSubscriptionsModal: mapActions.toggleSubscriptionsModal,
       toggleSubscribeModal: mapActions.toggleSubscribeModal,
@@ -109,6 +130,7 @@ class MapStore {
       showLayerInfo: mapActions.showLayerInfo,
       toggleTOCVisible: mapActions.toggleTOCVisible,
       toggleEditing: mapActions.toggleEditing,
+      resetEditing: mapActions.resetEditing,
       openTOCAccordion: mapActions.openTOCAccordion,
       setUserSubscriptions: mapActions.setUserSubscriptions,
       changeBasemap: mapActions.changeBasemap,
@@ -122,6 +144,7 @@ class MapStore {
       setSubLayers: layerActions.setSubLayers,
       addAll: layerActions.addAll,
       removeAll: layerActions.removeAll,
+      removeAllLayers: layerActions.removeAllLayers,
       setLossOptions: layerActions.setLossOptions,
       shouldResetSlider: layerActions.shouldResetSlider,
       updateLossTimeline: layerActions.updateLossTimeline,
@@ -135,6 +158,14 @@ class MapStore {
       updateViirsEndDate: layerActions.updateViirsEndDate,
       updateModisStartDate: layerActions.updateModisStartDate,
       updateModisEndDate: layerActions.updateModisEndDate,
+      updateSelectedFeatureTitles: layerActions.updateSelectedFeatureTitles,
+      updateCurrentLat: mapActions.updateCurrentLat,
+      updateCurrentLng: mapActions.updateCurrentLng,
+      updateCurrentX: mapActions.updateCurrentX,
+      updateCurrentY: mapActions.updateCurrentY,
+      increaseSelectIndex: mapActions.increaseSelectIndex,
+      decreaseSelectIndex: mapActions.decreaseSelectIndex,
+      updateSelectIndex: mapActions.updateSelectIndex,
       changeOpacity: layerActions.changeOpacity,
       setOpacities: layerActions.setOpacities,
       updateTimeExtent: mapActions.updateTimeExtent,
@@ -146,20 +177,54 @@ class MapStore {
       updateExclusiveRadioIds: mapActions.updateExclusiveRadioIds,
       updateAnalysisParams: mapActions.updateAnalysisParams,
       updateAnalysisSliderIndices: mapActions.updateAnalysisSliderIndices,
+      activateMeasurementButton: mapActions.activateMeasurementButton,
       activateDrawButton: mapActions.activateDrawButton,
+      activateEnterValuesButton: mapActions.activateEnterValuesButton,
+      activateEditCoordinates: mapActions.activateEditCoordinates,
       toggleImageryVisible: mapActions.toggleImageryVisible,
+      imageryFetchUpdate: mapActions.imageryFetchUpdate,
       getSatelliteImagery: mapActions.getSatelliteImagery,
       setSelectedImagery: mapActions.setSelectedImagery,
       setImageryHoverInfo: mapActions.setImageryHoverInfo,
       setActiveFilters: mapActions.setActiveFilters,
-      changeLayerVersion: mapActions.changeLayerVersion
-
+      changeLayerVersion: mapActions.changeLayerVersion,
+      updateViirsCustomRange: layerActions.updateViirsCustomRange,
+      updateActiveViirsOption: layerActions.updateActiveViirsOption,
+      updateActiveViirsOptionLabel: layerActions.updateActiveViirsOptionLabel,
+      updateModisCustomRange: layerActions.updateModisCustomRange,
+      updateActiveModisOption: layerActions.updateActiveModisOption,
+      updateActiveModisOptionLabel: layerActions.updateActiveModisOptionLabel,
+      registeringGeometry: mapActions.registeringGeometry
     });
   }
 
   setDefaults (settings) {
     //- Set the default value to the first actual value in the select, 0 is No Data
     this.activeSlopeClass = settings.slopeClasses && settings.slopeClasses[1];
+  }
+  
+  updateViirsCustomRange(bool) {
+    this.customViirsRange = bool;
+  }
+
+  updateModisCustomRange(bool) {
+    this.customModisRange = bool;
+  }
+  
+  updateActiveViirsOption(num) {
+    this.activeViirsOption = num;
+  }
+
+  updateActiveModisOption(num) {
+    this.activeModisOption = num;
+  }
+  
+  updateActiveViirsOptionLabel(str) {
+    this.activeViirsOptionLabel = str;
+  }
+
+  updateActiveModisOptionLabel(str) {
+    this.activeModisOptionLabel = str;
   }
 
   addActiveLayer (layerId) {
@@ -183,16 +248,22 @@ class MapStore {
   }
 
   addSubLayer (info) {
+    if (!this.dynamicLayers[info.id]) {
+      this.dynamicLayers[info.id] = [];
+    }
     this.dynamicLayers[info.id].push(info.subIndex);
     this.addActiveLayer(info.subId);
   }
 
   removeSubLayer (info) {
-    const subLayerIndex = this.dynamicLayers[info.id].indexOf(info.subIndex);
-    if (subLayerIndex > -1) {
-      this.dynamicLayers[info.id].splice(subLayerIndex, 1);
+    if (this.dynamicLayers[info.id]) {
+
+      const subLayerIndex = this.dynamicLayers[info.id].indexOf(info.subIndex);
+      if (subLayerIndex > -1) {
+        this.dynamicLayers[info.id].splice(subLayerIndex, 1);
+      }
+      this.removeActiveLayer(info.subId);
     }
-    this.removeActiveLayer(info.subId);
   }
 
   removeAllSubLayers(info) {
@@ -298,6 +369,55 @@ class MapStore {
     Object.keys(this.dynamicLayers).forEach((layerId) => {
       this.dynamicLayers[layerId] = [];
     });
+    
+      //- FIRES
+      this.viirsStartDate = new Date();
+      this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
+      this.viirsEndDate = new Date();
+      this.modisStartDate = new Date();
+      this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
+      this.modisEndDate = new Date();
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_48HR')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_48HR').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_72HR')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_72HR').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_7D')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_7D').hide();
+    }
+    
+    if (brApp.map.getLayer('VIIRS_ACTIVE_FIRES_1YR')) {
+      brApp.map.getLayer('VIIRS_ACTIVE_FIRES_1YR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_48HR')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_48HR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_72HR')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_72HR').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_7D')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_7D').hide();
+    }
+    
+    if (brApp.map.getLayer('MODIS_ACTIVE_FIRES_1YR')) {
+      brApp.map.getLayer('MODIS_ACTIVE_FIRES_1YR').hide();
+    }
+   
 
     //- Reset all layer filters
     //- Loss
@@ -320,41 +440,42 @@ class MapStore {
     this.formaStartDate = new Date('2012', 0, 1);
     this.formaEndDate = new Date();
 
-    //- FIRES
-    this.viirsStartDate = new Date();
-    this.viirsStartDate.setDate(this.viirsStartDate.getDate() - 1);
-    this.viirsEndDate = new Date();
-    this.modisStartDate = new Date();
-    this.modisStartDate.setDate(this.modisStartDate.getDate() - 1);
-    this.modisEndDate = new Date();
-
     //-Terra I
     this.terraIStartDate = new Date('2004', 0, 1);
     this.terraIEndDate = new Date('2016', 6, 12);
   }
 
+  removeAllLayers () {
+    this.activeLayers = [];
+  }
+
   mapUpdated () {}
 
   infoWindowUpdated (selectedFeature) {
-    if (selectedFeature) {
+    if (selectedFeature && brApp.map.measurement && brApp.map.measurement.getTool() === undefined) {
       // If this is a custom feature, active tab should be the analysis tab
       if (selectedFeature.attributes &&
         (selectedFeature.attributes.source === attributes.SOURCE_DRAW || selectedFeature.attributes.source === attributes.SOURCE_UPLOAD)
       ) {
         this.activeTab = tabKeys.ANALYSIS;
       } else {
-        if (!selectedFeature.attributes.geostoreId && isRegistering === false) {
-          isRegistering = true;
-          mapActions.toggleAnalysisTab.defer(true);
-
+        if (!selectedFeature.attributes.geostoreId && this.isRegistering === false) {
+          mapActions.registeringGeometry.defer(true);
           analysisUtils.getExactGeom(selectedFeature).then(exactGeom => {
             //If the geometry we got back from the server is in the wrong spatialRef, let's just use the original geometry!
             const geomToRegister = exactGeom.spatialReference.isWebMercator() ? exactGeom : selectedFeature.geometry;
-            analysisUtils.registerGeom(exactGeom).then(res => {
-              selectedFeature.attributes.geostoreId = res.data.id;
-              selectedFeature.setGeometry(geomToRegister);
-              mapActions.toggleAnalysisTab(false);
-              isRegistering = false;
+            analysisUtils.registerGeom(geomToRegister).then(res => {
+              if (res.error) {
+                analysisUtils.registerGeom(selectedFeature.geometry).then(geomRes => {
+                  selectedFeature.attributes.geostoreId = geomRes.error ? '' : geomRes.data.id;
+                  selectedFeature.setGeometry(geomToRegister);
+                  mapActions.registeringGeometry.defer(false);
+                });
+              } else {
+                selectedFeature.attributes.geostoreId = res.data.id;
+                selectedFeature.setGeometry(geomToRegister);
+                mapActions.registeringGeometry.defer(false);
+              }
             });
           });
         } else {
@@ -363,6 +484,10 @@ class MapStore {
       }
       this.activeAnalysisType = 'default';
     }
+  }
+  
+  registeringGeometry(bool) {
+    this.isRegistering = bool;
   }
 
   toggleAnalysisTab(bool) {
@@ -378,7 +503,43 @@ class MapStore {
       }
       return prevArray.concat(currentItem);
     }, []);
+
+    const viirsOn = this.activeLayers.some(laya => laya.indexOf('VIIRS_ACTIVE_FIRES') > -1);
+    const modisOn = this.activeLayers.some(laya => laya.indexOf('MODIS_ACTIVE_FIRES') > -1);
+    this.activeLayers.forEach(laya => {
+      if (laya === 'VIIRS_ACTIVE_FIRES_48HR') {
+        this.activeViirsOption = 2;
+        this.activeViirsOptionLabel = 'Past 48 hours';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_72HR') {
+        this.activeViirsOption = 3;
+        this.activeViirsOptionLabel = 'Past 72 hours';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_7D') {
+        this.activeViirsOption = 4;
+        this.activeViirsOptionLabel = 'Past Week';
+      } else if (laya === 'VIIRS_ACTIVE_FIRES_1YR') {
+        this.activeViirsOptionLabel = 'Defined Range';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_48HR') {
+        this.activeModisOption = 2;
+        this.activeModisOptionLabel = 'Past 48 hours';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_72HR') {
+        this.activeModisOption = 3;
+        this.activeModisOptionLabel = 'Past 72 hours';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_7D') {
+        this.activeModisOption = 4;
+        this.activeModisOptionLabel = 'Past Week';
+      } else if (laya === 'MODIS_ACTIVE_FIRES_1YR') {
+        this.activeModisOptionLabel = 'Defined Range';
+      }
+    });
+    
     this.activeLayers = reducedLayers.filter((layer) => layer.visible && !layer.subId).map((layer) => layer.id);
+    if (viirsOn && this.activeLayers.indexOf('VIIRS_ACTIVE_FIRES') === -1) {
+      this.activeLayers.push('VIIRS_ACTIVE_FIRES');
+    }
+    if (modisOn && this.activeLayers.indexOf('MODIS_ACTIVE_FIRES') === -1) {
+      this.activeLayers.push('MODIS_ACTIVE_FIRES');
+    }
+
     this.allLayers = layers;
     layers.forEach(layer => {
       if (layer.type === 'dynamic' || layer.subId) {
@@ -392,6 +553,7 @@ class MapStore {
         }
       }
     });
+    
   }
 
   updateCartoSymbol (symbol) {
@@ -406,8 +568,20 @@ class MapStore {
     this.activeAnalysisType = payload;
   }
 
+  toggleMeasurementModal () {
+    this.measurementModalVisible = !this.measurementModalVisible;
+  }
+
   toggleAnalysisModal (payload) {
     this.analysisModalVisible = payload.visible;
+  }
+
+  toggleCoordinatesModal (payload) {
+    this.coordinatesModalVisible = payload.visible;
+  }
+
+  toggleEditCoordinatesModal (payload) {
+    this.editCoordinatesModalVisible = payload.visible;
   }
 
   togglePrintModal (payload) {
@@ -463,7 +637,15 @@ class MapStore {
   }
 
   toggleEditing () {
-    this.editingEnabled = !this.editingEnabled;
+    if (this.editingEnabled) {
+      this.editingEnabled = false;
+    } else {
+      this.editingEnabled = true;
+    }
+  }
+
+  resetEditing () {
+    this.editingEnabled = false;
   }
 
   openTOCAccordion (groupKey) {
@@ -527,30 +709,76 @@ class MapStore {
     this.modisEndDate = endDate;
   }
 
-  showLayerInfo (layer) {
-    // Grab the id of the sublayer if it exists, else, grab the normal id
-    const id = layer.subId ? layer.subId : layer.id;
-    const info = layerInfoCache.get(id);
+  updateSelectedFeatureTitles (selectedFeatureTitles) {
+    this.selectedFeatureTitles = selectedFeatureTitles;
+  }
 
-    if (info) {
+  updateCurrentLat (latitude) {
+    this.currentLat = latitude;
+  }
+
+  updateCurrentLng (longitude) {
+    this.currentLng = longitude;
+  }
+
+  updateCurrentX (x) {
+    this.currentX = x;
+  }
+
+  updateCurrentY (y) {
+    this.currentY = y;
+  }
+  
+  increaseSelectIndex() {
+    this.selectIndex = this.selectIndex + 1;
+    this.activeTab = tabKeys.INFO_WINDOW;
+  }
+  
+  decreaseSelectIndex() {
+    this.selectIndex = this.selectIndex - 1;
+    this.activeTab = tabKeys.INFO_WINDOW;
+  }
+  
+  updateSelectIndex(index) {
+    this.selectIndex = index;
+    this.activeTab = tabKeys.INFO_WINDOW;
+  }
+
+  showLayerInfo (layer) {
+    if (layer.metadata && layer.metadata.metadata && layer.metadata.metadata.error) {
       const promise = new Promise((resolve) => {
         resolve();
       });
-
       promise.then(() => {
+        this.modalLayerInfo = null;
         this.iconLoading = '';
-        this.modalLayerInfo = info;
         this.layerModalVisible = true;
         this.emitChange();
       });
-
     } else {
-      layerInfoCache.fetch(layer).then(layerInfo => {
-        this.iconLoading = '';
-        this.modalLayerInfo = layerInfo;
-        this.layerModalVisible = true;
-        this.emitChange();
-      });
+      // Grab the id of the sublayer if it exists, else, grab the normal id
+      const id = layer.subId ? layer.subId : layer.id;
+      const info = layerInfoCache.get(id);
+      if (info) {
+        const promise = new Promise((resolve) => {
+          resolve();
+        });
+
+        promise.then(() => {
+          this.iconLoading = '';
+          this.modalLayerInfo = info;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+
+      } else {
+        layerInfoCache.fetch(layer).then(layerInfo => {
+          this.iconLoading = '';
+          this.modalLayerInfo = layerInfo;
+          this.layerModalVisible = true;
+          this.emitChange();
+        });
+      }
     }
   }
 
@@ -625,13 +853,29 @@ class MapStore {
     this.analysisSliderIndices[params.id] = params.indices;
   }
 
+  activateMeasurementButton(bool) {
+    this.activateMeasurementButton = bool;
+  }
+
   activateDrawButton(bool) {
     this.drawButtonActive = bool;
+  }
+
+  activateEnterValuesButton(bool) {
+    this.enterValuesButtonActive = bool;
+  }
+
+  activateEditCoordinates(bool) {
+    this.editCoordinatesActive = bool;
   }
 
   toggleImageryVisible(bool) {
     this.imageryModalVisible = bool;
     this.imageryError = false;
+  }
+
+  imageryFetchUpdate(bool) {
+    this.imageryFetchFailed = bool;
   }
 
   getSatelliteImagery(params) {
@@ -673,12 +917,14 @@ class MapStore {
 
           if (responseCount === tileArrays.length) {
             this.loadingImagery = false;
+            this.imageryModalVisible = true;
           }
           this.emitChange();
         }, () => {
           responseCount++;
           if (responseCount === tileArrays.length) {
             this.loadingImagery = false;
+            this.imageryModalVisible = true;
           }
         });
 
@@ -688,6 +934,7 @@ class MapStore {
       this.imageryParams = null;
       this.selectedImagery = null;
       this.loadingImagery = false;
+      this.imageryModalVisible = true;
       this.imageryError = true;
       this.imageryData = [];
       this.emitChange();
@@ -724,7 +971,6 @@ class MapStore {
     this.allLayers = allLayersCopy;
     this.activeVersions[id] = versionIndex;
     this.emitChange();
-
   }
 }
 

@@ -156,7 +156,8 @@ const utils = {
       viirsStartDate,
       viirsEndDate,
       modisStartDate,
-      modisEndDate
+      modisEndDate,
+      selectedFeatureTitles
     } = options;
     const labels = settings.labels[lang];
     const query = {
@@ -181,6 +182,7 @@ const utils = {
       modisStartDate: modisStartDate,
       modisEndDate: modisEndDate,
       customFeatureTitle: options.selectedFeature.attributes.title || 'Feature Analysis',
+      selectedFeatureTitles: selectedFeatureTitles || options.selectedFeature.attributes.title || 'Feature Analysis',
       sharinghost: settings.sharinghost,
       activeFilters: activeFilters,
       activeVersions: activeVersions,
@@ -188,6 +190,10 @@ const utils = {
       ...(OBJECTID ? {OBJECTID} : {}),
       ...(OBJECTID_Field ? {OBJECTID_Field} : {})
     };
+
+    if (settings.language !== lang) {
+      query.webmap = settings.alternativeWebmap;
+    }
 
     // We need the dynamic layers but we cannot encode nested objects, so we will pass them in to query like this:
     // layerId: array of visible layers

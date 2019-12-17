@@ -15,6 +15,7 @@ import layerActions from 'actions/LayerActions';
 import mapActions from 'actions/MapActions';
 // import BasemapGroup from 'components/LayerPanel/BasemapGroup';
 import WRIBasemapLayer from 'components/LayerPanel/WRIBasemapLayer';
+import AGOLBasemap from 'components/LayerPanel/AGOLBasemap';
 import LandsatLayer from 'components/LayerPanel/LandsatLayer';
 import BasemapLayer from 'components/LayerPanel/BasemapLayer';
 import LayerKeys from 'constants/LayerConstants';
@@ -266,8 +267,8 @@ export default class LayerPanel extends Component {
   }
 
   renderBasemaps = (configuredLayers) => {
-    const {language} = this.context;
-    const {basemap} = this.props;
+    const {language, settings} = this.context;
+    const { basemap, webmapInfo} = this.props;
     let basemapLayers = [];
 
     //- Add Custom Basemaps
@@ -296,6 +297,19 @@ export default class LayerPanel extends Component {
       }
     });
 
+    if (settings.useWebmapBasemap) {
+      const bmLayerNames = webmapInfo.baseMap.baseMapLayers.map(baseMapLayer => baseMapLayer.id);
+      
+      basemapLayers.push(
+        <AGOLBasemap
+          label={webmapInfo.baseMap.title}
+          active={
+            !basemap || basemap === 'agol' || bmLayerNames.includes(basemap)
+          }
+        />
+      );
+    }
+
     //- Add Esri Basemaps
     if (basemaps) {
       let basemapNames = Object.keys(basemaps);
@@ -303,6 +317,7 @@ export default class LayerPanel extends Component {
         /* Only show basemaps WRI wants */
         return basemapUtils.arcgisBasemaps.indexOf(bm) > -1;
       });
+
       basemapLayers = basemapLayers.concat(basemapNames.map(bm => {
         return (
           <BasemapLayer

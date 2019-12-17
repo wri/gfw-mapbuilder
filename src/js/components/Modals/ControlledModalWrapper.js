@@ -9,8 +9,8 @@ export default function ControlledModalWrapper (props) {
   return (
     <div className='modal-container'>
       <div className='modal-background' onClick={props.onClose} />
-      <article className='modal shadow'>
-        <div title='close' className='close-icon pointer' onClick={props.onClose} >
+      <article className={`modal ${props.shadow ? 'shadow' : ''}`}>
+        <div title='close' className={`${props.layer ? 'layer-close-icon' : 'close-icon'} pointer`} onClick={props.onClose} >
           <svg>
             <SVGIcon id={'shape-close'} />
           </svg>
