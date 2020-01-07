@@ -1,33 +1,13 @@
-const merge = require('webpack-merge');
-const parts = require('./webpack.parts');
+//@ts-ignore
 
-// Webpack configuration for development
-module.exports = (PATHS) => {
-  return merge([
-    parts.devServer({
-      // Customize host/port here - else defaults localhost, 8080
-      host: process.env.HOST,
-      port: 3000 || process.env.PORT,
-    }),
+const merge = require("webpack-merge");
+const common = require("./webpack.common.js");
 
-    // Load Sass Module
-    parts.loadStyl({
-      include: PATHS.src,
-      options: {
-        name: '[name].css',
-        outputPath: `${PATHS.assets}/css/`
-      }
-    }),
-
-    // Load Images
-    parts.loadImages(),
-
-    // Source Maps
-    {
-      output: {
-        devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
-      },
-    },
-    parts.generateSourceMaps({ type: 'cheap-module-eval-source-map'}),
-  ]);
-};
+module.exports = merge(common, {
+  mode: "development",
+  devtool: "inline-source-map",
+  devServer: {
+    contentBase: "./dist",
+    stats: "minimal"
+  }
+});
