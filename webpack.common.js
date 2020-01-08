@@ -62,7 +62,7 @@ module.exports = {
 
     new ArcGISPlugin({
       features: {
-        "3d": true
+        "3d": false
       }
     }),
 

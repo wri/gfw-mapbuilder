@@ -31,6 +31,11 @@ export class MapController {
       }
     );
   }
+
+  log() {
+    console.log(this._map?.basemap.id);
+  }
 }
 
 export const mapController = new MapController();
+// window.mapController = mapController;

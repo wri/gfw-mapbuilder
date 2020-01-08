@@ -3,8 +3,7 @@ $gray: #efefef;
 $white: #fff;
 
 html,
-body,
-.mapview {
+body {
   padding: 0;
   margin: 0;
   width: 100%;
@@ -14,4 +13,13 @@ body,
   // letter-spacing: 0em;
   // font-family: "Arial", sans-serif;
   // line-height: 1.55rem;
+}
+
+.mapview-container,
+.mapview,
+#main {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
