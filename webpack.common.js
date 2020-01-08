@@ -52,8 +52,8 @@ module.exports = {
         use: ["file-loader"]
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        use: ["file-loader"]
+        test: /\.(png|jpg|gif|svg)$/,
+        use: ["url-loader"]
       }
     ]
   },
@@ -61,6 +61,7 @@ module.exports = {
     new CleanWebpackPlugin(),
 
     new ArcGISPlugin({
+      useDefaultAssetLoaders: false,
       features: {
         "3d": false
       }
