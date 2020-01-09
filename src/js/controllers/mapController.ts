@@ -27,10 +27,16 @@ export class MapController {
     });
 
     this._mapview
-      .when(() => {
-        console.log('mapview is loaded');
-        store.dispatch({ type: 'MAP_READY', isMapReady: true });
-      })
+      .when(
+        () => {
+          console.log('mapview is loaded');
+          store.dispatch({ type: 'MAP_READY', isMapReady: true });
+        },
+        (error: Error) => {
+          console.log('error in initializeMap()', error);
+          store.dispatch({ type: 'MAP_ERROR', loadError: true });
+        }
+      )
       .catch(error => {
         console.log('error in initializeMap()', error);
         store.dispatch({ type: 'MAP_ERROR', loadError: true });
