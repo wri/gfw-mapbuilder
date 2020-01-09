@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useRef, useEffect } from "react";
-import { mapController } from "../../controllers/mapController";
+import * as React from 'react';
+import { useRef, useEffect } from 'react';
+import { mapController } from '../../controllers/mapController';
 
 export function Mapview() {
   const mapElementRef = useRef(null);
