@@ -3,6 +3,8 @@ import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import { RefObject } from 'react';
 
+import store from '../store/store';
+
 export class MapController {
   _map: Map | null;
   _mapview: MapView | null;
@@ -26,6 +28,7 @@ export class MapController {
     this._mapview.when(
       () => {
         console.log('mapview is loaded');
+        store.dispatch({ type: 'MAP_READY', mapReady: true });
       },
       (error: Error) => {
         console.log(error);

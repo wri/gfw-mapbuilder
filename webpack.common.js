@@ -1,27 +1,27 @@
 //@ts-ignore
 
-const path = require("path");
-const ArcGISPlugin = require("@arcgis/webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const ArcGISPlugin = require('@arcgis/webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
     index: [
-      "./src/css/index.scss",
-      "@dojo/framework/shim/Promise",
-      "./src/js/index.tsx"
+      './src/css/index.scss',
+      '@dojo/framework/shim/Promise',
+      './src/js/index.tsx'
     ]
   },
   output: {
-    filename: "[name].[chunkhash].js",
-    publicPath: ""
+    filename: '[name].[chunkhash].js',
+    publicPath: ''
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
+        loader: 'ts-loader',
         options: {
           transpileOnly: true
         }
@@ -30,7 +30,7 @@ module.exports = {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader",
+            loader: 'html-loader',
             options: { minimize: false }
           }
         ],
@@ -40,20 +40,20 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
-          "style-loader",
+          'style-loader',
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           // Compiles Sass to CSS
-          "sass-loader"
+          'sass-loader'
         ]
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ["file-loader"]
+        use: ['file-loader']
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        use: ["url-loader"]
+        use: ['url-loader']
       }
     ]
   },
@@ -63,29 +63,29 @@ module.exports = {
     new ArcGISPlugin({
       useDefaultAssetLoaders: false,
       features: {
-        "3d": false
+        '3d': false
       }
     }),
 
     new HtmlWebPackPlugin({
-      title: "ArcGIS Template Application",
-      template: "./src/index.html",
-      filename: "./index.html",
-      favicon: "./src/assets/favicon.ico",
-      chunksSortMode: "none",
-      inlineSource: ".(css)$"
+      title: 'ArcGIS Template Application',
+      template: './src/index.html',
+      filename: './index.html',
+      favicon: './src/assets/favicon.ico',
+      chunksSortMode: 'none',
+      inlineSource: '.(css)$'
     })
   ],
   resolve: {
     modules: [
-      path.resolve(__dirname, "/src"),
-      path.resolve(__dirname, "node_modules/")
+      path.resolve(__dirname, '/src'),
+      path.resolve(__dirname, 'node_modules/')
     ],
-    extensions: [".ts", ".tsx", ".js", ".scss", ".css"]
+    extensions: ['.ts', '.tsx', '.js', '.scss', '.css']
   },
   node: {
     process: false,
     global: false,
-    fs: "empty"
+    fs: 'empty'
   }
 };
