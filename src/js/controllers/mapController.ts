@@ -20,20 +20,21 @@ export class MapController {
         id: 'e691172598f04ea8881cd2a4adaa45ba'
       }
     });
+
     this._mapview = new MapView({
       map: this._map,
       container: domRef.current
     });
 
-    this._mapview.when(
-      () => {
+    this._mapview
+      .when(() => {
         console.log('mapview is loaded');
-        store.dispatch({ type: 'MAP_READY', mapReady: true });
-      },
-      (error: Error) => {
-        console.log(error);
-      }
-    );
+        store.dispatch({ type: 'MAP_READY', isMapReady: true });
+      })
+      .catch(error => {
+        console.log('error in initializeMap()', error);
+        store.dispatch({ type: 'MAP_ERROR', loadError: true });
+      });
   }
 
   log(): void {
