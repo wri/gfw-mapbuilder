@@ -1,10 +1,10 @@
 import Map from 'esri/Map';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
+import Legend from 'esri/widgets/Legend';
 import { RefObject } from 'react';
 
 import store from '../store/store';
-
 export class MapController {
   _map: Map | null;
   _mapview: MapView | null;
@@ -25,6 +25,12 @@ export class MapController {
       map: this._map,
       container: domRef.current
     });
+
+    const legend = new Legend({
+      view: this._mapview
+    });
+
+    this._mapview.ui.add(legend, 'bottom-right');
 
     this._mapview
       .when(
