@@ -13,7 +13,7 @@ export class MapController {
     this._mapview = null;
   }
 
-  initializeMap(domRef: RefObject<any>) {
+  initializeMap(domRef: RefObject<any>): void {
     const { appState } = store.getState();
     this._map = new WebMap({
       portalItem: {
