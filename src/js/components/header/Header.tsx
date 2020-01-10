@@ -6,13 +6,13 @@ import config from '../../../../configs/resources';
 
 import '../../../css/header.scss';
 
-export const Header: FunctionComponent = () => {
+const Header: FunctionComponent = () => {
   const { title, subtitle, logoUrl, logoLinkUrl } = config;
 
   return (
     <div className="header-container">
       <div className="title-container">
-        <a href={logoLinkUrl} target="_blank" tabIndex={0}>
+        <a href={logoLinkUrl} target="_blank" rel="noreferrer" tabIndex={0}>
           <img
             src={logoUrl}
             alt="image of Global Forest Watch logo"
@@ -26,3 +26,5 @@ export const Header: FunctionComponent = () => {
     </div>
   );
 };
+
+export default Header;
