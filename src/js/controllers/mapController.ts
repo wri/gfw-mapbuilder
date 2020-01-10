@@ -37,7 +37,7 @@ export class MapController {
           store.dispatch({ type: 'MAP_ERROR', loadError: true });
         }
       )
-      .catch(error => {
+      .catch((error: Error) => {
         console.log('error in initializeMap()', error);
         store.dispatch({ type: 'MAP_ERROR', loadError: true });
       });
