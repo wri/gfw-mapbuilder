@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import mapview from './mapview/mapview';
+import isMapReady from './mapview/mapview';
+import loadError from './mapview/loadError';
 
 export default combineReducers({
-  mapview
+  isMapReady,
+  loadError
 });

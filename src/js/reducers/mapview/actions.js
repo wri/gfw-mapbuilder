@@ -1,8 +1,15 @@
 import * as types from 'constants/actionTypes';
 
-export function isMapReady(mapReady) {
+export function isMapReady(isMapReady) {
   return {
     type: types.MAP_READY,
-    mapReady
+    isMapReady
+  };
+}
+
+export function mapError(loadError) {
+  return {
+    type: types.MAP_ERROR,
+    loadError
   };
 }
