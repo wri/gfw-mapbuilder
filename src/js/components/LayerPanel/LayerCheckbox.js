@@ -82,7 +82,7 @@ export default class LayerCheckbox extends Component {
 
   toggleLayer () {
     const {layer} = this.props;
-    const {map} = this.context;
+    const {map, language, settings} = this.context;
 
     if (layer.disabled) { return; }
     if (layer.subId) {
@@ -94,12 +94,31 @@ export default class LayerCheckbox extends Component {
         layer.visible = true;
       }
     } else {
+      const layerTitle = layer.label ? layer.label[language] : '';
+      let sameLayerTitle;
+
+      Object.keys(settings.layerPanel).forEach(key => {
+        if (settings.layerPanel[key].layers) {
+          settings.layerPanel[key].layers.forEach(layerPanelLayer => {            
+            if (layerPanelLayer.label && layerPanelLayer.label[language] === layerTitle && layerPanelLayer.id !== layer.id) {
+              sameLayerTitle = layerPanelLayer.id;
+            }
+          });
+        }
+      });
+      
       if (this.props.checked) {
         layer.visible = false;
         layerActions.removeActiveLayer(layer.id);
+        if (sameLayerTitle) {
+          layerActions.removeActiveLayer(sameLayerTitle);
+        }
       } else {
         layer.visible = true;
         layerActions.addActiveLayer(layer.id);
+        if (sameLayerTitle) {
+          layerActions.addActiveLayer(sameLayerTitle);
+        }
       }
     }
 

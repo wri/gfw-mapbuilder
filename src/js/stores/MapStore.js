@@ -159,12 +159,16 @@ class MapStore {
 
   addActiveLayer (layerId) {
     const index = this.activeLayers.indexOf(layerId);
+    console.log(index, layerId);
+    
     if (index === -1) {
       // Create a copy of the strings array for easy change detection
       const layers = this.activeLayers.slice();
       layers.push(layerId);
       this.activeLayers = layers;
     }
+    console.log('this.activeLayers', this.activeLayers);
+    
   }
 
   removeActiveLayer (layerId) {
@@ -175,6 +179,7 @@ class MapStore {
       layers.splice(index, 1);
       this.activeLayers = layers;
     }
+    console.log('this.activeLayers', this.activeLayers);
   }
 
   addSubLayer (info) {

@@ -335,7 +335,13 @@ export default class LegendPanel extends Component {
           />;
         } else {
           if (!layer.layerIds && !esriLayer.tileInfo) {
-            throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
+            //TODO: We might have to look at what I changed this to in prod to avoid this error and WHY IT ONLY THROWS sometimes?!
+            // throw new Error('You must configure the "layerIds" property on your layer config object for layer: ' + esriLayer.title);
+            return null;
+          }
+
+          if (esriLayer.type === 'VectorTileLayer') {
+            return null;
           }
 
           if (esriLayer.layerInfos && esriLayer.layerInfos.length > 0) {
