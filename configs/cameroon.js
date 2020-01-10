@@ -1,91 +1,42 @@
 export default {
-  //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
-  //- General Settings
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
-  title: 'GFW Mapbuilder',
-  subtitle: 'Make maps that matter',
-  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
-  aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
-  downloadLinkUrl: '', // http://data.globalforestwatch.org/
+  webmap: '6142e76453354c0b83633370e6a6f006 ',
+  title: 'Atlas Forestier du Cameroun',
+  subtitle: 'Ministère des Forêts et de la Faune',
+  webmapMenuName: 'Affectation des Terres',
+  logoUrl:
+    'https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590',
+  logoLinkUrl: 'http://www.minfof.cm/',
   printServiceUrl:
-    'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
-  mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
-  mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-  narrative: '',
-  hideHeader: false,
-  hideFooter: false,
-  includeMyGFWLogin: true,
-  navLinksInNewTab: false,
-  //- Color Settings
-  customColorTheme: '',
-  //- Language Settings
-  language: 'en',
-  useAlternativeLanguage: false,
-  //- Custom Basemap
+    'https://gis.forest-atlas.org/server/rest/services/cmr/ExportWebMap/GPServer/Export%20Web%20Map',
+  narrative:
+    "\u003cp\u003eCe thème présente la situation générale de l'affectation des terres au Cameroun. Sont représentés : les permis minier (d'exploitation et de recherche), les zones d'intérêt cynégétique, les ventes de coupe, les forêts de production (UFA et forêt communale), les forêts communautaires, les aires protégées, les réserves forestières et les plantations agro industrielle.\u003cbr\u003e\u003c/p\u003e",
+  includeSubscribeButton: true,
   useWebmapBasemap: false,
-  alternativeWebmap: '',
-  alternativeLanguage: 'fr',
-  alternativeLanguageTitle: 'GFW Mapbuilder',
-  alternativeLanguageSubtitle: 'Make maps that matter',
-  alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-  alternativeNarrative: '',
+  sharinghost: 'https://www.arcgis.com',
+  analyticsCode: 'UA-62288390-1',
+  iso: 'CMR',
+  customColorTheme: '#ff8000',
+  language: 'fr',
+  useAlternativeLanguage: true,
+  alternativeLanguage: 'en',
+  alternativeWebmap: 'b96ee7fcd75e405dbf9a8b5a44ae734a',
+  alternativeLanguageTitle: 'Forest Atlas of Cameroon',
+  alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
+  alternativeNarrative:
+    '\u003cp\u003eThis map show the general land use allocation in Cameroon. It includes mining permits, hunting zones, various forest titles as well as agro-industrial plantations.\u003cbr\u003e\u003c/p\u003e',
   alternativeWebmapMenuName: 'Land Use',
-  initialExtent: {
-    x: null, // -122.3,
-    y: null, // 47.6,
-    z: null // 9,
-  },
-  //- Tab Settings
-  includeDocumentsTab: false,
-  //- Layers/Analysis Settings
-  iso: '',
+  includeDocumentsTab: true,
   viirsFires: true,
   modisFires: true,
   intactForests: true,
-  primaryForests: true,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
-  sadAlerts: true,
+  sadAlerts: false,
   gladAlerts: true,
   terraIAlerts: true,
+  primaryForests: true,
   recentImagery: true,
-  webmapMenuName: 'Land Use',
-  // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
-  sharinghost: 'https://www.arcgis.com',
-  analyticsCode: '',
-  includeCartoTemplateLayers: false,
-  cartoUser: 'wri-01',
-  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  cartoApiKey: 'your key here',
-  cartoGroupLabel: {
-    en: 'Carto Layers',
-    fr: 'Carto Layers'
-  },
-
-  /**
-   * Custom Analysis Module Configuration
-   * This section provides the opportunity to define additional custom analysis modules.
-   * The modules are dependent on gfw widgets registered to the GFW API, so if you would
-   * like to define a custom module, you must first create a widget and register it.
-   *
-   * (we probably will NOT use the value property. we will just loop through all analysisModules
-   * and create a dropdown option for each if they have all of the required properties. maybe they have an order to sort them? This also
-   * means that all of the standard analyses will get their own entry in this array.)
-   * @property {string} value - a unique value for this analysis module
-   * @property {string} label - the label for the analysis in the dropdown
-   * @property {string} group - what group this analysis belongs to (maybe this is how we can differentiate
-   * the 'standard' analyses any thing with group 'standard' will not be required to have a widget
-   * until we get widgets for all of them)
-   * @property {string} widgetId - the widgetId from the gfw-api
-   * @property {string} queryUrl - the url to query for the analysis data
-   * @property {object[]} params - any params to pass along with the query url
-   * @property {string} params[].key - query param key
-   * @property {string} params[].value - query param value
-   *
-   * (geostore is automatically appended with each request)
-   */
   analysisModules: [
     {
       analysisId: 'TC_LOSS_GAIN',
@@ -95,7 +46,7 @@ export default {
         fr: 'Perte/gain total de la couverture arborée',
         es: 'Pérdida/ganancia de cobertura arbórea total',
         pt: 'Perda/ganho total de cobertura arbórea',
-        id: 'Total kehilangan/perolehan tutupan pohon ',
+        id: 'Total kehilangan/perolehan tutupan pohon',
         zh: '总森林覆盖减少/增加面积量',
         ka: 'ხის ვარჯის საერთო კარგვა / მატება'
       },
@@ -122,7 +73,7 @@ export default {
         zh:
           '选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。',
         ka:
-          'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
+          'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
       },
       useGfwWidget: true,
       widgetId: '95c2c559-ca78-4b7a-b18b-7b2bca14ce83',
@@ -135,7 +86,7 @@ export default {
           bounds: [2001, 2018],
           valueType: 'date',
           label: {
-            en: 'Select range for analysis',
+            en: 'Select range for analysis:',
             fr: 'Sélectionner une plage pour l’analyse:',
             es: 'Seleccione un rango para el análisis:',
             pt: 'Selecione o período para análise:',
@@ -321,7 +272,7 @@ export default {
         es:
           'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
         pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-        id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+        id: 'Kehilangan tutupan pohon tahunan berdasarkan kelas tutupan lahan',
         zh: '年度森林覆盖减少量（按土地覆盖分类）',
         ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
       },
@@ -332,7 +283,7 @@ export default {
         es:
           'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
         pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-        id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+        id: 'Kehilangan tutupan pohon tahunan berdasarkan kelas tutupan lahan',
         zh: '年度森林覆盖减少量（按土地覆盖分类）',
         ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
       },
@@ -492,19 +443,23 @@ export default {
         ka: 'GLAD შეტყობინებები'
       },
       description: {
-        en: 'Count the number of GLAD tree cover loss alerts per month.',
+        en:
+          'Count the number of GLAD tree cover loss alerts per month over the past two years and compare to the historical average.',
         fr:
-          'Compte le nombre d’alertes GLAD de perte de la couverture arborée par mois.',
+          'Compte le nombre d’alertes GLAD de perte de la couverture arborée par mois sur les deux dernières années et le compare à la moyenne historique.',
         es:
-          'Cuente el número de alertas GLAD sobre pérdida de cobertura arbórea por mes.',
+          'Cuente el número de alertas GLAD sobre pérdida de cobertura arbórea por mes en los últimos dos años y compárela con el promedio histórico.',
         pt:
-          'Quantificação de alertas GLAD de perda de cobertura arbórea por mês.',
-        id: 'Hitung jumlah peringatan kehilangan tutupan pohon GLAD per bulan.',
-        zh: 'Count the number of GLAD tree cover loss alerts per month.',
-        ka: 'Count the number of GLAD tree cover loss alerts per month.'
+          'Apresentação da quantidade de alertas GLAD de perda de cobertura arbórea por mês nos últimos dois anos e comparação com a média histórica.',
+        id:
+          'Hitung jumlah peringatan kehilangan tutupan pohon GLAD per bulan selama dua tahun terakhir dan bandingkan dengan rata-rata historis.',
+        zh:
+          '统计过去两年内每月 GLAD 森林覆盖减少预警次数，并与历史平均值比较。',
+        ka:
+          'Count the number of GLAD tree cover loss alerts per month over the past two years and compare to the historical average.'
       },
       useGfwWidget: true,
-      widgetId: '0734ba0a-3a6c-4388-aa4a-5871791b1d1f',
+      widgetId: 'b5e43ea3-2812-484e-bc31-1bf5d2fe8aa0',
       uiParams: 'none'
     },
     {
@@ -592,7 +547,8 @@ export default {
           'Cette analyse compte le nombre d’alertes de détection d’incendies VIIRS durant les 7 derniers jours',
         es:
           'Este análisis cuenta el número de detecciones de alertas de incendios VIIRS durante los últimos siete días',
-        pt: 'Incêndios ativos VIIRS',
+        pt:
+          'Esta análise apresenta a quantidade de detecções de alertas de incêndio VIIRS nos últimos 7 dias',
         id:
           'Analisis ini menghitung jumlah deteksi peringatan kebakaran VIIRS selama 7 hari terakhir',
         zh: '此分析可统计过去 7 天 VIIRS 火警监测的次数。',
@@ -638,7 +594,7 @@ export default {
         zh:
           '自 2015 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。 ',
         ka:
-          'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA)  და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
+          'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
       },
       useGfwWidget: true,
       widgetId: '1b84364d-0efd-4d60-81ef-870f7d13ee7b',
@@ -651,97 +607,71 @@ export default {
       ]
     }
   ],
-
-  /**
-   * Layer panel configuration, anything with an = is optional, {object=}
-   * Order at the group level controls the order of the accordions, the top most accordion's layers
-   * will also be the top most layers on the map. The order in the layer level controls how those layers
-   * are organized within their own group
-   ** @name layerPanel
-   ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
-   ** and values are string labels
-   * @property {object=} label - Label for the group in the layer panel
-   * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
-   * @property {object[]=} layers - Layers placed in the various accordions
-   * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
-   * @property {number} layers[].order - Order of this layer in this section only
-   * @property {string} layers[].id - Must be a unique id for the layer
-   * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
-   ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
-   * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
-   * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
-   * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
-   * @property {string} layers[].url - URL for the service
-   * @property {object=} layers[].label - Label for the layer in the UI
-   * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
-   * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
-   * @property {object=} popup - Popup configuration for the layer if it is available
-   */
   layerPanel: {
     GROUP_WEBMAP: {
       order: 2,
-      label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
-      layers: [] // Will get filled in with layers from the webmap
+      label: {},
+      layers: []
     },
     GROUP_LCD: {
-      groupType: 'default',
+      grouptype: 'default',
       order: 1,
       label: {
         en: 'Land Cover Dynamics',
         fr: 'Evolution de la couverture des sols',
         es: 'Dinámica de la Cobertura del Suelo',
-        pt: 'Dinâmica de cobertura da terra ',
+        pt: 'Dinâmica de cobertura da terra',
         id: 'Land Cover Dynamics',
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
       layers: [
         {
-          id: 'TREE_COVER_LOSS',
           order: 1,
+          id: 'TREE_COVER_LOSS',
           type: 'remoteDataLayer',
           uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
         },
         {
-          id: 'TREE_COVER_GAIN',
           order: 2,
           type: 'remoteDataLayer',
+          id: 'TREE_COVER_GAIN',
           uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
         },
         {
-          id: 'IMAZON_SAD',
           order: 3,
           type: 'remoteDataLayer',
+          id: 'IMAZON_SAD',
           uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
         },
         {
-          id: 'GLAD_ALERTS',
           order: 4,
+          id: 'GLAD_ALERTS',
           type: 'remoteDataLayer',
           uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
         },
         {
-          id: 'TERRA_I_ALERTS',
           order: 5,
+          id: 'TERRA_I_ALERTS',
           type: 'remoteDataLayer',
           uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
         },
         {
-          id: 'VIIRS_ACTIVE_FIRES',
           order: 6,
+          id: 'VIIRS_ACTIVE_FIRES',
           type: 'remoteDataLayer',
           uuid: '15cb32c9-874f-4552-afdc-8a35ef70682f'
         },
         {
-          id: 'MODIS_ACTIVE_FIRES',
           order: 7,
+          id: 'MODIS_ACTIVE_FIRES',
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
         }
       ]
     },
     GROUP_LC: {
-      groupType: 'default',
+      groupttype: 'default',
       order: 3,
       label: {
         en: 'Land Cover',
@@ -754,54 +684,54 @@ export default {
       },
       layers: [
         {
-          id: 'GLOB_MANGROVE',
           order: 1,
+          id: 'GLOB_MANGROVE',
           type: 'remoteDataLayer',
           uuid: '533cbe18-22a6-46ac-99ca-027c96f33ac3'
         },
         {
-          id: 'IFL',
           order: 2,
+          id: 'IFL',
           type: 'remoteDataLayer',
           uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
         },
         {
-          id: 'PRIMARY_FORESTS',
           order: 3,
+          id: 'PRIMARY_FORESTS',
           type: 'remoteDataLayer',
           uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
         },
         {
-          id: 'AG_BIOMASS',
           order: 4,
+          id: 'AG_BIOMASS',
           type: 'remoteDataLayer',
           uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
         },
         {
-          id: 'LAND_COVER',
           order: 5,
+          id: 'LAND_COVER',
           type: 'remoteDataLayer',
           uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
         },
         {
-          id: 'TREE_COVER',
           order: 6,
+          id: 'TREE_COVER',
           type: 'remoteDataLayer',
           uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
         }
       ]
     },
     GROUP_IMAGERY: {
-      groupType: 'imagery',
+      grouptype: 'imagery',
       order: 4,
       label: {
         en: 'Recent Imagery',
-        fr: 'Recent Imagery',
-        es: 'Recent Imagery',
-        pt: 'Recent Imagery',
-        id: 'Recent Imagery',
+        fr: 'Imagerie récente',
+        es: 'Imágenes recientes',
+        pt: 'Imagens recentes',
+        id: 'Citra Satelit Terbaru',
         zh: 'Recent Imagery',
-        ka: 'Recent Imagery'
+        ka: 'ბოლო გამოსახულება'
       },
       layers: [
         {
@@ -812,28 +742,31 @@ export default {
           visible: false,
           label: {
             en: 'Recent Imagery',
-            fr: 'Recent Imagery',
-            es: 'Recent Imagery',
-            pt: 'Recent Imagery',
-            id: 'Recent Imagery',
-            zh: 'Recent Imagery',
-            ka: 'Recent Imagery'
+            fr: 'Imagerie récente',
+            es: 'Imágenes recientes',
+            pt: 'Imagens recentes',
+            id: 'Citra Satelit Terbaru',
+            zh: '云层覆盖',
+            ka: 'ბოლო გამოსახულება'
           },
           dynamicSublabel: {
             en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            fr: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
+            fr:
+              '({DATE_TIME}, {CLOUD_COVERAGE}% Imagerie récente, {INSTRUMENT})',
+            es:
+              '({DATE_TIME}, {CLOUD_COVERAGE}% Cobertura de nubes, {INSTRUMENT})',
+            pt:
+              '({DATE_TIME}, {CLOUD_COVERAGE}% Cobertura de nuvens, {INSTRUMENT})',
+            id: '({DATE_TIME}, {CLOUD_COVERAGE}% Tutupan Awan, {INSTRUMENT})',
+            zh: '({DATE_TIME}, {CLOUD_COVERAGE}% 近期图像, {INSTRUMENT})',
+            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% ღრუბლიანობა, {INSTRUMENT})'
           }
         }
       ]
     },
     GROUP_BASEMAP: {
       groupType: 'basemap',
-      order: 200,
+      order: 6,
       label: {
         en: 'Basemap',
         fr: 'Basemap',
@@ -867,7 +800,8 @@ export default {
             '2013',
             '2014',
             '2015',
-            '2016'
+            '2016',
+            '2017'
           ],
           title: {
             en: 'Landsat',
@@ -882,7 +816,6 @@ export default {
         {
           id: 'wri_mono',
           thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
-          // thumbnailUrl: './css/images/wri_mono.png',
           title: {
             en: 'WRI Mono',
             fr: 'WRI Mono',
@@ -896,7 +829,6 @@ export default {
         {
           id: 'wri_contextual',
           thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
-          // thumbnailUrl: './css/images/wri_contextual.png',
           title: {
             en: 'WRI Contextual',
             fr: 'WRI Contextual',
@@ -909,43 +841,6 @@ export default {
         }
       ]
     },
-
-    /**
-     * CUSTOM GROUPS
-     * Add your custom groups below. The custom groups are similar to the groups defined above.
-     * They are an object defined with a unique key (this key MUST be unique).
-     * There are three (3) group types that you may choose from:
-     *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
-     *               With this group type, more than one layer may be on at a time
-     *
-     *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
-     *            Only one layer may be on at a time within the same group
-     *            You may optionally choose to turn this group off when any other radio group is selected
-     *
-     *    nested - This group allows for layers to be grouped further within a layer panel
-     *
-     * COMMON GROUP PROPERTIES
-     * @property {string} groupType - the group type, one of checkbox, radio, nested
-     * @property {number} order - the order of the group in the layer panel
-     * @property {object} label - the label for the group in the layer panel
-     * @property {object[]} layers - the layers to be placed in the group
-     * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
-     * @property {number} layers[].order - the order of the layer within the group
-     * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
-     *
-     * RADIO GROUP PROPERTIES
-     * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
-     * sublayers you would like to include in the group. This property is required, so if you
-     * wish to include all sublayers, you must still provide this property with all sublayers
-     * @property {object} sublabel - for a dynamic layer the sublabel property must specify
-     * which sublayer the sublabel belongs to
-     *
-     * NESTED GROUP PROPERTIES
-     * @property {number} layers[].order - the order of the nested group within the panel group
-     * @property {object} layers[].label - the label for the nested group
-     * @property {object[]} layers[].nestedLayers - the layers for the nested group
-     */
-
     extraLayers: [
       {
         id: 'MASK',
@@ -970,5 +865,6 @@ export default {
         visible: true
       }
     ]
-  }
+  },
+  otherFieldsModules: ''
 };

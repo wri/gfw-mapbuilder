@@ -2,8 +2,12 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Mapview } from './mapview/Mapview';
+import Header from './header/Header';
+
 import { mapController } from '../controllers/mapController';
+
 import { MapviewStore } from '../store/mapview/types';
+
 import 'arcgis-js-api/themes/light/main.scss';
 import '../../css/index.scss';
 
@@ -18,10 +22,11 @@ export function App() {
   handleClick();
   return (
     <>
-      <div onClick={handleClick}>
+      {/* <div onClick={handleClick}>
         {isMapReady ? 'Ready!' : 'Loading'}
         {loadError ? 'Error!' : 'No error!'}
-      </div>
+      </div> */}
+      <Header />
       <Mapview />
     </>
   );
