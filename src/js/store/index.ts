@@ -10,7 +10,9 @@ const rootReducer = combineReducers({
   mapviewState: mapviewReducer
 });
 
-const middlewares: any[] = [];
+export type RootState = ReturnType<typeof rootReducer>;
+
+const middlewares = [];
 // Environment specific middlewares configuration
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-line no-undef
