@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-export const LanguageDropdown: FunctionComponent = () => {
+const LanguageDropdown: FunctionComponent = () => {
   return (
     <div className="language-dropdown-container">
       <select>
@@ -10,3 +10,5 @@ export const LanguageDropdown: FunctionComponent = () => {
     </div>
   );
 };
+
+export default LanguageDropdown;
