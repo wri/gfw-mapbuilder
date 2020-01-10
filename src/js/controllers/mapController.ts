@@ -2,8 +2,7 @@ import Map from 'esri/Map';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import { RefObject } from 'react';
-
-import store from '../store/store';
+import store from '../store/index';
 
 export class MapController {
   _map: Map | null;
@@ -15,9 +14,10 @@ export class MapController {
   }
 
   initializeMap(domRef: RefObject<any>) {
+    const { appState } = store.getState();
     this._map = new WebMap({
       portalItem: {
-        id: 'e691172598f04ea8881cd2a4adaa45ba'
+        id: appState.webmap
       }
     });
 
@@ -30,16 +30,16 @@ export class MapController {
       .when(
         () => {
           console.log('mapview is loaded');
-          store.dispatch({ type: 'MAP_READY', isMapReady: true });
+          store.dispatch({ type: 'MAP_READY', payload: true });
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
-          store.dispatch({ type: 'MAP_ERROR', loadError: true });
+          store.dispatch({ type: 'MAP_ERROR', payload: true });
         }
       )
       .catch((error: Error) => {
         console.log('error in initializeMap()', error);
-        store.dispatch({ type: 'MAP_ERROR', loadError: true });
+        store.dispatch({ type: 'MAP_ERROR', payload: true });
       });
   }
 
