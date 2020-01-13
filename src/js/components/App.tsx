@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Mapview } from './mapview/Mapview';
+import MapContent from './MapContent';
 import Header from './header/Header';
 
 import { mapController } from '../controllers/mapController';
@@ -27,7 +27,7 @@ export function App() {
         {loadError ? 'Error!' : 'No error!'}
       </div> */}
       <Header />
-      <Mapview />
+      <MapContent />
     </>
   );
 }

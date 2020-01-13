@@ -26,5 +26,6 @@
     "types": ["arcgis-js-api", "moment"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "files": ["custom.d.ts"]
 }
