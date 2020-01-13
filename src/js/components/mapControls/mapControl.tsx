@@ -8,8 +8,10 @@ import '../../../css/shareWidget';
 const MapControl: FunctionComponent = () => {
   return (
     <>
-      <ShareWidget />
-      <PrintWidget />
+      <div className="widget-wrapper">
+        <PrintWidget />
+        <ShareWidget />
+      </div>
     </>
   );
 };
