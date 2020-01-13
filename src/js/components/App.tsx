@@ -2,13 +2,11 @@ import * as React from 'react';
 
 import MapContent from './MapContent';
 import Header from './header/Header';
-
-// import { mapController } from '../controllers/mapController';
-
-// import { MapviewStore } from '../store/mapview/types';
+// import { RootState } from 'js/store/index';
+// import { useSelector } from 'react-redux';
 
 import 'arcgis-js-api/themes/light/main.scss';
-import '../../css/index.scss';
+import 'css/index.scss';
 
 // const Loader = (): React.ReactElement => <h4>Map Loading...</h4>;
 
