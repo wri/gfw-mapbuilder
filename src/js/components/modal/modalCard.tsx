@@ -1,11 +1,26 @@
 import React, { FunctionComponent } from 'react';
 
-const ModalCard: FunctionComponent = () => {
-  return (
-    <div className="modal-wrapper">
-      <span>ModalCard</span>
-    </div>
-  );
+interface ModalProps {
+  renderModal: boolean;
+  children: any;
+}
+
+const ModalCard: FunctionComponent<ModalProps> = ({
+  renderModal,
+  children
+}) => {
+  const returnCard = () => {
+    if (renderModal) {
+      return (
+        <div className="modal-wrapper">
+          <span>ModalCard</span>
+          {children}
+        </div>
+      );
+    }
+  };
+
+  return <>{returnCard()}</>;
 };
 
 export default ModalCard;
