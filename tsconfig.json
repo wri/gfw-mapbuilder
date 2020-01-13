@@ -19,11 +19,11 @@
     "strictNullChecks": true,
     "outDir": "./dist/",
     "sourceMap": true,
-    "noEmitOnError": false,
+    "noEmitOnError": true,
     "noUnusedLocals": true,
     "importHelpers": true,
     "skipLibCheck": true,
-    "types": ["arcgis-js-api", "moment"]
+    "types": ["arcgis-js-api", "moment", "node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
