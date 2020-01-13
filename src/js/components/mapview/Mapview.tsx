@@ -4,18 +4,20 @@ import { mapController } from '../../controllers/mapController';
 import { useDispatch } from 'react-redux';
 import { overwriteSettings } from '../../store/appState/actions';
 
-export function Mapview() {
+const Mapview: React.FunctionComponent = () => {
   const mapElementRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     mapController.initializeMap(mapElementRef);
   }, []);
-  dispatch(overwriteSettings({title: "New Title"}));
+  dispatch(overwriteSettings({ title: 'New Title' }));
 
   return (
     <div className="mapview-container">
       <div className="mapview" ref={mapElementRef}></div>
     </div>
   );
-}
+};
+
+export default Mapview;

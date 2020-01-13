@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { Mapview } from './mapview/Mapview';
+import Mapview from './mapview/Mapview';
 import { RootState } from '../store/index';
 import 'arcgis-js-api/themes/light/main.scss';
 import '../../css/index.scss';
 
-export function App(): JSX.Element {
+const App = (): JSX.Element => {
   const isMapReady = useSelector(
     (store: RootState) => store.mapviewState.isMapReady
   );
@@ -21,4 +21,6 @@ export function App(): JSX.Element {
       <Mapview />
     </>
   );
-}
+};
+
+export default App;
