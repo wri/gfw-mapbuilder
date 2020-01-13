@@ -1,10 +1,10 @@
 export interface AppState {
-  webmap: string;
+  webmap?: string;
   title: string;
   subtitle?: string;
   logoUrl?: string;
   logoLinkUrl?: string;
-  language: string;
+  language?: string;
 }
 
 //Action names available

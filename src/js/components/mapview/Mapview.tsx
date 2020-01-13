@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useEffect } from 'react';
 import { mapController } from '../../controllers/mapController';
 import { useDispatch } from 'react-redux';
-import { OVERWRITE_SETTINGS } from '../../store/appState/types';
+import { overwriteSettings } from '../../store/appState/actions';
 
 export function Mapview() {
   const mapElementRef = useRef(null);
@@ -11,10 +11,7 @@ export function Mapview() {
   useEffect(() => {
     mapController.initializeMap(mapElementRef);
   }, []);
-  dispatch({
-    type: OVERWRITE_SETTINGS,
-    payload: { title: 'neww title!!', newProppp: 'fakeValue' }
-  });
+  dispatch(overwriteSettings({title: "New Title"}));
 
   return (
     <div className="mapview-container">

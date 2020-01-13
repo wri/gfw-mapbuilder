@@ -19,7 +19,7 @@
     "strictNullChecks": true,
     "outDir": "./dist/",
     "sourceMap": true,
-    "noEmitOnError": false,
+    "noEmitOnError": true,
     "noUnusedLocals": true,
     "importHelpers": true,
     "skipLibCheck": true,
