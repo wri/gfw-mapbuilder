@@ -1,5 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 
+import ModalCard from '../modal/modalCard';
+
 import '../../../css/shareWidget';
 
 const ShareWidget: FunctionComponent = () => {
@@ -33,6 +35,8 @@ const ShareWidget: FunctionComponent = () => {
     }
   };
 
+  const test = () => {};
+
   return (
     <>
       <div className="share-widget-container">
@@ -53,7 +57,8 @@ const ShareWidget: FunctionComponent = () => {
           </svg>
         </button>
       </div>
-      {widgetContent()}
+      {/* {widgetContent()} */}
+      <ModalCard />
     </>
   );
 };

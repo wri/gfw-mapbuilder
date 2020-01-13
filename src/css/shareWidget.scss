@@ -4,6 +4,7 @@
 }
 
 $font: 'Fira Sans', sans-serif;
+$font-color: #555;
 
 .share-widget-container {
   display: block;
@@ -74,6 +75,7 @@ $font: 'Fira Sans', sans-serif;
   .directions {
     margin: 1rem;
     font-family: $font;
+    color: $font-color;
 
     .title {
       text-align: center;
