@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('../fonts/firasans-regular-webfont.ttf') format('Truetype');
+}
+
+$font: 'Fira Sans', sans-serif;
+
 .share-widget-container {
   display: block;
   position: absolute;
@@ -29,6 +36,7 @@
     width: 38px;
     margin-top: auto;
     margin-bottom: auto;
+    border: none;
 
     .svg-icon {
       fill: #555;
@@ -36,6 +44,42 @@
       margin: auto;
       height: 25px;
       width: 25px;
+    }
+  }
+}
+
+.share-content-container {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: calc(50% - 150px);
+
+  width: 300px;
+  background: white;
+  border: 1px solid red;
+
+  .exit-button {
+    position: absolute;
+    border: none;
+    right: 0;
+
+    svg {
+      height: 2rem;
+      width: 1rem;
+    }
+  }
+
+  .directions {
+    margin: 1rem;
+    font-family: $font;
+
+    .title {
+      text-align: center;
+    }
+
+    p {
+      font-size: 13px;
     }
   }
 }
