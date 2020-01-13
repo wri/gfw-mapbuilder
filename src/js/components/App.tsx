@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import Mapview from './mapview/Mapview';
-import { RootState } from '../store/index';
+import Header from './header/Header';
+import { RootState } from './../store/index';
+import { useSelector } from 'react-redux';
+
 import 'arcgis-js-api/themes/light/main.scss';
 import '../../css/index.scss';
+
+const Loader = (): React.ReactElement => <h4>Map Loading...</h4>;
+
+const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
 const App = (): JSX.Element => {
   const isMapReady = useSelector(
@@ -12,13 +18,13 @@ const App = (): JSX.Element => {
   const loadError = useSelector(
     (store: RootState) => store.mapviewState.loadError
   );
+
   return (
     <>
-      <div>
-        {isMapReady ? 'Ready!' : 'Loading'}
-        {loadError ? 'Error!' : 'No error!'}
-      </div>
+      <Header />
       <Mapview />
+      {!isMapReady && <Loader />}
+      {loadError && <ErrorScreen />}
     </>
   );
 };
