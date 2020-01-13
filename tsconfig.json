@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     "module": "amd",
+    "baseUrl": ".",
+    "paths": {
+      "js/*": ["src/js/*"],
+      "css/*": ["src/css/*"]
+    },
     "lib": ["dom", "es2015.promise", "es5", "es6"],
     "target": "es5",
     "allowJs": true,

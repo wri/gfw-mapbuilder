@@ -22,8 +22,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
-        options: {
-        }
+        options: {}
       },
       {
         test: /\.html$/,
@@ -76,6 +75,10 @@ module.exports = {
     })
   ],
   resolve: {
+    alias: {
+      js: path.join(__dirname, 'src/js'),
+      css: path.join(__dirname, 'src/css')
+    },
     modules: [
       path.resolve(__dirname, '/src'),
       path.resolve(__dirname, 'node_modules/')
