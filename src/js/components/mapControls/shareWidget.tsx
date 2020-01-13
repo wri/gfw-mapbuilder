@@ -27,7 +27,7 @@ const ShareWidget: FunctionComponent = () => {
 
   return (
     <>
-      <div className="share-widget-container">
+      <div className="share-widget-container right">
         <button
           className="image-wrapper"
           role="button"

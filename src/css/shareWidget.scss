@@ -6,10 +6,18 @@
 $font: 'Fira Sans', sans-serif;
 $font-color: #555;
 
+.left {
+  left: 85%;
+}
+
+.right {
+  right: 0;
+}
+
+.print-widget-container,
 .share-widget-container {
   display: block;
   position: absolute;
-  right: 0;
   top: 10%;
   z-index: 1;
 
