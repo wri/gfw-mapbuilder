@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import MapContent from './MapContent';
 import Header from './header/Header';
+import DimBackground from './app/DimBackground';
 
 import { mapController } from '../controllers/mapController';
 
@@ -28,6 +29,7 @@ export function App() {
       </div> */}
       <Header />
       <MapContent />
+      {false && <DimBackground />}
     </>
   );
 }

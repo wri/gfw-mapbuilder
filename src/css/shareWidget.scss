@@ -9,6 +9,7 @@ $font: 'Fira Sans', sans-serif;
   display: block;
   position: absolute;
   right: 0;
+  top: 10%;
   z-index: 1;
 
   background-color: #ffffff;
@@ -51,7 +52,7 @@ $font: 'Fira Sans', sans-serif;
 .share-content-container {
   display: block;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   top: 50%;
   left: calc(50% - 150px);
 
@@ -81,5 +82,12 @@ $font: 'Fira Sans', sans-serif;
     p {
       font-size: 13px;
     }
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .image-wrapper,
+  .exit-button {
+    background: white;
   }
 }

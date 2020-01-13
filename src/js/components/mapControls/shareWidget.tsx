@@ -7,7 +7,7 @@ const ShareWidget: FunctionComponent = () => {
 
   const widgetContent = () => {
     if (openWidget) {
-      console.log('dispatch logic RE grey screen');
+      console.log('dispatch logic RE grey screen'); // TODO dispatch openWidget to Redux store
       return (
         <div className="share-content-container">
           <button
