@@ -1,41 +1,37 @@
 import React, { FunctionComponent, useState } from 'react';
 
-import ModalCard from '../modal/modalCard';
-
 import '../../../css/shareWidget';
 
 const ShareWidget: FunctionComponent = () => {
   const [openWidget, setWidgetContent] = useState(false);
 
-  const widgetContent = () => {
-    if (openWidget) {
-      console.log('dispatch logic RE grey screen'); // TODO dispatch openWidget to Redux store
-      return (
-        <div className="share-content-container">
-          <button
-            className="exit-button"
-            onClick={() => setWidgetContent(!openWidget)}
-          >
-            <svg className="svg-icon">
-              <svg id="shape-close" viewBox="0 0 25 25">
-                <title>Close</title>
-                <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
-              </svg>
-            </svg>
-          </button>
-          <div className="directions">
-            <h4 className="title">Share this view</h4>
-            <p>
-              Copy and paste the link to share it or use the buttons below to
-              share on social media.
-            </p>
-          </div>
-        </div>
-      );
-    }
-  };
-
-  const test = () => {};
+  // const widgetContent = () => {
+  //   if (openWidget) {
+  //     console.log('dispatch logic RE grey screen'); // TODO dispatch openWidget to Redux store
+  //     return (
+  //       <div className="share-content-container">
+  //         <button
+  //           className="exit-button"
+  //           onClick={() => setWidgetContent(!openWidget)}
+  //         >
+  //           <svg className="svg-icon">
+  //             <svg id="shape-close" viewBox="0 0 25 25">
+  //               <title>Close</title>
+  //               <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+  //             </svg>
+  //           </svg>
+  //         </button>
+  //         <div className="directions">
+  //           <h4 className="title">Share this view</h4>
+  //           <p>
+  //             Copy and paste the link to share it or use the buttons below to
+  //             share on social media.
+  //           </p>
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  // };
 
   return (
     <>
@@ -58,7 +54,7 @@ const ShareWidget: FunctionComponent = () => {
         </button>
       </div>
       {/* {widgetContent()} */}
-      <ModalCard />
+      {/* <ModalCard /> */}
     </>
   );
 };

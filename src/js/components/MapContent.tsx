@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 
-import { Mapview } from './mapview/Mapview';
-import ShareWidget from '../components/mapControls/shareWidget';
+import Mapview from '../components/mapview/Mapview';
+import MapControl from '../components/mapControls/mapControl';
 
 const MapContent: FunctionComponent = () => {
   return (
     <>
-      <ShareWidget />
+      <MapControl />
       <Mapview />
     </>
   );

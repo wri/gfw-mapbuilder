@@ -1,35 +1,35 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
 import MapContent from './MapContent';
 import Header from './header/Header';
 import DimBackground from './app/DimBackground';
 
-import { mapController } from '../controllers/mapController';
+// import { mapController } from '../controllers/mapController';
 
-import { MapviewStore } from '../store/mapview/types';
+// import { MapviewStore } from '../store/mapview/types';
 
 import 'arcgis-js-api/themes/light/main.scss';
 import '../../css/index.scss';
 
-function handleClick() {
-  mapController.log();
-}
+// const Loader = (): React.ReactElement => <h4>Map Loading...</h4>;
 
-export function App() {
-  const isMapReady = useSelector((store: MapviewStore) => store.isMapReady);
-  const loadError = useSelector((store: MapviewStore) => store.loadError);
+// const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
-  handleClick();
+const App = (): JSX.Element => {
+  // const isMapReady = useSelector(
+  //   (store: RootState) => store.mapviewState.isMapReady
+  // );
+  // const loadError = useSelector(
+  //   (store: RootState) => store.mapviewState.loadError
+  // );
+
   return (
     <>
-      {/* <div onClick={handleClick}>
-        {isMapReady ? 'Ready!' : 'Loading'}
-        {loadError ? 'Error!' : 'No error!'}
-      </div> */}
       <Header />
       <MapContent />
       {false && <DimBackground />}
     </>
   );
-}
+};
+
+export default App;
