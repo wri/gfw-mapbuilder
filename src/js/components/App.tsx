@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import MapContent from './MapContent';
 import Header from './header/Header';
-import DimBackground from './app/DimBackground';
 
 // import { mapController } from '../controllers/mapController';
 
@@ -27,7 +26,6 @@ const App = (): JSX.Element => {
     <>
       <Header />
       <MapContent />
-      {false && <DimBackground />}
     </>
   );
 };

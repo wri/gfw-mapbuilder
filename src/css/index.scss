@@ -34,12 +34,3 @@ body {
 .mapview-container {
   height: calc(100% - 5rem);
 }
-
-.dim-container {
-  position: absolute;
-  z-index: 2;
-  opacity: 0.75;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-}

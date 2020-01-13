@@ -1,21 +1,47 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
+
+import '../../../css/modalCard.scss';
 
 interface ModalProps {
   renderModal: boolean;
   children: any;
+  closeModal: any;
 }
 
 const ModalCard: FunctionComponent<ModalProps> = ({
   renderModal,
-  children
+  children,
+  closeModal
 }) => {
+  const [widgetClosed, closeWidget] = useState(false);
+
+  useEffect(() => {
+    closeWidget(renderModal);
+  }, [renderModal]);
+
   const returnCard = () => {
-    if (renderModal) {
+    if (widgetClosed) {
       return (
-        <div className="modal-wrapper">
-          <span>ModalCard</span>
-          {children}
-        </div>
+        <>
+          <div
+            className="dim-container"
+            onClick={() => closeModal(!widgetClosed)}
+          ></div>
+          <div className="modal-card-container">
+            <button
+              className="exit-button"
+              onClick={() => closeWidget(!widgetClosed)}
+            >
+              <svg className="svg-icon">
+                <svg id="shape-close" viewBox="0 0 25 25">
+                  <title>Close</title>
+                  <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+                </svg>
+              </svg>
+            </button>
+            {children}
+          </div>
+        </>
       );
     }
   };

@@ -50,40 +50,28 @@ $font-color: #555;
   }
 }
 
-.share-content-container {
-  display: block;
+.exit-button {
   position: absolute;
-  z-index: 3;
-  top: 50%;
-  left: calc(50% - 150px);
+  border: none;
+  right: 0;
 
-  width: 300px;
-  background: white;
-  border: 1px solid red;
+  svg {
+    height: 2rem;
+    width: 1rem;
+  }
+}
 
-  .exit-button {
-    position: absolute;
-    border: none;
-    right: 0;
+.directions {
+  margin: 1rem;
+  font-family: $font;
+  color: $font-color;
 
-    svg {
-      height: 2rem;
-      width: 1rem;
-    }
+  .title {
+    text-align: center;
   }
 
-  .directions {
-    margin: 1rem;
-    font-family: $font;
-    color: $font-color;
-
-    .title {
-      text-align: center;
-    }
-
-    p {
-      font-size: 13px;
-    }
+  p {
+    font-size: 13px;
   }
 }
 
