@@ -81,6 +81,46 @@ $font-color: #555;
   }
 }
 
+// * FYI - determining how to integrate flexbox w/MapControls
+
+// .widget-wrapper {
+//   display: flex;
+//   flex-wrap: wrap;
+//   flex-direction: row;
+//   right: 5rem;
+//   top: 7rem;
+//   position: absolute;
+
+//   .share-widget-container,
+//   .print-widget-container {
+//     display: flex;
+//     position: absolute;
+//     z-index: 4;
+//     background-color: #ffffff;
+//     border: 1px solid #aaa;
+//     width: 38px;
+//     height: 38px;
+
+//     .image-wrapper {
+//       display: flex;
+//       height: auto;
+//       width: 38px;
+//       margin-top: auto;
+//       margin-bottom: auto;
+//       border: none;
+
+//       .svg-icon {
+//         fill: #555;
+//         display: block;
+//         margin: auto;
+//         height: 21px;
+//         width: 21px;
+//       }
+//     }
+//   }
+// }
+// * FYI - determining how to integrate flexbox w/MapControls
+
 @media screen and (max-width: 475px) {
   .image-wrapper,
   .exit-button {

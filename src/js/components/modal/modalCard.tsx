@@ -30,7 +30,7 @@ const ModalCard: FunctionComponent<ModalProps> = ({
           <div className="modal-card-container">
             <button
               className="exit-button"
-              onClick={() => closeWidget(!widgetClosed)}
+              onClick={() => closeModal(!widgetClosed)}
             >
               <svg className="svg-icon">
                 <svg id="shape-close" viewBox="0 0 25 25">

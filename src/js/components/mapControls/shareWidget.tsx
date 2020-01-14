@@ -2,8 +2,6 @@ import React, { FunctionComponent, useState } from 'react';
 
 import ModalCard from '../modal/modalCard';
 
-import '../../../css/shareWidget';
-
 const ShareWidget: FunctionComponent = () => {
   const [openWidget, setWidgetContent] = useState(false);
 

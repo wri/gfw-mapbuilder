@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react';
 import ShareWidget from '../mapControls/shareWidget';
 import PrintWidget from '../mapControls/printWidget';
 
-import '../../../css/shareWidget';
+import '../../../css/mapControls';
 
 const MapControl: FunctionComponent = () => {
   return (
