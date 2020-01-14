@@ -24,6 +24,12 @@ body {
   height: 100%;
 }
 
-.mapview-container {
-  height: calc(100% - 5rem);
+// .mapview-container {
+//   height: calc(100% - 5rem);
+// }
+
+#main {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
 }
