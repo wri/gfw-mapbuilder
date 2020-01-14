@@ -27,10 +27,5 @@ body {
 #main {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.mapview-container {
-  height: calc(100% - 5rem);
+  flex-direction: row;
 }
