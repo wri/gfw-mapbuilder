@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Mapview from './mapview/Mapview';
 import Header from './header/Header';
+import LeftPanel from './leftPanel/LeftPanel';
 import { RootState } from 'js/store/index';
 import { useSelector } from 'react-redux';
 
@@ -23,6 +24,7 @@ const App = (): JSX.Element => {
     <>
       <Header />
       <Mapview />
+      <LeftPanel />
       {!isMapReady && <Loader />}
       {loadError && <ErrorScreen />}
     </>
