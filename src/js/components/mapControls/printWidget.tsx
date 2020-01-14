@@ -5,7 +5,8 @@ import ModalCard from '../modal/modalCard';
 // import '../../../css/shareWidget'
 
 const PrintWidget: FunctionComponent = () => {
-  const [openWidget, setWidgetContent] = useState(false);
+  const [openWidget, setOpenWidget] = useState(false);
+  // TODO integrate Redux
 
   const WidgetContent = () => {
     return (
@@ -17,10 +18,6 @@ const PrintWidget: FunctionComponent = () => {
     );
   };
 
-  const closeModal = (modalStatus: boolean) => {
-    setWidgetContent(modalStatus);
-  };
-
   return (
     <>
       <div className="print-widget-container left">
@@ -28,7 +25,7 @@ const PrintWidget: FunctionComponent = () => {
           className="image-wrapper"
           role="button"
           aria-pressed={openWidget}
-          onClick={() => setWidgetContent(!openWidget)}
+          onClick={() => setOpenWidget(!openWidget)}
         >
           <svg className="svg-icon">
             <svg id="icon-print" viewBox="0 0 19 14">
@@ -44,7 +41,7 @@ const PrintWidget: FunctionComponent = () => {
 
       <ModalCard
         renderModal={openWidget}
-        closeModal={(modalStatus: boolean) => closeModal(modalStatus)}
+        setOpenWidget={(modalStatus: boolean) => setOpenWidget(modalStatus)}
       >
         <WidgetContent />
       </ModalCard>

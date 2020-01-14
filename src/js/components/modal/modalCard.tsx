@@ -5,13 +5,13 @@ import '../../../css/modalCard.scss';
 interface ModalProps {
   renderModal: boolean;
   children: any;
-  closeModal: any;
+  setOpenWidget: any;
 }
 
 const ModalCard: FunctionComponent<ModalProps> = ({
   renderModal,
   children,
-  closeModal
+  setOpenWidget
 }) => {
   const [widgetClosed, closeWidget] = useState(false);
 
@@ -25,12 +25,12 @@ const ModalCard: FunctionComponent<ModalProps> = ({
         <>
           <div
             className="dim-container"
-            onClick={() => closeModal(!widgetClosed)}
+            onClick={() => setOpenWidget(!widgetClosed)}
           ></div>
           <div className="modal-card-container">
             <button
               className="exit-button"
-              onClick={() => closeModal(!widgetClosed)}
+              onClick={() => setOpenWidget(!widgetClosed)}
             >
               <svg className="svg-icon">
                 <svg id="shape-close" viewBox="0 0 25 25">

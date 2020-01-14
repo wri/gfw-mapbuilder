@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import MapContent from './MapContent';
 import Header from './header/Header';
+import MapContent from './MapContent';
 // import { RootState } from 'js/store/index';
 // import { useSelector } from 'react-redux';
 

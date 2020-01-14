@@ -14,44 +14,50 @@ $font-color: #555;
   right: 0;
 }
 
-.print-widget-container,
-.share-widget-container {
-  display: block;
+.widget-wrapper {
   position: absolute;
-  top: 10%;
-  z-index: 1;
+  height: 100%;
+  width: 100%;
 
-  background-color: #ffffff;
+  .print-widget-container,
+  .share-widget-container {
+    display: block;
+    position: absolute;
+    top: 10%;
+    z-index: 1;
 
-  font-size: 14px;
-  color: #6e6e6e;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  overflow: hidden;
-  cursor: pointer;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  transition: background-color 125ms ease-in-out;
+    background-color: #ffffff;
 
-  margin-top: 2rem;
-  margin-right: 2rem;
-
-  .image-wrapper {
+    font-size: 14px;
+    color: #6e6e6e;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
     display: flex;
-    height: auto;
-    width: 38px;
-    margin-top: auto;
-    margin-bottom: auto;
-    border: none;
+    justify-content: center;
+    transition: background-color 125ms ease-in-out;
 
-    .svg-icon {
-      fill: #555;
-      display: block;
-      margin: auto;
-      height: 25px;
-      width: 25px;
+    margin-top: 2rem;
+    margin-right: 2rem;
+
+    .image-wrapper {
+      display: flex;
+      height: auto;
+      width: 38px;
+      margin-top: auto;
+      margin-bottom: auto;
+      border: none;
+
+      .svg-icon {
+        fill: #555;
+        display: block;
+        margin: auto;
+        height: 25px;
+        width: 25px;
+      }
     }
   }
 }
