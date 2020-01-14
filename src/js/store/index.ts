@@ -1,11 +1,13 @@
 //@ts-ignore
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { appSettingsReducer } from './appSettings/reducers';
 import { appStateReducer } from './appState/reducers';
 import { mapviewReducer } from './mapview/reducers';
 import { createLogger } from 'redux-logger';
 
 const rootReducer = combineReducers({
+  appSettings: appSettingsReducer,
   appState: appStateReducer,
   mapviewState: mapviewReducer
 });
