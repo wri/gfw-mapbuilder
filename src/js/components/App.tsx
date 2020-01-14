@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import Mapview from './mapview/Mapview';
+import Mapview from './mapview/Mapview';
 import Header from './header/Header';
 // import { RootState } from 'js/store/index';
 // import { useSelector } from 'react-redux';
@@ -22,7 +22,7 @@ const App = (): JSX.Element => {
   return (
     <>
       <Header />
-      {/* <Mapview /> */}
+      <Mapview />
       {/* {!isMapReady && <Loader />}
       {loadError && <ErrorScreen />} */}
     </>
