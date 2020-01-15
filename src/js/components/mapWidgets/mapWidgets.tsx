@@ -35,8 +35,8 @@ const MapWidgets: FunctionComponent = () => {
           <ZoomWidget />
         </div>
         <div className="widget-column">
-          <PrintWidget />
           <ShareWidget />
+          <PrintWidget />
         </div>
         <div className="widget-column">
           <PenWidget />

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const printModal = (
-  <div className="share-content-container">
+  <div className="modal-content-container">
     <div className="directions">
       <p>Choose a print output</p>
     </div>
@@ -9,7 +9,7 @@ const printModal = (
 );
 
 const shareModal = (
-  <div className="share-content-container">
+  <div className="modal-content-container">
     <div className="directions">
       <h4 className="title">Share this view</h4>
       <p>
@@ -21,7 +21,7 @@ const shareModal = (
 );
 
 const penModal = (
-  <div className="share-content-container">
+  <div className="modal-content-container">
     <div className="directions">
       <h4 className="title">Analyse your own shape</h4>
       <ol>
@@ -42,7 +42,7 @@ const penModal = (
 );
 
 const searchModal = (
-  <div className="share-content-container">
+  <div className="modal-content-container">
     <div className="directions">
       <div>
         <span>Lat:</span>

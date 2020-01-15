@@ -1,17 +1,23 @@
 .modal-card-container {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   z-index: 3;
-  top: 50%;
-  left: calc(50% - 150px);
+  top: 40%;
+  left: 35%;
+  padding: 1rem;
 
-  width: 300px;
+  min-width: 300px;
+  max-width: 250px;
+  min-height: 125px;
   background: white;
 
   .exit-button {
     position: absolute;
     border: none;
     right: 0;
+    top: 0;
 
     svg {
       height: 2rem;
@@ -27,4 +33,10 @@
   width: 100%;
   height: 100%;
   background-color: black;
+}
+
+.print-modal {
+  min-width: 300px;
+  max-width: 250px;
+  min-height: 125px;
 }
