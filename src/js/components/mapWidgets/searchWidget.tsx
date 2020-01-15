@@ -1,10 +1,14 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 
 import { ReactComponent as SearchIcon } from '../../../images/searchIcon.svg';
 
 const SearchWidget: FunctionComponent = () => {
-  // const [openWidget, setOpenWidget] = useState(false);
-  // ? should aria-pressed be maintained via Redux state, or local component state?
+  const [searchARIA, setSearchARIA] = useState(false);
+
+  const setSearch = () => {
+    setSearchARIA(!searchARIA);
+    // TODO dispatch actionCreator to render Search form
+  };
 
   return (
     <>
@@ -12,8 +16,8 @@ const SearchWidget: FunctionComponent = () => {
         <button
           className="image-wrapper"
           role="button"
-          aria-pressed={true} //openWidget goes here
-          onClick={() => console.log('Redux goes here!')}
+          aria-pressed={searchARIA}
+          onClick={() => setSearch()}
         >
           <SearchIcon height={25} width={25} fill={'#555'} />
         </button>

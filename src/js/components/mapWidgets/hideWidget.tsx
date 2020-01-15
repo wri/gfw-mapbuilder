@@ -1,10 +1,14 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 
 import { ReactComponent as HideIcon } from '../../../images/hideIcon.svg';
 
 const HideWidget: FunctionComponent = () => {
-  // const [openWidget, setOpenWidget] = useState(false);
-  // ? should aria-pressed be maintained via Redux state, or local component state?
+  const [hideARIA, setHideARIA] = useState(false);
+
+  const setHide = () => {
+    setHideARIA(!hideARIA);
+    // TODO - onClick, dispatch to actionCreator to hide all widgets
+  };
 
   return (
     <>
@@ -12,8 +16,8 @@ const HideWidget: FunctionComponent = () => {
         <button
           className="image-wrapper"
           role="button"
-          aria-pressed={true} //openWidget goes here
-          onClick={() => console.log('Redux goes here!')}
+          aria-pressed={hideARIA}
+          onClick={() => setHide()}
         >
           <HideIcon height={25} width={25} fill={'#555'} />
         </button>

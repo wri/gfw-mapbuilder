@@ -1,10 +1,14 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 
 import { ReactComponent as PenIcon } from '../../../images/penIcon.svg';
 
 const PenWidget: FunctionComponent = () => {
-  // const [openWidget, setOpenWidget] = useState(false);
-  // ? should aria-pressed be maintained via Redux state, or local component state?
+  const [penARIA, setPenARIA] = useState(false);
+
+  const setPen = () => {
+    setPenARIA(!penARIA);
+    // TODO maintain aria-pressed via local component state
+  };
 
   return (
     <>
@@ -12,8 +16,8 @@ const PenWidget: FunctionComponent = () => {
         <button
           className="image-wrapper"
           role="button"
-          aria-pressed={true} //openWidget goes here
-          onClick={() => console.log('Redux goes here!')}
+          aria-pressed={penARIA}
+          onClick={() => setPen()}
         >
           <PenIcon height={25} width={25} fill={'#555'} />
         </button>
