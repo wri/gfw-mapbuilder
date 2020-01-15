@@ -8,6 +8,8 @@ interface ModalProps {
   setOpenWidget: any;
 }
 
+// TODO wrap modalCard around Dimmer
+
 const ModalCard: FunctionComponent<ModalProps> = ({
   renderModal,
   children,
@@ -19,34 +21,35 @@ const ModalCard: FunctionComponent<ModalProps> = ({
     closeWidget(renderModal);
   }, [renderModal]);
 
-  const returnCard = () => {
+  const returnContent = () => {
     if (widgetClosed) {
       return (
         <>
           <div
             className="dim-container"
             onClick={() => setOpenWidget(!widgetClosed)}
-          ></div>
-          <div className="modal-card-container">
-            <button
-              className="exit-button"
-              onClick={() => setOpenWidget(!widgetClosed)}
-            >
-              <svg className="svg-icon">
-                <svg id="shape-close" viewBox="0 0 25 25">
-                  <title>Close</title>
-                  <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+          >
+            <div className="modal-card-container">
+              <button
+                className="exit-button"
+                onClick={() => setOpenWidget(!widgetClosed)}
+              >
+                <svg className="svg-icon">
+                  <svg id="shape-close" viewBox="0 0 25 25">
+                    <title>Close</title>
+                    <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+                  </svg>
                 </svg>
-              </svg>
-            </button>
-            {children}
+              </button>
+              {children}
+            </div>
           </div>
         </>
       );
     }
   };
 
-  return <>{returnCard()}</>;
+  return <>{returnContent()}</>;
 };
 
 export default ModalCard;

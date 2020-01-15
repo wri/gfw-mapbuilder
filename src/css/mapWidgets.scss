@@ -14,7 +14,7 @@ $font-color: #555;
   width: 76px;
   top: 80px;
   position: absolute;
-  z-index: 5;
+  z-index: 1;
 
   .widget-column {
     display: flex;
@@ -22,9 +22,8 @@ $font-color: #555;
 
     .widget-container {
       display: flex;
-      z-index: 4;
-      background-color: #ffffff;
       border: 1px solid #aaa;
+      background-color: white;
       width: 38px;
       height: 38px;
 

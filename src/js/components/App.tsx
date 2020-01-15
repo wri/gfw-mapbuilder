@@ -22,9 +22,6 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      {/* <div
-      className="dim-container"
-    ></div> */}
       <Header />
       <MapContent />
     </>

@@ -4,7 +4,7 @@ import { mapController } from 'js/controllers/mapController';
 import { useDispatch } from 'react-redux';
 import { overwriteSettings } from 'js/store/appState/actions';
 
-import '../../../css/mapControls';
+import '../../../css/mapWidgets.scss';
 
 const Mapview: React.FunctionComponent = () => {
   const mapElementRef = useRef(null);
