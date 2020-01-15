@@ -3,12 +3,14 @@ interface LeftPanel {
 }
 
 export interface AppState {
-  leftPanel: LeftPanel;
+  leftPanel?: LeftPanel;
+  renderModal?: String;
 }
 
 //Action names available
 export const SHOW_TABVIEW_PANEL = 'SHOW_TABVIEW_PANEL';
 export const HIDE_TABVIEW_PANEL = 'HIDE_TABVIEW_PANEL';
+export const RENDER_MODAL = 'RENDER_MODAL';
 
 interface ShowTabviewPanelAction {
   type: typeof SHOW_TABVIEW_PANEL;
@@ -20,4 +22,12 @@ interface HideTabviewPanelAction {
   payload: AppState;
 }
 
-export type AppStateTypes = ShowTabviewPanelAction | HideTabviewPanelAction;
+interface RenderModalAction {
+  type: typeof RENDER_MODAL;
+  payload: AppState;
+}
+
+export type AppStateTypes =
+  | ShowTabviewPanelAction
+  | HideTabviewPanelAction
+  | RenderModalAction;

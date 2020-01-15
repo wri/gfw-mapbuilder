@@ -1,23 +1,19 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { renderModal } from '../../store/appState/actions';
 
 import { ReactComponent as PenIcon } from '../../../images/penIcon.svg';
 
 const PenWidget: FunctionComponent = () => {
-  const [penARIA, setPenARIA] = useState(false);
-
-  const setPen = () => {
-    setPenARIA(!penARIA);
-    // TODO - onClick, dispatch to actionCreator to render Modal
-  };
+  const dispatch = useDispatch();
 
   return (
     <>
       <div className="widget-container">
         <button
           className="image-wrapper"
-          role="button"
-          aria-pressed={penARIA}
-          onClick={() => setPen()}
+          onClick={() => dispatch(renderModal({ renderModal: 'PenWidget' }))}
         >
           <PenIcon height={25} width={25} fill={'#555'} />
         </button>

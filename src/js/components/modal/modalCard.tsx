@@ -1,50 +1,41 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { renderModal } from '../../store/appState/actions';
 
 import '../../../css/modalCard.scss';
 
 interface ModalProps {
-  renderModal: boolean;
   children: any;
-  setOpenWidget: any;
 }
 
-const ModalCard: FunctionComponent<ModalProps> = ({
-  renderModal,
-  children,
-  setOpenWidget
-}) => {
-  const [widgetClosed, closeWidget] = useState(false);
-
-  useEffect(() => {
-    closeWidget(renderModal);
-  }, [renderModal]);
+const ModalCard: FunctionComponent<ModalProps> = ({ children }) => {
+  const dispatch = useDispatch();
 
   const returnContent = () => {
-    if (widgetClosed) {
-      return (
-        <>
-          <div
-            className="dim-container"
-            onClick={() => setOpenWidget(!widgetClosed)}
-          >
-            <div className="modal-card-container">
-              <button
-                className="exit-button"
-                onClick={() => setOpenWidget(!widgetClosed)}
-              >
-                <svg className="svg-icon">
-                  <svg id="shape-close" viewBox="0 0 25 25">
-                    <title>Close</title>
-                    <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
-                  </svg>
+    return (
+      <>
+        <div
+          className="dim-container"
+          onClick={() => dispatch(renderModal({ renderModal: '' }))}
+        >
+          <div className="modal-card-container">
+            <button
+              className="exit-button"
+              onClick={() => dispatch(renderModal({ renderModal: '' }))}
+            >
+              <svg className="svg-icon">
+                <svg id="shape-close" viewBox="0 0 25 25">
+                  <title>Close</title>
+                  <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
                 </svg>
-              </button>
-              {children}
-            </div>
+              </svg>
+            </button>
+            {children}
           </div>
-        </>
-      );
-    }
+        </div>
+      </>
+    );
   };
 
   return <>{returnContent()}</>;

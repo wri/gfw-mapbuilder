@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
 
 import ShareWidget from './shareWidget';
 import PrintWidget from './printWidget';
@@ -8,13 +9,25 @@ import HideWidget from './hideWidget';
 import RefreshWidget from './refreshWidget';
 import ZoomWidget from './zoomWidget';
 
-// import ModalCard from '../modal/modalCard'
+import setModalContent from '../modal/modal.config';
+
+import ModalCard from '../modal/modalCard';
 
 import '../../../css/mapWidgets';
 
 // TODO integrate ModalCard here!
 
 const MapWidgets: FunctionComponent = () => {
+  const renderModal = useSelector((state: any) => state.appState.renderModal);
+
+  const setModal = () => {
+    const modalContent = setModalContent(renderModal);
+
+    if (renderModal.length) {
+      return <ModalCard children={modalContent} />;
+    }
+  };
+
   return (
     <>
       <div className="widget-wrapper">
@@ -34,7 +47,7 @@ const MapWidgets: FunctionComponent = () => {
           <RefreshWidget />
         </div>
       </div>
-      {/* <ModalCard renderModal={true} children={"test"} setOpenWidget={() => console.log('setOpenWidget()')}/> */}
+      {setModal()}
     </>
   );
 };
