@@ -1,23 +1,16 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import { ReactComponent as HideIcon } from '../../../images/hideIcon.svg';
 
 const HideWidget: FunctionComponent = () => {
-  const [hideARIA, setHideARIA] = useState(false);
-
-  const setHide = () => {
-    setHideARIA(!hideARIA);
-    // TODO - onClick, dispatch to actionCreator to hide all widgets
-  };
+  // TODO connect to Redux to toggle leftPanel and Legend
 
   return (
     <>
       <div className="widget-container">
         <button
           className="image-wrapper"
-          role="button"
-          aria-pressed={hideARIA}
-          onClick={() => setHide()}
+          onClick={() => console.log('hide legend and left panel!')}
         >
           <HideIcon height={25} width={25} fill={'#555'} />
         </button>

@@ -11,7 +11,6 @@ const ZoomWidget: FunctionComponent = () => {
       <div className="widget-container">
         <button
           className="image-wrapper"
-          role="button"
           aria-pressed={undefined}
           onClick={() => mapController.zoomInOrOut({ zoomIn: false })}
         >
@@ -21,7 +20,6 @@ const ZoomWidget: FunctionComponent = () => {
       <div className="widget-container">
         <button
           className="image-wrapper"
-          role="button"
           aria-pressed={undefined}
           onClick={() => mapController.zoomInOrOut({ zoomIn: true })}
         >

@@ -28,6 +28,13 @@ const ModalCard: FunctionComponent<ModalProps> = ({ children }) => {
     }
   };
 
+  const handleEscapeKey = (e: React.KeyboardEvent) => {
+    if (e.keyCode === 27) {
+      // * NOTE ESC button has a keyCode of 27
+      dispatch(renderModal({ renderModal: '' }));
+    }
+  };
+
   const returnContent = () => {
     return (
       <>
@@ -39,6 +46,7 @@ const ModalCard: FunctionComponent<ModalProps> = ({ children }) => {
           <button
             className="exit-button"
             onClick={() => dispatch(renderModal({ renderModal: '' }))}
+            onKeyDown={e => handleEscapeKey(e)}
           >
             <svg className="svg-icon">
               <svg id="shape-close" viewBox="0 0 25 25">

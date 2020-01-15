@@ -15,8 +15,6 @@ import ModalCard from '../modal/modalCard';
 
 import '../../../css/mapWidgets';
 
-// TODO integrate ModalCard here!
-
 const MapWidgets: FunctionComponent = () => {
   const renderModal = useSelector((state: any) => state.appState.renderModal);
 
