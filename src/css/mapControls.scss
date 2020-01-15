@@ -6,130 +6,59 @@
 $font: 'Fira Sans', sans-serif;
 $font-color: #555;
 
-.left {
-  left: 85%;
-}
-
-.right {
-  right: 0;
-}
-
 .widget-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column; //row;
+  right: 20px;
+  width: 76px;
+  top: 80px;
   position: absolute;
-  height: 100%;
-  width: 100%;
+  z-index: 5;
 
-  .print-widget-container,
-  .share-widget-container {
-    display: block;
-    position: absolute;
-    top: 10%;
-    z-index: 1;
-
-    background-color: #ffffff;
-
-    font-size: 14px;
-    color: #6e6e6e;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    overflow: hidden;
-    cursor: pointer;
-    text-align: center;
+  .widget-column {
     display: flex;
-    justify-content: center;
-    transition: background-color 125ms ease-in-out;
+    flex-direction: row;
 
-    margin-top: 2rem;
-    margin-right: 2rem;
-
-    .image-wrapper {
+    .widget-container {
       display: flex;
-      height: auto;
+      z-index: 4;
+      background-color: #ffffff;
+      border: 1px solid #aaa;
       width: 38px;
-      margin-top: auto;
-      margin-bottom: auto;
-      border: none;
+      height: 38px;
 
-      .svg-icon {
-        fill: #555;
-        display: block;
-        margin: auto;
-        height: 25px;
-        width: 25px;
+      .image-wrapper {
+        display: flex;
+        height: auto;
+        width: 38px;
+        margin-top: auto;
+        margin-bottom: auto;
+        border: none;
+
+        .svg-icon {
+          fill: #555;
+          display: block;
+          margin: auto;
+          height: 21px;
+          width: 21px;
+        }
       }
     }
   }
 }
 
-.exit-button {
-  position: absolute;
-  border: none;
-  right: 0;
-
-  svg {
-    height: 2rem;
-    width: 1rem;
-  }
-}
-
-.directions {
-  margin: 1rem;
-  font-family: $font;
-  color: $font-color;
-
-  .title {
-    text-align: center;
-  }
-
-  p {
-    font-size: 13px;
-  }
-}
-
-// * FYI - determining how to integrate flexbox w/MapControls
-
-// .widget-wrapper {
-//   display: flex;
-//   flex-wrap: wrap;
-//   flex-direction: row;
-//   right: 5rem;
-//   top: 7rem;
-//   position: absolute;
-
-//   .share-widget-container,
-//   .print-widget-container {
-//     display: flex;
-//     position: absolute;
-//     z-index: 4;
-//     background-color: #ffffff;
-//     border: 1px solid #aaa;
-//     width: 38px;
-//     height: 38px;
-
-//     .image-wrapper {
-//       display: flex;
-//       height: auto;
-//       width: 38px;
-//       margin-top: auto;
-//       margin-bottom: auto;
-//       border: none;
-
-//       .svg-icon {
-//         fill: #555;
-//         display: block;
-//         margin: auto;
-//         height: 21px;
-//         width: 21px;
-//       }
-//     }
-//   }
-// }
-// * FYI - determining how to integrate flexbox w/MapControls
-
 @media screen and (max-width: 475px) {
-  .image-wrapper,
-  .exit-button {
-    background: white;
+  .widget-wrapper {
+    .widget-column {
+      flex-direction: column;
+
+      .widget-container {
+        .image-wrapper,
+        .exit-button {
+          background: white;
+        }
+      }
+    }
   }
 }

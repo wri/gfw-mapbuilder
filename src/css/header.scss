@@ -1,4 +1,4 @@
-$height: 5rem;
+$height: 50px; // 5rem;
 
 .header-container {
   display: flex;
@@ -6,6 +6,7 @@ $height: 5rem;
   justify-content: space-between;
   padding-right: 1rem;
   width: 100%;
+  height: $height;
 
   .title-container {
     display: flex;
