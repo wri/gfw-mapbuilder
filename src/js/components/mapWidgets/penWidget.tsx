@@ -7,7 +7,7 @@ const PenWidget: FunctionComponent = () => {
 
   const setPen = () => {
     setPenARIA(!penARIA);
-    // TODO maintain aria-pressed via local component state
+    // TODO - onClick, dispatch to actionCreator to render Modal
   };
 
   return (

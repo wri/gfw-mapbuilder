@@ -8,8 +8,6 @@ interface ModalProps {
   setOpenWidget: any;
 }
 
-// TODO wrap modalCard around Dimmer
-
 const ModalCard: FunctionComponent<ModalProps> = ({
   renderModal,
   children,

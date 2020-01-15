@@ -23,7 +23,7 @@ const ShareWidget: FunctionComponent = () => {
 
   const setShare = () => {
     setShareARIA(!shareARIA);
-    // TODO dispatch actionCreator to render Share form
+    // TODO - onClick, dispatch to actionCreator to render Modal
   };
 
   return (
