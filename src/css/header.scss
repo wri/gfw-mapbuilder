@@ -1,4 +1,4 @@
-$height: 50px; // 5rem;
+$header-height: 50px; // 5rem;
 
 .header-container {
   display: flex;
@@ -6,7 +6,7 @@ $height: 50px; // 5rem;
   justify-content: space-between;
   padding-right: 1rem;
   width: 100%;
-  height: $height;
+  height: $header-height;
 
   .title-container {
     display: flex;
@@ -14,7 +14,7 @@ $height: 50px; // 5rem;
     height: 100%;
 
     .gfw-logo {
-      max-height: $height;
+      max-height: $header-height;
     }
 
     .titles {

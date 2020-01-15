@@ -1,6 +1,11 @@
 $blue: #0079c1;
 $gray: #efefef;
 $white: #fff;
+$header-height: 50px;
+
+//? when I try to incorporate $header-height in
+// .mapview-container height attribute, the map isn't able to render
+// even though this same approach works in other SASS files
 
 html,
 body {
@@ -21,11 +26,13 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
+}
+
+.mapview,
+#main {
   height: 100%;
 }
 
-#main {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+.mapview-container {
+  height: calc(100% - 50px);
 }
