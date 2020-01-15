@@ -2,8 +2,13 @@ import Map from 'esri/Map';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
+// import Zoom from 'esri/widgets/Zoom'
 import { RefObject } from 'react';
 import store from '../store/index';
+
+interface ZoomParams {
+  zoomIn: boolean;
+}
 
 export class MapController {
   _map: Map | null;
@@ -52,6 +57,17 @@ export class MapController {
 
   log(): void {
     console.log(this._map?.basemap);
+  }
+
+  zoomInOrOut({ zoomIn }: ZoomParams): void {
+    if (this._mapview) {
+      const zoomNum = zoomIn ? this._mapview.zoom + 1 : this._mapview.zoom - 1;
+
+      this._mapview.goTo({
+        target: this._mapview.center,
+        zoom: zoomNum
+      });
+    }
   }
 }
 

@@ -6,6 +6,7 @@ import PenWidget from './penWidget';
 import SearchWidget from './searchWidget';
 import HideWidget from './hideWidget';
 import RefreshWidget from './refreshWidget';
+import ZoomWidget from './zoomWidget';
 
 // import ModalCard from '../modal/modalCard'
 
@@ -17,6 +18,9 @@ const MapWidgets: FunctionComponent = () => {
   return (
     <>
       <div className="widget-wrapper">
+        <div className="widget-column">
+          <ZoomWidget />
+        </div>
         <div className="widget-column">
           <PrintWidget />
           <ShareWidget />
