@@ -10,11 +10,11 @@ interface ModalProps {
 }
 
 const ModalCard: FunctionComponent<ModalProps> = ({ children }) => {
-  const renderModal = useSelector((state: any) => state.appState.renderModal);
+  const modalType = useSelector((state: any) => state.appState.renderModal);
   const dispatch = useDispatch();
 
   const setModalClassName = () => {
-    switch (renderModal) {
+    switch (modalType) {
       case 'PrintWidget':
         return 'print-modal';
       case 'ShareWidget':

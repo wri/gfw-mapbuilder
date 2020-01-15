@@ -1,16 +1,10 @@
 .modal-card-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   position: absolute;
   z-index: 3;
-  top: 40%;
-  left: 35%;
   padding: 1rem;
-
-  min-width: 300px;
-  max-width: 250px;
-  min-height: 125px;
   background: white;
 
   .exit-button {
@@ -36,7 +30,29 @@
 }
 
 .print-modal {
-  min-width: 300px;
-  max-width: 250px;
-  min-height: 125px;
+  height: 115px;
+  width: 225px;
+  top: 35%;
+  left: 40%;
+}
+
+.share-modal {
+  width: 300px;
+  height: 225px;
+  top: 35%;
+  left: 40%;
+}
+
+.pen-modal {
+  height: 500px;
+  width: 320px;
+  top: 20%;
+  left: 40%;
+}
+
+.search-modal {
+  width: 390px;
+  height: 160px;
+  top: 35%;
+  left: 35%;
 }
