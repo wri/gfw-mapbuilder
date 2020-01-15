@@ -20,10 +20,10 @@ export class MapController {
   }
 
   initializeMap(domRef: RefObject<any>): void {
-    const { appState } = store.getState();
+    const { appSettings } = store.getState();
     this._map = new WebMap({
       portalItem: {
-        id: appState.webmap
+        id: appSettings.webmap
       }
     });
 

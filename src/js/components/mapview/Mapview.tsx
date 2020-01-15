@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useEffect } from 'react';
 import { mapController } from 'js/controllers/mapController';
 import { useDispatch } from 'react-redux';
-import { overwriteSettings } from 'js/store/appState/actions';
+import { overwriteSettings } from 'js/store/appSettings/actions';
 
 import '../../../css/mapWidgets.scss';
 

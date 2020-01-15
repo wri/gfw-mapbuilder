@@ -1,12 +1,14 @@
-import { AppState, AppStateTypes, OVERWRITE_SETTINGS } from './types';
+import {
+  AppState,
+  AppStateTypes,
+  SHOW_TABVIEW_PANEL,
+  HIDE_TABVIEW_PANEL
+} from './types';
 
 const initialState: AppState = {
-  webmap: 'e691172598f04ea8881cd2a4adaa45ba',
-  title: 'GFW Mapbuilder',
-  subtitle: 'Make maps that matter',
-  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
-  language: 'en'
+  leftPanel: {
+    tabviewHidden: false
+  }
 };
 
 export function appStateReducer(
@@ -14,7 +16,9 @@ export function appStateReducer(
   action: AppStateTypes
 ): AppState {
   switch (action.type) {
-    case OVERWRITE_SETTINGS:
+    case SHOW_TABVIEW_PANEL:
+      return { ...state, ...action.payload };
+    case HIDE_TABVIEW_PANEL:
       return { ...state, ...action.payload };
     default:
       return state;

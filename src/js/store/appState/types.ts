@@ -1,18 +1,23 @@
+interface LeftPanel {
+  tabviewHidden: boolean;
+}
+
 export interface AppState {
-  webmap?: string;
-  title: string;
-  subtitle?: string;
-  logoUrl?: string;
-  logoLinkUrl?: string;
-  language?: string;
+  leftPanel: LeftPanel;
 }
 
 //Action names available
-export const OVERWRITE_SETTINGS = 'OVERWRITE_SETTINGS';
+export const SHOW_TABVIEW_PANEL = 'SHOW_TABVIEW_PANEL';
+export const HIDE_TABVIEW_PANEL = 'HIDE_TABVIEW_PANEL';
 
-interface OverwriteSettingsAction {
-  type: typeof OVERWRITE_SETTINGS;
+interface ShowTabviewPanelAction {
+  type: typeof SHOW_TABVIEW_PANEL;
   payload: AppState;
 }
 
-export type AppStateTypes = OverwriteSettingsAction;
+interface HideTabviewPanelAction {
+  type: typeof HIDE_TABVIEW_PANEL;
+  payload: AppState;
+}
+
+export type AppStateTypes = ShowTabviewPanelAction | HideTabviewPanelAction;
