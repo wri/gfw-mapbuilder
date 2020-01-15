@@ -15,7 +15,6 @@ export class MapController {
   }
 
   initializeMap(domRef: RefObject<any>): void {
-    console.log('INIT MAP');
     const { appSettings } = store.getState();
     this._map = new WebMap({
       portalItem: {
