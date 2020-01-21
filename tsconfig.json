@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "js/*": ["src/js/*"],
-      "css/*": ["src/css/*"]
+      "css/*": ["src/css/*"],
+      "images/*": ["src/images/*"]
     },
     "lib": ["dom", "es2015.promise", "es5", "es6"],
     "target": "es5",
