@@ -1,35 +1,75 @@
-$height: 5rem;
+$header-height: 50px; // 5rem;
 
 .header-container {
   display: flex;
-  max-height: $height;
-  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
+  padding-right: 1rem;
+  width: 100%;
+  height: $header-height;
 
   .title-container {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
     max-height: 5rem;
+    height: 100%;
 
     .gfw-logo {
-      max-height: $height;
+      max-height: $header-height;
     }
 
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 0;
-    }
+    .titles {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin-left: 1rem;
+      padding: 0.5rem;
 
-    h2 {
-      font-size: 1rem;
-      margin-top: 0;
+      h1,
+      h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        // margin-bottom: 0;
+      }
+
+      h2 {
+        font-size: 1rem;
+        // margin-top: 0;
+      }
     }
   }
 
   .language-dropdown-container {
     margin-top: auto;
     margin-bottom: auto;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .header-container {
+    justify-content: flex-end;
+
+    .title-container {
+      width: 100%;
+
+      .titles {
+        margin-left: 0.25rem;
+
+        h1 {
+          font-size: 1rem;
+        }
+
+        h2 {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+
+  .language-dropdown-container {
+    width: fit-content;
   }
 }

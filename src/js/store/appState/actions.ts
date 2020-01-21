@@ -1,8 +1,27 @@
-import { OVERWRITE_SETTINGS, AppState } from './types';
+import {
+  SHOW_TABVIEW_PANEL,
+  HIDE_TABVIEW_PANEL,
+  RENDER_MODAL,
+  AppState
+} from './types';
 
-export function overwriteSettings(newSettings: AppState) {
+export function showTabviewPanel(payload: AppState) {
   return {
-    type: OVERWRITE_SETTINGS,
-    payload: newSettings
+    type: SHOW_TABVIEW_PANEL,
+    payload: payload
+  };
+}
+
+export function hideTabviewPanel(payload: AppState) {
+  return {
+    type: HIDE_TABVIEW_PANEL,
+    payload: payload
+  };
+}
+
+export function renderModal(payload: AppState) {
+  return {
+    type: RENDER_MODAL,
+    payload: payload
   };
 }
