@@ -49,6 +49,8 @@ $font-color: #555;
 
 @media screen and (max-width: 475px) {
   .widget-wrapper {
+    right: 0px;
+
     .widget-column {
       flex-direction: column;
 
