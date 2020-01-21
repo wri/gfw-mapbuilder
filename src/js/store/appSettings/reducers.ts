@@ -1,7 +1,7 @@
 import { AppSettings, AppSettingsTypes, OVERWRITE_SETTINGS } from './types';
 
 const initialState: AppSettings = {
-  webmap: 'e691172598f04ea8881cd2a4adaa45ba',
+  webmap: '512eef95997b4e7486cdbdc45078739d',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
