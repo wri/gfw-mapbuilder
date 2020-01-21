@@ -9,7 +9,7 @@ export default {
 	title: 'GFW Mapbuilder',
 	subtitle: 'Make maps that matter',
 	logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-	logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+	logoLinkUrl: 'https://www.globalforestwatch.org/howto/tags/map-builder/',
 	aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
 	downloadLinkUrl: '', // http://data.globalforestwatch.org/
 	printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
