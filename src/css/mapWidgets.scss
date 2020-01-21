@@ -1,0 +1,65 @@
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('../fonts/firasans-regular-webfont.ttf') format('Truetype');
+}
+
+$font: 'Fira Sans', sans-serif;
+$font-color: #555;
+
+.widget-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column; //row;
+  right: 20px;
+  width: 76px;
+  top: 80px;
+  position: absolute;
+  z-index: 1;
+
+  .widget-column {
+    display: flex;
+    flex-direction: row;
+
+    .widget-container {
+      display: flex;
+      border: 1px solid #aaa;
+      background-color: white;
+      width: 38px;
+      height: 38px;
+
+      .image-wrapper {
+        display: flex;
+        height: auto;
+        width: 38px;
+        margin-top: auto;
+        margin-bottom: auto;
+        border: none;
+
+        .svg-icon {
+          fill: #555;
+          display: block;
+          margin: auto;
+          height: 21px;
+          width: 21px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .widget-wrapper {
+    right: 0px;
+
+    .widget-column {
+      flex-direction: column;
+
+      .widget-container {
+        .image-wrapper,
+        .exit-button {
+          background: white;
+        }
+      }
+    }
+  }
+}

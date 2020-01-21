@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Mapview from './mapview/Mapview';
+import MapContent from './MapContent';
 import Header from './header/Header';
 import { RootState } from 'js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -52,7 +52,7 @@ const App = (): JSX.Element => {
       ) : (
         <>
           <Header />
-          <Mapview />
+          <MapContent />
           {!isMapReady && <MapSpinner />}
         </>
       )}

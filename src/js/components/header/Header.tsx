@@ -19,8 +19,10 @@ const Header: FunctionComponent = () => {
             className="gfw-logo"
           />
         </a>
-        <h1>{title.toUpperCase()}</h1>
-        <h2>{subtitle}</h2>
+        <div className="titles">
+          <h1>{title.toUpperCase()}</h1>
+          <h2>{subtitle}</h2>
+        </div>
       </div>
       <LanguageDropdown />
     </div>

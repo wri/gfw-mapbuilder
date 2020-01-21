@@ -1,4 +1,9 @@
-import { SHOW_TABVIEW_PANEL, HIDE_TABVIEW_PANEL, AppState } from './types';
+import {
+  SHOW_TABVIEW_PANEL,
+  HIDE_TABVIEW_PANEL,
+  RENDER_MODAL,
+  AppState
+} from './types';
 
 export function showTabviewPanel(payload: AppState) {
   return {
@@ -10,6 +15,13 @@ export function showTabviewPanel(payload: AppState) {
 export function hideTabviewPanel(payload: AppState) {
   return {
     type: HIDE_TABVIEW_PANEL,
+    payload: payload
+  };
+}
+
+export function renderModal(payload: AppState) {
+  return {
+    type: RENDER_MODAL,
     payload: payload
   };
 }
