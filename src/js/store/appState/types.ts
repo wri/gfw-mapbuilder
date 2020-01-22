@@ -3,9 +3,9 @@ interface LeftPanel {
 }
 
 export interface AppState {
-  leftPanel?: LeftPanel;
-  renderModal?: String;
-  selectedLanguage?: String;
+  leftPanel: LeftPanel;
+  renderModal: string;
+  selectedLanguage: string;
 }
 
 //Action names available
@@ -26,12 +26,12 @@ interface HideTabviewPanelAction {
 
 interface RenderModalAction {
   type: typeof RENDER_MODAL;
-  payload: AppState;
+  payload: AppState['renderModal'];
 }
 
 interface SetLanguageAction {
   type: typeof SET_LANGUAGE;
-  payload: AppState;
+  payload: AppState['selectedLanguage'];
 }
 
 export type AppStateTypes =
