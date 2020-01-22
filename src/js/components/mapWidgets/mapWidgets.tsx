@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
 
 import ShareWidget from './shareWidget';
 import PrintWidget from './printWidget';
@@ -9,13 +8,9 @@ import HideWidget from './hideWidget';
 import RefreshWidget from './refreshWidget';
 import ZoomWidget from './zoomWidget';
 
-import ModalCard from '../modal/modalCard';
-
 import '../../../css/mapWidgets';
 
 const MapWidgets: FunctionComponent = () => {
-  const modalType = useSelector((state: any) => state.appState.renderModal);
-
   return (
     <>
       <div className="widget-wrapper">
@@ -35,7 +30,6 @@ const MapWidgets: FunctionComponent = () => {
           <RefreshWidget />
         </div>
       </div>
-      {modalType.length ? <ModalCard /> : null}
     </>
   );
 };

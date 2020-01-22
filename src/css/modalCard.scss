@@ -5,7 +5,7 @@ $header-height: 50px;
   align-items: flex-start;
   justify-content: center;
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   padding: 1rem;
   background: white;
 
@@ -24,11 +24,12 @@ $header-height: 50px;
 
 .dim-container {
   position: absolute;
-  z-index: 2;
-  opacity: 0.75;
+  z-index: 3;
+  opacity: 0.5;
   width: 100%;
-  height: calc(100% - 50px);
   background-color: black;
+  top: 0;
+  height: 100%;
 }
 
 .print-modal {

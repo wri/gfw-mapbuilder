@@ -26,13 +26,10 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
-}
-
-.mapview,
-#main {
   height: 100%;
 }
 
 .mapview-container {
-  height: calc(100% - 50px);
+  position: absolute;
+  top: 0;
 }
