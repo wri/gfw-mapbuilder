@@ -9,22 +9,12 @@ import HideWidget from './hideWidget';
 import RefreshWidget from './refreshWidget';
 import ZoomWidget from './zoomWidget';
 
-import setModalContent from '../modal/modal.config';
-
 import ModalCard from '../modal/modalCard';
 
 import '../../../css/mapWidgets';
 
 const MapWidgets: FunctionComponent = () => {
-  const renderModal = useSelector((state: any) => state.appState.renderModal);
-
-  const setModal = () => {
-    const modalContent = setModalContent(renderModal);
-
-    if (renderModal.length) {
-      return <ModalCard children={modalContent} />;
-    }
-  };
+  const modalType = useSelector((state: any) => state.appState.renderModal);
 
   return (
     <>
@@ -45,7 +35,7 @@ const MapWidgets: FunctionComponent = () => {
           <RefreshWidget />
         </div>
       </div>
-      {setModal()}
+      {modalType.length ? <ModalCard /> : null}
     </>
   );
 };
