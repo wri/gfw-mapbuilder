@@ -13,7 +13,7 @@ const SearchWidget: FunctionComponent = () => {
       <div className="widget-container">
         <button
           className="image-wrapper"
-          onClick={() => dispatch(renderModal({ renderModal: 'SearchWidget' }))}
+          onClick={() => dispatch(renderModal('SearchWidget'))}
         >
           <SearchIcon height={25} width={25} fill={'#555'} />
         </button>

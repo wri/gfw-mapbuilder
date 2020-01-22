@@ -20,14 +20,14 @@ export function hideTabviewPanel(payload: AppState) {
   };
 }
 
-export function renderModal(payload: AppState) {
+export function renderModal(payload: AppState['renderModal']) {
   return {
     type: RENDER_MODAL,
     payload: payload
   };
 }
 
-export function setLanguage(payload: AppState) {
+export function setLanguage(payload: AppState['selectedLanguage']) {
   return {
     type: SET_LANGUAGE,
     payload: payload

@@ -25,9 +25,9 @@ export function appStateReducer(
     case HIDE_TABVIEW_PANEL:
       return { ...state, ...action.payload };
     case RENDER_MODAL:
-      return { ...state, ...action.payload };
+      return { ...state, renderModal: action.payload };
     case SET_LANGUAGE:
-      return { ...state, ...action.payload };
+      return { ...state, selectedLanguage: action.payload };
     default:
       return state;
   }
