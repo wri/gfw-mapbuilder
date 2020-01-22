@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import 'css/leftpanel.scss';
-
-//Tabs Related Imports TODO: extract those in separarate file/folder later
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store/index';
 import { selectActiveTab } from 'js/store/appState/actions';
+import ReactTooltip from 'react-tooltip';
+import 'css/leftpanel.scss';
+
+//Tabs Related Imports TODO: extract those in separarate file/folder later
 import { ReactComponent as LayersTabIcon } from 'images/layersTabIcon.svg';
 import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
 import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
@@ -18,50 +19,101 @@ interface TabProps {
   label: string;
   icon: React.SFC<React.SVGProps<SVGSVGElement>>;
   tooltipText: string;
-  activeTab: string;
+  activeTab: string | undefined;
 }
 
+// Individual TAB Logic
 const Tab = (props: TabProps): React.ReactElement => {
   const dispatch = useDispatch();
   const tabIsActive =
     props.activeTab === props.label ? 'tab-button__active' : '';
 
   return (
-    <button
-      className={tabIsActive ? 'tab-button tab-button__active' : 'tab-button'}
-      onClick={() => dispatch(selectActiveTab(props.label))}
-    >
-      <span className="tab-tooltip">{props.tooltipText}</span>
-      <props.icon width={25} height={25} fill={'#555'} />
-    </button>
+    <>
+      <button
+        data-tip={props.label}
+        data-offset="{'top': -5}"
+        className={tabIsActive ? 'tab-button tab-button__active' : 'tab-button'}
+        onClick={() => dispatch(selectActiveTab(props.label))}
+      >
+        <props.icon width={25} height={25} fill={'#555'} />
+      </button>
+      <ReactTooltip effect="solid" className="tab-tooltip" />
+    </>
   );
 };
 
-const Tabs = (): React.ReactElement => {
-  //Default active tab
-  const defaultActiveTab = useSelector(
-    (store: RootState) => store.appSettings.defaultActiveTab
-  );
+// Tabs ROW Component Logic
+interface TabRenderObject {
+  label: string;
+  icon: React.SFC<React.SVGProps<SVGSVGElement>>;
+  tooltipText: string;
+  render: boolean | undefined;
+}
 
-  //Specific tabs that are optional and rendered per resources
-  const renderDocTab = useSelector(
-    (store: RootState) => store.appSettings.includeDocumentsTab
-  );
+interface TabsProps {
+  tabsToRender: TabRenderObject[];
+}
 
+const Tabs = (props: TabsProps): React.ReactElement => {
   //Active Tab in the store
   const savedActiveTab = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
+
   //Current active tab default to the default one
-  const [activeTab, setActiveTab] = useState('');
+  const [activeTab, setActiveTab] = useState(savedActiveTab);
 
   //This probably should be in our default settings?
+
+  //how do we figure out what is active tab? default or new, when to re-render etc?
+  useEffect(() => {
+    //check if we need to use default one or not
+    if (savedActiveTab !== activeTab) {
+      setActiveTab(savedActiveTab);
+    }
+  }, [savedActiveTab]);
+
+  const tabsGroupRow = props.tabsToRender.map(tab => (
+    <Tab
+      key={tab.label}
+      label={tab.label}
+      tooltipText={tab.tooltipText}
+      icon={tab.icon}
+      activeTab={activeTab}
+    />
+  ));
+  return <div className="tab-header-container">{tabsGroupRow}</div>;
+};
+
+// Tab View Logic
+const TabViewContainer = (): React.ReactElement => {
+  //Figure out which tab content we are showing
+  //Active Tab in the store
+  const savedActiveTab = useSelector(
+    (store: RootState) => store.appState.leftPanel.activeTab
+  );
+
+  return (
+    <div className="tabview-container">
+      <div className={`tabview-${savedActiveTab}`}>
+        <p>Here is the tabview content</p>
+        <p>We are currently in tab: {savedActiveTab}</p>
+      </div>
+    </div>
+  );
+};
+
+const LeftPanel = (): React.ReactElement => {
+  //Specific tabs that are optional and rendered per resources
+  const renderDocTab = useSelector(
+    (store: RootState) => store.appSettings.includeDocumentsTab
+  );
+  //Rendering instructions should be likely driven by our config
   const tabsArray = [
     {
       label: 'info',
       icon: InfoTabIcon,
-      iconWidth: 20,
-      iconHeight: 20,
       tooltipText: 'Info',
       render: true
     },
@@ -94,41 +146,16 @@ const Tabs = (): React.ReactElement => {
       label: 'documents',
       icon: DocumentsTabIcon,
       tooltipText: 'Documents',
-      render: renderDocTab //coming from resources JS!renderInfoTab
+      render: renderDocTab //Example of it coming from resources file
     }
   ];
 
-  //how do we figure out what is active tab? default or new, when to re-render etc?
-  useEffect(() => {
-    //check if we need to use default one or not
-    const activeTabValue: any =
-      activeTab === '' ? defaultActiveTab : savedActiveTab;
-    setActiveTab(activeTabValue);
-  }, [savedActiveTab]);
+  const tabsToRender = tabsArray.filter(tab => tab.render);
 
-  const tabsToRender = tabsArray
-    .filter(tab => tab.render)
-    .map(tab => (
-      <Tab
-        key={tab.label}
-        label={tab.label}
-        tooltipText={tab.tooltipText}
-        icon={tab.icon}
-        activeTab={activeTab}
-      />
-    ));
-  return <div className="tab-header-container">{tabsToRender}</div>;
-};
-
-const Tabview = () => {
-  return null;
-};
-
-const LeftPanel = (): React.ReactElement => {
   return (
     <div className="left-panel">
-      <Tabs />
-      <Tabview />
+      <Tabs tabsToRender={tabsToRender} />
+      <TabViewContainer />
     </div>
   );
 };
