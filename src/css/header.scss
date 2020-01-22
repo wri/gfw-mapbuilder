@@ -5,7 +5,6 @@ $header-height: 50px; // 5rem;
   position: absolute;
   flex-direction: row;
   justify-content: space-between;
-  padding-right: 1rem;
   width: 100%;
   top: 0;
   height: $header-height;
@@ -49,6 +48,7 @@ $header-height: 50px; // 5rem;
   .language-dropdown-container {
     margin-top: auto;
     margin-bottom: auto;
+    padding-right: 1rem;
   }
 }
 
