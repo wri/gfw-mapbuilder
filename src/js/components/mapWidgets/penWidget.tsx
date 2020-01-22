@@ -13,7 +13,7 @@ const PenWidget: FunctionComponent = () => {
       <div className="widget-container">
         <button
           className="image-wrapper"
-          onClick={() => dispatch(renderModal({ renderModal: 'PenWidget' }))}
+          onClick={() => dispatch(renderModal('PenWidget'))}
         >
           <PenIcon height={25} width={25} fill={'#555'} />
         </button>
