@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import MapContent from './MapContent';
 import Header from './header/Header';
+import ModalCard from './modal/modalCard';
 import { RootState } from 'js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -44,6 +45,7 @@ const App = (): JSX.Element => {
   // const loadError = useSelector(
   //   (store: RootState) => store.mapviewState.loadError
   // );
+  const modalType = useSelector((state: any) => state.appState.renderModal);
 
   return (
     <>
@@ -54,6 +56,7 @@ const App = (): JSX.Element => {
           <Header />
           <MapContent />
           {!isMapReady && <MapSpinner />}
+          {modalType.length ? <ModalCard /> : null}
         </>
       )}
     </>
