@@ -18,7 +18,7 @@ const LanguageDropdown: FunctionComponent = () => {
         <option value="fr">French</option>
         <option value="es">Spanish</option>
         <option value="pt">Portuguese</option>
-        <option value="id">English2.0</option>
+        <option value="id">Indonesian</option>
         <option value="zh">Chinese</option>
       </select>
     </div>
