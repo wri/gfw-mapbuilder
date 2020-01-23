@@ -24,9 +24,25 @@ interface TabProps {
 
 // Individual TAB Logic
 const Tab = (props: TabProps): React.ReactElement => {
-  const dispatch = useDispatch();
   const tabIsActive =
     props.activeTab === props.label ? 'tab-button__active' : '';
+  const dispatch = useDispatch();
+  const savedActiveTab = useSelector(
+    (store: RootState) => store.appState.leftPanel.activeTab
+  );
+
+  function handleTabClick(): void {
+    const tabviewElement: any = document.querySelector('.tabview-container');
+    if (savedActiveTab !== props.label) {
+      dispatch(selectActiveTab(props.label));
+      tabviewElement.style.display = 'block';
+    } else {
+      //we hide unless it was already hidden, then we show
+      tabviewElement.style.display =
+        tabviewElement.style.display === 'none' ? 'block' : 'none';
+      console.log('hide tabview');
+    }
+  }
 
   return (
     <>
@@ -34,7 +50,7 @@ const Tab = (props: TabProps): React.ReactElement => {
         data-tip={props.label}
         data-offset="{'top': -5}"
         className={tabIsActive ? 'tab-button tab-button__active' : 'tab-button'}
-        onClick={() => dispatch(selectActiveTab(props.label))}
+        onClick={handleTabClick}
       >
         <props.icon width={25} height={25} fill={'#555'} />
       </button>
