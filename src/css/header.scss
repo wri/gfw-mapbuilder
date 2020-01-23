@@ -2,11 +2,14 @@ $header-height: 50px; // 5rem;
 
 .header-container {
   display: flex;
+  position: absolute;
   flex-direction: row;
   justify-content: space-between;
-  padding-right: 1rem;
   width: 100%;
+  top: 0;
   height: $header-height;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 2;
 
   .title-container {
     display: flex;
@@ -45,6 +48,7 @@ $header-height: 50px; // 5rem;
   .language-dropdown-container {
     margin-top: auto;
     margin-bottom: auto;
+    padding-right: 1rem;
   }
 }
 

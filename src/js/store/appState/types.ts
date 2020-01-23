@@ -6,6 +6,7 @@ export interface LeftPanel {
 export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
+  selectedLanguage: string;
 }
 
 //Action names available
@@ -13,6 +14,7 @@ export const RENDER_MODAL = 'RENDER_MODAL';
 export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
 export const SHOW_TABVIEW_PANEL = 'SHOW_TABVIEW_PANEL';
 export const HIDE_TABVIEW_PANEL = 'HIDE_TABVIEW_PANEL';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
 
 interface ShowTabviewPanelAction {
   type: typeof SHOW_TABVIEW_PANEL;
@@ -34,8 +36,14 @@ interface SelectActiveTab {
   payload: LeftPanel['activeTab'];
 }
 
+interface SetLanguageAction {
+  type: typeof SET_LANGUAGE;
+  payload: AppState['selectedLanguage'];
+}
+
 export type AppStateTypes =
   | ShowTabviewPanelAction
   | HideTabviewPanelAction
   | RenderModalAction
-  | SelectActiveTab;
+  | SelectActiveTab
+  | SetLanguageAction;

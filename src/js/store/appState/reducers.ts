@@ -3,11 +3,13 @@ import {
   AppStateTypes,
   SHOW_TABVIEW_PANEL,
   HIDE_TABVIEW_PANEL,
-  RENDER_MODAL,
-  SELECT_ACTIVE_TAB
+  SELECT_ACTIVE_TAB,
+  SET_LANGUAGE,
+  RENDER_MODAL
 } from './types';
 
 const initialState: AppState = {
+  selectedLanguage: 'en',
   renderModal: '',
   leftPanel: {
     tabviewHidden: false,
@@ -34,6 +36,8 @@ export function appStateReducer(
           activeTab: action.payload
         }
       };
+    case SET_LANGUAGE:
+      return { ...state, selectedLanguage: action.payload };
     default:
       return state;
   }

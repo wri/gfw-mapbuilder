@@ -3,6 +3,7 @@ import {
   HIDE_TABVIEW_PANEL,
   RENDER_MODAL,
   SELECT_ACTIVE_TAB,
+  SET_LANGUAGE,
   AppState,
   LeftPanel
 } from './types';
@@ -31,6 +32,13 @@ export function renderModal(payload: AppState['renderModal']) {
 export function selectActiveTab(payload: LeftPanel['activeTab']) {
   return {
     type: SELECT_ACTIVE_TAB,
+    payload: payload
+  };
+}
+
+export function setLanguage(payload: AppState['selectedLanguage']) {
+  return {
+    type: SET_LANGUAGE,
     payload: payload
   };
 }
