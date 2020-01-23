@@ -1,25 +1,7 @@
-$blue: #0079c1;
-$gray: #efefef;
-$white: #fff;
-$header-height: 50px;
-
-//? when I try to incorporate $header-height in
-// .mapview-container height attribute, the map isn't able to render
-// even though this same approach works in other SASS files
+@import 'variables.scss';
 
 html,
-body {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  // display: flex;
-  // flex-direction: column;
-  // letter-spacing: 0em;
-  // font-family: "Arial", sans-serif;
-  // line-height: 1.55rem;
-}
-
+body,
 .mapview-container,
 .mapview,
 #main {

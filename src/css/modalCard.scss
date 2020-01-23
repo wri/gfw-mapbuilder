@@ -1,4 +1,4 @@
-$header-height: 50px;
+@import 'variables.scss';
 
 .modal-card-container {
   display: flex;
@@ -7,13 +7,24 @@ $header-height: 50px;
   position: absolute;
   z-index: 4;
   padding: 1rem;
-  background: white;
+  background: $white;
+  font-family: $fira-sans;
+  color: $dark-grey;
+
+  overflow-y: scroll;
+  left: 50%;
+  top: 50%;
+  margin-left: -10rem; // * NOTE: -10rem = negative half the width of .modal-card-container
+  margin-top: -7.5rem; // * NOTE: -7.5rem = negative half the height of .modal-card-container
+  width: 20rem;
+  height: 15rem;
 
   .exit-button {
     position: absolute;
     border: none;
     right: 0;
     top: 0;
+    background-color: $white;
 
     svg {
       height: 2rem;
@@ -27,37 +38,16 @@ $header-height: 50px;
   z-index: 3;
   opacity: 0.5;
   width: 100%;
-  background-color: black;
+  background-color: $black;
   top: 0;
   height: 100%;
 }
 
-.print-modal {
-  height: 115px;
-  width: 225px;
-  top: 35%;
-  left: 40%;
-}
-
-.share-modal {
-  width: 300px;
-  height: 225px;
-  top: 35%;
-  left: 40%;
-}
-
-.pen-modal {
-  height: 500px;
-  width: 320px;
-  top: 20%;
-  left: 40%;
-}
-
-.search-modal {
-  width: 390px;
-  height: 160px;
-  top: 35%;
-  left: 35%;
+@media screen and (max-width: $mobile-device) {
+  .modal-card-container {
+    width: 15rem;
+    margin-left: -8.5rem; // * NOTE: -8.5rem is an estimate
+  }
 }
 
 .modal-content-container {

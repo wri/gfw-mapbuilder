@@ -1,0 +1,30 @@
+/* COLORS
+============================================= */
+
+$white: #fff;
+$medium-dark-grey: #aaa;
+$dark-grey: #555; // * NOTE: NEW
+$black: black; // * NOTE: NEW
+$header-color: rgba(255, 255, 255, 0.5);
+
+/* FEATURE DIMENSIONS
+============================================= */
+
+$header-height: 50px;
+$map-widget-square: 38px;
+$map-widget-svg: 21px;
+
+/* FONTS
+============================================= */
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('../fonts/firasans-regular-webfont.ttf') format('Truetype');
+}
+
+$fira-sans: 'Fira Sans', sans-serif;
+
+/* MEDIA QUERY, DEVICE WIDTH
+============================================= */
+
+$mobile-device: 475px;
