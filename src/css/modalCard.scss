@@ -49,22 +49,3 @@
     margin-left: -8.5rem; // * NOTE: -8.5rem is an estimate
   }
 }
-
-.modal-content-container {
-  .dds-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-
-    input {
-      width: 5rem;
-      height: 1.5rem;
-    }
-
-    p {
-      margin-bottom: 0rem;
-    }
-  }
-}

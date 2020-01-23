@@ -233,10 +233,15 @@ export const searchContent = {
 };
 
 export const coordinatesContent = {
+  degree: '°',
+  apostrophe: "'",
+  quotes: `"`,
   en: {
     title: 'Enter your own coordinates',
     dropdownTitle: 'Select Format',
-    decimalOptions: ['Degrees Decimal Seconds (DMS)', 'Decimal Degrees (DD)']
+    decimalOptions: ['Degrees Decimal Seconds (DMS)', 'Decimal Degrees (DD)'],
+    latitude: 'Latitude',
+    longitude: 'Longitude'
   },
   ka: {
     title: 'KA: Enter your own coordinates',
@@ -244,7 +249,9 @@ export const coordinatesContent = {
     decimalOptions: [
       'KA: Degrees Decimal Seconds (DMS)',
       'KA: Decimal Degrees (DD)'
-    ]
+    ],
+    latitude: 'KA: Latitude',
+    longitude: 'KA: Longitude'
   },
   fr: {
     title: 'FR: Enter your own coordinates',
@@ -252,7 +259,9 @@ export const coordinatesContent = {
     decimalOptions: [
       'FR: Degrees Decimal Seconds (DMS)',
       'FR: Decimal Degrees (DD)'
-    ]
+    ],
+    latitude: 'FR: Latitude',
+    longitude: 'FR: Longitude'
   },
   es: {
     title: 'ES: Enter your own coordinates',
@@ -260,7 +269,9 @@ export const coordinatesContent = {
     decimalOptions: [
       'ES: Degrees Decimal Seconds (DMS)',
       'ES: Decimal Degrees (DD)'
-    ]
+    ],
+    latitude: 'ES: Latitude',
+    longitude: 'ES: Longitude'
   },
   pt: {
     title: 'PT: Enter your own coordinates',
@@ -268,7 +279,9 @@ export const coordinatesContent = {
     decimalOptions: [
       'PT: Degrees Decimal Seconds (DMS)',
       'PT: Decimal Degrees (DD)'
-    ]
+    ],
+    latitude: 'PT: Latitude',
+    longitude: 'PT: Longitude'
   },
   id: {
     title: 'ID: Enter your own coordinates',
@@ -276,7 +289,9 @@ export const coordinatesContent = {
     decimalOptions: [
       'ID: Degrees Decimal Seconds (DMS)',
       'ID: Decimal Degrees (DD)'
-    ]
+    ],
+    latitude: 'ID: Latitude',
+    longitude: 'ID: Longitude'
   },
   zh: {
     title: 'ZH: Enter your own coordinates',
@@ -284,6 +299,8 @@ export const coordinatesContent = {
     decimalOptions: [
       'ZH: Degrees Decimal Seconds (DMS)',
       'ZH: Decimal Degrees (DD)'
-    ]
+    ],
+    latitude: 'ZH: Latitude',
+    longitude: 'ZH: Longitude'
   }
 };

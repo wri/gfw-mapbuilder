@@ -2,6 +2,7 @@
 ============================================= */
 
 $white: #fff;
+$button-color: rgb(240, 171, 0);
 $medium-dark-grey: #aaa;
 $dark-grey: #555; // * NOTE: NEW
 $black: black; // * NOTE: NEW
@@ -13,6 +14,11 @@ $header-color: rgba(255, 255, 255, 0.5);
 $header-height: 50px;
 $map-widget-square: 38px;
 $map-widget-svg: 21px;
+
+%input-fields {
+  width: 2.75rem;
+  height: 1.5rem;
+}
 
 /* FONTS
 ============================================= */
