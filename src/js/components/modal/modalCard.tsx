@@ -14,21 +14,6 @@ const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector((state: any) => state.appState.renderModal);
   const dispatch = useDispatch();
 
-  const setModalClassName = () => {
-    switch (modalType) {
-      case 'PrintWidget':
-        return 'print-modal';
-      case 'ShareWidget':
-        return 'share-modal';
-      case 'PenWidget':
-        return 'pen-modal';
-      case 'SearchWidget':
-        return 'search-modal';
-      default:
-        break;
-    }
-  };
-
   const handleEscapeKey = (e: React.KeyboardEvent) => {
     if (e.keyCode === 27) {
       // * NOTE ESC button has a keyCode of 27
@@ -57,7 +42,7 @@ const ModalCard: FunctionComponent<{}> = () => {
         className="dim-container"
         onClick={() => dispatch(renderModal(''))}
       ></div>
-      <div className={`modal-card-container ${setModalClassName()}`}>
+      <div className="modal-card-container">
         <button
           className="exit-button"
           onClick={() => dispatch(renderModal(''))}
