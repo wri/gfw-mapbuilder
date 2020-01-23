@@ -59,3 +59,22 @@ $header-height: 50px;
   top: 35%;
   left: 35%;
 }
+
+.modal-content-container {
+  .dds-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+
+    input {
+      width: 5rem;
+      height: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 0rem;
+    }
+  }
+}

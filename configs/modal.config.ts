@@ -231,3 +231,59 @@ export const searchContent = {
     buttonTitle: '搜寻'
   }
 };
+
+export const coordinatesContent = {
+  en: {
+    title: 'Enter your own coordinates',
+    dropdownTitle: 'Select Format',
+    decimalOptions: ['Degrees Decimal Seconds (DMS)', 'Decimal Degrees (DD)']
+  },
+  ka: {
+    title: 'KA: Enter your own coordinates',
+    dropdownTitle: 'KA: Select Format',
+    decimalOptions: [
+      'KA: Degrees Decimal Seconds (DMS)',
+      'KA: Decimal Degrees (DD)'
+    ]
+  },
+  fr: {
+    title: 'FR: Enter your own coordinates',
+    dropdownTitle: 'FR: Select Format',
+    decimalOptions: [
+      'FR: Degrees Decimal Seconds (DMS)',
+      'FR: Decimal Degrees (DD)'
+    ]
+  },
+  es: {
+    title: 'ES: Enter your own coordinates',
+    dropdownTitle: 'ES: Select Format',
+    decimalOptions: [
+      'ES: Degrees Decimal Seconds (DMS)',
+      'ES: Decimal Degrees (DD)'
+    ]
+  },
+  pt: {
+    title: 'PT: Enter your own coordinates',
+    dropdownTitle: 'PT: Select Format',
+    decimalOptions: [
+      'PT: Degrees Decimal Seconds (DMS)',
+      'PT: Decimal Degrees (DD)'
+    ]
+  },
+  id: {
+    title: 'ID: Enter your own coordinates',
+    dropdownTitle: 'ID: Select Format',
+    decimalOptions: [
+      'ID: Degrees Decimal Seconds (DMS)',
+      'ID: Decimal Degrees (DD)'
+    ]
+  },
+  zh: {
+    title: 'ZH: Enter your own coordinates',
+    dropdownTitle: 'ZH: Select Format',
+    decimalOptions: [
+      'ZH: Degrees Decimal Seconds (DMS)',
+      'ZH: Decimal Degrees (DD)'
+    ]
+  }
+};

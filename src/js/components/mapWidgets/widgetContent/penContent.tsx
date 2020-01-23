@@ -51,7 +51,11 @@ const PenContent: FunctionComponent = () => {
             <li key={i}>{direction}</li>
           ))}
         </ol>
-        <button>{coordinatesButton}</button>
+        <button
+          onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
+        >
+          {coordinatesButton}
+        </button>
         <br />
         ---------------------- Or -------------------------
         <br />
