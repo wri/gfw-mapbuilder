@@ -2,7 +2,9 @@ import {
   SHOW_TABVIEW_PANEL,
   HIDE_TABVIEW_PANEL,
   RENDER_MODAL,
-  AppState
+  SELECT_ACTIVE_TAB,
+  AppState,
+  LeftPanel
 } from './types';
 
 export function showTabviewPanel(payload: AppState) {
@@ -19,9 +21,16 @@ export function hideTabviewPanel(payload: AppState) {
   };
 }
 
-export function renderModal(payload: AppState) {
+export function renderModal(payload: AppState['renderModal']) {
   return {
     type: RENDER_MODAL,
+    payload: payload
+  };
+}
+
+export function selectActiveTab(payload: LeftPanel['activeTab']) {
+  return {
+    type: SELECT_ACTIVE_TAB,
     payload: payload
   };
 }
