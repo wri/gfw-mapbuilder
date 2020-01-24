@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store/index';
-import { selectActiveTab } from 'js/store/appState/actions';
+import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import ReactTooltip from 'react-tooltip';
+import TabViewContainer from './TabViewContainer';
 import 'css/leftpanel.scss';
 
-//Tabs Related Imports TODO: extract those in separarate file/folder later
 import { ReactComponent as LayersTabIcon } from 'images/layersTabIcon.svg';
 import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
 import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
@@ -14,33 +13,34 @@ import { ReactComponent as DocumentsTabIcon } from 'images/documentsTabIcon.svg'
 import { ReactComponent as InfoTabIcon } from 'images/infoTabIcon.svg';
 import { ReactComponent as MeasurementTabIcon } from 'images/MeasurementTabIcon.svg';
 
-interface TabProps {
+export interface TabProps {
   key: string;
   label: string;
   icon: React.SFC<React.SVGProps<SVGSVGElement>>;
   tooltipText: string;
-  activeTab: string | undefined;
+  activeTab: string;
 }
 
 // Individual TAB Logic
 const Tab = (props: TabProps): React.ReactElement => {
+  const tabViewVisible = useSelector(
+    (store: RootState) => store.appState.leftPanel.tabViewVisible
+  );
   const tabIsActive =
-    props.activeTab === props.label ? 'tab-button__active' : '';
+    props.activeTab === props.label && tabViewVisible
+      ? 'tab-button__active'
+      : '';
   const dispatch = useDispatch();
   const savedActiveTab = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
   function handleTabClick(): void {
-    const tabviewElement: any = document.querySelector('.tabview-container');
     if (savedActiveTab !== props.label) {
       dispatch(selectActiveTab(props.label));
-      tabviewElement.style.display = 'block';
+      dispatch(toggleTabviewPanel(true));
     } else {
-      //we hide unless it was already hidden, then we show
-      tabviewElement.style.display =
-        tabviewElement.style.display === 'none' ? 'block' : 'none';
-      console.log('hide tabview');
+      dispatch(toggleTabviewPanel(!tabViewVisible));
     }
   }
 
@@ -59,7 +59,6 @@ const Tab = (props: TabProps): React.ReactElement => {
   );
 };
 
-// Tabs ROW Component Logic
 interface TabRenderObject {
   label: string;
   icon: React.SFC<React.SVGProps<SVGSVGElement>>;
@@ -77,51 +76,23 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
-  //Current active tab default to the default one
-  const [activeTab, setActiveTab] = useState(savedActiveTab);
-
-  //This probably should be in our default settings?
-
-  //how do we figure out what is active tab? default or new, when to re-render etc?
-  useEffect(() => {
-    //check if we need to use default one or not
-    if (savedActiveTab !== activeTab) {
-      setActiveTab(savedActiveTab);
-    }
-  }, [savedActiveTab]);
-
   const tabsGroupRow = props.tabsToRender.map(tab => (
     <Tab
       key={tab.label}
       label={tab.label}
       tooltipText={tab.tooltipText}
       icon={tab.icon}
-      activeTab={activeTab}
+      activeTab={savedActiveTab}
     />
   ));
   return <div className="tab-header-container">{tabsGroupRow}</div>;
 };
 
-// Tab View Logic
-const TabViewContainer = (): React.ReactElement => {
-  //Figure out which tab content we are showing
-  //Active Tab in the store
-  const savedActiveTab = useSelector(
-    (store: RootState) => store.appState.leftPanel.activeTab
-  );
-
-  return (
-    <div className="tabview-container">
-      <div className={`tabview-${savedActiveTab}`}>
-        <p>Here is the tabview content</p>
-        <p>We are currently in tab: {savedActiveTab}</p>
-      </div>
-    </div>
-  );
-};
-
 const LeftPanel = (): React.ReactElement => {
-  //Specific tabs that are optional and rendered per resources
+  //Tab view visibility state that is controlled by tabs (clicking on same tab twice in a row, hides the tabview)
+  // const tabViewVisible = useSelector(
+  //   (store: RootState) => store.appState.leftPanel.tabViewVisible
+  // );
   const renderDocTab = useSelector(
     (store: RootState) => store.appSettings.includeDocumentsTab
   );
@@ -171,7 +142,7 @@ const LeftPanel = (): React.ReactElement => {
   return (
     <div className="left-panel">
       <Tabs tabsToRender={tabsToRender} />
-      <TabViewContainer />
+      {<TabViewContainer tabViewsToRender={tabsToRender} />}
     </div>
   );
 };
