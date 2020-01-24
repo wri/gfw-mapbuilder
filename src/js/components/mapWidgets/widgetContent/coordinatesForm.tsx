@@ -145,7 +145,7 @@ const CoordinatesForm: FunctionComponent = () => {
             </div>
           </div>
           <hr />
-          <div className="dds-wrapper">
+          {/* <div className="dds-wrapper">
             <div className="dds-input">
               <p>{latitude}</p>
               <div className="degree-input">
@@ -177,7 +177,7 @@ const CoordinatesForm: FunctionComponent = () => {
                 <span>{degree}</span>
               </div>
             </div>
-          </div>
+          </div> */}
           <hr />
         </>
       );
