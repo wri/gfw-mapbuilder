@@ -7,9 +7,7 @@ import {
   LeftPanel
 } from './types';
 
-export function toggleTabviewPanel(
-  payload: AppState['leftPanel']['tabViewVisible']
-) {
+export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   return {
     type: TOGGLE_TABVIEW_PANEL,
     payload: payload

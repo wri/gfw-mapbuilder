@@ -17,7 +17,7 @@ export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 
 interface ToggleTabviewPanelAction {
   type: typeof TOGGLE_TABVIEW_PANEL;
-  payload: AppState['leftPanel']['tabViewVisible'];
+  payload: LeftPanel['tabViewVisible'];
 }
 
 interface RenderModalAction {
