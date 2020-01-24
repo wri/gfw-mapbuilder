@@ -5,6 +5,7 @@ import PrintContent from '../mapWidgets/widgetContent/printContent';
 import ShareContent from '../mapWidgets/widgetContent/shareContent';
 import PenContent from '../mapWidgets/widgetContent/penContent';
 import SearchContent from '../mapWidgets/widgetContent/searchContent';
+import CoordinatesForm from '../mapWidgets/widgetContent/coordinatesForm';
 
 import { renderModal } from '../../store/appState/actions';
 
@@ -29,6 +30,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <ShareContent />;
       case 'PenWidget':
         return <PenContent />;
+      case 'PenWidget-CoordinatesForm':
+        return <CoordinatesForm />;
       case 'SearchWidget':
         return <SearchContent />;
       default:
