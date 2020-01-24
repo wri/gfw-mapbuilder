@@ -119,7 +119,7 @@ const CoordinatesForm: FunctionComponent = () => {
           <hr />
           <div className="buttons-wrapper">
             <button>Add more</button>
-            <button className="make-shape-button">Make shape</button>
+            <button className="orange-button">Make shape</button>
           </div>
         </>
       );
@@ -185,7 +185,7 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   return (
-    <div className="modal-content-container">
+    <div className="coordinates-form-container">
       <div className="directions">
         <div className="titles">
           <h4 className="title">{title}</h4>

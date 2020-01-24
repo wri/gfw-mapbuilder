@@ -1,6 +1,6 @@
 @import 'variables.scss';
 
-.modal-content-container {
+.coordinates-form-container {
   display: flex;
   justify-content: center;
   width: inherit;
@@ -13,6 +13,15 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+
+    .title {
+      font-weight: 400;
+      margin-bottom: 0px;
+    }
+
+    ol {
+      font-size: 13px;
+    }
 
     .dms-wrapper {
       display: flex;
@@ -71,17 +80,6 @@
       flex-direction: column;
       align-items: center;
       font-family: $fira-sans;
-
-      .make-shape-button {
-        width: 15rem;
-        height: 2rem;
-        border-radius: 20px;
-        font-size: 1rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        background-color: $button-color;
-        color: $white;
-      }
     }
   }
 }
