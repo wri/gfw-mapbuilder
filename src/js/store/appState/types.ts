@@ -1,5 +1,5 @@
 export interface LeftPanel {
-  tabviewHidden: boolean;
+  tabViewVisible: boolean;
   activeTab: string;
 }
 
@@ -12,18 +12,12 @@ export interface AppState {
 //Action names available
 export const RENDER_MODAL = 'RENDER_MODAL';
 export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
-export const SHOW_TABVIEW_PANEL = 'SHOW_TABVIEW_PANEL';
-export const HIDE_TABVIEW_PANEL = 'HIDE_TABVIEW_PANEL';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
+export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 
-interface ShowTabviewPanelAction {
-  type: typeof SHOW_TABVIEW_PANEL;
-  payload: AppState;
-}
-
-interface HideTabviewPanelAction {
-  type: typeof HIDE_TABVIEW_PANEL;
-  payload: AppState;
+interface ToggleTabviewPanelAction {
+  type: typeof TOGGLE_TABVIEW_PANEL;
+  payload: AppState['leftPanel']['tabViewVisible'];
 }
 
 interface RenderModalAction {
@@ -42,8 +36,7 @@ interface SetLanguageAction {
 }
 
 export type AppStateTypes =
-  | ShowTabviewPanelAction
-  | HideTabviewPanelAction
+  | ToggleTabviewPanelAction
   | RenderModalAction
   | SelectActiveTab
   | SetLanguageAction;

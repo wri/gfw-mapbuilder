@@ -1,6 +1,5 @@
 import {
-  SHOW_TABVIEW_PANEL,
-  HIDE_TABVIEW_PANEL,
+  TOGGLE_TABVIEW_PANEL,
   RENDER_MODAL,
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
@@ -8,16 +7,11 @@ import {
   LeftPanel
 } from './types';
 
-export function showTabviewPanel(payload: AppState) {
+export function toggleTabviewPanel(
+  payload: AppState['leftPanel']['tabViewVisible']
+) {
   return {
-    type: SHOW_TABVIEW_PANEL,
-    payload: payload
-  };
-}
-
-export function hideTabviewPanel(payload: AppState) {
-  return {
-    type: HIDE_TABVIEW_PANEL,
+    type: TOGGLE_TABVIEW_PANEL,
     payload: payload
   };
 }
