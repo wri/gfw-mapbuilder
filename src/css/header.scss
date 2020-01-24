@@ -1,20 +1,19 @@
-$header-height: 50px; // 5rem;
+@import 'variables.scss';
 
 .header-container {
   display: flex;
   position: absolute;
-  flex-direction: row;
   justify-content: space-between;
   width: 100%;
   top: 0;
   height: $header-height;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: $header-color;
   z-index: 2;
+  font-family: $fira-sans;
+  color: $dark-grey;
 
   .title-container {
     display: flex;
-    max-height: 5rem;
-    height: 100%;
 
     .gfw-logo {
       max-height: $header-height;
@@ -35,12 +34,10 @@ $header-height: 50px; // 5rem;
 
       h1 {
         font-size: 1.5rem;
-        // margin-bottom: 0;
       }
 
       h2 {
         font-size: 1rem;
-        // margin-top: 0;
       }
     }
   }
@@ -52,7 +49,7 @@ $header-height: 50px; // 5rem;
   }
 }
 
-@media screen and (max-width: 475px) {
+@media screen and (max-width: $mobile-device) {
   .header-container {
     justify-content: flex-end;
 

@@ -14,18 +14,18 @@ const MapWidgets: FunctionComponent = () => {
   return (
     <>
       <div className="widget-wrapper">
-        <div className="widget-column">
+        <div className="widget-row">
           <ZoomWidget />
         </div>
-        <div className="widget-column">
+        <div className="widget-row">
           <ShareWidget />
           <PrintWidget />
         </div>
-        <div className="widget-column">
+        <div className="widget-row">
           <PenWidget />
           <SearchWidget />
         </div>
-        <div className="widget-column">
+        <div className="widget-row">
           <HideWidget />
           <RefreshWidget />
         </div>
