@@ -94,11 +94,9 @@ export class MapController {
         this._mapview.graphics.add(event.graphic);
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
-        /**
-         * TODO - dispatch to store to render analysis tab of leftPanel!
-         * ? Should we dispatch the event (logged above) to the Redux store
-         * ? so the analysis tab of the panel can access it?
-         */
+
+        store.dispatch({ type: 'SELECT_ACTIVE_TAB', payload: 'analysis' });
+        store.dispatch({ type: 'TOGGLE_TABVIEW_PANEL', payload: true });
       }
     });
   }
