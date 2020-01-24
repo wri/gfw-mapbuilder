@@ -4,7 +4,6 @@ import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
-// import Zoom from 'esri/widgets/Zoom'
 
 import { RefObject } from 'react';
 import store from '../store/index';
