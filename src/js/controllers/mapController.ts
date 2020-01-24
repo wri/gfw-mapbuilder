@@ -13,14 +13,14 @@ interface ZoomParams {
 }
 
 export class MapController {
-  _map: Map | null;
-  _mapview: MapView | null | any;
-  _sketchVM: SketchViewModel | null | any;
+  _map: Map | undefined;
+  _mapview: MapView | undefined;
+  _sketchVM: SketchViewModel | undefined;
 
   constructor() {
-    this._map = null;
-    this._mapview = null;
-    this._sketchVM = null;
+    this._map = undefined;
+    this._mapview = undefined;
+    this._sketchVM = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -89,9 +89,9 @@ export class MapController {
       }
     });
 
-    this._sketchVM.on('create', (event: any) => {
+    this._sketchVM?.on('create', (event: any) => {
       if (event.state === 'complete') {
-        this._mapview.graphics.add(event.graphic);
+        this._mapview?.graphics.add(event.graphic);
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
 
@@ -102,7 +102,7 @@ export class MapController {
   }
 
   createPolygonSketch = () => {
-    this._sketchVM.create('polygon', { mode: 'freehand' });
+    this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 }
 
