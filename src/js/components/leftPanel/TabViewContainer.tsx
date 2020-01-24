@@ -24,23 +24,28 @@ class TabViewContainer extends React.Component<TabViewContainerProps, {}> {
       (tabView: TabViewRender) => {
         switch (tabView.label) {
           case 'info':
-            return <InfoTabView key={tabView.label} />;
+            return <InfoTabView label={tabView.label} key={tabView.label} />;
           case 'layers':
-            return <LayerTabView key={tabView.label} />;
+            return <LayerTabView label={tabView.label} key={tabView.label} />;
           case 'data':
-            return <DataTabView key={tabView.label} />;
+            return <DataTabView label={tabView.label} key={tabView.label} />;
           case 'measurement':
-            return <MeasurementTabView key={tabView.label} />;
+            return (
+              <MeasurementTabView label={tabView.label} key={tabView.label} />
+            );
           case 'analysis':
-            return <AnalysisTabView key={tabView.label} />;
+            return (
+              <AnalysisTabView label={tabView.label} key={tabView.label} />
+            );
           case 'documents':
-            return <DocumentsTabView key={tabView.label} />;
+            return (
+              <DocumentsTabView label={tabView.label} key={tabView.label} />
+            );
           default:
             break;
         }
       }
     );
-
     return TabViews;
   }
 }
