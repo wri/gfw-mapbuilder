@@ -37,7 +37,7 @@ export default {
     z: null // 9,
   },
   //- Tab Settings
-  includeDocumentsTab: false,
+  includeDocumentsTab: true,
   //- Layers/Analysis Settings
   iso: '',
   viirsFires: true,

@@ -81,7 +81,8 @@ module.exports = {
   resolve: {
     alias: {
       js: path.join(__dirname, 'src/js'),
-      css: path.join(__dirname, 'src/css')
+      css: path.join(__dirname, 'src/css'),
+      images: path.join(__dirname, 'src/images')
     },
     modules: [
       path.resolve(__dirname, '/src'),

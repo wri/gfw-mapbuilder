@@ -5,6 +5,7 @@ export interface AppSettings {
   logoUrl?: string;
   logoLinkUrl?: string;
   language?: string;
+  includeDocumentsTab?: boolean;
 }
 
 //Action names available
