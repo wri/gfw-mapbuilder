@@ -23,36 +23,40 @@ export interface TabProps {
 
 // Individual TAB Logic
 const Tab = (props: TabProps): React.ReactElement => {
+  const { activeTab, label, icon: Icon } = props;
+
+  const dispatch = useDispatch();
+
   const tabViewVisible = useSelector(
     (store: RootState) => store.appState.leftPanel.tabViewVisible
   );
-  const tabIsActive =
-    props.activeTab === props.label && tabViewVisible
-      ? 'tab-button__active'
-      : '';
-  const dispatch = useDispatch();
+
   const savedActiveTab = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
   function handleTabClick(): void {
-    if (savedActiveTab !== props.label) {
-      dispatch(selectActiveTab(props.label));
-      dispatch(toggleTabviewPanel(true));
-    } else {
+    if (savedActiveTab === label) {
       dispatch(toggleTabviewPanel(!tabViewVisible));
+    } else {
+      dispatch(selectActiveTab(label));
+      dispatch(toggleTabviewPanel(true));
     }
   }
 
   return (
     <>
       <button
-        data-tip={props.label}
+        data-tip={label}
         data-offset="{'top': -5}"
-        className={tabIsActive ? 'tab-button tab-button__active' : 'tab-button'}
+        className={
+          label === activeTab && tabViewVisible
+            ? 'tab-button tab-button__active'
+            : 'tab-button'
+        }
         onClick={handleTabClick}
       >
-        <props.icon width={25} height={25} fill={'#555'} />
+        <Icon width={25} height={25} fill={'#555'} />
       </button>
       <ReactTooltip effect="solid" className="tab-tooltip" />
     </>
@@ -142,7 +146,7 @@ const LeftPanel = (): React.ReactElement => {
   return (
     <div className="left-panel">
       <Tabs tabsToRender={tabsToRender} />
-      {<TabViewContainer tabViewsToRender={tabsToRender} />}
+      <TabViewContainer tabViewsToRender={tabsToRender} />
     </div>
   );
 };
