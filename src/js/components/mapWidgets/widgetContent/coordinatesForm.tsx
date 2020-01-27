@@ -21,13 +21,21 @@ const CoordinatesForm: FunctionComponent = () => {
     longitude
   } = coordinatesContent[selectedLanguage];
 
-  const setFormValues = (
-    coordinateValue: string,
-    rowNum: Number,
-    coordinateType: string,
-    degreeType: string,
-    cardinalPoint: string
-  ) => {
+  interface DMSFormValues {
+    coordinateValue: string;
+    rowNum: number;
+    coordinateType: string;
+    degreeType: string;
+    cardinalPoint: string;
+  }
+
+  const setDMSFormValues = ({
+    coordinateValue,
+    rowNum,
+    coordinateType,
+    degreeType,
+    cardinalPoint
+  }: DMSFormValues) => {
     if (_dmsFormValues[`row${rowNum}`]) {
       _dmsFormValues[`row${rowNum}`][coordinateType][
         degreeType
@@ -41,14 +49,20 @@ const CoordinatesForm: FunctionComponent = () => {
       };
     }
 
-    console.log('setFormValues()', _dmsFormValues);
+    console.log('setDMSFormValues()', _dmsFormValues);
   };
 
-  const setCardinalType = (
-    specificPoint: string,
-    rowNum: number,
-    coordinateType: string
-  ) => {
+  interface DMSCardinalPoint {
+    specificPoint: string;
+    rowNum: number;
+    coordinateType: string;
+  }
+
+  const setDMSCardinalType = ({
+    specificPoint,
+    rowNum,
+    coordinateType
+  }: DMSCardinalPoint) => {
     if (_dmsFormValues[`row${rowNum}`]) {
       _dmsFormValues[`row${rowNum}`][coordinateType][
         'cardinalPoint'
@@ -61,7 +75,7 @@ const CoordinatesForm: FunctionComponent = () => {
       };
     }
 
-    console.log('setCardinalType()', _dmsFormValues);
+    console.log('setDMSCardinalType()', _dmsFormValues);
   };
 
   const dmsRows = (): any => {
@@ -78,13 +92,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setFormValues(
-                        e.target.value,
+                      setDMSFormValues({
+                        coordinateValue: e.target.value,
                         rowNum,
-                        'latitude',
-                        'degree',
-                        'north'
-                      )
+                        coordinateType: 'latitude',
+                        degreeType: 'degree',
+                        cardinalPoint: 'north'
+                      })
                     }
                   />
                   <span className="degree">{degree}</span>
@@ -92,13 +106,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setFormValues(
-                        e.target.value,
+                      setDMSFormValues({
+                        coordinateValue: e.target.value,
                         rowNum,
-                        'latitude',
-                        'minutes',
-                        'north'
-                      )
+                        coordinateType: 'latitude',
+                        degreeType: 'minutes',
+                        cardinalPoint: 'north'
+                      })
                     }
                   />
                   <span className="degree">{minutes}</span>
@@ -106,19 +120,23 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setFormValues(
-                        e.target.value,
+                      setDMSFormValues({
+                        coordinateValue: e.target.value,
                         rowNum,
-                        'latitude',
-                        'seconds',
-                        'north'
-                      )
+                        coordinateType: 'latitude',
+                        degreeType: 'seconds',
+                        cardinalPoint: 'north'
+                      })
                     }
                   />
                   <span className="degree">{seconds}</span>
                   <select
                     onChange={e =>
-                      setCardinalType(e.target.value, rowNum, 'latitude')
+                      setDMSCardinalType({
+                        specificPoint: e.target.value,
+                        rowNum,
+                        coordinateType: 'latitude'
+                      })
                     }
                   >
                     <option value="N">N</option>
@@ -138,13 +156,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setFormValues(
-                        e.target.value,
+                      setDMSFormValues({
+                        coordinateValue: e.target.value,
                         rowNum,
-                        'longitude',
-                        'degree',
-                        'east'
-                      )
+                        coordinateType: 'longitude',
+                        degreeType: 'degree',
+                        cardinalPoint: 'east'
+                      })
                     }
                   />
                   <span className="degree">{degree}</span>
@@ -152,13 +170,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setFormValues(
-                        e.target.value,
+                      setDMSFormValues({
+                        coordinateValue: e.target.value,
                         rowNum,
-                        'longitude',
-                        'minutes',
-                        'east'
-                      )
+                        coordinateType: 'longitude',
+                        degreeType: 'minutes',
+                        cardinalPoint: 'east'
+                      })
                     }
                   />
                   <span className="degree">{minutes}</span>
@@ -166,19 +184,23 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setFormValues(
-                        e.target.value,
+                      setDMSFormValues({
+                        coordinateValue: e.target.value,
                         rowNum,
-                        'longitude',
-                        'seconds',
-                        'east'
-                      )
+                        coordinateType: 'longitude',
+                        degreeType: 'seconds',
+                        cardinalPoint: 'east'
+                      })
                     }
                   />
                   <span className="degree">{seconds}</span>
                   <select
                     onChange={e =>
-                      setCardinalType(e.target.value, rowNum, 'longitude')
+                      setDMSCardinalType({
+                        specificPoint: e.target.value,
+                        rowNum,
+                        coordinateType: 'longitude'
+                      })
                     }
                   >
                     <option value="E">E</option>
@@ -197,20 +219,6 @@ const CoordinatesForm: FunctionComponent = () => {
   const setShape = () => {
     console.log('setShape()', _dmsFormValues);
     // TODO create polygon from formvalues!
-  };
-
-  const returnSelectedContent = (): ReactElement => {
-    return (
-      <>
-        {dmsRows()}
-        <div className="buttons-wrapper">
-          <button>Add more</button>
-          <button className="orange-button" onClick={() => setShape()}>
-            Make shape
-          </button>
-        </div>
-      </>
-    );
   };
 
   // if (decimalOptions[selectedFormat].includes('DD')) {
@@ -287,7 +295,13 @@ const CoordinatesForm: FunctionComponent = () => {
           ))}
         </select>
         <hr />
-        {returnSelectedContent()}
+        {dmsRows()}
+        <div className="buttons-wrapper">
+          <button>Add more</button>
+          <button className="orange-button" onClick={() => setShape()}>
+            Make shape
+          </button>
+        </div>
       </div>
     </div>
   );
