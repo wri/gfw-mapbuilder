@@ -6,7 +6,7 @@ import { coordinatesContent } from '../../../../../configs/modal.config';
 import '../../../../css/CoordinatesForm';
 
 const CoordinatesForm: FunctionComponent = () => {
-  const _formValues = {};
+  const _dmsFormValues = {};
   const [selectedFormat, setSelectedFormat] = useState(0);
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
@@ -26,30 +26,22 @@ const CoordinatesForm: FunctionComponent = () => {
     rowNum: Number,
     coordinateType: string,
     degreeType: string,
-    direction: string
+    cardinalPoint: string
   ) => {
-    if (_formValues[`row${rowNum}`]) {
-      Object.defineProperty(
-        _formValues[`row${rowNum}`][coordinateType],
-        degreeType,
-        {
-          value: coordinateValue,
-          writable: true
-        }
-      );
+    if (_dmsFormValues[`row${rowNum}`]) {
+      _dmsFormValues[`row${rowNum}`][coordinateType][
+        degreeType
+      ] = coordinateValue;
     } else {
-      Object.defineProperty(_formValues, `row${rowNum}`, {
-        value: {
-          [coordinateType]: {
-            [degreeType]: coordinateValue,
-            direction: direction
-          }
-        },
-        writable: true
-      });
+      _dmsFormValues[`row${rowNum}`] = {
+        [coordinateType]: {
+          [degreeType]: coordinateValue,
+          cardinalPoint: cardinalPoint
+        }
+      };
     }
 
-    console.log('setFormValues()', _formValues);
+    console.log('setFormValues()', _dmsFormValues);
   };
 
   const setCardinalType = (
@@ -57,15 +49,19 @@ const CoordinatesForm: FunctionComponent = () => {
     rowNum: number,
     coordinateType: string
   ) => {
-    Object.defineProperty(
-      _formValues[`row${rowNum}`][coordinateType],
-      'cardinalPoint',
-      {
-        value: specificPoint,
-        writable: true
-      }
-    );
-    console.log('setCardinalType()', _formValues);
+    if (_dmsFormValues[`row${rowNum}`]) {
+      _dmsFormValues[`row${rowNum}`][coordinateType][
+        'cardinalPoint'
+      ] = specificPoint;
+    } else {
+      _dmsFormValues[`row${rowNum}`] = {
+        [coordinateType]: {
+          cardinalPoint: specificPoint
+        }
+      };
+    }
+
+    console.log('setCardinalType()', _dmsFormValues);
   };
 
   const dmsRows = (): any => {
@@ -125,12 +121,8 @@ const CoordinatesForm: FunctionComponent = () => {
                       setCardinalType(e.target.value, rowNum, 'latitude')
                     }
                   >
-                    <option value="N" key={`${rowNum}a`}>
-                      N
-                    </option>
-                    <option value="S" key={`${rowNum}b`}>
-                      S
-                    </option>
+                    <option value="N">N</option>
+                    <option value="S">S</option>
                   </select>
                 </div>
               </div>
@@ -189,12 +181,8 @@ const CoordinatesForm: FunctionComponent = () => {
                       setCardinalType(e.target.value, rowNum, 'longitude')
                     }
                   >
-                    <option value="E" key={`${rowNum}a`}>
-                      E
-                    </option>
-                    <option value="W" key={`${rowNum}b`}>
-                      W
-                    </option>
+                    <option value="E">E</option>
+                    <option value="W">W</option>
                   </select>
                 </div>
               </div>
@@ -207,7 +195,7 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   const setShape = () => {
-    console.log('setShape()', _formValues);
+    console.log('setShape()', _dmsFormValues);
     // TODO create polygon from formvalues!
   };
 
