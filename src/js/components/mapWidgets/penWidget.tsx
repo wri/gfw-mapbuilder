@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { renderModal } from '../../store/appState/actions';
 
-import { ReactComponent as PenIcon } from '../../../images/penIcon.svg';
+import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 
 const PenWidget: FunctionComponent = () => {
   const dispatch = useDispatch();
