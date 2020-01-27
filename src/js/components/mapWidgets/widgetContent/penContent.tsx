@@ -9,7 +9,7 @@ import { penContent } from 'configs/modal.config';
 
 import { ReactComponent as PolygonIcon } from 'images/PolygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
-import { ReactComponent as PlusIcon } from 'images/PlusIcon.svg';
+import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
 
 import 'css/penContent.scss';
 
