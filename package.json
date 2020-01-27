@@ -8,6 +8,7 @@
     "build": "webpack --config webpack.production.js --display-origins --display-provided-exports --display-reasons",
     "clean": "rm -rf node_modules; rm package-lock.json",
     "profile": "webpack --profile --json > stats.json",
+    "log": "echo \"\\033[32mFired Script!\"",
     "serve": "webpack-dev-server --mode production --open --https --compress",
     "test": "jest",
     "prettier": "prettier --write \"src/**/*.ts?(x)\"",
