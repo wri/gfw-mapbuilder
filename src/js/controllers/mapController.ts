@@ -49,6 +49,8 @@ export class MapController {
         () => {
           console.log('mapview is loaded');
           store.dispatch({ type: 'MAP_READY', payload: true });
+
+          this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);

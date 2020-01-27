@@ -31,6 +31,11 @@
       width: 1rem;
     }
   }
+
+  &.pen-widget {
+    height: 30rem;
+    top: 30%;
+  }
 }
 
 .dim-container {
@@ -54,7 +59,7 @@
   font-weight: bold;
   border: none;
   text-transform: uppercase;
-  background-color: $button-color;
+  background-color: $base-yellow;
   color: $white;
   margin: 0 auto;
   margin-top: 1rem;

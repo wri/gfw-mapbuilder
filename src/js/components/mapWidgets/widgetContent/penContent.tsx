@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { renderModal } from 'js/store/appState/actions';
@@ -29,10 +29,6 @@ const PenContent: FunctionComponent = () => {
     shapefileButton,
     shapefileInstructions
   } = penContent[selectedLanguage];
-
-  useEffect(() => {
-    mapController.initializeAndSetSketch();
-  });
 
   const setDrawTool = () => {
     dispatch(renderModal(''));
