@@ -13,14 +13,16 @@ interface ZoomParams {
 }
 
 export class MapController {
-  _map: Map | null;
-  _mapview: MapView | null | any;
-  _sketchVM: SketchViewModel | null | any;
+  _map: Map | undefined;
+  _mapview: MapView | undefined;
+  _sketchVM: SketchViewModel | undefined;
+  _previousSketchGraphic: any;
 
   constructor() {
-    this._map = null;
-    this._mapview = null;
-    this._sketchVM = null;
+    this._map = undefined;
+    this._mapview = undefined;
+    this._sketchVM = undefined;
+    this._previousSketchGraphic = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -47,6 +49,8 @@ export class MapController {
         () => {
           console.log('mapview is loaded');
           store.dispatch({ type: 'MAP_READY', payload: true });
+
+          this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -89,11 +93,13 @@ export class MapController {
       }
     });
 
-    this._sketchVM.on('create', (event: any) => {
+    this._sketchVM?.on('create', (event: any) => {
       if (event.state === 'complete') {
-        this._mapview.graphics.add(event.graphic);
+        this._previousSketchGraphic = event.graphic;
+
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
+        this._mapview?.graphics.add(event.graphic);
 
         store.dispatch({ type: 'SELECT_ACTIVE_TAB', payload: 'analysis' });
         store.dispatch({ type: 'TOGGLE_TABVIEW_PANEL', payload: true });
@@ -102,7 +108,8 @@ export class MapController {
   }
 
   createPolygonSketch = () => {
-    this._sketchVM.create('polygon', { mode: 'freehand' });
+    this._mapview?.graphics.remove(this._previousSketchGraphic);
+    this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 }
 

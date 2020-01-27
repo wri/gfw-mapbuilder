@@ -14,6 +14,7 @@ import '../../../css/modalCard.scss';
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector((state: any) => state.appState.renderModal);
   const dispatch = useDispatch();
+  let className = '';
 
   const handleEscapeKey = (e: React.KeyboardEvent) => {
     if (e.keyCode === 27) {
@@ -39,13 +40,21 @@ const ModalCard: FunctionComponent<{}> = () => {
     }
   };
 
+  switch (modalType) {
+    case 'PenWidget':
+      className = 'pen-widget';
+      break;
+    default:
+      break;
+  }
+
   return (
     <>
       <div
         className="dim-container"
         onClick={() => dispatch(renderModal(''))}
       ></div>
-      <div className="modal-card-container">
+      <div className={`modal-card-container ${className}`}>
         <button
           className="exit-button"
           onClick={() => dispatch(renderModal(''))}

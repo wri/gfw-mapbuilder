@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { renderModal } from '../../store/appState/actions';
 
-import { ReactComponent as ShareIcon } from '../../../images/ShareIcon.svg';
+import { ReactComponent as ShareIcon } from '../../../images/shareIcon.svg';
 
 const ShareWidget: FunctionComponent = () => {
   const dispatch = useDispatch();

@@ -1,0 +1,42 @@
+name: Deploy Latest
+
+on:
+  push:
+    branches:
+      - clean-slate
+
+jobs:
+  deploy:
+    name: Creating development deployment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Create Build
+        run: |
+          npm install
+          npm run build
+          npm run log
+      - name: Deploy Build
+        uses: blueraster/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          SOURCE_DIR: './dist'
+          DEST_DIR: 'gfw-mapbuilder/clean-slate'
+          AWS_REGION: 'us-east-1'
+          AWS_S3_BUCKET: ${{ secrets.MB_AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.MB_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.MB_AWS_SECRET_ACCESS_KEY }}
+      - name: Slack notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: MapBuilderCI
+          SLACK_CHANNEL: mapbuilder-ci
+          SLACK_OVERRIDE_MESSAGE: true
+        uses: blueraster/action-slack@master
+        with:
+          args: "Mapbuilder's base branch has been updated \n https://alpha.blueraster.io/gfw-mapbuilder/clean-slate"

@@ -11,7 +11,7 @@ import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
 import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
 import { ReactComponent as DocumentsTabIcon } from 'images/documentsTabIcon.svg';
 import { ReactComponent as InfoTabIcon } from 'images/infoTabIcon.svg';
-import { ReactComponent as MeasurementTabIcon } from 'images/MeasurementTabIcon.svg';
+import { ReactComponent as MeasurementTabIcon } from 'images/measurementTabIcon.svg';
 
 export interface TabProps {
   key: string;
