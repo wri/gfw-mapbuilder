@@ -3,7 +3,7 @@ name: Deploy Latest
 on:
   push:
     branches:
-      - init-actions
+      - clean-slate
 
 jobs:
   deploy:
