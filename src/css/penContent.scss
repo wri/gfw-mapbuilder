@@ -1,0 +1,52 @@
+@import 'variables.scss';
+
+.pen-content-container {
+  .directions {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .polygon-icon {
+      margin: 0 auto;
+    }
+
+    figure {
+      margin-bottom: 0;
+
+      figcaption {
+        h4 {
+          margin: 0;
+        }
+      }
+
+      ol {
+        padding-left: 1rem;
+      }
+    }
+
+    hr {
+      width: 75%;
+    }
+
+    .shapefile-instructions {
+      font-size: 0.75rem;
+      margin-left: 3rem;
+      margin-right: 3rem;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-device) {
+  .pen-content-container {
+    .directions {
+      figure {
+        margin: 1rem 1rem 0 1rem;
+      }
+
+      .shapefile-instructions {
+        margin-left: 2rem;
+        margin-right: 2rem;
+      }
+    }
+  }
+}
