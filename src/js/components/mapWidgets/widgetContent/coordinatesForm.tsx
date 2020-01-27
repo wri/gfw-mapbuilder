@@ -6,12 +6,14 @@ import { coordinatesContent } from '../../../../../configs/modal.config';
 import '../../../../css/CoordinatesForm';
 
 const CoordinatesForm: FunctionComponent = () => {
+  const _rows = [1, 2, 3, 4, 5, 6];
+  let _formValues = {};
   const [selectedFormat, setSelectedFormat] = useState(0);
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
   );
 
-  const { degree, apostrophe, quotes } = coordinatesContent;
+  const { degree, minutes, seconds } = coordinatesContent;
   const {
     title,
     dropdownTitle,
@@ -20,26 +22,95 @@ const CoordinatesForm: FunctionComponent = () => {
     longitude
   } = coordinatesContent[selectedLanguage];
 
+  const setValues = (
+    coordinateValue: string,
+    rowNum: Number,
+    coordinateType: string,
+    degreeType: string
+  ) => {
+    if (_formValues[`row${rowNum}`]) {
+      Object.defineProperty(
+        _formValues[`row${rowNum}`][coordinateType],
+        degreeType,
+        {
+          value: coordinateValue,
+          writable: true
+        }
+      );
+    } else {
+      Object.defineProperty(_formValues, `row${rowNum}`, {
+        value: {
+          [coordinateType]: {
+            [degreeType]: coordinateValue
+          }
+        },
+        writable: true
+      });
+    }
+
+    console.log('component _formValues', _formValues);
+  };
+
+  const setCardinalType = (
+    specificPoint: string,
+    rowNum: number,
+    coordinateType: string
+  ) => {
+    Object.defineProperty(
+      _formValues[`row${rowNum}`][coordinateType],
+      'cardinalPoint',
+      {
+        value: specificPoint,
+        writable: true
+      }
+    );
+    console.log('setCardinalType()', _formValues);
+  };
+
   const latitudeLongitudeRow = (): any => {
     if (decimalOptions[selectedFormat].includes('DMS')) {
-      const rows = [1, 2, 3, 4, 5, 6];
-
-      return rows.map(rowNum => {
+      return _rows.map(rowNum => {
         if (rowNum % 2 === 1) {
           return (
             <>
               <div className="dms-wrapper">
                 <span>{latitude}</span>
                 <div className="input-wrapper">
-                  <input type="number" name="latitude coordinates" />
+                  <input
+                    type="number"
+                    name="latitude coordinates"
+                    onChange={e =>
+                      setValues(e.target.value, rowNum, 'latitude', 'degree')
+                    }
+                  />
                   <span className="degree">{degree}</span>
-                  <input type="number" name="latitude coordinates" />
-                  <span className="degree">{apostrophe}</span>
-                  <input type="number" name="latitude coordinates" />
-                  <span className="degree">{quotes}</span>
-                  <select onChange={e => console.log('hmmm', e.target.value)}>
-                    <option value="N">N</option>
-                    <option value="S">S</option>
+                  <input
+                    type="number"
+                    name="latitude coordinates"
+                    onChange={e =>
+                      setValues(e.target.value, rowNum, 'latitude', 'minutes')
+                    }
+                  />
+                  <span className="degree">{minutes}</span>
+                  <input
+                    type="number"
+                    name="latitude coordinates"
+                    onChange={e =>
+                      setValues(e.target.value, rowNum, 'latitude', 'seconds')
+                    }
+                  />
+                  <span className="degree">{seconds}</span>
+                  <select
+                    onChange={e =>
+                      setCardinalType(e.target.value, rowNum, 'latitude')
+                    }
+                  >
+                    <option value="N" key={`${rowNum}a`}>
+                      N
+                    </option>
+                    <option value="S" key={`${rowNum}b`}>
+                      S
+                    </option>
                   </select>
                 </div>
               </div>
@@ -51,15 +122,41 @@ const CoordinatesForm: FunctionComponent = () => {
               <div className="dms-wrapper">
                 <span>{longitude}</span>
                 <div className="input-wrapper">
-                  <input type="number" name="latitude coordinates" />
+                  <input
+                    type="number"
+                    name="latitude coordinates"
+                    onChange={e =>
+                      setValues(e.target.value, rowNum, 'longitude', 'degree')
+                    }
+                  />
                   <span className="degree">{degree}</span>
-                  <input type="number" name="latitude coordinates" />
-                  <span className="degree">{apostrophe}</span>
-                  <input type="number" name="latitude coordinates" />
-                  <span className="degree">{quotes}</span>
-                  <select onChange={e => console.log('hmmm', e.target.value)}>
-                    <option value="E">E</option>
-                    <option value="W">W</option>
+                  <input
+                    type="number"
+                    name="latitude coordinates"
+                    onChange={e =>
+                      setValues(e.target.value, rowNum, 'longitude', 'minutes')
+                    }
+                  />
+                  <span className="degree">{minutes}</span>
+                  <input
+                    type="number"
+                    name="latitude coordinates"
+                    onChange={e =>
+                      setValues(e.target.value, rowNum, 'longitude', 'seconds')
+                    }
+                  />
+                  <span className="degree">{seconds}</span>
+                  <select
+                    onChange={e =>
+                      setCardinalType(e.target.value, rowNum, 'longitude')
+                    }
+                  >
+                    <option value="E" key={`${rowNum}a`}>
+                      E
+                    </option>
+                    <option value="W" key={`${rowNum}b`}>
+                      W
+                    </option>
                   </select>
                 </div>
               </div>

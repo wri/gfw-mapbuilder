@@ -234,8 +234,8 @@ export const searchContent = {
 
 export const coordinatesContent = {
   degree: '°',
-  apostrophe: "'",
-  quotes: `"`,
+  minutes: "'",
+  seconds: `"`,
   en: {
     title: 'Enter your own coordinates',
     dropdownTitle: 'Select Format',
