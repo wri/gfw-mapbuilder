@@ -6,8 +6,7 @@ import { coordinatesContent } from '../../../../../configs/modal.config';
 import '../../../../css/CoordinatesForm';
 
 const CoordinatesForm: FunctionComponent = () => {
-  const _rows = [1, 2, 3, 4, 5, 6];
-  let _formValues = {};
+  const _formValues = {};
   const [selectedFormat, setSelectedFormat] = useState(0);
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
@@ -22,11 +21,12 @@ const CoordinatesForm: FunctionComponent = () => {
     longitude
   } = coordinatesContent[selectedLanguage];
 
-  const setValues = (
+  const setFormValues = (
     coordinateValue: string,
     rowNum: Number,
     coordinateType: string,
-    degreeType: string
+    degreeType: string,
+    direction: string
   ) => {
     if (_formValues[`row${rowNum}`]) {
       Object.defineProperty(
@@ -41,14 +41,15 @@ const CoordinatesForm: FunctionComponent = () => {
       Object.defineProperty(_formValues, `row${rowNum}`, {
         value: {
           [coordinateType]: {
-            [degreeType]: coordinateValue
+            [degreeType]: coordinateValue,
+            direction: direction
           }
         },
         writable: true
       });
     }
 
-    console.log('component _formValues', _formValues);
+    console.log('setFormValues()', _formValues);
   };
 
   const setCardinalType = (
@@ -67,9 +68,10 @@ const CoordinatesForm: FunctionComponent = () => {
     console.log('setCardinalType()', _formValues);
   };
 
-  const latitudeLongitudeRow = (): any => {
+  const dmsRows = (): any => {
+    const rows = [1, 2, 3, 4, 5, 6];
     if (decimalOptions[selectedFormat].includes('DMS')) {
-      return _rows.map(rowNum => {
+      return rows.map(rowNum => {
         if (rowNum % 2 === 1) {
           return (
             <>
@@ -80,7 +82,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setValues(e.target.value, rowNum, 'latitude', 'degree')
+                      setFormValues(
+                        e.target.value,
+                        rowNum,
+                        'latitude',
+                        'degree',
+                        'north'
+                      )
                     }
                   />
                   <span className="degree">{degree}</span>
@@ -88,7 +96,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setValues(e.target.value, rowNum, 'latitude', 'minutes')
+                      setFormValues(
+                        e.target.value,
+                        rowNum,
+                        'latitude',
+                        'minutes',
+                        'north'
+                      )
                     }
                   />
                   <span className="degree">{minutes}</span>
@@ -96,7 +110,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setValues(e.target.value, rowNum, 'latitude', 'seconds')
+                      setFormValues(
+                        e.target.value,
+                        rowNum,
+                        'latitude',
+                        'seconds',
+                        'north'
+                      )
                     }
                   />
                   <span className="degree">{seconds}</span>
@@ -126,7 +146,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setValues(e.target.value, rowNum, 'longitude', 'degree')
+                      setFormValues(
+                        e.target.value,
+                        rowNum,
+                        'longitude',
+                        'degree',
+                        'east'
+                      )
                     }
                   />
                   <span className="degree">{degree}</span>
@@ -134,7 +160,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setValues(e.target.value, rowNum, 'longitude', 'minutes')
+                      setFormValues(
+                        e.target.value,
+                        rowNum,
+                        'longitude',
+                        'minutes',
+                        'east'
+                      )
                     }
                   />
                   <span className="degree">{minutes}</span>
@@ -142,7 +174,13 @@ const CoordinatesForm: FunctionComponent = () => {
                     type="number"
                     name="latitude coordinates"
                     onChange={e =>
-                      setValues(e.target.value, rowNum, 'longitude', 'seconds')
+                      setFormValues(
+                        e.target.value,
+                        rowNum,
+                        'longitude',
+                        'seconds',
+                        'east'
+                      )
                     }
                   />
                   <span className="degree">{seconds}</span>
@@ -168,13 +206,20 @@ const CoordinatesForm: FunctionComponent = () => {
     }
   };
 
+  const setShape = () => {
+    console.log('setShape()', _formValues);
+    // TODO create polygon from formvalues!
+  };
+
   const returnSelectedContent = (): ReactElement => {
     return (
       <>
-        {latitudeLongitudeRow()}
+        {dmsRows()}
         <div className="buttons-wrapper">
           <button>Add more</button>
-          <button className="orange-button">Make shape</button>
+          <button className="orange-button" onClick={() => setShape()}>
+            Make shape
+          </button>
         </div>
       </>
     );
