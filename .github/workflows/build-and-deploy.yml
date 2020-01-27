@@ -31,3 +31,12 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.MB_AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.MB_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.MB_AWS_SECRET_ACCESS_KEY }}
+      - name: Slack notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: MapBuilderCI
+          SLACK_CHANNEL: mapbuilder-ci
+          SLACK_OVERRIDE_MESSAGE: true
+        uses: blueraster/action-slack@master
+        with:
+          args: "Mapbuilder's base branch has been updated \n https://alpha.blueraster.io/gfw-mapbuilder/clean-slate"
