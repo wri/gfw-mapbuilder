@@ -1,15 +1,15 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { renderModal } from '../../../store/appState/actions';
+import { renderModal } from 'js/store/appState/actions';
 
-import { mapController } from '../../../controllers/mapController';
+import { mapController } from 'js/controllers/mapController';
 
-import { penContent } from '../../../../../configs/modal.config';
+import { penContent } from 'configs/modal.config';
 
-import { ReactComponent as PolygonIcon } from '../../../../images/PolygonIcon.svg';
-import { ReactComponent as PenIcon } from '../../../../images/penIcon.svg';
-import { ReactComponent as PlusIcon } from '../../../../images/PlusIcon.svg';
+import { ReactComponent as PolygonIcon } from 'images/PolygonIcon.svg';
+import { ReactComponent as PenIcon } from 'images/penIcon.svg';
+import { ReactComponent as PlusIcon } from 'images/PlusIcon.svg';
 
 import '../../../../css/penContent.scss';
 

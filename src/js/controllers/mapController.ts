@@ -16,11 +16,13 @@ export class MapController {
   _map: Map | undefined;
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
+  _previousSketchGraphic: any;
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
+    this._previousSketchGraphic = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -91,6 +93,8 @@ export class MapController {
 
     this._sketchVM?.on('create', (event: any) => {
       if (event.state === 'complete') {
+        this._previousSketchGraphic = event.graphic;
+
         this._mapview?.graphics.add(event.graphic);
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
@@ -102,6 +106,7 @@ export class MapController {
   }
 
   createPolygonSketch = () => {
+    this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 }
