@@ -1,8 +1,16 @@
-import { MapviewState, MapviewStateTypes, MAP_READY, MAP_ERROR } from './types';
+import {
+  MapviewState,
+  MapviewStateTypes,
+  MAP_READY,
+  MAP_ERROR,
+  CLEAR_ALL_LAYERS,
+  UPDATE_VISIBLE_LAYERS
+} from './types';
 
 const initialState: MapviewState = {
   isMapReady: false,
-  loadError: false
+  loadError: false,
+  visibleLayers: []
 };
 
 export function mapviewReducer(
@@ -14,6 +22,10 @@ export function mapviewReducer(
       return { ...state, isMapReady: action.payload };
     case MAP_ERROR:
       return { ...state, loadError: action.payload };
+    case CLEAR_ALL_LAYERS:
+      return { ...state, visibleLayers: [] };
+    case UPDATE_VISIBLE_LAYERS:
+      return { ...state, visibleLayers: [...action.payload] };
     default:
       return state;
   }
