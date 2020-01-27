@@ -97,9 +97,9 @@ export class MapController {
       if (event.state === 'complete') {
         this._previousSketchGraphic = event.graphic;
 
-        this._mapview?.graphics.add(event.graphic);
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
+        this._mapview?.graphics.add(event.graphic);
 
         store.dispatch({ type: 'SELECT_ACTIVE_TAB', payload: 'analysis' });
         store.dispatch({ type: 'TOGGLE_TABVIEW_PANEL', payload: true });
