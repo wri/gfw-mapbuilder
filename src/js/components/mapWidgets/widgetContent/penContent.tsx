@@ -11,7 +11,7 @@ import { ReactComponent as PolygonIcon } from 'images/PolygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/PlusIcon.svg';
 
-import '../../../../css/penContent.scss';
+import 'css/penContent.scss';
 
 const PenContent: FunctionComponent = () => {
   const dispatch = useDispatch();
