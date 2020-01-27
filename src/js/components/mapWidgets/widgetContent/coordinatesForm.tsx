@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState, ReactElement } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import DMSSection from './coordinatesDMSSection';
+import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
 
-import { coordinatesContent } from '../../../../../configs/modal.config';
+import { coordinatesContent } from 'configs/modal.config';
 
-import '../../../../css/CoordinatesForm';
+import 'css/CoordinatesForm';
 
 interface SpecificDMSSection {
   rowNum: number;

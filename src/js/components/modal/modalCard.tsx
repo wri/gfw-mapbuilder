@@ -1,15 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from '../mapWidgets/widgetContent/printContent';
-import ShareContent from '../mapWidgets/widgetContent/shareContent';
-import PenContent from '../mapWidgets/widgetContent/penContent';
-import SearchContent from '../mapWidgets/widgetContent/searchContent';
-import CoordinatesForm from '../mapWidgets/widgetContent/coordinatesForm';
+import PrintContent from 'src/js/components/mapWidgets/widgetContent/printContent';
+import ShareContent from 'src/js/components/mapWidgets/widgetContent/shareContent';
+import PenContent from 'src/js/components/mapWidgets/widgetContent/penContent';
+import SearchContent from 'src/js/components/mapWidgets/widgetContent/searchContent';
+import CoordinatesForm from 'src/js/components/mapWidgets/widgetContent/coordinatesForm';
 
-import { renderModal } from '../../store/appState/actions';
+import { renderModal } from 'src/js/store/appState/actions';
 
-import '../../../css/modalCard.scss';
+import 'css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector((state: any) => state.appState.renderModal);
