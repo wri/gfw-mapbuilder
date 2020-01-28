@@ -3,6 +3,7 @@ import {
   MAP_READY,
   CLEAR_ALL_LAYERS,
   UPDATE_VISIBLE_LAYERS,
+  ALL_AVAILABLE_LAYERS,
   MapviewState
 } from './types';
 
@@ -29,6 +30,15 @@ export function clearAllLayers() {
 export function updateVisibleLayers(payload: MapviewState['visibleLayers']) {
   return {
     type: UPDATE_VISIBLE_LAYERS as typeof UPDATE_VISIBLE_LAYERS,
+    payload
+  };
+}
+
+export function allAvailableLayers(
+  payload: MapviewState['allAvailableLayers']
+) {
+  return {
+    type: ALL_AVAILABLE_LAYERS as typeof ALL_AVAILABLE_LAYERS,
     payload
   };
 }
