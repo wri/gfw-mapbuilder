@@ -6,6 +6,7 @@ export interface AppSettings {
   logoLinkUrl?: string;
   language?: string;
   includeDocumentsTab?: boolean;
+  layerPanel?: object;
 }
 
 //Action names available
