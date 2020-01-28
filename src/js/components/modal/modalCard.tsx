@@ -1,13 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from 'src/js/components/mapWidgets/widgetContent/printContent';
-import ShareContent from 'src/js/components/mapWidgets/widgetContent/shareContent';
-import PenContent from 'src/js/components/mapWidgets/widgetContent/penContent';
-import SearchContent from 'src/js/components/mapWidgets/widgetContent/searchContent';
-import CoordinatesForm from 'src/js/components/mapWidgets/widgetContent/coordinatesForm';
+import PrintContent from 'js/components/mapWidgets/widgetContent/printContent';
+import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
+import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
+import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
+import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 
-import { renderModal } from 'src/js/store/appState/actions';
+import { renderModal } from 'js/store/appState/actions';
 
 import 'css/modalCard.scss';
 
