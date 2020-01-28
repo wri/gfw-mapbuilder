@@ -73,6 +73,23 @@
   }
 }
 
+.layers-control-checkbox {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  span {
+    margin-left: 10px;
+  }
+}
+
+.transparency-slider {
+  margin-bottom: 15px;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+}
+
 .info-icon-container {
   background-color: #f0ab00;
   border-radius: 50%;
