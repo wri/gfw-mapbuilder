@@ -5,6 +5,8 @@ import { RootState } from 'js/store';
 import { mapController } from 'js/controllers/mapController';
 import { ReactComponent as InfoIcon } from 'images/InfoIcon.svg';
 import 'css/leftpanel.scss';
+import LayerToggleSwitch from './LayerToggleSwitch';
+import LayerTransparencySlider from './LayerTransparencySlider';
 
 const AllLayerControls = () => {
   return (
@@ -18,7 +20,6 @@ const AllLayerControls = () => {
   );
 };
 
-//-----------
 interface LayerControlProps {
   id: string;
 }
@@ -28,44 +29,16 @@ const LayerControl = (props: LayerControlProps): React.ReactElement => {
   );
   const layerIsVisible = visibleLayers.includes(props.id);
 
-  const [localLayerOpacity, setlocalLayerOpacity] = useState(
-    mapController.getLayerOpacity(props.id)
-  );
-
-  function handleOpacityChange(e: any) {
-    setlocalLayerOpacity(e.target.value);
-    mapController.setLayerOpacity(props.id, e.target.value);
-  }
   return (
     <>
       <div className="layers-control-checkbox">
-        <label>
-          <input
-            type="checkbox"
-            name="layer-checkbox"
-            checked={layerIsVisible}
-            onChange={() => mapController.toggleLayerVisibility(props.id)}
-          />
-          <span>{props.id}</span>
-        </label>
+        <LayerToggleSwitch layerIsVisible={layerIsVisible} layerID={props.id} />
+        <span className="layer-label">{props.id}</span>
         <div className="info-icon-container">
           <InfoIcon width={10} height={10} fill="#fff" />
         </div>
       </div>
-      <div className="transparency-slider">
-        <p>Transparency Slider</p>
-        <input
-          type="range"
-          min="0.1"
-          max="1"
-          step="0.05"
-          name="tslider"
-          id=""
-          value={localLayerOpacity}
-          onChange={handleOpacityChange}
-        />
-        <label htmlFor="tslider">{localLayerOpacity}</label>
-      </div>
+      <LayerTransparencySlider layerID={props.id} />
     </>
   );
 };
@@ -103,11 +76,11 @@ const LayerGroup = (): React.ReactElement => {
   );
 };
 
-interface Props {
+interface LayersTabViewProps {
   key: string;
   label: string;
 }
-const LayersTabView = (props: Props) => {
+const LayersTabView = (props: LayersTabViewProps) => {
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
   );
