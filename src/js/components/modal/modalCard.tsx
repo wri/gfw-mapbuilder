@@ -1,14 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from '../mapWidgets/widgetContent/printContent';
-import ShareContent from '../mapWidgets/widgetContent/shareContent';
-import PenContent from '../mapWidgets/widgetContent/penContent';
-import SearchContent from '../mapWidgets/widgetContent/searchContent';
+import PrintContent from 'js/components/mapWidgets/widgetContent/printContent';
+import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
+import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
+import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
+import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 
-import { renderModal } from '../../store/appState/actions';
+import { renderModal } from 'js/store/appState/actions';
 
-import '../../../css/modalCard.scss';
+import 'css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector((state: any) => state.appState.renderModal);
@@ -30,6 +31,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <ShareContent />;
       case 'PenWidget':
         return <PenContent />;
+      case 'PenWidget-CoordinatesForm':
+        return <CoordinatesForm />;
       case 'SearchWidget':
         return <SearchContent />;
       default:
