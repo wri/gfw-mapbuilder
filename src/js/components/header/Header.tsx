@@ -1,13 +1,17 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'js/store/index';
 
 import LanguageDropdown from '../../components/header/LanguageDropdown';
 
-import config from '../../../../configs/resources';
+// import config from '../../../../configs/resources';
 
 import '../../../css/header.scss';
 
 const Header: FunctionComponent = () => {
-  const { title, subtitle, logoUrl, logoLinkUrl } = config;
+  const { title, subtitle, logoUrl, logoLinkUrl } = useSelector(
+    (store: RootState) => store.appSettings
+  );
 
   return (
     <div className="header-container">
