@@ -26,7 +26,7 @@ interface DMSFormValues {
   coordinateValue: string;
   rowNum: number;
   coordinateType: string;
-  degreeType: string;
+  degreeType: number;
   cardinalPoint: string;
 }
 
@@ -201,7 +201,7 @@ const CoordinatesForm: FunctionComponent = () => {
         </select>
         <hr />
         {decimalOptions[selectedFormat].includes('DMS') &&
-          dmsSections.map((dmsSection: SpecificDMSSection) => {
+          dmsSections.map((dmsSection: SpecificDMSSection, index: number) => {
             return (
               <DMSSection
                 dmsSection={dmsSection}
@@ -210,6 +210,7 @@ const CoordinatesForm: FunctionComponent = () => {
                 degreeSymbol={degree}
                 minuteSymbol={minutes}
                 secondsSymbol={seconds}
+                key={index}
               />
             );
           })}
