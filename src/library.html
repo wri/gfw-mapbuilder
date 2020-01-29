@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>GFW Mapbuilder Library</title>
+    <script defer>
+      console.log('first?');
+      setTimeout(() => {
+        console.log('second');
+        var gfwLib = new MapBuilda('lib-main', { title: 'different title' });
+      }, 1000);
+    </script>
+  </head>
+  <body>
+    <div id="lib-main"></div>
+  </body>
+</html>
