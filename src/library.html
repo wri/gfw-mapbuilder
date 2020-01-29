@@ -8,15 +8,11 @@
     />
     <meta name="mobile-web-app-capable" content="yes" />
     <title>GFW Mapbuilder Library</title>
-    <script defer>
-      console.log('first?');
-      setTimeout(() => {
-        console.log('second');
-        var gfwLib = new MapBuilda('lib-main', { title: 'different title' });
-      }, 1000);
-    </script>
   </head>
   <body>
     <div id="lib-main"></div>
   </body>
+  <script defer>
+    var gfwLib = new MapBuilda('lib-main', { title: 'different title' });
+  </script>
 </html>
