@@ -30,14 +30,13 @@ export default function DMSSection(props: DMSSectionProps) {
     setDMSCardinalType,
     degreeSymbol,
     minuteSymbol,
-    secondsSymbol,
-    key
+    secondsSymbol
   } = props;
   const { rowNum, latitude, longitude } = dmsSection;
 
   return (
     <>
-      <div className="dms-wrapper" key={key}>
+      <div className="dms-wrapper">
         <span>Latitude</span>
         <div className="input-wrapper">
           <input
