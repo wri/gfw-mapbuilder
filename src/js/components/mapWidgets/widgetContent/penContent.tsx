@@ -7,7 +7,7 @@ import { mapController } from 'js/controllers/mapController';
 
 import { penContent } from 'configs/modal.config';
 
-import { ReactComponent as PolygonIcon } from 'images/PolygonIcon.svg';
+import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
 
