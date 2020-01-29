@@ -71,20 +71,20 @@ module.exports = {
       }
     ]
   },
-    optimization: {
-        minimizer: [
-        new TerserPlugin({
-            cache: true,
-            parallel: true,
-            sourceMap: false,
-            terserOptions: {
-            output: {
-                comments: false
-            }
-            }
-        })
-        ]
-    },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: false,
+        terserOptions: {
+          output: {
+            comments: false
+          }
+        }
+      })
+    ]
+  },
   plugins: [
     new CleanWebpackPlugin(),
 
