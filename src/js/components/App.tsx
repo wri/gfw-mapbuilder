@@ -20,7 +20,8 @@ const MapSpinner = (): React.ReactElement => (
 );
 // const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
-const App = (): JSX.Element => {
+const App = (props: any): JSX.Element => {
+  console.log('prrps??', props);
   //INIT with global spinner set to true
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
