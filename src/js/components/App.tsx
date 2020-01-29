@@ -32,8 +32,8 @@ const App = (props: any): JSX.Element => {
       //IF APPID > ASYNC Get Resources
       //
       //Determine which resources we are reading from
-      //Read our local resources.js file
-      dispatch(overwriteSettings(resources));
+      //Read our local resources.js file And any external library resources (which are prioritized)
+      dispatch(overwriteSettings({ ...resources, ...props }));
       //Send that to our redux appSettings overwriting whatever is there
       setShowGlobalSpinner(false);
     }, 500);
