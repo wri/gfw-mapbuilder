@@ -31,10 +31,10 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
-  function handleGroupToggle() {
+  const handleGroupToggle = () => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;
     dispatch(setOpenLayerGroup(openGroupKey));
-  }
+  };
 
   const basemapsToRender = layerGroupConfig.layers.map((baselayer: any) => (
     <BaseLayerControl
@@ -54,7 +54,9 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         tabIndex={0}
       >
         <span>{layerGroupTitle}</span>
-        <button className="caret-button">{groupOpen ? '▼' : '▲'}</button>
+        <button className="caret-button" onClick={handleGroupToggle}>
+          {groupOpen ? '▼' : '▲'}
+        </button>
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
         {basemapsToRender}

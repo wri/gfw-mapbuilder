@@ -25,14 +25,20 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
-  function handleGroupToggle() {
+  const handleGroupToggle = () => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;
     dispatch(setOpenLayerGroup(openGroupKey));
-  }
+  };
 
   return (
     <div className="layer-group-container">
-      <div className="layer-group-title">
+      <div
+        className="layer-group-title"
+        onClick={handleGroupToggle}
+        onKeyPress={handleGroupToggle}
+        role="button"
+        tabIndex={0}
+      >
         <span>{layerGroupTitle}</span>
         <button className="caret-button" onClick={handleGroupToggle}>
           {groupOpen ? '▼' : '▲'}
