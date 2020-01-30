@@ -2,7 +2,7 @@ import React from 'react';
 
 import 'css/CoordinatesForm';
 
-interface coordinateProps {
+interface CoordinateProps {
   degree: number;
   minutes: number;
   seconds: number;
@@ -12,27 +12,30 @@ interface coordinateProps {
 interface DMSSectionProps {
   dmsSection: {
     rowNum: number;
-    latitude: coordinateProps;
-    longitude: coordinateProps;
+    latitude: CoordinateProps;
+    longitude: CoordinateProps;
   };
-  setDMSFormValues: (formValues: any) => void;
-  setDMSCardinalType: (cardinalValue: any) => void;
+  setDMSFormValues: (formValues: object) => void;
+  setDMSCardinalType: (cardinalValue: object) => void;
   degreeSymbol: string;
   minuteSymbol: string;
   secondsSymbol: string;
   key: number;
+  removeSection: boolean;
 }
 
-export default function DMSSection(props: DMSSectionProps) {
+export default function DMSSection(props: DMSSectionProps): JSX.Element {
   const {
     dmsSection,
     setDMSFormValues,
     setDMSCardinalType,
     degreeSymbol,
     minuteSymbol,
-    secondsSymbol
+    secondsSymbol,
+    removeSection
   } = props;
   const { rowNum, latitude, longitude } = dmsSection;
+  console.log('removeSection', removeSection);
 
   return (
     <>
@@ -43,7 +46,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="latitude coordinates"
             value={latitude.degree}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -57,7 +60,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="latitude coordinates"
             value={latitude.minutes}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -71,7 +74,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="latitude coordinates"
             value={latitude.seconds}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -83,7 +86,7 @@ export default function DMSSection(props: DMSSectionProps) {
           <span className="degree">{secondsSymbol}</span>
           <select
             value={latitude.cardinalPoint}
-            onChange={e =>
+            onBlur={(e): void =>
               setDMSCardinalType({
                 specificPoint: e.target.value,
                 rowNum,
@@ -103,7 +106,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="longitude coordinates"
             value={longitude.degree}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -117,7 +120,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="longitude coordinates"
             value={longitude.minutes}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -131,7 +134,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="longitude coordinates"
             value={longitude.seconds}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -143,7 +146,7 @@ export default function DMSSection(props: DMSSectionProps) {
           <span className="degree">{secondsSymbol}</span>
           <select
             value={longitude.cardinalPoint}
-            onChange={e =>
+            onBlur={(e): void =>
               setDMSCardinalType({
                 specificPoint: e.target.value,
                 rowNum,
