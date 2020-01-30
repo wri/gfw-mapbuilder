@@ -5,6 +5,7 @@ import PrintContent from '../mapWidgets/widgetContent/printContent';
 import ShareContent from '../mapWidgets/widgetContent/shareContent';
 import PenContent from '../mapWidgets/widgetContent/penContent';
 import SearchContent from '../mapWidgets/widgetContent/searchContent';
+import MeasureContent from '../mapWidgets/widgetContent/measureContent';
 
 import { renderModal } from '../../store/appState/actions';
 
@@ -35,6 +36,7 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <SearchContent />;
       case 'MeasureWidget':
         className = 'measure-widget';
+        return <MeasureContent />;
       default:
         break;
     }
