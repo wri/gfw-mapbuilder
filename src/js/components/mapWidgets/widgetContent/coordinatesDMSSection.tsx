@@ -44,8 +44,11 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
     <>
       <div className="dms-wrapper">
         {renderRemoveButton && (
-          <button onClick={(): void => addOrRemoveSection(false)}>
-            REMOVE <TrashCanIcon height={25} width={25} color={'#fff'} />
+          <button
+            onClick={(): void => addOrRemoveSection(false)}
+            className="dms-remove"
+          >
+            REMOVE <TrashCanIcon height={20} width={20} fill={'#555'} />
           </button>
         )}
         <span>Latitude</span>
