@@ -148,49 +148,6 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(allDMSSections);
   };
 
-  return (
-    <div className="coordinates-form-container">
-      <div className="directions">
-        <div className="titles">
-          <h4 className="title">{title}</h4>
-          <p>{dropdownTitle}</p>
-        </div>
-        <select onBlur={(e): void => setSelectedFormat(Number(e.target.value))}>
-          {decimalOptions.map((option: string, index: number) => (
-            <option value={index} key={index}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <hr />
-        {decimalOptions[selectedFormat].includes('DMS') &&
-          dmsSections.map((dmsSection: SpecificDMSSection, index: number) => {
-            return (
-              <DMSSection
-                dmsSection={dmsSection}
-                setDMSFormValues={setDMSFormValues}
-                setDMSCardinalType={setDMSCardinalType}
-                degreeSymbol={degree}
-                minuteSymbol={minutes}
-                secondsSymbol={seconds}
-                key={index}
-                renderRemoveButton={index > 2 ? true : false}
-                addOrRemoveSection={addOrRemoveSection}
-              />
-            );
-          })}
-        <div className="buttons-wrapper">
-          <button onClick={(): void => addOrRemoveSection(true)}>
-            Add more
-          </button>
-          <button className="orange-button" onClick={(): void => setShape()}>
-            Make shape
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   // if (decimalOptions[selectedFormat].includes('DD')) {
   //   return (
   //     <>
@@ -249,6 +206,49 @@ const CoordinatesForm: FunctionComponent = () => {
   //   );
   // }
   // };
+
+  return (
+    <div className="coordinates-form-container">
+      <div className="directions">
+        <div className="titles">
+          <h4 className="title">{title}</h4>
+          <p>{dropdownTitle}</p>
+        </div>
+        <select onBlur={(e): void => setSelectedFormat(Number(e.target.value))}>
+          {decimalOptions.map((option: string, index: number) => (
+            <option value={index} key={index}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <hr />
+        {decimalOptions[selectedFormat].includes('DMS') &&
+          dmsSections.map((dmsSection: SpecificDMSSection, index: number) => {
+            return (
+              <DMSSection
+                dmsSection={dmsSection}
+                setDMSFormValues={setDMSFormValues}
+                setDMSCardinalType={setDMSCardinalType}
+                degreeSymbol={degree}
+                minuteSymbol={minutes}
+                secondsSymbol={seconds}
+                key={index}
+                renderRemoveButton={index > 2 ? true : false}
+                addOrRemoveSection={addOrRemoveSection}
+              />
+            );
+          })}
+        <div className="buttons-wrapper">
+          <button onClick={(): void => addOrRemoveSection(true)}>
+            Add more
+          </button>
+          <button className="orange-button" onClick={(): void => setShape()}>
+            Make shape
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default CoordinatesForm;
