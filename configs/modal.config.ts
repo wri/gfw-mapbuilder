@@ -32,8 +32,6 @@ export const printContent = {
 };
 
 export const shareContent = {
-  // TODO find proper translations for this content!
-
   en: {
     title: 'Share',
     instructions:

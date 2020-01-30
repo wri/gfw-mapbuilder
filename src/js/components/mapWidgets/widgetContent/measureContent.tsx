@@ -1,7 +1,5 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { measureContent } from 'configs/modal.config';
+import React, { FunctionComponent, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 interface SpecificDropDownOption {
   text: string;
@@ -9,14 +7,6 @@ interface SpecificDropDownOption {
 }
 
 const MeasureContent: FunctionComponent = () => {
-  const dispatch = useDispatch();
-  const selectedLanguage = useSelector(
-    (state: any) => state.appState.selectedLanguage
-  );
-  const selectedContent = useSelector(
-    (state: any) => state.appState.measurementContent
-  );
-
   const [renderDistanceOption, setDistanceOption] = useState(false);
   const [renderAreaOption, setAreaOption] = useState(false);
   const [renderLatLongOption, setLatLongOption] = useState(false);

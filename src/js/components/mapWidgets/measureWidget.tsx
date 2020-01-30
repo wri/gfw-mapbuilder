@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { renderModal } from '../../store/appState/actions';
+import { renderModal } from 'js/store/appState/actions';
 
 import { ReactComponent as MeasureIcon } from 'images/measureIcon.svg';
 
