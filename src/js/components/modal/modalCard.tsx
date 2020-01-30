@@ -1,15 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from 'js/components/mapWidgets/widgetContent/printContent';
-import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
-import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
-import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
-import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
+import PrintContent from '../mapWidgets/widgetContent/printContent';
+import ShareContent from '../mapWidgets/widgetContent/shareContent';
+import PenContent from '../mapWidgets/widgetContent/penContent';
+import SearchContent from '../mapWidgets/widgetContent/searchContent';
 
-import { renderModal } from 'js/store/appState/actions';
+import { renderModal } from '../../store/appState/actions';
 
-import 'css/modalCard.scss';
+import '../../../css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector((state: any) => state.appState.renderModal);
@@ -30,31 +29,37 @@ const ModalCard: FunctionComponent<{}> = () => {
       case 'ShareWidget':
         return <ShareContent />;
       case 'PenWidget':
+        // className = 'pen-widget';
         return <PenContent />;
-      case 'PenWidget-CoordinatesForm':
-        return <CoordinatesForm />;
       case 'SearchWidget':
         return <SearchContent />;
+      case 'MeasureWidget':
+        className = 'measure-widget';
       default:
         break;
     }
   };
 
-  switch (modalType) {
-    case 'PenWidget':
-      className = 'pen-widget';
-      break;
-    default:
-      break;
-  }
+  const setClassName = () => {
+    switch (modalType) {
+      case 'MeasureWidget':
+        return 'measure-widget';
+      case 'PenWidget':
+        return 'pen-widget';
+      default:
+        break;
+    }
+  };
 
   return (
     <>
       <div
-        className="dim-container"
+        // className={`dim-container ${className}`}
+        className={`dim-container ${setClassName()}`}
         onClick={() => dispatch(renderModal(''))}
       ></div>
-      <div className={`modal-card-container ${className}`}>
+      {/* <div className={`modal-card-container ${className}`}> */}
+      <div className={`modal-card-container ${setClassName()}`}>
         <button
           className="exit-button"
           onClick={() => dispatch(renderModal(''))}
