@@ -1,6 +1,6 @@
 import * as React from 'react';
 import InfoTabView from './InfoTabView';
-import LayerTabView from './LayersTabView';
+import LayerTabView from './layersPanel/LayersTabView';
 import DataTabView from './DataTabView';
 import MeasurementTabView from './MeasurementTabView';
 import AnalysisTabView from './AnalysisTabView';
