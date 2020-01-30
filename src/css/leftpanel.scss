@@ -107,6 +107,7 @@
 }
 
 .layer-group-title {
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   padding: 0 5px;
@@ -121,4 +122,21 @@
     border: 0;
     font-size: 1.2rem;
   }
+}
+
+.layer-basemap {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #aaa;
+  img {
+    border-radius: 50px;
+    width: 44px;
+    height: 44px;
+    margin: 10px;
+    vertical-align: middle;
+  }
+}
+
+.layer-basemap.selected {
+  background: #f2f2f2;
 }
