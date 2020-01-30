@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
@@ -40,22 +40,6 @@ interface DMSCardinalPoint {
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
-  const [addSection, setAddSection] = useState(0);
-  const [defaultSection, setAddDefaultSection] = useState({
-    rowNum: 0,
-    latitude: {
-      degree: 0,
-      minutes: 0,
-      seconds: 0,
-      cardinalPoint: 'N'
-    },
-    longitude: {
-      degree: 0,
-      minutes: 0,
-      seconds: 0,
-      cardinalPoint: 'E'
-    }
-  });
   const [dmsSections, setDMSForm] = useState([
     {
       rowNum: 0,
@@ -112,20 +96,6 @@ const CoordinatesForm: FunctionComponent = () => {
     selectedLanguage
   ];
 
-  useEffect(() => {
-    const allDMSSections = [...dmsSections];
-    const defaultDMSSection = { ...defaultSection };
-    const newRowNum = allDMSSections.length + addSection;
-
-    defaultDMSSection.rowNum = newRowNum;
-
-    allDMSSections.push(defaultDMSSection);
-    setDMSForm(allDMSSections);
-  }, [addSection]);
-
-  // TODO - [ x ] add section for each time addSection is updated
-  // TODO - [ ] figure out how to conditionally render remove box
-
   const setDMSFormValues = ({
     coordinateValue,
     rowNum,
@@ -162,6 +132,22 @@ const CoordinatesForm: FunctionComponent = () => {
     // TODO create polygon from formvalues!
   };
 
+  const addOrRemoveSection = (addSection: boolean): void => {
+    const allDMSSections = [...dmsSections];
+    const defaultDMSSection = { ...dmsSections[0] };
+    let newRowNum;
+
+    if (addSection) {
+      newRowNum = allDMSSections.length + 1;
+      defaultDMSSection.rowNum = newRowNum;
+      allDMSSections.push(defaultDMSSection);
+    } else {
+      allDMSSections.pop();
+    }
+
+    setDMSForm(allDMSSections);
+  };
+
   return (
     <div className="coordinates-form-container">
       <div className="directions">
@@ -188,12 +174,13 @@ const CoordinatesForm: FunctionComponent = () => {
                 minuteSymbol={minutes}
                 secondsSymbol={seconds}
                 key={index}
-                removeSection={index > 2 ? true : false}
+                renderRemoveButton={index > 2 ? true : false}
+                addOrRemoveSection={addOrRemoveSection}
               />
             );
           })}
         <div className="buttons-wrapper">
-          <button onClick={(): void => setAddSection(addSection + 1)}>
+          <button onClick={(): void => addOrRemoveSection(true)}>
             Add more
           </button>
           <button className="orange-button" onClick={(): void => setShape()}>

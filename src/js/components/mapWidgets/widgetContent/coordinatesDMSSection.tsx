@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
+
 import 'css/CoordinatesForm';
 
 interface CoordinateProps {
@@ -17,11 +19,12 @@ interface DMSSectionProps {
   };
   setDMSFormValues: (formValues: object) => void;
   setDMSCardinalType: (cardinalValue: object) => void;
+  addOrRemoveSection: (addSection: boolean) => void;
   degreeSymbol: string;
   minuteSymbol: string;
   secondsSymbol: string;
   key: number;
-  removeSection: boolean;
+  renderRemoveButton: boolean;
 }
 
 export default function DMSSection(props: DMSSectionProps): JSX.Element {
@@ -32,14 +35,19 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
     degreeSymbol,
     minuteSymbol,
     secondsSymbol,
-    removeSection
+    renderRemoveButton,
+    addOrRemoveSection
   } = props;
   const { rowNum, latitude, longitude } = dmsSection;
-  console.log('removeSection', removeSection);
 
   return (
     <>
       <div className="dms-wrapper">
+        {renderRemoveButton && (
+          <button onClick={(): void => addOrRemoveSection(false)}>
+            REMOVE <TrashCanIcon height={25} width={25} color={'#fff'} />
+          </button>
+        )}
         <span>Latitude</span>
         <div className="input-wrapper">
           <input

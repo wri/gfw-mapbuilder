@@ -13,7 +13,7 @@ const PrintWidget: FunctionComponent = () => {
       <div className="widget-container">
         <button
           className="image-wrapper"
-          onClick={() => dispatch(renderModal('PrintWidget'))}
+          onClick={(): object => dispatch(renderModal('PrintWidget'))}
         >
           <PrintIcon height={25} width={25} fill={'#555'} />
         </button>
