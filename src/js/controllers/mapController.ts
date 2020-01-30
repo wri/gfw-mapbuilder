@@ -2,6 +2,9 @@ import Map from 'esri/Map';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
+import GraphicsLayer from 'esri/layers/GraphicsLayer';
+import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
+
 import { RefObject } from 'react';
 import store from '../store/index';
 import {
@@ -11,18 +14,23 @@ import {
   mapError,
   isMapReady
 } from 'js/store/mapview/actions';
+import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 
 interface ZoomParams {
   zoomIn: boolean;
 }
 
 export class MapController {
-  _map: Map | null;
-  _mapview: MapView | null;
+  _map: Map | undefined;
+  _mapview: MapView | undefined;
+  _sketchVM: SketchViewModel | undefined;
+  _previousSketchGraphic: any;
 
   constructor() {
-    this._map = null;
-    this._mapview = null;
+    this._map = undefined;
+    this._mapview = undefined;
+    this._sketchVM = undefined;
+    this._previousSketchGraphic = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -56,6 +64,7 @@ export class MapController {
           //store all AVAILABLE layers in redux too (this is a temporary solution, all available layers likely will come from resources and webmap info)
           store.dispatch(allAvailableLayers(mapLayers));
           console.log('mapview is loaded');
+          this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -124,6 +133,39 @@ export class MapController {
       layer.opacity = Number(value);
     }
   }
+  initializeAndSetSketch(): void {
+    const tempGL = new GraphicsLayer({
+      id: 'sketchGraphics'
+    });
+
+    this._sketchVM = new SketchViewModel({
+      layer: tempGL,
+      view: this._mapview,
+      polylineSymbol: {
+        type: 'simple-line',
+        color: 'red',
+        width: 3
+      }
+    });
+
+    this._sketchVM?.on('create', (event: any) => {
+      if (event.state === 'complete') {
+        this._previousSketchGraphic = event.graphic;
+
+        event.graphic.symbol.outline.color = [115, 252, 253];
+        event.graphic.symbol.color = [0, 0, 0, 0];
+        this._mapview?.graphics.add(event.graphic);
+
+        store.dispatch(selectActiveTab('analysis'));
+        store.dispatch(toggleTabviewPanel(true));
+      }
+    });
+  }
+
+  createPolygonSketch = () => {
+    this._mapview?.graphics.remove(this._previousSketchGraphic);
+    this._sketchVM?.create('polygon', { mode: 'freehand' });
+  };
 }
 
 export const mapController = new MapController();

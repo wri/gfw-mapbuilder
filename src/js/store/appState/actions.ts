@@ -10,7 +10,7 @@ import {
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   return {
-    type: TOGGLE_TABVIEW_PANEL,
+    type: TOGGLE_TABVIEW_PANEL as typeof TOGGLE_TABVIEW_PANEL,
     payload: payload
   };
 }
@@ -24,7 +24,7 @@ export function renderModal(payload: AppState['renderModal']) {
 
 export function selectActiveTab(payload: LeftPanel['activeTab']) {
   return {
-    type: SELECT_ACTIVE_TAB,
+    type: SELECT_ACTIVE_TAB as typeof SELECT_ACTIVE_TAB,
     payload: payload
   };
 }

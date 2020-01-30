@@ -9,7 +9,6 @@ interface LayerToggleProps {
 
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
   const { layerIsVisible, layerID } = props;
-  console.log(layerIsVisible);
   return (
     <div className="layer-checkbox">
       <input
