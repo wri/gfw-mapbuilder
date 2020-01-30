@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 interface SpecificDropDownOption {
   text: string;
@@ -13,7 +12,7 @@ const MeasureContent: FunctionComponent = () => {
   const [dropDownOptions, setDropDownOptions] = useState([]);
   const [selectedDropDownOption, setSelectedDropDownOption] = useState('');
 
-  const returnDropdownOptions = () => {
+  const returnDropdownOptions = (): JSX.Element[] => {
     return dropDownOptions.map(
       (lengthUnit: SpecificDropDownOption, index: number) => {
         const { text, esriUnit } = lengthUnit;
@@ -33,20 +32,20 @@ const MeasureContent: FunctionComponent = () => {
     <div className="measure-options-container">
       <div className="buttons-select-wrapper">
         <button
-          onClick={() => setAreaOption(!renderAreaOption)}
+          onClick={(): void => setAreaOption(!renderAreaOption)}
           className="esri-icon-measure-area"
         />
         <button
-          onClick={() => setDistanceOption(!renderDistanceOption)}
+          onClick={(): void => setDistanceOption(!renderDistanceOption)}
           className="esri-icon-measure"
         />
         <button
-          onClick={() => setLatLongOption(!renderLatLongOption)}
+          onClick={(): void => setLatLongOption(!renderLatLongOption)}
           className="esri-icon-maps"
         />
         <span>|</span>
         <select
-          onChange={e => setSelectedDropDownOption(e.target.value)}
+          onBlur={(e): void => setSelectedDropDownOption(e.target.value)}
           disabled={dropDownOptions.length ? false : true}
         >
           {dropDownOptions.length === 0 && (

@@ -9,14 +9,17 @@ import MeasureContent from '../mapWidgets/widgetContent/measureContent';
 
 import { renderModal } from '../../store/appState/actions';
 
+import { RootState } from 'js/store';
+
 import '../../../css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
-  const modalType = useSelector((state: any) => state.appState.renderModal);
+  const modalType = useSelector(
+    (state: RootState) => state.appState.renderModal
+  );
   const dispatch = useDispatch();
-  let className = '';
 
-  const handleEscapeKey = (e: React.KeyboardEvent) => {
+  const handleEscapeKey = (e: React.KeyboardEvent): void => {
     if (e.keyCode === 27) {
       // * NOTE ESC button has a keyCode of 27
       dispatch(renderModal(''));
@@ -30,12 +33,10 @@ const ModalCard: FunctionComponent<{}> = () => {
       case 'ShareWidget':
         return <ShareContent />;
       case 'PenWidget':
-        // className = 'pen-widget';
         return <PenContent />;
       case 'SearchWidget':
         return <SearchContent />;
       case 'MeasureWidget':
-        className = 'measure-widget';
         return <MeasureContent />;
       default:
         break;
@@ -56,16 +57,17 @@ const ModalCard: FunctionComponent<{}> = () => {
   return (
     <>
       <div
-        // className={`dim-container ${className}`}
         className={`dim-container ${setClassName()}`}
-        onClick={() => dispatch(renderModal(''))}
+        onClick={(): {} => dispatch(renderModal(''))}
+        onKeyDown={(): void => console.log('dimmer!')}
+        role="complementary"
       ></div>
       {/* <div className={`modal-card-container ${className}`}> */}
       <div className={`modal-card-container ${setClassName()}`}>
         <button
           className="exit-button"
-          onClick={() => dispatch(renderModal(''))}
-          onKeyDown={e => handleEscapeKey(e)}
+          onClick={(): object => dispatch(renderModal(''))}
+          onKeyDown={(e): void => handleEscapeKey(e)}
         >
           <svg className="svg-icon">
             <svg id="shape-close" viewBox="0 0 25 25">
