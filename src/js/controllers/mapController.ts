@@ -7,6 +7,14 @@ import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 
 import { RefObject } from 'react';
 import store from '../store/index';
+import {
+  clearAllLayers,
+  updateVisibleLayers,
+  allAvailableLayers,
+  mapError,
+  isMapReady
+} from 'js/store/mapview/actions';
+import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 
 interface ZoomParams {
   zoomIn: boolean;
@@ -47,19 +55,25 @@ export class MapController {
     this._mapview
       .when(
         () => {
-          console.log('mapview is loaded');
-          store.dispatch({ type: 'MAP_READY', payload: true });
+          store.dispatch(isMapReady(true));
+          //TODO: Is there a better way/place to push all available layers of the map into redux?
+          const mapLayers: string[] = [];
+          this._map?.layers.forEach(layer => mapLayers.push(layer.id));
+          store.dispatch(updateVisibleLayers(mapLayers));
 
+          //store all AVAILABLE layers in redux too (this is a temporary solution, all available layers likely will come from resources and webmap info)
+          store.dispatch(allAvailableLayers(mapLayers));
+          console.log('mapview is loaded');
           this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
-          store.dispatch({ type: 'MAP_ERROR', payload: true });
+          store.dispatch(mapError(true));
         }
       )
       .catch((error: Error) => {
         console.log('error in initializeMap()', error);
-        store.dispatch({ type: 'MAP_ERROR', payload: true });
+        store.dispatch(mapError(true));
       });
   }
 
@@ -78,6 +92,47 @@ export class MapController {
     }
   }
 
+  clearAllLayers() {
+    console.log('clear all layers');
+    //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
+    this._map?.layers.forEach(layer => (layer.visible = false));
+    //2. Update redux state with visible layers array being empty
+    store.dispatch(clearAllLayers());
+  }
+
+  selectAllLayers() {
+    console.log('select all layers');
+    const layersToEnable: string[] = [];
+    this._map?.layers.forEach(layer => {
+      layer.visible = true;
+      layersToEnable.push(layer.id);
+    });
+    store.dispatch(updateVisibleLayers(layersToEnable));
+  }
+
+  toggleLayerVisibility(layerID: string) {
+    //update the map
+    const layer = this._map?.findLayerById(layerID);
+    if (layer) {
+      layer.visible = !layer.visible;
+    }
+    //update redux
+    store.dispatch(updateVisibleLayers([layerID]));
+  }
+
+  getLayerOpacity(layerID: string) {
+    const layer = this._map?.findLayerById(layerID);
+    if (layer) {
+      return layer.opacity;
+    }
+  }
+
+  setLayerOpacity(layerID: string, value: string) {
+    const layer = this._map?.findLayerById(layerID);
+    if (layer) {
+      layer.opacity = Number(value);
+    }
+  }
   initializeAndSetSketch(): void {
     const tempGL = new GraphicsLayer({
       id: 'sketchGraphics'
@@ -101,8 +156,8 @@ export class MapController {
         event.graphic.symbol.color = [0, 0, 0, 0];
         this._mapview?.graphics.add(event.graphic);
 
-        store.dispatch({ type: 'SELECT_ACTIVE_TAB', payload: 'analysis' });
-        store.dispatch({ type: 'TOGGLE_TABVIEW_PANEL', payload: true });
+        store.dispatch(selectActiveTab('analysis'));
+        store.dispatch(toggleTabviewPanel(true));
       }
     });
   }
@@ -114,4 +169,12 @@ export class MapController {
 }
 
 export const mapController = new MapController();
-// window.mapController = mapController;
+
+//TODO: This is for DEV only and should be removed once we deploy to prod
+declare global {
+  interface Window {
+    mapController: any;
+  }
+}
+
+window.mapController = mapController;

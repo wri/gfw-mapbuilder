@@ -6,6 +6,41 @@ export interface AppSettings {
   logoLinkUrl?: string;
   language?: string;
   includeDocumentsTab?: boolean;
+  layerPanel: LayerGroup;
+}
+
+type LayerGroupKey =
+  | 'GROUP_WEBMAP'
+  | 'GROUP_BASEMAP'
+  | 'GROUP_LC'
+  | 'GROUP_LCD'
+  | 'GROUP_IMAGERY'
+  | 'extraLayers';
+
+type LayerGroup = {
+  [key in LayerGroupKey]: LayerGroupInfo;
+};
+
+export interface LayerGroupInfo {
+  groupType?: string;
+  order?: number;
+  label?: LabelInfo;
+  layers?: LayerInfo[];
+  [key: string]: any; //accounting for any wild card key:values coming from outside source
+}
+
+interface LabelInfo {
+  [key: string]: string;
+}
+
+interface LayerInfo {
+  id?: string;
+  uuid?: string;
+  templateUrl?: string;
+  thumbnailUrl?: string;
+  title?: { [key: string]: string };
+  years?: string[];
+  [key: string]: any;
 }
 
 //Action names available
