@@ -70,7 +70,7 @@ const ModalCard: FunctionComponent<{}> = () => {
       <div className={`modal-card-container ${setClassName()}`}>
         <button
           className="exit-button"
-          onClick={(): object => dispatch(renderModal(''))}
+          onClick={() => dispatch(renderModal(''))}
           onKeyDown={(e): void => handleEscapeKey(e)}
         >
           <svg className="svg-icon">
