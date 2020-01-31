@@ -43,8 +43,6 @@
     left: 75%;
     height: 7.5rem;
     width: 17rem;
-
-    @include measure-content-style;
   }
   .orange-button {
     display: flex;

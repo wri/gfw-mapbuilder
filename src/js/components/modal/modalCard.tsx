@@ -1,17 +1,17 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from '../mapWidgets/widgetContent/printContent';
-import ShareContent from '../mapWidgets/widgetContent/shareContent';
-import PenContent from '../mapWidgets/widgetContent/penContent';
-import SearchContent from '../mapWidgets/widgetContent/searchContent';
-import MeasureContent from '../mapWidgets/widgetContent/measureContent';
+import PrintContent from 'js/components/mapWidgets/widgetContent/shareContent';
+import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
+import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
+import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
+import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
 
-import { renderModal } from '../../store/appState/actions';
+import { renderModal } from 'js/store/appState/actions';
 
 import { RootState } from 'js/store';
 
-import '../../../css/modalCard.scss';
+import 'css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector(
@@ -58,7 +58,7 @@ const ModalCard: FunctionComponent<{}> = () => {
     <>
       <div
         className={`dim-container ${setClassName()}`}
-        onClick={(): {} => dispatch(renderModal(''))}
+        onBlur={(): {} => dispatch(renderModal(''))}
         onKeyDown={(): void => console.log('dimmer!')}
         role="complementary"
       ></div>

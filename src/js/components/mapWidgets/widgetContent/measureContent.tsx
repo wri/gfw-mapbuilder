@@ -1,4 +1,6 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
+
+import 'css/measureContent.scss';
 
 interface SpecificDropDownOption {
   text: string;
@@ -6,51 +8,53 @@ interface SpecificDropDownOption {
 }
 
 const MeasureContent: FunctionComponent = () => {
-  const [renderDistanceOption, setDistanceOption] = useState(false);
-  const [renderAreaOption, setAreaOption] = useState(false);
-  const [renderLatLongOption, setLatLongOption] = useState(false);
-  const [dropDownOptions, setDropDownOptions] = useState([]);
-  const [selectedDropDownOption, setSelectedDropDownOption] = useState('');
-
   const returnDropdownOptions = (): JSX.Element[] => {
-    return dropDownOptions.map(
-      (lengthUnit: SpecificDropDownOption, index: number) => {
-        const { text, esriUnit } = lengthUnit;
+    return [].map((lengthUnit: SpecificDropDownOption, index: number) => {
+      const { text, esriUnit } = lengthUnit;
 
-        return (
-          <>
-            <option value={esriUnit} key={index}>
-              {text}
-            </option>
-          </>
-        );
-      }
-    );
+      return (
+        <>
+          <option value={esriUnit} key={index}>
+            {text}
+          </option>
+        </>
+      );
+    });
+  };
+
+  const setAreaOption = (): void => {
+    console.log('setAreaOption');
+  };
+
+  const setDistanceOption = (): void => {
+    console.log('setDistanceOption');
+  };
+
+  const setLatLongOption = (): void => {
+    console.log('setLatLongOption');
   };
 
   return (
     <div className="measure-options-container">
       <div className="buttons-select-wrapper">
         <button
-          onClick={(): void => setAreaOption(!renderAreaOption)}
+          onClick={(): void => setAreaOption()}
           className="esri-icon-measure-area"
         />
         <button
-          onClick={(): void => setDistanceOption(!renderDistanceOption)}
+          onClick={(): void => setDistanceOption()}
           className="esri-icon-measure"
         />
         <button
-          onClick={(): void => setLatLongOption(!renderLatLongOption)}
+          onClick={(): void => setLatLongOption()}
           className="esri-icon-maps"
         />
         <span>|</span>
         <select
-          onBlur={(e): void => setSelectedDropDownOption(e.target.value)}
-          disabled={dropDownOptions.length ? false : true}
+          onBlur={(e): void => console.log(e.target.value)}
+          disabled={[].length ? false : true}
         >
-          {dropDownOptions.length === 0 && (
-            <option defaultValue="Unit">Unit</option>
-          )}
+          {[].length === 0 && <option defaultValue="Unit">Unit</option>}
           {returnDropdownOptions()}
         </select>
       </div>
