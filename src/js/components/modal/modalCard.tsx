@@ -47,14 +47,14 @@ const ModalCard: FunctionComponent<{}> = () => {
     default:
       break;
   }
-
   return (
     <>
-      <div // eslint-disable-line
+      <div
         className="dim-container"
         onClick={() => dispatch(renderModal(''))}
         onKeyDown={() => dispatch(renderModal(''))}
-        role="dialog"
+        role="button"
+        tabIndex={0}
       ></div>
       <div className={`modal-card-container ${className}`}>
         <button
