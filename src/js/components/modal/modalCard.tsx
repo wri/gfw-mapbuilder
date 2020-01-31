@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from 'js/components/mapWidgets/widgetContent/shareContent';
+import PrintContent from 'js/components/mapWidgets/widgetContent/printContent';
 import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
 import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
+import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
 
 import { renderModal } from 'js/store/appState/actions';
@@ -34,6 +35,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <ShareContent />;
       case 'PenWidget':
         return <PenContent />;
+      case 'PenWidget-CoordinatesForm':
+        return <CoordinatesForm />;
       case 'SearchWidget':
         return <SearchContent />;
       case 'MeasureWidget':
