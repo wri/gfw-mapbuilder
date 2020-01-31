@@ -24,11 +24,11 @@ interface SpecificDMSSection {
     cardinalPoint: string;
   };
 }
-interface DMSFormValues {
-  coordinateValue?: string;
-  rowNum?: number;
-  coordinateType?: string;
-  degreeType?: number;
+export interface DMSFormValues {
+  coordinateValue: number;
+  rowNum: number;
+  coordinateType: string;
+  degreeType: string;
   cardinalPoint?: string;
 }
 
@@ -134,12 +134,10 @@ const CoordinatesForm: FunctionComponent = () => {
 
   const addOrRemoveSection = (addSection: boolean): void => {
     const allDMSSections = [...dmsSections];
-    const defaultDMSSection = { ...dmsSections[0] };
-    let newRowNum;
 
     if (addSection) {
-      newRowNum = allDMSSections.length + 1;
-      defaultDMSSection.rowNum = newRowNum;
+      const defaultDMSSection = { ...dmsSections[0] };
+      defaultDMSSection.rowNum = allDMSSections.length + 1;
       allDMSSections.push(defaultDMSSection);
     } else {
       allDMSSections.pop();

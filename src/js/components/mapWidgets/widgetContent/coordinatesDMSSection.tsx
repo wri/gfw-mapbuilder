@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { DMSFormValues } from './coordinatesForm';
+
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 
 import 'css/CoordinatesForm';
@@ -17,7 +19,7 @@ interface DMSSectionProps {
     latitude: CoordinateProps;
     longitude: CoordinateProps;
   };
-  setDMSFormValues: (formValues: object) => void;
+  setDMSFormValues: (formValues: DMSFormValues) => void;
   setDMSCardinalType: (cardinalValue: object) => void;
   addOrRemoveSection: (addSection: boolean) => void;
   degreeSymbol: string;
