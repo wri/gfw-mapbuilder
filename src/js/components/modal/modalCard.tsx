@@ -57,10 +57,11 @@ const ModalCard: FunctionComponent<{}> = () => {
   return (
     <>
       <div
-        className={`dim-container ${setClassName()}`}
-        onBlur={(): {} => dispatch(renderModal(''))}
-        onKeyDown={(): void => console.log('dimmer!')}
-        role="complementary"
+        className="dim-container"
+        onClick={() => dispatch(renderModal(''))}
+        onKeyDown={() => dispatch(renderModal(''))}
+        role="button"
+        tabIndex={0}
       ></div>
       {/* <div className={`modal-card-container ${className}`}> */}
       <div className={`modal-card-container ${setClassName()}`}>
