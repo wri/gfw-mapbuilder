@@ -32,8 +32,6 @@ export const printContent = {
 };
 
 export const shareContent = {
-  // TODO find proper translations for this content!
-
   en: {
     title: 'Share',
     instructions:
@@ -302,5 +300,176 @@ export const coordinatesContent = {
     ],
     latitude: 'ZH: Latitude',
     longitude: 'ZH: Longitude'
+  }
+};
+
+export const measureContent = {
+  en: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  ka: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  fr: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  es: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  pt: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  id: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  zh: {
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
   }
 };
