@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { DMSFormValues } from './coordinatesForm';
+
+import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
+
 import 'css/CoordinatesForm';
 
 interface CoordinateProps {
@@ -15,35 +19,47 @@ interface DMSSectionProps {
     latitude: CoordinateProps;
     longitude: CoordinateProps;
   };
-  setDMSFormValues: (formValues: any) => void;
-  setDMSCardinalType: (cardinalValue: any) => void;
+  setDMSFormValues: (formValues: DMSFormValues) => void;
+  setDMSCardinalType: (cardinalValue: object) => void;
+  addOrRemoveSection: (addSection: boolean) => void;
   degreeSymbol: string;
   minuteSymbol: string;
   secondsSymbol: string;
   key: number;
+  renderRemoveButton: boolean;
 }
 
-export default function DMSSection(props: DMSSectionProps) {
+export default function DMSSection(props: DMSSectionProps): JSX.Element {
   const {
     dmsSection,
     setDMSFormValues,
     setDMSCardinalType,
     degreeSymbol,
     minuteSymbol,
-    secondsSymbol
+    secondsSymbol,
+    renderRemoveButton,
+    addOrRemoveSection
   } = props;
   const { rowNum, latitude, longitude } = dmsSection;
 
   return (
     <>
       <div className="dms-wrapper">
+        {renderRemoveButton && (
+          <button
+            onClick={(): void => addOrRemoveSection(false)}
+            className="dms-remove"
+          >
+            REMOVE <TrashCanIcon height={20} width={20} fill={'#555'} />
+          </button>
+        )}
         <span>Latitude</span>
         <div className="input-wrapper">
           <input
             type="number"
             name="latitude coordinates"
             value={latitude.degree}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -57,7 +73,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="latitude coordinates"
             value={latitude.minutes}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -71,7 +87,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="latitude coordinates"
             value={latitude.seconds}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -103,7 +119,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="longitude coordinates"
             value={longitude.degree}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -117,7 +133,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="longitude coordinates"
             value={longitude.minutes}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,
@@ -131,7 +147,7 @@ export default function DMSSection(props: DMSSectionProps) {
             type="number"
             name="longitude coordinates"
             value={longitude.seconds}
-            onChange={e =>
+            onChange={(e): void =>
               setDMSFormValues({
                 coordinateValue: Number(e.target.value),
                 rowNum,

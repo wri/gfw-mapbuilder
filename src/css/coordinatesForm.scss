@@ -29,6 +29,25 @@
       flex-direction: column;
       margin-top: 1rem;
 
+      .dms-remove {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 5rem;
+        margin-left: auto;
+        border: none;
+        font-weight: 500;
+        color: $dark-grey;
+        font-family: $fira-sans;
+        font-size: 0.75rem;
+      }
+
+      .dms-remove:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
       span {
         font-size: 0.75rem;
       }

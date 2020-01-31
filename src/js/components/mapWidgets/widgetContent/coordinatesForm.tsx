@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
 
+import { RootState } from 'js/store/index';
+
 import { coordinatesContent } from 'configs/modal.config';
 
 import 'css/CoordinatesForm';
@@ -22,18 +24,18 @@ interface SpecificDMSSection {
     cardinalPoint: string;
   };
 }
-interface DMSFormValues {
-  coordinateValue: string;
+export interface DMSFormValues {
+  coordinateValue: number;
   rowNum: number;
   coordinateType: string;
-  degreeType: number;
-  cardinalPoint: string;
+  degreeType: string;
+  cardinalPoint?: string;
 }
 
 interface DMSCardinalPoint {
-  specificPoint: string;
-  rowNum: number;
-  coordinateType: string;
+  specificPoint?: string;
+  rowNum?: number;
+  coordinateType?: string;
 }
 
 const CoordinatesForm: FunctionComponent = () => {
@@ -86,7 +88,7 @@ const CoordinatesForm: FunctionComponent = () => {
     }
   ]);
   const selectedLanguage = useSelector(
-    (state: any) => state.appState.selectedLanguage
+    (state: RootState) => state.appState.selectedLanguage
   );
 
   const { degree, minutes, seconds } = coordinatesContent;
@@ -99,11 +101,13 @@ const CoordinatesForm: FunctionComponent = () => {
     rowNum,
     coordinateType,
     degreeType
-  }: DMSFormValues) => {
+  }: DMSFormValues): void => {
     const sections = [...dmsSections];
     const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
 
-    sections[sectionNum][coordinateType][degreeType] = coordinateValue;
+    if (coordinateType) {
+      sections[sectionNum][coordinateType][degreeType] = coordinateValue;
+    }
 
     setDMSForm(sections);
   };
@@ -112,18 +116,34 @@ const CoordinatesForm: FunctionComponent = () => {
     specificPoint,
     rowNum,
     coordinateType
-  }: DMSCardinalPoint) => {
+  }: DMSCardinalPoint): void => {
     const sections = [...dmsSections];
     const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
 
-    sections[sectionNum][coordinateType].cardinalPoint = specificPoint;
+    if (coordinateType) {
+      sections[sectionNum][coordinateType].cardinalPoint = specificPoint;
+    }
 
     setDMSForm(sections);
   };
 
-  const setShape = () => {
+  const setShape = (): void => {
     console.log('setShape()', dmsSections);
     // TODO create polygon from formvalues!
+  };
+
+  const addOrRemoveSection = (addSection: boolean): void => {
+    const allDMSSections = [...dmsSections];
+
+    if (addSection) {
+      const defaultDMSSection = { ...dmsSections[0] };
+      defaultDMSSection.rowNum = allDMSSections.length + 1;
+      allDMSSections.push(defaultDMSSection);
+    } else {
+      allDMSSections.pop();
+    }
+
+    setDMSForm(allDMSSections);
   };
 
   // if (decimalOptions[selectedFormat].includes('DD')) {
@@ -211,12 +231,16 @@ const CoordinatesForm: FunctionComponent = () => {
                 minuteSymbol={minutes}
                 secondsSymbol={seconds}
                 key={index}
+                renderRemoveButton={index > 2 ? true : false}
+                addOrRemoveSection={addOrRemoveSection}
               />
             );
           })}
         <div className="buttons-wrapper">
-          <button>Add more</button>
-          <button className="orange-button" onClick={() => setShape()}>
+          <button onClick={(): void => addOrRemoveSection(true)}>
+            Add more
+          </button>
+          <button className="orange-button" onClick={(): void => setShape()}>
             Make shape
           </button>
         </div>
