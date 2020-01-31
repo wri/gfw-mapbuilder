@@ -4,7 +4,8 @@ import {
   CLEAR_ALL_LAYERS,
   UPDATE_VISIBLE_LAYERS,
   ALL_AVAILABLE_LAYERS,
-  MapviewState
+  MapviewState,
+  ALL_AVAILABLE_LAYERS2
 } from './types';
 
 export function isMapReady(payload: MapviewState['isMapReady']) {
@@ -39,6 +40,15 @@ export function allAvailableLayers(
 ) {
   return {
     type: ALL_AVAILABLE_LAYERS as typeof ALL_AVAILABLE_LAYERS,
+    payload
+  };
+}
+
+export function allAvailableLayers2(
+  payload: MapviewState['allAvailableLayers2']
+) {
+  return {
+    type: ALL_AVAILABLE_LAYERS2 as typeof ALL_AVAILABLE_LAYERS2,
     payload
   };
 }

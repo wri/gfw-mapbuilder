@@ -12,9 +12,11 @@ import {
   updateVisibleLayers,
   allAvailableLayers,
   mapError,
-  isMapReady
+  isMapReady,
+  allAvailableLayers2
 } from 'js/store/mapview/actions';
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
+import { LayerProps } from 'js/store/mapview/types';
 
 interface ZoomParams {
   zoomIn: boolean;
@@ -61,7 +63,19 @@ export class MapController {
           this._map?.layers.forEach(layer => mapLayers.push(layer.id));
           store.dispatch(updateVisibleLayers(mapLayers));
 
-          //store all AVAILABLE layers in redux too (this is a temporary solution, all available layers likely will come from resources and webmap info)
+          const mapLayerObjects: LayerProps[] = [];
+          this._map?.layers.forEach((layer: any) => {
+            const { id, title, opacity, visible, definitionExpression } = layer;
+            mapLayerObjects.push({
+              id,
+              title,
+              opacity,
+              visible,
+              definitionExpression
+            });
+          });
+          store.dispatch(allAvailableLayers2(mapLayerObjects));
+
           store.dispatch(allAvailableLayers(mapLayers));
           console.log('mapview is loaded');
           this.initializeAndSetSketch();

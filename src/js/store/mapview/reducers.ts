@@ -5,14 +5,16 @@ import {
   MAP_ERROR,
   CLEAR_ALL_LAYERS,
   UPDATE_VISIBLE_LAYERS,
-  ALL_AVAILABLE_LAYERS
+  ALL_AVAILABLE_LAYERS,
+  ALL_AVAILABLE_LAYERS2
 } from './types';
 
 const initialState: MapviewState = {
   isMapReady: false,
   loadError: false,
   visibleLayers: [],
-  allAvailableLayers: []
+  allAvailableLayers: [],
+  allAvailableLayers2: []
 };
 
 function updateVisibleLayers(
@@ -51,6 +53,8 @@ export function mapviewReducer(
       return updateVisibleLayers(state, action.payload);
     case ALL_AVAILABLE_LAYERS:
       return { ...state, allAvailableLayers: [...action.payload] };
+    case ALL_AVAILABLE_LAYERS2:
+      return { ...state, allAvailableLayers2: action.payload };
     default:
       return state;
   }
