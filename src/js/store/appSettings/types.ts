@@ -6,18 +6,27 @@ export interface AppSettings {
   logoLinkUrl?: string;
   language?: string;
   includeDocumentsTab?: boolean;
-  layerPanel?: any;
+  layerPanel: LayerGroup;
 }
 
-interface LayerGroup {
-  [key: string]: LayerGroupInfo;
-}
+type LayerGroupKey =
+  | 'GROUP_WEBMAP'
+  | 'GROUP_BASEMAP'
+  | 'GROUP_LC'
+  | 'GROUP_LCD'
+  | 'GROUP_IMAGERY'
+  | 'extraLayers';
+
+type LayerGroup = {
+  [key in LayerGroupKey]: LayerGroupInfo;
+};
 
 export interface LayerGroupInfo {
   groupType?: string;
   order?: number;
   label?: LabelInfo;
   layers?: LayerInfo[];
+  [key: string]: any; //TODO:accounting for any wild card key:values, should be omitted once we know exact possibilities of resources.js
 }
 
 interface LabelInfo {
@@ -31,6 +40,7 @@ interface LayerInfo {
   thumbnailUrl?: string;
   title?: { [key: string]: string };
   years?: string[];
+  [key: string]: any;
 }
 
 //Action names available

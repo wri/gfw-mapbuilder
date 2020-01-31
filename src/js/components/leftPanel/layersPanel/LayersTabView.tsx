@@ -32,13 +32,9 @@ const LayersTabView = (props: LayersTabViewProps) => {
   );
 
   const { layerPanel } = useSelector((store: RootState) => store.appSettings);
-
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
-
   const layerGroupsToRender = Object.keys(layerPanel)
-    .sort(
-      (a: string, b: string) => layerPanel?.[a]?.order - layerPanel?.[b]?.order
-    )
+    .sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order)
     .map((layerGroupKey: string) => {
       switch (layerGroupKey) {
         case 'GROUP_WEBMAP':

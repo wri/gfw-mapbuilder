@@ -7,7 +7,14 @@ const initialState: AppSettings = {
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
   logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
   language: 'en',
-  layerPanel: undefined
+  layerPanel: {
+    GROUP_WEBMAP: {},
+    GROUP_BASEMAP: {},
+    GROUP_LC: {},
+    GROUP_LCD: {},
+    GROUP_IMAGERY: {},
+    extraLayers: {}
+  }
 };
 
 export function appSettingsReducer(
