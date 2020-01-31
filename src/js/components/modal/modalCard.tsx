@@ -6,17 +6,21 @@ import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
 import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
 import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
+import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
 
 import { renderModal } from 'js/store/appState/actions';
+
+import { RootState } from 'js/store';
 
 import 'css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
-  const modalType = useSelector((state: any) => state.appState.renderModal);
+  const modalType = useSelector(
+    (state: RootState) => state.appState.renderModal
+  );
   const dispatch = useDispatch();
-  let className = '';
 
-  const handleEscapeKey = (e: React.KeyboardEvent) => {
+  const handleEscapeKey = (e: React.KeyboardEvent): void => {
     if (e.keyCode === 27) {
       // * NOTE ESC button has a keyCode of 27
       dispatch(renderModal(''));
@@ -35,30 +39,39 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <CoordinatesForm />;
       case 'SearchWidget':
         return <SearchContent />;
+      case 'MeasureWidget':
+        return <MeasureContent />;
       default:
         break;
     }
   };
 
-  switch (modalType) {
-    case 'PenWidget':
-      className = 'pen-widget';
-      break;
-    default:
-      break;
-  }
+  const setClassName = () => {
+    switch (modalType) {
+      case 'MeasureWidget':
+        return 'measure-widget';
+      case 'PenWidget':
+        return 'pen-widget';
+      default:
+        break;
+    }
+  };
 
   return (
     <>
       <div
         className="dim-container"
         onClick={() => dispatch(renderModal(''))}
+        onKeyDown={() => dispatch(renderModal(''))}
+        role="button"
+        tabIndex={0}
       ></div>
-      <div className={`modal-card-container ${className}`}>
+      {/* <div className={`modal-card-container ${className}`}> */}
+      <div className={`modal-card-container ${setClassName()}`}>
         <button
           className="exit-button"
           onClick={() => dispatch(renderModal(''))}
-          onKeyDown={e => handleEscapeKey(e)}
+          onKeyDown={(e): void => handleEscapeKey(e)}
         >
           <svg className="svg-icon">
             <svg id="shape-close" viewBox="0 0 25 25">

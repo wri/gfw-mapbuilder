@@ -12,10 +12,15 @@ const Header: FunctionComponent = () => {
   return (
     <div className="header-container">
       <div className="title-container">
-        <a href={logoLinkUrl} target="_blank" rel="noreferrer" tabIndex={0}>
+        <a
+          href={logoLinkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={0}
+        >
           <img
             src={logoUrl}
-            alt="image of Global Forest Watch logo"
+            alt="Global Forest Watch logo"
             className="gfw-logo"
           />
         </a>

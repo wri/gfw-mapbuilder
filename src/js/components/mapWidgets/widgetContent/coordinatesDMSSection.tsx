@@ -97,7 +97,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
           <span className="degree">{secondsSymbol}</span>
           <select
             value={latitude.cardinalPoint}
-            onBlur={(e): void =>
+            onBlur={e =>
               setDMSCardinalType({
                 specificPoint: e.target.value,
                 rowNum,
@@ -157,7 +157,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
           <span className="degree">{secondsSymbol}</span>
           <select
             value={longitude.cardinalPoint}
-            onBlur={(e): void =>
+            onBlur={e =>
               setDMSCardinalType({
                 specificPoint: e.target.value,
                 rowNum,

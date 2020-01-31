@@ -36,6 +36,41 @@
     height: 30rem;
     top: 30%;
   }
+
+  &.measure-widget {
+    top: 25%;
+    left: 75%;
+    height: 7.5rem;
+    width: 17rem;
+  }
+  .orange-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15rem;
+    height: 2rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    text-transform: uppercase;
+    background-color: $base-yellow;
+    color: $white;
+    margin: 0 auto;
+    margin-top: 1rem;
+    font-family: $fira-sans;
+
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+
+  @media screen and (max-width: $mobile-device) {
+    .modal-card-container {
+      width: 15rem;
+      margin-left: -8.5rem; // * NOTE: -8.5rem is an estimate
+    }
+  }
 }
 
 .dim-container {
@@ -46,33 +81,8 @@
   background-color: $black;
   top: 0;
   height: 100%;
-}
 
-.orange-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 15rem;
-  height: 2rem;
-  border-radius: 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  text-transform: uppercase;
-  background-color: $base-yellow;
-  color: $white;
-  margin: 0 auto;
-  margin-top: 1rem;
-  font-family: $fira-sans;
-
-  svg {
-    margin-right: 0.5rem;
-  }
-}
-
-@media screen and (max-width: $mobile-device) {
-  .modal-card-container {
-    width: 15rem;
-    margin-left: -8.5rem; // * NOTE: -8.5rem is an estimate
+  &.measure-widget {
+    display: none;
   }
 }
