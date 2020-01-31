@@ -47,12 +47,14 @@ const ModalCard: FunctionComponent<{}> = () => {
     default:
       break;
   }
-
   return (
     <>
       <div
         className="dim-container"
         onClick={() => dispatch(renderModal(''))}
+        onKeyDown={() => dispatch(renderModal(''))}
+        role="button"
+        tabIndex={0}
       ></div>
       <div className={`modal-card-container ${className}`}>
         <button

@@ -8,7 +8,7 @@ const LanguageDropdown: FunctionComponent = () => {
 
   return (
     <div className="language-dropdown-container">
-      <select onChange={e => dispatch(setLanguage(e.target.value))}>
+      <select onBlur={e => dispatch(setLanguage(e.target.value))}>
         <option value="en">English</option>
         <option value="ka">Georgian</option>
         <option value="fr">French</option>
