@@ -26,7 +26,7 @@ export interface LayerGroupInfo {
   order?: number;
   label?: LabelInfo;
   layers?: LayerInfo[];
-  [key: string]: any; //TODO:accounting for any wild card key:values, should be omitted once we know exact possibilities of resources.js
+  [key: string]: any; //accounting for any wild card key:values coming from outside source
 }
 
 interface LabelInfo {

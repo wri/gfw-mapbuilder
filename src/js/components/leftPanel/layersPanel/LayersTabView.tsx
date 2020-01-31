@@ -78,13 +78,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
             />
           );
         case 'extraLayers':
-          return (
-            <ExtraLayersGroup
-              key={layerGroupKey}
-              layerGroupKey={layerGroupKey}
-              layerGroupConfig={layerPanel[layerGroupKey]}
-            />
-          );
+          return null;
         default:
           return null;
       }
