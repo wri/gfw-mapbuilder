@@ -60,7 +60,7 @@ const ModalCard: FunctionComponent<{}> = () => {
   return (
     <>
       <div
-        className="dim-container"
+        className={`dim-container ${setClassName()}`}
         onClick={() => dispatch(renderModal(''))}
         onKeyDown={() => dispatch(renderModal(''))}
         role="button"
