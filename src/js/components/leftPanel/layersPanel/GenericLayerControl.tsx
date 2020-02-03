@@ -22,7 +22,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <InfoIcon width={10} height={10} fill="#fff" />
         </div>
       </div>
-      <LayerTransparencySlider layerID={props.id} />
+      <LayerTransparencySlider
+        layerID={props.id}
+        layerOpacity={layer?.opacity}
+      />
     </>
   );
 };

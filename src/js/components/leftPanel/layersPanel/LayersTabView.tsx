@@ -5,8 +5,7 @@ import { mapController } from 'js/controllers/mapController';
 import 'css/leftpanel.scss';
 import WebmapLayersGroup from './webmapLayersGroup';
 import BasemapLayersGroup from './basemapLayersGroup';
-import LCLayersGroup from './LCLayersGroup';
-import LCDLayersGroup from './LCDLayersGroup';
+import DefaultLayerGroup from './DefaultLayerGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
 
 const AllLayerControls = () => {
@@ -52,22 +51,6 @@ const LayersTabView = (props: LayersTabViewProps) => {
               layerGroupConfig={layerPanel[layerGroupKey]}
             />
           );
-        case 'GROUP_LC':
-          return (
-            <LCLayersGroup
-              key={layerGroupKey}
-              layerGroupKey={layerGroupKey}
-              layerGroupConfig={layerPanel[layerGroupKey]}
-            />
-          );
-        case 'GROUP_LCD':
-          return (
-            <LCDLayersGroup
-              key={layerGroupKey}
-              layerGroupKey={layerGroupKey}
-              layerGroupConfig={layerPanel[layerGroupKey]}
-            />
-          );
         case 'GROUP_IMAGERY':
           return (
             <ImageryLayersGroup
@@ -79,7 +62,13 @@ const LayersTabView = (props: LayersTabViewProps) => {
         case 'extraLayers':
           return null;
         default:
-          return null;
+          return (
+            <DefaultLayerGroup
+              key={layerGroupKey}
+              layerGroupKey={layerGroupKey}
+              layerGroupConfig={layerPanel[layerGroupKey]}
+            />
+          );
       }
     });
   return (
