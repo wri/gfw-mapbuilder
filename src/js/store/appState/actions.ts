@@ -5,7 +5,8 @@ import {
   SET_LANGUAGE,
   SET_OPEN_LAYER_GROUP,
   AppState,
-  LeftPanel
+  LeftPanel,
+  SET_MEASURE_BUTTON
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
@@ -39,6 +40,15 @@ export function setLanguage(payload: AppState['selectedLanguage']) {
 export function setOpenLayerGroup(payload: LeftPanel['openLayerGroup']) {
   return {
     type: SET_OPEN_LAYER_GROUP,
+    payload: payload
+  };
+}
+
+export function setMeasureButton(
+  payload: AppState['measureContent']['toggleButton']
+) {
+  return {
+    type: SET_MEASURE_BUTTON,
     payload: payload
   };
 }

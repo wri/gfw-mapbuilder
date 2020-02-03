@@ -5,7 +5,8 @@ import {
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   RENDER_MODAL,
-  SET_OPEN_LAYER_GROUP
+  SET_OPEN_LAYER_GROUP,
+  SET_MEASURE_BUTTON
 } from './types';
 
 const initialState: AppState = {
@@ -15,6 +16,13 @@ const initialState: AppState = {
     tabViewVisible: true,
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP'
+  },
+  measureContent: {
+    toggleButton: {
+      areaButton: false,
+      distanceButton: false,
+      coordinatesButton: false
+    }
   }
 };
 
@@ -49,6 +57,16 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           openLayerGroup: action.payload
+        }
+      };
+    case SET_MEASURE_BUTTON:
+      return {
+        ...state,
+        measureContent: {
+          toggleButton: {
+            ...state.measureContent.toggleButton,
+            ...action.payload
+          }
         }
       };
     default:
