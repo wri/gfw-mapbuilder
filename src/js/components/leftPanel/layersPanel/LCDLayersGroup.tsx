@@ -45,8 +45,8 @@ const LCDLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         </button>
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
-        {allAvailableLayers.map(layerID => (
-          <GenericLayerControl id={layerID} key={layerID} />
+        {allAvailableLayers.map(layer => (
+          <GenericLayerControl id={layer.id} key={layer.id} />
         ))}
       </div>
     </div>

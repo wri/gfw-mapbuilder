@@ -5,7 +5,6 @@ import { mapController } from 'js/controllers/mapController';
 import 'css/leftpanel.scss';
 import WebmapLayersGroup from './webmapLayersGroup';
 import BasemapLayersGroup from './basemapLayersGroup';
-import ExtraLayersGroup from './ExtraLayersGroup';
 import LCLayersGroup from './LCLayersGroup';
 import LCDLayersGroup from './LCDLayersGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
