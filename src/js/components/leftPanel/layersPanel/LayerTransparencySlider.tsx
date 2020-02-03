@@ -1,22 +1,17 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { mapController } from 'js/controllers/mapController';
 
 interface LayerTransparencyProps {
   layerID: string;
+  layerOpacity: number | undefined;
 }
 
 const LayerTransparencySlider = (
   props: LayerTransparencyProps
 ): React.ReactElement => {
-  const { layerID } = props;
-
-  const [localLayerOpacity, setlocalLayerOpacity] = useState(
-    mapController.getLayerOpacity(layerID)
-  );
+  const { layerID, layerOpacity } = props;
 
   function handleOpacityChange(e: any) {
-    setlocalLayerOpacity(e.target.value);
     mapController.setLayerOpacity(layerID, e.target.value);
   }
 
@@ -30,10 +25,10 @@ const LayerTransparencySlider = (
         step="0.05"
         name="tslider"
         id=""
-        value={localLayerOpacity}
+        value={layerOpacity}
         onChange={handleOpacityChange}
       />
-      <label htmlFor="tslider">{localLayerOpacity}</label>
+      <label htmlFor="tslider">{layerOpacity}</label>
     </div>
   );
 };
