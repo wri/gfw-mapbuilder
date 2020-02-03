@@ -63,7 +63,8 @@ export class MapController {
               title,
               opacity,
               visible,
-              definitionExpression
+              definitionExpression,
+              group: 'webmap'
             });
           });
           store.dispatch(allAvailableLayers(mapLayerObjects));
