@@ -154,13 +154,6 @@ export class MapController {
     }
   }
 
-  getLayerOpacity(layerID: string) {
-    const layer = this._map?.findLayerById(layerID);
-    if (layer) {
-      return layer.opacity;
-    }
-  }
-
   setLayerOpacity(layerID: string, value: string) {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
