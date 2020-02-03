@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setMeasureButton } from 'js/store/appState/actions';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { measureContent } from 'configs/modal.config';
 
 import { RootState } from 'js/store/index';
@@ -29,20 +31,30 @@ const MeasureContent: FunctionComponent = () => {
   } = measureContent[selectedLanguage];
   const dispatch = useDispatch();
 
-  const returnDropdownOptions = (): JSX.Element[] => {
-    return selectedDropdown.map(
-      (lengthUnit: SpecificDropDownOption, index: number) => {
-        const { text, esriUnit } = lengthUnit;
+  const setMeasurementUnit = (selectedDropDownOption: string): void => {
+    if (areaButton) {
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: false,
+        setNewMeasure: false
+      });
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: false,
+        setNewMeasure: true,
+        unitOfLength: selectedDropDownOption
+      });
+    }
 
-        return (
-          <>
-            <option value={esriUnit} key={index}>
-              {text}
-            </option>
-          </>
-        );
-      }
-    );
+    if (distanceButton) {
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: true,
+        setNewMeasure: false
+      });
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: true,
+        setNewMeasure: true,
+        unitOfLength: selectedDropDownOption
+      });
+    }
   };
 
   const toggleButtonsOff = (): void => {
@@ -56,6 +68,10 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setAreaOption = (): void => {
+    mapController.setSpecificMeasureWidget({
+      measureByDistance: false,
+      setNewMeasure: false
+    });
     toggleButtonsOff();
     if (areaButton) {
       dispatch(
@@ -64,6 +80,7 @@ const MeasureContent: FunctionComponent = () => {
         })
       );
       setSelectedDropdown([]);
+      mapController.setSpecificMeasureWidget({ measureByDistance: false });
     } else {
       dispatch(
         setMeasureButton({
@@ -71,10 +88,19 @@ const MeasureContent: FunctionComponent = () => {
         })
       );
       setSelectedDropdown(areaUnitsOfLength);
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: false,
+        setNewMeasure: true,
+        unitOfLength: ''
+      });
     }
   };
 
   const setDistanceOption = (): void => {
+    mapController.setSpecificMeasureWidget({
+      measureByDistance: true,
+      setNewMeasure: false
+    });
     toggleButtonsOff();
     if (distanceButton) {
       dispatch(
@@ -90,6 +116,11 @@ const MeasureContent: FunctionComponent = () => {
         })
       );
       setSelectedDropdown(distanceUnitsOfLength);
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: true,
+        setNewMeasure: true,
+        unitOfLength: ''
+      });
     }
   };
 
@@ -112,6 +143,22 @@ const MeasureContent: FunctionComponent = () => {
     }
   };
 
+  const returnDropdownOptions = (): JSX.Element[] => {
+    return selectedDropdown.map(
+      (lengthUnit: SpecificDropDownOption, index: number) => {
+        const { text, esriUnit } = lengthUnit;
+
+        return (
+          <>
+            <option value={esriUnit} key={index}>
+              {text}
+            </option>
+          </>
+        );
+      }
+    );
+  };
+
   return (
     <div className="measure-options-container">
       <div className="buttons-select-wrapper">
@@ -129,7 +176,7 @@ const MeasureContent: FunctionComponent = () => {
         />
         <span>|</span>
         <select
-          onBlur={(e): void => console.log(e.target.value)}
+          onBlur={(e): void => setMeasurementUnit(e.target.value)}
           disabled={selectedDropdown.length > 0 ? false : true}
         >
           {selectedDropdown.length === 0 && (

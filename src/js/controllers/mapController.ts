@@ -4,6 +4,8 @@ import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
+import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
+import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import { RefObject } from 'react';
 import store from '../store/index';
 import {
@@ -23,12 +25,16 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
+  _measureByDistance: DistanceMeasurement2D | any;
+  _measureByArea: AreaMeasurement2D | undefined;
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
+    this._measureByDistance = undefined;
+    this._measureByArea = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -69,6 +75,7 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           this.initializeAndSetSketch();
+          this.setMeasureWidget();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -213,6 +220,53 @@ export class MapController {
     this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
+
+  setMeasureWidget(): void {
+    this._measureByArea = new AreaMeasurement2D({
+      view: this._mapview,
+      unit: 'acres'
+    });
+
+    this._measureByDistance = new DistanceMeasurement2D({
+      view: this._mapview,
+      unit: 'miles'
+    });
+  }
+
+  setSpecificMeasureWidget({
+    measureByDistance = false,
+    setNewMeasure = false,
+    unitOfLength = ''
+  }: {
+    measureByDistance: boolean;
+    setNewMeasure?: boolean;
+    unitOfLength?: string;
+  }): void {
+    const selectedWidget = measureByDistance
+      ? this._measureByDistance
+      : this._measureByArea;
+
+    if (setNewMeasure) {
+      const newUnit = unitOfLength.length ? unitOfLength : selectedWidget?.unit;
+
+      selectedWidget.unit = newUnit;
+      // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
+
+      selectedWidget?.viewModel.newMeasurement();
+
+      selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
+        console.log('setSpecificMeasureWidget()', measurement);
+        // store.dispatch({
+        //   type: 'SET_MEASURE_WIDGET_RESULTS',
+        //   payload: measurement
+        // });
+      });
+    }
+
+    if (setNewMeasure === false) {
+      selectedWidget.viewModel.clearMeasurement();
+    }
+  }
 }
 
 export const mapController = new MapController();
