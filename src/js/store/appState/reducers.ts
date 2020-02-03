@@ -6,7 +6,8 @@ import {
   SET_LANGUAGE,
   RENDER_MODAL,
   SET_OPEN_LAYER_GROUP,
-  SET_MEASURE_BUTTON
+  SET_MEASURE_BUTTON,
+  SET_MEASURE_RESULTS
 } from './types';
 
 const initialState: AppState = {
@@ -22,6 +23,11 @@ const initialState: AppState = {
       areaButton: false,
       distanceButton: false,
       coordinatesButton: false
+    },
+    results: {
+      area: [],
+      distance: [],
+      coordinates: []
     }
   }
 };
@@ -66,7 +72,19 @@ export function appStateReducer(
           toggleButton: {
             ...state.measureContent.toggleButton,
             ...action.payload
-          }
+          },
+          results: state.measureContent.results
+        }
+      };
+    case SET_MEASURE_RESULTS:
+      return {
+        ...state,
+        measureContent: {
+          results: {
+            ...state.measureContent.results,
+            ...action.payload
+          },
+          toggleButton: state.measureContent.toggleButton
         }
       };
     default:

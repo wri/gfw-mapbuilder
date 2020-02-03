@@ -8,12 +8,18 @@ import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import { RefObject } from 'react';
 import store from '../store/index';
+
 import {
   allAvailableLayers,
   mapError,
   isMapReady
 } from 'js/store/mapview/actions';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
+
+import {
+  selectActiveTab,
+  toggleTabviewPanel,
+  setMeasureResults
+} from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
 interface ZoomParams {
@@ -238,7 +244,7 @@ export class MapController {
     setNewMeasure = false,
     unitOfLength = ''
   }: {
-    measureByDistance: boolean;
+    measureByDistance?: boolean;
     setNewMeasure?: boolean;
     unitOfLength?: string;
   }): void {
@@ -254,17 +260,64 @@ export class MapController {
 
       selectedWidget?.viewModel.newMeasurement();
 
-      selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
-        console.log('setSpecificMeasureWidget()', measurement);
-        // store.dispatch({
-        //   type: 'SET_MEASURE_WIDGET_RESULTS',
-        //   payload: measurement
-        // });
+      selectedWidget?.watch('viewModel.measurement', (measurement: object) => {
+        const areaResults = measureByDistance ? [] : [measurement];
+        const distanceResults = measureByDistance ? [measurement] : [];
+
+        selectedWidget?.watch('viewModel.state', (state: string) => {
+          if (state === 'measured') {
+            // TODO - figure out why you can't dispatch an actionCreator
+            store.dispatch({
+              type: 'SET_MEASURE_RESULTS',
+              payload: {
+                area: areaResults,
+                distance: distanceResults
+              }
+            });
+          }
+        });
       });
     }
 
     if (setNewMeasure === false) {
-      selectedWidget.viewModel.clearMeasurement();
+      console.log('clearMeasurement');
+      this._measureByDistance.viewModel.clearMeasurement();
+      this._measureByArea?.viewModel.clearMeasurement();
+    }
+  }
+
+  getOnClickCoordinates(): void {
+    this._mapview?.on('pointer-move', event => {
+      if (store.getState().appState.renderModal === 'MeasureWidget') {
+        // * NOTE: for coordinates measurement widget
+
+        const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
+        console.log('MOUSE MOVE', coordinates);
+        // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
+      }
+    });
+  }
+
+  getPointerMoveCoordinates(): void {
+    this._mapview?.on('pointer-move', event => {
+      if (store.getState().appState.renderModal === 'MeasureWidget') {
+        // * NOTE: for coordinates measurement widget
+
+        const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
+        console.log('MOUSE MOVE', coordinates);
+        // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
+      }
+    });
+  }
+
+  getCoordinates(getCoordinates: boolean | undefined): void {
+    if (getCoordinates) {
+      //
+      this.getOnClickCoordinates();
+      this.getPointerMoveCoordinates();
+    } else {
+      // find a way to remove the instance of getOnClickCoordinates() and getPointerMoveCoordinates()
+      console.log(getCoordinates);
     }
   }
 }

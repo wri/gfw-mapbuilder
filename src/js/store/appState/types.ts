@@ -6,12 +6,14 @@ export interface LeftPanel {
 
 export interface MeasureContent {
   toggleButton: {
-    // areaButton?: string,
     areaButton?: boolean;
-    // distanceButton?: string,
     distanceButton?: boolean;
-    // coordinatesButton?: string,
     coordinatesButton?: boolean;
+  };
+  results: {
+    area?: Array<object>;
+    distance?: Array<object>;
+    coordinates?: Array<object>;
   };
 }
 
@@ -29,6 +31,7 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
 export const SET_MEASURE_BUTTON = 'SET_MEASURE_BUTTON';
+export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 
 interface SetOpenLayerGroup {
   type: typeof SET_OPEN_LAYER_GROUP;
@@ -60,10 +63,16 @@ interface SetMeasureButton {
   payload: AppState['measureContent']['toggleButton'];
 }
 
+interface SetMeasureResults {
+  type: typeof SET_MEASURE_RESULTS;
+  payload: AppState['measureContent']['results'];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
   | SelectActiveTab
   | SetLanguageAction
   | SetOpenLayerGroup
-  | SetMeasureButton;
+  | SetMeasureButton
+  | SetMeasureResults;

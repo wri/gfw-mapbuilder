@@ -6,7 +6,8 @@ import {
   SET_OPEN_LAYER_GROUP,
   AppState,
   LeftPanel,
-  SET_MEASURE_BUTTON
+  SET_MEASURE_BUTTON,
+  SET_MEASURE_RESULTS
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
@@ -49,6 +50,15 @@ export function setMeasureButton(
 ) {
   return {
     type: SET_MEASURE_BUTTON,
+    payload: payload
+  };
+}
+
+export function setMeasureResults(
+  payload: AppState['measureContent']['results']
+) {
+  return {
+    type: SET_MEASURE_RESULTS,
     payload: payload
   };
 }
