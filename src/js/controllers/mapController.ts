@@ -147,7 +147,7 @@ export class MapController {
             visible: layer.visible
           };
         } else {
-          return { ...l };
+          return l;
         }
       });
       store.dispatch(allAvailableLayers(newLayersArray));
@@ -173,7 +173,7 @@ export class MapController {
             opacity: layer.opacity
           };
         } else {
-          return { ...l };
+          return l;
         }
       });
       store.dispatch(allAvailableLayers(newLayersArray));
