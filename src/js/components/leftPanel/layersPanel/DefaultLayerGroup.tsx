@@ -9,7 +9,7 @@ interface LayerGroupProps {
   layerGroupConfig: any;
 }
 
-const LCDLayersGroup = (props: LayerGroupProps): React.ReactElement => {
+const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
   const { selectedLanguage, leftPanel } = useSelector(
     (store: RootState) => store.appState
   );
@@ -53,4 +53,4 @@ const LCDLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   );
 };
 
-export default LCDLayersGroup;
+export default DefaultLayerGroup;
