@@ -4,17 +4,15 @@ import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
-
 import { RefObject } from 'react';
 import store from '../store/index';
 import {
-  clearAllLayers,
-  updateVisibleLayers,
   allAvailableLayers,
   mapError,
   isMapReady
 } from 'js/store/mapview/actions';
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
+import { LayerProps } from 'js/store/mapview/types';
 
 interface ZoomParams {
   zoomIn: boolean;
@@ -56,14 +54,20 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
-          //TODO: Is there a better way/place to push all available layers of the map into redux?
-          const mapLayers: string[] = [];
-          this._map?.layers.forEach(layer => mapLayers.push(layer.id));
-          store.dispatch(updateVisibleLayers(mapLayers));
 
-          //store all AVAILABLE layers in redux too (this is a temporary solution, all available layers likely will come from resources and webmap info)
-          store.dispatch(allAvailableLayers(mapLayers));
-          console.log('mapview is loaded');
+          const mapLayerObjects: LayerProps[] = [];
+          this._map?.layers.forEach((layer: any) => {
+            const { id, title, opacity, visible, definitionExpression } = layer;
+            mapLayerObjects.push({
+              id,
+              title,
+              opacity,
+              visible,
+              definitionExpression
+            });
+          });
+          store.dispatch(allAvailableLayers(mapLayerObjects));
+
           this.initializeAndSetSketch();
         },
         (error: Error) => {
@@ -97,7 +101,17 @@ export class MapController {
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach(layer => (layer.visible = false));
     //2. Update redux state with visible layers array being empty
-    store.dispatch(clearAllLayers());
+
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map(
+      (l: LayerProps) => {
+        return {
+          ...l,
+          visible: false
+        };
+      }
+    );
+    store.dispatch(allAvailableLayers(newLayersArray));
   }
 
   selectAllLayers() {
@@ -107,17 +121,37 @@ export class MapController {
       layer.visible = true;
       layersToEnable.push(layer.id);
     });
-    store.dispatch(updateVisibleLayers(layersToEnable));
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map(
+      (l: LayerProps) => {
+        return {
+          ...l,
+          visible: true
+        };
+      }
+    );
+    store.dispatch(allAvailableLayers(newLayersArray));
   }
 
   toggleLayerVisibility(layerID: string) {
-    //update the map
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
+      //1. update the map
       layer.visible = !layer.visible;
+      //2. Update redux
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            visible: layer.visible
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
     }
-    //update redux
-    store.dispatch(updateVisibleLayers([layerID]));
   }
 
   getLayerOpacity(layerID: string) {
@@ -131,8 +165,21 @@ export class MapController {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       layer.opacity = Number(value);
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            opacity: layer.opacity
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
+
   initializeAndSetSketch(): void {
     const tempGL = new GraphicsLayer({
       id: 'sketchGraphics'

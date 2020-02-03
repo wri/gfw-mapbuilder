@@ -3,7 +3,7 @@ import { mapController } from 'js/controllers/mapController';
 import 'css/layer-toggle-checkbox.scss';
 
 interface LayerToggleProps {
-  layerIsVisible: boolean;
+  layerIsVisible: boolean | undefined;
   layerID: string;
 }
 

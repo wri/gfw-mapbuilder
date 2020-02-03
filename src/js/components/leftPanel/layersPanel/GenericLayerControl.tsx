@@ -9,15 +9,14 @@ interface LayerControlProps {
   id: string;
 }
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
-  const { visibleLayers } = useSelector(
+  const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
-  const layerIsVisible = visibleLayers.includes(props.id);
-
+  const layer = allAvailableLayers.find(l => l.id === props.id);
   return (
     <>
       <div className="layers-control-checkbox">
-        <LayerToggleSwitch layerIsVisible={layerIsVisible} layerID={props.id} />
+        <LayerToggleSwitch layerIsVisible={layer?.visible} layerID={props.id} />
         <span className="layer-label">{props.id}</span>
         <div className="info-icon-container">
           <InfoIcon width={10} height={10} fill="#fff" />
