@@ -148,11 +148,6 @@ export class MapController {
   getMoreLayers(): Promise<any> {
     const { appSettings } = store.getState();
     const { layerPanel } = appSettings;
-    // return new Promise(resolve => {
-    //   setTimeout(() => resolve('Gotcha!!!'), 500);
-    // });
-
-    const queries: any = [];
     const detailedLayers: any = [];
     const remoteDataLayers: any = [];
 
@@ -167,11 +162,7 @@ export class MapController {
         return list.concat(orderedGroups);
       }, []);
 
-    console.log('layers', layers);
     layers.forEach((layer: RemoteDataLayer) => {
-      // queries.push(new Promise(resolve => {
-      //   setTimeout(() => resolve('Gotcha!!!'), 500);
-      // }));
       if (layer.type === 'remoteDataLayer') {
         remoteDataLayers.push({
           order: layer.order,
@@ -214,17 +205,12 @@ export class MapController {
                   };
                   return item;
                 })
-            // )
           );
       }
     );
     detailedLayers.forEach((detailedLayer: object) => {
       remoteDataLayerRequests.push(detailedLayer);
     });
-    console.log('remoteDataLayerRequests', remoteDataLayerRequests);
-    // debugger
-    // Promise.all(queries).then(ress => console.log('ressressress', ress));
-
     return Promise.all(remoteDataLayerRequests);
   }
 
