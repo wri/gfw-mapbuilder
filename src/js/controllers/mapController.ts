@@ -112,7 +112,7 @@ export class MapController {
                 }
                 return opacity ?? 1; //if all fails, default to 1
               }
-              let resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
+              const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
 
               // let resourceVisible = true; //TODO: Make this dynamic as well!
               let resourceDefinitionExpression;
@@ -121,9 +121,6 @@ export class MapController {
               if (apiLayer.dataLayer) {
                 resourceId = apiLayer.dataLayer.id;
                 resourceTitle = apiLayer.layer.label[appState.selectedLanguage];
-                resourceOpacity = apiLayer.layer.opacity
-                  ? apiLayer.layer.opacity
-                  : resourceOpacity;
                 resourceGroup = apiLayer.dataLayer.groupId;
               } else {
                 resourceId = apiLayer.id;
