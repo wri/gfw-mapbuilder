@@ -12,6 +12,7 @@ export interface LayerProps {
   order?: number;
   opacity: number;
   definitionExpression?: string;
+  group: string;
 }
 
 //Action types

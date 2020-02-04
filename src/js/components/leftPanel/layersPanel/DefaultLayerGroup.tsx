@@ -20,9 +20,8 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
-
+  const groupLayerIds = layerGroupConfig.layers.map((layer: any) => layer.id);
   const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage];
-
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
   const handleGroupToggle = () => {
@@ -45,9 +44,11 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
         </button>
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
-        {allAvailableLayers.map(layer => (
-          <GenericLayerControl id={layer.id} key={layer.id} />
-        ))}
+        {allAvailableLayers
+          .filter(laya => groupLayerIds.includes(laya.id))
+          .map(layer => (
+            <GenericLayerControl id={layer.id} key={layer.id} />
+          ))}
       </div>
     </div>
   );
