@@ -33,7 +33,7 @@ export class MapController {
   _previousSketchGraphic: any;
   _measureByDistance: DistanceMeasurement2D | any;
   _measureByArea: AreaMeasurement2D | undefined;
-  _mouseMoveEventListener: EventListener | any;
+  _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
 
   constructor() {
@@ -43,7 +43,8 @@ export class MapController {
     this._previousSketchGraphic = undefined;
     this._measureByDistance = undefined;
     this._measureByArea = undefined;
-    this._mouseMoveEventListener = undefined;
+    this._mouseClickEventListener = undefined;
+    this._pointerMoveEventListener = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -259,7 +260,6 @@ export class MapController {
         break;
     }
 
-    console.log('distanceUnit', distanceUnit);
     return convertedValue;
   }
 
@@ -268,7 +268,6 @@ export class MapController {
     distanceUnit: string
   ): number | undefined {
     let convertedValue;
-    console.log('distanceUnit', distanceUnit);
     switch (distanceUnit) {
       case 'kilometers':
         convertedValue = distance / 1000;
@@ -293,6 +292,26 @@ export class MapController {
     }
 
     return convertedValue;
+  }
+
+  convertDecimalToDMS(coordinateResults: any): object {
+    const { latitude, longitude } = coordinateResults;
+
+    const latitudeInteger = Math.floor(latitude);
+    const latitudeMinutes = Math.floor((latitude % 1) * 60);
+    const latitudeSeconds = Math.floor((latitudeMinutes % 1) * 60);
+
+    const longitudeInteger = Math.floor(longitude);
+    const longitudeMinutes = Math.floor((longitude % 1) * 60);
+    const longitudeSeconds = Math.floor((longitudeMinutes % 1) * 60);
+
+    const latitudeInDMS = `${latitudeInteger}°${latitudeMinutes}'${latitudeSeconds}"`;
+    const longitudeDMS = `${longitudeInteger}°${longitudeMinutes}'${longitudeSeconds}"`;
+
+    return {
+      latitude: latitudeInDMS,
+      longitude: longitudeDMS
+    };
   }
 
   setMeasureWidget(): void {
@@ -374,12 +393,23 @@ export class MapController {
     }
   }
 
-  getOnClickCoordinates(): void {
-    this._pointerMoveEventListener = this._mapview?.on('click', event => {
-      const coordinateMouseClickResults = this._mapview?.toMap({
+  getOnClickCoordinates(unitIsDMS: boolean): void {
+    this._mouseClickEventListener = this._mapview?.on('click', event => {
+      event.stopPropagation();
+      let coordinateMouseClickResults;
+      const coordinatesInDecimals = this._mapview?.toMap({
         x: event.x,
         y: event.y
       });
+
+      if (unitIsDMS) {
+        coordinateMouseClickResults = this.convertDecimalToDMS(
+          coordinatesInDecimals
+        );
+      } else {
+        coordinateMouseClickResults = coordinatesInDecimals;
+      }
+
       store.dispatch(
         setMeasureResults({
           areaResults: {},
@@ -390,29 +420,49 @@ export class MapController {
     });
   }
 
-  getPointerMoveCoordinates(): void {
-    this._mouseMoveEventListener = this._mapview?.on('pointer-move', event => {
-      const coordinatePointerMoveResults = this._mapview?.toMap({
-        x: event.x,
-        y: event.y
-      });
-      store.dispatch(
-        setMeasureResults({
-          areaResults: {},
-          distanceResults: {},
-          coordinatePointerMoveResults
-        })
-      );
-    });
+  getPointerMoveCoordinates(unitIsDMS: boolean): void {
+    this._pointerMoveEventListener = this._mapview?.on(
+      'pointer-move',
+      event => {
+        event.stopPropagation();
+        let coordinatePointerMoveResults;
+        const coordinatesInDecimals = this._mapview?.toMap({
+          x: event.x,
+          y: event.y
+        });
+
+        if (unitIsDMS) {
+          coordinatePointerMoveResults = this.convertDecimalToDMS(
+            coordinatesInDecimals
+          );
+        } else {
+          coordinatePointerMoveResults = coordinatesInDecimals;
+        }
+
+        store.dispatch(
+          setMeasureResults({
+            areaResults: {},
+            distanceResults: {},
+            coordinatePointerMoveResults
+          })
+        );
+      }
+    );
   }
 
-  getCoordinates(getCoordinates: boolean): void {
+  getCoordinates({
+    getCoordinates,
+    unitIsDMS = false
+  }: {
+    getCoordinates: boolean;
+    unitIsDMS?: boolean;
+  }): void {
     if (getCoordinates) {
-      this.getOnClickCoordinates();
-      this.getPointerMoveCoordinates();
+      this.getOnClickCoordinates(unitIsDMS);
+      this.getPointerMoveCoordinates(unitIsDMS);
     } else {
-      this._mouseMoveEventListener?.remove();
-      this._mouseMoveEventListener = undefined;
+      this._mouseClickEventListener?.remove();
+      this._mouseClickEventListener = undefined;
 
       this._pointerMoveEventListener?.remove();
       this._pointerMoveEventListener = undefined;

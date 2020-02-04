@@ -31,6 +31,7 @@ const MeasureContent: FunctionComponent = () => {
     (state: RootState) => state.appState.selectedLanguage
   );
   const [selectedDropdown, setSelectedDropdown] = useState([]);
+  const [selectedDropdownOption, setSelectedDropdownOption] = useState('');
   const {
     areaUnitsOfLength,
     distanceUnitsOfLength,
@@ -48,10 +49,13 @@ const MeasureContent: FunctionComponent = () => {
     );
     setSelectedDropdown([]);
     mapController.setSpecificMeasureWidget({ setNewMeasure: false });
-    mapController.getCoordinates(false);
+    mapController.getCoordinates({
+      getCoordinates: false
+    });
   };
 
-  const setMeasurementUnit = (selectedDropDownOption: string): void => {
+  const setMeasurementUnit = (selectedUnit: string): void => {
+    setSelectedDropdownOption(selectedUnit);
     if (areaButton) {
       mapController.setSpecificMeasureWidget({
         measureByDistance: false,
@@ -60,7 +64,7 @@ const MeasureContent: FunctionComponent = () => {
       mapController.setSpecificMeasureWidget({
         measureByDistance: false,
         setNewMeasure: true,
-        unitOfLength: selectedDropDownOption
+        unitOfLength: selectedUnit
       });
     }
 
@@ -71,7 +75,14 @@ const MeasureContent: FunctionComponent = () => {
       mapController.setSpecificMeasureWidget({
         measureByDistance: true,
         setNewMeasure: true,
-        unitOfLength: selectedDropDownOption
+        unitOfLength: selectedUnit
+      });
+    }
+
+    if (coordinatesButton) {
+      mapController.getCoordinates({
+        getCoordinates: true,
+        unitIsDMS: selectedUnit === 'dms' ? true : false
       });
     }
   };
@@ -85,7 +96,9 @@ const MeasureContent: FunctionComponent = () => {
     distanceButton: boolean;
     coordinatesButton: boolean;
   }): void => {
-    mapController.getCoordinates(false);
+    mapController.getCoordinates({
+      getCoordinates: false
+    });
     mapController.setSpecificMeasureWidget({
       setNewMeasure: false
     });
@@ -98,7 +111,10 @@ const MeasureContent: FunctionComponent = () => {
     );
 
     if (coordinatesButton) {
-      mapController.getCoordinates(true);
+      mapController.getCoordinates({
+        getCoordinates: true,
+        unitIsDMS: selectedDropdownOption === 'dms' ? true : false
+      });
     } else {
       mapController.setSpecificMeasureWidget({
         measureByDistance: distanceButton ? true : false,
@@ -167,8 +183,13 @@ const MeasureContent: FunctionComponent = () => {
     if (areaButton) {
       return (
         <>
-          <p>Area: {areaResults?.area}</p>
-          <p>Perimeter: {areaResults?.perimeter}</p>
+          <p>
+            <strong>Area: </strong> {areaResults?.area}
+          </p>
+          <p>
+            <strong>Perimeter: </strong>
+            {areaResults?.perimeter}
+          </p>
         </>
       );
     }
@@ -176,7 +197,10 @@ const MeasureContent: FunctionComponent = () => {
     if (distanceButton) {
       return (
         <>
-          <p>Distance: {distanceResults?.length}</p>
+          <p>
+            <strong>Distance Results: </strong>
+            {distanceResults?.length}
+          </p>
         </>
       );
     }
@@ -184,7 +208,9 @@ const MeasureContent: FunctionComponent = () => {
     if (coordinatesButton) {
       return (
         <>
-          <p>Coordinate results</p>
+          <p>
+            <strong>Coordinate results</strong>
+          </p>
           <p>
             <strong>Mouse click</strong>
           </p>
