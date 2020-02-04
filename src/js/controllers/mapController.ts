@@ -32,6 +32,7 @@ interface RemoteDataLayer {
     groupId: string;
     id: string;
   };
+  label: object;
   id: string;
   groupId: string;
   type: string;
@@ -92,14 +93,11 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           this.getMoreLayers().then(res => {
-            console.log('aaa', res);
-            const { appState, mapviewState } = store.getState();
+            const { appState } = store.getState();
 
             const resourceLayerObjects: LayerProps[] = [];
 
             res.forEach((apiLayer: RemoteDataLayer) => {
-              console.log(apiLayer);
-
               let resourceId;
               let resourceTitle;
               let resourceOpacity = 1; //TODO: Make this dynamic
@@ -110,10 +108,13 @@ export class MapController {
               if (apiLayer.dataLayer) {
                 resourceId = apiLayer.dataLayer.id;
                 resourceTitle = apiLayer.layer.label[appState.selectedLanguage];
-                resourceOpacity = apiLayer.layer.opacity;
+                resourceOpacity = apiLayer.layer.opacity
+                  ? apiLayer.layer.opacity
+                  : resourceOpacity;
                 resourceGroup = apiLayer.dataLayer.groupId;
               } else {
                 resourceId = apiLayer.id;
+                resourceTitle = apiLayer.label[appState.selectedLanguage];
                 resourceGroup = apiLayer.groupId;
               }
 
