@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
-import { ReactComponent as InfoIcon } from 'images/InfoIcon.svg';
+import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
 
