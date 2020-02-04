@@ -103,12 +103,13 @@ export class MapController {
               let resourceId;
               let resourceTitle;
 
+              //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
               function determineLayerOpacity() {
                 //Try the resources.js predetermined opacity
                 let opacity = apiLayer.dataLayer?.opacity;
                 if (!opacity && opacity !== 0) {
                   //nothing in the resources to do with opacity, try the response's oapcity
-                  opacity = apiLayer?.layer?.opacity;
+                  opacity = apiLayer.layer?.opacity;
                 }
                 return opacity ?? 1; //if all fails, default to 1
               }
