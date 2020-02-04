@@ -26,11 +26,12 @@ interface RemoteDataLayer {
     label: object;
     // [key: string]: object
   };
-  dataLayer: {
+  dataLayer?: {
     // [key: string]: object
     uuid: string;
     groupId: string;
     id: string;
+    opacity?: number;
   };
   label: object;
   id: string;
@@ -98,9 +99,21 @@ export class MapController {
             const resourceLayerObjects: LayerProps[] = [];
 
             res.forEach((apiLayer: RemoteDataLayer) => {
+              if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
               let resourceId;
               let resourceTitle;
-              let resourceOpacity = 1; //TODO: Make this dynamic
+
+              function determineLayerOpacity() {
+                //Try the resources.js predetermined opacity
+                let opacity = apiLayer.dataLayer?.opacity;
+                if (!opacity && opacity !== 0) {
+                  //nothing in the resources to do with opacity, try the response's oapcity
+                  opacity = apiLayer?.layer?.opacity;
+                }
+                return opacity ?? 1; //if all fails, default to 1
+              }
+              let resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
+
               // let resourceVisible = true; //TODO: Make this dynamic as well!
               let resourceDefinitionExpression;
               let resourceGroup;
@@ -178,7 +191,7 @@ export class MapController {
     const remoteDataLayerRequests = remoteDataLayers.map(
       (item: RemoteDataLayer, j: any) => {
         return fetch(
-          `https://production-api.globalforestwatch.org/v1/layer/${item.dataLayer.uuid}`
+          `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`
         )
           .then(response => response.json())
           .then(json => json.data)
@@ -205,7 +218,8 @@ export class MapController {
                 };
                 return item;
               })
-          );
+          )
+          .catch(error => console.error(error));
       }
     );
     detailedLayers.forEach((detailedLayer: object) => {
