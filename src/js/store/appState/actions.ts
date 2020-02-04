@@ -49,7 +49,7 @@ export function setMeasureButton(
   payload: AppState['measureContent']['toggleButton']
 ) {
   return {
-    type: SET_MEASURE_BUTTON,
+    type: SET_MEASURE_BUTTON as typeof SET_MEASURE_BUTTON,
     payload: payload
   };
 }
@@ -58,7 +58,7 @@ export function setMeasureResults(
   payload: AppState['measureContent']['results']
 ) {
   return {
-    type: SET_MEASURE_RESULTS,
+    type: SET_MEASURE_RESULTS as typeof SET_MEASURE_RESULTS,
     payload: payload
   };
 }

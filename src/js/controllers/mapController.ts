@@ -239,6 +239,27 @@ export class MapController {
     });
   }
 
+  getAndDispatchMeasureResults(
+    selectedWidget: DistanceMeasurement2D | AreaMeasurement2D,
+    measureByDistance: boolean
+  ): void {
+    selectedWidget?.watch('viewModel.measurement', (measurement: object) => {
+      const areaResults = measureByDistance ? {} : measurement;
+      const distanceResults = measureByDistance ? measurement : {};
+
+      selectedWidget?.watch('viewModel.state', (state: string) => {
+        if (state === 'measured') {
+          store.dispatch(
+            setMeasureResults({
+              areaResults,
+              distanceResults
+            })
+          );
+        }
+      });
+    });
+  }
+
   setSpecificMeasureWidget({
     measureByDistance = false,
     setNewMeasure = false,
@@ -259,60 +280,38 @@ export class MapController {
       // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
 
       selectedWidget?.viewModel.newMeasurement();
-
-      selectedWidget?.watch('viewModel.measurement', (measurement: object) => {
-        const areaResults = measureByDistance ? [] : [measurement];
-        const distanceResults = measureByDistance ? [measurement] : [];
-
-        selectedWidget?.watch('viewModel.state', (state: string) => {
-          if (state === 'measured') {
-            // TODO - figure out why you can't dispatch an actionCreator
-            store.dispatch({
-              type: 'SET_MEASURE_RESULTS',
-              payload: {
-                area: areaResults,
-                distance: distanceResults
-              }
-            });
-          }
-        });
-      });
-    }
-
-    if (setNewMeasure === false) {
-      console.log('clearMeasurement');
+      this.getAndDispatchMeasureResults(selectedWidget, measureByDistance);
+    } else {
       this._measureByDistance.viewModel.clearMeasurement();
       this._measureByArea?.viewModel.clearMeasurement();
     }
   }
 
   getOnClickCoordinates(): void {
-    this._mapview?.on('pointer-move', event => {
-      if (store.getState().appState.renderModal === 'MeasureWidget') {
-        // * NOTE: for coordinates measurement widget
-
-        const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
-        console.log('MOUSE MOVE', coordinates);
-        // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
-      }
+    // if (
+    //   store.getState().appState.measureContent.toggleButton.coordinatesButton
+    // ) {
+    this._mapview?.on('click', event => {
+      const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
+      console.log('MOUSE CLICK', coordinates);
+      // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
     });
+    // }
   }
 
   getPointerMoveCoordinates(): void {
     this._mapview?.on('pointer-move', event => {
-      if (store.getState().appState.renderModal === 'MeasureWidget') {
-        // * NOTE: for coordinates measurement widget
+      // * NOTE: for coordinates measurement widget
 
-        const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
-        console.log('MOUSE MOVE', coordinates);
-        // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
-      }
+      const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
+      console.log('MOUSE MOVE', coordinates);
+      // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
     });
   }
 
-  getCoordinates(getCoordinates: boolean | undefined): void {
+  getCoordinates(getCoordinates: boolean): void {
+    console.log('getCoordinates', getCoordinates);
     if (getCoordinates) {
-      //
       this.getOnClickCoordinates();
       this.getPointerMoveCoordinates();
     } else {

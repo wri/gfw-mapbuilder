@@ -4,6 +4,13 @@ export interface LeftPanel {
   openLayerGroup: string;
 }
 
+export interface SpecificResults {
+  geometry?: any;
+  area?: number;
+  perimeter?: number;
+  length?: number;
+}
+
 export interface MeasureContent {
   toggleButton: {
     areaButton?: boolean;
@@ -11,9 +18,9 @@ export interface MeasureContent {
     coordinatesButton?: boolean;
   };
   results: {
-    area?: Array<object>;
-    distance?: Array<object>;
-    coordinates?: Array<object>;
+    areaResults?: SpecificResults;
+    distanceResults?: SpecificResults;
+    coordinatesResults?: SpecificResults;
   };
 }
 

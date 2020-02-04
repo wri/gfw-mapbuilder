@@ -25,9 +25,9 @@ const initialState: AppState = {
       coordinatesButton: false
     },
     results: {
-      area: [],
-      distance: [],
-      coordinates: []
+      areaResults: {},
+      distanceResults: {},
+      coordinatesResults: {}
     }
   }
 };

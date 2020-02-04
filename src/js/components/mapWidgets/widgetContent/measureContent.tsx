@@ -20,6 +20,9 @@ const MeasureContent: FunctionComponent = () => {
   const { areaButton, distanceButton, coordinatesButton } = useSelector(
     (state: RootState) => state.appState.measureContent.toggleButton
   );
+  const { areaResults, distanceResults, coordinatesResults } = useSelector(
+    (state: RootState) => state.appState.measureContent.results
+  );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -31,7 +34,20 @@ const MeasureContent: FunctionComponent = () => {
   } = measureContent[selectedLanguage];
   const dispatch = useDispatch();
 
+  const resetWidget = (): void => {
+    dispatch(
+      setMeasureButton({
+        areaButton: false,
+        distanceButton: false,
+        coordinatesButton: false
+      })
+    );
+    setSelectedDropdown([]);
+    mapController.setSpecificMeasureWidget({ setNewMeasure: false });
+  };
+
   const setMeasurementUnit = (selectedDropDownOption: string): void => {
+    // resetWidget();
     if (areaButton) {
       mapController.setSpecificMeasureWidget({
         measureByDistance: false,
@@ -58,20 +74,12 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setAreaOption = (): void => {
-    mapController.setSpecificMeasureWidget({
-      setNewMeasure: false
-    });
     if (areaButton) {
-      dispatch(
-        setMeasureButton({
-          areaButton: false,
-          distanceButton: false,
-          coordinatesButton: false
-        })
-      );
-      setSelectedDropdown([]);
-      mapController.setSpecificMeasureWidget({ measureByDistance: false });
+      resetWidget();
     } else {
+      mapController.setSpecificMeasureWidget({
+        setNewMeasure: false
+      });
       dispatch(
         setMeasureButton({
           areaButton: true,
@@ -89,19 +97,12 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setDistanceOption = (): void => {
-    mapController.setSpecificMeasureWidget({
-      setNewMeasure: false
-    });
     if (distanceButton) {
-      dispatch(
-        setMeasureButton({
-          distanceButton: false,
-          areaButton: false,
-          coordinatesButton: false
-        })
-      );
-      setSelectedDropdown([]);
+      resetWidget();
     } else {
+      mapController.setSpecificMeasureWidget({
+        setNewMeasure: false
+      });
       dispatch(
         setMeasureButton({
           distanceButton: true,
@@ -119,18 +120,10 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setLatLongOption = (): void => {
-    mapController.setSpecificMeasureWidget({
-      setNewMeasure: false
-    });
+    console.log('setLatLongOption', coordinatesButton);
     if (coordinatesButton) {
-      dispatch(
-        setMeasureButton({
-          coordinatesButton: false,
-          distanceButton: false,
-          areaButton: false
-        })
-      );
-      setSelectedDropdown([]);
+      resetWidget();
+      mapController.getCoordinates(false);
     } else {
       dispatch(
         setMeasureButton({
@@ -140,7 +133,10 @@ const MeasureContent: FunctionComponent = () => {
         })
       );
       setSelectedDropdown(latitudeLongitudeUnits);
-      mapController.getCoordinates(coordinatesButton);
+      mapController.getCoordinates(true);
+      mapController.setSpecificMeasureWidget({
+        setNewMeasure: false
+      });
     }
   };
 
@@ -158,6 +154,36 @@ const MeasureContent: FunctionComponent = () => {
         );
       }
     );
+  };
+
+  const returnMeasurementResults = (): any => {
+    if (areaButton) {
+      console.log('areaResults', areaResults);
+      return (
+        <>
+          <p>Area: {areaResults?.area}</p>
+          <p>Perimeter: {areaResults?.perimeter}</p>
+        </>
+      );
+    }
+
+    if (distanceButton) {
+      console.log('distanceResults', distanceResults);
+      return (
+        <>
+          <p>Distance: {distanceResults?.length}</p>
+        </>
+      );
+    }
+
+    if (coordinatesButton) {
+      console.log('coordinatesResults', coordinatesResults);
+      return (
+        <>
+          <p>Coordinate results</p>
+        </>
+      );
+    }
   };
 
   return (
@@ -188,6 +214,7 @@ const MeasureContent: FunctionComponent = () => {
       </div>
       <p>Measurement Result</p>
       <hr />
+      {returnMeasurementResults()}
     </div>
   );
 };
