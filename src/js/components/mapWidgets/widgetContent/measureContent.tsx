@@ -20,9 +20,13 @@ const MeasureContent: FunctionComponent = () => {
   const { areaButton, distanceButton, coordinatesButton } = useSelector(
     (state: RootState) => state.appState.measureContent.toggleButton
   );
-  const { areaResults, distanceResults, coordinatesResults } = useSelector(
-    (state: RootState) => state.appState.measureContent.results
-  );
+  const {
+    areaResults,
+    distanceResults,
+    coordinateMouseClickResults,
+    coordinatePointerMoveResults
+  } = useSelector((state: RootState) => state.appState.measureContent.results);
+
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -44,10 +48,10 @@ const MeasureContent: FunctionComponent = () => {
     );
     setSelectedDropdown([]);
     mapController.setSpecificMeasureWidget({ setNewMeasure: false });
+    mapController.getCoordinates(false);
   };
 
   const setMeasurementUnit = (selectedDropDownOption: string): void => {
-    // resetWidget();
     if (areaButton) {
       mapController.setSpecificMeasureWidget({
         measureByDistance: false,
@@ -62,13 +66,44 @@ const MeasureContent: FunctionComponent = () => {
 
     if (distanceButton) {
       mapController.setSpecificMeasureWidget({
-        measureByDistance: true,
         setNewMeasure: false
       });
       mapController.setSpecificMeasureWidget({
         measureByDistance: true,
         setNewMeasure: true,
         unitOfLength: selectedDropDownOption
+      });
+    }
+  };
+
+  const setActiveOption = ({
+    areaButton,
+    distanceButton,
+    coordinatesButton
+  }: {
+    areaButton: boolean;
+    distanceButton: boolean;
+    coordinatesButton: boolean;
+  }): void => {
+    mapController.getCoordinates(false);
+    mapController.setSpecificMeasureWidget({
+      setNewMeasure: false
+    });
+    dispatch(
+      setMeasureButton({
+        areaButton,
+        distanceButton,
+        coordinatesButton
+      })
+    );
+
+    if (coordinatesButton) {
+      mapController.getCoordinates(true);
+    } else {
+      mapController.setSpecificMeasureWidget({
+        measureByDistance: distanceButton ? true : false,
+        setNewMeasure: true,
+        unitOfLength: ''
       });
     }
   };
@@ -77,22 +112,12 @@ const MeasureContent: FunctionComponent = () => {
     if (areaButton) {
       resetWidget();
     } else {
-      mapController.setSpecificMeasureWidget({
-        setNewMeasure: false
+      setActiveOption({
+        areaButton: true,
+        distanceButton: false,
+        coordinatesButton: false
       });
-      dispatch(
-        setMeasureButton({
-          areaButton: true,
-          distanceButton: false,
-          coordinatesButton: false
-        })
-      );
       setSelectedDropdown(areaUnitsOfLength);
-      mapController.setSpecificMeasureWidget({
-        measureByDistance: false,
-        setNewMeasure: true,
-        unitOfLength: ''
-      });
     }
   };
 
@@ -100,43 +125,25 @@ const MeasureContent: FunctionComponent = () => {
     if (distanceButton) {
       resetWidget();
     } else {
-      mapController.setSpecificMeasureWidget({
-        setNewMeasure: false
+      setActiveOption({
+        areaButton: false,
+        distanceButton: true,
+        coordinatesButton: false
       });
-      dispatch(
-        setMeasureButton({
-          distanceButton: true,
-          areaButton: false,
-          coordinatesButton: false
-        })
-      );
       setSelectedDropdown(distanceUnitsOfLength);
-      mapController.setSpecificMeasureWidget({
-        measureByDistance: true,
-        setNewMeasure: true,
-        unitOfLength: ''
-      });
     }
   };
 
   const setLatLongOption = (): void => {
-    console.log('setLatLongOption', coordinatesButton);
     if (coordinatesButton) {
       resetWidget();
-      mapController.getCoordinates(false);
     } else {
-      dispatch(
-        setMeasureButton({
-          coordinatesButton: true,
-          distanceButton: false,
-          areaButton: false
-        })
-      );
-      setSelectedDropdown(latitudeLongitudeUnits);
-      mapController.getCoordinates(true);
-      mapController.setSpecificMeasureWidget({
-        setNewMeasure: false
+      setActiveOption({
+        coordinatesButton: true,
+        distanceButton: false,
+        areaButton: false
       });
+      setSelectedDropdown(latitudeLongitudeUnits);
     }
   };
 
@@ -158,7 +165,6 @@ const MeasureContent: FunctionComponent = () => {
 
   const returnMeasurementResults = (): any => {
     if (areaButton) {
-      console.log('areaResults', areaResults);
       return (
         <>
           <p>Area: {areaResults?.area}</p>
@@ -168,7 +174,6 @@ const MeasureContent: FunctionComponent = () => {
     }
 
     if (distanceButton) {
-      console.log('distanceResults', distanceResults);
       return (
         <>
           <p>Distance: {distanceResults?.length}</p>
@@ -177,10 +182,21 @@ const MeasureContent: FunctionComponent = () => {
     }
 
     if (coordinatesButton) {
-      console.log('coordinatesResults', coordinatesResults);
       return (
         <>
           <p>Coordinate results</p>
+          <p>
+            <strong>Mouse click</strong>
+          </p>
+          <p>Latitude: {coordinateMouseClickResults?.latitude}</p>
+          <p>Longitude: {coordinateMouseClickResults?.longitude}</p>
+          <br />
+
+          <p>
+            <strong>Pointer move</strong>
+          </p>
+          <p>Latitude: {coordinatePointerMoveResults?.latitude}</p>
+          <p>Longitude: {coordinatePointerMoveResults?.longitude}</p>
         </>
       );
     }

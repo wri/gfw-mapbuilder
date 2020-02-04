@@ -1,3 +1,5 @@
+import Point from 'esri/geometry/Point';
+
 export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
@@ -20,7 +22,8 @@ export interface MeasureContent {
   results: {
     areaResults?: SpecificResults;
     distanceResults?: SpecificResults;
-    coordinatesResults?: SpecificResults;
+    coordinateMouseClickResults?: Point | any;
+    coordinatePointerMoveResults?: any;
   };
 }
 

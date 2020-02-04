@@ -27,7 +27,8 @@ const initialState: AppState = {
     results: {
       areaResults: {},
       distanceResults: {},
-      coordinatesResults: {}
+      coordinateMouseClickResults: {},
+      coordinatePointerMoveResults: {}
     }
   }
 };

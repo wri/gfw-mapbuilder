@@ -33,6 +33,8 @@ export class MapController {
   _previousSketchGraphic: any;
   _measureByDistance: DistanceMeasurement2D | any;
   _measureByArea: AreaMeasurement2D | undefined;
+  _mouseMoveEventListener: EventListener | any;
+  _pointerMoveEventListener: EventListener | any;
 
   constructor() {
     this._map = undefined;
@@ -41,6 +43,7 @@ export class MapController {
     this._previousSketchGraphic = undefined;
     this._measureByDistance = undefined;
     this._measureByArea = undefined;
+    this._mouseMoveEventListener = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -227,6 +230,71 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
+  convertSquareMetersToSpecificUnit(
+    distance: number,
+    distanceUnit: string
+  ): number | undefined {
+    let convertedValue;
+    switch (distanceUnit) {
+      case 'acres':
+        convertedValue = distance / 4047;
+        break;
+      case 'square-miles':
+        convertedValue = distance / 2.59e6;
+        break;
+      case 'square-kilometers':
+        convertedValue = distance / 1e6;
+        break;
+      case 'hectares':
+        convertedValue = distance / 10000;
+        break;
+      case 'square-yards':
+        convertedValue = distance * 1.196;
+        break;
+      case 'square-us-feet':
+        convertedValue = distance * 10.764;
+        break;
+      case 'square-meters':
+        convertedValue = distance;
+        break;
+    }
+
+    console.log('distanceUnit', distanceUnit);
+    return convertedValue;
+  }
+
+  convertMetersToSpecificUnit(
+    distance: number,
+    distanceUnit: string
+  ): number | undefined {
+    let convertedValue;
+    console.log('distanceUnit', distanceUnit);
+    switch (distanceUnit) {
+      case 'kilometers':
+        convertedValue = distance / 1000;
+        break;
+      case 'feet':
+      case 'us-feet':
+        convertedValue = distance * 3.281;
+        break;
+      case 'yards':
+        convertedValue = distance * 1.094;
+        break;
+      case 'nautical-miles':
+        convertedValue = distance / 1852;
+        break;
+      case 'meters':
+        convertedValue = distance;
+        break;
+      case 'miles':
+      default:
+        convertedValue = distance / 1609;
+        break;
+    }
+
+    return convertedValue;
+  }
+
   setMeasureWidget(): void {
     this._measureByArea = new AreaMeasurement2D({
       view: this._mapview,
@@ -243,9 +311,28 @@ export class MapController {
     selectedWidget: DistanceMeasurement2D | AreaMeasurement2D,
     measureByDistance: boolean
   ): void {
-    selectedWidget?.watch('viewModel.measurement', (measurement: object) => {
-      const areaResults = measureByDistance ? {} : measurement;
-      const distanceResults = measureByDistance ? measurement : {};
+    selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
+      const convertedLength = this.convertMetersToSpecificUnit(
+        measurement?.length,
+        selectedWidget.unit
+      );
+
+      const convertedArea = this.convertSquareMetersToSpecificUnit(
+        measurement?.area,
+        selectedWidget.unit
+      );
+
+      const convertedPerimeter = this.convertSquareMetersToSpecificUnit(
+        measurement?.perimeter,
+        selectedWidget.unit
+      );
+
+      const areaResults = measureByDistance
+        ? {}
+        : { area: convertedArea, perimeter: convertedPerimeter };
+      const distanceResults = measureByDistance
+        ? { length: convertedLength }
+        : {};
 
       selectedWidget?.watch('viewModel.state', (state: string) => {
         if (state === 'measured') {
@@ -288,35 +375,47 @@ export class MapController {
   }
 
   getOnClickCoordinates(): void {
-    // if (
-    //   store.getState().appState.measureContent.toggleButton.coordinatesButton
-    // ) {
-    this._mapview?.on('click', event => {
-      const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
-      console.log('MOUSE CLICK', coordinates);
-      // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
+    this._pointerMoveEventListener = this._mapview?.on('click', event => {
+      const coordinateMouseClickResults = this._mapview?.toMap({
+        x: event.x,
+        y: event.y
+      });
+      store.dispatch(
+        setMeasureResults({
+          areaResults: {},
+          distanceResults: {},
+          coordinateMouseClickResults
+        })
+      );
     });
-    // }
   }
 
   getPointerMoveCoordinates(): void {
-    this._mapview?.on('pointer-move', event => {
-      // * NOTE: for coordinates measurement widget
-
-      const coordinates = this._mapview?.toMap({ x: event.x, y: event.y }); // * NOTE: to show mouse's lat/long in measureContent.tsx
-      console.log('MOUSE MOVE', coordinates);
-      // store.dispatch({ type: 'SET_MEASURE_WIDGET_RESULTS', payload: { mapClicked: false, latitude: coordinates?.latitude, longitude: coordinates?.longitude} });
+    this._mouseMoveEventListener = this._mapview?.on('pointer-move', event => {
+      const coordinatePointerMoveResults = this._mapview?.toMap({
+        x: event.x,
+        y: event.y
+      });
+      store.dispatch(
+        setMeasureResults({
+          areaResults: {},
+          distanceResults: {},
+          coordinatePointerMoveResults
+        })
+      );
     });
   }
 
   getCoordinates(getCoordinates: boolean): void {
-    console.log('getCoordinates', getCoordinates);
     if (getCoordinates) {
       this.getOnClickCoordinates();
       this.getPointerMoveCoordinates();
     } else {
-      // find a way to remove the instance of getOnClickCoordinates() and getPointerMoveCoordinates()
-      console.log(getCoordinates);
+      this._mouseMoveEventListener?.remove();
+      this._mouseMoveEventListener = undefined;
+
+      this._pointerMoveEventListener?.remove();
+      this._pointerMoveEventListener = undefined;
     }
   }
 }
