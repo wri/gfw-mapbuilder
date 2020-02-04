@@ -181,30 +181,29 @@ export class MapController {
         )
           .then(response => response.json())
           .then(json => json.data)
-          .then(
-            layer =>
-              fetch(layer.attributes.layerConfig.metadata)
-                .then(response => response.json())
-                .then(metadata => {
-                  const attributes = layer.attributes;
-                  const itemGroup = item.group;
-                  // Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
-                  //   if (layerProp !== 'type' && layerProp !== 'uuid') {
-                  //     if (layerProp === 'legendConfig') {
-                  //       attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
-                  //     } else {
-                  //       layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
-                  //     }
-                  //   }
-                  // });
-                  item.layer = layer.attributes.layerConfig;
-                  item.group = itemGroup;
-                  item.layer.metadata = {
-                    metadata,
-                    legendConfig: attributes.legendConfig
-                  };
-                  return item;
-                })
+          .then(layer =>
+            fetch(layer.attributes.layerConfig.metadata)
+              .then(response => response.json())
+              .then(metadata => {
+                const attributes = layer.attributes;
+                const itemGroup = item.group;
+                // Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
+                //   if (layerProp !== 'type' && layerProp !== 'uuid') {
+                //     if (layerProp === 'legendConfig') {
+                //       attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+                //     } else {
+                //       layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
+                //     }
+                //   }
+                // });
+                item.layer = layer.attributes.layerConfig;
+                item.group = itemGroup;
+                item.layer.metadata = {
+                  metadata,
+                  legendConfig: attributes.legendConfig
+                };
+                return item;
+              })
           );
       }
     );
