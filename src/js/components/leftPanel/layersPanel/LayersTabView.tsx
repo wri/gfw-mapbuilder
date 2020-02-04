@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import { mapController } from 'js/controllers/mapController';
 import 'css/leftpanel.scss';
-import WebmapLayersGroup from './webmapLayersGroup';
-import BasemapLayersGroup from './basemapLayersGroup';
+import WebmapLayersGroup from './WebmapLayersGroup';
+import BasemapLayersGroup from './BasemapLayersGroup';
 import DefaultLayerGroup from './DefaultLayerGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
 

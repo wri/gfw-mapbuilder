@@ -4,7 +4,7 @@ import { DMSFormValues } from './coordinatesForm';
 
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 
-import 'css/CoordinatesForm';
+import 'css/coordinatesForm';
 
 interface CoordinateProps {
   degree: number;
