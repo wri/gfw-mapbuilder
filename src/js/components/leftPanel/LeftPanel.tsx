@@ -94,13 +94,15 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     />
   ));
 
-  const test = () => {
-    if (isTabVisible) {
-      return <div className="tab-header-container">{tabsGroupRow}</div>;
-    }
-  };
-
-  return { test };
+  return (
+    <div
+      className={`tab-header-container ${
+        isTabVisible ? '' : 'tab-header-hidden'
+      }`}
+    >
+      {tabsGroupRow}
+    </div>
+  );
 };
 
 const LeftPanel = (): React.ReactElement => {

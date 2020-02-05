@@ -17,14 +17,13 @@ const HideWidget: FunctionComponent = () => {
   const toggleContent = (): void => {
     if (tabViewVisible) {
       // [X] toggle left panel content
-      // [ ] toggle layer panel buttons
+      // [X] toggle layer panel buttons
       // [ ] toggle legend
       dispatch(toggleTabviewPanel(false));
       dispatch(toggleTab(false));
-      // turn off
     } else {
-      // turn on!
       dispatch(toggleTabviewPanel(true));
+      dispatch(toggleTab(true));
     }
   };
 
