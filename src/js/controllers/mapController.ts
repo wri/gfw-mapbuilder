@@ -325,8 +325,6 @@ export class MapController {
 
     if (setNewMeasure) {
       const newUnit = unitOfLength.length ? unitOfLength : selectedWidget?.unit;
-      // TODO - [ ] check if you still need to maintain this variable, or if
-      // TODO you're always passing in a unit!
 
       selectedWidget.unit = newUnit;
       // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work

@@ -53,19 +53,21 @@ export function convertCoordinates(
   coordinateResults: any
 ): object {
   const { latitude, longitude } = coordinateResults;
+  let convertedCoordinates = coordinateResults;
+
   const isString =
     typeof latitude && typeof longitude === 'string' ? true : false;
   const isNumber =
     typeof latitude && typeof longitude === 'number' ? true : false;
-  // ? is there a better way to check isString or isNumber?
-  // ! is there a better way to check isString or isNumber?
-  let convertedCoordinates = coordinateResults;
 
-  if (coordinateType === 'dms' && isString) {
+  // ? is there a better way to check isString or isNumber?
+  // ! HEADS UP - is there a better way to check isString or isNumber?
+
+  if (coordinateType === 'dms' && isNumber) {
     convertedCoordinates = convertDecimalToDMS(coordinateResults);
   }
 
-  if (coordinateType === 'degree' && isNumber) {
+  if (coordinateType === 'degree' && isString) {
     convertedCoordinates = convertDMSToDecimal(coordinateResults);
   }
 

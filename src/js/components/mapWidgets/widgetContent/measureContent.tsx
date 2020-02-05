@@ -39,8 +39,8 @@ const MeasureContent: FunctionComponent = () => {
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
-  const [selectedDropdown, setSelectedDropdown] = useState([]);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState('');
+
   const {
     areaUnitsOfLength,
     distanceUnitsOfLength,
@@ -56,13 +56,13 @@ const MeasureContent: FunctionComponent = () => {
         coordinatesButtonActive: false
       })
     );
-    setSelectedDropdown([]);
+    setSelectedDropdownOption('');
     mapController.setSpecificMeasureWidget({ setNewMeasure: false });
     mapController.clearCoordinates();
   };
 
   const setMeasurementUnit = (selectedUnit: string): void => {
-    setSelectedDropdownOption(selectedUnit);
+    // setSelectedDropdownOption(selectedUnit); // TODO - comment in, once the onBlur rule has been disabled
     // * NOTE - if true, clears measurement
     // * and enables selected measurement, while
     // * passing in the selected measurement unit
@@ -180,8 +180,7 @@ const MeasureContent: FunctionComponent = () => {
         distanceButtonActive: false,
         coordinatesButtonActive: false
       });
-      setSelectedDropdown(areaUnitsOfLength);
-      setSelectedDropdownOption(areaUnitsOfLength[0]);
+      setSelectedDropdownOption(areaUnitsOfLength[0].text);
     }
   };
 
@@ -195,7 +194,6 @@ const MeasureContent: FunctionComponent = () => {
         distanceButtonActive: true,
         coordinatesButtonActive: false
       });
-      setSelectedDropdown(distanceUnitsOfLength);
       setSelectedDropdownOption(distanceUnitsOfLength[0]);
     }
   };
@@ -210,25 +208,36 @@ const MeasureContent: FunctionComponent = () => {
         distanceButtonActive: false,
         coordinatesButtonActive: true
       });
-      setSelectedDropdown(latitudeLongitudeUnits);
       setSelectedDropdownOption(latitudeLongitudeUnits[0]);
     }
   };
 
   const returnDropdownOptions = (): JSX.Element[] => {
-    return selectedDropdown.map(
-      (lengthUnit: SpecificDropDownOption, index: number) => {
-        const { text, esriUnit } = lengthUnit;
+    let test = [];
 
-        return (
-          <>
-            <option value={esriUnit} key={index}>
-              {text}
-            </option>
-          </>
-        );
-      }
-    );
+    if (areaButtonActive) {
+      test = areaUnitsOfLength;
+    }
+
+    if (distanceButtonActive) {
+      test = distanceUnitsOfLength;
+    }
+
+    if (coordinatesButtonActive) {
+      test = latitudeLongitudeUnits;
+    }
+
+    return test.map((lengthUnit: SpecificDropDownOption, index: number) => {
+      const { text, esriUnit } = lengthUnit;
+
+      return (
+        <>
+          <option value={esriUnit} key={index}>
+            {text}
+          </option>
+        </>
+      );
+    });
   };
 
   const returnMeasurementResults = (): any => {
@@ -306,12 +315,14 @@ const MeasureContent: FunctionComponent = () => {
         />
         <span>|</span>
         <select
+          // * NOTE - Luke gave us the green light to disable the onBlur rule
+          // * and maintain state strictly with one event handler (onChange)
           value={selectedDropdownOption}
           onBlur={(e): void => setMeasurementUnit(e.target.value)}
-          onChange={(e): void => setMeasurementUnit(e.target.value)} // TODO - alert vaidotas/lucas!
-          disabled={selectedDropdown.length > 0 ? false : true}
+          onChange={(e): void => setSelectedDropdownOption(e.target.value)}
+          disabled={returnDropdownOptions().length > 0 ? false : true}
         >
-          {selectedDropdown.length === 0 && (
+          {returnDropdownOptions().length === 0 && (
             <option defaultValue="Unit">Unit</option>
           )}
           {returnDropdownOptions()}
