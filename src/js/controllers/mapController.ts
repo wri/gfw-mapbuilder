@@ -306,11 +306,11 @@ export class MapController {
     const longitudeSeconds = Math.floor((longitudeMinutes % 1) * 60);
 
     const latitudeInDMS = `${latitudeInteger}°${latitudeMinutes}'${latitudeSeconds}"`;
-    const longitudeDMS = `${longitudeInteger}°${longitudeMinutes}'${longitudeSeconds}"`;
+    const longitudeInDMS = `${longitudeInteger}°${longitudeMinutes}'${longitudeSeconds}"`;
 
     return {
       latitude: latitudeInDMS,
-      longitude: longitudeDMS
+      longitude: longitudeInDMS
     };
   }
 

@@ -245,6 +245,11 @@ const MeasureContent: FunctionComponent = () => {
         />
         <span>|</span>
         <select
+          value={
+            selectedDropdownOption.length
+              ? selectedDropdownOption
+              : selectedDropdown[0]
+          }
           onBlur={(e): void => setMeasurementUnit(e.target.value)}
           disabled={selectedDropdown.length > 0 ? false : true}
         >
