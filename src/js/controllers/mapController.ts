@@ -3,6 +3,9 @@ import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
+import ImageryLayer from 'esri/layers/ImageryLayer';
+import FeatureLayer from 'esri/layers/FeatureLayer';
+import MapImageLayer from 'esri/layers/MapImageLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import { RefObject } from 'react';
 import store from '../store/index';
@@ -24,10 +27,11 @@ interface RemoteDataLayer {
     opacity: number;
     metadata: object;
     label: object;
+    url: string;
+    type: string;
     // [key: string]: object
   };
   dataLayer?: {
-    // [key: string]: object
     uuid: string;
     groupId: string;
     id: string;
@@ -35,10 +39,21 @@ interface RemoteDataLayer {
   };
   label: object;
   id: string;
+  url: string;
   groupId: string;
   type: string;
   order: number;
   group: object;
+}
+
+interface LayerFactoryObject {
+  id: string;
+  title: string;
+  opacity: number;
+  visible: boolean;
+  definitionExpression: string | undefined;
+  url: string;
+  type: string;
 }
 
 export class MapController {
@@ -98,6 +113,8 @@ export class MapController {
 
             const resourceLayerObjects: LayerProps[] = [];
 
+            const resouceLayerSpecs: LayerFactoryObject[] = [];
+
             res.forEach((apiLayer: RemoteDataLayer) => {
               if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
               let resourceId;
@@ -118,15 +135,21 @@ export class MapController {
               // let resourceVisible = true; //TODO: Make this dynamic as well!
               let resourceDefinitionExpression;
               let resourceGroup;
+              let url;
+              let type;
 
               if (apiLayer.dataLayer) {
                 resourceId = apiLayer.dataLayer.id;
                 resourceTitle = apiLayer.layer.label[appState.selectedLanguage];
                 resourceGroup = apiLayer.dataLayer.groupId;
+                url = apiLayer.layer.url;
+                type = apiLayer.layer.type;
               } else {
                 resourceId = apiLayer.id;
                 resourceTitle = apiLayer.label[appState.selectedLanguage];
                 resourceGroup = apiLayer.groupId;
+                url = apiLayer.url;
+                type = apiLayer.type;
               }
 
               resourceLayerObjects.push({
@@ -137,11 +160,30 @@ export class MapController {
                 definitionExpression: resourceDefinitionExpression,
                 group: resourceGroup
               });
+
+              resouceLayerSpecs.push({
+                id: resourceId,
+                title: resourceTitle,
+                opacity: resourceOpacity,
+                visible: false,
+                definitionExpression: resourceDefinitionExpression,
+                url: url,
+                type: type
+              });
             });
 
             store.dispatch(
               allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
             );
+
+            const mapLayers = resouceLayerSpecs
+              .filter(
+                resouceSpec =>
+                  resouceSpec.type === 'feature' ||
+                  resouceSpec.type === 'dynamic'
+              )
+              .map(resouceLayerSpec => this.createLayer(resouceLayerSpec));
+            this._map?.addMany(mapLayers);
           });
 
           this.initializeAndSetSketch();
@@ -199,16 +241,19 @@ export class MapController {
               .then(metadata => {
                 const attributes = layer.attributes;
                 const itemGroup = item.group;
+
                 // Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
-                //   if (layerProp !== 'type' && layerProp !== 'uuid') {
-                //     if (layerProp === 'legendConfig') {
-                //       attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
-                //     } else {
-                //       layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
-                //     }
+
+                // if (layerProp !== 'type' && layerProp !== 'uuid') {
+                //   if (layerProp === 'legendConfig') {
+                //     attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+                //   } else {
+                //     layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
                 //   }
+                // }
                 // });
                 item.layer = layer.attributes.layerConfig;
+
                 item.group = itemGroup;
                 item.layer.metadata = {
                   metadata,
@@ -226,6 +271,43 @@ export class MapController {
     return Promise.all(remoteDataLayerRequests);
   }
 
+  createLayer(layerConfig: LayerFactoryObject): any {
+    let esriLayer;
+    switch (layerConfig.type) {
+      case 'dynamic':
+        esriLayer = new MapImageLayer({
+          id: layerConfig.id,
+          title: layerConfig.title,
+          visible: layerConfig.visible,
+          url: layerConfig.url
+        });
+        break;
+      case 'image':
+        esriLayer = new ImageryLayer({
+          id: layerConfig.id,
+          title: layerConfig.title,
+          visible: layerConfig.visible,
+          url: layerConfig.url
+        });
+        break;
+
+      case 'feature':
+        esriLayer = new FeatureLayer({
+          id: layerConfig.id,
+          title: layerConfig.title,
+          visible: layerConfig.visible,
+          url: layerConfig.url
+        });
+        break;
+      default:
+        // throw new Error('No matching layer type!')
+        console.error('No error type!');
+        break;
+    }
+
+    return esriLayer;
+  }
+
   log(): void {
     console.log(this._map?.basemap);
   }
@@ -241,7 +323,7 @@ export class MapController {
     }
   }
 
-  clearAllLayers() {
+  clearAllLayers(): void {
     console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach(layer => (layer.visible = false));
@@ -259,7 +341,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  selectAllLayers() {
+  selectAllLayers(): void {
     console.log('select all layers');
     const layersToEnable: string[] = [];
     this._map?.layers.forEach(layer => {
@@ -278,7 +360,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  toggleLayerVisibility(layerID: string) {
+  toggleLayerVisibility(layerID: string): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       //1. update the map
@@ -299,7 +381,7 @@ export class MapController {
     }
   }
 
-  setLayerOpacity(layerID: string, value: string) {
+  setLayerOpacity(layerID: string, value: string): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       layer.opacity = Number(value);
@@ -347,7 +429,7 @@ export class MapController {
     });
   }
 
-  createPolygonSketch = () => {
+  createPolygonSketch = (): void => {
     this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
