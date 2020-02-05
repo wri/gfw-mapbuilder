@@ -17,7 +17,7 @@ import {
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
-const allowedLayers = ['feature', 'dynamic'];
+const allowedLayers = ['feature', 'dynamic']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
 interface ZoomParams {
   zoomIn: boolean;
