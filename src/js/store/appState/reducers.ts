@@ -5,13 +5,15 @@ import {
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   RENDER_MODAL,
-  SET_OPEN_LAYER_GROUP
+  SET_OPEN_LAYER_GROUP,
+  TOGGLE_TAB
 } from './types';
 
 const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
   leftPanel: {
+    tabVisible: true,
     tabViewVisible: true,
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP'
@@ -29,6 +31,14 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           tabViewVisible: action.payload
+        }
+      };
+    case TOGGLE_TAB:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          tabVisible: action.payload
         }
       };
     case RENDER_MODAL:

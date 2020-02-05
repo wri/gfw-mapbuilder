@@ -1,5 +1,6 @@
 import {
   TOGGLE_TABVIEW_PANEL,
+  TOGGLE_TAB,
   RENDER_MODAL,
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
@@ -11,6 +12,13 @@ import {
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   return {
     type: TOGGLE_TABVIEW_PANEL as typeof TOGGLE_TABVIEW_PANEL,
+    payload: payload
+  };
+}
+
+export function toggleTab(payload: LeftPanel['tabVisible']) {
+  return {
+    type: TOGGLE_TAB as typeof TOGGLE_TAB,
     payload: payload
   };
 }

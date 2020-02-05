@@ -80,6 +80,10 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
+  const isTabVisible = useSelector(
+    (store: RootState) => store.appState.leftPanel.tabVisible
+  );
+
   const tabsGroupRow = props.tabsToRender.map(tab => (
     <Tab
       key={tab.label}
@@ -89,7 +93,14 @@ const Tabs = (props: TabsProps): React.ReactElement => {
       activeTab={savedActiveTab}
     />
   ));
-  return <div className="tab-header-container">{tabsGroupRow}</div>;
+
+  const test = () => {
+    if (isTabVisible) {
+      return <div className="tab-header-container">{tabsGroupRow}</div>;
+    }
+  };
+
+  return { test };
 };
 
 const LeftPanel = (): React.ReactElement => {

@@ -1,4 +1,5 @@
 export interface LeftPanel {
+  tabVisible: boolean;
   tabViewVisible: boolean;
   activeTab: string;
   openLayerGroup: string;
@@ -15,6 +16,7 @@ export const RENDER_MODAL = 'RENDER_MODAL';
 export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
+export const TOGGLE_TAB = 'TOGGLE_TAB';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
 
 interface SetOpenLayerGroup {
@@ -25,6 +27,11 @@ interface SetOpenLayerGroup {
 interface ToggleTabviewPanelAction {
   type: typeof TOGGLE_TABVIEW_PANEL;
   payload: LeftPanel['tabViewVisible'];
+}
+
+interface ToggleTab {
+  type: typeof TOGGLE_TAB;
+  payload: LeftPanel['tabVisible'];
 }
 
 interface RenderModalAction {
@@ -47,4 +54,5 @@ export type AppStateTypes =
   | RenderModalAction
   | SelectActiveTab
   | SetLanguageAction
-  | SetOpenLayerGroup;
+  | SetOpenLayerGroup
+  | ToggleTab;
