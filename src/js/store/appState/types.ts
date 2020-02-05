@@ -6,24 +6,31 @@ export interface LeftPanel {
   openLayerGroup: string;
 }
 
-export interface SpecificResults {
-  geometry?: any;
+interface SpecificAreaResults {
   area?: number;
   perimeter?: number;
+}
+
+interface SpecificDistanceResults {
   length?: number;
+}
+
+interface ClickResults {
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface MeasureContent {
   toggleButton: {
-    areaButton?: boolean;
-    distanceButton?: boolean;
-    coordinatesButton?: boolean;
+    areaButtonActive: boolean;
+    distanceButtonActive: boolean;
+    coordinatesButtonActive: boolean;
   };
   results: {
-    areaResults?: SpecificResults;
-    distanceResults?: SpecificResults;
-    coordinateMouseClickResults?: Point | any;
-    coordinatePointerMoveResults?: any;
+    areaResults?: SpecificAreaResults;
+    distanceResults?: SpecificDistanceResults;
+    coordinateMouseClickResults?: ClickResults | undefined | Point;
+    coordinatePointerMoveResults?: ClickResults | undefined | Point;
   };
 }
 

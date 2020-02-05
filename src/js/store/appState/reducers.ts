@@ -20,9 +20,9 @@ const initialState: AppState = {
   },
   measureContent: {
     toggleButton: {
-      areaButton: false,
-      distanceButton: false,
-      coordinatesButton: false
+      areaButtonActive: false,
+      distanceButtonActive: false,
+      coordinatesButtonActive: false
     },
     results: {
       areaResults: {},

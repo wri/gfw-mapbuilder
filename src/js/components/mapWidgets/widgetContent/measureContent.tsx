@@ -1,10 +1,15 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setMeasureButton } from 'js/store/appState/actions';
+import { setMeasureButton, setMeasureResults } from 'js/store/appState/actions';
 
 import { mapController } from 'js/controllers/mapController';
 
+import {
+  convertCoordinates,
+  convertSquareMetersToSpecificUnit,
+  convertMetersToSpecificUnit
+} from 'js/utils/helper.util';
 import { measureContent } from 'configs/modal.config';
 
 import { RootState } from 'js/store/index';
@@ -17,7 +22,11 @@ interface SpecificDropDownOption {
 }
 
 const MeasureContent: FunctionComponent = () => {
-  const { areaButton, distanceButton, coordinatesButton } = useSelector(
+  const {
+    areaButtonActive,
+    distanceButtonActive,
+    coordinatesButtonActive
+  } = useSelector(
     (state: RootState) => state.appState.measureContent.toggleButton
   );
   const {
@@ -42,21 +51,39 @@ const MeasureContent: FunctionComponent = () => {
   const resetWidget = (): void => {
     dispatch(
       setMeasureButton({
-        areaButton: false,
-        distanceButton: false,
-        coordinatesButton: false
+        areaButtonActive: false,
+        distanceButtonActive: false,
+        coordinatesButtonActive: false
       })
     );
     setSelectedDropdown([]);
     mapController.setSpecificMeasureWidget({ setNewMeasure: false });
-    mapController.getCoordinates({
-      getCoordinates: false
-    });
+    mapController.clearCoordinates();
   };
 
   const setMeasurementUnit = (selectedUnit: string): void => {
     setSelectedDropdownOption(selectedUnit);
-    if (areaButton) {
+    // * NOTE - if true, clears measurement
+    // * and enables selected measurement, while
+    // * passing in the selected measurement unit
+
+    if (areaButtonActive) {
+      const convertedArea = convertSquareMetersToSpecificUnit(
+        areaResults?.area,
+        selectedUnit
+      );
+
+      const convertedPerimeter = convertSquareMetersToSpecificUnit(
+        areaResults?.perimeter,
+        selectedUnit
+      );
+
+      dispatch(
+        setMeasureResults({
+          areaResults: { area: convertedArea, perimeter: convertedPerimeter }
+        })
+      );
+
       mapController.setSpecificMeasureWidget({
         measureByDistance: false,
         setNewMeasure: false
@@ -68,7 +95,18 @@ const MeasureContent: FunctionComponent = () => {
       });
     }
 
-    if (distanceButton) {
+    if (distanceButtonActive) {
+      const convertedLength = convertMetersToSpecificUnit(
+        distanceResults?.length,
+        selectedUnit
+      );
+
+      dispatch(
+        setMeasureResults({
+          distanceResults: { length: convertedLength }
+        })
+      );
+
       mapController.setSpecificMeasureWidget({
         setNewMeasure: false
       });
@@ -79,45 +117,53 @@ const MeasureContent: FunctionComponent = () => {
       });
     }
 
-    if (coordinatesButton) {
-      mapController.getCoordinates({
-        getCoordinates: true,
-        unitIsDMS: selectedUnit === 'dms' ? true : false
-      });
+    if (coordinatesButtonActive) {
+      const convertedCoordinates = convertCoordinates(
+        selectedUnit,
+        coordinateMouseClickResults
+      );
+
+      dispatch(
+        setMeasureResults({
+          coordinateMouseClickResults: convertedCoordinates
+        })
+      );
+      mapController.setCoordinates(selectedUnit === 'dms' ? true : false);
     }
   };
 
   const setActiveOption = ({
-    areaButton,
-    distanceButton,
-    coordinatesButton
+    areaButtonActive,
+    distanceButtonActive,
+    coordinatesButtonActive
   }: {
-    areaButton: boolean;
-    distanceButton: boolean;
-    coordinatesButton: boolean;
+    areaButtonActive: boolean;
+    distanceButtonActive: boolean;
+    coordinatesButtonActive: boolean;
   }): void => {
-    mapController.getCoordinates({
-      getCoordinates: false
-    });
+    // * NOTE - when an option is set to active,
+    // * we're clearing coordinates/measurement widgets
+    // * before implementing logic to maintain the Redux store
+    // * and setting the measure, area or coordinate widget
+    mapController.clearCoordinates();
     mapController.setSpecificMeasureWidget({
       setNewMeasure: false
     });
     dispatch(
       setMeasureButton({
-        areaButton,
-        distanceButton,
-        coordinatesButton
+        areaButtonActive,
+        distanceButtonActive,
+        coordinatesButtonActive
       })
     );
 
-    if (coordinatesButton) {
-      mapController.getCoordinates({
-        getCoordinates: true,
-        unitIsDMS: selectedDropdownOption === 'dms' ? true : false
-      });
+    if (coordinatesButtonActive) {
+      mapController.setCoordinates(
+        selectedDropdownOption === 'dms' ? true : false
+      );
     } else {
       mapController.setSpecificMeasureWidget({
-        measureByDistance: distanceButton ? true : false,
+        measureByDistance: distanceButtonActive ? true : false,
         setNewMeasure: true,
         unitOfLength: ''
       });
@@ -125,41 +171,47 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setAreaOption = (): void => {
-    if (areaButton) {
+    if (areaButtonActive) {
       resetWidget();
     } else {
       setActiveOption({
-        areaButton: true,
-        distanceButton: false,
-        coordinatesButton: false
+        // ? should we refactor to dynamically set other 2 properties to false
+        areaButtonActive: true,
+        distanceButtonActive: false,
+        coordinatesButtonActive: false
       });
       setSelectedDropdown(areaUnitsOfLength);
+      setSelectedDropdownOption(areaUnitsOfLength[0]);
     }
   };
 
   const setDistanceOption = (): void => {
-    if (distanceButton) {
+    if (distanceButtonActive) {
       resetWidget();
     } else {
       setActiveOption({
-        areaButton: false,
-        distanceButton: true,
-        coordinatesButton: false
+        // ? should we refactor to dynamically set other 2 properties to false
+        areaButtonActive: false,
+        distanceButtonActive: true,
+        coordinatesButtonActive: false
       });
       setSelectedDropdown(distanceUnitsOfLength);
+      setSelectedDropdownOption(distanceUnitsOfLength[0]);
     }
   };
 
-  const setLatLongOption = (): void => {
-    if (coordinatesButton) {
+  const setCoordinateOption = (): void => {
+    if (coordinatesButtonActive) {
       resetWidget();
     } else {
       setActiveOption({
-        coordinatesButton: true,
-        distanceButton: false,
-        areaButton: false
+        // ? should we refactor to dynamically set other 2 properties to false
+        areaButtonActive: false,
+        distanceButtonActive: false,
+        coordinatesButtonActive: true
       });
       setSelectedDropdown(latitudeLongitudeUnits);
+      setSelectedDropdownOption(latitudeLongitudeUnits[0]);
     }
   };
 
@@ -180,7 +232,10 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const returnMeasurementResults = (): any => {
-    if (areaButton) {
+    // * NOTE - later one we'll want a message saying;
+    // * 'select option to see results'
+    // * when everything is toggled OFF
+    if (areaButtonActive) {
       return (
         <>
           <p>
@@ -194,7 +249,7 @@ const MeasureContent: FunctionComponent = () => {
       );
     }
 
-    if (distanceButton) {
+    if (distanceButtonActive) {
       return (
         <>
           <p>
@@ -205,7 +260,7 @@ const MeasureContent: FunctionComponent = () => {
       );
     }
 
-    if (coordinatesButton) {
+    if (coordinatesButtonActive) {
       return (
         <>
           <p>
@@ -233,24 +288,27 @@ const MeasureContent: FunctionComponent = () => {
       <div className="buttons-select-wrapper">
         <button
           onClick={(): void => setAreaOption()}
-          className={`esri-icon-measure-area ${areaButton ? 'selected' : ''}`}
+          className={`esri-icon-measure-area ${
+            areaButtonActive ? 'selected' : ''
+          }`}
         />
         <button
           onClick={(): void => setDistanceOption()}
-          className={`esri-icon-measure ${distanceButton ? 'selected' : ''}`}
+          className={`esri-icon-measure ${
+            distanceButtonActive ? 'selected' : ''
+          }`}
         />
         <button
-          onClick={(): void => setLatLongOption()}
-          className={`esri-icon-maps ${coordinatesButton ? 'selected' : ''}`}
+          onClick={(): void => setCoordinateOption()}
+          className={`esri-icon-maps ${
+            coordinatesButtonActive ? 'selected' : ''
+          }`}
         />
         <span>|</span>
         <select
-          value={
-            selectedDropdownOption.length
-              ? selectedDropdownOption
-              : selectedDropdown[0]
-          }
+          value={selectedDropdownOption}
           onBlur={(e): void => setMeasurementUnit(e.target.value)}
+          onChange={(e): void => setMeasurementUnit(e.target.value)} // TODO - alert vaidotas/lucas!
           disabled={selectedDropdown.length > 0 ? false : true}
         >
           {selectedDropdown.length === 0 && (

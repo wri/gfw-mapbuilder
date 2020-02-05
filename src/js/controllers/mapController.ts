@@ -6,7 +6,14 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+
 import { RefObject } from 'react';
+
+import {
+  convertSquareMetersToSpecificUnit,
+  convertMetersToSpecificUnit
+} from 'js/utils/helper.util';
+
 import store from '../store/index';
 
 import {
@@ -231,69 +238,6 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  convertSquareMetersToSpecificUnit(
-    distance: number,
-    distanceUnit: string
-  ): number | undefined {
-    let convertedValue;
-    switch (distanceUnit) {
-      case 'acres':
-        convertedValue = distance / 4047;
-        break;
-      case 'square-miles':
-        convertedValue = distance / 2.59e6;
-        break;
-      case 'square-kilometers':
-        convertedValue = distance / 1e6;
-        break;
-      case 'hectares':
-        convertedValue = distance / 10000;
-        break;
-      case 'square-yards':
-        convertedValue = distance * 1.196;
-        break;
-      case 'square-us-feet':
-        convertedValue = distance * 10.764;
-        break;
-      case 'square-meters':
-        convertedValue = distance;
-        break;
-    }
-
-    return convertedValue;
-  }
-
-  convertMetersToSpecificUnit(
-    distance: number,
-    distanceUnit: string
-  ): number | undefined {
-    let convertedValue;
-    switch (distanceUnit) {
-      case 'kilometers':
-        convertedValue = distance / 1000;
-        break;
-      case 'feet':
-      case 'us-feet':
-        convertedValue = distance * 3.281;
-        break;
-      case 'yards':
-        convertedValue = distance * 1.094;
-        break;
-      case 'nautical-miles':
-        convertedValue = distance / 1852;
-        break;
-      case 'meters':
-        convertedValue = distance;
-        break;
-      case 'miles':
-      default:
-        convertedValue = distance / 1609;
-        break;
-    }
-
-    return convertedValue;
-  }
-
   convertDecimalToDMS(coordinateResults: any): object {
     const { latitude, longitude } = coordinateResults;
 
@@ -331,17 +275,17 @@ export class MapController {
     measureByDistance: boolean
   ): void {
     selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
-      const convertedLength = this.convertMetersToSpecificUnit(
+      const convertedLength = convertMetersToSpecificUnit(
         measurement?.length,
         selectedWidget.unit
       );
 
-      const convertedArea = this.convertSquareMetersToSpecificUnit(
+      const convertedArea = convertSquareMetersToSpecificUnit(
         measurement?.area,
         selectedWidget.unit
       );
 
-      const convertedPerimeter = this.convertSquareMetersToSpecificUnit(
+      const convertedPerimeter = convertSquareMetersToSpecificUnit(
         measurement?.perimeter,
         selectedWidget.unit
       );
@@ -381,6 +325,8 @@ export class MapController {
 
     if (setNewMeasure) {
       const newUnit = unitOfLength.length ? unitOfLength : selectedWidget?.unit;
+      // TODO - [ ] check if you still need to maintain this variable, or if
+      // TODO you're always passing in a unit!
 
       selectedWidget.unit = newUnit;
       // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
@@ -393,7 +339,7 @@ export class MapController {
     }
   }
 
-  getOnClickCoordinates(unitIsDMS: boolean): void {
+  setOnClickCoordinates(unitIsDMS: boolean): void {
     this._mouseClickEventListener = this._mapview?.on('click', event => {
       event.stopPropagation();
       let coordinateMouseClickResults;
@@ -420,7 +366,7 @@ export class MapController {
     });
   }
 
-  getPointerMoveCoordinates(unitIsDMS: boolean): void {
+  setPointerMoveCoordinates(unitIsDMS: boolean): void {
     this._pointerMoveEventListener = this._mapview?.on(
       'pointer-move',
       event => {
@@ -450,23 +396,17 @@ export class MapController {
     );
   }
 
-  getCoordinates({
-    getCoordinates,
-    unitIsDMS = false
-  }: {
-    getCoordinates: boolean;
-    unitIsDMS?: boolean;
-  }): void {
-    if (getCoordinates) {
-      this.getOnClickCoordinates(unitIsDMS);
-      this.getPointerMoveCoordinates(unitIsDMS);
-    } else {
-      this._mouseClickEventListener?.remove();
-      this._mouseClickEventListener = undefined;
+  setCoordinates(unitIsDMS = false): void {
+    this.setOnClickCoordinates(unitIsDMS);
+    this.setPointerMoveCoordinates(unitIsDMS);
+  }
 
-      this._pointerMoveEventListener?.remove();
-      this._pointerMoveEventListener = undefined;
-    }
+  clearCoordinates(): void {
+    this._mouseClickEventListener?.remove();
+    this._mouseClickEventListener = undefined;
+
+    this._pointerMoveEventListener?.remove();
+    this._pointerMoveEventListener = undefined;
   }
 }
 
