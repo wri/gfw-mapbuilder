@@ -17,6 +17,8 @@ import {
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
+const allowedLayers = ['feature', 'dynamic'];
+
 interface ZoomParams {
   zoomIn: boolean;
 }
@@ -112,77 +114,80 @@ export class MapController {
             const { appState } = store.getState();
 
             const resourceLayerObjects: LayerProps[] = [];
-
             const resouceLayerSpecs: LayerFactoryObject[] = [];
 
-            res.forEach((apiLayer: RemoteDataLayer) => {
-              if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
-              let resourceId;
-              let resourceTitle;
+            res
+              .filter((resLayer: RemoteDataLayer) => {
+                const resLayerType = resLayer.dataLayer
+                  ? resLayer.layer.type
+                  : resLayer.type;
+                return allowedLayers.includes(resLayerType);
+              })
+              .forEach((apiLayer: RemoteDataLayer) => {
+                if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
+                let resourceId;
+                let resourceTitle;
 
-              //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
-              function determineLayerOpacity() {
-                //Try the resources.js predetermined opacity
-                let opacity = apiLayer.dataLayer?.opacity;
-                if (!opacity && opacity !== 0) {
-                  //nothing in the resources to do with opacity, try the response's oapcity
-                  opacity = apiLayer.layer?.opacity;
+                //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
+                function determineLayerOpacity() {
+                  //Try the resources.js predetermined opacity
+                  let opacity = apiLayer.dataLayer?.opacity;
+                  if (!opacity && opacity !== 0) {
+                    //nothing in the resources to do with opacity, try the response's oapcity
+                    opacity = apiLayer.layer?.opacity;
+                  }
+                  return opacity ?? 1; //if all fails, default to 1
                 }
-                return opacity ?? 1; //if all fails, default to 1
-              }
-              const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
+                const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
 
-              // let resourceVisible = true; //TODO: Make this dynamic as well!
-              let resourceDefinitionExpression;
-              let resourceGroup;
-              let url;
-              let type;
+                // let resourceVisible = true; //TODO: Make this dynamic as well!
+                let resourceDefinitionExpression;
+                let resourceGroup;
+                let url;
+                let type;
 
-              if (apiLayer.dataLayer) {
-                resourceId = apiLayer.dataLayer.id;
-                resourceTitle = apiLayer.layer.label[appState.selectedLanguage];
-                resourceGroup = apiLayer.dataLayer.groupId;
-                url = apiLayer.layer.url;
-                type = apiLayer.layer.type;
-              } else {
-                resourceId = apiLayer.id;
-                resourceTitle = apiLayer.label[appState.selectedLanguage];
-                resourceGroup = apiLayer.groupId;
-                url = apiLayer.url;
-                type = apiLayer.type;
-              }
+                if (apiLayer.dataLayer) {
+                  resourceId = apiLayer.dataLayer.id;
+                  resourceTitle =
+                    apiLayer.layer.label[appState.selectedLanguage];
+                  resourceGroup = apiLayer.dataLayer.groupId;
+                  url = apiLayer.layer.url;
+                  type = apiLayer.layer.type;
+                } else {
+                  resourceId = apiLayer.id;
+                  resourceTitle = apiLayer.label[appState.selectedLanguage];
+                  resourceGroup = apiLayer.groupId;
+                  url = apiLayer.url;
+                  type = apiLayer.type;
+                }
 
-              resourceLayerObjects.push({
-                id: resourceId,
-                title: resourceTitle,
-                opacity: resourceOpacity,
-                visible: false,
-                definitionExpression: resourceDefinitionExpression,
-                group: resourceGroup
+                resouceLayerSpecs.push({
+                  id: resourceId,
+                  title: resourceTitle,
+                  opacity: resourceOpacity,
+                  visible: false,
+                  definitionExpression: resourceDefinitionExpression,
+                  url: url,
+                  type: type
+                });
+
+                resourceLayerObjects.push({
+                  id: resourceId,
+                  title: resourceTitle,
+                  opacity: resourceOpacity,
+                  visible: false,
+                  definitionExpression: resourceDefinitionExpression,
+                  group: resourceGroup
+                });
               });
-
-              resouceLayerSpecs.push({
-                id: resourceId,
-                title: resourceTitle,
-                opacity: resourceOpacity,
-                visible: false,
-                definitionExpression: resourceDefinitionExpression,
-                url: url,
-                type: type
-              });
-            });
 
             store.dispatch(
               allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
             );
 
-            const mapLayers = resouceLayerSpecs
-              .filter(
-                resouceSpec =>
-                  resouceSpec.type === 'feature' ||
-                  resouceSpec.type === 'dynamic'
-              )
-              .map(resouceLayerSpec => this.createLayer(resouceLayerSpec));
+            const mapLayers = resouceLayerSpecs.map(resouceLayerSpec =>
+              this.createLayer(resouceLayerSpec)
+            );
             this._map?.addMany(mapLayers);
           });
 
