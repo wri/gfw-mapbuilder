@@ -46,12 +46,14 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
+  _legend: Legend | undefined;
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
+    this._legend = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -67,11 +69,11 @@ export class MapController {
       container: domRef.current
     });
 
-    const legend = new Legend({
+    this._legend = new Legend({
       view: this._mapview
     });
 
-    this._mapview.ui.add(legend, 'bottom-right');
+    this._mapview.ui.add(this._legend, 'bottom-right');
 
     this._mapview
       .when(
@@ -350,6 +352,16 @@ export class MapController {
   createPolygonSketch = () => {
     this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
+  };
+
+  toggleLegend = (legendActive: boolean): void => {
+    if (legendActive && this._legend) {
+      this._mapview?.ui.add(this._legend, 'bottom-right');
+    }
+
+    if (legendActive === false && this._legend) {
+      this._mapview?.ui.remove(this._legend);
+    }
   };
 }
 

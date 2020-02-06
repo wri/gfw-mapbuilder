@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { toggleTabviewPanel, toggleTab } from 'js/store/appState/actions';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { RootState } from 'js/store/index';
 
 import { ReactComponent as HideIcon } from '../../../images/hideIcon.svg';
 
 const HideWidget: FunctionComponent = () => {
-  // TODO connect to Redux to toggle leftPanel and Legend
   const dispatch = useDispatch();
   const { tabViewVisible } = useSelector(
     (state: RootState) => state.appState.leftPanel
@@ -16,14 +17,13 @@ const HideWidget: FunctionComponent = () => {
 
   const toggleContent = (): void => {
     if (tabViewVisible) {
-      // [X] toggle left panel content
-      // [X] toggle layer panel buttons
-      // [ ] toggle legend
       dispatch(toggleTabviewPanel(false));
       dispatch(toggleTab(false));
+      mapController.toggleLegend(false);
     } else {
       dispatch(toggleTabviewPanel(true));
       dispatch(toggleTab(true));
+      mapController.toggleLegend(true);
     }
   };
 
