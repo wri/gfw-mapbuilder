@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { toggleTabviewPanel, toggleTab } from 'js/store/appState/actions';
+import { setHideWidget } from 'js/store/appState/actions';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -11,14 +11,13 @@ import { ReactComponent as HideIcon } from '../../../images/hideIcon.svg';
 
 const HideWidget: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const { tabViewVisible } = useSelector(
-    (state: RootState) => state.appState.leftPanel
+  const { hideWidgetActive } = useSelector(
+    (state: RootState) => state.appState
   );
 
   const toggleContent = (): void => {
-    dispatch(toggleTabviewPanel(!tabViewVisible));
-    dispatch(toggleTab(!tabViewVisible));
-    mapController.toggleLegend(!tabViewVisible);
+    dispatch(setHideWidget(!hideWidgetActive));
+    mapController.toggleLegend();
   };
 
   return (

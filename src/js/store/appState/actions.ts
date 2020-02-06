@@ -1,10 +1,10 @@
 import {
   TOGGLE_TABVIEW_PANEL,
-  TOGGLE_TAB,
   RENDER_MODAL,
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   SET_OPEN_LAYER_GROUP,
+  SET_HIDE_WIDGET,
   AppState,
   LeftPanel
 } from './types';
@@ -16,9 +16,9 @@ export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   };
 }
 
-export function toggleTab(payload: LeftPanel['tabVisible']) {
+export function setHideWidget(payload: AppState['hideWidgetActive']) {
   return {
-    type: TOGGLE_TAB as typeof TOGGLE_TAB,
+    type: SET_HIDE_WIDGET as typeof SET_HIDE_WIDGET,
     payload: payload
   };
 }

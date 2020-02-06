@@ -354,13 +354,13 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  toggleLegend = (legendActive: boolean): void => {
-    if (legendActive && this._legend) {
-      this._mapview?.ui.add(this._legend, 'bottom-right');
-    }
-
-    if (legendActive === false && this._legend) {
-      this._mapview?.ui.remove(this._legend);
+  toggleLegend = (): void => {
+    if (this._legend && typeof this._legend.container === 'object') {
+      if (this._legend.container.classList.contains('hide')) {
+        this._legend.container.classList.remove('hide');
+      } else {
+        this._legend.container.classList.add('hide');
+      }
     }
   };
 }
