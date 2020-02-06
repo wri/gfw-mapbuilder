@@ -4,7 +4,8 @@ import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
-import { RefObject } from 'react';
+import Print from 'esri/widgets/Print';
+import { RefObject, MutableRefObject } from 'react';
 import store from '../store/index';
 import {
   allAvailableLayers,
@@ -46,12 +47,14 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
+  _printWidget: Print | undefined;
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
+    this._printWidget = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -145,6 +148,7 @@ export class MapController {
           });
 
           this.initializeAndSetSketch();
+          this.initializePrintWidget();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -350,6 +354,21 @@ export class MapController {
   createPolygonSketch = () => {
     this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
+  };
+
+  initializePrintWidget = (): void => {
+    this._printWidget = new Print({
+      view: this._mapview,
+      printServiceUrl:
+        'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task'
+    });
+  };
+
+  setPrintWidget = (printContentRef: HTMLElement): void => {
+    console.log('this._printWidget', this._printWidget);
+    if (this._printWidget) {
+      this._printWidget.container = printContentRef;
+    }
   };
 }
 

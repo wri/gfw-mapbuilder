@@ -3,31 +3,38 @@
 export const printContent = {
   en: {
     buttonLabel: 'Choose a print output',
-    report: 'Print Report'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   ka: {
     buttonLabel: 'აარჩიეთ ბეჭდვის ფორმატი',
-    report: 'ანგარიშის ბეჭდვა'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   fr: {
     buttonLabel: "Choisissez un format d'impression",
-    report: 'Imprimer le Rapport'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   es: {
     buttonLabel: 'Elegir diseño de página',
-    report: 'Imprimir Informe'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   pt: {
     buttonLabel: 'Escolher saída de impressão.',
-    report: 'Imprimir Relatório'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   id: {
     buttonLabel: 'Choose a print output',
-    report: 'Print Report'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   zh: {
     buttonLabel: '选择打印模板',
-    report: '打印报告'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   }
 };
 
