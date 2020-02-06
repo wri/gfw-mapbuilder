@@ -80,8 +80,8 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
-  const isTabVisible = useSelector(
-    (store: RootState) => store.appState.leftPanel.tabVisible
+  const { tabVisible } = useSelector(
+    (store: RootState) => store.appState.leftPanel
   );
 
   const tabsGroupRow = props.tabsToRender.map(tab => (
@@ -97,7 +97,7 @@ const Tabs = (props: TabsProps): React.ReactElement => {
   return (
     <div
       className={`tab-header-container ${
-        isTabVisible ? '' : 'tab-header-hidden'
+        tabVisible ? '' : 'tab-header-hidden'
       }`}
     >
       {tabsGroupRow}

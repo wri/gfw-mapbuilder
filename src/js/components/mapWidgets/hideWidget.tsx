@@ -16,15 +16,9 @@ const HideWidget: FunctionComponent = () => {
   );
 
   const toggleContent = (): void => {
-    if (tabViewVisible) {
-      dispatch(toggleTabviewPanel(false));
-      dispatch(toggleTab(false));
-      mapController.toggleLegend(false);
-    } else {
-      dispatch(toggleTabviewPanel(true));
-      dispatch(toggleTab(true));
-      mapController.toggleLegend(true);
-    }
+    dispatch(toggleTabviewPanel(!tabViewVisible));
+    dispatch(toggleTab(!tabViewVisible));
+    mapController.toggleLegend(!tabViewVisible);
   };
 
   return (
