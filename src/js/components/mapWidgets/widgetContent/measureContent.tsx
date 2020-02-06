@@ -213,31 +213,33 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const returnDropdownOptions = (): JSX.Element[] => {
-    let test = [];
+    let selectedDropdown = [];
 
     if (areaButtonActive) {
-      test = areaUnitsOfLength;
+      selectedDropdown = areaUnitsOfLength;
     }
 
     if (distanceButtonActive) {
-      test = distanceUnitsOfLength;
+      selectedDropdown = distanceUnitsOfLength;
     }
 
     if (coordinatesButtonActive) {
-      test = latitudeLongitudeUnits;
+      selectedDropdown = latitudeLongitudeUnits;
     }
 
-    return test.map((lengthUnit: SpecificDropDownOption, index: number) => {
-      const { text, esriUnit } = lengthUnit;
+    return selectedDropdown.map(
+      (lengthUnit: SpecificDropDownOption, index: number) => {
+        const { text, esriUnit } = lengthUnit;
 
-      return (
-        <>
-          <option value={esriUnit} key={index}>
-            {text}
-          </option>
-        </>
-      );
-    });
+        return (
+          <>
+            <option value={esriUnit} key={index}>
+              {text}
+            </option>
+          </>
+        );
+      }
+    );
   };
 
   const returnMeasurementResults = (): any => {
