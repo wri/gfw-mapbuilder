@@ -4,7 +4,9 @@ import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
-import Print from 'esri/widgets/Print';
+import PrintTask from 'esri/tasks/PrintTask';
+import PrintTemplate from 'esri/tasks/support/PrintTemplate';
+import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { RefObject, MutableRefObject } from 'react';
 import store from '../store/index';
 import {
@@ -47,14 +49,14 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
-  _printWidget: Print | undefined;
+  _printTask: PrintTask | undefined;
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
-    this._printWidget = undefined;
+    this._printTask = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -148,7 +150,7 @@ export class MapController {
           });
 
           this.initializeAndSetSketch();
-          this.initializePrintWidget();
+          this.initializePrintTask();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -356,19 +358,39 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  initializePrintWidget = (): void => {
-    this._printWidget = new Print({
-      view: this._mapview,
-      printServiceUrl:
-        'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task'
+  initializePrintTask = (): void => {
+    const printServiceURL = store.getState().appSettings.printServiceUrl;
+
+    this._printTask = new PrintTask({
+      url: printServiceURL
     });
   };
 
-  setPrintWidget = (printContentRef: HTMLElement): void => {
-    console.log('this._printWidget', this._printWidget);
-    if (this._printWidget) {
-      this._printWidget.container = printContentRef;
-    }
+  generateMapPDF = async (layoutType: string): Promise<any> => {
+    const template = new PrintTemplate({
+      format: 'pdf',
+      layout: layoutType as any,
+      // * NOTE - must set 'layout' as type of 'any' in order to assign
+      // * custom layout types from GFW print service URL
+      layoutOptions: {
+        scalebarUnit: 'Kilometers',
+        customTextElements: [
+          { title: 'GFW Mapbuilder' },
+          { subtitle: 'Make maps that matter' }
+        ]
+      }
+    });
+
+    const params = new PrintParameters({
+      view: this._mapview,
+      template
+    });
+
+    const mapPDF = await this._printTask
+      ?.execute(params)
+      .catch(e => console.log('error in generateMapPDF()', e));
+
+    return mapPDF;
   };
 }
 

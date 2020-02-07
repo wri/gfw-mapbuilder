@@ -7,6 +7,7 @@ export interface AppSettings {
   language?: string;
   includeDocumentsTab?: boolean;
   layerPanel: LayerGroup;
+  printServiceUrl?: string;
 }
 
 type LayerGroupKey =

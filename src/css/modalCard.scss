@@ -43,6 +43,16 @@
     height: 7.5rem;
     width: 17rem;
   }
+
+  &.print-widget {
+    .directions {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
   .orange-button {
     display: flex;
     align-items: center;
