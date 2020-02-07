@@ -2,7 +2,6 @@ import * as React from 'react';
 import InfoTabView from './InfoTabView';
 import LayerTabView from './layersPanel/LayersTabView';
 import DataTabView from './DataTabView';
-import MeasurementTabView from './MeasurementTabView';
 import AnalysisTabView from './AnalysisTabView';
 import DocumentsTabView from './DocumentsTabView';
 
@@ -29,10 +28,6 @@ class TabViewContainer extends React.Component<TabViewContainerProps, {}> {
             return <LayerTabView label={tabView.label} key={tabView.label} />;
           case 'data':
             return <DataTabView label={tabView.label} key={tabView.label} />;
-          case 'measurement':
-            return (
-              <MeasurementTabView label={tabView.label} key={tabView.label} />
-            );
           case 'analysis':
             return (
               <AnalysisTabView label={tabView.label} key={tabView.label} />

@@ -11,7 +11,6 @@ import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
 import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
 import { ReactComponent as DocumentsTabIcon } from 'images/documentsTabIcon.svg';
 import { ReactComponent as InfoTabIcon } from 'images/infoTabIcon.svg';
-import { ReactComponent as MeasurementTabIcon } from 'images/measurementTabIcon.svg';
 
 export interface TabProps {
   key: string;
@@ -118,12 +117,6 @@ const LeftPanel = (): React.ReactElement => {
       label: 'data',
       icon: DataTabIcon,
       tooltipText: 'Data',
-      render: true
-    },
-    {
-      label: 'measurement',
-      icon: MeasurementTabIcon,
-      tooltipText: 'Measurement',
       render: true
     },
     {
