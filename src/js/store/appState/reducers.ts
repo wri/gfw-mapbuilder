@@ -5,12 +5,14 @@ import {
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   RENDER_MODAL,
-  SET_OPEN_LAYER_GROUP
+  SET_OPEN_LAYER_GROUP,
+  SET_HIDE_WIDGET
 } from './types';
 
 const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
+  hideWidgetActive: false,
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',
@@ -30,6 +32,11 @@ export function appStateReducer(
           ...state.leftPanel,
           tabViewVisible: action.payload
         }
+      };
+    case SET_HIDE_WIDGET:
+      return {
+        ...state,
+        hideWidgetActive: action.payload
       };
     case RENDER_MODAL:
       return { ...state, renderModal: action.payload };

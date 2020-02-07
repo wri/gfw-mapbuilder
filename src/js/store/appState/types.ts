@@ -8,6 +8,7 @@ export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
   selectedLanguage: string;
+  hideWidgetActive: boolean;
 }
 
 //Action names available
@@ -16,6 +17,7 @@ export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
+export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
 
 interface SetOpenLayerGroup {
   type: typeof SET_OPEN_LAYER_GROUP;
@@ -25,6 +27,11 @@ interface SetOpenLayerGroup {
 interface ToggleTabviewPanelAction {
   type: typeof TOGGLE_TABVIEW_PANEL;
   payload: LeftPanel['tabViewVisible'];
+}
+
+interface SetHideWidget {
+  type: typeof SET_HIDE_WIDGET;
+  payload: AppState['hideWidgetActive'];
 }
 
 interface RenderModalAction {
@@ -47,4 +54,5 @@ export type AppStateTypes =
   | RenderModalAction
   | SelectActiveTab
   | SetLanguageAction
-  | SetOpenLayerGroup;
+  | SetOpenLayerGroup
+  | SetHideWidget;

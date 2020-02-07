@@ -79,6 +79,10 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
+  const { hideWidgetActive } = useSelector(
+    (store: RootState) => store.appState
+  );
+
   const tabsGroupRow = props.tabsToRender.map(tab => (
     <Tab
       key={tab.label}
@@ -88,7 +92,12 @@ const Tabs = (props: TabsProps): React.ReactElement => {
       activeTab={savedActiveTab}
     />
   ));
-  return <div className="tab-header-container">{tabsGroupRow}</div>;
+
+  return (
+    <div className={`tab-header-container ${hideWidgetActive ? 'hide' : ''}`}>
+      {tabsGroupRow}
+    </div>
+  );
 };
 
 const LeftPanel = (): React.ReactElement => {

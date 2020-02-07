@@ -4,6 +4,7 @@ import {
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   SET_OPEN_LAYER_GROUP,
+  SET_HIDE_WIDGET,
   AppState,
   LeftPanel
 } from './types';
@@ -11,6 +12,13 @@ import {
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   return {
     type: TOGGLE_TABVIEW_PANEL as typeof TOGGLE_TABVIEW_PANEL,
+    payload: payload
+  };
+}
+
+export function setHideWidget(payload: AppState['hideWidgetActive']) {
+  return {
+    type: SET_HIDE_WIDGET as typeof SET_HIDE_WIDGET,
     payload: payload
   };
 }
