@@ -7,7 +7,7 @@ import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
-import { RefObject, MutableRefObject } from 'react';
+import { RefObject } from 'react';
 import store from '../store/index';
 import {
   allAvailableLayers,
