@@ -187,8 +187,8 @@ export const penContent = {
 
 export const searchContent = {
   en: {
-    latitude: 'Latitude',
-    longitude: 'Longitude',
+    latitude: 'Lat',
+    longitude: 'Lon',
     title: 'Search for feature:',
     buttonTitle: 'Search'
   },
@@ -199,8 +199,8 @@ export const searchContent = {
     buttonTitle: 'გადიდება'
   },
   fr: {
-    latitude: 'Latitude',
-    longitude: 'Longitude',
+    latitude: 'Lat',
+    longitude: 'Lon',
     title: 'Recherche de polygones:',
     buttonTitle: 'Chercher'
   },
@@ -211,8 +211,8 @@ export const searchContent = {
     buttonTitle: 'Buscar'
   },
   pt: {
-    latitude: 'Latitude',
-    longitude: 'Longitude',
+    latitude: 'Lat',
+    longitude: 'Lon',
     title: 'Buscar recurso:',
     buttonTitle: 'Pesquisa:'
   },

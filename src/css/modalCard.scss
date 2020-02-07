@@ -43,6 +43,32 @@
     height: 7.5rem;
     width: 17rem;
   }
+
+  &.search-widget {
+    .directions {
+      display: flex;
+      flex-direction: column;
+
+      .form-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: flex-end;
+
+        .input-coordinates {
+          border: none;
+          border-bottom: 1px solid $black;
+          max-width: 5.5rem;
+        }
+      }
+
+      .form-wrapper > .custom-dimensions {
+        width: 5rem;
+        text-transform: capitalize;
+      }
+    }
+  }
+
   .orange-button {
     display: flex;
     align-items: center;
