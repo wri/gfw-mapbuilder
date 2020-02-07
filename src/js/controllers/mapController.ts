@@ -10,6 +10,7 @@ import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import { RefObject } from 'react';
 import store from '../store/index';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
+import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 
 import {
   allAvailableLayers,
@@ -19,7 +20,7 @@ import {
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
-const allowedLayers = ['feature', 'dynamic', 'loss']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
+const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
 interface ZoomParams {
   zoomIn: boolean;
@@ -314,7 +315,15 @@ export class MapController {
           urlTemplate: layerConfig.url,
           view: this._mapview
         });
-
+        break;
+      case 'gain':
+        esriLayer = new TreeCoverGainLayer({
+          id: layerConfig.id,
+          title: layerConfig.title,
+          visible: layerConfig.visible,
+          urlTemplate: layerConfig.url,
+          view: this._mapview
+        });
         break;
       default:
         // throw new Error('No matching layer type!')
