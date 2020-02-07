@@ -72,6 +72,7 @@ export class MapController {
     });
 
     this._mapview.ui.add(legend, 'bottom-right');
+    this._mapview.ui.remove('zoom');
 
     this._mapview
       .when(
