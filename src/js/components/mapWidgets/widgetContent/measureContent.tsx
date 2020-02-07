@@ -1,7 +1,11 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setMeasureButton, setMeasureResults } from 'js/store/appState/actions';
+import {
+  setMeasureButton,
+  setMeasureResults,
+  setActiveMeasureButton
+} from 'js/store/appState/actions';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -23,6 +27,7 @@ interface SpecificDropDownOption {
 
 const MeasureContent: FunctionComponent = () => {
   const {
+    activeButton,
     areaButtonActive,
     distanceButtonActive,
     coordinatesButtonActive
@@ -49,20 +54,20 @@ const MeasureContent: FunctionComponent = () => {
   const dispatch = useDispatch();
 
   const resetWidget = (): void => {
-    dispatch(
-      setMeasureButton({
-        areaButtonActive: false,
-        distanceButtonActive: false,
-        coordinatesButtonActive: false
-      })
-    );
-    setSelectedDropdownOption('');
-    mapController.setSpecificMeasureWidget({ setNewMeasure: false });
-    mapController.clearCoordinates();
+    // dispatch(
+    //   setMeasureButton({
+    //     areaButtonActive: false,
+    //     distanceButtonActive: false,
+    //     coordinatesButtonActive: false
+    //   })
+    // );
+    // setSelectedDropdownOption('');
+    // mapController.setSpecificMeasureWidget({ setNewMeasure: false });
+    // mapController.clearCoordinates();
   };
 
   const setMeasurementUnit = (selectedUnit: string): void => {
-    // setSelectedDropdownOption(selectedUnit); // TODO - comment in, once the onBlur rule has been disabled
+    setSelectedDropdownOption(selectedUnit);
     // * NOTE - if true, clears measurement
     // * and enables selected measurement, while
     // * passing in the selected measurement unit
@@ -85,7 +90,7 @@ const MeasureContent: FunctionComponent = () => {
       );
 
       mapController.setSpecificMeasureWidget({
-        measureByDistance: false,
+        // measureByDistance: false,
         setNewMeasure: false
       });
       mapController.setSpecificMeasureWidget({
@@ -118,6 +123,7 @@ const MeasureContent: FunctionComponent = () => {
     }
 
     if (coordinatesButtonActive) {
+      console.log('coordinateMouseClickResults', coordinateMouseClickResults);
       const convertedCoordinates = convertCoordinates(
         selectedUnit,
         coordinateMouseClickResults
@@ -171,75 +177,78 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setAreaOption = (): void => {
-    if (areaButtonActive) {
-      resetWidget();
-    } else {
-      setActiveOption({
-        // ? should we refactor to dynamically set other 2 properties to false
-        areaButtonActive: true,
-        distanceButtonActive: false,
-        coordinatesButtonActive: false
-      });
-      setSelectedDropdownOption(areaUnitsOfLength[0].text);
-    }
+    // if (areaButtonActive) {
+    //   // check activeMeasureOption.length < 1
+    //   // check what's active and what is set to
+    //   resetWidget(); //setActiveMeasureOption('')
+    // } else {
+    //   // dispatch setActiveMeasureOption('areaWidget')
+    //   setActiveOption({
+    //     // ? should we refactor to dynamically set other 2 properties to false
+    //     areaButtonActive: true,
+    //     distanceButtonActive: false,
+    //     coordinatesButtonActive: false
+    //   });
+    //   setSelectedDropdownOption(areaUnitsOfLength[0].text);
+    // }
   };
 
   const setDistanceOption = (): void => {
-    if (distanceButtonActive) {
-      resetWidget();
-    } else {
-      setActiveOption({
-        // ? should we refactor to dynamically set other 2 properties to false
-        areaButtonActive: false,
-        distanceButtonActive: true,
-        coordinatesButtonActive: false
-      });
-      setSelectedDropdownOption(distanceUnitsOfLength[0]);
-    }
+    // if (distanceButtonActive) {
+    //   resetWidget();
+    // } else {
+    //   setActiveOption({
+    //     // ? should we refactor to dynamically set other 2 properties to false
+    //     areaButtonActive: false,
+    //     distanceButtonActive: true,
+    //     coordinatesButtonActive: false
+    //   });
+    //   setSelectedDropdownOption(distanceUnitsOfLength[0]);
+    // }
   };
 
   const setCoordinateOption = (): void => {
-    if (coordinatesButtonActive) {
-      resetWidget();
-    } else {
-      setActiveOption({
-        // ? should we refactor to dynamically set other 2 properties to false
-        areaButtonActive: false,
-        distanceButtonActive: false,
-        coordinatesButtonActive: true
-      });
-      setSelectedDropdownOption(latitudeLongitudeUnits[0]);
-    }
+    // if (coordinatesButtonActive) {
+    //   resetWidget();
+    // } else {
+    //   setActiveOption({
+    //     // ? should we refactor to dynamically set other 2 properties to false
+    //     areaButtonActive: false,
+    //     distanceButtonActive: false,
+    //     coordinatesButtonActive: true
+    //   });
+    //   setSelectedDropdownOption(latitudeLongitudeUnits[0]);
+    // }
   };
 
   const returnDropdownOptions = (): JSX.Element[] => {
-    let selectedDropdown = [];
+    // const selectedDropdown = [];
 
-    if (areaButtonActive) {
-      selectedDropdown = areaUnitsOfLength;
-    }
+    // TODO - case statment, checking value of property
 
-    if (distanceButtonActive) {
-      selectedDropdown = distanceUnitsOfLength;
-    }
+    // if (areaButtonActive) {
+    //   selectedDropdown = areaUnitsOfLength;
+    // }
 
-    if (coordinatesButtonActive) {
-      selectedDropdown = latitudeLongitudeUnits;
-    }
+    // if (distanceButtonActive) {
+    //   selectedDropdown = distanceUnitsOfLength;
+    // }
 
-    return selectedDropdown.map(
-      (lengthUnit: SpecificDropDownOption, index: number) => {
-        const { text, esriUnit } = lengthUnit;
+    // if (coordinatesButtonActive) {
+    //   selectedDropdown = latitudeLongitudeUnits;
+    // }
 
-        return (
-          <>
-            <option value={esriUnit} key={index}>
-              {text}
-            </option>
-          </>
-        );
-      }
-    );
+    // TODO
+
+    return [].map((lengthUnit: SpecificDropDownOption, index: number) => {
+      const { text, esriUnit } = lengthUnit;
+
+      return (
+        <option value={esriUnit} key={index}>
+          {text}
+        </option>
+      );
+    });
   };
 
   const returnMeasurementResults = (): any => {
@@ -247,50 +256,98 @@ const MeasureContent: FunctionComponent = () => {
     // * 'select option to see results'
     // * when everything is toggled OFF
     if (areaButtonActive) {
-      return (
-        <>
-          <p>
-            <strong>Area: </strong> {areaResults?.area}
-          </p>
-          <p>
-            <strong>Perimeter: </strong>
-            {areaResults?.perimeter}
-          </p>
-        </>
-      );
+      // TODO check if redux property is === 'areaWidget'
+      // return (
+      //   <>
+      //     <p>
+      //       <strong>Area: </strong> {areaResults?.area}
+      //     </p>
+      //     <p>
+      //       <strong>Perimeter: </strong>
+      //       {areaResults?.perimeter}
+      //     </p>
+      //   </>
+      // );
     }
 
     if (distanceButtonActive) {
-      return (
-        <>
-          <p>
-            <strong>Distance Results: </strong>
-            {distanceResults?.length}
-          </p>
-        </>
-      );
+      // TODO check if redux property is === 'distanceWidget'
+      // return (
+      //   <>
+      //     <p>
+      //       <strong>Distance Results: </strong>
+      //       {distanceResults?.length}
+      //     </p>
+      //   </>
+      // );
     }
 
     if (coordinatesButtonActive) {
-      return (
-        <>
-          <p>
-            <strong>Coordinate results</strong>
-          </p>
-          <p>
-            <strong>Mouse click</strong>
-          </p>
-          <p>Latitude: {coordinateMouseClickResults?.latitude}</p>
-          <p>Longitude: {coordinateMouseClickResults?.longitude}</p>
-          <br />
+      // TODO check if redux property is === 'coordinatesWidget'
+      // return (
+      //   <>
+      //     <p>
+      //       <strong>Coordinate results</strong>
+      //     </p>
+      //     <p>
+      //       <strong>Mouse click</strong>
+      //     </p>
+      //     <p>Latitude: {coordinateMouseClickResults?.latitude}</p>
+      //     <p>Longitude: {coordinateMouseClickResults?.longitude}</p>
+      //     <br />
+      //     <p>
+      //       <strong>Pointer move</strong>
+      //     </p>
+      //     <p>Latitude: {coordinatePointerMoveResults?.latitude}</p>
+      //     <p>Longitude: {coordinatePointerMoveResults?.longitude}</p>
+      //   </>
+      // );
+    }
+  };
 
-          <p>
-            <strong>Pointer move</strong>
-          </p>
-          <p>Latitude: {coordinatePointerMoveResults?.latitude}</p>
-          <p>Longitude: {coordinatePointerMoveResults?.longitude}</p>
-        </>
-      );
+  const returnDropdown = (optionType?: string): JSX.Element => {
+    let selectedDropdown = [];
+    // TODO [ ] - check value of the Redux property. Conditionally set value of dropdown/selected
+
+    switch (optionType) {
+      case 'area':
+        selectedDropdown = areaUnitsOfLength;
+        break;
+      case 'distance':
+        selectedDropdown = distanceUnitsOfLength;
+        break;
+      case 'coordinates':
+        selectedDropdown = latitudeLongitudeUnits;
+        break;
+      default:
+        break;
+    }
+
+    return selectedDropdown.map(
+      (lengthUnit: SpecificDropDownOption, index: number) => {
+        const { text, esriUnit } = lengthUnit;
+
+        return (
+          <option value={esriUnit} key={index}>
+            {text}
+          </option>
+        );
+      }
+    );
+  };
+
+  const setOption = (optionType: string): void => {
+    // TODO [ ] - check Redux property to see if it's equal to optionType
+    // * if === ? dispatch ''
+    // * else dispatch optionType && setSelectedDropdownOption
+    // * returnDropdown(optionType)
+
+    if (activeButton === optionType) {
+      dispatch(setActiveMeasureButton(''));
+      // TODO - fire mapController functions fired in in setActiveOption()
+    } else {
+      dispatch(setActiveMeasureButton(optionType));
+      returnDropdown(optionType);
     }
   };
 
@@ -298,36 +355,38 @@ const MeasureContent: FunctionComponent = () => {
     <div className="measure-options-container">
       <div className="buttons-select-wrapper">
         <button
-          onClick={(): void => setAreaOption()}
+          onClick={(): void => setOption('distance')}
+          // onClick={(): void => setAreaOption()} // setOption('distance')
           className={`esri-icon-measure-area ${
             areaButtonActive ? 'selected' : ''
           }`}
         />
         <button
-          onClick={(): void => setDistanceOption()}
+          onClick={(): void => setOption('area')}
+          // onClick={(): void => setDistanceOption()} // setOption('distance')
           className={`esri-icon-measure ${
             distanceButtonActive ? 'selected' : ''
           }`}
         />
-        <button
-          onClick={(): void => setCoordinateOption()}
+        {/* <button
+          onClick={(): void => setCoordinateOption()} // setOption('coordinates')
           className={`esri-icon-maps ${
             coordinatesButtonActive ? 'selected' : ''
           }`}
-        />
+        /> */}
         <span>|</span>
         <select
           // * NOTE - Luke gave us the green light to disable the onBlur rule
           // * and maintain state strictly with one event handler (onChange)
           value={selectedDropdownOption}
-          onBlur={(e): void => setMeasurementUnit(e.target.value)}
-          onChange={(e): void => setSelectedDropdownOption(e.target.value)}
-          disabled={returnDropdownOptions().length > 0 ? false : true}
+          onChange={(e): void => setMeasurementUnit(e.target.value)}
+          onBlur={(): void => console.log('onBlur!')}
+          // disabled={returnDropdown()?.length > 0 ? false : true}
         >
-          {returnDropdownOptions().length === 0 && (
+          {/* {returnDropdown()?.length === 0 && (
             <option defaultValue="Unit">Unit</option>
-          )}
-          {returnDropdownOptions()}
+          )} */}
+          {returnDropdown()}
         </select>
       </div>
       <p>Measurement Result</p>

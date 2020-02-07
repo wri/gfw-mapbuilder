@@ -275,6 +275,25 @@ export class MapController {
     measureByDistance: boolean
   ): void {
     selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
+      // if (measureByDistance) {
+      //   const convertedLength = convertMetersToSpecificUnit(
+      //     measurement?.length,
+      //     selectedWidget.unit
+      //   );
+      //   distanceResults = { length: convertedLength };
+      // } else {
+      //   const convertedArea = convertSquareMetersToSpecificUnit(
+      //     measurement?.area,
+      //     selectedWidget.unit
+      //   );
+
+      //   const convertedPerimeter = convertSquareMetersToSpecificUnit(
+      //     measurement?.perimeter,
+      //     selectedWidget.unit
+      //   );
+      //   areaResults = { area: convertedArea, perimeter: convertedPerimeter };
+      // }
+
       const convertedLength = convertMetersToSpecificUnit(
         measurement?.length,
         selectedWidget.unit
@@ -312,7 +331,7 @@ export class MapController {
 
   setSpecificMeasureWidget({
     measureByDistance = false,
-    setNewMeasure = false,
+    setNewMeasure = false, // TODO - delete setNewMeasure
     unitOfLength = ''
   }: {
     measureByDistance?: boolean;
@@ -323,18 +342,17 @@ export class MapController {
       ? this._measureByDistance
       : this._measureByArea;
 
-    if (setNewMeasure) {
-      const newUnit = unitOfLength.length ? unitOfLength : selectedWidget?.unit;
+    // TODO - fire clearMeasurement() at the top of the function
+    this._measureByDistance.viewModel.clearMeasurement();
+    this._measureByArea?.viewModel.clearMeasurement();
 
-      selectedWidget.unit = newUnit;
-      // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
+    selectedWidget.unit = unitOfLength.length
+      ? unitOfLength
+      : selectedWidget?.unit;
+    // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
 
-      selectedWidget?.viewModel.newMeasurement();
-      this.getAndDispatchMeasureResults(selectedWidget, measureByDistance);
-    } else {
-      this._measureByDistance.viewModel.clearMeasurement();
-      this._measureByArea?.viewModel.clearMeasurement();
-    }
+    selectedWidget?.viewModel.newMeasurement();
+    this.getAndDispatchMeasureResults(selectedWidget, measureByDistance);
   }
 
   setOnClickCoordinates(unitIsDMS: boolean): void {

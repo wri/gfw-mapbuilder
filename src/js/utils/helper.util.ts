@@ -1,6 +1,16 @@
-import Point from 'esri/geometry/Point';
+interface DecimalResults {
+  latitude: number;
+  longitude: number;
+}
 
-export function convertDecimalToDMS(coordinateResults: any): object {
+interface DMSResults {
+  latitude: string;
+  longitude: string;
+}
+
+export function convertDecimalToDMS(
+  coordinateResults: DecimalResults
+): DMSResults {
   const { latitude, longitude } = coordinateResults;
 
   const latitudeInteger = Math.floor(latitude);
@@ -20,14 +30,21 @@ export function convertDecimalToDMS(coordinateResults: any): object {
   };
 }
 
-interface CoordinateResults {
-  latitude: string;
-  longitude: string;
-}
-
-// TODO - pair program on 'any' type
+// export function convertDMSToDecimal(
+//   coordinateResults: DMSResults
+// ): DecimalResults {
 export function convertDMSToDecimal(coordinateResults: any): any {
   const { latitude, longitude } = coordinateResults;
+
+  console.log('convertDMSToDecimal', coordinateResults);
+
+  const matchedCoordinates = latitude.match(/\d+|\D+/g);
+
+  if (matchedCoordinates) {
+    const [latDegree, latMinute, latSecond] = matchedCoordinates
+      .filter((coordinate: string) => Number(coordinate) >= 0)
+      .map((coordinate: string) => Number(coordinate));
+  }
 
   const [latDegree, latMinute, latSecond] = latitude // ? Is there a faster/better way of doing this
     .match(/\d+|\D+/g)
@@ -41,6 +58,8 @@ export function convertDMSToDecimal(coordinateResults: any): any {
 
   const latitudeInDecimal = latDegree + latMinute / 60 + latSecond / 3600;
   const longitudeInDecimal = longDegree + longMinute / 60 + longSecond / 3600;
+
+  // TODO
   return {
     latitude: latitudeInDecimal,
     longitude: longitudeInDecimal
@@ -50,7 +69,8 @@ export function convertDMSToDecimal(coordinateResults: any): any {
 // TODO - pair program on 'any' type
 export function convertCoordinates(
   coordinateType: string,
-  coordinateResults: any
+  // coordinateResults: DMSResults | DecimalResults
+  coordinateResults: any | any
 ): object {
   const { latitude, longitude } = coordinateResults;
   let convertedCoordinates = coordinateResults;
@@ -60,14 +80,14 @@ export function convertCoordinates(
   const isNumber =
     typeof latitude && typeof longitude === 'number' ? true : false;
 
+  console.log('convertCoordinates', coordinateResults);
+
   // ? is there a better way to check isString or isNumber?
   // ! HEADS UP - is there a better way to check isString or isNumber?
 
   if (coordinateType === 'dms' && isNumber) {
     convertedCoordinates = convertDecimalToDMS(coordinateResults);
-  }
-
-  if (coordinateType === 'degree' && isString) {
+  } else if (coordinateType === 'degree' && isString) {
     convertedCoordinates = convertDMSToDecimal(coordinateResults);
   }
 

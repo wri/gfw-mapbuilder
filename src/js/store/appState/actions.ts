@@ -7,7 +7,8 @@ import {
   AppState,
   LeftPanel,
   SET_MEASURE_BUTTON,
-  SET_MEASURE_RESULTS
+  SET_MEASURE_RESULTS,
+  SET_ACTIVE_MEASURE_BUTTON
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
@@ -59,6 +60,15 @@ export function setMeasureResults(
 ) {
   return {
     type: SET_MEASURE_RESULTS as typeof SET_MEASURE_RESULTS,
+    payload: payload
+  };
+}
+
+export function setActiveMeasureButton(
+  payload: AppState['measureContent']['toggleButton']['activeButton']
+) {
+  return {
+    type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,
     payload: payload
   };
 }
