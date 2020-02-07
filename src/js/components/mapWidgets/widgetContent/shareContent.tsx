@@ -19,6 +19,8 @@ const ShareContent: FunctionComponent = () => {
   const copyURLToClipboard = (): void => {
     urlRef.current.select();
     document.execCommand('copy');
+    // ? do we need a bitly account (like in master branch) to shortern URLs ?
+    // TODO which accounts for long mapbuilder URLs
   };
 
   const shareTwitter = (): void => {
@@ -30,13 +32,15 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const shareFacebook = (): void => {
-    const appID = 481743892710575;
+    const appID = 10000000000;
+    // TODO the appID needs to be generated/registered
+    // TODO through FB's developer site
 
     window.open(
       `https://www.facebook.com/dialog/feed?
       app_id=${appID}
       &link=${window.location.href}
-      &redirect_uri=http://localhost:8080/`,
+      &redirect_uri=${window.location.href}`,
       'Facebook',
       popupDimensions
     );
