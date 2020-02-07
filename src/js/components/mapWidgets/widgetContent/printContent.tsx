@@ -17,21 +17,10 @@ const PrintContent: FunctionComponent = () => {
 
   const printMap = async (printType: string): Promise<void> => {
     setURL('');
+    // ? Should we review the UI/UX for this widget?
+    // ? local component state - isLoading
     const { url } = await mapController.generateMapPDF(printType);
     setURL(url);
-  };
-
-  const returnPrintContent = (): JSX.Element | void => {
-    if (url.length) {
-      return (
-        <>
-          <br />
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            Printout
-          </a>
-        </>
-      );
-    }
   };
 
   return (
@@ -47,7 +36,14 @@ const PrintContent: FunctionComponent = () => {
             return <option key={index}>{printOption}</option>;
           })}
         </select>
-        {returnPrintContent()}
+        {url.length > 0 && (
+          <>
+            <br />
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              Printout
+            </a>
+          </>
+        )}
       </div>
     </div>
   );

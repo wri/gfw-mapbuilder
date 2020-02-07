@@ -150,7 +150,6 @@ export class MapController {
           });
 
           this.initializeAndSetSketch();
-          this.initializePrintTask();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -358,15 +357,15 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  initializePrintTask = (): void => {
+  generateMapPDF = async (layoutType: string): Promise<any> => {
     const printServiceURL = store.getState().appSettings.printServiceUrl;
 
-    this._printTask = new PrintTask({
-      url: printServiceURL
-    });
-  };
+    if (!this._printTask) {
+      this._printTask = new PrintTask({
+        url: printServiceURL
+      });
+    }
 
-  generateMapPDF = async (layoutType: string): Promise<any> => {
     const template = new PrintTemplate({
       format: 'pdf',
       layout: layoutType as any,
