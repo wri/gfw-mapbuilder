@@ -58,28 +58,40 @@ export const TreeCoverLossLayer: any = BaseTileLayer.createSubclass({
     return esriRequest(url, {
       responseType: 'image',
       allowImageDataAccess: true
-    }).then((response: any) => {
-      const image = response.data;
-      const width = this.tileInfo.size[0];
-      const height = this.tileInfo.size[0];
+    }).then(
+      function(response) {
+        // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
+        const promise = new Promise(resolve => {
+          // when esri request resolves successfully
+          // get the image from the response
+          const image = response.data;
+          const width = this.tileInfo.size[0];
+          const height = this.tileInfo.size[0];
 
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.width = width;
-      canvas.height = height;
+          // create a canvas with 2D rendering context
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = width;
+          canvas.height = height;
 
-      const imageObject = new Image();
-      imageObject.crossOrigin = 'Anonymous';
+          // Draw the blended image onto the canvas.
+          context.drawImage(image, 0, 0, width, height);
 
-      imageObject.onload = () => {
-        context?.drawImage(imageObject, 0, 0, width, height);
-        const imageData = context?.getImageData(0, 0, width, height);
-        imageData?.data.set(this.filter(imageData.data));
-        context?.putImageData(imageData, 0, 0);
-      };
-      imageObject.src = image.src;
-      return canvas;
-    });
+          const imageObject = new Image();
+          imageObject.crossOrigin = 'Anonymous';
+
+          imageObject.onload = () => {
+            context?.drawImage(imageObject, 0, 0, width, height);
+            const imageData = context?.getImageData(0, 0, width, height);
+            imageData?.data.set(this.filter(imageData.data));
+            context?.putImageData(imageData, 0, 0);
+            resolve(canvas);
+          };
+          imageObject.src = image.src;
+        });
+        return promise;
+      }.bind(this)
+    );
   },
 
   // Filter Data Method
