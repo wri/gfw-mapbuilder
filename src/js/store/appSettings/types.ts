@@ -4,9 +4,12 @@ export interface AppSettings {
   subtitle?: string;
   logoUrl?: string;
   logoLinkUrl?: string;
-  language?: string;
+  language: string;
   includeDocumentsTab?: boolean;
   layerPanel: LayerGroup;
+  useAlternativeLanguage: boolean;
+  alternativeWebmap: string;
+  alternativeLanguage: string;
   printServiceUrl?: string;
 }
 
