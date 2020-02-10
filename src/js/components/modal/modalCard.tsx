@@ -46,7 +46,7 @@ const ModalCard: FunctionComponent<{}> = () => {
     }
   };
 
-  const setClassName = () => {
+  const setClassName = (): string => {
     switch (modalType) {
       case 'MeasureWidget':
         return 'measure-widget';
@@ -54,6 +54,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'pen-widget';
       case 'PrintWidget':
         return 'print-widget';
+      case 'ShareWidget':
+        return 'share-widget';
       default:
         return '';
     }

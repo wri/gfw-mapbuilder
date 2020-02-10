@@ -11,7 +11,6 @@ import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
 import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
 import { ReactComponent as DocumentsTabIcon } from 'images/documentsTabIcon.svg';
 import { ReactComponent as InfoTabIcon } from 'images/infoTabIcon.svg';
-import { ReactComponent as MeasurementTabIcon } from 'images/measurementTabIcon.svg';
 
 export interface TabProps {
   key: string;
@@ -80,6 +79,10 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
+  const { hideWidgetActive } = useSelector(
+    (store: RootState) => store.appState
+  );
+
   const tabsGroupRow = props.tabsToRender.map(tab => (
     <Tab
       key={tab.label}
@@ -89,7 +92,12 @@ const Tabs = (props: TabsProps): React.ReactElement => {
       activeTab={savedActiveTab}
     />
   ));
-  return <div className="tab-header-container">{tabsGroupRow}</div>;
+
+  return (
+    <div className={`tab-header-container ${hideWidgetActive ? 'hide' : ''}`}>
+      {tabsGroupRow}
+    </div>
+  );
 };
 
 const LeftPanel = (): React.ReactElement => {
@@ -118,12 +126,6 @@ const LeftPanel = (): React.ReactElement => {
       label: 'data',
       icon: DataTabIcon,
       tooltipText: 'Data',
-      render: true
-    },
-    {
-      label: 'measurement',
-      icon: MeasurementTabIcon,
-      tooltipText: 'Measurement',
       render: true
     },
     {

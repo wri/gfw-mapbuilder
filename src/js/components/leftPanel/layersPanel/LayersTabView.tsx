@@ -28,6 +28,9 @@ const LayersTabView = (props: LayersTabViewProps) => {
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
   );
+  const { hideWidgetActive } = useSelector(
+    (store: RootState) => store.appState
+  );
 
   const { layerPanel } = useSelector((store: RootState) => store.appSettings);
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
@@ -74,7 +77,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
   return (
     <>
       {tabViewIsVisible && (
-        <div>
+        <div className={hideWidgetActive ? 'hide' : ''}>
           <AllLayerControls />
           {layerGroupsToRender}
         </div>
