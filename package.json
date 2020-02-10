@@ -46,6 +46,21 @@
       "ts",
       "tsx"
     ],
+    "moduleNameMapper": {
+      "js/layers/TerraILayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/GladLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/CartoLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "js/layers/TreeCoverLossLayer": "<rootDir>/tests/__mocks__/class.js",
+      "js/layers/TreeCoverGainLayer": "<rootDir>/tests/__mocks__/class.js",
+      "js/layers/FormaLayer": "<rootDir>/tests/__mocks__/constructor.js",
+      "^esri/layers/": "<rootDir>/tests/__mocks__/constructor.js",
+      "dojo/_base/declare": "<rootDir>/tests/__mocks__/constructor.js",
+      "esri/Map": "<rootDir>/config/__mocks__/constructor.js",
+      "esri/config": "<rootDir>/config/__mocks__/config.js",
+      "^dojo(.*)$": "<rootDir>/config/__mocks__/object.js",
+      "^esri(.*)$": "<rootDir>/config/__mocks__/object.js",
+      "^dijit(.*)$": "<rootDir>/config/__mocks__/object.js"
+    },
     "moduleDirectories": [
       "node_modules",
       "src",
