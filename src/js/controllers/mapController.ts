@@ -4,6 +4,9 @@ import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
+import PrintTask from 'esri/tasks/PrintTask';
+import PrintTemplate from 'esri/tasks/support/PrintTemplate';
+import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { RefObject } from 'react';
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
@@ -54,6 +57,7 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
+  _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
 
   constructor() {
@@ -61,6 +65,7 @@ export class MapController {
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
+    this._printTask = undefined;
     this._legend = undefined;
   }
 
@@ -397,6 +402,40 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
+  generateMapPDF = async (layoutType: string): Promise<any> => {
+    const printServiceURL = store.getState().appSettings.printServiceUrl;
+
+    if (!this._printTask) {
+      this._printTask = new PrintTask({
+        url: printServiceURL
+      });
+    }
+
+    const template = new PrintTemplate({
+      format: 'pdf',
+      layout: layoutType as any,
+      // * NOTE - must set 'layout' as type of 'any' in order to assign
+      // * custom layout types from GFW print service URL
+      layoutOptions: {
+        scalebarUnit: 'Kilometers',
+        customTextElements: [
+          { title: 'GFW Mapbuilder' },
+          { subtitle: 'Make maps that matter' }
+        ]
+      }
+    });
+
+    const params = new PrintParameters({
+      view: this._mapview,
+      template
+    });
+
+    const mapPDF = await this._printTask
+      ?.execute(params)
+      .catch(e => console.log('error in generateMapPDF()', e));
+
+    return mapPDF;
+  };
   toggleLegend = (): void => {
     if (this._legend && typeof this._legend.container === 'object') {
       if (this._legend.container.classList.contains('hide')) {
