@@ -305,11 +305,10 @@ const MeasureContent: FunctionComponent = () => {
     }
   };
 
-  const returnDropdown = (optionType?: string): JSX.Element => {
+  const returnDropdown = (): Array<[]> | Array<JSX.Element> => {
     let selectedDropdown = [];
-    // TODO [ ] - check value of the Redux property. Conditionally set value of dropdown/selected
 
-    switch (optionType) {
+    switch (activeButton) {
       case 'area':
         selectedDropdown = areaUnitsOfLength;
         break;
@@ -337,17 +336,12 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setOption = (optionType: string): void => {
-    // TODO [ ] - check Redux property to see if it's equal to optionType
-    // * if === ? dispatch ''
-    // * else dispatch optionType && setSelectedDropdownOption
-    // * returnDropdown(optionType)
-
     if (activeButton === optionType) {
       dispatch(setActiveMeasureButton(''));
-      // TODO - fire mapController functions fired in in setActiveOption()
     } else {
       dispatch(setActiveMeasureButton(optionType));
-      returnDropdown(optionType);
+      // TODO - [ ]
+      returnDropdown();
     }
   };
 
@@ -356,36 +350,35 @@ const MeasureContent: FunctionComponent = () => {
       <div className="buttons-select-wrapper">
         <button
           onClick={(): void => setOption('distance')}
-          // onClick={(): void => setAreaOption()} // setOption('distance')
+          // onClick={(): void => setAreaOption()}
           className={`esri-icon-measure-area ${
             areaButtonActive ? 'selected' : ''
           }`}
         />
         <button
           onClick={(): void => setOption('area')}
-          // onClick={(): void => setDistanceOption()} // setOption('distance')
+          // onClick={(): void => setDistanceOption()}
           className={`esri-icon-measure ${
             distanceButtonActive ? 'selected' : ''
           }`}
         />
-        {/* <button
-          onClick={(): void => setCoordinateOption()} // setOption('coordinates')
+        <button
+          onClick={(): void => setOption('coordinates')}
+          // onClick={(): void => setCoordinateOption()}
           className={`esri-icon-maps ${
             coordinatesButtonActive ? 'selected' : ''
           }`}
-        /> */}
+        />
         <span>|</span>
         <select
-          // * NOTE - Luke gave us the green light to disable the onBlur rule
-          // * and maintain state strictly with one event handler (onChange)
           value={selectedDropdownOption}
           onChange={(e): void => setMeasurementUnit(e.target.value)}
-          onBlur={(): void => console.log('onBlur!')}
-          // disabled={returnDropdown()?.length > 0 ? false : true}
+          onBlur={(): void => console.log('Bonjour, onBlur!')}
+          disabled={returnDropdown().length > 0 ? false : true}
         >
-          {/* {returnDropdown()?.length === 0 && (
+          {returnDropdown().length === 0 && (
             <option defaultValue="Unit">Unit</option>
-          )} */}
+          )}
           {returnDropdown()}
         </select>
       </div>

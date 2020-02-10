@@ -7,7 +7,8 @@ import {
   RENDER_MODAL,
   SET_OPEN_LAYER_GROUP,
   SET_MEASURE_BUTTON,
-  SET_MEASURE_RESULTS
+  SET_MEASURE_RESULTS,
+  SET_ACTIVE_MEASURE_BUTTON
 } from './types';
 
 const initialState: AppState = {
@@ -65,6 +66,17 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           openLayerGroup: action.payload
+        }
+      };
+    case SET_ACTIVE_MEASURE_BUTTON:
+      return {
+        ...state,
+        measureContent: {
+          toggleButton: {
+            ...state.measureContent.toggleButton,
+            activeButton: action.payload
+          },
+          results: state.measureContent.results
         }
       };
     case SET_MEASURE_BUTTON:
