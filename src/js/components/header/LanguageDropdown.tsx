@@ -1,7 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useDispatch } from 'react-redux';
-
-import { setLanguage } from 'js/store/appState/actions';
+import { mapController } from 'js/controllers/mapController';
 
 interface DropProps {
   language: string;
@@ -42,13 +40,11 @@ function valueToLang(abbrev: string): string {
 }
 
 const LanguageDropdown = (props: DropProps) => {
-  const dispatch = useDispatch();
-
   return (
     <div className="language-dropdown-container">
       <select
         value={props.selectedLanguage}
-        onChange={e => dispatch(setLanguage(e.target.value))}
+        onChange={e => mapController.changeLanguage(e.target.value)}
       >
         <option value={props.language}>
           {valueToLang(props.selectedLanguage)}
