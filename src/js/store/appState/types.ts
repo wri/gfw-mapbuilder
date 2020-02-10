@@ -23,9 +23,9 @@ interface ClickResults {
 export interface MeasureContent {
   toggleButton: {
     activeButton?: string;
-    areaButtonActive: boolean;
-    distanceButtonActive: boolean;
-    coordinatesButtonActive: boolean;
+    // areaButtonActive: boolean;
+    // distanceButtonActive: boolean;
+    // coordinatesButtonActive: boolean;
   };
   results: {
     areaResults?: SpecificAreaResults;

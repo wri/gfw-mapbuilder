@@ -36,8 +36,6 @@ export function convertDecimalToDMS(
 export function convertDMSToDecimal(coordinateResults: any): any {
   const { latitude, longitude } = coordinateResults;
 
-  console.log('convertDMSToDecimal', coordinateResults);
-
   const matchedCoordinates = latitude.match(/\d+|\D+/g);
 
   if (matchedCoordinates) {
@@ -58,8 +56,6 @@ export function convertDMSToDecimal(coordinateResults: any): any {
 
   const latitudeInDecimal = latDegree + latMinute / 60 + latSecond / 3600;
   const longitudeInDecimal = longDegree + longMinute / 60 + longSecond / 3600;
-
-  // TODO
   return {
     latitude: latitudeInDecimal,
     longitude: longitudeInDecimal

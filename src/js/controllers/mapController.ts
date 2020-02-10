@@ -452,11 +452,6 @@ export class MapController {
     );
   }
 
-  setCoordinates(unitIsDMS = false): void {
-    // this.setOnClickCoordinates(unitIsDMS);
-    // this.setPointerMoveCoordinates(unitIsDMS);
-  }
-
   clearCoordinates(): void {
     this._mouseClickEventListener?.remove();
     this._mouseClickEventListener = undefined;

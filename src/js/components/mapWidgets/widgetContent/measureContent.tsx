@@ -2,7 +2,6 @@ import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-  setMeasureButton,
   setMeasureResults,
   setActiveMeasureButton
 } from 'js/store/appState/actions';
@@ -27,10 +26,10 @@ interface SpecificDropDownOption {
 
 const MeasureContent: FunctionComponent = () => {
   const {
-    activeButton,
-    areaButtonActive,
-    distanceButtonActive,
-    coordinatesButtonActive
+    activeButton
+    // areaButtonActive,
+    // distanceButtonActive,
+    // coordinatesButtonActive
   } = useSelector(
     (state: RootState) => state.appState.measureContent.toggleButton
   );
@@ -70,61 +69,20 @@ const MeasureContent: FunctionComponent = () => {
 
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      // const convertedArea = convertSquareMetersToSpecificUnit(
-      //   areaResults?.area,
-      //   selectedUnit
-      // );
-      // const convertedPerimeter = convertSquareMetersToSpecificUnit(
-      //   areaResults?.perimeter,
-      //   selectedUnit
-      // );
-      // dispatch(
-      //   setMeasureResults({
-      //     areaResults: { area: convertedArea, perimeter: convertedPerimeter }
-      //   })
-      // );
-      // mapController.setSpecificMeasureWidget({
-      //   // measureByDistance: false,
-      //   setNewMeasure: false
-      // });
-      // mapController.setSpecificMeasureWidget({
-      //   measureByDistance: false,
-      //   setNewMeasure: true,
-      //   unitOfLength: selectedUnit
-      // });
+      // TODO - convert area/perimeters via convertSquareMetersToSpecificUnit()
+      // TODO - reset widget
+      // TODO - update results in Redux
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
-      // const convertedLength = convertMetersToSpecificUnit(
-      //   distanceResults?.length,
-      //   selectedUnit
-      // );
-      // dispatch(
-      //   setMeasureResults({
-      //     distanceResults: { length: convertedLength }
-      //   })
-      // );
-      // mapController.setSpecificMeasureWidget({
-      //   setNewMeasure: false
-      // });
-      // mapController.setSpecificMeasureWidget({
-      //   measureByDistance: true,
-      //   setNewMeasure: true,
-      //   unitOfLength: selectedUnit
-      // });
+      // TODO - convert area/perimeters via convertMetersToSpecificUnit()
+      // TODO - reset widget
+      // TODO - update results in Redux
     } else if (activeButton === 'coordinates') {
       setSelectedCoordinatesUnit(selectedUnit);
       mapController.setActiveMeasureWidget(activeButton, selectedUnit);
-      // console.log('coordinateMouseClickResults', coordinateMouseClickResults);
-      // const convertedCoordinates = convertCoordinates(
-      //   selectedUnit,
-      //   coordinateMouseClickResults
-      // );
-      // dispatch(
-      //   setMeasureResults({
-      //     coordinateMouseClickResults: convertedCoordinates
-      //   })
-      // );
-      // mapController.setCoordinates(selectedUnit === 'dms' ? true : false);
+      // TODO - convert area/perimeters via convertCoordinates()
+      // TODO - reset widget
+      // TODO - update results in Redux
     }
   };
 
@@ -144,9 +102,7 @@ const MeasureContent: FunctionComponent = () => {
           </p>
         </>
       );
-    }
-
-    if (activeButton === 'distance') {
+    } else if (activeButton === 'distance') {
       return (
         <>
           <p>
@@ -155,9 +111,7 @@ const MeasureContent: FunctionComponent = () => {
           </p>
         </>
       );
-    }
-
-    if (activeButton === 'coordinates') {
+    } else if (activeButton === 'coordinates') {
       return (
         <>
           <p>
@@ -224,9 +178,6 @@ const MeasureContent: FunctionComponent = () => {
           selectedCoordinatesUnit
         );
         break;
-      case '':
-        // setSelectedDropdownOption('');
-        break;
       default:
         break;
     }
@@ -261,19 +212,19 @@ const MeasureContent: FunctionComponent = () => {
         <button
           onClick={(): void => setOption('area')}
           className={`esri-icon-measure-area ${
-            areaButtonActive ? 'selected' : ''
+            activeButton === 'area' ? 'selected' : ''
           }`}
         />
         <button
           onClick={(): void => setOption('distance')}
           className={`esri-icon-measure ${
-            distanceButtonActive ? 'selected' : ''
+            activeButton === 'distance' ? 'selected' : ''
           }`}
         />
         <button
           onClick={(): void => setOption('coordinates')}
           className={`esri-icon-maps ${
-            coordinatesButtonActive ? 'selected' : ''
+            activeButton === 'coordinates' ? 'selected' : ''
           }`}
         />
         <span>|</span>

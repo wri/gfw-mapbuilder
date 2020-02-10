@@ -6,7 +6,6 @@ import {
   SET_OPEN_LAYER_GROUP,
   AppState,
   LeftPanel,
-  SET_MEASURE_BUTTON,
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON
 } from './types';
@@ -42,15 +41,6 @@ export function setLanguage(payload: AppState['selectedLanguage']) {
 export function setOpenLayerGroup(payload: LeftPanel['openLayerGroup']) {
   return {
     type: SET_OPEN_LAYER_GROUP,
-    payload: payload
-  };
-}
-
-export function setMeasureButton(
-  payload: AppState['measureContent']['toggleButton']
-) {
-  return {
-    type: SET_MEASURE_BUTTON as typeof SET_MEASURE_BUTTON,
     payload: payload
   };
 }
