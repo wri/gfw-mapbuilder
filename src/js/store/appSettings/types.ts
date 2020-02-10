@@ -10,6 +10,7 @@ export interface AppSettings {
   useAlternativeLanguage: boolean;
   alternativeWebmap: string;
   alternativeLanguage: string;
+  printServiceUrl?: string;
 }
 
 type LayerGroupKey =
