@@ -44,22 +44,32 @@ const MeasureContent: FunctionComponent = () => {
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
-  const [selectedDropdownOption, setSelectedDropdownOption] = useState('');
 
   const {
+    defaultOption,
     areaUnitsOfLength,
     distanceUnitsOfLength,
     latitudeLongitudeUnits
   } = measureContent[selectedLanguage];
+
+  const [selectedAreaUnit, setSelectedAreaUnit] = useState(
+    areaUnitsOfLength[0].esriUnit
+  );
+  const [selectedDistanceUnit, setSelectedDistanceUnit] = useState(
+    distanceUnitsOfLength[0].esriUnit
+  );
+  const [selectedCoordinatesUnit, setSelectedCoordinatesUnit] = useState(
+    latitudeLongitudeUnits[0].esriUnit
+  );
   const dispatch = useDispatch();
 
   const setMeasurementUnit = (selectedUnit: string): void => {
-    setSelectedDropdownOption(selectedUnit);
     // * NOTE - if true, clears measurement
     // * and enables selected measurement, while
     // * passing in the selected measurement unit
 
     if (activeButton === 'area') {
+      setSelectedAreaUnit(selectedUnit);
       // const convertedArea = convertSquareMetersToSpecificUnit(
       //   areaResults?.area,
       //   selectedUnit
@@ -82,9 +92,8 @@ const MeasureContent: FunctionComponent = () => {
       //   setNewMeasure: true,
       //   unitOfLength: selectedUnit
       // });
-    }
-
-    if (activeButton === 'distance') {
+    } else if (activeButton === 'distance') {
+      setSelectedDistanceUnit(selectedUnit);
       // const convertedLength = convertMetersToSpecificUnit(
       //   distanceResults?.length,
       //   selectedUnit
@@ -102,9 +111,9 @@ const MeasureContent: FunctionComponent = () => {
       //   setNewMeasure: true,
       //   unitOfLength: selectedUnit
       // });
-    }
-
-    if (activeButton === 'coordinates') {
+    } else if (activeButton === 'coordinates') {
+      setSelectedCoordinatesUnit(selectedUnit);
+      mapController.setActiveMeasureWidget(activeButton, selectedUnit);
       // console.log('coordinateMouseClickResults', coordinateMouseClickResults);
       // const convertedCoordinates = convertCoordinates(
       //   selectedUnit,
@@ -184,6 +193,7 @@ const MeasureContent: FunctionComponent = () => {
         selectedDropdown = latitudeLongitudeUnits;
         break;
       default:
+        selectedDropdown = defaultOption;
         break;
     }
 
@@ -200,39 +210,48 @@ const MeasureContent: FunctionComponent = () => {
     );
   };
 
-  const getDropdownInfo = (optionType: string): string => {
-    let selectedOption = '';
-
-    if (selectedDropdownOption.length > 0) {
-      selectedOption = selectedDropdownOption;
-    } else {
-      switch (optionType) {
-        case 'area':
-          selectedOption = areaUnitsOfLength[0].text;
-          break;
-        case 'distance':
-          selectedOption = distanceUnitsOfLength[0].text;
-          break;
-        case 'coordinates':
-          selectedOption = latitudeLongitudeUnits[0].text;
-          break;
-        default:
-          break;
-      }
+  const setSelectedWidget = (optionType: string): void => {
+    switch (optionType) {
+      case 'area':
+        mapController.setActiveMeasureWidget(optionType, selectedAreaUnit);
+        break;
+      case 'distance':
+        mapController.setActiveMeasureWidget(optionType, selectedDistanceUnit);
+        break;
+      case 'coordinates':
+        mapController.setActiveMeasureWidget(
+          optionType,
+          selectedCoordinatesUnit
+        );
+        break;
+      case '':
+        // setSelectedDropdownOption('');
+        break;
+      default:
+        break;
     }
-
-    return selectedOption;
   };
 
   const setOption = (optionType: string): void => {
+    mapController.clearAllWidgets();
     if (activeButton === optionType) {
       dispatch(setActiveMeasureButton(''));
     } else {
       dispatch(setActiveMeasureButton(optionType));
-      mapController.clearAllWidgets();
+      setSelectedWidget(optionType);
+    }
+  };
 
-      const dropdownOption = getDropdownInfo(optionType);
-      mapController.setActiveMeasureWidget(optionType, dropdownOption);
+  const returnValue = (): string => {
+    switch (activeButton) {
+      case 'area':
+        return selectedAreaUnit;
+      case 'distance':
+        return selectedDistanceUnit;
+      case 'coordinates':
+        return selectedCoordinatesUnit;
+      default:
+        return '';
     }
   };
 
@@ -259,14 +278,11 @@ const MeasureContent: FunctionComponent = () => {
         />
         <span>|</span>
         <select
-          value={selectedDropdownOption}
+          value={returnValue()}
           onChange={(e): void => setMeasurementUnit(e.target.value)}
           onBlur={(): void => console.log('Bonjour, onBlur!')}
-          disabled={returnDropdown().length > 0 ? false : true}
+          disabled={activeButton === '' ? true : false}
         >
-          {returnDropdown().length === 0 && (
-            <option defaultValue="Unit">Unit</option>
-          )}
           {returnDropdown()}
         </select>
       </div>

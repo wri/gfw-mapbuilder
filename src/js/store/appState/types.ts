@@ -30,8 +30,8 @@ export interface MeasureContent {
   results: {
     areaResults?: SpecificAreaResults;
     distanceResults?: SpecificDistanceResults;
-    coordinateMouseClickResults?: ClickResults | undefined | Point;
-    coordinatePointerMoveResults?: ClickResults | undefined | Point;
+    coordinateMouseClickResults?: any; // ClickResults | undefined | Point;
+    coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
   };
 }
 

@@ -10,6 +10,7 @@ import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import { RefObject } from 'react';
 
 import {
+  convertDecimalToDMS,
   convertSquareMetersToSpecificUnit,
   convertMetersToSpecificUnit
 } from 'js/utils/helper.util';
@@ -345,8 +346,9 @@ export class MapController {
         selectedWidget = this._measureByDistance;
         break;
       case 'coordinates': {
-        this.setOnClickCoordinates(selectedDropdownOption);
-        this.setPointerMoveCoordinates(selectedDropdownOption);
+        // this.updateOnClickCoordinates(selectedDropdownOption);
+        // this.setOnClickCoordinates(selectedDropdownOption);
+        // this.setPointerMoveCoordinates(selectedDropdownOption);
         break;
       }
       default:
@@ -359,30 +361,39 @@ export class MapController {
     }
   }
 
-  // setSpecificMeasureWidget({
-  //   measureByDistance = false,
-  //   setNewMeasure = false, // TODO - delete setNewMeasure
-  //   unitOfLength = ''
-  // }: {
-  //   measureByDistance?: boolean;
-  //   setNewMeasure?: boolean;
-  //   unitOfLength?: string;
-  // }): void {
-  //   const selectedWidget = measureByDistance
-  //     ? this._measureByDistance
-  //     : this._measureByArea;
+  updateOnClickCoordinates(selectedDropdownOption: string): void {
+    const {
+      coordinateMouseClickResults
+    } = store.getState().appState.measureContent.results;
+    const isDMS = selectedDropdownOption === 'dms';
+    const isDecimal = selectedDropdownOption === 'decimal';
 
-  //   this._measureByDistance.viewModel.clearMeasurement();
-  //   this._measureByArea?.viewModel.clearMeasurement();
+    if (
+      coordinateMouseClickResults?.latitude &&
+      coordinateMouseClickResults?.longitude &&
+      isDMS
+    ) {
+      // convert to DMS
+      const dmsResults = convertDecimalToDMS({
+        latitude: coordinateMouseClickResults?.latitude,
+        longitude: coordinateMouseClickResults?.longitude
+      });
 
-  //   selectedWidget.unit = unitOfLength.length
-  //     ? unitOfLength
-  //     : selectedWidget?.unit;
-  // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
-
-  //   selectedWidget?.viewModel.newMeasurement();
-  //   this.getAndDispatchMeasureResults(selectedWidget, measureByDistance);
-  // }
+      store.dispatch(
+        setMeasureResults({
+          areaResults: {},
+          distanceResults: {},
+          coordinateMouseClickResults: dmsResults
+        })
+      );
+    } else if (
+      coordinateMouseClickResults?.latitude &&
+      coordinateMouseClickResults?.longitude &&
+      isDecimal
+    ) {
+      // TODO - fire convertDMSToDecimal()
+    }
+  }
 
   setOnClickCoordinates(selectedDropdownOption: string): void {
     this._mouseClickEventListener = this._mapview?.on('click', event => {
@@ -393,9 +404,9 @@ export class MapController {
         y: event.y
       });
 
-      if (selectedDropdownOption === 'Degree') {
+      if (selectedDropdownOption === 'degree') {
         coordinateMouseClickResults = coordinatesInDecimals;
-      } else if (selectedDropdownOption === 'DMS') {
+      } else if (selectedDropdownOption === 'dms') {
         coordinateMouseClickResults = this.convertDecimalToDMS(
           coordinatesInDecimals
         );
