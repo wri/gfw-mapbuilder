@@ -7,7 +7,7 @@ import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
-import 'css/CoordinatesForm';
+import 'css/coordinatesForm';
 
 interface SpecificDMSSection {
   rowNum: number;

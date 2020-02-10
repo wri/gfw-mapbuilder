@@ -40,6 +40,7 @@ export interface AppState {
   renderModal: string;
   selectedLanguage: string;
   measureContent: MeasureContent;
+  hideWidgetActive: boolean;
 }
 
 //Action names available
@@ -51,6 +52,7 @@ export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
 export const SET_MEASURE_BUTTON = 'SET_MEASURE_BUTTON';
 export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
+export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
 
 interface SetOpenLayerGroup {
   type: typeof SET_OPEN_LAYER_GROUP;
@@ -60,6 +62,11 @@ interface SetOpenLayerGroup {
 interface ToggleTabviewPanelAction {
   type: typeof TOGGLE_TABVIEW_PANEL;
   payload: LeftPanel['tabViewVisible'];
+}
+
+interface SetHideWidget {
+  type: typeof SET_HIDE_WIDGET;
+  payload: AppState['hideWidgetActive'];
 }
 
 interface RenderModalAction {
@@ -100,4 +107,5 @@ export type AppStateTypes =
   | SetOpenLayerGroup
   | SetMeasureButton
   | SetMeasureResults
-  | SetActiveMeasureButton;
+  | SetActiveMeasureButton
+  | SetHideWidget;

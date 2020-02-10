@@ -29,6 +29,7 @@
     "noUnusedLocals": false,
     "importHelpers": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["arcgis-js-api", "moment", "node"]
   },
   "include": ["src/**/*"],

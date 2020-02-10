@@ -16,6 +16,7 @@ import {
 } from 'js/utils/helper.util';
 
 import store from '../store/index';
+import { LayerFactory } from 'js/helpers/LayerFactory';
 
 import {
   allAvailableLayers,
@@ -30,8 +31,37 @@ import {
 } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
+import { LayerFactoryObject } from 'js/interfaces/mapping';
+
+const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
+
 interface ZoomParams {
   zoomIn: boolean;
+}
+
+interface RemoteDataLayer {
+  // layer: object;
+  layer: {
+    opacity: number;
+    metadata: object;
+    label: object;
+    url: string;
+    type: string;
+    // [key: string]: object
+  };
+  dataLayer?: {
+    uuid: string;
+    groupId: string;
+    id: string;
+    opacity?: number;
+  };
+  label: object;
+  id: string;
+  url: string;
+  groupId: string;
+  type: string;
+  order: number;
+  group: object;
 }
 
 export class MapController {
@@ -43,16 +73,14 @@ export class MapController {
   _measureByArea: AreaMeasurement2D | undefined;
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
+  _legend: Legend | undefined;
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
-    this._measureByDistance = undefined;
-    this._measureByArea = undefined;
-    this._mouseClickEventListener = undefined;
-    this._pointerMoveEventListener = undefined;
+    this._legend = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -68,11 +96,12 @@ export class MapController {
       container: domRef.current
     });
 
-    const legend = new Legend({
+    this._legend = new Legend({
       view: this._mapview
     });
 
-    this._mapview.ui.add(legend, 'bottom-right');
+    this._mapview.ui.add(this._legend, 'bottom-right');
+    this._mapview.ui.remove('zoom');
 
     this._mapview
       .when(
@@ -87,10 +116,94 @@ export class MapController {
               title,
               opacity,
               visible,
-              definitionExpression
+              definitionExpression,
+              group: 'webmap'
             });
           });
+
           store.dispatch(allAvailableLayers(mapLayerObjects));
+
+          this.getMoreLayers().then(res => {
+            const { appState } = store.getState();
+
+            const resourceLayerObjects: LayerProps[] = [];
+            const resouceLayerSpecs: LayerFactoryObject[] = [];
+
+            res
+              .filter((resLayer: RemoteDataLayer) => {
+                const resLayerType = resLayer.dataLayer
+                  ? resLayer.layer.type
+                  : resLayer.type;
+                return allowedLayers.includes(resLayerType);
+              })
+              .forEach((apiLayer: RemoteDataLayer) => {
+                if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
+                let resourceId;
+                let resourceTitle;
+
+                //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
+                function determineLayerOpacity() {
+                  //Try the resources.js predetermined opacity
+                  let opacity = apiLayer.dataLayer?.opacity;
+                  if (!opacity && opacity !== 0) {
+                    //nothing in the resources to do with opacity, try the response's oapcity
+                    opacity = apiLayer.layer?.opacity;
+                  }
+                  return opacity ?? 1; //if all fails, default to 1
+                }
+                const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
+
+                // let resourceVisible = true; //TODO: Make this dynamic as well!
+                let resourceDefinitionExpression;
+                let resourceGroup;
+                let url;
+                let type;
+
+                if (apiLayer.dataLayer) {
+                  resourceId = apiLayer.dataLayer.id;
+                  resourceTitle =
+                    apiLayer.layer.label[appState.selectedLanguage];
+                  resourceGroup = apiLayer.dataLayer.groupId;
+                  url = apiLayer.layer.url;
+                  type = apiLayer.layer.type;
+                } else {
+                  resourceId = apiLayer.id;
+                  resourceTitle = apiLayer.label[appState.selectedLanguage];
+                  resourceGroup = apiLayer.groupId;
+                  url = apiLayer.url;
+                  type = apiLayer.type;
+                }
+
+                resouceLayerSpecs.push({
+                  id: resourceId,
+                  title: resourceTitle,
+                  opacity: resourceOpacity,
+                  visible: false,
+                  definitionExpression: resourceDefinitionExpression,
+                  url: url,
+                  type: type
+                });
+
+                resourceLayerObjects.push({
+                  id: resourceId,
+                  title: resourceTitle,
+                  opacity: resourceOpacity,
+                  visible: false,
+                  definitionExpression: resourceDefinitionExpression,
+                  group: resourceGroup
+                });
+              });
+
+            store.dispatch(
+              allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
+            );
+
+            const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
+              return LayerFactory(this._mapview, resouceLayerSpec);
+            });
+
+            this._map?.addMany(mapLayers);
+          });
 
           this.initializeAndSetSketch();
           this.setMeasureWidget();
@@ -104,6 +217,78 @@ export class MapController {
         console.log('error in initializeMap()', error);
         store.dispatch(mapError(true));
       });
+  }
+
+  getMoreLayers(): Promise<any> {
+    const { appSettings } = store.getState();
+    const { layerPanel } = appSettings;
+    const detailedLayers: any = [];
+    const remoteDataLayers: any = [];
+
+    const layers = Object.keys(layerPanel)
+      .filter(groupName => {
+        return groupName !== 'GROUP_BASEMAP' && groupName !== 'extraLayers';
+      })
+      .reduce((list, groupName, groupIndex) => {
+        const orderedGroups = layerPanel[groupName].layers.map((layer: any) => {
+          return { groupId: groupName, ...layer };
+        });
+        return list.concat(orderedGroups);
+      }, []);
+
+    layers.forEach((layer: RemoteDataLayer) => {
+      if (layer.type === 'remoteDataLayer') {
+        remoteDataLayers.push({
+          order: layer.order,
+          layerGroupId: layer.groupId,
+          dataLayer: layer
+        });
+      } else {
+        detailedLayers.push(layer);
+      }
+    });
+
+    const remoteDataLayerRequests = remoteDataLayers.map(
+      (item: RemoteDataLayer, j: any) => {
+        return fetch(
+          `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`
+        )
+          .then(response => response.json())
+          .then(json => json.data)
+          .then(layer =>
+            fetch(layer.attributes.layerConfig.metadata)
+              .then(response => response.json())
+              .then(metadata => {
+                const attributes = layer.attributes;
+                const itemGroup = item.group;
+
+                // Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
+
+                // if (layerProp !== 'type' && layerProp !== 'uuid') {
+                //   if (layerProp === 'legendConfig') {
+                //     attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+                //   } else {
+                //     layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
+                //   }
+                // }
+                // });
+                item.layer = layer.attributes.layerConfig;
+
+                item.group = itemGroup;
+                item.layer.metadata = {
+                  metadata,
+                  legendConfig: attributes.legendConfig
+                };
+                return item;
+              })
+          )
+          .catch(error => console.error(error));
+      }
+    );
+    detailedLayers.forEach((detailedLayer: object) => {
+      remoteDataLayerRequests.push(detailedLayer);
+    });
+    return Promise.all(remoteDataLayerRequests);
   }
 
   log(): void {
@@ -121,7 +306,7 @@ export class MapController {
     }
   }
 
-  clearAllLayers() {
+  clearAllLayers(): void {
     console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach(layer => (layer.visible = false));
@@ -139,7 +324,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  selectAllLayers() {
+  selectAllLayers(): void {
     console.log('select all layers');
     const layersToEnable: string[] = [];
     this._map?.layers.forEach(layer => {
@@ -158,7 +343,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  toggleLayerVisibility(layerID: string) {
+  toggleLayerVisibility(layerID: string): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       //1. update the map
@@ -179,14 +364,7 @@ export class MapController {
     }
   }
 
-  getLayerOpacity(layerID: string) {
-    const layer = this._map?.findLayerById(layerID);
-    if (layer) {
-      return layer.opacity;
-    }
-  }
-
-  setLayerOpacity(layerID: string, value: string) {
+  setLayerOpacity(layerID: string, value: string): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       layer.opacity = Number(value);
@@ -234,7 +412,7 @@ export class MapController {
     });
   }
 
-  createPolygonSketch = () => {
+  createPolygonSketch = (): void => {
     this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
@@ -459,6 +637,15 @@ export class MapController {
     this._pointerMoveEventListener?.remove();
     this._pointerMoveEventListener = undefined;
   }
+  toggleLegend = (): void => {
+    if (this._legend && typeof this._legend.container === 'object') {
+      if (this._legend.container.classList.contains('hide')) {
+        this._legend.container.classList.remove('hide');
+      } else {
+        this._legend.container.classList.add('hide');
+      }
+    }
+  };
 }
 
 export const mapController = new MapController();

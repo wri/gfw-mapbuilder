@@ -35,3 +35,11 @@ $fira-sans: 'Fira Sans', sans-serif;
 ============================================= */
 
 $mobile-device: 475px;
+
+/* MISC GLOBAL CLASSES
+============================================= */
+
+.hide {
+  // * NOTE - to be conditionally added/removed across the app, as needed!
+  display: none;
+}

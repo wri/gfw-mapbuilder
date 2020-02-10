@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import { mapController } from 'js/controllers/mapController';
 import 'css/leftpanel.scss';
-import WebmapLayersGroup from './webmapLayersGroup';
-import BasemapLayersGroup from './basemapLayersGroup';
-import LCLayersGroup from './LCLayersGroup';
-import LCDLayersGroup from './LCDLayersGroup';
+import WebmapLayersGroup from './WebmapLayersGroup';
+import BasemapLayersGroup from './BasemapLayersGroup';
+import DefaultLayerGroup from './DefaultLayerGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
 
 const AllLayerControls = () => {
@@ -28,6 +27,9 @@ interface LayersTabViewProps {
 const LayersTabView = (props: LayersTabViewProps) => {
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
+  );
+  const { hideWidgetActive } = useSelector(
+    (store: RootState) => store.appState
   );
 
   const { layerPanel } = useSelector((store: RootState) => store.appSettings);
@@ -52,22 +54,6 @@ const LayersTabView = (props: LayersTabViewProps) => {
               layerGroupConfig={layerPanel[layerGroupKey]}
             />
           );
-        case 'GROUP_LC':
-          return (
-            <LCLayersGroup
-              key={layerGroupKey}
-              layerGroupKey={layerGroupKey}
-              layerGroupConfig={layerPanel[layerGroupKey]}
-            />
-          );
-        case 'GROUP_LCD':
-          return (
-            <LCDLayersGroup
-              key={layerGroupKey}
-              layerGroupKey={layerGroupKey}
-              layerGroupConfig={layerPanel[layerGroupKey]}
-            />
-          );
         case 'GROUP_IMAGERY':
           return (
             <ImageryLayersGroup
@@ -79,13 +65,19 @@ const LayersTabView = (props: LayersTabViewProps) => {
         case 'extraLayers':
           return null;
         default:
-          return null;
+          return (
+            <DefaultLayerGroup
+              key={layerGroupKey}
+              layerGroupKey={layerGroupKey}
+              layerGroupConfig={layerPanel[layerGroupKey]}
+            />
+          );
       }
     });
   return (
     <>
       {tabViewIsVisible && (
-        <div>
+        <div className={hideWidgetActive ? 'hide' : ''}>
           <AllLayerControls />
           {layerGroupsToRender}
         </div>
