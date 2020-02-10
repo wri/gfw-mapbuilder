@@ -21,10 +21,10 @@ export default {
   customColorTheme: '',
   //- Language Settings
   language: 'en',
-  useAlternativeLanguage: true,
+  useAlternativeLanguage: false,
   //- Custom Basemap
   useWebmapBasemap: false,
-  alternativeWebmap: 'b96ee7fcd75e405dbf9a8b5a44ae734a',
+  alternativeWebmap: '',
   alternativeLanguage: 'fr',
   alternativeLanguageTitle: 'GFW Mapbuilder',
   alternativeLanguageSubtitle: 'Make maps that matter',
