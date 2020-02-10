@@ -12,12 +12,6 @@ import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { RefObject } from 'react';
 
-import {
-  convertDecimalToDMS,
-  convertSquareMetersToSpecificUnit,
-  convertMetersToSpecificUnit
-} from 'js/utils/helper.util';
-
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 
@@ -422,26 +416,6 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  convertDecimalToDMS(coordinateResults: any): object {
-    const { latitude, longitude } = coordinateResults;
-
-    const latitudeInteger = Math.floor(latitude);
-    const latitudeMinutes = Math.floor((latitude % 1) * 60);
-    const latitudeSeconds = Math.floor((latitudeMinutes % 1) * 60);
-
-    const longitudeInteger = Math.floor(longitude);
-    const longitudeMinutes = Math.floor((longitude % 1) * 60);
-    const longitudeSeconds = Math.floor((longitudeMinutes % 1) * 60);
-
-    const latitudeInDMS = `${latitudeInteger}°${latitudeMinutes}'${latitudeSeconds}"`;
-    const longitudeInDMS = `${longitudeInteger}°${longitudeMinutes}'${longitudeSeconds}"`;
-
-    return {
-      latitude: latitudeInDMS,
-      longitude: longitudeInDMS
-    };
-  }
-
   setMeasureWidget(): void {
     this._measureByArea = new AreaMeasurement2D({
       view: this._mapview,
@@ -464,24 +438,11 @@ export class MapController {
 
       switch (optionType) {
         case 'area': {
-          const convertedArea = convertSquareMetersToSpecificUnit(
-            measurement?.area,
-            selectedWidget.unit
-          );
-
-          const convertedPerimeter = convertSquareMetersToSpecificUnit(
-            measurement?.perimeter,
-            selectedWidget.unit
-          );
-          areaResults = { area: convertedArea, perimeter: convertedPerimeter };
+          // do something
           break;
         }
         case 'distance': {
-          const convertedLength = convertMetersToSpecificUnit(
-            measurement?.length,
-            selectedWidget.unit
-          );
-          distanceResults = { length: convertedLength };
+          // do something
           break;
         }
         case 'coordinates':
@@ -540,7 +501,7 @@ export class MapController {
 
     if (optionType === 'area' || optionType === 'distance') {
       selectedWidget?.viewModel.newMeasurement();
-      this.getAndDispatchMeasureResults(selectedWidget, optionType);
+      // this.getAndDispatchMeasureResults(selectedWidget, optionType);
     }
   }
 
@@ -556,17 +517,13 @@ export class MapController {
       coordinateMouseClickResults?.longitude &&
       isDMS
     ) {
-      // convert to DMS
-      const dmsResults = convertDecimalToDMS({
-        latitude: coordinateMouseClickResults?.latitude,
-        longitude: coordinateMouseClickResults?.longitude
-      });
+      // TODO - convert decimal to DMS
 
       store.dispatch(
         setMeasureResults({
           areaResults: {},
           distanceResults: {},
-          coordinateMouseClickResults: dmsResults
+          coordinateMouseClickResults: {}
         })
       );
     } else if (
@@ -574,25 +531,23 @@ export class MapController {
       coordinateMouseClickResults?.longitude &&
       isDecimal
     ) {
-      // TODO - fire convertDMSToDecimal()
+      // TODO - convert DMS to decimal
     }
   }
 
   setOnClickCoordinates(selectedDropdownOption: string): void {
     this._mouseClickEventListener = this._mapview?.on('click', event => {
       event.stopPropagation();
-      let coordinateMouseClickResults;
+      let coordinateMouseClickResults = {};
       const coordinatesInDecimals = this._mapview?.toMap({
         x: event.x,
         y: event.y
       });
 
       if (selectedDropdownOption === 'degree') {
-        coordinateMouseClickResults = coordinatesInDecimals;
+        // TODO - convert to degree
       } else if (selectedDropdownOption === 'dms') {
-        coordinateMouseClickResults = this.convertDecimalToDMS(
-          coordinatesInDecimals
-        );
+        // TODO - convert to dms
       }
 
       store.dispatch(
@@ -610,18 +565,16 @@ export class MapController {
       'pointer-move',
       event => {
         event.stopPropagation();
-        let coordinatePointerMoveResults;
+        let coordinatePointerMoveResults = {};
         const coordinatesInDecimals = this._mapview?.toMap({
           x: event.x,
           y: event.y
         });
 
         if (selectedDropdownOption === 'Degree') {
-          coordinatePointerMoveResults = coordinatesInDecimals;
+          // TODO - convert to degree
         } else if (selectedDropdownOption === 'DMS') {
-          coordinatePointerMoveResults = this.convertDecimalToDMS(
-            coordinatesInDecimals
-          );
+          // TODO - convert to DMS
         }
 
         store.dispatch(
@@ -635,13 +588,6 @@ export class MapController {
     );
   }
 
-  clearCoordinates(): void {
-    this._mouseClickEventListener?.remove();
-    this._mouseClickEventListener = undefined;
-
-    this._pointerMoveEventListener?.remove();
-    this._pointerMoveEventListener = undefined;
-  }
   generateMapPDF = async (layoutType: string): Promise<any> => {
     const printServiceURL = store.getState().appSettings.printServiceUrl;
 

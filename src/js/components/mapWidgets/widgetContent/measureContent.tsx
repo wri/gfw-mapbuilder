@@ -8,11 +8,6 @@ import {
 
 import { mapController } from 'js/controllers/mapController';
 
-import {
-  convertCoordinates,
-  convertSquareMetersToSpecificUnit,
-  convertMetersToSpecificUnit
-} from 'js/utils/helper.util';
 import { measureContent } from 'configs/modal.config';
 
 import { RootState } from 'js/store/index';
@@ -69,18 +64,18 @@ const MeasureContent: FunctionComponent = () => {
 
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      // TODO - convert area/perimeters via convertSquareMetersToSpecificUnit()
+      // TODO - convert area/perimeters
       // TODO - reset widget
       // TODO - update results in Redux
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
-      // TODO - convert area/perimeters via convertMetersToSpecificUnit()
+      // TODO - convert area/perimeters
       // TODO - reset widget
       // TODO - update results in Redux
     } else if (activeButton === 'coordinates') {
       setSelectedCoordinatesUnit(selectedUnit);
       mapController.setActiveMeasureWidget(activeButton, selectedUnit);
-      // TODO - convert area/perimeters via convertCoordinates()
+      // TODO - convert area/perimeters
       // TODO - reset widget
       // TODO - update results in Redux
     }
