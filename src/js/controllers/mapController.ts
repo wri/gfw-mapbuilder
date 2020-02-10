@@ -458,6 +458,10 @@ export class MapController {
     selectedWidget: DistanceMeasurement2D | AreaMeasurement2D,
     optionType?: string
   ): void {
+    console.log(
+      'selectedWidget.viewModel.state',
+      selectedWidget.viewModel.state
+    );
     selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
       let areaResults = {};
       let distanceResults = {};
@@ -556,6 +560,8 @@ export class MapController {
           }
         })
       );
+
+      this.updateAreaWidgetOnClick();
     }
   }
 
@@ -591,6 +597,14 @@ export class MapController {
     ) {
       // TODO - fire convertDMSToDecimal()
     }
+  }
+
+  updateAreaWidgetOnClick(): void {
+    const mapviewOnClick = this._mapview?.on('click', event => {
+      event.stopPropagation();
+      this._measureByArea?.viewModel.newMeasurement();
+      mapviewOnClick?.remove();
+    });
   }
 
   setOnClickCoordinates(selectedDropdownOption: string): void {

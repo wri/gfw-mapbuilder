@@ -66,16 +66,9 @@ const MeasureContent: FunctionComponent = () => {
   const setMeasurementUnit = (
     selectedUnit: AreaMeasurement2D['unit']
   ): void => {
-    // * NOTE - if true, clears measurement
-    // * and enables selected measurement, while
-    // * passing in the selected measurement unit
-
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
       mapController.updateAreaWidget(selectedUnit);
-      // TODO - [X] - convert area/perimeters via convertSquareMetersToSpecificUnit()
-      // TODO - [ ] - reset widget
-      // TODO - [ ] - update results in Redux
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
       // TODO - convert area/perimeters via convertMetersToSpecificUnit()
