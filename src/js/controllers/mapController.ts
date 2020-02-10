@@ -3,14 +3,10 @@ import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
-import ImageryLayer from 'esri/layers/ImageryLayer';
-import FeatureLayer from 'esri/layers/FeatureLayer';
-import MapImageLayer from 'esri/layers/MapImageLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import { RefObject } from 'react';
 import store from '../store/index';
-import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
-import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
+import { LayerFactory } from 'js/helpers/LayerFactory';
 
 import {
   allAvailableLayers,
@@ -19,6 +15,8 @@ import {
 } from 'js/store/mapview/actions';
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
+
+import { LayerFactoryObject } from 'js/interfaces/mapping';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -49,16 +47,6 @@ interface RemoteDataLayer {
   type: string;
   order: number;
   group: object;
-}
-
-interface LayerFactoryObject {
-  id: string;
-  title: string;
-  opacity: number;
-  visible: boolean;
-  definitionExpression: string | undefined;
-  url: string;
-  type: string;
 }
 
 export class MapController {
@@ -188,9 +176,10 @@ export class MapController {
               allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
             );
 
-            const mapLayers = resouceLayerSpecs.map(resouceLayerSpec =>
-              this.createLayer(resouceLayerSpec)
-            );
+            const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
+              return LayerFactory(this._mapview, resouceLayerSpec);
+            });
+
             this._map?.addMany(mapLayers);
           });
 
@@ -277,61 +266,6 @@ export class MapController {
       remoteDataLayerRequests.push(detailedLayer);
     });
     return Promise.all(remoteDataLayerRequests);
-  }
-
-  createLayer(layerConfig: LayerFactoryObject): any {
-    let esriLayer;
-    switch (layerConfig.type) {
-      case 'dynamic':
-        esriLayer = new MapImageLayer({
-          id: layerConfig.id,
-          title: layerConfig.title,
-          visible: layerConfig.visible,
-          url: layerConfig.url
-        });
-        break;
-      case 'image':
-        esriLayer = new ImageryLayer({
-          id: layerConfig.id,
-          title: layerConfig.title,
-          visible: layerConfig.visible,
-          url: layerConfig.url
-        });
-        break;
-
-      case 'feature':
-        esriLayer = new FeatureLayer({
-          id: layerConfig.id,
-          title: layerConfig.title,
-          visible: layerConfig.visible,
-          url: layerConfig.url
-        });
-        break;
-      case 'loss':
-        esriLayer = new TreeCoverLossLayer({
-          id: layerConfig.id,
-          title: layerConfig.title,
-          visible: layerConfig.visible,
-          urlTemplate: layerConfig.url,
-          view: this._mapview
-        });
-        break;
-      case 'gain':
-        esriLayer = new TreeCoverGainLayer({
-          id: layerConfig.id,
-          title: layerConfig.title,
-          visible: layerConfig.visible,
-          urlTemplate: layerConfig.url,
-          view: this._mapview
-        });
-        break;
-      default:
-        // throw new Error('No matching layer type!')
-        console.error('No error type!');
-        break;
-    }
-
-    return esriLayer;
   }
 
   log(): void {
