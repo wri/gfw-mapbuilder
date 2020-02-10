@@ -544,6 +544,21 @@ export class MapController {
     }
   }
 
+  updateAreaWidget(selectedUnit: AreaMeasurement2D['unit']): void {
+    if (this._measureByArea) {
+      this._measureByArea.unit = selectedUnit;
+
+      store.dispatch(
+        setMeasureResults({
+          areaResults: {
+            area: this._measureByArea.viewModel.measurementLabel.area,
+            perimeter: this._measureByArea.viewModel.measurementLabel.perimeter
+          }
+        })
+      );
+    }
+  }
+
   updateOnClickCoordinates(selectedDropdownOption: string): void {
     const {
       coordinateMouseClickResults

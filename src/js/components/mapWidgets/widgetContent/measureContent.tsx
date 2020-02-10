@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 
 import {
   setMeasureResults,
@@ -62,16 +63,19 @@ const MeasureContent: FunctionComponent = () => {
   );
   const dispatch = useDispatch();
 
-  const setMeasurementUnit = (selectedUnit: string): void => {
+  const setMeasurementUnit = (
+    selectedUnit: AreaMeasurement2D['unit']
+  ): void => {
     // * NOTE - if true, clears measurement
     // * and enables selected measurement, while
     // * passing in the selected measurement unit
 
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      // TODO - convert area/perimeters via convertSquareMetersToSpecificUnit()
-      // TODO - reset widget
-      // TODO - update results in Redux
+      mapController.updateAreaWidget(selectedUnit);
+      // TODO - [X] - convert area/perimeters via convertSquareMetersToSpecificUnit()
+      // TODO - [ ] - reset widget
+      // TODO - [ ] - update results in Redux
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
       // TODO - convert area/perimeters via convertMetersToSpecificUnit()
@@ -230,7 +234,9 @@ const MeasureContent: FunctionComponent = () => {
         <span>|</span>
         <select
           value={returnValue()}
-          onChange={(e): void => setMeasurementUnit(e.target.value)}
+          onChange={(e): void =>
+            setMeasurementUnit(e.target.value as AreaMeasurement2D['unit'])
+          }
           onBlur={(): void => console.log('Bonjour, onBlur!')}
           disabled={activeButton === '' ? true : false}
         >
