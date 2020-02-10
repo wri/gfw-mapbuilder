@@ -6,6 +6,9 @@ const initialState: AppSettings = {
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
   logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  useAlternativeLanguage: false,
+  alternativeWebmap: '',
+  alternativeLanguage: 'fr',
   language: 'en',
   layerPanel: {
     GROUP_WEBMAP: {},

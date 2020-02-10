@@ -1,13 +1,26 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'js/store/index';
+import LanguageDropdown from 'js/components/header/LanguageDropdown';
 
-import LanguageDropdown from '../../components/header/LanguageDropdown';
-
-import config from '../../../../configs/resources';
-
-import '../../../css/header.scss';
+import 'css/header.scss';
 
 const Header: FunctionComponent = () => {
-  const { title, subtitle, logoUrl, logoLinkUrl } = config;
+  const settings = useSelector((store: RootState) => store.appSettings);
+
+  const appState = useSelector((store: RootState) => store.appState);
+
+  const {
+    language,
+    title,
+    subtitle,
+    logoUrl,
+    logoLinkUrl,
+    useAlternativeLanguage,
+    alternativeWebmap,
+    alternativeLanguage
+  } = settings;
+  const { selectedLanguage } = appState;
 
   return (
     <div className="header-container">
@@ -29,7 +42,13 @@ const Header: FunctionComponent = () => {
           <h2>{subtitle}</h2>
         </div>
       </div>
-      <LanguageDropdown />
+      {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
+        <LanguageDropdown
+          language={language}
+          alternativeLanguage={alternativeLanguage}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
     </div>
   );
 };
