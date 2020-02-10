@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
 
-import { ReactComponent as TwitterIcon } from 'src/images/TwitterIcon.svg';
-import { ReactComponent as FacebookIcon } from 'src/images/FacebookIcon.svg';
+import { ReactComponent as TwitterIcon } from 'src/images/twitterIcon.svg';
+import { ReactComponent as FacebookIcon } from 'src/images/facebookIcon.svg';
 
 import { shareContent } from '../../../../../configs/modal.config';
 
