@@ -52,6 +52,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'measure-widget';
       case 'PenWidget':
         return 'pen-widget';
+      case 'PrintWidget':
+        return 'print-widget';
       case 'ShareWidget':
         return 'share-widget';
       default:
