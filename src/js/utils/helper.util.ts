@@ -80,11 +80,6 @@ export function convertCoordinates(
   const isNumber =
     typeof latitude && typeof longitude === 'number' ? true : false;
 
-  console.log('convertCoordinates', coordinateResults);
-
-  // ? is there a better way to check isString or isNumber?
-  // ! HEADS UP - is there a better way to check isString or isNumber?
-
   if (coordinateType === 'dms' && isNumber) {
     convertedCoordinates = convertDecimalToDMS(coordinateResults);
   } else if (coordinateType === 'degree' && isString) {

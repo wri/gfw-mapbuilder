@@ -272,49 +272,40 @@ export class MapController {
 
   getAndDispatchMeasureResults(
     selectedWidget: DistanceMeasurement2D | AreaMeasurement2D,
-    measureByDistance: boolean
+    optionType?: string
   ): void {
     selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
-      // if (measureByDistance) {
-      //   const convertedLength = convertMetersToSpecificUnit(
-      //     measurement?.length,
-      //     selectedWidget.unit
-      //   );
-      //   distanceResults = { length: convertedLength };
-      // } else {
-      //   const convertedArea = convertSquareMetersToSpecificUnit(
-      //     measurement?.area,
-      //     selectedWidget.unit
-      //   );
+      let areaResults = {};
+      let distanceResults = {};
 
-      //   const convertedPerimeter = convertSquareMetersToSpecificUnit(
-      //     measurement?.perimeter,
-      //     selectedWidget.unit
-      //   );
-      //   areaResults = { area: convertedArea, perimeter: convertedPerimeter };
-      // }
+      switch (optionType) {
+        case 'area': {
+          const convertedArea = convertSquareMetersToSpecificUnit(
+            measurement?.area,
+            selectedWidget.unit
+          );
 
-      const convertedLength = convertMetersToSpecificUnit(
-        measurement?.length,
-        selectedWidget.unit
-      );
-
-      const convertedArea = convertSquareMetersToSpecificUnit(
-        measurement?.area,
-        selectedWidget.unit
-      );
-
-      const convertedPerimeter = convertSquareMetersToSpecificUnit(
-        measurement?.perimeter,
-        selectedWidget.unit
-      );
-
-      const areaResults = measureByDistance
-        ? {}
-        : { area: convertedArea, perimeter: convertedPerimeter };
-      const distanceResults = measureByDistance
-        ? { length: convertedLength }
-        : {};
+          const convertedPerimeter = convertSquareMetersToSpecificUnit(
+            measurement?.perimeter,
+            selectedWidget.unit
+          );
+          areaResults = { area: convertedArea, perimeter: convertedPerimeter };
+          break;
+        }
+        case 'distance': {
+          const convertedLength = convertMetersToSpecificUnit(
+            measurement?.length,
+            selectedWidget.unit
+          );
+          distanceResults = { length: convertedLength };
+          break;
+        }
+        case 'coordinates':
+          // do something
+          break;
+        default:
+          break;
+      }
 
       selectedWidget?.watch('viewModel.state', (state: string) => {
         if (state === 'measured') {
@@ -329,33 +320,71 @@ export class MapController {
     });
   }
 
-  setSpecificMeasureWidget({
-    measureByDistance = false,
-    setNewMeasure = false, // TODO - delete setNewMeasure
-    unitOfLength = ''
-  }: {
-    measureByDistance?: boolean;
-    setNewMeasure?: boolean;
-    unitOfLength?: string;
-  }): void {
-    const selectedWidget = measureByDistance
-      ? this._measureByDistance
-      : this._measureByArea;
+  clearAllWidgets(): void {
+    this._mouseClickEventListener?.remove();
+    this._mouseClickEventListener = undefined;
 
-    // TODO - fire clearMeasurement() at the top of the function
+    this._pointerMoveEventListener?.remove();
+    this._pointerMoveEventListener = undefined;
+
     this._measureByDistance.viewModel.clearMeasurement();
     this._measureByArea?.viewModel.clearMeasurement();
-
-    selectedWidget.unit = unitOfLength.length
-      ? unitOfLength
-      : selectedWidget?.unit;
-    // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
-
-    selectedWidget?.viewModel.newMeasurement();
-    this.getAndDispatchMeasureResults(selectedWidget, measureByDistance);
   }
 
-  setOnClickCoordinates(unitIsDMS: boolean): void {
+  setActiveMeasureWidget(
+    optionType: string,
+    selectedDropdownOption: string
+  ): void {
+    let selectedWidget;
+
+    switch (optionType) {
+      case 'area':
+        selectedWidget = this._measureByArea;
+        break;
+      case 'distance':
+        selectedWidget = this._measureByDistance;
+        break;
+      case 'coordinates': {
+        this.setOnClickCoordinates(selectedDropdownOption);
+        this.setPointerMoveCoordinates(selectedDropdownOption);
+        break;
+      }
+      default:
+        break;
+    }
+
+    if (optionType === 'area' || optionType === 'distance') {
+      selectedWidget?.viewModel.newMeasurement();
+      this.getAndDispatchMeasureResults(selectedWidget, optionType);
+    }
+  }
+
+  // setSpecificMeasureWidget({
+  //   measureByDistance = false,
+  //   setNewMeasure = false, // TODO - delete setNewMeasure
+  //   unitOfLength = ''
+  // }: {
+  //   measureByDistance?: boolean;
+  //   setNewMeasure?: boolean;
+  //   unitOfLength?: string;
+  // }): void {
+  //   const selectedWidget = measureByDistance
+  //     ? this._measureByDistance
+  //     : this._measureByArea;
+
+  //   this._measureByDistance.viewModel.clearMeasurement();
+  //   this._measureByArea?.viewModel.clearMeasurement();
+
+  //   selectedWidget.unit = unitOfLength.length
+  //     ? unitOfLength
+  //     : selectedWidget?.unit;
+  // * NOTE: _measureByDistance OR _measureByArea must have a type of any for this reassignment (above) to work
+
+  //   selectedWidget?.viewModel.newMeasurement();
+  //   this.getAndDispatchMeasureResults(selectedWidget, measureByDistance);
+  // }
+
+  setOnClickCoordinates(selectedDropdownOption: string): void {
     this._mouseClickEventListener = this._mapview?.on('click', event => {
       event.stopPropagation();
       let coordinateMouseClickResults;
@@ -364,12 +393,12 @@ export class MapController {
         y: event.y
       });
 
-      if (unitIsDMS) {
+      if (selectedDropdownOption === 'Degree') {
+        coordinateMouseClickResults = coordinatesInDecimals;
+      } else if (selectedDropdownOption === 'DMS') {
         coordinateMouseClickResults = this.convertDecimalToDMS(
           coordinatesInDecimals
         );
-      } else {
-        coordinateMouseClickResults = coordinatesInDecimals;
       }
 
       store.dispatch(
@@ -382,7 +411,7 @@ export class MapController {
     });
   }
 
-  setPointerMoveCoordinates(unitIsDMS: boolean): void {
+  setPointerMoveCoordinates(selectedDropdownOption: string): void {
     this._pointerMoveEventListener = this._mapview?.on(
       'pointer-move',
       event => {
@@ -393,12 +422,12 @@ export class MapController {
           y: event.y
         });
 
-        if (unitIsDMS) {
+        if (selectedDropdownOption === 'Degree') {
+          coordinatePointerMoveResults = coordinatesInDecimals;
+        } else if (selectedDropdownOption === 'DMS') {
           coordinatePointerMoveResults = this.convertDecimalToDMS(
             coordinatesInDecimals
           );
-        } else {
-          coordinatePointerMoveResults = coordinatesInDecimals;
         }
 
         store.dispatch(
@@ -413,8 +442,8 @@ export class MapController {
   }
 
   setCoordinates(unitIsDMS = false): void {
-    this.setOnClickCoordinates(unitIsDMS);
-    this.setPointerMoveCoordinates(unitIsDMS);
+    // this.setOnClickCoordinates(unitIsDMS);
+    // this.setPointerMoveCoordinates(unitIsDMS);
   }
 
   clearCoordinates(): void {
