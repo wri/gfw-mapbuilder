@@ -46,9 +46,7 @@ const LanguageDropdown = (props: DropProps) => {
         value={props.selectedLanguage}
         onChange={e => mapController.changeLanguage(e.target.value)}
       >
-        <option value={props.language}>
-          {valueToLang(props.selectedLanguage)}
-        </option>
+        <option value={props.language}>{valueToLang(props.language)}</option>
         <option value={props.alternativeLanguage}>
           {valueToLang(props.alternativeLanguage)}
         </option>
