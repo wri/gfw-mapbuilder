@@ -301,11 +301,15 @@ export class MapController {
     }
 
     this._map = null;
-    const alternativeWebmap = store.getState().appSettings.alternativeWebmap;
+    const appSettings = store.getState().appSettings;
+    const newWebMap =
+      lang === appSettings.language
+        ? appSettings.webmap
+        : appSettings.alternativeWebmap;
 
     this._map = new WebMap({
       portalItem: {
-        id: alternativeWebmap
+        id: newWebMap
       }
     });
 
