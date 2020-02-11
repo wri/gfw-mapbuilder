@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 
 import {
   setMeasureResults,
@@ -59,13 +60,16 @@ const MeasureContent: FunctionComponent = () => {
   const dispatch = useDispatch();
 
   const setMeasurementUnit = (
-    selectedUnit: AreaMeasurement2D['unit']
+    selectedUnit: any
+    //AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
+    // TODO - typecheck selectedUnit!
   ): void => {
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
       mapController.updateAreaWidget(selectedUnit);
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
+      mapController.updateDistanceWidget(selectedUnit);
       // TODO - convert area/perimeters
       // TODO - reset widget
       // TODO - update results in Redux
@@ -179,6 +183,14 @@ const MeasureContent: FunctionComponent = () => {
     mapController.clearAllWidgets();
     if (activeButton === optionType) {
       dispatch(setActiveMeasureButton(''));
+      dispatch(
+        setMeasureResults({
+          areaResults: {},
+          distanceResults: {},
+          coordinateMouseClickResults: {},
+          coordinatePointerMoveResults: {}
+        })
+      );
     } else {
       dispatch(setActiveMeasureButton(optionType));
       setSelectedWidget(optionType);
@@ -223,7 +235,11 @@ const MeasureContent: FunctionComponent = () => {
         <select
           value={returnValue()}
           onChange={(e): void =>
-            setMeasurementUnit(e.target.value as AreaMeasurement2D['unit'])
+            setMeasurementUnit(
+              e.target.value as
+                | AreaMeasurement2D['unit']
+                | DistanceMeasurement2D['unit']
+            )
           }
           onBlur={(): void => console.log('Bonjour, onBlur!')}
           disabled={activeButton === '' ? true : false}

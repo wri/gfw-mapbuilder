@@ -430,42 +430,54 @@ export class MapController {
 
   getAndDispatchMeasureResults(
     selectedWidget: DistanceMeasurement2D | AreaMeasurement2D,
-    optionType?: string
+    optionType: string
   ): void {
-    console.log(
-      'selectedWidget.viewModel.state',
-      selectedWidget.viewModel.state
-    );
-    selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
-      let areaResults = {};
-      let distanceResults = {};
-
-      switch (optionType) {
-        case 'area': {
-          // do something
-          break;
+    let areaResults = {};
+    let distanceResults = {};
+    selectedWidget?.watch(
+      'viewModel.measurementLabel',
+      (
+        measurementLabel: any
+        //  DistanceMeasurement2D['viewModel']['measurementLabel']
+        // AreaMeasurement2D['viewModel']['measurementLabel']
+      ) => {
+        switch (optionType) {
+          case 'area': {
+            if (measurementLabel) {
+              areaResults = {
+                area: measurementLabel.area,
+                perimeter: measurementLabel.perimeter
+              };
+            }
+            break;
+          }
+          case 'distance': {
+            if (measurementLabel) {
+              distanceResults = {
+                length: measurementLabel
+              };
+            }
+            break;
+          }
+          case 'coordinates':
+            // do something
+            break;
+          default:
+            break;
         }
-        case 'distance': {
-          // do something
-          break;
-        }
-        case 'coordinates':
-          // do something
-          break;
-        default:
-          break;
       }
-
-      selectedWidget?.watch('viewModel.state', (state: string) => {
-        if (state === 'measured') {
-          store.dispatch(
-            setMeasureResults({
-              areaResults,
-              distanceResults
-            })
-          );
-        }
-      });
+    );
+    selectedWidget?.watch('viewModel.state', (state: string) => {
+      if (state === 'measured') {
+        store.dispatch(
+          setMeasureResults({
+            areaResults,
+            distanceResults,
+            coordinateMouseClickResults: {},
+            coordinatePointerMoveResults: {}
+          })
+        );
+      }
     });
   }
 
@@ -505,7 +517,7 @@ export class MapController {
 
     if (optionType === 'area' || optionType === 'distance') {
       selectedWidget?.viewModel.newMeasurement();
-      // this.getAndDispatchMeasureResults(selectedWidget, optionType);
+      this.getAndDispatchMeasureResults(selectedWidget, optionType);
     }
   }
 
@@ -518,11 +530,33 @@ export class MapController {
           areaResults: {
             area: this._measureByArea.viewModel.measurementLabel.area,
             perimeter: this._measureByArea.viewModel.measurementLabel.perimeter
-          }
+          },
+          distanceResults: {},
+          coordinateMouseClickResults: {},
+          coordinatePointerMoveResults: {}
         })
       );
 
       this.updateAreaWidgetOnClick();
+    }
+  }
+
+  updateDistanceWidget(selectedUnit: DistanceMeasurement2D['unit']): void {
+    if (this._measureByDistance) {
+      this._measureByDistance.unit = selectedUnit;
+
+      store.dispatch(
+        setMeasureResults({
+          distanceResults: {
+            length: this._measureByDistance.viewModel.measurementLabel
+          },
+          areaResults: {},
+          coordinateMouseClickResults: {},
+          coordinatePointerMoveResults: {}
+        })
+      );
+
+      this.updateDistanceWidgetOnClick();
     }
   }
 
@@ -539,6 +573,8 @@ export class MapController {
       isDMS
     ) {
       // TODO - convert decimal to DMS
+      // * NOTE - Will need to revisit this logic
+      // * NOTE - Will need to explicitly update other ...Results property of Redux state
 
       store.dispatch(
         setMeasureResults({
@@ -560,6 +596,14 @@ export class MapController {
     const mapviewOnClick = this._mapview?.on('click', event => {
       event.stopPropagation();
       this._measureByArea?.viewModel.newMeasurement();
+      mapviewOnClick?.remove();
+    });
+  }
+
+  updateDistanceWidgetOnClick(): void {
+    const mapviewOnClick = this._mapview?.on('click', event => {
+      event.stopPropagation();
+      this._measureByDistance?.viewModel.newMeasurement();
       mapviewOnClick?.remove();
     });
   }
