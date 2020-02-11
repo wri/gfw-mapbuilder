@@ -10,7 +10,6 @@ import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { RefObject } from 'react';
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
-
 import {
   allAvailableLayers,
   mapError,
@@ -20,6 +19,7 @@ import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
+import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -54,7 +54,7 @@ interface RemoteDataLayer {
 
 export class MapController {
   _map: Map | undefined;
-  _mapview: MapView | undefined;
+  _mapview: MapView;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
   _printTask: PrintTask | undefined;
@@ -62,7 +62,6 @@ export class MapController {
 
   constructor() {
     this._map = undefined;
-    this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
     this._printTask = undefined;
@@ -93,6 +92,9 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
+
+          //Setup popup related watches to be used in data panel
+          addPopupWatchUtils(this._mapview);
 
           const mapLayerObjects: LayerProps[] = [];
           this._map?.layers.forEach((layer: any) => {
@@ -389,7 +391,7 @@ export class MapController {
 
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
-        this._mapview?.graphics.add(event.graphic);
+        this._mapview.graphics.add(event.graphic);
 
         store.dispatch(selectActiveTab('analysis'));
         store.dispatch(toggleTabviewPanel(true));
@@ -398,7 +400,7 @@ export class MapController {
   }
 
   createPolygonSketch = (): void => {
-    this._mapview?.graphics.remove(this._previousSketchGraphic);
+    this._mapview.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
