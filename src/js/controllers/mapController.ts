@@ -59,7 +59,7 @@ interface RemoteDataLayer {
 }
 
 export class MapController {
-  _map: Map | undefined | null;
+  _map: Map | undefined;
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
@@ -300,7 +300,7 @@ export class MapController {
       this._map.removeMany(resourceLayers);
     }
 
-    this._map = null;
+    this._map = undefined;
     const appSettings = store.getState().appSettings;
     const newWebMap =
       lang === appSettings.language
@@ -354,8 +354,6 @@ export class MapController {
                 this._map?.addMany(resourceLayers);
               });
             }
-
-            this.initializeAndSetSketch();
           },
           (error: Error) => {
             console.log('error in initializeMap()', error);
