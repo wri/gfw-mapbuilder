@@ -437,26 +437,25 @@ export class MapController {
     selectedWidget?.watch(
       'viewModel.measurementLabel',
       (
-        measurementLabel: any
-        //  DistanceMeasurement2D['viewModel']['measurementLabel']
-        // AreaMeasurement2D['viewModel']['measurementLabel']
+        measurementLabel: AreaMeasurement2D['viewModel']['measurementLabel']
+        // | DistanceMeasurement2D['viewModel']['measurementLabel']
       ) => {
         switch (optionType) {
           case 'area': {
-            if (measurementLabel) {
-              areaResults = {
-                area: measurementLabel.area,
-                perimeter: measurementLabel.perimeter
-              };
-            }
+            // if (measurementLabel) {
+            areaResults = {
+              area: measurementLabel.area,
+              perimeter: measurementLabel.perimeter
+            };
+            // }
             break;
           }
           case 'distance': {
-            if (measurementLabel) {
-              distanceResults = {
-                length: measurementLabel
-              };
-            }
+            // if (measurementLabel) {
+            distanceResults = {
+              length: measurementLabel
+            };
+            // }
             break;
           }
           case 'coordinates':
@@ -592,7 +591,9 @@ export class MapController {
     }
   }
 
-  updateMeasureWidgetOnClick(selectedWidget: any): void {
+  updateMeasureWidgetOnClick(
+    selectedWidget: DistanceMeasurement2D | AreaMeasurement2D
+  ): void {
     const mapviewOnClick = this._mapview?.on('click', event => {
       event.stopPropagation();
       selectedWidget?.viewModel.newMeasurement();

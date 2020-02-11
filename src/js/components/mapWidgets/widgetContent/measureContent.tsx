@@ -60,19 +60,16 @@ const MeasureContent: FunctionComponent = () => {
   const dispatch = useDispatch();
 
   const setMeasurementUnit = (
-    selectedUnit: any
-    //AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
-    // TODO - typecheck selectedUnit!
+    selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
   ): void => {
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      mapController.updateAreaWidget(selectedUnit);
+      mapController.updateAreaWidget(selectedUnit as AreaMeasurement2D['unit']);
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
-      mapController.updateDistanceWidget(selectedUnit);
-      // TODO - convert area/perimeters
-      // TODO - reset widget
-      // TODO - update results in Redux
+      mapController.updateDistanceWidget(
+        selectedUnit as DistanceMeasurement2D['unit']
+      );
     } else if (activeButton === 'coordinates') {
       setSelectedCoordinatesUnit(selectedUnit);
       mapController.setActiveMeasureWidget(activeButton, selectedUnit);
