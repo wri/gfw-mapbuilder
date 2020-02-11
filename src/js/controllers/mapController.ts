@@ -1,4 +1,5 @@
 import Map from 'esri/Map';
+import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
@@ -283,9 +284,24 @@ export class MapController {
 
   changeLanguage(lang: string): void {
     store.dispatch(setLanguage(lang));
+    const resourceLayers: Layer[] = [];
+    if (this._map) {
+      store
+        .getState()
+        .mapviewState.allAvailableLayers.filter(availableLayer => {
+          return availableLayer.group !== 'webmap';
+        })
+        .forEach(resourceLayer => {
+          if (this._map) {
+            resourceLayers.push(this._map.findLayerById(resourceLayer.id));
+          }
+        });
+
+      this._map.removeMany(resourceLayers);
+    }
+
     this._map = null;
     const alternativeWebmap = store.getState().appSettings.alternativeWebmap;
-    console.log('alternativeWebmap', alternativeWebmap);
 
     this._map = new WebMap({
       portalItem: {
@@ -294,25 +310,14 @@ export class MapController {
     });
 
     if (this._mapview) {
-      console.log('inn');
       this._mapview.map = this._map;
       this._mapview
         .when(
           () => {
             store.dispatch(isMapReady(true));
-            console.log('this._mapview', this._mapview);
-            console.log('this._map', this._map);
-            console.log('this._map?.layers', this._map?.layers);
 
-            // once(this._map, 'loaded', () => {
-            //   console.log('poojh we laaded');
-            //   debugger
-            // })
             if (this._map) {
               once(this._map, 'loaded', () => {
-                console.log('poojh we laaded');
-                console.log('this._map', this._map);
-
                 const mapLayerObjects: LayerProps[] = [];
                 this._map?.layers.forEach((layer: any) => {
                   const {
@@ -332,106 +337,19 @@ export class MapController {
                   });
                 });
 
-                store.dispatch(allAvailableLayers(mapLayerObjects));
-
-                this.getMoreLayers().then(res => {
-                  const { appState } = store.getState();
-
-                  const resourceLayerObjects: LayerProps[] = [];
-                  const resouceLayerSpecs: LayerFactoryObject[] = [];
-
-                  res
-                    .filter((resLayer: RemoteDataLayer) => {
-                      const resLayerType = resLayer.dataLayer
-                        ? resLayer.layer.type
-                        : resLayer.type;
-                      return allowedLayers.includes(resLayerType);
-                    })
-                    .forEach((apiLayer: RemoteDataLayer) => {
-                      if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
-                      let resourceId;
-                      let resourceTitle;
-
-                      //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
-                      function determineLayerOpacity() {
-                        //Try the resources.js predetermined opacity
-                        let opacity = apiLayer.dataLayer?.opacity;
-                        if (!opacity && opacity !== 0) {
-                          //nothing in the resources to do with opacity, try the response's oapcity
-                          opacity = apiLayer.layer?.opacity;
-                        }
-                        return opacity ?? 1; //if all fails, default to 1
-                      }
-                      const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
-
-                      // let resourceVisible = true; //TODO: Make this dynamic as well!
-                      let resourceDefinitionExpression;
-                      let resourceGroup;
-                      let url;
-                      let type;
-
-                      if (apiLayer.dataLayer) {
-                        resourceId = apiLayer.dataLayer.id;
-                        resourceTitle =
-                          apiLayer.layer.label[appState.selectedLanguage];
-                        resourceGroup = apiLayer.dataLayer.groupId;
-                        url = apiLayer.layer.url;
-                        type = apiLayer.layer.type;
-                      } else {
-                        resourceId = apiLayer.id;
-                        resourceTitle =
-                          apiLayer.label[appState.selectedLanguage];
-                        resourceGroup = apiLayer.groupId;
-                        url = apiLayer.url;
-                        type = apiLayer.type;
-                      }
-
-                      resouceLayerSpecs.push({
-                        id: resourceId,
-                        title: resourceTitle,
-                        opacity: resourceOpacity,
-                        visible: false,
-                        definitionExpression: resourceDefinitionExpression,
-                        url: url,
-                        type: type
-                      });
-
-                      resourceLayerObjects.push({
-                        id: resourceId,
-                        title: resourceTitle,
-                        opacity: resourceOpacity,
-                        visible: false,
-                        definitionExpression: resourceDefinitionExpression,
-                        group: resourceGroup
-                      });
-                    });
-
-                  store.dispatch(
-                    allAvailableLayers([
-                      ...mapLayerObjects,
-                      ...resourceLayerObjects
-                    ])
+                const prevMapObjects = store
+                  .getState()
+                  .mapviewState.allAvailableLayers.filter(
+                    availableLayer => availableLayer.group !== 'webmap'
                   );
 
-                  const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
-                    return LayerFactory(this._mapview, resouceLayerSpec);
-                  });
+                store.dispatch(
+                  allAvailableLayers([...prevMapObjects, ...mapLayerObjects])
+                );
 
-                  this._map?.addMany(mapLayers);
-                });
+                this._map?.addMany(resourceLayers);
               });
             }
-
-            // this._map?.loaded.on('change', function(event) {
-            //   debugger
-            //   // console.log("Layer added: ", event.added);
-            //   // console.log("Layer removed: ", event.removed);
-            //   // console.log("Layer moved: ", event.moved);
-            //  });
-
-            //TODO: Why are there no this._map?.layers below here?? Has it not yet loaded..? We know this webmap in west Africa has layers!
-
-            //TODO: IT FIRES TOO FAST!! maybe a ONCE onload??
 
             this.initializeAndSetSketch();
           },
