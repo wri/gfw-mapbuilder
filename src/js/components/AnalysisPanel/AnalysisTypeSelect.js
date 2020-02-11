@@ -16,13 +16,13 @@ export default class AnalysisTypeSelect extends Component {
     language: PropTypes.string.isRequired
   };
 
-  createOptions = (analysisObj) => {
+  createOptions = (analysisObj, i) => {
     const { language } = this.context;
     const { analysisId, label } = analysisObj;
 
     return (
       <option
-        key={analysisId}
+        key={analysisId + i}
         value={analysisId}
       >
         {label[language] ? label[language] : ''}
