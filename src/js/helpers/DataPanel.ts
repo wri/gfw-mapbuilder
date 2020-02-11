@@ -11,9 +11,6 @@ export function addPopupWatchUtils(mapview: MapView): void {
       const cleanFeatureArray = featureArray.filter(
         features => features.length !== 0
       );
-      //Resulting array can be empty (no features found) or array of arrays containing features
-      console.log(cleanFeatureArray);
-
       //Send results to redux store to be used in DataPanel
       store.dispatch(setActiveFeatures(cleanFeatureArray));
       //TODO: Handle server side layers here or elsewhere!
