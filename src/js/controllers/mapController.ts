@@ -1,4 +1,5 @@
 import Map from 'esri/Map';
+import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
@@ -7,6 +8,7 @@ import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
+import { once } from 'esri/core/watchUtils';
 import { RefObject } from 'react';
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
@@ -16,7 +18,11 @@ import {
   mapError,
   isMapReady
 } from 'js/store/mapview/actions';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
+import {
+  selectActiveTab,
+  toggleTabviewPanel,
+  setLanguage
+} from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
@@ -194,7 +200,7 @@ export class MapController {
           this.initializeAndSetSketch();
         },
         (error: Error) => {
-          console.log('error in initializeMap()', error);
+          console.log('error in re-initializeMap()', error);
           store.dispatch(mapError(true));
         }
       )
@@ -274,6 +280,91 @@ export class MapController {
       remoteDataLayerRequests.push(detailedLayer);
     });
     return Promise.all(remoteDataLayerRequests);
+  }
+
+  changeLanguage(lang: string): void {
+    store.dispatch(setLanguage(lang));
+    const resourceLayers: Layer[] = [];
+    if (this._map) {
+      store
+        .getState()
+        .mapviewState.allAvailableLayers.filter(availableLayer => {
+          return availableLayer.group !== 'webmap';
+        })
+        .forEach(resourceLayer => {
+          if (this._map) {
+            resourceLayers.push(this._map.findLayerById(resourceLayer.id));
+          }
+        });
+
+      this._map.removeMany(resourceLayers);
+    }
+
+    this._map = undefined;
+    const appSettings = store.getState().appSettings;
+    const newWebMap =
+      lang === appSettings.language
+        ? appSettings.webmap
+        : appSettings.alternativeWebmap;
+
+    this._map = new WebMap({
+      portalItem: {
+        id: newWebMap
+      }
+    });
+
+    if (this._mapview) {
+      this._mapview.map = this._map;
+      this._mapview
+        .when(
+          () => {
+            store.dispatch(isMapReady(true));
+
+            if (this._map) {
+              once(this._map, 'loaded', () => {
+                const mapLayerObjects: LayerProps[] = [];
+                this._map?.layers.forEach((layer: any) => {
+                  const {
+                    id,
+                    title,
+                    opacity,
+                    visible,
+                    definitionExpression
+                  } = layer;
+                  mapLayerObjects.push({
+                    id,
+                    title,
+                    opacity,
+                    visible,
+                    definitionExpression,
+                    group: 'webmap'
+                  });
+                });
+
+                const prevMapObjects = store
+                  .getState()
+                  .mapviewState.allAvailableLayers.filter(
+                    availableLayer => availableLayer.group !== 'webmap'
+                  );
+
+                store.dispatch(
+                  allAvailableLayers([...prevMapObjects, ...mapLayerObjects])
+                );
+
+                this._map?.addMany(resourceLayers);
+              });
+            }
+          },
+          (error: Error) => {
+            console.log('error in change Language mapView constructor', error);
+            store.dispatch(mapError(true));
+          }
+        )
+        .catch((error: Error) => {
+          console.log('error in change Language mapView constructor', error);
+          store.dispatch(mapError(true));
+        });
+    }
   }
 
   log(): void {
