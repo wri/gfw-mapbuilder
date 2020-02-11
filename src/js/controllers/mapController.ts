@@ -537,7 +537,7 @@ export class MapController {
         })
       );
 
-      this.updateAreaWidgetOnClick();
+      this.updateMeasureWidgetOnClick(this._measureByArea);
     }
   }
 
@@ -556,7 +556,7 @@ export class MapController {
         })
       );
 
-      this.updateDistanceWidgetOnClick();
+      this.updateMeasureWidgetOnClick(this._measureByDistance);
     }
   }
 
@@ -592,20 +592,12 @@ export class MapController {
     }
   }
 
-  updateAreaWidgetOnClick(): void {
+  updateMeasureWidgetOnClick(selectedWidget: any): void {
     const mapviewOnClick = this._mapview?.on('click', event => {
       event.stopPropagation();
-      this._measureByArea?.viewModel.newMeasurement();
-      mapviewOnClick?.remove();
+      selectedWidget?.viewModel.newMeasurement();
     });
-  }
-
-  updateDistanceWidgetOnClick(): void {
-    const mapviewOnClick = this._mapview?.on('click', event => {
-      event.stopPropagation();
-      this._measureByDistance?.viewModel.newMeasurement();
-      mapviewOnClick?.remove();
-    });
+    mapviewOnClick?.remove();
   }
 
   setOnClickCoordinates(selectedDropdownOption: string): void {
