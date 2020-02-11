@@ -1,8 +1,11 @@
+import Graphic from 'esri/Graphic';
+
 //Store types
 export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
   allAvailableLayers: LayerProps[];
+  activeFeatures: Graphic[][];
 }
 
 export interface LayerProps {
@@ -19,6 +22,7 @@ export interface LayerProps {
 export const MAP_READY = 'MAP_READY';
 export const MAP_ERROR = 'MAP_ERROR';
 export const ALL_AVAILABLE_LAYERS = 'ALL_AVAILABLE_LAYERS';
+export const SET_ACTIVE_FEATURES = 'SET_ACTIVE_FEATURES';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -35,7 +39,13 @@ interface AllAvailableLayersAction {
   payload: MapviewState['allAvailableLayers'];
 }
 
+interface SetActiveFeaturesAction {
+  type: typeof SET_ACTIVE_FEATURES;
+  payload: MapviewState['activeFeatures'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
-  | AllAvailableLayersAction;
+  | AllAvailableLayersAction
+  | SetActiveFeaturesAction;
