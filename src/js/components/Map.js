@@ -253,19 +253,21 @@ export default class Map extends Component {
 
         //- Add click event for user-features layer
         const userFeaturesLayer = response.map.getLayer(layerKeys.USER_FEATURES);
-        userFeaturesLayer.on('click', (evt) => {
-          if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
-            evt.stopPropagation();
-            if (!evt.graphic.attributes.geostoreId) {
-              analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
-                evt.graphic.attributes.geostoreId = res.data.id;
+        if (userFeaturesLayer) {
+          userFeaturesLayer.on('click', (evt) => {
+            if (evt.graphic && evt.graphic.attributes && !this.state.editingEnabled) {
+              evt.stopPropagation();
+              if (!evt.graphic.attributes.geostoreId) {
+                analysisUtils.registerGeom(evt.graphic.geometry).then(res => {
+                  evt.graphic.attributes.geostoreId = res.data.id;
+                  response.map.infoWindow.setFeatures([evt.graphic]);
+                });
+              } else {
                 response.map.infoWindow.setFeatures([evt.graphic]);
-              });
-            } else {
-              response.map.infoWindow.setFeatures([evt.graphic]);
+              }
             }
-          }
-        });
+          });
+        }
 
         editToolbar = new Edit(response.map);
         editToolbar.on('deactivate', evt => {
