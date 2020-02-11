@@ -2,6 +2,7 @@ import {
   MAP_ERROR,
   MAP_READY,
   ALL_AVAILABLE_LAYERS,
+  SET_USER_CLICK_LOCATION,
   MapviewState
 } from './types';
 
@@ -24,6 +25,15 @@ export function allAvailableLayers(
 ) {
   return {
     type: ALL_AVAILABLE_LAYERS as typeof ALL_AVAILABLE_LAYERS,
+    payload
+  };
+}
+
+export function setUserClickLocation(
+  payload: MapviewState['userClickLocation']
+) {
+  return {
+    type: SET_USER_CLICK_LOCATION as typeof SET_USER_CLICK_LOCATION,
     payload
   };
 }
