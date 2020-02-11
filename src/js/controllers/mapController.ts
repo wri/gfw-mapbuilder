@@ -16,7 +16,8 @@ import { LayerFactory } from 'js/helpers/LayerFactory';
 import {
   allAvailableLayers,
   mapError,
-  isMapReady
+  isMapReady,
+  setUserClickLocation
 } from 'js/store/mapview/actions';
 import {
   selectActiveTab,
@@ -116,6 +117,15 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           this.getMoreLayers().then(res => {
+            //Set generic map click handler
+            this._mapview?.on('click', event => {
+              console.log(event.mapPoint);
+              //activate data tab
+              store.dispatch(selectActiveTab('data'));
+              //save mapPoint to redux for later use
+              store.dispatch(setUserClickLocation(event.mapPoint));
+            });
+
             const { appState } = store.getState();
 
             const resourceLayerObjects: LayerProps[] = [];
