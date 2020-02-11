@@ -67,6 +67,13 @@ export default class App extends Component {
   }
 
   setSettings = (settings) => {
+    if (!settings.layerPanel.extraLayers || settings.layerPanel.extraLayers.length === 0) {
+      settings.layerPanel.extraLayers.push({
+        "id": "USER_FEATURES",
+        "type": "graphic",
+        "visible": true
+      });
+    }
     appActions.applySettings(settings);
     this.updateTitle(settings);
     createTracker('UA-62288390-15');
