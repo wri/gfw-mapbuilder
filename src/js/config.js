@@ -34,6 +34,10 @@ const config = {
     'tiles.globalforestwatch.org',
     'staging-api.globalforestwatch.org',
     'wri-01.carto.com',
+    'https://my.gfw-mapbuilder.org',
+    'my.gfw-mapbuilder.org',
+    'https://programs.wcs.org',
+    'programs.wcs.org'
   ],
 
   urls: {
