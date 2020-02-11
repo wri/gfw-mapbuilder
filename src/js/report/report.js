@@ -267,26 +267,6 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     });
 };
 
-const updateAnalysisModules = function functionName(params) {
-  let acquiredModules = false;
-  window.addEventListener('message', function(e) {
-    let info;
-
-    // If the message is from the parent and it says it has the info
-    if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
-      if (!acquiredModules) { //so let's avoid setting it twice
-        info = e.data.info;
-        // console.log('Info is ' + JSON.stringify(info));
-        localStorage.setItem('analysisMods', JSON.stringify(info));
-        acquiredModules = true;
-      }
-    }
-  }, false);
-
-  // Ask the page opener (the map) to send us the info
-  opener.postMessage('send-info', params.origin);
-};
-
 const createMap = function createMap (params) {
   const { basemap } = params;
 
@@ -1119,10 +1099,6 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
-
-    if (opener) { //If this report.html was opened via the map (rather than a url paste)
-      updateAnalysisModules(params);
-    }
 
     //- Create the map as soon as possible
     createMap(params);
