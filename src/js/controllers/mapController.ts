@@ -200,7 +200,7 @@ export class MapController {
           this.initializeAndSetSketch();
         },
         (error: Error) => {
-          console.log('error in initializeMap()', error);
+          console.log('error in re-initializeMap()', error);
           store.dispatch(mapError(true));
         }
       )
@@ -356,12 +356,12 @@ export class MapController {
             }
           },
           (error: Error) => {
-            console.log('error in initializeMap()', error);
+            console.log('error in change Language mapView constructor', error);
             store.dispatch(mapError(true));
           }
         )
         .catch((error: Error) => {
-          console.log('error in initializeMap()', error);
+          console.log('error in change Language mapView constructor', error);
           store.dispatch(mapError(true));
         });
     }
