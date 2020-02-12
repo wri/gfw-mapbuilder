@@ -5,16 +5,16 @@ html
   body.tundra
     #root
     div#share-modal.modal-wrapper.hidden
-    script(id='library-load' src='https://alpha.blueraster.io/wcs/vibrant-oceans-exploration/1.3.2.js')
+    script(id='library-load' src='https://alpha.blueraster.io/wcs/vibrant-oceans-corals/1.3.2.js')
     script.
       var customApp = new MapBuilder({
         el: 'root',
         config: {
           "webmap": "8189599625d44c219e6b7a060a048dc2",
-          "title": "Vibrant Oceans Demo",
-          "subtitle": "Concept Exploration",
+          "title": "Vibrant Oceans Corals - Demonstration Data",
+          "subtitle": "Illustrating Vibrant Oceans Analytics Engine",
           "logoUrl": "https://programs.wcs.org/Desktopmodules/WCSVega/WCSMapBuilder/wcslogo.png",
-          "logoLinkUrl": "https://www.wcs.org",
+          "logoLinkUrl": "https://programs.wcs.org/vibrantoceans/",
           "aboutLinkUrl": "",
           "downloadLinkUrl": "",
           "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
@@ -37,129 +37,181 @@ html
           "alternativeNarrative": "",
           "alternativeWebmapMenuName": "",
           "includeDocumentsTab": false,
-          "documentsDirectory": "https://cmr.forest-atlas.org/resources/docs/",
-          "documentsMapserver": "https://gis.forest-atlas.org/server/rest/services/CMR/documents_administratifs/MapServer",
+          "documentsDirectory": "",
+          "documentsMapserver": "",
           "iso": "",
-          "activeFires": false,
           "initialExtent": {
             "x": "",
             "y": "",
             "z": ""
           },
-          "viirsFires": true,
-          "modisFires": true,
-          "intactForests": true,
-          "aboveGroundBiomass": true,
-          "landCover": true,
-          "mangroves": true,
-          "sadAlerts": true,
-          "gladAlerts": true,
-          "terraIAlerts": true,
-          "webmapMenuName": "",
-          "slopePotentialOptions": "",
-          "alternativeSlopePotentialOptions": "",
-          "slopePotentialColors": "",
-          "slopeClassNames": "",
-          "slopeClassColors": "",
-          "treeCoverClassNames": "",
-          "treeCoverClassColors": "",
-          "landCoverClassNames": "",
-          "landCoverClassColors": "",
-          "populationClassNames": "",
-          "populationClassColors": "",
-          "rainfallClassNames": "",
-          "rainfallClassColors": "",
-          "alternativeSlopeDescription": "",
-          "sharinghost": "https://www.arcgis.com",
-          "analyticsCode": "",
-          "userFeatureToken": "",
-          "analysisModules": [],
+          "analysisModules": [{
+            "analysisId": "WCS_OceansPopulationWithin5km_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Population Within 5km"
+            },
+            "title": {
+              "en": "Oceans: Population Within 5km"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Population Within 5km"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansAverageCropUrbanAreaPerBasin_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Average Crop Urban Area Per Basin"
+            },
+            "title": {
+              "en": "Oceans: Average Crop Urban Area Per Basin"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Average Crop Urban Area Per Basin"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansAveragePercentPastureAreaPerBasin_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Average Percent Pasture Area Per Basin"
+            },
+            "title": {
+              "en": "Oceans: Average Percent Pasture Area Per Basin"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Average Percent Pasture Area Per Basin"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansLargeScaleFisheriesCatchRate_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Large Scale Fisheries Catch Rate"
+            },
+            "title": {
+              "en": "Oceans: Large Scale Fisheries Catch Rate"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Large Scale Fisheries Catch Rate"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansNumberOfPortsWithin5Km_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Number Of Ports Within 5  Km"
+            },
+            "title": {
+              "en": "Oceans: Number Of Ports Within 5  Km"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Number Of Ports Within 5  Km"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansPopulationWithin5km_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Population Within 5km"
+            },
+            "title": {
+              "en": "Oceans: Population Within 5km"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Population Within 5km"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansRateOfIllegalCatch_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Rate Of Illegal Catch"
+            },
+            "title": {
+              "en": "Oceans: Rate Of Illegal Catch"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Rate Of Illegal Catch"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansSmallScaleFisheriesCatchRate_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Small Scale Fisheries Catch Rate"
+            },
+            "title": {
+              "en": "Oceans: Small Scale Fisheries Catch Rate"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Small Scale Fisheries Catch Rate"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansSumPopulationWithin5km_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Sum Population Within 5 km"
+            },
+            "title": {
+              "en": "Oceans: Sum Population Within 5 km"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Sum Population Within 5 km"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }, {
+            "analysisId": "WCS_OceansSumPopulationWithinBasins_WCSBarChart1DropDown_[TabID]_[PortalID]_[Locale]___",
+            "label": {
+              "en": "Oceans: Sum Population Within Basins"
+            },
+            "title": {
+              "en": "Oceans: Sum Population Within Basins"
+            },
+            "description": {
+              "en": "Click below to run the analysis for Sum Population Within Basins"
+            },
+            "useGfwWidget": true,
+            "widgetId": "684e5f08-d657-41c8-aa1d-0b87f3bec079",
+            "uiParams": "none"
+          }],
           "layerPanel": {
             "GROUP_WEBMAP": {
               "order": 1,
               "label": {
-                "en": "Reef Data"
+                "en": "WCS Layers"
               },
-              "opacity": 100,
               "layers": []
             },
             "GROUP_Range": {
-              "order": 4,
+              "groupType": "default",
+              "order": 2,
               "label": {
                 "en": "Species Data"
               },
-              "layers": [{
-                "order": 1,
-                "id": "MR",
-                "type": "dynamic",
-                "url": "https://gis.unep-wcmc.org/arcgis/rest/services/marine/WCMC_007_TurtleNesting1999/MapServer",
-                "layerIds": [0],
-                "visible": false,
-                "label": {
-                  "en": "Turtle Nesting"
-                }
-              }, {
-                "order": 2,
-                "id": "MRG",
-                "type": "dynamic",
-                "url": "https://gis.unep-wcmc.org/arcgis/rest/services/marine/WCMC_013_014_Seagrass_WMS/MapServer",
-                "layerIds": [0],
-                "visible": false,
-                "label": {
-                  "en": "Sea Grass Distribution"
-                }
-              }]
+              "layers": []
             },
             "GROUP_Other": {
-              "order": 6,
+              "order": 3,
               "label": {
                 "en": "Other"
               },
-              "layers": [{
-                "order": 1,
-                "id": "Oth1",
-                "type": "dynamic",
-                "url": "https://gis-gfw.wri.org/arcgis/rest/services/hydrology/MapServer",
-                "layerIds": [2],
-                "visible": false,
-                "label": {
-                  "en": "Hydrology"
-                }
-              }, {
-                "order": 2,
-                "id": "Oth2",
-                "type": "dynamic",
-                "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer",
-                "layerIds": [0],
-                "visible": false,
-                "label": {
-                  "en": "Roads"
-                }
-              }, {
-                "order": 3,
-                "id": "Oth3",
-                "type": "dynamic",
-                "url": "https://tiles.arcgis.com/tiles/x494PplYsmeeZsYB/arcgis/rest/services/HF2009/MapServer",
-                "layerIds": [0],
-                "visible": false,
-                "label": {
-                  "en": "Human Footprint"
-                }
-              }, {
-                "order": 4,
-                "id": "Oth4",
-                "type": "dynamic",
-                "url": "https://gis.unep-wcmc.org/arcgis/rest/services/marine/WCMC_035_MeanSeaSurfaceTemperature2015/MapServer",
-                "layerIds": [0],
-                "visible": false,
-                "label": {
-                  "en": "Mean Sea Surface Temperature"
-                }
-              }]
+              "layers": []
             },
             "GROUP_BASEMAP": {
               "groupType": "basemap",
-              "order": 200,
+              "order": 4,
               "label": {
                 "en": "Basemap",
                 "fr": "Basemap",
@@ -167,67 +219,11 @@ html
                 "pt": "Basemap",
                 "id": "Basemap",
                 "zh": "Basemap",
-                "ka": "áƒ¡áƒáƒ‘áƒáƒ–áƒ áƒ áƒ£áƒ™áƒ"
+                "ka": "?????? ????"
               },
-              "layers": [{
-                "id": "landsat",
-                "thumbnailUrl": "https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png",
-                "templateUrl": "https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png",
-                "years": ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"],
-                "title": {
-                  "en": "Landsat",
-                  "fr": "Landsat",
-                  "es": "Landsat",
-                  "pt": "Landsat",
-                  "id": "Landsat",
-                  "zh": "Landsat",
-                  "ka": "Landsat"
-                }
-              }, {
-                "id": "wri_mono",
-                "thumbnailUrl": "https://my.gfw-mapbuilder.org/img/wri_mono.png",
-                "title": {
-                  "en": "Grey Basemap",
-                  "fr": "Mono",
-                  "es": "Mono",
-                  "pt": "Mono",
-                  "id": "Mono",
-                  "zh": "Mono",
-                  "ka": "Mono"
-                }
-              }, {
-                "id": "wri_contextual",
-                "thumbnailUrl": "https://my.gfw-mapbuilder.org/img/wri_contextual.png",
-                "title": {
-                  "en": "Contextual",
-                  "fr": "Contextual",
-                  "es": "Contextual",
-                  "pt": "Contextual",
-                  "id": "Contextual",
-                  "zh": "Contextual",
-                  "ka": "Contextual"
-                }
-              }]
+              "layers": []
             },
-            "extraLayers": [{
-              "id": "MASK",
-              "type": "dynamic",
-              "order": 10000,
-              "url": "https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer",
-              "opacity": 0.35,
-              "layerIds": [0]
-            }, {
-              "id": "LEGEND_LAYER",
-              "type": "dynamic",
-              "url": "https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer",
-              "visible": false,
-              "opacity": 0,
-              "layerIds": []
-            }, {
-              "id": "USER_FEATURES",
-              "type": "graphic",
-              "visible": true
-            }]
+            "extraLayers": []
           }
         },
         version: '1.3.2'
