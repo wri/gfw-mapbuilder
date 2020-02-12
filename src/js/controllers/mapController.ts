@@ -612,8 +612,12 @@ export class MapController {
           coordinatePointerMoveResults: {}
         })
       );
+      this._selectedWidget?.watch('viewModel.state', (state: string) => {
+        if (state === 'measured') {
+          this.updateMeasureWidgetOnClick();
+        }
+      });
     }
-    this.updateMeasureWidgetOnClick();
   }
 
   // updateOnClickCoordinates(selectedDropdownOption: string): void {
