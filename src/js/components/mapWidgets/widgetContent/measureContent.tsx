@@ -158,7 +158,7 @@ const MeasureContent: FunctionComponent = () => {
     );
   };
 
-  const setSelectedWidget = (optionType: string): void => {
+  const setSelectedWidget = (optionType: OptionType): void => {
     if (optionType === 'coordinates') {
       // do something
       // mapController.setActiveMeasureWidget(optionType);
