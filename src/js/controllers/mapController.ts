@@ -477,10 +477,6 @@ export class MapController {
   }
 
   setActiveMeasureWidget(optionType: string): void {
-    this._selectedWidget = new DistanceMeasurement2D({
-      view: this._mapview,
-      unit: 'miles'
-    });
     switch (optionType) {
       case 'area':
         this._selectedWidget = new AreaMeasurement2D({
@@ -488,7 +484,15 @@ export class MapController {
           unit: 'acres'
         });
         break;
+      case 'distance':
+        this._selectedWidget = new DistanceMeasurement2D({
+          view: this._mapview,
+          unit: 'miles'
+        });
+        break;
       case 'coordinates': {
+        this._selectedWidget?.viewModel.clearMeasurement();
+        this._selectedWidget = undefined;
         // this.updateOnClickCoordinates(selectedDropdownOption);
         // this.setOnClickCoordinates(selectedDropdownOption);
         // this.setPointerMoveCoordinates(selectedDropdownOption);
