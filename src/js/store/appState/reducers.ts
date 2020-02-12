@@ -13,6 +13,7 @@ const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
   hideWidgetActive: false,
+  isLoggedIn: false,
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',

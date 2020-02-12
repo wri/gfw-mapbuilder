@@ -5,6 +5,7 @@ import {
   SET_LANGUAGE,
   SET_OPEN_LAYER_GROUP,
   SET_HIDE_WIDGET,
+  SET_LOGGED_IN,
   AppState,
   LeftPanel
 } from './types';
@@ -26,6 +27,13 @@ export function setHideWidget(payload: AppState['hideWidgetActive']) {
 export function renderModal(payload: AppState['renderModal']) {
   return {
     type: RENDER_MODAL,
+    payload: payload
+  };
+}
+
+export function setLoggedIn(payload: AppState['isLoggedIn']) {
+  return {
+    type: SET_LOGGED_IN as typeof SET_LOGGED_IN,
     payload: payload
   };
 }
