@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PrintContent from 'js/components/mapWidgets/widgetContent/printContent';
 import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
+import MyGFWContent from 'js/components/mapWidgets/widgetContent/myGFWContent';
 import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
 import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
@@ -33,6 +34,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <PrintContent />;
       case 'ShareWidget':
         return <ShareContent />;
+      case 'GFWLoginWidget':
+        return <MyGFWContent />;
       case 'PenWidget':
         return <PenContent />;
       case 'PenWidget-CoordinatesForm':
@@ -50,6 +53,8 @@ const ModalCard: FunctionComponent<{}> = () => {
     switch (modalType) {
       case 'MeasureWidget':
         return 'measure-widget';
+      case 'GFWLoginWidget':
+        return 'gfw-login-widget';
       case 'PenWidget':
         return 'pen-widget';
       case 'PrintWidget':

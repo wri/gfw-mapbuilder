@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 
-
 const MyGFWContent: FunctionComponent = () => {
   return (
     <div className="measure-options-container">

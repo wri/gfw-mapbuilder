@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store/index';
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
+import GFWLogin from 'js/components/header/GFWLogin';
 
 import 'css/header.scss';
 
@@ -18,7 +19,8 @@ const Header: FunctionComponent = () => {
     logoLinkUrl,
     useAlternativeLanguage,
     alternativeWebmap,
-    alternativeLanguage
+    alternativeLanguage,
+    includeMyGFWLogin
   } = settings;
   const { selectedLanguage } = appState;
 
@@ -44,6 +46,13 @@ const Header: FunctionComponent = () => {
       </div>
       {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
         <LanguageDropdown
+          language={language}
+          alternativeLanguage={alternativeLanguage}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
+      {includeMyGFWLogin && (
+        <GFWLogin
           language={language}
           alternativeLanguage={alternativeLanguage}
           selectedLanguage={selectedLanguage}
