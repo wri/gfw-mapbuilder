@@ -1,5 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 
 import {
   setMeasureResults,
@@ -20,12 +22,7 @@ interface SpecificDropDownOption {
 }
 
 const MeasureContent: FunctionComponent = () => {
-  const {
-    activeButton
-    // areaButtonActive,
-    // distanceButtonActive,
-    // coordinatesButtonActive
-  } = useSelector(
+  const { activeButton } = useSelector(
     (state: RootState) => state.appState.measureContent.toggleButton
   );
   const {
@@ -57,24 +54,24 @@ const MeasureContent: FunctionComponent = () => {
   );
   const dispatch = useDispatch();
 
-  const setMeasurementUnit = (selectedUnit: string): void => {
-    // * NOTE - if true, clears measurement
-    // * and enables selected measurement, while
-    // * passing in the selected measurement unit
-
+  const setMeasurementUnit = (
+    selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
+  ): void => {
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      // TODO - convert area/perimeters
-      // TODO - reset widget
-      // TODO - update results in Redux
+      mapController.updateSelectedMeasureWidget(
+        'area',
+        selectedUnit as AreaMeasurement2D['unit']
+      );
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
-      // TODO - convert area/perimeters
-      // TODO - reset widget
-      // TODO - update results in Redux
+      mapController.updateSelectedMeasureWidget(
+        'distance',
+        selectedUnit as AreaMeasurement2D['unit']
+      );
     } else if (activeButton === 'coordinates') {
       setSelectedCoordinatesUnit(selectedUnit);
-      mapController.setActiveMeasureWidget(activeButton, selectedUnit);
+      // mapController.setActiveMeasureWidget(activeButton);
       // TODO - convert area/perimeters
       // TODO - reset widget
       // TODO - update results in Redux
@@ -162,16 +159,13 @@ const MeasureContent: FunctionComponent = () => {
   const setSelectedWidget = (optionType: string): void => {
     switch (optionType) {
       case 'area':
-        mapController.setActiveMeasureWidget(optionType, selectedAreaUnit);
+        mapController.setActiveMeasureWidget(optionType);
         break;
       case 'distance':
-        mapController.setActiveMeasureWidget(optionType, selectedDistanceUnit);
+        mapController.setActiveMeasureWidget(optionType);
         break;
       case 'coordinates':
-        mapController.setActiveMeasureWidget(
-          optionType,
-          selectedCoordinatesUnit
-        );
+        // mapController.setActiveMeasureWidget(optionType);
         break;
       default:
         break;
@@ -182,13 +176,21 @@ const MeasureContent: FunctionComponent = () => {
     mapController.clearAllWidgets();
     if (activeButton === optionType) {
       dispatch(setActiveMeasureButton(''));
+      dispatch(
+        setMeasureResults({
+          areaResults: {},
+          distanceResults: {},
+          coordinateMouseClickResults: {},
+          coordinatePointerMoveResults: {}
+        })
+      );
     } else {
       dispatch(setActiveMeasureButton(optionType));
       setSelectedWidget(optionType);
     }
   };
 
-  const returnValue = (): string => {
+  const returnSelectedUnit = (): string => {
     switch (activeButton) {
       case 'area':
         return selectedAreaUnit;
@@ -224,8 +226,14 @@ const MeasureContent: FunctionComponent = () => {
         />
         <span>|</span>
         <select
-          value={returnValue()}
-          onChange={(e): void => setMeasurementUnit(e.target.value)}
+          value={returnSelectedUnit()}
+          onChange={(e): void =>
+            setMeasurementUnit(
+              e.target.value as
+                | AreaMeasurement2D['unit']
+                | DistanceMeasurement2D['unit']
+            )
+          }
           onBlur={(): void => console.log('Bonjour, onBlur!')}
           disabled={activeButton === '' ? true : false}
         >

@@ -6,7 +6,6 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
-
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
@@ -66,12 +65,14 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
-  _measureByDistance: DistanceMeasurement2D | any;
-  _measureByArea: AreaMeasurement2D | undefined;
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
   _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
+  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;
+  // * NOTE - _selectedWidget is typed as any
+  // * because ESRI's TS types measurementLabel as a string
+  // * when AreaMeasurement2D.viewModel.measurementLabel is an object
 
   constructor() {
     this._map = undefined;
@@ -80,6 +81,7 @@ export class MapController {
     this._previousSketchGraphic = undefined;
     this._printTask = undefined;
     this._legend = undefined;
+    this._selectedWidget = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -205,7 +207,6 @@ export class MapController {
           });
 
           this.initializeAndSetSketch();
-          this.setMeasureWidget();
         },
         (error: Error) => {
           console.log('error in initializeMap()', error);
@@ -416,52 +417,51 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  setMeasureWidget(): void {
-    this._measureByArea = new AreaMeasurement2D({
-      view: this._mapview,
-      unit: 'acres'
-    });
-
-    this._measureByDistance = new DistanceMeasurement2D({
-      view: this._mapview,
-      unit: 'miles'
-    });
-  }
-
-  getAndDispatchMeasureResults(
-    selectedWidget: DistanceMeasurement2D | AreaMeasurement2D,
-    optionType?: string
-  ): void {
-    selectedWidget?.watch('viewModel.measurement', (measurement: any) => {
-      let areaResults = {};
-      let distanceResults = {};
-
-      switch (optionType) {
-        case 'area': {
-          // do something
-          break;
+  getAndDispatchMeasureResults(optionType: string): void {
+    let areaResults = {};
+    let distanceResults = {};
+    this._selectedWidget?.watch(
+      'viewModel.measurementLabel',
+      (
+        measurementLabel: AreaMeasurement2D['viewModel']['measurementLabel']
+      ) => {
+        switch (optionType) {
+          case 'area': {
+            if (measurementLabel) {
+              areaResults = {
+                area: measurementLabel.area,
+                perimeter: measurementLabel.perimeter
+              };
+            }
+            break;
+          }
+          case 'distance': {
+            if (measurementLabel) {
+              distanceResults = {
+                length: measurementLabel
+              };
+            }
+            break;
+          }
+          case 'coordinates':
+            // do something
+            break;
+          default:
+            break;
         }
-        case 'distance': {
-          // do something
-          break;
-        }
-        case 'coordinates':
-          // do something
-          break;
-        default:
-          break;
       }
-
-      selectedWidget?.watch('viewModel.state', (state: string) => {
-        if (state === 'measured') {
-          store.dispatch(
-            setMeasureResults({
-              areaResults,
-              distanceResults
-            })
-          );
-        }
-      });
+    );
+    this._selectedWidget?.watch('viewModel.state', (state: string) => {
+      if (state === 'measured') {
+        store.dispatch(
+          setMeasureResults({
+            areaResults,
+            distanceResults,
+            coordinateMouseClickResults: {},
+            coordinatePointerMoveResults: {}
+          })
+        );
+      }
     });
   }
 
@@ -472,24 +472,27 @@ export class MapController {
     this._pointerMoveEventListener?.remove();
     this._pointerMoveEventListener = undefined;
 
-    this._measureByDistance.viewModel.clearMeasurement();
-    this._measureByArea?.viewModel.clearMeasurement();
+    this._selectedWidget?.viewModel.clearMeasurement();
+    this._selectedWidget = undefined;
   }
 
-  setActiveMeasureWidget(
-    optionType: string,
-    selectedDropdownOption: string
-  ): void {
-    let selectedWidget;
-
+  setActiveMeasureWidget(optionType: string): void {
     switch (optionType) {
       case 'area':
-        selectedWidget = this._measureByArea;
+        this._selectedWidget = new AreaMeasurement2D({
+          view: this._mapview,
+          unit: 'acres'
+        });
         break;
       case 'distance':
-        selectedWidget = this._measureByDistance;
+        this._selectedWidget = new DistanceMeasurement2D({
+          view: this._mapview,
+          unit: 'miles'
+        });
         break;
       case 'coordinates': {
+        this._selectedWidget?.viewModel.clearMeasurement();
+        this._selectedWidget = undefined;
         // this.updateOnClickCoordinates(selectedDropdownOption);
         // this.setOnClickCoordinates(selectedDropdownOption);
         // this.setPointerMoveCoordinates(selectedDropdownOption);
@@ -500,9 +503,46 @@ export class MapController {
     }
 
     if (optionType === 'area' || optionType === 'distance') {
-      selectedWidget?.viewModel.newMeasurement();
-      // this.getAndDispatchMeasureResults(selectedWidget, optionType);
+      this._selectedWidget?.viewModel.newMeasurement();
+      this.getAndDispatchMeasureResults(optionType);
     }
+  }
+
+  updateSelectedMeasureWidget(
+    optionType: string,
+    selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
+  ): void {
+    let areaResults = {};
+    let distanceResults = {};
+
+    if (this._selectedWidget) {
+      this._selectedWidget.unit = selectedUnit;
+      switch (optionType) {
+        case 'area':
+          areaResults = {
+            area: this._selectedWidget.viewModel.measurementLabel.area,
+            perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
+          };
+          break;
+        case 'distance':
+          distanceResults = {
+            length: this._selectedWidget.viewModel.measurementLabel
+          };
+          break;
+        default:
+          break;
+      }
+
+      store.dispatch(
+        setMeasureResults({
+          areaResults,
+          distanceResults,
+          coordinateMouseClickResults: {},
+          coordinatePointerMoveResults: {}
+        })
+      );
+    }
+    this.updateMeasureWidgetOnClick();
   }
 
   updateOnClickCoordinates(selectedDropdownOption: string): void {
@@ -518,6 +558,8 @@ export class MapController {
       isDMS
     ) {
       // TODO - convert decimal to DMS
+      // * NOTE - Will need to revisit this logic
+      // * NOTE - Will need to explicitly update other ...Results property of Redux state
 
       store.dispatch(
         setMeasureResults({
@@ -533,6 +575,14 @@ export class MapController {
     ) {
       // TODO - convert DMS to decimal
     }
+  }
+
+  updateMeasureWidgetOnClick(): void {
+    const mapviewOnClick = this._mapview?.on('click', event => {
+      event.stopPropagation();
+      this._selectedWidget?.viewModel.newMeasurement();
+      mapviewOnClick?.remove();
+    });
   }
 
   setOnClickCoordinates(selectedDropdownOption: string): void {

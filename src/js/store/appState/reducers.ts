@@ -87,7 +87,6 @@ export function appStateReducer(
         ...state,
         measureContent: {
           results: {
-            ...state.measureContent.results,
             ...action.payload
           },
           toggleButton: state.measureContent.toggleButton
