@@ -22,12 +22,7 @@ interface SpecificDropDownOption {
 }
 
 const MeasureContent: FunctionComponent = () => {
-  const {
-    activeButton
-    // areaButtonActive,
-    // distanceButtonActive,
-    // coordinatesButtonActive
-  } = useSelector(
+  const { activeButton } = useSelector(
     (state: RootState) => state.appState.measureContent.toggleButton
   );
   const {
@@ -64,15 +59,19 @@ const MeasureContent: FunctionComponent = () => {
   ): void => {
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      mapController.updateAreaWidget(selectedUnit as AreaMeasurement2D['unit']);
+      mapController.updateSelectedMeasureWidget(
+        'area',
+        selectedUnit as AreaMeasurement2D['unit']
+      );
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
-      mapController.updateDistanceWidget(
-        selectedUnit as DistanceMeasurement2D['unit']
+      mapController.updateSelectedMeasureWidget(
+        'distance',
+        selectedUnit as AreaMeasurement2D['unit']
       );
     } else if (activeButton === 'coordinates') {
       setSelectedCoordinatesUnit(selectedUnit);
-      mapController.setActiveMeasureWidget(activeButton, selectedUnit);
+      // mapController.setActiveMeasureWidget(activeButton);
       // TODO - convert area/perimeters
       // TODO - reset widget
       // TODO - update results in Redux
@@ -160,16 +159,13 @@ const MeasureContent: FunctionComponent = () => {
   const setSelectedWidget = (optionType: string): void => {
     switch (optionType) {
       case 'area':
-        mapController.setActiveMeasureWidget(optionType, selectedAreaUnit);
+        mapController.setActiveMeasureWidget(optionType);
         break;
       case 'distance':
-        mapController.setActiveMeasureWidget(optionType, selectedDistanceUnit);
+        mapController.setActiveMeasureWidget(optionType);
         break;
       case 'coordinates':
-        mapController.setActiveMeasureWidget(
-          optionType,
-          selectedCoordinatesUnit
-        );
+        // mapController.setActiveMeasureWidget(optionType);
         break;
       default:
         break;
@@ -194,7 +190,7 @@ const MeasureContent: FunctionComponent = () => {
     }
   };
 
-  const returnValue = (): string => {
+  const returnSelectedUnit = (): string => {
     switch (activeButton) {
       case 'area':
         return selectedAreaUnit;
@@ -230,7 +226,7 @@ const MeasureContent: FunctionComponent = () => {
         />
         <span>|</span>
         <select
-          value={returnValue()}
+          value={returnSelectedUnit()}
           onChange={(e): void =>
             setMeasurementUnit(
               e.target.value as
