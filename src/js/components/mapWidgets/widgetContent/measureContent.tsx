@@ -23,14 +23,14 @@ interface SpecificDropDownOption {
 
 const MeasureContent: FunctionComponent = () => {
   const { activeButton } = useSelector(
-    (state: RootState) => state.appState.measureContent.toggleButton
+    (state: RootState) => state.appState.measureContent
   );
   const {
     areaResults,
     distanceResults,
     coordinateMouseClickResults,
     coordinatePointerMoveResults
-  } = useSelector((state: RootState) => state.appState.measureContent.results);
+  } = useSelector((state: RootState) => state.appState.measureContent);
 
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
@@ -157,18 +157,11 @@ const MeasureContent: FunctionComponent = () => {
   };
 
   const setSelectedWidget = (optionType: string): void => {
-    switch (optionType) {
-      case 'area':
-        mapController.setActiveMeasureWidget(optionType);
-        break;
-      case 'distance':
-        mapController.setActiveMeasureWidget(optionType);
-        break;
-      case 'coordinates':
-        // mapController.setActiveMeasureWidget(optionType);
-        break;
-      default:
-        break;
+    if (optionType === 'coordinates') {
+      // do something
+      // mapController.setActiveMeasureWidget(optionType);
+    } else {
+      mapController.setActiveMeasureWidget(optionType);
     }
   };
 
@@ -218,12 +211,12 @@ const MeasureContent: FunctionComponent = () => {
             activeButton === 'distance' ? 'selected' : ''
           }`}
         />
-        <button
+        {/* <button
           onClick={(): void => setOption('coordinates')}
           className={`esri-icon-maps ${
             activeButton === 'coordinates' ? 'selected' : ''
           }`}
-        />
+        /> */}
         <span>|</span>
         <select
           value={returnSelectedUnit()}

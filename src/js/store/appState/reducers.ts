@@ -21,15 +21,11 @@ const initialState: AppState = {
     openLayerGroup: 'GROUP_WEBMAP'
   },
   measureContent: {
-    toggleButton: {
-      activeButton: ''
-    },
-    results: {
-      areaResults: {},
-      distanceResults: {},
-      coordinateMouseClickResults: {},
-      coordinatePointerMoveResults: {}
-    }
+    activeButton: '',
+    areaResults: {},
+    distanceResults: {},
+    coordinateMouseClickResults: {},
+    coordinatePointerMoveResults: {}
   }
 };
 
@@ -75,21 +71,15 @@ export function appStateReducer(
       return {
         ...state,
         measureContent: {
-          toggleButton: {
-            ...state.measureContent.toggleButton,
-            activeButton: action.payload
-          },
-          results: state.measureContent.results
+          ...state.measureContent,
+          activeButton: action.payload
         }
       };
     case SET_MEASURE_RESULTS:
       return {
         ...state,
         measureContent: {
-          results: {
-            ...action.payload
-          },
-          toggleButton: state.measureContent.toggleButton
+          ...action.payload
         }
       };
     default:

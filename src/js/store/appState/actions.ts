@@ -53,9 +53,7 @@ export function setOpenLayerGroup(payload: LeftPanel['openLayerGroup']) {
   };
 }
 
-export function setMeasureResults(
-  payload: AppState['measureContent']['results']
-) {
+export function setMeasureResults(payload: AppState['measureContent']) {
   return {
     type: SET_MEASURE_RESULTS as typeof SET_MEASURE_RESULTS,
     payload: payload
@@ -63,7 +61,7 @@ export function setMeasureResults(
 }
 
 export function setActiveMeasureButton(
-  payload: AppState['measureContent']['toggleButton']['activeButton']
+  payload: AppState['measureContent']['activeButton']
 ) {
   return {
     type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,

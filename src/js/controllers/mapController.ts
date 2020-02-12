@@ -418,43 +418,25 @@ export class MapController {
   };
 
   getAndDispatchMeasureResults(optionType: string): void {
-    let areaResults = {};
-    let distanceResults = {};
-    this._selectedWidget?.watch(
-      'viewModel.measurementLabel',
-      (
-        measurementLabel: AreaMeasurement2D['viewModel']['measurementLabel']
-      ) => {
-        switch (optionType) {
-          case 'area': {
-            if (measurementLabel) {
-              areaResults = {
-                area: measurementLabel.area,
-                perimeter: measurementLabel.perimeter
-              };
-            }
-            break;
-          }
-          case 'distance': {
-            if (measurementLabel) {
-              distanceResults = {
-                length: measurementLabel
-              };
-            }
-            break;
-          }
-          case 'coordinates':
-            // do something
-            break;
-          default:
-            break;
-        }
-      }
-    );
     this._selectedWidget?.watch('viewModel.state', (state: string) => {
+      let areaResults = {};
+      let distanceResults = {};
+
       if (state === 'measured') {
+        if (optionType === 'area') {
+          areaResults = {
+            area: this._selectedWidget.viewModel.measurementLabel.area,
+            perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
+          };
+        } else if (optionType === 'perimeter') {
+          distanceResults = {
+            length: this._selectedWidget.viewModel.measurementLabel
+          };
+        }
+
         store.dispatch(
           setMeasureResults({
+            activeButton: optionType,
             areaResults,
             distanceResults,
             coordinateMouseClickResults: {},
@@ -466,14 +448,14 @@ export class MapController {
   }
 
   clearAllWidgets(): void {
+    this._selectedWidget?.viewModel.clearMeasurement();
+    this._selectedWidget = undefined;
+
     this._mouseClickEventListener?.remove();
     this._mouseClickEventListener = undefined;
 
     this._pointerMoveEventListener?.remove();
     this._pointerMoveEventListener = undefined;
-
-    this._selectedWidget?.viewModel.clearMeasurement();
-    this._selectedWidget = undefined;
   }
 
   setActiveMeasureWidget(optionType: string): void {
@@ -535,6 +517,7 @@ export class MapController {
 
       store.dispatch(
         setMeasureResults({
+          activeButton: optionType,
           areaResults,
           distanceResults,
           coordinateMouseClickResults: {},
@@ -545,37 +528,37 @@ export class MapController {
     this.updateMeasureWidgetOnClick();
   }
 
-  updateOnClickCoordinates(selectedDropdownOption: string): void {
-    const {
-      coordinateMouseClickResults
-    } = store.getState().appState.measureContent.results;
-    const isDMS = selectedDropdownOption === 'dms';
-    const isDecimal = selectedDropdownOption === 'decimal';
+  // updateOnClickCoordinates(selectedDropdownOption: string): void {
+  //   const {
+  //     coordinateMouseClickResults
+  //   } = store.getState().appState.measureContent;
+  //   const isDMS = selectedDropdownOption === 'dms';
+  //   const isDecimal = selectedDropdownOption === 'decimal';
 
-    if (
-      coordinateMouseClickResults?.latitude &&
-      coordinateMouseClickResults?.longitude &&
-      isDMS
-    ) {
-      // TODO - convert decimal to DMS
-      // * NOTE - Will need to revisit this logic
-      // * NOTE - Will need to explicitly update other ...Results property of Redux state
+  //   if (
+  //     coordinateMouseClickResults?.latitude &&
+  //     coordinateMouseClickResults?.longitude &&
+  //     isDMS
+  //   ) {
+  //     // TODO - convert decimal to DMS
+  //     // * NOTE - Will need to revisit this logic
+  //     // * NOTE - Will need to explicitly update other ...Results property of Redux state
 
-      store.dispatch(
-        setMeasureResults({
-          areaResults: {},
-          distanceResults: {},
-          coordinateMouseClickResults: {}
-        })
-      );
-    } else if (
-      coordinateMouseClickResults?.latitude &&
-      coordinateMouseClickResults?.longitude &&
-      isDecimal
-    ) {
-      // TODO - convert DMS to decimal
-    }
-  }
+  //     store.dispatch(
+  //       setMeasureResults({
+  //         areaResults: {},
+  //         distanceResults: {},
+  //         coordinateMouseClickResults: {}
+  //       })
+  //     );
+  //   } else if (
+  //     coordinateMouseClickResults?.latitude &&
+  //     coordinateMouseClickResults?.longitude &&
+  //     isDecimal
+  //   ) {
+  //     // TODO - convert DMS to decimal
+  //   }
+  // }
 
   updateMeasureWidgetOnClick(): void {
     const mapviewOnClick = this._mapview?.on('click', event => {
@@ -585,58 +568,58 @@ export class MapController {
     });
   }
 
-  setOnClickCoordinates(selectedDropdownOption: string): void {
-    this._mouseClickEventListener = this._mapview?.on('click', event => {
-      event.stopPropagation();
-      let coordinateMouseClickResults = {};
-      const coordinatesInDecimals = this._mapview?.toMap({
-        x: event.x,
-        y: event.y
-      });
+  // setOnClickCoordinates(selectedDropdownOption: string): void {
+  //   this._mouseClickEventListener = this._mapview?.on('click', event => {
+  //     event.stopPropagation();
+  //     let coordinateMouseClickResults = {};
+  //     const coordinatesInDecimals = this._mapview?.toMap({
+  //       x: event.x,
+  //       y: event.y
+  //     });
 
-      if (selectedDropdownOption === 'degree') {
-        // TODO - convert to degree
-      } else if (selectedDropdownOption === 'dms') {
-        // TODO - convert to dms
-      }
+  //     if (selectedDropdownOption === 'degree') {
+  //       // TODO - convert to degree
+  //     } else if (selectedDropdownOption === 'dms') {
+  //       // TODO - convert to dms
+  //     }
 
-      store.dispatch(
-        setMeasureResults({
-          areaResults: {},
-          distanceResults: {},
-          coordinateMouseClickResults
-        })
-      );
-    });
-  }
+  //     store.dispatch(
+  //       setMeasureResults({
+  //         areaResults: {},
+  //         distanceResults: {},
+  //         coordinateMouseClickResults
+  //       })
+  //     );
+  //   });
+  // }
 
-  setPointerMoveCoordinates(selectedDropdownOption: string): void {
-    this._pointerMoveEventListener = this._mapview?.on(
-      'pointer-move',
-      event => {
-        event.stopPropagation();
-        let coordinatePointerMoveResults = {};
-        const coordinatesInDecimals = this._mapview?.toMap({
-          x: event.x,
-          y: event.y
-        });
+  // setPointerMoveCoordinates(selectedDropdownOption: string): void {
+  //   this._pointerMoveEventListener = this._mapview?.on(
+  //     'pointer-move',
+  //     event => {
+  //       event.stopPropagation();
+  //       let coordinatePointerMoveResults = {};
+  //       const coordinatesInDecimals = this._mapview?.toMap({
+  //         x: event.x,
+  //         y: event.y
+  //       });
 
-        if (selectedDropdownOption === 'Degree') {
-          // TODO - convert to degree
-        } else if (selectedDropdownOption === 'DMS') {
-          // TODO - convert to DMS
-        }
+  //       if (selectedDropdownOption === 'Degree') {
+  //         // TODO - convert to degree
+  //       } else if (selectedDropdownOption === 'DMS') {
+  //         // TODO - convert to DMS
+  //       }
 
-        store.dispatch(
-          setMeasureResults({
-            areaResults: {},
-            distanceResults: {},
-            coordinatePointerMoveResults
-          })
-        );
-      }
-    );
-  }
+  //       store.dispatch(
+  //         setMeasureResults({
+  //           areaResults: {},
+  //           distanceResults: {},
+  //           coordinatePointerMoveResults
+  //         })
+  //       );
+  //     }
+  //   );
+  // }
 
   generateMapPDF = async (layoutType: string): Promise<any> => {
     const printServiceURL = store.getState().appSettings.printServiceUrl;

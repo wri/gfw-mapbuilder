@@ -1,4 +1,4 @@
-import Point from 'esri/geometry/Point';
+// import Point from 'esri/geometry/Point';
 
 export interface LeftPanel {
   tabViewVisible: boolean;
@@ -7,12 +7,12 @@ export interface LeftPanel {
 }
 
 interface SpecificAreaResults {
-  area?: number;
-  perimeter?: number;
+  area?: string;
+  perimeter?: string;
 }
 
 interface SpecificDistanceResults {
-  length?: number;
+  length?: string;
 }
 
 interface ClickResults {
@@ -21,15 +21,11 @@ interface ClickResults {
 }
 
 export interface MeasureContent {
-  toggleButton: {
-    activeButton?: string;
-  };
-  results: {
-    areaResults?: SpecificAreaResults;
-    distanceResults?: SpecificDistanceResults;
-    coordinateMouseClickResults?: any; // ClickResults | undefined | Point;
-    coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
-  };
+  activeButton?: string;
+  areaResults?: SpecificAreaResults;
+  distanceResults?: SpecificDistanceResults;
+  coordinateMouseClickResults?: any; // ClickResults | undefined | Point;
+  coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
 }
 
 export interface AppState {
@@ -82,12 +78,12 @@ interface SetLanguageAction {
 
 interface SetMeasureResults {
   type: typeof SET_MEASURE_RESULTS;
-  payload: AppState['measureContent']['results'];
+  payload: AppState['measureContent'];
 }
 
 interface SetActiveMeasureButton {
   type: typeof SET_ACTIVE_MEASURE_BUTTON;
-  payload: AppState['measureContent']['toggleButton']['activeButton'];
+  payload: AppState['measureContent']['activeButton'];
 }
 
 export type AppStateTypes =
