@@ -12,6 +12,8 @@ import { mapController } from 'js/controllers/mapController';
 
 import { measureContent } from 'configs/modal.config';
 
+import { OptionType } from 'js/interfaces/measureWidget';
+
 import { RootState } from 'js/store/index';
 
 import 'css/measureContent.scss';
@@ -165,7 +167,7 @@ const MeasureContent: FunctionComponent = () => {
     }
   };
 
-  const setOption = (optionType: string): void => {
+  const setOption = (optionType: OptionType): void => {
     mapController.clearAllWidgets();
     if (activeButton === optionType) {
       dispatch(setActiveMeasureButton(''));

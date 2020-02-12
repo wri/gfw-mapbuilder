@@ -11,6 +11,7 @@ import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { once } from 'esri/core/watchUtils';
+
 import { RefObject } from 'react';
 
 import store from '../store/index';
@@ -29,6 +30,7 @@ import {
   setLanguage
 } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
+import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
 
@@ -505,7 +507,7 @@ export class MapController {
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
-  getAndDispatchMeasureResults(optionType: string): void {
+  getAndDispatchMeasureResults(optionType: OptionType): void {
     this._selectedWidget?.watch('viewModel.state', (state: string) => {
       let areaResults = {};
       let distanceResults = {};
@@ -516,7 +518,7 @@ export class MapController {
             area: this._selectedWidget.viewModel.measurementLabel.area,
             perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
           };
-        } else if (optionType === 'perimeter') {
+        } else if (optionType === 'distance') {
           distanceResults = {
             length: this._selectedWidget.viewModel.measurementLabel
           };
@@ -546,7 +548,7 @@ export class MapController {
     this._pointerMoveEventListener = undefined;
   }
 
-  setActiveMeasureWidget(optionType: string): void {
+  setActiveMeasureWidget(optionType: OptionType): void {
     switch (optionType) {
       case 'area':
         this._selectedWidget = new AreaMeasurement2D({
@@ -579,7 +581,7 @@ export class MapController {
   }
 
   updateSelectedMeasureWidget(
-    optionType: string,
+    optionType: OptionType,
     selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
   ): void {
     let areaResults = {};
