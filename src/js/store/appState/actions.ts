@@ -6,7 +6,9 @@ import {
   SET_OPEN_LAYER_GROUP,
   SET_HIDE_WIDGET,
   AppState,
-  LeftPanel
+  LeftPanel,
+  SET_MEASURE_RESULTS,
+  SET_ACTIVE_MEASURE_BUTTON
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
@@ -47,6 +49,22 @@ export function setLanguage(payload: AppState['selectedLanguage']) {
 export function setOpenLayerGroup(payload: LeftPanel['openLayerGroup']) {
   return {
     type: SET_OPEN_LAYER_GROUP,
+    payload: payload
+  };
+}
+
+export function setMeasureResults(payload: AppState['measureContent']) {
+  return {
+    type: SET_MEASURE_RESULTS as typeof SET_MEASURE_RESULTS,
+    payload: payload
+  };
+}
+
+export function setActiveMeasureButton(
+  payload: AppState['measureContent']['activeButton']
+) {
+  return {
+    type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,
     payload: payload
   };
 }
