@@ -22,7 +22,7 @@ const Header: FunctionComponent = () => {
     alternativeLanguage,
     includeMyGFWLogin
   } = settings;
-  const { selectedLanguage } = appState;
+  const { selectedLanguage, isLoggedIn } = appState;
 
   return (
     <div className="header-container">
@@ -51,13 +51,7 @@ const Header: FunctionComponent = () => {
           selectedLanguage={selectedLanguage}
         />
       )}
-      {includeMyGFWLogin && (
-        <GFWLogin
-          language={language}
-          alternativeLanguage={alternativeLanguage}
-          selectedLanguage={selectedLanguage}
-        />
-      )}
+      {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
     </div>
   );
 };

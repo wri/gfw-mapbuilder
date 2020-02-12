@@ -1,8 +1,24 @@
 import React, { FunctionComponent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { RootState } from 'js/store';
+import { render } from 'react-dom';
 
 const MyGFWContent: FunctionComponent = () => {
-  return (
-    <div className="measure-options-container">
+  const isLoggedIn = useSelector(
+    (state: RootState) => state.appState.isLoggedIn
+  );
+
+  function logOut() {
+    fetch('https://production-api.globalforestwatch.org/auth/logout', {
+      credentials: 'include'
+    }).then(() => {
+      window.location.reload();
+    });
+  }
+
+  function renderLogins() {
+    return (
       <ul className="subscription-authentication">
         <li className="subscribe-method twitter-box">
           <a
@@ -31,6 +47,33 @@ const MyGFWContent: FunctionComponent = () => {
           </a>
         </li>
       </ul>
+    );
+  }
+
+  function renderDropdowns() {
+    return (
+      <div className="options-modal">
+        <ul className="more-list">
+          <li className="gfw-api-option">
+            {/* <p onClick={this.getSubscriptions}> */}
+            <p>subscriptions</p>
+          </li>
+          <li className="gfw-api-option">
+            <a href="http://www.globalforestwatch.org/my_gfw">My GFW Profile</a>
+          </li>
+          <li className="gfw-api-option">
+            <p onClick={logOut}>Logout</p>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+  console.log('isLoggedIn', isLoggedIn);
+
+  return (
+    <div className="measure-options-container">
+      {!isLoggedIn && renderLogins()}
+      {isLoggedIn && renderDropdowns()}
     </div>
   );
 };

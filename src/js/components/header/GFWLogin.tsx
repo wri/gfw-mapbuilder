@@ -5,28 +5,22 @@ import { useDispatch } from 'react-redux';
 import { renderModal } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
 
-interface DropProps {
-  language: string;
-  alternativeLanguage: string;
-  selectedLanguage: string;
+interface LoginProps {
+  loggedIn: boolean;
 }
 
-const GFWLogin = (props: DropProps) => {
+const GFWLogin = (props: LoginProps) => {
   const dispatch = useDispatch();
-  // const [loginDisplayed, setLoginDisplayed] = useState(false);
+  console.log('propsprops', props);
 
   return (
     <div className="gfw-login-container">
-      {/* <button onClick={(e: React.MouseEvent<HTMLElement>) => setLoginDisplayed(!loginDisplayed)}>Login to MY GFW</button> */}
       <button
         className="gfw-login-button"
         onClick={() => dispatch(renderModal('GFWLoginWidget'))}
-      ></button>
-      {/* <ul className={`login-modal ${!loginDisplayed ? 'hidden' : ''}`}>
-          <li>Twitter</li>
-          <li>FB</li>
-          <li>Google</li>
-        </ul> */}
+      >
+        {props.loggedIn ? 'MY GFW' : 'Login to MY GFW'}
+      </button>
     </div>
   );
 };
