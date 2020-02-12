@@ -6,7 +6,8 @@ import {
   SET_LANGUAGE,
   RENDER_MODAL,
   SET_OPEN_LAYER_GROUP,
-  SET_HIDE_WIDGET
+  SET_HIDE_WIDGET,
+  SET_LOGGED_IN
 } from './types';
 
 const initialState: AppState = {
@@ -51,6 +52,8 @@ export function appStateReducer(
       };
     case SET_LANGUAGE:
       return { ...state, selectedLanguage: action.payload };
+    case SET_LOGGED_IN:
+      return { ...state, isLoggedIn: action.payload };
     case SET_OPEN_LAYER_GROUP:
       return {
         ...state,

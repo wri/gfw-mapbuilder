@@ -10,6 +10,7 @@ import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 import resources from '../../../configs/resources';
 import { overwriteSettings } from 'js/store/appSettings/actions';
+import { setLoggedIn } from 'js/store/appState/actions';
 
 //TODO: SPinners should be SVGs in images/ folder that get imported
 const GlobalSpinner = (): React.ReactElement => <h4>App Loading...</h4>;
@@ -46,6 +47,24 @@ const App = (): JSX.Element => {
   //   (store: RootState) => store.mapviewState.loadError
   // );
   const modalType = useSelector((state: any) => state.appState.renderModal);
+
+  useEffect(() => {
+    fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
+      credentials: 'include'
+    }).then(response => {
+      let hasError = false;
+      if (response.status !== 200) {
+        hasError = true;
+      }
+      response.json().then(() => {
+        if (hasError) {
+          console.info('We are not currently logged in');
+          return;
+        }
+        dispatch(setLoggedIn(true));
+      });
+    });
+  }, [dispatch]);
 
   return (
     <>
