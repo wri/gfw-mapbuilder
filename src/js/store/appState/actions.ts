@@ -41,7 +41,7 @@ export function selectActiveTab(payload: LeftPanel['activeTab']) {
 
 export function setLanguage(payload: AppState['selectedLanguage']) {
   return {
-    type: SET_LANGUAGE,
+    type: SET_LANGUAGE as typeof SET_LANGUAGE,
     payload: payload
   };
 }
