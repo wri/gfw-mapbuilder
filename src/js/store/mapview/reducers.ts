@@ -3,15 +3,13 @@ import {
   MapviewStateTypes,
   MAP_READY,
   MAP_ERROR,
-  ALL_AVAILABLE_LAYERS,
-  SET_USER_CLICK_LOCATION
+  ALL_AVAILABLE_LAYERS
 } from './types';
 
 const initialState: MapviewState = {
   isMapReady: false,
   loadError: false,
-  allAvailableLayers: [],
-  userClickLocation: undefined
+  allAvailableLayers: []
 };
 
 export function mapviewReducer(
@@ -25,8 +23,6 @@ export function mapviewReducer(
       return { ...state, loadError: action.payload };
     case ALL_AVAILABLE_LAYERS:
       return { ...state, allAvailableLayers: action.payload };
-    case SET_USER_CLICK_LOCATION:
-      return { ...state, userClickLocation: action.payload };
     default:
       return state;
   }
