@@ -2,6 +2,7 @@
 export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
+  userSubscriptions: {}[];
   allAvailableLayers: LayerProps[];
 }
 
@@ -18,6 +19,7 @@ export interface LayerProps {
 //Action types
 export const MAP_READY = 'MAP_READY';
 export const MAP_ERROR = 'MAP_ERROR';
+export const USER_SUBSCRIPTIONS = 'USER_SUBSCRIPTIONS';
 export const ALL_AVAILABLE_LAYERS = 'ALL_AVAILABLE_LAYERS';
 
 interface MapIsReadyAction {
@@ -35,7 +37,13 @@ interface AllAvailableLayersAction {
   payload: MapviewState['allAvailableLayers'];
 }
 
+interface UserSubscriptionsAction {
+  type: typeof USER_SUBSCRIPTIONS;
+  payload: MapviewState['userSubscriptions'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
+  | UserSubscriptionsAction
   | AllAvailableLayersAction;

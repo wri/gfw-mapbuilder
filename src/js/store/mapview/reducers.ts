@@ -3,12 +3,14 @@ import {
   MapviewStateTypes,
   MAP_READY,
   MAP_ERROR,
+  USER_SUBSCRIPTIONS,
   ALL_AVAILABLE_LAYERS
 } from './types';
 
 const initialState: MapviewState = {
   isMapReady: false,
   loadError: false,
+  userSubscriptions: [],
   allAvailableLayers: []
 };
 
@@ -21,6 +23,8 @@ export function mapviewReducer(
       return { ...state, isMapReady: action.payload };
     case MAP_ERROR:
       return { ...state, loadError: action.payload };
+    case USER_SUBSCRIPTIONS:
+      return { ...state, userSubscriptions: action.payload };
     case ALL_AVAILABLE_LAYERS:
       return { ...state, allAvailableLayers: action.payload };
     default:
