@@ -312,6 +312,7 @@ export const coordinatesContent = {
 
 export const measureContent = {
   en: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
@@ -336,6 +337,7 @@ export const measureContent = {
     ]
   },
   ka: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
@@ -360,6 +362,7 @@ export const measureContent = {
     ]
   },
   fr: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
@@ -384,6 +387,7 @@ export const measureContent = {
     ]
   },
   es: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
@@ -408,6 +412,7 @@ export const measureContent = {
     ]
   },
   pt: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
@@ -432,6 +437,7 @@ export const measureContent = {
     ]
   },
   id: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
@@ -456,6 +462,7 @@ export const measureContent = {
     ]
   },
   zh: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
       { text: 'Sq Miles', esriUnit: 'square-miles' },
