@@ -4,9 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import { render } from 'react-dom';
 
+import { userSubscriptions } from 'js/store/mapview/actions';
+
 const MyGFWContent: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector(
     (state: RootState) => state.appState.isLoggedIn
+  );
+
+  const subscriptions = useSelector(
+    (state: RootState) => state.mapviewState.userSubscriptions
   );
 
   function logOut() {
@@ -15,6 +22,32 @@ const MyGFWContent: FunctionComponent = () => {
     }).then(() => {
       window.location.reload();
     });
+  }
+
+  function getSubscriptions() {
+    if (subscriptions.length === 0) {
+      fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
+        credentials: 'include'
+      }).then(response => {
+        if (response.status !== 200) {
+          // this.setState({
+          //   userSubscriptions: []
+          // });
+        }
+        response.json().then(json => {
+          dispatch(userSubscriptions(json.data));
+          // this.setState({
+          //   userSubscriptions: json.data
+          // });
+          // mapActions.setUserSubscriptions(json.data);
+          // mapActions.toggleSubscriptionsModal({ visible: true });
+        });
+      });
+    } else {
+      console.log('ooh');
+
+      // mapActions.toggleSubscriptionsModal({ visible: true });
+    }
   }
 
   function renderLogins() {
@@ -56,7 +89,7 @@ const MyGFWContent: FunctionComponent = () => {
         <ul className="more-list">
           <li className="gfw-api-option">
             {/* <p onClick={this.getSubscriptions}> */}
-            <p>subscriptions</p>
+            <p onClick={getSubscriptions}>subscriptions</p>
           </li>
           <li className="gfw-api-option">
             <a href="http://www.globalforestwatch.org/my_gfw">My GFW Profile</a>
