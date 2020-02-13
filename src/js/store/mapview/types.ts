@@ -16,6 +16,7 @@ export interface LayerProps {
   opacity: number;
   definitionExpression?: string;
   group: string;
+  url: string;
 }
 
 //Action types

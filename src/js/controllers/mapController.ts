@@ -92,20 +92,53 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
+          this._mapview?.on('click', event => {
+            //Initialize server side feature fetching on each map click
+            // fetchServerSideFeatures(this._map, event.mapPoint);
+            //activate data tab
+            // store.dispatch(selectActiveTab('data'));
+            //save mapPoint to redux for later use
+            // store.dispatch(setUserClickLocation(event.mapPoint));
+            // function sendQuery() {
+            //   //"VIIRS_ACTIVE_FIRES"
+            //   //"https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer"
+            //   const url =
+            //     'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer/21';
+            //   const queryParams = {
+            //     where: '1=1',
+            //     outFields: '*',
+            //     returnGeometry: false,
+            //     geometry: event.mapPoint
+            //     // distance: 30,
+            //     // units: 'miles'
+            //   };
+            //   return esriQuery(url, queryParams);
+            // }
+            // const serverSideRes = await sendQuery();
+            // console.log(serverSideRes.features);
+            addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
+          });
 
           //Setup popup related watches to be used in data panel
-          addPopupWatchUtils(this._mapview);
 
           const mapLayerObjects: LayerProps[] = [];
           this._map?.layers.forEach((layer: any) => {
-            const { id, title, opacity, visible, definitionExpression } = layer;
+            const {
+              id,
+              title,
+              opacity,
+              visible,
+              definitionExpression,
+              url
+            } = layer;
             mapLayerObjects.push({
               id,
               title,
               opacity,
               visible,
               definitionExpression,
-              group: 'webmap'
+              group: 'webmap',
+              url
             });
           });
 
@@ -178,7 +211,8 @@ export class MapController {
                   opacity: resourceOpacity,
                   visible: false,
                   definitionExpression: resourceDefinitionExpression,
-                  group: resourceGroup
+                  group: resourceGroup,
+                  url: url
                 });
               });
 
