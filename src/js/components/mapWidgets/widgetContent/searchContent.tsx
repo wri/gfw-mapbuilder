@@ -1,33 +1,72 @@
-import React, { FunctionComponent } from 'react';
+import React, {
+  FunctionComponent,
+  useRef,
+  useEffect,
+  useState,
+  ChangeEvent
+} from 'react';
 import { useSelector } from 'react-redux';
+
+import { mapController } from 'js/controllers/mapController';
 
 import { RootState } from 'js/store/index';
 
 import { searchContent } from '../../../../../configs/modal.config';
 
 const SearchContent: FunctionComponent = () => {
+  const searchRef = useRef(null);
+  const [latitudeInput, setLatitude] = useState(0);
+  const [longitudeInput, setLongitude] = useState(0);
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
-
   const { title, buttonTitle, latitude, longitude } = searchContent[
     selectedLanguage
   ];
+
+  useEffect(() => {
+    if (searchRef) {
+      mapController.initializeSearchWidget(searchRef);
+    }
+  }, [searchRef]);
+
+  const setSearch = (): void => {
+    mapController.setSearchWidget(latitudeInput, longitudeInput);
+  };
+
   return (
     <div className="modal-content-container">
       <div className="directions">
         <div className="form-wrapper">
           <label htmlFor={latitude}>{latitude}:</label>
-          <input id={latitude} type="number" className="input-coordinates" />
+          <input
+            id={latitude}
+            type="number"
+            className="input-coordinates"
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              setLatitude(Number(e.target.value))
+            }
+          />
 
           <label htmlFor={longitude}>{longitude}:</label>
-          <input id={longitude} type="number" className="input-coordinates" />
-          <button className="orange-button custom-dimensions">
+          <input
+            id={longitude}
+            type="number"
+            className="input-coordinates"
+            onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+              setLongitude(Number(e.target.value))
+            }
+          />
+          <button
+            className="orange-button custom-dimensions"
+            onClick={setSearch}
+          >
             {buttonTitle}
           </button>
         </div>
         <p>{title}</p>
       </div>
+      <div ref={searchRef}></div>
     </div>
   );
 };

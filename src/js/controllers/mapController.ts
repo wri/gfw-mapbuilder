@@ -7,6 +7,7 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import Search from 'esri/widgets/Search';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
@@ -24,6 +25,7 @@ import {
 } from 'js/store/mapview/actions';
 
 import {
+  renderModal,
   selectActiveTab,
   toggleTabviewPanel,
   setMeasureResults,
@@ -74,7 +76,8 @@ export class MapController {
   _pointerMoveEventListener: EventListener | any;
   _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
-  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;
+  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;,
+  _searchWidget: Search | any;
   // * NOTE - _selectedWidget is typed as any
   // * because ESRI's TS types measurementLabel as a string
   // * when AreaMeasurement2D.viewModel.measurementLabel is an object
@@ -87,6 +90,7 @@ export class MapController {
     this._printTask = undefined;
     this._legend = undefined;
     this._selectedWidget = undefined;
+    this._searchWidget = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -749,6 +753,7 @@ export class MapController {
 
     return mapPDF;
   };
+
   toggleLegend = (): void => {
     if (this._legend && typeof this._legend.container === 'object') {
       if (this._legend.container.classList.contains('hide')) {
@@ -758,6 +763,18 @@ export class MapController {
       }
     }
   };
+
+  initializeSearchWidget(searchRef: RefObject<any>): void {
+    this._searchWidget = new Search({
+      view: this._mapview,
+      container: searchRef.current
+    });
+  }
+
+  async setSearchWidget(latitude: number, longitude: number): Promise<void> {
+    await this._searchWidget.search([latitude, longitude]);
+    store.dispatch(renderModal(''));
+  }
 }
 
 export const mapController = new MapController();
