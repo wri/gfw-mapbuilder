@@ -267,6 +267,26 @@ const createLayers = function createLayers (layerPanel, activeLayers, language, 
     });
 };
 
+const updateAnalysisModules = function functionName(params) {
+  let acquiredModules = false;
+  window.addEventListener('message', function(e) {
+    let info;
+
+    // If the message is from the parent and it says it has the info
+    if (e.origin === params.origin && e.data && e.data.command === 'info') { //this fires twice;
+      if (!acquiredModules) { //so let's avoid setting it twice
+        info = e.data.info;
+        // console.log('Info is ' + JSON.stringify(info));
+        localStorage.setItem('analysisMods', JSON.stringify(info));
+        acquiredModules = true;
+      }
+    }
+  }, false);
+
+  // Ask the page opener (the map) to send us the info
+  opener.postMessage('send-info', params.origin);
+};
+
 const createMap = function createMap (params) {
   const { basemap } = params;
 
@@ -602,10 +622,8 @@ const renderResults = (results, lang, config, params) => {
   }
 
   const { chartType, label, colors, analysisId } = config;
-  console.log('config');
   const defaultColors = ['#cf5188'];
   let chartComponent = null;
-  console.log('chartTypechartType', chartType);
 
   switch (chartType) {
     case 'bar': {
@@ -789,8 +807,7 @@ const renderResults = (results, lang, config, params) => {
       break;
     }
     case 'vega':
-      chartComponent = <VegaChart results={results} selectedFeature={selectedFeat ? selectedFeat : null} />;
-      console.log('results report', results);
+      chartComponent = <VegaChart results={results} selectedFeature={selectedFeat ? selectedFeat : null} analysisMod={config} />;
       console.log('paramsparams', params);
       console.log('configgg', config);
       //chartComponent = <VegaChart results={results} selectedFeature={this.props.selectedFeature} setLoading={() => this.setState({isLoading: false})}/>;
@@ -798,7 +815,6 @@ const renderResults = (results, lang, config, params) => {
     default:
       break;
   }
-  console.log('chartComponent', chartComponent);
   return chartComponent;
 };
 
@@ -879,7 +895,15 @@ const handleTcdParams = (paramsObject) => {
 
 const runAnalysis = function runAnalysis (params, feature) {
   const { settings } = params;
-  const { language } = settings;
+  const { language } = settings;  
+
+  let analysisModules;
+  const stringMods = localStorage.getItem('analysisMods');
+  analysisModules = stringMods ? JSON.parse(stringMods) : '';
+
+  if (!analysisModules) {
+    analysisModules = settings.analysisModules;
+  }
 
   const { geostoreId } = feature;
   const resultsContainer = document.getElementById('results-container');
@@ -889,7 +913,7 @@ const runAnalysis = function runAnalysis (params, feature) {
   // and call a separate function that makes an esriRequest (like below) but with the updated
   // params that were passed into the report
 
-  settings.analysisModules.forEach((module) => {
+  analysisModules.forEach((module) => {
     let uiParamsToAppend = {};
 
     if (Array.isArray(module.uiParams) && module.uiParams.length > 0) {
@@ -930,13 +954,13 @@ const runAnalysis = function runAnalysis (params, feature) {
 
         const chartComponent = renderResults(results, language, module, params);
         const moduleDiv = document.getElementById(module.analysisId + '_div');
+        console.log(module);
+        
         ReactDOM.render(chartComponent, moduleDiv);
       });
       return;
     }
-    console.log('module.analysisUrl', module.analysisUrl);
     if (module.analysisId === 'FRAGMENTATION') {
-      // debugger
 
       if (feature.geometry.spatialReference.isWebMercator()) {
         feature.geometry = webmercatorUtils.webMercatorToGeographic(feature.geometry);
@@ -947,10 +971,6 @@ const runAnalysis = function runAnalysis (params, feature) {
       const content = {
         polygon: geojson.coordinates
       };
-      console.log('content', content);
-      // debugger
-
-
 
       fetch(
         module.analysisUrl,
@@ -963,13 +983,10 @@ const runAnalysis = function runAnalysis (params, feature) {
           body: JSON.stringify(content)
         }
       ).then(results => {
-        console.log('results', results);
 
         if (results.json) {
 
           results.json().then(newRes => {
-            console.log('newResss', newRes);
-            console.log('uiParamsToAppend.period', uiParamsToAppend.period);
             const dates = uiParamsToAppend.period.split(',');
 
             const startYear = dates[0].split('-')[0];
@@ -978,10 +995,7 @@ const runAnalysis = function runAnalysis (params, feature) {
             module.endYear = parseInt(endYear);
             let startCount;
             let totalCount = 0;
-            console.log('module.startYear', module.startYear);
-            console.log('module.endYear', module.endYear);
             Object.keys(newRes).forEach(year => {
-              console.log(year, typeof year);
               if (parseInt(year) === module.startYear) {
                 startCount = newRes[year];
               } else if (parseInt(year) > module.startYear && parseInt(year) <= module.endYear) {
@@ -1040,6 +1054,8 @@ const runAnalysis = function runAnalysis (params, feature) {
         resultsContainer.appendChild(div);
 
         const chartComponent = renderResults(results, language, module, params);
+        console.log(module.analysisId, chartComponent);
+        
 
         if (!chartComponent) {
           div.remove();
@@ -1099,6 +1115,14 @@ export default {
     params.viirsTo = moment(new Date(viirsEndDate));
     params.modisFrom = moment(new Date(modisStartDate));
     params.modisTo = moment(new Date(modisEndDate));
+
+    if (opener) { //If this report.html was opened via the map (rather than a url paste)
+      const analysisMods = localStorage.getItem('analysisMods');
+      if (analysisMods) {
+        localStorage.removeItem('analysisMods');
+      }
+      updateAnalysisModules(params);
+    }
 
     //- Create the map as soon as possible
     createMap(params);

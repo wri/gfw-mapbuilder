@@ -20,7 +20,7 @@ export default class VegaChart extends Component {
       const config = this.props.results.data.attributes.widgetConfig;
       const selectedFeature = this.props.selectedFeature;
       const attributes = selectedFeature && selectedFeature.attributes ? selectedFeature.attributes : null; //Only WCS-specific widgets need this property
-      charts.makeVegaChart(this.chart, config, this.props.setLoading, attributes, this.props.results.data.id, this.handleError);
+      charts.makeVegaChart(this.chart, config, this.props.setLoading, attributes, this.props.results.data.id, this.handleError, this.props.analysisMod);
     }
   }
 

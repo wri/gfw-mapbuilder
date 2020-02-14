@@ -258,6 +258,8 @@ export default {
     if (!appid) {
       //- Format the resources before resolving
       formatResources();
+      console.log('resources resolved as: ', resources);
+      
       promise.resolve(resources);
       return promise;
     }

@@ -373,13 +373,10 @@ export default {
 		});
   },
 
-  makeVegaChart: (el, config, callback, selectedAttributes, id, handleError) => {
-    console.log('selectedAttributes', selectedAttributes);
-    console.log('config', config);
-    //selectedAttributes && config.featureDataFieldsToPass
-      // &&/|| baseConfig.analysisId ??
+  makeVegaChart: (el, config, callback, selectedAttributes, id, handleError, analysisMod) => {
+
     if (selectedAttributes && config.featureDataFieldsToPass) { // WCS Specific logic
-      const baseConfig = resources.analysisModules.find(mod => mod.widgetId === id);
+      const baseConfig = analysisMod ? analysisMod : resources.analysisModules.find(mod => mod.widgetId === id);
       console.log('baseConfig', baseConfig);
       const baseUrl = config.data[0].url.split('?')[0];
 			let queryParams = encodeURI(config.featureDataFieldsToPass
@@ -399,11 +396,11 @@ export default {
       let analysisSuffix = '';
       if (baseConfig.analysisId) {
         analysisSuffix = encodeURI('analysisId=' + baseConfig.analysisId);
-		if (queryParams) {
-			queryParams += '&' + analysisSuffix;
-		} else {
-			queryParams = analysisSuffix;
-		}
+				if (queryParams) {
+					queryParams += '&' + analysisSuffix;
+				} else {
+					queryParams = analysisSuffix;
+				}
       }
 
       function render(spec) {
