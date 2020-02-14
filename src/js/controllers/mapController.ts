@@ -93,29 +93,7 @@ export class MapController {
         () => {
           store.dispatch(isMapReady(true));
           this._mapview?.on('click', event => {
-            //Initialize server side feature fetching on each map click
-            // fetchServerSideFeatures(this._map, event.mapPoint);
-            //activate data tab
-            // store.dispatch(selectActiveTab('data'));
-            //save mapPoint to redux for later use
-            // store.dispatch(setUserClickLocation(event.mapPoint));
-            // function sendQuery() {
-            //   //"VIIRS_ACTIVE_FIRES"
-            //   //"https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer"
-            //   const url =
-            //     'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_24hrs/MapServer/21';
-            //   const queryParams = {
-            //     where: '1=1',
-            //     outFields: '*',
-            //     returnGeometry: false,
-            //     geometry: event.mapPoint
-            //     // distance: 30,
-            //     // units: 'miles'
-            //   };
-            //   return esriQuery(url, queryParams);
-            // }
-            // const serverSideRes = await sendQuery();
-            // console.log(serverSideRes.features);
+            store.dispatch(selectActiveTab('data'));
             addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
           });
 
