@@ -25,9 +25,7 @@ const SearchContent: FunctionComponent = () => {
   ];
 
   useEffect(() => {
-    if (searchRef) {
-      mapController.initializeSearchWidget(searchRef);
-    }
+    mapController.initializeSearchWidget(searchRef);
   }, [searchRef]);
 
   const setSearch = (): void => {
@@ -64,9 +62,11 @@ const SearchContent: FunctionComponent = () => {
             {buttonTitle}
           </button>
         </div>
-        <p>{title}</p>
       </div>
-      <div ref={searchRef}></div>
+      <div className="search-widget-wrapper">
+        <p>{title}</p>
+        <div ref={searchRef}></div>
+      </div>
     </div>
   );
 };

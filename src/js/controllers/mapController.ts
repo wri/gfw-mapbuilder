@@ -3,12 +3,14 @@ import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
+import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import Search from 'esri/widgets/Search';
 import PrintTask from 'esri/tasks/PrintTask';
+import Point from 'esri/geometry/Point';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { once } from 'esri/core/watchUtils';
@@ -771,9 +773,22 @@ export class MapController {
     });
   }
 
-  async setSearchWidget(latitude: number, longitude: number): Promise<void> {
-    await this._searchWidget.search([latitude, longitude]);
+  setSearchWidget(latitude: number, longitude: number): void {
+    const specificPoint = new Point({
+      latitude,
+      longitude
+    });
+
     store.dispatch(renderModal(''));
+    this._mapview?.goTo(
+      {
+        target: specificPoint,
+        zoom: 10
+      },
+      {
+        duration: 5000
+      }
+    );
   }
 }
 
