@@ -1,18 +1,40 @@
 import Map from 'esri/Map';
+import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
+import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
+import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import PrintTask from 'esri/tasks/PrintTask';
+import PrintTemplate from 'esri/tasks/support/PrintTemplate';
+import PrintParameters from 'esri/tasks/support/PrintParameters';
+import { once } from 'esri/core/watchUtils';
+
 import { RefObject } from 'react';
+
 import store from '../store/index';
+import { LayerFactory } from 'js/helpers/LayerFactory';
+
 import {
   allAvailableLayers,
   mapError,
   isMapReady
 } from 'js/store/mapview/actions';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
+
+import {
+  selectActiveTab,
+  toggleTabviewPanel,
+  setMeasureResults,
+  setLanguage
+} from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
+import { OptionType } from 'js/interfaces/measureWidget';
+
+import { LayerFactoryObject } from 'js/interfaces/mapping';
+
+const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
 interface ZoomParams {
   zoomIn: boolean;
@@ -24,10 +46,11 @@ interface RemoteDataLayer {
     opacity: number;
     metadata: object;
     label: object;
+    url: string;
+    type: string;
     // [key: string]: object
   };
   dataLayer?: {
-    // [key: string]: object
     uuid: string;
     groupId: string;
     id: string;
@@ -35,6 +58,7 @@ interface RemoteDataLayer {
   };
   label: object;
   id: string;
+  url: string;
   groupId: string;
   type: string;
   order: number;
@@ -46,12 +70,23 @@ export class MapController {
   _mapview: MapView | undefined;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
+  _mouseClickEventListener: EventListener | any;
+  _pointerMoveEventListener: EventListener | any;
+  _printTask: PrintTask | undefined;
+  _legend: Legend | undefined;
+  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;
+  // * NOTE - _selectedWidget is typed as any
+  // * because ESRI's TS types measurementLabel as a string
+  // * when AreaMeasurement2D.viewModel.measurementLabel is an object
 
   constructor() {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
+    this._printTask = undefined;
+    this._legend = undefined;
+    this._selectedWidget = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -67,11 +102,11 @@ export class MapController {
       container: domRef.current
     });
 
-    const legend = new Legend({
+    this._legend = new Legend({
       view: this._mapview
     });
 
-    this._mapview.ui.add(legend, 'bottom-right');
+    this._mapview.ui.add(this._legend, 'bottom-right');
     this._mapview.ui.remove('zoom');
 
     this._mapview
@@ -98,57 +133,88 @@ export class MapController {
             const { appState } = store.getState();
 
             const resourceLayerObjects: LayerProps[] = [];
+            const resouceLayerSpecs: LayerFactoryObject[] = [];
 
-            res.forEach((apiLayer: RemoteDataLayer) => {
-              if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
-              let resourceId;
-              let resourceTitle;
+            res
+              .filter((resLayer: RemoteDataLayer) => {
+                const resLayerType = resLayer.dataLayer
+                  ? resLayer.layer.type
+                  : resLayer.type;
+                return allowedLayers.includes(resLayerType);
+              })
+              .forEach((apiLayer: RemoteDataLayer) => {
+                if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
+                let resourceId;
+                let resourceTitle;
 
-              //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
-              function determineLayerOpacity() {
-                //Try the resources.js predetermined opacity
-                let opacity = apiLayer.dataLayer?.opacity;
-                if (!opacity && opacity !== 0) {
-                  //nothing in the resources to do with opacity, try the response's oapcity
-                  opacity = apiLayer.layer?.opacity;
+                //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
+                function determineLayerOpacity() {
+                  //Try the resources.js predetermined opacity
+                  let opacity = apiLayer.dataLayer?.opacity;
+                  if (!opacity && opacity !== 0) {
+                    //nothing in the resources to do with opacity, try the response's oapcity
+                    opacity = apiLayer.layer?.opacity;
+                  }
+                  return opacity ?? 1; //if all fails, default to 1
                 }
-                return opacity ?? 1; //if all fails, default to 1
-              }
-              const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
+                const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
 
-              // let resourceVisible = true; //TODO: Make this dynamic as well!
-              let resourceDefinitionExpression;
-              let resourceGroup;
+                // let resourceVisible = true; //TODO: Make this dynamic as well!
+                let resourceDefinitionExpression;
+                let resourceGroup;
+                let url;
+                let type;
 
-              if (apiLayer.dataLayer) {
-                resourceId = apiLayer.dataLayer.id;
-                resourceTitle = apiLayer.layer.label[appState.selectedLanguage];
-                resourceGroup = apiLayer.dataLayer.groupId;
-              } else {
-                resourceId = apiLayer.id;
-                resourceTitle = apiLayer.label[appState.selectedLanguage];
-                resourceGroup = apiLayer.groupId;
-              }
+                if (apiLayer.dataLayer) {
+                  resourceId = apiLayer.dataLayer.id;
+                  resourceTitle =
+                    apiLayer.layer.label[appState.selectedLanguage];
+                  resourceGroup = apiLayer.dataLayer.groupId;
+                  url = apiLayer.layer.url;
+                  type = apiLayer.layer.type;
+                } else {
+                  resourceId = apiLayer.id;
+                  resourceTitle = apiLayer.label[appState.selectedLanguage];
+                  resourceGroup = apiLayer.groupId;
+                  url = apiLayer.url;
+                  type = apiLayer.type;
+                }
 
-              resourceLayerObjects.push({
-                id: resourceId,
-                title: resourceTitle,
-                opacity: resourceOpacity,
-                visible: false,
-                definitionExpression: resourceDefinitionExpression,
-                group: resourceGroup
+                resouceLayerSpecs.push({
+                  id: resourceId,
+                  title: resourceTitle,
+                  opacity: resourceOpacity,
+                  visible: false,
+                  definitionExpression: resourceDefinitionExpression,
+                  url: url,
+                  type: type
+                });
+
+                resourceLayerObjects.push({
+                  id: resourceId,
+                  title: resourceTitle,
+                  opacity: resourceOpacity,
+                  visible: false,
+                  definitionExpression: resourceDefinitionExpression,
+                  group: resourceGroup
+                });
               });
-            });
 
             store.dispatch(
               allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
             );
+
+            const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
+              return LayerFactory(this._mapview, resouceLayerSpec);
+            });
+
+            this._map?.addMany(mapLayers);
           });
 
           this.initializeAndSetSketch();
         },
         (error: Error) => {
-          console.log('error in initializeMap()', error);
+          console.log('error in re-initializeMap()', error);
           store.dispatch(mapError(true));
         }
       )
@@ -200,16 +266,19 @@ export class MapController {
               .then(metadata => {
                 const attributes = layer.attributes;
                 const itemGroup = item.group;
+
                 // Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
-                //   if (layerProp !== 'type' && layerProp !== 'uuid') {
-                //     if (layerProp === 'legendConfig') {
-                //       attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
-                //     } else {
-                //       layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
-                //     }
+
+                // if (layerProp !== 'type' && layerProp !== 'uuid') {
+                //   if (layerProp === 'legendConfig') {
+                //     attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
+                //   } else {
+                //     layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
                 //   }
+                // }
                 // });
                 item.layer = layer.attributes.layerConfig;
+
                 item.group = itemGroup;
                 item.layer.metadata = {
                   metadata,
@@ -227,6 +296,91 @@ export class MapController {
     return Promise.all(remoteDataLayerRequests);
   }
 
+  changeLanguage(lang: string): void {
+    store.dispatch(setLanguage(lang));
+    const resourceLayers: Layer[] = [];
+    if (this._map) {
+      store
+        .getState()
+        .mapviewState.allAvailableLayers.filter(availableLayer => {
+          return availableLayer.group !== 'webmap';
+        })
+        .forEach(resourceLayer => {
+          if (this._map) {
+            resourceLayers.push(this._map.findLayerById(resourceLayer.id));
+          }
+        });
+
+      this._map.removeMany(resourceLayers);
+    }
+
+    this._map = undefined;
+    const appSettings = store.getState().appSettings;
+    const newWebMap =
+      lang === appSettings.language
+        ? appSettings.webmap
+        : appSettings.alternativeWebmap;
+
+    this._map = new WebMap({
+      portalItem: {
+        id: newWebMap
+      }
+    });
+
+    if (this._mapview) {
+      this._mapview.map = this._map;
+      this._mapview
+        .when(
+          () => {
+            store.dispatch(isMapReady(true));
+
+            if (this._map) {
+              once(this._map, 'loaded', () => {
+                const mapLayerObjects: LayerProps[] = [];
+                this._map?.layers.forEach((layer: any) => {
+                  const {
+                    id,
+                    title,
+                    opacity,
+                    visible,
+                    definitionExpression
+                  } = layer;
+                  mapLayerObjects.push({
+                    id,
+                    title,
+                    opacity,
+                    visible,
+                    definitionExpression,
+                    group: 'webmap'
+                  });
+                });
+
+                const prevMapObjects = store
+                  .getState()
+                  .mapviewState.allAvailableLayers.filter(
+                    availableLayer => availableLayer.group !== 'webmap'
+                  );
+
+                store.dispatch(
+                  allAvailableLayers([...prevMapObjects, ...mapLayerObjects])
+                );
+
+                this._map?.addMany(resourceLayers);
+              });
+            }
+          },
+          (error: Error) => {
+            console.log('error in change Language mapView constructor', error);
+            store.dispatch(mapError(true));
+          }
+        )
+        .catch((error: Error) => {
+          console.log('error in change Language mapView constructor', error);
+          store.dispatch(mapError(true));
+        });
+    }
+  }
+
   log(): void {
     console.log(this._map?.basemap);
   }
@@ -242,7 +396,7 @@ export class MapController {
     }
   }
 
-  clearAllLayers() {
+  clearAllLayers(): void {
     console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach(layer => (layer.visible = false));
@@ -260,7 +414,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  selectAllLayers() {
+  selectAllLayers(): void {
     console.log('select all layers');
     const layersToEnable: string[] = [];
     this._map?.layers.forEach(layer => {
@@ -279,7 +433,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  toggleLayerVisibility(layerID: string) {
+  toggleLayerVisibility(layerID: string): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       //1. update the map
@@ -300,7 +454,7 @@ export class MapController {
     }
   }
 
-  setLayerOpacity(layerID: string, value: string) {
+  setLayerOpacity(layerID: string, value: string): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
       layer.opacity = Number(value);
@@ -348,9 +502,261 @@ export class MapController {
     });
   }
 
-  createPolygonSketch = () => {
+  createPolygonSketch = (): void => {
     this._mapview?.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
+  };
+
+  getAndDispatchMeasureResults(optionType: OptionType): void {
+    this._selectedWidget?.watch('viewModel.state', (state: string) => {
+      let areaResults = {};
+      let distanceResults = {};
+
+      if (state === 'measured') {
+        if (optionType === 'area') {
+          areaResults = {
+            area: this._selectedWidget.viewModel.measurementLabel.area,
+            perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
+          };
+        } else if (optionType === 'distance') {
+          distanceResults = {
+            length: this._selectedWidget.viewModel.measurementLabel
+          };
+        }
+
+        store.dispatch(
+          setMeasureResults({
+            activeButton: optionType,
+            areaResults,
+            distanceResults,
+            coordinateMouseClickResults: {},
+            coordinatePointerMoveResults: {}
+          })
+        );
+      }
+    });
+  }
+
+  clearAllWidgets(): void {
+    this._selectedWidget?.viewModel.clearMeasurement();
+    this._selectedWidget = undefined;
+
+    this._mouseClickEventListener?.remove();
+    this._mouseClickEventListener = undefined;
+
+    this._pointerMoveEventListener?.remove();
+    this._pointerMoveEventListener = undefined;
+  }
+
+  setActiveMeasureWidget(optionType: OptionType): void {
+    switch (optionType) {
+      case 'area':
+        this._selectedWidget = new AreaMeasurement2D({
+          view: this._mapview,
+          unit: 'acres'
+        });
+        break;
+      case 'distance':
+        this._selectedWidget = new DistanceMeasurement2D({
+          view: this._mapview,
+          unit: 'miles'
+        });
+        break;
+      case 'coordinates': {
+        this._selectedWidget?.viewModel.clearMeasurement();
+        this._selectedWidget = undefined;
+        // this.updateOnClickCoordinates(selectedDropdownOption);
+        // this.setOnClickCoordinates(selectedDropdownOption);
+        // this.setPointerMoveCoordinates(selectedDropdownOption);
+        break;
+      }
+      default:
+        break;
+    }
+
+    if (optionType === 'area' || optionType === 'distance') {
+      this._selectedWidget?.viewModel.newMeasurement();
+      this.getAndDispatchMeasureResults(optionType);
+    }
+  }
+
+  updateSelectedMeasureWidget(
+    optionType: OptionType,
+    selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
+  ): void {
+    let areaResults = {};
+    let distanceResults = {};
+
+    if (this._selectedWidget) {
+      this._selectedWidget.unit = selectedUnit;
+      switch (optionType) {
+        case 'area':
+          areaResults = {
+            area: this._selectedWidget.viewModel.measurementLabel.area,
+            perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
+          };
+          break;
+        case 'distance':
+          distanceResults = {
+            length: this._selectedWidget.viewModel.measurementLabel
+          };
+          break;
+        default:
+          break;
+      }
+
+      store.dispatch(
+        setMeasureResults({
+          activeButton: optionType,
+          areaResults,
+          distanceResults,
+          coordinateMouseClickResults: {},
+          coordinatePointerMoveResults: {}
+        })
+      );
+      this._selectedWidget?.watch('viewModel.state', (state: string) => {
+        if (state === 'measured') {
+          this.updateMeasureWidgetOnClick();
+        }
+      });
+    }
+  }
+
+  // updateOnClickCoordinates(selectedDropdownOption: string): void {
+  //   const {
+  //     coordinateMouseClickResults
+  //   } = store.getState().appState.measureContent;
+  //   const isDMS = selectedDropdownOption === 'dms';
+  //   const isDecimal = selectedDropdownOption === 'decimal';
+
+  //   if (
+  //     coordinateMouseClickResults?.latitude &&
+  //     coordinateMouseClickResults?.longitude &&
+  //     isDMS
+  //   ) {
+  //     // TODO - convert decimal to DMS
+  //     // * NOTE - Will need to revisit this logic
+  //     // * NOTE - Will need to explicitly update other ...Results property of Redux state
+
+  //     store.dispatch(
+  //       setMeasureResults({
+  //         areaResults: {},
+  //         distanceResults: {},
+  //         coordinateMouseClickResults: {}
+  //       })
+  //     );
+  //   } else if (
+  //     coordinateMouseClickResults?.latitude &&
+  //     coordinateMouseClickResults?.longitude &&
+  //     isDecimal
+  //   ) {
+  //     // TODO - convert DMS to decimal
+  //   }
+  // }
+
+  updateMeasureWidgetOnClick(): void {
+    const mapviewOnClick = this._mapview?.on('click', event => {
+      event.stopPropagation();
+      this._selectedWidget?.viewModel.newMeasurement();
+      mapviewOnClick?.remove();
+    });
+  }
+
+  // setOnClickCoordinates(selectedDropdownOption: string): void {
+  //   this._mouseClickEventListener = this._mapview?.on('click', event => {
+  //     event.stopPropagation();
+  //     let coordinateMouseClickResults = {};
+  //     const coordinatesInDecimals = this._mapview?.toMap({
+  //       x: event.x,
+  //       y: event.y
+  //     });
+
+  //     if (selectedDropdownOption === 'degree') {
+  //       // TODO - convert to degree
+  //     } else if (selectedDropdownOption === 'dms') {
+  //       // TODO - convert to dms
+  //     }
+
+  //     store.dispatch(
+  //       setMeasureResults({
+  //         areaResults: {},
+  //         distanceResults: {},
+  //         coordinateMouseClickResults
+  //       })
+  //     );
+  //   });
+  // }
+
+  // setPointerMoveCoordinates(selectedDropdownOption: string): void {
+  //   this._pointerMoveEventListener = this._mapview?.on(
+  //     'pointer-move',
+  //     event => {
+  //       event.stopPropagation();
+  //       let coordinatePointerMoveResults = {};
+  //       const coordinatesInDecimals = this._mapview?.toMap({
+  //         x: event.x,
+  //         y: event.y
+  //       });
+
+  //       if (selectedDropdownOption === 'Degree') {
+  //         // TODO - convert to degree
+  //       } else if (selectedDropdownOption === 'DMS') {
+  //         // TODO - convert to DMS
+  //       }
+
+  //       store.dispatch(
+  //         setMeasureResults({
+  //           areaResults: {},
+  //           distanceResults: {},
+  //           coordinatePointerMoveResults
+  //         })
+  //       );
+  //     }
+  //   );
+  // }
+
+  generateMapPDF = async (layoutType: string): Promise<any> => {
+    const printServiceURL = store.getState().appSettings.printServiceUrl;
+
+    if (!this._printTask) {
+      this._printTask = new PrintTask({
+        url: printServiceURL
+      });
+    }
+
+    const template = new PrintTemplate({
+      format: 'pdf',
+      layout: layoutType as any,
+      // * NOTE - must set 'layout' as type of 'any' in order to assign
+      // * custom layout types from GFW print service URL
+      layoutOptions: {
+        scalebarUnit: 'Kilometers',
+        customTextElements: [
+          { title: 'GFW Mapbuilder' },
+          { subtitle: 'Make maps that matter' }
+        ]
+      }
+    });
+
+    const params = new PrintParameters({
+      view: this._mapview,
+      template
+    });
+
+    const mapPDF = await this._printTask
+      ?.execute(params)
+      .catch(e => console.log('error in generateMapPDF()', e));
+
+    return mapPDF;
+  };
+  toggleLegend = (): void => {
+    if (this._legend && typeof this._legend.container === 'object') {
+      if (this._legend.container.classList.contains('hide')) {
+        this._legend.container.classList.remove('hide');
+      } else {
+        this._legend.container.classList.add('hide');
+      }
+    }
   };
 }
 
