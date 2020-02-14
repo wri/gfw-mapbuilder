@@ -78,8 +78,7 @@ export class MapController {
   _pointerMoveEventListener: EventListener | any;
   _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
-  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;,
-  _searchWidget: Search | any;
+  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;
   // * NOTE - _selectedWidget is typed as any
   // * because ESRI's TS types measurementLabel as a string
   // * when AreaMeasurement2D.viewModel.measurementLabel is an object
@@ -92,7 +91,6 @@ export class MapController {
     this._printTask = undefined;
     this._legend = undefined;
     this._selectedWidget = undefined;
-    this._searchWidget = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -767,7 +765,7 @@ export class MapController {
   };
 
   initializeSearchWidget(searchRef: RefObject<any>): void {
-    this._searchWidget = new Search({
+    new Search({
       view: this._mapview,
       container: searchRef.current
     });
@@ -797,7 +795,6 @@ export class MapController {
       symbol: simpleMarkerSymbol
     });
 
-    store.dispatch(renderModal(''));
     this._mapview?.graphics.add(pointGraphic);
     this._mapview?.goTo(
       {
@@ -808,6 +805,7 @@ export class MapController {
         duration: 5000
       }
     );
+    store.dispatch(renderModal(''));
   }
 }
 

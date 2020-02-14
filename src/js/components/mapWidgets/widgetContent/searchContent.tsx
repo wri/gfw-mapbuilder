@@ -38,6 +38,7 @@ const SearchContent: FunctionComponent = () => {
         <div className="form-wrapper">
           <label htmlFor={latitude}>{latitude}:</label>
           <input
+            value={latitudeInput > 0 ? latitudeInput : ''}
             id={latitude}
             type="number"
             className="input-coordinates"
@@ -48,6 +49,7 @@ const SearchContent: FunctionComponent = () => {
 
           <label htmlFor={longitude}>{longitude}:</label>
           <input
+            value={longitudeInput > 0 ? longitudeInput : ''}
             id={longitude}
             type="number"
             className="input-coordinates"
