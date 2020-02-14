@@ -774,12 +774,31 @@ export class MapController {
   }
 
   setSearchWidget(latitude: number, longitude: number): void {
+    if (this._mapview) {
+      this?._mapview.graphics.removeAll();
+    }
+
     const specificPoint = new Point({
       latitude,
       longitude
     });
 
+    const simpleMarkerSymbol = {
+      type: 'simple-marker',
+      color: [240, 171, 0], // $base-yellow
+      outline: {
+        color: [255, 255, 255],
+        width: 1
+      }
+    };
+
+    const pointGraphic = new Graphic({
+      geometry: specificPoint,
+      symbol: simpleMarkerSymbol
+    });
+
     store.dispatch(renderModal(''));
+    this._mapview?.graphics.add(pointGraphic);
     this._mapview?.goTo(
       {
         target: specificPoint,
