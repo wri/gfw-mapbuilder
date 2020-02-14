@@ -229,7 +229,6 @@ const MeasureContent: FunctionComponent = () => {
                 | DistanceMeasurement2D['unit']
             )
           }
-          onBlur={(): void => console.log('Bonjour, onBlur!')}
           disabled={activeButton === '' ? true : false}
         >
           {returnDropdown()}
