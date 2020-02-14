@@ -36,11 +36,12 @@ const DataTabView = (props: DataTabProps) => {
     featureGroup: Graphic[];
   }
   const FeatureDataView = (): any => {
-    const FeatureGroupElement = (props: FeatureDataProps) => {
+    const FeatureGroupElement = (props: any) => {
       const [page, setPage] = useState(0);
-      const groupTitle = props.featureGroup[0].layer.title;
-      const attributes = props.featureGroup.map(group => group.attributes);
-      console.log(attributes);
+      const groupTitle = props.layerFeatureGroup.layerTitle;
+      const attributes = props.layerFeatureGroup.features.map(
+        (group: any) => group.attributes
+      );
 
       function turnPage(): void {
         if (page !== attributes.length - 1) {
@@ -59,9 +60,9 @@ const DataTabView = (props: DataTabProps) => {
         </>
       );
     };
-    return activeFeatures.map((featureGroup, i) => (
+    return activeFeatures.map((layerFeatureGroup, i) => (
       <div key={i}>
-        <FeatureGroupElement featureGroup={featureGroup} />
+        <FeatureGroupElement layerFeatureGroup={layerFeatureGroup} />
       </div>
     ));
   };

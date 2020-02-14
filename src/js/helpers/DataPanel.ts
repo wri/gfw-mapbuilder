@@ -1,14 +1,20 @@
-import { watch } from 'esri/core/watchUtils';
 import MapView from 'esri/views/MapView';
 import Point from 'esri/geometry/Point';
 import Map from 'esri/Map';
 import store from 'js/store';
-import { setActiveFeatures } from 'js/store/mapview/actions';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/support/Query';
 import geometryEngine from 'esri/geometry/geometryEngine';
+import Graphic from 'esri/Graphic';
+import Sublayer from 'esri/layers/support/Sublayer';
+import { watch } from 'esri/core/watchUtils';
+import { setActiveFeatures } from 'js/store/mapview/actions';
+import { LayerFeatureResult } from 'js/store/mapview/types';
 
-function esriQuery(url: string, queryParams: any): Promise<any> | any {
+function esriQuery(
+  url: string,
+  queryParams: __esri.QueryProperties
+): Promise<__esri.FeatureSet> {
   const qt = new QueryTask({
     url: url
   });
@@ -17,35 +23,70 @@ function esriQuery(url: string, queryParams: any): Promise<any> | any {
   return result;
 }
 
-function fetchServerSidePromises(
+async function processSublayers(
+  geometry: any,
+  sublayersArray: Sublayer[]
+): Promise<any> {
+  const processedSubsResults: LayerFeatureResult[] = [];
+  for await (const sublayer of sublayersArray) {
+    const url = sublayer.url;
+    const qParams = {
+      where: '1=1',
+      outFields: ['*'],
+      geometry: geometry,
+      returnGeometry: false
+    };
+    try {
+      const sublayerResult = await esriQuery(url, qParams);
+      //if no features are found, skip it
+      if (sublayerResult.features.length !== 0) {
+        const features = sublayerResult.features.map(f => {
+          return {
+            attributes: f.attributes,
+            geometry: f.geometry
+          };
+        });
+        const subCleanedResult = {
+          layerID: sublayer.layer.id,
+          layerTitle: sublayer.layer.title,
+          features: features
+        };
+        processedSubsResults.push(subCleanedResult);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  return processedSubsResults;
+}
+
+async function fetchAsyncServerResults(
   map: Map | undefined,
   mapview: MapView,
   mapPoint: Point
-): any {
-  //Iterate over map layers, filter out turned off layers and non map-image layers
-  const visibleServerLayers = map?.layers.filter(
-    l => l.visible && l.type === 'map-image'
-  );
-  //Extract all sublayers
-  const sublayers = visibleServerLayers
-    ?.flatten((item: any) => item.sublayers)
-    .filter((l: any) => !l.sublayers);
+): Promise<any> {
+  if (map) {
+    //Iterate over map layers, filter out turned off layers and non map-image layers
+    const visibleServerLayers = map.layers.filter(
+      l => l.visible && l.type === 'map-image'
+    );
+    //Extract all sublayers
+    const sublayers: any = visibleServerLayers
+      .flatten((item: any) => item.sublayers)
+      .filter((l: any) => !l.sublayers);
 
-  const serverPromiseArray: any = sublayers?.map((sl: any) => {
-    const url = sl.url;
+    //We need to convert Collection of sublayers to regular array for async processing
+    const sublayersArray: any[] = sublayers.items.map((sl: Sublayer) => sl);
+
+    //TODO: Better way to handle mouse click buffering?
     const distance = mapview.resolution * 0.005;
     const geometry = geometryEngine.buffer(mapPoint, distance, 'miles');
-    const qParams = {
-      where: '1=1',
-      outFields: '*',
-      geometry: geometry,
-      // distance: 1,
-      // units: 'miles',
-      returnGeometry: false
-    };
-    return esriQuery(url, qParams);
-  });
-  return serverPromiseArray?.items;
+    const processedSubs: LayerFeatureResult[] = await processSublayers(
+      geometry,
+      sublayersArray
+    );
+    return processedSubs;
+  }
 }
 
 //Client Side Feature Fetching
@@ -56,45 +97,41 @@ export function addPopupWatchUtils(
 ): void {
   //Watching for promises array on Popup, that gets resolved once user clicks on the map and features are returned. Note: this will not return any server side features.
   const popupWatcher = watch(mapview.popup, 'promises', promises => {
-    console.log('client promises:');
-    console.log(promises);
-    const serverPromises = fetchServerSidePromises(map, mapview, mapPoint);
-    console.log('server promises');
-    console.log(serverPromises);
-    const clientAndServerPromises = promises.concat(serverPromises);
-    console.log('client and serverprom');
-    console.log(clientAndServerPromises);
-
-    function resolvePromisesWithErrors(promises: any) {
+    function resolveClientPromisesWithErrors(promises: any): Promise<void> {
       return Promise.all<any>(
-        promises.map((p: any) => p.catch((error: any) => null))
-      ).then(featureArray => {
-        console.log(featureArray);
-        //Remove empty and failed results that come through the promise resolution
-        const cleanFeatureArray = featureArray
-          .filter((f: any) => f !== null)
-          .filter((f: any) => f.length !== 0);
-        //Remove empty results that come from server side resolution
-        console.log(cleanFeatureArray);
-        const sanitizedRes = cleanFeatureArray.map((featObject: any) => {
-          //if it is server side promise resolution, extract features
+        promises.map((p: Promise<any>) => p.catch((error: Error) => null))
+      ).then(async clientFeatures => {
+        let layerFeatureResults: LayerFeatureResult[] = [];
+        const cleanClientFeautures = clientFeatures
+          .filter(f => f !== null) //catch failed promises
+          .filter(f => f.length !== 0) //catch no features returned
+          .map((featureObject: Graphic[]) => {
+            const newFeatureObject: LayerFeatureResult = {
+              layerID: featureObject[0].layer.id,
+              layerTitle: featureObject[0].layer.title,
+              features: featureObject.map(g => {
+                return {
+                  attributes: g.attributes,
+                  geometry: g.geometry
+                };
+              })
+            };
+            return newFeatureObject;
+          });
+        layerFeatureResults = layerFeatureResults.concat(cleanClientFeautures);
 
-          if (Array.isArray(featObject)) {
-            // console.log(featObject);
-            return featObject;
-          } else {
-            // debugger;
-            //client side resolution is clean already - do nothing
-            return featObject.features;
-          }
-        });
-        //Send results to redux store to be used in DataPanel
-        store.dispatch(setActiveFeatures(sanitizedRes));
+        //deal with server side separately
+        const serverResponse = await fetchAsyncServerResults(
+          map,
+          mapview,
+          mapPoint
+        );
+        layerFeatureResults = layerFeatureResults.concat(serverResponse);
+        console.log(layerFeatureResults);
+        store.dispatch(setActiveFeatures(layerFeatureResults));
       });
     }
-    resolvePromisesWithErrors(clientAndServerPromises);
-    // resolvePromisesWithErrors(promises);
-    //cleanup watcher
+    resolveClientPromisesWithErrors(promises);
     popupWatcher.remove();
   });
 }

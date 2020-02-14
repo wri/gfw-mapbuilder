@@ -5,7 +5,7 @@ export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
   allAvailableLayers: LayerProps[];
-  activeFeatures: Graphic[][];
+  activeFeatures: LayerFeatureResult[];
 }
 
 export interface LayerProps {
@@ -17,6 +17,17 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
+}
+
+interface FeatureResult {
+  attributes: object;
+  geometry: __esri.Geometry;
+}
+
+export interface LayerFeatureResult {
+  layerTitle: string;
+  layerID: string;
+  features: FeatureResult[];
 }
 
 //Action types
