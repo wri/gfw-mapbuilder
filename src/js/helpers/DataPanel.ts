@@ -7,7 +7,7 @@ import Query from 'esri/tasks/support/Query';
 import geometryEngine from 'esri/geometry/geometryEngine';
 import Graphic from 'esri/Graphic';
 import Sublayer from 'esri/layers/support/Sublayer';
-import { watch } from 'esri/core/watchUtils';
+import { once } from 'esri/core/watchUtils';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 
@@ -43,7 +43,7 @@ async function processSublayers(
         const features = sublayerResult.features.map(f => {
           return {
             attributes: f.attributes,
-            geometry: f.geometry
+            geometry: f.geometry //this is either null or geometry depending on our query!
           };
         });
         const subCleanedResult = {
@@ -96,7 +96,7 @@ export function addPopupWatchUtils(
   mapPoint: Point
 ): void {
   //Watching for promises array on Popup, that gets resolved once user clicks on the map and features are returned. Note: this will not return any server side features.
-  const popupWatcher = watch(mapview.popup, 'promises', promises => {
+  once(mapview.popup, 'promises', promises => {
     function resolveClientPromisesWithErrors(promises: any): Promise<void> {
       return Promise.all<any>(
         promises.map((p: Promise<any>) => p.catch((error: Error) => null))
@@ -132,6 +132,5 @@ export function addPopupWatchUtils(
       });
     }
     resolveClientPromisesWithErrors(promises);
-    popupWatcher.remove();
   });
 }
