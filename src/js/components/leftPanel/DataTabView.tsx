@@ -3,7 +3,17 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import { ReactComponent as AnalysisIcon } from 'images/analysisPolyIcon.svg';
-import Graphic from 'esri/Graphic';
+
+const DefaultTabView = () => (
+  <div className="data-tab-default-container">
+    <p>Select a shape on the map</p>
+    <ol>
+      <li>Use the layers tab to turn on a data layer</li>
+      <li>Select a shape on the map</li>
+    </ol>
+    <AnalysisIcon width={100} height={100} />
+  </div>
+);
 
 interface DataTabProps {
   key: string;
@@ -21,20 +31,6 @@ const DataTabView = (props: DataTabProps) => {
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
-  const DefaultTabView = () => (
-    <div className="data-tab-default-container">
-      <p>Select a shape on the map</p>
-      <ol>
-        <li>Use the layers tab to turn on a data layer</li>
-        <li>Select a shape on the map</li>
-      </ol>
-      <AnalysisIcon width={100} height={100} />
-    </div>
-  );
-
-  interface FeatureDataProps {
-    featureGroup: Graphic[];
-  }
   const FeatureDataView = (): any => {
     const FeatureGroupElement = (props: any) => {
       const [page, setPage] = useState(0);
@@ -60,11 +56,26 @@ const DataTabView = (props: DataTabProps) => {
         </>
       );
     };
-    return activeFeatures.map((layerFeatureGroup, i) => (
-      <div key={i}>
-        <FeatureGroupElement layerFeatureGroup={layerFeatureGroup} />
+
+    //TODO: needs to be active language aware
+    return (
+      <div className="data-tabview-container">
+        {activeFeatures.map((layerFeatureGroup, i) => (
+          <div key={i}>
+            {<FeatureGroupElement layerFeatureGroup={layerFeatureGroup} />}
+          </div>
+        ))}
+        <div className="data-tabview-footer">
+          <button onClick={() => console.log('Print Report!')}>
+            Print Report{' '}
+            <img
+              src="https://my.gfw-mapbuilder.org/img/print-icon.svg"
+              alt="print"
+            />
+          </button>
+        </div>
       </div>
-    ));
+    );
   };
 
   const DataTabViewContent = () => {
