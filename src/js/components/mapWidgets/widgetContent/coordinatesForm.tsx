@@ -41,7 +41,6 @@ interface DMSCardinalPoint {
 }
 
 const CoordinatesForm: FunctionComponent = () => {
-  const [formError, setFormError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState(0);
   const [dmsSections, setDMSForm] = useState([
     {
@@ -131,7 +130,6 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   const setShape = (): void => {
-    // TODO create form validation logic by maintaining formError
     mapController.setPolygon(dmsSections);
   };
 
@@ -246,12 +244,6 @@ const CoordinatesForm: FunctionComponent = () => {
           <button className="orange-button" onClick={(): void => setShape()}>
             Make shape
           </button>
-          {formError && (
-            <p>
-              Error: Please fill in all latitude and longitude values. You must
-              enter a minimum of 3 points to make a shape.
-            </p>
-          )}
         </div>
       </div>
     </div>
