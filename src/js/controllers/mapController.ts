@@ -19,7 +19,6 @@ import { RefObject } from 'react';
 
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
-
 import {
   allAvailableLayers,
   mapError,
@@ -37,6 +36,7 @@ import { LayerProps } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
+import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 
 import { SpecificDMSSection } from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 
@@ -73,7 +73,7 @@ interface RemoteDataLayer {
 
 export class MapController {
   _map: Map | undefined;
-  _mapview: MapView | undefined;
+  _mapview: MapView;
   _sketchVM: SketchViewModel | undefined;
   _previousSketchGraphic: any;
   _mouseClickEventListener: EventListener | any;
@@ -87,7 +87,6 @@ export class MapController {
 
   constructor() {
     this._map = undefined;
-    this._mapview = undefined;
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
     this._printTask = undefined;
@@ -119,17 +118,31 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
+          this._mapview?.on('click', event => {
+            store.dispatch(selectActiveTab('data'));
+            addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
+          });
+
+          //Setup popup related watches to be used in data panel
 
           const mapLayerObjects: LayerProps[] = [];
           this._map?.layers.forEach((layer: any) => {
-            const { id, title, opacity, visible, definitionExpression } = layer;
+            const {
+              id,
+              title,
+              opacity,
+              visible,
+              definitionExpression,
+              url
+            } = layer;
             mapLayerObjects.push({
               id,
               title,
               opacity,
               visible,
               definitionExpression,
-              group: 'webmap'
+              group: 'webmap',
+              url
             });
           });
 
@@ -202,7 +215,8 @@ export class MapController {
                   opacity: resourceOpacity,
                   visible: false,
                   definitionExpression: resourceDefinitionExpression,
-                  group: resourceGroup
+                  group: resourceGroup,
+                  url: url
                 });
               });
 
@@ -500,7 +514,7 @@ export class MapController {
 
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
-        this._mapview?.graphics.add(event.graphic);
+        this._mapview.graphics.add(event.graphic);
 
         store.dispatch(selectActiveTab('analysis'));
         store.dispatch(toggleTabviewPanel(true));
@@ -509,7 +523,7 @@ export class MapController {
   }
 
   createPolygonSketch = (): void => {
-    this._mapview?.graphics.remove(this._previousSketchGraphic);
+    this._mapview.graphics.remove(this._previousSketchGraphic);
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 

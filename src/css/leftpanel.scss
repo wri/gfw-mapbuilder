@@ -142,3 +142,10 @@
 .layer-basemap.selected {
   background: #f2f2f2;
 }
+
+//DATA PANEL STYLES, may need to extract this into separate file
+.data-tab-default-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
