@@ -780,70 +780,66 @@ export class MapController {
   };
 
   setPolygon = (setDMSForm: Array<SpecificDMSSection>): void => {
-    if (this._mapview) {
-      const simpleFillSymbol = {
-        type: 'simple-fill', // autocasts as new SimpleFillSymbol()
-        color: [240, 171, 0, 0.0],
-        outline: {
-          // autocasts as new SimpleLineSymbol()
-          color: [0, 255, 254],
-          width: 2
-        }
-      };
+    const simpleFillSymbol = {
+      type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+      color: [240, 171, 0, 0.0],
+      outline: {
+        // autocasts as new SimpleLineSymbol()
+        color: [0, 255, 254],
+        width: 2
+      }
+    };
 
-      this._mapview.graphics.removeAll();
+    this._mapview.graphics.removeAll();
 
-      const points = setDMSForm.map(point => {
-        const { latitude, longitude } = point;
-        let convertedLatitude;
-        let convertedLongitude;
-        if (latitude.cardinalPoint === 'N') {
-          convertedLatitude =
-            latitude.seconds / 3600 + latitude.minutes / 60 + latitude.degree;
-        } else {
-          convertedLatitude =
-            (longitude.seconds / 3600 -
-              longitude.minutes / 60 +
-              longitude.degree) *
-            -1;
-        }
-
-        if (longitude.cardinalPoint === 'E') {
-          convertedLongitude =
-            longitude.seconds / 3600 +
+    const points = setDMSForm.map(point => {
+      const { latitude, longitude } = point;
+      let convertedLatitude;
+      let convertedLongitude;
+      if (latitude.cardinalPoint === 'N') {
+        convertedLatitude =
+          latitude.seconds / 3600 + latitude.minutes / 60 + latitude.degree;
+      } else {
+        convertedLatitude =
+          (longitude.seconds / 3600 -
             longitude.minutes / 60 +
-            longitude.degree;
-        } else {
-          convertedLongitude =
-            longitude.seconds / 3600 +
-            longitude.minutes / 60 +
-            longitude.degree * -1;
-        }
+            longitude.degree) *
+          -1;
+      }
 
-        return new Point({
-          latitude: convertedLatitude,
-          longitude: convertedLongitude
-        });
+      if (longitude.cardinalPoint === 'E') {
+        convertedLongitude =
+          longitude.seconds / 3600 + longitude.minutes / 60 + longitude.degree;
+      } else {
+        convertedLongitude =
+          longitude.seconds / 3600 +
+          longitude.minutes / 60 +
+          longitude.degree * -1;
+      }
+
+      return new Point({
+        latitude: convertedLatitude,
+        longitude: convertedLongitude
       });
+    });
 
-      const polygon = new Polygon().addRing(points);
+    const polygon = new Polygon().addRing(points);
 
-      const graphic = new Graphic({
-        geometry: polygon,
-        symbol: simpleFillSymbol
-      });
-      this._mapview?.graphics.add(graphic);
+    const graphic = new Graphic({
+      geometry: polygon,
+      symbol: simpleFillSymbol
+    });
+    this._mapview.graphics.add(graphic);
 
-      this._mapview?.goTo(
-        {
-          target: graphic
-        },
-        {
-          duration: 1000
-        }
-      );
-      store.dispatch(renderModal(''));
-    }
+    this._mapview.goTo(
+      {
+        target: graphic
+      },
+      {
+        duration: 1000
+      }
+    );
+    store.dispatch(renderModal(''));
   };
 }
 
