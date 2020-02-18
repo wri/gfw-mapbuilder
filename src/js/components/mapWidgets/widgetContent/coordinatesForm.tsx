@@ -3,13 +3,15 @@ import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
 import 'css/coordinatesForm';
 
-interface SpecificDMSSection {
+export interface SpecificDMSSection {
   rowNum: number;
   latitude: {
     degree: number;
@@ -39,6 +41,7 @@ interface DMSCardinalPoint {
 }
 
 const CoordinatesForm: FunctionComponent = () => {
+  const [formError, setFormError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState(0);
   const [dmsSections, setDMSForm] = useState([
     {
@@ -128,8 +131,8 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   const setShape = (): void => {
-    console.log('setShape()', dmsSections);
-    // TODO create polygon from formvalues!
+    // TODO create form validation logic by maintaining formError
+    mapController.setPolygon(dmsSections);
   };
 
   const addOrRemoveSection = (addSection: boolean): void => {
@@ -243,6 +246,12 @@ const CoordinatesForm: FunctionComponent = () => {
           <button className="orange-button" onClick={(): void => setShape()}>
             Make shape
           </button>
+          {formError && (
+            <p>
+              Error: Please fill in all latitude and longitude values. You must
+              enter a minimum of 3 points to make a shape.
+            </p>
+          )}
         </div>
       </div>
     </div>

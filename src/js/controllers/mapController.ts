@@ -3,10 +3,16 @@ import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
+import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import Point from 'esri/geometry/Point';
+import geometryEngine from 'esri/geometry/geometryEngine';
+import CoordinateConversion from 'esri/widgets/CoordinateConversion';
+import coordinateFormatter from 'esri/geometry/coordinateFormatter';
+import Polygon from 'esri/geometry/Polygon';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
@@ -24,6 +30,7 @@ import {
 } from 'js/store/mapview/actions';
 
 import {
+  renderModal,
   selectActiveTab,
   toggleTabviewPanel,
   setMeasureResults,
@@ -33,6 +40,8 @@ import { LayerProps } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
+
+import { SpecificDMSSection } from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -756,6 +765,73 @@ export class MapController {
       } else {
         this._legend.container.classList.add('hide');
       }
+    }
+  };
+
+  setPolygon = (setDMSForm: Array<SpecificDMSSection>): void => {
+    if (this._mapview) {
+      const simpleFillSymbol = {
+        type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+        color: [240, 171, 0],
+        outline: {
+          // autocasts as new SimpleLineSymbol()
+          color: [255, 255, 255],
+          width: 1
+        }
+      };
+
+      this._mapview.graphics.removeAll();
+
+      const points = setDMSForm.map(point => {
+        const { latitude, longitude } = point;
+        let convertedLatitude;
+        let convertedLongitude;
+        if (latitude.cardinalPoint === 'N') {
+          convertedLatitude =
+            latitude.seconds / 3600 + latitude.minutes / 60 + latitude.degree;
+        } else {
+          convertedLatitude =
+            (longitude.seconds / 3600 -
+              longitude.minutes / 60 +
+              longitude.degree) *
+            -1;
+        }
+
+        if (longitude.cardinalPoint === 'E') {
+          convertedLongitude =
+            longitude.seconds / 3600 +
+            longitude.minutes / 60 +
+            longitude.degree;
+        } else {
+          convertedLongitude =
+            longitude.seconds / 3600 +
+            longitude.minutes / 60 +
+            longitude.degree * -1;
+        }
+
+        return new Point({
+          latitude: convertedLatitude,
+          longitude: convertedLongitude
+        });
+      });
+
+      const polygon = new Polygon().addRing(points);
+
+      const graphic = new Graphic({
+        geometry: polygon,
+        symbol: simpleFillSymbol
+      });
+      this._mapview?.graphics.add(graphic);
+
+      this._mapview?.goTo(
+        {
+          target: graphic
+        },
+        {
+          duration: 1000
+        }
+      );
+      store.dispatch(renderModal(''));
     }
   };
 }

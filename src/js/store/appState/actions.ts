@@ -27,7 +27,7 @@ export function setHideWidget(payload: AppState['hideWidgetActive']) {
 
 export function renderModal(payload: AppState['renderModal']) {
   return {
-    type: RENDER_MODAL,
+    type: RENDER_MODAL as typeof RENDER_MODAL,
     payload: payload
   };
 }
