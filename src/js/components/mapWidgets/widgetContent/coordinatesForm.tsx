@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
+import DDSection from 'js/components/mapWidgets/widgetContent/coordinateDDSection';
 
 import { RootState } from 'js/store/index';
 
@@ -24,6 +25,12 @@ interface SpecificDMSSection {
     cardinalPoint: string;
   };
 }
+
+interface SpecificDDSection {
+  rowNum: number;
+  latitude: number;
+  longitude: number;
+}
 export interface DMSFormValues {
   coordinateValue: number;
   rowNum: number;
@@ -40,6 +47,23 @@ interface DMSCardinalPoint {
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
+  const [ddSections, setDDForm] = useState([
+    {
+      rowNum: 0,
+      latitude: 0,
+      longitude: 0
+    },
+    {
+      rowNum: 1,
+      latitude: 0,
+      longitude: 0
+    },
+    {
+      rowNum: 2,
+      latitude: 0,
+      longitude: 0
+    }
+  ]);
   const [dmsSections, setDMSForm] = useState([
     {
       rowNum: 0,
@@ -95,6 +119,14 @@ const CoordinatesForm: FunctionComponent = () => {
   const { title, dropdownTitle, decimalOptions } = coordinatesContent[
     selectedLanguage
   ];
+
+  const setDDFormValues = (): void => {
+    const sections = [...ddSections];
+
+    // const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
+
+    console.log('setDDFormValues()');
+  };
 
   const setDMSFormValues = ({
     coordinateValue,
@@ -220,6 +252,17 @@ const CoordinatesForm: FunctionComponent = () => {
           ))}
         </select>
         <hr />
+        {decimalOptions[selectedFormat].includes('DD') &&
+          ddSections.map((ddSection: SpecificDDSection, index: number) => {
+            return (
+              <DDSection
+                key={index}
+                ddSection={ddSection}
+                setDDFormValues={setDDFormValues}
+                degreeSymbol={degree}
+              />
+            );
+          })}
         {decimalOptions[selectedFormat].includes('DMS') &&
           dmsSections.map((dmsSection: SpecificDMSSection, index: number) => {
             return (
