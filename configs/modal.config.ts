@@ -3,37 +3,42 @@
 export const printContent = {
   en: {
     buttonLabel: 'Choose a print output',
-    report: 'Print Report'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   ka: {
     buttonLabel: 'აარჩიეთ ბეჭდვის ფორმატი',
-    report: 'ანგარიშის ბეჭდვა'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   fr: {
     buttonLabel: "Choisissez un format d'impression",
-    report: 'Imprimer le Rapport'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   es: {
     buttonLabel: 'Elegir diseño de página',
-    report: 'Imprimir Informe'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   pt: {
     buttonLabel: 'Escolher saída de impressão.',
-    report: 'Imprimir Relatório'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   id: {
     buttonLabel: 'Choose a print output',
-    report: 'Print Report'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   },
   zh: {
     buttonLabel: '选择打印模板',
-    report: '打印报告'
+    dropdownLabel: 'Print',
+    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
   }
 };
 
 export const shareContent = {
-  // TODO find proper translations for this content!
-
   en: {
     title: 'Share',
     instructions:
@@ -189,8 +194,8 @@ export const penContent = {
 
 export const searchContent = {
   en: {
-    latitude: 'Latitude',
-    longitude: 'Longitude',
+    latitude: 'Lat',
+    longitude: 'Lon',
     title: 'Search for feature:',
     buttonTitle: 'Search'
   },
@@ -201,8 +206,8 @@ export const searchContent = {
     buttonTitle: 'გადიდება'
   },
   fr: {
-    latitude: 'Latitude',
-    longitude: 'Longitude',
+    latitude: 'Lat',
+    longitude: 'Lon',
     title: 'Recherche de polygones:',
     buttonTitle: 'Chercher'
   },
@@ -213,8 +218,8 @@ export const searchContent = {
     buttonTitle: 'Buscar'
   },
   pt: {
-    latitude: 'Latitude',
-    longitude: 'Longitude',
+    latitude: 'Lat',
+    longitude: 'Lon',
     title: 'Buscar recurso:',
     buttonTitle: 'Pesquisa:'
   },
@@ -229,5 +234,256 @@ export const searchContent = {
     longitude: '经度',
     title: '搜寻特征：',
     buttonTitle: '搜寻'
+  }
+};
+
+export const coordinatesContent = {
+  degree: '°',
+  minutes: "'",
+  seconds: `"`,
+  en: {
+    title: 'Enter your own coordinates',
+    dropdownTitle: 'Select Format',
+    decimalOptions: ['Degrees Decimal Seconds (DMS)', 'Decimal Degrees (DD)'],
+    latitude: 'Latitude',
+    longitude: 'Longitude'
+  },
+  ka: {
+    title: 'KA: Enter your own coordinates',
+    dropdownTitle: 'KA: Select Format',
+    decimalOptions: [
+      'KA: Degrees Decimal Seconds (DMS)',
+      'KA: Decimal Degrees (DD)'
+    ],
+    latitude: 'KA: Latitude',
+    longitude: 'KA: Longitude'
+  },
+  fr: {
+    title: 'FR: Enter your own coordinates',
+    dropdownTitle: 'FR: Select Format',
+    decimalOptions: [
+      'FR: Degrees Decimal Seconds (DMS)',
+      'FR: Decimal Degrees (DD)'
+    ],
+    latitude: 'FR: Latitude',
+    longitude: 'FR: Longitude'
+  },
+  es: {
+    title: 'ES: Enter your own coordinates',
+    dropdownTitle: 'ES: Select Format',
+    decimalOptions: [
+      'ES: Degrees Decimal Seconds (DMS)',
+      'ES: Decimal Degrees (DD)'
+    ],
+    latitude: 'ES: Latitude',
+    longitude: 'ES: Longitude'
+  },
+  pt: {
+    title: 'PT: Enter your own coordinates',
+    dropdownTitle: 'PT: Select Format',
+    decimalOptions: [
+      'PT: Degrees Decimal Seconds (DMS)',
+      'PT: Decimal Degrees (DD)'
+    ],
+    latitude: 'PT: Latitude',
+    longitude: 'PT: Longitude'
+  },
+  id: {
+    title: 'ID: Enter your own coordinates',
+    dropdownTitle: 'ID: Select Format',
+    decimalOptions: [
+      'ID: Degrees Decimal Seconds (DMS)',
+      'ID: Decimal Degrees (DD)'
+    ],
+    latitude: 'ID: Latitude',
+    longitude: 'ID: Longitude'
+  },
+  zh: {
+    title: 'ZH: Enter your own coordinates',
+    dropdownTitle: 'ZH: Select Format',
+    decimalOptions: [
+      'ZH: Degrees Decimal Seconds (DMS)',
+      'ZH: Decimal Degrees (DD)'
+    ],
+    latitude: 'ZH: Latitude',
+    longitude: 'ZH: Longitude'
+  }
+};
+
+export const measureContent = {
+  en: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  ka: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  fr: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  es: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  pt: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  id: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  zh: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
   }
 };

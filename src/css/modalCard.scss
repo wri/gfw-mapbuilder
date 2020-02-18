@@ -36,6 +36,146 @@
     height: 30rem;
     top: 30%;
   }
+
+  &.measure-widget {
+    top: 25%;
+    left: 75%;
+    height: 7.5rem;
+    width: 17rem;
+  }
+
+  &.search-widget {
+    padding-top: 2rem;
+    color: $dark-grey;
+
+    .modal-content-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      flex-direction: column;
+
+      .directions {
+        display: flex;
+        flex-direction: column;
+
+        .form-wrapper {
+          display: flex;
+          flex-wrap: wrap;
+          flex-direction: row;
+          align-items: flex-end;
+
+          p {
+            color: red;
+            font-size: 0.85rem;
+            margin: 0px;
+          }
+
+          .input-coordinates {
+            border: none;
+            border-bottom: 1px solid $black;
+            max-width: 5.5rem;
+            font-family: $fira-sans;
+            font-size: 1.25rem;
+          }
+        }
+
+        .form-wrapper > .custom-dimensions {
+          width: 5rem;
+          text-transform: capitalize;
+        }
+      }
+
+      .search-widget-wrapper {
+        .esri-search {
+          border: 1px solid black;
+        }
+      }
+    }
+  }
+  &.share-widget,
+  &.print-widget {
+    .directions {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &.share-widget {
+    h4 {
+      margin-bottom: auto;
+    }
+
+    .copy-link-wrapper {
+      display: flex;
+      height: 3rem;
+
+      input,
+      button {
+        height: auto;
+      }
+
+      input {
+        font-size: 14px;
+      }
+
+      button {
+        width: 4rem;
+        border: 1px solid $black;
+        background-color: $white;
+        color: $base-yellow;
+      }
+    }
+
+    .share-button-wrapper {
+      margin-top: 1rem;
+
+      .share-button {
+        height: 40px;
+        width: 40px;
+        border: none;
+        margin-right: 1rem;
+      }
+
+      .facebook {
+        background-color: #36589f;
+      }
+
+      .twitter {
+        background-color: #568dce;
+      }
+    }
+  }
+
+  .orange-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15rem;
+    height: 2rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    text-transform: uppercase;
+    background-color: $base-yellow;
+    color: $white;
+    margin: 0 auto;
+    margin-top: 1rem;
+    font-family: $fira-sans;
+
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+
+  @media screen and (max-width: $mobile-device) {
+    .modal-card-container {
+      width: 15rem;
+      margin-left: -8.5rem; // * NOTE: -8.5rem is an estimate
+    }
+  }
 }
 
 .dim-container {
@@ -46,33 +186,8 @@
   background-color: $black;
   top: 0;
   height: 100%;
-}
 
-.orange-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 15rem;
-  height: 2rem;
-  border-radius: 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  text-transform: uppercase;
-  background-color: $base-yellow;
-  color: $white;
-  margin: 0 auto;
-  margin-top: 1rem;
-  font-family: $fira-sans;
-
-  svg {
-    margin-right: 0.5rem;
-  }
-}
-
-@media screen and (max-width: $mobile-device) {
-  .modal-card-container {
-    width: 15rem;
-    margin-left: -8.5rem; // * NOTE: -8.5rem is an estimate
+  &.measure-widget {
+    display: none;
   }
 }

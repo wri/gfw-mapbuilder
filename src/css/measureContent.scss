@@ -1,0 +1,48 @@
+@import 'variables.scss';
+
+.measure-options-container {
+  display: flex;
+  width: inherit;
+  justify-content: center;
+  margin: 1rem 0.5rem;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+
+  .buttons-select-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .esri-icon-measure-line,
+    .esri-icon-measure-area {
+      width: 2rem;
+      height: $measure-content-button-height;
+      margin: 0 0.25rem 0 0.25rem;
+    }
+
+    select {
+      height: $measure-content-button-height;
+    }
+
+    .selected {
+      border: 1px solid $dark-grey;
+    }
+  }
+
+  p {
+    font-size: 0.75rem;
+    margin: 1rem 0 0 0;
+    font-weight: bold;
+  }
+
+  hr {
+    width: inherit;
+    margin-top: 0;
+  }
+}

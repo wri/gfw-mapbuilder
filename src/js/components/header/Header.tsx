@@ -1,25 +1,39 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store/index';
+import LanguageDropdown from 'js/components/header/LanguageDropdown';
 
-import LanguageDropdown from '../../components/header/LanguageDropdown';
+import 'css/header.scss';
 
 // import config from '../../../../configs/resources';
 
-import '../../../css/header.scss';
-
 const Header: FunctionComponent = () => {
-  const { title, subtitle, logoUrl, logoLinkUrl } = useSelector(
-    (store: RootState) => store.appSettings
-  );
+  const {
+    language,
+    title,
+    subtitle,
+    logoUrl,
+    logoLinkUrl,
+    useAlternativeLanguage,
+    alternativeWebmap,
+    alternativeLanguage
+  } = useSelector((store: RootState) => store.appSettings);
+
+  const appState = useSelector((store: RootState) => store.appState);
+  const selectedLanguage = appState.selectedLanguage;
 
   return (
     <div className="header-container">
       <div className="title-container">
-        <a href={logoLinkUrl} target="_blank" rel="noreferrer" tabIndex={0}>
+        <a
+          href={logoLinkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={0}
+        >
           <img
             src={logoUrl}
-            alt="image of Global Forest Watch logo"
+            alt="Global Forest Watch logo"
             className="gfw-logo"
           />
         </a>
@@ -28,7 +42,13 @@ const Header: FunctionComponent = () => {
           <h2>{subtitle}</h2>
         </div>
       </div>
-      <LanguageDropdown />
+      {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
+        <LanguageDropdown
+          language={language}
+          alternativeLanguage={alternativeLanguage}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
     </div>
   );
 };
