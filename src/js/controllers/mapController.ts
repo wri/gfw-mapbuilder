@@ -771,14 +771,14 @@ export class MapController {
     });
   }
 
-  setSearchWidget(latitude: number, longitude: number): void {
+  setSearchWidget(latitude: string, longitude: string): void {
     if (this._mapview) {
       this?._mapview.graphics.removeAll();
     }
 
     const specificPoint = new Point({
-      latitude,
-      longitude
+      latitude: Number(latitude),
+      longitude: Number(longitude)
     });
 
     const simpleMarkerSymbol = {

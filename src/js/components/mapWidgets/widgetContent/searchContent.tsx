@@ -15,8 +15,8 @@ import { searchContent } from '../../../../../configs/modal.config';
 
 const SearchContent: FunctionComponent = () => {
   const searchRef = useRef(null);
-  const [latitudeInput, setLatitude] = useState(0);
-  const [longitudeInput, setLongitude] = useState(0);
+  const [latitudeInput, setLatitude] = useState('');
+  const [longitudeInput, setLongitude] = useState('');
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -38,23 +38,23 @@ const SearchContent: FunctionComponent = () => {
         <div className="form-wrapper">
           <label htmlFor={latitude}>{latitude}:</label>
           <input
-            value={latitudeInput > 0 ? latitudeInput : ''}
+            value={latitudeInput}
             id={latitude}
             type="number"
             className="input-coordinates"
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-              setLatitude(Number(e.target.value))
+              setLatitude(e.target.value)
             }
           />
 
           <label htmlFor={longitude}>{longitude}:</label>
           <input
-            value={longitudeInput > 0 ? longitudeInput : ''}
+            value={longitudeInput}
             id={longitude}
             type="number"
             className="input-coordinates"
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-              setLongitude(Number(e.target.value))
+              setLongitude(e.target.value)
             }
           />
           <button
