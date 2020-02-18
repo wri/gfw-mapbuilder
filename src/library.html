@@ -13,10 +13,12 @@
     <div id="lib-main"></div>
   </body>
   <script defer>
-    var config = '<%= foo %>';
+    var config = <%= foo %>;
 
     console.log('aasd', config);
-    var gfwLib = new MapBuilda('lib-main', JSON.parse(config));
+    // var gfwLib = new MapBuilda('lib-main', JSON.parse(config));
+    var gfwLib = new MapBuilda('lib-main', config);
+
     // var gfwLib = new MapBuilda('lib-main', config);
     //<title><%= foo %></title>
   </script>

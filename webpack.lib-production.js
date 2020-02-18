@@ -7,6 +7,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
+
+// require = require("esm")(module/*, options*/)
+
+const cammm = require('./configs/cameroon.js');
+console.log('cammm', cammm);
+
 // const PrintContent = require('./configs/modal.config');
 // const { printContent } = require('configs/modal.config');
 //require('./configs/cameroon.js')
@@ -37,7 +43,8 @@ module.exports = env => {
     // //   ]
     // // },
     entry: {
-      index: ['./src/js/lib.tsx', './configs/camJSON.json']
+      // index: ['./src/js/lib.tsx', './configs/camJSON.json']
+      index: ['./src/js/lib.tsx']
     },
     // entry: () => new Promise((resolve) => resolve([ './src/js/lib.tsx', './configs/cameroon.js'])),
     // entry: {
@@ -149,7 +156,8 @@ module.exports = env => {
             // 'foo': require('./configs/modal.config.ts')
             // 'foo': path.resolve(__dirname, './configs/modal.config.ts')
             // foo: compilation.options.entry.index[1]
-            foo: JSON.stringify(require('./configs/camJSON.json'))
+            // foo: JSON.stringify(require('./configs/camJSON.json'))
+            foo: JSON.stringify(cammm)
             // 'foo': './configs/cameroon.js'
             // 'foo': require('./configs/resources.js')
             // 'foo': resources
