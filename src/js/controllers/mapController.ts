@@ -9,6 +9,8 @@ import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import Polygon from 'esri/geometry/Polygon';
+import Search from 'esri/widgets/Search';
+import Point from 'esri/geometry/Point';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
@@ -772,6 +774,7 @@ export class MapController {
 
     return mapPDF;
   };
+
   toggleLegend = (): void => {
     if (this._legend && typeof this._legend.container === 'object') {
       if (this._legend.container.classList.contains('hide')) {
@@ -815,6 +818,48 @@ export class MapController {
     );
     store.dispatch(renderModal(''));
   };
+
+  initializeSearchWidget(searchRef: RefObject<any>): void {
+    new Search({
+      view: this._mapview,
+      container: searchRef.current
+    });
+  }
+
+  setSearchWidget(latitude: string, longitude: string): void {
+    this._mapview.graphics.removeAll();
+
+    const specificPoint = new Point({
+      latitude: Number(latitude),
+      longitude: Number(longitude)
+    });
+
+    const simpleMarkerSymbol = {
+      type: 'simple-marker',
+      color: [240, 171, 0],
+      outline: {
+        color: [255, 255, 255],
+        width: 1
+      }
+    };
+
+    const pointGraphic = new Graphic({
+      geometry: specificPoint,
+      symbol: simpleMarkerSymbol
+    });
+
+    this._mapview.graphics.add(pointGraphic);
+    this._mapview.goTo(
+      {
+        target: specificPoint,
+        zoom: 10
+      },
+      {
+        duration: 1000
+      }
+    );
+    store.dispatch(renderModal(''));
+  }
 }
 
 export const mapController = new MapController();
