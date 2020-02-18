@@ -363,7 +363,8 @@ export class MapController {
                     title,
                     opacity,
                     visible,
-                    definitionExpression
+                    definitionExpression,
+                    url
                   } = layer;
                   mapLayerObjects.push({
                     id,
@@ -371,7 +372,8 @@ export class MapController {
                     opacity,
                     visible,
                     definitionExpression,
-                    group: 'webmap'
+                    group: 'webmap',
+                    url: url
                   });
                 });
 
