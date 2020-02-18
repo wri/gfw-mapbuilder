@@ -788,9 +788,7 @@ export class MapController {
   }
 
   setSearchWidget(latitude: string, longitude: string): void {
-    if (this._mapview) {
-      this?._mapview.graphics.removeAll();
-    }
+    this._mapview.graphics.removeAll();
 
     const specificPoint = new Point({
       latitude: Number(latitude),
@@ -811,8 +809,8 @@ export class MapController {
       symbol: simpleMarkerSymbol
     });
 
-    this._mapview?.graphics.add(pointGraphic);
-    this._mapview?.goTo(
+    this._mapview.graphics.add(pointGraphic);
+    this._mapview.goTo(
       {
         target: specificPoint,
         zoom: 10
