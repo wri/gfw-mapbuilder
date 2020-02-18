@@ -27,12 +27,14 @@ const SearchContent: FunctionComponent = () => {
 
   useEffect(() => {
     mapController.initializeSearchWidget(searchRef);
-  }, [searchRef]);
+  }, []);
 
   const setSearch = (): void => {
-    if (Number(latitudeInput) < 0 || Number(latitudeInput) > 90) {
+    if (latitudeInput === '' || latitudeInput === '') {
       setFormError(true);
-    } else if (Number(latitudeInput) < 0 || Number(latitudeInput) > 90) {
+    } else if (Number(latitudeInput) > 90 || Number(latitudeInput) < -90) {
+      setFormError(true);
+    } else if (Number(longitudeInput) > 180 || Number(longitudeInput) < -180) {
       setFormError(true);
     } else {
       setFormError(false);
@@ -45,14 +47,16 @@ const SearchContent: FunctionComponent = () => {
       <div className="directions">
         <div className="form-wrapper">
           {formError && (
-            <p>Latitudes range from 0 to 90. Longitudes range from 0 to 180.</p>
+            <p>
+              Latitudes range from -90 to 90. Longitudes range from -180 to 180.
+            </p>
           )}
           <label htmlFor={latitude}>{latitude}:</label>
           <input
             value={latitudeInput}
             id={latitude}
             type="number"
-            min={0}
+            min={-90}
             max={90}
             className="input-coordinates"
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>
@@ -65,7 +69,7 @@ const SearchContent: FunctionComponent = () => {
             value={longitudeInput}
             id={longitude}
             type="number"
-            min={0}
+            min={-180}
             max={180}
             className="input-coordinates"
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>

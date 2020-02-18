@@ -802,7 +802,7 @@ export class MapController {
         zoom: 10
       },
       {
-        duration: 5000
+        duration: 1000
       }
     );
     store.dispatch(renderModal(''));
