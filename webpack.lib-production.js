@@ -8,26 +8,10 @@ const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
 
-// require = require("esm")(module/*, options*/)
-
 const cammm = require('./configs/cameroon.js');
 console.log('cammm', cammm);
 
-// const PrintContent = require('./configs/modal.config');
-// const { printContent } = require('configs/modal.config');
-//require('./configs/cameroon.js')
-// import '../../configs/dojoConfig';
-// import './configs/cameroon';
-// import resources from './configs/resources';
-// import resources from './configs/cameroon';
-// import resolve from './configs/cameroon';
-// import { printContent } from './configs/modal.config';
-// console.log('printContent');
-// console.log(printContent);
-// console.log(resources)
-
 module.exports = env => {
-  console.log('env', env);
   console.log('env.COUNTRY_CONFIG', env.COUNTRY_CONFIG);
 
   return {
@@ -156,15 +140,10 @@ module.exports = env => {
             // 'foo': require('./configs/modal.config.ts')
             // 'foo': path.resolve(__dirname, './configs/modal.config.ts')
             // foo: compilation.options.entry.index[1]
-            // foo: JSON.stringify(require('./configs/camJSON.json'))
             foo: JSON.stringify(cammm)
             // 'foo': './configs/cameroon.js'
             // 'foo': require('./configs/resources.js')
-            // 'foo': resources
             // 'foo': require('./configs/cameroon.js')
-            // externals: {
-            //   'Configurator': JSON.stringify(require('./config/config-dev.json'))
-            // },
           };
         }
       }),
