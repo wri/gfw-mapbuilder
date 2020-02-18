@@ -27,10 +27,7 @@ const PrintContent: FunctionComponent = () => {
     <div>
       <div className="directions">
         <p>{buttonLabel}</p>
-        <select
-          onBlur={(e): Promise<void> => printMap(e.target.value)}
-          onChange={(e): Promise<void> => printMap(e.target.value)}
-        >
+        <select onChange={(e): Promise<void> => printMap(e.target.value)}>
           <option value={''}>{dropdownLabel}</option>
           {printOptions.map((printOption: string, index: string) => {
             return <option key={index}>{printOption}</option>;
