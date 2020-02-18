@@ -69,7 +69,7 @@ const DataTabView = (props: DataTabProps) => {
 
   const DataTabViewContent = () => {
     if (!tabViewIsVisible) {
-      return <></>;
+      return null;
     } else {
       return activeFeatures.length === 0 ? (
         <DefaultTabView />
