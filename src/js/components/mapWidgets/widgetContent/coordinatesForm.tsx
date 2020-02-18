@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
-import DDSection from 'js/components/mapWidgets/widgetContent/coordinateDDSection';
+import DDSection from 'js/components/mapWidgets/widgetContent/coordinatesDDSection';
 
 import { RootState } from 'js/store/index';
 
