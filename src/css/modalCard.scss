@@ -64,6 +64,12 @@
           flex-direction: row;
           align-items: flex-end;
 
+          p {
+            color: red;
+            font-size: 0.85rem;
+            margin: 0px;
+          }
+
           .input-coordinates {
             border: none;
             border-bottom: 1px solid $black;
