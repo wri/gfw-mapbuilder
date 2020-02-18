@@ -3,11 +3,14 @@ import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
 import Legend from 'esri/widgets/Legend';
+import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import Search from 'esri/widgets/Search';
 import PrintTask from 'esri/tasks/PrintTask';
+import Point from 'esri/geometry/Point';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { once } from 'esri/core/watchUtils';
@@ -23,6 +26,7 @@ import {
 } from 'js/store/mapview/actions';
 
 import {
+  renderModal,
   selectActiveTab,
   toggleTabviewPanel,
   setMeasureResults,
@@ -765,6 +769,7 @@ export class MapController {
 
     return mapPDF;
   };
+
   toggleLegend = (): void => {
     if (this._legend && typeof this._legend.container === 'object') {
       if (this._legend.container.classList.contains('hide')) {
@@ -774,6 +779,48 @@ export class MapController {
       }
     }
   };
+
+  initializeSearchWidget(searchRef: RefObject<any>): void {
+    new Search({
+      view: this._mapview,
+      container: searchRef.current
+    });
+  }
+
+  setSearchWidget(latitude: string, longitude: string): void {
+    this._mapview.graphics.removeAll();
+
+    const specificPoint = new Point({
+      latitude: Number(latitude),
+      longitude: Number(longitude)
+    });
+
+    const simpleMarkerSymbol = {
+      type: 'simple-marker',
+      color: [240, 171, 0], // $base-yellow
+      outline: {
+        color: [255, 255, 255],
+        width: 1
+      }
+    };
+
+    const pointGraphic = new Graphic({
+      geometry: specificPoint,
+      symbol: simpleMarkerSymbol
+    });
+
+    this._mapview.graphics.add(pointGraphic);
+    this._mapview.goTo(
+      {
+        target: specificPoint,
+        zoom: 10
+      },
+      {
+        duration: 1000
+      }
+    );
+    store.dispatch(renderModal(''));
+  }
 }
 
 export const mapController = new MapController();
