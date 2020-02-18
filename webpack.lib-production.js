@@ -37,7 +37,7 @@ module.exports = env => {
     // //   ]
     // // },
     entry: {
-      index: ['./src/js/lib.tsx', './configs/cameroon.js']
+      index: ['./src/js/lib.tsx', './configs/camJSON.json']
     },
     // entry: () => new Promise((resolve) => resolve([ './src/js/lib.tsx', './configs/cameroon.js'])),
     // entry: {
@@ -148,7 +148,8 @@ module.exports = env => {
             // 'foo': require('./configs/modal.config')
             // 'foo': require('./configs/modal.config.ts')
             // 'foo': path.resolve(__dirname, './configs/modal.config.ts')
-            foo: compilation.options.entry.index[1]
+            // foo: compilation.options.entry.index[1]
+            foo: JSON.stringify(require('./configs/camJSON.json'))
             // 'foo': './configs/cameroon.js'
             // 'foo': require('./configs/resources.js')
             // 'foo': resources

@@ -16,7 +16,7 @@
     var config = '<%= foo %>';
 
     console.log('aasd', config);
-    var gfwLib = new MapBuilda('lib-main', { title: 'different title' });
+    var gfwLib = new MapBuilda('lib-main', JSON.parse(config));
     // var gfwLib = new MapBuilda('lib-main', config);
     //<title><%= foo %></title>
   </script>
