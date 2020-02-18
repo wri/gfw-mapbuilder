@@ -769,11 +769,11 @@ export class MapController {
     if (this._mapview) {
       const simpleFillSymbol = {
         type: 'simple-fill', // autocasts as new SimpleFillSymbol()
-        color: [240, 171, 0],
+        color: [240, 171, 0, 0.0],
         outline: {
           // autocasts as new SimpleLineSymbol()
-          color: [255, 255, 255],
-          width: 1
+          color: [0, 255, 254],
+          width: 2
         }
       };
 
