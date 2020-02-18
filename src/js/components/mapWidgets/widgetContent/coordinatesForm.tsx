@@ -129,10 +129,6 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(sections);
   };
 
-  const setShape = (): void => {
-    mapController.setPolygon(dmsSections);
-  };
-
   const addOrRemoveSection = (addSection: boolean): void => {
     const allDMSSections = [...dmsSections];
 
@@ -241,7 +237,10 @@ const CoordinatesForm: FunctionComponent = () => {
           <button onClick={(): void => addOrRemoveSection(true)}>
             Add more
           </button>
-          <button className="orange-button" onClick={(): void => setShape()}>
+          <button
+            className="orange-button"
+            onClick={(): void => mapController.setPolygon(dmsSections)}
+          >
             Make shape
           </button>
         </div>
