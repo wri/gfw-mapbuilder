@@ -10,6 +10,7 @@ import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 import resources from '../../../configs/resources';
 import { overwriteSettings } from 'js/store/appSettings/actions';
+import { AppSettings } from 'js/store/appSettings/types';
 
 //TODO: SPinners should be SVGs in images/ folder that get imported
 const GlobalSpinner = (): React.ReactElement => <h4>App Loading...</h4>;
@@ -20,8 +21,7 @@ const MapSpinner = (): React.ReactElement => (
 );
 // const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
-const App = (props: any): JSX.Element => {
-  console.log('prrps??', props);
+const App = (props: AppSettings | any): JSX.Element => {
   //INIT with global spinner set to true
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();

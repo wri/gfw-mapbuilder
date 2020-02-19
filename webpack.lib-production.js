@@ -8,46 +8,25 @@ const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
 
-const cammm = require('./configs/cameroon.js');
-console.log('cammm', cammm);
+const cameroonConfig = require('./configs/cameroon.js');
 
 module.exports = env => {
-  console.log('env.COUNTRY_CONFIG', env.COUNTRY_CONFIG);
+  console.log(env);
+  let customConfig = {};
+
+  if (env && env.COUNTRY_CONFIG) {
+    customConfig = cameroonConfig; //TODO: Let's make this dynamic!
+  }
 
   return {
     mode: 'development',
     devtool: 'inline-source-map',
-    // entry: './src/js/lib.tsx',
-    // // entry: {
-    // //   index: [
-    // //     './src/css/index.scss',
-    // //     '@dojo/framework/shim/Promise',
-    // //     './src/js/lib.tsx'
-    // //     // './src/js/libraryMain.ts'
-    // //   ]
-    // // },
     entry: {
-      // index: ['./src/js/lib.tsx', './configs/camJSON.json']
       index: ['./src/js/lib.tsx']
     },
-    // entry: () => new Promise((resolve) => resolve([ './src/js/lib.tsx', './configs/cameroon.js'])),
-    // entry: {
-    //   index: './src/js/lib.tsx',
-    //   countryConfig: './configs/cameroon.js',
-    // },
-
     output: {
-      // filename: {
-      //   index: 'library-bundle.js',
-      //   countryConfig: './configs/cameroon.js',
-      // },
       filename: 'library-bundle.js',
-      // filename: '[name].[chunkhash].js',
-      // library: 'MapBuilda'
       publicPath: ''
-      // filename: 'libraryMain.js',
-      // library: 'MapBuilder',
-      // libraryTarget: 'amd',
     },
     module: {
       rules: [
@@ -56,16 +35,6 @@ module.exports = env => {
           loader: 'ts-loader',
           options: {}
         },
-        // {
-        //   test: /\.html$/,
-        //   use: [
-        //     {
-        //       loader: 'html-loader',
-        //       options: { minimize: false }
-        //     }
-        //   ],
-        //   exclude: /node_modules/
-        // },
         {
           test: /\.s[ac]ss$/i,
           use: [
@@ -123,10 +92,6 @@ module.exports = env => {
         chunksSortMode: 'none',
         inlineSource: '.(css)$',
         templateParameters: (compilation, assets, assetTags, options) => {
-          console.log('');
-          // console.log(compilation.options)
-          console.log(compilation.options.entry.index[1]);
-          console.log('');
           return {
             compilation,
             webpackConfig: compilation.options,
@@ -135,15 +100,7 @@ module.exports = env => {
               files: assets,
               options
             },
-            // 'foo': '{bar: "fooBar"}'
-            // 'foo': require('./configs/modal.config')
-            // 'foo': require('./configs/modal.config.ts')
-            // 'foo': path.resolve(__dirname, './configs/modal.config.ts')
-            // foo: compilation.options.entry.index[1]
-            foo: JSON.stringify(cammm)
-            // 'foo': './configs/cameroon.js'
-            // 'foo': require('./configs/resources.js')
-            // 'foo': require('./configs/cameroon.js')
+            libConfig: JSON.stringify(customConfig)
           };
         }
       }),

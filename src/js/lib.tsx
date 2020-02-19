@@ -3,42 +3,37 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import '../../configs/dojoConfig';
 import store from './store/index';
-// import MapBuilder from 'js/libraryMain';
 import { MapBuilderMain } from 'js/MapBuilderMain';
 
 declare global {
   interface Window {
-    MapBuilda: any;
+    MapBuilder: Function;
   }
 }
 
-interface MapB {
+interface BuilderMain {
   render: Function;
 }
 
-class MapBuilda {
+class MapBuilder {
   element: string;
   config: object;
-  mapB: MapB;
+  builderMain: BuilderMain;
 
   constructor(element: string, config: object) {
     this.config = config;
     this.element = element;
-    console.log('element', element);
-    console.log('config', config);
-    this.mapB = new MapBuilderMain(config);
+    this.builderMain = new MapBuilderMain(config);
 
     this.render();
   }
 
-  render(): any {
+  render(): void {
     ReactDOM.render(
-      <Provider store={store}>{this.mapB.render()}</Provider>,
+      <Provider store={store}>{this.builderMain.render()}</Provider>,
       document.getElementById(this.element)
     );
   }
 }
 
-// export default MapBuilda;
-
-window.MapBuilda = MapBuilda;
+window.MapBuilder = MapBuilder;
