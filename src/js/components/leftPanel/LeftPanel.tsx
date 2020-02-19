@@ -79,10 +79,6 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
-  const { hideWidgetActive } = useSelector(
-    (store: RootState) => store.appState
-  );
-
   const tabsGroupRow = props.tabsToRender.map(tab => (
     <Tab
       key={tab.label}
@@ -93,18 +89,13 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     />
   ));
 
-  return (
-    <div className={`tab-header-container ${hideWidgetActive ? 'hide' : ''}`}>
-      {tabsGroupRow}
-    </div>
-  );
+  return <div className="tab-header-container">{tabsGroupRow}</div>;
 };
 
 const LeftPanel = (): React.ReactElement => {
-  //Tab view visibility state that is controlled by tabs (clicking on same tab twice in a row, hides the tabview)
-  // const tabViewVisible = useSelector(
-  //   (store: RootState) => store.appState.leftPanel.tabViewVisible
-  // );
+  const { hideWidgetActive } = useSelector(
+    (store: RootState) => store.appState
+  );
   const renderDocTab = useSelector(
     (store: RootState) => store.appSettings.includeDocumentsTab
   );
@@ -146,7 +137,7 @@ const LeftPanel = (): React.ReactElement => {
   const tabsToRender = tabsArray.filter(tab => tab.render);
 
   return (
-    <div className="left-panel">
+    <div className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}>
       <Tabs tabsToRender={tabsToRender} />
       <TabViewContainer tabViewsToRender={tabsToRender} />
     </div>
