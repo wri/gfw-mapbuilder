@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
+import DDSection from 'js/components/mapWidgets/widgetContent/coordinatesDDSection';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -26,6 +27,12 @@ export interface SpecificDMSSection {
     cardinalPoint: string;
   };
 }
+
+export interface SpecificDDSection {
+  rowNum: number;
+  latitude: number;
+  longitude: number;
+}
 export interface DMSFormValues {
   coordinateValue: string;
   rowNum: number;
@@ -42,6 +49,23 @@ interface DMSCardinalPoint {
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
+  const [ddSections, setDDForm] = useState([
+    {
+      rowNum: 0,
+      latitude: 0,
+      longitude: 0
+    },
+    {
+      rowNum: 1,
+      latitude: 0,
+      longitude: 0
+    },
+    {
+      rowNum: 2,
+      latitude: 0,
+      longitude: 0
+    }
+  ]);
   const [dmsSections, setDMSForm] = useState([
     {
       rowNum: 0,
@@ -98,6 +122,23 @@ const CoordinatesForm: FunctionComponent = () => {
     selectedLanguage
   ];
 
+  const setDDFormValues = ({
+    userInput,
+    rowNum,
+    coordinateType
+  }: {
+    userInput: number;
+    rowNum: number;
+    coordinateType: string;
+  }): void => {
+    const sections = [...ddSections];
+    const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
+
+    sections[sectionNum][coordinateType] = userInput;
+
+    setDDForm(sections);
+  };
+
   const setDMSFormValues = ({
     coordinateValue,
     rowNum,
@@ -129,78 +170,44 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(sections);
   };
 
-  const addOrRemoveSection = (addSection: boolean): void => {
-    const allDMSSections = [...dmsSections];
-
-    if (addSection) {
-      const defaultDMSSection = { ...dmsSections[0] };
-      defaultDMSSection.rowNum = allDMSSections.length + 1;
-      allDMSSections.push(defaultDMSSection);
-    } else {
-      allDMSSections.pop();
-    }
-
-    setDMSForm(allDMSSections);
+  const setShape = (): void => {
+    console.log('setShape()', dmsSections);
+    // TODO create polygon from formvalues!
   };
 
-  // if (decimalOptions[selectedFormat].includes('DD')) {
-  //   return (
-  //     <>
-  //       <div className="dds-wrapper">
-  //         <div className="dds-input">
-  //           <p>{latitude}</p>
-  //           <div className="degree-input">
-  //             <input type="number" name="latitude coordinates" />
-  //             <span>{degree}</span>
-  //           </div>
-  //         </div>
-  //         <div className="dds-input">
-  //           <p>{longitude}</p>
-  //           <div className="degree-input">
-  //             <input type="number" name="longitude coordinates" />
-  //             <span>{degree}</span>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <hr />
-  //       {/* <div className="dds-wrapper">
-  //         <div className="dds-input">
-  //           <p>{latitude}</p>
-  //           <div className="degree-input">
-  //             <input type="number" name="latitude coordinates" />
-  //             <span>{degree}</span>
-  //           </div>
-  //         </div>
-  //         <div className="dds-input">
-  //           <p>{longitude}</p>
-  //           <div className="degree-input">
-  //             <input type="number" name="longitude coordinates" />
-  //             <span>{degree}</span>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <hr />
-  //       <div className="dds-wrapper">
-  //         <div className="dds-input">
-  //           <p>{latitude}</p>
-  //           <div className="degree-input">
-  //             <input type="number" name="latitude coordinates" />
-  //             <span>{degree}</span>
-  //           </div>
-  //         </div>
-  //         <div className="dds-input">
-  //           <p>{longitude}</p>
-  //           <div className="degree-input">
-  //             <input type="number" name="longitude coordinates" />
-  //             <span>{degree}</span>
-  //           </div>
-  //         </div>
-  //       </div> */}
-  //       <hr />
-  //     </>
-  //   );
-  // }
-  // };
+  const addOrRemoveSection = (
+    // allSections: Array<SpecificDDSection> | Array<SpecificDMSSection>,
+    allSections: Array<any>,
+    addSection: boolean
+  ): Array<SpecificDDSection> | Array<SpecificDMSSection> => {
+    if (addSection) {
+      const defaultSection = { ...allSections[0] };
+      defaultSection.rowNum = allSections.length + 1;
+      allSections.push(defaultSection);
+    } else {
+      allSections.pop();
+    }
+
+    return allSections;
+  };
+
+  const setSection = (addSection: boolean): void => {
+    if (decimalOptions[selectedFormat].includes('DMS')) {
+      const allDMSSections = [...dmsSections];
+      const updatedSections = addOrRemoveSection(
+        allDMSSections,
+        addSection
+      ) as Array<SpecificDMSSection>;
+      setDMSForm(updatedSections);
+    } else {
+      const allDDSections = [...ddSections];
+      const updatedSections = addOrRemoveSection(
+        allDDSections,
+        addSection
+      ) as Array<SpecificDDSection>;
+      setDDForm(updatedSections);
+    }
+  };
 
   return (
     <div className="coordinates-form-container">
@@ -217,6 +224,19 @@ const CoordinatesForm: FunctionComponent = () => {
           ))}
         </select>
         <hr />
+        {decimalOptions[selectedFormat].includes('DD') &&
+          ddSections.map((ddSection: SpecificDDSection, index: number) => {
+            return (
+              <DDSection
+                key={index}
+                ddSection={ddSection}
+                setDDFormValues={setDDFormValues}
+                degreeSymbol={degree}
+                renderRemoveButton={index > 2 ? true : false}
+                setSection={setSection}
+              />
+            );
+          })}
         {decimalOptions[selectedFormat].includes('DMS') &&
           dmsSections.map((dmsSection: SpecificDMSSection, index: number) => {
             return (
@@ -229,14 +249,12 @@ const CoordinatesForm: FunctionComponent = () => {
                 secondsSymbol={seconds}
                 key={index}
                 renderRemoveButton={index > 2 ? true : false}
-                addOrRemoveSection={addOrRemoveSection}
+                setSection={setSection}
               />
             );
           })}
         <div className="buttons-wrapper">
-          <button onClick={(): void => addOrRemoveSection(true)}>
-            Add more
-          </button>
+          <button onClick={(): void => setSection(true)}>Add more</button>
           <button
             className="orange-button"
             onClick={(): void => mapController.setPolygon(dmsSections)}

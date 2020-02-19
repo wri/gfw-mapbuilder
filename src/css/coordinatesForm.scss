@@ -5,6 +5,20 @@
   justify-content: center;
   width: inherit;
 
+  .remove-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 5rem;
+    margin-left: auto;
+    border: none;
+    font-weight: 500;
+    color: $dark-grey;
+    font-family: $fira-sans;
+    font-size: 0.75rem;
+  }
+
   hr {
     margin: 1.5rem 0 1.5rem 0;
   }
@@ -28,20 +42,6 @@
       flex-wrap: nowrap;
       flex-direction: column;
       margin-top: 1rem;
-
-      .dms-remove {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        width: 5rem;
-        margin-left: auto;
-        border: none;
-        font-weight: 500;
-        color: $dark-grey;
-        font-family: $fira-sans;
-        font-size: 0.75rem;
-      }
 
       .dms-remove:hover {
         cursor: pointer;
@@ -78,17 +78,29 @@
       height: 3rem;
       font-size: 0.75rem;
 
-      .degree-input {
+      .degree-section {
         display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
 
-        input {
-          width: 5rem;
-          height: 1.5rem;
+        .input-wrapper {
+          display: flex;
+          flex-direction: row;
+
+          input {
+            width: 6rem;
+            height: 1.5rem;
+          }
+
+          span {
+            font-size: 1rem;
+            font-weight: bold;
+          }
         }
       }
 
-      p {
-        margin-bottom: 0rem;
+      hr {
+        margin: 1rem 0 1rem 0;
       }
     }
 
