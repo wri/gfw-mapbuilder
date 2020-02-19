@@ -9,36 +9,13 @@ import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
+import {
+  SpecificDMSSection,
+  DMSFormValues,
+  DMSCardinalPoint
+} from 'js/interfaces/coordinateForm';
+
 import 'css/coordinatesForm';
-
-export interface SpecificDMSSection {
-  rowNum: number;
-  latitude: {
-    degree: string;
-    minutes: string;
-    seconds: string;
-    cardinalPoint: string;
-  };
-  longitude: {
-    degree: string;
-    minutes: string;
-    seconds: string;
-    cardinalPoint: string;
-  };
-}
-export interface DMSFormValues {
-  coordinateValue: string;
-  rowNum: number;
-  coordinateType: string;
-  degreeType: string;
-  cardinalPoint?: string;
-}
-
-interface DMSCardinalPoint {
-  specificPoint?: string;
-  rowNum?: number;
-  coordinateType?: string;
-}
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
