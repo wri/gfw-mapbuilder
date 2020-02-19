@@ -6,6 +6,8 @@ import DDSection from 'js/components/mapWidgets/widgetContent/coordinatesDDSecti
 
 import { mapController } from 'js/controllers/mapController';
 
+import { convertXYToPoint, convertDMSToXY } from 'js/utils/helper.config';
+
 import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
@@ -30,8 +32,8 @@ export interface SpecificDMSSection {
 
 export interface SpecificDDSection {
   rowNum: number;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 }
 export interface DMSFormValues {
   coordinateValue: string;
@@ -52,18 +54,18 @@ const CoordinatesForm: FunctionComponent = () => {
   const [ddSections, setDDForm] = useState([
     {
       rowNum: 0,
-      latitude: 0,
-      longitude: 0
+      latitude: '',
+      longitude: ''
     },
     {
       rowNum: 1,
-      latitude: 0,
-      longitude: 0
+      latitude: '',
+      longitude: ''
     },
     {
       rowNum: 2,
-      latitude: 0,
-      longitude: 0
+      latitude: '',
+      longitude: ''
     }
   ]);
   const [dmsSections, setDMSForm] = useState([
@@ -127,7 +129,7 @@ const CoordinatesForm: FunctionComponent = () => {
     rowNum,
     coordinateType
   }: {
-    userInput: number;
+    userInput: string;
     rowNum: number;
     coordinateType: string;
   }): void => {
@@ -170,11 +172,6 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(sections);
   };
 
-  const setShape = (): void => {
-    console.log('setShape()', dmsSections);
-    // TODO create polygon from formvalues!
-  };
-
   const addOrRemoveSection = (
     // allSections: Array<SpecificDDSection> | Array<SpecificDMSSection>,
     allSections: Array<any>,
@@ -206,6 +203,16 @@ const CoordinatesForm: FunctionComponent = () => {
         addSection
       ) as Array<SpecificDDSection>;
       setDDForm(updatedSections);
+    }
+  };
+
+  const setShape = (): void => {
+    if (decimalOptions[selectedFormat].includes('DMS')) {
+      const points = convertDMSToXY(dmsSections);
+      mapController.setPolygon(points);
+    } else {
+      const points = convertXYToPoint(ddSections);
+      mapController.setPolygon(points);
     }
   };
 
@@ -255,10 +262,7 @@ const CoordinatesForm: FunctionComponent = () => {
           })}
         <div className="buttons-wrapper">
           <button onClick={(): void => setSection(true)}>Add more</button>
-          <button
-            className="orange-button"
-            onClick={(): void => mapController.setPolygon(dmsSections)}
-          >
+          <button className="orange-button" onClick={(): void => setShape()}>
             Make shape
           </button>
         </div>

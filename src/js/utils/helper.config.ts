@@ -1,6 +1,9 @@
 import Point from 'esri/geometry/Point';
 
-import { SpecificDMSSection } from 'js/components/mapWidgets/widgetContent/coordinatesForm';
+import {
+  SpecificDMSSection,
+  SpecificDDSection
+} from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 
 export const convertDMSToXY = (
   setDMSForm: Array<SpecificDMSSection>
@@ -37,6 +40,19 @@ export const convertDMSToXY = (
     return new Point({
       latitude: convertedLatitude,
       longitude: convertedLongitude
+    });
+  });
+};
+
+export const convertXYToPoint = (
+  setDDForm: Array<SpecificDDSection>
+): Array<Point> => {
+  return setDDForm.map(point => {
+    const { latitude, longitude } = point;
+
+    return new Point({
+      latitude: Number(latitude),
+      longitude: Number(longitude)
     });
   });
 };
