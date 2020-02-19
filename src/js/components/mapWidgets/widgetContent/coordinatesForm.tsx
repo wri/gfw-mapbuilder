@@ -8,9 +8,11 @@ import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
+import { SpecificDDSection } from 'js/interfaces/coordinatesForm';
+
 import 'css/coordinatesForm';
 
-interface SpecificDMSSection {
+export interface SpecificDMSSection {
   rowNum: number;
   latitude: {
     degree: number;
@@ -26,11 +28,6 @@ interface SpecificDMSSection {
   };
 }
 
-export interface SpecificDDSection {
-  rowNum: number;
-  latitude: number;
-  longitude: number;
-}
 export interface DMSFormValues {
   coordinateValue: number;
   rowNum: number;
@@ -125,7 +122,7 @@ const CoordinatesForm: FunctionComponent = () => {
     rowNum,
     coordinateType
   }: {
-    userInput: number;
+    userInput: string;
     rowNum: number;
     coordinateType: string;
   }): void => {
