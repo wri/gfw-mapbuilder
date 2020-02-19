@@ -7,10 +7,13 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
     <meta name="mobile-web-app-capable" content="yes" />
-    <title>GFW Mapbuilder</title>
+    <title>GFW Mapbuilder Library</title>
   </head>
   <body>
-    <noscript> JavaScript is required in order to use this app </noscript>
-    <div id="main"></div>
+    <div id="lib-main"></div>
   </body>
+  <script defer>
+    const config = <%= libConfig %>;
+    const gfwLib = new MapBuilder('lib-main', config);
+  </script>
 </html>
