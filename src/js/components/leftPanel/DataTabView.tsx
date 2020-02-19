@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import { ReactComponent as AnalysisIcon } from 'images/analysisPolyIcon.svg';
+import { LayerFeatureResult } from 'js/store/mapview/types';
 
 const DefaultTabView = () => (
   <div className="data-tab-default-container">
@@ -14,6 +15,20 @@ const DefaultTabView = () => (
     <AnalysisIcon width={100} height={100} />
   </div>
 );
+
+const DataTabFooter = () => {
+  return (
+    <div className="data-tabview-footer">
+      <button onClick={() => console.log('Print Report!')}>
+        Print Report{' '}
+        <img
+          src="https://my.gfw-mapbuilder.org/img/print-icon.svg"
+          alt="print"
+        />
+      </button>
+    </div>
+  );
+};
 
 interface DataTabProps {
   key: string;
@@ -29,56 +44,94 @@ const DataTabView = (props: DataTabProps) => {
     (store: RootState) => store.mapviewState
   );
 
-  const tabViewIsVisible = tabViewVisible && activeTab === props.label;
-
   const FeatureDataView = (): any => {
-    const FeatureGroupElement = (props: any) => {
-      const [page, setPage] = useState(0);
-      const groupTitle = props.layerFeatureGroup.layerTitle;
-      const attributes = props.layerFeatureGroup.features.map(
-        (group: any) => group.attributes
-      );
+    const [activeLayer, setActiveLayer] = useState(activeFeatures[0].layerID);
+    const activeLayerInfo = activeFeatures.find(f => f.layerID === activeLayer);
 
-      function turnPage(): void {
-        if (page !== attributes.length - 1) {
-          setPage(page + 1);
+    const LayerAttributesElement = (props: {
+      activeLayerInfo: any;
+    }): JSX.Element => {
+      const [page, setPage] = useState(0);
+
+      function turnAttributeTablePage(forward: boolean): void {
+        let newPage;
+        if (forward) {
+          newPage =
+            page === props.activeLayerInfo.features.length - 1
+              ? page
+              : page + 1;
+        } else {
+          newPage = page === 0 ? 0 : page - 1;
         }
+        setPage(newPage);
       }
+
+      interface AttributeObject {
+        [key: string]: string;
+      }
+      const AttributeTable = (props: AttributeObject): JSX.Element => {
+        return (
+          <table>
+            <tbody>
+              {Object.keys(props.attributes).map((a: string, i: number) => (
+                <tr key={i}>
+                  <td>{a}</td>
+                  <td>{props.attributes[a]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      };
+
+      //determine if next/prev buttons are enabled or disabled
+      const prevBtn = page === 0 ? 'disabled' : '';
+      const nextBtn =
+        page === props.activeLayerInfo.features.length - 1 ? 'disabled' : '';
       return (
-        <>
-          <p>Layer Title: {groupTitle}</p>
-          <p>Attributes:</p>
-          <p>{JSON.stringify(attributes[page])}</p>
+        <div className="layer-feature-group">
+          <p>Layer Title: {props.activeLayerInfo.layerTitle}</p>
+          <div className="attribute-page-buttons">
+            <button
+              className={`attribute-page-button ${prevBtn}`}
+              onClick={() => turnAttributeTablePage(false)}
+            >
+              Prev
+            </button>
+            <button
+              className={`attribute-page-button ${nextBtn}`}
+              onClick={() => turnAttributeTablePage(true)}
+            >
+              Next
+            </button>
+          </div>
           <p>
-            Page {page + 1} of {attributes.length}
+            Page {page + 1} of {props.activeLayerInfo.features.length}
           </p>
-          <button onClick={turnPage}>next page</button>
-        </>
+          <AttributeTable
+            attributes={props.activeLayerInfo.features[page].attributes}
+          />
+        </div>
       );
     };
 
     //TODO: needs to be active language aware
     return (
       <div className="data-tabview-container">
-        {activeFeatures.map((layerFeatureGroup, i) => (
-          <div key={i}>
-            {<FeatureGroupElement layerFeatureGroup={layerFeatureGroup} />}
-          </div>
-        ))}
-        <div className="data-tabview-footer">
-          <button onClick={() => console.log('Print Report!')}>
-            Print Report{' '}
-            <img
-              src="https://my.gfw-mapbuilder.org/img/print-icon.svg"
-              alt="print"
-            />
-          </button>
-        </div>
+        <div>Selector</div>
+        <LayerSelector
+          activeFeatures={activeFeatures}
+          activeLayerInfo={activeLayerInfo}
+          handleLayerSelection={handleLayerSelection}
+        />
+        <LayerAttributesElement activeLayerInfo={activeLayerInfo} />
+        <DataTabFooter />
       </div>
     );
   };
 
   const DataTabViewContent = () => {
+    const tabViewIsVisible = tabViewVisible && activeTab === props.label;
     if (!tabViewIsVisible) {
       return null;
     } else {
