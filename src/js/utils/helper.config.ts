@@ -11,21 +11,27 @@ export const convertDMSToXY = (
     let convertedLongitude;
     if (latitude.cardinalPoint === 'N') {
       convertedLatitude =
-        latitude.seconds / 3600 + latitude.minutes / 60 + latitude.degree;
+        Number(latitude.seconds) / 3600 +
+        Number(latitude.minutes) / 60 +
+        Number(latitude.degree);
     } else {
       convertedLatitude =
-        (longitude.seconds / 3600 - longitude.minutes / 60 + longitude.degree) *
+        (Number(longitude.seconds) / 3600 -
+          Number(longitude.minutes) / 60 +
+          Number(longitude.degree)) *
         -1;
     }
 
     if (longitude.cardinalPoint === 'E') {
       convertedLongitude =
-        longitude.seconds / 3600 + longitude.minutes / 60 + longitude.degree;
+        Number(longitude.seconds) / 3600 +
+        Number(longitude.minutes) / 60 +
+        Number(longitude.degree);
     } else {
       convertedLongitude =
-        longitude.seconds / 3600 +
-        longitude.minutes / 60 +
-        longitude.degree * -1;
+        Number(longitude.seconds) / 3600 +
+        Number(longitude.minutes) / 60 +
+        Number(longitude.degree) * -1;
     }
 
     return new Point({
