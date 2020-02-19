@@ -151,6 +151,23 @@
 }
 
 .data-tabview-container {
+  .layer-feature-group {
+    .attribute-page-button {
+      font-size: 14px;
+      border: 0;
+      border-radius: 35px;
+      line-height: 25px;
+      padding: 0 1rem;
+      background-color: $base-yellow;
+      cursor: pointer;
+      color: #fff;
+    }
+    .attribute-page-button.disabled {
+      background-color: rgb(238, 238, 238);
+      cursor: disabled;
+      color: #555;
+    }
+  }
   .data-tabview-footer {
     display: flex;
     justify-content: center;
