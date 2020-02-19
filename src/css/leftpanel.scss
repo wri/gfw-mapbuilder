@@ -152,7 +152,62 @@
 
 .data-tabview-container {
   .layer-feature-group {
+    .layer-controls {
+      display: flex;
+      padding-top: 15px;
+      justify-content: space-around;
+      margin-bottom: 10px;
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: relative;
+        background-color: #fff;
+        background-image: url('../images/down-arrow.png');
+        background-repeat: no-repeat, repeat;
+        background-position: right 0.7em top 50%, 0 0;
+        background-size: 0.75em auto, 100%;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        display: block;
+        height: 100%;
+        border-radius: 0;
+        padding-left: 5px;
+        padding-right: 20px;
+        left: 0;
+        top: 0;
+      }
+      option {
+        font-weight: normal;
+        display: block;
+        white-space: pre;
+        min-height: 1.2em;
+        padding: 0px 2px 1px;
+      }
+      option:after {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
+      }
+    }
+    .page-numbers {
+      color: #555;
+      display: flex;
+      justify-content: flex-end;
+      font-size: 0.85rem;
+      margin-right: 1rem;
+    }
+    .layer-title {
+      color: #6f6f6f;
+      font-size: 14px;
+      text-align: center;
+      margin: 0 0.5rem;
+      height: 3rem;
+      font-weight: bold;
+    }
     .attribute-page-button {
+      margin-left: 5px;
       font-size: 14px;
       border: 0;
       border-radius: 35px;
