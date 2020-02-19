@@ -1,17 +1,14 @@
+interface CoordinateObject {
+  degree: string;
+  minutes: string;
+  seconds: string;
+  cardinalPoint: string;
+}
+
 export interface SpecificDMSSection {
   rowNum: number;
-  latitude: {
-    degree: string;
-    minutes: string;
-    seconds: string;
-    cardinalPoint: string;
-  };
-  longitude: {
-    degree: string;
-    minutes: string;
-    seconds: string;
-    cardinalPoint: string;
-  };
+  latitude: CoordinateObject;
+  longitude: CoordinateObject;
 }
 
 export interface DMSFormValues {
