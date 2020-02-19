@@ -8,9 +8,10 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+import Polygon from 'esri/geometry/Polygon';
 import Search from 'esri/widgets/Search';
-import PrintTask from 'esri/tasks/PrintTask';
 import Point from 'esri/geometry/Point';
+import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { once } from 'esri/core/watchUtils';
@@ -37,6 +38,10 @@ import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
 import { addPopupWatchUtils } from 'js/helpers/DataPanel';
+
+import { SpecificDMSSection } from 'js/components/mapWidgets/widgetContent/coordinatesForm';
+
+import { convertDMSToXY } from 'js/utils/helper.config';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -780,6 +785,40 @@ export class MapController {
     }
   };
 
+  setPolygon = (setDMSForm: Array<SpecificDMSSection>): void => {
+    const simpleFillSymbol = {
+      type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+      color: [240, 171, 0, 0.0],
+      outline: {
+        // autocasts as new SimpleLineSymbol()
+        color: [0, 255, 254],
+        width: 2
+      }
+    };
+
+    this._mapview.graphics.removeAll();
+
+    const points = convertDMSToXY(setDMSForm);
+
+    const polygon = new Polygon().addRing(points);
+
+    const graphic = new Graphic({
+      geometry: polygon,
+      symbol: simpleFillSymbol
+    });
+    this._mapview.graphics.add(graphic);
+
+    this._mapview.goTo(
+      {
+        target: graphic
+      },
+      {
+        duration: 1000
+      }
+    );
+    store.dispatch(renderModal(''));
+  };
+
   initializeSearchWidget(searchRef: RefObject<any>): void {
     new Search({
       view: this._mapview,
@@ -797,7 +836,7 @@ export class MapController {
 
     const simpleMarkerSymbol = {
       type: 'simple-marker',
-      color: [240, 171, 0], // $base-yellow
+      color: [240, 171, 0],
       outline: {
         color: [255, 255, 255],
         width: 1

@@ -3,13 +3,15 @@ import { useSelector } from 'react-redux';
 
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
 import 'css/coordinatesForm';
 
-interface SpecificDMSSection {
+export interface SpecificDMSSection {
   rowNum: number;
   latitude: {
     degree: number;
@@ -127,11 +129,6 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(sections);
   };
 
-  const setShape = (): void => {
-    console.log('setShape()', dmsSections);
-    // TODO create polygon from formvalues!
-  };
-
   const addOrRemoveSection = (addSection: boolean): void => {
     const allDMSSections = [...dmsSections];
 
@@ -240,7 +237,10 @@ const CoordinatesForm: FunctionComponent = () => {
           <button onClick={(): void => addOrRemoveSection(true)}>
             Add more
           </button>
-          <button className="orange-button" onClick={(): void => setShape()}>
+          <button
+            className="orange-button"
+            onClick={(): void => mapController.setPolygon(dmsSections)}
+          >
             Make shape
           </button>
         </div>
