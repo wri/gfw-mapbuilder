@@ -26,7 +26,7 @@ interface SpecificDMSSection {
   };
 }
 
-interface SpecificDDSection {
+export interface SpecificDDSection {
   rowNum: number;
   latitude: number;
   longitude: number;
