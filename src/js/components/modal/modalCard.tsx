@@ -8,6 +8,7 @@ import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
 import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
+import SubscriptionContent from '../mapWidgets/widgetContent/SubscriptionContent';
 
 import { renderModal } from 'js/store/appState/actions';
 
@@ -40,6 +41,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <PenContent />;
       case 'PenWidget-CoordinatesForm':
         return <CoordinatesForm />;
+      case 'SubscriptionWidget':
+        return <SubscriptionContent />;
       case 'SearchWidget':
         return <SearchContent />;
       case 'MeasureWidget':
