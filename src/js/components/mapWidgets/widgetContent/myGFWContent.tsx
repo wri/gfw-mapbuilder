@@ -5,6 +5,7 @@ import { RootState } from 'js/store';
 import { render } from 'react-dom';
 
 import { userSubscriptions } from 'js/store/mapview/actions';
+import { renderModal } from 'js/store/appState/actions';
 
 const MyGFWContent: FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const MyGFWContent: FunctionComponent = () => {
     (state: RootState) => state.mapviewState.userSubscriptions
   );
 
-  function logOut() {
+  function logOut(): void {
     fetch('https://production-api.globalforestwatch.org/auth/logout', {
       credentials: 'include'
     }).then(() => {
@@ -24,7 +25,7 @@ const MyGFWContent: FunctionComponent = () => {
     });
   }
 
-  function getSubscriptions() {
+  function getSubscriptions(): void {
     if (subscriptions.length === 0) {
       fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
         credentials: 'include'
@@ -36,6 +37,7 @@ const MyGFWContent: FunctionComponent = () => {
         }
         response.json().then(json => {
           dispatch(userSubscriptions(json.data));
+          dispatch(renderModal('SubscriptionWidget'));
           // this.setState({
           //   userSubscriptions: json.data
           // });
@@ -45,12 +47,13 @@ const MyGFWContent: FunctionComponent = () => {
       });
     } else {
       console.log('ooh');
+      dispatch(renderModal('SubscriptionWidget'));
 
       // mapActions.toggleSubscriptionsModal({ visible: true });
     }
   }
 
-  function renderLogins() {
+  const RenderLogins = (): any => {
     return (
       <ul className="subscription-authentication">
         <li className="subscribe-method twitter-box">
@@ -81,15 +84,15 @@ const MyGFWContent: FunctionComponent = () => {
         </li>
       </ul>
     );
-  }
+  };
 
-  function renderDropdowns() {
+  const RenderDropdowns = (): any => {
     return (
       <div className="options-modal">
         <ul className="more-list">
-          <li className="gfw-api-option">
+          <li onClick={getSubscriptions} className="gfw-api-option">
             {/* <p onClick={this.getSubscriptions}> */}
-            <p onClick={getSubscriptions}>subscriptions</p>
+            Subscriptions
           </li>
           <li className="gfw-api-option">
             <a href="http://www.globalforestwatch.org/my_gfw">My GFW Profile</a>
@@ -100,13 +103,12 @@ const MyGFWContent: FunctionComponent = () => {
         </ul>
       </div>
     );
-  }
-  console.log('isLoggedIn', isLoggedIn);
+  };
 
   return (
     <div className="measure-options-container">
-      {!isLoggedIn && renderLogins()}
-      {isLoggedIn && renderDropdowns()}
+      {!isLoggedIn && <RenderLogins />}
+      {isLoggedIn && <RenderDropdowns />}
     </div>
   );
 };
