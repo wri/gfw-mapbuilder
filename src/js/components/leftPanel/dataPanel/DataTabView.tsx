@@ -29,15 +29,7 @@ const DataTabView = (props: DataTabProps) => {
       const [page, setPage] = useState(0);
 
       function turnAttributeTablePage(forward: boolean): void {
-        let newPage;
-        if (forward) {
-          newPage =
-            page === props.activeLayerInfo.features.length - 1
-              ? page
-              : page + 1;
-        } else {
-          newPage = page === 0 ? 0 : page - 1;
-        }
+        const newPage = forward ? page + 1 : page - 1;
         setPage(newPage);
       }
 
@@ -76,12 +68,14 @@ const DataTabView = (props: DataTabProps) => {
             <div className="attribute-page-buttons">
               <button
                 className={`attribute-page-button ${prevBtn}`}
+                disabled={page === 0}
                 onClick={() => turnAttributeTablePage(false)}
               >
                 Prev
               </button>
               <button
                 className={`attribute-page-button ${nextBtn}`}
+                disabled={page === props.activeLayerInfo.features.length - 1}
                 onClick={() => turnAttributeTablePage(true)}
               >
                 Next

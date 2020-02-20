@@ -10,6 +10,7 @@ import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
+import { selectActiveTab } from 'js/store/appState/actions';
 
 function esriQuery(
   url: string,
@@ -129,6 +130,10 @@ export function addPopupWatchUtils(
         layerFeatureResults = layerFeatureResults.concat(serverResponse);
         console.log(layerFeatureResults);
         store.dispatch(setActiveFeatures(layerFeatureResults));
+        const { appState } = store.getState();
+        if (appState.leftPanel.activeTab !== 'data') {
+          store.dispatch(selectActiveTab('data'));
+        }
       });
     }
     resolveClientPromisesWithErrors(promises);
