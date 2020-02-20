@@ -198,13 +198,13 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   const setShape = (): void => {
+    let points = [];
     if (decimalOptions[selectedFormat].includes('DMS')) {
-      const points = convertDMSToXY(dmsSections);
-      mapController.setPolygon(points);
+      points = convertDMSToXY(dmsSections);
     } else {
-      const points = convertXYToPoint(ddSections);
-      mapController.setPolygon(points);
+      points = convertXYToPoint(ddSections);
     }
+    mapController.setPolygon(points);
   };
 
   return (
