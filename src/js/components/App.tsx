@@ -10,6 +10,7 @@ import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 import resources from '../../../configs/resources';
 import { overwriteSettings } from 'js/store/appSettings/actions';
+import { AppSettings } from 'js/store/appSettings/types';
 
 //TODO: SPinners should be SVGs in images/ folder that get imported
 const GlobalSpinner = (): React.ReactElement => <h4>App Loading...</h4>;
@@ -20,7 +21,7 @@ const MapSpinner = (): React.ReactElement => (
 );
 // const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
-const App = (): JSX.Element => {
+const App = (props: AppSettings | any): JSX.Element => {
   //INIT with global spinner set to true
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
@@ -31,8 +32,8 @@ const App = (): JSX.Element => {
       //IF APPID > ASYNC Get Resources
       //
       //Determine which resources we are reading from
-      //Read our local resources.js file
-      dispatch(overwriteSettings(resources));
+      //Read our local resources.js file And any external library resources (which are prioritized)
+      dispatch(overwriteSettings({ ...resources, ...props }));
       //Send that to our redux appSettings overwriting whatever is there
       setShowGlobalSpinner(false);
     }, 500);

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
   //- General Settings
   // webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',

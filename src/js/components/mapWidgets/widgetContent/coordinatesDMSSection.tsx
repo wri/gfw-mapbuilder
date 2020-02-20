@@ -1,17 +1,10 @@
 import React from 'react';
 
-import { DMSFormValues } from './coordinatesForm';
+import { DMSFormValues, CoordinateProps } from 'js/interfaces/coordinateForm';
 
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 
 import 'css/coordinatesForm';
-
-interface CoordinateProps {
-  degree: number;
-  minutes: number;
-  seconds: number;
-  cardinalPoint: string;
-}
 
 interface DMSSectionProps {
   dmsSection: {
@@ -61,7 +54,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             value={latitude.degree}
             onChange={(e): void =>
               setDMSFormValues({
-                coordinateValue: Number(e.target.value),
+                coordinateValue: e.target.value,
                 rowNum,
                 coordinateType: 'latitude',
                 degreeType: 'degree'
@@ -75,7 +68,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             value={latitude.minutes}
             onChange={(e): void =>
               setDMSFormValues({
-                coordinateValue: Number(e.target.value),
+                coordinateValue: e.target.value,
                 rowNum,
                 coordinateType: 'latitude',
                 degreeType: 'minutes'
@@ -89,7 +82,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             value={latitude.seconds}
             onChange={(e): void =>
               setDMSFormValues({
-                coordinateValue: Number(e.target.value),
+                coordinateValue: e.target.value,
                 rowNum,
                 coordinateType: 'latitude',
                 degreeType: 'seconds'
@@ -99,7 +92,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
           <span className="degree">{secondsSymbol}</span>
           <select
             value={latitude.cardinalPoint}
-            onBlur={e =>
+            onChange={(e): void =>
               setDMSCardinalType({
                 specificPoint: e.target.value,
                 rowNum,
@@ -121,7 +114,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             value={longitude.degree}
             onChange={(e): void =>
               setDMSFormValues({
-                coordinateValue: Number(e.target.value),
+                coordinateValue: e.target.value,
                 rowNum,
                 coordinateType: 'longitude',
                 degreeType: 'degree'
@@ -135,7 +128,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             value={longitude.minutes}
             onChange={(e): void =>
               setDMSFormValues({
-                coordinateValue: Number(e.target.value),
+                coordinateValue: e.target.value,
                 rowNum,
                 coordinateType: 'longitude',
                 degreeType: 'minutes'
@@ -149,7 +142,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             value={longitude.seconds}
             onChange={(e): void =>
               setDMSFormValues({
-                coordinateValue: Number(e.target.value),
+                coordinateValue: e.target.value,
                 rowNum,
                 coordinateType: 'longitude',
                 degreeType: 'seconds'
@@ -159,7 +152,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
           <span className="degree">{secondsSymbol}</span>
           <select
             value={longitude.cardinalPoint}
-            onBlur={e =>
+            onChange={(e): void =>
               setDMSCardinalType({
                 specificPoint: e.target.value,
                 rowNum,
