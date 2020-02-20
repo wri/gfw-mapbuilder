@@ -23,7 +23,8 @@ import { LayerFactory } from 'js/helpers/LayerFactory';
 import {
   allAvailableLayers,
   mapError,
-  isMapReady
+  isMapReady,
+  setActiveFeatures
 } from 'js/store/mapview/actions';
 
 import {
@@ -33,7 +34,7 @@ import {
   setMeasureResults,
   setLanguage
 } from 'js/store/appState/actions';
-import { LayerProps } from 'js/store/mapview/types';
+import { LayerProps, LayerFeatureResult } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
@@ -515,11 +516,22 @@ export class MapController {
 
     this._sketchVM?.on('create', (event: any) => {
       if (event.state === 'complete') {
+        event.graphic.attributes = {
+          OBJECTID: event.graphic.uid
+        };
         this._previousSketchGraphic = event.graphic;
 
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
         this._mapview.graphics.add(event.graphic);
+
+        const drawnFeatures: LayerFeatureResult[] = [];
+        drawnFeatures.push({
+          layerID: 'user_features',
+          layerTitle: 'User Features',
+          features: [event.graphic]
+        });
+        store.dispatch(setActiveFeatures(drawnFeatures));
 
         store.dispatch(selectActiveTab('analysis'));
         store.dispatch(toggleTabviewPanel(true));
