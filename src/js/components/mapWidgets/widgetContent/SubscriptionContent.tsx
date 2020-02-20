@@ -2,6 +2,9 @@ import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { mapController } from 'js/controllers/mapController';
+import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
+import { ReactComponent as WorldShape } from 'images/worldShape.svg';
+import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
 
 import { RootState } from 'js/store/index';
 
@@ -128,9 +131,7 @@ const SubscriptionContent: FunctionComponent = () => {
               }`}
             >
               <a href={subscribeUrl} className="subscription-uncle">
-                <svg className="svg-icon subscription-svg">
-                  {/* <SVGIcon id={'shape-warning'} /> */}
-                </svg>
+                <ShapeWarning height={25} width={25} fill={'#F0AB00'} />
                 <span className="subscribe-tooltipmap">
                   Subscription has not been confirmed, click here to resend the
                   confirmation email
@@ -148,7 +149,7 @@ const SubscriptionContent: FunctionComponent = () => {
           {/* <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'> */}
           <div onClick={evt => console.log('shoow')} className="map-row">
             <button title="Show on map" className="btn-delete-subscription">
-              {/* <SVGIcon id={'shape-world'} /> */}
+              <WorldShape height={25} width={25} fill={'#555'} />
             </button>
           </div>
           <div className="delete-row">
@@ -158,7 +159,7 @@ const SubscriptionContent: FunctionComponent = () => {
               onClick={evt => console.log('DeleteDelete')}
               className="btn-delete-subscription"
             >
-              {/* <SVGIcon id={'icon-analysis-remove'} /><span className='delete-row-label'>Delete</span> */}
+              <DeleteIcon height={25} width={25} fill={'#555'} />
             </button>
           </div>
         </div>

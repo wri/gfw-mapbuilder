@@ -173,6 +173,10 @@
     top: 2px;
   }
 
+  .toggle-switch-subscription.active-subscription span {
+    left: 9px;
+  }
+
   .toggle-switch-subscription {
     float: right;
     margin-left: 10px;
@@ -288,6 +292,29 @@
   .source-row .other-row p {
     margin-top: 8px;
     margin-bottom: 8px;
+  }
+
+  .source-row .btn-delete-subscription {
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Fira GFW Sans', 'Fira Sans';
+    font-feature-settings: 'liga' 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 14px;
   }
 
   @media screen and (max-width: $mobile-device) {
