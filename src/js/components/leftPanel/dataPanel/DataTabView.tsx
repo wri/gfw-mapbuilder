@@ -108,20 +108,17 @@ const DataTabView = (props: DataTabProps) => {
     );
   };
 
-  const DataTabViewContent = () => {
-    const tabViewIsVisible = tabViewVisible && activeTab === props.label;
-    if (!tabViewIsVisible) {
-      return null;
-    } else {
-      return activeFeatures.length === 0 ? (
-        <DefaultTabView />
-      ) : (
-        <FeatureDataView />
-      );
-    }
-  };
+  const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
-  return <DataTabViewContent />;
+  return (
+    <div
+      className={
+        tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'
+      }
+    >
+      {activeFeatures.length === 0 ? <DefaultTabView /> : <FeatureDataView />}
+    </div>
+  );
 };
 
 export default DataTabView;
