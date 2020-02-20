@@ -4,17 +4,13 @@ import Map from 'esri/Map';
 import store from 'js/store';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/support/Query';
-import geometryEngine from 'esri/geometry/geometryEngine';
 import Graphic from 'esri/Graphic';
 import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 
-function esriQuery(
-  url: string,
-  queryParams: __esri.QueryProperties
-): Promise<__esri.FeatureSet> {
+function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
   const qt = new QueryTask({
     url: url
   });
@@ -24,15 +20,32 @@ function esriQuery(
 }
 
 async function processSublayers(
-  geometry: any,
-  sublayersArray: Sublayer[]
+  geometry: Point,
+  sublayersArray: Sublayer[],
+  mapview: MapView
 ): Promise<any> {
+  //Depending on mapzoom level query distance is lower to account for points on the map spacing
+  function calcDistance(): number {
+    if (mapview.zoom < 10) {
+      return 2;
+    } else if (mapview.zoom > 10 && mapview.zoom <= 13) {
+      return 0.8;
+    } else if (mapview.zoom > 13 && mapview.zoom <= 15) {
+      return 0.3;
+    } else {
+      return 0.03;
+    }
+  }
+
+  const bufferedDistance = calcDistance();
   const processedSubsResults: LayerFeatureResult[] = [];
   for await (const sublayer of sublayersArray) {
     const url = sublayer.url;
     const qParams = {
       where: '1=1',
       outFields: ['*'],
+      units: 'miles',
+      distance: bufferedDistance,
       geometry: geometry,
       returnGeometry: false
     };
@@ -79,11 +92,12 @@ async function fetchAsyncServerResults(
     const sublayersArray: any[] = sublayers.items.map((sl: Sublayer) => sl);
 
     //TODO: Better way to handle mouse click buffering?
-    const distance = mapview.resolution * 0.005;
-    const geometry = geometryEngine.buffer(mapPoint, distance, 'miles');
+    // const distance = mapview.resolution * 0.005;
+    // const geometry = geometryEngine.buffer(mapPoint, distance, 'miles');
     const processedSubs: LayerFeatureResult[] = await processSublayers(
-      geometry,
-      sublayersArray
+      mapPoint,
+      sublayersArray,
+      mapview
     );
     return processedSubs;
   }
@@ -127,7 +141,6 @@ export function addPopupWatchUtils(
           mapPoint
         );
         layerFeatureResults = layerFeatureResults.concat(serverResponse);
-        console.log(layerFeatureResults);
         store.dispatch(setActiveFeatures(layerFeatureResults));
       });
     }
