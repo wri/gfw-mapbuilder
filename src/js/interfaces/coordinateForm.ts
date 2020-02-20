@@ -31,3 +31,24 @@ export interface DMSCardinalPoint {
   rowNum?: number;
   coordinateType?: string;
 }
+
+export interface SpecificDDSection {
+  rowNum: number;
+  latitude: string;
+  longitude: string;
+}
+
+export interface DDFormValues {
+  userInput: string;
+  rowNum: number;
+  coordinateType: string;
+}
+
+export interface DDSectionProps {
+  key: number;
+  ddSection: SpecificDDSection;
+  degreeSymbol: string;
+  renderRemoveButton: boolean;
+  setDDFormValues: (formValues: DDFormValues) => void;
+  setSection: (addSection: boolean) => void;
+}
