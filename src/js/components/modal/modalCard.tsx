@@ -60,6 +60,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'gfw-login-widget';
       case 'PenWidget':
         return 'pen-widget';
+      case 'SearchWidget':
+        return 'search-widget';
       case 'PrintWidget':
         return 'print-widget';
       case 'ShareWidget':

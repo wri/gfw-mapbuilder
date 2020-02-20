@@ -19,3 +19,8 @@ body,
 button {
   cursor: pointer;
 }
+
+//disable default popup from being visible (we are using its functionality but not the UI)
+.esri-popup {
+  display: none !important;
+}

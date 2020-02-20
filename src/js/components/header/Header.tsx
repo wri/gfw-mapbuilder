@@ -6,11 +6,9 @@ import GFWLogin from 'js/components/header/GFWLogin';
 
 import 'css/header.scss';
 
+// import config from '../../../../configs/resources';
+
 const Header: FunctionComponent = () => {
-  const settings = useSelector((store: RootState) => store.appSettings);
-
-  const appState = useSelector((store: RootState) => store.appState);
-
   const {
     language,
     title,
@@ -21,7 +19,9 @@ const Header: FunctionComponent = () => {
     alternativeWebmap,
     alternativeLanguage,
     includeMyGFWLogin
-  } = settings;
+  } = useSelector((store: RootState) => store.appSettings);
+
+  const appState = useSelector((store: RootState) => store.appState);
   const { selectedLanguage, isLoggedIn } = appState;
 
   return (

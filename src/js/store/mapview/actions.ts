@@ -3,6 +3,7 @@ import {
   MAP_READY,
   USER_SUBSCRIPTIONS,
   ALL_AVAILABLE_LAYERS,
+  SET_ACTIVE_FEATURES,
   MapviewState
 } from './types';
 
@@ -32,6 +33,13 @@ export function allAvailableLayers(
 ) {
   return {
     type: ALL_AVAILABLE_LAYERS as typeof ALL_AVAILABLE_LAYERS,
+    payload
+  };
+}
+
+export function setActiveFeatures(payload: MapviewState['activeFeatures']) {
+  return {
+    type: SET_ACTIVE_FEATURES as typeof SET_ACTIVE_FEATURES,
     payload
   };
 }
