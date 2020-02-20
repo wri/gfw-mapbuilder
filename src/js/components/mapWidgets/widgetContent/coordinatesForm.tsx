@@ -9,36 +9,13 @@ import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
+import {
+  SpecificDMSSection,
+  DMSFormValues,
+  DMSCardinalPoint
+} from 'js/interfaces/coordinateForm';
+
 import 'css/coordinatesForm';
-
-export interface SpecificDMSSection {
-  rowNum: number;
-  latitude: {
-    degree: number;
-    minutes: number;
-    seconds: number;
-    cardinalPoint: string;
-  };
-  longitude: {
-    degree: number;
-    minutes: number;
-    seconds: number;
-    cardinalPoint: string;
-  };
-}
-export interface DMSFormValues {
-  coordinateValue: number;
-  rowNum: number;
-  coordinateType: string;
-  degreeType: string;
-  cardinalPoint?: string;
-}
-
-interface DMSCardinalPoint {
-  specificPoint?: string;
-  rowNum?: number;
-  coordinateType?: string;
-}
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
@@ -46,45 +23,45 @@ const CoordinatesForm: FunctionComponent = () => {
     {
       rowNum: 0,
       latitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'N'
       },
       longitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'E'
       }
     },
     {
       rowNum: 1,
       latitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'N'
       },
       longitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'E'
       }
     },
     {
       rowNum: 2,
       latitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'N'
       },
       longitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'E'
       }
     }
