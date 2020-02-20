@@ -33,14 +33,13 @@ const ReturnMeasurementResults = (): JSX.Element => {
     coordinateMouseClickResults,
     coordinatePointerMoveResults
   } = useSelector((state: RootState) => state.appState.measureContent);
-  const [results, setResults] = useState(<></>);
 
-  useEffect(() => {
+  const returnResults = (): JSX.Element | void => {
     // * NOTE - later one we'll want a message saying;
     // * 'select option to see results'
     // * when everything is toggled OFF
     if (activeButton === 'area') {
-      setResults(
+      return (
         <>
           <p>
             <strong>Area: </strong> {areaResults?.area}
@@ -52,7 +51,7 @@ const ReturnMeasurementResults = (): JSX.Element => {
         </>
       );
     } else if (activeButton === 'distance') {
-      setResults(
+      return (
         <>
           <p>
             <strong>Distance Results: </strong>
@@ -61,7 +60,7 @@ const ReturnMeasurementResults = (): JSX.Element => {
         </>
       );
     } else if (activeButton === 'coordinates') {
-      setResults(
+      return (
         <>
           <p>
             <strong>Coordinate results</strong>
@@ -80,15 +79,9 @@ const ReturnMeasurementResults = (): JSX.Element => {
         </>
       );
     }
-  }, [
-    activeButton,
-    areaResults,
-    distanceResults,
-    coordinateMouseClickResults,
-    coordinatePointerMoveResults
-  ]);
+  };
 
-  return results;
+  return <>{returnResults()}</>;
 };
 
 const ReturnDropdown: FunctionComponent = () => {
