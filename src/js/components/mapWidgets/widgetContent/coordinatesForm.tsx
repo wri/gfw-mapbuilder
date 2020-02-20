@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
-import DDSection from 'js/components/mapWidgets/widgetContent/coordinatesDDSection';
+import DMSSection from './coordinatesDMSSection';
+import DDSection from './coordinatesDDSection';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -11,6 +11,7 @@ import { RootState } from 'js/store/index';
 import { coordinatesContent } from 'configs/modal.config';
 
 import {
+  DDFormValues,
   SpecificDDSection,
   SpecificDMSSection,
   DMSFormValues,
@@ -98,11 +99,7 @@ const CoordinatesForm: FunctionComponent = () => {
     userInput,
     rowNum,
     coordinateType
-  }: {
-    userInput: string;
-    rowNum: number;
-    coordinateType: string;
-  }): void => {
+  }: DDFormValues): void => {
     const sections = [...ddSections];
     const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
 
@@ -143,8 +140,6 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   const setShape = (): void => {
-    console.log('setShape()', dmsSections);
-    // TODO create polygon from formvalues!
     if (decimalOptions[selectedFormat].includes('DMS')) {
       mapController.setPolygon(dmsSections);
     } else {
@@ -154,12 +149,11 @@ const CoordinatesForm: FunctionComponent = () => {
 
   const addOrRemoveSection = (
     // allSections: Array<SpecificDDSection> | Array<SpecificDMSSection>,
+    defaultSection: SpecificDDSection | SpecificDMSSection,
     allSections: Array<any>,
     addSection: boolean
   ): Array<SpecificDDSection> | Array<SpecificDMSSection> => {
     if (addSection) {
-      const defaultSection = { ...allSections[0] };
-      defaultSection.rowNum = allSections.length + 1;
       allSections.push(defaultSection);
     } else {
       allSections.pop();
@@ -171,14 +165,37 @@ const CoordinatesForm: FunctionComponent = () => {
   const setSection = (addSection: boolean): void => {
     if (decimalOptions[selectedFormat].includes('DMS')) {
       const allDMSSections = [...dmsSections];
+      const defaultDMSSection = {
+        rowNum: 0,
+        latitude: {
+          degree: '',
+          minutes: '',
+          seconds: '',
+          cardinalPoint: 'N'
+        },
+        longitude: {
+          degree: '',
+          minutes: '',
+          seconds: '',
+          cardinalPoint: 'E'
+        }
+      };
+
       const updatedSections = addOrRemoveSection(
+        defaultDMSSection,
         allDMSSections,
         addSection
       ) as Array<SpecificDMSSection>;
       setDMSForm(updatedSections);
     } else {
       const allDDSections = [...ddSections];
+      const defaultDDSection = {
+        rowNum: allDDSections.length + 1,
+        latitude: '',
+        longitude: ''
+      };
       const updatedSections = addOrRemoveSection(
+        defaultDDSection,
         allDDSections,
         addSection
       ) as Array<SpecificDDSection>;
