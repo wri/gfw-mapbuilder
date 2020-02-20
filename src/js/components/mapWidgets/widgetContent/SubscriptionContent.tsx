@@ -121,7 +121,7 @@ const SubscriptionContent: FunctionComponent = () => {
     return (
       <div key={key} className="source-row subscribe-row">
         <div className="subscribe-button-container">
-          <div className="svg-icon subscription-svg">
+          <div className="subscription-unconfirmed">
             <div
               className={`subscription-unconfirmed-wrap ${
                 subscription.attributes.confirmed ? 'hidden' : ''

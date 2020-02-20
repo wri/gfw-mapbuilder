@@ -129,6 +129,167 @@
     }
   }
 
+  .subscribe-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .delete-row-label {
+    padding-top: 3px;
+  }
+  .source-summary {
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  .source-summary h3 {
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .source-summary p {
+    margin: 10px 0;
+  }
+
+  .toggle-switch,
+  .toggle-switch-subscription {
+    transition: all 0.3s ease;
+    background: gray;
+    display: inline-block;
+    border-radius: 5px;
+    position: relative;
+    height: 10px;
+    width: 17px;
+    margin-top: 5px;
+  }
+
+  .toggle-switch span,
+  .toggle-switch-subscription span {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    position: absolute;
+    background: #fff;
+    height: 6px;
+    width: 6px;
+    left: 2px;
+    top: 2px;
+  }
+
+  .toggle-switch-subscription {
+    float: right;
+    margin-left: 10px;
+    margin-top: 4px;
+  }
+
+  .subscription-unconfirmed {
+    display: flex;
+    align-items: center;
+  }
+  .subscription-unconfirmed .subscription-uncle {
+    position: relative;
+  }
+  .subscription-unconfirmed-wrap:hover .subscribe-tooltipmap {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+  .subscription-unconfirmed-wrap {
+    display: inline-block;
+    float: left;
+  }
+  .subscription-unconfirmed-wrap .subscription-svg {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  .subscription-unconfirmed-wrap .subscribe-tooltipmap {
+    position: absolute;
+    background: #fffee2;
+    -webkit-box-shadow: 0 1px 3px rgba(85, 85, 85, 0.25);
+    box-shadow: 0 1px 3px rgba(85, 85, 85, 0.25);
+    z-index: 1000;
+    margin: 0;
+    visibility: hidden;
+    opacity: 0;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.25;
+    bottom: 100%;
+    left: 115px;
+    text-align: center;
+    padding: 6px 8px;
+    white-space: nowrap;
+    pointer-events: none;
+    -webkit-transform: translate(-50%, 0px);
+    transform: translate(-50%, 0px);
+    width: 200px;
+    white-space: normal;
+  }
+  .subscribe-tooltipmap:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #fffee2;
+    z-index: 2;
+    bottom: 0px;
+    left: 0px;
+    -webkit-transform: translate(-50%, 50%) rotate(270deg);
+    transform: translate(-50%, 50%) rotate(270deg);
+    border-width: 1px;
+    border-color: #f0f0ed;
+    border-style: solid;
+  }
+  .subscription-explanation {
+    max-width: 230px;
+  }
+  .dataset-list {
+    display: inline-block;
+  }
+  .step-title {
+    font-size: 24px;
+    margin: 0 auto;
+    color: #555;
+    text-align: center;
+  }
+  .custom-checkbox {
+    display: inline-block;
+    width: 50%;
+  }
+
+  .name-row {
+    font-weight: bold;
+    margin-left: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .name-row.no-warning {
+    margin-left: 0;
+  }
+  .source-row {
+    border-bottom: 1px solid gray;
+    display: table;
+    width: 100%;
+    margin: 0;
+  }
+  .source-row:nth-child(even) {
+    background: #f2f2f3;
+  }
+  .source-row.subscribe-row {
+    padding: 10px;
+  }
+  .source-row .other-row {
+    font-size: 14px;
+  }
+  .source-row .other-row.date-created {
+    font-style: italic;
+  }
+  .source-row .other-row p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
   @media screen and (max-width: $mobile-device) {
     .modal-card-container {
       width: 15rem;
