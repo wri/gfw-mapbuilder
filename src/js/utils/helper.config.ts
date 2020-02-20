@@ -3,7 +3,7 @@ import Point from 'esri/geometry/Point';
 import {
   SpecificDMSSection,
   SpecificDDSection
-} from 'js/components/mapWidgets/widgetContent/coordinatesForm';
+} from '../interfaces/coordinateForm';
 
 export const convertDMSToXY = (
   setDMSForm: Array<SpecificDMSSection>

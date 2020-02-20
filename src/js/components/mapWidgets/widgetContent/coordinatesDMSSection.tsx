@@ -1,17 +1,10 @@
 import React from 'react';
 
-import { DMSFormValues } from './coordinatesForm';
+import { DMSFormValues, CoordinateProps } from 'js/interfaces/coordinateForm';
 
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 
 import 'css/coordinatesForm';
-
-interface CoordinateProps {
-  degree: string;
-  minutes: string;
-  seconds: string;
-  cardinalPoint: string;
-}
 
 interface DMSSectionProps {
   dmsSection: {

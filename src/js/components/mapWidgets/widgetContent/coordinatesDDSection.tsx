@@ -1,23 +1,8 @@
 import React from 'react';
 
-import { SpecificDDSection } from './coordinatesForm';
+import { DDSectionProps } from 'js/interfaces/coordinateForm';
 
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
-
-interface DDFormValues {
-  userInput: string;
-  rowNum: number;
-  coordinateType: string;
-}
-
-interface DDSectionProps {
-  key: number;
-  ddSection: SpecificDDSection;
-  degreeSymbol: string;
-  renderRemoveButton: boolean;
-  setDDFormValues: (formValues: DDFormValues) => void;
-  setSection: (addSection: boolean) => void;
-}
 
 export default function DDSection(props: DDSectionProps): JSX.Element {
   const {

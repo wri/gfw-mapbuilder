@@ -39,7 +39,7 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { LayerFactoryObject } from 'js/interfaces/mapping';
 import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 
-import { SpecificDMSSection } from 'js/components/mapWidgets/widgetContent/coordinatesForm';
+import { SpecificDMSSection } from 'js/interfaces/coordinateForm';
 
 import { convertDMSToXY } from 'js/utils/helper.config';
 
