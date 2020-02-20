@@ -1,5 +1,22 @@
 import Graphic from 'esri/Graphic';
 
+interface SpecificAreaResults {
+  area?: string;
+  perimeter?: string;
+}
+
+interface SpecificDistanceResults {
+  length?: string;
+}
+
+export interface MeasureContent {
+  activeButton?: string;
+  areaResults?: SpecificAreaResults;
+  distanceResults?: SpecificDistanceResults;
+  coordinateMouseClickResults?: any; // ClickResults | undefined | Point;
+  coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
+}
+
 //Store types
 export interface MapviewState {
   isMapReady: boolean;

@@ -5,11 +5,9 @@ import LanguageDropdown from 'js/components/header/LanguageDropdown';
 
 import 'css/header.scss';
 
+// import config from '../../../../configs/resources';
+
 const Header: FunctionComponent = () => {
-  const settings = useSelector((store: RootState) => store.appSettings);
-
-  const appState = useSelector((store: RootState) => store.appState);
-
   const {
     language,
     title,
@@ -19,8 +17,10 @@ const Header: FunctionComponent = () => {
     useAlternativeLanguage,
     alternativeWebmap,
     alternativeLanguage
-  } = settings;
-  const { selectedLanguage } = appState;
+  } = useSelector((store: RootState) => store.appSettings);
+
+  const appState = useSelector((store: RootState) => store.appState);
+  const selectedLanguage = appState.selectedLanguage;
 
   return (
     <div className="header-container">

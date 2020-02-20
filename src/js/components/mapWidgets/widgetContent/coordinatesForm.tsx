@@ -4,106 +4,83 @@ import { useSelector } from 'react-redux';
 import DMSSection from 'js/components/mapWidgets/widgetContent/coordinatesDMSSection';
 import DDSection from 'js/components/mapWidgets/widgetContent/coordinatesDDSection';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
 
-import { SpecificDDSection } from 'js/interfaces/coordinatesForm';
+import {
+  SpecificDDSection,
+  SpecificDMSSection,
+  DMSFormValues,
+  DMSCardinalPoint
+} from 'js/interfaces/coordinateForm';
 
 import 'css/coordinatesForm';
-
-export interface SpecificDMSSection {
-  rowNum: number;
-  latitude: {
-    degree: number;
-    minutes: number;
-    seconds: number;
-    cardinalPoint: string;
-  };
-  longitude: {
-    degree: number;
-    minutes: number;
-    seconds: number;
-    cardinalPoint: string;
-  };
-}
-
-export interface DMSFormValues {
-  coordinateValue: number;
-  rowNum: number;
-  coordinateType: string;
-  degreeType: string;
-  cardinalPoint?: string;
-}
-
-interface DMSCardinalPoint {
-  specificPoint?: string;
-  rowNum?: number;
-  coordinateType?: string;
-}
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
   const [ddSections, setDDForm] = useState([
     {
       rowNum: 0,
-      latitude: 0,
-      longitude: 0
+      latitude: '',
+      longitude: ''
     },
     {
       rowNum: 1,
-      latitude: 0,
-      longitude: 0
+      latitude: '',
+      longitude: ''
     },
     {
       rowNum: 2,
-      latitude: 0,
-      longitude: 0
+      latitude: '',
+      longitude: ''
     }
   ]);
   const [dmsSections, setDMSForm] = useState([
     {
       rowNum: 0,
       latitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'N'
       },
       longitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'E'
       }
     },
     {
       rowNum: 1,
       latitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'N'
       },
       longitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'E'
       }
     },
     {
       rowNum: 2,
       latitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'N'
       },
       longitude: {
-        degree: 0,
-        minutes: 0,
-        seconds: 0,
+        degree: '',
+        minutes: '',
+        seconds: '',
         cardinalPoint: 'E'
       }
     }
@@ -168,6 +145,11 @@ const CoordinatesForm: FunctionComponent = () => {
   const setShape = (): void => {
     console.log('setShape()', dmsSections);
     // TODO create polygon from formvalues!
+    if (decimalOptions[selectedFormat].includes('DMS')) {
+      mapController.setPolygon(dmsSections);
+    } else {
+      // TODO - set polygon via DD form
+    }
   };
 
   const addOrRemoveSection = (

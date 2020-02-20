@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DDSectionProps } from 'js/interfaces/coordinatesForm';
+import { DDSectionProps } from 'js/interfaces/coordinateForm';
 
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 
