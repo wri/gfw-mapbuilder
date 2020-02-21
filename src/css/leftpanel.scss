@@ -9,6 +9,11 @@
   background: $white;
   box-shadow: 0px 1px 2px rgba(85, 85, 85, 0.25);
   overflow-y: auto;
+
+  .info-content-container {
+    display: flex;
+    min-height: 5rem;
+  }
 }
 
 .tabview-container {
