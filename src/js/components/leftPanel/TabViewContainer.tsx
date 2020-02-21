@@ -1,7 +1,7 @@
 import * as React from 'react';
 import InfoTabView from './InfoTabView';
 import LayerTabView from './layersPanel/LayersTabView';
-import DataTabView from './DataTabView';
+import DataTabView from './dataPanel/DataTabView';
 import AnalysisTabView from './AnalysisTabView';
 import DocumentsTabView from './DocumentsTabView';
 

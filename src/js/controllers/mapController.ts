@@ -128,7 +128,6 @@ export class MapController {
         () => {
           store.dispatch(isMapReady(true));
           this._mapview?.on('click', event => {
-            store.dispatch(selectActiveTab('data'));
             addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
           });
 
