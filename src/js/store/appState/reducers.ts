@@ -17,7 +17,7 @@ const initialState: AppState = {
   hideWidgetActive: false,
   leftPanel: {
     tabViewVisible: true,
-    activeTab: 'info',
+    activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP'
   },
   measureContent: {
