@@ -24,7 +24,6 @@ async function processSublayers(
   sublayersArray: Sublayer[],
   mapview: MapView
 ): Promise<any> {
-  //Depending on mapzoom level query distance is lower to account for points on the map spacing
   const processedSubsResults: LayerFeatureResult[] = [];
   for await (const sublayer of sublayersArray) {
     const url = sublayer.url;
@@ -78,9 +77,6 @@ async function fetchAsyncServerResults(
     //We need to convert Collection of sublayers to regular array for async processing
     const sublayersArray: any[] = sublayers.items.map((sl: Sublayer) => sl);
 
-    //TODO: Better way to handle mouse click buffering?
-    // const distance = mapview.resolution * 0.005;
-    // const geometry = geometryEngine.buffer(mapPoint, distance, 'miles');
     const processedSubs: LayerFeatureResult[] = await processSublayers(
       mapPoint,
       sublayersArray,
