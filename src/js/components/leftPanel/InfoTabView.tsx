@@ -18,7 +18,7 @@ const InfoTabView = (props: Props) => {
     (store: RootState) => store.appState
   );
 
-  const narrativeContent = (): string =>
+  const narrativeContent =
     selectedLanguage === language ? narrative : alternativeNarrative;
 
   /**
@@ -32,7 +32,10 @@ const InfoTabView = (props: Props) => {
   return (
     <>
       {tabViewIsVisible && (
-        <div className="info-content-container">{narrativeContent}</div>
+        <div
+          className="info-content-container"
+          dangerouslySetInnerHTML={{ __html: narrativeContent }}
+        />
       )}
     </>
   );
