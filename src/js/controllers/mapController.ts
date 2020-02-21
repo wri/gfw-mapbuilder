@@ -45,6 +45,12 @@ import { convertDMSToXY } from 'js/utils/helper.config';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
+interface URLCoordinates {
+  zoom: number;
+  latitude: string;
+  longitude: string;
+}
+
 interface ZoomParams {
   zoomIn: boolean;
 }
@@ -859,6 +865,20 @@ export class MapController {
       }
     );
     store.dispatch(renderModal(''));
+  }
+
+  getMapviewCoordinates(): URLCoordinates {
+    const { zoom } = this._mapview;
+    const { latitude, longitude } = this._mapview.center;
+
+    const subStringLatitude = latitude.toString().substring(0, 7);
+    const subStringLongitude = longitude.toString().substring(0, 7);
+
+    return {
+      latitude: subStringLatitude,
+      longitude: subStringLongitude,
+      zoom
+    };
   }
 }
 
