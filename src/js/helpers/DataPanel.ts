@@ -25,19 +25,6 @@ async function processSublayers(
   mapview: MapView
 ): Promise<any> {
   //Depending on mapzoom level query distance is lower to account for points on the map spacing
-  function calcDistance(): number {
-    if (mapview.zoom < 10) {
-      return 2;
-    } else if (mapview.zoom >= 10 && mapview.zoom <= 13) {
-      return 0.8;
-    } else if (mapview.zoom > 13 && mapview.zoom <= 15) {
-      return 0.3;
-    } else {
-      return 0.03;
-    }
-  }
-
-  const bufferedDistance = calcDistance();
   const processedSubsResults: LayerFeatureResult[] = [];
   for await (const sublayer of sublayersArray) {
     const url = sublayer.url;
@@ -45,7 +32,7 @@ async function processSublayers(
       where: '1=1',
       outFields: ['*'],
       units: 'miles',
-      distance: bufferedDistance,
+      distance: 0.02 * mapview.resolution,
       geometry: geometry,
       returnGeometry: false
     };
