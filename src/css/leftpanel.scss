@@ -155,9 +155,19 @@
 
 .data-tabview-container {
   .layer-feature-group {
-    .layer-controls {
+    .layer-control-container {
+      .remove-attribute-button {
+        display: flex;
+        justify-content: flex-end;
+        button {
+          -webkit-appearance: none;
+          outline: none;
+          border: 0;
+        }
+      }
+    }
+    .layer-control {
       display: flex;
-      padding-top: 15px;
       justify-content: space-around;
       margin-bottom: 10px;
       select {
