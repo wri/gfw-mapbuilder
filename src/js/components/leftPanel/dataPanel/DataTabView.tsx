@@ -38,12 +38,12 @@ const DataTabView = (props: DataTabProps) => {
       }
       const AttributeTable = (props: AttributeObject): JSX.Element => {
         return (
-          <table>
+          <table cellPadding={0} cellSpacing={0}>
             <tbody>
               {Object.keys(props.attributes).map((a: string, i: number) => (
                 <tr key={i}>
-                  <td>{a}</td>
-                  <td>{props.attributes[a]}</td>
+                  <td className="first-cell">{a}</td>
+                  <td className="second-cell">{props.attributes[a]}</td>
                 </tr>
               ))}
             </tbody>
@@ -86,6 +86,7 @@ const DataTabView = (props: DataTabProps) => {
             {page + 1} / {props.activeLayerInfo.features.length}
           </div>
           <div className="layer-title">{props.activeLayerInfo.layerTitle}</div>
+          <hr />
           <AttributeTable
             attributes={props.activeLayerInfo.features[page].attributes}
           />
