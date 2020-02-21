@@ -18,27 +18,21 @@ const InfoTabView = (props: Props) => {
     (store: RootState) => store.appState
   );
 
-  const renderContent = (): string => {
-    if (selectedLanguage === language) {
-      // * checks if selectedLanguage is the default language
-      // * if so, returns default content.
-      /**
-       * ? QUESTION
-       * ? Should we consider organizing custom content in the
-       * ? resources.js so it's organized by component/language?
-       * ? This could prevent future regressions
-       */
-      return narrative;
-    } else {
-      return alternativeNarrative;
-    }
-  };
+  const narrativeContent = (): string =>
+    selectedLanguage === language ? narrative : alternativeNarrative;
+
+  /**
+   * ? QUESTION
+   * ? Should we consider organizing custom content in the
+   * ? resources.js so it's organized by component/language?
+   * ? This could prevent future regressions
+   */
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
   return (
     <>
       {tabViewIsVisible && (
-        <div className="info-content-container">{renderContent()}</div>
+        <div className="info-content-container">{narrativeContent}</div>
       )}
     </>
   );
