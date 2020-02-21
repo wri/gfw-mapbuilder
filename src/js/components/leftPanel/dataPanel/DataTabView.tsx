@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
-import { setActiveFeatureIndex } from 'js/store/mapview/actions';
+import {
+  setActiveFeatureIndex,
+  setActiveFeatures
+} from 'js/store/mapview/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
@@ -56,11 +59,32 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         );
       };
 
-      function removeAttribute() {
-        console.log('removing attribute');
+      function removeAttribute(): void {
+        const oldActiveFeatures = [...activeFeatures];
+        // if we are removing last feature from the layer group, remove the whole layer
+        if (activeFeatures[activeLayerIndex].features.length === 1) {
+          //remove the whole layer
+          oldActiveFeatures.splice(activeLayerIndex, 1);
+          //update redux store with new features
+          dispatch(setActiveFeatures(oldActiveFeatures));
+          //update active layerindex as the old one does not exit anymore
+          dispatch(setActiveFeatureIndex([0, 0]));
+        } else {
+          //remove only one feature and keep everything else intact
+          oldActiveFeatures[activeLayerIndex].features.splice(
+            activeFeatureIndex[1],
+            1
+          );
+          //update redux
+          dispatch(setActiveFeatures(oldActiveFeatures));
+          //new active page depends if we are on first page or not, if we are on first page, we keep same page, if not we decrement by one
+          const newActivePage =
+            activeFeatureIndex[1] === 0 ? 0 : activeFeatureIndex[1] - 1;
+          dispatch(setActiveFeatureIndex([activeLayerIndex, newActivePage]));
+        }
       }
 
-      function handleLayerSwitch(layerID: string) {
+      function handleLayerSwitch(layerID: string): void {
         //Upon layer selection switch, we update the index of the activefeature's layer and zero out the feature itself
         const newLayerIndex = activeFeatures.findIndex(
           f => f.layerID === layerID
