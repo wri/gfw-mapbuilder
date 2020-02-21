@@ -790,7 +790,7 @@ export class MapController {
     }
   };
 
-  setPolygon = (setDMSForm: Array<SpecificDMSSection>): void => {
+  setPolygon = (points: Array<Point>): void => {
     const simpleFillSymbol = {
       type: 'simple-fill', // autocasts as new SimpleFillSymbol()
       color: [240, 171, 0, 0.0],
@@ -802,8 +802,6 @@ export class MapController {
     };
 
     this._mapview.graphics.removeAll();
-
-    const points = convertDMSToXY(setDMSForm);
 
     const polygon = new Polygon().addRing(points);
 
