@@ -28,7 +28,7 @@ async function processSublayers(
   function calcDistance(): number {
     if (mapview.zoom < 10) {
       return 2;
-    } else if (mapview.zoom > 10 && mapview.zoom <= 13) {
+    } else if (mapview.zoom >= 10 && mapview.zoom <= 13) {
       return 0.8;
     } else if (mapview.zoom > 13 && mapview.zoom <= 15) {
       return 0.3;
