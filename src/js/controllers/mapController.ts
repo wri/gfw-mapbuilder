@@ -867,7 +867,7 @@ export class MapController {
     store.dispatch(renderModal(''));
   }
 
-  setMapviewCoordinates(): URLCoordinates {
+  getMapviewCoordinates(): URLCoordinates {
     const { zoom } = this._mapview;
     const { latitude, longitude } = this._mapview.center;
 

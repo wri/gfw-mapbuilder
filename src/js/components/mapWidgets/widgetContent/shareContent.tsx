@@ -55,14 +55,11 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const returnURL = (): string => {
-    const { latitude, longitude, zoom } = mapController.setMapviewCoordinates();
+    const { latitude, longitude, zoom } = mapController.getMapviewCoordinates();
     const visibleLayersURL = allAvailableLayers
       .filter(layer => layer.visible)
       .map(layer => layer.id)
-      .join(',');
-
-    // * NOTE - Sample URL;
-    // http://blueraster.teaches-yoga.com/CMR?x=12.37&y=6.44&z=8&l=en&b=wri_contextual&t=INFO_WINDOW&a=atlas_forestier_en_9979_36%2Catlas_forestier_en_9979_37%2Catlas_forestier_en_9979_13%2Catlas_forestier_en_9979_38%2Catlas_forestier_en_9979_35%2Catlas_forestier_en_9979_47%2Catlas_forestier_en_9979_49&o=1%2C1%2C1%2C1%2C1%2C1%2C1
+      .join('%2C');
 
     return `${window.location.href}&lat=${latitude}&lon=${latitude}&z=${zoom}&activeLayers=${visibleLayersURL}`;
   };
