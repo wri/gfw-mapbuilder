@@ -9,6 +9,11 @@
   background: $white;
   box-shadow: 0px 1px 2px rgba(85, 85, 85, 0.25);
   overflow-y: auto;
+
+  .info-content-container {
+    display: flex;
+    min-height: 5rem;
+  }
 }
 
 .tabview-container {
@@ -177,9 +182,19 @@
         padding: 10px;
       }
     }
-    .layer-controls {
+    .layer-control-container {
+      .remove-attribute-button {
+        display: flex;
+        justify-content: flex-end;
+        button {
+          -webkit-appearance: none;
+          outline: none;
+          border: 0;
+        }
+      }
+    }
+    .layer-control {
       display: flex;
-      padding-top: 15px;
       justify-content: space-around;
       margin-bottom: 10px;
       select {

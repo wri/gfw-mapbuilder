@@ -23,7 +23,9 @@ import { LayerFactory } from 'js/helpers/LayerFactory';
 import {
   allAvailableLayers,
   mapError,
-  isMapReady
+  isMapReady,
+  setActiveFeatureIndex,
+  setActiveFeatures
 } from 'js/store/mapview/actions';
 
 import {
@@ -127,7 +129,12 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
-          this._mapview?.on('click', event => {
+          this._mapview.popup.highlightEnabled = false;
+          this._mapview.on('click', event => {
+            //TODO: We need a better loading handling, probably a spinner!
+            //clean active indexes for data tab and activeFeatures
+            store.dispatch(setActiveFeatures([]));
+            store.dispatch(setActiveFeatureIndex([0, 0]));
             addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
           });
 
@@ -790,7 +797,7 @@ export class MapController {
     }
   };
 
-  setPolygon = (setDMSForm: Array<SpecificDMSSection>): void => {
+  setPolygon = (points: Array<Point>): void => {
     const simpleFillSymbol = {
       type: 'simple-fill', // autocasts as new SimpleFillSymbol()
       color: [240, 171, 0, 0.0],
@@ -802,8 +809,6 @@ export class MapController {
     };
 
     this._mapview.graphics.removeAll();
-
-    const points = convertDMSToXY(setDMSForm);
 
     const polygon = new Polygon().addRing(points);
 

@@ -6,6 +6,8 @@ import DDSection from './coordinatesDDSection';
 
 import { mapController } from 'js/controllers/mapController';
 
+import { convertXYToPoint, convertDMSToXY } from 'js/utils/helper.config';
+
 import { RootState } from 'js/store/index';
 
 import { coordinatesContent } from 'configs/modal.config';
@@ -139,14 +141,6 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(sections);
   };
 
-  const setShape = (): void => {
-    if (decimalOptions[selectedFormat].includes('DMS')) {
-      mapController.setPolygon(dmsSections);
-    } else {
-      // TODO - set polygon via DD form
-    }
-  };
-
   const addOrRemoveSection = (
     // allSections: Array<SpecificDDSection> | Array<SpecificDMSSection>,
     defaultSection: SpecificDDSection | SpecificDMSSection,
@@ -201,6 +195,16 @@ const CoordinatesForm: FunctionComponent = () => {
       ) as Array<SpecificDDSection>;
       setDDForm(updatedSections);
     }
+  };
+
+  const setShape = (): void => {
+    let points = [];
+    if (decimalOptions[selectedFormat].includes('DMS')) {
+      points = convertDMSToXY(dmsSections);
+    } else {
+      points = convertXYToPoint(ddSections);
+    }
+    mapController.setPolygon(points);
   };
 
   return (
