@@ -11,7 +11,14 @@ const AnalysisTabView = (props: Props) => {
     (store: RootState) => store.appState.leftPanel
   );
 
+  const { activeFeatures } = useSelector(
+    (store: RootState) => store.mapviewState
+  );
+
+  console.log('activeFeatures', activeFeatures);
+
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
+  console.log('tabViewIsVisible', tabViewIsVisible);
   return <>{tabViewIsVisible && <div>Analysis Tab View</div>}</>;
 };
 
