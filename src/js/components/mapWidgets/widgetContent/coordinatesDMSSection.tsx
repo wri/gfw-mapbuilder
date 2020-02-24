@@ -14,7 +14,7 @@ interface DMSSectionProps {
   };
   setDMSFormValues: (formValues: DMSFormValues) => void;
   setDMSCardinalType: (cardinalValue: object) => void;
-  addOrRemoveSection: (addSection: boolean) => void;
+  setSection: (addSection: boolean) => void;
   degreeSymbol: string;
   minuteSymbol: string;
   secondsSymbol: string;
@@ -31,7 +31,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
     minuteSymbol,
     secondsSymbol,
     renderRemoveButton,
-    addOrRemoveSection
+    setSection
   } = props;
   const { rowNum, latitude, longitude } = dmsSection;
 
@@ -40,8 +40,8 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
       <div className="dms-wrapper">
         {renderRemoveButton && (
           <button
-            onClick={(): void => addOrRemoveSection(false)}
-            className="dms-remove"
+            onClick={(): void => setSection(false)}
+            className="remove-button"
           >
             REMOVE <TrashCanIcon height={20} width={20} fill={'#555'} />
           </button>

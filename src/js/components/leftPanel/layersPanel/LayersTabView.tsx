@@ -77,7 +77,11 @@ const LayersTabView = (props: LayersTabViewProps) => {
   return (
     <>
       {tabViewIsVisible && (
-        <div className={hideWidgetActive ? 'hide' : ''}>
+        <div
+          className={
+            hideWidgetActive ? 'hide tabview-container' : 'tabview-container'
+          }
+        >
           <AllLayerControls />
           {layerGroupsToRender}
         </div>

@@ -19,7 +19,9 @@ const initialState: AppSettings = {
     GROUP_LCD: {},
     GROUP_IMAGERY: {},
     extraLayers: {}
-  }
+  },
+  narrative: '',
+  alternativeNarrative: ''
 };
 
 export function appSettingsReducer(

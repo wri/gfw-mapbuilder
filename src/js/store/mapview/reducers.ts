@@ -4,14 +4,16 @@ import {
   MAP_READY,
   MAP_ERROR,
   ALL_AVAILABLE_LAYERS,
-  SET_ACTIVE_FEATURES
+  SET_ACTIVE_FEATURES,
+  SET_ACTIVE_FEATURE_INDEX
 } from './types';
 
 const initialState: MapviewState = {
   isMapReady: false,
   loadError: false,
   allAvailableLayers: [],
-  activeFeatures: []
+  activeFeatures: [],
+  activeFeatureIndex: [0, 0] //first element is the index of the layer, second is the index of feature
 };
 
 export function mapviewReducer(
@@ -27,6 +29,8 @@ export function mapviewReducer(
       return { ...state, allAvailableLayers: action.payload };
     case SET_ACTIVE_FEATURES:
       return { ...state, activeFeatures: action.payload };
+    case SET_ACTIVE_FEATURE_INDEX:
+      return { ...state, activeFeatureIndex: action.payload };
     default:
       return state;
   }

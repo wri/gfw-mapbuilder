@@ -24,6 +24,7 @@ import {
   allAvailableLayers,
   mapError,
   isMapReady,
+  setActiveFeatureIndex,
   setActiveFeatures
 } from 'js/store/mapview/actions';
 
@@ -45,6 +46,12 @@ import { SpecificDMSSection } from 'js/interfaces/coordinateForm';
 import { convertDMSToXY } from 'js/utils/helper.config';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
+
+interface URLCoordinates {
+  zoom: number;
+  latitude: string;
+  longitude: string;
+}
 
 interface ZoomParams {
   zoomIn: boolean;
@@ -122,7 +129,12 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
-          this._mapview?.on('click', event => {
+          this._mapview.popup.highlightEnabled = false;
+          this._mapview.on('click', event => {
+            //TODO: We need a better loading handling, probably a spinner!
+            //clean active indexes for data tab and activeFeatures
+            store.dispatch(setActiveFeatures([]));
+            store.dispatch(setActiveFeatureIndex([0, 0]));
             addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
           });
 
@@ -796,7 +808,7 @@ export class MapController {
     }
   };
 
-  setPolygon = (setDMSForm: Array<SpecificDMSSection>): void => {
+  setPolygon = (points: Array<Point>): void => {
     const simpleFillSymbol = {
       type: 'simple-fill', // autocasts as new SimpleFillSymbol()
       color: [240, 171, 0, 0.0],
@@ -808,8 +820,6 @@ export class MapController {
     };
 
     this._mapview.graphics.removeAll();
-
-    const points = convertDMSToXY(setDMSForm);
 
     const polygon = new Polygon().addRing(points);
 
@@ -870,6 +880,20 @@ export class MapController {
       }
     );
     store.dispatch(renderModal(''));
+  }
+
+  getMapviewCoordinates(): URLCoordinates {
+    const { zoom } = this._mapview;
+    const { latitude, longitude } = this._mapview.center;
+
+    const subStringLatitude = latitude.toString().substring(0, 7);
+    const subStringLongitude = longitude.toString().substring(0, 7);
+
+    return {
+      latitude: subStringLatitude,
+      longitude: subStringLongitude,
+      zoom
+    };
   }
 }
 

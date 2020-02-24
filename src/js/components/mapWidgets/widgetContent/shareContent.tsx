@@ -6,10 +6,15 @@ import { RootState } from 'js/store/index';
 import { ReactComponent as TwitterIcon } from 'src/images/twitterIcon.svg';
 import { ReactComponent as FacebookIcon } from 'src/images/facebookIcon.svg';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { shareContent } from '../../../../../configs/modal.config';
 
 const ShareContent: FunctionComponent = () => {
   const urlRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const { allAvailableLayers } = useSelector(
+    (state: RootState) => state.mapviewState
+  );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -49,18 +54,23 @@ const ShareContent: FunctionComponent = () => {
     // * because it doesn't support localhost URLs
   };
 
+  const returnURL = (): string => {
+    const { latitude, longitude, zoom } = mapController.getMapviewCoordinates();
+    const visibleLayersURL = allAvailableLayers
+      .filter(layer => layer.visible)
+      .map(layer => layer.id)
+      .join('%2C');
+
+    return `${window.location.href}&lat=${latitude}&lon=${latitude}&z=${zoom}&activeLayers=${visibleLayersURL}`;
+  };
+
   return (
     <div className="modal-content-container">
       <div className="directions">
         <h4 className="title">{title}</h4>
         <p>{instructions}</p>
         <div className="copy-link-wrapper">
-          <input
-            type="text"
-            readOnly
-            value={window.location.href}
-            ref={urlRef}
-          ></input>
+          <input type="text" readOnly value={returnURL()} ref={urlRef}></input>
           <button onClick={(): void => copyURLToClipboard()}>COPY</button>
         </div>
         <div className="share-button-wrapper">

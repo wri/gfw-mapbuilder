@@ -1,4 +1,19 @@
-import Graphic from 'esri/Graphic';
+interface SpecificAreaResults {
+  area: string;
+  perimeter: string;
+}
+
+interface SpecificDistanceResults {
+  length: string;
+}
+
+export interface MeasureContent {
+  activeButton: string;
+  areaResults: SpecificAreaResults;
+  distanceResults: SpecificDistanceResults;
+  coordinateMouseClickResults?: any; // ClickResults | undefined | Point;
+  coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
+}
 
 //Store types
 export interface MapviewState {
@@ -6,6 +21,7 @@ export interface MapviewState {
   loadError: boolean;
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
+  activeFeatureIndex: number[];
 }
 
 export interface LayerProps {
@@ -35,6 +51,7 @@ export const MAP_READY = 'MAP_READY';
 export const MAP_ERROR = 'MAP_ERROR';
 export const ALL_AVAILABLE_LAYERS = 'ALL_AVAILABLE_LAYERS';
 export const SET_ACTIVE_FEATURES = 'SET_ACTIVE_FEATURES';
+export const SET_ACTIVE_FEATURE_INDEX = 'SET_ACTIVE_FEATURE_INDEX';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -56,8 +73,14 @@ interface SetActiveFeaturesAction {
   payload: MapviewState['activeFeatures'];
 }
 
+interface SetActiveFeatureIndex {
+  type: typeof SET_ACTIVE_FEATURE_INDEX;
+  payload: MapviewState['activeFeatureIndex'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
   | AllAvailableLayersAction
-  | SetActiveFeaturesAction;
+  | SetActiveFeaturesAction
+  | SetActiveFeatureIndex;
