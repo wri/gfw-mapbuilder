@@ -70,7 +70,7 @@ export const getWMSLegendGraphic = (url, layerName, version) => {
     url: url,
     content: {
       REQUEST: 'GetLegendGraphic',
-      LAYER: layerName,
+      LAYER: decodeURIComponent(layerName),
       FORMAT: 'image/png',
       VERSION: version
     },
