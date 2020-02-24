@@ -15,7 +15,6 @@ import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { once } from 'esri/core/watchUtils';
-
 import { RefObject } from 'react';
 
 import store from '../store/index';
@@ -44,6 +43,7 @@ import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 import { SpecificDMSSection } from 'js/interfaces/coordinateForm';
 
 import { convertDMSToXY } from 'js/utils/helper.config';
+import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -468,6 +468,12 @@ export class MapController {
       }
     );
     store.dispatch(allAvailableLayers(newLayersArray));
+  }
+
+  drawGraphic(geometry: __esri.Geometry): void {
+    if (this._map) {
+      createAndAddNewGraphic(this._map, geometry);
+    }
   }
 
   toggleLayerVisibility(layerID: string): void {
