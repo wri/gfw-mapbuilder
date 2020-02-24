@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { mapController } from 'js/controllers/mapController';
+
+import { renderModal } from 'js/store/appState/actions';
 
 import { RootState } from 'js/store';
 
@@ -14,6 +18,7 @@ interface Props {
   label: string;
 }
 const AnalysisTabView = (props: Props): JSX.Element => {
+  const dispatch = useDispatch();
   const { selectedLanguage, leftPanel } = useSelector(
     (store: RootState) => store.appState
   );
@@ -66,7 +71,10 @@ const AnalysisTabView = (props: Props): JSX.Element => {
                 )}
               </ol>
             </figure>
-            <button className="orange-button">
+            <button
+              className="orange-button"
+              onClick={(): void => mapController.createPolygonSketch()}
+            >
               <PenIcon height={25} width={25} fill={'#555'} />
               {drawButton}
             </button>
@@ -83,7 +91,10 @@ const AnalysisTabView = (props: Props): JSX.Element => {
                 )}
               </ol>
             </figure>
-            <button className="orange-button">
+            <button
+              className="orange-button"
+              onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
+            >
               <PlusIcon height={25} width={25} fill={'#000'} />
               {coordinatesButton}
             </button>
