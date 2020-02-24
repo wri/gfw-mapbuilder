@@ -1,11 +1,4 @@
-// import penIcon from '../src/images/penIcon.svg';
-// import React, { FunctionComponent } from 'react';
-
 const drawTool = 'DRAW_ICON_HERE';
-
-// const drawTool: FunctionComponent = () => {
-//   return <img src={penIcon} />;
-// };
 
 export const analysisContent = {
   en: {
