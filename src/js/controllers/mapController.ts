@@ -122,6 +122,7 @@ export class MapController {
 
     this._mapview.ui.add(this._legend, 'bottom-right');
     this._mapview.ui.remove('zoom');
+    this._mapview.ui.remove('attribution');
 
     this._mapview
       .when(

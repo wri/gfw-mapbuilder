@@ -14,14 +14,6 @@ body,
 .mapview-container {
   position: absolute;
   top: 0;
-
-  .mapview
-    > .esri-view-root
-    > .esri-ui
-    > .esri-ui-manual-container
-    > .esri-attribution {
-    display: none;
-  }
 }
 
 button {
