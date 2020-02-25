@@ -11,6 +11,31 @@ import { setActiveFeatures } from 'js/store/mapview/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
 
+function extractLayerInfo(
+  featureObject: any
+): {
+  layerID: string;
+  layerTitle: string;
+  sublayerSouce: boolean;
+  sublayerID: string;
+  sublayerTitle: string;
+} {
+  const output: any = {};
+  if (featureObject[0].layer) {
+    output.layerID = featureObject[0].layer.id;
+    output.layerTitle = featureObject[0].layer.title;
+    output.sublayerTitle = null;
+    output.sublayerID = null;
+  } else {
+    //assume that we are in sublayer situation
+    output.layerID = featureObject[0].sourceLayer.layer.title;
+    output.layerTitle = featureObject[0].sourceLayer.layer.title;
+    output.sublayerTitle = featureObject[0].sourceLayer.title;
+    output.sublayerID = featureObject[0].sourceLayer.id;
+  }
+  return output;
+}
+
 function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
   const qt = new QueryTask({
     url: url
@@ -49,6 +74,8 @@ async function processSublayers(
         const subCleanedResult = {
           layerID: sublayer.layer.id,
           layerTitle: sublayer.layer.title,
+          sublayerID: null,
+          sublayerTitle: null,
           features: features
         };
         processedSubsResults.push(subCleanedResult);
@@ -63,13 +90,14 @@ async function processSublayers(
 async function fetchAsyncServerResults(
   map: Map | undefined,
   mapview: MapView,
-  mapPoint: Point
+  mapPoint: Point,
+  layerFeatureResults: LayerFeatureResult[]
 ): Promise<any> {
   if (map) {
     //Iterate over map layers, filter out turned off layers and non map-image layers
-    const visibleServerLayers = map.layers.filter(
-      l => l.visible && l.type === 'map-image'
-    );
+    const visibleServerLayers = map.layers
+      .filter(l => l.visible && l.type === 'map-image')
+      .filter(l => layerFeatureResults.map(f => f.layerID).includes(l.id)); //the second filter here ensures that we do not double count, for some reason 'map-image' was being processed twice, at the client side (popup promise) and server side too. TODO: This may need further investigation, debugging with variuos county configs!
     //Extract all sublayers
     const sublayers: any = visibleServerLayers
       .flatten((item: any) => item.sublayers)
@@ -104,9 +132,18 @@ export function addPopupWatchUtils(
           .filter(f => f !== null) //catch failed promises
           .filter(f => f.length !== 0) //catch no features returned
           .map((featureObject: Graphic[]) => {
+            //extract layerID and layerTitle from resulting feature object
+            const {
+              layerID,
+              layerTitle,
+              sublayerID,
+              sublayerTitle
+            } = extractLayerInfo(featureObject);
             const newFeatureObject: LayerFeatureResult = {
-              layerID: featureObject[0].layer.id,
-              layerTitle: featureObject[0].layer.title,
+              layerID: layerID,
+              layerTitle: layerTitle,
+              sublayerID: sublayerID,
+              sublayerTitle: sublayerTitle,
               features: featureObject.map(g => {
                 return {
                   attributes: g.attributes,
@@ -122,7 +159,8 @@ export function addPopupWatchUtils(
         const serverResponse = await fetchAsyncServerResults(
           map,
           mapview,
-          mapPoint
+          mapPoint,
+          layerFeatureResults
         );
         layerFeatureResults = layerFeatureResults.concat(serverResponse);
         store.dispatch(setActiveFeatures(layerFeatureResults));
