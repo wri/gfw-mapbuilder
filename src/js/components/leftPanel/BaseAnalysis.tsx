@@ -47,7 +47,10 @@ const BaseAnalysis = (props: any): JSX.Element => {
 
   const AnalysisOptions = (props: any): JSX.Element => (
     <>
-      <select onChange={evt => selectAnalysis(evt.target.value)}>
+      <select
+        value={selectedAnalysis}
+        onChange={evt => selectAnalysis(evt.target.value)}
+      >
         {analysisModules.map((module: any, i: number) => {
           return (
             <option value={module.analysisId} key={i}>
@@ -56,6 +59,7 @@ const BaseAnalysis = (props: any): JSX.Element => {
           );
         })}
       </select>
+      {/* if we have run/slected a chjart, show that chart, ELSE, show the button beloow (either way shows the dropdown above) */}
       <button onClick={runAnalysis}>RUN ANALYSIS</button>
     </>
   );
