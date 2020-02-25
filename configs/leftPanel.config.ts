@@ -186,3 +186,50 @@ export const analysisContent = {
     建议文件大小应小于1MB。ESRI文件必须为压缩文件（.zip）,GeoJSON 文件必须为后缀.json的文件。`
   }
 };
+
+export const basemapLayersContent = {
+  defaultESRIBasemaps: [
+    {
+      id: 'satellite',
+      thumbnailUrl:
+        'https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/esri/images/basemap/satellite.jpg',
+      title: {
+        en: 'Imagery',
+        ka: 'Imagery',
+        fr: 'Imagery',
+        es: 'Imagery',
+        pt: 'Imagery',
+        id: 'Imagery',
+        zh: 'Imagery'
+      }
+    },
+    {
+      id: 'hybrid',
+      thumbnailUrl:
+        'https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/esri/images/basemap/hybrid.jpg',
+      title: {
+        en: 'Imagery with Labels',
+        ka: 'Imagery with Labels',
+        fr: 'Imagery with Labels',
+        es: 'Imagery with Labels',
+        pt: 'Imagery with Labels',
+        id: 'Imagery with Labels',
+        zh: 'Imagery with Labels'
+      }
+    },
+    {
+      id: 'osm',
+      thumbnailUrl:
+        'https://my.gfw-mapbuilder.org/js/arcgis-api-mapbuilder-1.2/esri/images/basemap/osm.jpg',
+      title: {
+        en: 'Open Street Map',
+        ka: 'Open Street Map',
+        fr: 'Open Street Map',
+        es: 'Open Street Map',
+        pt: 'Open Street Map',
+        id: 'Open Street Map',
+        zh: 'Open Street Map'
+      }
+    }
+  ]
+};
