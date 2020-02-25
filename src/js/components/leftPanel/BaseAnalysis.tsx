@@ -34,6 +34,7 @@ const BaseAnalysis = (props: any): JSX.Element => {
         .then((response: any) => response.json())
         .then((analysisMod: any) => {
           console.log('analysisMod', analysisMod);
+          //TODO: This is where we stopped!
         });
     }
   }
