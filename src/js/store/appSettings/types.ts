@@ -13,6 +13,7 @@ export interface AppSettings {
   printServiceUrl?: string;
   narrative: string;
   alternativeNarrative: string;
+  analysisModules: AnalysisModule[];
 }
 
 type LayerGroupKey =
@@ -26,6 +27,19 @@ type LayerGroupKey =
 type LayerGroup = {
   [key in LayerGroupKey]: LayerGroupInfo;
 };
+
+interface AnalysisModule {
+  analysisId: string;
+  label: {
+    en: string;
+  };
+  title: {
+    en: string;
+  };
+  useGfwWidget: boolean;
+  widgetId: string;
+  uiParams: object[];
+}
 
 export interface LayerGroupInfo {
   groupType?: string;

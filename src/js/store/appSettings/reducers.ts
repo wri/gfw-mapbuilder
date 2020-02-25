@@ -21,7 +21,21 @@ const initialState: AppSettings = {
     extraLayers: {}
   },
   narrative: '',
-  alternativeNarrative: ''
+  alternativeNarrative: '',
+  analysisModules: [
+    {
+      analysisId: 'analyze',
+      label: {
+        en: 'module'
+      },
+      title: {
+        en: 'module'
+      },
+      useGfwWidget: true,
+      widgetId: 'aa',
+      uiParams: [{}]
+    }
+  ]
 };
 
 export function appSettingsReducer(
