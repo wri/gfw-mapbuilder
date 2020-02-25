@@ -57,7 +57,7 @@ const AnalysisTabView = (props: Props): JSX.Element => {
                 )}
               </ol>
             </figure>
-            <PolygonIcon className="polygon-icon" />
+            <PolygonIcon width={100} height={100} />
             <hr />
             <figure>
               <figcaption className="title">
