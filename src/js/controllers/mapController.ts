@@ -94,10 +94,6 @@ export class MapController {
   _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
-  // _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;
-  // * NOTE - _selectedWidget is typed as any
-  // * because ESRI's TS types measurementLabel as a string
-  // * when AreaMeasurement2D.viewModel.measurementLabel is an object
 
   constructor() {
     this._map = undefined;
