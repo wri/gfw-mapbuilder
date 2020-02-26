@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, DragEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { renderModal } from 'js/store/appState/actions';
@@ -33,6 +33,36 @@ const PenContent: FunctionComponent = () => {
   const setDrawTool = () => {
     dispatch(renderModal(''));
     mapController.createPolygonSketch();
+  };
+
+  const onDragFile = (event: DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const onDropFile = (event: DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const file = event.dataTransfer.files[0];
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    const xhr = new XMLHttpRequest();
+    const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
+    xhr.open('POST', url, true);
+    debugger;
+    xhr.onreadystatechange = (): void => {
+      debugger;
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        debugger;
+        //   const response = geojsonUtil.geojsonToArcGIS(JSON.parse(xhr.responseText).data.attributes);
+        //   this.processGeojson(response);
+        // } else if (xhr.readyState === 4) {
+        //   console.log('Error: shapefile not working');
+      }
+    };
   };
 
   return (
@@ -77,7 +107,12 @@ const PenContent: FunctionComponent = () => {
           {coordinatesButton}
         </button>
         <hr />
-        <button>{shapefileButton}</button>
+        <div
+          onDragOver={(e: DragEvent<HTMLDivElement>): void => onDragFile(e)}
+          onDrop={(e: DragEvent<HTMLDivElement>): void => onDropFile(e)}
+        >
+          <span>{shapefileButton}</span>
+        </div>
         <p className="shapefile-instructions">* {shapefileInstructions}</p>
       </div>
     </div>
