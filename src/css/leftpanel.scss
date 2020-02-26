@@ -323,3 +323,13 @@
     }
   }
 }
+
+@media screen and (max-width: $mobile-device) {
+  .left-panel
+    > .analysis-tab-container
+    > .directions
+    > .drop-shapefile-container
+    h4 {
+    display: none;
+  }
+}
