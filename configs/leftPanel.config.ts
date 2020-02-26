@@ -21,11 +21,7 @@ export const analysisContent = {
       `Add up to 10 points to make shapes`
     ],
     coordinatesButton: 'Enter Values',
-    visitTitle: 'Add additional shapes in the future by visiting the draw tool',
-    uploadShapefileTitle: 'or drop a custom shapefile here',
-    uploadShapefileDirections: `Only polygon data is supported and should use a spatial reference of WGS84.\
-       The recommended maximum size is 1MB, anything more than that may not work as expected.\
-       Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.`
+    visitTitle: 'Add additional shapes in the future by visiting the draw tool'
   },
   ka: {
     analyzeExistingShapeTitle: 'ჩაატარეთ ფიგურის ანალიზი რუკაზე',
@@ -47,11 +43,7 @@ export const analysisContent = {
       `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`
     ],
     coordinatesButton: `მნიშვნელობების შეტანა`,
-    visitTitle: `მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ${drawTool} მეშვეობით`,
-    uploadShapefileTitle: 'ან შემოიტანეთ სხვა შეიპფაილი',
-    uploadShapefileDirections: `უნდა იყოს გამოყენებული მხოლოდ პოლიგონების მონაცემები WGS84 სივრცული რეფერენსებით.\
-    რეკომენდირებული მაქსიმალური ზომაა 1 მბ, უფრო დიდმა ფაილმა შეიძლება ვერ იმუშაოს კორექტულად.\
-    Esri შეიპფაილები უნდა იყოს დაზიპული (.zip) ხოლო GeoJSON ფაილები უნდა იყოს  .json ფორმატით.`
+    visitTitle: `მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ${drawTool} მეშვეობით`
   },
   fr: {
     analyzeExistingShapeTitle: 'Analysez un polygone sur la carte',
@@ -73,11 +65,7 @@ export const analysisContent = {
       `Ajoutez jusqu’à 10 points pour définir votre zone`
     ],
     coordinatesButton: `Entrez les valeurs`,
-    visitTitle: "Ajouter des polygones supplémentaires grâce à l'outil dessin",
-    uploadShapefileTitle: 'ou glissez un shapefile ici',
-    uploadShapefileDirections: `Fonctionne uniquement avec des données de type polygone avec la réérence spatiale WGS84.\
-    La taille maximale est de 1MB. Les fichiers shapefiles doivent être compressés(.zip) et les fichiers GeoJSON sous\
-    le format .json.`
+    visitTitle: "Ajouter des polygones supplémentaires grâce à l'outil dessin"
   },
   es: {
     analyzeExistingShapeTitle: 'Analizar un polígono  en el mapa',
@@ -100,11 +88,7 @@ export const analysisContent = {
     ],
     coordinatesButton: `Ingresa valores`,
     visitTitle:
-      'Añadir polígonos adicionales en el futuro usando la herramienta de dibujo ',
-    uploadShapefileTitle: 'o dejar un shapefile aquí',
-    uploadShapefileDirections: `Solo están permitido datos en formato de polígono, con el Sistema de Referencia de Coordinados WGS84. \
-    Se recomienda un tamaño máximo de 1MB, más grande de 1MB puede no funcionar como era de esperar. \
-    Shapefiles de ESRI necesitan estar en formato .zip, y archivos de GeoJSON necesitan estar en formato .json.`
+      'Añadir polígonos adicionales en el futuro usando la herramienta de dibujo '
   },
   pt: {
     analyzeExistingShapeTitle: 'Analise a área selecionada no mapa',
@@ -127,11 +111,7 @@ export const analysisContent = {
     ],
     coordinatesButton: `Entre com os valores`,
     visitTitle:
-      'Adicionar formas adicionais no futuro, visitando a ferramenta de desenho',
-    uploadShapefileTitle: 'ou soltar aqui um shapefile personalizado',
-    uploadShapefileDirections: `Somente geometria de polígono é suportada, devendo-se usar WGS81 como sistema de referência espacial. \
-    O tamanho máximo recomendado é de 5 MB, arquivos com tamanho maior que o recomendado podem não funcionar corretamente. \
-    ESRI shapefiles devem estar compactados (.zip) e arquivos GeoJSON devem estar no formato .json.`
+      'Adicionar formas adicionais no futuro, visitando a ferramenta de desenho'
   },
   id: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
@@ -153,12 +133,7 @@ export const analysisContent = {
       `Tambahkan sampai 10 titik untuk membuat bentuk`
     ],
     coordinatesButton: `Masukkan Nilai`,
-    visitTitle:
-      'Add additional shapes in the future by visiting the draw tool ',
-    uploadShapefileTitle: 'or drop a custom shapefile here',
-    uploadShapefileDirections: `Only polygon data is supported and should use a spatial reference of WGS84. \
-    The recommended maximum size is 1MB, anything more than that may not work as expected. \
-    Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.`
+    visitTitle: 'Add additional shapes in the future by visiting the draw tool '
   },
   zh: {
     analyzeExistingShapeTitle: '分析地图上的图形',
@@ -180,10 +155,7 @@ export const analysisContent = {
       `添加最多10个坐标来完成作图`
     ],
     coordinatesButton: `输入`,
-    visitTitle: '使用绘画工具来添加更多图形',
-    uploadShapefileTitle: '或者在这里添加自定义地理信息系统文件（shapefile）',
-    uploadShapefileDirections: `本网站仅支持空间参考系统为WGS84的图形数据文件。\
-    建议文件大小应小于1MB。ESRI文件必须为压缩文件（.zip）,GeoJSON 文件必须为后缀.json的文件。`
+    visitTitle: '使用绘画工具来添加更多图形'
   }
 };
 
