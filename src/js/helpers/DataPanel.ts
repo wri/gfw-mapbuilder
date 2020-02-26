@@ -94,10 +94,13 @@ async function fetchAsyncServerResults(
   layerFeatureResults: LayerFeatureResult[]
 ): Promise<any> {
   if (map) {
-    //Iterate over map layers, filter out turned off layers and non map-image layers
+    const processedLayersByClientQuery = layerFeatureResults.map(
+      f => f.layerID
+    );
     const visibleServerLayers = map.layers
-      .filter(l => l.visible && l.type === 'map-image')
-      .filter(l => layerFeatureResults.map(f => f.layerID).includes(l.id)); //the second filter here ensures that we do not double count, for some reason 'map-image' was being processed twice, at the client side (popup promise) and server side too. TODO: This may need further investigation, debugging with variuos county configs!
+      .filter(l => l.visible)
+      .filter(l => !processedLayersByClientQuery.includes(l.id));
+    //the second filter here ensures that we do not double count, for some reason some layers were being processed twice, at the client side (popup promise) and server side too. TODO: This may need further investigation, debugging with variuos county configs!
     //Extract all sublayers
     const sublayers: any = visibleServerLayers
       .flatten((item: any) => item.sublayers)
