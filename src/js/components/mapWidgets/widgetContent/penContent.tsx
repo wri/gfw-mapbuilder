@@ -1,5 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, DragEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import UploadFile from 'js/components/sharedComponents/UploadFile';
 
 import { renderModal } from 'js/store/appState/actions';
 
@@ -77,7 +79,7 @@ const PenContent: FunctionComponent = () => {
           {coordinatesButton}
         </button>
         <hr />
-        <button>{shapefileButton}</button>
+        <UploadFile />
         <p className="shapefile-instructions">* {shapefileInstructions}</p>
       </div>
     </div>
