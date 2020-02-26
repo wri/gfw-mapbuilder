@@ -44,6 +44,8 @@ interface FeatureResult {
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
+  sublayerTitle: string | null;
+  sublayerID: string | null;
   features: FeatureResult[];
 }
 

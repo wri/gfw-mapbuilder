@@ -217,7 +217,29 @@
 }
 
 .data-tabview-container {
+  hr {
+    width: 90%;
+  }
   .layer-feature-group {
+    table {
+      overflow-wrap: break-word;
+      font-size: 13px;
+      color: #555;
+      width: 100%;
+      tbody:nth-child(odd) tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      td.first-cell {
+        max-width: 1px; //this is to make break word work inside a table cell
+        font-weight: bold;
+        padding: 10px;
+      }
+      td.second-cell {
+        max-width: 1px; //this is to make break word work inside a table cell
+        text-align: right;
+        padding: 10px;
+      }
+    }
     .layer-control-container {
       .remove-attribute-button {
         display: flex;
@@ -278,8 +300,7 @@
       color: #6f6f6f;
       font-size: 14px;
       text-align: center;
-      margin: 0 0.5rem;
-      height: 3rem;
+      margin: 0.5rem 0.5rem 0.5rem;
       font-weight: bold;
     }
     .attribute-page-button {
@@ -302,6 +323,10 @@
   .data-tabview-footer {
     display: flex;
     justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
     button {
       border: 1px solid $base-yellow;
       text-transform: uppercase;

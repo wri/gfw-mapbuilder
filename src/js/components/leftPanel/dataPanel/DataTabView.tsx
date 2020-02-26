@@ -9,6 +9,7 @@ import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
 import { ReactComponent as CloseAttribute } from '../../../../images/closeIcon.svg';
+import { mapController } from 'js/controllers/mapController';
 
 interface DataTabProps {
   key: string;
@@ -30,6 +31,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     const activeLayerIndex = activeFeatures.findIndex(
       f => f.layerID === activeLayer
     );
+    if (activeLayerInfo) {
+      mapController.drawGraphic(
+        activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
+          .geometry
+      );
+    }
     const LayerAttributesElement = (props: {
       activeLayerInfo: any;
       activeLayerIndex: number;
@@ -46,12 +53,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       }
       const AttributeTable = (props: AttributeObject): JSX.Element => {
         return (
-          <table>
+          <table cellPadding={0} cellSpacing={0}>
             <tbody>
               {Object.keys(props.attributes).map((a: string, i: number) => (
                 <tr key={i}>
-                  <td>{a}</td>
-                  <td>{props.attributes[a]}</td>
+                  <td className="first-cell">{a}</td>
+                  <td className="second-cell">{props.attributes[a]}</td>
                 </tr>
               ))}
             </tbody>
@@ -134,6 +141,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
             {page + 1} / {props.activeLayerInfo.features.length}
           </div>
           <div className="layer-title">{props.activeLayerInfo.layerTitle}</div>
+          <hr />
           <AttributeTable
             attributes={props.activeLayerInfo.features[page].attributes}
           />
