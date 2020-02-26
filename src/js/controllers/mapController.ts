@@ -470,6 +470,13 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
+  removeAllGraphics(layerID: string): void {
+    const layer: any = this._map?.findLayerById(layerID);
+    if (layer) {
+      layer.removeAll();
+    }
+  }
+
   drawGraphic(geometry: __esri.Geometry): void {
     if (this._map) {
       createAndAddNewGraphic(this._map, geometry);

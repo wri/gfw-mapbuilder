@@ -31,12 +31,14 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     const activeLayerIndex = activeFeatures.findIndex(
       f => f.layerID === activeLayer
     );
+
     if (activeLayerInfo) {
       mapController.drawGraphic(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
           .geometry
       );
     }
+
     const LayerAttributesElement = (props: {
       activeLayerInfo: any;
       activeLayerIndex: number;
@@ -76,6 +78,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           dispatch(setActiveFeatures(oldActiveFeatures));
           //update active layerindex as the old one does not exit anymore
           dispatch(setActiveFeatureIndex([0, 0]));
+          //clean out graphics layer from all leftover highligh graphics
+          mapController.removeAllGraphics('active-feature-layer');
         } else {
           //remove only one feature and keep everything else intact
           oldActiveFeatures[activeLayerIndex].features.splice(

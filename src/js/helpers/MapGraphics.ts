@@ -1,4 +1,3 @@
-//@ts-nocheck
 import Map from 'esri/Map';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
@@ -8,7 +7,7 @@ export function createAndAddNewGraphic(
   geometry?: __esri.Geometry
 ): void {
   if (!geometry) return;
-  let graphicsLayer = map.findLayerById('active-feature-layer');
+  let graphicsLayer: any = map.findLayerById('active-feature-layer');
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
   } else {
@@ -18,7 +17,7 @@ export function createAndAddNewGraphic(
     map.add(graphicsLayer);
   }
 
-  const symbol = {
+  const symbol: any = {
     color: [0, 0, 0, 0],
     outline: {
       color: [115, 252, 253],
