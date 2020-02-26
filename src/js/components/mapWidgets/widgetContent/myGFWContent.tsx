@@ -1,9 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { RootState } from 'js/store';
-import { render } from 'react-dom';
-
 import { userSubscriptions } from 'js/store/mapview/actions';
 import { renderModal } from 'js/store/appState/actions';
 
@@ -20,40 +17,32 @@ const MyGFWContent: FunctionComponent = () => {
   function logOut(): void {
     fetch('https://production-api.globalforestwatch.org/auth/logout', {
       credentials: 'include'
-    }).then(() => {
-      window.location.reload();
-    });
+    })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(e => console.log('Logout failed', e));
   }
 
   function getSubscriptions(): void {
     if (subscriptions.length === 0) {
       fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
         credentials: 'include'
-      }).then(response => {
-        if (response.status !== 200) {
-          // this.setState({
-          //   userSubscriptions: []
-          // });
-        }
-        response.json().then(json => {
-          dispatch(userSubscriptions(json.data));
-          dispatch(renderModal('SubscriptionWidget'));
-          // this.setState({
-          //   userSubscriptions: json.data
-          // });
-          // mapActions.setUserSubscriptions(json.data);
-          // mapActions.toggleSubscriptionsModal({ visible: true });
-        });
-      });
+      })
+        .then(response => {
+          response.json().then(json => {
+            dispatch(userSubscriptions(json.data));
+            dispatch(renderModal('SubscriptionWidget'));
+          });
+        })
+        .catch(e => console.log('Failed to fetch subscriptions', e));
     } else {
-      console.log('ooh');
+      console.log('We already have subscriptions, render them instead');
       dispatch(renderModal('SubscriptionWidget'));
-
-      // mapActions.toggleSubscriptionsModal({ visible: true });
     }
   }
 
-  const RenderLogins = (): any => {
+  const RenderLogins = (): JSX.Element => {
     return (
       <ul className="subscription-authentication">
         <li className="subscribe-method twitter-box">
@@ -86,12 +75,11 @@ const MyGFWContent: FunctionComponent = () => {
     );
   };
 
-  const RenderDropdowns = (): any => {
+  const RenderDropdowns = (): JSX.Element => {
     return (
       <div className="options-modal">
         <ul className="more-list">
           <li onClick={getSubscriptions} className="gfw-api-option">
-            {/* <p onClick={this.getSubscriptions}> */}
             Subscriptions
           </li>
           <li className="gfw-api-option">
@@ -106,7 +94,7 @@ const MyGFWContent: FunctionComponent = () => {
   };
 
   return (
-    <div className="measure-options-container">
+    <div>
       {!isLoggedIn && <RenderLogins />}
       {isLoggedIn && <RenderDropdowns />}
     </div>
