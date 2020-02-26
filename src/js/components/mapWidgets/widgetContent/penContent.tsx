@@ -1,6 +1,8 @@
 import React, { FunctionComponent, DragEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import UploadFile from 'js/components/sharedComponents/UploadFile';
+
 import { renderModal } from 'js/store/appState/actions';
 
 import { mapController } from 'js/controllers/mapController';
@@ -33,19 +35,6 @@ const PenContent: FunctionComponent = () => {
   const setDrawTool = () => {
     dispatch(renderModal(''));
     mapController.createPolygonSketch();
-  };
-
-  const onDragFile = (event: DragEvent<HTMLDivElement>): void => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const onDropFile = (event: DragEvent<HTMLDivElement>): void => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const file = event.dataTransfer.files[0];
-    console.log('onDropFile()', file);
   };
 
   return (
@@ -90,12 +79,7 @@ const PenContent: FunctionComponent = () => {
           {coordinatesButton}
         </button>
         <hr />
-        <div
-          onDragOver={(e: DragEvent<HTMLDivElement>): void => onDragFile(e)}
-          onDrop={(e: DragEvent<HTMLDivElement>): void => onDropFile(e)}
-        >
-          <span>{shapefileButton}</span>
-        </div>
+        <UploadFile />
         <p className="shapefile-instructions">* {shapefileInstructions}</p>
       </div>
     </div>
