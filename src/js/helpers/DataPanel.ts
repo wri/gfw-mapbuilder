@@ -59,7 +59,7 @@ async function processSublayers(
       units: 'miles',
       distance: 0.02 * mapview.resolution,
       geometry: geometry,
-      returnGeometry: false
+      returnGeometry: true
     };
     try {
       const sublayerResult = await esriQuery(url, qParams);

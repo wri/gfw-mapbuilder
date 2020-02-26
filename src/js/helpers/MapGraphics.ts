@@ -5,8 +5,9 @@ import Graphic from 'esri/Graphic';
 
 export function createAndAddNewGraphic(
   map: Map,
-  geometry: __esri.Geometry
+  geometry?: __esri.Geometry
 ): void {
+  if (!geometry) return;
   let graphicsLayer = map.findLayerById('active-feature-layer');
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
@@ -24,7 +25,6 @@ export function createAndAddNewGraphic(
       width: 1.5
     }
   };
-
   //determine if we need fill or marker
   if (geometry.type === 'polygon') {
     symbol.type = 'simple-fill';
