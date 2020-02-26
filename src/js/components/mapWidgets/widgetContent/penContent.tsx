@@ -45,24 +45,7 @@ const PenContent: FunctionComponent = () => {
     event.stopPropagation();
 
     const file = event.dataTransfer.files[0];
-
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-
-    const xhr = new XMLHttpRequest();
-    const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
-    xhr.open('POST', url, true);
-    debugger;
-    xhr.onreadystatechange = (): void => {
-      debugger;
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        debugger;
-        //   const response = geojsonUtil.geojsonToArcGIS(JSON.parse(xhr.responseText).data.attributes);
-        //   this.processGeojson(response);
-        // } else if (xhr.readyState === 4) {
-        //   console.log('Error: shapefile not working');
-      }
-    };
+    console.log('onDropFile()', file);
   };
 
   return (
