@@ -1,0 +1,33 @@
+@import 'variables.scss';
+
+.upload-container {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  background-color: #eee;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  position: relative;
+  text-align: center;
+  margin: 1rem 2rem;
+  padding: 10px;
+  cursor: copy;
+
+  span {
+    font-family: $fira-sans;
+    font-size: 1.25rem;
+  }
+}
+
+.shapefile-instructions {
+  font-size: 0.75rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+@media screen and (max-width: $mobile-device) {
+  .shapefile-instructions {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}
