@@ -64,16 +64,16 @@ function UploadFile(): JSX.Element {
   };
 
   return (
-    <>
+    <div className="upload-container">
       <div
-        className="upload-container"
+        className="upload-wrapper"
         onDragOver={(e: DragEvent<HTMLDivElement>): void => onDragFile(e)}
         onDrop={(e: DragEvent<HTMLDivElement>): void => onDropFile(e)}
       >
         <span>{shapefileButton}</span>
       </div>
       <p className="shapefile-instructions">* {shapefileInstructions}</p>
-    </>
+    </div>
   );
 }
 
