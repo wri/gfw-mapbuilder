@@ -1,18 +1,13 @@
-import React, { FunctionComponent } from 'react';
-import { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-// import { renderModal } from '../../store/appState/actions';
 import { renderModal } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
 
 interface LoginProps {
   loggedIn: boolean;
 }
 
-const GFWLogin = (props: LoginProps) => {
+const GFWLogin = (props: LoginProps): JSX.Element => {
   const dispatch = useDispatch();
-  console.log('propsprops', props);
-
   return (
     <div className="gfw-login-container">
       <button
