@@ -93,10 +93,7 @@ export class MapController {
   _pointerMoveEventListener: EventListener | any;
   _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
-  _selectedWidget: any; // DistanceMeasurement2D | AreaMeasurement2D | undefined;
-  // * NOTE - _selectedWidget is typed as any
-  // * because ESRI's TS types measurementLabel as a string
-  // * when AreaMeasurement2D.viewModel.measurementLabel is an object
+  _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
 
   constructor() {
     this._map = undefined;
@@ -555,12 +552,14 @@ export class MapController {
       if (state === 'measured') {
         if (optionType === 'area') {
           areaResults = {
-            area: this._selectedWidget.viewModel.measurementLabel.area,
-            perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
+            area: this._selectedWidget?.viewModel.measurementLabel['area'],
+            perimeter: this._selectedWidget?.viewModel.measurementLabel[
+              'perimeter'
+            ]
           };
         } else if (optionType === 'distance') {
           distanceResults = {
-            length: this._selectedWidget.viewModel.measurementLabel
+            length: this._selectedWidget?.viewModel.measurementLabel
           };
         }
 
@@ -632,8 +631,10 @@ export class MapController {
       switch (optionType) {
         case 'area':
           areaResults = {
-            area: this._selectedWidget.viewModel.measurementLabel.area,
-            perimeter: this._selectedWidget.viewModel.measurementLabel.perimeter
+            area: this._selectedWidget.viewModel.measurementLabel['area'],
+            perimeter: this._selectedWidget.viewModel.measurementLabel[
+              'perimeter'
+            ]
           };
           break;
         case 'distance':
