@@ -12,6 +12,7 @@ interface DefaultBasemapProps {
     id: string;
     thumbnailUrl: string;
     title: string;
+    activeBasemap: string;
   };
 }
 
@@ -29,10 +30,10 @@ const BaseLayerControl = (props: any) => {
 const GenericBaseLayerControl = ({
   layerInfo
 }: DefaultBasemapProps): JSX.Element => {
-  const { id, thumbnailUrl, title } = layerInfo;
+  const { id, thumbnailUrl, title, activeBasemap } = layerInfo;
   return (
     <div
-      className="layer-basemap"
+      className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
       onClick={(): void => mapController.setActiveBasemap(id)}
     >
       <img src={thumbnailUrl} alt="basemap" />
@@ -49,6 +50,9 @@ interface LayerGroupProps {
 const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const { selectedLanguage, leftPanel } = useSelector(
     (store: RootState) => store.appState
+  );
+  const { activeBasemap } = useSelector(
+    (store: RootState) => store.mapviewState
   );
 
   const dispatch = useDispatch();
@@ -80,7 +84,8 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         layerInfo={{
           id: baselayer.id,
           thumbnailUrl: baselayer.thumbnailUrl,
-          title: baselayer.title[selectedLanguage]
+          title: baselayer.title[selectedLanguage],
+          activeBasemap
         }}
       />
     )

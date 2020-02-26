@@ -29,6 +29,7 @@ import {
   setActiveFeatures
 } from 'js/store/mapview/actions';
 
+import { setSelectedBasemap } from 'js/store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
@@ -891,6 +892,7 @@ export class MapController {
     if (this._map) {
       const basemap = Basemap.fromId(id);
       this._map.basemap = basemap;
+      store.dispatch(setSelectedBasemap(id));
     }
   }
 }
