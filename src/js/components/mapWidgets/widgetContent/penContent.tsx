@@ -80,7 +80,6 @@ const PenContent: FunctionComponent = () => {
         </button>
         <hr />
         <UploadFile />
-        <p className="shapefile-instructions">* {shapefileInstructions}</p>
       </div>
     </div>
   );

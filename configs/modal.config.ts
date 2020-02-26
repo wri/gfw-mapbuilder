@@ -89,10 +89,7 @@ export const penContent = {
       'Enter at least 3 coordinates',
       'Add up to 10 points to make shapes'
     ],
-    coordinatesButton: 'Enter Values',
-    shapefileButton: 'or drop a custom shapefile here',
-    shapefileInstructions:
-      'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 1MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.'
+    coordinatesButton: 'Enter Values'
   },
   ka: {
     drawTitle: 'ჩაატარეთ თქვენი ფიგურის ანალიზი',
@@ -106,10 +103,7 @@ export const penContent = {
       `შეიტანეთ მინიმუმ  3 კოორდინატი`,
       `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`
     ],
-    coordinatesButton: `მნიშვნელობების შეტანა`,
-    shapefileButton: 'ან შემოიტანეთ სხვა შეიპფაილი',
-    shapefileInstructions:
-      'უნდა იყოს გამოყენებული მხოლოდ პოლიგონების მონაცემები WGS84 სივრცული რეფერენსებით. რეკომენდირებული მაქსიმალური ზომაა 1 მბ, უფრო დიდმა ფაილმა შეიძლება ვერ იმუშაოს კორექტულად.  Esri შეიპფაილები უნდა იყოს დაზიპული (.zip) ხოლო GeoJSON ფაილები უნდა იყოს  .json ფორმატით.'
+    coordinatesButton: `მნიშვნელობების შეტანა`
   },
   fr: {
     drawTitle: 'Analysez votre propre polygone',
@@ -123,10 +117,7 @@ export const penContent = {
       `Entrez au moins 3 coordonnées`,
       `Ajoutez jusqu’à 10 points pour définir votre zone`
     ],
-    coordinatesButton: `Entrez les valeurs`,
-    shapefileButton: 'ou glissez un shapefile ici',
-    shapefileInstructions:
-      'Fonctionne uniquement avec des données de type polygone avec la réérence spatiale WGS84. La taille maximale est de 1MB. Les fichiers shapefiles doivent être compressés(.zip) et les fichiers GeoJSON sous le format .json.'
+    coordinatesButton: `Entrez les valeurs`
   },
   es: {
     drawTitle: 'Analizar su propio polígono',
@@ -140,10 +131,7 @@ export const penContent = {
       `Ingresa por lo menos 3 coordenadas`,
       `Agrega hasta 10 puntos para generar el polígono`
     ],
-    coordinatesButton: `Ingresa valores`,
-    shapefileButton: 'o dejar un shapefile aquí',
-    shapefileInstructions:
-      'Solo están permitido datos en formato de polígono, con el Sistema de Referencia de Coordinados WGS84. Se recomienda un tamaño máximo de 1MB, más grande de 1MB puede no funcionar como era de esperar. Shapefiles de ESRI necesitan estar en formato .zip, y archivos de GeoJSON necesitan estar en formato .json.'
+    coordinatesButton: `Ingresa valores`
   },
   pt: {
     drawTitle: 'Use sua propria área de Análise',
@@ -157,10 +145,7 @@ export const penContent = {
       `Insira pelo menos 3 coordenadas`,
       `Adicione até 10 pontos para desenhar o shape`
     ],
-    coordinatesButton: `Entre com os valores`,
-    shapefileButton: 'ou soltar aqui um shapefile personalizado',
-    shapefileInstructions:
-      'Somente geometria de polígono é suportada, devendo-se usar WGS81 como sistema de referência espacial. O tamanho máximo recomendado é de 5 MB, arquivos com tamanho maior que o recomendado podem não funcionar corretamente. ESRI shapefiles devem estar compactados (.zip) e arquivos GeoJSON devem estar no formato .json.'
+    coordinatesButton: `Entre com os valores`
   },
   id: {
     drawTitle: 'Analyse your own shape',
@@ -174,10 +159,7 @@ export const penContent = {
       `Masukkan paling sedikit 3 koordinat`,
       `Tambahkan sampai 10 titik untuk membuat bentuk`
     ],
-    coordinatesButton: `Masukkan Nilai`,
-    shapefileButton: 'or drop a custom shapefile here',
-    shapefileInstructions:
-      'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 1MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.'
+    coordinatesButton: `Masukkan Nilai`
   },
   zh: {
     drawTitle: '分析自定义图形',
@@ -185,10 +167,7 @@ export const penContent = {
     drawButton: '开始绘画',
     coordinatesTitle: '输入你的坐标',
     coordinatesInstructions: [`输入至少三个坐标`, `添加最多10个坐标来完成作图`],
-    coordinatesButton: `输入`,
-    shapefileButton: '或者在这里添加自定义地理信息系统文件（shapefile）',
-    shapefileInstructions:
-      '本网站仅支持空间参考系统为WGS84的图形数据文件。建议文件大小应小于1MB。ESRI文件必须为压缩文件（.zip）,GeoJSON 文件必须为后缀.json的文件。'
+    coordinatesButton: `输入`
   }
 };
 
