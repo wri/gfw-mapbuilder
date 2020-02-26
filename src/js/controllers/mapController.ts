@@ -14,6 +14,7 @@ import Point from 'esri/geometry/Point';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
+import Basemap from 'esri/Basemap';
 import { once } from 'esri/core/watchUtils';
 
 import { RefObject } from 'react';
@@ -28,6 +29,7 @@ import {
   setActiveFeatures
 } from 'js/store/mapview/actions';
 
+import { setSelectedBasemap } from 'js/store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
@@ -884,6 +886,14 @@ export class MapController {
       longitude: subStringLongitude,
       zoom
     };
+  }
+
+  setActiveBasemap(id: string): void {
+    if (this._map) {
+      const basemap = Basemap.fromId(id);
+      this._map.basemap = basemap;
+      store.dispatch(setSelectedBasemap(id));
+    }
   }
 }
 

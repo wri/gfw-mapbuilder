@@ -22,6 +22,7 @@ export interface MapviewState {
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
   activeFeatureIndex: number[];
+  activeBasemap: string; // * NEW! not in resources.js
 }
 
 export interface LayerProps {
@@ -52,6 +53,7 @@ export const MAP_ERROR = 'MAP_ERROR';
 export const ALL_AVAILABLE_LAYERS = 'ALL_AVAILABLE_LAYERS';
 export const SET_ACTIVE_FEATURES = 'SET_ACTIVE_FEATURES';
 export const SET_ACTIVE_FEATURE_INDEX = 'SET_ACTIVE_FEATURE_INDEX';
+export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -73,6 +75,11 @@ interface SetActiveFeaturesAction {
   payload: MapviewState['activeFeatures'];
 }
 
+interface SetSelectedAction {
+  type: typeof SET_ACTIVE_BASEMAP;
+  payload: MapviewState['activeBasemap'];
+}
+
 interface SetActiveFeatureIndex {
   type: typeof SET_ACTIVE_FEATURE_INDEX;
   payload: MapviewState['activeFeatureIndex'];
@@ -83,4 +90,5 @@ export type MapviewStateTypes =
   | MapErrorAction
   | AllAvailableLayersAction
   | SetActiveFeaturesAction
-  | SetActiveFeatureIndex;
+  | SetActiveFeatureIndex
+  | SetSelectedAction;
