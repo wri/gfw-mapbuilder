@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import UploadFile from 'js/components/sharedComponents/UploadFile';
+
 import { mapController } from 'js/controllers/mapController';
 
 import { renderModal } from 'js/store/appState/actions';
@@ -33,9 +35,7 @@ const AnalysisTabView = (props: Props): JSX.Element => {
     enterCoordinatesTitle,
     enterCoordinatesDirections,
     coordinatesButton,
-    visitTitle,
-    uploadShapefileTitle,
-    uploadShapefileDirections
+    visitTitle
   } = analysisContent[selectedLanguage];
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
@@ -104,8 +104,7 @@ const AnalysisTabView = (props: Props): JSX.Element => {
                 {visitTitle}
                 <PenIcon height={21} width={21} fill={'#555'} />
               </h4>
-              <p>{uploadShapefileTitle}</p>
-              <p className="upload-disclaimer">* {uploadShapefileDirections}</p>
+              <UploadFile />
             </div>
           </div>
         </div>

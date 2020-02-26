@@ -54,11 +54,12 @@
       .drop-shapefile-container {
         display: flex;
         flex-direction: column;
-        padding: 2rem;
+        padding: 1rem 0;
 
         h4 {
           line-height: 1.5rem;
           text-align: center;
+          margin: 0 1rem 0 1rem;
         }
 
         .upload-disclaimer {
