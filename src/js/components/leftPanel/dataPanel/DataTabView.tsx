@@ -9,6 +9,7 @@ import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
 import { ReactComponent as CloseAttribute } from '../../../../images/closeIcon.svg';
+import { mapController } from 'js/controllers/mapController';
 
 interface DataTabProps {
   key: string;
@@ -30,6 +31,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     const activeLayerIndex = activeFeatures.findIndex(
       f => f.layerID === activeLayer
     );
+    if (activeLayerInfo) {
+      mapController.drawGraphic(
+        activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
+          .geometry
+      );
+    }
     const LayerAttributesElement = (props: {
       activeLayerInfo: any;
       activeLayerIndex: number;
