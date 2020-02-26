@@ -1,5 +1,3 @@
-import Graphic from 'esri/Graphic';
-
 interface SpecificAreaResults {
   area: string;
   perimeter: string;
@@ -17,11 +15,17 @@ export interface MeasureContent {
   coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
 }
 
+interface UserSubscription {
+  attributes: object;
+  id: string;
+  type: string;
+}
+
 //Store types
 export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
-  userSubscriptions: {}[];
+  userSubscriptions: UserSubscription[];
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
 }
