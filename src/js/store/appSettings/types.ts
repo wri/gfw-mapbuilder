@@ -9,6 +9,7 @@ export interface AppSettings {
   layerPanel: LayerGroup;
   useAlternativeLanguage: boolean;
   alternativeWebmap: string;
+  includeMyGFWLogin: boolean;
   alternativeLanguage: string;
   printServiceUrl?: string;
   narrative: string;

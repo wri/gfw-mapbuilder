@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store/index';
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
+import GFWLogin from 'js/components/header/GFWLogin';
 
 import 'css/header.scss';
 
@@ -16,11 +17,12 @@ const Header: FunctionComponent = () => {
     logoLinkUrl,
     useAlternativeLanguage,
     alternativeWebmap,
-    alternativeLanguage
+    alternativeLanguage,
+    includeMyGFWLogin
   } = useSelector((store: RootState) => store.appSettings);
 
   const appState = useSelector((store: RootState) => store.appState);
-  const selectedLanguage = appState.selectedLanguage;
+  const { selectedLanguage, isLoggedIn } = appState;
 
   return (
     <div className="header-container">
@@ -49,6 +51,7 @@ const Header: FunctionComponent = () => {
           selectedLanguage={selectedLanguage}
         />
       )}
+      {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   SET_LANGUAGE,
   RENDER_MODAL,
   SET_OPEN_LAYER_GROUP,
+  SET_LOGGED_IN,
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
   SET_HIDE_WIDGET
@@ -15,6 +16,7 @@ const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
   hideWidgetActive: false,
+  isLoggedIn: false,
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',
@@ -59,6 +61,8 @@ export function appStateReducer(
       };
     case SET_LANGUAGE:
       return { ...state, selectedLanguage: action.payload };
+    case SET_LOGGED_IN:
+      return { ...state, isLoggedIn: action.payload };
     case SET_OPEN_LAYER_GROUP:
       return {
         ...state,

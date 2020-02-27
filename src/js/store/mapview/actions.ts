@@ -1,6 +1,7 @@
 import {
   MAP_ERROR,
   MAP_READY,
+  USER_SUBSCRIPTIONS,
   ALL_AVAILABLE_LAYERS,
   SET_ACTIVE_FEATURES,
   SET_ACTIVE_FEATURE_INDEX,
@@ -18,6 +19,13 @@ export function isMapReady(payload: MapviewState['isMapReady']) {
 export function mapError(payload: MapviewState['loadError']) {
   return {
     type: MAP_ERROR as typeof MAP_ERROR,
+    payload
+  };
+}
+
+export function userSubscriptions(payload: MapviewState['userSubscriptions']) {
+  return {
+    type: USER_SUBSCRIPTIONS as typeof USER_SUBSCRIPTIONS,
     payload
   };
 }

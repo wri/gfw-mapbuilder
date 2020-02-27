@@ -19,7 +19,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         <LayerToggleSwitch layerIsVisible={layer?.visible} layerID={props.id} />
         <span className="layer-label">{props.id}</span>
         <div className="info-icon-container">
-          <InfoIcon width={10} height={10} fill="#fff" />
+          <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>
       <LayerTransparencySlider

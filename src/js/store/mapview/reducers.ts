@@ -3,6 +3,7 @@ import {
   MapviewStateTypes,
   MAP_READY,
   MAP_ERROR,
+  USER_SUBSCRIPTIONS,
   ALL_AVAILABLE_LAYERS,
   SET_ACTIVE_FEATURES,
   SET_ACTIVE_FEATURE_INDEX,
@@ -12,6 +13,7 @@ import {
 const initialState: MapviewState = {
   isMapReady: false,
   loadError: false,
+  userSubscriptions: [],
   allAvailableLayers: [],
   activeFeatures: [],
   activeFeatureIndex: [0, 0], //first element is the index of the layer, second is the index of feature
@@ -27,6 +29,8 @@ export function mapviewReducer(
       return { ...state, isMapReady: action.payload };
     case MAP_ERROR:
       return { ...state, loadError: action.payload };
+    case USER_SUBSCRIPTIONS:
+      return { ...state, userSubscriptions: action.payload };
     case ALL_AVAILABLE_LAYERS:
       return { ...state, allAvailableLayers: action.payload };
     case SET_ACTIVE_FEATURES:
