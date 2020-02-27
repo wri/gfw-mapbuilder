@@ -42,10 +42,9 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { LayerFactoryObject } from 'js/interfaces/mapping';
 import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 
-import { SpecificDMSSection } from 'js/interfaces/coordinateForm';
-
-import { convertDMSToXY } from 'js/utils/helper.config';
 import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
+
+import { getCustomSymbol } from 'js/utils/symbol.config';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -908,6 +907,65 @@ export class MapController {
       this._map.basemap = basemap;
       store.dispatch(setSelectedBasemap(id));
     }
+  }
+
+  processGeojson(esriJson: any): any {
+    const graphics: Array<Graphic> = [];
+    esriJson.forEach((feature: any) => {
+      const graphic = new Graphic({
+        geometry: new Polygon(feature.geometry),
+        symbol: getCustomSymbol(),
+        attributes: feature.attributes
+        // source: attributes.SOURCE_UPLOAD
+        // * NOTE: ^ this was in original version
+      });
+      graphics.push(graphic);
+      this._mapview.graphics.add(graphic);
+    });
+    this._mapview.goTo(graphics);
+
+    // ? Do we need the v1 logic below?
+
+    // const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
+    // const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
+    // if (layer) {
+    //   this.context.map.setExtent(graphicsExtent, true);
+
+    //   const geometryService = new GeometryService(
+    //     'https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'
+    //   );
+    //   var params = new ProjectParameters();
+
+    //   // Set the projection of the geometry for the image server
+    //   params.outSR = new SpatialReference(102100);
+    //   params.geometries = [];
+
+    //   graphics.forEach(feature => {
+    //     params.geometries.push(feature.geometry);
+    //   });
+
+    //   // update the graphics geometry with the new projected geometry
+    //   const successfullyProjected = geometries => {
+    //     graphics.forEach((graphic, i) => {
+    //       graphic.geometry = geometries[i];
+    //       layer.add(graphic);
+    //       if (i === geometries.length - 1) {
+    //         geometryUtils
+    //           .generateDrawnPolygon(graphic.geometry)
+    //           .then(registeredGraphic => {
+    //             this.context.map.infoWindow.setFeatures([registeredGraphic]);
+    //           });
+    //       }
+    //     });
+    //   };
+    //   const failedToProject = err => {
+    //     console.log('Failed to project the geometry: ', err);
+    //   };
+    //   geometryService
+    //     .project(params)
+    //     .then(successfullyProjected, failedToProject);
+    // }
+    // this.setState({ isUploading: false });
   }
 }
 
