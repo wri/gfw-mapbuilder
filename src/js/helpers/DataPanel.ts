@@ -4,17 +4,39 @@ import Map from 'esri/Map';
 import store from 'js/store';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/support/Query';
-import geometryEngine from 'esri/geometry/geometryEngine';
 import Graphic from 'esri/Graphic';
 import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
+import { selectActiveTab } from 'js/store/appState/actions';
 
-function esriQuery(
-  url: string,
-  queryParams: __esri.QueryProperties
-): Promise<__esri.FeatureSet> {
+function extractLayerInfo(
+  featureObject: any
+): {
+  layerID: string;
+  layerTitle: string;
+  sublayerSouce: boolean;
+  sublayerID: string;
+  sublayerTitle: string;
+} {
+  const output: any = {};
+  if (featureObject[0].layer) {
+    output.layerID = featureObject[0].layer.id;
+    output.layerTitle = featureObject[0].layer.title;
+    output.sublayerTitle = null;
+    output.sublayerID = null;
+  } else {
+    //assume that we are in sublayer situation
+    output.layerID = featureObject[0].sourceLayer.layer.title;
+    output.layerTitle = featureObject[0].sourceLayer.layer.title;
+    output.sublayerTitle = featureObject[0].sourceLayer.title;
+    output.sublayerID = featureObject[0].sourceLayer.id;
+  }
+  return output;
+}
+
+function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
   const qt = new QueryTask({
     url: url
   });
@@ -24,8 +46,9 @@ function esriQuery(
 }
 
 async function processSublayers(
-  geometry: any,
-  sublayersArray: Sublayer[]
+  geometry: Point,
+  sublayersArray: Sublayer[],
+  mapview: MapView
 ): Promise<any> {
   const processedSubsResults: LayerFeatureResult[] = [];
   for await (const sublayer of sublayersArray) {
@@ -33,8 +56,10 @@ async function processSublayers(
     const qParams = {
       where: '1=1',
       outFields: ['*'],
+      units: 'miles',
+      distance: 0.02 * mapview.resolution,
       geometry: geometry,
-      returnGeometry: false
+      returnGeometry: true
     };
     try {
       const sublayerResult = await esriQuery(url, qParams);
@@ -49,6 +74,8 @@ async function processSublayers(
         const subCleanedResult = {
           layerID: sublayer.layer.id,
           layerTitle: sublayer.layer.title,
+          sublayerID: null,
+          sublayerTitle: null,
           features: features
         };
         processedSubsResults.push(subCleanedResult);
@@ -63,13 +90,17 @@ async function processSublayers(
 async function fetchAsyncServerResults(
   map: Map | undefined,
   mapview: MapView,
-  mapPoint: Point
+  mapPoint: Point,
+  layerFeatureResults: LayerFeatureResult[]
 ): Promise<any> {
   if (map) {
-    //Iterate over map layers, filter out turned off layers and non map-image layers
-    const visibleServerLayers = map.layers.filter(
-      l => l.visible && l.type === 'map-image'
+    const processedLayersByClientQuery = layerFeatureResults.map(
+      f => f.layerID
     );
+    const visibleServerLayers = map.layers
+      .filter(l => l.visible)
+      .filter(l => !processedLayersByClientQuery.includes(l.id));
+    //the second filter here ensures that we do not double count, for some reason some layers were being processed twice, at the client side (popup promise) and server side too. TODO: This may need further investigation, debugging with variuos county configs!
     //Extract all sublayers
     const sublayers: any = visibleServerLayers
       .flatten((item: any) => item.sublayers)
@@ -78,12 +109,10 @@ async function fetchAsyncServerResults(
     //We need to convert Collection of sublayers to regular array for async processing
     const sublayersArray: any[] = sublayers.items.map((sl: Sublayer) => sl);
 
-    //TODO: Better way to handle mouse click buffering?
-    const distance = mapview.resolution * 0.005;
-    const geometry = geometryEngine.buffer(mapPoint, distance, 'miles');
     const processedSubs: LayerFeatureResult[] = await processSublayers(
-      geometry,
-      sublayersArray
+      mapPoint,
+      sublayersArray,
+      mapview
     );
     return processedSubs;
   }
@@ -106,9 +135,18 @@ export function addPopupWatchUtils(
           .filter(f => f !== null) //catch failed promises
           .filter(f => f.length !== 0) //catch no features returned
           .map((featureObject: Graphic[]) => {
+            //extract layerID and layerTitle from resulting feature object
+            const {
+              layerID,
+              layerTitle,
+              sublayerID,
+              sublayerTitle
+            } = extractLayerInfo(featureObject);
             const newFeatureObject: LayerFeatureResult = {
-              layerID: featureObject[0].layer.id,
-              layerTitle: featureObject[0].layer.title,
+              layerID: layerID,
+              layerTitle: layerTitle,
+              sublayerID: sublayerID,
+              sublayerTitle: sublayerTitle,
               features: featureObject.map(g => {
                 return {
                   attributes: g.attributes,
@@ -124,11 +162,15 @@ export function addPopupWatchUtils(
         const serverResponse = await fetchAsyncServerResults(
           map,
           mapview,
-          mapPoint
+          mapPoint,
+          layerFeatureResults
         );
         layerFeatureResults = layerFeatureResults.concat(serverResponse);
-        console.log(layerFeatureResults);
         store.dispatch(setActiveFeatures(layerFeatureResults));
+        const { appState } = store.getState();
+        if (appState.leftPanel.activeTab !== 'data') {
+          store.dispatch(selectActiveTab('data'));
+        }
       });
     }
     resolveClientPromisesWithErrors(promises);

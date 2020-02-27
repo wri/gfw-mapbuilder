@@ -12,6 +12,8 @@ export interface AppSettings {
   includeMyGFWLogin: boolean;
   alternativeLanguage: string;
   printServiceUrl?: string;
+  narrative: string;
+  alternativeNarrative: string;
 }
 
 type LayerGroupKey =

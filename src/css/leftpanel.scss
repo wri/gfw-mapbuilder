@@ -3,13 +3,76 @@
 .left-panel {
   z-index: 1;
   position: absolute;
-  top: 200px;
+  top: 140px;
   left: 20px;
   width: 300px;
   background: $white;
   box-shadow: 0px 1px 2px rgba(85, 85, 85, 0.25);
-  height: calc(100% - 250px);
   overflow-y: auto;
+
+  .info-content-container {
+    display: flex;
+    min-height: 5rem;
+  }
+
+  .analysis-tab-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 30rem;
+    font-family: $fira-sans;
+
+    h4,
+    ol {
+      font-size: 0.85rem;
+      color: #6f6f6f;
+    }
+
+    .directions {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      figure {
+        margin-bottom: 0;
+
+        figcaption {
+          h4 {
+            margin: 0;
+          }
+        }
+
+        ol {
+          padding-left: 1rem;
+        }
+      }
+
+      hr {
+        width: 75%;
+      }
+
+      .drop-shapefile-container {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0;
+
+        h4 {
+          line-height: 1.5rem;
+          text-align: center;
+          margin: 0 1rem 0 1rem;
+        }
+
+        .upload-disclaimer {
+          font-size: 0.85rem;
+          color: #6f6f6f;
+        }
+      }
+    }
+  }
+}
+
+.tabview-container {
+  height: 600px;
 }
 
 .tab-header-container {
@@ -130,6 +193,9 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid #aaa;
+  font-family: $fira-sans;
+  font-size: 0.85rem;
+
   img {
     border-radius: 50px;
     width: 44px;
@@ -148,4 +214,147 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.data-tabview-container {
+  hr {
+    width: 90%;
+  }
+  .layer-feature-group {
+    table {
+      overflow-wrap: break-word;
+      font-size: 13px;
+      color: #555;
+      width: 100%;
+      tbody:nth-child(odd) tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      td.first-cell {
+        max-width: 1px; //this is to make break word work inside a table cell
+        font-weight: bold;
+        padding: 10px;
+      }
+      td.second-cell {
+        max-width: 1px; //this is to make break word work inside a table cell
+        text-align: right;
+        padding: 10px;
+      }
+    }
+    .layer-control-container {
+      .remove-attribute-button {
+        display: flex;
+        justify-content: flex-end;
+        button {
+          -webkit-appearance: none;
+          outline: none;
+          border: 0;
+        }
+      }
+    }
+    .layer-control {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 10px;
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: relative;
+        background-color: #fff;
+        background-image: url('../images/down-arrow.png');
+        background-repeat: no-repeat, repeat;
+        background-position: right 0.7em top 50%, 0 0;
+        background-size: 0.75em auto, 100%;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        display: block;
+        height: 100%;
+        border-radius: 0;
+        padding-left: 5px;
+        padding-right: 20px;
+        left: 0;
+        top: 0;
+      }
+      option {
+        font-weight: normal;
+        display: block;
+        white-space: pre;
+        min-height: 1.2em;
+        padding: 0px 2px 1px;
+      }
+      option:after {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
+      }
+    }
+    .page-numbers {
+      color: #555;
+      display: flex;
+      justify-content: flex-end;
+      font-size: 0.85rem;
+      margin-right: 1rem;
+    }
+    .layer-title {
+      color: #6f6f6f;
+      font-size: 14px;
+      text-align: center;
+      margin: 0.5rem 0.5rem 0.5rem;
+      font-weight: bold;
+    }
+    .attribute-page-button {
+      margin-left: 5px;
+      font-size: 14px;
+      border: 0;
+      border-radius: 35px;
+      line-height: 25px;
+      padding: 0 1rem;
+      background-color: $base-yellow;
+      cursor: pointer;
+      color: #fff;
+    }
+    .attribute-page-button.disabled {
+      background-color: rgb(238, 238, 238);
+      cursor: disabled;
+      color: #555;
+    }
+  }
+  .data-tabview-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
+    button {
+      border: 1px solid $base-yellow;
+      text-transform: uppercase;
+      -webkit-appearance: none;
+      font-weight: 500;
+      font-size: 12px;
+      outline: none;
+      line-height: 14px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: inherit;
+      border-radius: 16px;
+      color: #555;
+      padding: 10px;
+      img {
+        margin-left: 7px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-device) {
+  .left-panel
+    > .analysis-tab-container
+    > .directions
+    > .drop-shapefile-container
+    h4 {
+    display: none;
+  }
 }

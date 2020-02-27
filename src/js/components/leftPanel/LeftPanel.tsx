@@ -99,13 +99,21 @@ const LeftPanel = (): React.ReactElement => {
   const renderDocTab = useSelector(
     (store: RootState) => store.appSettings.includeDocumentsTab
   );
+
+  const { narrative, alternativeNarrative } = useSelector(
+    (store: RootState) => store.appSettings
+  );
+
+  const renderInfoTab =
+    narrative.length || alternativeNarrative.length ? true : false;
+
   //Rendering instructions should be likely driven by our config
   const tabsArray = [
     {
       label: 'info',
       icon: InfoTabIcon,
       tooltipText: 'Info',
-      render: true
+      render: renderInfoTab
     },
     {
       label: 'layers',
