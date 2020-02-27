@@ -1,21 +1,20 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
-
-import { mapController } from 'js/controllers/mapController';
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
 import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
 
 import { RootState } from 'js/store/index';
 
-const datasets = [
-  'viirs-active-fires',
-  'umd-loss-gain',
-  'glad-alerts',
-  'imazon-alerts',
-  'forma-alerts',
-  'terrai-alerts',
-  'prodes-loss'
+//TODO: Investigate if this is exhaustive list or needs to be configed out somehow
+const datasetMap = [
+  { id: 'viirs-active-fires', label: 'VIIRS active fires alerts' },
+  { id: 'umd-loss-gain', label: 'Tree cover loss data' },
+  { id: 'glad-alerts', label: 'GLAD tree cover loss alerts' },
+  { id: 'imazon-alerts', label: 'SAD tree cover loss alerts' },
+  { id: 'forma-alerts', label: 'FORMA active clearing alerts' },
+  { id: 'terrai-alerts', label: 'Terra-i tree cover loss alerts' },
+  { id: 'prodes-loss', label: 'PRODES deforestation data' }
 ];
 
 interface SubscriptionAttributes {
@@ -23,6 +22,7 @@ interface SubscriptionAttributes {
   createdAt: string;
   userId: string;
   resource: object;
+  datasets: string[];
   // datasets: Array<string>;
   // resource: {type: "EMAIL", content: "lc07@uw.edu"}
   // datasets: (2) ["umd-loss-gain", "glad-alerts"]
@@ -40,34 +40,13 @@ const SubscriptionContent: FunctionComponent = () => {
     (state: RootState) => state.mapviewState.userSubscriptions
   );
 
-  const DatasetAlerts = (props: any): any => {
-    let datasetName;
-    switch (props.dataset) {
-      case 'viirs-active-fires':
-        datasetName = 'VIIRS active fires alerts';
-        break;
-      case 'umd-loss-gain':
-        datasetName = 'Tree cover loss data';
-        break;
-      case 'glad-alerts':
-        datasetName = 'GLAD tree cover loss alerts';
-        break;
-      case 'imazon-alerts':
-        datasetName = 'SAD tree cover loss alerts';
-        break;
-      case 'forma-alerts':
-        datasetName = 'FORMA active clearing alerts';
-        break;
-      case 'terrai-alerts':
-        datasetName = 'Terra-i tree cover loss alerts';
-        break;
-      case 'prodes-loss':
-        datasetName = 'PRODES deforestation data';
-        break;
-      default:
-        break;
-    }
-    console.log('datasetNamedatasetName', datasetName);
+  interface DatasetAlertsProps {
+    dataset: string;
+    datasetLabel: string;
+    subscription: Subscription;
+  }
+  const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
+    console.log('datasetNamedatasetName', props.datasetLabel);
 
     const colorTheme = '#929292';
     // const { customColorTheme } = this.context.settings;
@@ -81,9 +60,8 @@ const SubscriptionContent: FunctionComponent = () => {
 
     return (
       <p className="subscribe-dataset">
-        {datasetName}
+        {props.datasetLabel}
         <span
-          // onClick={() => this.updateSubscription(dataset, subscription)}
           onClick={() => console.log('udpate dataset')}
           style={{ backgroundColor: `${colorTheme}` }}
           className={`toggle-switch-subscription pointer ${
@@ -146,17 +124,15 @@ const SubscriptionContent: FunctionComponent = () => {
               {subscription.attributes.name}
             </p>
           </div>
-          {/* <div onClick={evt => this.showSubscription(evt, subscription)} className='map-row'> */}
-          <div onClick={evt => console.log('shoow')} className="map-row">
+          <div onClick={() => console.log('shoow')} className="map-row">
             <button title="Show on map" className="btn-delete-subscription">
               <WorldShape height={25} width={25} fill={'#555'} />
             </button>
           </div>
           <div className="delete-row">
-            {/* <button title='Delete subscription' onClick={evt => this.deleteSubscription(evt, subscription)} className='btn-delete-subscription'> */}
             <button
               title="Delete subscription"
-              onClick={evt => console.log('DeleteDelete')}
+              onClick={() => console.log('DeleteDelete')}
               className="btn-delete-subscription"
             >
               <DeleteIcon height={25} width={25} fill={'#555'} />
@@ -170,10 +146,11 @@ const SubscriptionContent: FunctionComponent = () => {
         <div className="other-row">
           Data sets:
           <div className="subscribe-datasets">
-            {datasets.map((dataset, j) => (
+            {datasetMap.map((dataset, i) => (
               <DatasetAlerts
-                key={j}
-                dataset={dataset}
+                key={i}
+                dataset={dataset.id}
+                datasetLabel={dataset.label}
                 subscription={subscription}
               />
             ))}
