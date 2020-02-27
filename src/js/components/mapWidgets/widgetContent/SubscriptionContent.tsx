@@ -36,8 +36,8 @@ interface Subscription {
 }
 
 const SubscriptionContent: FunctionComponent = () => {
-  const userSubscriptions = useSelector(
-    (state: RootState) => state.mapviewState.userSubscriptions
+  const { userSubscriptions } = useSelector(
+    (state: RootState) => state.mapviewState
   );
 
   interface DatasetAlertsProps {
@@ -97,6 +97,7 @@ const SubscriptionContent: FunctionComponent = () => {
     }
 
     const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
+    //TODO: May need to push into the config
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
 
     return (

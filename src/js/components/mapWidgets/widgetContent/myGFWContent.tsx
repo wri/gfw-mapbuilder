@@ -19,6 +19,7 @@ const MyGFWContent: FunctionComponent = () => {
       credentials: 'include'
     })
       .then(() => {
+        //TODO: is there a better way to do this then full page reload?
         window.location.reload();
       })
       .catch(e => console.log('Logout failed', e));
@@ -93,12 +94,7 @@ const MyGFWContent: FunctionComponent = () => {
     );
   };
 
-  return (
-    <div>
-      {!isLoggedIn && <RenderLogins />}
-      {isLoggedIn && <RenderDropdowns />}
-    </div>
-  );
+  return <div>{isLoggedIn ? <RenderDropdowns /> : <RenderLogins />}</div>;
 };
 
 export default MyGFWContent;
