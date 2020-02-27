@@ -1,15 +1,24 @@
-import React, { DragEvent } from 'react';
-import { useSelector } from 'react-redux';
+import React, { DragEvent, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  renderModal,
+  toggleTabviewPanel,
+  selectActiveTab
+} from 'js/store/appState/actions';
+
+import { mapController } from 'js/controllers/mapController';
 
 import { geojsonToArcGIS } from 'js/utils/geojson.config';
-import { mapController } from 'js/controllers/mapController';
 
 import 'css/uploadFile.scss';
 
 const UploadFile = (): JSX.Element => {
+  const dispatch = useDispatch();
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
   );
+  const [wrongFileType, setWrongFileType] = useState(false);
 
   const uploadContent = {
     en: {
@@ -61,15 +70,18 @@ const UploadFile = (): JSX.Element => {
   const onDropFile = async (
     event: DragEvent<HTMLDivElement>
   ): Promise<void> => {
+    setWrongFileType(false);
     const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
     event.preventDefault();
     event.stopPropagation();
     event.persist();
 
     const file = event.dataTransfer.files[0];
+    const isZipfile = file.type === 'application/zip';
+    const isGeoJSON = file.name.includes('geojson'); // * NOTE: geoJSON files don't have a set type
 
-    if (file) {
-      // TODO [ ] - Integrate spinner (separate PR/feature branch)!
+    if (file && (isZipfile || isGeoJSON)) {
+      // TODO - [ ] Turn on spinner!
       const formData = new FormData();
       formData.append('file', file, file.name);
 
@@ -82,13 +94,12 @@ const UploadFile = (): JSX.Element => {
 
       const results = geojsonToArcGIS(featureCollection.data.attributes);
       mapController.processGeojson(results);
-      // TODO [ ] - dispatch to close leftPanel
-      // TODO [ ] - dispatch to close Modal
+      dispatch(toggleTabviewPanel(true));
+      dispatch(selectActiveTab('analysis'));
+      dispatch(renderModal(''));
     } else {
-      // TODO - logic to handle if there is no file
-      //        ? Sweet alert?
-      // TODO [ ] - dispatch to close leftPanel
-      // TODO [ ] - dispatch to close Modal
+      // TODO - [ ] Turn off spinner!
+      setWrongFileType(true);
     }
   };
 
@@ -101,7 +112,9 @@ const UploadFile = (): JSX.Element => {
       >
         <span>{shapefileButton}</span>
       </div>
-      <p className="shapefile-instructions">* {shapefileInstructions}</p>
+      <p className={`shapefile-instructions ${wrongFileType ? 'red' : ''}`}>
+        * {shapefileInstructions}
+      </p>
     </div>
   );
 };
