@@ -1,5 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setUserSubscriptions } from 'js/store/mapview/actions';
+
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
 import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
@@ -36,6 +39,7 @@ interface Subscription {
 }
 
 const SubscriptionContent: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const { userSubscriptions } = useSelector(
     (state: RootState) => state.mapviewState
   );
@@ -77,9 +81,7 @@ const SubscriptionContent: FunctionComponent = () => {
   };
 
   const SubscriptionDetails = (props: any, key: number): any => {
-    const { subscription } = props;
-
-    console.log('subscription in SusbcriptionDeatils;, ', subscription);
+    const { subscription, userSubscriptions } = props;
 
     const date = new Date(subscription.attributes.createdAt);
     let dd: any = date.getDate();
@@ -99,6 +101,26 @@ const SubscriptionContent: FunctionComponent = () => {
     const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
     //TODO: May need to push into the config
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
+
+    const deleteSubscription = async (
+      subscriptionID: string
+    ): Promise<void> => {
+      await fetch(
+        `https://production-api.globalforestwatch.org/v1/subscriptions/${subscriptionID}`,
+        {
+          method: 'DELETE',
+          credentials: 'include'
+        }
+      )
+        .then(response => response.json())
+        .catch(e => console.log('error in deleteSubscription()', e));
+
+      const updatedSubscriptions = userSubscriptions.filter(
+        (s: any) => s.id !== subscriptionID
+      );
+
+      dispatch(setUserSubscriptions(updatedSubscriptions));
+    };
 
     return (
       <div key={key} className="source-row subscribe-row">
@@ -133,7 +155,7 @@ const SubscriptionContent: FunctionComponent = () => {
           <div className="delete-row">
             <button
               title="Delete subscription"
-              onClick={() => console.log('DeleteDelete')}
+              onClick={(): Promise<void> => deleteSubscription(subscription.id)}
               className="btn-delete-subscription"
             >
               <DeleteIcon height={25} width={25} fill={'#555'} />
@@ -169,7 +191,11 @@ const SubscriptionContent: FunctionComponent = () => {
         Subscribe in the info window.
       </p>
       {userSubscriptions.map((subscription: any, i: number) => (
-        <SubscriptionDetails subscription={subscription} key={i} />
+        <SubscriptionDetails
+          subscription={subscription}
+          userSubscriptions={userSubscriptions}
+          key={i}
+        />
       ))}
     </div>
   );
