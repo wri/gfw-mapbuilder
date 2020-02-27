@@ -1,9 +1,12 @@
-import React, { FunctionComponent, DragEvent } from 'react';
+import React, { DragEvent } from 'react';
 import { useSelector } from 'react-redux';
+
+import { geojsonToArcGIS } from 'js/utils/geojson.config';
+import { mapController } from 'js/controllers/mapController';
 
 import 'css/uploadFile.scss';
 
-function UploadFile(): JSX.Element {
+const UploadFile = (): JSX.Element => {
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
   );
@@ -55,12 +58,38 @@ function UploadFile(): JSX.Element {
     event.stopPropagation();
   };
 
-  const onDropFile = (event: DragEvent<HTMLDivElement>): void => {
+  const onDropFile = async (
+    event: DragEvent<HTMLDivElement>
+  ): Promise<void> => {
+    const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
     event.preventDefault();
     event.stopPropagation();
+    event.persist();
 
     const file = event.dataTransfer.files[0];
-    console.log('onDropFile()', file);
+
+    if (file) {
+      // TODO [ ] - Integrate spinner (separate PR/feature branch)!
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+
+      const featureCollection = await fetch(url, {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .catch(e => console.log('error in onDropFile()', e));
+
+      const results = geojsonToArcGIS(featureCollection.data.attributes);
+      mapController.processGeojson(results);
+      // TODO [ ] - dispatch to close leftPanel
+      // TODO [ ] - dispatch to close Modal
+    } else {
+      // TODO - logic to handle if there is no file
+      //        ? Sweet alert?
+      // TODO [ ] - dispatch to close leftPanel
+      // TODO [ ] - dispatch to close Modal
+    }
   };
 
   return (
@@ -68,13 +97,13 @@ function UploadFile(): JSX.Element {
       <div
         className="upload-wrapper"
         onDragOver={(e: DragEvent<HTMLDivElement>): void => onDragFile(e)}
-        onDrop={(e: DragEvent<HTMLDivElement>): void => onDropFile(e)}
+        onDrop={(e: DragEvent<HTMLDivElement>): Promise<void> => onDropFile(e)}
       >
         <span>{shapefileButton}</span>
       </div>
       <p className="shapefile-instructions">* {shapefileInstructions}</p>
     </div>
   );
-}
+};
 
 export default UploadFile;
