@@ -1,22 +1,63 @@
+/* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
-const AnalysisSpinner = (): React.ReactElement => <h4>Geom Registering...</h4>;
 
-const BaseAnalysis = (props: any): JSX.Element => {
+const AnalysisSpinner = (): React.ReactElement => (
+  <h4>Geometry is Registering...</h4>
+);
+
+//TODO: This should we swapped for already existing work
+const DefaultTabView = (): JSX.Element => (
+  <div className="data-tab-default-container">
+    <p>Select a shape on the map</p>
+  </div>
+);
+
+const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
-  const [selectedAnalysis, selectAnalysis] = useState('');
+
+  const { analysisModules } = useSelector(
+    (store: RootState) => store.appSettings
+  );
+
+  //Default to the first analysis
+  const [selectedAnalysis, setSelectedAnalysis] = useState(
+    analysisModules[0].analysisId
+  );
+
+  const [geostoreReady, setGeostoreReady] = useState(false);
 
   const { activeFeatures, activeFeatureIndex } = useSelector(
     (store: RootState) => store.mapviewState
   );
 
-  const { analysisModules } = useSelector(
-    (store: RootState) => store.appSettings
-  );
+  useEffect(() => {
+    setGeostoreReady(false);
+    const activeLayer = activeFeatures[activeFeatureIndex[0]];
+    const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+    //On Base analysis tab we need to fire registration to geostore for the selected feature or the drawn/uploaded shape
+    //Determine if we have the geostore already or we need to register it
+    if (!activeLayer || activeFeature.attributes.hasOwnProperty('geostoreId')) {
+      console.log(
+        'we have no features or it already has geostoreID, do nothing'
+      );
+      setGeostoreReady(true);
+      return;
+    } else {
+      console.log('feature does not exist, we need to register it');
+      registerGeometry(activeFeature)
+        .then(response => response.json())
+        .then(res => {
+          activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
+          dispatch(setActiveFeatures(activeFeatures));
+          setGeostoreReady(true);
+        });
+    }
+  }, [activeFeatures, dispatch, activeFeatureIndex]);
 
   function runAnalysis() {
     console.log('runAnalysis', selectedAnalysis);
@@ -26,7 +67,6 @@ const BaseAnalysis = (props: any): JSX.Element => {
     if (mod) {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-
       fetch(
         `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?${activeFeature.attributes.geostoreId}`
       )
@@ -38,50 +78,33 @@ const BaseAnalysis = (props: any): JSX.Element => {
     }
   }
 
-  const DefaultTabView = (props: any): JSX.Element => (
-    <div className="data-tab-default-container">
-      <p>Select a shape on the map</p>
-    </div>
+  const AnalysisOptions = (): JSX.Element => (
+    <select
+      value={selectedAnalysis}
+      onChange={e => setSelectedAnalysis(e.target.value)}
+    >
+      {analysisModules.map((module: any, i: number) => {
+        return (
+          <option value={module.analysisId} key={i}>
+            {module.label.en}
+          </option>
+        );
+      })}
+    </select>
   );
 
-  const AnalysisOptions = (props: any): JSX.Element => (
+  return (
     <>
-      <select
-        value={selectedAnalysis}
-        onChange={evt => selectAnalysis(evt.target.value)}
-      >
-        {analysisModules.map((module: any, i: number) => {
-          return (
-            <option value={module.analysisId} key={i}>
-              {module.label.en}
-            </option>
-          );
-        })}
-      </select>
-      {/* if we have run/slected a chjart, show that chart, ELSE, show the button beloow (either way shows the dropdown above) */}
-      <button onClick={runAnalysis}>RUN ANALYSIS</button>
+      {geostoreReady ? (
+        <div>
+          <AnalysisOptions />
+          <button onClick={runAnalysis}>RUN ANALYSIS</button>
+        </div>
+      ) : (
+        <AnalysisSpinner />
+      )}
     </>
   );
-
-  if (activeFeatures.length === 0) {
-    return <DefaultTabView />;
-  } else {
-    const activeLayer = activeFeatures[activeFeatureIndex[0]];
-    const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-
-    if (activeFeature.attributes.geostoreId) {
-      return <AnalysisOptions />;
-    }
-
-    registerGeometry(activeFeature)
-      .then(response => response.json())
-      .then(res => {
-        activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
-        dispatch(setActiveFeatures(activeFeatures));
-      });
-
-    return <AnalysisSpinner />;
-  }
 };
 
 export default BaseAnalysis;
