@@ -121,14 +121,19 @@ const SubscriptionContent: FunctionComponent = () => {
           credentials: 'include'
         }
       )
-        .then(response => response.json())
-        .catch(e => console.log('error in deleteSubscription()', e));
+        .then(response => {
+          if (response.status === 200) {
+            const updatedSubscriptions = userSubscriptions.filter(
+              (s: Subscription) => s.id !== subscriptionID
+            );
 
-      const updatedSubscriptions = userSubscriptions.filter(
-        (s: Subscription) => s.id !== subscriptionID
-      );
-
-      dispatch(setUserSubscriptions(updatedSubscriptions));
+            dispatch(setUserSubscriptions(updatedSubscriptions));
+          }
+        })
+        .catch(e => {
+          console.log('error in deleteSubscription()', e);
+          // TODO [ ] - Need UI error handling logic!
+        });
     };
 
     return (
