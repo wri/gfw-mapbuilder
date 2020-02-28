@@ -10,13 +10,6 @@ const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
 );
 
-//TODO: This should we swapped for already existing work
-const DefaultTabView = (): JSX.Element => (
-  <div className="data-tab-default-container">
-    <p>Select a shape on the map</p>
-  </div>
-);
-
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
 
@@ -36,7 +29,6 @@ const BaseAnalysis = (): JSX.Element => {
   );
 
   useEffect(() => {
-    setGeostoreReady(false);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
     const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
     //On Base analysis tab we need to fire registration to geostore for the selected feature or the drawn/uploaded shape
@@ -52,12 +44,15 @@ const BaseAnalysis = (): JSX.Element => {
       registerGeometry(activeFeature)
         .then(response => response.json())
         .then(res => {
+          const oldActiveFeatures = [...activeFeatures];
+          const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
+          const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
           activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
-          dispatch(setActiveFeatures(activeFeatures));
+          dispatch(setActiveFeatures(oldActiveFeatures));
           setGeostoreReady(true);
         });
     }
-  }, [activeFeatures, dispatch, activeFeatureIndex]);
+  }, [activeFeatures, activeFeatureIndex]);
 
   function runAnalysis() {
     console.log('runAnalysis', selectedAnalysis);

@@ -560,7 +560,6 @@ export class MapController {
 
         store.dispatch(setActiveFeatures([drawnFeatures]));
         store.dispatch(selectActiveTab('analysis'));
-        store.dispatch(toggleTabviewPanel(true));
       }
     });
   }
