@@ -26,6 +26,7 @@ interface SubscriptionAttributes {
   userId: string;
   resource: object;
   datasets: string[];
+  confirmed: boolean;
   // datasets: Array<string>;
   // resource: {type: "EMAIL", content: "lc07@uw.edu"}
   // datasets: (2) ["umd-loss-gain", "glad-alerts"]
@@ -36,6 +37,11 @@ interface Subscription {
   type: string;
   id: string;
   key: number;
+}
+
+interface SubscriptionProps {
+  subscription: Subscription;
+  userSubscriptions: Array<Subscription>;
 }
 
 const SubscriptionContent: FunctionComponent = () => {
@@ -80,7 +86,10 @@ const SubscriptionContent: FunctionComponent = () => {
     );
   };
 
-  const SubscriptionDetails = (props: any, key: number): any => {
+  const SubscriptionDetails = (
+    props: SubscriptionProps,
+    key: number
+  ): JSX.Element => {
     const { subscription, userSubscriptions } = props;
 
     const date = new Date(subscription.attributes.createdAt);
@@ -116,7 +125,7 @@ const SubscriptionContent: FunctionComponent = () => {
         .catch(e => console.log('error in deleteSubscription()', e));
 
       const updatedSubscriptions = userSubscriptions.filter(
-        (s: any) => s.id !== subscriptionID
+        (s: Subscription) => s.id !== subscriptionID
       );
 
       dispatch(setUserSubscriptions(updatedSubscriptions));
@@ -192,8 +201,8 @@ const SubscriptionContent: FunctionComponent = () => {
       </p>
       {userSubscriptions.map((subscription: any, i: number) => (
         <SubscriptionDetails
-          subscription={subscription}
-          userSubscriptions={userSubscriptions}
+          subscription={subscription as Subscription}
+          userSubscriptions={userSubscriptions as Array<Subscription>}
           key={i}
         />
       ))}
