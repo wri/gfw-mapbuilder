@@ -99,8 +99,9 @@ async function fetchAsyncServerResults(
     );
     const visibleServerLayers = map.layers
       .filter(l => l.visible)
+      .filter(l => l.type !== 'graphics')
       .filter(l => !processedLayersByClientQuery.includes(l.id));
-    //the second filter here ensures that we do not double count, for some reason some layers were being processed twice, at the client side (popup promise) and server side too. TODO: This may need further investigation, debugging with variuos county configs!
+    //the third filter here ensures that we do not double count, for some reason some layers were being processed twice, at the client side (popup promise) and server side too. TODO: This may need further investigation, debugging with variuos county configs!
     //Extract all sublayers
     const sublayers: any = visibleServerLayers
       .flatten((item: any) => item.sublayers)
