@@ -93,8 +93,8 @@ const SubscriptionContent: FunctionComponent = () => {
 
   const SubscriptionDetails = (props: any, key: number): any => {
     const { subscription } = props;
-    // dispatch
-    console.log('subscription in SusbcriptionDeatils;, ', subscription);
+
+    console.log('subscription in SusbcriptionDetails', subscription);
 
     const date = new Date(subscription.attributes.createdAt);
     let dd: any = date.getDate();
@@ -120,33 +120,38 @@ const SubscriptionContent: FunctionComponent = () => {
     ): Promise<void> => {
       // TODO [ ] - Integrate spinner!
       const geostoreID = subscription.attributes.params.geostore;
-      let results;
+      const countryCode = subscription.attributes.params.iso.country;
+      const regionCode = subscription.attributes.params.iso.region;
+      const endPoint = regionCode
+        ? `${countryCode}/${regionCode}`
+        : `${countryCode}`;
 
-      if (geostoreID) {
-        // * NOTE: original logic
-        results = await fetch(
-          `https://production-api.globalforestwatch.org/v1/geostore/${geostoreID}`
-        )
-          .then(response => response.json())
-          .catch(e =>
-            console.log('error in /geostore/ of zoomToSubscription()', e)
-          );
-      } else {
-        // * NOTE: New logic accounts for when geostoreID is null
-        const countryCode = subscription.attributes.params.iso.country;
-        const regionCode = subscription.attributes.params.iso.region;
-        results = await fetch(
-          `https://api.resourcewatch.org/v1/geostore/admin/${countryCode}/${regionCode}`
-        )
-          .then(response => response.json())
-          .catch(e =>
-            console.log('error in /geostore/admin/ of zoomToSubscription()', e)
-          );
-      }
+      const geostoreEndpoint = `https://production-api.globalforestwatch.org/v1/geostore/${geostoreID}`;
+      const countryCodeEndpoint = `https://api.resourcewatch.org/v1/geostore/admin/${endPoint}`;
+      const specificEndpoint = geostoreID
+        ? geostoreEndpoint
+        : countryCodeEndpoint;
 
-      const esriJson = geojsonToArcGIS(results.data.attributes.geojson);
-      mapController.processGeojson(esriJson);
-      dispatch(renderModal(''));
+      await fetch(specificEndpoint)
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          }
+        })
+        .then(results => {
+          const esriJson = geojsonToArcGIS(results.data.attributes.geojson);
+          mapController.processGeojson(esriJson);
+          dispatch(renderModal(''));
+        })
+        .catch(e => {
+          console.log('error in /geostore/ of zoomToSubscription()', e);
+          console.error('Edge case in zoomToSubscription()!');
+          /**
+           * ! Edge cases found via https://www.globalforestwatch.org/my-gfw/subscriptions/new;
+           * ! Workflow 1. Select an area from a GFW data set / selecting an area by clicking a shape on the map
+           * ! Workflow 2. Select a country or jurisdiction / creating a subscription with no country selected
+           */
+        });
     };
 
     return (
