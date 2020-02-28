@@ -111,10 +111,8 @@ const SubscriptionContent: FunctionComponent = () => {
     //TODO: May need to push into the config
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
 
-    const deleteSubscription = async (
-      subscriptionID: string
-    ): Promise<void> => {
-      await fetch(
+    const deleteSubscription = (subscriptionID: string): void => {
+      fetch(
         `https://production-api.globalforestwatch.org/v1/subscriptions/${subscriptionID}`,
         {
           method: 'DELETE',
@@ -169,7 +167,7 @@ const SubscriptionContent: FunctionComponent = () => {
           <div className="delete-row">
             <button
               title="Delete subscription"
-              onClick={(): Promise<void> => deleteSubscription(subscription.id)}
+              onClick={(): void => deleteSubscription(subscription.id)}
               className="btn-delete-subscription"
             >
               <DeleteIcon height={25} width={25} fill={'#555'} />
