@@ -20,13 +20,31 @@ const datasetMap = [
   { id: 'prodes-loss', label: 'PRODES deforestation data' }
 ];
 
+interface SubscriptionParams {
+  iso: {
+    country: string;
+    region: string;
+  };
+  wdpaid: any;
+  use: any;
+  useid: any;
+  geostore: string;
+}
+
+interface SubscriptionResource {
+  type: string;
+  content: string;
+}
+
 interface SubscriptionAttributes {
   name: string;
   createdAt: string;
   userId: string;
-  resource: object;
+  resource: SubscriptionResource;
   datasets: string[];
   confirmed: boolean;
+  language: string;
+  params: SubscriptionParams;
   // datasets: Array<string>;
   // resource: {type: "EMAIL", content: "lc07@uw.edu"}
   // datasets: (2) ["umd-loss-gain", "glad-alerts"]
@@ -44,6 +62,13 @@ interface SubscriptionProps {
   userSubscriptions: Array<Subscription>;
 }
 
+interface JSONData {
+  datasets: Array<string>;
+  language: string;
+  resource: SubscriptionResource;
+  params: SubscriptionParams;
+}
+
 const SubscriptionContent: FunctionComponent = () => {
   const dispatch = useDispatch();
   const { userSubscriptions } = useSelector(
@@ -56,6 +81,7 @@ const SubscriptionContent: FunctionComponent = () => {
     subscription: Subscription;
   }
   const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
+    const { subscription, datasetLabel, dataset } = props;
     console.log('datasetNamedatasetName', props.datasetLabel);
 
     const colorTheme = '#929292';
@@ -68,14 +94,68 @@ const SubscriptionContent: FunctionComponent = () => {
     //     colorTheme = '#929292';
     // }
 
+    const updateDataset = (): void => {
+      const jsonData: JSONData = {
+        datasets: [],
+        language: subscription.attributes.language,
+        resource: subscription.attributes.resource,
+        params: subscription.attributes.params
+      };
+      const datasetOn = subscription.attributes.datasets.includes(dataset);
+
+      if (datasetOn) {
+        console.log('TURNING OFF');
+        jsonData.datasets = subscription.attributes.datasets.filter(
+          datasetID => datasetID !== dataset
+        );
+      } else {
+        console.log('TURNING ON');
+        subscription.attributes.datasets.push(dataset);
+        jsonData.datasets = subscription.attributes.datasets;
+      }
+
+      fetch(
+        `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}`,
+        {
+          method: 'PATCH',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        }
+      )
+        .then(response => (response.status === 200 ? response.json() : null))
+        .then(results => {
+          if (results) {
+            const original = userSubscriptions.find(
+              sub => sub.id === results.data.id
+            ) as Subscription;
+            const originalIndex = userSubscriptions.indexOf(original);
+            userSubscriptions[originalIndex] = { ...results.data };
+            dispatch(setUserSubscriptions(userSubscriptions));
+            // TODO [X] - update the Redux store
+            // TODO [ ] - confirm that all objects in userSubscriptions are unique
+            // ? How do we dynamically check if userSubscriptions are unique?
+            // ? new Set() ?
+            // ? is there a better way of updating userSubscriptions
+            // TODO confirm change on myGFW
+          }
+        })
+        .catch(e => {
+          console.log('error in updateDataset()', e);
+          // TODO [ ] - dispatch error UI
+        });
+    };
+
     return (
       <p className="subscribe-dataset">
-        {props.datasetLabel}
+        {datasetLabel}
         <span
-          onClick={() => console.log('udpate dataset')}
+          onClick={(): void => updateDataset()}
           style={{ backgroundColor: `${colorTheme}` }}
           className={`toggle-switch-subscription pointer ${
-            props.subscription.attributes.datasets.indexOf(props.dataset) === -1
+            subscription.attributes.datasets.indexOf(props.dataset) === -1
               ? ''
               : 'active-subscription'
           }`}
