@@ -85,7 +85,7 @@ interface AllAvailableLayersAction {
   payload: MapviewState['allAvailableLayers'];
 }
 
-interface UserSubscriptionsAction {
+interface SetUserSubscriptionsAction {
   type: typeof USER_SUBSCRIPTIONS;
   payload: MapviewState['userSubscriptions'];
 }
@@ -107,7 +107,7 @@ interface SetActiveFeatureIndex {
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
-  | UserSubscriptionsAction
+  | SetUserSubscriptionsAction
   | AllAvailableLayersAction
   | SetActiveFeaturesAction
   | SetActiveFeatureIndex

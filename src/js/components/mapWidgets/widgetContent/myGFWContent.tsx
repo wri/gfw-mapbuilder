@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'js/store';
-import { userSubscriptions } from 'js/store/mapview/actions';
+import { setUserSubscriptions } from 'js/store/mapview/actions';
 import { renderModal } from 'js/store/appState/actions';
 
 const MyGFWContent: FunctionComponent = () => {
@@ -32,7 +32,7 @@ const MyGFWContent: FunctionComponent = () => {
       })
         .then(response => {
           response.json().then(json => {
-            dispatch(userSubscriptions(json.data));
+            dispatch(setUserSubscriptions(json.data));
             dispatch(renderModal('SubscriptionWidget'));
           });
         })
