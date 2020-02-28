@@ -14,7 +14,6 @@ import Point from 'esri/geometry/Point';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
-import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import { once } from 'esri/core/watchUtils';
 
 import { RefObject } from 'react';
@@ -43,8 +42,6 @@ import { LayerFactoryObject } from 'js/interfaces/mapping';
 import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 
 import { SpecificDMSSection } from 'js/interfaces/coordinateForm';
-
-import spatialDataParser from 'src/js/helpers/SpatialDataParser';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -452,35 +449,6 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
-  registerGeom(feature: any): Promise<any> {
-    const geographic = webMercatorUtils.webMercatorToGeographic(
-      feature.geometry
-    );
-    const geojson = spatialDataParser.arcgisToGeoJSON(geographic);
-    const geoStore = {
-      geojson: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: geojson
-          }
-        ]
-      }
-    };
-    const content = JSON.stringify(geoStore);
-
-    return fetch('https://production-api.globalforestwatch.org/v1/geostore', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: content
-    });
-  }
-
   selectAllLayers(): void {
     console.log('select all layers');
     const layersToEnable: string[] = [];
@@ -566,14 +534,14 @@ export class MapController {
         event.graphic.symbol.color = [0, 0, 0, 0];
         this._mapview.graphics.add(event.graphic);
 
-        const drawnFeatures: LayerFeatureResult[] = [];
-        drawnFeatures.push({
+        //Replace all active features with our drawn feature, assigning custom layerID and Title
+        const drawnFeatures: LayerFeatureResult = {
           layerID: 'user_features',
           layerTitle: 'User Features',
           features: [event.graphic]
-        });
-        store.dispatch(setActiveFeatures(drawnFeatures));
+        };
 
+        store.dispatch(setActiveFeatures([drawnFeatures]));
         store.dispatch(selectActiveTab('analysis'));
         store.dispatch(toggleTabviewPanel(true));
       }

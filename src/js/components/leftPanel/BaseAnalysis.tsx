@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { mapController } from 'js/controllers/mapController';
 import { setActiveFeatures } from 'js/store/mapview/actions';
-
+import { registerGeometry } from 'js/helpers/geometryRegistration';
 const AnalysisSpinner = (): React.ReactElement => <h4>Geom Registering...</h4>;
 
 const BaseAnalysis = (props: any): JSX.Element => {
@@ -74,8 +73,7 @@ const BaseAnalysis = (props: any): JSX.Element => {
       return <AnalysisOptions />;
     }
 
-    mapController
-      .registerGeom(activeFeature)
+    registerGeometry(activeFeature)
       .then(response => response.json())
       .then(res => {
         activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?

@@ -40,7 +40,7 @@ interface Attributes {
   geostoreId: string;
 }
 
-interface FeatureResult {
+export interface FeatureResult {
   attributes: Attributes;
   geometry: __esri.Geometry;
 }
