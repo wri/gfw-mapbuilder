@@ -24,3 +24,25 @@ button {
 .esri-popup {
   display: none !important;
 }
+
+.orange-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15rem;
+  height: 2rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  text-transform: uppercase;
+  background-color: $base-yellow;
+  color: $white;
+  margin: 0 auto;
+  margin-top: 1rem;
+  font-family: $fira-sans;
+
+  svg {
+    margin-right: 0.5rem;
+  }
+}

@@ -10,6 +10,7 @@ import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 import resources from '../../../configs/resources';
 import { overwriteSettings } from 'js/store/appSettings/actions';
+import { setLoggedIn } from 'js/store/appState/actions';
 import { AppSettings } from 'js/store/appSettings/types';
 
 //TODO: SPinners should be SVGs in images/ folder that get imported
@@ -22,31 +23,43 @@ const MapSpinner = (): React.ReactElement => (
 // const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
 const App = (props: AppSettings | any): JSX.Element => {
-  //INIT with global spinner set to true
-  const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
-  const dispatch = useDispatch();
-
-  //Mock resources parsing and merging async step here
-  useEffect(() => {
-    setTimeout(() => {
-      //IF APPID > ASYNC Get Resources
-      //
-      //Determine which resources we are reading from
-      //Read our local resources.js file And any external library resources (which are prioritized)
-      dispatch(overwriteSettings({ ...resources, ...props }));
-      //Send that to our redux appSettings overwriting whatever is there
-      setShowGlobalSpinner(false);
-    }, 500);
-  }, [dispatch]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
-
   //Listen to map loading state that comes from mapController via redux store change
   const isMapReady = useSelector(
     (store: RootState) => store.mapviewState.isMapReady
   );
-  // const loadError = useSelector(
-  //   (store: RootState) => store.mapviewState.loadError
-  // );
-  const modalType = useSelector((state: any) => state.appState.renderModal);
+  //INIT with global spinner set to true
+  const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    //TODO: Need to deal with the scenario of APPID!
+    //Determine which resources we are reading from
+    //Read our local resources.js file And any external library resources (which are prioritized)
+    dispatch(overwriteSettings({ ...resources, ...props }));
+    //Send that to our redux appSettings overwriting whatever is there
+    setShowGlobalSpinner(false);
+  }, [dispatch]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
+
+  const modalType = useSelector(
+    (store: RootState) => store.appState.renderModal
+  );
+
+  useEffect(() => {
+    fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
+      credentials: 'include'
+    })
+      .then(response => {
+        const hasError = response.status !== 200;
+        response.json().then(() => {
+          if (hasError) {
+            console.error('Login Failed, User is currently not logged in');
+            return;
+          }
+          dispatch(setLoggedIn(true));
+        });
+      })
+      .catch(e => console.error(e));
+  }, [dispatch]);
 
   return (
     <>
@@ -57,7 +70,7 @@ const App = (props: AppSettings | any): JSX.Element => {
           <Header />
           <MapContent />
           {!isMapReady && <MapSpinner />}
-          {modalType.length ? <ModalCard /> : null}
+          {modalType !== '' && <ModalCard />}
         </>
       )}
     </>

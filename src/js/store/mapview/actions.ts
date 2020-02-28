@@ -1,9 +1,11 @@
 import {
   MAP_ERROR,
   MAP_READY,
+  USER_SUBSCRIPTIONS,
   ALL_AVAILABLE_LAYERS,
   SET_ACTIVE_FEATURES,
   SET_ACTIVE_FEATURE_INDEX,
+  SET_ACTIVE_BASEMAP,
   MapviewState
 } from './types';
 
@@ -17,6 +19,13 @@ export function isMapReady(payload: MapviewState['isMapReady']) {
 export function mapError(payload: MapviewState['loadError']) {
   return {
     type: MAP_ERROR as typeof MAP_ERROR,
+    payload
+  };
+}
+
+export function userSubscriptions(payload: MapviewState['userSubscriptions']) {
+  return {
+    type: USER_SUBSCRIPTIONS as typeof USER_SUBSCRIPTIONS,
     payload
   };
 }
@@ -43,5 +52,12 @@ export function setActiveFeatureIndex(
   return {
     type: SET_ACTIVE_FEATURE_INDEX as typeof SET_ACTIVE_FEATURE_INDEX,
     payload
+  };
+}
+
+export function setSelectedBasemap(basemapID: MapviewState['activeBasemap']) {
+  return {
+    type: SET_ACTIVE_BASEMAP as typeof SET_ACTIVE_BASEMAP,
+    payload: basemapID
   };
 }

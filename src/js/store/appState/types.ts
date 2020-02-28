@@ -34,6 +34,7 @@ export interface AppState {
   selectedLanguage: string;
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
+  isLoggedIn: boolean;
 }
 
 //Action names available
@@ -42,6 +43,7 @@ export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
+export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
 export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
@@ -64,6 +66,11 @@ interface SetHideWidget {
 interface RenderModalAction {
   type: typeof RENDER_MODAL;
   payload: AppState['renderModal'];
+}
+
+interface SetLoggedIn {
+  type: typeof SET_LOGGED_IN;
+  payload: AppState['isLoggedIn'];
 }
 
 interface SelectActiveTab {
@@ -92,6 +99,7 @@ export type AppStateTypes =
   | SelectActiveTab
   | SetLanguageAction
   | SetOpenLayerGroup
+  | SetLoggedIn
   | SetMeasureResults
   | SetActiveMeasureButton
   | SetHideWidget;
