@@ -23,7 +23,9 @@ export function mapError(payload: MapviewState['loadError']) {
   };
 }
 
-export function userSubscriptions(payload: MapviewState['userSubscriptions']) {
+export function setUserSubscriptions(
+  payload: MapviewState['userSubscriptions']
+) {
   return {
     type: USER_SUBSCRIPTIONS as typeof USER_SUBSCRIPTIONS,
     payload

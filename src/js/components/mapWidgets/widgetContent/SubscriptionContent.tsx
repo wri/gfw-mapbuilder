@@ -6,6 +6,7 @@ import { mapController } from 'js/controllers/mapController';
 import { renderModal } from 'js/store/appState/actions';
 
 import { geojsonToArcGIS } from 'js/utils/geojson.config';
+import { setUserSubscriptions } from 'js/store/mapview/actions';
 
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
 import { ReactComponent as WorldShape } from 'images/worldShape.svg';
@@ -37,6 +38,7 @@ interface SubscriptionAttributes {
       region: string;
     };
   };
+  confirmed: boolean;
   // datasets: Array<string>;
   // resource: {type: "EMAIL", content: "lc07@uw.edu"}
   // datasets: (2) ["umd-loss-gain", "glad-alerts"]
@@ -47,6 +49,11 @@ interface Subscription {
   type: string;
   id: string;
   key: number;
+}
+
+interface SubscriptionProps {
+  subscription: Subscription;
+  userSubscriptions: Array<Subscription>;
 }
 
 const SubscriptionContent: FunctionComponent = () => {
@@ -91,10 +98,11 @@ const SubscriptionContent: FunctionComponent = () => {
     );
   };
 
-  const SubscriptionDetails = (props: any, key: number): any => {
-    const { subscription } = props;
-
-    console.log('subscription in SusbcriptionDetails', subscription);
+  const SubscriptionDetails = (
+    props: SubscriptionProps,
+    key: number
+  ): JSX.Element => {
+    const { subscription, userSubscriptions } = props;
 
     const date = new Date(subscription.attributes.createdAt);
     let dd: any = date.getDate();
@@ -153,6 +161,28 @@ const SubscriptionContent: FunctionComponent = () => {
            */
         });
     };
+    const deleteSubscription = (subscriptionID: string): void => {
+      fetch(
+        `https://production-api.globalforestwatch.org/v1/subscriptions/${subscriptionID}`,
+        {
+          method: 'DELETE',
+          credentials: 'include'
+        }
+      )
+        .then(response => {
+          if (response.status === 200) {
+            const updatedSubscriptions = userSubscriptions.filter(
+              (s: Subscription) => s.id !== subscriptionID
+            );
+
+            dispatch(setUserSubscriptions(updatedSubscriptions));
+          }
+        })
+        .catch(e => {
+          console.log('error in deleteSubscription()', e);
+          // TODO [ ] - Need UI error handling logic!
+        });
+    };
 
     return (
       <div key={key} className="source-row subscribe-row">
@@ -191,7 +221,7 @@ const SubscriptionContent: FunctionComponent = () => {
           <div className="delete-row">
             <button
               title="Delete subscription"
-              onClick={() => console.log('DeleteDelete')}
+              onClick={(): void => deleteSubscription(subscription.id)}
               className="btn-delete-subscription"
             >
               <DeleteIcon height={25} width={25} fill={'#555'} />
@@ -227,7 +257,11 @@ const SubscriptionContent: FunctionComponent = () => {
         Subscribe in the info window.
       </p>
       {userSubscriptions.map((subscription: any, i: number) => (
-        <SubscriptionDetails subscription={subscription} key={i} />
+        <SubscriptionDetails
+          subscription={subscription as Subscription}
+          userSubscriptions={userSubscriptions as Array<Subscription>}
+          key={i}
+        />
       ))}
     </div>
   );
