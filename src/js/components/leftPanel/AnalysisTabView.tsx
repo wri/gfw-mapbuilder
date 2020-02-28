@@ -16,11 +16,6 @@ import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
 
-// interface Props {
-//   key: string;
-//   label: string;
-// }
-
 interface TabProps {
   key: string;
   label: string;
