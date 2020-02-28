@@ -1,5 +1,12 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { mapController } from 'js/controllers/mapController';
+
+import { renderModal } from 'js/store/appState/actions';
+
+import { geojsonToArcGIS } from 'js/utils/geojson.config';
+
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
 import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
@@ -23,6 +30,13 @@ interface SubscriptionAttributes {
   userId: string;
   resource: object;
   datasets: string[];
+  params: {
+    geostore: any;
+    iso: {
+      country: string;
+      region: string;
+    };
+  };
   // datasets: Array<string>;
   // resource: {type: "EMAIL", content: "lc07@uw.edu"}
   // datasets: (2) ["umd-loss-gain", "glad-alerts"]
@@ -36,6 +50,7 @@ interface Subscription {
 }
 
 const SubscriptionContent: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const { userSubscriptions } = useSelector(
     (state: RootState) => state.mapviewState
   );
@@ -78,7 +93,7 @@ const SubscriptionContent: FunctionComponent = () => {
 
   const SubscriptionDetails = (props: any, key: number): any => {
     const { subscription } = props;
-
+    // dispatch
     console.log('subscription in SusbcriptionDeatils;, ', subscription);
 
     const date = new Date(subscription.attributes.createdAt);
@@ -99,6 +114,40 @@ const SubscriptionContent: FunctionComponent = () => {
     const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
     //TODO: May need to push into the config
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
+
+    const zoomToSubscription = async (
+      subscription: Subscription
+    ): Promise<void> => {
+      // TODO [ ] - Integrate spinner!
+      const geostoreID = subscription.attributes.params.geostore;
+      let results;
+
+      if (geostoreID) {
+        // * NOTE: original logic
+        results = await fetch(
+          `https://production-api.globalforestwatch.org/v1/geostore/${geostoreID}`
+        )
+          .then(response => response.json())
+          .catch(e =>
+            console.log('error in /geostore/ of zoomToSubscription()', e)
+          );
+      } else {
+        // * NOTE: New logic accounts for when geostoreID is null
+        const countryCode = subscription.attributes.params.iso.country;
+        const regionCode = subscription.attributes.params.iso.region;
+        results = await fetch(
+          `https://api.resourcewatch.org/v1/geostore/admin/${countryCode}/${regionCode}`
+        )
+          .then(response => response.json())
+          .catch(e =>
+            console.log('error in /geostore/admin/ of zoomToSubscription()', e)
+          );
+      }
+
+      const esriJson = geojsonToArcGIS(results.data.attributes.geojson);
+      mapController.processGeojson(esriJson);
+      dispatch(renderModal(''));
+    };
 
     return (
       <div key={key} className="source-row subscribe-row">
@@ -126,7 +175,11 @@ const SubscriptionContent: FunctionComponent = () => {
             </p>
           </div>
           <div onClick={() => console.log('shoow')} className="map-row">
-            <button title="Show on map" className="btn-delete-subscription">
+            <button
+              title="Show on map"
+              className="btn-delete-subscription"
+              onClick={(): Promise<void> => zoomToSubscription(subscription)}
+            >
               <WorldShape height={25} width={25} fill={'#555'} />
             </button>
           </div>
