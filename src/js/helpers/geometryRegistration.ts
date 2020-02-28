@@ -1,11 +1,11 @@
 import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import spatialDataParser from 'src/js/helpers/SpatialDataParser';
+import { arcgisToGeoJSON } from 'src/js/utils/geojson.config';
 import { FeatureResult } from 'js/store/mapview/types';
 
 //TODO: Will need to type this better
 export function registerGeometry(feature: FeatureResult): Promise<any> {
   const geographic = webMercatorUtils.webMercatorToGeographic(feature.geometry);
-  const geojson = spatialDataParser.arcgisToGeoJSON(geographic);
+  const geojson = arcgisToGeoJSON(geographic);
   const geoStore = {
     geojson: {
       type: 'FeatureCollection',
