@@ -134,6 +134,7 @@ export class MapController {
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
+            store.dispatch(selectActiveTab('data'));
             addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
           });
 
