@@ -1,5 +1,5 @@
 import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import { arcgisToGeoJSON } from 'src/js/utils/geojson.config';
+import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
 import { FeatureResult } from 'js/store/mapview/types';
 
 //TODO: Will need to type this better

@@ -1,7 +1,7 @@
 import React, { DragEvent } from 'react';
 import { useSelector } from 'react-redux';
 
-import { geojsonToArcGIS } from 'js/utils/geojson.config';
+import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { mapController } from 'js/controllers/mapController';
 
 import 'css/uploadFile.scss';

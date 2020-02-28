@@ -6,7 +6,10 @@ import DDSection from './coordinatesDDSection';
 
 import { mapController } from 'js/controllers/mapController';
 
-import { convertXYToPoint, convertDMSToXY } from 'js/utils/helper.config';
+import {
+  convertXYToPoint,
+  convertDMSToXY
+} from 'js/helpers/coordinatesConversion';
 
 import { RootState } from 'js/store/index';
 
