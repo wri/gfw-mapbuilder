@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { Geometry } from 'esri/geometry';
 
 interface SpatialReference {
@@ -191,3 +192,209 @@ export const geojsonToArcGIS = (
 
   return result;
 };
+
+// ported from terraformer.js https://github.com/Esri/Terraformer/blob/master/terraformer.js#L504-L519
+function vertexIntersectsVertex(a1: any, a2: any, b1: any, b2: any): boolean {
+  const uaT =
+    (b2[0] - b1[0]) * (a1[1] - b1[1]) - (b2[1] - b1[1]) * (a1[0] - b1[0]);
+  const ubT =
+    (a2[0] - a1[0]) * (a1[1] - b1[1]) - (a2[1] - a1[1]) * (a1[0] - b1[0]);
+  const uB =
+    (b2[1] - b1[1]) * (a2[0] - a1[0]) - (b2[0] - b1[0]) * (a2[1] - a1[1]);
+
+  if (uB !== 0) {
+    const ua = uaT / uB;
+    const ub = ubT / uB;
+
+    if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// ported from terraformer.js https://github.com/Esri/Terraformer/blob/master/terraformer.js#L521-L531
+function arrayIntersectsArray(a: any, b: any): boolean {
+  for (let i = 0; i < a.length - 1; i++) {
+    for (let j = 0; j < b.length - 1; j++) {
+      if (vertexIntersectsVertex(a[i], a[i + 1], b[j], b[j + 1])) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// ported from terraformer.js https://github.com/Esri/Terraformer/blob/master/terraformer.js#L470-L480
+function coordinatesContainPoint(coordinates: any, point: any): boolean {
+  let contains = false;
+  for (let i = -1, l = coordinates.length, j = l - 1; ++i < l; j = i) {
+    if (
+      ((coordinates[i][1] <= point[1] && point[1] < coordinates[j][1]) ||
+        (coordinates[j][1] <= point[1] && point[1] < coordinates[i][1])) &&
+      point[0] <
+        ((coordinates[j][0] - coordinates[i][0]) *
+          (point[1] - coordinates[i][1])) /
+          (coordinates[j][1] - coordinates[i][1]) +
+          coordinates[i][0]
+    ) {
+      contains = !contains;
+    }
+  }
+  return contains;
+}
+
+// ported from terraformer-arcgis-parser.js https://github.com/Esri/terraformer-arcgis-parser/blob/master/terraformer-arcgis-parser.js#L106-L113
+function coordinatesContainCoordinates(outer: any, inner: any): boolean {
+  const intersects = arrayIntersectsArray(outer, inner);
+  const contains = coordinatesContainPoint(outer, inner[0]);
+  if (!intersects && contains) {
+    return true;
+  }
+  return false;
+}
+
+// do any polygons in this array contain any other polygons in this array?
+// used for checking for holes in arcgis rings
+// ported from terraformer-arcgis-parser.js https://github.com/Esri/terraformer-arcgis-parser/blob/master/terraformer-arcgis-parser.js#L117-L172
+function convertRingsToGeoJSON(rings: any) {
+  const outerRings = [];
+  const holes = [];
+  let x; // iterator
+  let outerRing; // current outer ring being evaluated
+  let hole: any; // current hole being evaluated
+
+  // for each ring
+  for (let r = 0; r < rings.length; r++) {
+    const ring = closeRing(rings[r].slice(0));
+    if (ring.length < 4) {
+      continue;
+    }
+    // is this ring an outer ring? is it clockwise?
+    if (ringIsClockwise(ring)) {
+      const polygon = [ring];
+      outerRings.push(polygon); // push to outer rings
+    } else {
+      holes.push(ring); // counterclockwise push to holes
+    }
+  }
+
+  const uncontainedHoles = [];
+
+  // while there are holes left...
+  while (holes.length) {
+    // pop a hole off out stack
+    hole = holes.pop();
+
+    // loop over all outer rings and see if they contain our hole.
+    let contained = false;
+    for (x = outerRings.length - 1; x >= 0; x--) {
+      outerRing = outerRings[x][0];
+      if (coordinatesContainCoordinates(outerRing, hole)) {
+        // the hole is contained push it into our polygon
+        outerRings[x].push(hole);
+        contained = true;
+        break;
+      }
+    }
+
+    // ring is not contained in any outer ring
+    // sometimes this happens https://github.com/Esri/esri-leaflet/issues/320
+    if (!contained) {
+      uncontainedHoles.push(hole);
+    }
+  }
+
+  // if we couldn't match any holes using contains we can try intersects...
+  while (uncontainedHoles.length) {
+    // pop a hole off out stack
+    hole = uncontainedHoles.pop();
+
+    // loop over all outer rings and see if any intersect our hole.
+    let intersects = false;
+
+    for (x = outerRings.length - 1; x >= 0; x--) {
+      outerRing = outerRings[x][0];
+      if (arrayIntersectsArray(outerRing, hole)) {
+        // the hole is contained push it into our polygon
+        outerRings[x].push(hole);
+        intersects = true;
+        break;
+      }
+    }
+
+    if (!intersects) {
+      outerRings.push([hole.reverse()]);
+    }
+  }
+
+  if (outerRings.length === 1) {
+    return {
+      type: 'Polygon',
+      coordinates: outerRings[0]
+    };
+  } else {
+    return {
+      type: 'MultiPolygon',
+      coordinates: outerRings
+    };
+  }
+}
+
+// shallow object clone for feature properties and attributes
+// from http://jsperf.com/cloning-an-object/2
+function shallowClone(obj: any) {
+  const target = {};
+  for (const i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      target[i] = obj[i];
+    }
+  }
+  return target;
+}
+
+export function arcgisToGeoJSON(arcgis: any, idAttribute?: any) {
+  let geojson = {} as any;
+
+  if (typeof arcgis.x === 'number' && typeof arcgis.y === 'number') {
+    geojson.type = 'Point';
+    geojson.coordinates = [arcgis.x, arcgis.y];
+  }
+
+  if (arcgis.points) {
+    geojson.type = 'MultiPoint';
+    geojson.coordinates = arcgis.points.slice(0);
+  }
+
+  if (arcgis.paths) {
+    if (arcgis.paths.length === 1) {
+      geojson.type = 'LineString';
+      geojson.coordinates = arcgis.paths[0].slice(0);
+    } else {
+      geojson.type = 'MultiLineString';
+      geojson.coordinates = arcgis.paths.slice(0);
+    }
+  }
+
+  if (arcgis.rings) {
+    geojson = convertRingsToGeoJSON(arcgis.rings.slice(0));
+  }
+
+  if (arcgis.geometry || arcgis.attributes) {
+    geojson.type = 'Feature';
+    geojson.geometry = arcgis.geometry
+      ? arcgisToGeoJSON(arcgis.geometry)
+      : null;
+    geojson.properties = arcgis.attributes
+      ? shallowClone(arcgis.attributes)
+      : null;
+    if (arcgis.attributes) {
+      geojson.id =
+        arcgis.attributes[idAttribute] ||
+        arcgis.attributes.OBJECTID ||
+        arcgis.attributes.FID;
+    }
+  }
+
+  return geojson;
+}
