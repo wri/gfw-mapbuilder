@@ -8,7 +8,7 @@ import { mapController } from 'js/controllers/mapController';
 import { renderModal } from 'js/store/appState/actions';
 
 import { RootState } from 'js/store';
-import BaseAnalysis from 'js/components/leftPanel/BaseAnalysis';
+import BaseAnalysis from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 
 import { analysisContent } from 'configs/leftPanel.config';
 

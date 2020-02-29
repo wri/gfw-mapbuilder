@@ -5,6 +5,7 @@ import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
+import VegaChart from './VegaChartContainer';
 
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
@@ -12,7 +13,7 @@ const AnalysisSpinner = (): React.ReactElement => (
 
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
-
+  const [vegaSpec, setVegaSpec] = useState(null);
   const { analysisModules } = useSelector(
     (store: RootState) => store.appSettings
   );
@@ -63,12 +64,15 @@ const BaseAnalysis = (): JSX.Element => {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
       fetch(
-        `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?${activeFeature.attributes.geostoreId}`
+        `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?geostore=${activeFeature.attributes.geostoreId}`
       )
         .then((response: any) => response.json())
         .then((analysisMod: any) => {
+          console.log(activeFeature.attributes.geostoreId);
           console.log('analysisMod', analysisMod);
-          //TODO: This is where we stopped!
+          console.log(analysisMod.data.widgetConfig);
+          //TODO: we need to handle loading and error states
+          setVegaSpec(analysisMod.data.attributes.widgetConfig);
         });
     }
   }
@@ -93,6 +97,7 @@ const BaseAnalysis = (): JSX.Element => {
       {geostoreReady ? (
         <div>
           <AnalysisOptions />
+          {vegaSpec && <VegaChart spec={vegaSpec} />}
           <button onClick={runAnalysis}>RUN ANALYSIS</button>
         </div>
       ) : (

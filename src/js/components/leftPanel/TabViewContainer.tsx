@@ -2,7 +2,7 @@ import * as React from 'react';
 import InfoTabView from './InfoTabView';
 import LayerTabView from './layersPanel/LayersTabView';
 import DataTabView from './dataPanel/DataTabView';
-import AnalysisTabView from './AnalysisTabView';
+import AnalysisTabView from './analysisPanel/AnalysisTabView';
 import DocumentsTabView from './DocumentsTabView';
 
 interface TabViewRender {
