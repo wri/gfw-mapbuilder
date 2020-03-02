@@ -1,13 +1,17 @@
 import React, { DragEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'js/store';
 
 import {
   renderModal,
   toggleTabviewPanel,
   selectActiveTab
 } from 'js/store/appState/actions';
+import { LayerFeatureResult } from 'js/store/mapview/types';
+import { setActiveFeatures } from 'js/store/mapview/actions';
 
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
+import { registerGeometry } from 'js/helpers/geometryRegistration';
 import { mapController } from 'js/controllers/mapController';
 
 import 'css/uploadFile.scss';
@@ -16,6 +20,9 @@ const UploadFile = (): JSX.Element => {
   const dispatch = useDispatch();
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
+  );
+  const { activeFeatures } = useSelector(
+    (store: RootState) => store.mapviewState
   );
   const [wrongFileType, setWrongFileType] = useState(false);
 
@@ -89,10 +96,37 @@ const UploadFile = (): JSX.Element => {
         body: formData
       })
         .then(response => response.json())
-        .catch(e => console.log('error in onDropFile()', e));
+        .catch(e => console.log('fetching error in onDropFile()', e));
 
-      const results = geojsonToArcGIS(featureCollection.data.attributes);
-      mapController.processGeojson(results);
+      const arcGISResults = geojsonToArcGIS(featureCollection.data.attributes);
+
+      registerGeometry(arcGISResults[0])
+        .then(response => (response.status === 200 ? response.json() : null))
+        .then(results => {
+          if (results) {
+            const oldActiveFeatures = [...activeFeatures];
+            const allGraphics = mapController.generateGraphics(arcGISResults);
+
+            const shapeFileFeatures: LayerFeatureResult = {
+              layerID: 'upload_file_features',
+              layerTitle: 'Upload File Features',
+              sublayerID: null,
+              sublayerTitle: null,
+              features: allGraphics,
+              geoStoreID: results.data.id
+            };
+            oldActiveFeatures.push(shapeFileFeatures);
+            dispatch(setActiveFeatures(oldActiveFeatures));
+          } else {
+            // TODO [ ] - error handling logic
+          }
+        })
+        .catch(e =>
+          console.log('error in registerGeometry() in onDropFile()', e)
+        );
+
+      mapController.processGeojson(arcGISResults);
+
       dispatch(toggleTabviewPanel(true));
       dispatch(selectActiveTab('analysis'));
       dispatch(renderModal(''));

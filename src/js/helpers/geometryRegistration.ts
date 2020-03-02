@@ -4,7 +4,14 @@ import { FeatureResult } from 'js/store/mapview/types';
 
 //TODO: Will need to type this better
 export function registerGeometry(feature: FeatureResult): Promise<any> {
-  const geographic = webMercatorUtils.webMercatorToGeographic(feature.geometry);
+  let geographic;
+
+  if (feature.geometry.spatialReference.wkid === 4326) {
+    geographic = feature.geometry;
+  } else {
+    geographic = webMercatorUtils.webMercatorToGeographic(feature.geometry);
+  }
+
   const geojson = arcgisToGeoJSON(geographic);
   const geoStore = {
     geojson: {

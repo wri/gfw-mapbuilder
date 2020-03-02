@@ -922,6 +922,16 @@ export class MapController {
     }
   }
 
+  generateGraphics(arcGISResults: any): any {
+    return arcGISResults.map((feature: any) => {
+      return new Graphic({
+        geometry: new Polygon(feature.geometry),
+        symbol: getCustomSymbol(),
+        attributes: feature.attributes
+      });
+    });
+  }
+
   processGeojson(esriJson: any): any {
     const graphics: Array<Graphic> = [];
     esriJson.forEach((feature: any) => {
