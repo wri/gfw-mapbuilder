@@ -89,7 +89,7 @@ const SubscriptionContent: FunctionComponent = () => {
     const { subscription, datasetLabel, dataset } = props;
     console.log('datasetNamedatasetName', props.datasetLabel);
 
-    const colorTheme = '#929292';
+    // const colorTheme = '#929292';
     // const { customColorTheme } = this.context.settings;
     // if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
     //     colorTheme = customColorTheme;
@@ -109,12 +109,10 @@ const SubscriptionContent: FunctionComponent = () => {
       const datasetOn = subscription.attributes.datasets.includes(dataset);
 
       if (datasetOn) {
-        console.log('TURNING OFF');
         jsonData.datasets = subscription.attributes.datasets.filter(
           datasetID => datasetID !== dataset
         );
       } else {
-        console.log('TURNING ON');
         subscription.attributes.datasets.push(dataset);
         jsonData.datasets = subscription.attributes.datasets;
       }
@@ -133,24 +131,16 @@ const SubscriptionContent: FunctionComponent = () => {
         .then(response => (response.status === 200 ? response.json() : null))
         .then(results => {
           if (results) {
-            const original = userSubscriptions.find(
-              sub => sub.id === results.data.id
-            ) as Subscription;
-            const originalIndex = userSubscriptions.indexOf(original);
-            userSubscriptions[originalIndex] = { ...results.data };
+            const index = userSubscriptions.findIndex(
+              u => u.id === results.data.id
+            );
+            userSubscriptions[index] = { ...results.data };
             dispatch(setUserSubscriptions(userSubscriptions));
-            // TODO [X] - update the Redux store
-            // TODO [ ] - confirm that all objects in userSubscriptions are unique
-            // ? How do we dynamically check if userSubscriptions are unique?
-            // ? new Set() ?
-            // ? is there a better way of updating userSubscriptions
-            // TODO confirm change on myGFW
+          } else {
+            // TODO [ ] - dispatch error UI
           }
         })
-        .catch(e => {
-          console.log('error in updateDataset()', e);
-          // TODO [ ] - dispatch error UI
-        });
+        .catch(e => console.log('error in updateDataset()', e));
     };
 
     return (
@@ -158,7 +148,6 @@ const SubscriptionContent: FunctionComponent = () => {
         {datasetLabel}
         <span
           onClick={(): void => updateDataset()}
-          style={{ backgroundColor: `${colorTheme}` }}
           className={`toggle-switch-subscription pointer ${
             subscription.attributes.datasets.indexOf(props.dataset) === -1
               ? ''
