@@ -923,6 +923,7 @@ export class MapController {
   }
 
   processGeojson(esriJson: any): any {
+    this._mapview.graphics.removeAll();
     const graphics: Array<Graphic> = [];
     esriJson.forEach((feature: any) => {
       const graphic = new Graphic({
