@@ -47,13 +47,6 @@ interface SubscriptionAttributes {
   userId: string;
   resource: SubscriptionResource;
   datasets: string[];
-  params: {
-    geostore: any;
-    iso: {
-      country: string;
-      region: string;
-    };
-  };
   confirmed: boolean;
   language: string;
   params: SubscriptionParams;
