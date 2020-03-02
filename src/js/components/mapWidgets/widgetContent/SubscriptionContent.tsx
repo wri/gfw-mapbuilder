@@ -1,6 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { mapController } from 'js/controllers/mapController';
+
+import { renderModal } from 'js/store/appState/actions';
+
+import { geojsonToArcGIS } from 'js/utils/geojson.config';
 import { setUserSubscriptions } from 'js/store/mapview/actions';
 
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
@@ -26,6 +31,13 @@ interface SubscriptionAttributes {
   userId: string;
   resource: object;
   datasets: string[];
+  params: {
+    geostore: any;
+    iso: {
+      country: string;
+      region: string;
+    };
+  };
   confirmed: boolean;
   // datasets: Array<string>;
   // resource: {type: "EMAIL", content: "lc07@uw.edu"}
@@ -111,6 +123,44 @@ const SubscriptionContent: FunctionComponent = () => {
     //TODO: May need to push into the config
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
 
+    const zoomToSubscription = async (
+      subscription: Subscription
+    ): Promise<void> => {
+      // TODO [ ] - Integrate spinner!
+      const geostoreID = subscription.attributes.params.geostore;
+      const countryCode = subscription.attributes.params.iso.country;
+      const regionCode = subscription.attributes.params.iso.region;
+      const endPoint = regionCode
+        ? `${countryCode}/${regionCode}`
+        : `${countryCode}`;
+
+      const geostoreEndpoint = `https://production-api.globalforestwatch.org/v1/geostore/${geostoreID}`;
+      const countryCodeEndpoint = `https://api.resourcewatch.org/v1/geostore/admin/${endPoint}`;
+      const specificEndpoint = geostoreID
+        ? geostoreEndpoint
+        : countryCodeEndpoint;
+
+      await fetch(specificEndpoint)
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          }
+        })
+        .then(results => {
+          const esriJson = geojsonToArcGIS(results.data.attributes.geojson);
+          mapController.processGeojson(esriJson);
+          dispatch(renderModal(''));
+        })
+        .catch(e => {
+          console.log('error in /geostore/ of zoomToSubscription()', e);
+          console.error('Edge case in zoomToSubscription()!');
+          /**
+           * ! Edge cases found via https://www.globalforestwatch.org/my-gfw/subscriptions/new;
+           * ! Workflow 1. Select an area from a GFW data set / selecting an area by clicking a shape on the map
+           * ! Workflow 2. Select a country or jurisdiction / creating a subscription with no country selected
+           */
+        });
+    };
     const deleteSubscription = (subscriptionID: string): void => {
       fetch(
         `https://production-api.globalforestwatch.org/v1/subscriptions/${subscriptionID}`,
@@ -160,7 +210,11 @@ const SubscriptionContent: FunctionComponent = () => {
             </p>
           </div>
           <div onClick={() => console.log('shoow')} className="map-row">
-            <button title="Show on map" className="btn-delete-subscription">
+            <button
+              title="Show on map"
+              className="btn-delete-subscription"
+              onClick={(): Promise<void> => zoomToSubscription(subscription)}
+            >
               <WorldShape height={25} width={25} fill={'#555'} />
             </button>
           </div>
