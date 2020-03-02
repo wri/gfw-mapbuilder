@@ -36,7 +36,7 @@ import {
   setMeasureResults,
   setLanguage
 } from 'js/store/appState/actions';
-import { LayerProps } from 'js/store/mapview/types';
+import { LayerProps, LayerFeatureResult } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
@@ -44,7 +44,7 @@ import { addPopupWatchUtils } from 'js/helpers/DataPanel';
 
 import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
 
-import { getCustomSymbol } from 'js/utils/symbol.config';
+import { getCustomSymbol } from 'js/helpers/generateSymbol';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -134,6 +134,7 @@ export class MapController {
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
+            store.dispatch(selectActiveTab('data'));
             addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
           });
 
@@ -539,14 +540,26 @@ export class MapController {
 
     this._sketchVM?.on('create', (event: any) => {
       if (event.state === 'complete') {
+        event.graphic.attributes = {
+          OBJECTID: event.graphic.uid
+        };
         this._previousSketchGraphic = event.graphic;
 
         event.graphic.symbol.outline.color = [115, 252, 253];
         event.graphic.symbol.color = [0, 0, 0, 0];
         this._mapview.graphics.add(event.graphic);
 
+        //Replace all active features with our drawn feature, assigning custom layerID and Title
+        const drawnFeatures: LayerFeatureResult = {
+          layerID: 'user_features',
+          layerTitle: 'User Features',
+          sublayerID: null,
+          sublayerTitle: null,
+          features: [event.graphic]
+        };
+
+        store.dispatch(setActiveFeatures([drawnFeatures]));
         store.dispatch(selectActiveTab('analysis'));
-        store.dispatch(toggleTabviewPanel(true));
       }
     });
   }

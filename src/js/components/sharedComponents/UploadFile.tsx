@@ -7,9 +7,8 @@ import {
   selectActiveTab
 } from 'js/store/appState/actions';
 
+import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { mapController } from 'js/controllers/mapController';
-
-import { geojsonToArcGIS } from 'js/utils/geojson.config';
 
 import 'css/uploadFile.scss';
 

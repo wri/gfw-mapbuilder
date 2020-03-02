@@ -43,8 +43,13 @@ export interface LayerProps {
   url: string;
 }
 
-interface FeatureResult {
-  attributes: object;
+interface Attributes {
+  [key: string]: any;
+  geostoreId: string;
+}
+
+export interface FeatureResult {
+  attributes: Attributes;
   geometry: __esri.Geometry;
 }
 

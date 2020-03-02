@@ -5,7 +5,7 @@ import { mapController } from 'js/controllers/mapController';
 
 import { renderModal } from 'js/store/appState/actions';
 
-import { geojsonToArcGIS } from 'js/utils/geojson.config';
+import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { setUserSubscriptions } from 'js/store/mapview/actions';
 
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
