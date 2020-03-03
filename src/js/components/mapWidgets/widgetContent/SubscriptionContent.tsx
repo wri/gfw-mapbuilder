@@ -94,11 +94,12 @@ const SubscriptionContent: FunctionComponent = () => {
         .then(response => (response.status === 200 ? response.json() : null))
         .then(results => {
           if (results) {
-            const index = userSubscriptions.findIndex(
+            const copyUserSubscriptions = [...userSubscriptions];
+            const index = copyUserSubscriptions.findIndex(
               u => u.id === results.data.id
             );
-            userSubscriptions[index] = { ...results.data };
-            dispatch(setUserSubscriptions(userSubscriptions));
+            copyUserSubscriptions[index] = { ...results.data };
+            dispatch(setUserSubscriptions(copyUserSubscriptions));
           } else {
             // TODO [ ] - dispatch error UI
           }
