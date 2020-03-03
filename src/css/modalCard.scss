@@ -229,6 +229,10 @@
     float: right;
     margin-left: 10px;
     margin-top: 4px;
+
+    &.active-subscription {
+      background-color: $base-yellow;
+    }
   }
 
   .subscription-unconfirmed {
