@@ -13,6 +13,11 @@ import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
 
 import { RootState } from 'js/store/index';
+import {
+  UserSubscription,
+  SubscriptionParams,
+  SubscriptionAttributes
+} from 'js/store/mapview/types';
 
 //TODO: Investigate if this is exhaustive list or needs to be configed out somehow
 const datasetMap = [
@@ -25,52 +30,10 @@ const datasetMap = [
   { id: 'prodes-loss', label: 'PRODES deforestation data' }
 ];
 
-interface SubscriptionParams {
-  iso: {
-    country: string;
-    region: string;
-  };
-  wdpaid: any;
-  use: any;
-  useid: any;
-  geostore: string;
-}
-
-interface SubscriptionResource {
-  type: string;
-  content: string;
-}
-
-interface SubscriptionAttributes {
-  name: string;
-  createdAt: string;
-  userId: string;
-  resource: SubscriptionResource;
-  datasets: string[];
-  confirmed: boolean;
-  language: string;
-  params: SubscriptionParams;
-  // datasets: Array<string>;
-  // resource: {type: "EMAIL", content: "lc07@uw.edu"}
-  // datasets: (2) ["umd-loss-gain", "glad-alerts"]
-}
-
-interface Subscription {
-  attributes: SubscriptionAttributes;
-  type: string;
-  id: string;
-  key: number;
-}
-
-interface SubscriptionProps {
-  subscription: Subscription;
-  userSubscriptions: Array<Subscription>;
-}
-
 interface JSONData {
-  datasets: Array<string>;
+  datasets: string[];
   language: string;
-  resource: SubscriptionResource;
+  resource: SubscriptionAttributes['resource'];
   params: SubscriptionParams;
 }
 
@@ -83,7 +46,7 @@ const SubscriptionContent: FunctionComponent = () => {
   interface DatasetAlertsProps {
     dataset: string;
     datasetLabel: string;
-    subscription: Subscription;
+    subscription: UserSubscription;
   }
   const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
     const { subscription, datasetLabel, dataset } = props;
@@ -160,10 +123,12 @@ const SubscriptionContent: FunctionComponent = () => {
     );
   };
 
-  const SubscriptionDetails = (
-    props: SubscriptionProps,
-    key: number
-  ): JSX.Element => {
+  interface SubscriptionProps {
+    subscription: UserSubscription;
+    userSubscriptions: UserSubscription[];
+  }
+
+  const SubscriptionDetails = (props: SubscriptionProps): JSX.Element => {
     const { subscription, userSubscriptions } = props;
 
     const date = new Date(subscription.attributes.createdAt);
@@ -186,7 +151,7 @@ const SubscriptionContent: FunctionComponent = () => {
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
 
     const zoomToSubscription = async (
-      subscription: Subscription
+      subscription: UserSubscription
     ): Promise<void> => {
       // TODO [ ] - Integrate spinner!
       const geostoreID = subscription.attributes.params.geostore;
@@ -234,7 +199,7 @@ const SubscriptionContent: FunctionComponent = () => {
         .then(response => {
           if (response.status === 200) {
             const updatedSubscriptions = userSubscriptions.filter(
-              (s: Subscription) => s.id !== subscriptionID
+              (s: UserSubscription) => s.id !== subscriptionID
             );
 
             dispatch(setUserSubscriptions(updatedSubscriptions));
@@ -247,7 +212,7 @@ const SubscriptionContent: FunctionComponent = () => {
     };
 
     return (
-      <div key={key} className="source-row subscribe-row">
+      <div className="source-row subscribe-row">
         <div className="subscribe-button-container">
           <div className="subscription-unconfirmed">
             <div
@@ -318,10 +283,10 @@ const SubscriptionContent: FunctionComponent = () => {
         To add new subscriptions select a feature on the map and click on
         Subscribe in the info window.
       </p>
-      {userSubscriptions.map((subscription: any, i: number) => (
+      {userSubscriptions.map((subscription: UserSubscription, i: number) => (
         <SubscriptionDetails
-          subscription={subscription as Subscription}
-          userSubscriptions={userSubscriptions as Array<Subscription>}
+          subscription={subscription}
+          userSubscriptions={userSubscriptions}
           key={i}
         />
       ))}
