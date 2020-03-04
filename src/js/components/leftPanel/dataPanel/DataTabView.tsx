@@ -107,6 +107,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       const prevBtn = page === 0 ? 'disabled' : '';
       const nextBtn =
         page === props.activeLayerInfo.features.length - 1 ? 'disabled' : '';
+
+      // if we have sublayer title, show it as well
+      const layerTitle = props.activeLayerInfo.sublayerTitle
+        ? `${props.activeLayerInfo.layerTitle}: ${props.activeLayerInfo.sublayerTitle}`
+        : props.activeLayerInfo.layerTitle;
+
       return (
         <div className="layer-feature-group">
           <div className="layer-control-container">
@@ -144,7 +150,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           <div className="page-numbers">
             {page + 1} / {props.activeLayerInfo.features.length}
           </div>
-          <div className="layer-title">{props.activeLayerInfo.layerTitle}</div>
+          <div className="layer-title">{layerTitle}</div>
           <hr />
           <AttributeTable
             attributes={props.activeLayerInfo.features[page].attributes}
