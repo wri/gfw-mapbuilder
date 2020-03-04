@@ -77,9 +77,11 @@
       border: 1px solid $dropdown-border;
       color: $black;
 
+      .subscription-authentication,
       .options-modal {
         list-style: none;
 
+        .subscribe-method,
         .more-list {
           vertical-align: baseline;
           list-style-type: none;
@@ -106,6 +108,46 @@
             &:hover {
               background-color: $light-grey;
             }
+          }
+        }
+      }
+      .subscription-authentication {
+        padding: 1rem;
+
+        p {
+          font-size: 0.75rem;
+        }
+
+        .subscribe-method {
+          font-size: 1rem;
+          padding: 12px 15px;
+          max-width: none;
+          margin-right: 0 !important;
+
+          text-align: center;
+          margin-top: 20px;
+          color: #fff;
+          padding-top: 15px;
+          padding-bottom: 15px;
+          text-decoration: none;
+
+          .-facebook,
+          .-google,
+          .-twitter {
+            color: $white;
+            text-decoration: none;
+          }
+
+          &.twitter-box {
+            background: #598dca;
+          }
+
+          &.facebook-box {
+            background: #39579b;
+          }
+
+          &.google-box {
+            background: #da4735;
           }
         }
       }
