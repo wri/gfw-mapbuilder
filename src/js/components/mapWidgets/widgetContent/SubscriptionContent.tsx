@@ -13,6 +13,11 @@ import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
 
 import { RootState } from 'js/store/index';
+import {
+  UserSubscription,
+  SubscriptionParams,
+  SubscriptionAttributes
+} from 'js/store/mapview/types';
 
 //TODO: Investigate if this is exhaustive list or needs to be configed out somehow
 const datasetMap = [
@@ -25,35 +30,11 @@ const datasetMap = [
   { id: 'prodes-loss', label: 'PRODES deforestation data' }
 ];
 
-interface SubscriptionAttributes {
-  name: string;
-  createdAt: string;
-  userId: string;
-  resource: object;
+interface JSONData {
   datasets: string[];
-  params: {
-    geostore: any;
-    iso: {
-      country: string;
-      region: string;
-    };
-  };
-  confirmed: boolean;
-  // datasets: Array<string>;
-  // resource: {type: "EMAIL", content: "lc07@uw.edu"}
-  // datasets: (2) ["umd-loss-gain", "glad-alerts"]
-}
-
-interface Subscription {
-  attributes: SubscriptionAttributes;
-  type: string;
-  id: string;
-  key: number;
-}
-
-interface SubscriptionProps {
-  subscription: Subscription;
-  userSubscriptions: Array<Subscription>;
+  language: string;
+  resource: SubscriptionAttributes['resource'];
+  params: SubscriptionParams;
 }
 
 const SubscriptionContent: FunctionComponent = () => {
@@ -65,12 +46,13 @@ const SubscriptionContent: FunctionComponent = () => {
   interface DatasetAlertsProps {
     dataset: string;
     datasetLabel: string;
-    subscription: Subscription;
+    subscription: UserSubscription;
   }
   const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
+    const { subscription, datasetLabel, dataset } = props;
     console.log('datasetNamedatasetName', props.datasetLabel);
 
-    const colorTheme = '#929292';
+    // const colorTheme = '#929292';
     // const { customColorTheme } = this.context.settings;
     // if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
     //     colorTheme = customColorTheme;
@@ -80,14 +62,58 @@ const SubscriptionContent: FunctionComponent = () => {
     //     colorTheme = '#929292';
     // }
 
+    const updateDataset = (): void => {
+      const jsonData: JSONData = {
+        datasets: [],
+        language: subscription.attributes.language,
+        resource: subscription.attributes.resource,
+        params: subscription.attributes.params
+      };
+      const datasetOn = subscription.attributes.datasets.includes(dataset);
+
+      if (datasetOn) {
+        jsonData.datasets = subscription.attributes.datasets.filter(
+          datasetID => datasetID !== dataset
+        );
+      } else {
+        subscription.attributes.datasets.push(dataset);
+        jsonData.datasets = subscription.attributes.datasets;
+      }
+
+      fetch(
+        `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}`,
+        {
+          method: 'PATCH',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        }
+      )
+        .then(response => (response.status === 200 ? response.json() : null))
+        .then(results => {
+          if (results) {
+            const copyUserSubscriptions = [...userSubscriptions];
+            const index = copyUserSubscriptions.findIndex(
+              u => u.id === results.data.id
+            );
+            copyUserSubscriptions[index] = { ...results.data };
+            dispatch(setUserSubscriptions(copyUserSubscriptions));
+          } else {
+            // TODO [ ] - dispatch error UI
+          }
+        })
+        .catch(e => console.log('error in updateDataset()', e));
+    };
+
     return (
       <p className="subscribe-dataset">
-        {props.datasetLabel}
+        {datasetLabel}
         <span
-          onClick={() => console.log('udpate dataset')}
-          style={{ backgroundColor: `${colorTheme}` }}
+          onClick={(): void => updateDataset()}
           className={`toggle-switch-subscription pointer ${
-            props.subscription.attributes.datasets.indexOf(props.dataset) === -1
+            subscription.attributes.datasets.indexOf(props.dataset) === -1
               ? ''
               : 'active-subscription'
           }`}
@@ -98,10 +124,12 @@ const SubscriptionContent: FunctionComponent = () => {
     );
   };
 
-  const SubscriptionDetails = (
-    props: SubscriptionProps,
-    key: number
-  ): JSX.Element => {
+  interface SubscriptionProps {
+    subscription: UserSubscription;
+    userSubscriptions: UserSubscription[];
+  }
+
+  const SubscriptionDetails = (props: SubscriptionProps): JSX.Element => {
     const { subscription, userSubscriptions } = props;
 
     const date = new Date(subscription.attributes.createdAt);
@@ -124,7 +152,7 @@ const SubscriptionContent: FunctionComponent = () => {
     const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
 
     const zoomToSubscription = async (
-      subscription: Subscription
+      subscription: UserSubscription
     ): Promise<void> => {
       // TODO [ ] - Integrate spinner!
       const geostoreID = subscription.attributes.params.geostore;
@@ -172,7 +200,7 @@ const SubscriptionContent: FunctionComponent = () => {
         .then(response => {
           if (response.status === 200) {
             const updatedSubscriptions = userSubscriptions.filter(
-              (s: Subscription) => s.id !== subscriptionID
+              (s: UserSubscription) => s.id !== subscriptionID
             );
 
             dispatch(setUserSubscriptions(updatedSubscriptions));
@@ -185,7 +213,7 @@ const SubscriptionContent: FunctionComponent = () => {
     };
 
     return (
-      <div key={key} className="source-row subscribe-row">
+      <div className="source-row subscribe-row">
         <div className="subscribe-button-container">
           <div className="subscription-unconfirmed">
             <div
@@ -256,10 +284,10 @@ const SubscriptionContent: FunctionComponent = () => {
         To add new subscriptions select a feature on the map and click on
         Subscribe in the info window.
       </p>
-      {userSubscriptions.map((subscription: any, i: number) => (
+      {userSubscriptions.map((subscription: UserSubscription, i: number) => (
         <SubscriptionDetails
-          subscription={subscription as Subscription}
-          userSubscriptions={userSubscriptions as Array<Subscription>}
+          subscription={subscription}
+          userSubscriptions={userSubscriptions}
           key={i}
         />
       ))}

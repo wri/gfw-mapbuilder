@@ -37,21 +37,13 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const shareFacebook = (): void => {
-    const appID = 10000000000;
-    // TODO the appID needs to be generated/registered
-    // TODO through FB's developer site
+    // https://www.facebook.com/sharer.php?u=http://bit.ly/2I6y3Te
 
     window.open(
-      `https://www.facebook.com/dialog/feed?
-      app_id=${appID}
-      &link=${window.location.href}
-      &redirect_uri=${window.location.href}`,
+      `https://www.facebook.com/sharer.php?u=${window.location.href}`,
       'Facebook',
       popupDimensions
     );
-    // * NOTE; FB share button will open with error
-    // * 'Parameter 'href' should represent a valid URL'
-    // * because it doesn't support localhost URLs
   };
 
   const returnURL = (): string => {
