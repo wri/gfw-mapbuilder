@@ -8,9 +8,15 @@ interface LayerSelectorProps {
 }
 const LayerSelector = (props: LayerSelectorProps): JSX.Element => {
   const options = props.activeFeatures.map(f => {
+    // const subtitle = f.sublayerTitle ? f.sublayerTitle : '';
+    // if we have sublayer title, show it as well
+    const layerTitle = f.sublayerTitle
+      ? `${f.layerTitle}: ${f.sublayerTitle}`
+      : f.layerTitle;
+
     return (
       <option value={f.layerID} key={f.layerID}>
-        {`${f.layerTitle} (${f.features.length})`}
+        {layerTitle}
       </option>
     );
   });
