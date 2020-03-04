@@ -40,6 +40,7 @@ function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
     url: url
   });
   const query = new Query(queryParams);
+  console.log(query);
   const result = qt.execute(query);
   return result;
 }
@@ -51,11 +52,17 @@ async function processLayers(
 ): Promise<any> {
   const processedLayersResult: LayerFeatureResult[] = [];
   const layersArray = layersCollection.toArray();
+  console.log(geometry);
+  // const queryParams = {
+  //   where: '1=1',
+  //   outFields: ['*'],
+  //   units: 'miles',
+  //   distance: 0.02 * mapview.resolution,
+  //   geometry: geometry,
+  //   returnGeometry: true
+  // };
   const queryParams = {
-    where: '1=1',
-    outFields: ['*'],
-    units: 'miles',
-    distance: 0.02 * mapview.resolution,
+    geometryType: 'point',
     geometry: geometry,
     returnGeometry: true
   };
@@ -70,6 +77,7 @@ async function processLayers(
           if (sublayerResult.features.length !== 0) {
             const features = sublayerResult.features.map(f => {
               return {
+                objectid: f.getObjectId(),
                 attributes: f.attributes,
                 geometry: f.geometry
               };
@@ -89,11 +97,14 @@ async function processLayers(
       }
     } else {
       // no subs found on layer, query layer itself!
+      console.log('no subs found');
       try {
         const layerResult = await esriQuery(url, queryParams);
+        console.log(layerResult);
         if (layerResult.features.length !== 0) {
           const features = layerResult.features.map(f => {
             return {
+              objectid: f.getObjectId(),
               attributes: f.attributes,
               geometry: f.geometry //this is either null or geometry depending on our query!
             };
@@ -123,9 +134,9 @@ async function fetchAsyncServerResults(
 ): Promise<any> {
   if (map) {
     const processedLayerInfo = layerFeatureResults.map(f => f.layerID);
-    const visibleServerLayers = map.layers
-      .filter(l => l.visible && l.type !== 'graphics')
-      .filter(l => !processedLayerInfo.includes(l.id));
+    const visibleServerLayers = map.layers.filter(
+      l => l.visible && l.type !== 'graphics'
+    );
     const processedLayers = await processLayers(
       mapview,
       mapPoint,
@@ -136,54 +147,72 @@ async function fetchAsyncServerResults(
 }
 
 //Client Side Feature Fetching
-export function addPopupWatchUtils(
+export function queryLayersForFeatures(
   mapview: MapView,
   map: Map | undefined,
-  mapPoint: Point
+  event: __esri.MapViewClickEvent
 ): void {
-  //Watching for promises array on Popup, that gets resolved once user clicks on the map and features are returned. Note: this will not return any server side features.
+  mapview.hitTest(event).then(hitResults => {
+    console.log(hitResults);
+    const layerFeatureResults: LayerFeatureResult[] = [];
+    map?.layers.forEach((l: any) => {
+      const qParams = {
+        where: '1=1',
+        outFields: ['*'],
+        units: 'miles',
+        distance: 0.02 * mapview.resolution,
+        geometry: event.mapPoint,
+        returnGeometry: true
+      };
+      l.queryFeatures(qParams).then((res: any) => console.log(res));
+    });
+    //deal with them
+  });
   once(mapview.popup, 'promises', promises => {
     function resolveClientPromisesWithErrors(promises: any): Promise<void> {
       return Promise.all<any>(
         promises.map((p: Promise<any>) => p.catch((error: Error) => null))
       ).then(async clientFeatures => {
-        let layerFeatureResults: LayerFeatureResult[] = [];
-        const cleanClientFeautures = clientFeatures
-          .filter(f => f !== null) //catch failed promises
-          .filter(f => f.length !== 0) //catch no features returned
-          .map((featureObject: Graphic[]) => {
-            //extract layerID and layerTitle from resulting feature object
-            const {
-              layerID,
-              layerTitle,
-              sublayerID,
-              sublayerTitle
-            } = extractLayerInfo(featureObject);
-            const newFeatureObject: LayerFeatureResult = {
-              layerID: layerID,
-              layerTitle: layerTitle,
-              sublayerID: sublayerID,
-              sublayerTitle: sublayerTitle,
-              features: featureObject.map(g => {
-                return {
-                  attributes: g.attributes,
-                  geometry: g.geometry
-                };
-              })
-            };
-            return newFeatureObject;
-          });
-        layerFeatureResults = layerFeatureResults.concat(cleanClientFeautures);
+        // let layerFeatureResults: LayerFeatureResult[] = [];
+        // const cleanClientFeautures = clientFeatures
+        //   .filter(f => f !== null) //catch failed promises
+        //   .filter(f => f.length !== 0) //catch no features returned
+        //   .map((featureObject: Graphic[]) => {
+        //     featureObject.forEach(g => console.log(g.getObjectId()));
+        //     // console.log(featureObject.getObjectId());
+        //     //extract layerID and layerTitle from resulting feature object
+        //     const {
+        //       layerID,
+        //       layerTitle,
+        //       sublayerID,
+        //       sublayerTitle
+        //     } = extractLayerInfo(featureObject);
+        //     const newFeatureObject: LayerFeatureResult = {
+        //       layerID: layerID,
+        //       layerTitle: layerTitle,
+        //       sublayerID: sublayerID,
+        //       sublayerTitle: sublayerTitle,
+        //       features: featureObject.map(g => {
+        //         return {
+        //           objectid: g.getObjectId(),
+        //           attributes: g.attributes,
+        //           geometry: g.geometry
+        //         };
+        //       })
+        //     };
+        //     return newFeatureObject;
+        //   });
+        // layerFeatureResults = layerFeatureResults.concat(cleanClientFeautures);
 
         //deal with server side separately
-        const serverResponse = await fetchAsyncServerResults(
-          map,
-          mapview,
-          mapPoint,
-          layerFeatureResults
-        );
-        layerFeatureResults = layerFeatureResults.concat(serverResponse);
-        store.dispatch(setActiveFeatures(layerFeatureResults));
+        // const serverResponse = await fetchAsyncServerResults(
+        //   map,
+        //   mapview,
+        //   event.mapPoint,
+        //   layerFeatureResults
+        // );
+        // layerFeatureResults = layerFeatureResults.concat(serverResponse);
+        // store.dispatch(setActiveFeatures(layerFeatureResults));
         const { appState } = store.getState();
         if (appState.leftPanel.activeTab !== 'data') {
           store.dispatch(selectActiveTab('data'));

@@ -40,7 +40,7 @@ import { LayerProps, LayerFeatureResult } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
-import { addPopupWatchUtils } from 'js/helpers/DataPanel';
+import { queryLayersForFeatures } from 'js/helpers/DataPanel';
 
 import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
 
@@ -137,7 +137,7 @@ export class MapController {
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
             store.dispatch(selectActiveTab('data'));
-            addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
+            queryLayersForFeatures(this._mapview, this._map, event);
           });
 
           const mapLayerObjects: LayerProps[] = [];
