@@ -101,9 +101,9 @@ const UploadFile = (): JSX.Element => {
 
       const arcGISResults = geojsonToArcGIS(featureCollection.data.attributes);
 
-      await Promise.all(
-        arcGISResults.map(async (feature: FeatureResult) => {
-          const registeredGeometry = await registerGeometry(feature)
+      Promise.all(
+        arcGISResults.map(async (feature: any) => {
+          const registeredGeometry: any = registerGeometry(feature)
             .then((response: Response) =>
               response.status === 200 ? response.json() : null
             )
