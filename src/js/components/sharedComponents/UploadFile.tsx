@@ -121,7 +121,6 @@ const UploadFile = (): JSX.Element => {
       )
         .then((registeredGeometries: any) => {
           if (registeredGeometries.length) {
-            const oldActiveFeatures = [...activeFeatures];
             const graphics = mapController.generateGraphics(arcGISResults);
 
             const shapeFileFeatures: LayerFeatureResult = {
@@ -129,11 +128,12 @@ const UploadFile = (): JSX.Element => {
               layerTitle: 'Upload File Features',
               sublayerID: null,
               sublayerTitle: null,
-              features: graphics
+              features: graphics.map((g: __esri.Graphic) => {
+                return { attributes: g.attributes, geometry: g.geometry };
+              })
             };
 
-            oldActiveFeatures.push(shapeFileFeatures);
-            dispatch(setActiveFeatures(oldActiveFeatures));
+            dispatch(setActiveFeatures([shapeFileFeatures]));
           } else {
             // TODO [ ] - error handling logic if array is empty
           }
