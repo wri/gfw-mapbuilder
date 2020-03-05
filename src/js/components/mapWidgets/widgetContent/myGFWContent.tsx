@@ -46,12 +46,17 @@ const MyGFWContent: FunctionComponent = () => {
   const RenderLogins = (): JSX.Element => {
     return (
       <ul className="subscription-authentication">
+        <p>
+          Log in is required so you can return to Global Forest Watch to view,
+          manage, and delete your subscriptions. Questions?
+          <a href="mailto:gfw@wri.org">Contact us at gfw@wri.org</a>
+        </p>
         <li className="subscribe-method twitter-box">
           <a
             href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw"
             className="-twitter"
           >
-            Twitter
+            Log in with Twitter
           </a>
         </li>
 
@@ -60,7 +65,7 @@ const MyGFWContent: FunctionComponent = () => {
             href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw"
             className="-facebook"
           >
-            Facebook
+            Log in with Facebook
           </a>
         </li>
 
@@ -69,7 +74,7 @@ const MyGFWContent: FunctionComponent = () => {
             href="https://production-api.globalforestwatch.org/auth/google?applications=gfw"
             className="-google"
           >
-            Google
+            Log in with Google
           </a>
         </li>
       </ul>
