@@ -9,6 +9,8 @@
   background: $white;
   box-shadow: 0px 1px 2px rgba(85, 85, 85, 0.25);
   overflow-y: auto;
+  max-height: 34rem;
+  overflow-y: scroll;
 
   .info-content-container {
     display: flex;
@@ -73,6 +75,7 @@
 
 .tabview-container {
   height: 600px;
+  color: $dark-grey;
 }
 
 .tab-header-container {
@@ -124,10 +127,9 @@
   height: 30px;
   border-bottom: solid 1px #aaa;
   margin-bottom: 10px;
+  font-family: $fira-sans;
+  color: $light-grey;
 
-  span {
-    line-height: 30px;
-  }
   button {
     height: 100%;
     outline: 0;
@@ -135,20 +137,55 @@
     border: 0;
     text-decoration: underline;
     float: right;
+    background-color: $white;
   }
 }
 
-.layers-control-checkbox {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
+.layers-control-container {
+  color: $dark-grey;
+
+  .layers-control-checkbox {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+
+    .layer-label {
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+
+    .info-ifon-container,
+    .layer-checkbox {
+      flex-grow: 0;
+    }
+
+    .layer-label {
+      flex-grow: 1;
+    }
+  }
 }
 
 .transparency-slider {
-  margin-bottom: 15px;
-  p {
-    margin: 0;
-    padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 0 1.5rem;
+  // margin-bottom: 15px;
+  // p {
+  //   margin: 0;
+  //   padding: 0;
+  // }
+
+  input[type='range'] {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    appearance: none;
+    height: 0.15rem;
+    width: 100%; /* Specific width is required for Firefox. */
+    background: rgb(144, 144, 144);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
   }
 }
 
@@ -168,7 +205,18 @@
 }
 
 .layer-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
   padding: 10px;
+  font-family: $fira-sans;
+  font-size: 1rem;
+
+  .layer-group-title {
+    .caret-button {
+      background-color: $white;
+    }
+  }
 }
 
 .layer-group-title {
@@ -356,5 +404,17 @@
     > .drop-shapefile-container
     h4 {
     display: none;
+  }
+
+  .left-panel {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    top: 50px;
+    left: 0px;
+    z-index: 2;
+    max-height: unset;
   }
 }
