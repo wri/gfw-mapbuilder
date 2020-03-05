@@ -9,6 +9,8 @@
   background: $white;
   box-shadow: 0px 1px 2px rgba(85, 85, 85, 0.25);
   overflow-y: auto;
+  max-height: 34rem;
+  overflow-y: scroll;
 
   .info-content-container {
     display: flex;
@@ -33,8 +35,12 @@
       align-items: center;
       flex-direction: column;
 
+      figure:first-of-type {
+        margin: 2rem 1.5rem 0 1.5rem;
+      }
+
       figure {
-        margin-bottom: 0;
+        margin: 0 1.5rem 0 1.5rem;
 
         figcaption {
           h4 {
@@ -47,14 +53,33 @@
         }
       }
 
-      hr {
-        width: 75%;
+      .span-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        width: fit-content;
+        margin: 1.5rem 0;
+        color: rgb(111, 111, 111);
+
+        span {
+          border-top: 1px solid $base-yellow;
+          width: 7rem;
+          margin-top: auto;
+          margin-bottom: auto;
+
+          &.left {
+            margin-right: 0.5rem;
+          }
+
+          &.right {
+            margin-left: 0.5rem;
+          }
+        }
       }
 
       .drop-shapefile-container {
         display: flex;
         flex-direction: column;
-        padding: 1rem 0;
 
         h4 {
           line-height: 1.5rem;
@@ -73,6 +98,7 @@
 
 .tabview-container {
   height: 600px;
+  color: $dark-grey;
 }
 
 .tab-header-container {
@@ -124,10 +150,9 @@
   height: 30px;
   border-bottom: solid 1px #aaa;
   margin-bottom: 10px;
+  font-family: $fira-sans;
+  color: $light-grey;
 
-  span {
-    line-height: 30px;
-  }
   button {
     height: 100%;
     outline: 0;
@@ -135,21 +160,40 @@
     border: 0;
     text-decoration: underline;
     float: right;
+    background-color: $white;
   }
 }
 
-.layers-control-checkbox {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
+.layers-control-container {
+  color: $dark-grey;
+
+  .layers-control-checkbox {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+
+    .layer-label {
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+
+    .info-ifon-container,
+    .layer-checkbox {
+      flex-grow: 0;
+    }
+
+    .layer-label {
+      flex-grow: 1;
+    }
+  }
 }
 
 .transparency-slider {
-  margin-bottom: 15px;
-  p {
-    margin: 0;
-    padding: 0;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 0 1.5rem;
+  width: 100%;
 }
 
 .info-icon-container {
@@ -168,7 +212,18 @@
 }
 
 .layer-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
   padding: 10px;
+  font-family: $fira-sans;
+  font-size: 1rem;
+
+  .layer-group-title {
+    .caret-button {
+      background-color: $white;
+    }
+  }
 }
 
 .layer-group-title {
@@ -214,6 +269,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: $fira-sans;
+
+  figure {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+
+    figcaption {
+      margin: 0;
+      font-size: 0.87rem;
+    }
+
+    ol {
+      padding-left: 1rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  svg {
+    align-items: center;
+  }
 }
 
 .data-tabview-container {
@@ -356,5 +431,17 @@
     > .drop-shapefile-container
     h4 {
     display: none;
+  }
+
+  .left-panel {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    top: 50px;
+    left: 0px;
+    z-index: 2;
+    max-height: unset;
   }
 }
