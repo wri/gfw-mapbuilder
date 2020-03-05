@@ -8,26 +8,30 @@ interface LayerSelectorProps {
 }
 const LayerSelector = (props: LayerSelectorProps): JSX.Element => {
   const options = props.activeFeatures.map(f => {
-    // const subtitle = f.sublayerTitle ? f.sublayerTitle : '';
-    // if we have sublayer title, show it as well
+    //if we are dealing with sublayer value is sublayer id, otherwise it is layer id
+    const selectionValue = f.sublayerID ? f.sublayerID : f.layerID;
     const layerTitle = f.sublayerTitle
       ? `${f.layerTitle}: ${f.sublayerTitle}`
       : f.layerTitle;
 
     return (
-      <option value={f.layerID} key={f.layerID}>
+      <option value={selectionValue} key={`${f.layerID}-${f.sublayerID}`}>
         {layerTitle}
       </option>
     );
   });
 
+  const selectionValue = props.activeLayerInfo?.sublayerID
+    ? props.activeLayerInfo?.sublayerID
+    : props.activeLayerInfo?.layerID;
+  console.log(selectionValue);
   return (
     <div className="data-tab-layerselect">
       <label htmlFor="layer-select"></label>
       <select
         name="layer"
         id="layer-select"
-        value={props.activeLayerInfo?.layerID}
+        value={selectionValue}
         onChange={(e): void => props.handleLayerSelection(e.target.value)}
       >
         {options}

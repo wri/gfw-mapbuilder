@@ -36,6 +36,7 @@ const App = (props: AppSettings | any): JSX.Element => {
     //TODO: Need to deal with the scenario of APPID!
     //Determine which resources we are reading from
     //Read our local resources.js file And any external library resources (which are prioritized)
+    // dispatch(overwriteSettings({ ...resources, ...props }));
     dispatch(overwriteSettings({ ...cameroon, ...props }));
     //Send that to our redux appSettings overwriting whatever is there
     setShowGlobalSpinner(false);

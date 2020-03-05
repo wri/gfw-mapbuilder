@@ -26,12 +26,17 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   );
 
   const FeatureDataView = (): any => {
-    const activeLayer = activeFeatures[activeFeatureIndex[0]].layerID;
-    const activeLayerInfo = activeFeatures.find(f => f.layerID === activeLayer);
-    const activeLayerIndex = activeFeatures.findIndex(
-      f => f.layerID === activeLayer
-    );
+    const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
+    // const activeLayerInfo = activeFeatures.find(f => f.layerID === activeLayer);
 
+    function findLayer(f: any) {
+      if (f.sublayerID) {
+        return String(f.sublayerID) === String(activeLayerInfo.sublayerID);
+      } else {
+        return String(f.layerID) === String(activeLayerInfo.layerID);
+      }
+    }
+    const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo) {
       mapController.drawGraphic(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
@@ -95,11 +100,17 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         }
       }
 
-      function handleLayerSwitch(layerID: string): void {
+      function handleLayerSwitch(id: string): void {
         //Upon layer selection switch, we update the index of the activefeature's layer and zero out the feature itself
-        const newLayerIndex = activeFeatures.findIndex(
-          f => f.layerID === layerID
-        );
+        // Figure out which layer is being selected depends if we have incoming layer id or sublayer id
+        function findLayer(f: any) {
+          if (f.sublayerID) {
+            return String(f.sublayerID) === id;
+          } else {
+            return String(f.layerID) === id;
+          }
+        }
+        const newLayerIndex: number = activeFeatures.findIndex(findLayer);
         dispatch(setActiveFeatureIndex([newLayerIndex, 0]));
       }
 
