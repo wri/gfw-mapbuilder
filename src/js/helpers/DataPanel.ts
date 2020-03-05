@@ -31,13 +31,13 @@ async function fetchAsyncServerResults(
     geometry: mapPoint,
     returnGeometry: true
   };
-  if (layer.sublayers && layer.sublayers.length !== 0) {
+  if (layer.sublayers && layer.sublayers.length > 0) {
     //process each sublayer
     for (const sublayer of layer.sublayers.items) {
       const subUrl = sublayer.url;
       try {
         const sublayerResult = await esriQuery(subUrl, queryParams);
-        if (sublayerResult.features.length !== 0) {
+        if (sublayerResult.features.length > 0) {
           const features = sublayerResult.features.map(f => {
             return {
               attributes: f.attributes,
@@ -62,7 +62,7 @@ async function fetchAsyncServerResults(
     try {
       const url = layer.url;
       const layerResult = await esriQuery(url, queryParams);
-      if (layerResult.features.length !== 0) {
+      if (layerResult.features.length > 0) {
         const features = layerResult.features.map(f => {
           return {
             objectid: f.getObjectId(),
@@ -120,7 +120,7 @@ export async function queryLayersForFeatures(
         try {
           const featureResults = await layer.queryFeatures(queryParams);
           //Ignore empty results
-          if (featureResults.features.length !== 0) {
+          if (featureResults.features.length > 0) {
             const newLayerFeatureResult = {
               layerID: featureResults.features[0].layer.id,
               layerTitle: featureResults.features[0].layer.title,
