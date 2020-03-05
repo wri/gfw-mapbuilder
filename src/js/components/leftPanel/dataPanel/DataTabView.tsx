@@ -8,8 +8,9 @@ import {
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
-import { ReactComponent as CloseAttribute } from '../../../../images/closeIcon.svg';
+import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
 import { mapController } from 'js/controllers/mapController';
+import { LayerFeatureResult } from 'js/store/mapview/types';
 
 interface DataTabProps {
   key: string;
@@ -25,13 +26,15 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     (store: RootState) => store.mapviewState
   );
 
-  const FeatureDataView = (): any => {
-    const activeLayer = activeFeatures[activeFeatureIndex[0]].layerID;
-    const activeLayerInfo = activeFeatures.find(f => f.layerID === activeLayer);
-    const activeLayerIndex = activeFeatures.findIndex(
-      f => f.layerID === activeLayer
-    );
+  const FeatureDataView = (): JSX.Element => {
+    const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
 
+    //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
+    function findLayer(f: LayerFeatureResult): boolean {
+      const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
+      return String(activeLayer) === String(activeLayerInfo.sublayerID);
+    }
+    const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo) {
       mapController.drawGraphic(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
@@ -95,11 +98,13 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         }
       }
 
-      function handleLayerSwitch(layerID: string): void {
-        //Upon layer selection switch, we update the index of the activefeature's layer and zero out the feature itself
-        const newLayerIndex = activeFeatures.findIndex(
-          f => f.layerID === layerID
-        );
+      function handleLayerSwitch(id: string): void {
+        //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
+        function findLayer(f: LayerFeatureResult): boolean {
+          const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
+          return String(activeLayer) === String(id);
+        }
+        const newLayerIndex: number = activeFeatures.findIndex(findLayer);
         dispatch(setActiveFeatureIndex([newLayerIndex, 0]));
       }
 

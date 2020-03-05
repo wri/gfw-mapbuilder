@@ -17,7 +17,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     <>
       <div className="layers-control-checkbox">
         <LayerToggleSwitch layerIsVisible={layer?.visible} layerID={props.id} />
-        <span className="layer-label">{props.id}</span>
+        <span className="layer-label">{layer?.title}</span>
         <div className="info-icon-container">
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
