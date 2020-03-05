@@ -100,21 +100,38 @@ const UploadFile = (): JSX.Element => {
 
       const arcGISResults = geojsonToArcGIS(featureCollection.data.attributes);
 
-      registerGeometry(arcGISResults[0])
-        .then(response => (response.status === 200 ? response.json() : null))
-        .then(results => {
-          if (results) {
+      await Promise.all(
+        arcGISResults.map((feature: any) =>
+          registerGeometry(feature)
+            .then((response: any) =>
+              response.status === 200 ? response.json() : null
+            )
+            .catch((e: any) => {
+              // TODO [ ] - error handling logic to account for when one geometry produces an error
+              console.log(
+                'error using registerGeometry() in UploadFile.tsx',
+                e
+              );
+            })
+        )
+      )
+        .then((registeredGeometries: any) => {
+          if (registeredGeometries.length) {
+            const geostoreIDs = registeredGeometries.map(
+              (geometry: any) => geometry.data.id
+            );
             const oldActiveFeatures = [...activeFeatures];
-            const allGraphics = mapController.generateGraphics(arcGISResults);
+            const graphics = mapController.generateGraphics(arcGISResults);
 
             const shapeFileFeatures: LayerFeatureResult = {
               layerID: 'upload_file_features',
               layerTitle: 'Upload File Features',
               sublayerID: null,
               sublayerTitle: null,
-              features: allGraphics,
-              geoStoreID: results.data.id
+              features: graphics,
+              geoStoreID: geostoreIDs
             };
+
             oldActiveFeatures.push(shapeFileFeatures);
             dispatch(setActiveFeatures(oldActiveFeatures));
           } else {
@@ -130,6 +147,7 @@ const UploadFile = (): JSX.Element => {
       dispatch(toggleTabviewPanel(true));
       dispatch(selectActiveTab('analysis'));
       dispatch(renderModal(''));
+      // TODO - [ ] Turn off spinner!
     } else {
       // TODO - [ ] Turn off spinner!
       setWrongFileType(true);
