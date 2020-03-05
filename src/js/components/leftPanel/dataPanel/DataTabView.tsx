@@ -31,11 +31,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
     //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
     function findLayer(f: LayerFeatureResult): boolean {
-      if (f.sublayerID) {
-        return String(f.sublayerID) === String(activeLayerInfo.sublayerID);
-      } else {
-        return String(f.layerID) === String(activeLayerInfo.layerID);
-      }
+      const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
+      return String(activeLayer) === String(activeLayerInfo.sublayerID);
     }
     const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo) {
@@ -104,11 +101,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       function handleLayerSwitch(id: string): void {
         //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
         function findLayer(f: LayerFeatureResult): boolean {
-          if (f.sublayerID) {
-            return String(f.sublayerID) === id;
-          } else {
-            return String(f.layerID) === id;
-          }
+          const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
+          return String(activeLayer) === String(id);
         }
         const newLayerIndex: number = activeFeatures.findIndex(findLayer);
         dispatch(setActiveFeatureIndex([newLayerIndex, 0]));
