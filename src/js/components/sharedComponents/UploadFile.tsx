@@ -7,6 +7,7 @@ import {
   toggleTabviewPanel,
   selectActiveTab
 } from 'js/store/appState/actions';
+import { FeatureResult } from 'js/store/mapview/types';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 
@@ -101,25 +102,25 @@ const UploadFile = (): JSX.Element => {
       const arcGISResults = geojsonToArcGIS(featureCollection.data.attributes);
 
       await Promise.all(
-        arcGISResults.map((feature: any) =>
-          registerGeometry(feature)
-            .then((response: any) =>
+        arcGISResults.map(async (feature: FeatureResult) => {
+          const registeredGeometry = await registerGeometry(feature)
+            .then((response: Response) =>
               response.status === 200 ? response.json() : null
             )
-            .catch((e: any) => {
-              // TODO [ ] - error handling logic to account for when one geometry produces an error
+            .catch((e: Error) => {
+              // TODO [ ] - error handling logic (to account for when one geometry produces an error)
               console.log(
                 'error using registerGeometry() in UploadFile.tsx',
                 e
               );
-            })
-        )
+            });
+          feature.attributes.geostoreId = registeredGeometry.data.id;
+
+          return registeredGeometry;
+        })
       )
         .then((registeredGeometries: any) => {
           if (registeredGeometries.length) {
-            const geostoreIDs = registeredGeometries.map(
-              (geometry: any) => geometry.data.id
-            );
             const oldActiveFeatures = [...activeFeatures];
             const graphics = mapController.generateGraphics(arcGISResults);
 
@@ -128,17 +129,16 @@ const UploadFile = (): JSX.Element => {
               layerTitle: 'Upload File Features',
               sublayerID: null,
               sublayerTitle: null,
-              features: graphics,
-              geoStoreID: geostoreIDs
+              features: graphics
             };
 
             oldActiveFeatures.push(shapeFileFeatures);
             dispatch(setActiveFeatures(oldActiveFeatures));
           } else {
-            // TODO [ ] - error handling logic
+            // TODO [ ] - error handling logic if array is empty
           }
         })
-        .catch(e =>
+        .catch((e: Error) =>
           console.log('error in registerGeometry() in onDropFile()', e)
         );
 
