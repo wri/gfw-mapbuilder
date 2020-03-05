@@ -110,6 +110,7 @@ export async function queryLayersForFeatures(
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {
       // Deal with CLIENT side layers
+      //TODO: is there a better way to split client/server queries?
       if (
         layer.type === 'feature' ||
         layer.type === 'csv' ||
@@ -144,6 +145,7 @@ export async function queryLayersForFeatures(
         }
       } else {
         // Deal with SERVER side layers
+        //TODO: will this handle most or all cases we have? needs more testing
         const queryServerSideLayer = await fetchAsyncServerResults(
           mapview,
           event.mapPoint,

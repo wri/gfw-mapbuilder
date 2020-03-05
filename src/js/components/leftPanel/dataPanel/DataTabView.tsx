@@ -8,8 +8,9 @@ import {
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
-import { ReactComponent as CloseAttribute } from '../../../../images/closeIcon.svg';
+import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
 import { mapController } from 'js/controllers/mapController';
+import { LayerFeatureResult } from 'js/store/mapview/types';
 
 interface DataTabProps {
   key: string;
@@ -25,11 +26,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     (store: RootState) => store.mapviewState
   );
 
-  const FeatureDataView = (): any => {
+  const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
-    // const activeLayerInfo = activeFeatures.find(f => f.layerID === activeLayer);
 
-    function findLayer(f: any) {
+    //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
+    function findLayer(f: LayerFeatureResult): boolean {
       if (f.sublayerID) {
         return String(f.sublayerID) === String(activeLayerInfo.sublayerID);
       } else {
@@ -101,9 +102,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       }
 
       function handleLayerSwitch(id: string): void {
-        //Upon layer selection switch, we update the index of the activefeature's layer and zero out the feature itself
-        // Figure out which layer is being selected depends if we have incoming layer id or sublayer id
-        function findLayer(f: any) {
+        //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
+        function findLayer(f: LayerFeatureResult): boolean {
           if (f.sublayerID) {
             return String(f.sublayerID) === id;
           } else {
