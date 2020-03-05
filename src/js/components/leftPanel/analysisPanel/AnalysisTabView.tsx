@@ -62,7 +62,9 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </ol>
         </figure>
         <PolygonIcon width={100} height={100} />
-        <hr />
+        <div className="span-wrapper">
+          <span className="left" /> Or <span className="right" />
+        </div>
         <figure>
           <figcaption className="title">
             <h4>{analyzeYourShapeTitle}</h4>
@@ -82,7 +84,9 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           <PenIcon height={25} width={25} fill={'#555'} />
           {drawButton}
         </button>
-        <hr />
+        <div className="span-wrapper buffer">
+          <span className="left" /> Or <span className="right" />
+        </div>
         <figure>
           <figcaption className="title">
             <h4>{enterCoordinatesTitle}</h4>
@@ -102,7 +106,9 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           <PlusIcon height={25} width={25} fill={'#000'} />
           {coordinatesButton}
         </button>
-        <hr />
+        <div className="span-wrapper buffer">
+          <span className="left" /> Or <span className="right" />
+        </div>
         <div className="drop-shapefile-container">
           <h4>
             {visitTitle}
