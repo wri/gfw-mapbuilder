@@ -27,7 +27,6 @@ const LayerTransparencySlider = (
         value={layerOpacity}
         onChange={handleOpacityChange}
       />
-      {/* <label htmlFor="tslider">{layerOpacity}</label> */}
     </div>
   );
 };
