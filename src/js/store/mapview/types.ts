@@ -86,7 +86,6 @@ export interface LayerFeatureResult {
   sublayerTitle: string | null;
   sublayerID: string | null;
   features: FeatureResult[];
-  geoStoreID?: string;
 }
 
 //Action types
