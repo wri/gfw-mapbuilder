@@ -109,8 +109,6 @@ const BaseAnalysis = (): JSX.Element => {
 
   const setDelete = (): void => {
     mapController.deleteSketchVM();
-    dispatch(selectActiveTab('analysis'));
-    dispatch(toggleTabviewPanel(true));
     dispatch(setActiveFeatures([]));
   };
 

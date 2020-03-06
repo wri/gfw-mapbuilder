@@ -548,6 +548,8 @@ export class MapController {
 
   listenToSketchDelete(): any {
     if (this._sketchVMGraphicsLayer) {
+      store.dispatch(setActiveFeatures([]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
       this._sketchVMGraphicsLayer.graphics['items'] = [];
     }
   }
@@ -602,6 +604,7 @@ export class MapController {
   }
 
   createPolygonSketch = (): void => {
+    this.deleteSketchVM();
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
