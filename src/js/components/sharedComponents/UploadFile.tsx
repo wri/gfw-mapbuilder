@@ -103,7 +103,7 @@ const UploadFile = (): JSX.Element => {
 
       Promise.all(
         arcGISResults.map(async (feature: any) => {
-          const registeredGeometry: any = registerGeometry(feature)
+          const registeredGeometry: any = await registerGeometry(feature)
             .then((response: Response) =>
               response.status === 200 ? response.json() : null
             )
@@ -114,6 +114,7 @@ const UploadFile = (): JSX.Element => {
                 e
               );
             });
+
           feature.attributes.geostoreId = registeredGeometry.data.id;
 
           return registeredGeometry;
