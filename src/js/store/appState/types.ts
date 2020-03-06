@@ -4,6 +4,7 @@ export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
   openLayerGroup: string;
+  density: number;
 }
 
 interface SpecificAreaResults {
@@ -47,6 +48,7 @@ export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
 export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
+export const SET_CANOPY_DENSITY = 'SET_CANOPY_DENSITY';
 
 interface SetOpenLayerGroup {
   type: typeof SET_OPEN_LAYER_GROUP;
@@ -56,6 +58,11 @@ interface SetOpenLayerGroup {
 interface ToggleTabviewPanelAction {
   type: typeof TOGGLE_TABVIEW_PANEL;
   payload: LeftPanel['tabViewVisible'];
+}
+
+interface SetCanopyDensity {
+  type: typeof SET_CANOPY_DENSITY;
+  payload: LeftPanel['density'];
 }
 
 interface SetHideWidget {
@@ -102,4 +109,5 @@ export type AppStateTypes =
   | SetLoggedIn
   | SetMeasureResults
   | SetActiveMeasureButton
-  | SetHideWidget;
+  | SetHideWidget
+  | SetCanopyDensity;

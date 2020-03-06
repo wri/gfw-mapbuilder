@@ -9,7 +9,8 @@ import {
   SET_LOGGED_IN,
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
-  SET_HIDE_WIDGET
+  SET_HIDE_WIDGET,
+  SET_CANOPY_DENSITY
 } from './types';
 
 const initialState: AppState = {
@@ -20,7 +21,8 @@ const initialState: AppState = {
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',
-    openLayerGroup: 'GROUP_WEBMAP'
+    openLayerGroup: 'GROUP_WEBMAP',
+    density: 30
   },
   measureContent: {
     activeButton: '',
@@ -69,6 +71,14 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           openLayerGroup: action.payload
+        }
+      };
+    case SET_CANOPY_DENSITY:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          density: action.payload
         }
       };
     case SET_ACTIVE_MEASURE_BUTTON:
