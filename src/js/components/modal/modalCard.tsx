@@ -7,6 +7,7 @@ import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
 import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
+import CanopyDensityContent from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import SubscriptionContent from '../mapWidgets/widgetContent/SubscriptionContent';
 
 import { renderModal } from 'js/store/appState/actions';
@@ -44,6 +45,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <SearchContent />;
       case 'MeasureWidget':
         return <MeasureContent />;
+      case 'CanopyDensity':
+        return <CanopyDensityContent />;
       default:
         break;
     }

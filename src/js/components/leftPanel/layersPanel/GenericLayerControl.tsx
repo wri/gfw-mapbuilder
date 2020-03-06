@@ -4,6 +4,7 @@ import { RootState } from 'js/store';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
+import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 
 interface LayerControlProps {
   id: string;
@@ -22,6 +23,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>
+      <CanopyDensityPicker />
       <LayerTransparencySlider
         layerID={props.id}
         layerOpacity={layer?.opacity}

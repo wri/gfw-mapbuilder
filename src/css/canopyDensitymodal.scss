@@ -1,0 +1,24 @@
+@import 'variables.scss';
+
+.canopy-density-container {
+  .tree-range {
+    margin: 20px 10px 5px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .tree {
+    background-color: #fff;
+    background-repeat: no-repeat no-repeat;
+    background-size: contain;
+    height: 60px;
+    background-image: url('../images/tree.png');
+  }
+  .forest {
+    background-color: #fff;
+    background-repeat: no-repeat no-repeat;
+    background-size: contain;
+    background-position: bottom right;
+    height: 60px;
+    background-image: url('../images/forest.png');
+  }
+}
