@@ -40,7 +40,7 @@ import { LayerProps, LayerFeatureResult } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
-import { addPopupWatchUtils } from 'js/helpers/DataPanel';
+import { queryLayersForFeatures } from 'js/helpers/DataPanel';
 
 import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
 
@@ -93,6 +93,7 @@ export class MapController {
   _printTask: PrintTask | undefined;
   _legend: Legend | undefined;
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
+  _sketchVMGraphicsLayer: GraphicsLayer | undefined;
 
   constructor() {
     this._map = undefined;
@@ -101,6 +102,7 @@ export class MapController {
     this._printTask = undefined;
     this._legend = undefined;
     this._selectedWidget = undefined;
+    this._sketchVMGraphicsLayer = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -128,6 +130,8 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
+          //Set default language
+          store.dispatch(setLanguage(appSettings.language));
           this._mapview.popup.highlightEnabled = false;
           this._mapview.on('click', event => {
             //TODO: We need a better loading handling, probably a spinner!
@@ -135,10 +139,8 @@ export class MapController {
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
             store.dispatch(selectActiveTab('data'));
-            addPopupWatchUtils(this._mapview, this._map, event.mapPoint);
+            queryLayersForFeatures(this._mapview, this._map, event);
           });
-
-          //Setup popup related watches to be used in data panel
 
           const mapLayerObjects: LayerProps[] = [];
           this._map?.layers.forEach((layer: any) => {
@@ -338,7 +340,8 @@ export class MapController {
       store
         .getState()
         .mapviewState.allAvailableLayers.filter(availableLayer => {
-          return availableLayer.group !== 'webmap';
+          //TODO: doing additional check for title existnce this is to do with graphics layers that do not get flushed when lang changes, need better solution
+          return availableLayer.group !== 'webmap' && availableLayer.title;
         })
         .forEach(resourceLayer => {
           if (this._map) {
@@ -523,13 +526,65 @@ export class MapController {
     }
   }
 
+  completeSketchVM(): void {
+    this._sketchVM?.complete();
+  }
+
+  deleteSketchVM(): void {
+    this._sketchVM?.emit('delete');
+  }
+
+  updateSketchVM(): any {
+    if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
+      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
+        tool: 'reshape',
+        enableRotation: false,
+        toggleToolOnClick: false,
+        enableScaling: false,
+        preserveAspectRatio: false
+      });
+    }
+  }
+
+  listenToSketchDelete(): any {
+    if (this._sketchVMGraphicsLayer) {
+      store.dispatch(setActiveFeatures([]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
+      this._sketchVMGraphicsLayer.graphics['items'] = [];
+    }
+  }
+
+  listenToSketchCreate(event: any): any {
+    if (event.state === 'complete') {
+      event.graphic.attributes = {
+        OBJECTID: event.graphic.uid
+      };
+
+      event.graphic.symbol.outline.color = [115, 252, 253];
+      event.graphic.symbol.color = [0, 0, 0, 0];
+
+      //Replace all active features with our drawn feature, assigning custom layerID and Title
+      const drawnFeatures: LayerFeatureResult = {
+        layerID: 'user_features',
+        layerTitle: 'User Features',
+        sublayerID: null,
+        sublayerTitle: null,
+        features: [event.graphic]
+      };
+
+      store.dispatch(setActiveFeatures([drawnFeatures]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
+      store.dispatch(selectActiveTab('analysis'));
+    }
+  }
+
   initializeAndSetSketch(): void {
-    const tempGL = new GraphicsLayer({
+    this._sketchVMGraphicsLayer = new GraphicsLayer({
       id: 'sketchGraphics'
     });
 
     this._sketchVM = new SketchViewModel({
-      layer: tempGL,
+      layer: this._sketchVMGraphicsLayer,
       view: this._mapview,
       polylineSymbol: {
         type: 'simple-line',
@@ -538,34 +593,21 @@ export class MapController {
       }
     });
 
+    this._map?.add(this._sketchVMGraphicsLayer);
+
     this._sketchVM?.on('create', (event: any) => {
-      if (event.state === 'complete') {
-        event.graphic.attributes = {
-          OBJECTID: event.graphic.uid
-        };
-        this._previousSketchGraphic = event.graphic;
+      this.listenToSketchCreate(event);
+    });
 
-        event.graphic.symbol.outline.color = [115, 252, 253];
-        event.graphic.symbol.color = [0, 0, 0, 0];
-        this._mapview.graphics.add(event.graphic);
-
-        //Replace all active features with our drawn feature, assigning custom layerID and Title
-        const drawnFeatures: LayerFeatureResult = {
-          layerID: 'user_features',
-          layerTitle: 'User Features',
-          sublayerID: null,
-          sublayerTitle: null,
-          features: [event.graphic]
-        };
-
-        store.dispatch(setActiveFeatures([drawnFeatures]));
-        store.dispatch(selectActiveTab('analysis'));
-      }
+    this._sketchVM?.on('delete', () => {
+      this.listenToSketchDelete();
     });
   }
 
   createPolygonSketch = (): void => {
-    this._mapview.graphics.remove(this._previousSketchGraphic);
+    this.deleteSketchVM();
+    store.dispatch(setActiveFeatures([]));
+    store.dispatch(setActiveFeatureIndex([0, 0]));
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 

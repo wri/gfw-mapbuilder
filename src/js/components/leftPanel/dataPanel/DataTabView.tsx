@@ -8,8 +8,9 @@ import {
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
-import { ReactComponent as CloseAttribute } from '../../../../images/closeIcon.svg';
+import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
 import { mapController } from 'js/controllers/mapController';
+import { LayerFeatureResult } from 'js/store/mapview/types';
 
 interface DataTabProps {
   key: string;
@@ -25,14 +26,16 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     (store: RootState) => store.mapviewState
   );
 
-  const FeatureDataView = (): any => {
-    const activeLayer = activeFeatures[activeFeatureIndex[0]].layerID;
-    const activeLayerInfo = activeFeatures.find(f => f.layerID === activeLayer);
-    const activeLayerIndex = activeFeatures.findIndex(
-      f => f.layerID === activeLayer
-    );
+  const FeatureDataView = (): JSX.Element => {
+    const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
 
-    if (activeLayerInfo) {
+    //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
+    function findLayer(f: LayerFeatureResult): boolean {
+      const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
+      return String(activeLayer) === String(activeLayerInfo.sublayerID);
+    }
+    const activeLayerIndex = activeFeatures.findIndex(findLayer);
+    if (activeLayerInfo && activeFeatures[activeLayerIndex]) {
       mapController.drawGraphic(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
           .geometry
@@ -95,11 +98,13 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         }
       }
 
-      function handleLayerSwitch(layerID: string): void {
-        //Upon layer selection switch, we update the index of the activefeature's layer and zero out the feature itself
-        const newLayerIndex = activeFeatures.findIndex(
-          f => f.layerID === layerID
-        );
+      function handleLayerSwitch(id: string): void {
+        //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
+        function findLayer(f: LayerFeatureResult): boolean {
+          const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
+          return String(activeLayer) === String(id);
+        }
+        const newLayerIndex: number = activeFeatures.findIndex(findLayer);
         dispatch(setActiveFeatureIndex([newLayerIndex, 0]));
       }
 
@@ -107,6 +112,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       const prevBtn = page === 0 ? 'disabled' : '';
       const nextBtn =
         page === props.activeLayerInfo.features.length - 1 ? 'disabled' : '';
+
+      // if we have sublayer title, show it as well
+      const layerTitle = props.activeLayerInfo.sublayerTitle
+        ? `${props.activeLayerInfo.layerTitle}: ${props.activeLayerInfo.sublayerTitle}`
+        : props.activeLayerInfo.layerTitle;
+
       return (
         <div className="layer-feature-group">
           <div className="layer-control-container">
@@ -144,7 +155,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           <div className="page-numbers">
             {page + 1} / {props.activeLayerInfo.features.length}
           </div>
-          <div className="layer-title">{props.activeLayerInfo.layerTitle}</div>
+          <div className="layer-title">{layerTitle}</div>
           <hr />
           <AttributeTable
             attributes={props.activeLayerInfo.features[page].attributes}

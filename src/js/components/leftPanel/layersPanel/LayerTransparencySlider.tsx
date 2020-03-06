@@ -17,7 +17,6 @@ const LayerTransparencySlider = (
 
   return (
     <div className="transparency-slider">
-      <p>Transparency Slider</p>
       <input
         type="range"
         min="0.1"
@@ -28,7 +27,6 @@ const LayerTransparencySlider = (
         value={layerOpacity}
         onChange={handleOpacityChange}
       />
-      <label htmlFor="tslider">{layerOpacity}</label>
     </div>
   );
 };

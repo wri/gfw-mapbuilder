@@ -47,6 +47,112 @@
     margin-bottom: auto;
     padding-right: 1rem;
   }
+
+  .gfw-login-container {
+    display: flex;
+    margin-right: 1rem;
+    align-content: center;
+    font-family: $fira-sans;
+    font-size: 0.75rem;
+
+    .gfw-login-button {
+      display: flex;
+      border: none;
+      background-color: inherit;
+
+      svg,
+      p {
+        margin: 0.25rem;
+      }
+    }
+
+    .dropdown-wrapper {
+      position: absolute;
+      right: 20px;
+      z-index: 100;
+      top: 50px;
+      min-width: 200px;
+      max-width: 200px;
+      background: $white;
+      border: 1px solid $dropdown-border;
+      color: $black;
+
+      .subscription-authentication,
+      .options-modal {
+        list-style: none;
+
+        .subscribe-method,
+        .more-list {
+          vertical-align: baseline;
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+          border: 0;
+
+          .gfw-api-option {
+            font-size: 1rem;
+
+            padding: 12px 15px;
+            max-width: none;
+            margin-right: 0 !important;
+            cursor: pointer;
+
+            p {
+              margin: unset;
+            }
+
+            a {
+              text-decoration: none;
+            }
+
+            &:hover {
+              background-color: $light-grey;
+            }
+          }
+        }
+      }
+      .subscription-authentication {
+        padding: 1rem;
+
+        p {
+          font-size: 0.75rem;
+        }
+
+        .subscribe-method {
+          font-size: 1rem;
+          padding: 12px 15px;
+          max-width: none;
+          margin-right: 0 !important;
+
+          text-align: center;
+          margin-top: 20px;
+          color: #fff;
+          padding-top: 15px;
+          padding-bottom: 15px;
+          text-decoration: none;
+
+          .-facebook,
+          .-google,
+          .-twitter {
+            color: $white;
+            text-decoration: none;
+          }
+
+          &.twitter-box {
+            background: #598dca;
+          }
+
+          &.facebook-box {
+            background: #39579b;
+          }
+
+          &.google-box {
+            background: #da4735;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media screen and (max-width: $mobile-device) {
