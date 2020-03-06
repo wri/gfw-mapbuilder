@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
@@ -17,6 +17,23 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { RootState } from 'js/store/index';
 
 import 'css/measureContent.scss';
+
+const ESRICoordinatesWidget = () => {
+  const coordRef = useRef(null);
+
+  useEffect(() => {
+    console.log('fire esri stuff');
+    console.log(coordRef.current);
+    mapController.attachCoordinatesWidget(coordRef);
+  }, []);
+
+  return (
+    <React.Fragment>
+      <div>ESRI COORDS</div>
+      <div className="esri-coords" ref={coordRef}></div>
+    </React.Fragment>
+  );
+};
 
 interface SpecificDropDownOption {
   text: string;
@@ -62,20 +79,9 @@ const ReturnMeasurementResults = (): JSX.Element => {
     } else if (activeButton === 'coordinates') {
       return (
         <>
-          <p>
-            <strong>Coordinate results</strong>
-          </p>
-          <p>
-            <strong>Mouse click</strong>
-          </p>
-          <p>Latitude: {coordinateMouseClickResults?.latitude}</p>
-          <p>Longitude: {coordinateMouseClickResults?.longitude}</p>
-          <br />
-          <p>
-            <strong>Pointer move</strong>
-          </p>
-          <p>Latitude: {coordinatePointerMoveResults?.latitude}</p>
-          <p>Longitude: {coordinatePointerMoveResults?.longitude}</p>
+          <div>
+            <ESRICoordinatesWidget />
+          </div>
         </>
       );
     }
@@ -171,7 +177,7 @@ const MeasureContent: FunctionComponent = () => {
         selectedUnit as AreaMeasurement2D['unit']
       );
     } else if (activeButton === 'coordinates') {
-      setSelectedCoordinatesUnit(selectedUnit);
+      //      setSelectedCoordinatesUnit(selectedUnit);
       // mapController.setActiveMeasureWidget(activeButton);
       // TODO - convert area/perimeters
       // TODO - reset widget
@@ -234,12 +240,12 @@ const MeasureContent: FunctionComponent = () => {
             activeButton === 'distance' ? 'selected' : ''
           }`}
         />
-        {/* <button
+        <button
           onClick={(): void => setOption('coordinates')}
           className={`esri-icon-maps ${
             activeButton === 'coordinates' ? 'selected' : ''
           }`}
-        /> */}
+        />
         <span>|</span>
         <select
           value={returnSelectedUnit()}

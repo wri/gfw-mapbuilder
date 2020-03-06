@@ -7,6 +7,7 @@ import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
+import CoordinateConversion from 'esri/widgets/CoordinateConversion';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import Polygon from 'esri/geometry/Polygon';
 import Search from 'esri/widgets/Search';
@@ -432,6 +433,14 @@ export class MapController {
         zoom: zoomNum
       });
     }
+  }
+
+  attachCoordinatesWidget(domref: any) {
+    console.log('attaching');
+    const ccWidget = new CoordinateConversion({
+      view: this._mapview,
+      container: domref.current
+    });
   }
 
   clearAllLayers(): void {
