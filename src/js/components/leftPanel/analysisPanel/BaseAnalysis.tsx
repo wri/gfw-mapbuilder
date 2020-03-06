@@ -7,6 +7,7 @@ import { mapController } from 'js/controllers/mapController';
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
+import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
 
@@ -106,6 +107,13 @@ const BaseAnalysis = (): JSX.Element => {
     }
   };
 
+  const setDelete = (): void => {
+    mapController.deleteSketchVM();
+    dispatch(selectActiveTab('analysis'));
+    dispatch(toggleTabviewPanel(true));
+    dispatch(setActiveFeatures([]));
+  };
+
   return (
     <>
       {geostoreReady ? (
@@ -115,6 +123,7 @@ const BaseAnalysis = (): JSX.Element => {
           ) : (
             <button onClick={(): void => setActiveButton()}>Save</button>
           )}
+          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {vegaSpec && <VegaChart spec={vegaSpec} />}
           <button onClick={runAnalysis}>RUN ANALYSIS</button>

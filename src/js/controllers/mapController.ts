@@ -530,6 +530,10 @@ export class MapController {
     this._sketchVM?.complete();
   }
 
+  deleteSketchVM(): void {
+    this._sketchVM?.emit('delete');
+  }
+
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
       this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
@@ -539,6 +543,12 @@ export class MapController {
         enableScaling: false,
         preserveAspectRatio: false
       });
+    }
+  }
+
+  listenToSketchDelete(): any {
+    if (this._sketchVMGraphicsLayer) {
+      this._sketchVMGraphicsLayer.graphics['items'] = [];
     }
   }
 
@@ -584,6 +594,10 @@ export class MapController {
 
     this._sketchVM?.on('create', (event: any) => {
       this.listenToSketchCreate(event);
+    });
+
+    this._sketchVM?.on('delete', () => {
+      this.listenToSketchDelete();
     });
   }
 
