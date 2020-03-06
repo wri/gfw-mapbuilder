@@ -561,6 +561,7 @@ export class MapController {
       };
 
       store.dispatch(setActiveFeatures([drawnFeatures]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
       store.dispatch(selectActiveTab('analysis'));
     }
   }
@@ -588,6 +589,8 @@ export class MapController {
   }
 
   createPolygonSketch = (): void => {
+    store.dispatch(setActiveFeatures([]));
+    store.dispatch(setActiveFeatureIndex([0, 0]));
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
