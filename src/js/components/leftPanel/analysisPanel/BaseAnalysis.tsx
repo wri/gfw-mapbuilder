@@ -1,9 +1,13 @@
 /* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+
+import { mapController } from 'js/controllers/mapController';
+
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
+import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
 
@@ -14,6 +18,7 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
+  const [renderEditButton, setRenderEditButton] = useState(true);
   const { analysisModules } = useSelector(
     (store: RootState) => store.appSettings
   );
@@ -92,10 +97,31 @@ const BaseAnalysis = (): JSX.Element => {
     </select>
   );
 
+  const setActiveButton = (): void => {
+    if (renderEditButton) {
+      setRenderEditButton(false);
+      mapController.updateSketchVM();
+    } else {
+      mapController.completeSketchVM();
+      setRenderEditButton(true);
+    }
+  };
+
+  const setDelete = (): void => {
+    mapController.deleteSketchVM();
+    dispatch(setActiveFeatures([]));
+  };
+
   return (
     <>
       {geostoreReady ? (
         <div>
+          {renderEditButton ? (
+            <button onClick={(): void => setActiveButton()}>Edit</button>
+          ) : (
+            <button onClick={(): void => setActiveButton()}>Save</button>
+          )}
+          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {vegaSpec && <VegaChart spec={vegaSpec} />}
           <button onClick={runAnalysis}>RUN ANALYSIS</button>
