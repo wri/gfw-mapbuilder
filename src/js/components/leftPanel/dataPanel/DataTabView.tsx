@@ -36,6 +36,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     }
     const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo && activeFeatures[activeLayerIndex]) {
+      const test = [
+        activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
+      ];
+      debugger;
       mapController.drawGraphic(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
           .geometry
