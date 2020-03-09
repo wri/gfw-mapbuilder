@@ -11,11 +11,6 @@ export function createAndAddNewGraphic(
 ): void {
   if (!geometry) return;
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
-  // * NOTE TO SELF - we're adding one graphic to an array
-  // * each time this function fires
-  // ? Could we scope a GraphicLayer with ID of 'active-feature-layer'
-  // ? to maintain an array of Graphics when uploading a file
-  // ? with many polygons?
 
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
@@ -57,13 +52,6 @@ export function createAndAddNewGraphic(
 
 export function setNewGraphic(map: any, mapview: any, allFeatures: any): any {
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
-  // * NOTE TO SELF - we're adding one graphic to an array
-  // * each time this function fires
-  // ? Could we scope a GraphicLayer with ID of 'active-feature-layer'
-  // ? to maintain an array of Graphics when uploading a file
-  // ? with many polygons?
-  const graphics: Array<Graphic> = [];
-
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
   } else {
@@ -77,6 +65,7 @@ export function setNewGraphic(map: any, mapview: any, allFeatures: any): any {
       feature.geometry.type === 'polygon'
         ? getCustomSymbol()
         : getImagerySymbol();
+
     const symbol = feature.geometry.rings
       ? getCustomSymbol()
       : polygonOrPointSymbol;
@@ -86,13 +75,12 @@ export function setNewGraphic(map: any, mapview: any, allFeatures: any): any {
       attributes: feature.attributes,
       symbol: symbol
     });
-    graphics.push(featureGraphic);
-    mapview.graphics.add(featureGraphic);
+
+    graphicsLayer.graphics.push(featureGraphic);
   });
 
-  // map.add(graphicsLayer.graphics);
-  // mapview.goTo(graphicsLayer.graphics);
-  mapview.goTo(graphics);
+  map.add(graphicsLayer);
+  mapview.goTo(graphicsLayer.graphics);
 }
 
 export function processGeojsonNotes(esriJson: any): any {

@@ -480,10 +480,9 @@ export class MapController {
     }
   }
 
-  drawGraphic(geometry: __esri.Geometry): void {
+  drawGraphic(specificFeature: any): void {
     if (this._map) {
-      // setNewGraphic(this._map, geometry);
-      createAndAddNewGraphic(this._map, geometry);
+      setNewGraphic(this._map, this._mapview, specificFeature);
     }
   }
 
