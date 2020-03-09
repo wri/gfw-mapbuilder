@@ -9,12 +9,20 @@ import {
   AppState,
   LeftPanel,
   SET_MEASURE_RESULTS,
-  SET_ACTIVE_MEASURE_BUTTON
+  SET_ACTIVE_MEASURE_BUTTON,
+  SET_CANOPY_DENSITY
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   return {
     type: TOGGLE_TABVIEW_PANEL as typeof TOGGLE_TABVIEW_PANEL,
+    payload: payload
+  };
+}
+
+export function setCanopyDensity(payload: LeftPanel['density']) {
+  return {
+    type: SET_CANOPY_DENSITY as typeof SET_CANOPY_DENSITY,
     payload: payload
   };
 }

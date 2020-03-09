@@ -4,7 +4,8 @@ import { RootState } from 'js/store';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
-
+import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
+import { densityEnabledLayers } from '../../../../../configs/layer-config';
 interface LayerControlProps {
   id: string;
 }
@@ -13,6 +14,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     (store: RootState) => store.mapviewState
   );
   const layer = allAvailableLayers.find(l => l.id === props.id);
+
+  //Determine if we need density control on this layer
+  const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   return (
     <>
       <div className="layers-control-checkbox">
@@ -22,10 +26,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>
-      <LayerTransparencySlider
-        layerID={props.id}
-        layerOpacity={layer?.opacity}
-      />
+      {layer?.visible && densityPicker && <CanopyDensityPicker />}
+      {layer?.visible && (
+        <LayerTransparencySlider
+          layerID={props.id}
+          layerOpacity={layer?.opacity}
+        />
+      )}
     </>
   );
 };
