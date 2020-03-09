@@ -38,10 +38,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
     const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo && activeFeatures[activeLayerIndex]) {
-      mapController.drawGraphic(
+      const activeFeature = new Array(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
-          .geometry
       );
+      mapController.drawGraphic(activeFeature);
     }
 
     const LayerAttributesElement = (props: {
@@ -52,6 +52,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
       function turnAttributeTablePage(forward: boolean): void {
         const newPage = forward ? page + 1 : page - 1;
+        const activeFeature = new Array(
+          activeFeatures[activeLayerIndex].features[newPage]
+        );
+        mapController.drawGraphic(activeFeature);
         dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
       }
 

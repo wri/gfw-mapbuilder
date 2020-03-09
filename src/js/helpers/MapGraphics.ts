@@ -1,43 +1,58 @@
 import Map from 'esri/Map';
+import Mapview from 'esri/views/MapView';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
+import Polygon from 'esri/geometry/Polygon';
 
-export function createAndAddNewGraphic(
-  map: Map,
-  geometry?: __esri.Geometry
-): void {
-  if (!geometry) return;
+import { getCustomSymbol, getImagerySymbol } from 'js/helpers/generateSymbol';
+
+import { FeatureResult } from 'js/store/mapview/types';
+
+interface GraphicConfig {
+  map: Map;
+  mapview: Mapview;
+  allFeatures: Array<FeatureResult>;
+  isUploadFile: boolean;
+}
+
+export function setNewGraphic({
+  map,
+  mapview,
+  allFeatures,
+  isUploadFile
+}: GraphicConfig): void {
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
+
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
   } else {
     graphicsLayer = new GraphicsLayer({
       id: 'active-feature-layer'
     });
-    map.add(graphicsLayer);
   }
 
-  const symbol: any = {
-    color: [0, 0, 0, 0],
-    outline: {
-      color: [115, 252, 253],
-      width: 1.5
-    }
-  };
-  //determine if we need fill or marker
-  if (geometry.type === 'polygon') {
-    symbol.type = 'simple-fill';
-    symbol.style = 'solid';
-  } else {
-    symbol.type = 'simple-marker';
-    symbol.style = 'circle';
-    symbol.size = '12px';
-  }
+  allFeatures.forEach((feature: FeatureResult) => {
+    const polygonOrPointSymbol =
+      feature.geometry.type === 'polygon'
+        ? getCustomSymbol()
+        : getImagerySymbol();
 
-  const featureGraphic = new Graphic({
-    geometry: geometry,
-    symbol: symbol
+    const symbol = (feature.geometry as any).rings
+      ? getCustomSymbol()
+      : polygonOrPointSymbol;
+
+    const featureGraphic = new Graphic({
+      geometry: new Polygon(feature.geometry),
+      attributes: feature.attributes,
+      symbol: symbol
+    });
+
+    graphicsLayer.graphics.push(featureGraphic);
   });
 
-  graphicsLayer.add(featureGraphic);
+  map.add(graphicsLayer);
+
+  if (isUploadFile) {
+    mapview.goTo(graphicsLayer.graphics);
+  }
 }
