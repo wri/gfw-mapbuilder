@@ -16,10 +16,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
   //Determine if we need density control on this layer
-  let densityPicker = false;
-  if (layer) {
-    densityPicker = densityEnabledLayers.includes(layer.id);
-  }
+  const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   return (
     <>
       <div className="layers-control-checkbox">

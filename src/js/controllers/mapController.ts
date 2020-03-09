@@ -905,7 +905,6 @@ export class MapController {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer) {
-        console.log(layer);
         layer.urlTemplate = layer.urlTemplate.replace(
           /(tc)(?:[^\/]+)/,
           `tc${value}`
