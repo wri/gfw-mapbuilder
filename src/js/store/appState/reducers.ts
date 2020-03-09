@@ -22,7 +22,7 @@ const initialState: AppState = {
     tabViewVisible: true,
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
-    density: 30
+    density: 5
   },
   measureContent: {
     activeButton: '',
