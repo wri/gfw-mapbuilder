@@ -34,8 +34,6 @@ const PenContent: FunctionComponent = () => {
 
   const setDrawTool = () => {
     dispatch(renderModal(''));
-    // TODO [ ] - clear activeFeatures
-    // TODO [ ] - delete previous polygons
     mapController.createPolygonSketch();
   };
 

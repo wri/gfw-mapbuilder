@@ -1,57 +1,28 @@
 import Map from 'esri/Map';
+import Mapview from 'esri/views/MapView';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
 import Polygon from 'esri/geometry/Polygon';
+
 import { getCustomSymbol, getImagerySymbol } from 'js/helpers/generateSymbol';
 
-export function createAndAddNewGraphic(
-  map: Map,
-  geometry?: __esri.Geometry,
-  attributes?: Graphic['attributes']
-): void {
-  if (!geometry) return;
-  let graphicsLayer: any = map.findLayerById('active-feature-layer');
+import { FeatureResult } from 'js/store/mapview/types';
 
-  if (graphicsLayer) {
-    graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
-  } else {
-    graphicsLayer = new GraphicsLayer({
-      id: 'active-feature-layer'
-    });
-    map.add(graphicsLayer);
-  }
-
-  const symbol: any = {
-    color: [0, 0, 0, 0],
-    outline: {
-      color: [115, 252, 253],
-      width: 1.5
-    }
-  };
-  //determine if we need fill or marker
-  if (geometry.type === 'polygon') {
-    symbol.type = 'simple-fill';
-    symbol.style = 'solid';
-  } else {
-    symbol.type = 'simple-marker';
-    symbol.style = 'circle';
-    symbol.size = '12px';
-  }
-
-  const featureGraphic = new Graphic({
-    geometry: geometry,
-    symbol: symbol
-  });
-
-  if (attributes) {
-    featureGraphic.attributes = attributes;
-  }
-
-  graphicsLayer.add(featureGraphic);
+interface GraphicConfig {
+  map: Map;
+  mapview: Mapview;
+  allFeatures: Array<FeatureResult>;
+  isUploadFile: boolean;
 }
 
-export function setNewGraphic(map: any, mapview: any, allFeatures: any): any {
+export function setNewGraphic({
+  map,
+  mapview,
+  allFeatures,
+  isUploadFile
+}: GraphicConfig): void {
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
+
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
   } else {
@@ -60,13 +31,13 @@ export function setNewGraphic(map: any, mapview: any, allFeatures: any): any {
     });
   }
 
-  allFeatures.forEach((feature: any) => {
+  allFeatures.forEach((feature: FeatureResult) => {
     const polygonOrPointSymbol =
       feature.geometry.type === 'polygon'
         ? getCustomSymbol()
         : getImagerySymbol();
 
-    const symbol = feature.geometry.rings
+    const symbol = (feature.geometry as any).rings
       ? getCustomSymbol()
       : polygonOrPointSymbol;
 
@@ -80,25 +51,8 @@ export function setNewGraphic(map: any, mapview: any, allFeatures: any): any {
   });
 
   map.add(graphicsLayer);
-  mapview.goTo(graphicsLayer.graphics);
-}
 
-export function processGeojsonNotes(esriJson: any): any {
-  /**
-   * * processGeojson()
-   *  Iterates over an array of ArcGIS data
-   *  Creates a new graphic
-   *  Pushes graphic to array of graphics
-   *  adds graphic to this._mapview.graphics
-   *  goes to graphics
-   */
-  /**
-   * * createAndAddNewGraphic()
-   *  conditionally removes all graphics of graphic layer
-   *  OR creates new graphic layer with ID of 'active-feature-layer'
-   *  adds graphic layer to map
-   *  conditionally assigns symbol a line or symbol
-   *  creates a new graphic
-   *  Adds graphic to graphicLayer
-   */
+  if (isUploadFile) {
+    mapview.goTo(graphicsLayer.graphics);
+  }
 }
