@@ -5,11 +5,11 @@ import Slider, { createSliderWithTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'css/canopyDensityModal';
 import { setCanopyDensity } from 'js/store/appState/actions';
+import { mapController } from 'js/controllers/mapController';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 //TODO: This needs to be Language aware
-/////- These tells me the raster id needed to filter the biomass layer based on canopyDensity > this is from rasterFunction utils
 /*
 
 const BIOMASS_DENSITY_ID_LOOKUP = {
@@ -22,15 +22,24 @@ const BIOMASS_DENSITY_ID_LOOKUP = {
   '75': '7'
 };
 */
+export const markValueMap = {
+  1: 10,
+  2: 15,
+  3: 20,
+  4: 25,
+  5: 30,
+  6: 50,
+  7: 75
+};
 
-export const marks = {
-  1: '10%',
-  2: '15%',
-  3: '20%',
-  4: '25%',
-  5: '30%',
-  6: '50%',
-  7: '75%'
+const marks = {
+  1: { label: '10%', style: {} },
+  2: { label: '15%', style: {} },
+  3: { label: '20%', style: {} },
+  4: { label: '25%', style: {} },
+  5: { label: '30%', style: {} },
+  6: { label: '50%', style: {} },
+  7: { label: '75%', style: {} }
 };
 
 const CanopyDensityContent = (): JSX.Element => {
@@ -39,9 +48,10 @@ const CanopyDensityContent = (): JSX.Element => {
     (store: RootState) => store.appState.leftPanel
   );
 
-  function handleSliderChange(value: any): void {
-    console.log(value);
+  function handleSliderChange(value: number): void {
     dispatch(setCanopyDensity(value));
+    //send % value to modify the layer
+    mapController.updateDensityValue(markValueMap[value]);
   }
 
   return (
@@ -59,7 +69,7 @@ const CanopyDensityContent = (): JSX.Element => {
         step={null}
         marks={marks}
         defaultValue={density}
-        tipFormatter={(val: number): string => marks[val]}
+        tipFormatter={(val: number): string => markValueMap[val] + '%'}
         railStyle={{ height: 10, backgroundColor: 'rgb(240, 171, 0)' }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
         activeDotStyle={{ border: '2px solid #e9e9e9' }}

@@ -17,7 +17,7 @@ import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import { once } from 'esri/core/watchUtils';
 import { RefObject } from 'react';
-
+import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import {
@@ -899,6 +899,20 @@ export class MapController {
       }
     );
     store.dispatch(renderModal(''));
+  }
+
+  updateDensityValue(value: number): void {
+    densityEnabledLayers.forEach((layerId: string) => {
+      const layer: any = this._map?.findLayerById(layerId);
+      if (layer) {
+        console.log(layer);
+        layer.urlTemplate = layer.urlTemplate.replace(
+          /(tc)(?:[^\/]+)/,
+          `tc${value}`
+        );
+        layer.refresh();
+      }
+    });
   }
 
   getMapviewCoordinates(): URLCoordinates {
