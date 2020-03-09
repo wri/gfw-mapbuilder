@@ -31,9 +31,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
     //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
     function findLayer(f: LayerFeatureResult): boolean {
+      const layerProp = f.sublayerID ? 'sublayerID' : 'layerID';
       const activeLayer = f.sublayerID ? f.sublayerID : f.layerID;
-      return String(activeLayer) === String(activeLayerInfo.sublayerID);
+      return String(activeLayer) === String(activeLayerInfo[layerProp]);
     }
+
     const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo && activeFeatures[activeLayerIndex]) {
       const activeFeature = new Array(
