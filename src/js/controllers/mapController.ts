@@ -974,7 +974,6 @@ export class MapController {
   }
 
   processGeojson(esriJson: Array<FeatureResult>): void {
-    this._mapview.graphics.removeAll();
     if (this._map) {
       setNewGraphic({
         map: this._map,

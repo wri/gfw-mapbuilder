@@ -122,19 +122,17 @@ const UploadFile = (): JSX.Element => {
       )
         .then((registeredGeometries: any) => {
           if (registeredGeometries.length) {
-            const graphics = mapController.generateGraphics(arcGISResults);
-
             const shapeFileFeatures: LayerFeatureResult = {
               layerID: 'upload_file_features',
               layerTitle: 'Upload File Features',
               sublayerID: null,
               sublayerTitle: null,
-              features: graphics.map((g: __esri.Graphic) => {
+              features: arcGISResults.map((g: __esri.Graphic) => {
                 return { attributes: g.attributes, geometry: g.geometry };
               })
             };
 
-            dispatch(setActiveFeatures([shapeFileFeatures]));
+            // dispatch(setActiveFeatures([shapeFileFeatures])); // ? whyyy?
           } else {
             // TODO [ ] - error handling logic if array is empty
           }
