@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+
 import { RootState } from 'js/store';
-import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
+
 import LayerToggleSwitch from './LayerToggleSwitch';
-import LayerTransparencySlider from './LayerTransparencySlider';
+// import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
+import RangeSlider from 'js/components/sharedComponents/RangeSlider';
+
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
+
+import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 interface LayerControlProps {
   id: string;
 }
@@ -28,9 +33,17 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       </div>
       {layer?.visible && densityPicker && <CanopyDensityPicker />}
       {layer?.visible && (
-        <LayerTransparencySlider
+        // <LayerTransparencySlider
+        //   layerID={props.id}
+        //   layerOpacity={layer?.opacity}
+        // />
+        <RangeSlider
+          min={0.1}
+          max={1}
+          step={0.05}
+          opacity={layer?.opacity}
           layerID={props.id}
-          layerOpacity={layer?.opacity}
+          returnSliderWithTooltip={false}
         />
       )}
     </>
