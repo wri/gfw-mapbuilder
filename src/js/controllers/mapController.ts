@@ -66,6 +66,8 @@ interface RemoteDataLayer {
     label: object;
     url: string;
     type: string;
+    popup?: object;
+    sublabel?: object;
     // [key: string]: object
   };
   dataLayer?: {
@@ -200,8 +202,16 @@ export class MapController {
                 let resourceGroup;
                 let url;
                 let type;
-
+                let metadata;
+                let popup;
+                let sublabel;
+                console.log(apiLayer);
                 if (apiLayer.dataLayer) {
+                  console.log('data layer is here');
+                  console.log(apiLayer);
+                  metadata = apiLayer.layer.metadata;
+                  popup = apiLayer.layer.popup;
+                  sublabel = apiLayer.layer.sublabel;
                   resourceId = apiLayer.dataLayer.id;
                   resourceTitle =
                     apiLayer.layer.label[appState.selectedLanguage];
@@ -209,6 +219,8 @@ export class MapController {
                   url = apiLayer.layer.url;
                   type = apiLayer.layer.type;
                 } else {
+                  console.log('data layer IS NOT here');
+                  console.log(apiLayer);
                   resourceId = apiLayer.id;
                   resourceTitle = apiLayer.label[appState.selectedLanguage];
                   resourceGroup = apiLayer.groupId;
@@ -233,7 +245,10 @@ export class MapController {
                   visible: false,
                   definitionExpression: resourceDefinitionExpression,
                   group: resourceGroup,
-                  url: url
+                  url: url,
+                  metadata,
+                  sublabel,
+                  popup
                 });
               });
 

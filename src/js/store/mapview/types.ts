@@ -68,6 +68,9 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
+  popup?: object;
+  metadata?: object;
+  sublabel?: object;
 }
 
 interface Attributes {
