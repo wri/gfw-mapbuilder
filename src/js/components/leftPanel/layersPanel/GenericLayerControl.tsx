@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { RootState } from 'js/store';
-
 import LayerToggleSwitch from './LayerToggleSwitch';
-// import LayerTransparencySlider from './LayerTransparencySlider';
+
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import RangeSlider from 'js/components/sharedComponents/RangeSlider';
+
+import { mapController } from 'js/controllers/mapController';
+
+import { RootState } from 'js/store';
 
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 
@@ -22,6 +24,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
+
+  const handleSliderChange = (eventValue: number): void => {
+    mapController.setLayerOpacity(props.id, String(eventValue));
+  };
+
   return (
     <>
       <div className="layers-control-checkbox">
@@ -33,17 +40,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       </div>
       {layer?.visible && densityPicker && <CanopyDensityPicker />}
       {layer?.visible && (
-        // <LayerTransparencySlider
-        //   layerID={props.id}
-        //   layerOpacity={layer?.opacity}
-        // />
         <RangeSlider
           min={0.1}
           max={1}
           step={0.05}
           opacity={layer?.opacity}
-          layerID={props.id}
           returnSliderWithTooltip={false}
+          handleSliderChange={handleSliderChange}
         />
       )}
     </>

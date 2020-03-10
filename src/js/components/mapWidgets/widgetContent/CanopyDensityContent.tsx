@@ -4,9 +4,9 @@ import Slider, { createSliderWithTooltip } from 'rc-slider';
 
 import RangeSlider from 'js/components/sharedComponents/RangeSlider';
 
-// import { mapController } from 'js/controllers/mapController';
+import { mapController } from 'js/controllers/mapController';
 
-// import { setCanopyDensity } from 'js/store/appState/actions';
+import { setCanopyDensity } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
 
 import 'rc-slider/assets/index.css';
@@ -28,15 +28,6 @@ const BIOMASS_DENSITY_ID_LOOKUP = {
   '75': '7'
 };
 */
-// export const markValueMap = {
-//   1: 10,
-//   2: 15,
-//   3: 20,
-//   4: 25,
-//   5: 30,
-//   6: 50,
-//   7: 75
-// };
 
 export const marks = {
   1: { value: 10, label: '10%', style: {} },
@@ -54,11 +45,11 @@ const CanopyDensityContent = (): JSX.Element => {
     (store: RootState) => store.appState.leftPanel
   );
 
-  // function handleSliderChange(value: number): void {
-  //   dispatch(setCanopyDensity(value));
-  //   //send % value to modify the layer
-  //   mapController.updateDensityValue(markValueMap[value]);
-  // }
+  const handleSliderChange = (eventValue: number): void => {
+    dispatch(setCanopyDensity(eventValue));
+    // * NOTE: sends % value to modify the layer
+    mapController.updateDensityValue(marks[eventValue].value);
+  };
 
   return (
     <div className="canopy-density-container">
@@ -73,35 +64,11 @@ const CanopyDensityContent = (): JSX.Element => {
         min={0}
         max={8}
         step={null}
-        marks={marks} // ? Should marks be config'd out?
+        marks={marks}
         density={density}
         returnSliderWithTooltip={true}
+        handleSliderChange={handleSliderChange}
       />
-      {/* <SliderWithTooltip
-        min={0}
-        max={8}
-        step={null}
-        marks={marks}
-        defaultValue={density}
-        tipFormatter={(val: number): string => markValueMap[val] + '%'}
-        railStyle={{ height: 10, backgroundColor: 'rgb(240, 171, 0)' }}
-        trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
-        activeDotStyle={{ border: '2px solid #e9e9e9' }}
-        dotStyle={{
-          border: `2px solid rgb(240, 171, 0)`,
-          height: 10,
-          width: 10,
-          bottom: -6
-        }}
-        handleStyle={[
-          {
-            border: `2px solid rgb(240, 171, 0)`,
-            height: 20,
-            width: 20
-          }
-        ]}
-        onChange={handleSliderChange}
-      /> */}
     </div>
   );
 };
