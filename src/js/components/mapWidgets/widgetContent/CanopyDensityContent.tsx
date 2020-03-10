@@ -1,11 +1,17 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
+
+import RangeSlider from 'js/components/sharedComponents/RangeSlider';
+
+// import { mapController } from 'js/controllers/mapController';
+
+// import { setCanopyDensity } from 'js/store/appState/actions';
+import { RootState } from 'js/store';
+
 import 'rc-slider/assets/index.css';
+
 import 'css/canopyDensityModal';
-import { setCanopyDensity } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -22,24 +28,24 @@ const BIOMASS_DENSITY_ID_LOOKUP = {
   '75': '7'
 };
 */
-export const markValueMap = {
-  1: 10,
-  2: 15,
-  3: 20,
-  4: 25,
-  5: 30,
-  6: 50,
-  7: 75
-};
+// export const markValueMap = {
+//   1: 10,
+//   2: 15,
+//   3: 20,
+//   4: 25,
+//   5: 30,
+//   6: 50,
+//   7: 75
+// };
 
-const marks = {
-  1: { label: '10%', style: {} },
-  2: { label: '15%', style: {} },
-  3: { label: '20%', style: {} },
-  4: { label: '25%', style: {} },
-  5: { label: '30%', style: {} },
-  6: { label: '50%', style: {} },
-  7: { label: '75%', style: {} }
+export const marks = {
+  1: { value: 10, label: '10%', style: {} },
+  2: { value: 15, label: '15%', style: {} },
+  3: { value: 20, label: '20%', style: {} },
+  4: { value: 25, label: '25%', style: {} },
+  5: { value: 30, label: '30%', style: {} },
+  6: { value: 50, label: '50%', style: {} },
+  7: { value: 75, label: '75%', style: {} }
 };
 
 const CanopyDensityContent = (): JSX.Element => {
@@ -48,11 +54,11 @@ const CanopyDensityContent = (): JSX.Element => {
     (store: RootState) => store.appState.leftPanel
   );
 
-  function handleSliderChange(value: number): void {
-    dispatch(setCanopyDensity(value));
-    //send % value to modify the layer
-    mapController.updateDensityValue(markValueMap[value]);
-  }
+  // function handleSliderChange(value: number): void {
+  //   dispatch(setCanopyDensity(value));
+  //   //send % value to modify the layer
+  //   mapController.updateDensityValue(markValueMap[value]);
+  // }
 
   return (
     <div className="canopy-density-container">
@@ -63,7 +69,15 @@ const CanopyDensityContent = (): JSX.Element => {
         <div className="tree"></div>
         <div className="forest"></div>
       </div>
-      <SliderWithTooltip
+      <RangeSlider
+        min={0}
+        max={8}
+        step={null}
+        marks={marks} // ? Should marks be config'd out?
+        density={density}
+        returnSliderWithTooltip={true}
+      />
+      {/* <SliderWithTooltip
         min={0}
         max={8}
         step={null}
@@ -87,7 +101,7 @@ const CanopyDensityContent = (): JSX.Element => {
           }
         ]}
         onChange={handleSliderChange}
-      />
+      /> */}
     </div>
   );
 };
