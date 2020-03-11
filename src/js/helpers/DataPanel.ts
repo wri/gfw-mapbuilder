@@ -8,7 +8,32 @@ import { setActiveFeatures } from 'js/store/mapview/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
 
+interface FieldInfo {
+  fieldName: string;
+  label: string;
+}
+function getAttributesToFetch(layer: __esri.FeatureLayer): FieldInfo[] {
+  //Check for popupTemplate > this handles webmap layers
+  let enabledFieldInfos: FieldInfo[] = [];
+  if (layer.popupTemplate) {
+    enabledFieldInfos = layer.popupTemplate.fieldInfos
+      .filter(f => f.visible)
+      .map(f => {
+        return {
+          fieldName: f.fieldName,
+          label: f.label
+        };
+      });
+    // console.log('enabledFieldInfos', enabledFieldInfos);
+  } else {
+    console.log('no popupTemplate found, lets dig into metadata');
+    console.log(layer);
+  }
+  return enabledFieldInfos;
+}
+
 function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
+  console.log(url);
   const qt = new QueryTask({
     url: url
   });
@@ -36,6 +61,7 @@ async function fetchAsyncServerResults(
     for (const sublayer of layer.sublayers.items) {
       const subUrl = sublayer.url;
       try {
+        const attributesToFetch = getAttributesToFetch(layer);
         const sublayerResult = await esriQuery(subUrl, queryParams);
         if (sublayerResult.features.length > 0) {
           const features = sublayerResult.features.map(f => {
@@ -61,6 +87,7 @@ async function fetchAsyncServerResults(
     //attempt to process layer as it because it has not sublayers
     try {
       const url = layer.url;
+      const attributesToFetch = getAttributesToFetch(layer);
       const layerResult = await esriQuery(url, queryParams);
       if (layerResult.features.length > 0) {
         const features = layerResult.features.map(f => {
@@ -118,6 +145,10 @@ export async function queryLayersForFeatures(
         layer.type === 'scene'
       ) {
         try {
+          const attributesToFetch = getAttributesToFetch(layer);
+          const outFields = attributesToFetch.map(f => f.fieldName);
+          queryParams.outFields = outFields;
+          console.log('forawait -> outFields', queryParams);
           const featureResults = await layer.queryFeatures(queryParams);
           //Ignore empty results
           if (featureResults.features.length > 0) {
@@ -146,12 +177,12 @@ export async function queryLayersForFeatures(
       } else {
         // Deal with SERVER side layers
         //TODO: will this handle most or all cases we have? needs more testing
-        const queryServerSideLayer = await fetchAsyncServerResults(
-          mapview,
-          event.mapPoint,
-          layer
-        );
-        layerFeatureResults = layerFeatureResults.concat(queryServerSideLayer);
+        // const queryServerSideLayer = await fetchAsyncServerResults(
+        //   mapview,
+        //   event.mapPoint,
+        //   layer
+        // );
+        // layerFeatureResults = layerFeatureResults.concat(queryServerSideLayer);
       }
     }
   }
