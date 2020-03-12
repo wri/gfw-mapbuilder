@@ -58,6 +58,11 @@ interface ZoomParams {
   zoomIn: boolean;
 }
 
+interface Popup {
+  content: any;
+  title: any;
+}
+
 interface RemoteDataLayer {
   // layer: object;
   layer: {
@@ -66,7 +71,7 @@ interface RemoteDataLayer {
     label: object;
     url: string;
     type: string;
-    popup?: object;
+    popup?: Popup;
     sublabel?: object;
     // [key: string]: object
   };
@@ -133,6 +138,9 @@ export class MapController {
         () => {
           store.dispatch(isMapReady(true));
           //Set default language
+          const basemap = Basemap.fromId('osm');
+          //@ts-ignore
+          this._map?.basemap = basemap;
           store.dispatch(setLanguage(appSettings.language));
           this._mapview.popup.highlightEnabled = false;
           this._mapview.on('click', event => {
@@ -205,10 +213,7 @@ export class MapController {
                 let metadata;
                 let popup;
                 let sublabel;
-                console.log(apiLayer);
                 if (apiLayer.dataLayer) {
-                  console.log('data layer is here');
-                  console.log(apiLayer);
                   metadata = apiLayer.layer.metadata;
                   popup = apiLayer.layer.popup;
                   sublabel = apiLayer.layer.sublabel;
@@ -219,8 +224,6 @@ export class MapController {
                   url = apiLayer.layer.url;
                   type = apiLayer.layer.type;
                 } else {
-                  console.log('data layer IS NOT here');
-                  console.log(apiLayer);
                   resourceId = apiLayer.id;
                   resourceTitle = apiLayer.label[appState.selectedLanguage];
                   resourceGroup = apiLayer.groupId;
