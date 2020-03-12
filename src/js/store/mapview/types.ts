@@ -59,6 +59,11 @@ export interface MapviewState {
   activeBasemap: string; // * NEW! not in resources.js
 }
 
+interface Popup {
+  content: any;
+  title: any;
+}
+
 export interface LayerProps {
   id: string;
   visible: boolean;
@@ -68,7 +73,7 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
-  popup?: object;
+  popup?: Popup;
   metadata?: object;
   sublabel?: object;
 }
