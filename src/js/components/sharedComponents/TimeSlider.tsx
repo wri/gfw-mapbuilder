@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
+import { createSliderWithTooltip, Range } from 'rc-slider';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
-// const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 const TimeSlider = (): JSX.Element => {
   const [range, setRange] = useState([2000, 2018]);
-  const [startYear, endYear] = range;
   const marks = [
     { label: '2000', style: {} },
     { label: '2001', style: {} },
@@ -29,41 +27,28 @@ const TimeSlider = (): JSX.Element => {
     { label: '2018', style: {} }
   ];
 
-  const handleSliderChange = (value: any) => {
-    console.log('VALUE', value);
-    setRange(value);
-  };
-
   return (
-    <div className="time-slider">
+    <div className="time-slider-container">
+      <button onClick={(): void => console.log('play time sequence!')}>
+        &#9658;
+      </button>
       <SliderWithTooltip
         min={2000}
         max={2018}
         defaultValue={[2000, 2018]}
         value={range}
-        // disabled={true}
         allowCross={false}
         tipFormatter={(val: number): number => val}
         dots={true}
         marks={marks}
-        //
-        // railStyle={{ height: 10, backgroundColor: 'rgb(240, 171, 0)' }}
-        // trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
-        // activeDotStyle={{ border: '2px solid #e9e9e9' }}
-        // dotStyle={{
-        //   border: `2px solid rgb(240, 171, 0)`,
-        //   height: 10,
-        //   width: 10,
-        //   bottom: -6
-        // }}
-        // handleStyle={[
-        //   {
-        //     border: `2px solid rgb(240, 171, 0)`,
-        //     height: 20,
-        //     width: 20
-        //   }
-        // ]}
-        onChange={handleSliderChange}
+        railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
+        handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
+        dotStyle={{ border: '1px solid #e9e9e9' }}
+        activeDotStyle={{
+          border: '1px solid #F0AB00'
+        }}
+        trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+        onChange={(value: Array<number>): void => setRange(value)}
       />
     </div>
   );
