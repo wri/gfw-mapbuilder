@@ -5,16 +5,57 @@ import store from 'js/store';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/support/Query';
 import { setActiveFeatures } from 'js/store/mapview/actions';
-import { LayerFeatureResult } from 'js/store/mapview/types';
+import { LayerFeatureResult, FeatureResult } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
+
+//Generic ESRI query helper
+function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
+  const qt = new QueryTask({
+    url: url
+  });
+  const query = new Query(queryParams);
+  const result = qt.execute(query);
+  return result;
+}
+
+//Helper to fetch name field for the objectids due to inconsistent naming and application requiring object id for attachment fetching
+async function getLayerFields(
+  layer: __esri.FeatureLayer
+): Promise<__esri.Field | undefined> {
+  let layerObjectField = {} as __esri.Field | undefined;
+  if (layer.fields) {
+    layerObjectField = layer.fields.find(
+      field =>
+        field.type.toLowerCase() === 'esrifieldtypeoid' ||
+        field.type.toLowerCase() === 'oid'
+    );
+  } else {
+    layerObjectField = await fetch(`${layer.url}?f=pjson`, {
+      body: null,
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data?.fields) {
+          const objectidName = data.fields.find(
+            (field: __esri.Field) =>
+              field.type.toLowerCase() === 'esrifieldtypeoid' ||
+              field.type.toLowerCase() === 'oid'
+          );
+          return objectidName;
+        }
+      });
+  }
+  return layerObjectField;
+}
 
 interface FieldInfo {
   fieldName: string;
   label: string;
 }
-function getAttributesToFetch(layer: __esri.FeatureLayer): FieldInfo[] {
+function getAttributesToFetch(layer: __esri.FeatureLayer): FieldInfo[] | null {
   //Check for popupTemplate > this handles webmap layers
-  let enabledFieldInfos: FieldInfo[] = [];
+  let enabledFieldInfos: FieldInfo[] | null = null;
   if (layer.popupTemplate) {
     enabledFieldInfos = layer.popupTemplate.fieldInfos
       .filter(f => f.visible)
@@ -24,93 +65,93 @@ function getAttributesToFetch(layer: __esri.FeatureLayer): FieldInfo[] {
           label: f.label
         };
       });
-    // console.log('enabledFieldInfos', enabledFieldInfos);
   } else {
+    //No popup template found, check the metadata
+    debugger;
+    enabledFieldInfos = [{ fieldName: '*', label: '*' }];
     console.log('no popupTemplate found, lets dig into metadata');
     console.log(layer);
   }
   return enabledFieldInfos;
 }
 
-function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
-  console.log(url);
-  const qt = new QueryTask({
-    url: url
-  });
-  const query = new Query(queryParams);
-  const result = qt.execute(query);
-  return result;
-}
-
-async function fetchAsyncServerResults(
+async function fetchQueryTask(
+  layer: __esri.FeatureLayer,
   mapview: MapView,
-  mapPoint: Point,
-  layer: any
-): Promise<any> {
-  const processedLayerResult: LayerFeatureResult[] = [];
-  const queryParams = {
+  event: __esri.MapViewClickEvent
+): Promise<FeatureResult[]> {
+  let featureResult = [] as FeatureResult[];
+  const queryParams: any = {
     where: '1=1',
-    outFields: ['*'],
+    outFields: [],
     units: 'miles',
     distance: 0.02 * mapview.resolution,
-    geometry: mapPoint,
+    geometry: event.mapPoint,
     returnGeometry: true
   };
-  if (layer.sublayers && layer.sublayers.length > 0) {
-    //process each sublayer
-    for (const sublayer of layer.sublayers.items) {
-      const subUrl = sublayer.url;
-      try {
-        const attributesToFetch = getAttributesToFetch(layer);
-        const sublayerResult = await esriQuery(subUrl, queryParams);
-        if (sublayerResult.features.length > 0) {
-          const features = sublayerResult.features.map(f => {
-            return {
-              attributes: f.attributes,
-              geometry: f.geometry
-            };
-          });
-          const layerResultObject = {
-            layerID: layer.id,
-            layerTitle: layer.title,
-            sublayerID: sublayer.id,
-            sublayerTitle: sublayer.title,
-            features: features
-          };
-          processedLayerResult.push(layerResultObject);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+  const url = layer.url;
+  try {
+    const layerFields = await getLayerFields(layer);
+    if (layerFields?.name) {
+      queryParams.outFields.push(layerFields.name);
     }
-  } else {
-    //attempt to process layer as it because it has not sublayers
-    try {
-      const url = layer.url;
-      const attributesToFetch = getAttributesToFetch(layer);
-      const layerResult = await esriQuery(url, queryParams);
-      if (layerResult.features.length > 0) {
-        const features = layerResult.features.map(f => {
-          return {
-            objectid: f.getObjectId(),
-            attributes: f.attributes,
-            geometry: f.geometry //this is either null or geometry depending on our query!
-          };
-        });
-        const layerResultObject = {
-          layerID: layer.id,
-          layerTitle: layer.title,
-          sublayerID: null,
-          sublayerTitle: null,
-          features: features
+    const attributesToFetch = getAttributesToFetch(layer);
+    const newOutFields = attributesToFetch?.map(f => f.fieldName);
+    queryParams.outFields.push(newOutFields);
+    const sublayerResult = await esriQuery(url, queryParams);
+
+    if (sublayerResult.features.length > 0) {
+      featureResult = sublayerResult.features.map(f => {
+        return {
+          attributes: f.attributes,
+          geometry: f.geometry,
+          objectid: layerFields?.name ? f.attributes[layerFields.name] : null
         };
-        processedLayerResult.push(layerResultObject);
-      }
-    } catch (e) {
-      console.error(`Failed to query layer, ${layer.id}`);
+      });
     }
+  } catch (e) {
+    console.error(e);
   }
-  return processedLayerResult;
+  return featureResult;
+}
+
+async function fetchQueryFeatures(
+  layer: __esri.FeatureLayer,
+  mapview: MapView,
+  event: __esri.MapViewClickEvent
+): Promise<FeatureResult[]> {
+  let featureResult = [] as FeatureResult[];
+  const queryParams: any = {
+    where: '1=1',
+    outFields: [],
+    units: 'miles',
+    distance: 0.02 * mapview.resolution,
+    geometry: event.mapPoint,
+    returnGeometry: true
+  };
+  const attributesToFetch = getAttributesToFetch(layer);
+  const layerFields = await getLayerFields(layer);
+  if (layerFields?.name) {
+    queryParams.outFields.push(layerFields.name);
+  }
+  const newOutFields = attributesToFetch?.map(f => f.fieldName);
+  queryParams.outFields.push(newOutFields);
+  try {
+    const featureResults = await layer.queryFeatures(queryParams);
+    //Ignore empty results
+    if (featureResults.features.length > 0) {
+      featureResult = featureResults.features.map((f: any) => {
+        return {
+          attributes: f.attributes,
+          geometry: f.geometry,
+          objectid: layerFields?.name ? f.attributes[layerFields.name] : null
+        };
+      });
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return featureResult;
 }
 
 //Client Side Feature Fetching
@@ -119,70 +160,69 @@ export async function queryLayersForFeatures(
   map: Map | undefined,
   event: __esri.MapViewClickEvent
 ): Promise<void> {
-  let layerFeatureResults: LayerFeatureResult[] = [];
+  const layerFeatureResults: LayerFeatureResult[] = [];
 
-  const queryParams = {
-    where: '1=1',
-    outFields: ['*'],
-    units: 'miles',
-    distance: 0.02 * mapview.resolution,
-    geometry: event.mapPoint,
-    returnGeometry: true
-  };
-
+  //TODO: This is where we would add exceptions to layers (e.g. TREE_COVER_LOSS/GAIN should not be querable etc)
+  // we need exhaustive list here!
   const allLayersVisibleLayers: any = map?.layers
-    .filter(l => l.visible && l.type !== 'graphics')
+    .filter(
+      l =>
+        l.visible &&
+        l.type !== 'graphics' &&
+        l.type !== 'base-tile' &&
+        l.type !== 'imagery'
+    )
     .toArray();
-
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {
-      // Deal with CLIENT side layers
-      //TODO: is there a better way to split client/server queries?
-      if (
-        layer.type === 'feature' ||
-        layer.type === 'csv' ||
-        layer.type === 'geojson' ||
-        layer.type === 'scene'
-      ) {
-        try {
-          const attributesToFetch = getAttributesToFetch(layer);
-          const outFields = attributesToFetch.map(f => f.fieldName);
-          queryParams.outFields = outFields;
-          console.log('forawait -> outFields', queryParams);
-          const featureResults = await layer.queryFeatures(queryParams);
-          //Ignore empty results
-          if (featureResults.features.length > 0) {
-            const newLayerFeatureResult = {
-              layerID: featureResults.features[0].layer.id,
-              layerTitle: featureResults.features[0].layer.title,
-              sublayerID: null,
-              sublayerTitle: null,
-              features: []
-            };
-            newLayerFeatureResult.features = featureResults.features.map(
-              (f: any) => {
-                return {
-                  attributes: f.attributes,
-                  geometry: f.geometry
-                };
-              }
-            );
-            layerFeatureResults = layerFeatureResults.concat(
-              newLayerFeatureResult
-            );
+      //for each layer we check if it has subs or not
+      if (layer.sublayers && layer.sublayers.length > 0) {
+        for (const sublayer of layer.sublayers.items) {
+          //sublayers do not have a type, so it always defaults to QueryTask
+          //use generic QueryTask approach
+          const features = await fetchQueryTask(sublayer, mapview, event);
+          if (features.length > 0) {
+            layerFeatureResults.push({
+              layerID: layer.id,
+              layerTitle: layer.title,
+              sublayerID: sublayer.id,
+              sublayerTitle: sublayer.title,
+              features: features
+            });
           }
-        } catch (e) {
-          console.log(e);
         }
       } else {
-        // Deal with SERVER side layers
-        //TODO: will this handle most or all cases we have? needs more testing
-        // const queryServerSideLayer = await fetchAsyncServerResults(
-        //   mapview,
-        //   event.mapPoint,
-        //   layer
-        // );
-        // layerFeatureResults = layerFeatureResults.concat(queryServerSideLayer);
+        //layer does not have subs, query just the layer itself!
+        if (
+          layer.type === 'feature' ||
+          layer.type === 'csv' ||
+          layer.type === 'geojson' ||
+          layer.type === 'scene'
+        ) {
+          //deal with queryFeatures() approach
+          const features = await fetchQueryFeatures(layer, mapview, event);
+          if (features.length > 0) {
+            layerFeatureResults.push({
+              layerID: layer.id,
+              layerTitle: layer.title,
+              sublayerID: null,
+              sublayerTitle: null,
+              features: features
+            });
+          }
+        } else {
+          //use generic QueryTask approach
+          const features = await fetchQueryTask(layer, mapview, event);
+          if (features.length > 0) {
+            layerFeatureResults.push({
+              layerID: layer.id,
+              layerTitle: layer.title,
+              sublayerID: null,
+              sublayerTitle: null,
+              features: features
+            });
+          }
+        }
       }
     }
   }
