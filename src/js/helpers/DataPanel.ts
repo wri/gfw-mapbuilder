@@ -100,11 +100,13 @@ function getAttributesToFetch(
             label: matchingLabel?.alias
           };
         });
-
       enabledFieldInfos =
         attributeFieldsToInclude && attributeFieldsToInclude.length > 0
           ? attributeFieldsToInclude
           : [{ fieldName: '*', label: '*' }];
+    } else {
+      console.log('no metadata stuff or no fieldnames?');
+      enabledFieldInfos = [{ fieldName: '*', label: '*' }];
     }
   }
   return enabledFieldInfos;
