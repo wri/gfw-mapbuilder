@@ -9,7 +9,10 @@ import {
 } from 'js/store/appState/actions';
 import { FeatureResult } from 'js/store/mapview/types';
 import { LayerFeatureResult } from 'js/store/mapview/types';
-import { setActiveFeatures } from 'js/store/mapview/actions';
+import {
+  setActiveFeatures,
+  setActiveFeatureIndex
+} from 'js/store/mapview/actions';
 
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
@@ -132,7 +135,8 @@ const UploadFile = (): JSX.Element => {
               })
             };
 
-            // dispatch(setActiveFeatures([shapeFileFeatures])); // ? whyyy?
+            dispatch(setActiveFeatureIndex([0, 0]));
+            dispatch(setActiveFeatures([shapeFileFeatures]));
           } else {
             // TODO [ ] - error handling logic if array is empty
           }

@@ -3,6 +3,7 @@ import Mapview from 'esri/views/MapView';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
 import Polygon from 'esri/geometry/Polygon';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 
 import { getCustomSymbol, getImagerySymbol } from 'js/helpers/generateSymbol';
 
@@ -31,15 +32,13 @@ export function setNewGraphic({
     });
   }
 
-  allFeatures.forEach((feature: FeatureResult) => {
-    const polygonOrPointSymbol =
-      feature.geometry.type === 'polygon'
-        ? getCustomSymbol()
-        : getImagerySymbol();
+  const polygonOrPointSymbol = (type: string): SimpleFillSymbol =>
+    type === 'polygon' ? getCustomSymbol() : getImagerySymbol();
 
+  allFeatures.forEach((feature: FeatureResult) => {
     const symbol = (feature.geometry as any).rings
       ? getCustomSymbol()
-      : polygonOrPointSymbol;
+      : polygonOrPointSymbol(feature.geometry.type);
 
     const featureGraphic = new Graphic({
       geometry: new Polygon(feature.geometry),
