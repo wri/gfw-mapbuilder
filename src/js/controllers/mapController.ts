@@ -1036,6 +1036,17 @@ export class MapController {
     // }
     // this.setState({ isUploading: false });
   }
+
+  updateBaseTile(id: string, range: Array<number>): void {
+    const [startYear, endYear] = range;
+    const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;
+
+    if (specificLayer) {
+      (specificLayer as any).minYear = startYear;
+      (specificLayer as any).maxYear = endYear;
+      specificLayer.refresh();
+    }
+  }
 }
 
 export const mapController = new MapController();
