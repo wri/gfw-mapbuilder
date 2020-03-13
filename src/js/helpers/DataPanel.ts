@@ -4,7 +4,11 @@ import store from 'js/store';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/support/Query';
 import { setActiveFeatures } from 'js/store/mapview/actions';
-import { LayerFeatureResult, FeatureResult } from 'js/store/mapview/types';
+import {
+  LayerFeatureResult,
+  FeatureResult,
+  FieldName
+} from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
 
 //Generic ESRI query helper
@@ -92,21 +96,19 @@ function getAttributesToFetch(
       const attributeFieldsToInclude = fieldNamesFromMetadata
         .filter((f: any) => availableFieldsNames.includes(f))
         .map((f: any) => {
-          const matchingLabel = availableFields?.find(
-            (allowedField: any) => allowedField.name.toLowerCase() === f
-          );
           return {
             fieldName: f,
-            label: matchingLabel?.alias
+            label: fieldsFromMetadataCleaned.find(
+              (field: any) => field.fieldName.toLowerCase() === f.toLowerCase()
+            ).label
           };
         });
       enabledFieldInfos =
         attributeFieldsToInclude && attributeFieldsToInclude.length > 0
           ? attributeFieldsToInclude
-          : [{ fieldName: '*', label: '*' }];
+          : null;
     } else {
-      console.log('no metadata stuff or no fieldnames?');
-      enabledFieldInfos = [{ fieldName: '*', label: '*' }];
+      enabledFieldInfos = null;
     }
   }
   return enabledFieldInfos;
@@ -117,11 +119,12 @@ async function fetchQueryTask(
   mapview: MapView,
   event: __esri.MapViewClickEvent,
   isSubLayer?: boolean
-): Promise<FeatureResult[]> {
+): Promise<{ fieldNames: FieldName[] | null; features: FeatureResult[] }> {
   let featureResult = [] as FeatureResult[];
+  let fieldNames = [] as FieldName[] | null;
   const queryParams: any = {
     where: '1=1',
-    outFields: [],
+    outFields: ['*'],
     units: 'miles',
     distance: 0.02 * mapview.resolution,
     geometry: event.mapPoint,
@@ -147,8 +150,12 @@ async function fetchQueryTask(
       isSubLayer,
       allLayerFields
     );
+    fieldNames = attributesToFetch;
     const newOutFields = attributesToFetch?.map(f => f.fieldName);
-    queryParams.outFields = queryParams.outFields.concat(newOutFields);
+    //TODO: What to do when we have no attributes to fetch if there is no popuptemplate of metadata info? do we even fetch the data display everything? nothing?
+    queryParams.outFields = newOutFields
+      ? queryParams.outFields.concat(newOutFields)
+      : queryParams.outFields;
     const sublayerResult = await esriQuery(url, queryParams);
 
     if (sublayerResult.features.length > 0) {
@@ -163,24 +170,27 @@ async function fetchQueryTask(
   } catch (e) {
     console.error(e);
   }
-  return featureResult;
+
+  return { features: featureResult, fieldNames };
 }
 
 async function fetchQueryFeatures(
   layer: __esri.FeatureLayer,
   mapview: MapView,
   event: __esri.MapViewClickEvent
-): Promise<FeatureResult[]> {
+): Promise<any> {
   let featureResult = [] as FeatureResult[];
+  let fieldNames = [] as any[] | null;
   const queryParams: any = {
     where: '1=1',
-    outFields: [],
+    outFields: ['*'],
     units: 'miles',
     distance: 0.02 * mapview.resolution,
     geometry: event.mapPoint,
     returnGeometry: true
   };
   const attributesToFetch = getAttributesToFetch(layer);
+  fieldNames = attributesToFetch;
   const allLayerFields = await getAllLayerFields(layer);
   let objectid: string | null = null;
   if (allLayerFields) {
@@ -195,7 +205,10 @@ async function fetchQueryFeatures(
     }
   }
   const newOutFields = attributesToFetch?.map(f => f.fieldName);
-  queryParams.outFields.push(newOutFields);
+  //TODO: What to do when we have no attributes to fetch if there is no popuptemplate of metadata info? do we even fetch the data display everything? nothing?
+  queryParams.outFields = newOutFields
+    ? [...queryParams.outFields, ...newOutFields]
+    : queryParams.outFields;
   try {
     const featureResults = await layer.queryFeatures(queryParams);
     //Ignore empty results
@@ -211,7 +224,8 @@ async function fetchQueryFeatures(
   } catch (e) {
     console.error(e);
   }
-  return featureResult;
+
+  return { features: featureResult, fieldNames };
 }
 
 //Feature Fetching Logic starts
@@ -240,14 +254,20 @@ export async function queryLayersForFeatures(
         for (const sublayer of layer.sublayers.items) {
           //sublayers do not have a type, so it always defaults to QueryTask
           //use generic QueryTask approach
-          const features = await fetchQueryTask(sublayer, mapview, event, true);
+          const { features, fieldNames } = await fetchQueryTask(
+            sublayer,
+            mapview,
+            event,
+            true
+          );
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: layer.title,
               sublayerID: sublayer.id,
               sublayerTitle: sublayer.title,
-              features: features
+              features: features,
+              fieldNames
             });
           }
         }
@@ -260,26 +280,37 @@ export async function queryLayersForFeatures(
           layer.type === 'scene'
         ) {
           //deal with queryFeatures() approach
-          const features = await fetchQueryFeatures(layer, mapview, event);
+          const { features, fieldNames } = await fetchQueryFeatures(
+            layer,
+            mapview,
+            event
+          );
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: layer.title,
               sublayerID: null,
               sublayerTitle: null,
-              features: features
+              features: features,
+              fieldNames
             });
           }
         } else {
           //use generic QueryTask approach
-          const features = await fetchQueryTask(layer, mapview, event, false);
+          const { features, fieldNames } = await fetchQueryTask(
+            layer,
+            mapview,
+            event,
+            false
+          );
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: layer.title,
               sublayerID: null,
               sublayerTitle: null,
-              features: features
+              features: features,
+              fieldNames
             });
           }
         }
