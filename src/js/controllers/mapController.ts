@@ -48,6 +48,13 @@ import { getCustomSymbol } from 'js/helpers/generateSymbol';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
+interface URLProperties {
+  iso: string;
+  layerTitle: string;
+  sublayerID: any;
+  specificFeatureID: any;
+}
+
 interface URLCoordinates {
   zoom: number;
   latitude: string;
@@ -974,6 +981,23 @@ export class MapController {
       const basemap = Basemap.fromId(id);
       this._map.basemap = basemap;
       store.dispatch(setSelectedBasemap(id));
+    }
+  }
+
+  async getDocuments(
+    urlProperties: URLProperties
+  ): Promise<Array<object> | null> {
+    const { iso, layerTitle, sublayerID, specificFeatureID } = urlProperties;
+    const endPoint = `https://gis.forest-atlas.org/server/rest/services/${iso}/${layerTitle}/MapServer/${sublayerID}/${specificFeatureID}/attachments?f=pjson`;
+
+    const { attachmentInfos } = await fetch(endPoint)
+      .then(response => response.json())
+      .catch(e => console.log('error in getDocuments()', e));
+
+    if (attachmentInfos.length) {
+      return attachmentInfos;
+    } else {
+      return null;
     }
   }
 
