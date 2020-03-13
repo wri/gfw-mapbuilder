@@ -92,6 +92,9 @@ const UploadFile = (): JSX.Element => {
 
     if (file && (isZipfile || isGeoJSON)) {
       // TODO - [ ] Turn on spinner!
+      dispatch(setActiveFeatureIndex([0, 0]));
+      dispatch(setActiveFeatures([]));
+
       const formData = new FormData();
       formData.append('file', file, file.name);
 
