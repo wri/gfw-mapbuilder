@@ -61,12 +61,24 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         return (
           <table cellPadding={0} cellSpacing={0}>
             <tbody>
-              {Object.keys(props.attributes).map((a: string, i: number) => (
-                <tr key={i}>
-                  <td className="first-cell">{a}</td>
-                  <td className="second-cell">{props.attributes[a]}</td>
-                </tr>
-              ))}
+              {activeLayerInfo.fieldNames?.map((field, i) => {
+                //Grab attribute value irrespective if fieldName is appropriately cased!
+                const attributeKey = Object.keys(props.attributes).find(
+                  a => a.toLowerCase() === field.fieldName.toLowerCase()
+                );
+                if (attributeKey) {
+                  return (
+                    <tr key={i}>
+                      <td className="first-cell">{field.label}</td>
+                      <td className="second-cell">
+                        {props.attributes[attributeKey]}
+                      </td>
+                    </tr>
+                  );
+                } else {
+                  return null;
+                }
+              })}
             </tbody>
           </table>
         );
