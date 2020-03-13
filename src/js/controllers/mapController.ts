@@ -986,7 +986,12 @@ export class MapController {
 
   async getDocuments(
     urlProperties: URLProperties
-  ): Promise<Array<object> | null> {
+  ): Promise<Array<{
+    id: number;
+    contentType: string;
+    size: number;
+    name: string;
+  }> | null> {
     const { iso, layerTitle, sublayerID, specificFeatureID } = urlProperties;
     const endPoint = `https://gis.forest-atlas.org/server/rest/services/${iso}/${layerTitle}/MapServer/${sublayerID}/${specificFeatureID}/attachments?f=pjson`;
 

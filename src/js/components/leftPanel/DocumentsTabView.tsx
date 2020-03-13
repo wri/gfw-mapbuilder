@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { mapController } from 'js/controllers/mapController';
@@ -10,7 +10,26 @@ interface Props {
   label: string;
 }
 
-const DocumentsTabView = (props: Props) => {
+interface Attachment {
+  id: number;
+  contentType: string;
+  size: number;
+  name: string;
+}
+
+interface AttachmentWithURLProps {
+  id: number;
+  contentType: string;
+  size: number;
+  name: string;
+  iso: string;
+  layerTitle: string;
+  sublayerID: number;
+  specificFeatureID: number;
+}
+
+const DocumentsTabView = (props: Props): JSX.Element => {
+  const [allAttachments, setAllAttachments] = useState([]);
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
   );
@@ -19,15 +38,31 @@ const DocumentsTabView = (props: Props) => {
   );
   const { iso } = useSelector((store: RootState) => store.appSettings);
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
-  /**
-   * * TODO
-   * if (tabViewIsVisible) make a fetch request for all
-   * attachments related to activeFeatures & activeFeatureIndex
-   */
+
+  const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
+
+  const featureCollectionTitle = activeFeatures[featureCollectionIndex]
+    ? activeFeatures[featureCollectionIndex].sublayerTitle
+    : null;
+  console.log('TOPP LEVELL', featureCollectionTitle);
 
   const grabID = (attributes: any): void => {
-    console.log(attributes);
-    debugger;
+    // * I may need to refactor
+    // * to account for different objectID names
+    const hasdefaultID = attributes.objectid ? true : false;
+    const forestProductionID = Object.keys(attributes).includes(
+      'forets_production.objectid'
+    );
+    //
+    if (hasdefaultID) {
+      return attributes.object;
+    }
+    if (forestProductionID) {
+      return attributes['forets_production.objectid'];
+    } else {
+      console.log('error with attributes in grabID()', attributes);
+      debugger;
+    }
   };
 
   const getAndSetDocuments = async (): Promise<any> => {
@@ -35,37 +70,80 @@ const DocumentsTabView = (props: Props) => {
 
     const specificFeature =
       activeFeatures[featureCollectionIndex].features[featureIndex];
-    0;
     const { layerTitle, sublayerID } = activeFeatures[featureCollectionIndex];
-
-    const specificFeatureID = specificFeature.attributes.objectid
-      ? specificFeature.attributes.objectid
-      : grabID(specificFeature.attributes);
 
     const urlProperties = {
       iso: iso.toLowerCase(),
       layerTitle,
       sublayerID,
-      specificFeatureID
+      specificFeatureID: grabID(specificFeature.attributes)
     };
     const attachments = await mapController.getDocuments(urlProperties);
 
-    if (attachments) {
-      console.log('We have attachments:', attachments);
+    if (attachments !== allAttachments) {
+      const attachmentInfo = attachments?.map((attachment: Attachment) => {
+        return { ...attachment, ...urlProperties };
+      }) as any;
+      setAllAttachments(attachmentInfo);
+    }
+  };
+
+  const returnDocuments = (): any => {
+    if (allAttachments && allAttachments.length) {
+      console.log('We have attachments... :)', allAttachments);
+      return allAttachments.map(
+        (attachment: AttachmentWithURLProps, key: number) => {
+          const {
+            id,
+            contentType,
+            size,
+            name,
+            iso,
+            layerTitle,
+            sublayerID,
+            specificFeatureID
+          } = attachment;
+          console.log('doc size', size);
+          // TODO [ ] styling!
+          return (
+            <a
+              href={`https://gis.forest-atlas.org/server/rest/services/${iso.toLowerCase()}/${layerTitle}/MapServer/${sublayerID}/${specificFeatureID}/attachments/${id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={key}
+            >
+              <div className="attachment-container">
+                <p>
+                  {name} is a {contentType}
+                </p>
+              </div>
+            </a>
+          );
+        }
+      );
     } else {
-      console.log('No attachments... :(', attachments);
+      console.log('No attachments... :(', allAttachments);
+      return <>There are no attachments at this time.</>;
     }
   };
 
   useEffect(() => {
     if (tabViewIsVisible) {
       getAndSetDocuments();
-      // TODO [ ] - grab featureCollection.layerTitle
-      // TODO [ ] - fetch attachments related to the activeFeature
     }
-  });
+  }, [tabViewIsVisible]);
 
-  return <>{tabViewIsVisible && <div>Documents Tab View</div>}</>;
+  return (
+    <div className="documents-container">
+      {tabViewIsVisible && (
+        <>
+          <h3>{featureCollectionTitle}</h3>
+          <p>Documents Tab View</p>
+          {returnDocuments()}
+        </>
+      )}
+    </div>
+  );
 };
 
 export default DocumentsTabView;
