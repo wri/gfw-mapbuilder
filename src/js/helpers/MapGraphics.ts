@@ -2,10 +2,12 @@ import Map from 'esri/Map';
 import Mapview from 'esri/views/MapView';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
+import Point from 'esri/geometry/Point';
 import Polygon from 'esri/geometry/Polygon';
 import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
+import SimpleMarkerSymbol from 'esri/symbols/SimpleMarkerSymbol';
 
-import { getCustomSymbol, getImagerySymbol } from 'js/helpers/generateSymbol';
+import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
 
 import { FeatureResult } from 'js/store/mapview/types';
 
@@ -32,16 +34,44 @@ export function setNewGraphic({
     });
   }
 
-  const polygonOrPointSymbol = (type: string): SimpleFillSymbol =>
-    type === 'polygon' ? getCustomSymbol() : getImagerySymbol();
+  const setSymbol = (symbolType: string): any => {
+    switch (symbolType) {
+      case 'polygon':
+        return getCustomSymbol();
+      case 'point':
+        return getPointSymbol();
+    }
+  };
+
+  const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
+    switch (symbolType) {
+      case 'polygon':
+        return new Polygon(geometry);
+      case 'point':
+        return new Point(geometry);
+    }
+  };
 
   allFeatures.forEach((feature: FeatureResult) => {
-    const symbol = (feature.geometry as any).rings
-      ? getCustomSymbol()
-      : polygonOrPointSymbol(feature.geometry.type);
+    const isPolygon =
+      (feature.geometry as any).rings || feature.geometry.type === 'polygon'
+        ? true
+        : false;
+    /**
+     * * NOTE:
+     * * File uploads don't have a geometry.type,
+     * * so we have to check if it has geometry.rings
+     */
+    const symbol = isPolygon
+      ? setSymbol('polygon')
+      : setSymbol(feature.geometry.type);
+
+    const geometry = isPolygon
+      ? setGeometry('polygon', feature.geometry)
+      : setGeometry(feature.geometry.type, feature.geometry);
 
     const featureGraphic = new Graphic({
-      geometry: new Polygon(feature.geometry),
+      geometry: geometry,
       attributes: feature.attributes,
       symbol: symbol
     });
