@@ -93,13 +93,16 @@ export default {
     },
     extraLayers: [
       {
-        order: 999999999,
-        id: "SBM",
-        type: "tiled",
-        opacity: 1,
+        order: 555,
+        id: "Island_Groups_and_Atoll_names",
+        type: "dynamic",
+        label: {
+          en: "Island_Groups_and_Atoll_names"
+        },
+        // opacity: 1,
         url:
-          "https://tiles.arcgis.com/tiles/x494PplYsmeeZsYB/arcgis/rest/services/Island_Groups_and_Atoll_names/VectorTileServer/tile/{level}/{col}/{row}.pbf",
-        layerIds: [1],
+          "https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer",
+        layerIds: [13],
         visible: true
       }
     ]
