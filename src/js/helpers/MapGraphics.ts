@@ -40,6 +40,9 @@ export function setNewGraphic({
         return getCustomSymbol();
       case 'point':
         return getPointSymbol();
+      default:
+        console.warn('potential edge case in setSymbol()', symbolType);
+        return getCustomSymbol();
     }
   };
 
@@ -49,14 +52,15 @@ export function setNewGraphic({
         return new Polygon(geometry);
       case 'point':
         return new Point(geometry);
+      default:
+        console.warn('potential edge case in setGeometry()', symbolType);
+        return new Polygon(geometry);
     }
   };
 
   allFeatures.forEach((feature: FeatureResult) => {
     const isPolygon =
-      (feature.geometry as any).rings || feature.geometry.type === 'polygon'
-        ? true
-        : false;
+      (feature.geometry as any).rings || feature.geometry.type === 'polygon';
     /**
      * * NOTE:
      * * File uploads don't have a geometry.type,
