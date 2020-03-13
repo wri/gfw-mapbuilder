@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Slider from 'rc-slider';
+import Slider, { createSliderWithTooltip } from 'rc-slider';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -7,6 +7,8 @@ interface LayerTransparencyProps {
   layerID: string;
   layerOpacity: number | undefined;
 }
+
+const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 const LayerTransparencySlider = (
   props: LayerTransparencyProps
@@ -19,11 +21,12 @@ const LayerTransparencySlider = (
 
   return (
     <div className="transparency-slider">
-      <Slider
+      <SliderWithTooltip
         min={0}
         max={1}
         step={0.05}
         value={layerOpacity}
+        tipFormatter={(val: number): string => `${val * 100}%`}
         onChange={handleOpacityChange}
         railStyle={{ height: 5, backgroundColor: 'rgb(240, 171, 0)' }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 5 }}
