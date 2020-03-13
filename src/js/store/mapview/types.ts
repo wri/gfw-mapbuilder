@@ -88,12 +88,18 @@ export interface FeatureResult {
   geometry: __esri.Geometry;
 }
 
+export interface FieldName {
+  fieldName: string;
+  label: string;
+}
+
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
   sublayerTitle: string | null;
   sublayerID: string | null;
   features: FeatureResult[];
+  fieldNames: FieldName[] | null;
 }
 
 //Action types
