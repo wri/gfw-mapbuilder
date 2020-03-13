@@ -186,6 +186,20 @@
       flex-grow: 1;
     }
   }
+
+  .time-slider-container {
+    display: flex;
+    padding: 0 1rem;
+    align-items: center;
+
+    button {
+      color: $base-yellow;
+      border: none;
+      background-color: white;
+      font-size: 1rem;
+      margin-right: 0.25rem;
+    }
+  }
 }
 
 .transparency-slider {
