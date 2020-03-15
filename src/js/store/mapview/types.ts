@@ -80,7 +80,7 @@ export interface LayerProps {
 
 interface Attributes {
   [key: string]: any;
-  geostoreId: string;
+  geostoreId?: string;
 }
 
 export interface FeatureResult {

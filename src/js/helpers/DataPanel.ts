@@ -3,6 +3,7 @@ import Map from 'esri/Map';
 import store from 'js/store';
 import QueryTask from 'esri/tasks/QueryTask';
 import Query from 'esri/tasks/support/Query';
+import * as esriIntl from 'esri/intl';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import {
   LayerFeatureResult,
@@ -44,9 +45,15 @@ async function getAllLayerFields(
 }
 
 //Helper fn to grab WHICH attributes we want to show in the data panel. Those can be coming from either popupTemplate in case of webmaps or it can also come from layer metadata which is fetched at the layer loading point. This is the case with most non webmap layers.
+interface FormatOptions {
+  dateFormat: null | any;
+  digitSeparator: boolean;
+  places: number;
+}
 interface FieldInfo {
   fieldName: string;
   label: string;
+  format?: FormatOptions;
 }
 function getAttributesToFetch(
   layer: __esri.FeatureLayer | __esri.Sublayer,
@@ -59,9 +66,11 @@ function getAttributesToFetch(
     enabledFieldInfos = layer.popupTemplate.fieldInfos
       .filter(f => f.visible)
       .map(f => {
+        //Format values if formatting is available!
         return {
           fieldName: f.fieldName,
-          label: f.label
+          label: f.label,
+          format: f.format
         };
       });
   } else {
@@ -114,6 +123,45 @@ function getAttributesToFetch(
   return enabledFieldInfos;
 }
 
+//Helper to fetch format options for each attribute and format it according to the instruction found
+function formatAttributeValues(
+  attributes: __esri.Graphic['attributes'],
+  fields: FieldInfo[] | null
+): object {
+  const formatAttributeObject = {} as object;
+  Object.keys(attributes).forEach(attribute => {
+    const attributeField = fields?.find(f => f.fieldName === attribute);
+    if (attributeField?.format?.dateFormat) {
+      //format the date if formatting options exist
+      const dateFormatIntlOptions = esriIntl.convertDateFormatToIntlOptions(
+        attributeField?.format?.dateFormat
+      );
+      const formattedDate = esriIntl.formatDate(
+        Number(attributes[attribute]),
+        dateFormatIntlOptions
+      );
+      formatAttributeObject[attribute] = formattedDate;
+    } else if (attributeField?.format?.digitSeparator) {
+      //format the number if formatting options exist
+      const numberFormatIntlOptions = esriIntl.convertNumberFormatToIntlOptions(
+        {
+          places: attributeField?.format?.places,
+          digitSeparator: attributeField?.format?.digitSeparator
+        }
+      );
+      const formattedNumber = esriIntl.formatNumber(
+        attributes[attribute],
+        numberFormatIntlOptions
+      );
+      formatAttributeObject[attribute] = formattedNumber;
+    } else {
+      //no formatting options found,  use original value
+      formatAttributeObject[attribute] = attributes[attribute];
+    }
+  });
+  return formatAttributeObject;
+}
+
 async function fetchQueryTask(
   layer: __esri.FeatureLayer,
   mapview: MapView,
@@ -160,8 +208,14 @@ async function fetchQueryTask(
 
     if (sublayerResult.features.length > 0) {
       featureResult = sublayerResult.features.map(f => {
+        //this is where formating should happen?
+
+        const formattedAttributes = formatAttributeValues(
+          f.attributes,
+          fieldNames
+        );
         return {
-          attributes: f.attributes,
+          attributes: formattedAttributes,
           geometry: f.geometry,
           objectid: objectid ? f.attributes[objectid] : null
         };
@@ -214,6 +268,8 @@ async function fetchQueryFeatures(
     //Ignore empty results
     if (featureResults.features.length > 0) {
       featureResult = featureResults.features.map((f: any) => {
+        //TODO: How do we read formatting options for attributes that come from metadata? 3x instructions do not work anymore.
+        debugger;
         return {
           attributes: f.attributes,
           geometry: f.geometry,
