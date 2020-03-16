@@ -435,8 +435,7 @@ export class MapController {
     }
   }
 
-  attachCoordinatesWidget(domref: any) {
-    console.log('attaching');
+  attachCoordinatesWidget(domref: React.MutableRefObject<any>): void {
     const ccWidget = new CoordinateConversion({
       view: this._mapview,
       container: domref.current
@@ -639,9 +638,6 @@ export class MapController {
       case 'coordinates': {
         this._selectedWidget?.viewModel.clearMeasurement();
         this._selectedWidget = undefined;
-        // this.updateOnClickCoordinates(selectedDropdownOption);
-        // this.setOnClickCoordinates(selectedDropdownOption);
-        // this.setPointerMoveCoordinates(selectedDropdownOption);
         break;
       }
       default:

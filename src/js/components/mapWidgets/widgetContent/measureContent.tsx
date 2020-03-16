@@ -18,20 +18,17 @@ import { RootState } from 'js/store/index';
 
 import 'css/measureContent.scss';
 
-const ESRICoordinatesWidget = () => {
+const ESRICoordinatesWidget = (): JSX.Element => {
   const coordRef = useRef(null);
 
   useEffect(() => {
-    console.log('fire esri stuff');
-    console.log(coordRef.current);
     mapController.attachCoordinatesWidget(coordRef);
   }, []);
 
   return (
-    <React.Fragment>
-      <div>ESRI COORDS</div>
+    <>
       <div className="esri-coords" ref={coordRef}></div>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -176,22 +173,11 @@ const MeasureContent: FunctionComponent = () => {
         'distance',
         selectedUnit as AreaMeasurement2D['unit']
       );
-    } else if (activeButton === 'coordinates') {
-      //      setSelectedCoordinatesUnit(selectedUnit);
-      // mapController.setActiveMeasureWidget(activeButton);
-      // TODO - convert area/perimeters
-      // TODO - reset widget
-      // TODO - update results in Redux
     }
   };
 
   const setSelectedWidget = (optionType: OptionType): void => {
-    if (optionType === 'coordinates') {
-      // do something
-      // mapController.setActiveMeasureWidget(optionType);
-    } else {
-      mapController.setActiveMeasureWidget(optionType);
-    }
+    mapController.setActiveMeasureWidget(optionType);
   };
 
   const setOption = (optionType: OptionType): void => {
