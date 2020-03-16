@@ -436,7 +436,7 @@ export class MapController {
   }
 
   attachCoordinatesWidget(domref: React.MutableRefObject<any>): void {
-    const ccWidget = new CoordinateConversion({
+    new CoordinateConversion({
       view: this._mapview,
       container: domref.current
     });
