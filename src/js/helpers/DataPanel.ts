@@ -198,10 +198,9 @@ async function fetchQueryTask(
     );
     fieldNames = attributesToFetch;
     const newOutFields = attributesToFetch?.map(f => f.fieldName);
-    //TODO: What to do when we have no attributes to fetch if there is no popuptemplate of metadata info? do we even fetch the data display everything? nothing?
     queryParams.outFields = newOutFields
       ? queryParams.outFields.concat(newOutFields)
-      : queryParams.outFields;
+      : ['*'];
     const sublayerResult = await esriQuery(url, queryParams);
 
     if (sublayerResult.features.length > 0) {
@@ -257,17 +256,14 @@ async function fetchQueryFeatures(
     }
   }
   const newOutFields = attributesToFetch?.map(f => f.fieldName);
-  //TODO: What to do when we have no attributes to fetch if there is no popuptemplate of metadata info? do we even fetch the data display everything? nothing?
   queryParams.outFields = newOutFields
     ? [...queryParams.outFields, ...newOutFields]
-    : queryParams.outFields;
+    : ['*'];
   try {
     const featureResults = await layer.queryFeatures(queryParams);
     //Ignore empty results
     if (featureResults.features.length > 0) {
       featureResult = featureResults.features.map((f: any) => {
-        //TODO: How do we read formatting options for attributes that come from metadata? 3x instructions do not work anymore.
-        debugger;
         return {
           attributes: f.attributes,
           geometry: f.geometry,

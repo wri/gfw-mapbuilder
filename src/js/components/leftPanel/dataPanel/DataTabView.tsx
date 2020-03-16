@@ -58,27 +58,39 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         [key: string]: string;
       }
       const AttributeTable = (props: AttributeObject): JSX.Element => {
+        //If we have fieldNames on activeLayerInfo we use it to map over attributes, otherwise, we use all attributes available
         return (
           <table cellPadding={0} cellSpacing={0}>
             <tbody>
-              {activeLayerInfo.fieldNames?.map((field, i) => {
-                //Grab attribute value irrespective if fieldName is appropriately cased!
-                const attributeKey = Object.keys(props.attributes).find(
-                  a => a.toLowerCase() === field.fieldName.toLowerCase()
-                );
-                if (attributeKey) {
-                  return (
-                    <tr key={i}>
-                      <td className="first-cell">{field.label}</td>
-                      <td className="second-cell">
-                        {props.attributes[attributeKey]}
-                      </td>
-                    </tr>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+              {activeLayerInfo.fieldNames
+                ? activeLayerInfo.fieldNames.map((field, i) => {
+                    //Grab attribute value irrespective if fieldName is appropriately cased!
+                    const attributeKey = Object.keys(props.attributes).find(
+                      a => a.toLowerCase() === field.fieldName.toLowerCase()
+                    );
+                    if (attributeKey) {
+                      return (
+                        <tr key={i}>
+                          <td className="first-cell">{field.label}</td>
+                          <td className="second-cell">
+                            {props.attributes[attributeKey]}
+                          </td>
+                        </tr>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })
+                : Object.keys(props.attributes).map((attribute, i) => {
+                    return (
+                      <tr key={i}>
+                        <td className="first-cell">{attribute}</td>
+                        <td className="second-cell">
+                          {props.attributes[attribute]}
+                        </td>
+                      </tr>
+                    );
+                  })}
             </tbody>
           </table>
         );
