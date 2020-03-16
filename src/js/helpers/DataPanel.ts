@@ -66,7 +66,6 @@ function getAttributesToFetch(
     enabledFieldInfos = layer.popupTemplate.fieldInfos
       .filter(f => f.visible)
       .map(f => {
-        //Format values if formatting is available!
         return {
           fieldName: f.fieldName,
           label: f.label,
@@ -96,7 +95,6 @@ function getAttributesToFetch(
       return { fieldName: newFieldName, label: f.label };
     });
 
-    //how do we handle no metadata on popup?
     const fieldNamesFromMetadata = fieldsFromMetadataCleaned?.map((f: any) => {
       return f.fieldName.toLowerCase().trim();
     });
