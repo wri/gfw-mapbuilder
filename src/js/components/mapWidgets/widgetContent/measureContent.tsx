@@ -112,9 +112,6 @@ const ReturnDropdown: FunctionComponent = () => {
     case 'distance':
       selectedDropdown = distanceUnitsOfLength;
       break;
-    case 'coordinates':
-      selectedDropdown = [];
-      break;
     default:
       selectedDropdown = defaultOption;
       break;
@@ -204,8 +201,6 @@ const MeasureContent: FunctionComponent = () => {
         return selectedAreaUnit;
       case 'distance':
         return selectedDistanceUnit;
-      case 'coordinates':
-        return selectedCoordinatesUnit;
       default:
         return '';
     }
@@ -232,20 +227,26 @@ const MeasureContent: FunctionComponent = () => {
             activeButton === 'coordinates' ? 'selected' : ''
           }`}
         />
-        <span>|</span>
-        <select
-          value={returnSelectedUnit()}
-          onChange={(e): void =>
-            setMeasurementUnit(
-              e.target.value as
-                | AreaMeasurement2D['unit']
-                | DistanceMeasurement2D['unit']
-            )
-          }
-          disabled={activeButton === '' ? true : false}
-        >
-          <ReturnDropdown />
-        </select>
+        {(activeButton === 'area' ||
+          activeButton === 'distance' ||
+          activeButton === '') && (
+          <>
+            <span>|</span>
+            <select
+              value={returnSelectedUnit()}
+              onChange={(e): void =>
+                setMeasurementUnit(
+                  e.target.value as
+                    | AreaMeasurement2D['unit']
+                    | DistanceMeasurement2D['unit']
+                )
+              }
+              disabled={activeButton === '' ? true : false}
+            >
+              <ReturnDropdown />
+            </select>
+          </>
+        )}
       </div>
       <p>Measurement Result</p>
       <hr />
