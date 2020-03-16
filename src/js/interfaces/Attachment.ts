@@ -3,22 +3,15 @@ export interface Attachment {
   contentType: string;
   size: number;
   name: string;
+  url: string;
 }
 
-export interface AttachmentWithURLProps {
-  id: number;
-  contentType: string;
-  size: number;
-  name: string;
-  iso: string;
-  layerTitle: string;
-  sublayerID: number;
-  specificFeatureID: number;
-}
+export type AttachmentWithURLProps = Attachment & URLProperties;
 
 export interface URLProperties {
-  iso: string;
-  layerTitle: string;
   sublayerID: number;
   specificFeatureID: number;
+  layerID: string;
+  iso?: string;
+  layerTitle?: string;
 }

@@ -15,6 +15,7 @@ import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
+import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -989,15 +990,37 @@ export class MapController {
   async getDocuments(
     urlProperties: URLProperties
   ): Promise<Array<Attachment> | null> {
-    const { iso, layerTitle, sublayerID, specificFeatureID } = urlProperties;
-    const endPoint = `https://gis.forest-atlas.org/server/rest/services/${iso}/${layerTitle}/MapServer/${sublayerID}/${specificFeatureID}/attachments?f=pjson`;
+    const { sublayerID, specificFeatureID, layerID } = urlProperties;
+    let endPoint = '';
+    const layer = this._map?.findLayerById(layerID);
 
-    const { attachmentInfos } = await fetch(endPoint)
+    if ((layer as any).sublayers.length && specificFeatureID) {
+      const sublayer = (layer as any).sublayers.items.filter(
+        (s: Sublayer) => s.id === sublayerID
+      );
+
+      endPoint = `${sublayer[0].url}/${specificFeatureID}/attachments?f=pjson`;
+    } else {
+      return null;
+    }
+
+    const attachments = await fetch(endPoint)
       .then(response => response.json())
+      .then((results: { attachmentInfos: Array<Attachment> }) => {
+        const { attachmentInfos } = results;
+
+        return attachmentInfos.map((attachment: Attachment) => {
+          attachment.url = endPoint.replace(
+            'attachments?f=pjson',
+            `attachments/${results.attachmentInfos[0].id}`
+          );
+          return attachment;
+        });
+      })
       .catch(e => console.log('error in getDocuments()', e));
 
-    if (attachmentInfos.length) {
-      return attachmentInfos;
+    if (attachments && attachments.length) {
+      return attachments;
     } else {
       return null;
     }

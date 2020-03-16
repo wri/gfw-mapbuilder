@@ -36,8 +36,7 @@ const initialState: AppSettings = {
       widgetId: 'aa',
       uiParams: [{}]
     }
-  ],
-  iso: 'CAF'
+  ]
 };
 
 export function appSettingsReducer(

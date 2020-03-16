@@ -5,11 +5,7 @@ import { mapController } from 'js/controllers/mapController';
 
 import { RootState } from 'js/store';
 
-import {
-  Attachment,
-  AttachmentWithURLProps,
-  URLProperties
-} from 'js/interfaces/Attachment';
+import { Attachment, AttachmentWithURLProps } from 'js/interfaces/Attachment';
 
 import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
 
@@ -26,7 +22,6 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const { activeFeatures, activeFeatureIndex } = useSelector(
     (store: RootState) => store.mapviewState
   );
-  const { iso } = useSelector((store: RootState) => store.appSettings);
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
   const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
@@ -64,23 +59,18 @@ const DocumentsTabView = (props: Props): JSX.Element => {
 
     const specificFeature =
       activeFeatures[featureCollectionIndex].features[featureIndex];
-    const { layerTitle, sublayerID } = activeFeatures[featureCollectionIndex];
+    const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
 
     const urlProperties = {
-      iso: iso.toLowerCase(),
-      layerTitle,
       sublayerID,
-      specificFeatureID: grabID(specificFeature.attributes)
+      specificFeatureID: grabID(specificFeature.attributes),
+      layerID
     } as any;
 
     const attachments = await mapController.getDocuments(urlProperties);
 
     if (attachments !== allAttachments) {
-      const attachmentInfo = attachments?.map((attachment: Attachment) => {
-        return { ...attachment, ...urlProperties };
-      }) as Array<AttachmentWithURLProps>;
-
-      setAllAttachments(attachmentInfo as any);
+      setAllAttachments(attachments as any);
     }
   };
 
@@ -88,25 +78,12 @@ const DocumentsTabView = (props: Props): JSX.Element => {
     if (allAttachments && allAttachments.length) {
       return allAttachments.map(
         (attachment: AttachmentWithURLProps, key: number) => {
-          const {
-            id,
-            contentType,
-            size,
-            name,
-            iso,
-            layerTitle,
-            sublayerID,
-            specificFeatureID
-          } = attachment;
+          const { url, size, name } = attachment;
           return (
             <>
               <tr>
                 <td key={key} title={name} className="file-name">
-                  <a
-                    href={`https://gis.forest-atlas.org/server/rest/services/${iso.toLowerCase()}/${layerTitle}/MapServer/${sublayerID}/${specificFeatureID}/attachments/${id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={url} target="_blank" rel="noopener noreferrer">
                     {name}
                   </a>
                 </td>
