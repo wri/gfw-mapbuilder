@@ -113,7 +113,7 @@ const ReturnDropdown: FunctionComponent = () => {
       selectedDropdown = distanceUnitsOfLength;
       break;
     case 'coordinates':
-      selectedDropdown = latitudeLongitudeUnits;
+      selectedDropdown = [];
       break;
     default:
       selectedDropdown = defaultOption;
