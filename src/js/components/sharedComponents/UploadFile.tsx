@@ -1,13 +1,21 @@
 import React, { DragEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'js/store';
 
 import {
   renderModal,
   toggleTabviewPanel,
   selectActiveTab
 } from 'js/store/appState/actions';
+import { FeatureResult } from 'js/store/mapview/types';
+import { LayerFeatureResult } from 'js/store/mapview/types';
+import {
+  setActiveFeatures,
+  setActiveFeatureIndex
+} from 'js/store/mapview/actions';
 
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
+import { registerGeometry } from 'js/helpers/geometryRegistration';
 import { mapController } from 'js/controllers/mapController';
 
 import 'css/uploadFile.scss';
@@ -16,6 +24,9 @@ const UploadFile = (): JSX.Element => {
   const dispatch = useDispatch();
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
+  );
+  const { activeFeatures } = useSelector(
+    (store: RootState) => store.mapviewState
   );
   const [wrongFileType, setWrongFileType] = useState(false);
 
@@ -81,6 +92,9 @@ const UploadFile = (): JSX.Element => {
 
     if (file && (isZipfile || isGeoJSON)) {
       // TODO - [ ] Turn on spinner!
+      dispatch(setActiveFeatureIndex([0, 0]));
+      dispatch(setActiveFeatures([]));
+
       const formData = new FormData();
       formData.append('file', file, file.name);
 
@@ -89,13 +103,57 @@ const UploadFile = (): JSX.Element => {
         body: formData
       })
         .then(response => response.json())
-        .catch(e => console.log('error in onDropFile()', e));
+        .catch(e => console.log('fetching error in onDropFile()', e));
 
-      const results = geojsonToArcGIS(featureCollection.data.attributes);
-      mapController.processGeojson(results);
+      const arcGISResults = geojsonToArcGIS(featureCollection.data.attributes);
+
+      Promise.all(
+        arcGISResults.map(async (feature: any) => {
+          const registeredGeometry: any = await registerGeometry(feature)
+            .then((response: Response) =>
+              response.status === 200 ? response.json() : null
+            )
+            .catch((e: Error) => {
+              // TODO [ ] - error handling logic (to account for when one geometry produces an error)
+              console.log(
+                'error using registerGeometry() in UploadFile.tsx',
+                e
+              );
+            });
+
+          feature.attributes.geostoreId = registeredGeometry.data.id;
+
+          return registeredGeometry;
+        })
+      )
+        .then((registeredGeometries: any) => {
+          if (registeredGeometries.length) {
+            const shapeFileFeatures: LayerFeatureResult = {
+              layerID: 'upload_file_features',
+              layerTitle: 'Upload File Features',
+              sublayerID: null,
+              sublayerTitle: null,
+              features: arcGISResults.map((g: __esri.Graphic) => {
+                return { attributes: g.attributes, geometry: g.geometry };
+              })
+            };
+
+            dispatch(setActiveFeatureIndex([0, 0]));
+            dispatch(setActiveFeatures([shapeFileFeatures]));
+          } else {
+            // TODO [ ] - error handling logic if array is empty
+          }
+        })
+        .catch((e: Error) =>
+          console.log('error in registerGeometry() in onDropFile()', e)
+        );
+
+      mapController.processGeojson(arcGISResults);
+
       dispatch(toggleTabviewPanel(true));
       dispatch(selectActiveTab('analysis'));
       dispatch(renderModal(''));
+      // TODO - [ ] Turn off spinner!
     } else {
       // TODO - [ ] Turn off spinner!
       setWrongFileType(true);

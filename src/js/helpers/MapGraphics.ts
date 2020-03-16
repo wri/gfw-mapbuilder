@@ -1,43 +1,91 @@
 import Map from 'esri/Map';
+import Mapview from 'esri/views/MapView';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
+import Point from 'esri/geometry/Point';
+import Polygon from 'esri/geometry/Polygon';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
+import SimpleMarkerSymbol from 'esri/symbols/SimpleMarkerSymbol';
 
-export function createAndAddNewGraphic(
-  map: Map,
-  geometry?: __esri.Geometry
-): void {
-  if (!geometry) return;
+import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
+
+import { FeatureResult } from 'js/store/mapview/types';
+
+interface GraphicConfig {
+  map: Map;
+  mapview: Mapview;
+  allFeatures: Array<FeatureResult>;
+  isUploadFile: boolean;
+}
+
+export function setNewGraphic({
+  map,
+  mapview,
+  allFeatures,
+  isUploadFile
+}: GraphicConfig): void {
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
+
   if (graphicsLayer) {
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
   } else {
     graphicsLayer = new GraphicsLayer({
       id: 'active-feature-layer'
     });
-    map.add(graphicsLayer);
   }
 
-  const symbol: any = {
-    color: [0, 0, 0, 0],
-    outline: {
-      color: [115, 252, 253],
-      width: 1.5
+  const setSymbol = (symbolType: string): any => {
+    switch (symbolType) {
+      case 'polygon':
+        return getCustomSymbol();
+      case 'point':
+        return getPointSymbol();
+      default:
+        console.warn('potential edge case in setSymbol()', symbolType);
+        return getCustomSymbol();
     }
   };
-  //determine if we need fill or marker
-  if (geometry.type === 'polygon') {
-    symbol.type = 'simple-fill';
-    symbol.style = 'solid';
-  } else {
-    symbol.type = 'simple-marker';
-    symbol.style = 'circle';
-    symbol.size = '12px';
-  }
 
-  const featureGraphic = new Graphic({
-    geometry: geometry,
-    symbol: symbol
+  const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
+    switch (symbolType) {
+      case 'polygon':
+        return new Polygon(geometry);
+      case 'point':
+        return new Point(geometry);
+      default:
+        console.warn('potential edge case in setGeometry()', symbolType);
+        return new Polygon(geometry);
+    }
+  };
+
+  allFeatures.forEach((feature: FeatureResult) => {
+    const isPolygon =
+      (feature.geometry as any).rings || feature.geometry.type === 'polygon';
+    /**
+     * * NOTE:
+     * * File uploads don't have a geometry.type,
+     * * so we have to check if it has geometry.rings
+     */
+    const symbol = isPolygon
+      ? setSymbol('polygon')
+      : setSymbol(feature.geometry.type);
+
+    const geometry = isPolygon
+      ? setGeometry('polygon', feature.geometry)
+      : setGeometry(feature.geometry.type, feature.geometry);
+
+    const featureGraphic = new Graphic({
+      geometry: geometry,
+      attributes: feature.attributes,
+      symbol: symbol
+    });
+
+    graphicsLayer.graphics.push(featureGraphic);
   });
 
-  graphicsLayer.add(featureGraphic);
+  map.add(graphicsLayer);
+
+  if (isUploadFile) {
+    mapview.goTo(graphicsLayer.graphics);
+  }
 }

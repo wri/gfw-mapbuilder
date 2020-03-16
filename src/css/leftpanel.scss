@@ -12,6 +12,33 @@
   max-height: 34rem;
   overflow-y: scroll;
 
+  .documents-container {
+    display: flex;
+    padding: 1rem;
+    font-family: $fira-sans;
+
+    table {
+      width: 100%;
+
+      .file-name {
+        max-width: 1rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 0.25em;
+      }
+
+      tr {
+        border-bottom: 1px solid #ddd;
+      }
+    }
+  }
+
   .info-content-container {
     display: flex;
     min-height: 5rem;
@@ -186,14 +213,26 @@
       flex-grow: 1;
     }
   }
+
+  .time-slider-container {
+    display: flex;
+    padding: 0 1rem;
+    align-items: center;
+
+    button {
+      color: $base-yellow;
+      border: none;
+      background-color: white;
+      font-size: 1rem;
+      margin-right: 0.25rem;
+    }
+  }
 }
 
 .transparency-slider {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
-  padding: 0 1.5rem;
-  width: 100%;
+  padding: 0 2rem;
 }
 
 .info-icon-container {

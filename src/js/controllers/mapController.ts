@@ -36,24 +36,21 @@ import {
   setMeasureResults,
   setLanguage
 } from 'js/store/appState/actions';
-import { LayerProps, LayerFeatureResult } from 'js/store/mapview/types';
+import {
+  LayerProps,
+  LayerFeatureResult,
+  FeatureResult
+} from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
-
 import { LayerFactoryObject } from 'js/interfaces/mapping';
+import { URLProperties, Attachment } from 'js/interfaces/Attachment';
 import { queryLayersForFeatures } from 'js/helpers/DataPanel';
 
-import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
+import { setNewGraphic } from 'js/helpers/MapGraphics';
 
 import { getCustomSymbol } from 'js/helpers/generateSymbol';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
-
-interface URLProperties {
-  iso: string;
-  layerTitle: string;
-  sublayerID: any;
-  specificFeatureID: any;
-}
 
 interface URLCoordinates {
   zoom: number;
@@ -487,9 +484,14 @@ export class MapController {
     }
   }
 
-  drawGraphic(geometry: __esri.Geometry): void {
+  drawGraphic(specificFeature: Array<FeatureResult>): void {
     if (this._map) {
-      createAndAddNewGraphic(this._map, geometry);
+      setNewGraphic({
+        map: this._map,
+        mapview: this._mapview,
+        allFeatures: specificFeature,
+        isUploadFile: false
+      });
     }
   }
 
@@ -986,12 +988,7 @@ export class MapController {
 
   async getDocuments(
     urlProperties: URLProperties
-  ): Promise<Array<{
-    id: number;
-    contentType: string;
-    size: number;
-    name: string;
-  }> | null> {
+  ): Promise<Array<Attachment> | null> {
     const { iso, layerTitle, sublayerID, specificFeatureID } = urlProperties;
     const endPoint = `https://gis.forest-atlas.org/server/rest/services/${iso}/${layerTitle}/MapServer/${sublayerID}/${specificFeatureID}/attachments?f=pjson`;
 
@@ -1006,21 +1003,15 @@ export class MapController {
     }
   }
 
-  processGeojson(esriJson: any): any {
-    this._mapview.graphics.removeAll();
-    const graphics: Array<Graphic> = [];
-    esriJson.forEach((feature: any) => {
-      const graphic = new Graphic({
-        geometry: new Polygon(feature.geometry),
-        symbol: getCustomSymbol(),
-        attributes: feature.attributes
-        // source: attributes.SOURCE_UPLOAD
-        // * NOTE: ^ this was in original version
+  processGeojson(esriJson: Array<FeatureResult>): void {
+    if (this._map) {
+      setNewGraphic({
+        map: this._map,
+        mapview: this._mapview,
+        allFeatures: esriJson,
+        isUploadFile: true
       });
-      graphics.push(graphic);
-      this._mapview.graphics.add(graphic);
-    });
-    this._mapview.goTo(graphics);
+    }
 
     // ? Do we need the v1 logic below?
 
