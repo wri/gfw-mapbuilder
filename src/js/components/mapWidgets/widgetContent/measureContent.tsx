@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
@@ -17,6 +17,20 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { RootState } from 'js/store/index';
 
 import 'css/measureContent.scss';
+
+const ESRICoordinatesWidget = (): JSX.Element => {
+  const coordRef = useRef(null);
+
+  useEffect(() => {
+    mapController.attachCoordinatesWidget(coordRef);
+  }, []);
+
+  return (
+    <>
+      <div className="esri-coords" ref={coordRef}></div>
+    </>
+  );
+};
 
 interface SpecificDropDownOption {
   text: string;
@@ -62,20 +76,9 @@ const ReturnMeasurementResults = (): JSX.Element => {
     } else if (activeButton === 'coordinates') {
       return (
         <>
-          <p>
-            <strong>Coordinate results</strong>
-          </p>
-          <p>
-            <strong>Mouse click</strong>
-          </p>
-          <p>Latitude: {coordinateMouseClickResults?.latitude}</p>
-          <p>Longitude: {coordinateMouseClickResults?.longitude}</p>
-          <br />
-          <p>
-            <strong>Pointer move</strong>
-          </p>
-          <p>Latitude: {coordinatePointerMoveResults?.latitude}</p>
-          <p>Longitude: {coordinatePointerMoveResults?.longitude}</p>
+          <div>
+            <ESRICoordinatesWidget />
+          </div>
         </>
       );
     }
@@ -108,9 +111,6 @@ const ReturnDropdown: FunctionComponent = () => {
       break;
     case 'distance':
       selectedDropdown = distanceUnitsOfLength;
-      break;
-    case 'coordinates':
-      selectedDropdown = latitudeLongitudeUnits;
       break;
     default:
       selectedDropdown = defaultOption;
@@ -170,22 +170,11 @@ const MeasureContent: FunctionComponent = () => {
         'distance',
         selectedUnit as AreaMeasurement2D['unit']
       );
-    } else if (activeButton === 'coordinates') {
-      setSelectedCoordinatesUnit(selectedUnit);
-      // mapController.setActiveMeasureWidget(activeButton);
-      // TODO - convert area/perimeters
-      // TODO - reset widget
-      // TODO - update results in Redux
     }
   };
 
   const setSelectedWidget = (optionType: OptionType): void => {
-    if (optionType === 'coordinates') {
-      // do something
-      // mapController.setActiveMeasureWidget(optionType);
-    } else {
-      mapController.setActiveMeasureWidget(optionType);
-    }
+    mapController.setActiveMeasureWidget(optionType);
   };
 
   const setOption = (optionType: OptionType): void => {
@@ -212,8 +201,6 @@ const MeasureContent: FunctionComponent = () => {
         return selectedAreaUnit;
       case 'distance':
         return selectedDistanceUnit;
-      case 'coordinates':
-        return selectedCoordinatesUnit;
       default:
         return '';
     }
@@ -234,26 +221,32 @@ const MeasureContent: FunctionComponent = () => {
             activeButton === 'distance' ? 'selected' : ''
           }`}
         />
-        {/* <button
+        <button
           onClick={(): void => setOption('coordinates')}
           className={`esri-icon-maps ${
             activeButton === 'coordinates' ? 'selected' : ''
           }`}
-        /> */}
-        <span>|</span>
-        <select
-          value={returnSelectedUnit()}
-          onChange={(e): void =>
-            setMeasurementUnit(
-              e.target.value as
-                | AreaMeasurement2D['unit']
-                | DistanceMeasurement2D['unit']
-            )
-          }
-          disabled={activeButton === '' ? true : false}
-        >
-          <ReturnDropdown />
-        </select>
+        />
+        {(activeButton === 'area' ||
+          activeButton === 'distance' ||
+          activeButton === '') && (
+          <>
+            <span>|</span>
+            <select
+              value={returnSelectedUnit()}
+              onChange={(e): void =>
+                setMeasurementUnit(
+                  e.target.value as
+                    | AreaMeasurement2D['unit']
+                    | DistanceMeasurement2D['unit']
+                )
+              }
+              disabled={activeButton === '' ? true : false}
+            >
+              <ReturnDropdown />
+            </select>
+          </>
+        )}
       </div>
       <p>Measurement Result</p>
       <hr />

@@ -7,6 +7,7 @@ import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
+import CoordinateConversion from 'esri/widgets/CoordinateConversion';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import Polygon from 'esri/geometry/Polygon';
 import Search from 'esri/widgets/Search';
@@ -440,6 +441,13 @@ export class MapController {
     }
   }
 
+  attachCoordinatesWidget(domref: React.MutableRefObject<any>): void {
+    new CoordinateConversion({
+      view: this._mapview,
+      container: domref.current
+    });
+  }
+
   clearAllLayers(): void {
     console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
@@ -680,9 +688,6 @@ export class MapController {
       case 'coordinates': {
         this._selectedWidget?.viewModel.clearMeasurement();
         this._selectedWidget = undefined;
-        // this.updateOnClickCoordinates(selectedDropdownOption);
-        // this.setOnClickCoordinates(selectedDropdownOption);
-        // this.setPointerMoveCoordinates(selectedDropdownOption);
         break;
       }
       default:
