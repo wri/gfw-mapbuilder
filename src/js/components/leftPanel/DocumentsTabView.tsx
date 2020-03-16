@@ -110,8 +110,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
                     {name}
                   </a>
                 </td>
-                {/* TODO: convert size to KB! */}
-                <td>{size}KB</td>
+                <td>{Math.round(size / 1000)} KB</td>
                 <td>
                   <DocIcon height={20} width={20} fill={'#555'} />
                 </td>
