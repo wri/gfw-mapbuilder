@@ -56,7 +56,7 @@ export interface MapviewState {
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
   activeFeatureIndex: number[];
-  activeBasemap: string; // * NEW! not in resources.js
+  activeBasemap: string;
 }
 
 export interface LayerProps {
@@ -68,6 +68,9 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
+  maxScale?: number;
+  minScale?: number;
+  sublayer: boolean;
 }
 
 interface Attributes {
