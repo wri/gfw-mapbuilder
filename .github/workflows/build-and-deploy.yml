@@ -48,9 +48,9 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: MapBuilderCI
-          SLACK_CHANNEL: gfw-mapbuilder
+          SLACK_CHANNEL: mapbuilder-ci
           SLACK_OVERRIDE_MESSAGE: true
         uses: blueraster/action-slack@master
         with:
-          args: 'Error making a build with clean-slate branch'
+          args: 'Error executing Github action post-merge'
       # NEW! <------------
