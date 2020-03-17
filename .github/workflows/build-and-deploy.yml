@@ -49,4 +49,4 @@ jobs:
           SLACK_OVERRIDE_MESSAGE: true
         uses: blueraster/action-slack@master
         with:
-          args: 'Error executing Github action post-merge as {{ EVENT_PAYLOAD.pull_request.url }}'
+          args: 'Error executing Github action post-merge as {{ EVENT_PAYLOAD.pull_request }}'
