@@ -17,7 +17,6 @@ const HideWidget: FunctionComponent = () => {
 
   const toggleContent = (): void => {
     dispatch(setHideWidget(!hideWidgetActive));
-    mapController.toggleLegend();
   };
 
   return (

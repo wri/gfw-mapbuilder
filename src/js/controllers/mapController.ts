@@ -2,7 +2,6 @@ import Map from 'esri/Map';
 import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
-import Legend from 'esri/widgets/Legend';
 import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
@@ -96,7 +95,6 @@ export class MapController {
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
   _printTask: PrintTask | undefined;
-  _legend: Legend | undefined;
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
 
@@ -105,7 +103,6 @@ export class MapController {
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
     this._printTask = undefined;
-    this._legend = undefined;
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
   }
@@ -123,11 +120,6 @@ export class MapController {
       container: domRef.current
     });
 
-    this._legend = new Legend({
-      view: this._mapview
-    });
-
-    this._mapview.ui.add(this._legend, 'bottom-right');
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
 
@@ -870,16 +862,6 @@ export class MapController {
       .catch(e => console.log('error in generateMapPDF()', e));
 
     return mapPDF;
-  };
-
-  toggleLegend = (): void => {
-    if (this._legend && typeof this._legend.container === 'object') {
-      if (this._legend.container.classList.contains('hide')) {
-        this._legend.container.classList.remove('hide');
-      } else {
-        this._legend.container.classList.add('hide');
-      }
-    }
   };
 
   setPolygon = (points: Array<Point>): void => {
