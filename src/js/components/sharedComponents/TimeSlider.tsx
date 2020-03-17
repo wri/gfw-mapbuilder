@@ -47,12 +47,15 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       const newMaxYear = (range[1] += 1);
       setRange([range[0], newMaxYear]);
       mapController.updateBaseTile(layerID, [range[0], newMaxYear]);
-      clearInterval(timeSliderRef.current);
     };
 
     if (startTimeSlider && range[1] !== prevRange[1]) {
       (timeSliderRef as any).current = setInterval(playSequence, 1000);
     }
+
+    return (): any => {
+      clearInterval(timeSliderRef.current);
+    };
   }, [startTimeSlider, range[1], prevRange[1]]);
 
   const setSelectedRange = (selectedRange: Array<number>): void => {
@@ -63,11 +66,13 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   const setTimeSlider = (startPlaying: boolean): any => {
     if (startPlaying) {
+      // * NOTE: plays time slider
       setRange([range[0], range[0]]);
       mapController.updateBaseTile(layerID, [range[0], range[0]]);
       setPlayButton(false);
       setStartTimeSlider(true);
     } else {
+      // * NOTE: stops & resets time slider
       setRange([2000, 2018]);
       setPrevRange([2000, 2018]);
       mapController.updateBaseTile(layerID, [2000, 2018]);
