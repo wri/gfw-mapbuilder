@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
 import { mapController } from 'js/controllers/mapController';
@@ -10,9 +10,13 @@ interface TimeSliderProps {
 }
 
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
+  const timeSliderRef = useRef();
   const { layerID } = props;
   const [range, setRange] = useState([2000, 2018]);
+  const [prevRange, setPrevRange] = useState([2000, 2018]);
   const [playButton, setPlayButton] = useState(true);
+  const [startTimeSlider, setStartTimeSlider] = useState(false);
+
   const marks = [
     { label: '2000', style: {} },
     { label: '2001', style: {} },
@@ -35,40 +39,52 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     { label: '2018', style: {} }
   ];
 
+  useEffect(() => {
+    const playSequence = (): void => {
+      if (range[1] === prevRange[1]) {
+        return;
+      }
+      const newMaxYear = (range[1] += 1);
+      setRange([range[0], newMaxYear]);
+      mapController.updateBaseTile(layerID, [range[0], newMaxYear]);
+      clearInterval(timeSliderRef.current);
+    };
+
+    if (startTimeSlider && range[1] !== prevRange[1]) {
+      (timeSliderRef as any).current = setInterval(playSequence, 1000);
+    }
+  }, [startTimeSlider, range[1], prevRange[1]]);
+
   const setSelectedRange = (selectedRange: Array<number>): void => {
     setRange(selectedRange);
+    setPrevRange(selectedRange);
     mapController.updateBaseTile(layerID, selectedRange);
   };
 
-  const playSequence = (): void => {
-    const [minYear, maxYear] = range;
-    const endRange = maxYear;
-    let mode = 0;
-    setPlayButton(false);
-    setSelectedRange([minYear, minYear]);
-
-    for (let sequenceYear = minYear; sequenceYear <= endRange; sequenceYear++) {
-      mode++;
-
-      setTimeout(() => {
-        setSelectedRange([minYear, sequenceYear]);
-      }, mode * 1000);
+  const setTimeSlider = (startPlaying: boolean): any => {
+    if (startPlaying) {
+      setRange([range[0], range[0]]);
+      mapController.updateBaseTile(layerID, [range[0], range[0]]);
+      setPlayButton(false);
+      setStartTimeSlider(true);
+    } else {
+      setRange([2000, 2018]);
+      setPrevRange([2000, 2018]);
+      mapController.updateBaseTile(layerID, [2000, 2018]);
+      setStartTimeSlider(false);
+      setPlayButton(true);
+      clearInterval(timeSliderRef.current);
     }
-  };
-
-  const pauseSequence = (): void => {
-    // clearTimeout(timeout); // ? How do I cancel setTimeout() and override the for loop?
-    setPlayButton(true);
-    setSelectedRange([2000, 2018]);
-    mapController.updateBaseTile(layerID, [2000, 2018]);
   };
 
   return (
     <div className="time-slider-container">
       {playButton ? (
-        <button onClick={(): void => playSequence()}>&#9658;</button>
+        <button onClick={(): void => setTimeSlider(true)}>&#9658;</button>
       ) : (
-        <button onClick={(): void => pauseSequence()}>&#10074;&#10074;</button>
+        <button onClick={(): void => setTimeSlider(false)}>
+          &#10074;&#10074;
+        </button>
       )}
       <SliderWithTooltip
         min={2000}
