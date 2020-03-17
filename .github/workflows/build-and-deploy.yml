@@ -3,7 +3,7 @@ name: Deploy Latest
 on:
   push:
     branches:
-      - clean-slate
+      - test-clean-slate
 
 jobs:
   deploy:
@@ -40,3 +40,13 @@ jobs:
         uses: blueraster/action-slack@master
         with:
           args: "Mapbuilder's base branch has been updated \n https://alpha.blueraster.io/gfw-mapbuilder/clean-slate"
+      - name: Previous step of a job failed
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: MapBuilderCI
+          SLACK_CHANNEL: mapbuilder-ci
+          SLACK_OVERRIDE_MESSAGE: true
+        uses: blueraster/action-slack@master
+        with:
+          args: 'Error executing Github action post-merge as {{ EVENT_PAYLOAD.pull_request.url }}'
