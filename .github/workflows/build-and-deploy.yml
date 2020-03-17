@@ -20,6 +20,7 @@ jobs:
           npm install
           npm run build
           npm run log
+          # NEW! <----
       - name: Deploy Build
         uses: blueraster/s3-sync-action@master
         with:
@@ -31,6 +32,7 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.MB_AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.MB_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.MB_AWS_SECRET_ACCESS_KEY }}
+          # continue-on-error: false
       - name: Slack notification
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -40,3 +42,15 @@ jobs:
         uses: blueraster/action-slack@master
         with:
           args: "Mapbuilder's base branch has been updated \n https://alpha.blueraster.io/gfw-mapbuilder/clean-slate"
+      # NEW! <------------
+      - name: Previous step of a job failed
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: MapBuilderCI
+          SLACK_CHANNEL: gfw-mapbuilder
+          SLACK_OVERRIDE_MESSAGE: true
+        uses: blueraster/action-slack@master
+        with:
+          args: 'Error making a build with clean-slate branch'
+      # NEW! <------------
