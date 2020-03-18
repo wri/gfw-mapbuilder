@@ -7,7 +7,8 @@ import {
   ALL_AVAILABLE_LAYERS,
   SET_ACTIVE_FEATURES,
   SET_ACTIVE_FEATURE_INDEX,
-  SET_ACTIVE_BASEMAP
+  SET_ACTIVE_BASEMAP,
+  SET_TIME_SLIDER
 } from './types';
 
 const initialState: MapviewState = {
@@ -17,7 +18,8 @@ const initialState: MapviewState = {
   allAvailableLayers: [],
   activeFeatures: [],
   activeFeatureIndex: [0, 0], //first element is the index of the layer, second is the index of feature
-  activeBasemap: ''
+  activeBasemap: '',
+  timeSlider: [2000, 2018]
 };
 
 export function mapviewReducer(
@@ -39,6 +41,8 @@ export function mapviewReducer(
       return { ...state, activeFeatureIndex: action.payload };
     case SET_ACTIVE_BASEMAP:
       return { ...state, activeBasemap: action.payload };
+    case SET_TIME_SLIDER:
+      return { ...state, timeSlider: action.payload };
     default:
       return state;
   }

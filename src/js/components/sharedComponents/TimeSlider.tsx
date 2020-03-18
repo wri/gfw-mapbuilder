@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
 import { mapController } from 'js/controllers/mapController';
+
+import { setTimeSlider } from 'js/store/mapview/actions';
+
+import { RootState } from 'js/store/index';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
@@ -10,12 +16,13 @@ interface TimeSliderProps {
 }
 
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
+  const dispatch = useDispatch();
   const timeSliderRef = useRef();
   const { layerID } = props;
-  const [range, setRange] = useState([2000, 2018]);
   const [prevRange, setPrevRange] = useState([2000, 2018]);
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
+  const { timeSlider } = useSelector((store: RootState) => store.mapviewState);
 
   const marks = {
     0: { label: '2000', style: {} },
@@ -41,42 +48,38 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   useEffect(() => {
     const playSequence = (): void => {
-      if (range[1] === prevRange[1]) {
-        setRange([range[0], range[0]]);
-        return;
-      }
-      const newMaxYear = (range[1] += 1);
-      setRange([range[0], newMaxYear]);
-      mapController.updateBaseTile(layerID, [range[0], newMaxYear]);
+      const newMaxYear = (timeSlider[1] += 1);
+      dispatch(setTimeSlider([timeSlider[0], newMaxYear]));
+      mapController.updateBaseTile(layerID, [timeSlider[0], newMaxYear]);
     };
 
-    if (startTimeSlider && range[1] !== prevRange[1]) {
+    if (startTimeSlider && timeSlider[1] !== prevRange[1]) {
       (timeSliderRef as any).current = setInterval(playSequence, 1000);
-    } else if (startTimeSlider && range[1] === prevRange[1]) {
-      (timeSliderRef as any).current = setInterval(playSequence, 1000);
+    } else if (startTimeSlider && timeSlider[1] === prevRange[1]) {
+      dispatch(setTimeSlider([timeSlider[0], timeSlider[0]]));
     }
 
     return (): any => {
       clearInterval(timeSliderRef.current);
     };
-  }, [startTimeSlider, range[1], prevRange[1]]);
+  }, [startTimeSlider, timeSlider[1], prevRange[1]]);
 
   const setSelectedRange = (selectedRange: Array<number>): void => {
-    setRange(selectedRange);
+    dispatch(setTimeSlider(selectedRange));
     setPrevRange(selectedRange);
     mapController.updateBaseTile(layerID, selectedRange);
   };
 
-  const setTimeSlider = (startPlaying: boolean): any => {
+  const playOrPauseTimeSlider = (startPlaying: boolean): any => {
     if (startPlaying) {
       // * NOTE: plays time slider
-      setRange([range[0], range[0]]);
-      mapController.updateBaseTile(layerID, [range[0], range[0]]);
+      dispatch(setTimeSlider([timeSlider[0], timeSlider[0]]));
+      mapController.updateBaseTile(layerID, [timeSlider[0], timeSlider[0]]);
       setPlayButton(false);
       setStartTimeSlider(true);
     } else {
       // * NOTE: stops & resets time slider
-      setRange(prevRange);
+      dispatch(setTimeSlider(prevRange));
       setPrevRange(prevRange);
       mapController.updateBaseTile(layerID, prevRange);
       setStartTimeSlider(false);
@@ -88,9 +91,11 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   return (
     <div className="time-slider-container">
       {playButton ? (
-        <button onClick={(): void => setTimeSlider(true)}>&#9658;</button>
+        <button onClick={(): void => playOrPauseTimeSlider(true)}>
+          &#9658;
+        </button>
       ) : (
-        <button onClick={(): void => setTimeSlider(false)}>
+        <button onClick={(): void => playOrPauseTimeSlider(false)}>
           &#10074;&#10074;
         </button>
       )}
@@ -98,7 +103,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         min={2000}
         max={2018}
         defaultValue={[2000, 2018]}
-        value={range}
+        value={timeSlider}
         allowCross={false}
         tipFormatter={(val: number): number => val}
         dots={true}
