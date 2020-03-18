@@ -68,11 +68,15 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
+  popup?: object | undefined;
+  metadata?: {metadata?: object, legendConfig?: object};
+  sublabel?: string | undefined;
+  legendInfo?: any;
 }
 
 interface Attributes {
   [key: string]: any;
-  geostoreId: string;
+  geostoreId?: string;
 }
 
 export interface FeatureResult {

@@ -3,11 +3,19 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import 'css/legend.scss';
+import LegendItems from './generateLegendItems';
 
 const Legend = (): JSX.Element => {
   const { hideWidgetActive } = useSelector(
     (store: RootState) => store.appState
   );
+  const { allAvailableLayers } = useSelector(
+    (store: RootState) => store.mapviewState
+  );
+
+  //TODO: should likely filter scale here too
+  const visibleLayers = allAvailableLayers.filter(l => l.visible);
+
   const [legendOpen, setLegendOpen] = useState(!hideWidgetActive);
 
   function handleLegendToggle(): void {
@@ -16,25 +24,29 @@ const Legend = (): JSX.Element => {
   }
 
   return (
-    <div className="legend-container">
-      <div className="legend-title" onClick={handleLegendToggle} role="button">
-        <p>Legend</p>
-        <button className="caret-button">
-          {legendOpen && !hideWidgetActive ? '▼' : '▲'}
-        </button>
-      </div>
-      <div
-        className={
-          legendOpen && !hideWidgetActive ? 'legend-content' : 'hidden'
-        }
-      >
-        <p>I am a Legend item representing a layer!</p>
-        <p>I am a Legend item representing a layer!</p>
-        <p>I am a Legend item representing a layer!</p>
-        <p>I am a Legend item representing a layer!</p>
-        <p>I am a Legend item representing a layer!</p>
-      </div>
-    </div>
+    <>
+      {visibleLayers.length > 0 && (
+        <div className="legend-container">
+          <div
+            className="legend-title"
+            onClick={handleLegendToggle}
+            role="button"
+          >
+            <p>Legend</p>
+            <button className="caret-button">
+              {legendOpen && !hideWidgetActive ? '▼' : '▲'}
+            </button>
+          </div>
+          <div
+            className={
+              legendOpen && !hideWidgetActive ? 'legend-content' : 'hidden'
+            }
+          >
+            <LegendItems visibleLayers={visibleLayers} />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
