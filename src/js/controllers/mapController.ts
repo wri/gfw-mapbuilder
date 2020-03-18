@@ -154,63 +154,7 @@ export class MapController {
             queryLayersForFeatures(this._mapview, this._map, event);
           });
 
-          const mapLayerObjects: LayerProps[] = [];
-          this._map?.layers.forEach((layer: any) => {
-            //we need to split out sublayers if there are any
-            if (layer.sublayers && layer.sublayers.length > 0) {
-              layer.sublayers.forEach((sub: any) => {
-                //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
-                sub.opacity = sub.opacity ? sub.opacity : 1;
-                const {
-                  id,
-                  title,
-                  opacity,
-                  visible,
-                  definitionExpression,
-                  url,
-                  maxScale,
-                  minScale
-                } = sub;
-                mapLayerObjects.push({
-                  id,
-                  title,
-                  opacity,
-                  visible,
-                  definitionExpression,
-                  group: 'webmap',
-                  url,
-                  maxScale,
-                  minScale,
-                  sublayer: true,
-                  parentID: sub.layer.id
-                });
-              });
-            } else {
-              const {
-                id,
-                title,
-                opacity,
-                visible,
-                definitionExpression,
-                url,
-                maxScale,
-                minScale
-              } = layer;
-              mapLayerObjects.push({
-                id,
-                title,
-                opacity,
-                visible,
-                definitionExpression,
-                group: 'webmap',
-                url,
-                maxScale,
-                minScale,
-                sublayer: false
-              });
-            }
-          });
-
+          const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           this.getMoreLayers().then(res => {
@@ -316,6 +260,65 @@ export class MapController {
         console.log('error in initializeMap()', error);
         store.dispatch(mapError(true));
       });
+  }
+
+  extractLayerObjects(): LayerProps[] {
+    const mapLayerObjects: LayerProps[] = [];
+    this._map?.layers.forEach((layer: any) => {
+      if (layer.sublayers && layer.sublayers.length > 0) {
+        layer.sublayers.forEach((sub: any) => {
+          //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
+          sub.opacity = sub.opacity ? sub.opacity : 1;
+          const {
+            id,
+            title,
+            opacity,
+            visible,
+            definitionExpression,
+            url,
+            maxScale,
+            minScale
+          } = sub;
+          mapLayerObjects.push({
+            id,
+            title,
+            opacity,
+            visible,
+            definitionExpression,
+            group: 'webmap',
+            url,
+            maxScale,
+            minScale,
+            sublayer: true,
+            parentID: sub.layer.id
+          });
+        });
+      } else {
+        const {
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          url,
+          maxScale,
+          minScale
+        } = layer;
+        mapLayerObjects.push({
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          group: 'webmap',
+          url,
+          maxScale,
+          minScale,
+          sublayer: false
+        });
+      }
+    });
+    return mapLayerObjects;
   }
 
   getMoreLayers(): Promise<any> {
@@ -431,57 +434,7 @@ export class MapController {
 
             if (this._map) {
               once(this._map, 'loaded', () => {
-                const mapLayerObjects: LayerProps[] = [];
-                this._map?.layers.forEach((layer: any) => {
-                  if (layer.sublayers && layer.sublayers.length > 0) {
-                    layer.sublayers.forEach((sub: any) => {
-                      //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
-                      sub.opacity = sub.opacity ? sub.opacity : 1;
-                      const {
-                        id,
-                        title,
-                        opacity,
-                        visible,
-                        definitionExpression,
-                        url,
-                        maxScale,
-                        minScale
-                      } = sub;
-                      mapLayerObjects.push({
-                        id,
-                        title,
-                        opacity,
-                        visible,
-                        definitionExpression,
-                        group: 'webmap',
-                        url,
-                        maxScale,
-                        minScale,
-                        sublayer: true,
-                        parentID: sub.layer.id
-                      });
-                    });
-                  } else {
-                    const {
-                      id,
-                      title,
-                      opacity,
-                      visible,
-                      definitionExpression,
-                      url
-                    } = layer;
-                    mapLayerObjects.push({
-                      id,
-                      title,
-                      opacity,
-                      visible,
-                      definitionExpression,
-                      group: 'webmap',
-                      url: url,
-                      sublayer: false
-                    });
-                  }
-                });
+                const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
 
                 const prevMapObjects = store
                   .getState()
