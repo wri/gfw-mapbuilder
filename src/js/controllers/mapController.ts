@@ -40,7 +40,7 @@ import { LayerProps, LayerFeatureResult } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
-import { queryLayersForFeatures } from 'js/helpers/DataPanel';
+import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 
 import { createAndAddNewGraphic } from 'js/helpers/MapGraphics';
 

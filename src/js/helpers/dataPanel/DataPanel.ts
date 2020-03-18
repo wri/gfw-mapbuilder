@@ -1,9 +1,9 @@
 import MapView from 'esri/views/MapView';
 import Map from 'esri/Map';
 import store from 'js/store';
-import QueryTask from 'esri/tasks/QueryTask';
-import Query from 'esri/tasks/support/Query';
-import * as esriIntl from 'esri/intl';
+import { esriQuery } from './esriQuery';
+import { getAttributesToFetch } from './getAttributes';
+import { formatAttributeValues } from './formatAttributes';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import {
   LayerFeatureResult,
@@ -12,14 +12,15 @@ import {
 } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
 
-//Generic ESRI query helper
-function esriQuery(url: string, queryParams: any): Promise<__esri.FeatureSet> {
-  const qt = new QueryTask({
-    url: url
-  });
-  const query = new Query(queryParams);
-  const result = qt.execute(query);
-  return result;
+export interface FormatOptions {
+  dateFormat: null | any;
+  digitSeparator: boolean;
+  places: number;
+}
+export interface FieldInfo {
+  fieldName: string;
+  label: string;
+  format?: FormatOptions;
 }
 
 //Helper fn to get all available layer fields for the data tab. If layer has fields itself we are using those, but if that is not the case, attempt to fetch it by hitting layer url endpoint with pjson prefix
@@ -42,122 +43,6 @@ async function getAllLayerFields(
       });
   }
   return layerFields;
-}
-
-//Helper fn to grab WHICH attributes we want to show in the data panel. Those can be coming from either popupTemplate in case of webmaps or it can also come from layer metadata which is fetched at the layer loading point. This is the case with most non webmap layers.
-interface FormatOptions {
-  dateFormat: null | any;
-  digitSeparator: boolean;
-  places: number;
-}
-interface FieldInfo {
-  fieldName: string;
-  label: string;
-  format?: FormatOptions;
-}
-function getAttributesToFetch(
-  layer: __esri.FeatureLayer | __esri.Sublayer,
-  isSubLayer?: boolean,
-  availableFields?: __esri.Field[] | undefined
-): FieldInfo[] | null {
-  //Check for popupTemplate > this handles webmap layers
-  let enabledFieldInfos: FieldInfo[] | null = null;
-  if (layer.popupTemplate) {
-    enabledFieldInfos = layer.popupTemplate.fieldInfos
-      .filter(f => f.visible)
-      .map(f => {
-        return {
-          fieldName: f.fieldName,
-          label: f.label,
-          format: f.format
-        };
-      });
-  } else {
-    //No popup template found, check the metadata
-    const { allAvailableLayers } = store.getState().mapviewState;
-    const { selectedLanguage } = store.getState().appState;
-    //@ts-ignore -- weird issue when sublayer suppose to have layer prop but TS does not agree
-    const layerID = isSubLayer ? layer.layer.id : layer.id;
-    const layerInfo = allAvailableLayers.find(l => l.id === layerID);
-
-    //TODO: There is a situation where metada has a field, but layer itself does not, we need to filter those out
-    const availableFieldsNames = availableFields?.map(f =>
-      f.name.toLowerCase().trim()
-    );
-
-    //TODO: 3x supported modifiers on the fieldName eg ACQ_DATE:DateString(hideTime:true), 4x this is no longer supported and modifiers should be added to FieldInfoFormat class. For now we are going to be sanitizing fieldNames that come from metadata (gfw api) so queries do not break. But this would need to be changed on their api end
-    const fieldsFromMetadataCleaned = layerInfo?.popup?.content[
-      selectedLanguage
-    ].map((f: any) => {
-      const newFieldName = f.fieldExpression.includes(':')
-        ? f.fieldExpression.substring(0, f.fieldExpression.indexOf(':'))
-        : f.fieldExpression;
-      return { fieldName: newFieldName, label: f.label };
-    });
-
-    const fieldNamesFromMetadata = fieldsFromMetadataCleaned?.map((f: any) => {
-      return f.fieldName.toLowerCase().trim();
-    });
-    // Deal with matching names from metadata and from layer itself
-    if (availableFieldsNames && fieldNamesFromMetadata) {
-      const attributeFieldsToInclude = fieldNamesFromMetadata
-        .filter((f: any) => availableFieldsNames.includes(f))
-        .map((f: any) => {
-          return {
-            fieldName: f,
-            label: fieldsFromMetadataCleaned.find(
-              (field: any) => field.fieldName.toLowerCase() === f.toLowerCase()
-            ).label
-          };
-        });
-      enabledFieldInfos =
-        attributeFieldsToInclude && attributeFieldsToInclude.length > 0
-          ? attributeFieldsToInclude
-          : null;
-    } else {
-      enabledFieldInfos = null;
-    }
-  }
-  return enabledFieldInfos;
-}
-
-//Helper to fetch format options for each attribute and format it according to the instruction found
-function formatAttributeValues(
-  attributes: __esri.Graphic['attributes'],
-  fields: FieldInfo[] | null
-): object {
-  const formatAttributeObject = {} as object;
-  Object.keys(attributes).forEach(attribute => {
-    const attributeField = fields?.find(f => f.fieldName === attribute);
-    if (attributeField?.format?.dateFormat) {
-      //format the date if formatting options exist
-      const dateFormatIntlOptions = esriIntl.convertDateFormatToIntlOptions(
-        attributeField?.format?.dateFormat
-      );
-      const formattedDate = esriIntl.formatDate(
-        Number(attributes[attribute]),
-        dateFormatIntlOptions
-      );
-      formatAttributeObject[attribute] = formattedDate;
-    } else if (attributeField?.format?.digitSeparator) {
-      //format the number if formatting options exist
-      const numberFormatIntlOptions = esriIntl.convertNumberFormatToIntlOptions(
-        {
-          places: attributeField?.format?.places,
-          digitSeparator: attributeField?.format?.digitSeparator
-        }
-      );
-      const formattedNumber = esriIntl.formatNumber(
-        attributes[attribute],
-        numberFormatIntlOptions
-      );
-      formatAttributeObject[attribute] = formattedNumber;
-    } else {
-      //no formatting options found,  use original value
-      formatAttributeObject[attribute] = attributes[attribute];
-    }
-  });
-  return formatAttributeObject;
 }
 
 async function fetchQueryTask(
