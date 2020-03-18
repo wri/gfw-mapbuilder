@@ -70,7 +70,8 @@ export interface LayerProps {
   url: string;
   maxScale?: number;
   minScale?: number;
-  sublayer: boolean;
+  sublayer?: boolean;
+  parentID?: string;
 }
 
 interface Attributes {

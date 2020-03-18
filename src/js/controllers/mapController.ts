@@ -581,7 +581,7 @@ export class MapController {
   toggleLayerVisibility(
     layerID: string,
     sublayer?: boolean,
-    parentID?: string | null
+    parentID?: string
   ): void {
     let layer = null as any;
     if (sublayer && parentID) {
@@ -615,7 +615,7 @@ export class MapController {
     layerID: string,
     value: string,
     sublayer?: boolean,
-    parentID?: string | null
+    parentID?: string
   ): void {
     let layer = null as any;
     if (sublayer && parentID) {
