@@ -59,6 +59,11 @@ export interface MapviewState {
   activeBasemap: string; // * NEW! not in resources.js
 }
 
+interface Popup {
+  content: any;
+  title: any;
+}
+
 export interface LayerProps {
   id: string;
   visible: boolean;
@@ -68,11 +73,14 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
+  popup?: Popup;
+  metadata?: object;
+  sublabel?: object;
 }
 
 interface Attributes {
   [key: string]: any;
-  geostoreId: string;
+  geostoreId?: string;
 }
 
 export interface FeatureResult {
@@ -80,12 +88,18 @@ export interface FeatureResult {
   geometry: __esri.Geometry;
 }
 
+export interface FieldName {
+  fieldName: string;
+  label: string;
+}
+
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
-  sublayerTitle: string | null;
-  sublayerID: string | null;
+  sublayerTitle?: string;
+  sublayerID?: string;
   features: FeatureResult[];
+  fieldNames: FieldName[] | null;
 }
 
 //Action types
