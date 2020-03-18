@@ -138,9 +138,6 @@ export class MapController {
         () => {
           store.dispatch(isMapReady(true));
           //Set default language
-          const basemap = Basemap.fromId('osm');
-          //@ts-ignore
-          this._map?.basemap = basemap;
           store.dispatch(setLanguage(appSettings.language));
           this._mapview.popup.highlightEnabled = false;
           this._mapview.on('click', event => {
