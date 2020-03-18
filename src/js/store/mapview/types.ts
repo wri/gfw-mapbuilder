@@ -96,8 +96,8 @@ export interface FieldName {
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
-  sublayerTitle: string | null;
-  sublayerID: string | null;
+  sublayerTitle?: string;
+  sublayerID?: string;
   features: FeatureResult[];
   fieldNames: FieldName[] | null;
 }

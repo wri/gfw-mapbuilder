@@ -580,18 +580,14 @@ export class MapController {
 
       event.graphic.symbol.outline.color = [115, 252, 253];
       event.graphic.symbol.color = [0, 0, 0, 0];
-      //as drawn features do not have user defined fieldNames, we iterate over attributes and each attribute becomes a fieldName
-      const fieldNames = Object.keys(event.graphic.attributes).map(a => {
-        return { fieldName: a, label: a };
-      });
       //Replace all active features with our drawn feature, assigning custom layerID and Title
       const drawnFeatures: LayerFeatureResult = {
         layerID: 'user_features',
         layerTitle: 'User Features',
-        sublayerID: null,
-        sublayerTitle: null,
+        // sublayerID: null,
+        // sublayerTitle: null,
         features: [event.graphic],
-        fieldNames: fieldNames
+        fieldNames: null
       };
 
       store.dispatch(setActiveFeatures([drawnFeatures]));

@@ -339,8 +339,6 @@ export async function queryLayersForFeatures(
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: layer.title,
-              sublayerID: null,
-              sublayerTitle: null,
               features: features,
               fieldNames
             });
@@ -357,8 +355,6 @@ export async function queryLayersForFeatures(
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: layer.title,
-              sublayerID: null,
-              sublayerTitle: null,
               features: features,
               fieldNames
             });
