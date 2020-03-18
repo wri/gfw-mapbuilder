@@ -131,11 +131,10 @@ const UploadFile = (): JSX.Element => {
             const shapeFileFeatures: LayerFeatureResult = {
               layerID: 'upload_file_features',
               layerTitle: 'Upload File Features',
-              sublayerID: null,
-              sublayerTitle: null,
               features: arcGISResults.map((g: __esri.Graphic) => {
                 return { attributes: g.attributes, geometry: g.geometry };
-              })
+              }),
+              fieldNames: null
             };
 
             dispatch(setActiveFeatureIndex([0, 0]));
