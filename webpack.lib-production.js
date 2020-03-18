@@ -141,6 +141,7 @@ module.exports = env => {
     },
     node: {
       process: false,
+      Buffer: false,
       global: false,
       fs: 'empty'
     }

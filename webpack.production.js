@@ -58,6 +58,7 @@ module.exports = merge(common, {
   },
   node: {
     process: false,
+    Buffer: false,
     global: false,
     fs: 'empty'
   }

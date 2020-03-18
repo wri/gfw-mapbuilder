@@ -38,10 +38,15 @@
   }
 
   &.measure-widget {
-    top: 25%;
+    top: 21%;
     left: 75%;
-    height: 7.5rem;
-    width: 17rem;
+    height: 11rem;
+    border: 1px solid gray;
+    border-radius: 2px;
+    .esri-coordinate-conversion {
+      font-size: 11px !important;
+      width: 300px !important;
+    }
   }
 
   &.gfw-login-widget {

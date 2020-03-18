@@ -57,6 +57,12 @@ export interface MapviewState {
   activeFeatures: LayerFeatureResult[];
   activeFeatureIndex: number[];
   activeBasemap: string; // * NEW! not in resources.js
+  timeSlider: number[];
+}
+
+interface Popup {
+  content: any;
+  title: any;
 }
 
 export interface LayerProps {
@@ -68,11 +74,14 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
+  popup?: Popup;
+  metadata?: object;
+  sublabel?: object;
 }
 
 interface Attributes {
   [key: string]: any;
-  geostoreId: string;
+  geostoreId?: string;
 }
 
 export interface FeatureResult {
@@ -80,12 +89,18 @@ export interface FeatureResult {
   geometry: __esri.Geometry;
 }
 
+export interface FieldName {
+  fieldName: string;
+  label: string;
+}
+
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
-  sublayerTitle: string | null;
-  sublayerID: string | null;
+  sublayerTitle?: string;
+  sublayerID?: string;
   features: FeatureResult[];
+  fieldNames: FieldName[] | null;
 }
 
 //Action types
@@ -96,6 +111,7 @@ export const ALL_AVAILABLE_LAYERS = 'ALL_AVAILABLE_LAYERS';
 export const SET_ACTIVE_FEATURES = 'SET_ACTIVE_FEATURES';
 export const SET_ACTIVE_FEATURE_INDEX = 'SET_ACTIVE_FEATURE_INDEX';
 export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
+export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -131,6 +147,11 @@ interface SetActiveFeatureIndex {
   payload: MapviewState['activeFeatureIndex'];
 }
 
+interface SetTimeSlider {
+  type: typeof SET_TIME_SLIDER;
+  payload: MapviewState['timeSlider'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -138,4 +159,5 @@ export type MapviewStateTypes =
   | AllAvailableLayersAction
   | SetActiveFeaturesAction
   | SetActiveFeatureIndex
-  | SetSelectedAction;
+  | SetSelectedAction
+  | SetTimeSlider;
