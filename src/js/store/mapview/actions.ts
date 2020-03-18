@@ -6,6 +6,7 @@ import {
   SET_ACTIVE_FEATURES,
   SET_ACTIVE_FEATURE_INDEX,
   SET_ACTIVE_BASEMAP,
+  SET_TIME_SLIDER,
   MapviewState
 } from './types';
 
@@ -61,5 +62,12 @@ export function setSelectedBasemap(basemapID: MapviewState['activeBasemap']) {
   return {
     type: SET_ACTIVE_BASEMAP as typeof SET_ACTIVE_BASEMAP,
     payload: basemapID
+  };
+}
+
+export function setTimeSlider(timeSlider: MapviewState['timeSlider']) {
+  return {
+    type: SET_TIME_SLIDER as typeof SET_TIME_SLIDER,
+    payload: timeSlider
   };
 }

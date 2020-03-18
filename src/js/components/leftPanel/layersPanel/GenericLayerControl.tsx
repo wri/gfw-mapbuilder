@@ -30,7 +30,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
-        return <TimeSlider />;
+        return <TimeSlider layerID={id} />;
       default:
         return null;
     }
