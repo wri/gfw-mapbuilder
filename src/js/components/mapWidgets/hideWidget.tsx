@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setHideWidget } from 'js/store/appState/actions';
 
-import { mapController } from 'js/controllers/mapController';
-
 import { RootState } from 'js/store/index';
 
 import { ReactComponent as HideIcon } from '../../../images/hideIcon.svg';
