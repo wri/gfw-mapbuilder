@@ -19,12 +19,34 @@
       text-transform: uppercase;
       margin: 0.5rem;
       padding: 0;
+      font-size: 14px;
     }
     .caret-button {
       outline: 0;
       border: 0;
       font-size: 1.2rem;
       background-color: white;
+    }
+  }
+  .legend-item-container {
+    text-align: left;
+    margin: 0.5rem;
+    font-size: 13px;
+
+    .layer-item {
+      .layer-title {
+        font-weight: bold;
+      }
+      .label-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-gap: 10px;
+        align-items: center;
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
     }
   }
 }

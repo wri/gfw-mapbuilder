@@ -65,6 +65,20 @@ interface Popup {
   title: any;
 }
 
+interface LegendConfigItem {
+  color: string;
+  name: object;
+  size: number;
+  outlineColor?: string;
+}
+
+interface LegendConfig {
+  items: LegendConfigItem[];
+  name: object;
+  source: string;
+  type: 'basic' | 'point';
+}
+
 export interface LayerProps {
   id: string;
   visible: boolean;
@@ -74,7 +88,7 @@ export interface LayerProps {
   definitionExpression?: string;
   group: string;
   url: string;
-  metadata?: { metadata?: object; legendConfig?: object };
+  metadata?: { metadata?: object; legendConfig?: LegendConfig };
   legendInfo?: any;
   popup?: Popup;
   sublabel?: object;

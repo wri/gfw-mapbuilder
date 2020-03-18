@@ -12,8 +12,11 @@ const Legend = (): JSX.Element => {
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
-
+  const { selectedLanguage } = useSelector(
+    (store: RootState) => store.appState
+  );
   //TODO: should likely filter scale here too
+  //TODO: order should be applied here I believe
   const visibleLayers = allAvailableLayers.filter(l => l.visible);
 
   const [legendOpen, setLegendOpen] = useState(!hideWidgetActive);
@@ -42,7 +45,10 @@ const Legend = (): JSX.Element => {
               legendOpen && !hideWidgetActive ? 'legend-content' : 'hidden'
             }
           >
-            <LegendItems visibleLayers={visibleLayers} />
+            <LegendItems
+              visibleLayers={visibleLayers}
+              language={selectedLanguage}
+            />
           </div>
         </div>
       )}
