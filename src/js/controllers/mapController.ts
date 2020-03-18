@@ -49,6 +49,7 @@ import { queryLayersForFeatures } from 'js/helpers/DataPanel';
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 
 import { getCustomSymbol } from 'js/helpers/generateSymbol';
+import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -70,6 +71,8 @@ interface RemoteDataLayer {
     label: object;
     url: string;
     type: string;
+    popup: object;
+    sublabel: string;
     // [key: string]: object
   };
   dataLayer?: {
@@ -140,7 +143,7 @@ export class MapController {
           });
 
           const mapLayerObjects: LayerProps[] = [];
-          this._map?.layers.forEach((layer: any) => {
+          this._map?.layers.forEach(async (layer: any) => {
             const {
               id,
               title,
@@ -149,6 +152,8 @@ export class MapController {
               definitionExpression,
               url
             } = layer;
+            //fetch webmap layers legend data
+            const legendInfo = await fetchLegendInfo(url);
             mapLayerObjects.push({
               id,
               title,
@@ -156,7 +161,8 @@ export class MapController {
               visible,
               definitionExpression,
               group: 'webmap',
-              url
+              url,
+              legendInfo: legendInfo.layers
             });
           });
 
@@ -197,8 +203,13 @@ export class MapController {
                 let resourceGroup;
                 let url;
                 let type;
-
+                let metadata;
+                let popup;
+                let sublabel;
                 if (apiLayer.dataLayer) {
+                  metadata = apiLayer.layer.metadata;
+                  popup = apiLayer.layer.popup;
+                  sublabel = apiLayer.layer.sublabel;
                   resourceId = apiLayer.dataLayer.id;
                   resourceTitle =
                     apiLayer.layer.label[appState.selectedLanguage];
@@ -230,7 +241,10 @@ export class MapController {
                   visible: false,
                   definitionExpression: resourceDefinitionExpression,
                   group: resourceGroup,
-                  url: url
+                  url: url,
+                  metadata,
+                  sublabel,
+                  popup
                 });
               });
 
