@@ -44,7 +44,7 @@ import {
 import { OptionType } from 'js/interfaces/measureWidget';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
-import { queryLayersForFeatures } from 'js/helpers/DataPanel';
+import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 
@@ -63,6 +63,11 @@ interface ZoomParams {
   zoomIn: boolean;
 }
 
+interface Popup {
+  content: any;
+  title: any;
+}
+
 interface RemoteDataLayer {
   // layer: object;
   layer: {
@@ -71,8 +76,8 @@ interface RemoteDataLayer {
     label: object;
     url: string;
     type: string;
-    popup: object;
-    sublabel: string;
+    popup?: Popup;
+    sublabel?: object;
     // [key: string]: object
   };
   dataLayer?: {
@@ -585,14 +590,14 @@ export class MapController {
 
       event.graphic.symbol.outline.color = [115, 252, 253];
       event.graphic.symbol.color = [0, 0, 0, 0];
-
       //Replace all active features with our drawn feature, assigning custom layerID and Title
       const drawnFeatures: LayerFeatureResult = {
         layerID: 'user_features',
         layerTitle: 'User Features',
-        sublayerID: null,
-        sublayerTitle: null,
-        features: [event.graphic]
+        // sublayerID: null,
+        // sublayerTitle: null,
+        features: [event.graphic],
+        fieldNames: null
       };
 
       store.dispatch(setActiveFeatures([drawnFeatures]));
@@ -1039,6 +1044,17 @@ export class MapController {
     //     .then(successfullyProjected, failedToProject);
     // }
     // this.setState({ isUploading: false });
+  }
+
+  updateBaseTile(id: string, range: Array<number>): void {
+    const [startYear, endYear] = range;
+    const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;
+
+    if (specificLayer) {
+      (specificLayer as any).minYear = startYear;
+      (specificLayer as any).maxYear = endYear;
+      specificLayer.refresh();
+    }
   }
 }
 
