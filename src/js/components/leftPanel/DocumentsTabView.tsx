@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 import { mapController } from 'js/controllers/mapController';
 
 import { RootState } from 'js/store';
 
-import { Attachment, AttachmentWithURLProps } from 'js/interfaces/Attachment';
+import { AttachmentWithURLProps } from 'js/interfaces/Attachment';
 
 import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
 
@@ -31,48 +31,31 @@ const DocumentsTabView = (props: Props): JSX.Element => {
     : null;
 
   useEffect(() => {
+    const getAndSetDocuments = async (): Promise<void> => {
+      const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
+
+      const specificFeature =
+        activeFeatures[featureCollectionIndex].features[featureIndex];
+      const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
+
+      const urlProperties = {
+        sublayerID,
+        specificFeatureID: specificFeature.objectid,
+        layerID
+      } as any;
+
+      const attachments = await mapController.getDocuments(urlProperties);
+
+      if (attachments !== allAttachments) {
+        setAllAttachments(attachments as any);
+      }
+    };
+
     if (tabViewIsVisible) {
+      // TODO dispatch loader
       getAndSetDocuments();
     }
   }, [tabViewIsVisible]);
-
-  const grabID = (attributes: any): number | null => {
-    // * May need to refactor
-    // * to account for different objectID names
-    const hasdefaultID = attributes.objectid ? true : false;
-    const forestProductionID = Object.keys(attributes).includes(
-      'forets_production.objectid'
-    );
-
-    if (hasdefaultID) {
-      return attributes.object;
-    } else if (forestProductionID) {
-      return attributes['forets_production.objectid'];
-    } else {
-      console.log('error with attributes in grabID()', attributes);
-      return null;
-    }
-  };
-
-  const getAndSetDocuments = async (): Promise<void> => {
-    const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
-
-    const specificFeature =
-      activeFeatures[featureCollectionIndex].features[featureIndex];
-    const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
-
-    const urlProperties = {
-      sublayerID,
-      specificFeatureID: grabID(specificFeature.attributes),
-      layerID
-    } as any;
-
-    const attachments = await mapController.getDocuments(urlProperties);
-
-    if (attachments !== allAttachments) {
-      setAllAttachments(attachments as any);
-    }
-  };
 
   const returnDocuments = (): Array<JSX.Element> | JSX.Element => {
     if (allAttachments && allAttachments.length) {
@@ -80,9 +63,9 @@ const DocumentsTabView = (props: Props): JSX.Element => {
         (attachment: AttachmentWithURLProps, key: number) => {
           const { url, size, name } = attachment;
           return (
-            <>
+            <Fragment key={key}>
               <tr>
-                <td key={key} title={name} className="file-name">
+                <td title={name} className="file-name">
                   <a href={url} target="_blank" rel="noopener noreferrer">
                     {name}
                   </a>
@@ -92,7 +75,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
                   <DocIcon height={20} width={20} fill={'#555'} />
                 </td>
               </tr>
-            </>
+            </Fragment>
           );
         }
       );
@@ -109,12 +92,14 @@ const DocumentsTabView = (props: Props): JSX.Element => {
             <thead className="feature-collection-title">
               {featureCollectionTitle}
             </thead>
-            <hr />
+            <div className="custom-horizontal-rule" />
             {allAttachments && allAttachments.length ? (
               <thead className="table-headers">
-                <th>Name</th>
-                <th>Size</th>
-                <th>PDF</th>
+                <tr>
+                  <th>Name</th>
+                  <th>Size</th>
+                  <th>PDF</th>
+                </tr>
               </thead>
             ) : null}
             <tbody>{returnDocuments()}</tbody>

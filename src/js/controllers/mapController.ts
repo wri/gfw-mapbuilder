@@ -45,6 +45,7 @@ import {
 } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 import { LayerFactoryObject } from 'js/interfaces/mapping';
+import { Attachment, URLProperties } from 'js/interfaces/Attachment';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 
 import { setNewGraphic } from 'js/helpers/MapGraphics';
