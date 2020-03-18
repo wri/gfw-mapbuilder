@@ -16,6 +16,85 @@ interface TimeSliderProps {
 }
 
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
+  const defaultMarks = {
+    '2000': {
+      label: '2000',
+      style: {}
+    },
+    '2001': {
+      label: '2001',
+      style: { display: 'none' }
+    },
+    '2002': {
+      label: '2002',
+      style: { display: 'none' }
+    },
+    '2003': {
+      label: '2003',
+      style: {}
+    },
+    '2004': {
+      label: '2004',
+      style: { display: 'none' }
+    },
+    '2005': {
+      label: '2005',
+      style: { display: 'none' }
+    },
+    '2006': {
+      label: '2006',
+      style: {}
+    },
+    '2007': {
+      label: '2007',
+      style: { display: 'none' }
+    },
+    '2008': {
+      label: '2008',
+      style: { display: 'none' }
+    },
+    '2009': {
+      label: '2009',
+      style: {}
+    },
+    '2010': {
+      label: '2010',
+      style: { display: 'none' }
+    },
+    '2011': {
+      label: '2011',
+      style: { display: 'none' }
+    },
+    '2012': {
+      label: '2012',
+      style: {}
+    },
+    '2013': {
+      label: '2013',
+      style: { display: 'none' }
+    },
+    '2014': {
+      label: '2014',
+      style: { display: 'none' }
+    },
+    '2015': {
+      label: '2015',
+      style: {}
+    },
+    '2016': {
+      label: '2016',
+      style: { display: 'none' }
+    },
+    '2017': {
+      label: '2017',
+      style: { display: 'none' }
+    },
+    '2018': {
+      label: '2018',
+      style: {}
+    }
+  };
+
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
   const { layerID } = props;
@@ -23,33 +102,45 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const { timeSlider } = useSelector((store: RootState) => store.mapviewState);
-
-  const marks = {
-    0: { label: '2000', style: {} },
-    1: { label: '2001', style: {} },
-    2: { label: '2002', style: {} },
-    3: { label: '2003', style: {} },
-    4: { label: '2004', style: {} },
-    5: { label: '2005', style: {} },
-    6: { label: '2006', style: {} },
-    7: { label: '2007', style: {} },
-    8: { label: '2008', style: {} },
-    9: { label: '2009', style: {} },
-    10: { label: '2010', style: {} },
-    11: { label: '2011', style: {} },
-    12: { label: '2012', style: {} },
-    13: { label: '2013', style: {} },
-    14: { label: '2014', style: {} },
-    15: { label: '2015', style: {} },
-    16: { label: '2016', style: {} },
-    17: { label: '2017', style: {} },
-    18: { label: '2018', style: {} }
-  };
+  const [marks, setMarks] = useState(defaultMarks);
 
   useEffect(() => {
+    const updateMarks = (newMaxYear: number): void => {
+      const sliderMarks = { ...marks };
+
+      const oneYearPrior = newMaxYear - 1;
+      const twoYearsPrior = newMaxYear - 2;
+      const oneYearLater = newMaxYear + 1;
+      const twoYearsLater = newMaxYear + 2;
+
+      if (sliderMarks[twoYearsPrior]) {
+        sliderMarks[twoYearsPrior].style.display = 'none';
+      }
+
+      if (sliderMarks[oneYearPrior]) {
+        sliderMarks[oneYearPrior].style.display = 'none';
+      }
+
+      if (sliderMarks[oneYearLater]) {
+        sliderMarks[oneYearLater].style.display = 'none';
+      }
+
+      if (sliderMarks[twoYearsLater]) {
+        sliderMarks[twoYearsLater].style.display = 'none';
+      }
+
+      if (sliderMarks[newMaxYear]) {
+        sliderMarks[newMaxYear].style.display = 'block';
+      }
+
+      setMarks({ ...sliderMarks });
+    };
+
     const playSequence = (): void => {
       const newMaxYear = (range[1] += 1);
+
       setRange([range[0], newMaxYear]);
+      updateMarks(newMaxYear);
       mapController.updateBaseTile(layerID, [range[0], newMaxYear]);
     };
 
@@ -57,6 +148,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       (timeSliderRef as any).current = setInterval(playSequence, 1000);
     } else if (startTimeSlider && range[1] === timeSlider[1]) {
       setRange([range[0], range[0]]);
+      setMarks(defaultMarks);
     }
 
     return (): any => {
@@ -80,6 +172,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     } else {
       // * NOTE: stops & resets time slider
       setRange(timeSlider);
+      setMarks(defaultMarks);
       mapController.updateBaseTile(layerID, timeSlider);
       setStartTimeSlider(false);
       setPlayButton(true);
@@ -114,6 +207,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
           border: '1px solid #F0AB00'
         }}
         trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+        className={playButton ? '' : 'playing'}
         onChange={(value: Array<number>): void => setSelectedRange(value)}
       />
     </div>
