@@ -19,7 +19,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
   const { layerID } = props;
-  const [prevRange, setPrevRange] = useState([2000, 2018]);
+  const [range, setRange] = useState([2000, 2018]);
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const { timeSlider } = useSelector((store: RootState) => store.mapviewState);
@@ -48,40 +48,39 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   useEffect(() => {
     const playSequence = (): void => {
-      const newMaxYear = (timeSlider[1] += 1);
-      dispatch(setTimeSlider([timeSlider[0], newMaxYear]));
-      mapController.updateBaseTile(layerID, [timeSlider[0], newMaxYear]);
+      const newMaxYear = (range[1] += 1);
+      setRange([range[0], newMaxYear]);
+      mapController.updateBaseTile(layerID, [range[0], newMaxYear]);
     };
 
-    if (startTimeSlider && timeSlider[1] !== prevRange[1]) {
+    if (startTimeSlider && range[1] !== timeSlider[1]) {
       (timeSliderRef as any).current = setInterval(playSequence, 1000);
-    } else if (startTimeSlider && timeSlider[1] === prevRange[1]) {
-      dispatch(setTimeSlider([timeSlider[0], timeSlider[0]]));
+    } else if (startTimeSlider && range[1] === timeSlider[1]) {
+      setRange([range[0], range[0]]);
     }
 
     return (): any => {
       clearInterval(timeSliderRef.current);
     };
-  }, [startTimeSlider, timeSlider[1], prevRange[1]]);
+  }, [startTimeSlider, range[1], timeSlider[1]]);
 
   const setSelectedRange = (selectedRange: Array<number>): void => {
+    setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
-    setPrevRange(selectedRange);
     mapController.updateBaseTile(layerID, selectedRange);
   };
 
   const playOrPauseTimeSlider = (startPlaying: boolean): any => {
     if (startPlaying) {
       // * NOTE: plays time slider
-      dispatch(setTimeSlider([timeSlider[0], timeSlider[0]]));
+      setRange([timeSlider[0], timeSlider[0]]);
       mapController.updateBaseTile(layerID, [timeSlider[0], timeSlider[0]]);
       setPlayButton(false);
       setStartTimeSlider(true);
     } else {
       // * NOTE: stops & resets time slider
-      dispatch(setTimeSlider(prevRange));
-      setPrevRange(prevRange);
-      mapController.updateBaseTile(layerID, prevRange);
+      setRange(timeSlider);
+      mapController.updateBaseTile(layerID, timeSlider);
       setStartTimeSlider(false);
       setPlayButton(true);
       clearInterval(timeSliderRef.current);
@@ -103,7 +102,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         min={2000}
         max={2018}
         defaultValue={[2000, 2018]}
-        value={timeSlider}
+        value={range}
         allowCross={false}
         tipFormatter={(val: number): number => val}
         dots={true}
