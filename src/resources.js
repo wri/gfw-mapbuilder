@@ -99,10 +99,9 @@ export default {
         label: {
           en: "Island_Groups_and_Atoll_names"
         },
-        // opacity: 1,
         url:
-          "https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer",
-        layerIds: [13],
+          "https://ags108.blueraster.io/server/rest/services/WCS/Oceans_Island_and_Atoll_Labels/MapServer",
+        layerIds: [0],
         visible: true
       }
     ]
