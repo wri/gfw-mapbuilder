@@ -12,10 +12,25 @@ interface LegendItemProps {
   language: string;
 }
 
-type LabelTypes = 'basic' | 'point' | 'line' | 'gradient' | 'group' | undefined;
+type LabelTypes =
+  | 'basic'
+  | 'point'
+  | 'line'
+  | 'gradient'
+  | 'group'
+  | string
+  | undefined;
 function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
-  const { color, size, outlineColor, thickness, lineType } = options;
-  console.log(options.items);
+  const {
+    color,
+    size,
+    outlineColor,
+    thickness,
+    lineType,
+    label,
+    imageData,
+    contentType
+  } = options;
   switch (type) {
     case 'basic':
       return (
@@ -30,6 +45,15 @@ function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
     case 'point':
       return (
         <PointItem color={color} height={size} width={size} opacity={opacity} />
+      );
+    case 'webmap':
+      return (
+        <PolyFromMapServer
+          opacity={opacity}
+          dataURI={imageData}
+          title={label}
+          contentType={contentType}
+        />
       );
     case 'line':
       return (
@@ -61,13 +85,22 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const items = props.visibleLayers.map(layer => {
     if (layer.origin === 'webmap') {
-      //deal with mapserver data here :()
-      //       <PolyFromMapServer
-      //         title="yes"
-      //         opacity={1}
-      //         dataURI="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAI1JREFUOI211MENwCAIBVBN3MLx2MMDuzqHPWlQwFBo/00lLySiJX2c8huIiCOKtdZyOTfoGhFHrXWtAWA7pzW9971DrdCC0YigFxPBCMZALwYAeV7qBnoxtcMoJoIRjIFejD6K69OzYq7BvmE0psG2YiIYwRjoxUyD/QZTO5w3RYF0RKuZX98Cz7/QmwfqIYE7SrOnbQAAAABJRU5ErkJggg=="
-      //       />
-      return null;
+      const labelIcons = layer.legendInfo.map((item: any, i: number) => {
+        //deal with no label
+        item.label = item.label && item.label !== '' ? item.label : layer.title;
+        return (
+          <div className="label-item" key={i}>
+            {getLegendLabel(layer.type, item, layer.opacity)}
+            <p>{item.label}</p>
+          </div>
+        );
+      });
+      return (
+        <div className="layer-item" key={layer.id}>
+          <p className="layer-title">{layer.title}</p>
+          {labelIcons}
+        </div>
+      );
     } else if (layer.origin === 'remote') {
       const title = layer.metadata?.legendConfig?.name[language];
       const labelIcons = layer.metadata?.legendConfig?.items.map(

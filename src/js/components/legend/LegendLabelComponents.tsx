@@ -2,6 +2,7 @@ import * as React from 'react';
 
 //TODO these types of legend items need to be supported according to the wiki: https://github.com/wri/gfw-mapbuilder/wiki/Legends
 /*
+  - Service ✅
   - Basic ✅
   - Point ✅
   - Line ✅
@@ -84,13 +85,14 @@ interface PolyFromMapServerProps {
   dataURI: string;
   title: string;
   opacity: number;
+  contentType: string;
 }
 export const PolyFromMapServer = (
   props: PolyFromMapServerProps
 ): JSX.Element => {
   return (
     <img
-      src={props.dataURI}
+      src={`data:${props.contentType};base64,${props.dataURI}`}
       title={props.title}
       style={{ opacity: `${props.opacity}` }}
     />
