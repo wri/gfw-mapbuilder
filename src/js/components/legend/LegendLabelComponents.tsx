@@ -1,19 +1,27 @@
 import * as React from 'react';
 
-interface IconItemProps {
+//TODO these types of legend items need to be supported according to the wiki: https://github.com/wri/gfw-mapbuilder/wiki/Legends
+/*
+  - Basic ✅
+  - Point ✅
+  - Line ✅
+  - Gradient 🛑
+  - Cloropleth 🛑
+  - Group 🛑
+*/
+
+interface PointItemProps {
   color: string;
   height: number;
   width: number;
   opacity: number;
-  outline?: string;
 }
 
-export const PointItem = (props: IconItemProps): JSX.Element => {
+export const PointItem = (props: PointItemProps): JSX.Element => {
   return (
     <div
       style={{
         borderRadius: '50%',
-
         width: `${props.width}px`,
         height: `${props.height}px`,
         opacity: `${props.opacity}`,
@@ -23,7 +31,42 @@ export const PointItem = (props: IconItemProps): JSX.Element => {
   );
 };
 
-export const PolygonItem = (props: IconItemProps): JSX.Element => {
+interface LineItemProps {
+  lineType: string; //"dashed" or "solid"
+  color: string;
+  thickness: string;
+  opacity: number;
+}
+
+export const LineItem = (props: LineItemProps): JSX.Element => {
+  return (
+    <div
+      style={{
+        width: '16px',
+        height: '16px',
+        backgroundColor: 'rgba(0,0,0,0)',
+        display: 'grid',
+        alignItems: 'center'
+      }}
+    >
+      <div
+        style={{
+          opacity: props.opacity,
+          borderBottom: `${props.thickness}px ${props.lineType} ${props.color}`
+        }}
+      ></div>
+    </div>
+  );
+};
+
+interface BasicItemProps {
+  color: string;
+  height: number;
+  width: number;
+  opacity: number;
+  outline: string;
+}
+export const BasicItem = (props: BasicItemProps): JSX.Element => {
   return (
     <div
       style={{

@@ -48,6 +48,7 @@ import { LayerFactoryObject } from 'js/interfaces/mapping';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 
 import { setNewGraphic } from 'js/helpers/MapGraphics';
+import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -262,9 +263,15 @@ export class MapController {
 
   extractLayerObjects(): LayerProps[] {
     const mapLayerObjects: LayerProps[] = [];
-    this._map?.layers.forEach((layer: any) => {
+    this._map?.layers.forEach(async (layer: any) => {
+      //Get the legend information for each layer
+      const legendInfo = await fetchLegendInfo(layer.url);
       if (layer.sublayers && layer.sublayers.length > 0) {
         layer.sublayers.forEach((sub: any) => {
+          //get sublayer legend info
+          const sublayerLegendInfo = legendInfo.layers.find(
+            (l: any) => l.layerId === sub.id
+          );
           //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
           sub.opacity = sub.opacity ? sub.opacity : 1;
           const {
@@ -290,10 +297,12 @@ export class MapController {
             maxScale,
             minScale,
             sublayer: true,
-            parentID: sub.layer.id
+            parentID: sub.layer.id,
+            legendInfo: sublayerLegendInfo.legend
           });
         });
       } else {
+        console.log(legendInfo);
         const {
           id,
           title,
@@ -316,7 +325,8 @@ export class MapController {
           url,
           maxScale,
           minScale,
-          sublayer: false
+          sublayer: false,
+          legendInfo
         });
       }
     });
