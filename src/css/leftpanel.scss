@@ -12,6 +12,38 @@
   max-height: 34rem;
   overflow-y: scroll;
 
+  .documents-container {
+    display: flex;
+    padding: 1rem;
+    font-family: $fira-sans;
+
+    table {
+      width: 100%;
+
+      .file-name {
+        max-width: 1rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 0.25em;
+      }
+
+      tr {
+        border-bottom: 1px solid #ddd;
+      }
+
+      .custom-horizontal-rule {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid black;
+      }
+    }
+  }
+
   .info-content-container {
     display: flex;
     min-height: 5rem;
