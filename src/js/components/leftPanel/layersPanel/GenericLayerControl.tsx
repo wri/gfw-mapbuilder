@@ -14,6 +14,8 @@ import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 
 interface LayerControlProps {
   id: string;
+  sublayer?: boolean;
+  parentID?: string;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
@@ -37,7 +39,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   return (
     <>
       <div className="layers-control-checkbox">
-        <LayerToggleSwitch layerIsVisible={layer?.visible} layerID={props.id} />
+        <LayerToggleSwitch
+          layerIsVisible={layer?.visible}
+          layerID={props.id}
+          sublayer={props.sublayer}
+          parentID={props.parentID}
+        />
         <span className="layer-label">{layer?.title}</span>
         <div className="info-icon-container">
           <InfoIcon width={10} height={10} fill={'#fff'} />
@@ -49,6 +56,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         <LayerTransparencySlider
           layerID={props.id}
           layerOpacity={layer?.opacity}
+          sublayer={props.sublayer}
+          parentID={props.parentID}
         />
       )}
     </>

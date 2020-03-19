@@ -65,6 +65,8 @@ interface Popup {
   title: any;
 }
 
+export type LayerOrigin = 'webmap' | 'service' | 'remote'; //where the layer originate from (GFW API, WEBMAP, SERVICE)
+
 export interface LayerProps {
   id: string;
   visible: boolean;
@@ -73,7 +75,13 @@ export interface LayerProps {
   opacity: number;
   definitionExpression?: string;
   group: string;
+  type: string;
+  origin: LayerOrigin;
   url: string;
+  maxScale?: number;
+  minScale?: number;
+  sublayer?: boolean;
+  parentID?: string;
   popup?: Popup;
   metadata?: object;
   sublabel?: object;

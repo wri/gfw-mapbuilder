@@ -45,9 +45,14 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
         {allAvailableLayers
-          .filter(lay => lay.group === 'webmap')
+          .filter(layer => layer.group === 'webmap')
           .map(layer => (
-            <GenericLayerControl id={layer.id} key={layer.id} />
+            <GenericLayerControl
+              sublayer={layer.sublayer}
+              parentID={layer.parentID}
+              id={layer.id}
+              key={layer.id}
+            />
           ))}
       </div>
     </div>
