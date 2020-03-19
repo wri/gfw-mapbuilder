@@ -40,7 +40,8 @@ import {
 import {
   LayerProps,
   LayerFeatureResult,
-  FeatureResult
+  FeatureResult,
+  LayerOrigin
 } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
@@ -154,27 +155,7 @@ export class MapController {
             queryLayersForFeatures(this._mapview, this._map, event);
           });
 
-          const mapLayerObjects: LayerProps[] = [];
-          this._map?.layers.forEach((layer: any) => {
-            const {
-              id,
-              title,
-              opacity,
-              visible,
-              definitionExpression,
-              url
-            } = layer;
-            mapLayerObjects.push({
-              id,
-              title,
-              opacity,
-              visible,
-              definitionExpression,
-              group: 'webmap',
-              url
-            });
-          });
-
+          const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           this.getMoreLayers().then(res => {
@@ -215,7 +196,9 @@ export class MapController {
                 let metadata;
                 let popup;
                 let sublabel;
+                let origin = '' as LayerOrigin;
                 if (apiLayer.dataLayer) {
+                  //Deal with remote data layers
                   metadata = apiLayer.layer.metadata;
                   popup = apiLayer.layer.popup;
                   sublabel = apiLayer.layer.sublabel;
@@ -225,12 +208,15 @@ export class MapController {
                   resourceGroup = apiLayer.dataLayer.groupId;
                   url = apiLayer.layer.url;
                   type = apiLayer.layer.type;
+                  origin = 'remote';
                 } else {
+                  // All other service layers info should be in resources file
                   resourceId = apiLayer.id;
                   resourceTitle = apiLayer.label[appState.selectedLanguage];
                   resourceGroup = apiLayer.groupId;
                   url = apiLayer.url;
                   type = apiLayer.type;
+                  origin = 'service';
                 }
 
                 resouceLayerSpecs.push({
@@ -247,10 +233,13 @@ export class MapController {
                   id: resourceId,
                   title: resourceTitle,
                   opacity: resourceOpacity,
-                  visible: false,
+                  visible: false, //TODO: I think visibility is suppose to be coming from config, this is hardcoded for now
                   definitionExpression: resourceDefinitionExpression,
                   group: resourceGroup,
+                  type,
+                  origin,
                   url: url,
+                  sublayer: false,
                   metadata,
                   sublabel,
                   popup
@@ -279,6 +268,69 @@ export class MapController {
         console.log('error in initializeMap()', error);
         store.dispatch(mapError(true));
       });
+  }
+
+  extractLayerObjects(): LayerProps[] {
+    const mapLayerObjects: LayerProps[] = [];
+    this._map?.layers.forEach((layer: any) => {
+      if (layer.sublayers && layer.sublayers.length > 0) {
+        layer.sublayers.forEach((sub: any) => {
+          //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
+          sub.opacity = sub.opacity ? sub.opacity : 1;
+          const {
+            id,
+            title,
+            opacity,
+            visible,
+            definitionExpression,
+            url,
+            maxScale,
+            minScale
+          } = sub;
+          mapLayerObjects.push({
+            id,
+            title,
+            opacity,
+            visible,
+            definitionExpression,
+            group: 'webmap',
+            type: 'webmap',
+            origin: 'webmap',
+            url,
+            maxScale,
+            minScale,
+            sublayer: true,
+            parentID: sub.layer.id
+          });
+        });
+      } else {
+        const {
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          url,
+          maxScale,
+          minScale
+        } = layer;
+        mapLayerObjects.push({
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          group: 'webmap',
+          type: 'webmap',
+          origin: 'webmap',
+          url,
+          maxScale,
+          minScale,
+          sublayer: false
+        });
+      }
+    });
+    return mapLayerObjects;
   }
 
   getMoreLayers(): Promise<any> {
@@ -394,26 +446,7 @@ export class MapController {
 
             if (this._map) {
               once(this._map, 'loaded', () => {
-                const mapLayerObjects: LayerProps[] = [];
-                this._map?.layers.forEach((layer: any) => {
-                  const {
-                    id,
-                    title,
-                    opacity,
-                    visible,
-                    definitionExpression,
-                    url
-                  } = layer;
-                  mapLayerObjects.push({
-                    id,
-                    title,
-                    opacity,
-                    visible,
-                    definitionExpression,
-                    group: 'webmap',
-                    url: url
-                  });
-                });
+                const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
 
                 const prevMapObjects = store
                   .getState()
@@ -466,7 +499,13 @@ export class MapController {
   clearAllLayers(): void {
     console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
-    this._map?.layers.forEach(layer => (layer.visible = false));
+    this._map?.layers.forEach((layer: any) => {
+      if (layer.sublayers) {
+        layer.sublayers.forEach((sub: any) => (sub.visible = false));
+      } else {
+        layer.visible = false;
+      }
+    });
     //2. Update redux state with visible layers array being empty
 
     const { mapviewState } = store.getState();
@@ -483,10 +522,12 @@ export class MapController {
 
   selectAllLayers(): void {
     console.log('select all layers');
-    const layersToEnable: string[] = [];
-    this._map?.layers.forEach(layer => {
-      layer.visible = true;
-      layersToEnable.push(layer.id);
+    this._map?.layers.forEach((layer: any) => {
+      if (layer.sublayers) {
+        layer.sublayers.forEach((sub: any) => (sub.visible = true));
+      } else {
+        layer.visible = true;
+      }
     });
     const { mapviewState } = store.getState();
     const newLayersArray = mapviewState.allAvailableLayers.map(
@@ -518,8 +559,20 @@ export class MapController {
     }
   }
 
-  toggleLayerVisibility(layerID: string): void {
-    const layer = this._map?.findLayerById(layerID);
+  toggleLayerVisibility(
+    layerID: string,
+    sublayer?: boolean,
+    parentID?: string
+  ): void {
+    let layer = null as any;
+    if (sublayer && parentID) {
+      layer = this._map
+        ?.findLayerById(parentID)
+        //@ts-ignore -- sublayers exist
+        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+    } else {
+      layer = this._map?.findLayerById(layerID);
+    }
     if (layer) {
       //1. update the map
       layer.visible = !layer.visible;
@@ -539,8 +592,21 @@ export class MapController {
     }
   }
 
-  setLayerOpacity(layerID: string, value: string): void {
-    const layer = this._map?.findLayerById(layerID);
+  setLayerOpacity(
+    layerID: string,
+    value: string,
+    sublayer?: boolean,
+    parentID?: string
+  ): void {
+    let layer = null as any;
+    if (sublayer && parentID) {
+      layer = this._map
+        ?.findLayerById(parentID)
+        //@ts-ignore -- sublayers exist
+        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+    } else {
+      layer = this._map?.findLayerById(layerID);
+    }
     if (layer) {
       layer.opacity = Number(value);
       const { mapviewState } = store.getState();
