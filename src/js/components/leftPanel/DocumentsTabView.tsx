@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
-import { mapController } from 'js/controllers/mapController';
+import { getDocuments } from 'js/helpers/mapController/Documents';
 
 import { RootState } from 'js/store';
 
@@ -24,10 +24,18 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   );
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
-  const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
+  const [featureCollectionIndex] = activeFeatureIndex;
+
+  const returnFeatureCollectionTitle = (): string => {
+    if (activeFeatures[featureCollectionIndex].sublayerTitle) {
+      return activeFeatures[featureCollectionIndex].sublayerTitle as string;
+    } else {
+      return activeFeatures[featureCollectionIndex].layerTitle;
+    }
+  };
 
   const featureCollectionTitle = activeFeatures[featureCollectionIndex]
-    ? activeFeatures[featureCollectionIndex].sublayerTitle
+    ? returnFeatureCollectionTitle()
     : null;
 
   useEffect(() => {
@@ -44,7 +52,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
         layerID
       } as any;
 
-      const attachments = await mapController.getDocuments(urlProperties);
+      const attachments = await getDocuments(urlProperties);
 
       if (attachments !== allAttachments) {
         setAllAttachments(attachments as any);
