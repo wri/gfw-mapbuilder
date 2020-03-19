@@ -40,7 +40,8 @@ import {
 import {
   LayerProps,
   LayerFeatureResult,
-  FeatureResult
+  FeatureResult,
+  LayerOrigin
 } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
 
@@ -195,7 +196,9 @@ export class MapController {
                 let metadata;
                 let popup;
                 let sublabel;
+                let origin = '' as LayerOrigin;
                 if (apiLayer.dataLayer) {
+                  //Deal with remote data layers
                   metadata = apiLayer.layer.metadata;
                   popup = apiLayer.layer.popup;
                   sublabel = apiLayer.layer.sublabel;
@@ -205,12 +208,15 @@ export class MapController {
                   resourceGroup = apiLayer.dataLayer.groupId;
                   url = apiLayer.layer.url;
                   type = apiLayer.layer.type;
+                  origin = 'remote';
                 } else {
+                  // All other service layers info should be in resources file
                   resourceId = apiLayer.id;
                   resourceTitle = apiLayer.label[appState.selectedLanguage];
                   resourceGroup = apiLayer.groupId;
                   url = apiLayer.url;
                   type = apiLayer.type;
+                  origin = 'service';
                 }
 
                 resouceLayerSpecs.push({
@@ -227,9 +233,11 @@ export class MapController {
                   id: resourceId,
                   title: resourceTitle,
                   opacity: resourceOpacity,
-                  visible: false,
+                  visible: false, //TODO: I think visibility is suppose to be coming from config, this is hardcoded for now
                   definitionExpression: resourceDefinitionExpression,
                   group: resourceGroup,
+                  type,
+                  origin,
                   url: url,
                   sublayer: false,
                   metadata,
@@ -286,6 +294,8 @@ export class MapController {
             visible,
             definitionExpression,
             group: 'webmap',
+            type: 'webmap',
+            origin: 'webmap',
             url,
             maxScale,
             minScale,
@@ -311,6 +321,8 @@ export class MapController {
           visible,
           definitionExpression,
           group: 'webmap',
+          type: 'webmap',
+          origin: 'webmap',
           url,
           maxScale,
           minScale,
