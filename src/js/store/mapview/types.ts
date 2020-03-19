@@ -78,6 +78,7 @@ interface LegendConfig {
   source: string;
   type: 'basic' | 'point';
 }
+export type LayerOrigin = 'webmap' | 'service' | 'remote'; //where the layer originate from (GFW API, WEBMAP, SERVICE)
 
 export interface LayerProps {
   id: string;
@@ -87,9 +88,15 @@ export interface LayerProps {
   opacity: number;
   definitionExpression?: string;
   group: string;
+  type: string;
+  origin: LayerOrigin;
   url: string;
   metadata?: { metadata?: object; legendConfig?: LegendConfig };
   legendInfo?: any;
+  maxScale?: number;
+  minScale?: number;
+  sublayer?: boolean;
+  parentID?: string;
   popup?: Popup;
   sublabel?: object;
 }
