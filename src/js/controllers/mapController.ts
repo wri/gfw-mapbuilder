@@ -25,7 +25,8 @@ import {
   mapError,
   isMapReady,
   setActiveFeatureIndex,
-  setActiveFeatures
+  setActiveFeatures,
+  changeMapScale
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -136,7 +137,12 @@ export class MapController {
           store.dispatch(isMapReady(true));
           //Set default language
           store.dispatch(setLanguage(appSettings.language));
-          this._mapview.popup.highlightEnabled = false;
+          //default scale for map
+          store.dispatch(changeMapScale(this._mapview.scale));
+          //zoom level listener
+          this._mapview.watch('scale', newScale => {
+            store.dispatch(changeMapScale(newScale));
+          });
           this._mapview.on('click', event => {
             //TODO: We need a better loading handling, probably a spinner!
             //clean active indexes for data tab and activeFeatures
@@ -265,7 +271,7 @@ export class MapController {
     const mapLayerObjects: LayerProps[] = [];
     this._map?.layers.forEach(async (layer: any) => {
       //Get the legend information for each layer
-      const legendInfo = await fetchLegendInfo(layer.url);
+      let legendInfo = await fetchLegendInfo(layer.url);
       if (layer.sublayers && layer.sublayers.length > 0) {
         layer.sublayers.forEach((sub: any) => {
           //get sublayer legend info
@@ -302,7 +308,11 @@ export class MapController {
           });
         });
       } else {
-        console.log(legendInfo);
+        //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
+        legendInfo = layer.layerId
+          ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId)
+              .legend
+          : legendInfo;
         const {
           id,
           title,
