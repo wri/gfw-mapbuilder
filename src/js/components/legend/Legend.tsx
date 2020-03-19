@@ -4,20 +4,38 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import 'css/legend.scss';
 import LegendItems from './generateLegendItems';
+import { LayerProps } from 'js/store/mapview/types';
 
 const Legend = (): JSX.Element => {
-  const { hideWidgetActive } = useSelector(
+  const { hideWidgetActive, selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
-  const { allAvailableLayers } = useSelector(
+  const { allAvailableLayers, scale } = useSelector(
     (store: RootState) => store.mapviewState
   );
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
-  );
-  //TODO: should likely filter scale here too
-  //TODO: order should be applied here I believe
-  const visibleLayers = allAvailableLayers.filter(l => l.visible);
+
+  //handle scale visibility too, this only addresses webmaps but not the GFW API layers!
+  function layerIsInScale(layer: LayerProps): boolean {
+    if (layer.hasOwnProperty('minScale') && layer.hasOwnProperty('maxScale')) {
+      if (layer.minScale === 0 && layer.maxScale === 0) {
+        return true;
+        //@ts-ignore -- TS is not understanding the above check for properties for some reason.
+      } else if (layer.maxScale < scale && layer.minScale > scale) {
+        //Our mapview is within the scale that is defined! show this legend item
+        return true;
+      } else {
+        //legend item is outside the scale parameters, we do not want it!
+        return false;
+      }
+    } else {
+      // if no maxmin scale defined, we want to show those layers in legend
+      return true;
+    }
+  }
+  //TODO: order should be applied here I think!
+  const visibleLayers = allAvailableLayers
+    .filter(l => l.visible)
+    .filter(layerIsInScale);
 
   const [legendOpen, setLegendOpen] = useState(!hideWidgetActive);
 
