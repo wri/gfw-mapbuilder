@@ -93,6 +93,7 @@ interface Attributes {
 }
 
 export interface FeatureResult {
+  objectid: number;
   attributes: Attributes;
   geometry: __esri.Geometry;
 }
