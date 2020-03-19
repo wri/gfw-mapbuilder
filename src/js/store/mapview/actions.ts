@@ -7,6 +7,7 @@ import {
   SET_ACTIVE_FEATURE_INDEX,
   SET_ACTIVE_BASEMAP,
   SET_TIME_SLIDER,
+  CHANGE_MAP_SCALE,
   MapviewState
 } from './types';
 
@@ -69,5 +70,12 @@ export function setTimeSlider(timeSlider: MapviewState['timeSlider']) {
   return {
     type: SET_TIME_SLIDER as typeof SET_TIME_SLIDER,
     payload: timeSlider
+  };
+}
+
+export function changeMapScale(scale: MapviewState['scale']) {
+  return {
+    type: CHANGE_MAP_SCALE as typeof CHANGE_MAP_SCALE,
+    payload: scale
   };
 }

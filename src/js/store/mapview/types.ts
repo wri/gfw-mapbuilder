@@ -58,6 +58,7 @@ export interface MapviewState {
   activeFeatureIndex: number[];
   activeBasemap: string; // * NEW! not in resources.js
   timeSlider: number[];
+  scale: number;
 }
 
 interface Popup {
@@ -134,6 +135,7 @@ export const SET_ACTIVE_FEATURES = 'SET_ACTIVE_FEATURES';
 export const SET_ACTIVE_FEATURE_INDEX = 'SET_ACTIVE_FEATURE_INDEX';
 export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
 export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
+export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -174,6 +176,11 @@ interface SetTimeSlider {
   payload: MapviewState['timeSlider'];
 }
 
+interface ChangeMapScale {
+  type: typeof CHANGE_MAP_SCALE;
+  payload: MapviewState['scale'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -182,4 +189,5 @@ export type MapviewStateTypes =
   | SetActiveFeaturesAction
   | SetActiveFeatureIndex
   | SetSelectedAction
-  | SetTimeSlider;
+  | SetTimeSlider
+  | ChangeMapScale;
