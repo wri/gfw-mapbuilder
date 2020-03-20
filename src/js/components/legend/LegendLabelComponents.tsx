@@ -19,14 +19,15 @@ interface PointItemProps {
 }
 
 export const PointItem = (props: PointItemProps): JSX.Element => {
+  const { width, height, opacity, color } = props;
   return (
     <div
       style={{
         borderRadius: '50%',
-        width: `${props.width}px`,
-        height: `${props.height}px`,
-        opacity: `${props.opacity}`,
-        backgroundColor: `${props.color}`
+        width: `${width}px`,
+        height: `${height}px`,
+        opacity: `${opacity}`,
+        backgroundColor: `${color}`
       }}
     ></div>
   );
@@ -40,6 +41,7 @@ interface LineItemProps {
 }
 
 export const LineItem = (props: LineItemProps): JSX.Element => {
+  const { opacity, thickness, lineType, color } = props;
   return (
     <div
       style={{
@@ -52,8 +54,8 @@ export const LineItem = (props: LineItemProps): JSX.Element => {
     >
       <div
         style={{
-          opacity: props.opacity,
-          borderBottom: `${props.thickness}px ${props.lineType} ${props.color}`
+          opacity: opacity,
+          borderBottom: `${thickness}px ${lineType} ${color}`
         }}
       ></div>
     </div>
@@ -68,14 +70,15 @@ interface BasicItemProps {
   outline: string;
 }
 export const BasicItem = (props: BasicItemProps): JSX.Element => {
+  const { outline, width, height, opacity, color } = props;
   return (
     <div
       style={{
-        border: `1px solid ${props.outline}`,
-        width: `${props.width}px`,
-        height: `${props.height}px`,
-        opacity: `${props.opacity}`,
-        backgroundColor: `${props.color}`
+        border: `1px solid ${outline}`,
+        width: `${width}px`,
+        height: `${height}px`,
+        opacity: `${opacity}`,
+        backgroundColor: `${color}`
       }}
     ></div>
   );
@@ -90,11 +93,12 @@ interface PolyFromMapServerProps {
 export const PolyFromMapServer = (
   props: PolyFromMapServerProps
 ): JSX.Element => {
+  const { contentType, dataURI, title, opacity } = props;
   return (
     <img
-      src={`data:${props.contentType};base64,${props.dataURI}`}
-      title={props.title}
-      style={{ opacity: `${props.opacity}` }}
+      src={`data:${contentType};base64,${dataURI}`}
+      title={title}
+      style={{ opacity: `${opacity}` }}
     />
   );
 };

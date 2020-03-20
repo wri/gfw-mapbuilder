@@ -40,7 +40,6 @@ const Legend = (): JSX.Element => {
   const [legendOpen, setLegendOpen] = useState(!hideWidgetActive);
 
   function handleLegendToggle(): void {
-    console.log('toggle');
     setLegendOpen(!legendOpen);
   }
 

@@ -20,6 +20,7 @@ type LabelTypes =
   | 'group'
   | string
   | undefined;
+
 function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
   const {
     color,
