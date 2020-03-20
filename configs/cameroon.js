@@ -1,5 +1,5 @@
 module.exports = {
-  webmap: '6142e76453354c0b83633370e6a6f006 ',
+  webmap: '8892b20e94244843b8e46d71ea1b03f2 ',
   title: 'Atlas Forestier du Cameroun',
   subtitle: 'Ministère des Forêts et de la Faune',
   webmapMenuName: 'Affectation des Terres',
