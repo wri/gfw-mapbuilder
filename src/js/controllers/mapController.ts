@@ -17,10 +17,12 @@ import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import { once } from 'esri/core/watchUtils';
+
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
+import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
 import {
   allAvailableLayers,
   mapError,
@@ -995,10 +997,13 @@ export class MapController {
     store.dispatch(renderModal(''));
   };
 
-  initializeSearchWidget(searchRef: RefObject<any>): void {
+  async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {
+    const allSources = await setLayerSearchSource();
+
     new Search({
       view: this._mapview,
-      container: searchRef.current
+      container: searchRef.current,
+      sources: allSources
     });
   }
 
