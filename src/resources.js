@@ -17,6 +17,7 @@ export default {
   includeMyGFWLogin: false,
   navLinksInNewTab: false,
   hideHeader: false,
+  hideLegend: false,
   hideFooter: false,
   language: "en",
   useAlternativeLanguage: true,
