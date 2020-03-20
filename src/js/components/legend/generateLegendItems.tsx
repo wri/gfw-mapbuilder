@@ -88,7 +88,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
     if (layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo.map((item: any, i: number) => {
         //deal with no label
-        item.label = item.label && item.label !== '' ? item.label : layer.title;
+        item.label = item.label && item.label.length ? item.label : layer.title;
         return (
           <div className="label-item" key={i}>
             {getLegendLabel(layer.type, item, layer.opacity)}
