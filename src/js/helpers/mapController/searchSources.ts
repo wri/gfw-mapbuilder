@@ -71,5 +71,5 @@ export const setLayerSearchSource = async (): Promise<ArrayOfLayerSources> => {
   const mapImageLayerSources = (await setMapImageLayerSources()) as any;
   // * NOTE: mapImageLayerSources returns console errors RE FeatureLayer
 
-  return [].concat(featureLayerSources, mapImageLayerSources);
+  return [...featureLayerSources, ...mapImageLayerSources];
 };
