@@ -16,7 +16,6 @@
     "brApp": true,
     "describe": true,
     "it": true,
-    "expect": true,
     "saveAs": true,
     "expect": true,
     "test": true,
