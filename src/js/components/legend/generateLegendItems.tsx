@@ -82,50 +82,51 @@ function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
   }
 }
 
-const LegendItems = (props: LegendItemProps): JSX.Element => {
+const returnLegendItem = (layer: any, language: string): JSX.Element => {
+  const isWebmap = layer.origin === 'webmap' ? true : false;
+
+  const legendItems = isWebmap
+    ? layer.legendInfo
+    : layer.metadata?.legendConfig?.items;
+
+  const returnLayerTitle = (): string =>
+    layer.metadata?.legendConfig?.name[language]
+      ? layer.metadata?.legendConfig?.name[language]
+      : layer.title;
+
+  const layerTitle = isWebmap ? layer.title : returnLayerTitle();
+
+  const labelIcons = legendItems.map((item: any, i: number) => {
+    const returnWebmapLabel = (): string =>
+      item.label && item.label.length ? item.label : layer.title;
+    const label = isWebmap ? returnWebmapLabel() : item.name[language];
+    const layerType = isWebmap
+      ? layer.type
+      : layer.metadata?.legendConfig?.type;
+
+    return (
+      <div className="label-item" key={i}>
+        {getLegendLabel(layerType, item, layer.opacity)}
+        <p>{label}</p>
+      </div>
+    );
+  });
+
+  return (
+    <div className="layer-item" key={layer.id}>
+      <p className="layer-title">{layerTitle}</p>
+      {labelIcons}
+    </div>
+  );
+};
+
+const LegendItems = (props: LegendItemProps): any => {
   const { language } = props;
   const items = props.visibleLayers.map(layer => {
-    if (layer.origin === 'webmap') {
-      const labelIcons = layer.legendInfo.map((item: any, i: number) => {
-        //deal with no label
-        item.label = item.label && item.label !== '' ? item.label : layer.title;
-        return (
-          <div className="label-item" key={i}>
-            {getLegendLabel(layer.type, item, layer.opacity)}
-            <p>{item.label}</p>
-          </div>
-        );
-      });
-      return (
-        <div className="layer-item" key={layer.id}>
-          <p className="layer-title">{layer.title}</p>
-          {labelIcons}
-        </div>
-      );
-    } else if (layer.origin === 'remote') {
-      const title = layer.metadata?.legendConfig?.name[language];
-      const labelIcons = layer.metadata?.legendConfig?.items.map(
-        (item: any, i) => {
-          return (
-            <div className="label-item" key={i}>
-              {getLegendLabel(
-                layer.metadata?.legendConfig?.type,
-                item,
-                layer.opacity
-              )}
-              <p>{item.name[language]}</p>
-            </div>
-          );
-        }
-      );
-      return (
-        <div className="layer-item" key={layer.id}>
-          <p className="layer-title">{title ? title : layer.title}</p>
-          {labelIcons}
-        </div>
-      );
+    if (layer.origin === 'webmap' || layer.origin === 'remote') {
+      return returnLegendItem(layer, language);
     } else {
-      //nothing found about the legend config information? what to do?
+      console.log('This layer is not a webmap or remote layer!', layer);
     }
   });
   return <div className="legend-item-container">{items}</div>;
