@@ -91,19 +91,6 @@ export default {
       },
       layers: []
     },
-    extraLayers: [
-      {
-        order: 555,
-        id: "Island_Groups_and_Atoll_names",
-        type: "dynamic",
-        label: {
-          en: "Island_Groups_and_Atoll_names"
-        },
-        url:
-          "https://ags108.blueraster.io/server/rest/services/WCS/Oceans_Island_and_Atoll_Labels/MapServer",
-        layerIds: [0],
-        visible: true
-      }
-    ]
+    extraLayers: []
   }
 };
