@@ -17,6 +17,8 @@ import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
+import QueryTask from 'esri/tasks/QueryTask';
+import Query from 'esri/tasks/support/Query';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -1165,17 +1167,58 @@ export class MapController {
     }
   }
 
-  setDefinedDateRange(layerID: string, sublayerType: string): void {
-    if (this._map) {
-      const layer = (this._map.allLayers as any).items.filter(
-        (layer: any) => layer.id === layerID
-      )[0];
+  async setDefinedDateRange(
+    layerID: string,
+    sublayerType: string
+  ): Promise<any> {
+    if (!this._map) {
+      return;
+    }
 
-      const sublayer = layer.sublayers.items.filter((sublayer: any) =>
-        sublayer.title.includes(sublayerType)
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: LayerProps) => layer.id === layerID
+    )[0];
+
+    layer.sublayers.items.forEach((sublayer: any) => {
+      if (!sublayer.title.includes(sublayerType)) {
+        sublayer.visible = false;
+      }
+    });
+
+    const specificSublayer = layer.sublayers.items.filter((sublayer: any) =>
+      sublayer.title.includes(sublayerType)
+    )[0];
+
+    if (specificSublayer) {
+      const query = new Query();
+      const queryTask = new QueryTask({
+        url: specificSublayer.url
+      });
+
+      query.returnGeometry = true;
+      query.outFields = ['*'];
+      query.where = '1=1';
+
+      const results = await queryTask.execute(query).then((results: any) => {
+        return results.features.map((feature: any) => {
+          return {
+            attributes: feature.attributes,
+            geometry: feature.geometry
+          };
+        });
+      });
+
+      setNewGraphic({
+        map: this._map,
+        mapview: this._mapview,
+        allFeatures: results,
+        isUploadFile: false
+      });
+    } else {
+      // TODO [ ] - UI indicating error!
+      console.log(
+        `sublayer type '${sublayerType}' does not exist in layer '${layer.id}'`
       );
-
-      debugger;
     }
   }
 }

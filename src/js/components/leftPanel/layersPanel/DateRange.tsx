@@ -10,7 +10,6 @@ interface DateRangeProps {
 
 const DateRange = (props: DateRangeProps): JSX.Element => {
   const { layer } = props;
-  console.log('<DateRange/>', layer);
 
   const returnDateToday = (): string => {
     const dateToday = new Date().toLocaleDateString();
@@ -42,7 +41,6 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    console.log('setDefinedRange()', e.target.value);
     // TODO [ ] fire query to correct URL
     setDefinedRange(e.target.value);
     setRenderCustomRange(false);
