@@ -1142,6 +1142,42 @@ export class MapController {
       specificLayer.refresh();
     }
   }
+
+  setCustomDateRange(
+    layerID: string,
+    startDate: string | Date,
+    endDate: string | Date
+  ): any {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+
+    if (this._map) {
+      const layer = (this._map.allLayers as any).items.filter(
+        (layer: any) => layer.id === layerID
+      );
+
+      const whereClause = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
+      /**
+       * TODO
+       * Need to update definitionExpression of the layer's selected sublayer
+       * Check layer.capabilities.exportMap.supportsSublayerDefinitionExpression to confirm we can update definitionExpression
+       */
+    }
+  }
+
+  setDefinedDateRange(layerID: string, sublayerType: string): void {
+    if (this._map) {
+      const layer = (this._map.allLayers as any).items.filter(
+        (layer: any) => layer.id === layerID
+      )[0];
+
+      const sublayer = layer.sublayers.items.filter((sublayer: any) =>
+        sublayer.title.includes(sublayerType)
+      );
+
+      debugger;
+    }
+  }
 }
 
 export const mapController = new MapController();

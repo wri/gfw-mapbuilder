@@ -1,5 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { LayerProps } from 'js/store/mapview/types';
 
 interface DateRangeProps {
@@ -24,6 +26,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const [startDate, setStartDate] = useState(returnDateToday());
   const [endDate, setEndDate] = useState(returnDateToday());
   const [renderCustomRange, setRenderCustomRange] = useState(false);
+  const [definedRange, setDefinedRange] = useState('');
 
   const setDate = (
     updateStartDate: boolean,
@@ -31,15 +34,19 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   ): void => {
     if (updateStartDate) {
       setStartDate(e.target.value);
+      mapController.setCustomDateRange(layer.id, e.target.value, endDate);
     } else {
       setEndDate(e.target.value);
+      mapController.setCustomDateRange(layer.id, startDate, e.target.value);
     }
   };
 
-  const setDefinedRange = (e: ChangeEvent<HTMLSelectElement>): void => {
+  const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
     console.log('setDefinedRange()', e.target.value);
     // TODO [ ] fire query to correct URL
+    setDefinedRange(e.target.value);
     setRenderCustomRange(false);
+    mapController.setDefinedDateRange(layer.id, e.target.value);
   };
 
   /**
@@ -50,10 +57,13 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   return (
     <>
       <div className="dropdown-wrapper">
-        <select onChange={(e): void => setDefinedRange(e)}>
-          <option value={'24 hours'}>Past 24 hours</option>
-          <option value={'48 hours'}>Past 48 hours</option>
-          <option value={'72 hours'}>Past 72 hours</option>
+        <select onChange={(e): void => setDefinedDateRange(e)}>
+          <option selected={definedRange.length ? false : true}>
+            Select a date range
+          </option>
+          <option value={'24 hrs'}>Past 24 hours</option>
+          <option value={'48 hrs'}>Past 48 hours</option>
+          <option value={'72 hrs'}>Past 72 hours</option>
           <option value={'7 days'}>Past week</option>
         </select>
       </div>
