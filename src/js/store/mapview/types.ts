@@ -58,6 +58,7 @@ export interface MapviewState {
   activeFeatureIndex: number[];
   activeBasemap: string; // * NEW! not in resources.js
   timeSlider: number[];
+  scale: number;
 }
 
 interface Popup {
@@ -65,6 +66,19 @@ interface Popup {
   title: any;
 }
 
+interface LegendConfigItem {
+  color: string;
+  name: object;
+  size: number;
+  outlineColor?: string;
+}
+
+interface LegendConfig {
+  items: LegendConfigItem[];
+  name: object;
+  source: string;
+  type: 'basic' | 'point';
+}
 export type LayerOrigin = 'webmap' | 'service' | 'remote'; //where the layer originate from (GFW API, WEBMAP, SERVICE)
 
 export interface LayerProps {
@@ -78,12 +92,13 @@ export interface LayerProps {
   type: string;
   origin: LayerOrigin;
   url: string;
+  metadata?: { metadata?: object; legendConfig?: LegendConfig };
+  legendInfo?: any;
   maxScale?: number;
   minScale?: number;
   sublayer?: boolean;
   parentID?: string;
   popup?: Popup;
-  metadata?: object;
   sublabel?: object;
 }
 
@@ -121,6 +136,7 @@ export const SET_ACTIVE_FEATURES = 'SET_ACTIVE_FEATURES';
 export const SET_ACTIVE_FEATURE_INDEX = 'SET_ACTIVE_FEATURE_INDEX';
 export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
 export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
+export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -161,6 +177,11 @@ interface SetTimeSlider {
   payload: MapviewState['timeSlider'];
 }
 
+interface ChangeMapScale {
+  type: typeof CHANGE_MAP_SCALE;
+  payload: MapviewState['scale'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -169,4 +190,5 @@ export type MapviewStateTypes =
   | SetActiveFeaturesAction
   | SetActiveFeatureIndex
   | SetSelectedAction
-  | SetTimeSlider;
+  | SetTimeSlider
+  | ChangeMapScale;

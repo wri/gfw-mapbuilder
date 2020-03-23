@@ -2,7 +2,6 @@ import Map from 'esri/Map';
 import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
-import Legend from 'esri/widgets/Legend';
 import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
@@ -27,7 +26,8 @@ import {
   mapError,
   isMapReady,
   setActiveFeatureIndex,
-  setActiveFeatures
+  setActiveFeatures,
+  changeMapScale
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -50,8 +50,7 @@ import { Attachment, URLProperties } from 'js/interfaces/Attachment';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 
 import { setNewGraphic } from 'js/helpers/MapGraphics';
-
-import { getCustomSymbol } from 'js/helpers/generateSymbol';
+import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 
@@ -105,7 +104,6 @@ export class MapController {
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
   _printTask: PrintTask | undefined;
-  _legend: Legend | undefined;
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
 
@@ -114,7 +112,6 @@ export class MapController {
     this._sketchVM = undefined;
     this._previousSketchGraphic = undefined;
     this._printTask = undefined;
-    this._legend = undefined;
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
   }
@@ -132,11 +129,6 @@ export class MapController {
       container: domRef.current
     });
 
-    this._legend = new Legend({
-      view: this._mapview
-    });
-
-    this._mapview.ui.add(this._legend, 'bottom-right');
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
 
@@ -146,7 +138,12 @@ export class MapController {
           store.dispatch(isMapReady(true));
           //Set default language
           store.dispatch(setLanguage(appSettings.language));
-          this._mapview.popup.highlightEnabled = false;
+          //default scale for map
+          store.dispatch(changeMapScale(this._mapview.scale));
+          //zoom level listener
+          this._mapview.watch('scale', newScale => {
+            store.dispatch(changeMapScale(newScale));
+          });
           this._mapview.on('click', event => {
             //TODO: We need a better loading handling, probably a spinner!
             //clean active indexes for data tab and activeFeatures
@@ -273,9 +270,15 @@ export class MapController {
 
   extractLayerObjects(): LayerProps[] {
     const mapLayerObjects: LayerProps[] = [];
-    this._map?.layers.forEach((layer: any) => {
+    this._map?.layers.forEach(async (layer: any) => {
+      //Get the legend information for each layer
+      let legendInfo = await fetchLegendInfo(layer.url);
       if (layer.sublayers && layer.sublayers.length > 0) {
         layer.sublayers.forEach((sub: any) => {
+          //get sublayer legend info
+          const sublayerLegendInfo = legendInfo.layers.find(
+            (l: any) => l.layerId === sub.id
+          );
           //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
           sub.opacity = sub.opacity ? sub.opacity : 1;
           const {
@@ -301,10 +304,16 @@ export class MapController {
             maxScale,
             minScale,
             sublayer: true,
-            parentID: sub.layer.id
+            parentID: sub.layer.id,
+            legendInfo: sublayerLegendInfo.legend
           });
         });
       } else {
+        //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
+        legendInfo = layer.layerId
+          ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId)
+              .legend
+          : legendInfo;
         const {
           id,
           title,
@@ -327,7 +336,8 @@ export class MapController {
           url,
           maxScale,
           minScale,
-          sublayer: false
+          sublayer: false,
+          legendInfo
         });
       }
     });
@@ -952,16 +962,6 @@ export class MapController {
       .catch(e => console.log('error in generateMapPDF()', e));
 
     return mapPDF;
-  };
-
-  toggleLegend = (): void => {
-    if (this._legend && typeof this._legend.container === 'object') {
-      if (this._legend.container.classList.contains('hide')) {
-        this._legend.container.classList.remove('hide');
-      } else {
-        this._legend.container.classList.add('hide');
-      }
-    }
   };
 
   setPolygon = (points: Array<Point>): void => {
