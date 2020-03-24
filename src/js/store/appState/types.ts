@@ -4,7 +4,7 @@ export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
   openLayerGroup: string;
-  density: number;
+  density: 1 | 2 | 3 | 4 | 5 | 6 | 7 | number; //careful about introducing any more density numbers, AG_BIOMASS layer depends on those to render and update
 }
 
 interface SpecificAreaResults {
