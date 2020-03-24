@@ -152,7 +152,12 @@ export class MapController {
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
             store.dispatch(selectActiveTab('data'));
-            queryLayersForFeatures(this._mapview, this._map, event);
+            queryLayersForFeatures(
+              this._mapview,
+              this._map,
+              event,
+              this._mapview.scale
+            );
           });
 
           const mapLayerObjects: LayerProps[] = this.extractLayerObjects();

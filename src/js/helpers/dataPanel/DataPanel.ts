@@ -11,6 +11,7 @@ import {
   FieldName
 } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
+import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 
 export interface FormatOptions {
   dateFormat: null | any;
@@ -167,7 +168,8 @@ async function fetchQueryFeatures(
 export async function queryLayersForFeatures(
   mapview: MapView,
   map: Map | undefined,
-  event: __esri.MapViewClickEvent
+  event: __esri.MapViewClickEvent,
+  scale: number
 ): Promise<void> {
   const layerFeatureResults: LayerFeatureResult[] = [];
 
@@ -175,18 +177,20 @@ export async function queryLayersForFeatures(
   // we need exhaustive list here!
   const allLayersVisibleLayers: any = map?.layers
     .filter(
-      l =>
+      (l: any) =>
         l.visible &&
         l.type !== 'graphics' &&
         l.type !== 'base-tile' &&
         l.type !== 'imagery'
     )
+    .filter((l: any) => layerIsInScale(l, scale))
     .toArray();
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {
       //for each layer we check if it has subs or not
       if (layer.sublayers && layer.sublayers.length > 0) {
         for (const sublayer of layer.sublayers.items) {
+          if (!sublayer.visible) continue;
           //sublayers do not have a type, so it always defaults to QueryTask
           //use generic QueryTask approach
           const { features, fieldNames } = await fetchQueryTask(
