@@ -15,7 +15,6 @@ const returnDateToday = (): string => {
   const monthTodayFormatted =
     monthToday.length === 1 ? `0${monthToday}` : monthToday;
   const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
-
   return dateTodayFormatted;
 };
 
