@@ -6,34 +6,31 @@ interface DateRangeProps {
   layer: LayerProps;
 }
 
+const returnDateToday = (): string => {
+  const dateToday = new Date().toLocaleDateString();
+  const [monthToday, dayToday, yearToday] = dateToday.split('/');
+  const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
+  const monthTodayFormatted =
+    monthToday.length === 1 ? `0${monthToday}` : monthToday;
+  const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
+
+  return dateTodayFormatted;
+};
+
 const DateRange = (props: DateRangeProps): JSX.Element => {
   const { layer } = props;
   console.log('<DateRange/>', layer);
-
-  const returnDateToday = (): string => {
-    const dateToday = new Date().toLocaleDateString();
-    const [monthToday, dayToday, yearToday] = dateToday.split('/');
-    const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
-    const monthTodayFormatted =
-      monthToday.length === 1 ? `0${monthToday}` : monthToday;
-    const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
-
-    return dateTodayFormatted;
-  };
 
   const [startDate, setStartDate] = useState(returnDateToday());
   const [endDate, setEndDate] = useState(returnDateToday());
   const [renderCustomRange, setRenderCustomRange] = useState(false);
 
-  const setDate = (
-    updateStartDate: boolean,
-    e: ChangeEvent<HTMLInputElement>
-  ): void => {
-    if (updateStartDate) {
-      setStartDate(e.target.value);
-    } else {
-      setEndDate(e.target.value);
-    }
+  const updateStartDate = (e: ChangeEvent<HTMLInputElement>): void => {
+    setStartDate(e.target.value);
+  };
+
+  const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
+    setEndDate(e.target.value);
   };
 
   const setDefinedRange = (e: ChangeEvent<HTMLSelectElement>): void => {
@@ -70,7 +67,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               value={startDate}
               min="2018-01-01"
               max={returnDateToday()}
-              onChange={(e): void => setDate(true, e)}
+              onChange={(e): void => updateStartDate(e)}
             />
           </div>
           <div className="date-section-wrapper">
@@ -81,7 +78,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               value={endDate}
               min="2018-01-01"
               max={returnDateToday()}
-              onChange={(e): void => setDate(false, e)}
+              onChange={(e): void => updateEndDate(e)}
             />
           </div>
         </>
