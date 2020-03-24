@@ -32,6 +32,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   useEffect(() => {
     const resetVIIRSOrMODIS = (): void => {
+      mapController.resetCustomDateRange();
+
       if (layer?.id === 'VIIRS_ACTIVE_FIRES') {
         mapController.resetVIRRSDefinedDateRange(layer.id);
       }

@@ -18,6 +18,8 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
 import FeatureLayer from 'esri/layers/FeatureLayer';
+import QueryTask from 'esri/tasks/QueryTask';
+import Query from 'esri/tasks/support/Query';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -1152,26 +1154,75 @@ export class MapController {
     }
   }
 
+  resetCustomDateRange(): void {
+    if (!this._map) {
+      return;
+    }
+
+    const modisLayer = (this._map
+      .allLayers as any).items.filter((layer: FeatureLayer) =>
+      layer.id.includes('MODIS')
+    )[0];
+
+    const viirsLayer = (this._map
+      .allLayers as any).items.filter((layer: FeatureLayer) =>
+      layer.id.includes('VIIRS')
+    )[0];
+
+    if (modisLayer.sublayers) {
+      const twentyFourHourMODIS = modisLayer.sublayers.items.filter(
+        (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+      )[0];
+      twentyFourHourMODIS.definitionExpression = undefined;
+    }
+
+    if (viirsLayer.sublayers) {
+      const twentyFourHourVIIRS = viirsLayer.sublayers.items.filter(
+        (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+      )[0];
+      twentyFourHourVIIRS.definitionExpression = undefined;
+    }
+
+    return;
+  }
+
   setCustomDateRange(
     layerID: string,
     startDate: string | Date,
     endDate: string | Date
-  ): any {
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
+  ): void {
+    const { mapviewState } = store.getState();
 
-    if (this._map) {
-      const layer = (this._map.allLayers as any).items.filter(
-        (layer: any) => layer.id === layerID
+    if (!this._map) {
+      return;
+    }
+
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: FeatureLayer) => layer.id === layerID
+    )[0];
+
+    if (layer.sublayers) {
+      const defExpression = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
+      const twentyFourHourSublayer = layer.sublayers.items.filter(
+        (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+      )[0];
+
+      twentyFourHourSublayer.definitionExpression = defExpression;
+
+      const newLayersArray = mapviewState.allAvailableLayers.map(
+        (layer: LayerProps) => {
+          if (layer.id === layerID) {
+            layer.definitionExpression = defExpression;
+          }
+
+          return layer;
+        }
       );
 
-      const whereClause = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
-      /**
-       * TODO
-       * Need to update definitionExpression of the layer's selected sublayer
-       * Check layer.capabilities.exportMap.supportsSublayerDefinitionExpression to confirm we can update definitionExpression
-       */
+      store.dispatch(allAvailableLayers(newLayersArray));
     }
+
+    return;
   }
 
   initializeAndSetVIIRSLayers(): void {
