@@ -54,6 +54,7 @@ import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 import { allowedLayers } from '../../../configs/layer-config';
+import { sortBy, flatten } from 'lodash-es';
 
 interface URLCoordinates {
   zoom: number;
@@ -245,15 +246,70 @@ export class MapController {
                 });
               });
 
-            store.dispatch(
-              allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
-            );
+            const allLayerObjects = [
+              ...mapLayerObjects,
+              ...resourceLayerObjects
+            ];
+            store.dispatch(allAvailableLayers(allLayerObjects));
 
             const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
               return LayerFactory(this._mapview, resouceLayerSpec);
             });
 
             this._map?.addMany(mapLayers);
+            //Lets order layers groups first
+            const orderedGroups = sortBy(
+              Object.keys(appSettings.layerPanel),
+              key => {
+                return appSettings.layerPanel[key].order;
+              }
+            );
+            //Order layers within layer groups
+            const orderedLayerGroups = orderedGroups
+              .map(group => {
+                //jam in webmap layers in here as they do not appear in settings
+                if (group === 'GROUP_WEBMAP') {
+                  return allLayerObjects.filter(o => o.group === 'webmap');
+                }
+                const layersInGroup = sortBy(
+                  appSettings.layerPanel[group].layers,
+                  l => {
+                    return l.order;
+                  }
+                );
+                return layersInGroup;
+              })
+              .filter(group => group?.length);
+            const flattenedLayerGroups = flatten(orderedLayerGroups);
+
+            let mapLayerIDs = [] as any[];
+
+            flattenedLayerGroups.forEach(layerGroup => {
+              //attempt to grab layer id  from the map
+              const layer = this._map?.findLayerById(layerGroup.id);
+              if (layer) {
+                //layer exist, likely dealing with normal layer
+                mapLayerIDs.push(layer.id);
+              } else if (!layer && layerGroup.sublayer) {
+                //we did not find it because it was sublayer and we need to find the parent layer
+                const layer = this._map?.findLayerById(layerGroup.parentID);
+                mapLayerIDs.push(layer?.id);
+              }
+            });
+
+            mapLayerIDs = mapLayerIDs
+              .filter(
+                (id: string, index: number) => mapLayerIDs.indexOf(id) === index
+              )
+              .reverse();
+
+            //finally let's reorder layers on the map!
+            this._map?.layers.forEach((layer: any) => {
+              const layerIndex = mapLayerIDs.findIndex(i => i === layer.id);
+              if (layerIndex !== -1) {
+                this._map?.reorder(layer, layerIndex);
+              }
+            });
           });
 
           this.initializeAndSetSketch();
