@@ -53,8 +53,7 @@ import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
-
-const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
+import { allowedLayers } from '../../../configs/layer-config';
 
 interface URLCoordinates {
   zoom: number;
@@ -1046,7 +1045,7 @@ export class MapController {
   updateDensityValue(value: number): void {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
-      if (layer) {
+      if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
         layer.urlTemplate = layer.urlTemplate.replace(
           /(tc)(?:[^\/]+)/,
           `tc${value}`
@@ -1054,6 +1053,14 @@ export class MapController {
         layer.refresh();
       }
     });
+  }
+
+  updateBiodensityValue(value: number): void {
+    const bioLayer: any = this._map?.findLayerById('AG_BIOMASS');
+    if (bioLayer) {
+      bioLayer.mosaicRule.where = `OBJECTID = ${value}`;
+      bioLayer.refresh();
+    }
   }
 
   getMapviewCoordinates(): URLCoordinates {
