@@ -1360,6 +1360,50 @@ export class MapController {
     this._MODISSevenDays.visible = false;
   }
 
+  updateVIIRSOpacity(layerID: string, opacity: number): void {
+    if (!this._map) {
+      return;
+    }
+
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: LayerProps) => layer.id === layerID
+    )[0];
+
+    if (!layer.sublayers) {
+      return;
+    }
+
+    const VIIRSTwentyFourHours = layer.sublayers.items.filter(
+      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+    );
+    VIIRSTwentyFourHours.opacity = opacity;
+    this._VIIRSFortyEightHours.opacity = opacity;
+    this._VIIRSSeventyTwoHours.opacity = opacity;
+    this._VIIRSSevenDays.opacity = opacity;
+  }
+
+  updateMODISOpacity(layerID: string, opacity: number): void {
+    if (!this._map) {
+      return;
+    }
+
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: LayerProps) => layer.id === layerID
+    )[0];
+
+    if (!layer.sublayers) {
+      return;
+    }
+
+    const MODISTwentyFourHours = layer.sublayers.items.filter(
+      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+    );
+    MODISTwentyFourHours.opacity = opacity;
+    this._MODISFortyEightHours.opacity = opacity;
+    this._MODISSeventyTwoHours.opacity = opacity;
+    this._MODISSevenDays.opacity = opacity;
+  }
+
   setDefinedDateRange(layerID: string, sublayerType: string): void {
     if (!this._map) {
       return;
