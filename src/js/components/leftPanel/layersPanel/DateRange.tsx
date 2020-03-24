@@ -8,57 +8,69 @@ interface DateRangeProps {
   layer: LayerProps;
 }
 
+const returnDateToday = (): string => {
+  const dateToday = new Date().toLocaleDateString();
+  const [monthToday, dayToday, yearToday] = dateToday.split('/');
+  const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
+  const monthTodayFormatted =
+    monthToday.length === 1 ? `0${monthToday}` : monthToday;
+  const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
+
+  return dateTodayFormatted;
+};
+
 const DateRange = (props: DateRangeProps): JSX.Element => {
   const { layer } = props;
-
-  const returnDateToday = (): string => {
-    const dateToday = new Date().toLocaleDateString();
-    const [monthToday, dayToday, yearToday] = dateToday.split('/');
-    const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
-    const monthTodayFormatted =
-      monthToday.length === 1 ? `0${monthToday}` : monthToday;
-    const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
-
-    return dateTodayFormatted;
-  };
 
   const [startDate, setStartDate] = useState(returnDateToday());
   const [endDate, setEndDate] = useState(returnDateToday());
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
 
-  const setDate = (
-    updateStartDate: boolean,
-    e: ChangeEvent<HTMLInputElement>
-  ): void => {
-    if (updateStartDate) {
-      setStartDate(e.target.value);
-      mapController.setCustomDateRange(layer.id, e.target.value, endDate);
-    } else {
-      setEndDate(e.target.value);
-      mapController.setCustomDateRange(layer.id, startDate, e.target.value);
+  const updateStartDate = (e: ChangeEvent<HTMLInputElement>): void => {
+    setStartDate(e.target.value);
+    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
+  };
+
+  const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
+    setEndDate(e.target.value);
+    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
+  };
+
+  const resetSpecificDefinedRange = (): void => {
+    if (layer.id.includes('VIIRS')) {
+      mapController.resetVIRRSDefinedDateRange(layer.id);
+    }
+
+    if (layer.id.includes('MODIS')) {
+      mapController.resetMODISDefinedDateRange(layer.id);
     }
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    // TODO [ ] fire query to correct URL
+    if (e.target.value === 'Select a date range') {
+      setDefinedRange('');
+      setRenderCustomRange(false);
+      resetSpecificDefinedRange();
+      return;
+    }
     setDefinedRange(e.target.value);
     setRenderCustomRange(false);
     mapController.setDefinedDateRange(layer.id, e.target.value);
   };
 
   /**
-   * TODO
-   * [ ] set min of input dynamically
+   * TODO [ ] set min of input dynamically
    */
 
   return (
     <>
       <div className="dropdown-wrapper">
-        <select onChange={(e): void => setDefinedDateRange(e)}>
-          <option selected={definedRange.length ? false : true}>
-            Select a date range
-          </option>
+        <select
+          onChange={(e): void => setDefinedDateRange(e)}
+          defaultValue={definedRange.length ? '' : 'Select a date range'}
+        >
+          <option value={'Select a date range'}>Select a date range</option>
           <option value={'24 hrs'}>Past 24 hours</option>
           <option value={'48 hrs'}>Past 48 hours</option>
           <option value={'72 hrs'}>Past 72 hours</option>
@@ -78,7 +90,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               value={startDate}
               min="2018-01-01"
               max={returnDateToday()}
-              onChange={(e): void => setDate(true, e)}
+              onChange={(e): void => updateStartDate(e)}
             />
           </div>
           <div className="date-section-wrapper">
@@ -89,7 +101,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               value={endDate}
               min="2018-01-01"
               max={returnDateToday()}
-              onChange={(e): void => setDate(false, e)}
+              onChange={(e): void => updateEndDate(e)}
             />
           </div>
         </>

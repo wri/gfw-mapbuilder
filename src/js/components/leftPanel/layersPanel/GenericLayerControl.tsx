@@ -1,10 +1,13 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
+import DateRange from './DateRange';
+
+import { mapController } from 'js/controllers/mapController';
 
 import { RootState } from 'js/store';
 
@@ -27,12 +30,46 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
 
+  useEffect(() => {
+    const resetVIIRSOrMODIS = (): void => {
+      if (layer?.id === 'VIIRS_ACTIVE_FIRES') {
+        mapController.resetVIRRSDefinedDateRange(layer.id);
+      }
+
+      if (layer?.id === 'MODIS_ACTIVE_FIRES') {
+        mapController.resetMODISDefinedDateRange(layer.id);
+      }
+    };
+
+    if ((layer as any)?.visible === false) {
+      resetVIIRSOrMODIS();
+    }
+  }, [layer?.visible]);
+
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
         return <TimeSlider layerID={id} />;
       default:
         return null;
+    }
+  };
+
+  const returnDateRange = (id: string): JSX.Element | undefined => {
+    if (!layer) {
+      return;
+    }
+    /**
+     * TODO
+     * [ ] glad alerts
+     * [ ] terra-I alerts
+     */
+    switch (id) {
+      case 'VIIRS_ACTIVE_FIRES':
+      case 'MODIS_ACTIVE_FIRES':
+        return <DateRange layer={layer} />;
+      default:
+        break;
     }
   };
 
@@ -60,6 +97,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
       )}
+      {layer?.visible && returnDateRange(props.id)}
     </>
   );
 };
