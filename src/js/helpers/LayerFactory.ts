@@ -3,6 +3,7 @@ import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
+import RasterFunction from 'esri/layers/support/RasterFunction';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import store from 'js/store/index';
@@ -24,14 +25,35 @@ export function LayerFactory(
       });
       break;
     case 'image':
+      const { appState } = store.getState();
       esriLayer = new ImageryLayer({
         id: layerConfig.id,
         visible: layerConfig.visible,
         url: layerConfig.url
       });
+      if (layerConfig.metadata.colormap) {
+        const remapRF = new RasterFunction();
+        remapRF.functionName = 'Remap';
+        remapRF.functionArguments = {
+          InputRanges: [
+            appState.leftPanel.density,
+            layerConfig.metadata.inputRange[1]
+          ],
+          OutputValues: layerConfig.metadata.outputRange,
+          Raster: '$$' // Apply remap to the image service
+        };
+        remapRF.outputPixelType = 'u8';
+        //apply custom colormap that's coming from metadata
+        const colorRF = new RasterFunction();
+        colorRF.functionName = 'Colormap';
+        colorRF.functionArguments = {
+          Colormap: layerConfig.metadata.colormap,
+          Raster: remapRF
+        };
+        esriLayer.renderingRule = colorRF;
+      }
       if (layerConfig.id === 'AG_BIOMASS') {
         //biomass layer expects object id that maps to canopy density values
-        const { appState } = store.getState();
         esriLayer.mosaicRule = new MosaicRule({
           where: `OBJECTID = ${appState.leftPanel.density}`
         });
