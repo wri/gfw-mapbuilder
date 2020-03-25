@@ -69,6 +69,7 @@
     ]
   },
   "dependencies": {
+    "lodash-es": "^4.17.15",
     "rc-slider": "^9.2.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -78,11 +79,12 @@
     "redux-logger": "^3.0.6"
   },
   "devDependencies": {
-    "@types/rc-slider": "^8.6.5",
     "@arcgis/webpack-plugin": "^4.14.0",
     "@svgr/webpack": "^5.0.1",
     "@types/jest": "^24.9.1",
+    "@types/lodash-es": "^4.17.3",
     "@types/node": "^13.1.4",
+    "@types/rc-slider": "^8.6.5",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-redux": "^7.1.5",
