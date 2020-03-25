@@ -324,7 +324,7 @@ export class MapController {
             minScale,
             sublayer: true,
             parentID: sub.layer.id,
-            legendInfo: sublayerLegendInfo.legend
+            legendInfo: sublayerLegendInfo?.legend
           });
         });
       } else {
@@ -484,11 +484,27 @@ export class MapController {
                     availableLayer => availableLayer.group !== 'webmap'
                   );
 
-                store.dispatch(
-                  allAvailableLayers([...prevMapObjects, ...mapLayerObjects])
-                );
+                const allLayerObjects = [...prevMapObjects, ...mapLayerObjects];
+
+                store.dispatch(allAvailableLayers(allLayerObjects));
 
                 this._map?.addMany(resourceLayers);
+                //Retrieve sorted layer array
+                const mapLayerIDs = getSortedLayers(
+                  appSettings.layerPanel,
+                  allLayerObjects,
+                  this._map
+                );
+
+                //Reorder layers on the map!
+                this._map?.layers.forEach((layer: any) => {
+                  const layerIndex = mapLayerIDs?.findIndex(
+                    i => i === layer.id
+                  );
+                  if (layerIndex && layerIndex !== -1) {
+                    this._map?.reorder(layer, layerIndex);
+                  }
+                });
               });
             }
           },
