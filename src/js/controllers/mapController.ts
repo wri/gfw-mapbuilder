@@ -1314,7 +1314,7 @@ export class MapController {
     }
   }
 
-  resetVIRRSDefinedDateRange(layerID: string): void {
+  resetDefinedDateRange(layerID: string): void {
     if (!this._map) {
       return;
     }
@@ -1327,17 +1327,24 @@ export class MapController {
       return;
     }
 
-    const VIIRSTwentyFourHours = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+    const twentyFourHours = layer.sublayers.items.filter((sublayer: Sublayer) =>
+      sublayer.title.includes('24 hrs')
     );
 
-    VIIRSTwentyFourHours.visible = false;
-    this._VIIRSFortyEightHours.visible = false;
-    this._VIIRSSeventyTwoHours.visible = false;
-    this._VIIRSSevenDays.visible = false;
+    twentyFourHours.visible = false;
+
+    if (layer.id.includes('VIIRS')) {
+      this._VIIRSFortyEightHours.visible = false;
+      this._VIIRSSeventyTwoHours.visible = false;
+      this._VIIRSSevenDays.visible = false;
+    } else if (layer.id.includes('MODIS')) {
+      this._MODISFortyEightHours.visible = false;
+      this._MODISSeventyTwoHours.visible = false;
+      this._MODISSevenDays.visible = false;
+    }
   }
 
-  resetMODISDefinedDateRange(layerID: string): void {
+  updateMODISorVIIRSOpacity(layerID: string, opacity: number): void {
     if (!this._map) {
       return;
     }
@@ -1350,58 +1357,21 @@ export class MapController {
       return;
     }
 
-    const MODISTwentyFourHours = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+    const twentyFourHours = layer.sublayers.items.filter((sublayer: Sublayer) =>
+      sublayer.title.includes('24 hrs')
     );
 
-    MODISTwentyFourHours.visible = false;
-    this._MODISFortyEightHours.visible = false;
-    this._MODISSeventyTwoHours.visible = false;
-    this._MODISSevenDays.visible = false;
-  }
+    twentyFourHours.opacity = opacity;
 
-  updateVIIRSOpacity(layerID: string, opacity: number): void {
-    if (!this._map) {
-      return;
+    if (layerID.includes('VIIRS')) {
+      this._VIIRSFortyEightHours.opacity = opacity;
+      this._VIIRSSeventyTwoHours.opacity = opacity;
+      this._VIIRSSevenDays.opacity = opacity;
+    } else if (layerID.includes('MODIS')) {
+      this._MODISFortyEightHours.opacity = opacity;
+      this._MODISSeventyTwoHours.opacity = opacity;
+      this._MODISSevenDays.opacity = opacity;
     }
-
-    const layer = (this._map.allLayers as any).items.filter(
-      (layer: LayerProps) => layer.id === layerID
-    )[0];
-
-    if (!layer.sublayers) {
-      return;
-    }
-
-    const VIIRSTwentyFourHours = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
-    );
-    VIIRSTwentyFourHours.opacity = opacity;
-    this._VIIRSFortyEightHours.opacity = opacity;
-    this._VIIRSSeventyTwoHours.opacity = opacity;
-    this._VIIRSSevenDays.opacity = opacity;
-  }
-
-  updateMODISOpacity(layerID: string, opacity: number): void {
-    if (!this._map) {
-      return;
-    }
-
-    const layer = (this._map.allLayers as any).items.filter(
-      (layer: LayerProps) => layer.id === layerID
-    )[0];
-
-    if (!layer.sublayers) {
-      return;
-    }
-
-    const MODISTwentyFourHours = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
-    );
-    MODISTwentyFourHours.opacity = opacity;
-    this._MODISFortyEightHours.opacity = opacity;
-    this._MODISSeventyTwoHours.opacity = opacity;
-    this._MODISSevenDays.opacity = opacity;
   }
 
   setDefinedDateRange(layerID: string, sublayerType: string): void {

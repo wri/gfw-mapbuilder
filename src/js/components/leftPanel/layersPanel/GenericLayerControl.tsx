@@ -31,18 +31,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
 
   useEffect(() => {
-    const resetVIIRSOrMODIS = (): void => {
-      if (layer?.id === 'VIIRS_ACTIVE_FIRES') {
-        mapController.resetVIRRSDefinedDateRange(layer.id);
-      }
-
-      if (layer?.id === 'MODIS_ACTIVE_FIRES') {
-        mapController.resetMODISDefinedDateRange(layer.id);
-      }
-    };
-
-    if ((layer as any)?.visible === false) {
-      resetVIIRSOrMODIS();
+    if (layer && (layer as any)?.visible === false) {
+      mapController.resetDefinedDateRange(layer.id);
     }
   }, [layer?.visible]);
 
