@@ -168,8 +168,7 @@ async function fetchQueryFeatures(
 export async function queryLayersForFeatures(
   mapview: MapView,
   map: Map | undefined,
-  event: __esri.MapViewClickEvent,
-  scale: number
+  event: __esri.MapViewClickEvent
 ): Promise<void> {
   const layerFeatureResults: LayerFeatureResult[] = [];
 
@@ -183,7 +182,7 @@ export async function queryLayersForFeatures(
         l.type !== 'base-tile' &&
         l.type !== 'imagery'
     )
-    .filter((l: any) => layerIsInScale(l, scale))
+    .filter((l: any) => layerIsInScale(l, mapview.scale))
     .toArray();
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {
