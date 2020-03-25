@@ -28,50 +28,78 @@ const InfoContent: FunctionComponent<{}> = () => {
         cautions,
         license,
         overview,
-        citation
+        citation,
+        title,
+        subtitle
       } = metadata;
 
       return (
         <>
+          <div className="header">
+            <h2>{title}</h2>
+            <h3>{subtitle}</h3>
+          </div>
           <table>
             <tbody>
               <tr>
-                <td>Function</td>
-                <td dangerouslySetInnerHTML={{ __html: metadata.function }} />
-              </tr>
-              <tr>
-                <td>Resolution</td>
-                <td dangerouslySetInnerHTML={{ __html: resolution }} />
-              </tr>
-              <tr>
-                <td>Tags</td>
-                <td>{tags}</td>
-              </tr>
-              <tr>
-                <td>Geographic Coverage</td>
-                <td dangerouslySetInnerHTML={{ __html: geographic_coverage }} />
-              </tr>
-              <tr>
-                <td>Source</td>
-                <td dangerouslySetInnerHTML={{ __html: source }} />
-              </tr>
-              <tr>
-                <td>Frequency</td>
+                <td className="label">Function</td>
                 <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: metadata.function }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Resolution</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: resolution }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Tags</td>
+                <td className="label-info">{tags}</td>
+              </tr>
+              <tr>
+                <td className="label">Geographic Coverage</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: geographic_coverage }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Source</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: source }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Frequency</td>
+                <td
+                  className="label-info"
                   dangerouslySetInnerHTML={{ __html: frequency_of_updates }}
                 />
               </tr>
               <tr>
-                <td>Date of Content</td>
-                <td dangerouslySetInnerHTML={{ __html: date_of_content }} />
+                <td className="label">Date of Content</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: date_of_content }}
+                />
               </tr>
               <tr>
-                <td>Cautions</td>
-                <td dangerouslySetInnerHTML={{ __html: cautions }} />
+                <td className="label">Cautions</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: cautions }}
+                />
               </tr>
               <tr>
-                <td>License</td>
-                <td dangerouslySetInnerHTML={{ __html: license }} />
+                <td className="label">License</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: license }}
+                />
               </tr>
             </tbody>
           </table>
@@ -82,6 +110,14 @@ const InfoContent: FunctionComponent<{}> = () => {
           <div className="citation-container">
             <h4>Citation</h4>
             <div dangerouslySetInnerHTML={{ __html: citation }} />
+          </div>
+          <div className="button-container">
+            <button
+              className="orange-button"
+              onClick={(): void => console.log('download data!')}
+            >
+              Download Data
+            </button>
           </div>
         </>
       );
@@ -95,7 +131,7 @@ const InfoContent: FunctionComponent<{}> = () => {
   };
 
   return (
-    <div>
+    <div className="info-content-container">
       <RenderLayerContent />
     </div>
   );
