@@ -36,6 +36,23 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const returnSubtitle = (): JSX.Element | undefined => {
+    let subTitle = '';
+    if (layer?.metadata?.metadata) {
+      subTitle = (layer?.metadata?.metadata as any).subtitle;
+      return (
+        <>
+          <br />
+          <span className="layer-subtitle">{subTitle}</span>
+        </>
+      );
+    } else {
+      console.log('layer does not have metadata to support subtitles!', layer);
+      return;
+    }
+    // return <span className="layer-subtitle">{subTitle}</span>;
+  };
+
   return (
     <>
       <div className="layers-control-checkbox">
@@ -45,7 +62,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           sublayer={props.sublayer}
           parentID={props.parentID}
         />
-        <span className="layer-label">{layer?.title}</span>
+        <div className="title-wrapper">
+          <span className="layer-label">{layer?.title}</span>
+          {returnSubtitle()}
+        </div>
         <div className="info-icon-container">
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
