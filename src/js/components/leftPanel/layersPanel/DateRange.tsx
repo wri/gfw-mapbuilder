@@ -33,17 +33,10 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
 
   const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
     setEndDate(e.target.value);
-    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
+    mapController.setCustomDateRange(layer.id, startDate, e.target.value);
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    if (e.target.value === 'Select a date range') {
-      setDefinedRange('');
-      setRenderCustomRange(false);
-      mapController.resetDefinedDateRange(layer.id);
-      return;
-    }
-
     setDefinedRange(e.target.value);
     setRenderCustomRange(false);
     mapController.setDefinedDateRange(layer.id, e.target.value);
@@ -58,9 +51,8 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
       <div className="dropdown-wrapper">
         <select
           onChange={(e): void => setDefinedDateRange(e)}
-          value={definedRange.length ? definedRange : 'Select a date range'}
+          value={definedRange.length ? definedRange : '24 hrs'}
         >
-          <option value={'Select a date range'}>Select a date range</option>
           <option value={'24 hrs'}>Past 24 hours</option>
           <option value={'48 hrs'}>Past 48 hours</option>
           <option value={'72 hrs'}>Past 72 hours</option>

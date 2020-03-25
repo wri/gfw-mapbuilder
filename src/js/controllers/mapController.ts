@@ -109,12 +109,6 @@ export class MapController {
   _printTask: PrintTask | undefined;
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
-  _VIIRSFortyEightHours: any;
-  _VIIRSSeventyTwoHours: any;
-  _VIIRSSevenDays: any;
-  _MODISFortyEightHours: any;
-  _MODISSeventyTwoHours: any;
-  _MODISSevenDays: any;
 
   constructor() {
     this._map = undefined;
@@ -1175,96 +1169,110 @@ export class MapController {
   }
 
   initializeAndSetVIIRSLayers(): void {
-    this._VIIRSFortyEightHours = new FeatureLayer({
+    const VIIRSFortyEightHours = new FeatureLayer({
+      id: 'VIIRS48',
       url:
         'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_48hrs/MapServer/21',
       visible: false
     });
 
-    this._VIIRSSeventyTwoHours = new FeatureLayer({
+    const VIIRSSeventyTwoHours = new FeatureLayer({
       // ? why is v1 using a 7d for 72 hours?
       // * we don't have 72hr feature layer
+      id: 'VIIRS72',
       url:
         'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer/21',
       visible: false
     });
 
-    this._VIIRSSevenDays = new FeatureLayer({
+    const VIIRSSevenDays = new FeatureLayer({
+      id: 'VIIRS7D',
       url:
         'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_VIIRS_7d/MapServer/21',
       visible: false
     });
 
     this._map?.addMany([
-      this._VIIRSFortyEightHours,
-      this._VIIRSSeventyTwoHours,
-      this._VIIRSSevenDays
+      VIIRSFortyEightHours,
+      VIIRSSeventyTwoHours,
+      VIIRSSevenDays
     ]);
   }
 
   initializeAndSetMODISLayers(): void {
-    this._MODISFortyEightHours = new FeatureLayer({
+    const MODISFortyEightHours = new FeatureLayer({
+      id: 'MODIS48',
       url:
         'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_48hrs/MapServer/21',
       visible: false
     });
 
-    this._MODISSeventyTwoHours = new FeatureLayer({
+    const MODISSeventyTwoHours = new FeatureLayer({
       // ? why is v1 using a 7d for 72 hours?
       // * we don't have 72hr feature layer
+      id: 'MODIS72',
       url:
         'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer/21',
       visible: false
     });
 
-    this._MODISSevenDays = new FeatureLayer({
+    const MODISSevenDays = new FeatureLayer({
+      id: 'MODIS7D',
       url:
         'https://gis-gfw.wri.org/arcgis/rest/services/Fires/FIRMS_Global_MODIS_7d/MapServer/21',
       visible: false
     });
 
     this._map?.addMany([
-      this._MODISFortyEightHours,
-      this._MODISSeventyTwoHours,
-      this._MODISSevenDays
+      MODISFortyEightHours,
+      MODISSeventyTwoHours,
+      MODISSevenDays
     ]);
   }
 
   setMODISDefinedRange(layer: any, sublayerType: string): void {
-    const MODISTwentyFourHours = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+    if (!this._map) {
+      return;
+    }
+
+    const MODIS24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
+      sublayer.title.includes('24 hrs')
     );
+    const MODIS48 = this._map?.findLayerById('MODIS48');
+    const MODIS72 = this._map?.findLayerById('MODIS72');
+    const MODIS7D = this._map?.findLayerById('MODIS7D');
+
     switch (sublayerType) {
       case '24 hrs':
         {
-          this._MODISFortyEightHours.visible = false;
-          this._MODISSeventyTwoHours.visible = false;
-          this._MODISSevenDays.visible = false;
-          MODISTwentyFourHours.visible = true;
+          MODIS48.visible = false;
+          MODIS72.visible = false;
+          MODIS7D.visible = false;
+          MODIS24.visible = true;
         }
         break;
       case '48 hrs':
         {
-          MODISTwentyFourHours.visible = false;
-          this._MODISSeventyTwoHours.visible = false;
-          this._MODISSevenDays.visible = false;
-          this._MODISFortyEightHours.visible = true;
+          MODIS24.visible = false;
+          MODIS72.visible = false;
+          MODIS7D.visible = false;
+          MODIS48.visible = true;
         }
         break;
       case '72 hrs':
         {
-          MODISTwentyFourHours.visible = false;
-          this._MODISFortyEightHours.visible = false;
-          this._MODISSevenDays.visible = false;
-          this._MODISSeventyTwoHours.visible = true;
+          MODIS24.visible = false;
+          MODIS48.visible = false;
+          MODIS7D.visible = false;
+          MODIS72.visible = true;
         }
         break;
       case '7 days':
         {
-          MODISTwentyFourHours.visible = false;
-          this._MODISFortyEightHours.visible = false;
-          this._MODISSeventyTwoHours.visible = false;
-          this._MODISSevenDays.visible = true;
+          MODIS24.visible = false;
+          MODIS48.visible = false;
+          MODIS72.visible = false;
+          MODIS7D.visible = true;
         }
         break;
       default:
@@ -1273,40 +1281,47 @@ export class MapController {
   }
 
   setVIIRSDefinedRange(layer: any, sublayerType: string): void {
-    const VIIRSTwentyFourHours = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+    if (!this._map) {
+      return;
+    }
+    const VIIRS24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
+      sublayer.title.includes('24 hrs')
     );
+    const VIIRS48 = this._map?.findLayerById('VIIRS48');
+    const VIIRS72 = this._map?.findLayerById('VIIRS72');
+    const VIIRS7D = this._map?.findLayerById('VIIRS7D');
+
     switch (sublayerType) {
       case '24 hrs':
         {
-          this._VIIRSFortyEightHours.visible = false;
-          this._VIIRSSeventyTwoHours.visible = false;
-          this._VIIRSSevenDays.visible = false;
-          VIIRSTwentyFourHours.visible = true;
+          VIIRS48.visible = false;
+          VIIRS72.visible = false;
+          VIIRS7D.visible = false;
+          VIIRS24.visible = true;
         }
         break;
       case '48 hrs':
         {
-          VIIRSTwentyFourHours.visible = false;
-          this._VIIRSSeventyTwoHours.visible = false;
-          this._VIIRSSevenDays.visible = false;
-          this._VIIRSFortyEightHours.visible = true;
+          VIIRS24.visible = false;
+          VIIRS72.visible = false;
+          VIIRS7D.visible = false;
+          VIIRS48.visible = true;
         }
         break;
       case '72 hrs':
         {
-          VIIRSTwentyFourHours.visible = false;
-          this._VIIRSFortyEightHours.visible = false;
-          this._VIIRSSevenDays.visible = false;
-          this._VIIRSSeventyTwoHours.visible = true;
+          VIIRS24.visible = false;
+          VIIRS48.visible = false;
+          VIIRS7D.visible = false;
+          VIIRS72.visible = true;
         }
         break;
       case '7 days':
         {
-          VIIRSTwentyFourHours.visible = false;
-          this._VIIRSFortyEightHours.visible = false;
-          this._VIIRSSeventyTwoHours.visible = false;
-          this._VIIRSSevenDays.visible = true;
+          VIIRS24.visible = false;
+          VIIRS48.visible = false;
+          VIIRS72.visible = false;
+          VIIRS7D.visible = true;
         }
         break;
       default:
@@ -1327,20 +1342,28 @@ export class MapController {
       return;
     }
 
-    const twentyFourHours = layer.sublayers.items.filter((sublayer: Sublayer) =>
+    const sublayer24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
       sublayer.title.includes('24 hrs')
     );
 
-    twentyFourHours.visible = false;
+    sublayer24.visible = false;
 
     if (layer.id.includes('VIIRS')) {
-      this._VIIRSFortyEightHours.visible = false;
-      this._VIIRSSeventyTwoHours.visible = false;
-      this._VIIRSSevenDays.visible = false;
+      const VIIRS48 = this._map?.findLayerById('VIIRS48');
+      const VIIRS72 = this._map?.findLayerById('VIIRS72');
+      const VIIRS7D = this._map?.findLayerById('VIIRS7D');
+
+      VIIRS48.visible = false;
+      VIIRS72.visible = false;
+      VIIRS7D.visible = false;
     } else if (layer.id.includes('MODIS')) {
-      this._MODISFortyEightHours.visible = false;
-      this._MODISSeventyTwoHours.visible = false;
-      this._MODISSevenDays.visible = false;
+      const MODIS48 = this._map?.findLayerById('MODIS48');
+      const MODIS72 = this._map?.findLayerById('MODIS72');
+      const MODIS7D = this._map?.findLayerById('MODIS7D');
+
+      MODIS48.visible = false;
+      MODIS72.visible = false;
+      MODIS7D.visible = false;
     }
   }
 
@@ -1357,20 +1380,28 @@ export class MapController {
       return;
     }
 
-    const twentyFourHours = layer.sublayers.items.filter((sublayer: Sublayer) =>
+    const sublayer24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
       sublayer.title.includes('24 hrs')
     );
 
-    twentyFourHours.opacity = opacity;
+    sublayer24.opacity = opacity;
 
     if (layerID.includes('VIIRS')) {
-      this._VIIRSFortyEightHours.opacity = opacity;
-      this._VIIRSSeventyTwoHours.opacity = opacity;
-      this._VIIRSSevenDays.opacity = opacity;
+      const VIIRS48 = this._map?.findLayerById('VIIRS48');
+      const VIIRS72 = this._map?.findLayerById('VIIRS72');
+      const VIIRS7D = this._map?.findLayerById('VIIRS7D');
+
+      VIIRS48.opacity = opacity;
+      VIIRS72.opacity = opacity;
+      VIIRS7D.opacity = opacity;
     } else if (layerID.includes('MODIS')) {
-      this._MODISFortyEightHours.opacity = opacity;
-      this._MODISSeventyTwoHours.opacity = opacity;
-      this._MODISSevenDays.opacity = opacity;
+      const MODIS48 = this._map?.findLayerById('MODIS48');
+      const MODIS72 = this._map?.findLayerById('MODIS72');
+      const MODIS7D = this._map?.findLayerById('MODIS7D');
+
+      MODIS48.opacity = opacity;
+      MODIS72.opacity = opacity;
+      MODIS7D.opacity = opacity;
     }
   }
 
