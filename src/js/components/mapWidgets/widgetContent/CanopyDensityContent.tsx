@@ -53,6 +53,7 @@ const CanopyDensityContent = (): JSX.Element => {
     //send % value to modify the layer
     mapController.updateDensityValue(markValueMap[value]);
     mapController.updateBiodensityValue(value);
+    mapController.updateTreeCoverValue(markValueMap[value]);
   }
 
   return (
