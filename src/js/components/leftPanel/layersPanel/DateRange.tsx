@@ -19,7 +19,6 @@ const returnDateToday = (): string => {
 
 const DateRange = (props: DateRangeProps): JSX.Element => {
   const { layer } = props;
-  console.log('<DateRange/>', layer);
 
   const [startDate, setStartDate] = useState(returnDateToday());
   const [endDate, setEndDate] = useState(returnDateToday());

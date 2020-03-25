@@ -1,6 +1,7 @@
 import {
   TOGGLE_TABVIEW_PANEL,
   RENDER_MODAL,
+  RENDER_INFO_MODAL,
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   SET_OPEN_LAYER_GROUP,
@@ -30,6 +31,13 @@ export function setCanopyDensity(payload: LeftPanel['density']) {
 export function setHideWidget(payload: AppState['hideWidgetActive']) {
   return {
     type: SET_HIDE_WIDGET as typeof SET_HIDE_WIDGET,
+    payload: payload
+  };
+}
+
+export function renderInfoModal(payload: AppState['renderInfoModal']) {
+  return {
+    type: RENDER_INFO_MODAL as typeof RENDER_INFO_MODAL,
     payload: payload
   };
 }

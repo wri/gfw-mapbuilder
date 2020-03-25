@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
+
+import { renderModal, renderInfoModal } from 'js/store/appState/actions';
 
 import { RootState } from 'js/store';
 
@@ -19,6 +21,7 @@ interface LayerControlProps {
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
+  const dispatch = useDispatch();
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
@@ -36,6 +39,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const setInfoModal = (): void => {
+    if (!layer) {
+      return;
+    }
+    dispatch(renderModal('InfoContent'));
+    dispatch(renderInfoModal(layer.id));
+  };
+
   return (
     <>
       <div className="layers-control-checkbox">
@@ -46,7 +57,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
         <span className="layer-label">{layer?.title}</span>
-        <div className="info-icon-container">
+        <div className="info-icon-container" onClick={() => setInfoModal()}>
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>

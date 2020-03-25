@@ -32,6 +32,7 @@ export interface MeasureContent {
 export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
+  renderInfoModal: string;
   selectedLanguage: string;
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
@@ -40,6 +41,7 @@ export interface AppState {
 
 //Action names available
 export const RENDER_MODAL = 'RENDER_MODAL';
+export const RENDER_INFO_MODAL = 'RENDER_INFO_MODAL';
 export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
@@ -75,6 +77,11 @@ interface RenderModalAction {
   payload: AppState['renderModal'];
 }
 
+interface RenderInfoModalAction {
+  type: typeof RENDER_INFO_MODAL;
+  payload: AppState['renderInfoModal'];
+}
+
 interface SetLoggedIn {
   type: typeof SET_LOGGED_IN;
   payload: AppState['isLoggedIn'];
@@ -103,6 +110,7 @@ interface SetActiveMeasureButton {
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
+  | RenderInfoModalAction
   | SelectActiveTab
   | SetLanguageAction
   | SetOpenLayerGroup
