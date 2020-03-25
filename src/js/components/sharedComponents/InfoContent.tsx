@@ -16,6 +16,14 @@ const InfoContent: FunctionComponent<{}> = () => {
   )[0];
 
   const RenderLayerContent = (): JSX.Element => {
+    if (!layer.metadata) {
+      console.log(
+        "This layer doesn't have metadata to support this feature!",
+        layer
+      );
+      return <></>;
+    }
+
     const { metadata } = layer.metadata as any;
     const {
       resolution,
@@ -33,44 +41,44 @@ const InfoContent: FunctionComponent<{}> = () => {
     return (
       <>
         <table>
-          <tr>
-            <td>Function</td>
-            <td dangerouslySetInnerHTML={{ __html: metadata.function }} />
-          </tr>
-          <tr>
-            <td>Resolution</td>
-            <td dangerouslySetInnerHTML={{ __html: resolution }} />
-          </tr>
-          <tr>
-            <td>Tags</td>
-            <td>{tags}</td>
-          </tr>
-          <tr>
-            <td>Geographic Coverage</td>
-            <td dangerouslySetInnerHTML={{ __html: geographic_coverage }} />
-          </tr>
-          <tr>
-            <td>Source</td>
-            <td dangerouslySetInnerHTML={{ __html: source }} />
-          </tr>
-          <tr>
-            <td>Frequency</td>
-            <td>
+          <tbody>
+            <tr>
+              <td>Function</td>
+              <td dangerouslySetInnerHTML={{ __html: metadata.function }} />
+            </tr>
+            <tr>
+              <td>Resolution</td>
+              <td dangerouslySetInnerHTML={{ __html: resolution }} />
+            </tr>
+            <tr>
+              <td>Tags</td>
+              <td>{tags}</td>
+            </tr>
+            <tr>
+              <td>Geographic Coverage</td>
+              <td dangerouslySetInnerHTML={{ __html: geographic_coverage }} />
+            </tr>
+            <tr>
+              <td>Source</td>
+              <td dangerouslySetInnerHTML={{ __html: source }} />
+            </tr>
+            <tr>
+              <td>Frequency</td>
               <td dangerouslySetInnerHTML={{ __html: frequency_of_updates }} />
-            </td>
-          </tr>
-          <tr>
-            <td>Date of Content</td>
-            <td dangerouslySetInnerHTML={{ __html: date_of_content }} />
-          </tr>
-          <tr>
-            <td>Cautions</td>
-            <td dangerouslySetInnerHTML={{ __html: cautions }} />
-          </tr>
-          <tr>
-            <td>License</td>
-            <td dangerouslySetInnerHTML={{ __html: license }} />
-          </tr>
+            </tr>
+            <tr>
+              <td>Date of Content</td>
+              <td dangerouslySetInnerHTML={{ __html: date_of_content }} />
+            </tr>
+            <tr>
+              <td>Cautions</td>
+              <td dangerouslySetInnerHTML={{ __html: cautions }} />
+            </tr>
+            <tr>
+              <td>License</td>
+              <td dangerouslySetInnerHTML={{ __html: license }} />
+            </tr>
+          </tbody>
         </table>
         <div className="overview-container">
           <h3>Overview</h3>
