@@ -40,11 +40,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const setInfoModal = (): void => {
-    if (!layer) {
-      return;
+    if (layer) {
+      dispatch(renderModal('InfoContent'));
+      dispatch(renderInfoModal(layer.id));
     }
-    dispatch(renderModal('InfoContent'));
-    dispatch(renderInfoModal(layer.id));
+
+    return;
   };
 
   return (
