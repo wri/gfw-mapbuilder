@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import LayerToggleSwitch from './LayerToggleSwitch';
@@ -6,8 +6,6 @@ import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRange from './DateRange';
-
-import { mapController } from 'js/controllers/mapController';
 
 import { RootState } from 'js/store';
 
@@ -29,12 +27,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
-
-  useEffect(() => {
-    if (layer && (layer as any)?.visible === false) {
-      mapController.resetDefinedDateRange(layer.id);
-    }
-  }, [layer?.visible]);
 
   const returnTimeSlider = (id: string): any => {
     switch (id) {
