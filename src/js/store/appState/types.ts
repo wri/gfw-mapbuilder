@@ -32,7 +32,7 @@ export interface MeasureContent {
 export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
-  renderInfoModal: string;
+  infoModalLayerID: string;
   selectedLanguage: string;
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
@@ -79,7 +79,7 @@ interface RenderModalAction {
 
 interface RenderInfoModalAction {
   type: typeof RENDER_INFO_MODAL;
-  payload: AppState['renderInfoModal'];
+  payload: AppState['infoModalLayerID'];
 }
 
 interface SetLoggedIn {

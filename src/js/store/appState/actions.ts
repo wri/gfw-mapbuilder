@@ -35,7 +35,7 @@ export function setHideWidget(payload: AppState['hideWidgetActive']) {
   };
 }
 
-export function renderInfoModal(payload: AppState['renderInfoModal']) {
+export function setInfoModalLayerID(payload: AppState['infoModalLayerID']) {
   return {
     type: RENDER_INFO_MODAL as typeof RENDER_INFO_MODAL,
     payload: payload

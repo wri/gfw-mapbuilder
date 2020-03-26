@@ -5,7 +5,7 @@ import { RootState } from 'js/store';
 
 const InfoContent: FunctionComponent<{}> = () => {
   const layerID = useSelector(
-    (store: RootState) => store.appState.renderInfoModal
+    (store: RootState) => store.appState.infoModalLayerID
   );
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState

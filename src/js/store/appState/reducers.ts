@@ -17,7 +17,7 @@ import {
 const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
-  renderInfoModal: '',
+  infoModalLayerID: '',
   hideWidgetActive: false,
   isLoggedIn: false,
   leftPanel: {
@@ -56,7 +56,7 @@ export function appStateReducer(
     case RENDER_MODAL:
       return { ...state, renderModal: action.payload };
     case RENDER_INFO_MODAL:
-      return { ...state, renderInfoModal: action.payload };
+      return { ...state, infoModalLayerID: action.payload };
     case SELECT_ACTIVE_TAB:
       return {
         ...state,

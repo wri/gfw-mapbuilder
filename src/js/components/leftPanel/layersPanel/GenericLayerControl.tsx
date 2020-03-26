@@ -6,7 +6,7 @@ import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 
-import { renderModal, renderInfoModal } from 'js/store/appState/actions';
+import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
 
 import { RootState } from 'js/store';
 
@@ -39,10 +39,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  const setInfoModal = (): void => {
+  const openInfoModal = (): void => {
     if (layer) {
       dispatch(renderModal('InfoContent'));
-      dispatch(renderInfoModal(layer.id));
+      dispatch(setInfoModalLayerID(layer.id));
     }
 
     return;
@@ -58,7 +58,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
         <span className="layer-label">{layer?.title}</span>
-        <div className="info-icon-container" onClick={() => setInfoModal()}>
+        <div className="info-icon-container" onClick={() => openInfoModal()}>
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>
