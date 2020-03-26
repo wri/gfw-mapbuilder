@@ -17,6 +17,7 @@ import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
+import FeatureLayer from 'esri/layers/FeatureLayer';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -51,9 +52,10 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { LayerFactoryObject } from 'js/interfaces/mapping';
 import { Attachment, URLProperties } from 'js/interfaces/Attachment';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
-
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
+
+import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
 
 interface URLCoordinates {
@@ -275,6 +277,8 @@ export class MapController {
           });
 
           this.initializeAndSetSketch();
+          this.initializeAndSetVIIRSLayers();
+          this.initializeAndSetMODISLayers();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -611,6 +615,7 @@ export class MapController {
     parentID?: string
   ): void {
     let layer = null as any;
+    this.turnOffVIIRSorMODIS(layerID);
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
@@ -1181,6 +1186,307 @@ export class MapController {
       (specificLayer as any).minYear = startYear;
       (specificLayer as any).maxYear = endYear;
       specificLayer.refresh();
+    }
+  }
+
+  setCustomDateRange(
+    layerID: string,
+    startDate: string | Date,
+    endDate: string | Date
+  ): any {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+
+    if (this._map) {
+      const layer = (this._map.allLayers as any).items.filter(
+        (layer: any) => layer.id === layerID
+      );
+
+      const whereClause = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
+      /**
+       * TODO
+       * Need to update definitionExpression of the layer's selected sublayer
+       * Check layer.capabilities.exportMap.supportsSublayerDefinitionExpression to confirm we can update definitionExpression
+       */
+    }
+  }
+
+  initializeAndSetVIIRSLayers(): void {
+    const viirsLayerIDs = VIIRSLayerIDs.map(({ layerID, url }) => {
+      return new FeatureLayer({
+        id: layerID,
+        url,
+        visible: false
+      });
+    });
+
+    this._map?.addMany(viirsLayerIDs);
+  }
+
+  initializeAndSetMODISLayers(): void {
+    const modisLayerIDs = MODISLayerIDs.map(({ layerID, url }) => {
+      return new FeatureLayer({
+        id: layerID,
+        url,
+        visible: false
+      });
+    });
+
+    this._map?.addMany(modisLayerIDs);
+  }
+
+  setMODISDefinedRange(layer: any, sublayerType: string): void {
+    if (!this._map) {
+      return;
+    }
+
+    const MODIS24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
+    );
+
+    switch (sublayerType) {
+      case '24 hrs':
+        {
+          MODIS24.visible = true;
+          MODISLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+
+            if (specificLayer) {
+              specificLayer.visible = false;
+            }
+          });
+        }
+        break;
+      case '48 hrs':
+        {
+          MODIS24.visible = false;
+          MODISLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+            if (specificLayer) {
+              if (specificLayer.id === 'MODIS48') {
+                specificLayer.visible = true;
+              } else {
+                specificLayer.visible = false;
+              }
+            }
+          });
+        }
+        break;
+      case '72 hrs':
+        {
+          MODIS24.visible = false;
+          MODISLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+            if (specificLayer) {
+              if (specificLayer.id === 'MODIS72') {
+                specificLayer.visible = true;
+              } else {
+                specificLayer.visible = false;
+              }
+            }
+          });
+        }
+        break;
+      case '7 days':
+        {
+          MODIS24.visible = false;
+          MODISLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+            if (specificLayer) {
+              if (specificLayer.id === 'MODIS7D') {
+                specificLayer.visible = true;
+              } else {
+                specificLayer.visible = false;
+              }
+            }
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  setVIIRSDefinedRange(layer: any, sublayerType: string): void {
+    if (!this._map) {
+      return;
+    }
+    const VIIRS24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
+    );
+
+    switch (sublayerType) {
+      case '24 hrs':
+        {
+          VIIRS24.visible = true;
+          VIIRSLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+
+            if (specificLayer) {
+              specificLayer.visible = false;
+            }
+          });
+        }
+        break;
+      case '48 hrs':
+        {
+          VIIRS24.visible = false;
+          VIIRSLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+            if (specificLayer) {
+              if (specificLayer.id === 'VIIRS48') {
+                specificLayer.visible = true;
+              } else {
+                specificLayer.visible = false;
+              }
+            }
+          });
+        }
+        break;
+      case '72 hrs':
+        {
+          VIIRS24.visible = false;
+          VIIRSLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+            if (specificLayer) {
+              if (specificLayer.id === 'VIIRS72') {
+                specificLayer.visible = true;
+              } else {
+                specificLayer.visible = false;
+              }
+            }
+          });
+        }
+        break;
+      case '7 days':
+        {
+          VIIRS24.visible = false;
+          VIIRSLayerIDs.forEach(({ layerID }) => {
+            const specificLayer = this._map?.findLayerById(layerID);
+            if (specificLayer) {
+              if (specificLayer.id === 'VIIRS7D') {
+                specificLayer.visible = true;
+              } else {
+                specificLayer.visible = false;
+              }
+            }
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  turnOffVIIRSorMODIS(layerID: string): void {
+    if (!this._map) {
+      return;
+    }
+
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: LayerProps) => layer.id === layerID
+    )[0];
+
+    if (!layer || !layer.sublayers) {
+      return;
+    }
+
+    const sublayer24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) =>
+        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
+        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+    );
+
+    sublayer24.visible = false;
+
+    if (layer.id === 'VIIRS_ACTIVE_FIRES') {
+      VIIRSLayerIDs.forEach(({ layerID }) => {
+        const specificLayer = this._map?.findLayerById(layerID);
+
+        if (specificLayer) {
+          specificLayer.visible = false;
+        }
+      });
+    } else if (layer.id === 'MODIS_ACTIVE_FIRES') {
+      MODISLayerIDs.forEach(({ layerID }) => {
+        const specificLayer = this._map?.findLayerById(layerID);
+
+        if (specificLayer) {
+          specificLayer.visible = false;
+        }
+      });
+    }
+  }
+
+  updateMODISorVIIRSOpacity(layerID: string, opacity: number): void {
+    if (!this._map) {
+      return;
+    }
+
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: LayerProps) => layer.id === layerID
+    )[0];
+
+    if (!layer || !layer.sublayers) {
+      return;
+    }
+
+    layer.opacity = opacity;
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      if (l.id === layerID) {
+        return {
+          ...l,
+          opacity: layer.opacity
+        };
+      } else {
+        return l;
+      }
+    });
+    store.dispatch(allAvailableLayers(newLayersArray));
+
+    const sublayer24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) =>
+        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
+        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+    );
+
+    sublayer24.opacity = opacity;
+
+    if (layerID === 'VIIRS_ACTIVE_FIRES') {
+      VIIRSLayerIDs.forEach(({ layerID }) => {
+        const specificLayer = this._map?.findLayerById(layerID);
+
+        if (specificLayer) {
+          specificLayer.opacity = opacity;
+        }
+      });
+    } else if (layerID === 'MODIS_ACTIVE_FIRES') {
+      MODISLayerIDs.forEach(({ layerID }) => {
+        const specificLayer = this._map?.findLayerById(layerID);
+
+        if (specificLayer) {
+          specificLayer.opacity = opacity;
+        }
+      });
+    }
+  }
+
+  setDefinedDateRange(layerID: string, sublayerType: string): void {
+    if (!this._map) {
+      return;
+    }
+
+    const layer = (this._map.allLayers as any).items.filter(
+      (layer: LayerProps) => layer.id === layerID
+    )[0];
+
+    if (layerID === 'MODIS_ACTIVE_FIRES') {
+      this.setMODISDefinedRange(layer, sublayerType);
+    }
+
+    if (layerID === 'VIIRS_ACTIVE_FIRES') {
+      this.setVIIRSDefinedRange(layer, sublayerType);
     }
   }
 }

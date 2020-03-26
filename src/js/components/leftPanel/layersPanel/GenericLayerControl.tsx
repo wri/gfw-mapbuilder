@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
+import DateRange from './DateRange';
 
 import { RootState } from 'js/store';
 
@@ -56,6 +57,24 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const returnDateRange = (id: string): JSX.Element | undefined => {
+    if (!layer) {
+      return;
+    }
+    /**
+     * TODO
+     * [ ] glad alerts
+     * [ ] terra-I alerts
+     */
+    switch (id) {
+      case 'VIIRS_ACTIVE_FIRES':
+      case 'MODIS_ACTIVE_FIRES':
+        return <DateRange layer={layer} />;
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <div className="layers-control-checkbox">
@@ -83,6 +102,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
       )}
+      {layer?.visible && returnDateRange(props.id)}
     </>
   );
 };
