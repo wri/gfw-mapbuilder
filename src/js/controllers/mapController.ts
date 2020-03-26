@@ -24,6 +24,7 @@ import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
+import { getSortedLayers } from 'js/helpers/mapController/layerSorting';
 import {
   allAvailableLayers,
   mapError,
@@ -53,9 +54,9 @@ import { Attachment, URLProperties } from 'js/interfaces/Attachment';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
-import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 
-const allowedLayers = ['feature', 'dynamic', 'loss', 'gain']; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
+import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
+import { allowedLayers } from '../../../configs/layer-config';
 
 interface URLCoordinates {
   zoom: number;
@@ -247,15 +248,32 @@ export class MapController {
                 });
               });
 
-            store.dispatch(
-              allAvailableLayers([...mapLayerObjects, ...resourceLayerObjects])
-            );
+            const allLayerObjects = [
+              ...mapLayerObjects,
+              ...resourceLayerObjects
+            ];
+            store.dispatch(allAvailableLayers(allLayerObjects));
 
             const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
               return LayerFactory(this._mapview, resouceLayerSpec);
             });
 
             this._map?.addMany(mapLayers);
+
+            //Retrieve sorted layer array
+            const mapLayerIDs = getSortedLayers(
+              appSettings.layerPanel,
+              allLayerObjects,
+              this._map
+            );
+
+            //Reorder layers on the map!
+            this._map?.layers.forEach((layer: any) => {
+              const layerIndex = mapLayerIDs?.findIndex(i => i === layer.id);
+              if (layerIndex && layerIndex !== -1) {
+                this._map?.reorder(layer, layerIndex);
+              }
+            });
           });
 
           this.initializeAndSetSketch();
@@ -310,7 +328,7 @@ export class MapController {
             minScale,
             sublayer: true,
             parentID: sub.layer.id,
-            legendInfo: sublayerLegendInfo.legend
+            legendInfo: sublayerLegendInfo?.legend
           });
         });
       } else {
@@ -470,11 +488,27 @@ export class MapController {
                     availableLayer => availableLayer.group !== 'webmap'
                   );
 
-                store.dispatch(
-                  allAvailableLayers([...prevMapObjects, ...mapLayerObjects])
-                );
+                const allLayerObjects = [...prevMapObjects, ...mapLayerObjects];
+
+                store.dispatch(allAvailableLayers(allLayerObjects));
 
                 this._map?.addMany(resourceLayers);
+                //Retrieve sorted layer array
+                const mapLayerIDs = getSortedLayers(
+                  appSettings.layerPanel,
+                  allLayerObjects,
+                  this._map
+                );
+
+                //Reorder layers on the map!
+                this._map?.layers.forEach((layer: any) => {
+                  const layerIndex = mapLayerIDs?.findIndex(
+                    i => i === layer.id
+                  );
+                  if (layerIndex && layerIndex !== -1) {
+                    this._map?.reorder(layer, layerIndex);
+                  }
+                });
               });
             }
           },
@@ -1050,7 +1084,7 @@ export class MapController {
   updateDensityValue(value: number): void {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
-      if (layer) {
+      if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
         layer.urlTemplate = layer.urlTemplate.replace(
           /(tc)(?:[^\/]+)/,
           `tc${value}`
@@ -1058,6 +1092,14 @@ export class MapController {
         layer.refresh();
       }
     });
+  }
+
+  updateBiodensityValue(value: number): void {
+    const bioLayer: any = this._map?.findLayerById('AG_BIOMASS');
+    if (bioLayer) {
+      bioLayer.mosaicRule.where = `OBJECTID = ${value}`;
+      bioLayer.refresh();
+    }
   }
 
   getMapviewCoordinates(): URLCoordinates {
