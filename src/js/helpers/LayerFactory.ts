@@ -2,6 +2,7 @@ import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
+import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
@@ -61,6 +62,15 @@ export function LayerFactory(
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
+      });
+      break;
+    case 'webtiled':
+      esriLayer = new WebTileLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        opacity: layerConfig.opacity
       });
       break;
     default:
