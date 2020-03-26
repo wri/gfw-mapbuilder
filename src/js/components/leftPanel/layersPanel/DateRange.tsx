@@ -56,7 +56,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           <option value={'24 hrs'}>Past 24 hours</option>
           <option value={'48 hrs'}>Past 48 hours</option>
           <option value={'72 hrs'}>Past 72 hours</option>
-          <option value={'7d'}>Past week</option>
+          <option value={'7 days'}>Past week</option>
         </select>
       </div>
       <button onClick={(): void => setRenderCustomRange(!renderCustomRange)}>

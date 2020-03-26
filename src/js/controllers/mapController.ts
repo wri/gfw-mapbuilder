@@ -615,7 +615,7 @@ export class MapController {
     parentID?: string
   ): void {
     let layer = null as any;
-    this.resetDefinedDateRange(layerID);
+    this.turnOffVIIRSorMODIS(layerID);
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
@@ -1240,8 +1240,8 @@ export class MapController {
       return;
     }
 
-    const MODIS24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
-      sublayer.title.includes('24 hrs')
+    const MODIS24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     switch (sublayerType) {
@@ -1263,7 +1263,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ layerID }) => {
             const specificLayer = this._map?.findLayerById(layerID);
             if (specificLayer) {
-              if (specificLayer.id.includes('48')) {
+              if (specificLayer.id === 'MODIS48') {
                 specificLayer.visible = true;
               } else {
                 specificLayer.visible = false;
@@ -1278,7 +1278,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ layerID }) => {
             const specificLayer = this._map?.findLayerById(layerID);
             if (specificLayer) {
-              if (specificLayer.id.includes('72')) {
+              if (specificLayer.id === 'MODIS72') {
                 specificLayer.visible = true;
               } else {
                 specificLayer.visible = false;
@@ -1293,7 +1293,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ layerID }) => {
             const specificLayer = this._map?.findLayerById(layerID);
             if (specificLayer) {
-              if (specificLayer.id.includes('7d')) {
+              if (specificLayer.id === 'MODIS7D') {
                 specificLayer.visible = true;
               } else {
                 specificLayer.visible = false;
@@ -1311,8 +1311,8 @@ export class MapController {
     if (!this._map) {
       return;
     }
-    const VIIRS24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
-      sublayer.title.includes('24 hrs')
+    const VIIRS24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     switch (sublayerType) {
@@ -1334,7 +1334,7 @@ export class MapController {
           VIIRSLayerIDs.forEach(({ layerID }) => {
             const specificLayer = this._map?.findLayerById(layerID);
             if (specificLayer) {
-              if (specificLayer.id.includes('48')) {
+              if (specificLayer.id === 'VIIRS48') {
                 specificLayer.visible = true;
               } else {
                 specificLayer.visible = false;
@@ -1349,7 +1349,7 @@ export class MapController {
           VIIRSLayerIDs.forEach(({ layerID }) => {
             const specificLayer = this._map?.findLayerById(layerID);
             if (specificLayer) {
-              if (specificLayer.id.includes('72')) {
+              if (specificLayer.id === 'VIIRS72') {
                 specificLayer.visible = true;
               } else {
                 specificLayer.visible = false;
@@ -1364,7 +1364,7 @@ export class MapController {
           VIIRSLayerIDs.forEach(({ layerID }) => {
             const specificLayer = this._map?.findLayerById(layerID);
             if (specificLayer) {
-              if (specificLayer.id.includes('7d')) {
+              if (specificLayer.id === 'VIIRS7D') {
                 specificLayer.visible = true;
               } else {
                 specificLayer.visible = false;
@@ -1378,7 +1378,7 @@ export class MapController {
     }
   }
 
-  resetDefinedDateRange(layerID: string): void {
+  turnOffVIIRSorMODIS(layerID: string): void {
     if (!this._map) {
       return;
     }
@@ -1391,13 +1391,15 @@ export class MapController {
       return;
     }
 
-    const sublayer24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
-      sublayer.title.includes('24 hrs')
+    const sublayer24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) =>
+        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
+        sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     sublayer24.visible = false;
 
-    if (layer.id.includes('VIIRS_ACTIVE_FIRES')) {
+    if (layer.id === 'VIIRS_ACTIVE_FIRES') {
       VIIRSLayerIDs.forEach(({ layerID }) => {
         const specificLayer = this._map?.findLayerById(layerID);
 
@@ -1405,7 +1407,7 @@ export class MapController {
           specificLayer.visible = false;
         }
       });
-    } else if (layer.id.includes('MODIS_ACTIVE_FIRES')) {
+    } else if (layer.id === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ layerID }) => {
         const specificLayer = this._map?.findLayerById(layerID);
 
@@ -1429,13 +1431,29 @@ export class MapController {
       return;
     }
 
-    const sublayer24 = layer.sublayers.items.filter((sublayer: Sublayer) =>
-      sublayer.title.includes('24 hrs')
+    layer.opacity = opacity;
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      if (l.id === layerID) {
+        return {
+          ...l,
+          opacity: layer.opacity
+        };
+      } else {
+        return l;
+      }
+    });
+    store.dispatch(allAvailableLayers(newLayersArray));
+
+    const sublayer24 = layer.sublayers.items.filter(
+      (sublayer: Sublayer) =>
+        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
+        sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     sublayer24.opacity = opacity;
 
-    if (layerID.includes('VIIRS_ACTIVE_FIRES')) {
+    if (layerID === 'VIIRS_ACTIVE_FIRES') {
       VIIRSLayerIDs.forEach(({ layerID }) => {
         const specificLayer = this._map?.findLayerById(layerID);
 
@@ -1443,7 +1461,7 @@ export class MapController {
           specificLayer.opacity = opacity;
         }
       });
-    } else if (layerID.includes('MODIS_ACTIVE_FIRES')) {
+    } else if (layerID === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ layerID }) => {
         const specificLayer = this._map?.findLayerById(layerID);
 
@@ -1463,11 +1481,11 @@ export class MapController {
       (layer: LayerProps) => layer.id === layerID
     )[0];
 
-    if (layerID.includes('MODIS_ACTIVE_FIRES')) {
+    if (layerID === 'MODIS_ACTIVE_FIRES') {
       this.setMODISDefinedRange(layer, sublayerType);
     }
 
-    if (layerID.includes('VIIRS_ACTIVE_FIRES')) {
+    if (layerID === 'VIIRS_ACTIVE_FIRES') {
       this.setVIIRSDefinedRange(layer, sublayerType);
     }
   }
