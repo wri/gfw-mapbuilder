@@ -22,6 +22,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
+  const { selectedLanguage } = useSelector(
+    (store: RootState) => store.appState
+  );
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
   //Determine if we need density control on this layer
@@ -38,8 +41,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const returnSubtitle = (): JSX.Element | undefined => {
     let subTitle = '';
-    if (layer?.metadata?.metadata) {
-      subTitle = (layer?.metadata?.metadata as any).subtitle;
+    if (layer?.sublabel) {
+      subTitle = layer.sublabel[selectedLanguage];
+
       return (
         <>
           <br />
@@ -50,7 +54,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       console.log('layer does not have metadata to support subtitles!', layer);
       return;
     }
-    // return <span className="layer-subtitle">{subTitle}</span>;
   };
 
   return (
