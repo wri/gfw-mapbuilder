@@ -23,6 +23,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
+  const { selectedLanguage } = useSelector(
+    (store: RootState) => store.appState
+  );
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
   //Determine if we need density control on this layer
@@ -34,6 +37,23 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return <TimeSlider layerID={id} />;
       default:
         return null;
+    }
+  };
+
+  const returnSubtitle = (): JSX.Element | undefined => {
+    let subTitle = '';
+    if (layer?.sublabel) {
+      subTitle = layer.sublabel[selectedLanguage];
+
+      return (
+        <>
+          <br />
+          <span className="layer-subtitle">{subTitle}</span>
+        </>
+      );
+    } else {
+      console.log('layer does not have metadata to support subtitles!', layer);
+      return;
     }
   };
 
@@ -64,7 +84,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           sublayer={props.sublayer}
           parentID={props.parentID}
         />
-        <span className="layer-label">{layer?.title}</span>
+        <div className="title-wrapper">
+          <span className="layer-label">{layer?.title}</span>
+          {returnSubtitle()}
+        </div>
         <div className="info-icon-container">
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
