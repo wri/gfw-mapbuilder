@@ -204,24 +204,27 @@
     justify-content: space-between;
     padding: 1rem;
 
-    .layer-label {
-      font-size: 0.8rem;
-      margin-left: 0.5rem;
-    }
+    .title-wrapper {
+      max-width: 12rem;
+      .layer-label {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        max-width: 12rem;
+        flex-grow: 1;
+      }
 
-    .layer-subtitle {
-      font-size: 0.8rem;
-      margin-left: 0.5rem;
-      color: $medium-dark-grey;
+      .layer-subtitle {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        color: $medium-dark-grey;
+      }
     }
 
     .info-ifon-container,
     .layer-checkbox {
       flex-grow: 0;
-    }
-
-    .layer-label {
-      flex-grow: 1;
     }
   }
 
@@ -261,6 +264,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .hidden {

@@ -5,6 +5,7 @@ import {
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   RENDER_MODAL,
+  RENDER_INFO_MODAL,
   SET_OPEN_LAYER_GROUP,
   SET_LOGGED_IN,
   SET_MEASURE_RESULTS,
@@ -16,6 +17,7 @@ import {
 const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
+  infoModalLayerID: '',
   hideWidgetActive: false,
   isLoggedIn: false,
   leftPanel: {
@@ -53,6 +55,8 @@ export function appStateReducer(
       };
     case RENDER_MODAL:
       return { ...state, renderModal: action.payload };
+    case RENDER_INFO_MODAL:
+      return { ...state, infoModalLayerID: action.payload };
     case SELECT_ACTIVE_TAB:
       return {
         ...state,

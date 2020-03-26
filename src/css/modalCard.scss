@@ -32,6 +32,100 @@
     }
   }
 
+  &.info-content {
+    width: 31.25rem;
+    height: 25rem;
+    margin-left: -15.625rem;
+    margin-top: -15.625rem;
+    font-family: $fira-sans;
+    padding: 1rem;
+
+    .info-content-container {
+      padding: 1rem;
+
+      .header {
+        h2 {
+          text-transform: uppercase;
+          line-height: 1rem;
+          font-weight: 500;
+          font-size: 1rem;
+          display: block;
+          color: $dark-grey;
+        }
+
+        h3 {
+          font-weight: normal;
+          color: #aaa;
+          line-height: 1rem;
+          font-size: 0.8rem;
+          margin-top: 0.75rem;
+          color: $medium-dark-grey;
+        }
+      }
+      .button-container {
+        border-top: 1px solid #e5e5df;
+
+        .orange-button {
+          width: 7.75rem;
+          font-size: 0.85rem;
+        }
+      }
+
+      table,
+      .overview-container,
+      .citation-container {
+        padding-top: 1rem;
+      }
+
+      .citation-container {
+        padding-top: 1rem;
+        color: #aaa;
+        font-size: 0.75rem;
+      }
+
+      table {
+        border-collapse: collapse;
+        font-size: 0.7rem;
+
+        tr:nth-child(even) {
+          background-color: rgb(242, 242, 243);
+        }
+
+        tr {
+          td.label {
+            line-height: 1rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 0.7rem;
+            width: 120px; // * pixels are required
+            border-right: 1px solid #e5e5df;
+            border-bottom: 1px solid #e5e5df;
+            padding: 0.65rem;
+          }
+
+          td.label-info {
+            line-height: 1rem;
+            border-bottom: 1px solid #e5e5df;
+            padding-left: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .overview-container {
+      font-size: 0.8rem;
+      h3 {
+        font-weight: 500;
+        font-size: 1rem;
+      }
+
+      div > p {
+        line-height: 1.25rem;
+        margin-top: 0.75rem;
+      }
+    }
+  }
+
   &.pen-widget {
     height: 30rem;
     top: 30%;

@@ -9,6 +9,7 @@ import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesF
 import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
 import CanopyDensityContent from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import SubscriptionContent from '../mapWidgets/widgetContent/SubscriptionContent';
+import InfoContent from 'js/components/sharedComponents/InfoContent';
 
 import { renderModal } from 'js/store/appState/actions';
 
@@ -47,6 +48,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <MeasureContent />;
       case 'CanopyDensity':
         return <CanopyDensityContent />;
+      case 'InfoContent':
+        return <InfoContent />;
       default:
         break;
     }
@@ -66,6 +69,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'print-widget';
       case 'ShareWidget':
         return 'share-widget';
+      case 'InfoContent':
+        return 'info-content';
       default:
         return '';
     }

@@ -1,11 +1,13 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import * as React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRange from './DateRange';
+
+import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
 
 import { RootState } from 'js/store';
 
@@ -20,6 +22,7 @@ interface LayerControlProps {
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
+  const dispatch = useDispatch();
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
@@ -38,6 +41,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       default:
         return null;
     }
+  };
+
+  const openInfoModal = (): void => {
+    if (layer) {
+      dispatch(renderModal('InfoContent'));
+      dispatch(setInfoModalLayerID(layer.id));
+    }
+
+    return;
   };
 
   const returnSubtitle = (): JSX.Element | undefined => {
@@ -88,7 +100,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <span className="layer-label">{layer?.title}</span>
           {returnSubtitle()}
         </div>
-        <div className="info-icon-container">
+        <div className="info-icon-container" onClick={() => openInfoModal()}>
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>
