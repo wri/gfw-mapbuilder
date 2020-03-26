@@ -1117,6 +1117,7 @@ export class MapController {
       remapRF.functionArguments = {
         InputRanges: [value, treeCoverLayerInfo.metadata.inputRange[1]],
         OutputValues: treeCoverLayerInfo.metadata.outputRange,
+        AllowUnmatched: false,
         Raster: '$$' // Apply remap to the image service
       };
       remapRF.outputPixelType = 'u8';

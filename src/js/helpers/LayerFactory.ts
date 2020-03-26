@@ -6,6 +6,7 @@ import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
+import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
@@ -29,21 +30,22 @@ export function LayerFactory(
       esriLayer = new ImageryLayer({
         id: layerConfig.id,
         visible: layerConfig.visible,
-        url: layerConfig.url
+        url: layerConfig.url,
+        opacity: layerConfig.opacity
       });
       if (layerConfig.metadata.colormap) {
         const remapRF = new RasterFunction();
         remapRF.functionName = 'Remap';
         remapRF.functionArguments = {
           InputRanges: [
-            appState.leftPanel.density,
+            markValueMap[appState.leftPanel.density],
             layerConfig.metadata.inputRange[1]
           ],
           OutputValues: layerConfig.metadata.outputRange,
-          Raster: '$$' // Apply remap to the image service
+          AllowUnmatched: false,
+          Raster: '$$'
         };
         remapRF.outputPixelType = 'u8';
-        //apply custom colormap that's coming from metadata
         const colorRF = new RasterFunction();
         colorRF.functionName = 'Colormap';
         colorRF.functionArguments = {
