@@ -4,8 +4,6 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
 import Point from 'esri/geometry/Point';
 import Polygon from 'esri/geometry/Polygon';
-import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import SimpleMarkerSymbol from 'esri/symbols/SimpleMarkerSymbol';
 
 import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
 

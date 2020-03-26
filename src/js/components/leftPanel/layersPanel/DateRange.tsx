@@ -1,5 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { LayerProps } from 'js/store/mapview/types';
 
 interface DateRangeProps {
@@ -13,7 +15,6 @@ const returnDateToday = (): string => {
   const monthTodayFormatted =
     monthToday.length === 1 ? `0${monthToday}` : monthToday;
   const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
-
   return dateTodayFormatted;
 };
 
@@ -23,33 +24,38 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const [startDate, setStartDate] = useState(returnDateToday());
   const [endDate, setEndDate] = useState(returnDateToday());
   const [renderCustomRange, setRenderCustomRange] = useState(false);
+  const [definedRange, setDefinedRange] = useState('');
 
   const updateStartDate = (e: ChangeEvent<HTMLInputElement>): void => {
     setStartDate(e.target.value);
+    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
   };
 
   const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
     setEndDate(e.target.value);
+    mapController.setCustomDateRange(layer.id, startDate, e.target.value);
   };
 
-  const setDefinedRange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    console.log('setDefinedRange()', e.target.value);
-    // TODO [ ] fire query to correct URL
+  const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    setDefinedRange(e.target.value);
     setRenderCustomRange(false);
+    mapController.setDefinedDateRange(layer.id, e.target.value);
   };
 
   /**
-   * TODO
-   * [ ] set min of input dynamically
+   * TODO [ ] set min of input dynamically
    */
 
   return (
     <>
       <div className="dropdown-wrapper">
-        <select onChange={(e): void => setDefinedRange(e)}>
-          <option value={'24 hours'}>Past 24 hours</option>
-          <option value={'48 hours'}>Past 48 hours</option>
-          <option value={'72 hours'}>Past 72 hours</option>
+        <select
+          onChange={(e): void => setDefinedDateRange(e)}
+          value={definedRange.length ? definedRange : '24 hrs'}
+        >
+          <option value={'24 hrs'}>Past 24 hours</option>
+          <option value={'48 hrs'}>Past 48 hours</option>
+          <option value={'72 hrs'}>Past 72 hours</option>
           <option value={'7 days'}>Past week</option>
         </select>
       </div>

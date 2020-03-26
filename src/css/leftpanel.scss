@@ -204,18 +204,27 @@
     justify-content: space-between;
     padding: 1rem;
 
-    .layer-label {
-      font-size: 0.8rem;
-      margin-left: 0.5rem;
+    .title-wrapper {
+      max-width: 12rem;
+      .layer-label {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+      }
+
+      .layer-subtitle {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        color: $medium-dark-grey;
+      }
+
+      .layer-label {
+        flex-grow: 1;
+      }
     }
 
     .info-ifon-container,
     .layer-checkbox {
       flex-grow: 0;
-    }
-
-    .layer-label {
-      flex-grow: 1;
     }
   }
 

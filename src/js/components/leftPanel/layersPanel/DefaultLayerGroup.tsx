@@ -2,12 +2,9 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import GenericLayerControl from './GenericLayerControl';
-import DateRange from './DateRange';
 
 import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
-
-import { LayerProps } from 'js/store/mapview/types';
 
 interface LayerGroupProps {
   layerGroupKey: string;
@@ -34,21 +31,6 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
     dispatch(setOpenLayerGroup(openGroupKey));
   };
 
-  const returnDateRange = (layer: LayerProps): JSX.Element | undefined => {
-    /**
-     * TODO
-     * [ ] glad alerts
-     * [ ] terra-I alerts
-     */
-    switch (layer.id) {
-      case 'VIIRS_ACTIVE_FIRES':
-      case 'MODIS_ACTIVE_FIRES':
-        return <DateRange layer={layer} />;
-      default:
-        break;
-    }
-  };
-
   return (
     <div className="layer-group-container">
       <div
@@ -66,14 +48,9 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
         {allAvailableLayers
           .filter(laya => groupLayerIds.includes(laya.id))
-          .map(layer => {
-            return (
-              <>
-                <GenericLayerControl id={layer.id} key={layer.id} />
-                {returnDateRange(layer)}
-              </>
-            );
-          })}
+          .map(layer => (
+            <GenericLayerControl id={layer.id} key={layer.id} />
+          ))}
       </div>
     </div>
   );
