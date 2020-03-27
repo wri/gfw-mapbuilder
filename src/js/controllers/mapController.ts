@@ -1106,12 +1106,9 @@ export class MapController {
     const { zoom } = this._mapview;
     const { latitude, longitude } = this._mapview.center;
 
-    const subStringLatitude = latitude.toString().substring(0, 7);
-    const subStringLongitude = longitude.toString().substring(0, 7);
-
     return {
-      latitude: subStringLatitude,
-      longitude: subStringLongitude,
+      latitude: latitude.toFixed(2),
+      longitude: longitude.toFixed(2),
       zoom
     };
   }
