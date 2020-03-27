@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
-
 import { RootState } from 'js/store';
+import { downloadData } from '../../../../configs/modal.config';
 
 const InfoContent: FunctionComponent<{}> = () => {
-  const layerID = useSelector(
-    (store: RootState) => store.appState.infoModalLayerID
+  const { infoModalLayerID: layerID, selectedLanguage } = useSelector(
+    (store: RootState) => store.appState
   );
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
@@ -30,7 +30,8 @@ const InfoContent: FunctionComponent<{}> = () => {
         overview,
         citation,
         title,
-        subtitle
+        subtitle,
+        download_data
       } = metadata;
 
       return (
@@ -111,14 +112,17 @@ const InfoContent: FunctionComponent<{}> = () => {
             <h4>Citation</h4>
             <div dangerouslySetInnerHTML={{ __html: citation }} />
           </div>
-          <div className="button-container">
-            <button
-              className="orange-button"
-              onClick={(): void => console.log('download data!')}
-            >
-              Download Data
-            </button>
-          </div>
+          {download_data && (
+            <div className="button-container">
+              <a href={download_data} target="_blank" rel="noopener noreferrer">
+                <button className="orange-button">
+                  {downloadData[selectedLanguage]
+                    ? downloadData[selectedLanguage]
+                    : 'Download Data'}
+                </button>
+              </a>
+            </div>
+          )}
         </>
       );
     } else {

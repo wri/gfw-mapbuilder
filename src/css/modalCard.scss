@@ -64,9 +64,14 @@
       }
       .button-container {
         border-top: 1px solid #e5e5df;
+        a {
+          text-decoration: none;
+        }
 
         .orange-button {
-          width: 7.75rem;
+          text-transform: uppercase;
+          min-width: 7.75rem;
+          width: auto;
           font-size: 0.85rem;
         }
       }
