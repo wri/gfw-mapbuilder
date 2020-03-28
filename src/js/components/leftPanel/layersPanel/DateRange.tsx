@@ -15,7 +15,6 @@ const returnDateToday = (): string => {
   const monthTodayFormatted =
     monthToday.length === 1 ? `0${monthToday}` : monthToday;
   const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
-
   return dateTodayFormatted;
 };
 
@@ -47,31 +46,21 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
 
   const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
     setEndDate(e.target.value);
-    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
-  };
-
-  const resetSpecificDefinedRange = (): void => {
-    if (layer.id.includes('VIIRS')) {
-      mapController.resetVIRRSDefinedDateRange(layer.id);
-    }
-
-    if (layer.id.includes('MODIS')) {
-      mapController.resetMODISDefinedDateRange(layer.id);
-    }
+    mapController.setCustomDateRange(layer.id, startDate, e.target.value);
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    if (e.target.value === 'Select a date range') {
-      setDefinedRange('');
-      setRenderCustomRange(false);
-      resetSpecificDefinedRange();
-      mapController.resetCustomDateRange();
-      return;
-    }
-
     setDefinedRange(e.target.value);
     setRenderCustomRange(false);
     mapController.setDefinedDateRange(layer.id, e.target.value);
+    mapController.resetCustomDateRange();
+  };
+
+  const setCustomRange = (): void => {
+    setRenderCustomRange(!renderCustomRange);
+
+    setDefinedRange('24 hrs');
+    mapController.setDefinedDateRange(layer.id, '24 hrs');
     mapController.resetCustomDateRange();
   };
 
@@ -80,18 +69,16 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
       <div className="dropdown-wrapper">
         <select
           onChange={(e): void => setDefinedDateRange(e)}
-          defaultValue={definedRange.length ? '' : 'Select a date range'}
+          value={definedRange.length ? definedRange : '24 hrs'}
         >
-          <option value={'Select a date range'}>Select a date range</option>
           <option value={'24 hrs'}>Past 24 hours</option>
           <option value={'48 hrs'}>Past 48 hours</option>
           <option value={'72 hrs'}>Past 72 hours</option>
           <option value={'7 days'}>Past week</option>
         </select>
       </div>
-      <button onClick={(): void => setRenderCustomRange(!renderCustomRange)}>
-        Custom Range
-      </button>
+      {/* <button onClick={(): void => setRenderCustomRange(!renderCustomRange)}> */}
+      <button onClick={(): void => setCustomRange()}>Custom Range</button>
       {renderCustomRange && (
         <>
           <div className="date-section-wrapper">

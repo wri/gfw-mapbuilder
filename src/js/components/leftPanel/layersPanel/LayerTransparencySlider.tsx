@@ -18,14 +18,11 @@ const LayerTransparencySlider = (
   const { layerID, layerOpacity, sublayer, parentID } = props;
 
   const handleOpacityChange = (eventValue: any): void => {
-    mapController.setLayerOpacity(layerID, eventValue, sublayer, parentID);
-
-    if (layerID.includes('VIIRS')) {
-      mapController.updateVIIRSOpacity(layerID, eventValue);
-    }
-
-    if (layerID.includes('MODIS')) {
-      mapController.updateMODISOpacity(layerID, eventValue);
+    if (layerID === 'VIIRS_ACTIVE_FIRES' || layerID === 'MODIS_ACTIVE_FIRES') {
+      mapController.updateMODISorVIIRSOpacity(layerID, eventValue);
+    } else {
+      // * NOTE: default logic
+      mapController.setLayerOpacity(layerID, eventValue, sublayer, parentID);
     }
   };
 
