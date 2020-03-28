@@ -466,3 +466,13 @@ export const measureContent = {
     ]
   }
 };
+
+export const downloadData = {
+  en: 'download data',
+  ka: 'მონაცემების ჩამოტვირთვა',
+  fr: 'Téléchargez les données',
+  es: 'Descarga información',
+  pt: 'Baixar dados',
+  zh: '下载数据',
+  id: 'download data'
+};
