@@ -48,8 +48,9 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const returnURL = (): string => {
-    const url = getShareableURL();
-    return `${window.location.href}&${url}`;
+    const stateUrl = getShareableURL();
+    const baseUrl = new URL(window.location.href).origin;
+    return `${baseUrl}?${stateUrl}`;
   };
 
   return (

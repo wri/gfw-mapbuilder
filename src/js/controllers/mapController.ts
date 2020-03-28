@@ -57,6 +57,7 @@ import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
+import { parseURLandApplyChanges } from 'js/helpers/shareFunctionality';
 
 interface URLCoordinates {
   zoom: number;
@@ -121,10 +122,16 @@ export class MapController {
   }
 
   initializeMap(domRef: RefObject<any>): void {
-    const { appSettings } = store.getState();
+    const { appSettings, appState } = store.getState();
+
+    const webmapID =
+      appState.selectedLanguage === appSettings.language
+        ? appSettings.webmap
+        : appSettings.alternativeWebmap;
+
     this._map = new WebMap({
       portalItem: {
-        id: appSettings.webmap
+        id: webmapID
       }
     });
 
@@ -140,8 +147,6 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
-          //Set default language
-          store.dispatch(setLanguage(appSettings.language));
           //default scale for map
           store.dispatch(changeMapScale(this._mapview.scale));
           //zoom level listener
@@ -279,6 +284,8 @@ export class MapController {
           this.initializeAndSetSketch();
           this.initializeAndSetVIIRSLayers();
           this.initializeAndSetMODISLayers();
+          //deal with share URL params
+          parseURLandApplyChanges();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -1107,8 +1114,8 @@ export class MapController {
     const { latitude, longitude } = this._mapview.center;
 
     return {
-      latitude: latitude.toFixed(2),
-      longitude: longitude.toFixed(2),
+      latitude: latitude.toFixed(7),
+      longitude: longitude.toFixed(7),
       zoom
     };
   }
