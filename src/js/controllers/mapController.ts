@@ -94,6 +94,7 @@ interface RemoteDataLayer {
     groupId: string;
     id: string;
     opacity?: number;
+    visible?: boolean;
   };
   label: object;
   id: string;
@@ -102,6 +103,7 @@ interface RemoteDataLayer {
   type: string;
   order: number;
   group: object;
+  visible?: boolean;
 }
 type LayerInfoFromUrl = {
   layerID: string;
@@ -199,19 +201,54 @@ export class MapController {
                 let resourceId;
                 let resourceTitle;
 
-                //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
-                function determineLayerOpacity() {
-                  //Try the resources.js predetermined opacity
-                  let opacity = apiLayer.dataLayer?.opacity;
-                  if (!opacity && opacity !== 0) {
-                    //nothing in the resources to do with opacity, try the response's oapcity
-                    opacity = apiLayer.layer?.opacity;
+                //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
+                function determineLayerOpacity(): number {
+                  //Check For layer in the URL state first
+                  const resourceLayerID = apiLayer.dataLayer
+                    ? apiLayer.dataLayer.id
+                    : apiLayer.id;
+                  const layerInfoFromURL = layerInfosFromURL.find(
+                    l => l.layerID === resourceLayerID
+                  );
+                  if (layerInfoFromURL) {
+                    return layerInfoFromURL.opacity;
+                  } else {
+                    //we are not dealing with URL hash, use resources.js > API > default 1 logic
+                    let opacity = apiLayer.dataLayer?.opacity;
+                    if (!opacity && opacity !== 0) {
+                      //nothing in the resources to do with opacity, try the response's oapcity
+                      opacity = apiLayer.layer?.opacity;
+                    }
+                    return opacity ?? 1; //if all fails, default to 1
                   }
-                  return opacity ?? 1; //if all fails, default to 1
                 }
-                const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
 
-                // let resourceVisible = true; //TODO: Make this dynamic as well!
+                //Helper to determine layer visibility
+                function determineLayerVisibility(): boolean {
+                  const resourceLayerID = apiLayer.dataLayer
+                    ? apiLayer.dataLayer.id
+                    : apiLayer.id;
+                  const layerInfoFromURL = layerInfosFromURL.find(
+                    l => l.layerID === resourceLayerID
+                  );
+                  if (layerInfoFromURL) {
+                    return true;
+                  } else {
+                    let visibility;
+                    if (apiLayer.dataLayer) {
+                      visibility = apiLayer.dataLayer.visible
+                        ? apiLayer.dataLayer.visible
+                        : false;
+                    } else {
+                      visibility = apiLayer.visible ? apiLayer.visible : false;
+                    }
+                    return visibility;
+                  }
+                }
+
+                const resourceOpacity = determineLayerOpacity();
+                const resourceVisibility = determineLayerVisibility();
+
                 let resourceDefinitionExpression;
                 let resourceGroup;
                 let url;
@@ -246,7 +283,7 @@ export class MapController {
                   id: resourceId,
                   title: resourceTitle,
                   opacity: resourceOpacity,
-                  visible: false,
+                  visible: resourceVisibility,
                   definitionExpression: resourceDefinitionExpression,
                   url: url,
                   type: type
@@ -256,7 +293,7 @@ export class MapController {
                   id: resourceId,
                   title: resourceTitle,
                   opacity: resourceOpacity,
-                  visible: false, //TODO: I think visibility is suppose to be coming from config, this is hardcoded for now
+                  visible: resourceVisibility,
                   definitionExpression: resourceDefinitionExpression,
                   group: resourceGroup,
                   type,
@@ -274,7 +311,7 @@ export class MapController {
               ...resourceLayerObjects
             ];
 
-            //deal with share URL params
+            //deal with share URL params such as zoom, extent and others
             parseURLandApplyChanges();
             store.dispatch(allAvailableLayers(allLayerObjects));
 
