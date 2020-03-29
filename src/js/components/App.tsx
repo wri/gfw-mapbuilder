@@ -40,6 +40,9 @@ const App = (props: AppSettings | any): JSX.Element => {
     const langFromURL = new URL(window.location.href).searchParams.get('lang');
     if (langFromURL) {
       dispatch(setLanguage(langFromURL));
+    } else {
+      //just set default lang
+      dispatch(setLanguage(cameroon.language));
     }
     setShowGlobalSpinner(false);
   }, [dispatch, props]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning

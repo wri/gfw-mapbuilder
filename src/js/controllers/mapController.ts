@@ -57,7 +57,10 @@ import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
-import { parseURLandApplyChanges } from 'js/helpers/shareFunctionality';
+import {
+  parseURLandApplyChanges,
+  getLayerInfoFromURL
+} from 'js/helpers/shareFunctionality';
 
 interface URLCoordinates {
   zoom: number;
@@ -100,6 +103,11 @@ interface RemoteDataLayer {
   order: number;
   group: object;
 }
+type LayerInfoFromUrl = {
+  layerID: string;
+  sublayerID: string | number | null;
+  opacity: number;
+};
 
 export class MapController {
   _map: Map | undefined;
@@ -161,6 +169,14 @@ export class MapController {
             store.dispatch(selectActiveTab('data'));
             queryLayersForFeatures(this._mapview, this._map, event);
           });
+
+          //In case of sharing functionality, check for URL containing layer visibility and opacity information
+          const layerInfosFromURL: LayerInfoFromUrl[] = getLayerInfoFromURL();
+
+          //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
+          if (layerInfosFromURL.length) {
+            this.syncWebmapLayersWithURL(layerInfosFromURL);
+          }
 
           const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
           store.dispatch(allAvailableLayers(mapLayerObjects));
@@ -257,6 +273,9 @@ export class MapController {
               ...mapLayerObjects,
               ...resourceLayerObjects
             ];
+
+            //deal with share URL params
+            parseURLandApplyChanges();
             store.dispatch(allAvailableLayers(allLayerObjects));
 
             const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
@@ -284,8 +303,6 @@ export class MapController {
           this.initializeAndSetSketch();
           this.initializeAndSetVIIRSLayers();
           this.initializeAndSetMODISLayers();
-          //deal with share URL params
-          parseURLandApplyChanges();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -1492,6 +1509,36 @@ export class MapController {
     if (layerID === 'VIIRS_ACTIVE_FIRES') {
       this.setVIIRSDefinedRange(layer, sublayerType);
     }
+  }
+
+  //Helper to deal with URL params and Webmap loaded layers
+
+  syncWebmapLayersWithURL(layerInfosFromURL: LayerInfoFromUrl[]): void {
+    this._map?.layers.forEach((webmapLayer: any) => {
+      if (webmapLayer.sublayers && webmapLayer.sublayers.length > 0) {
+        webmapLayer.sublayers.forEach((sub: Layer) => {
+          const layerFromURL = layerInfosFromURL.find(
+            l => l.sublayerID && String(l.sublayerID) === String(sub.id)
+          );
+          if (layerFromURL) {
+            sub.visible = true;
+            sub.opacity = layerFromURL.opacity;
+          } else {
+            sub.visible = false;
+          }
+        });
+      } else {
+        const layerFromURL = layerInfosFromURL.find(
+          l => l.layerID === webmapLayer.id
+        );
+        if (layerFromURL) {
+          webmapLayer.visible = true;
+          webmapLayer.opacity = layerFromURL.opacity;
+        } else {
+          webmapLayer.visible = false;
+        }
+      }
+    });
   }
 }
 

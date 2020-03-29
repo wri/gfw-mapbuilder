@@ -72,6 +72,34 @@ export function getShareableURL(): string {
   return urlParams.join('&');
 }
 
+export function getLayerInfoFromURL(): any[] {
+  const parsedURL = new URL(window.location.href);
+  const allLayerIDS = parsedURL.searchParams.get('l')?.split(',');
+  const opacityArray = parsedURL.searchParams
+    .get('o')
+    ?.split(',')
+    .map(o => Number(o));
+
+  const mergedLayerInfosFromUrl = allLayerIDS
+    ? allLayerIDS.map((id: string, i: number) => {
+        const outputObject = {} as any;
+        const isSublayer = id.includes('[s]');
+        if (isSublayer) {
+          const layerAndSubIds = id.split('[s]');
+          outputObject.layerID = layerAndSubIds[0];
+          outputObject.sublayerID = layerAndSubIds[1];
+          outputObject.opacity = opacityArray?.[i];
+        } else {
+          outputObject.layerID = id;
+          outputObject.sublayerID = null;
+          outputObject.opacity = opacityArray?.[i];
+        }
+        return outputObject;
+      })
+    : [];
+  return mergedLayerInfosFromUrl;
+}
+
 export function parseURLandApplyChanges(): void {
   const { appState, mapviewState } = store.getState();
   const parsedURL = new URL(window.location.href);
@@ -99,7 +127,7 @@ export function parseURLandApplyChanges(): void {
         case 'tab':
           store.dispatch(selectActiveTab(urlParamValue));
           break;
-        case 'l':
+        case 'laaaa':
           // Get the array of enabled layers from urlParamV
           // Get the array of opacities of those layers
           // Generate a new array of objects { id: string, subid: string | number | null, opacity}
