@@ -1,11 +1,6 @@
 import store from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
-import {
-  selectActiveTab,
-  toggleTabviewPanel,
-  setMeasureResults,
-  setCanopyDensity
-} from 'js/store/appState/actions';
+import { selectActiveTab, setCanopyDensity } from 'js/store/appState/actions';
 
 /* eslint no-case-declarations: 0 */
 
@@ -101,19 +96,13 @@ export function getLayerInfoFromURL(): any[] {
 }
 
 export function parseURLandApplyChanges(): void {
-  const { appState, mapviewState } = store.getState();
+  const { mapviewState } = store.getState();
   const parsedURL = new URL(window.location.href);
   Object.keys(urlEncodingMap).forEach((param: string) => {
     const urlParamValue = parsedURL.searchParams.get(param);
     if (urlParamValue) {
       //we got a param match, apply it to the global application state where appropriate
       switch (param) {
-        //case 'lang':
-        //  //need to make sure we want this, if it is the same language, do nothing
-        //  if (urlParamValue !== appState.selectedLanguage) {
-        //    mapController.changeLanguage(urlParamValue);
-        //  }
-        //  break;
         case 'z':
           mapController._mapview.zoom = Number(urlParamValue);
           break;
@@ -126,60 +115,6 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'tab':
           store.dispatch(selectActiveTab(urlParamValue));
-          break;
-        case 'laaaa':
-          // Get the array of enabled layers from urlParamV
-          // Get the array of opacities of those layers
-          // Generate a new array of objects { id: string, subid: string | number | null, opacity}
-          const allLayerIDS = urlParamValue.split(',');
-          const subIDs = allLayerIDS.filter(l => l.includes('[s]'));
-          const opacityArray = parsedURL.searchParams
-            .get('o')
-            ?.split(',')
-            .map(o => Number(o));
-
-          const mergedLayerInfosFromUrl = allLayerIDS.map(
-            (id: string, i: number) => {
-              const outputObject = {} as any;
-              const isSublayer = id.includes('[s]');
-              if (isSublayer) {
-                const layerAndSubIds = id.split('[s]');
-                outputObject.layerID = layerAndSubIds[0];
-                outputObject.sublayerID = layerAndSubIds[1];
-                outputObject.opacity = opacityArray?.[i];
-              } else {
-                outputObject.layerID = id;
-                outputObject.sublayerID = null;
-                outputObject.opacity = opacityArray?.[i];
-              }
-              return outputObject;
-            }
-          );
-          console.log(mergedLayerInfosFromUrl);
-
-          // Iterate over all available layers array from redux
-          // Check if layer/sublayer exists in the incoming param array
-          // True > turn visibility on it and opacity changeLanguage
-          // False > visibility off
-          //
-          mapviewState.allAvailableLayers.forEach(layer => {
-            console.log(layer);
-            //find the layer in question
-            let activeLayer = null as any;
-            if (layer.sublayer && layer.parentID) {
-              activeLayer = mapController._map
-                ?.findLayerById(layer.parentID)
-                //@ts-ignore -- sublayers exist
-                ?.allSublayers.items.find((sub: any) => sub.id === layerID);
-            } else {
-              activeLayer = mapController._map?.findLayerById(layer.id);
-            }
-            if (activeLayer) {
-              console.log(activeLayer);
-              activeLayer.visible = true;
-            }
-          });
-          //update the map
           break;
         default:
           break;
