@@ -67,7 +67,13 @@ export function getShareableURL(): string {
   return urlParams.join('&');
 }
 
-export function getLayerInfoFromURL(): any[] {
+//Retrieves layer information from URL hash
+interface LayerInfo {
+  layerID: string;
+  sublayerID: string | number | null;
+  opacity: number;
+}
+export function getLayerInfoFromURL(): LayerInfo[] {
   const parsedURL = new URL(window.location.href);
   const allLayerIDS = parsedURL.searchParams.get('l')?.split(',');
   const opacityArray = parsedURL.searchParams
@@ -95,8 +101,8 @@ export function getLayerInfoFromURL(): any[] {
   return mergedLayerInfosFromUrl;
 }
 
+//Apply hash state for zoom, lat, long, tab and density values
 export function parseURLandApplyChanges(): void {
-  const { mapviewState } = store.getState();
   const parsedURL = new URL(window.location.href);
   Object.keys(urlEncodingMap).forEach((param: string) => {
     const urlParamValue = parsedURL.searchParams.get(param);
