@@ -32,6 +32,10 @@ export function getShareableURL(): string {
   const { activeBasemap } = mapviewState;
   urlParams.push(`b=${activeBasemap}`);
 
+  //Basemap LayerID
+  const { selectedLanguage } = appState;
+  urlParams.push(`lang=${selectedLanguage}`);
+
   //X Y Z
   const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
   console.log(zoom);
