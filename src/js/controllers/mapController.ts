@@ -18,8 +18,6 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import { once } from 'esri/core/watchUtils';
 import FeatureLayer from 'esri/layers/FeatureLayer';
-import QueryTask from 'esri/tasks/QueryTask';
-import Query from 'esri/tasks/support/Query';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -1196,26 +1194,24 @@ export class MapController {
       return;
     }
 
-    const modisLayer = (this._map
-      .allLayers as any).items.filter((layer: FeatureLayer) =>
-      layer.id.includes('MODIS')
+    const modisLayer = (this._map.allLayers as any).items.filter(
+      (layer: FeatureLayer) => layer.id === 'MODIS_ACTIVE_FIRES'
     )[0];
 
-    const viirsLayer = (this._map
-      .allLayers as any).items.filter((layer: FeatureLayer) =>
-      layer.id.includes('VIIRS')
+    const viirsLayer = (this._map.allLayers as any).items.filter(
+      (layer: FeatureLayer) => layer.id === 'VIIRS_ACTIVE_FIRES'
     )[0];
 
     if (modisLayer.sublayers) {
       const twentyFourHourMODIS = modisLayer.sublayers.items.filter(
-        (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+        (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
       )[0];
       twentyFourHourMODIS.definitionExpression = undefined;
     }
 
     if (viirsLayer.sublayers) {
       const twentyFourHourVIIRS = viirsLayer.sublayers.items.filter(
-        (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+        (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
       )[0];
       twentyFourHourVIIRS.definitionExpression = undefined;
     }
@@ -1241,7 +1237,9 @@ export class MapController {
     if (layer.sublayers) {
       const defExpression = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
       const twentyFourHourSublayer = layer.sublayers.items.filter(
-        (sublayer: Sublayer) => sublayer.title.includes('24 hrs')
+        (sublayer: Sublayer) =>
+          sublayer.title === 'Global Fires (MODIS) 24 hrs' ||
+          sublayer.title === 'Global Fires (VIIRS) 24 hrs'
       )[0];
 
       twentyFourHourSublayer.definitionExpression = defExpression;
@@ -1363,7 +1361,7 @@ export class MapController {
       return;
     }
     const VIIRS24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
     );
 
     switch (sublayerType) {

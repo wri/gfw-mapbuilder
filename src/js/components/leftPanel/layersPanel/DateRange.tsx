@@ -77,7 +77,6 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           <option value={'7 days'}>Past week</option>
         </select>
       </div>
-      {/* <button onClick={(): void => setRenderCustomRange(!renderCustomRange)}> */}
       <button onClick={(): void => setCustomRange()}>Custom Range</button>
       {renderCustomRange && (
         <>
