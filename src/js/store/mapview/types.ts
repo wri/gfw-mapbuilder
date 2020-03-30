@@ -77,7 +77,7 @@ interface LegendConfig {
   items: LegendConfigItem[];
   name: object;
   source: string;
-  type: 'basic' | 'point';
+  type: 'basic' | 'point' | 'gradient';
 }
 export type LayerOrigin = 'webmap' | 'service' | 'remote'; //where the layer originate from (GFW API, WEBMAP, SERVICE)
 

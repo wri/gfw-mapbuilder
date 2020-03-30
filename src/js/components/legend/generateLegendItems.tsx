@@ -4,7 +4,8 @@ import {
   PointItem,
   BasicItem,
   PolyFromMapServer,
-  LineItem
+  LineItem,
+  GradientItem
 } from './LegendLabelComponents';
 
 interface LegendItemProps {
@@ -21,7 +22,11 @@ type LabelTypes =
   | string
   | undefined;
 
-function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
+function getLegendLabel(
+  type: LabelTypes,
+  options: any,
+  opacity: number
+): JSX.Element | null {
   const {
     color,
     size,
@@ -65,8 +70,6 @@ function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
           opacity={opacity}
         />
       );
-    case 'gradient':
-      return null;
     case 'group':
       return null;
     default:
@@ -80,6 +83,17 @@ function getLegendLabel(type: LabelTypes, options: any, opacity: number): any {
         />
       );
   }
+}
+
+function generateGradientItem(
+  legendConfig: any,
+  language: string
+): JSX.Element {
+  return (
+    <div className="label-item">
+      <GradientItem items={legendConfig.items} language={language} />
+    </div>
+  );
 }
 
 const LegendItems = (props: LegendItemProps): JSX.Element => {
@@ -104,8 +118,15 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       );
     } else if (layer.origin === 'remote') {
       const title = layer.metadata?.legendConfig?.name[language];
-      const labelIcons = layer.metadata?.legendConfig?.items.map(
-        (item: any, i) => {
+      let labelIcons;
+      if (layer.metadata?.legendConfig?.type === 'gradient') {
+        //Gradient requires combining items into a single image, so we deal with it separately
+        labelIcons = generateGradientItem(
+          layer.metadata?.legendConfig,
+          language
+        );
+      } else {
+        labelIcons = layer.metadata?.legendConfig?.items.map((item: any, i) => {
           return (
             <div className="label-item" key={i}>
               {getLegendLabel(
@@ -116,8 +137,8 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
               <p>{item.name[language]}</p>
             </div>
           );
-        }
-      );
+        });
+      }
       return (
         <div className="layer-item" key={layer.id}>
           <p className="layer-title">{title ? title : layer.title}</p>

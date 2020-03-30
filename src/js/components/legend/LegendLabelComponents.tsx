@@ -6,7 +6,7 @@ import * as React from 'react';
   - Basic ✅
   - Point ✅
   - Line ✅
-  - Gradient 🛑
+  - Gradient ✅
   - Cloropleth 🛑
   - Group 🛑
 */
@@ -100,5 +100,34 @@ export const PolyFromMapServer = (
       title={title}
       style={{ opacity: `${opacity}` }}
     />
+  );
+};
+
+interface GradientItemProps {
+  items: any[];
+  language: string;
+}
+
+export const GradientItem = (props: GradientItemProps): JSX.Element => {
+  const { items, language } = props;
+  const gradientColors = items.map(item => item.color).join(',');
+  const gradientHeight = items.length * 20;
+  return (
+    <>
+      <div
+        style={{
+          color: 'red',
+          backgroundImage: `linear-gradient(${gradientColors})`,
+          width: '18px',
+          height: `${gradientHeight}px`,
+          border: '1px solid #555'
+        }}
+      ></div>
+      <div>
+        {items.map((item: any, i: number) => (
+          <p key={i}>{item.name[language] ? item.name[language] : ''}</p>
+        ))}
+      </div>
+    </>
   );
 };
