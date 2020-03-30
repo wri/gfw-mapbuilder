@@ -18,10 +18,23 @@ const returnDateToday = (): string => {
   return dateTodayFormatted;
 };
 
+const returnOneYearAgoToday = (): any => {
+  const dateToday = new Date().toLocaleDateString();
+  const [monthToday, dayToday, yearToday] = dateToday.split('/');
+  const lastYear = String(Number(yearToday) - 1);
+  const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
+  const monthTodayFormatted =
+    monthToday.length === 1 ? `0${monthToday}` : monthToday;
+
+  const dateTodayFormatted = `${lastYear}-${monthTodayFormatted}-${dayTodayFormatted}`;
+
+  return dateTodayFormatted;
+};
+
 const DateRange = (props: DateRangeProps): JSX.Element => {
   const { layer } = props;
 
-  const [startDate, setStartDate] = useState(returnDateToday());
+  const [startDate, setStartDate] = useState(returnOneYearAgoToday());
   const [endDate, setEndDate] = useState(returnDateToday());
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
@@ -40,11 +53,16 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     setDefinedRange(e.target.value);
     setRenderCustomRange(false);
     mapController.setDefinedDateRange(layer.id, e.target.value);
+    mapController.resetCustomDateRange();
   };
 
-  /**
-   * TODO [ ] set min of input dynamically
-   */
+  const setCustomRange = (): void => {
+    setRenderCustomRange(!renderCustomRange);
+
+    setDefinedRange('24 hrs');
+    mapController.setDefinedDateRange(layer.id, '24 hrs');
+    mapController.resetCustomDateRange();
+  };
 
   return (
     <>
@@ -59,9 +77,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           <option value={'7 days'}>Past week</option>
         </select>
       </div>
-      <button onClick={(): void => setRenderCustomRange(!renderCustomRange)}>
-        Custom Range
-      </button>
+      <button onClick={(): void => setCustomRange()}>Custom Range</button>
       {renderCustomRange && (
         <>
           <div className="date-section-wrapper">
