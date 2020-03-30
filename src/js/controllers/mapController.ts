@@ -16,6 +16,7 @@ import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
+import RasterFunction from 'esri/layers/support/RasterFunction';
 import { once } from 'esri/core/watchUtils';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 
@@ -77,12 +78,15 @@ interface RemoteDataLayer {
   // layer: object;
   layer: {
     opacity: number;
-    metadata: object;
+    metadata: any;
     label: object;
     url: string;
     type: string;
     popup?: Popup;
     sublabel?: object;
+    colormap?: any;
+    inputRange: any;
+    outputRange: any;
     // [key: string]: object
   };
   dataLayer?: {
@@ -211,6 +215,9 @@ export class MapController {
                   url = apiLayer.layer.url;
                   type = apiLayer.layer.type;
                   origin = 'remote';
+                  metadata.colormap = apiLayer.layer.colormap;
+                  metadata.inputRange = apiLayer.layer.inputRange;
+                  metadata.outputRange = apiLayer.layer.outputRange;
                 } else {
                   // All other service layers info should be in resources file
                   resourceId = apiLayer.id;
@@ -228,7 +235,8 @@ export class MapController {
                   visible: false,
                   definitionExpression: resourceDefinitionExpression,
                   url: url,
-                  type: type
+                  type: type,
+                  metadata
                 });
 
                 resourceLayerObjects.push({
@@ -269,8 +277,8 @@ export class MapController {
 
             //Reorder layers on the map!
             this._map?.layers.forEach((layer: any) => {
-              const layerIndex = mapLayerIDs?.findIndex(i => i === layer.id);
-              if (layerIndex && layerIndex !== -1) {
+              const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
+              if (layerIndex !== -1) {
                 this._map?.reorder(layer, layerIndex);
               }
             });
@@ -1099,6 +1107,32 @@ export class MapController {
     if (bioLayer) {
       bioLayer.mosaicRule.where = `OBJECTID = ${value}`;
       bioLayer.refresh();
+    }
+  }
+
+  updateTreeCoverValue(value: number): void {
+    const { mapviewState } = store.getState();
+    const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find(
+      l => l.id === 'TREE_COVER'
+    );
+    const treeLayer: any = this._map?.findLayerById('TREE_COVER');
+    if (treeLayer && treeCoverLayerInfo) {
+      const remapRF = new RasterFunction();
+      remapRF.functionName = 'Remap';
+      remapRF.functionArguments = {
+        InputRanges: [value, treeCoverLayerInfo.metadata.inputRange[1]],
+        OutputValues: treeCoverLayerInfo.metadata.outputRange,
+        AllowUnmatched: false,
+        Raster: '$$' // Apply remap to the image service
+      };
+      remapRF.outputPixelType = 'u8';
+      const colorRF = new RasterFunction();
+      colorRF.functionName = 'Colormap';
+      colorRF.functionArguments = {
+        Colormap: treeCoverLayerInfo.metadata.colormap,
+        Raster: remapRF
+      };
+      treeLayer.renderingRule = colorRF;
     }
   }
 

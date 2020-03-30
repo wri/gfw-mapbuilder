@@ -6,4 +6,5 @@ export interface LayerFactoryObject {
   definitionExpression: string | undefined;
   url: string;
   type: string;
+  metadata: any;
 }

@@ -4,8 +4,10 @@ import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
+import RasterFunction from 'esri/layers/support/RasterFunction';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
+import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
@@ -25,14 +27,36 @@ export function LayerFactory(
       });
       break;
     case 'image':
+      const { appState } = store.getState();
       esriLayer = new ImageryLayer({
         id: layerConfig.id,
         visible: layerConfig.visible,
-        url: layerConfig.url
+        url: layerConfig.url,
+        opacity: layerConfig.opacity
       });
+      if (layerConfig.metadata.colormap) {
+        const remapRF = new RasterFunction();
+        remapRF.functionName = 'Remap';
+        remapRF.functionArguments = {
+          InputRanges: [
+            markValueMap[appState.leftPanel.density],
+            layerConfig.metadata.inputRange[1]
+          ],
+          OutputValues: layerConfig.metadata.outputRange,
+          AllowUnmatched: false,
+          Raster: '$$'
+        };
+        remapRF.outputPixelType = 'u8';
+        const colorRF = new RasterFunction();
+        colorRF.functionName = 'Colormap';
+        colorRF.functionArguments = {
+          Colormap: layerConfig.metadata.colormap,
+          Raster: remapRF
+        };
+        esriLayer.renderingRule = colorRF;
+      }
       if (layerConfig.id === 'AG_BIOMASS') {
         //biomass layer expects object id that maps to canopy density values
-        const { appState } = store.getState();
         esriLayer.mosaicRule = new MosaicRule({
           where: `OBJECTID = ${appState.leftPanel.density}`
         });
