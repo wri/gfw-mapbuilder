@@ -59,18 +59,26 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       <>
         <div className="header">
           <h2>{layer.title}</h2>
-          <table>
-            <tbody>
-              <tr>
-                <td className="label">Description</td>
-                <td className="label-info">{description}</td>
-              </tr>
-              <tr>
-                <td className="label">License</td>
-                <td className="label-info">{copyrightText}</td>
-              </tr>
-            </tbody>
-          </table>
+          {description.length || copyrightText.length ? (
+            <>
+              <table>
+                <tbody>
+                  <tr>
+                    <td className="label">Description</td>
+                    <td className="label-info">{description}</td>
+                  </tr>
+                  <tr>
+                    <td className="label">License</td>
+                    <td className="label-info">{copyrightText}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              <h3>No information available</h3>
+            </>
+          )}
         </div>
       </>
     );
