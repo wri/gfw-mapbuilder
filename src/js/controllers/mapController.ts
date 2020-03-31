@@ -58,6 +58,10 @@ import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
+import {
+  parseURLandApplyChanges,
+  getLayerInfoFromURL
+} from 'js/helpers/shareFunctionality';
 
 interface URLCoordinates {
   zoom: number;
@@ -94,6 +98,7 @@ interface RemoteDataLayer {
     groupId: string;
     id: string;
     opacity?: number;
+    visible?: boolean;
   };
   label: object;
   id: string;
@@ -102,7 +107,13 @@ interface RemoteDataLayer {
   type: string;
   order: number;
   group: object;
+  visible?: boolean;
 }
+type LayerInfoFromUrl = {
+  layerID: string;
+  sublayerID: string | number | null;
+  opacity: number;
+};
 
 export class MapController {
   _map: Map | undefined;
@@ -125,10 +136,16 @@ export class MapController {
   }
 
   initializeMap(domRef: RefObject<any>): void {
-    const { appSettings } = store.getState();
+    const { appSettings, appState } = store.getState();
+
+    const webmapID =
+      appState.selectedLanguage === appSettings.language
+        ? appSettings.webmap
+        : appSettings.alternativeWebmap;
+
     this._map = new WebMap({
       portalItem: {
-        id: appSettings.webmap
+        id: webmapID
       }
     });
 
@@ -144,8 +161,6 @@ export class MapController {
       .when(
         () => {
           store.dispatch(isMapReady(true));
-          //Set default language
-          store.dispatch(setLanguage(appSettings.language));
           //default scale for map
           store.dispatch(changeMapScale(this._mapview.scale));
           //zoom level listener
@@ -160,6 +175,14 @@ export class MapController {
             store.dispatch(selectActiveTab('data'));
             queryLayersForFeatures(this._mapview, this._map, event);
           });
+
+          //In case of sharing functionality, check for URL containing layer visibility and opacity information
+          const layerInfosFromURL: LayerInfoFromUrl[] = getLayerInfoFromURL();
+
+          //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
+          if (layerInfosFromURL.length) {
+            this.syncWebmapLayersWithURL(layerInfosFromURL);
+          }
 
           const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
           store.dispatch(allAvailableLayers(mapLayerObjects));
@@ -182,19 +205,54 @@ export class MapController {
                 let resourceId;
                 let resourceTitle;
 
-                //TODO: In the future make this separate pure function, that accepts apiLayer and returns a number (opacity)
-                function determineLayerOpacity() {
-                  //Try the resources.js predetermined opacity
-                  let opacity = apiLayer.dataLayer?.opacity;
-                  if (!opacity && opacity !== 0) {
-                    //nothing in the resources to do with opacity, try the response's oapcity
-                    opacity = apiLayer.layer?.opacity;
+                //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
+                function determineLayerOpacity(): number {
+                  //Check For layer in the URL state first
+                  const resourceLayerID = apiLayer.dataLayer
+                    ? apiLayer.dataLayer.id
+                    : apiLayer.id;
+                  const layerInfoFromURL = layerInfosFromURL.find(
+                    l => l.layerID === resourceLayerID
+                  );
+                  if (layerInfoFromURL) {
+                    return layerInfoFromURL.opacity;
+                  } else {
+                    //we are not dealing with URL hash, use resources.js > API > default 1 logic
+                    let opacity = apiLayer.dataLayer?.opacity;
+                    if (!opacity && opacity !== 0) {
+                      //nothing in the resources to do with opacity, try the response's oapcity
+                      opacity = apiLayer.layer?.opacity;
+                    }
+                    return opacity ?? 1; //if all fails, default to 1
                   }
-                  return opacity ?? 1; //if all fails, default to 1
                 }
-                const resourceOpacity = determineLayerOpacity(); //TODO: Make this dynamic
 
-                // let resourceVisible = true; //TODO: Make this dynamic as well!
+                //Helper to determine layer visibility
+                function determineLayerVisibility(): boolean {
+                  const resourceLayerID = apiLayer.dataLayer
+                    ? apiLayer.dataLayer.id
+                    : apiLayer.id;
+                  const layerInfoFromURL = layerInfosFromURL.find(
+                    l => l.layerID === resourceLayerID
+                  );
+                  if (layerInfoFromURL) {
+                    return true;
+                  } else {
+                    let visibility;
+                    if (apiLayer.dataLayer) {
+                      visibility = apiLayer.dataLayer.visible
+                        ? apiLayer.dataLayer.visible
+                        : false;
+                    } else {
+                      visibility = apiLayer.visible ? apiLayer.visible : false;
+                    }
+                    return visibility;
+                  }
+                }
+
+                const resourceOpacity = determineLayerOpacity();
+                const resourceVisibility = determineLayerVisibility();
+
                 let resourceDefinitionExpression;
                 let resourceGroup;
                 let url;
@@ -234,7 +292,7 @@ export class MapController {
                   id: resourceId,
                   title: resourceTitle,
                   opacity: resourceOpacity,
-                  visible: false,
+                  visible: resourceVisibility,
                   definitionExpression: resourceDefinitionExpression,
                   url: url,
                   type: type,
@@ -245,7 +303,7 @@ export class MapController {
                   id: resourceId,
                   title: resourceTitle,
                   opacity: resourceOpacity,
-                  visible: false, //TODO: I think visibility is suppose to be coming from config, this is hardcoded for now
+                  visible: resourceVisibility,
                   definitionExpression: resourceDefinitionExpression,
                   group: resourceGroup,
                   type,
@@ -262,6 +320,9 @@ export class MapController {
               ...mapLayerObjects,
               ...resourceLayerObjects
             ];
+
+            //deal with share URL params such as zoom, extent and others
+            parseURLandApplyChanges();
             store.dispatch(allAvailableLayers(allLayerObjects));
 
             const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
@@ -1142,12 +1203,9 @@ export class MapController {
     const { zoom } = this._mapview;
     const { latitude, longitude } = this._mapview.center;
 
-    const subStringLatitude = latitude.toString().substring(0, 7);
-    const subStringLongitude = longitude.toString().substring(0, 7);
-
     return {
-      latitude: subStringLatitude,
-      longitude: subStringLongitude,
+      latitude: latitude.toFixed(7),
+      longitude: longitude.toFixed(7),
       zoom
     };
   }
@@ -1573,6 +1631,36 @@ export class MapController {
     if (layerID === 'VIIRS_ACTIVE_FIRES') {
       this.setVIIRSDefinedRange(layer, sublayerType);
     }
+  }
+
+  //Helper to deal with URL params and Webmap loaded layers
+
+  syncWebmapLayersWithURL(layerInfosFromURL: LayerInfoFromUrl[]): void {
+    this._map?.layers.forEach((webmapLayer: any) => {
+      if (webmapLayer.sublayers && webmapLayer.sublayers.length > 0) {
+        webmapLayer.sublayers.forEach((sub: Layer) => {
+          const layerFromURL = layerInfosFromURL.find(
+            l => l.sublayerID && String(l.sublayerID) === String(sub.id)
+          );
+          if (layerFromURL) {
+            sub.visible = true;
+            sub.opacity = layerFromURL.opacity;
+          } else {
+            sub.visible = false;
+          }
+        });
+      } else {
+        const layerFromURL = layerInfosFromURL.find(
+          l => l.layerID === webmapLayer.id
+        );
+        if (layerFromURL) {
+          webmapLayer.visible = true;
+          webmapLayer.opacity = layerFromURL.opacity;
+        } else {
+          webmapLayer.visible = false;
+        }
+      }
+    });
   }
 }
 

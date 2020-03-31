@@ -9,6 +9,7 @@ import { ReactComponent as FacebookIcon } from 'src/images/facebookIcon.svg';
 import { mapController } from 'js/controllers/mapController';
 
 import { shareContent } from '../../../../../configs/modal.config';
+import { getShareableURL } from 'js/helpers/shareFunctionality';
 
 const ShareContent: FunctionComponent = () => {
   const urlRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -47,13 +48,9 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const returnURL = (): string => {
-    const { latitude, longitude, zoom } = mapController.getMapviewCoordinates();
-    const visibleLayersURL = allAvailableLayers
-      .filter(layer => layer.visible)
-      .map(layer => layer.id)
-      .join('%2C');
-
-    return `${window.location.href}&lat=${latitude}&lon=${latitude}&z=${zoom}&activeLayers=${visibleLayersURL}`;
+    const stateUrl = getShareableURL();
+    const baseUrl = new URL(window.location.href).origin;
+    return `${baseUrl}?${stateUrl}`;
   };
 
   return (

@@ -10,7 +10,7 @@ import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 import cameroon from '../../../configs/cameroon';
 import { overwriteSettings } from 'js/store/appSettings/actions';
-import { setLoggedIn } from 'js/store/appState/actions';
+import { setLoggedIn, setLanguage } from 'js/store/appState/actions';
 import { AppSettings } from 'js/store/appSettings/types';
 
 //TODO: SPinners should be SVGs in images/ folder that get imported
@@ -36,9 +36,16 @@ const App = (props: AppSettings | any): JSX.Element => {
     //Determine which resources we are reading from
     //Read our local resources.js file And any external library resources (which are prioritized)
     dispatch(overwriteSettings({ ...cameroon, ...props }));
-    //Send that to our redux appSettings overwriting whatever is there
+    //Check URL for language param which comes in after user shares the application.
+    const langFromURL = new URL(window.location.href).searchParams.get('lang');
+    if (langFromURL) {
+      dispatch(setLanguage(langFromURL));
+    } else {
+      //just set default lang
+      dispatch(setLanguage(cameroon.language));
+    }
     setShowGlobalSpinner(false);
-  }, [dispatch]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
+  }, [dispatch, props]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
 
   const modalType = useSelector(
     (store: RootState) => store.appState.renderModal
