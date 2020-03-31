@@ -1480,7 +1480,9 @@ export class MapController {
         sublayer.title === 'Global Fires (MODIS) 24 hrs'
     )[0];
 
-    sublayer24.visible = true;
+    if (sublayer24) {
+      sublayer24.visible = true;
+    }
 
     if (layer.id === 'VIIRS_ACTIVE_FIRES') {
       VIIRSLayerIDs.forEach(({ layerID }) => {
