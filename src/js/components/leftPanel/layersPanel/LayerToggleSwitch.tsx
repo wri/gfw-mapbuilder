@@ -11,6 +11,12 @@ interface LayerToggleProps {
 
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
   const { layerIsVisible, layerID, sublayer, parentID } = props;
+
+  const toggleVisibility = (): void => {
+    mapController.toggleLayerVisibility(layerID, sublayer, parentID);
+    mapController.turnOffVIIRSorMODIS(layerID);
+  };
+
   return (
     <div className="layer-checkbox">
       <input
@@ -19,9 +25,7 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
         className="styled-checkbox"
         id={`layer-checkbox-${layerID}`}
         checked={layerIsVisible}
-        onChange={(): void =>
-          mapController.toggleLayerVisibility(layerID, sublayer, parentID)
-        }
+        onChange={(): void => toggleVisibility()}
       />
       <label
         className="styled-checkboxlabel"

@@ -623,7 +623,6 @@ export class MapController {
     parentID?: string
   ): void {
     let layer = null as any;
-    this.turnOffVIIRSorMODIS(layerID);
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
