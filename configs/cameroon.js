@@ -670,6 +670,144 @@ module.exports = {
         }
       ]
     },
+    GROUP_TEST: {
+      grouptype: 'default',
+      order: 9999,
+      label: {
+        en: 'TEST',
+        fr: 'TEST',
+        es: 'TEST',
+        pt: 'TEST',
+        id: 'TEST',
+        zh: 'TEST',
+        ka: 'TEST'
+      },
+      layers: [
+        {
+          order: 89,
+          id: 'CTC2',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+          layerIds: [3],
+          technicalName: 'ind_treecover2',
+          visible: false,
+          label: {
+            en:
+              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
+          }
+        },
+        {
+          order: 88,
+          id: 'CTC',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+          layerIds: [2],
+          technicalName: 'ind_treecover',
+          visible: false,
+          label: {
+            en:
+              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+          }
+        },
+        {
+          order: 79,
+          id: 'MTC',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer',
+          layerIds: [1],
+          technicalName: 'ind_statecarbon',
+          visible: false,
+          label: {
+            en:
+              'State-wise Potential for Increase in Above-ground Carbon Sequestration'
+          },
+          popup: {
+            title: {
+              en: ''
+            },
+            content: {
+              en: [
+                {
+                  label: 'Above-ground Carbon Sequestration Potential of India',
+                  fieldExpression: '*'
+                },
+                {
+                  label: 'In Protection Areas (million tonnes):',
+                  fieldExpression: 'Nat_prot'
+                },
+                {
+                  label: 'In Wide-scale Restoration Areas (million tonnes):',
+                  fieldExpression: 'Nat_widesc'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
+                  fieldExpression: 'Nat_Agri20'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
+                  fieldExpression: 'Nat_Agri40'
+                },
+                {
+                  label: 'In Other Areas (million tonnes):',
+                  fieldExpression: 'Nat_Others'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: 'Above-ground Carbon Sequestration Potential of',
+                  fieldExpression: 'ST_NM'
+                },
+                {
+                  label: 'In Protection Areas (million tonnes):',
+                  fieldExpression: 'Protection'
+                },
+                {
+                  label: 'In Wide-scale Restoration Areas (million tonnes):',
+                  fieldExpression: 'Widescale'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
+                  fieldExpression: 'Agri_tc20'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
+                  fieldExpression: 'Agri_tc40'
+                },
+                {
+                  label: 'In Other Areas (million tonnes)',
+                  fieldExpression: 'Others'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: 'This excludes protected areas. *',
+                  fieldExpression: '*'
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
     GROUP_LC: {
       groupttype: 'default',
       order: 3,
