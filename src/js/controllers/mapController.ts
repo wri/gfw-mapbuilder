@@ -221,7 +221,9 @@ export class MapController {
                 } else {
                   // All other service layers info should be in resources file
                   resourceId = apiLayer.id;
-                  resourceTitle = apiLayer.label[appState.selectedLanguage];
+                  resourceTitle = apiLayer.label[appState.selectedLanguage]
+                    ? apiLayer.label[appState.selectedLanguage]
+                    : 'Untitled Layer';
                   resourceGroup = apiLayer.groupId;
                   url = apiLayer.url;
                   type = apiLayer.type;
