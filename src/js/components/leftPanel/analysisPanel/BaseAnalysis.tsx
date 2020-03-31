@@ -10,6 +10,8 @@ import { setActiveFeatures } from 'js/store/mapview/actions';
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
+import analysisTranslations from './analysisTranslations';
+import 'css/leftpanel.scss';
 
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
@@ -18,15 +20,18 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
-  const [renderEditButton, setRenderEditButton] = useState(true);
+  const [renderEditButton, setRenderEditButton] = useState(false);
+
+  const { selectedLanguage } = useSelector(
+    (store: RootState) => store.appState
+  );
+
   const { analysisModules } = useSelector(
     (store: RootState) => store.appSettings
   );
 
   //Default to the first analysis
-  const [selectedAnalysis, setSelectedAnalysis] = useState(
-    analysisModules[0].analysisId
-  );
+  const [selectedAnalysis, setSelectedAnalysis] = useState('default');
 
   const [geostoreReady, setGeostoreReady] = useState(false);
 
@@ -82,20 +87,76 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  const AnalysisOptions = (): JSX.Element => (
-    <select
-      value={selectedAnalysis}
-      onChange={e => setSelectedAnalysis(e.target.value)}
-    >
-      {analysisModules.map((module: any, i: number) => {
-        return (
-          <option value={module.analysisId} key={i}>
-            {module.label.en}
-          </option>
-        );
-      })}
-    </select>
-  );
+  const AnalysisInstructions = (): JSX.Element | null => {
+    const currentAnalysis = analysisModules.find(
+      module => module.analysisId === selectedAnalysis
+    );
+    console.log(currentAnalysis);
+    if (selectedAnalysis === 'default') {
+      return (
+        <>
+          <div className="analysis-text">
+            <p style={{ fontWeight: 'bold' }}>
+              {analysisTranslations.ANALYSIS_NOT_SELECTED[selectedLanguage][0]}
+            </p>
+            <p>
+              {analysisTranslations.ANALYSIS_NOT_SELECTED[selectedLanguage][1]}
+            </p>
+          </div>
+          <div className="chart-icon"></div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
+            {currentAnalysis?.title[selectedLanguage]}
+          </p>
+          <p style={{ fontSize: '12px' }}>
+            {currentAnalysis?.description[selectedLanguage]}
+          </p>
+          <div>
+            {currentAnalysis?.uiParams &&
+              currentAnalysis?.uiParams !== 'none' &&
+              currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+                return (
+                  <div className="ui-analysis-wrapper" key={i}>
+                    <div className="ui-description">
+                      <div className="number">
+                        <p>{i + 1}</p>
+                      </div>
+                      <p>{uiParam.label[selectedLanguage]}</p>
+                    </div>
+                    <p>{uiParam.inputType}</p>
+                  </div>
+                );
+              })}
+          </div>
+        </>
+      );
+    }
+  };
+
+  const AnalysisOptions = (): JSX.Element => {
+    return (
+      <select
+        className="analysis-select"
+        value={selectedAnalysis || 'default'}
+        onChange={e => setSelectedAnalysis(e.target.value)}
+      >
+        <option value="default">
+          {analysisTranslations.DEFAULT_ANALYSIS_LABEL[selectedLanguage]}
+        </option>
+        {analysisModules.map((module: any, i: number) => {
+          return (
+            <option value={module.analysisId} key={i}>
+              {module.label[selectedLanguage]}
+            </option>
+          );
+        })}
+      </select>
+    );
+  };
 
   const setActiveButton = (): void => {
     if (renderEditButton) {
@@ -112,19 +173,34 @@ const BaseAnalysis = (): JSX.Element => {
     dispatch(setActiveFeatures([]));
   };
 
+  const activeLayer = activeFeatures[activeFeatureIndex[0]];
+  const layerTitle = activeLayer.sublayerTitle
+    ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
+    : activeLayer.layerTitle;
+
   return (
     <>
       {geostoreReady ? (
-        <div>
-          {renderEditButton ? (
-            <button onClick={(): void => setActiveButton()}>Edit</button>
-          ) : (
-            <button onClick={(): void => setActiveButton()}>Save</button>
-          )}
-          <button onClick={(): void => setDelete()}>Delete</button>
+        <div className="base-analysis-content">
+          <div className="layer-title">{layerTitle}</div>
           <AnalysisOptions />
+          {!vegaSpec && (
+            <div className="analysis-instructions">
+              <AnalysisInstructions />
+            </div>
+          )}
           {vegaSpec && <VegaChart spec={vegaSpec} />}
-          <button onClick={runAnalysis}>RUN ANALYSIS</button>
+          <button
+            disabled={selectedAnalysis === 'default'}
+            className={
+              selectedAnalysis === 'default'
+                ? 'orange-button disabled'
+                : 'orange-button'
+            }
+            onClick={runAnalysis}
+          >
+            {analysisTranslations.RUN_ANALYSIS_BUTTON_TEXT[selectedLanguage]}
+          </button>
         </div>
       ) : (
         <AnalysisSpinner />
