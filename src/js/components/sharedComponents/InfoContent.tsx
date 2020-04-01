@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-// import convert from 'xml-js';
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store';
@@ -27,7 +26,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     // TODO [ ] IF metadata exists from ArcGIS, use it!
     //    const metadataURL = `${layer.url}/info/metadata`;
     //    const xmlResults = await fetch(metadataURL).then(res => res.text());
-    //    const results = convert.xml2js(xmlResults);
+    //    const results = convert.xml2js(xmlResults); // uses module 'xml-js'
     //
     // TODO [ ] ELSE, use the description and summary instead
 
