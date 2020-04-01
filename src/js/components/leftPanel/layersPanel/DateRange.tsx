@@ -66,8 +66,13 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
 
   return (
     <>
-      <div className="dropdown-wrapper">
+      <div
+        className={`daterange-wrapper ${
+          renderCustomRange ? 'expanded-date-section' : ''
+        } `}
+      >
         <select
+          className="date-time-toggle"
           onChange={(e): void => setDefinedDateRange(e)}
           value={definedRange.length ? definedRange : '24 hrs'}
         >
@@ -76,34 +81,39 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           <option value={'72 hrs'}>Past 72 hours</option>
           <option value={'7 days'}>Past week</option>
         </select>
+        <button
+          className="date-time-toggle"
+          onClick={(): void => setCustomRange()}
+        >
+          Custom Range
+        </button>
+        {renderCustomRange && (
+          <div className="calendar-wrapper">
+            <div className="date-section-wrapper">
+              <label htmlFor="start-date">Start:</label>
+              <input
+                className="date-time-toggle input"
+                type="date"
+                value={startDate}
+                min="2018-01-01"
+                max={returnDateToday()}
+                onChange={(e): void => updateStartDate(e)}
+              />
+            </div>
+            <div className="date-section-wrapper">
+              <label htmlFor="end-date">End:</label>
+              <input
+                className="date-time-toggle input"
+                type="date"
+                value={endDate}
+                min="2018-01-01"
+                max={returnDateToday()}
+                onChange={(e): void => updateEndDate(e)}
+              />
+            </div>
+          </div>
+        )}
       </div>
-      <button onClick={(): void => setCustomRange()}>Custom Range</button>
-      {renderCustomRange && (
-        <>
-          <div className="date-section-wrapper">
-            <label htmlFor="start-date">Start:</label>
-            <input
-              type="date"
-              id="start-date"
-              value={startDate}
-              min="2018-01-01"
-              max={returnDateToday()}
-              onChange={(e): void => updateStartDate(e)}
-            />
-          </div>
-          <div className="date-section-wrapper">
-            <label htmlFor="end-date">End:</label>
-            <input
-              type="date"
-              id="end-date"
-              value={endDate}
-              min="2018-01-01"
-              max={returnDateToday()}
-              onChange={(e): void => updateEndDate(e)}
-            />
-          </div>
-        </>
-      )}
     </>
   );
 };
