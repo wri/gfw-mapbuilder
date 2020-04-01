@@ -1460,7 +1460,7 @@ export class MapController {
     }
   }
 
-  turnOffVIIRSorMODIS(layerID: string): void {
+  toggleVIIRSorMODIS(layerID: string): void {
     if (!this._map) {
       return;
     }
