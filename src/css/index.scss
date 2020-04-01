@@ -46,3 +46,21 @@ button {
     margin-right: 0.5rem;
   }
 }
+
+.date-time-toggle {
+  position: relative;
+  background: transparent;
+  width: 6rem;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  height: 1.5rem;
+  border-radius: 16px;
+  -webkit-appearance: none;
+  margin-top: auto;
+  margin-bottom: auto;
+  border: 1px solid $base-yellow;
+  background-color: $white;
+  color: $dark-grey;
+  font-size: 11px;
+}

@@ -248,6 +248,57 @@
       }
     }
   }
+
+  .daterange-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-family: $fira-sans;
+    width: auto;
+    height: 2rem;
+    margin-top: 1rem;
+
+    &.expanded-date-section {
+      height: 8rem;
+    }
+
+    select.date-time-toggle {
+      padding: 5px 5px 5px 10px;
+    }
+
+    .date-time-toggle {
+      &.input {
+        width: 7.5rem;
+        height: 1rem;
+      }
+    }
+
+    .calendar-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: -webkit-fill-available;
+      padding: 1.5rem 1.5rem 0rem 1.5rem;
+
+      .date-section-wrapper {
+        display: flex;
+        width: -webkit-fill-available;
+        justify-content: space-evenly;
+
+        label {
+          margin-top: auto;
+          margin-bottom: auto;
+          font-size: 0.75rem;
+          color: $black;
+        }
+
+        input {
+          font-family: $fira-sans;
+        }
+      }
+    }
+  }
 }
 
 .transparency-slider {
