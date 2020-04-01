@@ -1473,6 +1473,8 @@ export class MapController {
       return;
     }
 
+    layer.visible = !layer.visible;
+
     const sublayer24 = layer.sublayers.items.filter(
       (sublayer: Sublayer) =>
         sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
@@ -1500,6 +1502,19 @@ export class MapController {
         }
       });
     }
+
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      if (l.id === layer.id) {
+        return {
+          ...l,
+          visible: layer.visible
+        };
+      } else {
+        return l;
+      }
+    });
+    store.dispatch(allAvailableLayers(newLayersArray));
   }
 
   updateMODISorVIIRSOpacity(layerID: string, opacity: number): void {
