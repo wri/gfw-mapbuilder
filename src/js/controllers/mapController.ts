@@ -108,6 +108,7 @@ interface RemoteDataLayer {
   order: number;
   group: object;
   visible?: boolean;
+  layerIds?: any[];
 }
 type LayerInfoFromUrl = {
   layerID: string;
@@ -261,6 +262,7 @@ export class MapController {
                 let popup;
                 let sublabel;
                 let origin = '' as LayerOrigin;
+                let layerIds;
                 if (apiLayer.dataLayer) {
                   //Deal with remote data layers
                   metadata = apiLayer.layer.metadata;
@@ -286,6 +288,7 @@ export class MapController {
                   url = apiLayer.url;
                   type = apiLayer.type;
                   origin = 'service';
+                  layerIds = apiLayer.layerIds ? apiLayer.layerIds : null;
                 }
 
                 resouceLayerSpecs.push({
@@ -312,7 +315,8 @@ export class MapController {
                   sublayer: false,
                   metadata,
                   sublabel,
-                  popup
+                  popup,
+                  layerIds
                 });
               });
 
@@ -511,6 +515,7 @@ export class MapController {
   }
 
   changeLanguage(lang: string): void {
+    //changing lang!
     store.dispatch(setLanguage(lang));
     const resourceLayers: Layer[] = [];
     if (this._map) {
@@ -686,7 +691,7 @@ export class MapController {
     parentID?: string
   ): void {
     let layer = null as any;
-    this.turnOffVIIRSorMODIS(layerID);
+    // this.turnOffVIIRSorMODIS(layerID);
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)

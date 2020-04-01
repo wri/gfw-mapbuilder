@@ -100,6 +100,7 @@ export interface LayerProps {
   parentID?: string;
   popup?: Popup;
   sublabel?: object;
+  layerIds?: any[] | null;
 }
 
 interface Attributes {

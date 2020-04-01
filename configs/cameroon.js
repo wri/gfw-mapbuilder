@@ -19,7 +19,7 @@ module.exports = {
   language: 'fr',
   useAlternativeLanguage: true,
   alternativeLanguage: 'en',
-  alternativeWebmap: 'b96ee7fcd75e405dbf9a8b5a44ae734a',
+  alternativeWebmap: '3ab4c186c87b44d8bf2520609fba783e',
   alternativeLanguageTitle: 'Forest Atlas of Cameroon',
   alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
   alternativeNarrative:
@@ -683,34 +683,34 @@ module.exports = {
         ka: 'TEST'
       },
       layers: [
-        {
-          order: 89,
-          id: 'CTC2',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-          layerIds: [3],
-          technicalName: 'ind_treecover2',
-          visible: false,
-          label: {
-            en:
-              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
-          }
-        },
-        {
-          order: 88,
-          id: 'CTC',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-          layerIds: [2],
-          technicalName: 'ind_treecover',
-          visible: false,
-          label: {
-            en:
-              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
-          }
-        },
+        // {
+        //   order: 89,
+        //   id: 'CTC2',
+        //   type: 'dynamic',
+        //   url:
+        //     'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+        //   layerIds: [3],
+        //   technicalName: 'ind_treecover2',
+        //   visible: true,
+        //   label: {
+        //     en:
+        //       'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
+        //   }
+        // },
+        // {
+        //   order: 88,
+        //   id: 'CTC',
+        //   type: 'dynamic',
+        //   url:
+        //     'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+        //   layerIds: [2],
+        //   technicalName: 'ind_treecover',
+        //   visible: true,
+        //   label: {
+        //     en:
+        //       'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+        //   }
+        // },
         {
           order: 79,
           id: 'MTC',
@@ -719,7 +719,7 @@ module.exports = {
             'https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer',
           layerIds: [1],
           technicalName: 'ind_statecarbon',
-          visible: false,
+          visible: true,
           label: {
             en:
               'State-wise Potential for Increase in Above-ground Carbon Sequestration'
