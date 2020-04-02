@@ -66,28 +66,26 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   }, [tabViewIsVisible]);
 
   const returnDocuments = (): Array<JSX.Element> | undefined => {
-    if (allAttachments && allAttachments.length) {
-      return allAttachments.map(
-        (attachment: AttachmentWithURLProps, key: number) => {
-          const { url, size, name } = attachment;
-          return (
-            <Fragment key={key}>
-              <tr>
-                <td title={name} className="file-name">
-                  {name}
-                </td>
-                <td>{Math.round(size / 1000)} KB</td>
-                <td>
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    <DocIcon height={20} width={20} fill={'#F0AB00'} />
-                  </a>
-                </td>
-              </tr>
-            </Fragment>
-          );
-        }
-      );
-    }
+    return allAttachments.map(
+      (attachment: AttachmentWithURLProps, key: number) => {
+        const { url, size, name } = attachment;
+        return (
+          <Fragment key={key}>
+            <tr>
+              <td title={name} className="file-name">
+                {name}
+              </td>
+              <td>{Math.round(size / 1000)} KB</td>
+              <td>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  <DocIcon height={20} width={20} fill={'#F0AB00'} />
+                </a>
+              </td>
+            </tr>
+          </Fragment>
+        );
+      }
+    );
   };
 
   return (

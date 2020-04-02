@@ -22,7 +22,7 @@
 
     .feature-collection-title {
       flex-wrap: wrap;
-      border-bottom: 1px solid #aaa;
+      border-bottom: 1px solid $medium-dark-grey;
       width: 100%;
       font-size: 1.1rem;
       font-weight: normal;
@@ -56,7 +56,7 @@
       }
 
       tr {
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid $dropdown-border;
         font-size: 0.85rem;
         white-space: nowrap;
         overflow: hidden;
