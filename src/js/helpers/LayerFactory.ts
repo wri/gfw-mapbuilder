@@ -11,20 +11,17 @@ import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
 
-import { LayerFactoryObject } from 'js/interfaces/mapping';
+import { LayerProps } from 'js/store/mapview/types';
 
 interface LayerOptions {
   id: string;
-  title: string;
+  title?: string;
   visible: boolean;
   url: string;
   sublayers?: { id: number; visible: boolean }[];
 }
 
-export function LayerFactory(
-  mapView: any,
-  layerConfig: LayerFactoryObject
-): Layer {
+export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
   let esriLayer;
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified

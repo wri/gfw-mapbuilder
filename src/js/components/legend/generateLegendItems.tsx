@@ -126,18 +126,20 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           language
         );
       } else {
-        labelIcons = layer.metadata?.legendConfig?.items.map((item: any, i) => {
-          return (
-            <div className="label-item" key={i}>
-              {getLegendLabel(
-                layer.metadata?.legendConfig?.type,
-                item,
-                layer.opacity
-              )}
-              <p>{item.name[language]}</p>
-            </div>
-          );
-        });
+        labelIcons = layer.metadata?.legendConfig?.items.map(
+          (item: any, i: number) => {
+            return (
+              <div className="label-item" key={i}>
+                {getLegendLabel(
+                  layer.metadata?.legendConfig?.type,
+                  item,
+                  layer.opacity
+                )}
+                <p>{item.name[language]}</p>
+              </div>
+            );
+          }
+        );
       }
       return (
         <div className="layer-item" key={layer.id}>

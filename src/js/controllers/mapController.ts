@@ -39,22 +39,17 @@ import { setSelectedBasemap } from 'js/store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
-  toggleTabviewPanel,
   setMeasureResults,
   setLanguage
 } from 'js/store/appState/actions';
 import {
   LayerProps,
   LayerFeatureResult,
-  FeatureResult,
-  LayerOrigin
+  FeatureResult
 } from 'js/store/mapview/types';
 import { OptionType } from 'js/interfaces/measureWidget';
-import { LayerFactoryObject } from 'js/interfaces/mapping';
-import { Attachment, URLProperties } from 'js/interfaces/Attachment';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from 'js/helpers/MapGraphics';
-import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
@@ -65,7 +60,8 @@ import {
 } from 'js/helpers/shareFunctionality';
 import {
   determineLayerOpacity,
-  determineLayerVisibility
+  determineLayerVisibility,
+  extractWebmapLayerObjects
 } from 'js/helpers/mapController/miscLayerHelpers';
 
 interface URLCoordinates {
@@ -76,45 +72,6 @@ interface URLCoordinates {
 
 interface ZoomParams {
   zoomIn: boolean;
-}
-
-interface Popup {
-  content: any;
-  title: any;
-}
-
-interface GFWApiLayer {}
-
-interface RemoteDataLayer {
-  layer: {
-    opacity: number;
-    metadata: any;
-    url: string;
-    type: string;
-    popup?: Popup;
-    sublabel?: object;
-    colormap?: any;
-    inputRange: any;
-    outputRange: any;
-    label: any;
-    // [key: string]: object
-  };
-  dataLayer?: {
-    uuid: string;
-    groupId: string;
-    id: string;
-    opacity?: number;
-    visible?: boolean;
-  };
-  label: object;
-  id: string;
-  url: string;
-  groupId: string;
-  type: string;
-  order: number;
-  group: object;
-  visible?: boolean;
-  layerIds?: any[];
 }
 
 export class MapController {
@@ -161,7 +118,7 @@ export class MapController {
 
     this._mapview
       .when(
-        () => {
+        async () => {
           store.dispatch(isMapReady(true));
           //default scale for map
           store.dispatch(changeMapScale(this._mapview.scale));
@@ -186,142 +143,106 @@ export class MapController {
             this.syncWebmapLayersWithURL(layerInfosFromURL);
           }
 
-          const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
+          //Add layers that are already on the map (webmap layers) to redux array
+          const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
+            this._map
+          );
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
-          this.getMoreLayers().then(res => {
-            const { appState } = store.getState();
+          //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
+          const remoteAndServiceLayersObjects = await this.getRemoteAndServiceLayers();
 
-            const resourceLayerObjects: LayerProps[] = [];
-            const resouceLayerSpecs: LayerFactoryObject[] = [];
+          //Remove those layers that we do not support
+          const allowedRemoteLayersObjects = remoteAndServiceLayersObjects.filter(
+            (layerObject: any) => {
+              const layerType = layerObject.dataLayer
+                ? layerObject.layer.type
+                : layerObject.type;
+              return allowedLayers.includes(layerType);
+            }
+          );
 
-            res
-              .filter((resLayer: RemoteDataLayer) => {
-                const resLayerType = resLayer.dataLayer
-                  ? resLayer.layer.type
-                  : resLayer.type;
-                return allowedLayers.includes(resLayerType);
-              })
-              .forEach((apiLayer: RemoteDataLayer) => {
-                if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
-                let resourceId;
-                let resourceTitle;
-                const resourceOpacity = determineLayerOpacity(
-                  apiLayer,
-                  layerInfosFromURL
-                );
-                const resourceVisibility = determineLayerVisibility(
-                  apiLayer,
-                  layerInfosFromURL
-                );
+          const remoteLayerObjects = [];
+          for (const remoteLayerObject of allowedRemoteLayersObjects) {
+            if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
 
-                let resourceDefinitionExpression;
-                let resourceGroup;
-                let url;
-                let type;
-                let metadata;
-                let popup;
-                let sublabel;
-                let origin = '' as LayerOrigin;
-                let layerIds;
-                let label;
-                let legendInfo;
-                if (apiLayer.dataLayer) {
-                  //Deal with remote data layers
-                  metadata = apiLayer.layer.metadata;
-                  popup = apiLayer.layer.popup;
-                  sublabel = apiLayer.layer.sublabel;
-                  resourceId = apiLayer.dataLayer.id;
-                  resourceTitle =
-                    apiLayer.layer.label[appState.selectedLanguage];
-                  resourceGroup = apiLayer.dataLayer.groupId;
-                  url = apiLayer.layer.url;
-                  type = apiLayer.layer.type;
-                  origin = 'remote';
-                  metadata.colormap = apiLayer.layer.colormap;
-                  label = apiLayer.layer.label;
-                  metadata.inputRange = apiLayer.layer.inputRange;
-                  metadata.outputRange = apiLayer.layer.outputRange;
-                } else {
-                  // Handle all SERVICE Layers here
-                  // All other service layers info should be in resources file
-                  // const legendInfoObject = await fetchLegendInfo(apiLayer.url);
-                  // const layerLegendInfo = legendInfoObject.layers.filter((l: any) => apiLayer.layerIds?.includes(l.layerId));
-                  // console.log("MapController -> initializeMap -> layerLegendInfo", layerLegendInfo)
-                  // legendInfo = layerLegendInfo.map((l: any) => l.legend);
-                  resourceId = apiLayer.id;
-                  resourceTitle = apiLayer.label[appState.selectedLanguage]
-                    ? apiLayer.label[appState.selectedLanguage]
-                    : 'Untitled Layer';
-                  resourceGroup = apiLayer.groupId;
-                  url = apiLayer.url;
-                  type = apiLayer.type;
-                  origin = 'service';
-                  layerIds = apiLayer.layerIds;
-                  label = apiLayer.label;
-                }
+            //Depending if layer is from GFW API or Resource (config file) construct object appropriately
+            const newRemoteLayerObject = {
+              opacity: determineLayerOpacity(
+                remoteLayerObject,
+                layerInfosFromURL
+              ),
+              visible: determineLayerVisibility(
+                remoteLayerObject,
+                layerInfosFromURL
+              )
+            } as LayerProps;
 
-                resouceLayerSpecs.push({
-                  id: resourceId,
-                  title: resourceTitle,
-                  opacity: resourceOpacity,
-                  visible: resourceVisibility,
-                  definitionExpression: resourceDefinitionExpression,
-                  url: url,
-                  type: type,
-                  metadata,
-                  layerIds
-                });
+            if (remoteLayerObject.dataLayer) {
+              //dealing with GFW API layers
+              newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
+              newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
+              newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
+              newRemoteLayerObject.title =
+                remoteLayerObject.layer.label[appState.selectedLanguage];
+              newRemoteLayerObject.group = remoteLayerObject.dataLayer.groupId;
+              newRemoteLayerObject.url = remoteLayerObject.layer.url;
+              newRemoteLayerObject.type = remoteLayerObject.layer.type;
+              newRemoteLayerObject.origin = 'remote';
+              newRemoteLayerObject.label = remoteLayerObject.layer.label;
+              newRemoteLayerObject.metadata = remoteLayerObject.layer.metadata;
+              newRemoteLayerObject.metadata.colormap =
+                remoteLayerObject.layer.colormap;
+              newRemoteLayerObject.metadata.inputRange =
+                remoteLayerObject.layer.inputRange;
+              newRemoteLayerObject.metadata.outputRange =
+                remoteLayerObject.layer.outputRange;
+              newRemoteLayerObject.parentID = undefined;
+            } else {
+              //dealing with resouces (config file) layers
+              // All other service layers info should be in resources file
+              // const legendInfoObject = await fetchLegendInfo(apiLayer.url);
+              // const layerLegendInfo = legendInfoObject.layers.filter((l: any) => apiLayer.layerIds?.includes(l.layerId));
+              // console.log("MapController -> initializeMap -> layerLegendInfo", layerLegendInfo)
+              // legendInfo = layerLegendInfo.map((l: any) => l.legend);
+              newRemoteLayerObject.id = remoteLayerObject.id;
+              newRemoteLayerObject.title = remoteLayerObject.label[
+                appState.selectedLanguage
+              ]
+                ? remoteLayerObject.label[appState.selectedLanguage]
+                : 'Untitled Layer';
+              newRemoteLayerObject.group = remoteLayerObject.groupId;
+              newRemoteLayerObject.url = remoteLayerObject.url;
+              newRemoteLayerObject.type = remoteLayerObject.type;
+              newRemoteLayerObject.origin = 'service';
+              newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
+              newRemoteLayerObject.label = remoteLayerObject.label;
+              newRemoteLayerObject.parentID = undefined;
+            }
+            remoteLayerObjects.push(newRemoteLayerObject);
+          }
+          const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
 
-                resourceLayerObjects.push({
-                  id: resourceId,
-                  title: resourceTitle,
-                  opacity: resourceOpacity,
-                  visible: resourceVisibility,
-                  definitionExpression: resourceDefinitionExpression,
-                  group: resourceGroup,
-                  type,
-                  origin,
-                  url: url,
-                  sublayer: false,
-                  metadata,
-                  sublabel,
-                  popup,
-                  layerIds,
-                  label,
-                  legendInfo
-                });
-              });
+          parseURLandApplyChanges();
+          store.dispatch(allAvailableLayers(allLayerObjects));
+          const esriRemoteLayers = remoteLayerObjects.map(layerObject => {
+            return LayerFactory(this._mapview, layerObject);
+          });
+          this._map?.addMany(esriRemoteLayers);
 
-            const allLayerObjects = [
-              ...mapLayerObjects,
-              ...resourceLayerObjects
-            ];
+          //Retrieve sorted layer array
+          const mapLayerIDs = getSortedLayers(
+            appSettings.layerPanel,
+            allLayerObjects,
+            this._map
+          );
 
-            //deal with share URL params such as zoom, extent and others
-            parseURLandApplyChanges();
-            store.dispatch(allAvailableLayers(allLayerObjects));
-
-            const mapLayers = resouceLayerSpecs.map(resouceLayerSpec => {
-              return LayerFactory(this._mapview, resouceLayerSpec);
-            });
-
-            this._map?.addMany(mapLayers);
-
-            //Retrieve sorted layer array
-            const mapLayerIDs = getSortedLayers(
-              appSettings.layerPanel,
-              allLayerObjects,
-              this._map
-            );
-
-            //Reorder layers on the map!
-            this._map?.layers.forEach((layer: any) => {
-              const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
-              if (layerIndex !== -1) {
-                this._map?.reorder(layer, layerIndex);
-              }
-            });
+          //Reorder layers on the map!
+          this._map?.layers.forEach((layer: any) => {
+            const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
+            if (layerIndex !== -1) {
+              this._map?.reorder(layer, layerIndex);
+            }
           });
 
           this.initializeAndSetSketch();
@@ -339,83 +260,7 @@ export class MapController {
       });
   }
 
-  extractLayerObjects(): LayerProps[] {
-    const mapLayerObjects: LayerProps[] = [];
-    this._map?.layers.forEach(async (layer: any) => {
-      //Get the legend information for each layer
-      let legendInfo = await fetchLegendInfo(layer.url);
-      if (layer.sublayers && layer.sublayers.length > 0) {
-        layer.sublayers.forEach((sub: any) => {
-          //get sublayer legend info
-          const sublayerLegendInfo = legendInfo.layers.find(
-            (l: any) => l.layerId === sub.id
-          );
-          //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
-          sub.opacity = sub.opacity ? sub.opacity : 1;
-          const {
-            id,
-            title,
-            opacity,
-            visible,
-            definitionExpression,
-            url,
-            maxScale,
-            minScale
-          } = sub;
-          mapLayerObjects.push({
-            id,
-            title,
-            opacity,
-            visible,
-            definitionExpression,
-            group: 'webmap',
-            type: 'webmap',
-            origin: 'webmap',
-            url,
-            maxScale,
-            minScale,
-            sublayer: true,
-            parentID: sub.layer.id,
-            legendInfo: sublayerLegendInfo?.legend
-          });
-        });
-      } else {
-        //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
-        legendInfo = layer.layerId
-          ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId)
-              .legend
-          : legendInfo;
-        const {
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          url,
-          maxScale,
-          minScale
-        } = layer;
-        mapLayerObjects.push({
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          group: 'webmap',
-          type: 'webmap',
-          origin: 'webmap',
-          url,
-          maxScale,
-          minScale,
-          sublayer: false,
-          legendInfo
-        });
-      }
-    });
-    return mapLayerObjects;
-  }
-
-  getMoreLayers(): Promise<any> {
+  getRemoteAndServiceLayers(): Promise<any> {
     const { appSettings } = store.getState();
     const { layerPanel } = appSettings;
     const detailedLayers: any = [];
@@ -432,7 +277,7 @@ export class MapController {
         return list.concat(orderedGroups);
       }, []);
 
-    layers.forEach((layer: RemoteDataLayer) => {
+    layers.forEach((layer: any): void => {
       if (layer.type === 'remoteDataLayer') {
         remoteDataLayers.push({
           order: layer.order,
@@ -444,43 +289,30 @@ export class MapController {
       }
     });
 
-    const remoteDataLayerRequests = remoteDataLayers.map(
-      (item: RemoteDataLayer, j: any) => {
-        return fetch(
-          `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`
+    const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
+      return fetch(
+        `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`
+      )
+        .then(response => response.json())
+        .then(json => json.data)
+        .then(layer =>
+          fetch(layer.attributes.layerConfig.metadata)
+            .then(response => response.json())
+            .then(metadata => {
+              const attributes = layer.attributes;
+              const itemGroup = item.group;
+              item.layer = layer.attributes.layerConfig;
+
+              item.group = itemGroup;
+              item.layer.metadata = {
+                metadata,
+                legendConfig: attributes.legendConfig
+              };
+              return item;
+            })
         )
-          .then(response => response.json())
-          .then(json => json.data)
-          .then(layer =>
-            fetch(layer.attributes.layerConfig.metadata)
-              .then(response => response.json())
-              .then(metadata => {
-                const attributes = layer.attributes;
-                const itemGroup = item.group;
-
-                // Object.keys(remoteDataLayers[j].layer).forEach(layerProp => {
-
-                // if (layerProp !== 'type' && layerProp !== 'uuid') {
-                //   if (layerProp === 'legendConfig') {
-                //     attributes[layerProp] = remoteDataLayers[j].layer[layerProp];
-                //   } else {
-                //     layer.attributes.layerConfig[layerProp] = remoteDataLayers[j].layer[layerProp];
-                //   }
-                // }
-                // });
-                item.layer = layer.attributes.layerConfig;
-
-                item.group = itemGroup;
-                item.layer.metadata = {
-                  metadata,
-                  legendConfig: attributes.legendConfig
-                };
-                return item;
-              })
-          )
-          .catch(error => console.error(error));
-      }
-    );
+        .catch(error => console.error(error));
+    });
     detailedLayers.forEach((detailedLayer: object) => {
       remoteDataLayerRequests.push(detailedLayer);
     });
@@ -506,7 +338,6 @@ export class MapController {
             resourceLayers.push(this._map.findLayerById(resourceLayer.id));
           }
         });
-
       this._map.removeMany(resourceLayers);
     }
 
@@ -529,10 +360,11 @@ export class MapController {
         .when(
           () => {
             store.dispatch(isMapReady(true));
-
             if (this._map) {
-              once(this._map, 'loaded', () => {
-                const mapLayerObjects: LayerProps[] = this.extractLayerObjects();
+              once(this._map, 'loaded', async () => {
+                const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
+                  this._map
+                );
 
                 const prevMapObjects = store
                   .getState()

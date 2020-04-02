@@ -1,5 +1,7 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
 import { LayerInfo } from 'src/js/helpers/shareFunctionality';
+import { LayerProps } from 'js/store/mapview/types';
+import { fetchLegendInfo } from '../legendInfo';
 export function determineLayerOpacity(
   apiLayer: any,
   layerInfosFromURL: LayerInfo[]
@@ -49,4 +51,83 @@ export function determineLayerVisibility(
     }
     return visibility;
   }
+}
+
+export async function extractWebmapLayerObjects(
+  esriMap?: __esri.Map
+): Promise<LayerProps[]> {
+  const mapLayerObjects: LayerProps[] = [];
+  if (!esriMap) return [];
+  const layerArray = esriMap.layers.toArray() as any;
+  for (const layer of layerArray) {
+    //Get the legend information for each layer
+    let legendInfo = await fetchLegendInfo(layer.url);
+    if (layer.sublayers && layer.sublayers.length > 0) {
+      layer.sublayers.forEach((sub: any) => {
+        //get sublayer legend info
+        const sublayerLegendInfo = legendInfo.layers.find(
+          (l: any) => l.layerId === sub.id
+        );
+        //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
+        sub.opacity = sub.opacity ? sub.opacity : 1;
+        const {
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          url,
+          maxScale,
+          minScale
+        } = sub;
+        mapLayerObjects.push({
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          group: 'webmap',
+          type: 'webmap',
+          origin: 'webmap',
+          url,
+          maxScale,
+          minScale,
+          sublayer: true,
+          parentID: sub.layer.id,
+          legendInfo: sublayerLegendInfo?.legend
+        });
+      });
+    } else {
+      //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
+      legendInfo = layer.layerId
+        ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId).legend
+        : legendInfo;
+      const {
+        id,
+        title,
+        opacity,
+        visible,
+        definitionExpression,
+        url,
+        maxScale,
+        minScale
+      } = layer;
+      mapLayerObjects.push({
+        id,
+        title,
+        opacity,
+        visible,
+        definitionExpression,
+        group: 'webmap',
+        type: 'webmap',
+        origin: 'webmap',
+        url,
+        maxScale,
+        minScale,
+        sublayer: false,
+        legendInfo
+      });
+    }
+  }
+  return mapLayerObjects;
 }
