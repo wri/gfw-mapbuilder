@@ -7,4 +7,5 @@ export interface LayerFactoryObject {
   url: string;
   type: string;
   metadata: any;
+  layerIds?: number[];
 }

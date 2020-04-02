@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
@@ -12,19 +13,34 @@ import store from 'js/store/index';
 
 import { LayerFactoryObject } from 'js/interfaces/mapping';
 
+interface LayerOptions {
+  id: string;
+  title: string;
+  visible: boolean;
+  url: string;
+  sublayers?: { id: number; visible: boolean }[];
+}
+
 export function LayerFactory(
   mapView: any,
   layerConfig: LayerFactoryObject
 ): Layer {
   let esriLayer;
   switch (layerConfig.type) {
+    //check for subs and enabled those that were spercified
     case 'dynamic':
-      esriLayer = new MapImageLayer({
+      const layerOptions: LayerOptions = {
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url
-      });
+      };
+      if (layerConfig.layerIds) {
+        layerOptions.sublayers = layerConfig.layerIds.map(id => {
+          return { id: id, visible: true };
+        });
+      }
+      esriLayer = new MapImageLayer(layerOptions);
       break;
     case 'image':
       const { appState } = store.getState();

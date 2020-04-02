@@ -288,7 +288,7 @@ export class MapController {
                   url = apiLayer.url;
                   type = apiLayer.type;
                   origin = 'service';
-                  layerIds = apiLayer.layerIds ? apiLayer.layerIds : null;
+                  layerIds = apiLayer.layerIds;
                 }
 
                 resouceLayerSpecs.push({
@@ -299,7 +299,8 @@ export class MapController {
                   definitionExpression: resourceDefinitionExpression,
                   url: url,
                   type: type,
-                  metadata
+                  metadata,
+                  layerIds
                 });
 
                 resourceLayerObjects.push({
