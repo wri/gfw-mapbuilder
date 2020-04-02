@@ -60,8 +60,13 @@ import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
 import {
   parseURLandApplyChanges,
-  getLayerInfoFromURL
+  getLayerInfoFromURL,
+  LayerInfo
 } from 'js/helpers/shareFunctionality';
+import {
+  determineLayerOpacity,
+  determineLayerVisibility
+} from 'js/helpers/mapController/miscLayerHelpers';
 
 interface URLCoordinates {
   zoom: number;
@@ -77,6 +82,8 @@ interface Popup {
   content: any;
   title: any;
 }
+
+interface GFWApiLayer {}
 
 interface RemoteDataLayer {
   layer: {
@@ -109,11 +116,6 @@ interface RemoteDataLayer {
   visible?: boolean;
   layerIds?: any[];
 }
-type LayerInfoFromUrl = {
-  layerID: string;
-  sublayerID: string | number | null;
-  opacity: number;
-};
 
 export class MapController {
   _map: Map | undefined;
@@ -177,7 +179,7 @@ export class MapController {
           });
 
           //In case of sharing functionality, check for URL containing layer visibility and opacity information
-          const layerInfosFromURL: LayerInfoFromUrl[] = getLayerInfoFromURL();
+          const layerInfosFromURL = getLayerInfoFromURL();
 
           //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
           if (layerInfosFromURL.length) {
@@ -204,54 +206,14 @@ export class MapController {
                 if (!apiLayer) return; //apiLayer may be undefined if we failed to retrieve layer data from api for some reason
                 let resourceId;
                 let resourceTitle;
-
-                //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-                function determineLayerOpacity(): number {
-                  //Check For layer in the URL state first
-                  const resourceLayerID = apiLayer.dataLayer
-                    ? apiLayer.dataLayer.id
-                    : apiLayer.id;
-                  const layerInfoFromURL = layerInfosFromURL.find(
-                    l => l.layerID === resourceLayerID
-                  );
-                  if (layerInfoFromURL) {
-                    return layerInfoFromURL.opacity;
-                  } else {
-                    //we are not dealing with URL hash, use resources.js > API > default 1 logic
-                    let opacity = apiLayer.dataLayer?.opacity;
-                    if (!opacity && opacity !== 0) {
-                      //nothing in the resources to do with opacity, try the response's oapcity
-                      opacity = apiLayer.layer?.opacity;
-                    }
-                    return opacity ?? 1; //if all fails, default to 1
-                  }
-                }
-
-                //Helper to determine layer visibility
-                function determineLayerVisibility(): boolean {
-                  const resourceLayerID = apiLayer.dataLayer
-                    ? apiLayer.dataLayer.id
-                    : apiLayer.id;
-                  const layerInfoFromURL = layerInfosFromURL.find(
-                    l => l.layerID === resourceLayerID
-                  );
-                  if (layerInfoFromURL) {
-                    return true;
-                  } else {
-                    let visibility;
-                    if (apiLayer.dataLayer) {
-                      visibility = apiLayer.dataLayer.visible
-                        ? apiLayer.dataLayer.visible
-                        : false;
-                    } else {
-                      visibility = apiLayer.visible ? apiLayer.visible : false;
-                    }
-                    return visibility;
-                  }
-                }
-
-                const resourceOpacity = determineLayerOpacity();
-                const resourceVisibility = determineLayerVisibility();
+                const resourceOpacity = determineLayerOpacity(
+                  apiLayer,
+                  layerInfosFromURL
+                );
+                const resourceVisibility = determineLayerVisibility(
+                  apiLayer,
+                  layerInfosFromURL
+                );
 
                 let resourceDefinitionExpression;
                 let resourceGroup;
@@ -263,6 +225,7 @@ export class MapController {
                 let origin = '' as LayerOrigin;
                 let layerIds;
                 let label;
+                let legendInfo;
                 if (apiLayer.dataLayer) {
                   //Deal with remote data layers
                   metadata = apiLayer.layer.metadata;
@@ -280,7 +243,12 @@ export class MapController {
                   metadata.inputRange = apiLayer.layer.inputRange;
                   metadata.outputRange = apiLayer.layer.outputRange;
                 } else {
+                  // Handle all SERVICE Layers here
                   // All other service layers info should be in resources file
+                  // const legendInfoObject = await fetchLegendInfo(apiLayer.url);
+                  // const layerLegendInfo = legendInfoObject.layers.filter((l: any) => apiLayer.layerIds?.includes(l.layerId));
+                  // console.log("MapController -> initializeMap -> layerLegendInfo", layerLegendInfo)
+                  // legendInfo = layerLegendInfo.map((l: any) => l.legend);
                   resourceId = apiLayer.id;
                   resourceTitle = apiLayer.label[appState.selectedLanguage]
                     ? apiLayer.label[appState.selectedLanguage]
@@ -320,7 +288,8 @@ export class MapController {
                   sublabel,
                   popup,
                   layerIds,
-                  label
+                  label,
+                  legendInfo
                 });
               });
 
@@ -1647,7 +1616,7 @@ export class MapController {
 
   //Helper to deal with URL params and Webmap loaded layers
 
-  syncWebmapLayersWithURL(layerInfosFromURL: LayerInfoFromUrl[]): void {
+  syncWebmapLayersWithURL(layerInfosFromURL: LayerInfo[]): void {
     this._map?.layers.forEach((webmapLayer: any) => {
       if (webmapLayer.sublayers && webmapLayer.sublayers.length > 0) {
         webmapLayer.sublayers.forEach((sub: Layer) => {

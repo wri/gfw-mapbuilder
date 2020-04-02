@@ -72,7 +72,7 @@ export function getShareableURL(): string {
 }
 
 //Retrieves layer information from URL hash
-interface LayerInfo {
+export interface LayerInfo {
   layerID: string;
   sublayerID: string | number | null;
   opacity: number;
