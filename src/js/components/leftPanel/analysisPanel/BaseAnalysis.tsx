@@ -45,13 +45,9 @@ const BaseAnalysis = (): JSX.Element => {
     //On Base analysis tab we need to fire registration to geostore for the selected feature or the drawn/uploaded shape
     //Determine if we have the geostore already or we need to register it
     if (!activeLayer || activeFeature.attributes.hasOwnProperty('geostoreId')) {
-      console.log(
-        'we have no features or it already has geostoreID, do nothing'
-      );
       setGeostoreReady(true);
       return;
     } else {
-      console.log('feature does not exist, we need to register it');
       registerGeometry(activeFeature)
         .then(response => response.json())
         .then(res => {
@@ -66,7 +62,6 @@ const BaseAnalysis = (): JSX.Element => {
   }, [activeFeatures, activeFeatureIndex]);
 
   function runAnalysis() {
-    console.log('runAnalysis', selectedAnalysis);
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
@@ -78,9 +73,6 @@ const BaseAnalysis = (): JSX.Element => {
       )
         .then((response: any) => response.json())
         .then((analysisMod: any) => {
-          console.log(activeFeature.attributes.geostoreId);
-          console.log('analysisMod', analysisMod);
-          console.log(analysisMod.data.widgetConfig);
           //TODO: we need to handle loading and error states
           setVegaSpec(analysisMod.data.attributes.widgetConfig);
         });
@@ -91,16 +83,15 @@ const BaseAnalysis = (): JSX.Element => {
     const currentAnalysis = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
-    console.log(currentAnalysis);
     if (selectedAnalysis === 'default') {
       return (
         <>
           <div className="analysis-text">
             <p style={{ fontWeight: 'bold' }}>
-              {analysisTranslations.ANALYSIS_NOT_SELECTED[selectedLanguage][0]}
+              {analysisTranslations.analysisNotSelected[selectedLanguage][0]}
             </p>
             <p>
-              {analysisTranslations.ANALYSIS_NOT_SELECTED[selectedLanguage][1]}
+              {analysisTranslations.analysisNotSelected[selectedLanguage][1]}
             </p>
           </div>
           <div className="chart-icon"></div>
@@ -145,7 +136,7 @@ const BaseAnalysis = (): JSX.Element => {
         onChange={e => setSelectedAnalysis(e.target.value)}
       >
         <option value="default">
-          {analysisTranslations.DEFAULT_ANALYSIS_LABEL[selectedLanguage]}
+          {analysisTranslations.defaultAnalysisLabel[selectedLanguage]}
         </option>
         {analysisModules.map((module: any, i: number) => {
           return (
@@ -199,7 +190,7 @@ const BaseAnalysis = (): JSX.Element => {
             }
             onClick={runAnalysis}
           >
-            {analysisTranslations.RUN_ANALYSIS_BUTTON_TEXT[selectedLanguage]}
+            {analysisTranslations.runAnalysisButton[selectedLanguage]}
           </button>
         </div>
       ) : (

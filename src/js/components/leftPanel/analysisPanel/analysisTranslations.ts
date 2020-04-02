@@ -1,5 +1,5 @@
 export default {
-  RUN_ANALYSIS_BUTTON_TEXT: {
+  runAnalysisButton: {
     en: 'Run Analysis',
     fr: "Exécuter L'analyse",
     ka: 'Run Analysis',
@@ -7,7 +7,7 @@ export default {
     pt: 'Run Analysis',
     id: 'Run Analysis'
   },
-  DEFAULT_ANALYSIS_LABEL: {
+  defaultAnalysisLabel: {
     en: 'Select analysis...',
     fr: "Sélectionner l'analyse...",
     ka: 'Select analysis...',
@@ -16,7 +16,7 @@ export default {
     id: 'Select analysis...',
     zh: 'Select analysis...'
   },
-  ANALYSIS_NOT_SELECTED: {
+  analysisNotSelected: {
     en: [
       'Analysis not selected',
       'Select an analysis from the drop-down menu to begin.'
