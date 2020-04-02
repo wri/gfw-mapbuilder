@@ -14,11 +14,28 @@
 
   .documents-container {
     display: flex;
+    flex-wrap: wrap;
     padding: 1rem;
     font-family: $fira-sans;
+    color: #6f6f6f;
+    font-weight: normal;
+
+    .feature-collection-title {
+      flex-wrap: wrap;
+      border-bottom: 1px solid #aaa;
+      width: 100%;
+      font-size: 1.1rem;
+      font-weight: normal;
+      padding-bottom: 0.5rem;
+    }
+
+    .no-documents {
+      font-size: 0.85rem;
+      text-align: center;
+    }
 
     table {
-      width: 100%;
+      width: 15rem;
 
       .file-name {
         max-width: 1rem;
@@ -29,17 +46,26 @@
 
       th,
       td {
-        text-align: left;
         padding: 0.25em;
+        text-align: center;
+      }
+
+      th {
+        font-size: 0.85rem;
+        font-weight: 700;
       }
 
       tr {
         border-bottom: 1px solid #ddd;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .custom-horizontal-rule {
         padding: 0.25rem 0;
-        border-bottom: 1px solid black;
+        border-bottom: 0.5px solid $black;
       }
     }
   }

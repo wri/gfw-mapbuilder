@@ -65,7 +65,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
     }
   }, [tabViewIsVisible]);
 
-  const returnDocuments = (): Array<JSX.Element> | JSX.Element => {
+  const returnDocuments = (): Array<JSX.Element> | undefined => {
     if (allAttachments && allAttachments.length) {
       return allAttachments.map(
         (attachment: AttachmentWithURLProps, key: number) => {
@@ -74,21 +74,19 @@ const DocumentsTabView = (props: Props): JSX.Element => {
             <Fragment key={key}>
               <tr>
                 <td title={name} className="file-name">
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    {name}
-                  </a>
+                  {name}
                 </td>
                 <td>{Math.round(size / 1000)} KB</td>
                 <td>
-                  <DocIcon height={20} width={20} fill={'#555'} />
+                  <a href={url} target="_blank" rel="noopener noreferrer">
+                    <DocIcon height={20} width={20} fill={'#F0AB00'} />
+                  </a>
                 </td>
               </tr>
             </Fragment>
           );
         }
       );
-    } else {
-      return <>There are no attachments at this time.</>;
     }
   };
 
@@ -96,22 +94,32 @@ const DocumentsTabView = (props: Props): JSX.Element => {
     <div className="documents-container">
       {tabViewIsVisible && (
         <>
-          <table className="documents-table">
-            <thead className="feature-collection-title">
+          {allAttachments && allAttachments.length ? (
+            <h3 className="feature-collection-title">
               {featureCollectionTitle}
-            </thead>
-            <div className="custom-horizontal-rule" />
-            {allAttachments && allAttachments.length ? (
-              <thead className="table-headers">
-                <tr>
-                  <th>Name</th>
-                  <th>Size</th>
-                  <th>PDF</th>
-                </tr>
-              </thead>
-            ) : null}
-            <tbody>{returnDocuments()}</tbody>
-          </table>
+            </h3>
+          ) : null}
+          {allAttachments && allAttachments.length ? (
+            <>
+              <table className="documents-table">
+                <thead className="table-headers">
+                  <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>PDF</th>
+                  </tr>
+                </thead>
+                <tbody>{returnDocuments()}</tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              <p className="no-documents">
+                Select an area of interest to see if there are any related
+                documents.
+              </p>
+            </>
+          )}
         </>
       )}
     </div>
