@@ -63,6 +63,7 @@ import {
   determineLayerVisibility,
   extractWebmapLayerObjects
 } from 'js/helpers/mapController/miscLayerHelpers';
+import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 interface URLCoordinates {
   zoom: number;
@@ -200,11 +201,15 @@ export class MapController {
               newRemoteLayerObject.parentID = undefined;
             } else {
               //dealing with resouces (config file) layers
-              // All other service layers info should be in resources file
-              // const legendInfoObject = await fetchLegendInfo(apiLayer.url);
-              // const layerLegendInfo = legendInfoObject.layers.filter((l: any) => apiLayer.layerIds?.includes(l.layerId));
-              // console.log("MapController -> initializeMap -> layerLegendInfo", layerLegendInfo)
-              // legendInfo = layerLegendInfo.map((l: any) => l.legend);
+
+              //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
+              const legendInfoObject = await fetchLegendInfo(
+                remoteLayerObject.url
+              );
+              const layerLegendInfo = legendInfoObject.layers.filter((l: any) =>
+                remoteLayerObject.layerIds?.includes(l.layerId)
+              );
+              newRemoteLayerObject.legendInfo = layerLegendInfo;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
                 appState.selectedLanguage
