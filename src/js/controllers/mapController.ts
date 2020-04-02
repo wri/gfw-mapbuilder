@@ -79,11 +79,9 @@ interface Popup {
 }
 
 interface RemoteDataLayer {
-  // layer: object;
   layer: {
     opacity: number;
     metadata: any;
-    label: object;
     url: string;
     type: string;
     popup?: Popup;
@@ -91,6 +89,7 @@ interface RemoteDataLayer {
     colormap?: any;
     inputRange: any;
     outputRange: any;
+    label: any;
     // [key: string]: object
   };
   dataLayer?: {
@@ -263,6 +262,7 @@ export class MapController {
                 let sublabel;
                 let origin = '' as LayerOrigin;
                 let layerIds;
+                let label;
                 if (apiLayer.dataLayer) {
                   //Deal with remote data layers
                   metadata = apiLayer.layer.metadata;
@@ -276,6 +276,7 @@ export class MapController {
                   type = apiLayer.layer.type;
                   origin = 'remote';
                   metadata.colormap = apiLayer.layer.colormap;
+                  label = apiLayer.layer.label;
                   metadata.inputRange = apiLayer.layer.inputRange;
                   metadata.outputRange = apiLayer.layer.outputRange;
                 } else {
@@ -289,6 +290,7 @@ export class MapController {
                   type = apiLayer.type;
                   origin = 'service';
                   layerIds = apiLayer.layerIds;
+                  label = apiLayer.label;
                 }
 
                 resouceLayerSpecs.push({
@@ -317,7 +319,8 @@ export class MapController {
                   metadata,
                   sublabel,
                   popup,
-                  layerIds
+                  layerIds,
+                  label
                 });
               });
 
@@ -516,7 +519,6 @@ export class MapController {
   }
 
   changeLanguage(lang: string): void {
-    //changing lang!
     store.dispatch(setLanguage(lang));
     const resourceLayers: Layer[] = [];
     if (this._map) {
@@ -527,6 +529,10 @@ export class MapController {
           return availableLayer.group !== 'webmap' && availableLayer.title;
         })
         .forEach(resourceLayer => {
+          // Match layers title with active language
+          resourceLayer.title = resourceLayer?.label[lang]
+            ? resourceLayer.label[lang]
+            : 'Untitled Layer';
           if (this._map) {
             resourceLayers.push(this._map.findLayerById(resourceLayer.id));
           }
