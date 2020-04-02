@@ -17,7 +17,6 @@ import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
-import { once } from 'esri/core/watchUtils';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 
 import { RefObject } from 'react';
@@ -85,6 +84,7 @@ export class MapController {
   _printTask: PrintTask | undefined;
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
+  _domRef: RefObject<any>;
 
   constructor() {
     this._map = undefined;
@@ -96,6 +96,7 @@ export class MapController {
   }
 
   initializeMap(domRef: RefObject<any>): void {
+    this._domRef = domRef;
     const { appSettings, appState } = store.getState();
 
     const webmapID =
@@ -325,92 +326,134 @@ export class MapController {
   }
 
   changeLanguage(lang: string): void {
-    store.dispatch(setLanguage(lang));
-    const resourceLayers: Layer[] = [];
-    if (this._map) {
-      store
-        .getState()
-        .mapviewState.allAvailableLayers.filter(availableLayer => {
-          //TODO: doing additional check for title existnce this is to do with graphics layers that do not get flushed when lang changes, need better solution
-          return availableLayer.group !== 'webmap' && availableLayer.title;
-        })
-        .forEach(resourceLayer => {
-          // Match layers title with active language
-          resourceLayer.title = resourceLayer?.label[lang]
-            ? resourceLayer.label[lang]
-            : 'Untitled Layer';
-          if (this._map) {
-            resourceLayers.push(this._map.findLayerById(resourceLayer.id));
-          }
-        });
-      this._map.removeMany(resourceLayers);
-    }
+    // store.dispatch(setLanguage(lang));
+    if (!this._map) return;
+    const allAvailableLayers = store.getState().mapviewState.allAvailableLayers;
+    const {
+      language,
+      webmap,
+      alternativeWebmap
+    } = store.getState().appSettings;
 
+    const newWebMapId = lang === language ? webmap : alternativeWebmap;
+    const nonWebmapLayers = allAvailableLayers.filter(
+      layer => layer.origin !== 'webmap'
+    );
+    const esriNonWebmapLayers = nonWebmapLayers.map((l: LayerProps) => {
+      const layerOnMap = this._map?.findLayerById(l.id);
+      return layerOnMap;
+    });
+    console.log(esriNonWebmapLayers);
+    console.log(
+      'MapController -> changeLanguage -> nonWebmapLayers',
+      nonWebmapLayers
+    );
+
+    this._map.removeAll();
     this._map = undefined;
-    const appSettings = store.getState().appSettings;
-    const newWebMap =
-      lang === appSettings.language
-        ? appSettings.webmap
-        : appSettings.alternativeWebmap;
-
     this._map = new WebMap({
-      portalItem: {
-        id: newWebMap
-      }
+      portalItem: { id: newWebMapId }
+    });
+    this._mapview = new MapView({
+      map: this._map,
+      container: this._domRef.current
+    });
+    this._mapview.when(() => {
+      store.dispatch(isMapReady(true));
+      //@ts-ignore
+
+      const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
+        this._map
+      );
+      const allLayerObjects = [...nonWebmapLayers, ...mapLayerObjects] as const;
+      console.log(allLayerObjects);
     });
 
-    if (this._mapview) {
-      this._mapview.map = this._map;
-      this._mapview
-        .when(
-          () => {
-            store.dispatch(isMapReady(true));
-            if (this._map) {
-              once(this._map, 'loaded', async () => {
-                const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
-                  this._map
-                );
+    // const resourceLayers: Layer[] = [];
+    // if (this._map) {
+    //   store
+    //     .getState()
+    //     .mapviewState.allAvailableLayers.filter(availableLayer => {
+    //       //TODO: doing additional check for title existnce this is to do with graphics layers that do not get flushed when lang changes, need better solution
+    //       return availableLayer.group !== 'webmap' && availableLayer.title;
+    //     })
+    //     .forEach(resourceLayer => {
+    //       // Match layers title with active language
+    //       resourceLayer.title = resourceLayer?.label[lang]
+    //         ? resourceLayer.label[lang]
+    //         : 'Untitled Layer';
+    //       if (this._map) {
+    //         resourceLayers.push(this._map.findLayerById(resourceLayer.id));
+    //       }
+    //     });
+    //   this._map.removeMany(resourceLayers);
+    // }
 
-                const prevMapObjects = store
-                  .getState()
-                  .mapviewState.allAvailableLayers.filter(
-                    availableLayer => availableLayer.group !== 'webmap'
-                  );
+    // this._map = undefined;
+    // const appSettings = store.getState().appSettings;
+    // const newWebMap =
+    //   lang === appSettings.language
+    //     ? appSettings.webmap
+    //     : appSettings.alternativeWebmap;
 
-                const allLayerObjects = [...prevMapObjects, ...mapLayerObjects];
+    // this._map = new WebMap({
+    //   portalItem: {
+    //     id: newWebMap
+    //   }
+    // });
 
-                store.dispatch(allAvailableLayers(allLayerObjects));
+    // if (this._mapview) {
+    //   this._mapview.map = this._map;
+    //   this._mapview
+    //     .when(
+    //       () => {
+    //         store.dispatch(isMapReady(true));
+    //         if (this._map) {
+    //           once(this._map, 'loaded', async () => {
+    //             const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
+    //               this._map
+    //             );
 
-                this._map?.addMany(resourceLayers);
-                //Retrieve sorted layer array
-                const mapLayerIDs = getSortedLayers(
-                  appSettings.layerPanel,
-                  allLayerObjects,
-                  this._map
-                );
+    //             const prevMapObjects = store
+    //               .getState()
+    //               .mapviewState.allAvailableLayers.filter(
+    //                 availableLayer => availableLayer.group !== 'webmap'
+    //               );
 
-                //Reorder layers on the map!
-                this._map?.layers.forEach((layer: any) => {
-                  const layerIndex = mapLayerIDs?.findIndex(
-                    i => i === layer.id
-                  );
-                  if (layerIndex && layerIndex !== -1) {
-                    this._map?.reorder(layer, layerIndex);
-                  }
-                });
-              });
-            }
-          },
-          (error: Error) => {
-            console.log('error in change Language mapView constructor', error);
-            store.dispatch(mapError(true));
-          }
-        )
-        .catch((error: Error) => {
-          console.log('error in change Language mapView constructor', error);
-          store.dispatch(mapError(true));
-        });
-    }
+    //             const allLayerObjects = [...prevMapObjects, ...mapLayerObjects];
+
+    //             store.dispatch(allAvailableLayers(allLayerObjects));
+
+    //             this._map?.addMany(resourceLayers);
+    //             //Retrieve sorted layer array
+    //             const mapLayerIDs = getSortedLayers(
+    //               appSettings.layerPanel,
+    //               allLayerObjects,
+    //               this._map
+    //             );
+    //             console.log(mapLayerIDs);
+    //             //Reorder layers on the map!
+    //             this._map?.layers.forEach((layer: any) => {
+    //               const layerIndex = mapLayerIDs?.findIndex(
+    //                 i => i === layer.id
+    //               );
+    //               if (layerIndex && layerIndex !== -1) {
+    //                 this._map?.reorder(layer, layerIndex);
+    //               }
+    //             });
+    //           });
+    //         }
+    //       },
+    //       (error: Error) => {
+    //         console.log('error in change Language mapView constructor', error);
+    //         store.dispatch(mapError(true));
+    //       }
+    //     )
+    //     .catch((error: Error) => {
+    //       console.log('error in change Language mapView constructor', error);
+    //       store.dispatch(mapError(true));
+    //     });
+    // }
   }
 
   log(): void {

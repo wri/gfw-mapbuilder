@@ -672,7 +672,7 @@ module.exports = {
     },
     GROUP_TEST: {
       grouptype: 'default',
-      order: 9999,
+      order: 7,
       label: {
         en: 'TEST',
         fr: 'TEST',
@@ -683,41 +683,41 @@ module.exports = {
         ka: 'TEST'
       },
       layers: [
-        // {
-        //   order: 89,
-        //   id: 'CTC2',
-        //   type: 'dynamic',
-        //   url:
-        //     'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-        //   layerIds: [3],
-        //   technicalName: 'ind_treecover2',
-        //   visible: true,
-        //   label: {
-        //     en:
-        //       'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
-        //   }
-        // },
-        // {
-        //   order: 88,
-        //   id: 'CTC',
-        //   type: 'dynamic',
-        //   url:
-        //     'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-        //   layerIds: [2],
-        //   technicalName: 'ind_treecover',
-        //   visible: true,
-        //   label: {
-        //     en:
-        //       'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
-        //   }
-        // },
         {
-          order: 79,
+          order: 3,
+          id: 'CTC2',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+          layerIds: [3],
+          technicalName: 'ind_treecover2',
+          visible: true,
+          label: {
+            en:
+              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
+          }
+        },
+        {
+          order: 2,
+          id: 'CTC',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+          layerIds: [2],
+          technicalName: 'ind_treecover',
+          visible: true,
+          label: {
+            en:
+              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+          }
+        },
+        {
+          order: 1,
           id: 'MTC',
           type: 'dynamic',
           url:
             'https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer',
-          layerIds: [1],
+          layerIds: [1, 7],
           technicalName: 'ind_statecarbon',
           visible: true,
           label: {
