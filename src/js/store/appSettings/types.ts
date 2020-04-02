@@ -31,15 +31,17 @@ type LayerGroup = {
 
 interface AnalysisModule {
   analysisId: string;
-  label: {
-    en: string;
-  };
+  chartType: string;
+  label: { [key: string]: string };
   title: {
-    en: string;
+    [key: string]: string;
+  };
+  description: {
+    [key: string]: string;
   };
   useGfwWidget: boolean;
   widgetId: string;
-  uiParams: object[];
+  uiParams: any;
 }
 
 export interface LayerGroupInfo {

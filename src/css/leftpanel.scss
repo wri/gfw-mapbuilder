@@ -126,6 +126,82 @@
       }
     }
   }
+
+  .base-analysis-content {
+    color: #6f6f6f;
+    padding: 6px;
+    .chart-icon {
+      background-image: url('../images/chart-icon.svg');
+      height: 180px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .layer-title {
+      font-size: 1.15em;
+      border-bottom: 1px solid #aaa;
+      font-weight: normal;
+      padding: 0;
+      margin: 0;
+    }
+    .analysis-text {
+      text-align: center;
+    }
+    .analysis-select {
+      /* styling */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      position: relative;
+      background-color: #fff;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAA21BMVEUAAADwrQDwqwDwqwDwqwDvqgDwqwDvrADwqwDwqwDwqwDwqwDwqwDwqwDyqgDwqwDwqwDtrADxrADwqwDvrQDwqwDwqwDwqgDxqwDxqwDypgDwqwDwqwDzrgDvqwDxqgDqqgDwqwDwqwDrsQDxqgDxqwD/qgDwqgDwrAD/vwDxrADwqgDvqwDwqwDxrADwpQDwqwDwqwDyrgDxqwDvqwDxqgDwqwDwqwDzqADurgDvqwDvrADxqgDvrADvqwD/mQDwrADwrAD/tgDvrQDvqwDwqgDwrADwqwAAAADkB7tnAAAAR3RSTlMARJiqQ2D+X9va9Oyrpyf7/Cufnh/4+SGPjhTx8xaAfgzp6g1sagPT1gRHtbP6kBHr7hNt1Ui3tikslJMScXAF2dwHQUAzlnfvwocAAAABYktHRACIBR1IAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AITETE4itYuTgAAANtJREFUOMuVk9cWglAMBCMidhC72BV7772L/P8fKYrUm+txX2dekmwAfsbDeNEwLICPUynh/BBQqQlCiC6EIUIXosALNB4TAeI0IfEaM5nCeTqjLSKLC7n3pqQ8xgvFzy5LmFDWl12pknmt/j2HTBYaxr2aLRJvd8yLsiSha715z837tlLwAycXRHtthk4h6+jVaGznk6mzeTO7ILuq2ZljIxrltQoLUr2XJl8R+782RhU25A/ZfoUd8kL7sD6ihD3Z4SMc0S88nTV+uaIC3NKvot6BEuXxUOC/PAFiMpgDflFNswAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMC0wMi0xOVQxNzo0OTo1NiswMDowMKV1IaYAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjAtMDItMTlUMTc6NDk6NTYrMDA6MDDUKJkaAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAABJRU5ErkJggg==);
+      background-repeat: no-repeat, repeat;
+      background-position: right 0.7em top 50%, 0 0;
+      background-size: 0.75em auto, 100%;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      display: block;
+      height: 100%;
+      border-radius: 0;
+      margin-top: 10px;
+      padding: 0.1em 0.5em 0.1em 0.5em;
+      left: 0;
+      top: 0;
+    }
+    .disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+    .ui-analysis-wrapper {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+    }
+    .ui-description {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+      p {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+      }
+      .number {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        width: 25px;
+        height: 25px;
+        border: 1px solid;
+        border-radius: 50%;
+        p {
+          font-weight: 700;
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
+  }
 }
 
 .tabview-container {

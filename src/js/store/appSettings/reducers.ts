@@ -25,16 +25,20 @@ const initialState: AppSettings = {
   alternativeNarrative: '',
   analysisModules: [
     {
-      analysisId: 'analyze',
+      analysisId: '',
       label: {
-        en: 'module'
+        en: ''
       },
       title: {
-        en: 'module'
+        en: ''
       },
-      useGfwWidget: true,
-      widgetId: 'aa',
-      uiParams: [{}]
+      description: {
+        en: ''
+      },
+      useGfwWidget: false,
+      chartType: '',
+      uiParams: [],
+      widgetId: ''
     }
   ]
 };
