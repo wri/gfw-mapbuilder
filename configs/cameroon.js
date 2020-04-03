@@ -615,7 +615,7 @@ module.exports = {
     },
     GROUP_LCD: {
       grouptype: 'default',
-      order: 1,
+      order: 7,
       label: {
         en: 'Land Cover Dynamics',
         fr: 'Evolution de la couverture des sols',
@@ -672,7 +672,7 @@ module.exports = {
     },
     GROUP_TEST: {
       grouptype: 'default',
-      order: 7,
+      order: 1,
       label: {
         en: 'TEST',
         fr: 'TEST',

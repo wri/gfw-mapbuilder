@@ -326,9 +326,8 @@ export class MapController {
   }
 
   changeLanguage(lang: string): void {
-    // store.dispatch(setLanguage(lang));
     if (!this._map) return;
-    const allAvailableLayers = store.getState().mapviewState.allAvailableLayers;
+    const { mapviewState, appSettings } = store.getState();
     const {
       language,
       webmap,
@@ -336,18 +335,13 @@ export class MapController {
     } = store.getState().appSettings;
 
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
-    const nonWebmapLayers = allAvailableLayers.filter(
+    const nonWebmapLayers = mapviewState.allAvailableLayers.filter(
       layer => layer.origin !== 'webmap'
     );
     const esriNonWebmapLayers = nonWebmapLayers.map((l: LayerProps) => {
       const layerOnMap = this._map?.findLayerById(l.id);
       return layerOnMap;
     });
-    console.log(esriNonWebmapLayers);
-    console.log(
-      'MapController -> changeLanguage -> nonWebmapLayers',
-      nonWebmapLayers
-    );
 
     this._map.removeAll();
     this._map = undefined;
@@ -358,102 +352,54 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
-    this._mapview.when(() => {
+    this._mapview.when(async () => {
+      //Set default state and other event listeners
       store.dispatch(isMapReady(true));
-      //@ts-ignore
+      store.dispatch(setLanguage(lang));
+      store.dispatch(changeMapScale(this._mapview.scale));
+      //zoom level listener
+      this._mapview.watch('scale', newScale => {
+        store.dispatch(changeMapScale(newScale));
+      });
+      this._mapview.on('click', event => {
+        store.dispatch(setActiveFeatures([]));
+        store.dispatch(setActiveFeatureIndex([0, 0]));
+        store.dispatch(selectActiveTab('data'));
+        queryLayersForFeatures(this._mapview, this._map, event);
+      });
 
+      this.initializeAndSetSketch();
       const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
         this._map
       );
-      const allLayerObjects = [...nonWebmapLayers, ...mapLayerObjects] as const;
-      console.log(allLayerObjects);
+
+      //Update the layer objects with new titles based on current language
+      const updatedLayerObjects = nonWebmapLayers.map(layerObject => {
+        const layerTitle = layerObject.label[lang]
+          ? layerObject.label[lang]
+          : 'Untitled Layer';
+        layerObject.title = layerTitle;
+        return layerObject;
+      });
+      //
+      //Add non webmap layers to the map
+      //@ts-ignore
+      this._map?.addMany(esriNonWebmapLayers);
+      const allLayerObjects = [...updatedLayerObjects, ...mapLayerObjects];
+      store.dispatch(allAvailableLayers(allLayerObjects));
+      const mapLayerIDs = getSortedLayers(
+        appSettings.layerPanel,
+        allLayerObjects,
+        this._map
+      );
+      //Reorder layers on the map!
+      this._map?.layers.forEach((layer: any) => {
+        const layerIndex = mapLayerIDs?.findIndex(i => i === layer.id);
+        if (layerIndex && layerIndex !== -1) {
+          this._map?.reorder(layer, layerIndex);
+        }
+      });
     });
-
-    // const resourceLayers: Layer[] = [];
-    // if (this._map) {
-    //   store
-    //     .getState()
-    //     .mapviewState.allAvailableLayers.filter(availableLayer => {
-    //       //TODO: doing additional check for title existnce this is to do with graphics layers that do not get flushed when lang changes, need better solution
-    //       return availableLayer.group !== 'webmap' && availableLayer.title;
-    //     })
-    //     .forEach(resourceLayer => {
-    //       // Match layers title with active language
-    //       resourceLayer.title = resourceLayer?.label[lang]
-    //         ? resourceLayer.label[lang]
-    //         : 'Untitled Layer';
-    //       if (this._map) {
-    //         resourceLayers.push(this._map.findLayerById(resourceLayer.id));
-    //       }
-    //     });
-    //   this._map.removeMany(resourceLayers);
-    // }
-
-    // this._map = undefined;
-    // const appSettings = store.getState().appSettings;
-    // const newWebMap =
-    //   lang === appSettings.language
-    //     ? appSettings.webmap
-    //     : appSettings.alternativeWebmap;
-
-    // this._map = new WebMap({
-    //   portalItem: {
-    //     id: newWebMap
-    //   }
-    // });
-
-    // if (this._mapview) {
-    //   this._mapview.map = this._map;
-    //   this._mapview
-    //     .when(
-    //       () => {
-    //         store.dispatch(isMapReady(true));
-    //         if (this._map) {
-    //           once(this._map, 'loaded', async () => {
-    //             const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
-    //               this._map
-    //             );
-
-    //             const prevMapObjects = store
-    //               .getState()
-    //               .mapviewState.allAvailableLayers.filter(
-    //                 availableLayer => availableLayer.group !== 'webmap'
-    //               );
-
-    //             const allLayerObjects = [...prevMapObjects, ...mapLayerObjects];
-
-    //             store.dispatch(allAvailableLayers(allLayerObjects));
-
-    //             this._map?.addMany(resourceLayers);
-    //             //Retrieve sorted layer array
-    //             const mapLayerIDs = getSortedLayers(
-    //               appSettings.layerPanel,
-    //               allLayerObjects,
-    //               this._map
-    //             );
-    //             console.log(mapLayerIDs);
-    //             //Reorder layers on the map!
-    //             this._map?.layers.forEach((layer: any) => {
-    //               const layerIndex = mapLayerIDs?.findIndex(
-    //                 i => i === layer.id
-    //               );
-    //               if (layerIndex && layerIndex !== -1) {
-    //                 this._map?.reorder(layer, layerIndex);
-    //               }
-    //             });
-    //           });
-    //         }
-    //       },
-    //       (error: Error) => {
-    //         console.log('error in change Language mapView constructor', error);
-    //         store.dispatch(mapError(true));
-    //       }
-    //     )
-    //     .catch((error: Error) => {
-    //       console.log('error in change Language mapView constructor', error);
-    //       store.dispatch(mapError(true));
-    //     });
-    // }
   }
 
   log(): void {

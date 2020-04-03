@@ -60,6 +60,7 @@ export async function extractWebmapLayerObjects(
   if (!esriMap) return [];
   const layerArray = esriMap.layers.toArray() as any;
   for (const layer of layerArray) {
+    if (layer.type === 'graphics') continue;
     //Get the legend information for each layer
     let legendInfo = await fetchLegendInfo(layer.url);
     if (layer.sublayers && layer.sublayers.length > 0) {
