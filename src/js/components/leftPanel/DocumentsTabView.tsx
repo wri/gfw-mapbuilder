@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { getDocuments } from 'js/helpers/mapController/Documents';
 
 import { RootState } from 'js/store';
-
 import { AttachmentWithURLProps } from 'js/interfaces/Attachment';
+
+import { documentsContent } from 'configs/leftPanel.config';
 
 import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
 
@@ -22,6 +23,11 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const { activeFeatures, activeFeatureIndex } = useSelector(
     (store: RootState) => store.mapviewState
   );
+  const { selectedLanguage } = useSelector(
+    (state: RootState) => state.appState
+  );
+
+  const { instructions, name, pdf, size } = documentsContent[selectedLanguage];
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
   const [featureCollectionIndex] = activeFeatureIndex;
@@ -102,9 +108,9 @@ const DocumentsTabView = (props: Props): JSX.Element => {
               <table className="documents-table">
                 <thead className="table-headers">
                   <tr>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>PDF</th>
+                    <th>{name}</th>
+                    <th>{size}</th>
+                    <th>{pdf}</th>
                   </tr>
                 </thead>
                 <tbody>{returnDocuments()}</tbody>
@@ -112,10 +118,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
             </>
           ) : (
             <>
-              <p className="no-documents">
-                Select an area of interest to see if there are any related
-                documents.
-              </p>
+              <p className="no-documents">{instructions}</p>
             </>
           )}
         </>
