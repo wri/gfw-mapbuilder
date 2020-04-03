@@ -204,12 +204,17 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              const legendInfoObject = await fetchLegendInfo(
-                remoteLayerObject.url
-              );
-              const layerLegendInfo = legendInfoObject.layers.filter((l: any) =>
-                remoteLayerObject.layerIds?.includes(l.layerId)
-              );
+              let legendInfoObject;
+              try {
+                legendInfoObject = await fetchLegendInfo(remoteLayerObject.url);
+              } catch (e) {
+                console.error('Error fetching Legend Info', e);
+              }
+              const layerLegendInfo =
+                legendInfoObject &&
+                legendInfoObject?.layers.filter((l: any) =>
+                  remoteLayerObject.layerIds?.includes(l.layerId)
+                );
               newRemoteLayerObject.legendInfo = layerLegendInfo;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
@@ -231,9 +236,11 @@ export class MapController {
 
           parseURLandApplyChanges();
           store.dispatch(allAvailableLayers(allLayerObjects));
-          const esriRemoteLayers = remoteLayerObjects.map(layerObject => {
-            return LayerFactory(this._mapview, layerObject);
-          });
+          const esriRemoteLayers = remoteLayerObjects
+            .map(layerObject => {
+              return LayerFactory(this._mapview, layerObject);
+            })
+            .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
           this._map?.addMany(esriRemoteLayers);
 
           //Retrieve sorted layer array

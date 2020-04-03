@@ -3,6 +3,7 @@ import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
+import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
@@ -107,6 +108,14 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
+        opacity: layerConfig.opacity
+      });
+      break;
+    case 'imagery':
+      esriLayer = new GraphicsLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
         opacity: layerConfig.opacity
       });
       break;
