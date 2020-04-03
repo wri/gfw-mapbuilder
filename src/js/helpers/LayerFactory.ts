@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
@@ -10,21 +11,33 @@ import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
 
-import { LayerFactoryObject } from 'js/interfaces/mapping';
+import { LayerProps } from 'js/store/mapview/types';
 
-export function LayerFactory(
-  mapView: any,
-  layerConfig: LayerFactoryObject
-): Layer {
+interface LayerOptions {
+  id: string;
+  title?: string;
+  visible: boolean;
+  url: string;
+  sublayers?: { id: number; visible: boolean }[];
+}
+
+export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
   let esriLayer;
   switch (layerConfig.type) {
+    //check for subs and enabled those that were spercified
     case 'dynamic':
-      esriLayer = new MapImageLayer({
+      const layerOptions: LayerOptions = {
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url
-      });
+      };
+      if (layerConfig.layerIds) {
+        layerOptions.sublayers = layerConfig.layerIds.map(id => {
+          return { id: id, visible: true };
+        });
+      }
+      esriLayer = new MapImageLayer(layerOptions);
       break;
     case 'image':
       const { appState } = store.getState();
