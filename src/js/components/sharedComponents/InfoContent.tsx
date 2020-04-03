@@ -5,11 +5,39 @@ import { RootState } from 'js/store';
 
 import { downloadData } from '../../../../configs/modal.config';
 
+//Extracting INFO from WebMaps
+const getWebmapGroupContent = async (layer: any): Promise<any> => {
+  // TODO [ ] IF metadata exists from ArcGIS, use it!
+  //    const metadataURL = `${layer.url}/info/metadata`;
+  //    const xmlResults = await fetch(metadataURL).then(res => res.text());
+  //    const results = convert.xml2js(xmlResults); // uses module 'xml-js'
+  //
+  // TODO [ ] ELSE, use the description and summary instead
+  return await fetch(`${layer.url}/?f=pjson`)
+    .then(res => res.json())
+    .then(results => {
+      return {
+        description: results.description,
+        copyrightText: results.copyrightText
+      };
+    });
+};
+
+//Extracting info from Service Layers with technicalName
+const getServiceGroupContent = async (technicalName: string): Promise<any> => {
+  // const technicalName = 'recent_satellite_imagery';
+  const baseURL = 'https://gis-gfw.wri.org/metadata';
+  const metaURL = `${baseURL}/${technicalName}`;
+  return await fetch(metaURL)
+    .then(res => res.json())
+    .then(results => {
+      return results;
+    });
+};
+
 const InfoContent: FunctionComponent<{}> = (): any => {
-  const [customContent, setCustomContent] = useState({
-    description: '',
-    copyrightText: ''
-  });
+  const [content, setContent] = useState<any>('');
+  const [dataLoading, setDataLoading] = useState(true);
 
   const { infoModalLayerID: layerID, selectedLanguage } = useSelector(
     (store: RootState) => store.appState
@@ -22,37 +50,39 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     (layer: any) => layer.id === layerID
   )[0];
 
-  const getWebmapGroupContent = async (): Promise<any> => {
-    // TODO [ ] IF metadata exists from ArcGIS, use it!
-    //    const metadataURL = `${layer.url}/info/metadata`;
-    //    const xmlResults = await fetch(metadataURL).then(res => res.text());
-    //    const results = convert.xml2js(xmlResults); // uses module 'xml-js'
-    //
-    // TODO [ ] ELSE, use the description and summary instead
-
-    return await fetch(`${layer.url}/?f=pjson`)
-      .then(res => res.json())
-      .then(results => {
-        return {
-          description: results.description,
-          copyrightText: results.copyrightText
-        };
-      });
-  };
-
   useEffect(() => {
-    const grabContent = async (): Promise<void> => {
-      const contentResults = await getWebmapGroupContent();
-      setCustomContent(contentResults);
+    const getWebmapContent = async (): Promise<void> => {
+      const results = await getWebmapGroupContent(layer);
+      setContent(results);
+      setDataLoading(false);
+    };
+
+    const getServiceContent = async (): Promise<void> => {
+      if (layer.technicalName) {
+        const results = await getServiceGroupContent(layer.technicalName);
+        setContent(results);
+        setDataLoading(false);
+      }
+    };
+
+    const getRemoteContent = (): void => {
+      const results = layer.metadata.metadata;
+      setContent(results);
+      setDataLoading(false);
     };
 
     if (layer.type === 'webmap') {
-      grabContent();
+      getWebmapContent();
+    } else if (layer.origin === 'service') {
+      console.log('fetching service layer info');
+      getServiceContent();
+    } else {
+      getRemoteContent();
     }
   }, []);
 
   const returnWebmapGroupContent = (): JSX.Element => {
-    const { description, copyrightText } = customContent;
+    const { description, copyrightText } = content;
 
     return (
       <>
@@ -84,7 +114,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   };
 
   const returnOtherGroupContent = (): JSX.Element => {
-    const { metadata } = layer.metadata as any;
     const {
       resolution,
       tags,
@@ -99,7 +128,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       title,
       subtitle,
       download_data
-    } = metadata;
+    } = content;
 
     return (
       <>
@@ -113,7 +142,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               <td className="label">Function</td>
               <td
                 className="label-info"
-                dangerouslySetInnerHTML={{ __html: metadata.function }}
+                dangerouslySetInnerHTML={{ __html: content.function }}
               />
             </tr>
             <tr>
@@ -194,9 +223,11 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     );
   };
 
-  const RenderLayerContent = (): JSX.Element => {
+  const RenderLayerContent = (): any => {
     if (layer.type === 'webmap') {
       return returnWebmapGroupContent();
+    } else if (layer.origin === 'service') {
+      return returnOtherGroupContent();
     } else {
       return returnOtherGroupContent();
     }
@@ -204,7 +235,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
 
   return (
     <div className="info-content-container">
-      <RenderLayerContent />
+      {!dataLoading && <RenderLayerContent />}
     </div>
   );
 };

@@ -102,6 +102,7 @@ export interface LayerProps {
   sublabel?: object;
   layerIds?: any[] | null;
   label?: any;
+  technicalName?: string;
 }
 
 interface Attributes {

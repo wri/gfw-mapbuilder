@@ -226,6 +226,9 @@ export class MapController {
               newRemoteLayerObject.url = remoteLayerObject.url;
               newRemoteLayerObject.type = remoteLayerObject.type;
               newRemoteLayerObject.origin = 'service';
+              newRemoteLayerObject.technicalName =
+                remoteLayerObject.technicalName;
+
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.parentID = undefined;
