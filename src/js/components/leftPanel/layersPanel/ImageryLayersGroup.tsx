@@ -1,47 +1,13 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
 import LayerTransparencySlider from './LayerTransparencySlider';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
-
-interface ImageryInfo {
-  [key: string]: any;
-  info: any;
-  selectedLanguage: string;
-  id?: string;
-}
-const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
-  const dispatch = useDispatch();
-  const dynamicSublabel =
-    props.info.layers[0].dynamicSublabel[props.selectedLanguage];
-  console.log(props);
-
-  const openInfoModal = (): void => {
-    if (props.id) {
-      dispatch(renderModal('InfoContent'));
-      dispatch(setInfoModalLayerID(props.id));
-    }
-  };
-
-  return (
-    <>
-      <div className="layers-control-checkbox">
-        <div className="title-wrapper">
-          <span className="layer-label">
-            {props.info?.label[props.selectedLanguage]}
-          </span>
-          <span className="layer-subtitle"> {dynamicSublabel}</span>
-        </div>
-        <div className="info-icon-container" onClick={() => openInfoModal()}>
-          <InfoIcon width={10} height={10} fill={'#fff'} />
-        </div>
-      </div>
-      <LayerTransparencySlider layerID={'props.id'} layerOpacity={1} />
-    </>
-  );
-};
+import 'css/layer-toggle-checkbox.scss';
+import RecentImagery from './RecentImageryModal';
 
 interface LayerGroupProps {
   layerGroupKey: string;
@@ -49,6 +15,74 @@ interface LayerGroupProps {
 }
 
 const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
+  const [imageryModalOpen, setImageryModalOpen] = useState(false);
+
+  interface ImageryInfo {
+    [key: string]: any;
+    info: any;
+    selectedLanguage: string;
+    id?: string;
+  }
+  const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
+    const dispatch = useDispatch();
+
+    const dynamicSublabel =
+      props.info.layers[0].dynamicSublabel[props.selectedLanguage];
+
+    const openInfoModal = (): void => {
+      if (props.id) {
+        dispatch(renderModal('InfoContent'));
+        dispatch(setInfoModalLayerID(props.id));
+      }
+    };
+
+    return (
+      <>
+        <div className="layers-control-checkbox">
+          <div className="title-wrapper">
+            <span className="layer-label">
+              {props.info?.label[props.selectedLanguage]}
+            </span>
+            <span className="layer-subtitle"> {dynamicSublabel}</span>
+          </div>
+          <ImageryLayerSwitch layerID={props.id} />
+          <div
+            className="info-icon-container"
+            style={{ marginLeft: 10 }}
+            onClick={() => openInfoModal()}
+          >
+            <InfoIcon width={10} height={10} fill={'#fff'} />
+          </div>
+        </div>
+        <LayerTransparencySlider layerID={'props.id'} layerOpacity={1} />
+      </>
+    );
+  };
+
+  interface ImageryToggleProps {
+    layerID?: string;
+  }
+  const ImageryLayerSwitch = (props: ImageryToggleProps): JSX.Element => {
+    return (
+      <div className="layer-checkbox imagery">
+        <input
+          type="checkbox"
+          name="styled-checkbox"
+          className="styled-checkbox"
+          id={`layer-checkbox-${props.layerID}`}
+          checked={imageryModalOpen}
+          onChange={(): void => setImageryModalOpen(!imageryModalOpen)}
+        />
+        <label
+          className="styled-checkboxlabel"
+          htmlFor={`layer-checkbox-${props.layerID}`}
+        >
+          {props.layerID}
+        </label>
+      </div>
+    );
+  };
+
   const { layerGroupKey, layerGroupConfig } = props;
   const { selectedLanguage, leftPanel } = useSelector(
     (store: RootState) => store.appState
@@ -68,33 +102,40 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
-  const handleGroupToggle = () => {
+  const handleGroupToggle = (): void => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;
     dispatch(setOpenLayerGroup(openGroupKey));
   };
 
+  const handleCloseModal = (): void => {
+    setImageryModalOpen(false);
+  };
+
   return (
-    <div className="layer-group-container">
-      <div
-        className="layer-group-title"
-        onClick={handleGroupToggle}
-        onKeyPress={handleGroupToggle}
-        role="button"
-        tabIndex={0}
-      >
-        <span>{layerGroupTitle}</span>
-        <button className="caret-button" onClick={handleGroupToggle}>
-          {groupOpen ? '▼' : '▲'}
-        </button>
+    <>
+      <div className="layer-group-container">
+        <div
+          className="layer-group-title"
+          onClick={handleGroupToggle}
+          onKeyPress={handleGroupToggle}
+          role="button"
+          tabIndex={0}
+        >
+          <span>{layerGroupTitle}</span>
+          <button className="caret-button" onClick={handleGroupToggle}>
+            {groupOpen ? '▼' : '▲'}
+          </button>
+        </div>
+        <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
+          <ImageryLayerControl
+            selectedLanguage={selectedLanguage}
+            info={layerGroupConfig}
+            id={imagerylayer?.id}
+          />
+        </div>
       </div>
-      <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
-        <ImageryLayerControl
-          selectedLanguage={selectedLanguage}
-          info={layerGroupConfig}
-          id={imagerylayer?.id}
-        />
-      </div>
-    </div>
+      {imageryModalOpen && <RecentImagery modalHandler={handleCloseModal} />}
+    </>
   );
 };
 
