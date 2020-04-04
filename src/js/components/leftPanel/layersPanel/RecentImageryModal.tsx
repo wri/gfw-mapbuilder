@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
+import { createSliderWithTooltip, Range } from 'rc-slider';
+const SliderWithTooltip = createSliderWithTooltip(Range);
 
 import imageryText from './imageryLanguages';
 
@@ -71,6 +73,83 @@ const MonthSelector = (props: MonthSelectorProps) => {
   );
 };
 
+const CloudSlider = (): JSX.Element => {
+  const defaultRange = [0, 100];
+  const marks = {
+    '0': {
+      label: '0',
+      style: {}
+    },
+    '50': {
+      label: '50',
+      style: {}
+    },
+    '100': {
+      label: '100',
+      style: {}
+    }
+  };
+  const [currentRange, setCurrentRange] = useState(defaultRange);
+  const handleSliderChange = (e: any): void => {
+    console.log('slider');
+    console.log(e);
+    setCurrentRange(e);
+  };
+  return (
+    <SliderWithTooltip
+      allowCross={false}
+      className="cloud-slider"
+      defaultValue={defaultRange}
+      marks={marks}
+      min={defaultRange[0]}
+      max={defaultRange[1]}
+      value={currentRange}
+      tipFormatter={(val: number): number => val}
+      step={25}
+      railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
+      handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
+      dotStyle={{ border: '1px solid #e9e9e9' }}
+      activeDotStyle={{
+        border: '1px solid #F0AB00'
+      }}
+      trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+      onChange={handleSliderChange}
+    />
+  );
+};
+
+interface ImageStylePickerProps {
+  lang: string;
+}
+const ImageStylePicker = (props: ImageStylePickerProps): JSX.Element => {
+  const [value, setValue] = useState(
+    imageryText[props.lang].imageStyleOptions[0]
+  );
+  const changeMonthHandler = (e: any): void => {
+    console.log('changing month');
+    console.log(e.target.value);
+    setValue(e.target.value);
+  };
+  const options = imageryText[props.lang].imageStyleOptions.map(
+    (option: any, i: number) => {
+      return (
+        <option key={i} value={option.value}>
+          {option.label}
+        </option>
+      );
+    }
+  );
+  return (
+    <select
+      className="date-time-toggle imagery-style"
+      onChange={changeMonthHandler}
+      value={value}
+    >
+      {options}
+    </select>
+  );
+};
+
 const RecentImagery = (props: ImageryProps): JSX.Element => {
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
@@ -109,11 +188,12 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
           <p className="subtitle">
             {imageryText[selectedLanguage].cloudPercentage}
           </p>
-          <p>Cloud Slide</p>
+          <CloudSlider />
         </div>
       </div>
       <div className="imagery-secondary-filters">
-        <p>Secondary FIlters</p>
+        <p>Thumbnail TXT</p>
+        <ImageStylePicker lang={selectedLanguage} />
       </div>
       <div className="imagery-thumbnails">
         <p>Thumbnails</p>

@@ -39,19 +39,28 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     return (
       <>
         <div className="layers-control-checkbox">
+          <ImageryLayerSwitch layerID={props.id} />
           <div className="title-wrapper">
             <span className="layer-label">
               {props.info?.label[props.selectedLanguage]}
             </span>
             <span className="layer-subtitle"> {dynamicSublabel}</span>
           </div>
-          <ImageryLayerSwitch layerID={props.id} />
-          <div
-            className="info-icon-container"
-            style={{ marginLeft: 10 }}
-            onClick={() => openInfoModal()}
-          >
-            <InfoIcon width={10} height={10} fill={'#fff'} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            <button
+              className="imagery-edit-button"
+              onClick={(): void => setImageryModalOpen(true)}
+            >
+              EDIT
+            </button>
+
+            <div
+              className="info-icon-container"
+              style={{ marginLeft: 10 }}
+              onClick={() => openInfoModal()}
+            >
+              <InfoIcon width={10} height={10} fill={'#fff'} />
+            </div>
           </div>
         </div>
         <LayerTransparencySlider layerID={'props.id'} layerOpacity={1} />
