@@ -32,7 +32,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   );
   const [recentTiles, setRecentTiles] = useState<any>('');
   const [tilesLoading, setTilesLoading] = useState<any>(true);
-
+  const [hoverContent, setHoverContent] = useState<any>('');
   const getRecentTiles = async (URL: string): Promise<any> => {
     setTilesLoading(true);
     const res = await fetch(URL).then(res => res.json());
@@ -122,6 +122,25 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     // console.log(recentTiles);
   }, [recentTiles]);
 
+  const handleTileHover = (e: any, tile: any) => {
+    setHoverContent(tile);
+  };
+
+  interface HoverRes {
+    hoverCloud: any;
+  }
+  const getHoverTileContent = (attribute: string): string | undefined => {
+    if (hoverContent !== '') {
+      if (attribute === 'hoverCloud') {
+        const hoverCloud = Math.round(hoverContent.attributes.cloud_score);
+        return String(hoverCloud);
+      } else if (attribute === 'hoverDay') {
+        const parsedDate = Date.parse(hoverContent.attributes.date_time);
+        const formatHoverDay = format(parsedDate, 'dd-MMM-yyyy');
+        return formatHoverDay;
+      }
+    }
+  };
   return (
     <div className="recent-imagery-container">
       <div className="imagery-header">
@@ -163,7 +182,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         </div>
         <div className="imagery-cloud">
           <p className="subtitle">
-            {imageryText[selectedLanguage].cloudPercentage}
+            {imageryText[selectedLanguage].cloudPercentage}˝
           </p>
           <CloudSlider
             cloudRange={cloudRange}
@@ -172,7 +191,17 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         </div>
       </div>
       <div className="imagery-secondary-filters">
-        <p>Thumbnail TXT</p>
+        <div style={{ height: 45 }}>
+          {hoverContent !== '' ? (
+            <>
+              <p>{getHoverTileContent('hoverDay')}</p>
+              <p>{`${getHoverTileContent('hoverCloud')}% cloud coverage`}</p>
+              <p>{hoverContent.attributes.instrument}</p>
+            </>
+          ) : (
+            ''
+          )}
+        </div>
         <ImageStylePicker
           imageryStyle={imageryStyle}
           lang={selectedLanguage}
@@ -181,7 +210,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       </div>
       <div className="imagery-thumbnails">
         {!tilesLoading ? (
-          <TileThumbnails tiles={recentTiles} />
+          <TileThumbnails tiles={recentTiles} handleHover={handleTileHover} />
         ) : (
           <p>Loading data</p>
         )}

@@ -708,11 +708,16 @@
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
       grid-gap: 3px;
+      .thumbnail:hover {
+        border: 2px solid black;
+      }
       .thumbnail {
         img {
           width: 85px;
           height: auto;
         }
+
+        cursor: pointer;
         display: grid;
         justify-content: center;
         align-items: center;
@@ -720,7 +725,6 @@
         height: 88px;
         overflow: hidden;
         background: #999;
-        border: 2px solid;
         border: transparent solid 2px;
       }
     }
