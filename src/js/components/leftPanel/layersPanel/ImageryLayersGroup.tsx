@@ -7,7 +7,7 @@ import LayerTransparencySlider from './LayerTransparencySlider';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
 import 'css/layer-toggle-checkbox.scss';
-import RecentImagery from './RecentImageryModal';
+import RecentImagery from './RecentImagery/RecentImageryModal';
 
 interface LayerGroupProps {
   layerGroupKey: string;
