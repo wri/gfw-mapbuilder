@@ -83,10 +83,9 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     };
 
     //chucnk requests to be 4 at a time
-    const chunkedTiles = chunk(tiles, 2);
+    const chunkedTiles = chunk(tiles, 4);
     let postTileResponses: any[] = [];
     let postThumbResponses: any[] = [];
-    let newTileObjects: any[] = [];
     for await (const tileChunk of chunkedTiles) {
       console.log(tileChunk);
       const postTilesResponse = await postTiles(tileChunk);
@@ -102,9 +101,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         tile.thumbUrl = postThumbResponses[i]?.thumbnail_url;
         return tile;
       });
-      newTileObjects = freshTilesChunk;
-      console.log('newTileObjects', newTileObjects);
-      setRecentTiles(newTileObjects);
+      setRecentTiles(freshTilesChunk);
       setTilesLoading(false);
     }
   };
