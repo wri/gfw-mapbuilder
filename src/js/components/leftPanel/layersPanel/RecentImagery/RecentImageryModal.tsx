@@ -9,7 +9,8 @@ import { CloudSlider } from './CloudSlider';
 import { ImageStylePicker } from './ImageStylePicker';
 import { mapController } from 'js/controllers/mapController';
 import { subMonths, parse, format } from 'date-fns';
-
+import { TileThumbnails } from './TileThumbnails';
+import { chunk } from 'lodash-es';
 interface ImageryProps {
   modalHandler: () => void;
 }
@@ -29,6 +30,84 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const [imageryStyle, setImageryStyle] = useState(
     imageryText[selectedLanguage].imageStyleOptions[0]
   );
+  const [recentTiles, setRecentTiles] = useState<any>('');
+  const [tilesLoading, setTilesLoading] = useState<any>(true);
+
+  const getRecentTiles = async (URL: string): Promise<any> => {
+    setTilesLoading(true);
+    const res = await fetch(URL).then(res => res.json());
+    const { tiles } = res.data;
+    console.log('res', tiles);
+    // const sourceData: any[] = tiles.map((tile: any) => {
+    //   return { source: tile.attributes.source };
+    // });
+
+    //POST req to Tiles endpoint
+    const postTiles = async (tileChunk: any[]): Promise<any> => {
+      const sourceData: any[] = tileChunk.map((tile: any) => {
+        return { source: tile.attributes.source };
+      });
+      const postTilesURL =
+        'https://production-api.globalforestwatch.org/recent-tiles/tiles';
+      return await fetch(postTilesURL, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ source_data: sourceData, bands: '' })
+      })
+        .then(data => data.json())
+        .catch(e => {
+          console.log('error', e);
+        });
+    };
+
+    //POST req to Tiles endpoint
+    const postThumbs = async (tileChunk: any[]): Promise<any> => {
+      const sourceData: any[] = tileChunk.map((tile: any) => {
+        return { source: tile.attributes.source };
+      });
+      const postThumbsURL =
+        'https://production-api.globalforestwatch.org/recent-tiles/thumbs';
+      return await fetch(postThumbsURL, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ source_data: sourceData, bands: '' })
+      })
+        .then(data => data.json())
+        .catch(e => console.log('error', e));
+    };
+
+    //chucnk requests to be 4 at a time
+    const chunkedTiles = chunk(tiles, 2);
+    let postTileResponses: any[] = [];
+    let postThumbResponses: any[] = [];
+    let newTileObjects: any[] = [];
+    for await (const tileChunk of chunkedTiles) {
+      console.log(tileChunk);
+      const postTilesResponse = await postTiles(tileChunk);
+      postTileResponses = postTileResponses.concat(
+        postTilesResponse.data.attributes
+      );
+      const postThumbsResponse = await postThumbs(tileChunk);
+      postThumbResponses = postThumbResponses.concat(
+        postThumbsResponse.data.attributes
+      );
+      const freshTilesChunk = tiles.map((tile: any, i: number) => {
+        tile.tileUrl = postTileResponses[i]?.tile_url;
+        tile.thumbUrl = postThumbResponses[i]?.thumbnail_url;
+        return tile;
+      });
+      newTileObjects = freshTilesChunk;
+      console.log('newTileObjects', newTileObjects);
+      setRecentTiles(newTileObjects);
+      setTilesLoading(false);
+    }
+  };
 
   React.useEffect(() => {
     const satIMGURL =
@@ -38,14 +117,13 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     //Start day is always 3 months before the end day
     const start = subMonths(parse(end, 'yyyy-MM-dd', new Date()), 3);
     const startFormatted = format(start, 'yyyy-MM-dd');
-    console.log('startFormatted', startFormatted);
-    console.log(start);
     const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
-    console.log('recentTileURL', recentTileURL);
+    getRecentTiles(recentTileURL);
   }, [selectedLanguage, day, monthRange, cloudRange, imageryStyle]);
-  // useState(() => {
 
-  // }, []);
+  React.useEffect(() => {
+    // console.log(recentTiles);
+  }, [recentTiles]);
 
   return (
     <div className="recent-imagery-container">
@@ -105,7 +183,11 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         />
       </div>
       <div className="imagery-thumbnails">
-        <p>Thumbnails</p>
+        {!tilesLoading ? (
+          <TileThumbnails tiles={recentTiles} />
+        ) : (
+          <p>Loading data</p>
+        )}
       </div>
     </div>
   );

@@ -701,6 +701,30 @@
       width: 95%;
     }
   }
+  .imagery-thumbnails {
+    overflow-y: scroll;
+    height: 200px;
+    .thumb-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 3px;
+      .thumbnail {
+        img {
+          width: 85px;
+          height: auto;
+        }
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        width: 88px;
+        height: 88px;
+        overflow: hidden;
+        background: #999;
+        border: 2px solid;
+        border: transparent solid 2px;
+      }
+    }
+  }
 
   .date-time-toggle.imagery-input {
     width: auto;
