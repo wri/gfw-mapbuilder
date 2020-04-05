@@ -7,6 +7,8 @@ import { DaySelector } from './DaySelector';
 import { MonthSelector } from './MonthSelector';
 import { CloudSlider } from './CloudSlider';
 import { ImageStylePicker } from './ImageStylePicker';
+import { mapController } from 'js/controllers/mapController';
+import { subMonths, parse, format } from 'date-fns';
 
 interface ImageryProps {
   modalHandler: () => void;
@@ -27,9 +29,22 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const [imageryStyle, setImageryStyle] = useState(
     imageryText[selectedLanguage].imageStyleOptions[0]
   );
+
+  React.useEffect(() => {
+    const satIMGURL =
+      'https://production-api.globalforestwatch.org/recent-tiles';
+    const { latitude, longitude } = mapController.getMapviewCoordinates();
+    const end = day;
+    //Start day is always 3 months before the end day
+    const start = subMonths(parse(end, 'yyyy-MM-dd', new Date()), 3);
+    const startFormatted = format(start, 'yyyy-MM-dd');
+    console.log('startFormatted', startFormatted);
+    console.log(start);
+    const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
+    console.log('recentTileURL', recentTileURL);
+  }, [selectedLanguage, day, monthRange, cloudRange, imageryStyle]);
   // useState(() => {
-  //   const satIMGURL =
-  //     'https://production-api.globalforestwatch.org/recent-tiles';
+
   // }, []);
 
   return (

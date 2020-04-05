@@ -69,6 +69,7 @@
     ]
   },
   "dependencies": {
+    "date-fns": "^2.11.1",
     "lodash-es": "^4.17.15",
     "rc-slider": "^9.2.2",
     "react": "^16.12.0",
