@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { getDocuments } from 'js/helpers/mapController/Documents';
 
 import { RootState } from 'js/store';
-
 import { AttachmentWithURLProps } from 'js/interfaces/Attachment';
+
+import { documentsContent } from 'configs/leftPanel.config';
 
 import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
 
@@ -22,6 +23,11 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const { activeFeatures, activeFeatureIndex } = useSelector(
     (store: RootState) => store.mapviewState
   );
+  const { selectedLanguage } = useSelector(
+    (state: RootState) => state.appState
+  );
+
+  const { instructions, name, pdf, size } = documentsContent[selectedLanguage];
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
   const [featureCollectionIndex] = activeFeatureIndex;
@@ -65,53 +71,56 @@ const DocumentsTabView = (props: Props): JSX.Element => {
     }
   }, [tabViewIsVisible]);
 
-  const returnDocuments = (): Array<JSX.Element> | JSX.Element => {
-    if (allAttachments && allAttachments.length) {
-      return allAttachments.map(
-        (attachment: AttachmentWithURLProps, key: number) => {
-          const { url, size, name } = attachment;
-          return (
-            <Fragment key={key}>
-              <tr>
-                <td title={name} className="file-name">
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    {name}
-                  </a>
-                </td>
-                <td>{Math.round(size / 1000)} KB</td>
-                <td>
-                  <DocIcon height={20} width={20} fill={'#555'} />
-                </td>
-              </tr>
-            </Fragment>
-          );
-        }
-      );
-    } else {
-      return <>There are no attachments at this time.</>;
-    }
+  const returnDocuments = (): Array<JSX.Element> | undefined => {
+    return allAttachments.map(
+      (attachment: AttachmentWithURLProps, key: number) => {
+        const { url, size, name } = attachment;
+        return (
+          <Fragment key={key}>
+            <tr>
+              <td title={name} className="file-name">
+                {name}
+              </td>
+              <td>{Math.round(size / 1000)} KB</td>
+              <td>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  <DocIcon height={20} width={20} fill={'#F0AB00'} />
+                </a>
+              </td>
+            </tr>
+          </Fragment>
+        );
+      }
+    );
   };
 
   return (
     <div className="documents-container">
       {tabViewIsVisible && (
         <>
-          <table className="documents-table">
-            <thead className="feature-collection-title">
+          {allAttachments && allAttachments.length ? (
+            <h3 className="feature-collection-title">
               {featureCollectionTitle}
-            </thead>
-            <div className="custom-horizontal-rule" />
-            {allAttachments && allAttachments.length ? (
-              <thead className="table-headers">
-                <tr>
-                  <th>Name</th>
-                  <th>Size</th>
-                  <th>PDF</th>
-                </tr>
-              </thead>
-            ) : null}
-            <tbody>{returnDocuments()}</tbody>
-          </table>
+            </h3>
+          ) : null}
+          {allAttachments && allAttachments.length ? (
+            <>
+              <table className="documents-table">
+                <thead className="table-headers">
+                  <tr>
+                    <th>{name}</th>
+                    <th>{size}</th>
+                    <th>{pdf}</th>
+                  </tr>
+                </thead>
+                <tbody>{returnDocuments()}</tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              <p className="no-documents">{instructions}</p>
+            </>
+          )}
         </>
       )}
     </div>

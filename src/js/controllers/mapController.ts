@@ -369,6 +369,7 @@ export class MapController {
       });
 
       this.initializeAndSetSketch();
+
       const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
         this._map
       );
@@ -493,7 +494,6 @@ export class MapController {
     parentID?: string
   ): void {
     let layer = null as any;
-    // this.turnOffVIIRSorMODIS(layerID);
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
@@ -1328,7 +1328,7 @@ export class MapController {
     }
   }
 
-  turnOffVIIRSorMODIS(layerID: string): void {
+  toggleVIIRSorMODIS(layerID: string): void {
     if (!this._map) {
       return;
     }
@@ -1341,13 +1341,17 @@ export class MapController {
       return;
     }
 
+    layer.visible = !layer.visible;
+
     const sublayer24 = layer.sublayers.items.filter(
       (sublayer: Sublayer) =>
         sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
         sublayer.title === 'Global Fires (MODIS) 24 hrs'
     )[0];
 
-    sublayer24.visible = true;
+    if (sublayer24) {
+      sublayer24.visible = true;
+    }
 
     if (layer.id === 'VIIRS_ACTIVE_FIRES') {
       VIIRSLayerIDs.forEach(({ layerID }) => {
@@ -1366,6 +1370,19 @@ export class MapController {
         }
       });
     }
+
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      if (l.id === layer.id) {
+        return {
+          ...l,
+          visible: layer.visible
+        };
+      } else {
+        return l;
+      }
+    });
+    store.dispatch(allAvailableLayers(newLayersArray));
   }
 
   updateMODISorVIIRSOpacity(layerID: string, opacity: number): void {
