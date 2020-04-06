@@ -27,10 +27,11 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const [monthRange, setMonthRange] = useState(
     imageryText[selectedLanguage].monthsOptions[0].value
   );
-  const [cloudRange, setCloudRange] = useState([0, 100]);
+  const [cloudRange, setCloudRange] = useState([0, 25]);
   const [imageryStyle, setImageryStyle] = useState(
     imageryText[selectedLanguage].imageStyleOptions[0]
   );
+  const [imageryStyleBands, setImageryStyleBands] = useState('');
   const [recentTiles, setRecentTiles] = useState<any>('');
   const [tilesLoading, setTilesLoading] = useState<any>(true);
   const [hoverContent, setHoverContent] = useState<any>('');
@@ -52,7 +53,10 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ source_data: sourceData, bands: '' })
+        body: JSON.stringify({
+          source_data: sourceData,
+          bands: imageryStyleBands
+        })
       })
         .then(data => data.json())
         .catch(e => {
@@ -73,25 +77,28 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ source_data: sourceData, bands: '' })
+        body: JSON.stringify({
+          source_data: sourceData,
+          bands: imageryStyleBands
+        })
       })
         .then(data => data.json())
         .catch(e => console.log('error', e));
     };
 
     //chucnk requests to be 4 at a time
-    const chunkedTiles = chunk(tiles, 4);
+    const chunkedTiles = chunk(tiles, 5);
     let postTileResponses: any[] = [];
     let postThumbResponses: any[] = [];
     for await (const tileChunk of chunkedTiles) {
       console.log(tileChunk);
       const postTilesResponse = await postTiles(tileChunk);
       postTileResponses = postTileResponses.concat(
-        postTilesResponse.data.attributes
+        postTilesResponse?.data?.attributes
       );
       const postThumbsResponse = await postThumbs(tileChunk);
       postThumbResponses = postThumbResponses.concat(
-        postThumbsResponse.data.attributes
+        postThumbsResponse?.data?.attributes
       );
       const freshTilesChunk = tiles.map((tile: any, i: number) => {
         tile.tileUrl = postTileResponses[i]?.tile_url;
@@ -134,6 +141,18 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       }
     }
   };
+
+  const handleImageryStyleChange = (e: any): void => {
+    setImageryStyle(e.target.value);
+    //special vegetarion bands are on the first index of options
+    const styleOptions = imageryText[selectedLanguage].imageStyleOptions.map(
+      (option: any) => option.label
+    );
+    const determineBands =
+      styleOptions.indexOf(e.target.value) === 0 ? '' : '[B8,B11,B2]';
+    setImageryStyleBands(determineBands);
+  };
+
   return (
     <div className="recent-imagery-container">
       <div className="imagery-header">
@@ -198,7 +217,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         <ImageStylePicker
           imageryStyle={imageryStyle}
           lang={selectedLanguage}
-          changeStyleHandler={e => setImageryStyle(e.target.value)}
+          changeStyleHandler={handleImageryStyleChange}
         />
       </div>
       <div className="imagery-thumbnails">
