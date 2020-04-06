@@ -205,3 +205,54 @@ export const basemapLayersContent = {
     }
   ]
 };
+
+export const documentsContent = {
+  en: {
+    instructions:
+      'Select an area of interest to see if there are any related documents',
+    name: 'Name',
+    pdf: 'PDF',
+    size: 'Size'
+  },
+  ka: {
+    instructions:
+      'შეარჩიეთ საინტერესო ტერიტორია, და ნახეთ არის თუ არა მასთან დაკავშირებული დოკუმენტები',
+    name: 'სახელი',
+    pdf: 'PDF',
+    size: 'ზომა'
+  },
+  fr: {
+    instructions:
+      "Choisisez une région d'intérêt pour voir les documents associés",
+    name: 'Nom du fichier',
+    pdf: 'PDF',
+    size: 'Taille'
+  },
+  es: {
+    instructions:
+      'Seleccionar una área de interés para ver si haya algún documento relacionado',
+    name: 'Nombre',
+    pdf: 'PDF',
+    size: 'Size'
+  },
+  pt: {
+    instructions:
+      'Selecione área de interesse para verificar a existência de documentos relacionados',
+    name: 'Nome',
+    pdf: 'PDF',
+    size: 'Tamanho'
+  },
+  id: {
+    instructions:
+      'Select an area of interest to see if there are any related documents',
+    name: 'Nama',
+    pdf: 'PDF',
+    size: 'Size'
+  },
+  zh: {
+    instructions: '选择感兴趣区域来查看相关文件',
+    name: '姓名',
+    pdf: 'PDF',
+    size: 'Size'
+  }
+};
