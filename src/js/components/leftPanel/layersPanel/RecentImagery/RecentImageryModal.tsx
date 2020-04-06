@@ -13,6 +13,7 @@ import { TileThumbnails } from './TileThumbnails';
 import { chunk } from 'lodash-es';
 interface ImageryProps {
   modalHandler: () => void;
+  handleTileHover: (data: any) => void;
 }
 
 const getTodayDate = new Date().toISOString().split('T')[0];
@@ -118,17 +119,11 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     getRecentTiles(recentTileURL);
   }, [selectedLanguage, day, monthRange, cloudRange, imageryStyle]);
 
-  React.useEffect(() => {
-    // console.log(recentTiles);
-  }, [recentTiles]);
-
   const handleTileHover = (e: any, tile: any) => {
     setHoverContent(tile);
+    props.handleTileHover(tile);
   };
 
-  interface HoverRes {
-    hoverCloud: any;
-  }
   const getHoverTileContent = (attribute: string): string | undefined => {
     if (hoverContent !== '') {
       if (attribute === 'hoverCloud') {

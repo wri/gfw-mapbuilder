@@ -8,6 +8,7 @@ import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
 import 'css/layer-toggle-checkbox.scss';
 import RecentImagery from './RecentImagery/RecentImageryModal';
+import { format } from 'date-fns';
 
 interface LayerGroupProps {
   layerGroupKey: string;
@@ -16,6 +17,7 @@ interface LayerGroupProps {
 
 const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const [imageryModalOpen, setImageryModalOpen] = useState(false);
+  const [hoverTileData, setHoverTileData] = useState('');
 
   interface ImageryInfo {
     [key: string]: any;
@@ -25,14 +27,29 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   }
   const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
     const dispatch = useDispatch();
-
-    const dynamicSublabel =
-      props.info.layers[0].dynamicSublabel[props.selectedLanguage];
-
     const openInfoModal = (): void => {
       if (props.id) {
         dispatch(renderModal('InfoContent'));
         dispatch(setInfoModalLayerID(props.id));
+      }
+    };
+
+    const parseDynamicSublabel = (): string => {
+      if (hoverTileData) {
+        let sublabelBase =
+          props.info.layers[0].dynamicSublabel[props.selectedLanguage];
+        const parsedDate = Date.parse(props.hoverTileData.date_time);
+        const formatHoverDay = format(parsedDate, 'dd-MMM-yyyy');
+        const hoverCloud = Math.round(props.hoverTileData.cloud_score);
+        sublabelBase = sublabelBase.replace('{DATE_TIME}', formatHoverDay);
+        sublabelBase = sublabelBase.replace('{CLOUD_COVERAGE}', hoverCloud);
+        sublabelBase = sublabelBase.replace(
+          '{INSTRUMENT}',
+          props.hoverTileData.instrument
+        );
+        return sublabelBase;
+      } else {
+        return '';
       }
     };
 
@@ -44,7 +61,9 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             <span className="layer-label">
               {props.info?.label[props.selectedLanguage]}
             </span>
-            <span className="layer-subtitle"> {dynamicSublabel}</span>
+            <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
+              {parseDynamicSublabel()}
+            </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <button
@@ -120,6 +139,10 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     setImageryModalOpen(false);
   };
 
+  const handleTileHover = (data: any): void => {
+    setHoverTileData(data.attributes);
+  };
+
   return (
     <>
       <div className="layer-group-container">
@@ -137,13 +160,19 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         </div>
         <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
           <ImageryLayerControl
+            hoverTileData={hoverTileData}
             selectedLanguage={selectedLanguage}
             info={layerGroupConfig}
             id={imagerylayer?.id}
           />
         </div>
       </div>
-      {imageryModalOpen && <RecentImagery modalHandler={handleCloseModal} />}
+      {imageryModalOpen && (
+        <RecentImagery
+          modalHandler={handleCloseModal}
+          handleTileHover={handleTileHover}
+        />
+      )}
     </>
   );
 };
