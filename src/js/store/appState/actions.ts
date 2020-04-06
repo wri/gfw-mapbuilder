@@ -2,6 +2,7 @@ import {
   TOGGLE_TABVIEW_PANEL,
   RENDER_MODAL,
   RENDER_INFO_MODAL,
+  RENDER_GFW_DROPDOWN,
   SELECT_ACTIVE_TAB,
   SET_LANGUAGE,
   SET_OPEN_LAYER_GROUP,
@@ -45,6 +46,13 @@ export function setInfoModalLayerID(payload: AppState['infoModalLayerID']) {
 export function renderModal(payload: AppState['renderModal']) {
   return {
     type: RENDER_MODAL as typeof RENDER_MODAL,
+    payload: payload
+  };
+}
+
+export function setRenderGFWDropdown(payload: AppState['renderGFWDropdown']) {
+  return {
+    type: RENDER_GFW_DROPDOWN as typeof RENDER_GFW_DROPDOWN,
     payload: payload
   };
 }

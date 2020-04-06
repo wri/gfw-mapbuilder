@@ -64,7 +64,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </>
       );
     } else {
-      console.log('layer does not have metadata to support subtitles!', layer);
+      // console.log('layer does not have metadata to support subtitles!', layer);
       return;
     }
   };
