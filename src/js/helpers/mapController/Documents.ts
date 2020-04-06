@@ -25,14 +25,15 @@ export const getDocuments = async (
     .then(response => response.json())
     .then((results: { attachmentInfos: Array<Attachment> }) => {
       const { attachmentInfos } = results;
-
-      return attachmentInfos.map((attachment: Attachment) => {
-        attachment.url = endPoint.replace(
-          'attachments?f=pjson',
-          `attachments/${results.attachmentInfos[0].id}`
-        );
-        return attachment;
-      });
+      if (attachmentInfos) {
+        return attachmentInfos.map((attachment: Attachment) => {
+          attachment.url = endPoint.replace(
+            'attachments?f=pjson',
+            `attachments/${results.attachmentInfos[0].id}`
+          );
+          return attachment;
+        });
+      }
     })
     .catch(e => console.log('error in getDocuments()', e));
 
