@@ -1,14 +1,18 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'js/store/index';
+import { useDispatch, useSelector } from 'react-redux';
+
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
 import GFWLogin from 'js/components/header/GFWLogin';
+
+import { RootState } from 'js/store/index';
+import { setRenderGFWDropdown } from 'js/store/appState/actions';
 
 import 'css/header.scss';
 
 // import config from '../../../../configs/resources';
 
 const Header: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const {
     language,
     title,
@@ -21,11 +25,18 @@ const Header: FunctionComponent = () => {
     includeMyGFWLogin
   } = useSelector((store: RootState) => store.appSettings);
 
-  const appState = useSelector((store: RootState) => store.appState);
-  const { selectedLanguage, isLoggedIn } = appState;
+  const { selectedLanguage, isLoggedIn, renderGFWDropdown } = useSelector(
+    (store: RootState) => store.appState
+  );
+
+  const closeGFWDropdown = () => {
+    if (renderGFWDropdown) {
+      dispatch(setRenderGFWDropdown(false));
+    }
+  };
 
   return (
-    <div className="header-container">
+    <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">
         <a
           href={logoLinkUrl}

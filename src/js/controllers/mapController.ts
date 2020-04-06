@@ -39,7 +39,8 @@ import {
   renderModal,
   selectActiveTab,
   setMeasureResults,
-  setLanguage
+  setLanguage,
+  setRenderGFWDropdown
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -129,6 +130,12 @@ export class MapController {
             store.dispatch(changeMapScale(newScale));
           });
           this._mapview.on('click', event => {
+            const { renderGFWDropdown } = store.getState().appState;
+
+            if (renderGFWDropdown) {
+              store.dispatch(setRenderGFWDropdown(false));
+            }
+
             //TODO: We need a better loading handling, probably a spinner!
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));

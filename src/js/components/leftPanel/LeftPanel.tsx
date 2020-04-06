@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store/index';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import ReactTooltip from 'react-tooltip';
+
+import { RootState } from 'js/store/index';
+import {
+  selectActiveTab,
+  toggleTabviewPanel,
+  setRenderGFWDropdown
+} from 'js/store/appState/actions';
+
 import TabViewContainer from './TabViewContainer';
+
 import 'css/leftpanel.scss';
 
 import { ReactComponent as LayersTabIcon } from 'images/layersTabIcon.svg';
@@ -93,7 +100,8 @@ const Tabs = (props: TabsProps): React.ReactElement => {
 };
 
 const LeftPanel = (): React.ReactElement => {
-  const { hideWidgetActive } = useSelector(
+  const dispatch = useDispatch();
+  const { hideWidgetActive, renderGFWDropdown } = useSelector(
     (store: RootState) => store.appState
   );
   const renderDocTab = useSelector(
@@ -144,8 +152,17 @@ const LeftPanel = (): React.ReactElement => {
 
   const tabsToRender = tabsArray.filter(tab => tab.render);
 
+  const closeGFWDropdown = () => {
+    if (renderGFWDropdown) {
+      dispatch(setRenderGFWDropdown(false));
+    }
+  };
+
   return (
-    <div className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}>
+    <div
+      className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}
+      onClick={() => closeGFWDropdown()}
+    >
       <Tabs tabsToRender={tabsToRender} />
       <TabViewContainer tabViewsToRender={tabsToRender} />
     </div>
