@@ -155,7 +155,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           const sublayerLabels = infoObject.legend.map(
             (item: any, j: number) => (
               <div className="label-item" key={j}>
-                {getLegendLabel('webmap', item, 1)}
+                {getLegendLabel('webmap', item, layer.opacity)}
                 <p>{item.label}</p>
               </div>
             )
