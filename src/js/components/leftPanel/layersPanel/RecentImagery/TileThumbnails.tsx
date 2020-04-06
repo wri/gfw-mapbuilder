@@ -11,7 +11,6 @@ interface TileThumbnailsProps {
   cloudCoverRange: number[];
 }
 export const TileThumbnails = (props: TileThumbnailsProps): JSX.Element => {
-  console.log(props.cloudCoverRange);
   const tiles = props.tiles
     .filter((tile: any) => checkForTileCloudRange(tile, props.cloudCoverRange))
     .map((tile: any, i: number) => {

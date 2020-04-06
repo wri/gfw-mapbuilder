@@ -38,10 +38,6 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     setTilesLoading(true);
     const res = await fetch(URL).then(res => res.json());
     const { tiles } = res.data;
-    console.log('res', tiles);
-    // const sourceData: any[] = tiles.map((tile: any) => {
-    //   return { source: tile.attributes.source };
-    // });
 
     //POST req to Tiles endpoint
     const postTiles = async (tileChunk: any[]): Promise<any> => {
@@ -112,8 +108,10 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       'https://production-api.globalforestwatch.org/recent-tiles';
     const { latitude, longitude } = mapController.getMapviewCoordinates();
     const end = day;
-    //Start day is always 3 months before the end day
-    const start = subMonths(parse(end, 'yyyy-MM-dd', new Date()), 3);
+    const start = subMonths(
+      parse(end, 'yyyy-MM-dd', new Date()),
+      Number(monthRange)
+    );
     const startFormatted = format(start, 'yyyy-MM-dd');
     const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
     getRecentTiles(recentTileURL);
