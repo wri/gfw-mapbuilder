@@ -117,7 +117,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     const startFormatted = format(start, 'yyyy-MM-dd');
     const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
     getRecentTiles(recentTileURL);
-  }, [selectedLanguage, day, monthRange, cloudRange, imageryStyle]);
+  }, [selectedLanguage, day, monthRange, imageryStyle]);
 
   const handleTileHover = (e: any, tile: any) => {
     setHoverContent(tile);
@@ -205,7 +205,11 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       </div>
       <div className="imagery-thumbnails">
         {!tilesLoading ? (
-          <TileThumbnails tiles={recentTiles} handleHover={handleTileHover} />
+          <TileThumbnails
+            tiles={recentTiles}
+            handleHover={handleTileHover}
+            cloudCoverRange={cloudRange}
+          />
         ) : (
           <p>Loading data</p>
         )}
