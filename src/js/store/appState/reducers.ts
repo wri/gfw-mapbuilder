@@ -6,6 +6,7 @@ import {
   SET_LANGUAGE,
   RENDER_MODAL,
   RENDER_INFO_MODAL,
+  RENDER_GFW_DROPDOWN,
   SET_OPEN_LAYER_GROUP,
   SET_LOGGED_IN,
   SET_MEASURE_RESULTS,
@@ -17,6 +18,7 @@ import {
 const initialState: AppState = {
   selectedLanguage: 'en',
   renderModal: '',
+  renderGFWDropdown: false,
   infoModalLayerID: '',
   hideWidgetActive: false,
   isLoggedIn: false,
@@ -57,6 +59,8 @@ export function appStateReducer(
       return { ...state, renderModal: action.payload };
     case RENDER_INFO_MODAL:
       return { ...state, infoModalLayerID: action.payload };
+    case RENDER_GFW_DROPDOWN:
+      return { ...state, renderGFWDropdown: action.payload };
     case SELECT_ACTIVE_TAB:
       return {
         ...state,

@@ -41,7 +41,8 @@ import {
   renderModal,
   selectActiveTab,
   setMeasureResults,
-  setLanguage
+  setLanguage,
+  setRenderGFWDropdown
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -141,6 +142,12 @@ export class MapController {
             throtthledUpdater(newExtent, this._mapview)
           );
           this._mapview.on('click', event => {
+            const { renderGFWDropdown } = store.getState().appState;
+
+            if (renderGFWDropdown) {
+              store.dispatch(setRenderGFWDropdown(false));
+            }
+
             //TODO: We need a better loading handling, probably a spinner!
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
@@ -401,6 +408,7 @@ export class MapController {
       });
 
       this.initializeAndSetSketch();
+
       const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
         this._map
       );
@@ -525,7 +533,6 @@ export class MapController {
     parentID?: string
   ): void {
     let layer = null as any;
-
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)

@@ -1,13 +1,17 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { RootState } from 'js/store';
+import { setRenderGFWDropdown } from 'js/store/appState/actions';
+
 import LegendItems from './generateLegendItems';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
+
 import 'css/legend.scss';
 
 const Legend = (): JSX.Element => {
-  const { hideWidgetActive, selectedLanguage } = useSelector(
+  const dispatch = useDispatch();
+  const { hideWidgetActive, selectedLanguage, renderGFWDropdown } = useSelector(
     (store: RootState) => store.appState
   );
   const { allAvailableLayers, scale } = useSelector(
@@ -25,10 +29,16 @@ const Legend = (): JSX.Element => {
     setLegendOpen(!legendOpen);
   }
 
+  const closeGFWDropdown = () => {
+    if (renderGFWDropdown) {
+      dispatch(setRenderGFWDropdown(false));
+    }
+  };
+
   return (
     <>
       {visibleLayers.length > 0 && (
-        <div className="legend-container">
+        <div className="legend-container" onClick={() => closeGFWDropdown()}>
           <div
             className="legend-title"
             onClick={handleLegendToggle}

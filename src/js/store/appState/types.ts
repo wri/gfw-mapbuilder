@@ -32,6 +32,7 @@ export interface MeasureContent {
 export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
+  renderGFWDropdown: boolean;
   infoModalLayerID: string;
   selectedLanguage: string;
   measureContent: MeasureContent;
@@ -42,6 +43,7 @@ export interface AppState {
 //Action names available
 export const RENDER_MODAL = 'RENDER_MODAL';
 export const RENDER_INFO_MODAL = 'RENDER_INFO_MODAL';
+export const RENDER_GFW_DROPDOWN = 'RENDER_GFW_DROPDOWN';
 export const SELECT_ACTIVE_TAB = 'SELECT_ACTIVE_TAB';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
@@ -82,6 +84,11 @@ interface RenderInfoModalAction {
   payload: AppState['infoModalLayerID'];
 }
 
+interface RenderGFWDropdownAction {
+  type: typeof RENDER_GFW_DROPDOWN;
+  payload: AppState['renderGFWDropdown'];
+}
+
 interface SetLoggedIn {
   type: typeof SET_LOGGED_IN;
   payload: AppState['isLoggedIn'];
@@ -111,6 +118,7 @@ export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
   | RenderInfoModalAction
+  | RenderGFWDropdownAction
   | SelectActiveTab
   | SetLanguageAction
   | SetOpenLayerGroup

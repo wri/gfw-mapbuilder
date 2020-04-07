@@ -671,6 +671,7 @@ module.exports = {
       ]
     },
     GROUP_TEST: {
+      // This is a test group consisting of various layers not related to cameroon, this should not make to PROD
       grouptype: 'default',
       order: 1,
       label: {
