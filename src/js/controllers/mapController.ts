@@ -18,6 +18,7 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import FeatureLayer from 'esri/layers/FeatureLayer';
+import { throttle } from 'lodash-es';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -31,7 +32,8 @@ import {
   isMapReady,
   setActiveFeatureIndex,
   setActiveFeatures,
-  changeMapScale
+  changeMapScale,
+  changeMapCenterCoordinates
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -118,16 +120,25 @@ export class MapController {
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
 
+    function syncExtent(ext: __esri.Extent, mapview: MapView): any {
+      const { latitude, longitude } = ext.center;
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      store.dispatch(changeMapScale(mapview.scale));
+    }
+
+    const throtthledUpdater = throttle(syncExtent, 1500, { trailing: true });
+
     this._mapview
       .when(
         async () => {
           store.dispatch(isMapReady(true));
           //default scale for map
           store.dispatch(changeMapScale(this._mapview.scale));
-          //zoom level listener
-          this._mapview.watch('scale', newScale => {
-            store.dispatch(changeMapScale(newScale));
-          });
+          const { latitude, longitude } = this._mapview.center;
+          store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+          this._mapview.watch('extent', newExtent =>
+            throtthledUpdater(newExtent, this._mapview)
+          );
           this._mapview.on('click', event => {
             //TODO: We need a better loading handling, probably a spinner!
             //clean active indexes for data tab and activeFeatures
@@ -362,15 +373,25 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
+
+    function syncExtent(ext: __esri.Extent, mapview: MapView): any {
+      const { latitude, longitude } = ext.center;
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      store.dispatch(changeMapScale(mapview.scale));
+    }
+
+    const throtthledUpdater = throttle(syncExtent, 1500, { trailing: true });
+
     this._mapview.when(async () => {
       //Set default state and other event listeners
       store.dispatch(isMapReady(true));
       store.dispatch(setLanguage(lang));
       store.dispatch(changeMapScale(this._mapview.scale));
-      //zoom level listener
-      this._mapview.watch('scale', newScale => {
-        store.dispatch(changeMapScale(newScale));
-      });
+      const { latitude, longitude } = this._mapview.center;
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      this._mapview.watch('extent', newExtent =>
+        throtthledUpdater(newExtent, this._mapview)
+      );
       this._mapview.on('click', event => {
         store.dispatch(setActiveFeatures([]));
         store.dispatch(setActiveFeatureIndex([0, 0]));
@@ -1044,49 +1065,6 @@ export class MapController {
         isUploadFile: true
       });
     }
-
-    // ? Do we need the v1 logic below?
-
-    // const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
-    // const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
-    // if (layer) {
-    //   this.context.map.setExtent(graphicsExtent, true);
-
-    //   const geometryService = new GeometryService(
-    //     'https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'
-    //   );
-    //   var params = new ProjectParameters();
-
-    //   // Set the projection of the geometry for the image server
-    //   params.outSR = new SpatialReference(102100);
-    //   params.geometries = [];
-
-    //   graphics.forEach(feature => {
-    //     params.geometries.push(feature.geometry);
-    //   });
-
-    //   // update the graphics geometry with the new projected geometry
-    //   const successfullyProjected = geometries => {
-    //     graphics.forEach((graphic, i) => {
-    //       graphic.geometry = geometries[i];
-    //       layer.add(graphic);
-    //       if (i === geometries.length - 1) {
-    //         geometryUtils
-    //           .generateDrawnPolygon(graphic.geometry)
-    //           .then(registeredGraphic => {
-    //             this.context.map.infoWindow.setFeatures([registeredGraphic]);
-    //           });
-    //       }
-    //     });
-    //   };
-    //   const failedToProject = err => {
-    //     console.log('Failed to project the geometry: ', err);
-    //   };
-    //   geometryService
-    //     .project(params)
-    //     .then(successfullyProjected, failedToProject);
-    // }
-    // this.setState({ isUploading: false });
   }
 
   updateBaseTile(id: string, range: Array<number>): void {

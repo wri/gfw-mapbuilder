@@ -7,10 +7,11 @@ import { DaySelector } from './DaySelector';
 import { MonthSelector } from './MonthSelector';
 import { CloudSlider } from './CloudSlider';
 import { ImageStylePicker } from './ImageStylePicker';
-import { mapController } from 'js/controllers/mapController';
 import { subMonths, parse, format } from 'date-fns';
 import { TileThumbnails } from './TileThumbnails';
 import { chunk } from 'lodash-es';
+import { useDebounce } from 'use-debounce';
+
 interface ImageryProps {
   modalHandler: () => void;
   handleTileHover: (data: any) => void;
@@ -22,7 +23,11 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
-
+  const { scale, mapCenterCoordinates } = useSelector(
+    (store: RootState) => store.mapviewState
+  );
+  const [dbScale] = useDebounce(scale, 1000);
+  const [dbMapCenterCoordinates] = useDebounce(mapCenterCoordinates, 1000);
   const [day, setDay] = useState(getTodayDate);
   const [monthRange, setMonthRange] = useState(
     imageryText[selectedLanguage].monthsOptions[0].value
@@ -87,11 +92,10 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     };
 
     //chucnk requests to be 4 at a time
-    const chunkedTiles = chunk(tiles, 5);
+    const chunkedTiles = chunk(tiles, 6);
     let postTileResponses: any[] = [];
     let postThumbResponses: any[] = [];
     for await (const tileChunk of chunkedTiles) {
-      console.log(tileChunk);
       const postTilesResponse = await postTiles(tileChunk);
       postTileResponses = postTileResponses.concat(
         postTilesResponse?.data?.attributes
@@ -113,7 +117,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   React.useEffect(() => {
     const satIMGURL =
       'https://production-api.globalforestwatch.org/recent-tiles';
-    const { latitude, longitude } = mapController.getMapviewCoordinates();
+    const { latitude, longitude } = mapCenterCoordinates;
     const end = day;
     const start = subMonths(
       parse(end, 'yyyy-MM-dd', new Date()),
@@ -122,7 +126,14 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     const startFormatted = format(start, 'yyyy-MM-dd');
     const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
     getRecentTiles(recentTileURL);
-  }, [selectedLanguage, day, monthRange, imageryStyle]);
+  }, [
+    selectedLanguage,
+    day,
+    monthRange,
+    imageryStyle,
+    dbScale,
+    dbMapCenterCoordinates
+  ]);
 
   const handleTileHover = (e: any, tile: any) => {
     setHoverContent(tile);

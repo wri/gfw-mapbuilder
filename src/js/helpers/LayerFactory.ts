@@ -112,15 +112,15 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       });
       break;
     case 'imagery':
-      esriLayer = new GraphicsLayer({
+      esriLayer = new TreeCoverGainLayer({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
-        opacity: layerConfig.opacity
+        urlTemplate: layerConfig.url,
+        view: mapView
       });
       break;
     default:
-      // throw new Error('No matching layer type!')
       console.error('No error type!');
       break;
   }
