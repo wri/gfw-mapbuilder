@@ -641,7 +641,7 @@
   font-size: 12px;
   position: fixed;
   top: 5vh;
-  left: 40vw;
+  left: 30vw;
   width: 500px;
   padding: 0.5rem;
   background-color: #fff;
@@ -703,7 +703,7 @@
   }
   .imagery-thumbnails {
     overflow-y: scroll;
-    height: 200px;
+    height: 90px;
     .thumb-container {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -726,6 +726,9 @@
         overflow: hidden;
         background: #999;
         border: transparent solid 2px;
+      }
+      .thumbnail.active {
+        border: 2px solid rgb(240, 171, 0);
       }
     }
   }
