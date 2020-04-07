@@ -92,7 +92,7 @@ export interface LayerProps {
   type: string;
   origin: LayerOrigin;
   url: string;
-  metadata?: { metadata?: object; legendConfig?: LegendConfig };
+  metadata?: any | { legendConfig?: LegendConfig };
   legendInfo?: any;
   maxScale?: number;
   minScale?: number;
@@ -100,6 +100,8 @@ export interface LayerProps {
   parentID?: string;
   popup?: Popup;
   sublabel?: object;
+  layerIds?: any[] | null;
+  label?: any;
 }
 
 interface Attributes {

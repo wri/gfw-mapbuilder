@@ -19,7 +19,7 @@ module.exports = {
   language: 'fr',
   useAlternativeLanguage: true,
   alternativeLanguage: 'en',
-  alternativeWebmap: 'b96ee7fcd75e405dbf9a8b5a44ae734a',
+  alternativeWebmap: '3ab4c186c87b44d8bf2520609fba783e',
   alternativeLanguageTitle: 'Forest Atlas of Cameroon',
   alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
   alternativeNarrative:
@@ -615,7 +615,7 @@ module.exports = {
     },
     GROUP_LCD: {
       grouptype: 'default',
-      order: 1,
+      order: 7,
       label: {
         en: 'Land Cover Dynamics',
         fr: 'Evolution de la couverture des sols',
@@ -667,6 +667,145 @@ module.exports = {
           id: 'MODIS_ACTIVE_FIRES',
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+        }
+      ]
+    },
+    GROUP_TEST: {
+      // This is a test group consisting of various layers not related to cameroon, this should not make to PROD
+      grouptype: 'default',
+      order: 1,
+      label: {
+        en: 'TEST',
+        fr: 'TEST',
+        es: 'TEST',
+        pt: 'TEST',
+        id: 'TEST',
+        zh: 'TEST',
+        ka: 'TEST'
+      },
+      layers: [
+        {
+          order: 3,
+          id: 'CTC2',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+          layerIds: [3],
+          technicalName: 'ind_treecover2',
+          visible: true,
+          label: {
+            en:
+              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
+          }
+        },
+        {
+          order: 2,
+          id: 'CTC',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+          layerIds: [2],
+          technicalName: 'ind_treecover',
+          visible: true,
+          label: {
+            en:
+              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+          }
+        },
+        {
+          order: 1,
+          id: 'MTC',
+          type: 'dynamic',
+          url:
+            'https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer',
+          layerIds: [1, 7],
+          technicalName: 'ind_statecarbon',
+          visible: true,
+          label: {
+            en:
+              'State-wise Potential for Increase in Above-ground Carbon Sequestration'
+          },
+          popup: {
+            title: {
+              en: ''
+            },
+            content: {
+              en: [
+                {
+                  label: 'Above-ground Carbon Sequestration Potential of India',
+                  fieldExpression: '*'
+                },
+                {
+                  label: 'In Protection Areas (million tonnes):',
+                  fieldExpression: 'Nat_prot'
+                },
+                {
+                  label: 'In Wide-scale Restoration Areas (million tonnes):',
+                  fieldExpression: 'Nat_widesc'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
+                  fieldExpression: 'Nat_Agri20'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
+                  fieldExpression: 'Nat_Agri40'
+                },
+                {
+                  label: 'In Other Areas (million tonnes):',
+                  fieldExpression: 'Nat_Others'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: 'Above-ground Carbon Sequestration Potential of',
+                  fieldExpression: 'ST_NM'
+                },
+                {
+                  label: 'In Protection Areas (million tonnes):',
+                  fieldExpression: 'Protection'
+                },
+                {
+                  label: 'In Wide-scale Restoration Areas (million tonnes):',
+                  fieldExpression: 'Widescale'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
+                  fieldExpression: 'Agri_tc20'
+                },
+                {
+                  label:
+                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
+                  fieldExpression: 'Agri_tc40'
+                },
+                {
+                  label: 'In Other Areas (million tonnes)',
+                  fieldExpression: 'Others'
+                },
+                {
+                  label: '',
+                  fieldExpression: '*'
+                },
+                {
+                  label: 'This excludes protected areas. *',
+                  fieldExpression: '*'
+                }
+              ]
+            }
+          }
         }
       ]
     },

@@ -126,18 +126,20 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           language
         );
       } else {
-        labelIcons = layer.metadata?.legendConfig?.items.map((item: any, i) => {
-          return (
-            <div className="label-item" key={i}>
-              {getLegendLabel(
-                layer.metadata?.legendConfig?.type,
-                item,
-                layer.opacity
-              )}
-              <p>{item.name[language]}</p>
-            </div>
-          );
-        });
+        labelIcons = layer.metadata?.legendConfig?.items.map(
+          (item: any, i: number) => {
+            return (
+              <div className="label-item" key={i}>
+                {getLegendLabel(
+                  layer.metadata?.legendConfig?.type,
+                  item,
+                  layer.opacity
+                )}
+                <p>{item.name[language]}</p>
+              </div>
+            );
+          }
+        );
       }
       return (
         <div className="layer-item" key={layer.id}>
@@ -145,7 +147,33 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {labelIcons}
         </div>
       );
-    } else {
+    } else if (layer.origin === 'service') {
+      let labelIcons;
+      //let's handle dynamic layer types first
+      if (layer.type === 'dynamic') {
+        labelIcons = layer.legendInfo.map((infoObject: any, i: number) => {
+          const sublayerLabels = infoObject.legend.map(
+            (item: any, j: number) => (
+              <div className="label-item" key={j}>
+                {getLegendLabel('webmap', item, layer.opacity)}
+                <p>{item.label}</p>
+              </div>
+            )
+          );
+          return (
+            <div className="label-item-group" key={i}>
+              <p className="sublayer-title">{infoObject.layerName}</p>
+              {sublayerLabels}
+            </div>
+          );
+        });
+      }
+      return (
+        <div className="layer-item" key={layer.id}>
+          <p className="layer-title">{layer.title}</p>
+          {labelIcons}
+        </div>
+      );
       //nothing found about the legend config information? what to do?
     }
   });
