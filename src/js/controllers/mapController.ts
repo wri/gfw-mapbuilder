@@ -128,7 +128,7 @@ export class MapController {
       store.dispatch(changeMapScale(mapview.scale));
     }
 
-    const throtthledUpdater = throttle(syncExtent, 1500, { trailing: true });
+    const throtthledUpdater = throttle(syncExtent, 3500, { trailing: false });
 
     this._mapview
       .when(
@@ -1444,7 +1444,7 @@ export class MapController {
     if (!layerID) return;
     const layer = this._map?.findLayerById(layerID) as any;
     if (layer && layer.urlTemplate) {
-      layer.visible = !value;
+      layer.visible = !layer.visible;
     }
   }
 

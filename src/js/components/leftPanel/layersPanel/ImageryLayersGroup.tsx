@@ -92,10 +92,33 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     layerID?: string;
   }
   const ImageryLayerSwitch = (props: ImageryToggleProps): JSX.Element => {
-    const handleImagerySwitch = (): void => {
-      setImageryModalOpen(!imageryModalOpen);
-      mapController.toggleImageryLayer(imageryModalOpen, props.layerID);
+    let imageryLayer: any;
+    if (props.layerID) {
+      imageryLayer = mapController._map?.findLayerById(props.layerID);
+    }
+    const [toggleIsOn, setToggleIsOn] = useState(
+      imageryLayer ? imageryLayer.visible : false
+    );
+
+    const handleImagerySwitch = (e: any): void => {
+      if (!props.layerID) return;
+      const imgLayer: any = mapController._map?.findLayerById(props.layerID);
+      if (!imgLayer) return;
+      if (toggleIsOn) {
+        if (imgLayer.urlTemplate) {
+          imgLayer.visible = false;
+        }
+        setImageryModalOpen(false);
+        setToggleIsOn(false);
+      } else {
+        if (imgLayer.urlTemplate) {
+          imgLayer.visible = true;
+        }
+        setImageryModalOpen(true);
+        setToggleIsOn(true);
+      }
     };
+
     return (
       <div className="layer-checkbox imagery">
         <input
@@ -103,7 +126,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           name="styled-checkbox"
           className="styled-checkbox"
           id={`layer-checkbox-${props.layerID}`}
-          checked={imageryModalOpen}
+          checked={toggleIsOn}
           onChange={handleImagerySwitch}
         />
         <label
