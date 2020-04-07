@@ -92,6 +92,10 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     layerID?: string;
   }
   const ImageryLayerSwitch = (props: ImageryToggleProps): JSX.Element => {
+    const handleImagerySwitch = (): void => {
+      setImageryModalOpen(!imageryModalOpen);
+      mapController.toggleImageryLayer(imageryModalOpen, props.layerID);
+    };
     return (
       <div className="layer-checkbox imagery">
         <input
@@ -100,7 +104,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           className="styled-checkbox"
           id={`layer-checkbox-${props.layerID}`}
           checked={imageryModalOpen}
-          onChange={(): void => setImageryModalOpen(!imageryModalOpen)}
+          onChange={handleImagerySwitch}
         />
         <label
           className="styled-checkboxlabel"

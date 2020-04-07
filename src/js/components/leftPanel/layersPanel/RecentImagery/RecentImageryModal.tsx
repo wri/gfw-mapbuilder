@@ -126,7 +126,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     getRecentTiles(recentTileURL);
   }, [selectedLanguage, day, monthRange, imageryStyle, mapCenterCoordinates]);
 
-  const handleTileHover = (e: any, tile: any) => {
+  const handleTileHover = (e: any, tile: any): void => {
     setHoverContent(tile);
     props.handleTileHover(tile);
   };

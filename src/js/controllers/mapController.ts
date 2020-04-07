@@ -1433,6 +1433,14 @@ export class MapController {
     this._imageryOpacity = value;
   }
 
+  toggleImageryLayer(value: boolean, layerID?: string): void {
+    if (!layerID) return;
+    const layer = this._map?.findLayerById(layerID) as any;
+    if (layer && layer.urlTemplate) {
+      layer.visible = !value;
+    }
+  }
+
   setDefinedDateRange(layerID: string, sublayerType: string): void {
     if (!this._map) {
       return;
