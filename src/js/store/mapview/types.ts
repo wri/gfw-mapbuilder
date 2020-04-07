@@ -59,6 +59,7 @@ export interface MapviewState {
   activeBasemap: string; // * NEW! not in resources.js
   timeSlider: number[];
   scale: number;
+  mapCenterCoordinates: { latitude: number; longitude: number };
 }
 
 interface Popup {
@@ -140,6 +141,7 @@ export const SET_ACTIVE_FEATURE_INDEX = 'SET_ACTIVE_FEATURE_INDEX';
 export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
 export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
 export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
+export const CHANGE_MAP_CENTER_COORDINATES = 'CHANGE_MAP_CENTER_COORDINATES';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -185,6 +187,11 @@ interface ChangeMapScale {
   payload: MapviewState['scale'];
 }
 
+interface ChangeMapCenterCoordinates {
+  type: typeof CHANGE_MAP_CENTER_COORDINATES;
+  payload: MapviewState['mapCenterCoordinates'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -194,4 +201,5 @@ export type MapviewStateTypes =
   | SetActiveFeatureIndex
   | SetSelectedAction
   | SetTimeSlider
-  | ChangeMapScale;
+  | ChangeMapScale
+  | ChangeMapCenterCoordinates;
