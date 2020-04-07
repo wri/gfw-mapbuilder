@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
-import LayerTransparencySlider from './LayerTransparencySlider';
+import ImagerySlider from './RecentImagery/ImagerySlider';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
 import 'css/layer-toggle-checkbox.scss';
 import RecentImagery from './RecentImagery/RecentImageryModal';
 import { format } from 'date-fns';
+import { mapController } from 'js/controllers/mapController';
 
 interface LayerGroupProps {
   layerGroupKey: string;
@@ -76,13 +77,13 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             <div
               className="info-icon-container"
               style={{ marginLeft: 10 }}
-              onClick={() => openInfoModal()}
+              onClick={(): void => openInfoModal()}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />
             </div>
           </div>
         </div>
-        <LayerTransparencySlider layerID={'props.id'} layerOpacity={1} />
+        {props.id && <ImagerySlider layerID={props.id} />}
       </>
     );
   };
@@ -124,6 +125,10 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     l => l.id === layerGroupConfig.layers[0].id
   );
 
+  const imageryLayerOnMap = mapController._map?.findLayerById(
+    layerGroupConfig.layers[0].id
+  );
+
   const dispatch = useDispatch();
 
   const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage];
@@ -163,7 +168,8 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             hoverTileData={hoverTileData}
             selectedLanguage={selectedLanguage}
             info={layerGroupConfig}
-            id={imagerylayer?.id}
+            id={imageryLayerOnMap?.id}
+            opacity={imagerylayer?.opacity}
           />
         </div>
       </div>

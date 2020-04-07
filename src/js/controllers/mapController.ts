@@ -87,6 +87,7 @@ export class MapController {
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
   _domRef: RefObject<any>;
+  _imageryOpacity: number;
 
   constructor() {
     this._map = undefined;
@@ -1425,6 +1426,11 @@ export class MapController {
         }
       });
     }
+  }
+
+  //Keeping imagery opacity in global variable due to the nature of placing tiles for imagery service. We re-create layer each time we place the new tile down. Keeping this value in redux introduced a lot of performance issues, thus global here.
+  updateImageryOpacity(value: number): void {
+    this._imageryOpacity = value;
   }
 
   setDefinedDateRange(layerID: string, sublayerType: string): void {

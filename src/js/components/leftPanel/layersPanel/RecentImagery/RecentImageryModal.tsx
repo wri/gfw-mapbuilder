@@ -10,7 +10,6 @@ import { ImageStylePicker } from './ImageStylePicker';
 import { subMonths, parse, format } from 'date-fns';
 import { TileThumbnails } from './TileThumbnails';
 import { chunk } from 'lodash-es';
-import { useDebounce } from 'use-debounce';
 
 interface ImageryProps {
   modalHandler: () => void;
@@ -23,11 +22,10 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
-  const { scale, mapCenterCoordinates } = useSelector(
+  const { mapCenterCoordinates } = useSelector(
     (store: RootState) => store.mapviewState
   );
-  const [dbScale] = useDebounce(scale, 1000);
-  const [dbMapCenterCoordinates] = useDebounce(mapCenterCoordinates, 1000);
+
   const [day, setDay] = useState(getTodayDate);
   const [monthRange, setMonthRange] = useState(
     imageryText[selectedLanguage].monthsOptions[0].value
@@ -40,6 +38,28 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const [recentTiles, setRecentTiles] = useState<any>('');
   const [tilesLoading, setTilesLoading] = useState<any>(true);
   const [hoverContent, setHoverContent] = useState<any>('');
+  //POST req to Tiles endpoint
+  const postThumbs = async (tileChunk: any[]): Promise<any> => {
+    const sourceData: any[] = tileChunk.map((tile: any) => {
+      return { source: tile.attributes.source };
+    });
+    const postThumbsURL =
+      'https://production-api.globalforestwatch.org/recent-tiles/thumbs';
+    return await fetch(postThumbsURL, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        source_data: sourceData,
+        bands: imageryStyleBands
+      })
+    })
+      .then(data => data.json())
+      .catch(e => console.log('error', e));
+  };
+
   const getRecentTiles = async (URL: string): Promise<any> => {
     setTilesLoading(true);
     const res = await fetch(URL).then(res => res.json());
@@ -67,28 +87,6 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         .catch(e => {
           console.log('error', e);
         });
-    };
-
-    //POST req to Tiles endpoint
-    const postThumbs = async (tileChunk: any[]): Promise<any> => {
-      const sourceData: any[] = tileChunk.map((tile: any) => {
-        return { source: tile.attributes.source };
-      });
-      const postThumbsURL =
-        'https://production-api.globalforestwatch.org/recent-tiles/thumbs';
-      return await fetch(postThumbsURL, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          source_data: sourceData,
-          bands: imageryStyleBands
-        })
-      })
-        .then(data => data.json())
-        .catch(e => console.log('error', e));
     };
 
     //chucnk requests to be 4 at a time
@@ -126,14 +124,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     const startFormatted = format(start, 'yyyy-MM-dd');
     const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
     getRecentTiles(recentTileURL);
-  }, [
-    selectedLanguage,
-    day,
-    monthRange,
-    imageryStyle,
-    dbScale,
-    dbMapCenterCoordinates
-  ]);
+  }, [selectedLanguage, day, monthRange, imageryStyle, mapCenterCoordinates]);
 
   const handleTileHover = (e: any, tile: any) => {
     setHoverContent(tile);
