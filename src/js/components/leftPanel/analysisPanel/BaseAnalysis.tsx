@@ -149,14 +149,14 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
-  const setActiveButton = (): void => {
-    if (renderEditButton) {
-      setRenderEditButton(false);
-      mapController.updateSketchVM();
-    } else {
-      mapController.completeSketchVM();
-      setRenderEditButton(true);
-    }
+  const editSketchVM = (): void => {
+    mapController.updateSketchVM();
+    setRenderEditButton(false);
+  };
+
+  const saveSketchVM = (): void => {
+    mapController.completeSketchVM();
+    setRenderEditButton(true);
   };
 
   const setDelete = (): void => {
@@ -174,6 +174,12 @@ const BaseAnalysis = (): JSX.Element => {
       {geostoreReady ? (
         <div className="base-analysis-content">
           <div className="layer-title">{layerTitle}</div>
+          {renderEditButton ? (
+            <button onClick={(): void => editSketchVM()}>Edit</button>
+          ) : (
+            <button onClick={(): void => saveSketchVM()}>Save</button>
+          )}
+          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">

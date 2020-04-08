@@ -562,6 +562,9 @@ export class MapController {
 
   completeSketchVM(): void {
     this._sketchVM?.complete();
+    const graphicsLayer = this._map?.findLayerById('sketchGraphics') as any;
+    debugger;
+    // (this._map?.findLayerById('sketchGraphics') as any).refresh();
   }
 
   deleteSketchVM(): void {
@@ -570,13 +573,16 @@ export class MapController {
 
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
-        tool: 'reshape',
-        enableRotation: false,
-        toggleToolOnClick: false,
-        enableScaling: false,
-        preserveAspectRatio: false
-      });
+      this._sketchVM?.update(
+        (this._sketchVMGraphicsLayer as any).graphics.items,
+        {
+          tool: 'reshape',
+          enableRotation: false,
+          toggleToolOnClick: false,
+          enableScaling: false,
+          preserveAspectRatio: false
+        }
+      );
     }
   }
 
@@ -605,7 +611,7 @@ export class MapController {
         features: [event.graphic],
         fieldNames: null
       };
-
+      // this._sketchVM?.complete();
       store.dispatch(setActiveFeatures([drawnFeatures]));
       store.dispatch(setActiveFeatureIndex([0, 0]));
       store.dispatch(selectActiveTab('analysis'));
@@ -635,6 +641,10 @@ export class MapController {
 
     this._sketchVM?.on('delete', () => {
       this.listenToSketchDelete();
+    });
+
+    this._sketchVM?.on('redo', (event: any) => {
+      console.log('REDO', event);
     });
   }
 
