@@ -485,48 +485,68 @@ export default class Analysis extends Component {
         const { valueAttribute, color, badgeLabel } = config;
 
         switch (activeAnalysisType) {
-          case 'TC_LOSS_GAIN':
-            chartComponent = <LossGainBadge
-              results={results}
-              lossFromSelectIndex={lossFromSelectIndex}
-              lossToSelectIndex={lossToSelectIndex}
-              totalLossLabel={text[language].ANALYSIS_TOTAL_LOSS_LABEL}
-              totalGainLabel={text[language].ANALYSIS_TOTAL_GAIN_LABEL}
-              totalGainRange={text[language].ANALYSIS_TOTAL_GAIN_RANGE}
-            />;
+          case "TC_LOSS_GAIN":
+            chartComponent = (
+              <LossGainBadge
+                results={results}
+                lossFromSelectIndex={lossFromSelectIndex}
+                lossToSelectIndex={lossToSelectIndex}
+                totalLossLabel={text[language].ANALYSIS_TOTAL_LOSS_LABEL}
+                totalGainLabel={text[language].ANALYSIS_TOTAL_GAIN_LABEL}
+                totalGainRange={text[language].ANALYSIS_TOTAL_GAIN_RANGE}
+              />
+            );
             break;
-          case 'VIIRS_FIRES':
-            chartComponent = <FiresBadge
-              results={results}
-              from={viirsStartDate}
-              to={viirsEndDate}
-              preLabel={text[language].ANALYSIS_FIRES_PRE}
-              firesLabel={text[language].ANALYSIS_FIRES_ACTIVE}
-              timelineStartLabel={text[language].TIMELINE_START}
-              timelineEndLabel={text[language].TIMELINE_END}
-            />;
-            break;
-          case 'FRAGMENTATION':
-            console.log('results', results);
-            console.log('config', config);
-            // results.startYearValue = startCount;
-            // results.totalRangeValue = totalCount;
-            const diff = results.totalRangeValue - results.startYearValue;
-            // debugger
-
-            const style = {
-              borderColor: 'purple',
-              color: 'purple'
-            };
-            chartComponent = <div className='results__badge' style={style}>
-              <div className='results__badge-label'>Frag Loss {config.startYear}-{config.endYear}</div>
-              <div className='results__badge-value'>{diff.toFixed(3)}</div>
-            </div>;
-
+          case "VIIRS_FIRES":
+            chartComponent = (
+              <FiresBadge
+                results={results}
+                from={viirsStartDate}
+                to={viirsEndDate}
+                preLabel={text[language].ANALYSIS_FIRES_PRE}
+                firesLabel={text[language].ANALYSIS_FIRES_ACTIVE}
+                timelineStartLabel={text[language].TIMELINE_START}
+                timelineEndLabel={text[language].TIMELINE_END}
+              />
+            );
             break;
           default:
-            chartComponent = <Badge results={results} valueAttribute={valueAttribute} color={color} label={badgeLabel[language]} />;
-
+            //let's catch fragmentation here in case we are dealing with it
+            const analysisIsFragmentation = activeAnalysisType.includes(
+              "FRAGMENTATION"
+            );
+            if (analysisIsFragmentation) {
+              console.log("results", results);
+              console.log("config", config);
+              const style = {
+                borderColor: "purple",
+                color: "purple",
+              };
+              function buildLabel() {
+                let range = '';
+                if (config.startYear) {
+                  range = `${config.startYear} - ${config.endYear}`;
+                }
+                return `${config.label[language]} ${range}`;
+              }
+              chartComponent = (
+                <div className="results__badge" style={style}>
+                  <div className="results__badge-label">
+                   {buildLabel()}
+                  </div>
+                  <div className="results__badge-value">{results.totalResult.toFixed(3)}</div>
+                </div>
+              );
+            } else {
+              chartComponent = (
+                <Badge
+                  results={results}
+                  valueAttribute={valueAttribute}
+                  color={color}
+                  label={badgeLabel[language]}
+                />
+              );
+            }
         }
         break;
       }
@@ -625,7 +645,7 @@ export default class Analysis extends Component {
           return;
         }
 
-        if (analysisSettings.analysisId === 'FRAGMENTATION') {
+        if (analysisSettings.analysisId.includes('FRAGMENTATION')) {
 
           if (selectedFeature.geometry.spatialReference.isWebMercator()) {
             selectedFeature.geometry = webmercatorUtils.webMercatorToGeographic(selectedFeature.geometry);
@@ -650,31 +670,42 @@ export default class Analysis extends Component {
             console.log('results', results);
 
             if (results.json) {
-              results.json().then(newRes => {
-                console.log('newResss', newRes);
-                console.log('uiParamsToAppend.period', uiParamsToAppend.period);
-                const dates = uiParamsToAppend.period.split(',');
-
-                const startYear = dates[0].split('-')[0];
-                const endYear = dates[1].split('-')[0];
-                analysisSettings.startYear = parseInt(startYear);
-                analysisSettings.endYear = parseInt(endYear);
-                let startCount;
-                let totalCount = 0;
-                console.log('analysisSettings.startYear', analysisSettings.startYear);
-                console.log('analysisSettings.endYear', analysisSettings.endYear);
-                Object.keys(newRes).forEach(year => {
-                  console.log(year, typeof year);
-                  if (parseInt(year) === analysisSettings.startYear) {
-                    startCount = newRes[year];
-                  } else if (parseInt(year) > analysisSettings.startYear && parseInt(year) <= analysisSettings.endYear) {
-                    totalCount += newRes[year];
+              results.json().then((newRes) => {
+                let dates;
+                let startYear;
+                let endYear;
+                if (analysisSettings.uiParams !== "none") {
+                  console.log("newResss", newRes);
+                  console.log(
+                    "uiParamsToAppend.period",
+                    uiParamsToAppend.period
+                  );
+                  dates = uiParamsToAppend.period.split(",");
+                  startYear = dates[0].split("-")[0];
+                  endYear = dates[1].split("-")[0];
+                  analysisSettings.startYear = parseInt(startYear);
+                  analysisSettings.endYear = parseInt(endYear);
+                }
+                let totalResult = 0;
+                Object.keys(newRes).forEach((year) => {
+                  if (year === "constant") {
+                    totalResult = newRes[year];
+                  }
+                  if (
+                    parseInt(year) >= analysisSettings.startYear &&
+                    parseInt(year) <= analysisSettings.endYear
+                  ) {
+                    totalResult += newRes[year];
                   }
                 });
-                newRes.startYearValue = startCount;
-                newRes.totalRangeValue = totalCount;
+                newRes.totalResult = totalResult;
                 this.setState({ isLoading: false });
-                this.renderResults(analysisId, newRes, language, analysisSettings);
+                this.renderResults(
+                  analysisId,
+                  newRes,
+                  language,
+                  analysisSettings
+                );
               });
             }
 
