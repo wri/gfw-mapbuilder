@@ -28,6 +28,7 @@ export default function placeTileOnMap(tile: any): void {
   mapController._map?.reorder(imageryLayer, 1);
 }
 /*
+//TODO: Logic below creates a Poly from imagery data in order to display hover info, we may need this logic if user requirements change
   if (imageryLayer) {
     //Remove all graphics from the layer
     imageryLayer.removeAll();

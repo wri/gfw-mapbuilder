@@ -89,7 +89,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
         });
     };
 
-    //chucnk requests to be 4 at a time
+    //Chunk tile array into smaller parts so the API does not get overloaded
     const chunkedTiles = chunk(tiles, 6);
     let postTileResponses: any[] = [];
     let postThumbResponses: any[] = [];
