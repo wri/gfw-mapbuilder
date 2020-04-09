@@ -12,6 +12,8 @@ import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import 'css/leftpanel.scss';
+import { DatePicker, RangeSlider } from './InputComponents';
+import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
@@ -79,6 +81,18 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
+  type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+  const renderInputComponent = (type: InputTypes): JSX.Element | null => {
+    switch (type) {
+      case 'rangeSlider':
+        return <RangeSlider />;
+      case 'tcd':
+        return <CanopyDensityPicker label={false} />;
+      case 'datepicker':
+        return <DatePicker />;
+    }
+  };
+
   const AnalysisInstructions = (): JSX.Element | null => {
     const currentAnalysis = analysisModules.find(
       module => module.analysisId === selectedAnalysis
@@ -118,7 +132,9 @@ const BaseAnalysis = (): JSX.Element => {
                       </div>
                       <p>{uiParam.label[selectedLanguage]}</p>
                     </div>
-                    <p>{uiParam.inputType}</p>
+                    <div className="analysis-input">
+                      {renderInputComponent(uiParam.inputType)}
+                    </div>
                   </div>
                 );
               })}

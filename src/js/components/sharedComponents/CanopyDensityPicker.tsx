@@ -6,7 +6,11 @@ import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensi
 
 //TODO: Language awareness
 //
-const CanopyDensityPicker = (): JSX.Element => {
+interface CanopyDensityPickerProps {
+  label: boolean;
+}
+
+const CanopyDensityPicker = (props: CanopyDensityPickerProps): JSX.Element => {
   const dispatch = useDispatch();
   const { density } = useSelector(
     (store: RootState) => store.appState.leftPanel
@@ -19,7 +23,7 @@ const CanopyDensityPicker = (): JSX.Element => {
   return (
     <>
       <div>
-        <span>Change canopy density</span>
+        {props.label && <span>Change canopy density</span>}
         <button
           className="canopy-density-picker"
           onClick={handleDensityButtonClick}

@@ -202,6 +202,11 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       margin-bottom: 10px;
     }
+    .analysis-input {
+      display: grid;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
     .ui-description {
       display: grid;
       grid-template-columns: auto 1fr;
