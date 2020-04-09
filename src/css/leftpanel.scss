@@ -206,6 +206,20 @@
       display: grid;
       justify-content: center;
       margin-bottom: 20px;
+      .calendar-wrapper {
+        .date-section-wrapper {
+          display: grid;
+          grid-template-columns: 40px 1fr;
+          margin-bottom: 2px;
+          label {
+            margin-right: 5px;
+          }
+          input {
+            width: auto;
+            height: auto;
+          }
+        }
+      }
     }
     .ui-description {
       display: grid;

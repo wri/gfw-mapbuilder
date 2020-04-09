@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
@@ -15,6 +16,20 @@ import 'css/leftpanel.scss';
 import { DatePicker, RangeSlider } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 
+type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+export interface UIParams {
+  inputType: InputTypes;
+  startParamName: string;
+  combineParams: boolean;
+  endParamName?: string;
+  valueSeparator?: string;
+  multi?: boolean;
+  minDate: string; //YYYY-MM-DD
+  maxDate: string; //YYYY-MM-DD
+  defaultStartDate: string; //YYYY-MM-DD
+  defaultEndDate: string; //YYYY-MM-DD
+}
+
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
 );
@@ -23,6 +38,8 @@ const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
   const [renderEditButton, setRenderEditButton] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
@@ -63,6 +80,20 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }, [activeFeatures, activeFeatureIndex]);
 
+  function generateWidgetURL(
+    widgetID: string,
+    geostoreID?: string,
+    uiParams: UIParams
+  ): string {
+    let baseURL = 'https://api.resourcewatch.org/v1/widget/';
+    //Add Widget ID
+    baseURL = baseURL.concat(widgetID);
+    //Add Geostore ID
+    baseURL = baseURL.concat(`?geostore=${geostoreID}`);
+    //?period=2018-01-01,2020-04-09
+    return baseURL;
+  }
+
   function runAnalysis() {
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
@@ -70,9 +101,12 @@ const BaseAnalysis = (): JSX.Element => {
     if (mod) {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-      fetch(
-        `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?geostore=${activeFeature.attributes.geostoreId}`
-      )
+      const widgetURL = generateWidgetURL(
+        mod.widgetId,
+        activeFeature.attributes.geostoreId,
+        mod
+      );
+      fetch(widgetURL)
         .then((response: any) => response.json())
         .then((analysisMod: any) => {
           //TODO: we need to handle loading and error states
@@ -81,15 +115,25 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
-  const renderInputComponent = (type: InputTypes): JSX.Element | null => {
-    switch (type) {
+  function handleDateChange(date: string, period: 'start' | 'end'): void {
+    console.log('setting date');
+    if (period === 'start') {
+      setStartDate(date);
+    } else {
+      setEndDate(date);
+    }
+  }
+
+  const renderInputComponent = (props: UIParams): JSX.Element | null => {
+    switch (props.inputType) {
       case 'rangeSlider':
         return <RangeSlider />;
       case 'tcd':
         return <CanopyDensityPicker label={false} />;
       case 'datepicker':
-        return <DatePicker />;
+        return <DatePicker {...props} sendDate={handleDateChange} />;
+      default:
+        return null;
     }
   };
 
@@ -133,7 +177,7 @@ const BaseAnalysis = (): JSX.Element => {
                       <p>{uiParam.label[selectedLanguage]}</p>
                     </div>
                     <div className="analysis-input">
-                      {renderInputComponent(uiParam.inputType)}
+                      {renderInputComponent(uiParam)}
                     </div>
                   </div>
                 );
