@@ -597,17 +597,17 @@ export class MapController {
       event.graphic.symbol.outline.color = [115, 252, 253];
       event.graphic.symbol.color = [0, 0, 0, 0];
       //Replace all active features with our drawn feature, assigning custom layerID and Title
-      const drawnFeatures: LayerFeatureResult = {
-        layerID: 'user_features',
-        layerTitle: 'User Features',
-        // sublayerID: null,
-        // sublayerTitle: null,
-        features: [event.graphic],
-        fieldNames: null
-      };
+      // const drawnFeatures: LayerFeatureResult = {
+      //   layerID: 'user_features',
+      //   layerTitle: 'User Features',
+      //   // sublayerID: null,
+      //   // sublayerTitle: null,
+      //   features: [event.graphic],
+      //   fieldNames: null
+      // };
 
-      store.dispatch(setActiveFeatures([drawnFeatures]));
-      store.dispatch(setActiveFeatureIndex([0, 0]));
+      // store.dispatch(setActiveFeatures([drawnFeatures]));
+      // store.dispatch(setActiveFeatureIndex([0, 0]));
       store.dispatch(selectActiveTab('analysis'));
     }
   }

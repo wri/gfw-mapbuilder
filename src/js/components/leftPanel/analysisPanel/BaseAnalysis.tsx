@@ -165,15 +165,21 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
-  const layerTitle = activeLayer.sublayerTitle
-    ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
-    : activeLayer.layerTitle;
+  // const layerTitle = activeLayer.sublayerTitle
+  //   ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
+  //   : activeLayer.layerTitle;
 
   return (
     <>
       {geostoreReady ? (
         <div className="base-analysis-content">
-          <div className="layer-title">{layerTitle}</div>
+          {/* <div className="layer-title">{layerTitle}</div> */}
+          {renderEditButton ? (
+            <button onClick={(): void => setActiveButton()}>Edit</button>
+          ) : (
+            <button onClick={(): void => setActiveButton()}>Save</button>
+          )}
+          <button onClick={() => setDelete()}>Delete</button>
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">
