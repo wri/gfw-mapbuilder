@@ -19,8 +19,6 @@ const PrintContent: FunctionComponent = () => {
   const printMap = async (printType: string): Promise<void> => {
     setPDFLoading(true);
     setURL('');
-    // ? Should we review the UI/UX for this widget?
-    // ? local component state - isLoading
     const { url } = await mapController.generateMapPDF(printType);
     setURL(url);
     setPDFLoading(false);
@@ -30,12 +28,6 @@ const PrintContent: FunctionComponent = () => {
     <div>
       <div className="directions">
         <p>{buttonLabel}</p>
-        {/* <select onChange={(e): Promise<void> => printMap(e.target.value)}>
-          <option value={''}>{dropdownLabel}</option>
-          {printOptions.map((printOption: string, index: string) => {
-            return <option key={index}>{printOption}</option>;
-          })}
-        </select> */}
         {printOptions.map((printOption: string, index: number) => {
           return (
             <button
