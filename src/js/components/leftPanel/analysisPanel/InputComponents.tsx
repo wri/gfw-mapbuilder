@@ -6,38 +6,37 @@ interface DatePickerProps {
   multi?: boolean;
   minDate: string; //YYYY-MM-DD
   maxDate: string; //YYYY-MM-DD
-}
-
-interface CallbackProp {
-  sendDate?: (date: string, type: 'start' | 'end') => void;
+  defaultStartDate?: string;
+  defaultEndDate?: string;
 }
 const getTodayDate = new Date().toISOString().split('T')[0];
 
 const DatePicker = (props: DatePickerProps): JSX.Element => {
   const dispatch = useDispatch();
-  const { multi, minDate, maxDate } = props;
+  const { multi, minDate, maxDate, defaultEndDate, defaultStartDate } = props;
 
-  const [startDate, setStartDate] = React.useState(getTodayDate);
+  const [startDate, setStartDate] = React.useState(
+    defaultStartDate ? defaultStartDate : getTodayDate
+  );
 
-  const [endDate, setEndDate] = React.useState(getTodayDate);
+  const [endDate, setEndDate] = React.useState(
+    defaultEndDate ? defaultEndDate : getTodayDate
+  );
+
   function handleStartDateChange(e: any): void {
     setStartDate(e.target.value);
-    // dispatch(setAnalysisDateRange([startDate, endDate]));
-    // props.sendDate(startDate, endDate);
-    // props.sendDate(e.target.value, 'start');
+    dispatch(setAnalysisDateRange([startDate, endDate]));
   }
 
   function handleEndDateChange(e: any): void {
     setEndDate(e.target.value);
-    // dispatch(setAnalysisDateRange([startDate, endDate]));
-    // props.sendDate(startDate, endDate);
-    // props.sendDate(e.target.value, 'end');
+    dispatch(setAnalysisDateRange([startDate, endDate]));
   }
 
-  // React.useEffect(() => {
-  //   console.log('synccccccccccccc');
-  //   props.sendDate(startDate, endDate);
-  // }, [startDate, endDate]);
+  //Sync at the start too
+  React.useEffect(() => {
+    dispatch(setAnalysisDateRange([startDate, endDate]));
+  }, []);
 
   return (
     <div className="calendar-wrapper">
@@ -47,9 +46,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
           className="date-time-toggle input"
           type="date"
           defaultValue={startDate}
-          // value={props.startDate}
           min={minDate ? minDate : undefined}
-          // onChange={handleStartDateChange}
           onChange={handleStartDateChange}
         />
       </div>

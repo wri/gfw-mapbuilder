@@ -35,23 +35,19 @@ const selectAnalysisModules = createSelector(
   (state: RootState) => state.appSettings,
   settings => settings.analysisModules
 );
+const selectAnalysisDaterange = createSelector(
+  (state: RootState) => state.appState,
+  appState => appState.leftPanel.analysisDateRange
+);
 
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
 );
 
-const getTodayDate = (): string => {
-  const getTodayDate = new Date().toISOString().split('T')[0];
-  return getTodayDate;
-};
-
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
-  const [renderEditButton, setRenderEditButton] = useState(false);
   //This is used for date picker analysis module
-  const [startDate, setStartDate] = useState(getTodayDate());
-  const [endDate, setEndDate] = useState(getTodayDate());
 
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
@@ -75,6 +71,8 @@ const BaseAnalysis = (): JSX.Element => {
     (store: RootState) => store.mapviewState.activeFeatureIndex
   );
 
+  const analysisDateRange = useSelector(selectAnalysisDaterange);
+
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
     const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
@@ -95,7 +93,7 @@ const BaseAnalysis = (): JSX.Element => {
           setGeostoreReady(true);
         });
     }
-  }, [activeFeatures, activeFeatureIndex]);
+  }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
   function generateWidgetURL(
     uiParams: any,
@@ -106,28 +104,12 @@ const BaseAnalysis = (): JSX.Element => {
     //Add Widget ID
     baseURL = baseURL.concat(widgetID);
     //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
-    debugger;
     for (const param of uiParams) {
       if (param.inputType === 'datepicker') {
-        const todayDate = new Date().toISOString().split('T')[0];
         let datePickerString = `?${param.startParamName}=`;
         if (param.combineParams) {
-          console.log(param.combineParams);
-          console.log(param.valueSeparator);
-          console.log(startDate);
-          console.log(endDate);
-          const start =
-            startDate !== ''
-              ? startDate
-              : param?.defaultStartDate
-              ? param.defaultStartDate
-              : todayDate;
-          const end =
-            endDate !== ''
-              ? endDate
-              : param?.defaultEndDate
-              ? param.defaultEndDate
-              : todayDate;
+          const start = analysisDateRange[0];
+          const end = analysisDateRange[1];
           datePickerString = datePickerString.concat(
             `${start}${param.valueSeparator}${end}`
           );
@@ -165,23 +147,8 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  // function handleDateChange(date: string, type: 'start' | 'end'): void {
-  //   console.log('setting date');
-  //   if (type === 'start') {
-  //     setStartDate(date);
-  //   }
-  //   if (type === 'end') {
-  //     setEndDate(date);
-  //   }
-  // }
-
-  // function testHandler(val: any): void {
-  //   setStartDate(val);
-  //   // console.log(val);
-  // }
-
   const renderInputComponent = (props: UIParams): JSX.Element | null => {
-    const { multi, minDate, maxDate } = props;
+    const { multi, minDate, maxDate, defaultStartDate, defaultEndDate } = props;
     switch (props.inputType) {
       case 'rangeSlider':
         return <RangeSlider />;
@@ -189,70 +156,85 @@ const BaseAnalysis = (): JSX.Element => {
         return <CanopyDensityPicker label={false} />;
       case 'datepicker':
         return (
-          <MemoDatePicker multi={multi} minDate={minDate} maxDate={maxDate} />
+          <MemoDatePicker
+            multi={multi}
+            minDate={minDate}
+            maxDate={maxDate}
+            defaultStartDate={defaultStartDate}
+            defaultEndDate={defaultEndDate}
+          />
         );
       default:
         return null;
     }
   };
 
-  const AnalysisInstructions = (): JSX.Element | null => {
-    const currentAnalysis = analysisModules.find(
-      module => module.analysisId === selectedAnalysis
-    );
-    if (selectedAnalysis === 'default') {
-      return (
-        <>
-          <div className="analysis-text">
-            <p style={{ fontWeight: 'bold' }}>
-              {analysisTranslations.analysisNotSelected[selectedLanguage][0]}
-            </p>
-            <p>
-              {analysisTranslations.analysisNotSelected[selectedLanguage][1]}
-            </p>
-          </div>
-          <div className="chart-icon"></div>
-        </>
+  const AnalysisInstructions = React.useMemo(
+    () => (): JSX.Element | null => {
+      const currentAnalysis = analysisModules.find(
+        module => module.analysisId === selectedAnalysis
       );
-    } else {
-      return (
-        <>
-          <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
-            {currentAnalysis?.title[selectedLanguage]}
-          </p>
-          <p style={{ fontSize: '12px' }}>
-            {currentAnalysis?.description[selectedLanguage]}
-          </p>
-          <div>
-            {currentAnalysis?.uiParams &&
-              currentAnalysis?.uiParams !== 'none' &&
-              currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
-                return (
-                  <div className="ui-analysis-wrapper" key={i}>
-                    <div className="ui-description">
-                      <div className="number">
-                        <p>{i + 1}</p>
+      if (selectedAnalysis === 'default') {
+        return (
+          <>
+            <div className="analysis-text">
+              <p style={{ fontWeight: 'bold' }}>
+                {analysisTranslations.analysisNotSelected[selectedLanguage][0]}
+              </p>
+              <p>
+                {analysisTranslations.analysisNotSelected[selectedLanguage][1]}
+              </p>
+            </div>
+            <div className="chart-icon"></div>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
+              {currentAnalysis?.title[selectedLanguage]}
+            </p>
+            <p style={{ fontSize: '12px' }}>
+              {currentAnalysis?.description[selectedLanguage]}
+            </p>
+            <div>
+              {currentAnalysis?.uiParams &&
+                currentAnalysis?.uiParams !== 'none' &&
+                currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+                  return (
+                    <div className="ui-analysis-wrapper" key={i}>
+                      <div className="ui-description">
+                        <div className="number">
+                          <p>{i + 1}</p>
+                        </div>
+                        <p>{uiParam.label[selectedLanguage]}</p>
                       </div>
-                      <p>{uiParam.label[selectedLanguage]}</p>
+                      <div className="analysis-input">
+                        {renderInputComponent(uiParam)}
+                      </div>
                     </div>
-                    <div className="analysis-input">
-                      {renderInputComponent(uiParam)}
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </>
-      );
-    }
-  };
+                  );
+                })}
+            </div>
+          </>
+        );
+      }
+    },
+    [analysisModules, selectedAnalysis, selectedLanguage]
+  );
 
   const AnalysisOptions = (): JSX.Element => {
+    function handleAnalysisOptionChange(e: any): void {
+      setSelectedAnalysis(e.target.value);
+      //Nulify Vega chart Result when new analysis option is selected
+      setVegaSpec(null);
+    }
+
     return (
       <select
         className="analysis-select"
         value={selectedAnalysis || 'default'}
-        onChange={e => setSelectedAnalysis(e.target.value)}
+        onChange={handleAnalysisOptionChange}
       >
         <option value="default">
           {analysisTranslations.defaultAnalysisLabel[selectedLanguage]}
@@ -267,21 +249,6 @@ const BaseAnalysis = (): JSX.Element => {
       </select>
     );
   };
-
-  // const setActiveButton = (): void => {
-  //   if (renderEditButton) {
-  //     setRenderEditButton(false);
-  //     mapController.updateSketchVM();
-  //   } else {
-  //     mapController.completeSketchVM();
-  //     setRenderEditButton(true);
-  //   }
-  // };
-
-  // const setDelete = (): void => {
-  //   mapController.deleteSketchVM();
-  //   dispatch(setActiveFeatures([]));
-  // };
 
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const layerTitle = activeLayer.sublayerTitle
