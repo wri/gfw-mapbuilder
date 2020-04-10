@@ -8,6 +8,7 @@ import {
   SET_ACTIVE_BASEMAP,
   SET_TIME_SLIDER,
   CHANGE_MAP_SCALE,
+  CHANGE_MAP_CENTER_COORDINATES,
   MapviewState
 } from './types';
 
@@ -77,5 +78,14 @@ export function changeMapScale(scale: MapviewState['scale']) {
   return {
     type: CHANGE_MAP_SCALE as typeof CHANGE_MAP_SCALE,
     payload: scale
+  };
+}
+
+export function changeMapCenterCoordinates(
+  mapCenterCoordinates: MapviewState['mapCenterCoordinates']
+) {
+  return {
+    type: CHANGE_MAP_CENTER_COORDINATES as typeof CHANGE_MAP_CENTER_COORDINATES,
+    payload: mapCenterCoordinates
   };
 }

@@ -25,7 +25,7 @@ const initialState: AppState = {
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',
-    openLayerGroup: 'GROUP_WEBMAP',
+    openLayerGroup: 'RECENT_IMAGERY',
     density: 5
   },
   measureContent: {

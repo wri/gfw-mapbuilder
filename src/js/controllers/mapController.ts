@@ -18,6 +18,7 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import FeatureLayer from 'esri/layers/FeatureLayer';
+import { debounce } from 'lodash-es';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -31,7 +32,8 @@ import {
   isMapReady,
   setActiveFeatureIndex,
   setActiveFeatures,
-  changeMapScale
+  changeMapScale,
+  changeMapCenterCoordinates
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -86,6 +88,7 @@ export class MapController {
   _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
   _domRef: RefObject<any>;
+  _imageryOpacity: number;
 
   constructor() {
     this._map = undefined;
@@ -119,16 +122,25 @@ export class MapController {
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
 
+    function syncExtent(ext: __esri.Extent, mapview: MapView): any {
+      const { latitude, longitude } = ext.center;
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      store.dispatch(changeMapScale(mapview.scale));
+    }
+
+    const throtthledUpdater = debounce(syncExtent, 1500, { trailing: true });
+
     this._mapview
       .when(
         async () => {
           store.dispatch(isMapReady(true));
           //default scale for map
           store.dispatch(changeMapScale(this._mapview.scale));
-          //zoom level listener
-          this._mapview.watch('scale', newScale => {
-            store.dispatch(changeMapScale(newScale));
-          });
+          const { latitude, longitude } = this._mapview.center;
+          store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+          this._mapview.watch('extent', newExtent =>
+            throtthledUpdater(newExtent, this._mapview)
+          );
           this._mapview.on('click', event => {
             const { renderGFWDropdown } = store.getState().appState;
 
@@ -211,12 +223,17 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              const legendInfoObject = await fetchLegendInfo(
-                remoteLayerObject.url
-              );
-              const layerLegendInfo = legendInfoObject.layers.filter((l: any) =>
-                remoteLayerObject.layerIds?.includes(l.layerId)
-              );
+              let legendInfoObject;
+              try {
+                legendInfoObject = await fetchLegendInfo(remoteLayerObject.url);
+              } catch (e) {
+                console.error('Error fetching Legend Info', e);
+              }
+              const layerLegendInfo =
+                legendInfoObject &&
+                legendInfoObject?.layers.filter((l: any) =>
+                  remoteLayerObject.layerIds?.includes(l.layerId)
+                );
               newRemoteLayerObject.legendInfo = layerLegendInfo;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
@@ -228,6 +245,9 @@ export class MapController {
               newRemoteLayerObject.url = remoteLayerObject.url;
               newRemoteLayerObject.type = remoteLayerObject.type;
               newRemoteLayerObject.origin = 'service';
+              newRemoteLayerObject.technicalName =
+                remoteLayerObject.technicalName;
+
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.parentID = undefined;
@@ -238,9 +258,11 @@ export class MapController {
 
           parseURLandApplyChanges();
           store.dispatch(allAvailableLayers(allLayerObjects));
-          const esriRemoteLayers = remoteLayerObjects.map(layerObject => {
-            return LayerFactory(this._mapview, layerObject);
-          });
+          const esriRemoteLayers = remoteLayerObjects
+            .map(layerObject => {
+              return LayerFactory(this._mapview, layerObject);
+            })
+            .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
           this._map?.addMany(esriRemoteLayers);
 
           //Retrieve sorted layer array
@@ -359,15 +381,25 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
+
+    function syncExtent(ext: __esri.Extent, mapview: MapView): any {
+      const { latitude, longitude } = ext.center;
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      store.dispatch(changeMapScale(mapview.scale));
+    }
+
+    const throtthledUpdater = debounce(syncExtent, 1500, { trailing: true });
+
     this._mapview.when(async () => {
       //Set default state and other event listeners
       store.dispatch(isMapReady(true));
       store.dispatch(setLanguage(lang));
       store.dispatch(changeMapScale(this._mapview.scale));
-      //zoom level listener
-      this._mapview.watch('scale', newScale => {
-        store.dispatch(changeMapScale(newScale));
-      });
+      const { latitude, longitude } = this._mapview.center;
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      this._mapview.watch('extent', newExtent =>
+        throtthledUpdater(newExtent, this._mapview)
+      );
       this._mapview.on('click', event => {
         store.dispatch(setActiveFeatures([]));
         store.dispatch(setActiveFeatureIndex([0, 0]));
@@ -1041,49 +1073,6 @@ export class MapController {
         isUploadFile: true
       });
     }
-
-    // ? Do we need the v1 logic below?
-
-    // const graphicsExtent = graphicsUtils.graphicsExtent(graphics);
-    // const layer = this.context.map.getLayer(layerKeys.USER_FEATURES);
-    // if (layer) {
-    //   this.context.map.setExtent(graphicsExtent, true);
-
-    //   const geometryService = new GeometryService(
-    //     'https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'
-    //   );
-    //   var params = new ProjectParameters();
-
-    //   // Set the projection of the geometry for the image server
-    //   params.outSR = new SpatialReference(102100);
-    //   params.geometries = [];
-
-    //   graphics.forEach(feature => {
-    //     params.geometries.push(feature.geometry);
-    //   });
-
-    //   // update the graphics geometry with the new projected geometry
-    //   const successfullyProjected = geometries => {
-    //     graphics.forEach((graphic, i) => {
-    //       graphic.geometry = geometries[i];
-    //       layer.add(graphic);
-    //       if (i === geometries.length - 1) {
-    //         geometryUtils
-    //           .generateDrawnPolygon(graphic.geometry)
-    //           .then(registeredGraphic => {
-    //             this.context.map.infoWindow.setFeatures([registeredGraphic]);
-    //           });
-    //       }
-    //     });
-    //   };
-    //   const failedToProject = err => {
-    //     console.log('Failed to project the geometry: ', err);
-    //   };
-    //   geometryService
-    //     .project(params)
-    //     .then(successfullyProjected, failedToProject);
-    // }
-    // this.setState({ isUploading: false });
   }
 
   updateBaseTile(id: string, range: Array<number>): void {
@@ -1443,6 +1432,19 @@ export class MapController {
           specificLayer.opacity = opacity;
         }
       });
+    }
+  }
+
+  //Keeping imagery opacity in global variable due to the nature of placing tiles for imagery service. We re-create layer each time we place the new tile down. Keeping this value in redux introduced a lot of performance issues, thus global here.
+  updateImageryOpacity(value: number): void {
+    this._imageryOpacity = value;
+  }
+
+  toggleImageryLayer(value: boolean, layerID?: string): void {
+    if (!layerID) return;
+    const layer = this._map?.findLayerById(layerID) as any;
+    if (layer && layer.urlTemplate) {
+      layer.visible = !layer.visible;
     }
   }
 
