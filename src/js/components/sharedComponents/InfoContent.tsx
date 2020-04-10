@@ -74,7 +74,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     if (layer.type === 'webmap') {
       getWebmapContent();
     } else if (layer.origin === 'service') {
-      console.log('fetching service layer info');
       getServiceContent();
     } else {
       getRemoteContent();

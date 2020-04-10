@@ -18,7 +18,7 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import FeatureLayer from 'esri/layers/FeatureLayer';
-import { throttle } from 'lodash-es';
+import { debounce } from 'lodash-es';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -128,7 +128,7 @@ export class MapController {
       store.dispatch(changeMapScale(mapview.scale));
     }
 
-    const throtthledUpdater = throttle(syncExtent, 3500, { trailing: false });
+    const throtthledUpdater = debounce(syncExtent, 1500, { trailing: true });
 
     this._mapview
       .when(
@@ -388,7 +388,7 @@ export class MapController {
       store.dispatch(changeMapScale(mapview.scale));
     }
 
-    const throtthledUpdater = throttle(syncExtent, 1500, { trailing: true });
+    const throtthledUpdater = debounce(syncExtent, 1500, { trailing: true });
 
     this._mapview.when(async () => {
       //Set default state and other event listeners
