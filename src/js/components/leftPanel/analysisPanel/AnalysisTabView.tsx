@@ -36,8 +36,8 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const tabViewVisible = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
 
   const {
