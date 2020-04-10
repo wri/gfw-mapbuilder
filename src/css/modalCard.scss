@@ -213,6 +213,20 @@
     }
   }
 
+  &.print-widget {
+    p {
+      font-size: 1.25rem;
+    }
+
+    a {
+      display: flex;
+      justify-content: space-between;
+      width: 5.5rem;
+      text-decoration: none;
+      color: $light-grey;
+    }
+  }
+
   &.share-widget {
     h4 {
       margin-bottom: auto;
