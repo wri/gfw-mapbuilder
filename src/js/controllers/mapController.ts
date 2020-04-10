@@ -42,7 +42,8 @@ import {
   selectActiveTab,
   setMeasureResults,
   setLanguage,
-  setRenderGFWDropdown
+  setRenderGFWDropdown,
+  setSelectedSearchWidgetLayer
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -956,10 +957,18 @@ export class MapController {
   async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {
     const allSources = await setLayerSearchSource();
 
-    new Search({
+    const searchWidget = new Search({
       view: this._mapview,
       container: searchRef.current,
       sources: allSources
+    });
+
+    searchWidget.on('search-focus', (e: any) => {
+      const selectedLayer = {
+        displayField: e.target.activeSource.displayField,
+        layerTitle: e.target.activeSource.layer.title
+      };
+      store.dispatch(setSelectedSearchWidgetLayer(selectedLayer));
     });
   }
 
