@@ -33,50 +33,50 @@ const BaseAnalysis = (): JSX.Element => {
   //Default to the first analysis
   const [selectedAnalysis, setSelectedAnalysis] = useState('default');
 
-  const [geostoreReady, setGeostoreReady] = useState(false);
+  const [geostoreReady, setGeostoreReady] = useState(true);
 
   const { activeFeatures, activeFeatureIndex } = useSelector(
     (store: RootState) => store.mapviewState
   );
 
-  useEffect(() => {
-    const activeLayer = activeFeatures[activeFeatureIndex[0]];
-    const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
-    //On Base analysis tab we need to fire registration to geostore for the selected feature or the drawn/uploaded shape
-    //Determine if we have the geostore already or we need to register it
-    if (!activeLayer || activeFeature.attributes.hasOwnProperty('geostoreId')) {
-      setGeostoreReady(true);
-      return;
-    } else {
-      registerGeometry(activeFeature)
-        .then(response => response.json())
-        .then(res => {
-          const oldActiveFeatures = [...activeFeatures];
-          const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
-          const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
-          activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
-          dispatch(setActiveFeatures(oldActiveFeatures));
-          setGeostoreReady(true);
-        });
-    }
-  }, [activeFeatures, activeFeatureIndex]);
+  // useEffect(() => {
+  //   const activeLayer = activeFeatures[activeFeatureIndex[0]];
+  //   const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+  //   //On Base analysis tab we need to fire registration to geostore for the selected feature or the drawn/uploaded shape
+  //   //Determine if we have the geostore already or we need to register it
+  //   if (!activeLayer || activeFeature.attributes.hasOwnProperty('geostoreId')) {
+  //     setGeostoreReady(true);
+  //     return;
+  //   } else {
+  //     registerGeometry(activeFeature)
+  //       .then(response => response.json())
+  //       .then(res => {
+  //         const oldActiveFeatures = [...activeFeatures];
+  //         const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
+  //         const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+  //         activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
+  //         dispatch(setActiveFeatures(oldActiveFeatures));
+  //     setGeostoreReady(true);
+  //       });
+  //   }
+  // }, [activeFeatures, activeFeatureIndex]);
 
   function runAnalysis() {
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
-    if (mod) {
-      const activeLayer = activeFeatures[activeFeatureIndex[0]];
-      const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-      fetch(
-        `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?geostore=${activeFeature.attributes.geostoreId}`
-      )
-        .then((response: any) => response.json())
-        .then((analysisMod: any) => {
-          //TODO: we need to handle loading and error states
-          setVegaSpec(analysisMod.data.attributes.widgetConfig);
-        });
-    }
+    // if (mod) {
+    //   const activeLayer = activeFeatures[activeFeatureIndex[0]];
+    //   const activeFeature = activeLayer.features[activeFeatureIndex[1]];
+    //   fetch(
+    //     `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?geostore=${activeFeature.attributes.geostoreId}`
+    //   )
+    //     .then((response: any) => response.json())
+    //     .then((analysisMod: any) => {
+    //       //TODO: we need to handle loading and error states
+    //       setVegaSpec(analysisMod.data.attributes.widgetConfig);
+    //     });
+    // }
   }
 
   const AnalysisInstructions = (): JSX.Element | null => {
@@ -164,7 +164,7 @@ const BaseAnalysis = (): JSX.Element => {
     dispatch(setActiveFeatures([]));
   };
 
-  const activeLayer = activeFeatures[activeFeatureIndex[0]];
+  // const activeLayer = activeFeatures[activeFeatureIndex[0]];
   // const layerTitle = activeLayer.sublayerTitle
   //   ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
   //   : activeLayer.layerTitle;

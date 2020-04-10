@@ -122,13 +122,13 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
 
   const TabViewContent = (): JSX.Element | null => {
     if (tabViewIsVisible) {
-      //let's check for active features
-      // if (activeFeatures.length === 0) {
-      //   return <DefaultAnalysisContent />;
-      // } else {
-      //   return <BaseAnalysis />;
-      // }
-      return <BaseAnalysis />;
+      // let's check for active features
+      if (activeFeatures.length === 0) {
+        return <DefaultAnalysisContent />;
+      } else {
+        return <BaseAnalysis />;
+      }
+      // return <BaseAnalysis />;
     } else {
       return null;
     }
