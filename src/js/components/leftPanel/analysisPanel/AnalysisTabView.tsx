@@ -40,7 +40,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     visitTitle
   } = analysisContent[selectedLanguage];
 
-  const { activeFeatures } = useSelector(
+  const { activeFeatures, sketchWidgetActive } = useSelector(
     (store: RootState) => store.mapviewState
   );
 
@@ -123,10 +123,10 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const TabViewContent = (): JSX.Element | null => {
     if (tabViewIsVisible) {
       //let's check for active features
-      if (activeFeatures.length === 0) {
-        return <DefaultAnalysisContent />;
-      } else {
+      if (activeFeatures.length || sketchWidgetActive) {
         return <BaseAnalysis />;
+      } else {
+        return <DefaultAnalysisContent />;
       }
     } else {
       return null;

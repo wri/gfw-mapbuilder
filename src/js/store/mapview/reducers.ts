@@ -10,7 +10,8 @@ import {
   SET_ACTIVE_BASEMAP,
   SET_TIME_SLIDER,
   CHANGE_MAP_SCALE,
-  CHANGE_MAP_CENTER_COORDINATES
+  CHANGE_MAP_CENTER_COORDINATES,
+  SKETCH_WIDGET_ACTIVE
 } from './types';
 
 const initialState: MapviewState = {
@@ -20,6 +21,7 @@ const initialState: MapviewState = {
   allAvailableLayers: [],
   activeFeatures: [],
   activeFeatureIndex: [0, 0], //first element is the index of the layer, second is the index of feature
+  sketchWidgetActive: false,
   activeBasemap: 'webmap',
   timeSlider: [2000, 2018],
   scale: 0,
@@ -43,6 +45,8 @@ export function mapviewReducer(
       return { ...state, activeFeatures: action.payload };
     case SET_ACTIVE_FEATURE_INDEX:
       return { ...state, activeFeatureIndex: action.payload };
+    case SKETCH_WIDGET_ACTIVE:
+      return { ...state, sketchWidgetActive: action.payload };
     case SET_ACTIVE_BASEMAP:
       return { ...state, activeBasemap: action.payload };
     case SET_TIME_SLIDER:

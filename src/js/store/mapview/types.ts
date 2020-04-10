@@ -55,6 +55,7 @@ export interface MapviewState {
   userSubscriptions: UserSubscription[];
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
+  sketchWidgetActive: boolean;
   activeFeatureIndex: number[];
   activeBasemap: string; // * NEW! not in resources.js
   timeSlider: number[];
@@ -142,6 +143,7 @@ export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
 export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
 export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
 export const CHANGE_MAP_CENTER_COORDINATES = 'CHANGE_MAP_CENTER_COORDINATES';
+export const SKETCH_WIDGET_ACTIVE = 'SKETCH_WIDGET_ACTIVE';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -192,6 +194,11 @@ interface ChangeMapCenterCoordinates {
   payload: MapviewState['mapCenterCoordinates'];
 }
 
+interface SetSketchWidget {
+  type: typeof SKETCH_WIDGET_ACTIVE;
+  payload: MapviewState['sketchWidgetActive'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -202,4 +209,5 @@ export type MapviewStateTypes =
   | SetSelectedAction
   | SetTimeSlider
   | ChangeMapScale
-  | ChangeMapCenterCoordinates;
+  | ChangeMapCenterCoordinates
+  | SetSketchWidget;

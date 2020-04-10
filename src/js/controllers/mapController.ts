@@ -33,7 +33,8 @@ import {
   setActiveFeatureIndex,
   setActiveFeatures,
   changeMapScale,
-  changeMapCenterCoordinates
+  changeMapCenterCoordinates,
+  setSketchWidgetWidget
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -614,6 +615,7 @@ export class MapController {
 
   listenToSketchDelete(): any {
     if (this._sketchVMGraphicsLayer) {
+      store.dispatch(setSketchWidgetWidget(false));
       store.dispatch(setActiveFeatures([]));
       store.dispatch(setActiveFeatureIndex([0, 0]));
       this._sketchVMGraphicsLayer.graphics['items'] = [];
@@ -629,17 +631,9 @@ export class MapController {
       event.graphic.symbol.outline.color = [115, 252, 253];
       event.graphic.symbol.color = [0, 0, 0, 0];
       //Replace all active features with our drawn feature, assigning custom layerID and Title
-      const drawnFeatures: LayerFeatureResult = {
-        layerID: 'user_features',
-        layerTitle: 'User Features',
-        // sublayerID: null,
-        // sublayerTitle: null,
-        features: [event.graphic],
-        fieldNames: null
-      };
-
-      store.dispatch(setActiveFeatures([drawnFeatures]));
+      store.dispatch(setActiveFeatures([]));
       store.dispatch(setActiveFeatureIndex([0, 0]));
+      store.dispatch(setSketchWidgetWidget(true));
       store.dispatch(selectActiveTab('analysis'));
     }
   }
@@ -674,6 +668,7 @@ export class MapController {
     this.deleteSketchVM();
     store.dispatch(setActiveFeatures([]));
     store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(setSketchWidgetWidget(true));
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
