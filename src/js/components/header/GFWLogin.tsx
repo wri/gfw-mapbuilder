@@ -14,8 +14,8 @@ interface LoginProps {
 
 const GFWLogin = (props: LoginProps): JSX.Element => {
   const dispatch = useDispatch();
-  const { renderGFWDropdown } = useSelector(
-    (state: RootState) => state.appState
+  const renderGFWDropdown = useSelector(
+    (state: RootState) => state.appState.renderGFWDropdown
   );
 
   return (
