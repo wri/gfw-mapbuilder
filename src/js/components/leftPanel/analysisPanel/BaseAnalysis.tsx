@@ -178,7 +178,9 @@ const BaseAnalysis = (): JSX.Element => {
     <>
       {geostoreReady ? (
         <div className="base-analysis-content">
-          <div className="layer-title">{title}</div>
+          <div className="layer-title">
+            {title === null ? 'User Drawn Feature' : title}
+          </div>
           {renderEditButton ? (
             <button onClick={(): void => setActiveButton()}>Edit</button>
           ) : (
