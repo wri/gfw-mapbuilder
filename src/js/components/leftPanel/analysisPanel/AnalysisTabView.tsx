@@ -16,6 +16,13 @@ import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
 
+import { createSelector } from 'reselect';
+//Memo'd selectors
+const selectActiveFeaturesLength = createSelector(
+  (state: RootState) => state.mapviewState,
+  mapviewState => mapviewState.activeFeatures.length
+);
+
 interface TabProps {
   key: string;
   label: string;
@@ -23,10 +30,15 @@ interface TabProps {
 
 const AnalysisTabView = (props: TabProps): JSX.Element => {
   const dispatch = useDispatch();
-  const { selectedLanguage, leftPanel } = useSelector(
+  const activeTab = useSelector(
+    (store: RootState) => store.appState.leftPanel.activeTab
+  );
+  const tabViewVisible = useSelector(
+    (store: RootState) => store.appState.leftPanel.activeTab
+  );
+  const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
-  const { activeTab, tabViewVisible } = leftPanel;
 
   const {
     analyzeExistingShapeTitle,
@@ -40,9 +52,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     visitTitle
   } = analysisContent[selectedLanguage];
 
-  const { activeFeatures } = useSelector(
-    (store: RootState) => store.mapviewState
-  );
+  const activeFeaturesLength = useSelector(selectActiveFeaturesLength);
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
@@ -120,20 +130,29 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     </div>
   );
 
-  const TabViewContent = (): JSX.Element | null => {
-    if (tabViewIsVisible) {
-      //let's check for active features
-      if (activeFeatures.length === 0) {
-        return <DefaultAnalysisContent />;
-      } else {
-        return <BaseAnalysis />;
-      }
-    } else {
-      return null;
-    }
-  };
+  // const TabViewContent = (): JSX.Element | null => {
+  //   console.log('tabview is re-rendering!');
+  //   if (tabViewIsVisible) {
+  //     //let's check for active features
+  //     if (activeFeaturesLength === 0) {
+  //       return <DefaultAnalysisContent />;
+  //     } else {
+  //       return <BaseAnalysis />;
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
-  return <TabViewContent />;
+  // return <TabViewContent />;
+  return (
+    <>
+      {tabViewIsVisible && activeFeaturesLength !== 0 && <BaseAnalysis />}
+      {tabViewIsVisible && activeFeaturesLength == 0 && (
+        <DefaultAnalysisContent />
+      )}
+    </>
+  );
 };
 
 export default AnalysisTabView;

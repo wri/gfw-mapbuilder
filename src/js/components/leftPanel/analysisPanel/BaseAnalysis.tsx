@@ -2,18 +2,18 @@
 /* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { createSelector } from 'reselect';
 
 import { mapController } from 'js/controllers/mapController';
 
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import 'css/leftpanel.scss';
-import { DatePicker, RangeSlider } from './InputComponents';
+import { RangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
@@ -30,32 +30,49 @@ export interface UIParams {
   defaultEndDate: string; //YYYY-MM-DD
 }
 
+//Memo'd selectors
+const selectAnalysisModules = createSelector(
+  (state: RootState) => state.appSettings,
+  settings => settings.analysisModules
+);
+
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
 );
+
+const getTodayDate = (): string => {
+  const getTodayDate = new Date().toISOString().split('T')[0];
+  return getTodayDate;
+};
 
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
   const [renderEditButton, setRenderEditButton] = useState(false);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  //This is used for date picker analysis module
+  const [startDate, setStartDate] = useState(getTodayDate());
+  const [endDate, setEndDate] = useState(getTodayDate());
 
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
 
-  const { analysisModules } = useSelector(
-    (store: RootState) => store.appSettings
-  );
+  // const { analysisModules } = useSelector(
+  //   (store: RootState) => store.appSettings
+  // );
+  const analysisModules = useSelector(selectAnalysisModules);
 
   //Default to the first analysis
   const [selectedAnalysis, setSelectedAnalysis] = useState('default');
 
   const [geostoreReady, setGeostoreReady] = useState(false);
 
-  const { activeFeatures, activeFeatureIndex } = useSelector(
-    (store: RootState) => store.mapviewState
+  const activeFeatures = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatures
+  );
+
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
   );
 
   useEffect(() => {
@@ -81,16 +98,49 @@ const BaseAnalysis = (): JSX.Element => {
   }, [activeFeatures, activeFeatureIndex]);
 
   function generateWidgetURL(
+    uiParams: any,
     widgetID: string,
-    geostoreID?: string,
-    uiParams: UIParams
+    geostoreID?: string
   ): string {
     let baseURL = 'https://api.resourcewatch.org/v1/widget/';
     //Add Widget ID
     baseURL = baseURL.concat(widgetID);
+    //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
+    debugger;
+    for (const param of uiParams) {
+      if (param.inputType === 'datepicker') {
+        const todayDate = new Date().toISOString().split('T')[0];
+        let datePickerString = `?${param.startParamName}=`;
+        if (param.combineParams) {
+          console.log(param.combineParams);
+          console.log(param.valueSeparator);
+          console.log(startDate);
+          console.log(endDate);
+          const start =
+            startDate !== ''
+              ? startDate
+              : param?.defaultStartDate
+              ? param.defaultStartDate
+              : todayDate;
+          const end =
+            endDate !== ''
+              ? endDate
+              : param?.defaultEndDate
+              ? param.defaultEndDate
+              : todayDate;
+          datePickerString = datePickerString.concat(
+            `${start}${param.valueSeparator}${end}`
+          );
+          baseURL = baseURL.concat(datePickerString);
+        }
+      } else if (param.inputType === 'rangeSlider') {
+        //
+      } else if (param.inputType === 'tcd') console.log(param);
+    }
+
     //Add Geostore ID
-    baseURL = baseURL.concat(`?geostore=${geostoreID}`);
-    //?period=2018-01-01,2020-04-09
+    baseURL = baseURL.concat(`&geostore=${geostoreID}`);
+    console.log(baseURL);
     return baseURL;
   }
 
@@ -102,9 +152,9 @@ const BaseAnalysis = (): JSX.Element => {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
       const widgetURL = generateWidgetURL(
+        mod.uiParams,
         mod.widgetId,
-        activeFeature.attributes.geostoreId,
-        mod
+        activeFeature.attributes.geostoreId
       );
       fetch(widgetURL)
         .then((response: any) => response.json())
@@ -115,23 +165,32 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  function handleDateChange(date: string, period: 'start' | 'end'): void {
-    console.log('setting date');
-    if (period === 'start') {
-      setStartDate(date);
-    } else {
-      setEndDate(date);
-    }
-  }
+  // function handleDateChange(date: string, type: 'start' | 'end'): void {
+  //   console.log('setting date');
+  //   if (type === 'start') {
+  //     setStartDate(date);
+  //   }
+  //   if (type === 'end') {
+  //     setEndDate(date);
+  //   }
+  // }
+
+  // function testHandler(val: any): void {
+  //   setStartDate(val);
+  //   // console.log(val);
+  // }
 
   const renderInputComponent = (props: UIParams): JSX.Element | null => {
+    const { multi, minDate, maxDate } = props;
     switch (props.inputType) {
       case 'rangeSlider':
         return <RangeSlider />;
       case 'tcd':
         return <CanopyDensityPicker label={false} />;
       case 'datepicker':
-        return <DatePicker {...props} sendDate={handleDateChange} />;
+        return (
+          <MemoDatePicker multi={multi} minDate={minDate} maxDate={maxDate} />
+        );
       default:
         return null;
     }
@@ -209,20 +268,20 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
-  const setActiveButton = (): void => {
-    if (renderEditButton) {
-      setRenderEditButton(false);
-      mapController.updateSketchVM();
-    } else {
-      mapController.completeSketchVM();
-      setRenderEditButton(true);
-    }
-  };
+  // const setActiveButton = (): void => {
+  //   if (renderEditButton) {
+  //     setRenderEditButton(false);
+  //     mapController.updateSketchVM();
+  //   } else {
+  //     mapController.completeSketchVM();
+  //     setRenderEditButton(true);
+  //   }
+  // };
 
-  const setDelete = (): void => {
-    mapController.deleteSketchVM();
-    dispatch(setActiveFeatures([]));
-  };
+  // const setDelete = (): void => {
+  //   mapController.deleteSketchVM();
+  //   dispatch(setActiveFeatures([]));
+  // };
 
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const layerTitle = activeLayer.sublayerTitle

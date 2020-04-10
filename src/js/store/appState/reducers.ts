@@ -12,7 +12,8 @@ import {
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
   SET_HIDE_WIDGET,
-  SET_CANOPY_DENSITY
+  SET_CANOPY_DENSITY,
+  SET_ANALYSIS_DATE
 } from './types';
 
 const initialState: AppState = {
@@ -26,7 +27,8 @@ const initialState: AppState = {
     tabViewVisible: true,
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
-    density: 5
+    density: 5,
+    analysisDateRange: ['', '']
   },
   measureContent: {
     activeButton: '',
@@ -102,6 +104,14 @@ export function appStateReducer(
         ...state,
         measureContent: {
           ...action.payload
+        }
+      };
+    case SET_ANALYSIS_DATE:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          analysisDateRange: action.payload
         }
       };
     default:

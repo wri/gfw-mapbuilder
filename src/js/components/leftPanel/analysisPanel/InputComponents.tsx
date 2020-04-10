@@ -1,55 +1,43 @@
 import * as React from 'react';
-import { UIParams } from './BaseAnalysis';
+import { setAnalysisDateRange } from 'js/store/appState/actions';
+import { useDispatch } from 'react-redux';
+
 interface DatePickerProps {
-  startParamName: string;
-  combineParams: boolean;
-  endParamName?: string;
-  valueSeparator?: string;
   multi?: boolean;
   minDate: string; //YYYY-MM-DD
   maxDate: string; //YYYY-MM-DD
-  defaultStartDate: string; //YYYY-MM-DD
-  defaultEndDate: string; //YYYY-MM-DD
 }
-
-const getTodayDate = (): string => {
-  const getTodayDate = new Date().toISOString().split('T')[0];
-  return getTodayDate;
-};
 
 interface CallbackProp {
-  sendDate: (date: string, period: 'start' | 'end') => void;
+  sendDate?: (date: string, type: 'start' | 'end') => void;
 }
+const getTodayDate = new Date().toISOString().split('T')[0];
 
-export const DatePicker = (props: UIParams & CallbackProp): JSX.Element => {
-  console.log(props);
-  const {
-    startParamName,
-    combineParams,
-    endParamName,
-    valueSeparator,
-    multi,
-    minDate,
-    maxDate,
-    defaultStartDate,
-    defaultEndDate
-  } = props;
-  const [startDate, setStartDate] = React.useState(
-    defaultStartDate ? defaultStartDate : getTodayDate()
-  );
-  const [endDate, setEndDate] = React.useState(
-    defaultEndDate ? defaultEndDate : getTodayDate()
-  );
+const DatePicker = (props: DatePickerProps): JSX.Element => {
+  const dispatch = useDispatch();
+  const { multi, minDate, maxDate } = props;
+
+  const [startDate, setStartDate] = React.useState(getTodayDate);
+
+  const [endDate, setEndDate] = React.useState(getTodayDate);
   function handleStartDateChange(e: any): void {
     setStartDate(e.target.value);
-    props.sendDate(e.target.value, 'start');
-    console.log(e.target.value);
+    // dispatch(setAnalysisDateRange([startDate, endDate]));
+    // props.sendDate(startDate, endDate);
+    // props.sendDate(e.target.value, 'start');
   }
 
   function handleEndDateChange(e: any): void {
     setEndDate(e.target.value);
-    props.sendDate(e.target.value, 'end');
+    // dispatch(setAnalysisDateRange([startDate, endDate]));
+    // props.sendDate(startDate, endDate);
+    // props.sendDate(e.target.value, 'end');
   }
+
+  // React.useEffect(() => {
+  //   console.log('synccccccccccccc');
+  //   props.sendDate(startDate, endDate);
+  // }, [startDate, endDate]);
 
   return (
     <div className="calendar-wrapper">
@@ -58,8 +46,10 @@ export const DatePicker = (props: UIParams & CallbackProp): JSX.Element => {
         <input
           className="date-time-toggle input"
           type="date"
-          value={startDate}
+          defaultValue={startDate}
+          // value={props.startDate}
           min={minDate ? minDate : undefined}
+          // onChange={handleStartDateChange}
           onChange={handleStartDateChange}
         />
       </div>
@@ -78,6 +68,8 @@ export const DatePicker = (props: UIParams & CallbackProp): JSX.Element => {
     </div>
   );
 };
+
+export const MemoDatePicker = React.memo(DatePicker);
 
 export const RangeSlider = (): JSX.Element => {
   return <p>Range Slider</p>;

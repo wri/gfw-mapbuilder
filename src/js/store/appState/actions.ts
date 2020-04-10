@@ -12,7 +12,8 @@ import {
   LeftPanel,
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
-  SET_CANOPY_DENSITY
+  SET_CANOPY_DENSITY,
+  SET_ANALYSIS_DATE
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
@@ -97,6 +98,15 @@ export function setActiveMeasureButton(
 ) {
   return {
     type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,
+    payload: payload
+  };
+}
+
+export function setAnalysisDateRange(
+  payload: AppState['leftPanel']['analysisDateRange']
+) {
+  return {
+    type: SET_ANALYSIS_DATE as typeof SET_ANALYSIS_DATE,
     payload: payload
   };
 }
