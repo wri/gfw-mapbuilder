@@ -31,23 +31,59 @@ const returnOneYearAgoToday = (): any => {
   return dateTodayFormatted;
 };
 
-const DateRange = (props: DateRangeProps): JSX.Element => {
-  const { layer } = props;
+interface CalendarDateRangeProps {
+  layerID: string;
+}
 
+export const CalendarDateRange = (
+  props: CalendarDateRangeProps
+): JSX.Element => {
   const [startDate, setStartDate] = useState(returnOneYearAgoToday());
   const [endDate, setEndDate] = useState(returnDateToday());
-  const [renderCustomRange, setRenderCustomRange] = useState(false);
-  const [definedRange, setDefinedRange] = useState('');
 
   const updateStartDate = (e: ChangeEvent<HTMLInputElement>): void => {
     setStartDate(e.target.value);
-    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
+    mapController.setCustomDateRange(props.layerID, e.target.value, endDate);
   };
 
   const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
     setEndDate(e.target.value);
-    mapController.setCustomDateRange(layer.id, startDate, e.target.value);
+    mapController.setCustomDateRange(props.layerID, startDate, e.target.value);
   };
+
+  return (
+    <div className="calendar-wrapper">
+      <div className="date-section-wrapper">
+        <label htmlFor="start-date">Start:</label>
+        <input
+          className="date-time-toggle input"
+          type="date"
+          value={startDate}
+          min="2018-01-01"
+          max={returnDateToday()}
+          onChange={(e): void => updateStartDate(e)}
+        />
+      </div>
+      <div className="date-section-wrapper">
+        <label htmlFor="end-date">End:</label>
+        <input
+          className="date-time-toggle input"
+          type="date"
+          value={endDate}
+          min="2018-01-01"
+          max={returnDateToday()}
+          onChange={(e): void => updateEndDate(e)}
+        />
+      </div>
+    </div>
+  );
+};
+
+const DateRange = (props: DateRangeProps): JSX.Element => {
+  const { layer } = props;
+
+  const [renderCustomRange, setRenderCustomRange] = useState(false);
+  const [definedRange, setDefinedRange] = useState('');
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
     setDefinedRange(e.target.value);
@@ -87,32 +123,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         >
           Custom Range
         </button>
-        {renderCustomRange && (
-          <div className="calendar-wrapper">
-            <div className="date-section-wrapper">
-              <label htmlFor="start-date">Start:</label>
-              <input
-                className="date-time-toggle input"
-                type="date"
-                value={startDate}
-                min="2018-01-01"
-                max={returnDateToday()}
-                onChange={(e): void => updateStartDate(e)}
-              />
-            </div>
-            <div className="date-section-wrapper">
-              <label htmlFor="end-date">End:</label>
-              <input
-                className="date-time-toggle input"
-                type="date"
-                value={endDate}
-                min="2018-01-01"
-                max={returnDateToday()}
-                onChange={(e): void => updateEndDate(e)}
-              />
-            </div>
-          </div>
-        )}
+        {renderCustomRange && <CalendarDateRange layerID={layer.id} />}
       </div>
     </>
   );

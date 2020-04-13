@@ -9,8 +9,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
 import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
+
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
+import { CalendarDateRange } from 'js/components/leftPanel/layersPanel/DateRange';
+
 import 'css/leftpanel.scss';
 
 const AnalysisSpinner = (): React.ReactElement => (
@@ -110,6 +113,7 @@ const BaseAnalysis = (): JSX.Element => {
             {currentAnalysis?.uiParams &&
               currentAnalysis?.uiParams !== 'none' &&
               currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+                const activeLayer = activeFeatures[activeFeatureIndex[0]];
                 return (
                   <div className="ui-analysis-wrapper" key={i}>
                     <div className="ui-description">
@@ -118,7 +122,11 @@ const BaseAnalysis = (): JSX.Element => {
                       </div>
                       <p>{uiParam.label[selectedLanguage]}</p>
                     </div>
-                    <p>{uiParam.inputType}</p>
+                    {uiParam.inputType === 'datepicker' ? (
+                      <CalendarDateRange layerID={activeLayer.layerID} />
+                    ) : (
+                      <p>{uiParam.inputType}</p>
+                    )}
                   </div>
                 );
               })}
