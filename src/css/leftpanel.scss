@@ -204,8 +204,13 @@
     }
     .analysis-input {
       display: grid;
-      justify-content: center;
+      justify-items: center;
       margin-bottom: 20px;
+      .time-slider-container {
+        width: 90%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
       .calendar-wrapper {
         .date-section-wrapper {
           display: grid;

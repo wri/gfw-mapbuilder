@@ -3,9 +3,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { createSelector } from 'reselect';
-
-import { mapController } from 'js/controllers/mapController';
-
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
