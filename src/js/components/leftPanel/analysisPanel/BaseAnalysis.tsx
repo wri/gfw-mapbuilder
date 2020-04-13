@@ -15,6 +15,7 @@ import analysisTranslations from './analysisTranslations';
 import 'css/leftpanel.scss';
 import { RangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
+import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -52,10 +53,9 @@ const BaseAnalysis = (): JSX.Element => {
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
-
-  // const { analysisModules } = useSelector(
-  //   (store: RootState) => store.appSettings
-  // );
+  const canopyDensity = useSelector(
+    (store: RootState) => store.appState.leftPanel.density
+  );
   const analysisModules = useSelector(selectAnalysisModules);
 
   //Default to the first analysis
@@ -102,11 +102,11 @@ const BaseAnalysis = (): JSX.Element => {
   ): string {
     let baseURL = 'https://api.resourcewatch.org/v1/widget/';
     //Add Widget ID
-    baseURL = baseURL.concat(widgetID);
+    baseURL = baseURL.concat(`${widgetID}?`);
     //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
     for (const param of uiParams) {
       if (param.inputType === 'datepicker') {
-        let datePickerString = `?${param.startParamName}=`;
+        let datePickerString = `${param.startParamName}=`;
         if (param.combineParams) {
           const start = analysisDateRange[0];
           const end = analysisDateRange[1];
@@ -117,12 +117,15 @@ const BaseAnalysis = (): JSX.Element => {
         }
       } else if (param.inputType === 'rangeSlider') {
         //
-      } else if (param.inputType === 'tcd') console.log(param);
+      } else if (param.inputType === 'tcd') {
+        const threshold = `&thresh=${markValueMap[canopyDensity]}`;
+        baseURL = baseURL.concat(threshold);
+        //&thresh=20
+      }
     }
 
     //Add Geostore ID
     baseURL = baseURL.concat(`&geostore=${geostoreID}`);
-    console.log(baseURL);
     return baseURL;
   }
 
