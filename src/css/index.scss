@@ -54,20 +54,18 @@ button {
 }
 
 .spinner {
-  :before {
-    content: '';
-    box-sizing: border-box;
-    position: absolute;
-    top: 70%;
-    left: 45%;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 5px solid #ccc;
-    border-top-color: #fff;
-    animation: spinner 0.6s linear infinite;
-    opacity: 0.75;
-  }
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 70%;
+  left: 45%;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 5px solid #ccc;
+  border-top-color: #fff;
+  animation: spinner 0.6s linear infinite;
+  opacity: 0.75;
 }
 
 .date-time-toggle {

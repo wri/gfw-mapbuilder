@@ -4,37 +4,37 @@ export const printContent = {
   en: {
     buttonLabel: 'Choose a print output',
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   },
   ka: {
     buttonLabel: 'აარჩიეთ ბეჭდვის ფორმატი',
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   },
   fr: {
     buttonLabel: "Choisissez un format d'impression",
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   },
   es: {
     buttonLabel: 'Elegir diseño de página',
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   },
   pt: {
     buttonLabel: 'Escolher saída de impressão.',
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   },
   id: {
     buttonLabel: 'Choose a print output',
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   },
   zh: {
     buttonLabel: '选择打印模板',
     dropdownLabel: 'Print',
-    printOptions: ['GFW_Mapbuilder_Landscape', 'MAP_ONLY']
+    printOptions: ['CMR_Landscape', 'MAP_ONLY']
   }
 };
 
