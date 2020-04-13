@@ -20,7 +20,7 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
-  const [renderEditButton, setRenderEditButton] = useState(false);
+  const [renderEditButton, setRenderEditButton] = useState(true);
 
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
