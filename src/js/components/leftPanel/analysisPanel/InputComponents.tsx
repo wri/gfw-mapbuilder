@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { setAnalysisDateRange } from 'js/store/appState/actions';
 import { useDispatch } from 'react-redux';
+import { createSliderWithTooltip, Range, Marks } from 'rc-slider';
+const SliderWithTooltip = createSliderWithTooltip(Range);
 
 interface DatePickerProps {
   multi?: boolean;
@@ -68,105 +70,55 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
 
 export const MemoDatePicker = React.memo(DatePicker);
 
-import { createSliderWithTooltip, Range } from 'rc-slider';
-const SliderWithTooltip = createSliderWithTooltip(Range);
-
-export const RangeSlider = (): JSX.Element => {
-  const defaultMarks = {
-    '2000': {
-      label: '2000',
-      style: {}
-    },
-    '2001': {
-      label: '2001',
-      style: { display: 'none' }
-    },
-    '2002': {
-      label: '2002',
-      style: { display: 'none' }
-    },
-    '2003': {
-      label: '2003',
-      style: {}
-    },
-    '2004': {
-      label: '2004',
-      style: { display: 'none' }
-    },
-    '2005': {
-      label: '2005',
-      style: { display: 'none' }
-    },
-    '2006': {
-      label: '2006',
-      style: {}
-    },
-    '2007': {
-      label: '2007',
-      style: { display: 'none' }
-    },
-    '2008': {
-      label: '2008',
-      style: { display: 'none' }
-    },
-    '2009': {
-      label: '2009',
-      style: {}
-    },
-    '2010': {
-      label: '2010',
-      style: { display: 'none' }
-    },
-    '2011': {
-      label: '2011',
-      style: { display: 'none' }
-    },
-    '2012': {
-      label: '2012',
-      style: {}
-    },
-    '2013': {
-      label: '2013',
-      style: { display: 'none' }
-    },
-    '2014': {
-      label: '2014',
-      style: { display: 'none' }
-    },
-    '2015': {
-      label: '2015',
-      style: {}
-    },
-    '2016': {
-      label: '2016',
-      style: { display: 'none' }
-    },
-    '2017': {
-      label: '2017',
-      style: { display: 'none' }
-    },
-    '2018': {
-      label: '2018',
-      style: {}
+function generateMarks(range: number[]): any[] | {} {
+  const marksObject = {};
+  for (let i = range[0]; i <= range[1]; i++) {
+    if (i === range[0] || i === range[1]) {
+      console.log('truth');
+      marksObject[i] = { label: String(i), style: {} };
+    } else {
+      marksObject[i] = { label: String(i), style: { display: 'none' } };
     }
-  };
-  const [range, setRange] = React.useState([2000, 2018]);
+  }
+  return marksObject;
+}
 
-  function handleSliderRange(val: any) {
+interface RangeSliderProps {
+  yearRange: number[];
+}
+const RangeSlider = (props: RangeSliderProps): JSX.Element => {
+  //Sync at the start too
+  const dispatch = useDispatch();
+
+  const [yearRange, setYearRange] = React.useState<number[]>(props.yearRange);
+  const [activeYearRange, setActiveYearRange] = React.useState<number[]>(
+    props.yearRange
+  );
+
+  // React.useEffect(() => {
+  //   dispatch(setAnalysisYearRange(activeYearRange));
+  // }, []);
+
+  function handleSliderRange(val: number[]): void {
+    setActiveYearRange(val);
     console.log(val);
   }
+
+  const marks: any = React.useCallback(() => {
+    return generateMarks(props.yearRange);
+  }, [props.yearRange]);
 
   return (
     <div className="time-slider-container">
       <SliderWithTooltip
-        min={2000}
-        max={2018}
-        defaultValue={[2000, 2018]}
-        value={range}
+        min={props.yearRange[0]}
+        max={props.yearRange[1]}
+        defaultValue={[props.yearRange[0], props.yearRange[1]]}
+        value={activeYearRange}
         allowCross={false}
         tipFormatter={(val: number): number => val}
         dots={true}
-        marks={defaultMarks}
+        marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
         handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
@@ -179,3 +131,5 @@ export const RangeSlider = (): JSX.Element => {
     </div>
   );
 };
+
+export const MemoRangeSlider = React.memo(RangeSlider);

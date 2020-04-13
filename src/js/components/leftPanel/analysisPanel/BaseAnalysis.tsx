@@ -10,7 +10,7 @@ import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import 'css/leftpanel.scss';
-import { RangeSlider, MemoDatePicker } from './InputComponents';
+import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 
@@ -26,6 +26,7 @@ export interface UIParams {
   maxDate: string; //YYYY-MM-DD
   defaultStartDate: string; //YYYY-MM-DD
   defaultEndDate: string; //YYYY-MM-DD
+  bounds?: number[];
 }
 
 //Memo'd selectors
@@ -147,11 +148,21 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  const renderInputComponent = (props: UIParams): JSX.Element | null => {
-    const { multi, minDate, maxDate, defaultStartDate, defaultEndDate } = props;
+  const renderInputComponent = (
+    props: UIParams
+  ): JSX.Element | null | undefined => {
+    const {
+      multi,
+      minDate,
+      maxDate,
+      defaultStartDate,
+      defaultEndDate,
+      bounds
+    } = props;
     switch (props.inputType) {
       case 'rangeSlider':
-        return <RangeSlider />;
+        if (bounds) return <MemoRangeSlider yearRange={bounds} />;
+        break;
       case 'tcd':
         return <CanopyDensityPicker label={false} />;
       case 'datepicker':
