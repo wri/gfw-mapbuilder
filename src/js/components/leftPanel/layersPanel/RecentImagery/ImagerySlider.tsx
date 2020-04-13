@@ -1,32 +1,38 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 
 import { mapController } from 'js/controllers/mapController';
 
 interface LayerTransparencyProps {
   layerID?: string;
-  layerOpacity: number | undefined;
-  sublayer?: boolean;
-  parentID?: string;
 }
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
-const LayerTransparencySlider = (
+const ImageryLayerTransparencySlider = (
   props: LayerTransparencyProps
 ): React.ReactElement => {
-  const { layerID, layerOpacity, sublayer, parentID } = props;
-
+  const { layerID } = props;
+  const [opacity, setOpacity] = useState(1);
   const handleOpacityChange = (eventValue: any): void => {
-    if (layerID === 'VIIRS_ACTIVE_FIRES' || layerID === 'MODIS_ACTIVE_FIRES') {
-      mapController.updateMODISorVIIRSOpacity(layerID, eventValue);
-    } else {
-      // * NOTE: default logic
-      if (layerID) {
-        mapController.setLayerOpacity(layerID, eventValue, sublayer, parentID);
+    if (!layerID) return;
+    const imageryLayer = mapController._map?.findLayerById(layerID);
+    if (!imageryLayer) return;
+    imageryLayer.opacity = eventValue;
+    mapController.updateImageryOpacity(eventValue);
+    setOpacity(eventValue);
+  };
+
+  React.useEffect(() => {
+    //setting default opacity here
+    if (layerID) {
+      const imageryLayer = mapController._map?.findLayerById(layerID);
+      if (imageryLayer) {
+        setOpacity(mapController._imageryOpacity);
       }
     }
-  };
+  }, [layerID]);
 
   return (
     <div className="transparency-slider">
@@ -34,7 +40,8 @@ const LayerTransparencySlider = (
         min={0}
         max={1}
         step={0.05}
-        value={layerOpacity}
+        defaultValue={opacity}
+        value={opacity}
         tipFormatter={(val: number): string => `${val * 100}%`}
         onChange={handleOpacityChange}
         railStyle={{ height: 5, backgroundColor: '#e9e9e9' }}
@@ -57,4 +64,4 @@ const LayerTransparencySlider = (
   );
 };
 
-export default LayerTransparencySlider;
+export default ImageryLayerTransparencySlider;

@@ -3,6 +3,7 @@ import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
+import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
@@ -110,8 +111,16 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         opacity: layerConfig.opacity
       });
       break;
+    case 'imagery':
+      esriLayer = new TreeCoverGainLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      break;
     default:
-      // throw new Error('No matching layer type!')
       console.error('No error type!');
       break;
   }
