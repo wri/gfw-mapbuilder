@@ -18,13 +18,13 @@ const SearchContent: FunctionComponent = () => {
   const [formError, setFormError] = useState(false);
   const [latitudeInput, setLatitude] = useState('');
   const [longitudeInput, setLongitude] = useState('');
-  const { selectedLanguage, selectedSearchWidgetLayer } = useSelector(
-    (state: RootState) => state.appState
+  const selectedLanguage = useSelector(
+    (state: RootState) => state.appState.selectedLanguage
   );
-  const [selectedLayerInfo, setSelectedLayerInfo] = useState({
-    displayField: '',
-    layerTitle: ''
-  });
+  const selectedSearchWidgetLayer = useSelector(
+    (state: RootState) => state.appState.selectedSearchWidgetLayer
+  );
+
   const { title, buttonTitle, latitude, longitude } = searchContent[
     selectedLanguage
   ];
@@ -32,10 +32,6 @@ const SearchContent: FunctionComponent = () => {
   useEffect(() => {
     mapController.initializeSearchWidget(searchRef);
   }, []);
-
-  useEffect(() => {
-    setSelectedLayerInfo(selectedSearchWidgetLayer);
-  }, [selectedSearchWidgetLayer]);
 
   const setSearch = (): void => {
     if (latitudeInput === '' || latitudeInput === '') {
@@ -95,11 +91,11 @@ const SearchContent: FunctionComponent = () => {
       <div className="search-widget-wrapper">
         <p>{title}</p>
         <div ref={searchRef}></div>
-        {selectedLayerInfo.displayField.length &&
-        selectedLayerInfo.layerTitle.length ? (
+        {selectedSearchWidgetLayer.displayField.length &&
+        selectedSearchWidgetLayer.layerTitle.length ? (
           <p>
-            Search <em>{selectedLayerInfo.layerTitle}</em> by{' '}
-            {selectedLayerInfo.displayField}
+            Search <em>{selectedSearchWidgetLayer.layerTitle}</em> by{' '}
+            {selectedSearchWidgetLayer.displayField}
           </p>
         ) : null}
       </div>
