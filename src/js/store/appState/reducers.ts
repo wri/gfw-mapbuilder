@@ -14,7 +14,8 @@ import {
   SET_HIDE_WIDGET,
   SET_CANOPY_DENSITY,
   SET_ANALYSIS_DATE,
-  SET_ANALYSIS_YEAR_RANGE
+  SET_ANALYSIS_YEAR_RANGE,
+  SET_SELECTED_SEARCH_WIDGET_LAYER
 } from './types';
 
 const initialState: AppState = {
@@ -24,6 +25,10 @@ const initialState: AppState = {
   infoModalLayerID: '',
   hideWidgetActive: false,
   isLoggedIn: false,
+  selectedSearchWidgetLayer: {
+    displayField: '',
+    layerTitle: ''
+  },
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',
@@ -46,6 +51,11 @@ export function appStateReducer(
   action: AppStateTypes
 ): AppState {
   switch (action.type) {
+    case SET_SELECTED_SEARCH_WIDGET_LAYER:
+      return {
+        ...state,
+        selectedSearchWidgetLayer: action.payload
+      };
     case TOGGLE_TABVIEW_PANEL:
       return {
         ...state,

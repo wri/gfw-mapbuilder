@@ -29,6 +29,11 @@ export interface MeasureContent {
   coordinatePointerMoveResults?: any; // ClickResults | undefined | Point;
 }
 
+interface SelectedSearchWidgetLayer {
+  displayField: string;
+  layerTitle: string;
+}
+
 export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
@@ -38,6 +43,7 @@ export interface AppState {
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
   isLoggedIn: boolean;
+  selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
 }
 
 //Action names available
@@ -55,6 +61,13 @@ export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
 export const SET_CANOPY_DENSITY = 'SET_CANOPY_DENSITY';
 export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
 export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
+export const SET_SELECTED_SEARCH_WIDGET_LAYER =
+  'SET_SELECTED_SEARCH_WIDGET_LAYER';
+
+interface SetSelectedSearchWidgetLayer {
+  type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
+  payload: AppState['selectedSearchWidgetLayer'];
+}
 
 interface SetOpenLayerGroup {
   type: typeof SET_OPEN_LAYER_GROUP;
@@ -140,4 +153,5 @@ export type AppStateTypes =
   | SetHideWidget
   | SetCanopyDensity
   | SetAnalysisDate
-  | SetAnalysisYearRange;
+  | SetAnalysisYearRange
+  | SetSelectedSearchWidgetLayer;
