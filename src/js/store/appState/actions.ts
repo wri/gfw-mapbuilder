@@ -12,8 +12,18 @@ import {
   LeftPanel,
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
-  SET_CANOPY_DENSITY
+  SET_CANOPY_DENSITY,
+  SET_SELECTED_SEARCH_WIDGET_LAYER
 } from './types';
+
+export function setSelectedSearchWidgetLayer(
+  payload: AppState['selectedSearchWidgetLayer']
+) {
+  return {
+    type: SET_SELECTED_SEARCH_WIDGET_LAYER as typeof SET_SELECTED_SEARCH_WIDGET_LAYER,
+    payload: payload
+  };
+}
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
   return {

@@ -21,6 +21,10 @@ const SearchContent: FunctionComponent = () => {
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
+  const selectedSearchWidgetLayer = useSelector(
+    (state: RootState) => state.appState.selectedSearchWidgetLayer
+  );
+
   const { title, buttonTitle, latitude, longitude } = searchContent[
     selectedLanguage
   ];
@@ -87,6 +91,13 @@ const SearchContent: FunctionComponent = () => {
       <div className="search-widget-wrapper">
         <p>{title}</p>
         <div ref={searchRef}></div>
+        {selectedSearchWidgetLayer.displayField.length &&
+        selectedSearchWidgetLayer.layerTitle.length ? (
+          <p>
+            Search <em>{selectedSearchWidgetLayer.layerTitle}</em> by{' '}
+            {selectedSearchWidgetLayer.displayField}
+          </p>
+        ) : null}
       </div>
     </div>
   );
