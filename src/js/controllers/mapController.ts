@@ -594,7 +594,7 @@ export class MapController {
     }
   }
 
-  completeSketchVM(): void {
+  completeSketchVM(): any {
     this._sketchVM?.complete();
   }
 
@@ -623,31 +623,31 @@ export class MapController {
     }
   }
 
-  listenToSketchCreate(event: any): any {
-    if (event.state === 'complete') {
-      event.graphic.attributes = {
-        OBJECTID: event.graphic.uid
-      };
-
-      event.graphic.symbol.outline.color = [115, 252, 253];
-      event.graphic.symbol.color = [0, 0, 0, 0];
-
-      const drawnFeatures: LayerFeatureResult = {
-        layerID: 'user_features',
-        layerTitle: 'User Features',
-        // sublayerID: null,
-        // sublayerTitle: null,
-        features: [event.graphic],
-        fieldNames: null
-      };
-
-      //Replace all active features with our drawn feature, assigning custom layerID and Title
-      // store.dispatch(setActiveFeatures([]));
-      store.dispatch(setActiveFeatures([drawnFeatures]));
-      store.dispatch(setActiveFeatureIndex([0, 0]));
-      // store.dispatch(setSketchWidgetWidget(true));
-      store.dispatch(selectActiveTab('analysis'));
+  listenToSketchCreate(event: any): void {
+    let eventGraphics;
+    if (event.hasOwnProperty('graphic')) {
+      eventGraphics = event.graphic;
+    } else if (event.hasOwnProperty('graphics')) {
+      eventGraphics = event.graphics[0];
     }
+    eventGraphics.attributes = {
+      OBJECTID: eventGraphics.uid
+    };
+
+    eventGraphics.symbol.outline.color = [115, 252, 253];
+    eventGraphics.symbol.color = [0, 0, 0, 0];
+
+    const drawnFeatures: LayerFeatureResult = {
+      layerID: 'user_features',
+      layerTitle: 'User Features',
+      features: [eventGraphics],
+      fieldNames: null
+    };
+
+    //Replace all active features with our drawn feature, assigning custom layerID and Title
+    store.dispatch(setActiveFeatures([drawnFeatures]));
+    store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(selectActiveTab('analysis'));
   }
 
   initializeAndSetSketch(): void {
@@ -668,19 +668,24 @@ export class MapController {
     this._map?.add(this._sketchVMGraphicsLayer);
 
     this._sketchVM?.on('create', (event: any) => {
-      // this.listenToSketchCreate(event);
+      if (event.state === 'complete') {
+        this.listenToSketchCreate(event);
+      }
     });
 
     this._sketchVM?.on('delete', () => {
       this.listenToSketchDelete();
     });
+
+    this._sketchVM?.on('update', (event: any) => {
+      if (event.state === 'complete') {
+        this.listenToSketchCreate(event);
+      }
+    });
   }
 
   createPolygonSketch = (): void => {
     this.deleteSketchVM();
-    // store.dispatch(setActiveFeatures([]));
-    // store.dispatch(setActiveFeatureIndex([0, 0]));
-    // store.dispatch(setSketchWidgetWidget(true));
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
