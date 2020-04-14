@@ -631,10 +631,21 @@ export class MapController {
 
       event.graphic.symbol.outline.color = [115, 252, 253];
       event.graphic.symbol.color = [0, 0, 0, 0];
+
+      const drawnFeatures: LayerFeatureResult = {
+        layerID: 'user_features',
+        layerTitle: 'User Features',
+        // sublayerID: null,
+        // sublayerTitle: null,
+        features: [event.graphic],
+        fieldNames: null
+      };
+
       //Replace all active features with our drawn feature, assigning custom layerID and Title
-      store.dispatch(setActiveFeatures([]));
+      // store.dispatch(setActiveFeatures([]));
+      store.dispatch(setActiveFeatures([drawnFeatures]));
       store.dispatch(setActiveFeatureIndex([0, 0]));
-      store.dispatch(setSketchWidgetWidget(true));
+      // store.dispatch(setSketchWidgetWidget(true));
       store.dispatch(selectActiveTab('analysis'));
     }
   }
@@ -657,7 +668,7 @@ export class MapController {
     this._map?.add(this._sketchVMGraphicsLayer);
 
     this._sketchVM?.on('create', (event: any) => {
-      this.listenToSketchCreate(event);
+      // this.listenToSketchCreate(event);
     });
 
     this._sketchVM?.on('delete', () => {
@@ -667,9 +678,9 @@ export class MapController {
 
   createPolygonSketch = (): void => {
     this.deleteSketchVM();
-    store.dispatch(setActiveFeatures([]));
-    store.dispatch(setActiveFeatureIndex([0, 0]));
-    store.dispatch(setSketchWidgetWidget(true));
+    // store.dispatch(setActiveFeatures([]));
+    // store.dispatch(setActiveFeatureIndex([0, 0]));
+    // store.dispatch(setSketchWidgetWidget(true));
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 

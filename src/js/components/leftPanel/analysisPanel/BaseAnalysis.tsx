@@ -284,16 +284,6 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
-  // const setActiveButton = (): void => {
-  //   if (renderEditButton) {
-  //     setRenderEditButton(false);
-  //     mapController.updateSketchVM();
-  //   } else {
-  //     mapController.completeSketchVM();
-  //     setRenderEditButton(true);
-  //   }
-  // };
-
   const setSaveSketch = (): void => {
     mapController.completeSketchVM();
     setRenderEditButton(true);
@@ -327,9 +317,9 @@ const BaseAnalysis = (): JSX.Element => {
             {title === null ? 'User Drawn Feature' : title}
           </div>
           {renderEditButton ? (
-            <button onClick={(): void => setSaveSketch()}>Edit</button>
+            <button onClick={(): void => setEditSketch()}>Edit</button>
           ) : (
-            <button onClick={(): void => setEditSketch()}>Save</button>
+            <button onClick={(): void => setSaveSketch()}>Save</button>
           )}
           <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
