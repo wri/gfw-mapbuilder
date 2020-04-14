@@ -13,6 +13,8 @@ import {
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
   SET_CANOPY_DENSITY,
+  SET_ANALYSIS_DATE,
+  SET_ANALYSIS_YEAR_RANGE,
   SET_SELECTED_SEARCH_WIDGET_LAYER
 } from './types';
 
@@ -107,6 +109,24 @@ export function setActiveMeasureButton(
 ) {
   return {
     type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,
+    payload: payload
+  };
+}
+
+export function setAnalysisDateRange(
+  payload: AppState['leftPanel']['analysisDateRange']
+) {
+  return {
+    type: SET_ANALYSIS_DATE as typeof SET_ANALYSIS_DATE,
+    payload: payload
+  };
+}
+
+export function setAnalysisYearRange(
+  payload: AppState['leftPanel']['analysisYearRange']
+) {
+  return {
+    type: SET_ANALYSIS_YEAR_RANGE as typeof SET_ANALYSIS_YEAR_RANGE,
     payload: payload
   };
 }

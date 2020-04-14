@@ -1,10 +1,10 @@
-// import Point from 'esri/geometry/Point';
-
 export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
   openLayerGroup: string;
   density: 1 | 2 | 3 | 4 | 5 | 6 | 7 | number; //careful about introducing any more density numbers, AG_BIOMASS layer depends on those to render and update
+  analysisDateRange: string[];
+  analysisYearRange: number[];
 }
 
 interface SpecificAreaResults {
@@ -59,6 +59,8 @@ export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
 export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
 export const SET_CANOPY_DENSITY = 'SET_CANOPY_DENSITY';
+export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
+export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
 export const SET_SELECTED_SEARCH_WIDGET_LAYER =
   'SET_SELECTED_SEARCH_WIDGET_LAYER';
 
@@ -127,6 +129,16 @@ interface SetActiveMeasureButton {
   payload: AppState['measureContent']['activeButton'];
 }
 
+interface SetAnalysisDate {
+  type: typeof SET_ANALYSIS_DATE;
+  payload: AppState['leftPanel']['analysisDateRange'];
+}
+
+interface SetAnalysisYearRange {
+  type: typeof SET_ANALYSIS_YEAR_RANGE;
+  payload: AppState['leftPanel']['analysisYearRange'];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -140,4 +152,6 @@ export type AppStateTypes =
   | SetActiveMeasureButton
   | SetHideWidget
   | SetCanopyDensity
+  | SetAnalysisDate
+  | SetAnalysisYearRange
   | SetSelectedSearchWidgetLayer;
