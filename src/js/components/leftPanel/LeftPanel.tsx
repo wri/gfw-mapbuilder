@@ -101,15 +101,20 @@ const Tabs = (props: TabsProps): React.ReactElement => {
 
 const LeftPanel = (): React.ReactElement => {
   const dispatch = useDispatch();
-  const { hideWidgetActive, renderGFWDropdown } = useSelector(
-    (store: RootState) => store.appState
+  const hideWidgetActive = useSelector(
+    (store: RootState) => store.appState.hideWidgetActive
+  );
+  const renderGFWDropdown = useSelector(
+    (store: RootState) => store.appState.renderGFWDropdown
   );
   const renderDocTab = useSelector(
     (store: RootState) => store.appSettings.includeDocumentsTab
   );
-
-  const { narrative, alternativeNarrative } = useSelector(
-    (store: RootState) => store.appSettings
+  const narrative = useSelector(
+    (store: RootState) => store.appSettings.narrative
+  );
+  const alternativeNarrative = useSelector(
+    (store: RootState) => store.appSettings.alternativeNarrative
   );
 
   const renderInfoTab =

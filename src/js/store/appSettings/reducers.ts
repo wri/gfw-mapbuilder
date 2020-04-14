@@ -38,7 +38,8 @@ const initialState: AppSettings = {
       useGfwWidget: false,
       chartType: '',
       uiParams: [],
-      widgetId: ''
+      widgetId: '',
+      params: []
     }
   ]
 };

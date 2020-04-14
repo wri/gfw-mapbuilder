@@ -8,8 +8,22 @@ import { RootState } from 'js/store/index';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
 
 import 'css/header.scss';
+import { createSelector } from 'reselect';
 
-// import config from '../../../../configs/resources';
+const appSettingsSelector = createSelector(
+  (state: RootState) => state.appSettings,
+  appSettings => ({
+    language: appSettings.language,
+    title: appSettings.title,
+    subtitle: appSettings.subtitle,
+    logoUrl: appSettings.logoUrl,
+    logoLinkUrl: appSettings.logoLinkUrl,
+    useAlternativeLanguage: appSettings.useAlternativeLanguage,
+    alternativeWebmap: appSettings.alternativeWebmap,
+    alternativeLanguage: appSettings.alternativeLanguage,
+    includeMyGFWLogin: appSettings.includeMyGFWLogin
+  })
+);
 
 const Header: FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -23,10 +37,18 @@ const Header: FunctionComponent = () => {
     alternativeWebmap,
     alternativeLanguage,
     includeMyGFWLogin
-  } = useSelector((store: RootState) => store.appSettings);
+  } = useSelector(appSettingsSelector);
 
-  const { selectedLanguage, isLoggedIn, renderGFWDropdown } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
+
+  const isLoggedIn = useSelector(
+    (store: RootState) => store.appState.isLoggedIn
+  );
+
+  const renderGFWDropdown = useSelector(
+    (store: RootState) => store.appState.renderGFWDropdown
   );
 
   const closeGFWDropdown = () => {
