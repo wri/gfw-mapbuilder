@@ -71,6 +71,10 @@ const BaseAnalysis = (): JSX.Element => {
 
   const analysisDateRange = useSelector(selectAnalysisDaterange);
 
+  const analysisYearRange = useSelector(
+    (store: RootState) => store.appState.leftPanel.analysisYearRange
+  );
+
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
     const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
@@ -96,7 +100,8 @@ const BaseAnalysis = (): JSX.Element => {
   function generateWidgetURL(
     uiParams: any,
     widgetID: string,
-    geostoreID?: string
+    geostoreID?: string,
+    queryParams?: { name: string; value: string }[]
   ): string {
     let baseURL = 'https://api.resourcewatch.org/v1/widget/';
     //Add Widget ID
@@ -114,7 +119,15 @@ const BaseAnalysis = (): JSX.Element => {
           baseURL = baseURL.concat(datePickerString);
         }
       } else if (param.inputType === 'rangeSlider') {
-        //
+        let yearRangeString = `${param.startParamName}=`;
+        if (param.combineParams) {
+          const start = `${analysisYearRange[0]}-01-01`;
+          const end = `${analysisYearRange[1]}-12-31`;
+          yearRangeString = yearRangeString.concat(
+            `${start}${param.valueSeparator}${end}`
+          );
+          baseURL = baseURL.concat(yearRangeString);
+        }
       } else if (param.inputType === 'tcd') {
         const threshold = `&thresh=${markValueMap[canopyDensity]}`;
         baseURL = baseURL.concat(threshold);
@@ -124,6 +137,13 @@ const BaseAnalysis = (): JSX.Element => {
 
     //Add Geostore ID
     baseURL = baseURL.concat(`&geostore=${geostoreID}`);
+
+    //Check for query Params and append if they exist
+    if (queryParams) {
+      queryParams.forEach(param => {
+        baseURL = baseURL.concat(`&${param.name}=${param.value}`);
+      });
+    }
     return baseURL;
   }
 
@@ -137,7 +157,8 @@ const BaseAnalysis = (): JSX.Element => {
       const widgetURL = generateWidgetURL(
         mod.uiParams,
         mod.widgetId,
-        activeFeature.attributes.geostoreId
+        activeFeature.attributes.geostoreId,
+        mod.params
       );
       fetch(widgetURL)
         .then((response: any) => response.json())

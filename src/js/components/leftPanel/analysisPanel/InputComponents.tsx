@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { setAnalysisDateRange } from 'js/store/appState/actions';
+import {
+  setAnalysisDateRange,
+  setAnalysisYearRange
+} from 'js/store/appState/actions';
 import { useDispatch } from 'react-redux';
-import { createSliderWithTooltip, Range, Marks } from 'rc-slider';
+import { createSliderWithTooltip, Range } from 'rc-slider';
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
 interface DatePickerProps {
@@ -74,7 +77,6 @@ function generateMarks(range: number[]): any[] | {} {
   const marksObject = {};
   for (let i = range[0]; i <= range[1]; i++) {
     if (i === range[0] || i === range[1]) {
-      console.log('truth');
       marksObject[i] = { label: String(i), style: {} };
     } else {
       marksObject[i] = { label: String(i), style: { display: 'none' } };
@@ -90,23 +92,22 @@ const RangeSlider = (props: RangeSliderProps): JSX.Element => {
   //Sync at the start too
   const dispatch = useDispatch();
 
-  const [yearRange, setYearRange] = React.useState<number[]>(props.yearRange);
   const [activeYearRange, setActiveYearRange] = React.useState<number[]>(
     props.yearRange
   );
 
-  // React.useEffect(() => {
-  //   dispatch(setAnalysisYearRange(activeYearRange));
-  // }, []);
+  React.useEffect(() => {
+    dispatch(setAnalysisYearRange(activeYearRange));
+  }, []);
 
   function handleSliderRange(val: number[]): void {
     setActiveYearRange(val);
-    console.log(val);
+    dispatch(setAnalysisYearRange(val));
   }
 
-  const marks: any = React.useCallback(() => {
-    return generateMarks(props.yearRange);
-  }, [props.yearRange]);
+  const marks: any = React.useMemo(() => generateMarks(props.yearRange), [
+    props.yearRange
+  ]);
 
   return (
     <div className="time-slider-container">
