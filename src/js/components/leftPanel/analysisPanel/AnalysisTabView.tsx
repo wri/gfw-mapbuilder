@@ -130,21 +130,6 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     </div>
   );
 
-  // const TabViewContent = (): JSX.Element | null => {
-  //   console.log('tabview is re-rendering!');
-  //   if (tabViewIsVisible) {
-  //     //let's check for active features
-  //     if (activeFeaturesLength === 0) {
-  //       return <DefaultAnalysisContent />;
-  //     } else {
-  //       return <BaseAnalysis />;
-  //     }
-  //   } else {
-  //     return null;
-  //   }
-  // };
-
-  // return <TabViewContent />;
   return (
     <>
       {tabViewIsVisible && activeFeaturesLength !== 0 && <BaseAnalysis />}
