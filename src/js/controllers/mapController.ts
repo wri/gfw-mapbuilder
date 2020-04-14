@@ -43,7 +43,8 @@ import {
   selectActiveTab,
   setMeasureResults,
   setLanguage,
-  setRenderGFWDropdown
+  setRenderGFWDropdown,
+  setSelectedSearchWidgetLayer
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -883,6 +884,19 @@ export class MapController {
 
   generateMapPDF = async (layoutType: string): Promise<any> => {
     const printServiceURL = store.getState().appSettings.printServiceUrl;
+    let printOptions: Array<string>;
+
+    if (printServiceURL && layoutType === 'Landscape') {
+      printOptions = await fetch(`${printServiceURL}/?f=json`)
+        .then(res => res.json())
+        .then(results => {
+          return results.parameters.filter(
+            (param: any) => param.name === 'Layout_Template'
+          )[0].choiceList;
+        });
+
+      layoutType = printOptions[0];
+    }
 
     if (!this._printTask) {
       this._printTask = new PrintTask({
@@ -951,10 +965,18 @@ export class MapController {
   async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {
     const allSources = await setLayerSearchSource();
 
-    new Search({
+    const searchWidget = new Search({
       view: this._mapview,
       container: searchRef.current,
       sources: allSources
+    });
+
+    searchWidget.on('search-focus', (e: any) => {
+      const selectedLayer = {
+        displayField: e.target.activeSource.displayField,
+        layerTitle: e.target.activeSource.layer.title
+      };
+      store.dispatch(setSelectedSearchWidgetLayer(selectedLayer));
     });
   }
 
