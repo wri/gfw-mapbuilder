@@ -13,7 +13,8 @@ import {
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
   SET_CANOPY_DENSITY,
-  SET_ANALYSIS_DATE
+  SET_ANALYSIS_DATE,
+  SET_ANALYSIS_YEAR_RANGE
 } from './types';
 
 export function toggleTabviewPanel(payload: LeftPanel['tabViewVisible']) {
@@ -107,6 +108,15 @@ export function setAnalysisDateRange(
 ) {
   return {
     type: SET_ANALYSIS_DATE as typeof SET_ANALYSIS_DATE,
+    payload: payload
+  };
+}
+
+export function setAnalysisYearRange(
+  payload: AppState['leftPanel']['analysisYearRange']
+) {
+  return {
+    type: SET_ANALYSIS_YEAR_RANGE as typeof SET_ANALYSIS_YEAR_RANGE,
     payload: payload
   };
 }

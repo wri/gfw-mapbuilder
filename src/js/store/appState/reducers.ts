@@ -13,7 +13,8 @@ import {
   SET_ACTIVE_MEASURE_BUTTON,
   SET_HIDE_WIDGET,
   SET_CANOPY_DENSITY,
-  SET_ANALYSIS_DATE
+  SET_ANALYSIS_DATE,
+  SET_ANALYSIS_YEAR_RANGE
 } from './types';
 
 const initialState: AppState = {
@@ -28,7 +29,8 @@ const initialState: AppState = {
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
-    analysisDateRange: ['', '']
+    analysisDateRange: ['', ''],
+    analysisYearRange: [2001, 2018]
   },
   measureContent: {
     activeButton: '',
@@ -112,6 +114,14 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           analysisDateRange: action.payload
+        }
+      };
+    case SET_ANALYSIS_YEAR_RANGE:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          analysisYearRange: action.payload
         }
       };
     default:
