@@ -18,12 +18,17 @@ interface DataTabProps {
 }
 const DataTabView = (props: DataTabProps): JSX.Element => {
   const dispatch = useDispatch();
-  const { activeTab, tabViewVisible } = useSelector(
-    (store: RootState) => store.appState.leftPanel
+  const activeTab = useSelector(
+    (store: RootState) => store.appState.leftPanel.activeTab
   );
-
-  const { activeFeatures, activeFeatureIndex } = useSelector(
-    (store: RootState) => store.mapviewState
+  const tabViewVisible = useSelector(
+    (store: RootState) => store.appState.leftPanel.tabViewVisible
+  );
+  const activeFeatures = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatures
+  );
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
   );
 
   const FeatureDataView = (): JSX.Element => {

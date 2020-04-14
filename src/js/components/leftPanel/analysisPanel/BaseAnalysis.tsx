@@ -1,13 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-
-import { mapController } from 'js/controllers/mapController';
-
+import { createSelector } from 'reselect';
 import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveFeatures } from 'js/store/mapview/actions';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 
 import VegaChart from './VegaChartContainer';
@@ -15,6 +13,34 @@ import analysisTranslations from './analysisTranslations';
 import { CalendarDateRange } from 'js/components/leftPanel/layersPanel/DateRange';
 
 import 'css/leftpanel.scss';
+import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
+import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
+import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
+
+type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+export interface UIParams {
+  inputType: InputTypes;
+  startParamName: string;
+  combineParams: boolean;
+  endParamName?: string;
+  valueSeparator?: string;
+  multi?: boolean;
+  minDate: string; //YYYY-MM-DD
+  maxDate: string; //YYYY-MM-DD
+  defaultStartDate: string; //YYYY-MM-DD
+  defaultEndDate: string; //YYYY-MM-DD
+  bounds?: number[];
+}
+
+//Memo'd selectors
+const selectAnalysisModules = createSelector(
+  (state: RootState) => state.appSettings,
+  settings => settings.analysisModules
+);
+const selectAnalysisDaterange = createSelector(
+  (state: RootState) => state.appState,
+  appState => appState.leftPanel.analysisDateRange
+);
 
 const AnalysisSpinner = (): React.ReactElement => (
   <h4>Geometry is Registering...</h4>
@@ -23,23 +49,33 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
-  const [renderEditButton, setRenderEditButton] = useState(false);
+  //This is used for date picker analysis module
 
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
-
-  const { analysisModules } = useSelector(
-    (store: RootState) => store.appSettings
+  const canopyDensity = useSelector(
+    (store: RootState) => store.appState.leftPanel.density
   );
+  const analysisModules = useSelector(selectAnalysisModules);
 
   //Default to the first analysis
   const [selectedAnalysis, setSelectedAnalysis] = useState('default');
 
   const [geostoreReady, setGeostoreReady] = useState(false);
 
-  const { activeFeatures, activeFeatureIndex } = useSelector(
-    (store: RootState) => store.mapviewState
+  const activeFeatures = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatures
+  );
+
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
+  );
+
+  const analysisDateRange = useSelector(selectAnalysisDaterange);
+
+  const analysisYearRange = useSelector(
+    (store: RootState) => store.appState.leftPanel.analysisYearRange
   );
 
   useEffect(() => {
@@ -62,7 +98,57 @@ const BaseAnalysis = (): JSX.Element => {
           setGeostoreReady(true);
         });
     }
-  }, [activeFeatures, activeFeatureIndex]);
+  }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
+
+  function generateWidgetURL(
+    uiParams: any,
+    widgetID: string,
+    geostoreID?: string,
+    queryParams?: { name: string; value: string }[]
+  ): string {
+    let baseURL = 'https://api.resourcewatch.org/v1/widget/';
+    //Add Widget ID
+    baseURL = baseURL.concat(`${widgetID}?`);
+    //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
+    for (const param of uiParams) {
+      if (param.inputType === 'datepicker') {
+        let datePickerString = `${param.startParamName}=`;
+        if (param.combineParams) {
+          const start = analysisDateRange[0];
+          const end = analysisDateRange[1];
+          datePickerString = datePickerString.concat(
+            `${start}${param.valueSeparator}${end}`
+          );
+          baseURL = baseURL.concat(datePickerString);
+        }
+      } else if (param.inputType === 'rangeSlider') {
+        let yearRangeString = `${param.startParamName}=`;
+        if (param.combineParams) {
+          const start = `${analysisYearRange[0]}-01-01`;
+          const end = `${analysisYearRange[1]}-12-31`;
+          yearRangeString = yearRangeString.concat(
+            `${start}${param.valueSeparator}${end}`
+          );
+          baseURL = baseURL.concat(yearRangeString);
+        }
+      } else if (param.inputType === 'tcd') {
+        const threshold = `&thresh=${markValueMap[canopyDensity]}`;
+        baseURL = baseURL.concat(threshold);
+        //&thresh=20
+      }
+    }
+
+    //Add Geostore ID
+    baseURL = baseURL.concat(`&geostore=${geostoreID}`);
+
+    //Check for query Params and append if they exist
+    if (queryParams) {
+      queryParams.forEach(param => {
+        baseURL = baseURL.concat(`&${param.name}=${param.value}`);
+      });
+    }
+    return baseURL;
+  }
 
   function runAnalysis() {
     const mod = analysisModules.find(
@@ -71,9 +157,13 @@ const BaseAnalysis = (): JSX.Element => {
     if (mod) {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-      fetch(
-        `https://api.resourcewatch.org/v1/widget/${mod.widgetId}?geostore=${activeFeature.attributes.geostoreId}`
-      )
+      const widgetURL = generateWidgetURL(
+        mod.uiParams,
+        mod.widgetId,
+        activeFeature.attributes.geostoreId,
+        mod.params
+      );
+      fetch(widgetURL)
         .then((response: any) => response.json())
         .then((analysisMod: any) => {
           //TODO: we need to handle loading and error states
@@ -82,66 +172,104 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  const AnalysisInstructions = (): JSX.Element | null => {
-    const currentAnalysis = analysisModules.find(
-      module => module.analysisId === selectedAnalysis
-    );
-    if (selectedAnalysis === 'default') {
-      return (
-        <>
-          <div className="analysis-text">
-            <p style={{ fontWeight: 'bold' }}>
-              {analysisTranslations.analysisNotSelected[selectedLanguage][0]}
-            </p>
-            <p>
-              {analysisTranslations.analysisNotSelected[selectedLanguage][1]}
-            </p>
-          </div>
-          <div className="chart-icon"></div>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
-            {currentAnalysis?.title[selectedLanguage]}
-          </p>
-          <p style={{ fontSize: '12px' }}>
-            {currentAnalysis?.description[selectedLanguage]}
-          </p>
-          <div>
-            {currentAnalysis?.uiParams &&
-              currentAnalysis?.uiParams !== 'none' &&
-              currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
-                const activeLayer = activeFeatures[activeFeatureIndex[0]];
-                return (
-                  <div className="ui-analysis-wrapper" key={i}>
-                    <div className="ui-description">
-                      <div className="number">
-                        <p>{i + 1}</p>
-                      </div>
-                      <p>{uiParam.label[selectedLanguage]}</p>
-                    </div>
-                    {uiParam.inputType === 'datepicker' ? (
-                      <CalendarDateRange layerID={activeLayer.layerID} />
-                    ) : (
-                      <p>{uiParam.inputType}</p>
-                    )}
-                  </div>
-                );
-              })}
-          </div>
-        </>
-      );
+  const renderInputComponent = (
+    props: UIParams
+  ): JSX.Element | null | undefined => {
+    const {
+      multi,
+      minDate,
+      maxDate,
+      defaultStartDate,
+      defaultEndDate,
+      bounds
+    } = props;
+    switch (props.inputType) {
+      case 'rangeSlider':
+        if (bounds) return <MemoRangeSlider yearRange={bounds} />;
+        break;
+      case 'tcd':
+        return <CanopyDensityPicker label={false} />;
+      case 'datepicker':
+        return (
+          <MemoDatePicker
+            multi={multi}
+            minDate={minDate}
+            maxDate={maxDate}
+            defaultStartDate={defaultStartDate}
+            defaultEndDate={defaultEndDate}
+          />
+        );
+      default:
+        return null;
     }
   };
 
+  const AnalysisInstructions = React.useMemo(
+    () => (): JSX.Element | null => {
+      const currentAnalysis = analysisModules.find(
+        module => module.analysisId === selectedAnalysis
+      );
+      if (selectedAnalysis === 'default') {
+        return (
+          <>
+            <div className="analysis-text">
+              <p style={{ fontWeight: 'bold' }}>
+                {analysisTranslations.analysisNotSelected[selectedLanguage][0]}
+              </p>
+              <p>
+                {analysisTranslations.analysisNotSelected[selectedLanguage][1]}
+              </p>
+            </div>
+            <div className="chart-icon"></div>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
+              {currentAnalysis?.title[selectedLanguage]}
+            </p>
+            <p style={{ fontSize: '12px' }}>
+              {currentAnalysis?.description[selectedLanguage]}
+            </p>
+            <div>
+              {currentAnalysis?.uiParams &&
+                currentAnalysis?.uiParams !== 'none' &&
+                currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+                  return (
+                    <div className="ui-analysis-wrapper" key={i}>
+                      <div className="ui-description">
+                        <div className="number">
+                          <p>{i + 1}</p>
+                        </div>
+                        <p>{uiParam.label[selectedLanguage]}</p>
+                      </div>
+                      <div className="analysis-input">
+                        {renderInputComponent(uiParam)}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </>
+        );
+      }
+    },
+    [analysisModules, selectedAnalysis, selectedLanguage]
+  );
+
   const AnalysisOptions = (): JSX.Element => {
+    function handleAnalysisOptionChange(e: any): void {
+      setSelectedAnalysis(e.target.value);
+      //Nulify Vega chart Result when new analysis option is selected
+      setVegaSpec(null);
+    }
+
     return (
       <select
         className="analysis-select"
         value={selectedAnalysis || 'default'}
-        onChange={e => setSelectedAnalysis(e.target.value)}
+        onChange={handleAnalysisOptionChange}
       >
         <option value="default">
           {analysisTranslations.defaultAnalysisLabel[selectedLanguage]}
@@ -155,21 +283,6 @@ const BaseAnalysis = (): JSX.Element => {
         })}
       </select>
     );
-  };
-
-  const setActiveButton = (): void => {
-    if (renderEditButton) {
-      setRenderEditButton(false);
-      mapController.updateSketchVM();
-    } else {
-      mapController.completeSketchVM();
-      setRenderEditButton(true);
-    }
-  };
-
-  const setDelete = (): void => {
-    mapController.deleteSketchVM();
-    dispatch(setActiveFeatures([]));
   };
 
   const activeLayer = activeFeatures[activeFeatureIndex[0]];

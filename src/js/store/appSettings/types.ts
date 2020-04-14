@@ -42,6 +42,7 @@ interface AnalysisModule {
   useGfwWidget: boolean;
   widgetId: string;
   uiParams: any;
+  params: { name: string; value: string }[];
 }
 
 export interface LayerGroupInfo {

@@ -18,9 +18,7 @@ const returnLayerSearchSources = (
       placeholder: layer.title,
       searchFields: [layer.displayField],
       displayField: layer.displayField,
-      suggestionTemplate: `${layer.displayField.toUpperCase()} {${
-        layer.displayField
-      }}`,
+      suggestionTemplate: `{${layer.displayField}}`,
       exactMatch: false,
       outFields: ['*'],
       maxResults: 6,
@@ -33,7 +31,25 @@ const returnLayerSearchSources = (
 
 const setFeatureLayerSources = (): ArrayOfLayerSources => {
   const allFeatureLayers = (mapController._map?.allLayers as any).items.filter(
-    (layer: Layer) => layer.type === 'feature'
+    (layer: Layer) => {
+      const isVIIRSLayer =
+        layer.id === 'VIIRS48' ||
+        layer.id === 'VIIRS72' ||
+        layer.id === 'VIIRS7D';
+
+      const isMODISLayer =
+        layer.id === 'MODIS48' ||
+        layer.id === 'MODIS72' ||
+        layer.id === 'MODIS7D';
+
+      if (isVIIRSLayer || isMODISLayer) {
+        return;
+      }
+
+      if (layer.type === 'feature') {
+        return layer;
+      }
+    }
   );
 
   return returnLayerSearchSources(allFeatureLayers);
@@ -68,8 +84,8 @@ const setMapImageLayerSources = async (): Promise<ArrayOfLayerSources> => {
 export const setLayerSearchSource = async (): Promise<ArrayOfLayerSources> => {
   const featureLayerSources = setFeatureLayerSources() as any;
 
-  const mapImageLayerSources = (await setMapImageLayerSources()) as any;
+  // const mapImageLayerSources = (await setMapImageLayerSources()) as any;
   // * NOTE: mapImageLayerSources returns console errors RE FeatureLayer
 
-  return [...featureLayerSources, ...mapImageLayerSources];
+  return featureLayerSources;
 };
