@@ -18,7 +18,7 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import FeatureLayer from 'esri/layers/FeatureLayer';
-import { debounce } from 'lodash-es';
+import { debounce, map } from 'lodash-es';
 
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
@@ -109,11 +109,19 @@ export class MapController {
         ? appSettings.webmap
         : appSettings.alternativeWebmap;
 
+    // this._map = new WebMap({
+    //   portalItem: {
+    //     id: webmapID
+    //   }
+    // });
+
     this._map = new WebMap({
       portalItem: {
-        id: webmapID
+        id: '168f2b9b1da3438189c49c9e80e27342'
       }
     });
+
+    (this._map as any).load();
 
     this._mapview = new MapView({
       map: this._map,
@@ -1516,6 +1524,21 @@ export class MapController {
         }
       }
     });
+  }
+
+  testGrabMetadata(layerID: string): any {
+    const test = (this._map?.layers as any).items.filter(
+      (l: any) => l.id === layerID
+    )[0];
+    // is there a way to grab this data?
+
+    const layer = new FeatureLayer({
+      portalItem: {
+        id: layerID
+      }
+    });
+
+    debugger;
   }
 }
 

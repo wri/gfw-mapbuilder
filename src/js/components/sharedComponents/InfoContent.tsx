@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { mapController } from '../../controllers/mapController';
+
 import { RootState } from 'js/store';
 
 import { downloadData } from '../../../../configs/modal.config';
@@ -13,14 +15,19 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
   //    const results = convert.xml2js(xmlResults); // uses module 'xml-js'
   //
   // TODO [ ] ELSE, use the description and summary instead
-  return await fetch(`${layer.url}/?f=pjson`)
-    .then(res => res.json())
-    .then(results => {
-      return {
-        description: results.description,
-        copyrightText: results.copyrightText
-      };
-    });
+  console.log('layer', layer);
+  if (layer.url) {
+    return await fetch(`${layer.url}/?f=pjson`)
+      .then(res => res.json())
+      .then(results => {
+        return {
+          description: results.description,
+          copyrightText: results.copyrightText
+        };
+      });
+  } else {
+    // do something!
+  }
 };
 
 //Extracting info from Service Layers with technicalName
@@ -52,6 +59,8 @@ const InfoContent: FunctionComponent<{}> = (): any => {
 
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
+      mapController.testGrabMetadata(layer.id);
+      //
       const results = await getWebmapGroupContent(layer);
       setContent(results);
       setDataLoading(false);
