@@ -33,8 +33,7 @@ import {
   setActiveFeatureIndex,
   setActiveFeatures,
   changeMapScale,
-  changeMapCenterCoordinates,
-  setSketchWidgetWidget
+  changeMapCenterCoordinates
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -616,7 +615,6 @@ export class MapController {
 
   listenToSketchDelete(): any {
     if (this._sketchVMGraphicsLayer) {
-      store.dispatch(setSketchWidgetWidget(false));
       store.dispatch(setActiveFeatures([]));
       store.dispatch(setActiveFeatureIndex([0, 0]));
       this._sketchVMGraphicsLayer.graphics['items'] = [];

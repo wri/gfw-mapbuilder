@@ -9,8 +9,7 @@ import {
   SET_TIME_SLIDER,
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
-  MapviewState,
-  SKETCH_WIDGET_ACTIVE
+  MapviewState
 } from './types';
 
 export function isMapReady(payload: MapviewState['isMapReady']) {
@@ -88,14 +87,5 @@ export function changeMapCenterCoordinates(
   return {
     type: CHANGE_MAP_CENTER_COORDINATES as typeof CHANGE_MAP_CENTER_COORDINATES,
     payload: mapCenterCoordinates
-  };
-}
-
-export function setSketchWidgetWidget(
-  setSketchWidget: MapviewState['sketchWidgetActive']
-) {
-  return {
-    type: SKETCH_WIDGET_ACTIVE as typeof SKETCH_WIDGET_ACTIVE,
-    payload: setSketchWidget
   };
 }

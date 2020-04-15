@@ -55,7 +55,6 @@ export interface MapviewState {
   userSubscriptions: UserSubscription[];
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
-  sketchWidgetActive: boolean;
   activeFeatureIndex: number[];
   activeBasemap: string; // * NEW! not in resources.js
   timeSlider: number[];
@@ -194,11 +193,6 @@ interface ChangeMapCenterCoordinates {
   payload: MapviewState['mapCenterCoordinates'];
 }
 
-interface SetSketchWidget {
-  type: typeof SKETCH_WIDGET_ACTIVE;
-  payload: MapviewState['sketchWidgetActive'];
-}
-
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -209,5 +203,4 @@ export type MapviewStateTypes =
   | SetSelectedAction
   | SetTimeSlider
   | ChangeMapScale
-  | ChangeMapCenterCoordinates
-  | SetSketchWidget;
+  | ChangeMapCenterCoordinates;
