@@ -23,10 +23,16 @@ const urlEncodingMap = {
 };
 
 //Generates a shareable URL
-export function getShareableURL(): string {
+interface ShareURLProps {
+  report: boolean;
+}
+export function getShareableURL(props: ShareURLProps): string {
   const urlParams = [];
 
   const { appState, mapviewState } = store.getState();
+
+  //Report boolean
+  urlParams.push(`report=${props.report}`);
 
   //Basemap LayerID
   const { activeBasemap } = mapviewState;
