@@ -11,8 +11,9 @@ interface ReportProps {
 
 const Report = (props: ReportProps): JSX.Element => {
   const dispatch = useDispatch();
+
   function printReport(): void {
-    //
+    window.print();
   }
 
   function shareReport(): void {

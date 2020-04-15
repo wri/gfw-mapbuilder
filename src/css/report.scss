@@ -36,6 +36,7 @@
     grid-template-columns: 1fr auto auto;
     grid-gap: 5px;
     align-items: center;
+    -webkit-print-color-adjust: exact;
     button {
       border: none;
       outline: none;
