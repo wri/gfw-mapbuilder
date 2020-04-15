@@ -123,6 +123,13 @@ export class MapController {
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
 
+    this.setPageTitle(
+      appState.selectedLanguage,
+      appSettings.language,
+      appSettings.title,
+      appSettings.alternativeLanguageTitle
+    );
+
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
       store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
@@ -296,6 +303,19 @@ export class MapController {
       });
   }
 
+  setPageTitle(
+    currentLanguage: string,
+    defaultLanguage: string,
+    primaryTitle: string,
+    secondaryTitle: string
+  ): void {
+    if (currentLanguage === defaultLanguage) {
+      window.document.title = primaryTitle;
+    } else {
+      window.document.title = secondaryTitle;
+    }
+  }
+
   getRemoteAndServiceLayers(): Promise<any> {
     const { appSettings } = store.getState();
     const { layerPanel } = appSettings;
@@ -357,12 +377,19 @@ export class MapController {
 
   changeLanguage(lang: string): void {
     if (!this._map) return;
-    const { mapviewState, appSettings } = store.getState();
+    const { mapviewState, appSettings, appState } = store.getState();
     const {
       language,
       webmap,
       alternativeWebmap
     } = store.getState().appSettings;
+
+    this.setPageTitle(
+      lang,
+      appSettings.language,
+      appSettings.title,
+      appSettings.alternativeLanguageTitle
+    );
 
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
     const nonWebmapLayers = mapviewState.allAvailableLayers.filter(

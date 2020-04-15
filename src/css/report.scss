@@ -1,6 +1,13 @@
 .report {
-  display: flex;
-  flex-direction: column;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  display: grid;
+  padding-top: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-items: center;
 
   .mapview-container,
   .mapview,
@@ -18,5 +25,28 @@
     display: flex;
     width: 100%;
     justify-content: center;
+  }
+
+  .report-header {
+    background-color: #555;
+    height: 50px;
+    width: 90%;
+    padding-right: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-gap: 5px;
+    align-items: center;
+    button {
+      border: none;
+      outline: none;
+      background-color: rgba(0, 0, 0, 0);
+    }
+    .title {
+      margin-left: 1rem;
+      color: #fff;
+      white-space: nowrap;
+      line-height: 25px;
+      font-size: 20px;
+    }
   }
 }

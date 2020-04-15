@@ -15,6 +15,7 @@ export interface AppSettings {
   narrative: string;
   alternativeNarrative: string;
   analysisModules: AnalysisModule[];
+  alternativeLanguageTitle: string;
 }
 
 type LayerGroupKey =

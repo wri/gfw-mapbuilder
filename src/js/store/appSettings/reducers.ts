@@ -23,6 +23,7 @@ const initialState: AppSettings = {
   },
   narrative: '',
   alternativeNarrative: '',
+  alternativeLanguageTitle: '',
   analysisModules: [
     {
       analysisId: '',
