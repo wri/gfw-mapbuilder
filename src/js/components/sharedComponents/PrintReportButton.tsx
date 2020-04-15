@@ -19,11 +19,10 @@ export const PrintReportButton = (): JSX.Element => {
     (store: RootState) => store.appState.selectedLanguage
   );
 
-  function printReportHandler(): void {
-    console.log('print reportt');
+  async function printReportHandler(): Promise<void> {
     //Get the base and state urls
     const baseUrl = new URL(window.location.href).origin;
-    const stateUrl = getShareableURL({ report: true });
+    const stateUrl = await getShareableURL({ report: true });
     const reportURL = `${baseUrl}?${stateUrl}`;
     console.log(reportURL);
   }

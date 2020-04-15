@@ -1,6 +1,8 @@
 import store from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
 import { selectActiveTab, setCanopyDensity } from 'js/store/appState/actions';
+import { LayerFeatureResult } from 'js/store/mapview/types';
+import { registerGeometry } from 'js/helpers/geometryRegistration';
 
 /* eslint no-case-declarations: 0 */
 
@@ -22,17 +24,37 @@ const urlEncodingMap = {
   me: 'modis_end_date'
 };
 
+function getGeostoreID(
+  activeFeatureIndex: number[],
+  activeFeatures: LayerFeatureResult[]
+): Promise<string> {
+  const activeLayer = activeFeatures[activeFeatureIndex[0]];
+  const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+  return registerGeometry(activeFeature)
+    .then(response => response.json())
+    .then(res => {
+      return res.data.id;
+    });
+}
+
 //Generates a shareable URL
 interface ShareURLProps {
   report: boolean;
 }
-export function getShareableURL(props: ShareURLProps): string {
+export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const urlParams = [];
 
   const { appState, mapviewState } = store.getState();
 
   //Report boolean
   urlParams.push(`report=${props.report}`);
+
+  //Active Feature geostoreID
+  const geostoreID = await getGeostoreID(
+    mapviewState.activeFeatureIndex,
+    mapviewState.activeFeatures
+  );
+  urlParams.push(`geostoreID=${geostoreID}`);
 
   //Basemap LayerID
   const { activeBasemap } = mapviewState;
