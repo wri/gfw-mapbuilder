@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { ReactComponent as ShareIcon } from '../../images/shareIcon.svg';
+import { ReactComponent as PrintIcon } from '../../images/printIcon.svg';
 import 'css/report.scss';
 
 interface ReportProps {
@@ -9,9 +11,13 @@ const Report = (props: ReportProps): JSX.Element => {
   return (
     <div className="report">
       <div className="report-header">
-        <p>Header</p>
-        <p>print btn</p>
-        <p>share btn</p>
+        <p className="title">{`${window.document.title} Custom Analysis`}</p>
+        <button>
+          <PrintIcon height={25} width={25} fill={'#fff'} />
+        </button>
+        <button>
+          <ShareIcon height={28} width={28} fill={'#fff'} />
+        </button>
       </div>
       <div className="report-map">
         <props.mapview />
