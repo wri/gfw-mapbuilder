@@ -48,7 +48,17 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const returnURL = (): string => {
-    const stateUrl = getShareableURL({ report: false });
+    //Let's check if we are in the report mode or not
+    const reportParam = new URL(window.location.href).searchParams.get(
+      'report'
+    );
+    let reportView;
+    if (reportParam) {
+      reportView = reportParam === 'true';
+    } else {
+      reportView = false;
+    }
+    const stateUrl = getShareableURL({ report: reportView });
     const baseUrl = new URL(window.location.href).origin;
     return `${baseUrl}?${stateUrl}`;
   };
