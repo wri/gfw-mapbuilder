@@ -13,6 +13,7 @@ import 'css/leftpanel.scss';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { PrintReportButton } from 'js/components/sharedComponents/PrintReportButton';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -310,6 +311,9 @@ const BaseAnalysis = (): JSX.Element => {
           >
             {analysisTranslations.runAnalysisButton[selectedLanguage]}
           </button>
+          <div className="print-button-container">
+            <PrintReportButton />
+          </div>
         </div>
       ) : (
         <AnalysisSpinner />
