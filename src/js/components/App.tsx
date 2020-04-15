@@ -31,6 +31,15 @@ const App = (props: AppSettings | any): JSX.Element => {
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
 
+  //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
+  const reportParam = new URL(window.location.href).searchParams.get('report');
+  let reportView;
+  if (reportParam) {
+    reportView = reportParam === 'true';
+  } else {
+    reportView = false;
+  }
+
   useEffect(() => {
     //TODO: Need to deal with the scenario of APPID!
     //Determine which resources we are reading from
@@ -74,8 +83,8 @@ const App = (props: AppSettings | any): JSX.Element => {
         <GlobalSpinner />
       ) : (
         <>
-          <Header />
-          <MapContent />
+          {!reportView && <Header />}
+          <MapContent report={reportView} />
           {!isMapReady && <MapSpinner />}
           {modalType !== '' && <ModalCard />}
         </>
