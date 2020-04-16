@@ -273,7 +273,17 @@ export class MapController {
               return LayerFactory(this._mapview, layerObject);
             })
             .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
-          this._map?.addMany(esriRemoteLayers);
+
+          //Get VIIRS and MODIS layers
+          const viirsLayers = this.initializeAndSetVIIRSLayers();
+          const modisLayers = this.initializeAndSetMODISLayers();
+
+          const allLayers = [
+            ...viirsLayers,
+            ...modisLayers,
+            ...esriRemoteLayers
+          ];
+          this._map?.addMany(allLayers);
 
           //Retrieve sorted layer array
           const mapLayerIDs = getSortedLayers(
@@ -290,11 +300,9 @@ export class MapController {
             }
           });
 
-          this.initializeAndSetSketch();
-          this.initializeAndSetVIIRSLayers();
-          this.initializeAndSetMODISLayers();
           //Send over msg that layers are active
           store.dispatch(setLayersLoading(false));
+          this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -1238,28 +1246,26 @@ export class MapController {
     return;
   }
 
-  initializeAndSetVIIRSLayers(): void {
-    const viirsLayerIDs = VIIRSLayerIDs.map(({ layerID, url }) => {
+  initializeAndSetVIIRSLayers(): any {
+    const viirsLayers = VIIRSLayerIDs.map(({ layerID, url }) => {
       return new FeatureLayer({
         id: layerID,
         url,
         visible: false
       });
     });
-
-    this._map?.addMany(viirsLayerIDs);
+    return viirsLayers;
   }
 
-  initializeAndSetMODISLayers(): void {
-    const modisLayerIDs = MODISLayerIDs.map(({ layerID, url }) => {
+  initializeAndSetMODISLayers(): any {
+    const modisLayers = MODISLayerIDs.map(({ layerID, url }) => {
       return new FeatureLayer({
         id: layerID,
         url,
         visible: false
       });
     });
-
-    this._map?.addMany(modisLayerIDs);
+    return modisLayers;
   }
 
   setMODISDefinedRange(layer: any, sublayerType: string): void {
@@ -1574,6 +1580,18 @@ export class MapController {
           webmapLayer.visible = false;
         }
       }
+    });
+  }
+
+  disableMapInteractions(): void {
+    this._mapview.on('mouse-wheel', function(event) {
+      event.stopPropagation();
+    });
+    this._mapview.on('double-click', function(event) {
+      event.stopPropagation();
+    });
+    this._mapview.on('drag', function(event) {
+      event.stopPropagation();
     });
   }
 }

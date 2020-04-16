@@ -50,4 +50,40 @@
       font-size: 20px;
     }
   }
+  .report-analysis {
+    color: #555;
+    .analysis-title {
+      font-size: 1.5rem;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .analysis-subtitle {
+      font-size: 1.25rem;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    width: 800px;
+    min-width: 30vw;
+    table {
+      overflow-wrap: break-word;
+      font-size: 13px;
+      color: #555;
+      width: 100%;
+      tbody:nth-child(odd) tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      td.first-cell {
+        max-width: 1px; //this is to make break word work inside a table cell
+        font-weight: bold;
+        padding: 5px;
+      }
+      td.second-cell {
+        max-width: 1px; //this is to make break word work inside a table cell
+        text-align: left;
+        padding: 5px;
+      }
+    }
+  }
 }
