@@ -1124,6 +1124,22 @@ export class MapController {
     }
   }
 
+  addActiveFeatureGraphic(esriJson: Array<FeatureResult>): void {
+    if (this._map) {
+      setNewGraphic({
+        map: this._map,
+        mapview: this._mapview,
+        allFeatures: esriJson,
+        isUploadFile: false
+      });
+
+      const graphicsLayer: any = this._map.findLayerById(
+        'active-feature-layer'
+      );
+      this._mapview.goTo(graphicsLayer.graphics);
+    }
+  }
+
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
     const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;

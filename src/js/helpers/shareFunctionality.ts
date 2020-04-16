@@ -49,12 +49,14 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   //Report boolean
   urlParams.push(`report=${props.report}`);
 
-  //Active Feature geostoreID
-  const geostoreID = await getGeostoreID(
-    mapviewState.activeFeatureIndex,
-    mapviewState.activeFeatures
-  );
-  urlParams.push(`geostoreID=${geostoreID}`);
+  //Active Feature geostoreID specificly for the report usecase
+  if (props.report) {
+    const geostoreID = await getGeostoreID(
+      mapviewState.activeFeatureIndex,
+      mapviewState.activeFeatures
+    );
+    urlParams.push(`geostoreID=${geostoreID}`);
+  }
 
   //Basemap LayerID
   const { activeBasemap } = mapviewState;
@@ -64,11 +66,13 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const { selectedLanguage } = appState;
   urlParams.push(`lang=${selectedLanguage}`);
 
-  //X Y Z
-  const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
-  console.log(zoom);
-  urlParams.push(`z=${zoom}`);
-  urlParams.push(`coords=${longitude}%2C${latitude}`);
+  //X Y Z, In case of Report, we do not need this, because we are zooming to the active feature
+  if (!props.report) {
+    const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
+    console.log(zoom);
+    urlParams.push(`z=${zoom}`);
+    urlParams.push(`coords=${longitude}%2C${latitude}`);
+  }
 
   //Canopy Density Value
   const { density } = appState.leftPanel;

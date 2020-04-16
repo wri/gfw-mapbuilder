@@ -24,7 +24,7 @@ export const PrintReportButton = (): JSX.Element => {
     const baseUrl = new URL(window.location.href).origin;
     const stateUrl = await getShareableURL({ report: true });
     const reportURL = `${baseUrl}?${stateUrl}`;
-    console.log(reportURL);
+    window.open(reportURL);
   }
 
   return (
