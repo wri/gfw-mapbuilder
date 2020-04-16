@@ -56,6 +56,15 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
       mapviewState.activeFeatures
     );
     urlParams.push(`geostoreID=${geostoreID}`);
+
+    //Report queries active feature for attributes, so we need objectID, layerID and subLayerID tracking also
+    const activeLayer =
+      mapviewState.activeFeatures[mapviewState.activeFeatureIndex[0]];
+    const activeFeature =
+      activeLayer.features[mapviewState.activeFeatureIndex[1]];
+    urlParams.push(`acLayer=${activeLayer.layerID}`);
+    urlParams.push(`acSublayer=${activeLayer.sublayerID}`);
+    urlParams.push(`objectid=${activeFeature.objectid}`);
   }
 
   //Basemap LayerID

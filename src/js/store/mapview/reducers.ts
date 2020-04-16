@@ -10,7 +10,8 @@ import {
   SET_ACTIVE_BASEMAP,
   SET_TIME_SLIDER,
   CHANGE_MAP_SCALE,
-  CHANGE_MAP_CENTER_COORDINATES
+  CHANGE_MAP_CENTER_COORDINATES,
+  SET_LAYERS_LOADING
 } from './types';
 
 const initialState: MapviewState = {
@@ -23,7 +24,8 @@ const initialState: MapviewState = {
   activeBasemap: 'webmap',
   timeSlider: [2000, 2018],
   scale: 0,
-  mapCenterCoordinates: { latitude: 0, longitude: 0 }
+  mapCenterCoordinates: { latitude: 0, longitude: 0 },
+  layersLoading: true
 };
 
 export function mapviewReducer(
@@ -51,6 +53,8 @@ export function mapviewReducer(
       return { ...state, scale: action.payload };
     case CHANGE_MAP_CENTER_COORDINATES:
       return { ...state, mapCenterCoordinates: action.payload };
+    case SET_LAYERS_LOADING:
+      return { ...state, layersLoading: action.payload };
     default:
       return state;
   }

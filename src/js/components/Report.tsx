@@ -18,8 +18,18 @@ interface ReportProps {
 const Report = (props: ReportProps): JSX.Element => {
   const dispatch = useDispatch();
 
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
+  );
+
+  const layersLoading = useSelector(
+    (store: RootState) => store.mapviewState.layersLoading
+  );
+
   const [featureGeometry, setFeatureGeometry] = React.useState<any>('');
   const [geostoreID, setGeostoreID] = React.useState('');
+  const [sublayerTitle, setSublayerTitle] = React.useState('');
+  const [layerTitle, setLayerTitle] = React.useState('');
 
   const isMapReady = useSelector(
     (store: RootState) => store.mapviewState.isMapReady
@@ -43,12 +53,50 @@ const Report = (props: ReportProps): JSX.Element => {
 
   React.useEffect(() => {
     //Transform geojson retrieved earlier to usable esri geometry
-    if (featureGeometry && isMapReady) {
+    if (featureGeometry && isMapReady && !layersLoading) {
       const esriGeo = geojsonToArcGIS(featureGeometry.geojson);
-      mapController.addActiveFeatureGraphic(esriGeo);
-      console.log(esriGeo);
+      if (esriGeo[0].geometry.hasOwnProperty('rings')) {
+        //Dealing with a poly
+        mapController.addActiveFeatureGraphic(esriGeo);
+      } else {
+        //Dealing with a point
+        mapController.addActiveFeaturePointGraphic(esriGeo[0]);
+      }
+
+      //Grab active Feature layerid, sublayerid and objectid from the url
+      const layerID = new URL(window.location.href).searchParams.get('acLayer');
+      const sublayerID = new URL(window.location.href).searchParams.get(
+        'acSublayer'
+      );
+      const objectID = new URL(window.location.href).searchParams.get(
+        'objectid'
+      );
+      console.log(layerID);
+      console.log(sublayerID);
+      console.log(allAvailableLayers);
+      //Find Layer URL that we would Query
+      let activeLayerURL;
+      allAvailableLayers.forEach(l => {
+        if (l.parentID) {
+          //we are dealing with a sublayer
+          if (l.parentID === layerID) {
+            if (String(l.id) === String(sublayerID)) {
+              console.log('found', l);
+              activeLayerURL = l.url;
+            }
+          }
+        } else {
+          if (l.id === layerID) {
+            //we are dealing with normal layer
+            console.log('found', l);
+            activeLayerURL = l.url;
+          }
+        }
+      });
+
+      console.log(activeLayerURL);
     }
-  }, [featureGeometry, isMapReady]);
+  }, [layersLoading]);
 
   function printReport(): void {
     window.print();
@@ -58,6 +106,7 @@ const Report = (props: ReportProps): JSX.Element => {
     dispatch(renderModal('ShareWidget'));
   }
 
+  // Forêts communautaires: Forêts communautaires
   return (
     <div className="report">
       <div className="report-header">
@@ -73,7 +122,7 @@ const Report = (props: ReportProps): JSX.Element => {
         <props.mapview />
       </div>
       <div className="report-analysis">
-        <p>Analysis area</p>
+        <p>AREA OF ANALYSIS</p>
       </div>
       <div className="report-charts">
         <p>Charts area</p>

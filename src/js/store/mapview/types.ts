@@ -60,6 +60,7 @@ export interface MapviewState {
   timeSlider: number[];
   scale: number;
   mapCenterCoordinates: { latitude: number; longitude: number };
+  layersLoading: boolean;
 }
 
 interface Popup {
@@ -142,6 +143,7 @@ export const SET_ACTIVE_BASEMAP = 'SET_ACTIVE_BASEMAP';
 export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
 export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
 export const CHANGE_MAP_CENTER_COORDINATES = 'CHANGE_MAP_CENTER_COORDINATES';
+export const SET_LAYERS_LOADING = 'SET_LAYERS_LOADING';
 
 interface MapIsReadyAction {
   type: typeof MAP_READY;
@@ -192,6 +194,11 @@ interface ChangeMapCenterCoordinates {
   payload: MapviewState['mapCenterCoordinates'];
 }
 
+interface SetLayersLoading {
+  type: typeof SET_LAYERS_LOADING;
+  payload: MapviewState['layersLoading'];
+}
+
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
@@ -202,4 +209,5 @@ export type MapviewStateTypes =
   | SetSelectedAction
   | SetTimeSlider
   | ChangeMapScale
-  | ChangeMapCenterCoordinates;
+  | ChangeMapCenterCoordinates
+  | SetLayersLoading;

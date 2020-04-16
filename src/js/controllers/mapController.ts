@@ -26,6 +26,7 @@ import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
 import { getSortedLayers } from 'js/helpers/mapController/layerSorting';
+import { addPointGraphic } from 'js/helpers/MapGraphics';
 import {
   allAvailableLayers,
   mapError,
@@ -33,7 +34,8 @@ import {
   setActiveFeatureIndex,
   setActiveFeatures,
   changeMapScale,
-  changeMapCenterCoordinates
+  changeMapCenterCoordinates,
+  setLayersLoading
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -291,6 +293,8 @@ export class MapController {
           this.initializeAndSetSketch();
           this.initializeAndSetVIIRSLayers();
           this.initializeAndSetMODISLayers();
+          //Send over msg that layers are active
+          store.dispatch(setLayersLoading(false));
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -1137,6 +1141,18 @@ export class MapController {
         'active-feature-layer'
       );
       this._mapview.goTo(graphicsLayer.graphics);
+    }
+  }
+
+  addActiveFeaturePointGraphic(esriJson: FeatureResult): void {
+    if (this._map) {
+      addPointGraphic(this._map, esriJson);
+      const graphicsLayer: any = this._map.findLayerById(
+        'active-feature-layer'
+      );
+      this._mapview.goTo(graphicsLayer.graphics);
+      //TODO: For some reason it does not zoom to points?
+      this._mapview.zoom = 12;
     }
   }
 
