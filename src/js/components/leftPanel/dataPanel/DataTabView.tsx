@@ -46,7 +46,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       const activeFeature = new Array(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
       );
-      if (activeLayerInfo.layerID !== 'user_features') {
+      if (
+        activeLayerInfo.layerID !== 'user_features' &&
+        activeLayerInfo.layerID !== 'upload_file_features'
+      ) {
         mapController.drawGraphic(activeFeature);
       }
     }
@@ -62,7 +65,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const activeFeature = new Array(
           activeFeatures[activeLayerIndex].features[newPage]
         );
-        if (activeLayerInfo.layerID !== 'user_features') {
+        if (
+          activeLayerInfo.layerID !== 'user_features' &&
+          activeLayerInfo.layerID !== 'upload_file_features'
+        ) {
           mapController.drawGraphic(activeFeature);
           dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
         }

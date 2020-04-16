@@ -603,7 +603,7 @@ export class MapController {
 
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
+      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'], {
         tool: 'reshape',
         enableRotation: false,
         toggleToolOnClick: false,
@@ -648,10 +648,17 @@ export class MapController {
     store.dispatch(selectActiveTab('analysis'));
   }
 
-  initializeAndSetSketch(): void {
+  initializeAndSetSketch(graphics = []): void {
     this._sketchVMGraphicsLayer = new GraphicsLayer({
       id: 'sketchGraphics'
     });
+
+    if (graphics.length) {
+      // ! error when using .update()
+      // "Parameter 'graphics' contains one or more graphics
+      // with a spatial reference different from the supplied MapView."
+      this._sketchVMGraphicsLayer.graphics.addMany(graphics);
+    }
 
     this._sketchVM = new SketchViewModel({
       layer: this._sketchVMGraphicsLayer,
@@ -1096,6 +1103,7 @@ export class MapController {
   }
 
   processGeojson(esriJson: Array<FeatureResult>): void {
+    console.log('processGeojson()');
     if (this._map) {
       setNewGraphic({
         map: this._map,

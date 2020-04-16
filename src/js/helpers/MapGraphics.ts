@@ -5,6 +5,8 @@ import Graphic from 'esri/Graphic';
 import Point from 'esri/geometry/Point';
 import Polygon from 'esri/geometry/Polygon';
 
+import { mapController } from 'js/controllers/mapController';
+
 import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
 
 import { FeatureResult } from 'js/store/mapview/types';
@@ -81,7 +83,7 @@ export function setNewGraphic({
     graphicsLayer.graphics.push(featureGraphic);
   });
 
-  map.add(graphicsLayer);
+  mapController.initializeAndSetSketch(graphicsLayer.graphics);
 
   if (isUploadFile) {
     mapview.goTo(graphicsLayer.graphics);
