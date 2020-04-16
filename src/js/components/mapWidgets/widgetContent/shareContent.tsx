@@ -62,7 +62,7 @@ const ShareContent: FunctionComponent = () => {
         reportView = false;
       }
       const stateUrl = await getShareableURL({ report: reportView });
-      const baseUrl = new URL(window.location.href).origin;
+      const baseUrl = new URL(window.location.href);
       const urlVal = `${baseUrl}?${stateUrl}`;
       setUrlValue(urlVal);
     }
