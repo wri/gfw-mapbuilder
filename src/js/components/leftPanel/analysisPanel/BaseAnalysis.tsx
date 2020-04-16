@@ -13,6 +13,7 @@ import 'css/leftpanel.scss';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { mapController } from 'js/controllers/mapController';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -46,6 +47,7 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
+  const [renderEditButton, setRenderEditButton] = useState(true);
   //This is used for date picker analysis module
 
   const selectedLanguage = useSelector(
@@ -282,16 +284,44 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
+  const setSaveSketch = (): void => {
+    mapController.completeSketchVM();
+    setRenderEditButton(true);
+  };
+
+  const setEditSketch = (): void => {
+    setRenderEditButton(false);
+    mapController.updateSketchVM();
+  };
+
+  const setDelete = (): void => {
+    mapController.deleteSketchVM();
+    dispatch(setActiveFeatures([]));
+  };
+
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
-  const layerTitle = activeLayer.sublayerTitle
-    ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
-    : activeLayer.layerTitle;
+
+  const returnLayerTitle =
+    activeLayer && activeLayer.layerTitle ? activeLayer.layerTitle : null;
+
+  const title =
+    activeLayer && activeLayer.sublayerTitle
+      ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
+      : returnLayerTitle;
 
   return (
     <>
       {geostoreReady ? (
         <div className="base-analysis-content">
-          <div className="layer-title">{layerTitle}</div>
+          <div className="layer-title">
+            {title === null ? 'User Drawn Feature' : title}
+          </div>
+          {renderEditButton ? (
+            <button onClick={(): void => setEditSketch()}>Edit</button>
+          ) : (
+            <button onClick={(): void => setSaveSketch()}>Save</button>
+          )}
+          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">
