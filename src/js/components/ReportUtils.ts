@@ -41,10 +41,11 @@ export function extractLayerInfo(
     activeLayerInfo.type = layer.type;
   }
 
-  //in case of MODIS/FIRES > We only find top level layer in allAvailableLayers, but the actual layer that needs to be queried is one of the sublayers underneath it, due to how we create MODIS/VIIRS, there is discrepancy and it should be fixed at the top level (layer creation level), this is an excape hatch
+  //in case of MODIS/FIRES > We only find top level layer in allAvailableLayers, but the actual layer that needs to be queried is one of the sublayers underneath it, due to how we create MODIS/VIIRS, there is discrepancy and it should be fixed at the top level (layer creation level), this is an excape hatch for service/dynamic layers too as they behave similarly
   if (
     layerIDFromURL === 'MODIS_ACTIVE_FIRES' ||
-    layerIDFromURL === 'VIIRS_ACTIVE_FIRES'
+    layerIDFromURL === 'VIIRS_ACTIVE_FIRES' ||
+    (activeLayer.origin === 'service' && activeLayer.type === 'dynamic')
   ) {
     const firesMapServerLayer: any = activeLayerInfo.parentLayer;
     const firesSublayer = firesMapServerLayer.findSublayerById(
