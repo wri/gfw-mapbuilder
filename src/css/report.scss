@@ -113,5 +113,58 @@
     .chart-module {
       margin-bottom: 25px;
     }
+    .ui-analysis-wrapper {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+    }
+    .analysis-input {
+      display: grid;
+      justify-items: center;
+      margin-bottom: 20px;
+      .time-slider-container {
+        width: 90%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .calendar-wrapper {
+        .date-section-wrapper {
+          display: grid;
+          grid-template-columns: 40px 1fr;
+          margin-bottom: 2px;
+          label {
+            margin-right: 5px;
+          }
+          input {
+            width: auto;
+            height: auto;
+          }
+        }
+      }
+    }
+    .ui-description {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      p {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+      }
+      .number {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        width: 25px;
+        height: 25px;
+        border: 1px solid;
+        border-radius: 50%;
+        margin-right: 10px;
+        p {
+          font-weight: 700;
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
   }
 }
