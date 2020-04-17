@@ -21,6 +21,7 @@ export function getAttributesToFetch(
         };
       });
   } else {
+    //TODO: How should we handle 'service' layers with no metadata and no popup template? are those outfields supposed to be in the config? currently we are not handling such scenario
     //No popup template found, check the metadata
     const { allAvailableLayers } = store.getState().mapviewState;
     const { selectedLanguage } = store.getState().appState;
