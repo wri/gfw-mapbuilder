@@ -297,7 +297,6 @@ export class MapController {
             //@ts-ignore
             const combinedLayers = [...allLayers, ...this._map.layers.items];
             const activeLayer = combinedLayers.find(l => l.id === layerID);
-            console.log(activeLayer);
             if (activeLayer.loaded === true) {
               store.dispatch(setLayersLoading(false));
             } else {

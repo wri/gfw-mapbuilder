@@ -6,8 +6,6 @@ interface ReportTableProps {
 
 export const ReportTable = (props: ReportTableProps): JSX.Element => {
   const { attributes, fields } = props.attr;
-  console.log(attributes);
-  console.log(fields);
   //If we have fieldNames on activeLayerInfo we use it to map over attributes, otherwise, we use all attributes available
   return (
     <table cellPadding={0} cellSpacing={0}>

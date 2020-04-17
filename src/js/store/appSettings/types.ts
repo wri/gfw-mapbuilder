@@ -30,7 +30,7 @@ type LayerGroup = {
   [key in LayerGroupKey]: LayerGroupInfo;
 };
 
-interface AnalysisModule {
+export interface AnalysisModule {
   analysisId: string;
   chartType: string;
   label: { [key: string]: string };

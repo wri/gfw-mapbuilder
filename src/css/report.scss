@@ -86,4 +86,32 @@
       }
     }
   }
+  .report-charts {
+    color: #555;
+    margin-top: 20px;
+    .chart-area-container {
+      width: 800px;
+      border: 1px solid blue;
+      .report-top-toolbar {
+        display: grid;
+        grid-template-columns: 5fr 1fr;
+        align-items: center;
+        .layer-checkbox {
+          width: 30px;
+        }
+      }
+      .report-toolbar-title {
+        text-transform: uppercase;
+      }
+      .report-button-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 5px;
+        align-items: center;
+      }
+    }
+    .chart-module {
+      margin-bottom: 25px;
+    }
+  }
 }

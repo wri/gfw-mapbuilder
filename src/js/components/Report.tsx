@@ -14,6 +14,7 @@ import { getAllLayerFields } from 'js/helpers/dataPanel/DataPanel';
 import { formatAttributeValues } from 'js/helpers/dataPanel/formatAttributes';
 import { ReportTable } from './ReportTable';
 import { extractLayerInfo } from './ReportUtils';
+import { MemoReportChartsComponent } from './ReportChartsComponent';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
@@ -39,7 +40,7 @@ const Report = (props: ReportProps): JSX.Element => {
   );
 
   const [featureGeometry, setFeatureGeometry] = React.useState<any>('');
-  const [geostoreID, setGeostoreID] = React.useState('');
+  const [geostoreID, setGeostoreID] = React.useState<string | null>(null);
   const [sublayerTitle, setSublayerTitle] = React.useState('');
   const [layerTitle, setLayerTitle] = React.useState('');
   const [attributes, setAttributes] = React.useState<null | object>(null);
@@ -58,11 +59,20 @@ const Report = (props: ReportProps): JSX.Element => {
     async function fetchGeostoreInfo(): Promise<any> {
       fetch(`${geostoreURL}${geostoreID}`)
         .then(response => response.json())
-        .then(data => setFeatureGeometry(data.data.attributes))
+        .then(data => {
+          setFeatureGeometry(data.data.attributes);
+          setGeostoreID(geostoreID);
+        })
         .catch(e => console.error(e));
     }
     fetchGeostoreInfo();
   }, []);
+
+  //Deal with VEGA chart Loading
+  React.useEffect(() => {
+    if (!geostoreID) return;
+    console.log(geostoreID);
+  }, [geostoreID]);
 
   React.useEffect(() => {
     //Transform geojson retrieved earlier to usable esri geometry
@@ -71,14 +81,10 @@ const Report = (props: ReportProps): JSX.Element => {
       activeLayerInfo: ActiveLayerInfo,
       objectID: any
     ): Promise<any> {
-      console.log(activeLayer);
-      console.log(activeLayerInfo);
-
       //Get The Fields
       const fields = activeLayerInfo.sublayer
         ? await getAllLayerFields(activeLayerInfo.sub)
         : await getAllLayerFields(activeLayerInfo.parentLayer);
-      console.log(fields);
 
       // Get all attributes that we want to fetch
       const layerToQuery = activeLayerInfo.sublayer
@@ -103,8 +109,6 @@ const Report = (props: ReportProps): JSX.Element => {
         responseAttributes.features[0].attributes,
         attributesToUse
       );
-      console.log(formattedAttributes);
-      console.log(responseAttributes);
       setAttributes({
         attributes: formattedAttributes,
         fields: attributesToUse
@@ -131,9 +135,6 @@ const Report = (props: ReportProps): JSX.Element => {
       const objectID = new URL(window.location.href).searchParams.get(
         'objectid'
       );
-      console.log(layerID);
-      console.log(sublayerID);
-      console.log(allAvailableLayers);
 
       const { activeLayer, activeLayerInfo }: any = extractLayerInfo(
         layerID,
@@ -175,7 +176,7 @@ const Report = (props: ReportProps): JSX.Element => {
         {attributes && <ReportTable attr={attributes} />}
       </div>
       <div className="report-charts">
-        <p>Charts area</p>
+        {geostoreID && <MemoReportChartsComponent />}
       </div>
     </div>
   );
