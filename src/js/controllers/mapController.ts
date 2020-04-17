@@ -603,7 +603,8 @@ export class MapController {
 
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'], {
+      console.log('UPDATING', this._sketchVMGraphicsLayer.graphics['items'][0]);
+      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
         tool: 'reshape',
         enableRotation: false,
         toggleToolOnClick: false,
@@ -654,9 +655,6 @@ export class MapController {
     });
 
     if (graphics.length) {
-      // ! error when using .update()
-      // "Parameter 'graphics' contains one or more graphics
-      // with a spatial reference different from the supplied MapView."
       this._sketchVMGraphicsLayer.graphics.addMany(graphics);
     }
 

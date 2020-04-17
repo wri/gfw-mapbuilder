@@ -4,6 +4,7 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
 import Point from 'esri/geometry/Point';
 import Polygon from 'esri/geometry/Polygon';
+import * as projection from 'esri/geometry/projection';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -58,34 +59,50 @@ export function setNewGraphic({
     }
   };
 
-  allFeatures.forEach((feature: FeatureResult) => {
-    const isPolygon =
-      (feature.geometry as any).rings || feature.geometry.type === 'polygon';
-    /**
-     * * NOTE:
-     * * File uploads don't have a geometry.type,
-     * * so we have to check if it has geometry.rings
-     */
-    const symbol = isPolygon
-      ? setSymbol('polygon')
-      : setSymbol(feature.geometry.type);
+  projection.load().then(() => {
+    allFeatures.forEach((feature: FeatureResult) => {
+      const isPolygon =
+        (feature.geometry as any).rings || feature.geometry.type === 'polygon';
 
-    const geometry = isPolygon
-      ? setGeometry('polygon', feature.geometry)
-      : setGeometry(feature.geometry.type, feature.geometry);
+      /**
+       * * NOTE:
+       * * File uploads don't have a geometry.type,
+       * * so we have to check if it has geometry.rings
+       */
 
-    const featureGraphic = new Graphic({
-      geometry: geometry,
-      attributes: feature.attributes,
-      symbol: symbol
+      const symbol = isPolygon
+        ? setSymbol('polygon')
+        : setSymbol(feature.geometry.type);
+
+      const geometry = isPolygon
+        ? setGeometry('polygon', feature.geometry)
+        : setGeometry(feature.geometry.type, feature.geometry);
+
+      const featureGraphic = new Graphic({
+        geometry: geometry,
+        attributes: feature.attributes,
+        symbol: symbol
+      });
+
+      const transformation = projection.getTransformation(
+        featureGraphic.geometry.spatialReference,
+        mapController._mapview.spatialReference
+      );
+
+      featureGraphic.geometry = projection.project(
+        featureGraphic.geometry,
+        mapController._mapview.spatialReference,
+        transformation
+      ) as __esri.Geometry;
+
+      graphicsLayer.graphics.push(featureGraphic);
     });
 
-    graphicsLayer.graphics.push(featureGraphic);
+    mapController.initializeAndSetSketch(graphicsLayer.graphics);
+
+    if (isUploadFile) {
+      mapview.goTo(graphicsLayer.graphics);
+      // ? why is it no longer going to the graphics?
+    }
   });
-
-  mapController.initializeAndSetSketch(graphicsLayer.graphics);
-
-  if (isUploadFile) {
-    mapview.goTo(graphicsLayer.graphics);
-  }
 }
