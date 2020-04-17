@@ -3,10 +3,8 @@ import { RootState } from 'js/store';
 import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
 import { AnalysisModule } from 'js/store/appSettings/types';
-import {
-  MemoRangeSlider,
-  MemoDatePicker
-} from 'js/components/leftPanel/analysisPanel/InputComponents';
+import { MemoReportRangeSlider } from './ReportRangeSlider';
+import { MemoReportDatePicker } from './DatePicker';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { UIParams } from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 
@@ -23,7 +21,7 @@ interface ChartModuleProps {
   lang: string;
 }
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
-  const { label } = props.moduleInfo;
+  const { label, uiParams } = props.moduleInfo;
   const language = props.lang;
   const translatedLabel = label[language]
     ? label[language]
@@ -31,6 +29,19 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   console.log(props);
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
+  const [inputsAreHidden, setInputsAreHidden] = React.useState(false);
+  const [yearRangeValue, setYearRangeValue] = React.useState([]);
+  const [startDate, setStartDate] = React.useState('');
+  const [endDate, setEndDate] = React.useState('');
+
+  function updateDate(val: any): void {
+    setYearRangeValue(val);
+  }
+
+  function updateDatePickerValues(start: string, end: string): void {
+    setStartDate(start);
+    setEndDate(end);
+  }
 
   const renderInputComponent = (
     props: UIParams
@@ -45,18 +56,25 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     } = props;
     switch (props.inputType) {
       case 'rangeSlider':
-        if (bounds) return <MemoRangeSlider yearRange={bounds} />;
+        if (bounds)
+          return (
+            <MemoReportRangeSlider
+              yearRange={bounds}
+              handleSliderChange={updateDate}
+            />
+          );
         break;
       case 'tcd':
         return <CanopyDensityPicker label={false} />;
       case 'datepicker':
         return (
-          <MemoDatePicker
+          <MemoReportDatePicker
             multi={multi}
             minDate={minDate}
             maxDate={maxDate}
             defaultStartDate={defaultStartDate}
             defaultEndDate={defaultEndDate}
+            sendDateValue={updateDatePickerValues}
           />
         );
       default:
@@ -69,7 +87,10 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       <div className="report-top-toolbar">
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
-          <div>
+          <div
+            onClick={() => setInputsAreHidden(!inputsAreHidden)}
+            style={{ cursor: 'pointer' }}
+          >
             <GearIcon width={22} height={22} fill={'#888888'} />
           </div>
           <div>
@@ -98,7 +119,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           submoduleIsHidden ? 'chart-submodule hidden' : 'chart-submodule'
         }
       >
-        <div>
+        <div className={inputsAreHidden ? 'hidden' : ''}>
           {currentAnalysis?.uiParams &&
             currentAnalysis?.uiParams !== 'none' &&
             currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
