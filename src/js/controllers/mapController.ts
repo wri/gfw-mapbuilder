@@ -294,11 +294,17 @@ export class MapController {
               'acLayer'
             );
             if (!layerID) return;
-            const activeLayer = allLayers.find(l => l.id === layerID);
-            once(activeLayer, 'loaded', () => {
-              //Send over msg that layers are active
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+            const activeLayer = combinedLayers.find(l => l.id === layerID);
+            console.log(activeLayer);
+            if (activeLayer.loaded === true) {
               store.dispatch(setLayersLoading(false));
-            });
+            } else {
+              once(activeLayer, 'loaded', () => {
+                store.dispatch(setLayersLoading(false));
+              });
+            }
           }
 
           this._map?.addMany(allLayers);
