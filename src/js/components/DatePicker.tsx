@@ -31,11 +31,6 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
     props.sendDateValue(startDate, e.target.value);
   }
 
-  //Sync at the start too
-  React.useEffect(() => {
-    props.sendDateValue(startDate, endDate);
-  }, []);
-
   return (
     <div className="calendar-wrapper">
       <div className="date-section-wrapper">

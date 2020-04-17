@@ -16,6 +16,37 @@ const selectAnalysisModules = createSelector(
   settings => settings.analysisModules
 );
 
+function getDefaultYearRange(uiParams: any): null | number[] {
+  if (uiParams === 'none') return null;
+  const input = uiParams.find(
+    (param: any) => param.inputType === 'rangeSlider'
+  );
+  if (input) return input.bounds;
+  return null;
+}
+
+const getTodayDate = new Date().toISOString().split('T')[0];
+
+function getDefaultStartDate(uiParams: any): string {
+  if (uiParams === 'none') return '';
+  const input = uiParams.find((param: any) => param.inputType === 'datepicker');
+  if (input && input.defaultStartDate) {
+    return input.defaultStartDate;
+  } else {
+    return getTodayDate;
+  }
+}
+
+function getDefaultEndDate(uiParams: any): string {
+  if (uiParams === 'none') return '';
+  const input = uiParams.find((param: any) => param.inputType === 'datepicker');
+  if (input && input.defaultEndDate) {
+    return input.defaultEndDate;
+  } else {
+    return getTodayDate;
+  }
+}
+
 interface ChartModuleProps {
   moduleInfo: AnalysisModule;
   lang: string;
@@ -30,9 +61,13 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [inputsAreHidden, setInputsAreHidden] = React.useState(false);
-  const [yearRangeValue, setYearRangeValue] = React.useState([]);
-  const [startDate, setStartDate] = React.useState('');
-  const [endDate, setEndDate] = React.useState('');
+  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(
+    getDefaultYearRange(uiParams)
+  );
+  const [startDate, setStartDate] = React.useState(
+    getDefaultStartDate(uiParams)
+  );
+  const [endDate, setEndDate] = React.useState(getDefaultEndDate(uiParams));
 
   function updateDate(val: any): void {
     setYearRangeValue(val);

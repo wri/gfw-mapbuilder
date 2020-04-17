@@ -20,14 +20,9 @@ interface RangeSliderProps {
   handleSliderChange: (val: number[]) => void;
 }
 const ReportRangeSlider = (props: RangeSliderProps): JSX.Element => {
-  //Sync at the start too
   const [activeYearRange, setActiveYearRange] = React.useState<number[]>(
     props.yearRange
   );
-
-  React.useEffect(() => {
-    props.handleSliderChange(activeYearRange);
-  }, [props]);
 
   function handleSliderRange(val: number[]): void {
     setActiveYearRange(val);
