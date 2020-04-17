@@ -13,6 +13,7 @@ import { getAttributesToFetch } from 'js/helpers/dataPanel/getAttributes';
 import { getAllLayerFields } from 'js/helpers/dataPanel/DataPanel';
 import { formatAttributeValues } from 'js/helpers/dataPanel/formatAttributes';
 import { ReportTable } from './ReportTable';
+import { extractLayerInfo } from './ReportUtils';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
@@ -20,6 +21,7 @@ interface ActiveLayerInfo {
   sub: any;
   parentLayer: any;
   sublayer?: boolean;
+  type: string;
 }
 interface ReportProps {
   mapview: React.FunctionComponent;
@@ -45,7 +47,6 @@ const Report = (props: ReportProps): JSX.Element => {
   const isMapReady = useSelector(
     (store: RootState) => store.mapviewState.isMapReady
   );
-  console.log(isMapReady);
 
   React.useEffect(() => {
     //disable map interactions
@@ -53,7 +54,6 @@ const Report = (props: ReportProps): JSX.Element => {
     const geostoreID = new URL(window.location.href).searchParams.get(
       'geostoreID'
     );
-    console.log(geostoreID);
     //On load using geostoreID coming from the URL, fetch information about the active feature
     async function fetchGeostoreInfo(): Promise<any> {
       fetch(`${geostoreURL}${geostoreID}`)
@@ -71,10 +71,10 @@ const Report = (props: ReportProps): JSX.Element => {
       activeLayerInfo: ActiveLayerInfo,
       objectID: any
     ): Promise<any> {
+      console.log(activeLayer);
       console.log(activeLayerInfo);
 
       //Get The Fields
-
       const fields = activeLayerInfo.sublayer
         ? await getAllLayerFields(activeLayerInfo.sub)
         : await getAllLayerFields(activeLayerInfo.parentLayer);
@@ -98,15 +98,7 @@ const Report = (props: ReportProps): JSX.Element => {
         objectIds: objectID
       };
 
-      let url = activeLayer.url;
-      //TODO: This needs a refactor so we do not compare strings below but always expect the "right" URL to be coming in
-      //In case of FIRES, VIIRS we added layers wrong at the initializemap, so we have do point at a sublayer url explicitly, all other layers should work as expected
-      if (
-        activeLayer.id === 'VIIRS_ACTIVE_FIRES' ||
-        activeLayer.id === 'MODIS_ACTIVE_FIRES'
-      ) {
-        url = url.concat('/21');
-      }
+      const url = activeLayer.url;
       const responseAttributes = await esriQuery(url, qParams);
       const formattedAttributes = formatAttributeValues(
         responseAttributes.features[0].attributes,
@@ -143,48 +135,14 @@ const Report = (props: ReportProps): JSX.Element => {
       console.log(layerID);
       console.log(sublayerID);
       console.log(allAvailableLayers);
-      //Find Layer URL that we would Query
-      let activeLayer: any;
-      allAvailableLayers.forEach(l => {
-        if (l.parentID) {
-          //we are dealing with a sublayer
-          if (l.parentID === layerID) {
-            if (String(l.id) === String(sublayerID)) {
-              console.log('found', l);
-              activeLayer = l;
-            }
-          }
-        } else {
-          if (l.id === layerID) {
-            //we are dealing with normal layer
-            console.log('found', l);
-            activeLayer = l;
-          }
-        }
-      });
-      console.log(activeLayer);
 
-      const activeLayerInfo = {} as ActiveLayerInfo;
-      //Find said layer on the map
-      if (!mapController._map) return;
-      if (activeLayer.parentID) {
-        //we are dealing with a sublayer
-        activeLayerInfo.sublayer = true;
-        const parentLayer: any = mapController._map.findLayerById(
-          activeLayer.parentID
-        );
-        activeLayerInfo.parentLayer = parentLayer;
-        activeLayerInfo.sub = parentLayer.allSublayers.items.find(
-          (s: any) => s.id === Number(activeLayer.id)
-        );
-        // const attr = getAttributesToFetch(sublayer, true);
-      } else {
-        activeLayerInfo.sublayer = false;
-        const parentLayer = mapController._map.findLayerById(
-          activeLayer.parentID
-        );
-        activeLayerInfo.parentLayer = parentLayer;
-      }
+      const { activeLayer, activeLayerInfo }: any = extractLayerInfo(
+        layerID,
+        sublayerID,
+        allAvailableLayers,
+        mapController._map
+      );
+
       getFeatures(activeLayer, activeLayerInfo, objectID);
     }
   }, [featureGeometry, layersLoading]);

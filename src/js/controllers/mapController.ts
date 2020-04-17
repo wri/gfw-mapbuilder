@@ -27,6 +27,7 @@ import { LayerFactory } from 'js/helpers/LayerFactory';
 import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
 import { getSortedLayers } from 'js/helpers/mapController/layerSorting';
 import { addPointGraphic } from 'js/helpers/MapGraphics';
+import { once } from 'esri/core/watchUtils';
 import {
   allAvailableLayers,
   mapError,
@@ -283,6 +284,23 @@ export class MapController {
             ...modisLayers,
             ...esriRemoteLayers
           ];
+
+          //If we have report active, we need to know when our feature layer has loaded
+          const report = new URL(window.location.href).searchParams.get(
+            'report'
+          );
+          if (report) {
+            const layerID = new URL(window.location.href).searchParams.get(
+              'acLayer'
+            );
+            if (!layerID) return;
+            const activeLayer = allLayers.find(l => l.id === layerID);
+            once(activeLayer, 'loaded', () => {
+              //Send over msg that layers are active
+              store.dispatch(setLayersLoading(false));
+            });
+          }
+
           this._map?.addMany(allLayers);
 
           //Retrieve sorted layer array
@@ -300,8 +318,6 @@ export class MapController {
             }
           });
 
-          //Send over msg that layers are active
-          store.dispatch(setLayersLoading(false));
           this.initializeAndSetSketch();
         },
         (error: Error) => {
