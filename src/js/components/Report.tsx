@@ -86,14 +86,13 @@ const Report = (props: ReportProps): JSX.Element => {
         : activeLayerInfo.parentLayer;
       const attributesToUse = getAttributesToFetch(
         layerToQuery,
-        activeLayerInfo.sub,
+        activeLayerInfo.sublayer,
         fields
       );
-      console.log(attributesToUse);
       const layerOutFields = attributesToUse?.map(f => f.fieldName);
       const qParams = {
         where: '1=1',
-        outFields: layerOutFields,
+        outFields: layerOutFields ? layerOutFields : ['*'],
         returnGeometry: false,
         objectIds: objectID
       };
