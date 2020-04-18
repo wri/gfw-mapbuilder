@@ -20,33 +20,6 @@ export function generateAndAttachVegaChart(
     }
   }
 
-  //In case of report, we tell chart to resize appropriately
-  if (report) {
-    if (!spec.signals) {
-      spec.signals = [];
-    }
-    spec.autosize = {
-      type: 'fit',
-      resize: true
-    };
-
-    const resizeWidthSignal = {
-      name: 'width',
-      update: 'containerSize()[0]*0.95',
-      value: '',
-      on: [
-        {
-          events: {
-            source: 'window',
-            type: 'resize'
-          },
-          update: 'containerSize()[0]*0.95'
-        }
-      ]
-    };
-    spec.signals.push(resizeWidthSignal);
-  }
-
   new vega.View(vega.parse(spec), {
     rendered: 'svg',
     container: domref
