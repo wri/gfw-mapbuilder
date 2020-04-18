@@ -92,25 +92,44 @@ const Chart = (props: ChartProps): JSX.Element => {
 
   const chartWrapperStyle = createChartWrapperStyle(chartType);
 
-  return (
-    <Measure
-      bounds
-      onResize={(contentRec): void => {
-        console.log(contentRec);
-        setDimensions({ dimensions: contentRec.bounds });
-      }}
-    >
-      {({ measureRef }) => (
-        <div ref={measureRef} style={chartWrapperStyle}>
-          <div
-            className="temptemp"
-            style={{ width: dimensions.dimensions.width }}
-            ref={chartRef}
-          ></div>
-        </div>
-      )}
-    </Measure>
-  );
+  function renderChartRef(): JSX.Element {
+    if (report) {
+      return (
+        <Measure
+          bounds
+          onResize={(contentRec): void => {
+            console.log(contentRec);
+            setDimensions({ dimensions: contentRec.bounds });
+          }}
+        >
+          {({ measureRef }) => (
+            <div ref={measureRef} style={chartWrapperStyle}>
+              <div
+                className="temptemp"
+                style={{
+                  width: dimensions.dimensions.width
+                }}
+                ref={chartRef}
+              ></div>
+            </div>
+          )}
+        </Measure>
+      );
+    } else {
+      return (
+        <div
+          className="temptemp"
+          style={{
+            width: dimensions.dimensions.width,
+            height: dimensions.dimensions.height
+          }}
+          ref={chartRef}
+        ></div>
+      );
+    }
+  }
+
+  return <>{renderChartRef()}</>;
 };
 
 export default Chart;
