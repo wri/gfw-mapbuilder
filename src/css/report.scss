@@ -28,6 +28,9 @@
   }
 
   .report-header {
+    @media print {
+      width: 100%;
+    }
     background-color: #555;
     height: 50px;
     width: 90%;
@@ -38,11 +41,18 @@
     align-items: center;
     -webkit-print-color-adjust: exact;
     button {
+      @media print {
+        display: none;
+      }
       border: none;
       outline: none;
       background-color: rgba(0, 0, 0, 0);
     }
     .title {
+      @media print {
+        text-align: center;
+        font-size: 2rem;
+      }
       margin-left: 1rem;
       color: #fff;
       white-space: nowrap;
@@ -90,8 +100,23 @@
     color: #555;
     margin-top: 20px;
     .chart-area-container {
-      border: 1px solid blue;
+      .temptemp {
+        @media print {
+          display: flex;
+          justify-content: center;
+        }
+        svg {
+          @media print {
+            width: 700px;
+          }
+        }
+      }
       .report-top-toolbar {
+        @media print {
+          text-align: center;
+          display: grid;
+          grid-template-columns: 1fr;
+        }
         display: grid;
         grid-template-columns: 5fr 1fr;
         align-items: center;
@@ -100,9 +125,15 @@
         }
       }
       .report-toolbar-title {
+        @media print {
+          font-size: 2rem;
+        }
         text-transform: uppercase;
       }
       .report-button-controls {
+        @media print {
+          display: none;
+        }
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         grid-gap: 5px;
@@ -110,6 +141,10 @@
       }
     }
     .chart-module {
+      @media print {
+        // top: 50%;
+        margin-top: 35vh;
+      }
       margin-bottom: 25px;
     }
     .ui-analysis-wrapper {
@@ -179,6 +214,9 @@
       padding-bottom: 20px;
     }
     .vega-chart-description {
+      @media print {
+        width: 80%;
+      }
       color: #555;
       padding: 0.5rem;
       font-size: 0.8rem;
@@ -191,6 +229,9 @@
   @media print {
     .pagebreak {
       page-break-after: always;
+    }
+    .vega-chart-description {
+      width: 20px;
     }
   }
 }
