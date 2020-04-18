@@ -120,7 +120,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   );
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
-  const [inputsAreHidden, setInputsAreHidden] = React.useState(false);
+  const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
   const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(
     getDefaultYearRange(uiParams)
   );
@@ -131,6 +131,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
+  const [chartDescription, setChartDescription] = React.useState<null | string>(
+    null
+  );
 
   function updateDate(val: any): void {
     setYearRangeValue(val);
@@ -180,9 +183,6 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     }
   };
   React.useEffect(() => {
-    console.log('use effect firing');
-    console.log(props.geostoreID);
-
     const widgetURL = generateWidgetURL(
       uiParams,
       props.moduleInfo.widgetId,
@@ -199,7 +199,17 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       .then((analysisMod: any) => {
         setChartLoading(false);
         //TODO: we need to handle loading and error states
-        console.log(analysisMod.data.attributes.widgetConfig);
+        const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${props.moduleInfo.widgetId}/metadata?language=${language}`;
+
+        fetch(descriptionURL)
+          .then((response: any) => response.json())
+          .then((data: any) => {
+            setChartDescription(data && data?.data[0]?.attributes?.description);
+          })
+          .catch(e => {
+            setChartDescription('Error retrieving chart analysis description.');
+            console.error(e);
+          });
         setVegaSpec(analysisMod.data.attributes.widgetConfig);
       })
       .catch(e => {
@@ -265,9 +275,14 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                 </div>
               );
             })}
-          <button className="orange-button" onClick={() => console.log('yaya')}>
-            {analysisTranslations.runAnalysisButton[language]}
-          </button>
+          {currentAnalysis?.uiParams !== 'none' && (
+            <button
+              className="orange-button"
+              onClick={() => console.log('yaya')}
+            >
+              {analysisTranslations.runAnalysisButton[language]}
+            </button>
+          )}
         </div>
         <div className="vega-chart-wrapper">
           {vegaSpec && (
@@ -279,8 +294,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             />
           )}
         </div>
-        <div>Chart Description</div>
+        <div className="vega-chart-description">{chartDescription}</div>
       </div>
+      <div className="pagebreak"></div>
     </div>
   );
 };

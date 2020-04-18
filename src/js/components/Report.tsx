@@ -176,6 +176,7 @@ const Report = (props: ReportProps): JSX.Element => {
         {attributes && <ReportTable attr={attributes} />}
       </div>
       <div className="report-charts">
+        <div className="pagebreak"></div>
         {geostoreID && <MemoReportChartsComponent geostoreID={geostoreID} />}
       </div>
     </div>

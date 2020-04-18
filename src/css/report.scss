@@ -178,5 +178,19 @@
       margin-bottom: 10px;
       padding-bottom: 20px;
     }
+    .vega-chart-description {
+      color: #555;
+      padding: 0.5rem;
+      font-size: 0.8rem;
+      width: 100%;
+      max-width: 60rem;
+      margin: 0 auto;
+      border: 1px solid #eee;
+    }
+  }
+  @media print {
+    .pagebreak {
+      page-break-after: always;
+    }
   }
 }
