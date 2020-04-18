@@ -299,7 +299,9 @@ const BaseAnalysis = (): JSX.Element => {
               <AnalysisInstructions />
             </div>
           )}
-          {vegaSpec && <VegaChart spec={vegaSpec} />}
+          {vegaSpec && (
+            <VegaChart spec={vegaSpec} language={selectedLanguage} />
+          )}
           <button
             disabled={selectedAnalysis === 'default'}
             className={

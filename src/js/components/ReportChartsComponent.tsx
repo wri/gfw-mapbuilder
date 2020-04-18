@@ -7,6 +7,9 @@ import { MemoReportRangeSlider } from './ReportRangeSlider';
 import { MemoReportDatePicker } from './DatePicker';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { UIParams } from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
+import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import VegaChart from 'js/components/leftPanel/analysisPanel/VegaChartContainer';
+import analysisTranslations from 'js/components/leftPanel/analysisPanel/analysisTranslations';
 
 import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
 import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
@@ -15,6 +18,59 @@ const selectAnalysisModules = createSelector(
   (state: RootState) => state.appSettings,
   settings => settings.analysisModules
 );
+
+function generateWidgetURL(
+  uiParams: any,
+  widgetID: string,
+  geostoreID: string,
+  startDate: string,
+  endDate: string,
+  analysisYearRange: number[] | null,
+  canopyDensity: number,
+  queryParams?: { name: string; value: string }[]
+): string {
+  let baseURL = 'https://api.resourcewatch.org/v1/widget/';
+  //Add Widget ID
+  baseURL = baseURL.concat(`${widgetID}?`);
+  //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
+  for (const param of uiParams) {
+    if (param.inputType === 'datepicker') {
+      let datePickerString = `${param.startParamName}=`;
+      if (param.combineParams) {
+        const start = startDate;
+        const end = endDate;
+        datePickerString = datePickerString.concat(
+          `${start}${param.valueSeparator}${end}`
+        );
+        baseURL = baseURL.concat(datePickerString);
+      }
+    } else if (param.inputType === 'rangeSlider') {
+      let yearRangeString = `${param.startParamName}=`;
+      if (param.combineParams && analysisYearRange) {
+        const start = `${analysisYearRange[0]}-01-01`;
+        const end = `${analysisYearRange[1]}-12-31`;
+        yearRangeString = yearRangeString.concat(
+          `${start}${param.valueSeparator}${end}`
+        );
+        baseURL = baseURL.concat(yearRangeString);
+      }
+    } else if (param.inputType === 'tcd') {
+      const threshold = `&thresh=${markValueMap[canopyDensity]}`;
+      baseURL = baseURL.concat(threshold);
+    }
+  }
+
+  //Add Geostore ID
+  baseURL = baseURL.concat(`&geostore=${geostoreID}`);
+
+  //Check for query Params and append if they exist
+  if (queryParams) {
+    queryParams.forEach(param => {
+      baseURL = baseURL.concat(`&${param.name}=${param.value}`);
+    });
+  }
+  return baseURL;
+}
 
 function getDefaultYearRange(uiParams: any): null | number[] {
   if (uiParams === 'none') return null;
@@ -50,6 +106,7 @@ function getDefaultEndDate(uiParams: any): string {
 interface ChartModuleProps {
   moduleInfo: AnalysisModule;
   lang: string;
+  geostoreID: string;
 }
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const { label, uiParams } = props.moduleInfo;
@@ -57,7 +114,10 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const translatedLabel = label[language]
     ? label[language]
     : 'Missing Translation Analysis Label';
-  console.log(props);
+
+  const density = useSelector(
+    (store: RootState) => store.appState.leftPanel.density
+  );
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [inputsAreHidden, setInputsAreHidden] = React.useState(false);
@@ -68,6 +128,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     getDefaultStartDate(uiParams)
   );
   const [endDate, setEndDate] = React.useState(getDefaultEndDate(uiParams));
+  const [chartLoading, setChartLoading] = React.useState(true);
+  const [chartError, setChartError] = React.useState(false);
+  const [vegaSpec, setVegaSpec] = React.useState(null);
 
   function updateDate(val: any): void {
     setYearRangeValue(val);
@@ -116,6 +179,36 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         return null;
     }
   };
+  React.useEffect(() => {
+    console.log('use effect firing');
+    console.log(props.geostoreID);
+
+    const widgetURL = generateWidgetURL(
+      uiParams,
+      props.moduleInfo.widgetId,
+      props.geostoreID,
+      startDate,
+      endDate,
+      yearRangeValue,
+      density,
+      props.moduleInfo.params
+    );
+    setChartLoading(true);
+    fetch(widgetURL)
+      .then((response: any) => response.json())
+      .then((analysisMod: any) => {
+        setChartLoading(false);
+        //TODO: we need to handle loading and error states
+        console.log(analysisMod.data.attributes.widgetConfig);
+        setVegaSpec(analysisMod.data.attributes.widgetConfig);
+      })
+      .catch(e => {
+        console.error(e);
+        setChartError(true);
+        setChartLoading(false);
+      });
+    console.log(widgetURL);
+  }, [props.geostoreID]);
 
   return (
     <div className="chart-module">
@@ -123,7 +216,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
           <div
-            onClick={() => setInputsAreHidden(!inputsAreHidden)}
+            onClick={(): void => setInputsAreHidden(!inputsAreHidden)}
             style={{ cursor: 'pointer' }}
           >
             <GearIcon width={22} height={22} fill={'#888888'} />
@@ -172,26 +265,38 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                 </div>
               );
             })}
+          <button className="orange-button" onClick={() => console.log('yaya')}>
+            {analysisTranslations.runAnalysisButton[language]}
+          </button>
         </div>
-        <div>Chart</div>
+        <div className="vega-chart-wrapper">
+          {vegaSpec && (
+            <VegaChart spec={vegaSpec} language={language} report={true} />
+          )}
+        </div>
         <div>Chart Description</div>
       </div>
     </div>
   );
 };
 
-const ReportChartsComponent = (): JSX.Element => {
+interface ChartProps {
+  geostoreID: string;
+}
+const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const analysisModules = useSelector(selectAnalysisModules);
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
-  console.log(analysisModules);
-  console.log('FIREEEEEEE');
-
   return (
     <div className="chart-area-container">
       {analysisModules.map((module, i) => (
-        <ChartModule key={i} moduleInfo={module} lang={selectedLanguage} />
+        <ChartModule
+          key={i}
+          moduleInfo={module}
+          lang={selectedLanguage}
+          geostoreID={props.geostoreID}
+        />
       ))}
     </div>
   );

@@ -176,7 +176,7 @@ const Report = (props: ReportProps): JSX.Element => {
         {attributes && <ReportTable attr={attributes} />}
       </div>
       <div className="report-charts">
-        {geostoreID && <MemoReportChartsComponent />}
+        {geostoreID && <MemoReportChartsComponent geostoreID={geostoreID} />}
       </div>
     </div>
   );
