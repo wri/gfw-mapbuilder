@@ -8,6 +8,7 @@ interface ChartProps {
   language: string;
   report?: boolean;
   chartType?: string;
+  sendBackURL?: (pngString: string) => void;
 }
 
 function createChartWrapperStyle(chartType?: string): object {
@@ -48,10 +49,15 @@ function createChartWrapperStyle(chartType?: string): object {
 const Chart = (props: ChartProps): JSX.Element => {
   const chartRef = useRef(null);
   const { spec, language, report, chartType } = props;
-  console.log(chartType);
   const [dimensions, setDimensions] = React.useState<undefined | any>({
     dimensions: { width: -1, height: -1 }
   });
+
+  function callback(pngString: string): void {
+    if (props.sendBackURL) {
+      props.sendBackURL(pngString);
+    }
+  }
   React.useEffect(() => {
     if (!spec) return;
     //In case of report, we tell chart to resize appropriately
@@ -85,10 +91,10 @@ const Chart = (props: ChartProps): JSX.Element => {
       props.spec,
       chartRef.current,
       props.language,
-      props.report
+      props.report,
+      callback
     );
   }, [chartRef, spec, language]);
-  console.log(dimensions.dimensions.width);
 
   const chartWrapperStyle = createChartWrapperStyle(chartType);
 
@@ -98,7 +104,6 @@ const Chart = (props: ChartProps): JSX.Element => {
         <Measure
           bounds
           onResize={(contentRec): void => {
-            console.log(contentRec);
             setDimensions({ dimensions: contentRec.bounds });
           }}
         >

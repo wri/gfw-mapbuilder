@@ -123,6 +123,9 @@
         .layer-checkbox {
           width: 30px;
         }
+        .styled-checkboxlabel {
+          text-indent: 0;
+        }
       }
       .report-toolbar-title {
         @media print {
@@ -224,6 +227,28 @@
       max-width: 60rem;
       margin: 0 auto;
       border: 1px solid #eee;
+    }
+  }
+  .download-option-container {
+    position: absolute;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 2;
+    margin-left: auto;
+    margin-top: 0.25rem;
+    .download-option {
+      padding: 8px 10px;
+      text-decoration: none;
+      color: #555;
+      font-size: 12px;
+      background: #fff;
+      border: 0.75px solid #eee;
+      text-align: center;
+      span {
+        text-transform: uppercase;
+      }
     }
   }
   @media print {

@@ -5,7 +5,8 @@ export function generateAndAttachVegaChart(
   spec: any | null,
   domref: React.MutableRefObject<null> | null,
   language: string,
-  report?: boolean | undefined
+  report?: boolean | undefined,
+  callback?: any
 ): void {
   //lang awareness
   if (spec.signals && spec.signals.length > 0) {
@@ -27,5 +28,6 @@ export function generateAndAttachVegaChart(
     .renderer('svg') // Vega needs to be rendered in an svg, not canvas!
     .hover()
     .run()
-    .toImageURL('png');
+    .toImageURL('png')
+    .then((url: string) => callback(url));
 }

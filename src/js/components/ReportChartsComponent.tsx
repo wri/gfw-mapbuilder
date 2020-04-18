@@ -131,6 +131,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
+  const [downloadUrl, setDownloadUrl] = React.useState('');
+  const [downloadOptionsVisible, setDownloadOptionsVisible] = React.useState(
+    false
+  );
+  const [chartDownloadTitle, setChartDownloadTitle] = React.useState('');
+  const [base64ChartURL, setBase64ChartURL] = React.useState('');
   const [chartDescription, setChartDescription] = React.useState<null | string>(
     null
   );
@@ -210,15 +216,40 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             setChartDescription('Error retrieving chart analysis description.');
             console.error(e);
           });
+        //download urls
+        const widgetConfigData = analysisMod.data.attributes.widgetConfig.data;
+        const downloadUrl = widgetConfigData.find(
+          (e: any) => e.name === 'data'
+        );
         setVegaSpec(analysisMod.data.attributes.widgetConfig);
+        fetch(downloadUrl.url)
+          .then((response: any) => response.json())
+          .then((data: any) => {
+            const chartTitle =
+              data.data && data.data.type
+                ? data.data.type + '-analysis.png'
+                : 'analysis.png';
+            setChartDownloadTitle(chartTitle);
+            //unclear why are we matching 'month' here but that's how it was done in 3x
+            if (data.data.attributes.downloadUrls.csv.includes('month')) {
+              setDownloadUrl(
+                'https://production-api.globalforestwatch.org' +
+                  data.data.attributes.downloadUrls.csv
+              );
+            }
+          })
+          .catch((e: Error) => console.error(e));
       })
       .catch(e => {
         console.error(e);
         setChartError(true);
         setChartLoading(false);
       });
-    console.log(widgetURL);
   }, [props.geostoreID]);
+
+  function handlePNGURL(base64: string): void {
+    setBase64ChartURL(base64);
+  }
 
   return (
     <div className="chart-module">
@@ -231,8 +262,20 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           >
             <GearIcon width={22} height={22} fill={'#888888'} />
           </div>
-          <div>
+          <div
+            style={{ cursor: 'pointer' }}
+            onClick={(): void =>
+              setDownloadOptionsVisible(!downloadOptionsVisible)
+            }
+          >
             <DownloadIcon width={25} height={25} />
+            {downloadOptionsVisible && (
+              <DownloadOptions
+                csv={downloadUrl}
+                chartDownTitle={chartDownloadTitle}
+                base64ChartURL={base64ChartURL}
+              />
+            )}
           </div>
           <div className="layer-checkbox">
             <input
@@ -291,6 +334,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
               language={language}
               report={true}
               chartType={currentAnalysis?.chartType}
+              sendBackURL={handlePNGURL}
             />
           )}
         </div>
@@ -324,3 +368,34 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
 };
 
 export const MemoReportChartsComponent = React.memo(ReportChartsComponent);
+
+interface DownloadOptionsProps {
+  csv: string;
+  chartDownTitle: string;
+  base64ChartURL: string;
+}
+
+const DownloadOptions = (props: DownloadOptionsProps): JSX.Element => {
+  return (
+    <div className="download-option-container">
+      <a
+        className="download-option"
+        href={props.base64ChartURL}
+        download={props.chartDownTitle}
+      >
+        <span className="download-option-label">Download PNG</span>
+      </a>
+      {props.csv !== '' && (
+        <a
+          className="download-option"
+          href={props.csv}
+          target="_blank"
+          rel="noopener noreferrer"
+          download
+        >
+          <span className="download-option-label">Download CSV</span>
+        </a>
+      )}
+    </div>
+  );
+};
