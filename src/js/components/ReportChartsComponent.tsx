@@ -247,7 +247,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           submoduleIsHidden ? 'chart-submodule hidden' : 'chart-submodule'
         }
       >
-        <div className={inputsAreHidden ? 'hidden' : ''}>
+        <div className={inputsAreHidden ? 'hidden' : 'chart-control-inputs'}>
           {currentAnalysis?.uiParams &&
             currentAnalysis?.uiParams !== 'none' &&
             currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
@@ -271,7 +271,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         </div>
         <div className="vega-chart-wrapper">
           {vegaSpec && (
-            <VegaChart spec={vegaSpec} language={language} report={true} />
+            <VegaChart
+              spec={vegaSpec}
+              language={language}
+              report={true}
+              chartType={currentAnalysis?.chartType}
+            />
           )}
         </div>
         <div>Chart Description</div>
