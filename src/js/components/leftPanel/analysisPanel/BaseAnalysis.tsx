@@ -16,6 +16,7 @@ import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensi
 import { PrintReportButton } from 'js/components/sharedComponents/PrintReportButton';
 import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.svg';
 import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
+import Loader from 'js/components/sharedComponents/Loader';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -155,6 +156,8 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   function runAnalysis() {
+    setBase64ChartURL('');
+    setVegaSpec(null);
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
@@ -356,6 +359,19 @@ const BaseAnalysis = (): JSX.Element => {
                 language={selectedLanguage}
                 sendBackURL={handlePNGURL}
               />
+              {base64ChartURL === '' && (
+                <Loader
+                  containerPositionStyling={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-25px',
+                    marginLeft: '-25px'
+                  }}
+                  color={'#cfcdcd'}
+                  size={50}
+                />
+              )}
             </>
           )}
           <button

@@ -4,8 +4,7 @@ import { ReactComponent as PrintIcon } from '../../images/printIcon.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { renderModal } from 'js/store/appState/actions';
 import { RootState } from 'js/store/index';
-import 'css/report.scss';
-
+import Loader from 'js/components/sharedComponents/Loader';
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { mapController } from 'js/controllers/mapController';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
@@ -15,6 +14,8 @@ import { formatAttributeValues } from 'js/helpers/dataPanel/formatAttributes';
 import { ReportTable } from './ReportTable';
 import { extractLayerInfo } from './ReportUtils';
 import { MemoReportChartsComponent } from './ReportChartsComponent';
+
+import 'css/report.scss';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
@@ -171,9 +172,38 @@ const Report = (props: ReportProps): JSX.Element => {
         <props.mapview />
       </div>
       <div className="report-analysis">
-        <p className="analysis-title">AREA OF ANALYSIS</p>
-        <p className="analysis-subtitle">{layerTitle}</p>
-        {attributes && <ReportTable attr={attributes} />}
+        {!attributes && (
+          <div
+            style={{
+              width: '100%',
+              height: '500px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <p style={{ textAlign: 'center', marginTop: '30px' }}>
+              Running analysis...
+            </p>
+            <Loader
+              containerPositionStyling={{
+                position: 'absolute',
+                top: '70%',
+                left: '50%',
+                marginLeft: '-50px'
+              }}
+              color={'#cfcdcd'}
+              size={100}
+            />
+          </div>
+        )}
+        {attributes && (
+          <>
+            <p className="analysis-title">AREA OF ANALYSIS</p>
+            <p className="analysis-subtitle">{layerTitle}</p>
+            <ReportTable attr={attributes} />
+          </>
+        )}
       </div>
       <div className="report-charts">
         <div className="pagebreak"></div>
