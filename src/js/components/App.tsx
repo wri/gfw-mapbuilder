@@ -85,7 +85,6 @@ const App = (props: AppSettings | any): JSX.Element => {
         <>
           {!reportView && <Header />}
           <MapContent report={reportView} />
-          {!isMapReady && <MapSpinner />}
           {modalType !== '' && <ModalCard />}
         </>
       )}

@@ -256,7 +256,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   }
 
   return (
-    <div className="chart-module">
+    <div className={submoduleIsHidden ? 'print-hidden' : 'chart-module'}>
       <div className="report-top-toolbar">
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
