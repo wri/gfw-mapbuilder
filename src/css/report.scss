@@ -248,7 +248,7 @@
   flex-direction: column;
   justify-content: flex-end;
   z-index: 2;
-  margin-left: auto;
+  margin-left: -110px;
   margin-top: 0.25rem;
   .download-option {
     padding: 8px 10px;
@@ -266,4 +266,7 @@
     background: #eee;
     text-decoration: underline;
   }
+}
+.report-downloads {
+  margin-left: -60px;
 }

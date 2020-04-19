@@ -344,7 +344,7 @@ const BaseAnalysis = (): JSX.Element => {
           {vegaSpec && (
             <>
               <div
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', float: 'right' }}
                 onClick={(): void =>
                   setDownloadOptionsVisible(!downloadOptionsVisible)
                 }
@@ -352,6 +352,7 @@ const BaseAnalysis = (): JSX.Element => {
                 <DownloadIcon width={25} height={25} />
                 {downloadOptionsVisible && (
                   <DownloadOptions
+                    report={false}
                     csv={chartDownloadURL}
                     chartDownTitle={chartDownTitle}
                     base64ChartURL={base64ChartURL}

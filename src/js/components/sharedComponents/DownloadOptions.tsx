@@ -6,6 +6,7 @@ interface DownloadOptionsProps {
   chartDownTitle: string;
   base64ChartURL: string;
   closeCB?: any;
+  report: boolean;
 }
 
 export const DownloadOptions = (props: DownloadOptionsProps): JSX.Element => {
@@ -28,7 +29,14 @@ export const DownloadOptions = (props: DownloadOptionsProps): JSX.Element => {
   }, []);
 
   return (
-    <div ref={ref} className="download-option-container">
+    <div
+      ref={ref}
+      className={
+        props.report
+          ? 'download-option-container report-downloads'
+          : 'download-option-container'
+      }
+    >
       <a
         className="download-option"
         href={props.base64ChartURL}

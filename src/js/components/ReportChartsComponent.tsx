@@ -282,6 +282,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             <DownloadIcon width={25} height={25} />
             {downloadOptionsVisible && (
               <DownloadOptions
+                report={true}
                 csv={downloadUrl}
                 chartDownTitle={chartDownloadTitle}
                 base64ChartURL={base64ChartURL}
