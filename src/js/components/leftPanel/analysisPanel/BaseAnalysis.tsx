@@ -317,14 +317,18 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
-  function handlePNGURL(base64: string): void {
-    setBase64ChartURL(base64);
-  }
-
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const layerTitle = activeLayer.sublayerTitle
     ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
     : activeLayer.layerTitle;
+
+  function handleCloseDownloadOptions(): void {
+    setDownloadOptionsVisible(false);
+  }
+
+  function handlePNGURL(base64: string): void {
+    setBase64ChartURL(base64);
+  }
 
   return (
     <>
@@ -351,6 +355,7 @@ const BaseAnalysis = (): JSX.Element => {
                     csv={chartDownloadURL}
                     chartDownTitle={chartDownTitle}
                     base64ChartURL={base64ChartURL}
+                    closeCB={handleCloseDownloadOptions}
                   />
                 )}
               </div>

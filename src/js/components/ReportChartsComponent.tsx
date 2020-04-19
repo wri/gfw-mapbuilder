@@ -258,6 +258,10 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     setBase64ChartURL(base64);
   }
 
+  function handleCloseDownloadOptions(): void {
+    setDownloadOptionsVisible(false);
+  }
+
   return (
     <div className={submoduleIsHidden ? 'print-hidden' : 'chart-module'}>
       <div className="report-top-toolbar">
@@ -281,6 +285,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                 csv={downloadUrl}
                 chartDownTitle={chartDownloadTitle}
                 base64ChartURL={base64ChartURL}
+                closeCB={handleCloseDownloadOptions}
               />
             )}
           </div>

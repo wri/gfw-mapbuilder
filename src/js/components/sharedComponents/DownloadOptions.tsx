@@ -5,11 +5,30 @@ interface DownloadOptionsProps {
   csv: string;
   chartDownTitle: string;
   base64ChartURL: string;
+  closeCB?: any;
 }
 
 export const DownloadOptions = (props: DownloadOptionsProps): JSX.Element => {
+  const ref = React.useRef(null);
+
+  const clickListener = React.useCallback(
+    (e: MouseEvent) => {
+      if (!(ref.current! as any).contains(e.target)) {
+        props.closeCB(); // using optional chaining here, change to onClose && onClose(), if required
+      }
+    },
+    [ref.current]
+  );
+
+  React.useEffect(() => {
+    document.addEventListener('click', clickListener);
+    return () => {
+      document.removeEventListener('click', clickListener);
+    };
+  }, []);
+
   return (
-    <div className="download-option-container">
+    <div ref={ref} className="download-option-container">
       <a
         className="download-option"
         href={props.base64ChartURL}
