@@ -69,12 +69,6 @@ const Report = (props: ReportProps): JSX.Element => {
     fetchGeostoreInfo();
   }, []);
 
-  //Deal with VEGA chart Loading
-  React.useEffect(() => {
-    if (!geostoreID) return;
-    console.log(geostoreID);
-  }, [geostoreID]);
-
   React.useEffect(() => {
     //Transform geojson retrieved earlier to usable esri geometry
     async function getFeatures(
@@ -156,7 +150,6 @@ const Report = (props: ReportProps): JSX.Element => {
     dispatch(renderModal('ShareWidget'));
   }
 
-  // Forêts communautaires: Forêts communautaires
   return (
     <div className="report">
       <div className="report-header">
