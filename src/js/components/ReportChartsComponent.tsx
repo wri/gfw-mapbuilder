@@ -144,6 +144,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     null
   );
 
+  //We want to re-render chart if user clicks on the 'run analysis' button, this is one way to do it, there may be better options
+  const [forceRender, setForceRender] = React.useReducer(x => x + 1, 0);
+
   function updateDate(val: any): void {
     setYearRangeValue(val);
   }
@@ -249,7 +252,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         setChartError(true);
         setChartLoading(false);
       });
-  }, [props.geostoreID]);
+  }, [props.geostoreID, forceRender]);
 
   function handlePNGURL(base64: string): void {
     setBase64ChartURL(base64);
@@ -325,7 +328,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           {currentAnalysis?.uiParams !== 'none' && (
             <button
               className="orange-button"
-              onClick={() => console.log('yaya')}
+              onClick={(): void => setForceRender()}
             >
               {analysisTranslations.runAnalysisButton[language]}
             </button>
