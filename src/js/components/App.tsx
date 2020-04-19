@@ -5,22 +5,22 @@ import Header from './header/Header';
 import ModalCard from './modal/modalCard';
 import { RootState } from 'js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
-
-import 'arcgis-js-api/themes/light/main.scss';
-import 'css/index.scss';
-import cameroon from '../../../configs/cameroon';
+import Loader from 'js/components/sharedComponents/Loader';
 import { overwriteSettings } from 'js/store/appSettings/actions';
 import { setLoggedIn, setLanguage } from 'js/store/appState/actions';
 import { AppSettings } from 'js/store/appSettings/types';
+import cameroon from '../../../configs/cameroon';
 
-//TODO: SPinners should be SVGs in images/ folder that get imported
-const GlobalSpinner = (): React.ReactElement => <h4>App Loading...</h4>;
+import 'arcgis-js-api/themes/light/main.scss';
+import 'css/index.scss';
+
 const MapSpinner = (): React.ReactElement => (
-  <h4 style={{ position: 'absolute', top: '50%', left: '50%' }}>
-    Map is Loading...
-  </h4>
+  <Loader
+    containerPositionStyling={{ position: 'absolute', top: '40%', left: '50%' }}
+    color={'#cfcdcd'}
+    size={100}
+  />
 );
-// const ErrorScreen = (): React.ReactElement => <h4>Map Loading Error</h4>;
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Listen to map loading state that comes from mapController via redux store change
@@ -80,7 +80,7 @@ const App = (props: AppSettings | any): JSX.Element => {
   return (
     <>
       {showGlobalSpinner ? (
-        <GlobalSpinner />
+        <MapSpinner />
       ) : (
         <>
           {!reportView && <Header />}
