@@ -14,6 +14,8 @@ import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import { PrintReportButton } from 'js/components/sharedComponents/PrintReportButton';
+import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.svg';
+import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -47,6 +49,10 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
+  const [chartDownloadURL, setChartDownloadURL] = useState('');
+  const [chartDownTitle, setChartDownTitle] = useState('');
+  const [base64ChartURL, setBase64ChartURL] = useState('');
+  const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
   //This is used for date picker analysis module
 
   const selectedLanguage = useSelector(
@@ -166,6 +172,31 @@ const BaseAnalysis = (): JSX.Element => {
         .then((analysisMod: any) => {
           //TODO: we need to handle loading and error states
           setVegaSpec(analysisMod.data.attributes.widgetConfig);
+          const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${mod.widgetId}/metadata?language=${selectedLanguage}`;
+          const widgetConfigData =
+            analysisMod.data.attributes.widgetConfig.data;
+          const downloadUrl = widgetConfigData.find(
+            (e: any) => e.name === 'data'
+          );
+
+          if (!downloadUrl) return;
+          fetch(downloadUrl.url)
+            .then((response: any) => response.json())
+            .then((data: any) => {
+              const chartTitle =
+                data.data && data.data.type
+                  ? data.data.type + '-analysis.png'
+                  : 'analysis.png';
+              //unclear why are we matching 'month' here but that's how it was done in 3x
+              if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
+                setChartDownTitle(chartTitle);
+                setChartDownloadURL(
+                  'https://production-api.globalforestwatch.org' +
+                    data.data.attributes.downloadUrls.csv
+                );
+              }
+            })
+            .catch((e: Error) => console.error(e));
         });
     }
   }
@@ -283,6 +314,10 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
+  function handlePNGURL(base64: string): void {
+    setBase64ChartURL(base64);
+  }
+
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const layerTitle = activeLayer.sublayerTitle
     ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
@@ -300,7 +335,28 @@ const BaseAnalysis = (): JSX.Element => {
             </div>
           )}
           {vegaSpec && (
-            <VegaChart spec={vegaSpec} language={selectedLanguage} />
+            <>
+              <div
+                style={{ cursor: 'pointer' }}
+                onClick={(): void =>
+                  setDownloadOptionsVisible(!downloadOptionsVisible)
+                }
+              >
+                <DownloadIcon width={25} height={25} />
+                {downloadOptionsVisible && (
+                  <DownloadOptions
+                    csv={chartDownloadURL}
+                    chartDownTitle={chartDownTitle}
+                    base64ChartURL={base64ChartURL}
+                  />
+                )}
+              </div>
+              <VegaChart
+                spec={vegaSpec}
+                language={selectedLanguage}
+                sendBackURL={handlePNGURL}
+              />
+            </>
           )}
           <button
             disabled={selectedAnalysis === 'default'}

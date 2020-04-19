@@ -10,6 +10,7 @@ import { UIParams } from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import VegaChart from 'js/components/leftPanel/analysisPanel/VegaChartContainer';
 import analysisTranslations from 'js/components/leftPanel/analysisPanel/analysisTranslations';
+import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
 
 import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
 import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
@@ -135,7 +136,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [downloadOptionsVisible, setDownloadOptionsVisible] = React.useState(
     false
   );
-  const [chartDownloadTitle, setChartDownloadTitle] = React.useState('');
+  const [chartDownloadTitle, setChartDownloadTitle] = React.useState(
+    'analysis.png'
+  );
   const [base64ChartURL, setBase64ChartURL] = React.useState('');
   const [chartDescription, setChartDescription] = React.useState<null | string>(
     null
@@ -222,6 +225,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           (e: any) => e.name === 'data'
         );
         setVegaSpec(analysisMod.data.attributes.widgetConfig);
+        if (!downloadUrl) return;
         fetch(downloadUrl.url)
           .then((response: any) => response.json())
           .then((data: any) => {
@@ -229,9 +233,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
               data.data && data.data.type
                 ? data.data.type + '-analysis.png'
                 : 'analysis.png';
-            setChartDownloadTitle(chartTitle);
             //unclear why are we matching 'month' here but that's how it was done in 3x
-            if (data.data.attributes.downloadUrls.csv.includes('month')) {
+            if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
+              setChartDownloadTitle(chartTitle);
               setDownloadUrl(
                 'https://production-api.globalforestwatch.org' +
                   data.data.attributes.downloadUrls.csv
@@ -368,34 +372,3 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
 };
 
 export const MemoReportChartsComponent = React.memo(ReportChartsComponent);
-
-interface DownloadOptionsProps {
-  csv: string;
-  chartDownTitle: string;
-  base64ChartURL: string;
-}
-
-const DownloadOptions = (props: DownloadOptionsProps): JSX.Element => {
-  return (
-    <div className="download-option-container">
-      <a
-        className="download-option"
-        href={props.base64ChartURL}
-        download={props.chartDownTitle}
-      >
-        <span className="download-option-label">Download PNG</span>
-      </a>
-      {props.csv !== '' && (
-        <a
-          className="download-option"
-          href={props.csv}
-          target="_blank"
-          rel="noopener noreferrer"
-          download
-        >
-          <span className="download-option-label">Download CSV</span>
-        </a>
-      )}
-    </div>
-  );
-};
