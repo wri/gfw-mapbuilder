@@ -17,6 +17,7 @@ import { PrintReportButton } from 'js/components/sharedComponents/PrintReportBut
 import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.svg';
 import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
 import Loader from 'js/components/sharedComponents/Loader';
+import { mapController } from 'js/controllers/mapController';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -54,6 +55,7 @@ const BaseAnalysis = (): JSX.Element => {
   const [chartDownTitle, setChartDownTitle] = useState('');
   const [base64ChartURL, setBase64ChartURL] = useState('');
   const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
+  const [renderEditButton, setRenderEditButton] = useState(true);
   //This is used for date picker analysis module
 
   const selectedLanguage = useSelector(
@@ -317,10 +319,30 @@ const BaseAnalysis = (): JSX.Element => {
     );
   };
 
+  const setSaveSketch = (): void => {
+    mapController.completeSketchVM();
+    setRenderEditButton(true);
+  };
+
+  const setEditSketch = (): void => {
+    setRenderEditButton(false);
+    mapController.updateSketchVM();
+  };
+
+  const setDelete = (): void => {
+    mapController.deleteSketchVM();
+    dispatch(setActiveFeatures([]));
+  };
+
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
-  const layerTitle = activeLayer.sublayerTitle
-    ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
-    : activeLayer.layerTitle;
+
+  const returnLayerTitle =
+    activeLayer && activeLayer.layerTitle ? activeLayer.layerTitle : null;
+
+  const title =
+    activeLayer && activeLayer.sublayerTitle
+      ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
+      : returnLayerTitle;
 
   function handleCloseDownloadOptions(): void {
     setDownloadOptionsVisible(false);
@@ -334,7 +356,15 @@ const BaseAnalysis = (): JSX.Element => {
     <>
       {geostoreReady ? (
         <div className="base-analysis-content">
-          <div className="layer-title">{layerTitle}</div>
+          <div className="layer-title">
+            {title === null ? 'User Drawn Feature' : title}
+          </div>
+          {renderEditButton ? (
+            <button onClick={(): void => setEditSketch()}>Edit</button>
+          ) : (
+            <button onClick={(): void => setSaveSketch()}>Save</button>
+          )}
+          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">
