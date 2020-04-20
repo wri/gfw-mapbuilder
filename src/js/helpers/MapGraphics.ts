@@ -60,7 +60,7 @@ export function setNewGraphic({
   };
 
   projection.load().then(() => {
-    allFeatures.forEach((feature: FeatureResult) => {
+    const allGraphics = allFeatures.map((feature: FeatureResult) => {
       const isPolygon =
         (feature.geometry as any).rings || feature.geometry.type === 'polygon';
 
@@ -95,14 +95,15 @@ export function setNewGraphic({
         transformation
       ) as __esri.Geometry;
 
-      graphicsLayer.graphics.push(featureGraphic);
+      return featureGraphic;
     });
+
+    graphicsLayer.graphics.push(...allGraphics);
 
     mapController.initializeAndSetSketch(graphicsLayer.graphics);
 
     if (isUploadFile) {
-      mapview.goTo(graphicsLayer.graphics);
-      // ? why is it no longer going to the graphics?
+      mapview.goTo(allGraphics);
     }
   });
 }
