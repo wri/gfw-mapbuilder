@@ -70,8 +70,9 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           activeLayerInfo.layerID !== 'upload_file_features'
         ) {
           mapController.drawGraphic(activeFeature);
-          dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
         }
+
+        dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
       }
 
       interface AttributeObject {

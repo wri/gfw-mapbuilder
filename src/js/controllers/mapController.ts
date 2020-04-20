@@ -603,14 +603,29 @@ export class MapController {
 
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      console.log('UPDATING', this._sketchVMGraphicsLayer.graphics['items'][0]);
-      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
-        tool: 'reshape',
-        enableRotation: false,
-        toggleToolOnClick: false,
-        enableScaling: false,
-        preserveAspectRatio: false
-      });
+      if (this._sketchVMGraphicsLayer.graphics['items'].length === 1) {
+        this._sketchVM?.update(
+          this._sketchVMGraphicsLayer.graphics['items'][0],
+          {
+            tool: 'reshape',
+            enableRotation: false,
+            toggleToolOnClick: false,
+            enableScaling: false,
+            preserveAspectRatio: false
+          }
+        );
+      }
+
+      if (this._sketchVMGraphicsLayer.graphics['items'].length > 1) {
+        this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'], {
+          tool: 'transform',
+          enableRotation: true,
+          toggleToolOnClick: true,
+          multipleSelectionEnabled: true,
+          enableScaling: true,
+          preserveAspectRatio: false
+        });
+      }
     }
   }
 
