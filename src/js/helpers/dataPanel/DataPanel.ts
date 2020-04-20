@@ -180,7 +180,8 @@ export async function queryLayersForFeatures(
         l.visible &&
         l.type !== 'graphics' &&
         l.type !== 'base-tile' &&
-        l.type !== 'imagery'
+        l.type !== 'imagery' &&
+        l.id !== 'MASK'
     )
     .filter((l: any) => layerIsInScale(l, mapview.scale))
     .toArray();

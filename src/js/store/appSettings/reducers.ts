@@ -13,6 +13,7 @@ const initialState: AppSettings = {
   printServiceUrl:
     'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
   language: 'en',
+  iso: '',
   layerPanel: {
     GROUP_WEBMAP: {},
     GROUP_BASEMAP: {},
