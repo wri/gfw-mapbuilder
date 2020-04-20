@@ -7,14 +7,24 @@ import WebmapLayersGroup from './WebmapLayersGroup';
 import BasemapLayersGroup from './BasemapLayersGroup';
 import DefaultLayerGroup from './DefaultLayerGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
+import { layersPanelTranslations } from '../../../../../configs/leftPanel.translations';
 
-const AllLayerControls = () => {
+interface LayerControlProps {
+  selectedLanguage: string;
+}
+const AllLayerControls = (props: LayerControlProps): JSX.Element => {
   return (
     <div className="all-layer-control-container">
-      <span>Layers</span>
-      <button onClick={() => mapController.clearAllLayers()}>Clear All</button>
+      <span>
+        {layersPanelTranslations[props.selectedLanguage]?.layers || 'Layers'}
+      </span>
+      <button onClick={() => mapController.clearAllLayers()}>
+        {layersPanelTranslations[props.selectedLanguage]?.clearAll ||
+          'Clear All'}
+      </button>
       <button onClick={() => mapController.selectAllLayers()}>
-        Select All
+        {layersPanelTranslations[props.selectedLanguage]?.selectAll ||
+          'Select All'}
       </button>
     </div>
   );
@@ -25,11 +35,17 @@ interface LayersTabViewProps {
   label: string;
 }
 const LayersTabView = (props: LayersTabViewProps) => {
-  const { activeTab, tabViewVisible } = useSelector(
-    (store: RootState) => store.appState.leftPanel
+  const activeTab = useSelector(
+    (store: RootState) => store.appState.leftPanel.activeTab
   );
-  const { hideWidgetActive } = useSelector(
-    (store: RootState) => store.appState
+  const tabViewVisible = useSelector(
+    (store: RootState) => store.appState.leftPanel.tabViewVisible
+  );
+  const hideWidgetActive = useSelector(
+    (store: RootState) => store.appState.hideWidgetActive
+  );
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
 
   const { layerPanel } = useSelector((store: RootState) => store.appSettings);
@@ -82,7 +98,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
             hideWidgetActive ? 'hide tabview-container' : 'tabview-container'
           }
         >
-          <AllLayerControls />
+          <AllLayerControls selectedLanguage={selectedLanguage} />
           {layerGroupsToRender}
         </div>
       )}

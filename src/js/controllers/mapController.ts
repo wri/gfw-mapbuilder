@@ -546,7 +546,6 @@ export class MapController {
   }
 
   clearAllLayers(): void {
-    console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach((layer: any) => {
       if (layer.sublayers) {
@@ -570,7 +569,6 @@ export class MapController {
   }
 
   selectAllLayers(): void {
-    console.log('select all layers');
     this._map?.layers.forEach((layer: any) => {
       if (layer.sublayers) {
         layer.sublayers.forEach((sub: any) => (sub.visible = true));
