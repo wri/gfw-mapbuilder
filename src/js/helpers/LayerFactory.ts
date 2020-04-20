@@ -20,6 +20,8 @@ interface LayerOptions {
   visible: boolean;
   url: string;
   sublayers?: { id: number; visible: boolean }[];
+  opacity?: number;
+  definitionExpression?: string;
 }
 
 export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
@@ -119,6 +121,23 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      break;
+    case 'MASK':
+      const { appSettings } = store.getState();
+      const countryISOCode = appSettings?.iso;
+      const maskDefExp = `code_iso3 <> '${countryISOCode}'`;
+      const maskLayerOptions: LayerOptions = {
+        id: layerConfig.id,
+        visible: true,
+        url: layerConfig.url,
+        opacity: layerConfig.opacity
+      };
+      if (layerConfig.layerIds) {
+        maskLayerOptions.sublayers = layerConfig.layerIds.map(id => {
+          return { id: id, visible: true, definitionExpression: maskDefExp };
+        });
+      }
+      esriLayer = new MapImageLayer(maskLayerOptions);
       break;
     default:
       console.error('No error type!');
