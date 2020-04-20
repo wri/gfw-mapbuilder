@@ -26,6 +26,8 @@ import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
 import { getSortedLayers } from 'js/helpers/mapController/layerSorting';
+import { addPointGraphic } from 'js/helpers/MapGraphics';
+import { once } from 'esri/core/watchUtils';
 import {
   allAvailableLayers,
   mapError,
@@ -33,7 +35,8 @@ import {
   setActiveFeatureIndex,
   setActiveFeatures,
   changeMapScale,
-  changeMapCenterCoordinates
+  changeMapCenterCoordinates,
+  setLayersLoading
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -122,6 +125,13 @@ export class MapController {
 
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
+
+    this.setPageTitle(
+      appState.selectedLanguage,
+      appSettings.language,
+      appSettings.title,
+      appSettings.alternativeLanguageTitle
+    );
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
@@ -264,7 +274,39 @@ export class MapController {
               return LayerFactory(this._mapview, layerObject);
             })
             .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
-          this._map?.addMany(esriRemoteLayers);
+
+          //Get VIIRS and MODIS layers
+          const viirsLayers = this.initializeAndSetVIIRSLayers();
+          const modisLayers = this.initializeAndSetMODISLayers();
+
+          const allLayers = [
+            ...viirsLayers,
+            ...modisLayers,
+            ...esriRemoteLayers
+          ];
+
+          //If we have report active, we need to know when our feature layer has loaded
+          const report = new URL(window.location.href).searchParams.get(
+            'report'
+          );
+          if (report) {
+            const layerID = new URL(window.location.href).searchParams.get(
+              'acLayer'
+            );
+            if (!layerID) return;
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+            const activeLayer = combinedLayers.find(l => l.id === layerID);
+            if (activeLayer.loaded === true) {
+              store.dispatch(setLayersLoading(false));
+            } else {
+              once(activeLayer, 'loaded', () => {
+                store.dispatch(setLayersLoading(false));
+              });
+            }
+          }
+
+          this._map?.addMany(allLayers);
 
           //Retrieve sorted layer array
           const mapLayerIDs = getSortedLayers(
@@ -282,8 +324,6 @@ export class MapController {
           });
 
           this.initializeAndSetSketch();
-          this.initializeAndSetVIIRSLayers();
-          this.initializeAndSetMODISLayers();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -294,6 +334,19 @@ export class MapController {
         console.log('error in initializeMap()', error);
         store.dispatch(mapError(true));
       });
+  }
+
+  setPageTitle(
+    currentLanguage: string,
+    defaultLanguage: string,
+    primaryTitle: string,
+    secondaryTitle: string
+  ): void {
+    if (currentLanguage === defaultLanguage) {
+      window.document.title = primaryTitle;
+    } else {
+      window.document.title = secondaryTitle;
+    }
   }
 
   getRemoteAndServiceLayers(): Promise<any> {
@@ -357,12 +410,19 @@ export class MapController {
 
   changeLanguage(lang: string): void {
     if (!this._map) return;
-    const { mapviewState, appSettings } = store.getState();
+    const { mapviewState, appSettings, appState } = store.getState();
     const {
       language,
       webmap,
       alternativeWebmap
     } = store.getState().appSettings;
+
+    this.setPageTitle(
+      lang,
+      appSettings.language,
+      appSettings.title,
+      appSettings.alternativeLanguageTitle
+    );
 
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
     const nonWebmapLayers = mapviewState.allAvailableLayers.filter(
@@ -1106,6 +1166,34 @@ export class MapController {
     }
   }
 
+  addActiveFeatureGraphic(esriJson: Array<FeatureResult>): void {
+    if (this._map) {
+      setNewGraphic({
+        map: this._map,
+        mapview: this._mapview,
+        allFeatures: esriJson,
+        isUploadFile: false
+      });
+
+      const graphicsLayer: any = this._map.findLayerById(
+        'active-feature-layer'
+      );
+      this._mapview.goTo(graphicsLayer.graphics);
+    }
+  }
+
+  addActiveFeaturePointGraphic(esriJson: FeatureResult): void {
+    if (this._map) {
+      addPointGraphic(this._map, esriJson);
+      const graphicsLayer: any = this._map.findLayerById(
+        'active-feature-layer'
+      );
+      this._mapview.goTo(graphicsLayer.graphics);
+      //TODO: For some reason it does not zoom to points?
+      this._mapview.zoom = 12;
+    }
+  }
+
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
     const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;
@@ -1188,28 +1276,26 @@ export class MapController {
     return;
   }
 
-  initializeAndSetVIIRSLayers(): void {
-    const viirsLayerIDs = VIIRSLayerIDs.map(({ layerID, url }) => {
+  initializeAndSetVIIRSLayers(): any {
+    const viirsLayers = VIIRSLayerIDs.map(({ layerID, url }) => {
       return new FeatureLayer({
         id: layerID,
         url,
         visible: false
       });
     });
-
-    this._map?.addMany(viirsLayerIDs);
+    return viirsLayers;
   }
 
-  initializeAndSetMODISLayers(): void {
-    const modisLayerIDs = MODISLayerIDs.map(({ layerID, url }) => {
+  initializeAndSetMODISLayers(): any {
+    const modisLayers = MODISLayerIDs.map(({ layerID, url }) => {
       return new FeatureLayer({
         id: layerID,
         url,
         visible: false
       });
     });
-
-    this._map?.addMany(modisLayerIDs);
+    return modisLayers;
   }
 
   setMODISDefinedRange(layer: any, sublayerType: string): void {
@@ -1524,6 +1610,18 @@ export class MapController {
           webmapLayer.visible = false;
         }
       }
+    });
+  }
+
+  disableMapInteractions(): void {
+    this._mapview.on('mouse-wheel', function(event) {
+      event.stopPropagation();
+    });
+    this._mapview.on('double-click', function(event) {
+      event.stopPropagation();
+    });
+    this._mapview.on('drag', function(event) {
+      event.stopPropagation();
     });
   }
 }
