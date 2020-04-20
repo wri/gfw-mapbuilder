@@ -5,7 +5,7 @@ import { setOpenLayerGroup } from 'js/store/appState/actions';
 
 import { mapController } from 'js/controllers/mapController';
 
-import { basemapLayersContent } from 'configs/leftPanel.config';
+import { basemapLayersContent } from 'configs/leftPanel.translations';
 
 interface DefaultBasemapProps {
   layerInfo: {

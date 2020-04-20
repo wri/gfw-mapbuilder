@@ -9,7 +9,7 @@ import Loader from 'js/components/sharedComponents/Loader';
 import { overwriteSettings } from 'js/store/appSettings/actions';
 import { setLoggedIn, setLanguage } from 'js/store/appState/actions';
 import { AppSettings } from 'js/store/appSettings/types';
-import cameroon from '../../../configs/cameroon';
+import cameroon from '../../../configs/countryConfigs/cameroon';
 
 import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
