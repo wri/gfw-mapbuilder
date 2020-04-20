@@ -11,9 +11,9 @@ import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
 import { getAttributesToFetch } from 'js/helpers/dataPanel/getAttributes';
 import { getAllLayerFields } from 'js/helpers/dataPanel/DataPanel';
 import { formatAttributeValues } from 'js/helpers/dataPanel/formatAttributes';
-import { ReportTable } from './ReportTable';
-import { extractLayerInfo } from './ReportUtils';
-import { MemoReportChartsComponent } from './ReportChartsComponent';
+import { ReportTable } from './report/ReportTable';
+import { extractLayerInfo } from './report/ReportUtils';
+import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 
 import 'css/report.scss';
 
