@@ -10,7 +10,7 @@ import { renderModal } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
 import BaseAnalysis from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 
-import { analysisContent } from 'configs/leftPanel.config';
+import { analysisContent } from 'configs/leftPanel.translations';
 
 import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
