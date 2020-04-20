@@ -323,19 +323,7 @@ export class MapController {
             }
           });
 
-          // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
-          const { layerPanel } = appSettings;
-          const maskLayer = layerPanel['extraLayers'].find(
-            (l: any) => l.id === 'MASK'
-          );
-          if (maskLayer) {
-            maskLayer.type = 'MASK';
-            const esriMaskLayer = LayerFactory(this._mapview, maskLayer);
-            if (esriMaskLayer && this._map) {
-              this._map.add(esriMaskLayer);
-            }
-          }
-
+          this.addMaskLayer();
           this.initializeAndSetSketch();
         },
         (error: Error) => {
@@ -507,18 +495,7 @@ export class MapController {
         this._map
       );
 
-      // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
-      const { layerPanel } = appSettings;
-      const maskLayer = layerPanel['extraLayers'].find(
-        (l: any) => l.id === 'MASK'
-      );
-      if (maskLayer) {
-        maskLayer.type = 'MASK';
-        const esriMaskLayer = LayerFactory(this._mapview, maskLayer);
-        if (esriMaskLayer && this._map) {
-          this._map.add(esriMaskLayer);
-        }
-      }
+      this.addMaskLayer();
 
       //Reorder layers on the map!
       this._map?.layers.forEach((layer: any) => {
@@ -532,6 +509,22 @@ export class MapController {
 
   log(): void {
     console.log(this._map?.basemap);
+  }
+
+  // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
+  addMaskLayer(): void {
+    const appSettings = store.getState().appSettings;
+    const { layerPanel } = appSettings;
+    const maskLayer = layerPanel['extraLayers'].find(
+      (l: any) => l.id === 'MASK'
+    );
+    if (maskLayer) {
+      maskLayer.type = 'MASK';
+      const esriMaskLayer = LayerFactory(this._mapview, maskLayer);
+      if (esriMaskLayer && this._map) {
+        this._map.add(esriMaskLayer);
+      }
+    }
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
