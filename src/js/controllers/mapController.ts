@@ -289,7 +289,7 @@ export class MapController {
           const report = new URL(window.location.href).searchParams.get(
             'report'
           );
-          if (report) {
+          if (report && report === 'true') {
             const layerID = new URL(window.location.href).searchParams.get(
               'acLayer'
             );
@@ -323,7 +323,7 @@ export class MapController {
             }
           });
 
-          this.addMaskLayer();
+          this.addExtraLayers();
           this.initializeAndSetSketch();
         },
         (error: Error) => {
@@ -495,7 +495,7 @@ export class MapController {
         this._map
       );
 
-      this.addMaskLayer();
+      this.addExtraLayers();
 
       //Reorder layers on the map!
       this._map?.layers.forEach((layer: any) => {
@@ -511,20 +511,24 @@ export class MapController {
     console.log(this._map?.basemap);
   }
 
+  // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression
   // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
-  addMaskLayer(): void {
+  addExtraLayers(): void {
     const appSettings = store.getState().appSettings;
     const { layerPanel } = appSettings;
-    const maskLayer = layerPanel['extraLayers'].find(
-      (l: any) => l.id === 'MASK'
-    );
-    if (maskLayer) {
-      maskLayer.type = 'MASK';
-      const esriMaskLayer = LayerFactory(this._mapview, maskLayer);
-      if (esriMaskLayer && this._map) {
-        this._map.add(esriMaskLayer);
+    const extraLayers = layerPanel['extraLayers'];
+    extraLayers.forEach((exLayer: any) => {
+      let extraEsriLayer;
+      if (exLayer.id === 'MASK') {
+        exLayer.type = 'MASK';
+        extraEsriLayer = LayerFactory(this._mapview, exLayer);
+      } else {
+        extraEsriLayer = LayerFactory(this._mapview, exLayer);
       }
-    }
+      if (extraEsriLayer) {
+        this._map!.add(extraEsriLayer);
+      }
+    });
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
