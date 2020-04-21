@@ -10,14 +10,30 @@ import { mapController } from 'js/controllers/mapController';
 
 interface NestedLayerGroupProps {
   layersInGroup: any[];
+  groupConfig: any;
+  selectedLanguage: string;
 }
 const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
-  console.log(props);
+  console.log(props.groupConfig);
 
-  const layers = props.layersInGroup.map(layer => (
-    <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
-  ));
-  return <>{layers}</>;
+  const layerGroups = props.groupConfig.layers.map((lGroup: any) => {
+    console.log(lGroup);
+    const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
+    const layers = props.layersInGroup
+      .filter((layer: any) => nestedLayerIDs.includes(layer.id))
+      .map((layer: any) => (
+        <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
+      ));
+    return (
+      <div>
+        <p>
+          {props.groupConfig.label[props.selectedLanguage] || 'Untitled Group'}
+        </p>
+        {layers}
+      </div>
+    );
+  });
+  return <>{layerGroups}</>;
 };
 
 interface RadioLayerGroupProps {
@@ -116,7 +132,13 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
           </>
         );
       case 'nested':
-        return <NestedLayerGroup layersInGroup={layersInGroup} />;
+        return (
+          <NestedLayerGroup
+            layersInGroup={layersInGroup}
+            groupConfig={layerGroupConfig}
+            selectedLanguage={selectedLanguage}
+          />
+        );
       case 'radio':
         return <RadioLayerGroup layersInGroup={layersInGroup} />;
       default:
