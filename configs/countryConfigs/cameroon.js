@@ -613,8 +613,152 @@ module.exports = {
       label: {},
       layers: []
     },
+    GROUP_Hazards: {
+      order: 6,
+      groupType: 'radio',
+      label: {
+        en: 'Hazards',
+        ka: 'საფრთხეები'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'ForestHazard',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+          layerIds: [0],
+          opacity: 0.75,
+          label: {
+            en: 'Forest General Hazard Risk',
+            ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
+          }
+        },
+        {
+          order: 2,
+          id: 'Elevation',
+          type: 'dynamic',
+          opacity: 0.8,
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+          layerIds: [1],
+          label: {
+            en: 'Elevation in Forested Areas',
+            ka: 'სიმაღლე ტყიან ზონებში'
+          }
+        },
+        {
+          order: 3,
+          id: 'Slope',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+          layerIds: [0],
+          opacity: 0.8,
+          label: {
+            en: 'Slope in Forested Areas',
+            ka: 'დაქანება ტყიან ზონებში'
+          }
+        },
+        {
+          order: 4,
+          id: 'Aspect',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+          layerIds: [2],
+          opacity: 0.8,
+          label: {
+            en: 'Aspect in Forested Areas',
+            ka: 'ექსპოზიცია ტყიან ზონებში'
+          }
+        },
+        {
+          order: 5,
+          id: 'Landslide',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+          layerIds: [1],
+          opacity: 0.6,
+          label: {
+            en: 'Landslide Zoning',
+            ka: 'ბუნებრივი კატასტროფები'
+          },
+          popup: {
+            title: {
+              en: 'Landslide Zoning',
+              ka: 'ბუნებრივი კატასტროფები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'კატეგორია',
+                  fieldExpression: 'Category_KA'
+                },
+                {
+                  label: 'ფართობი ჰა',
+                  fieldExpression: 'Area_ha_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Category',
+                  fieldExpression: 'Category_EN'
+                },
+                {
+                  label: 'Area ha',
+                  fieldExpression: 'Area_ha_EN'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 6,
+          id: 'Debrisflow',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+          layerIds: [2],
+          opacity: 0.6,
+          label: {
+            en: 'Debrisflow Zoning',
+            ka: 'რისკის ზონები'
+          },
+          popup: {
+            title: {
+              en: 'Debrisflow Zoning',
+              ka: 'რისკის ზონები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'კატეგორია',
+                  fieldExpression: 'Category_KA'
+                },
+                {
+                  label: 'ფართობი ჰა',
+                  fieldExpression: 'Area_ha_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Category',
+                  fieldExpression: 'Category_EN'
+                },
+                {
+                  label: 'Area ha',
+                  fieldExpression: 'Area_ha_EN'
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
     GROUP_LCD: {
-      grouptype: 'default',
+      groupType: 'default',
       order: 7,
       label: {
         en: 'Land Cover Dynamics',
@@ -672,7 +816,7 @@ module.exports = {
     },
     GROUP_TEST: {
       // This is a test group consisting of various layers not related to cameroon, this should not make to PROD
-      grouptype: 'default',
+      groupType: 'default',
       order: 1,
       label: {
         en: 'TEST',
@@ -683,134 +827,10 @@ module.exports = {
         zh: 'TEST',
         ka: 'TEST'
       },
-      layers: [
-        {
-          order: 3,
-          id: 'CTC2',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-          layerIds: [3],
-          technicalName: 'ind_treecover2',
-          visible: true,
-          label: {
-            en:
-              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
-          }
-        },
-        {
-          order: 2,
-          id: 'CTC',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-          layerIds: [2],
-          technicalName: 'ind_treecover',
-          visible: true,
-          label: {
-            en:
-              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
-          }
-        },
-        {
-          order: 1,
-          id: 'MTC',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer',
-          layerIds: [1, 7],
-          technicalName: 'ind_statecarbon',
-          visible: true,
-          label: {
-            en:
-              'State-wise Potential for Increase in Above-ground Carbon Sequestration'
-          },
-          popup: {
-            title: {
-              en: ''
-            },
-            content: {
-              en: [
-                {
-                  label: 'Above-ground Carbon Sequestration Potential of India',
-                  fieldExpression: '*'
-                },
-                {
-                  label: 'In Protection Areas (million tonnes):',
-                  fieldExpression: 'Nat_prot'
-                },
-                {
-                  label: 'In Wide-scale Restoration Areas (million tonnes):',
-                  fieldExpression: 'Nat_widesc'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
-                  fieldExpression: 'Nat_Agri20'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
-                  fieldExpression: 'Nat_Agri40'
-                },
-                {
-                  label: 'In Other Areas (million tonnes):',
-                  fieldExpression: 'Nat_Others'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: 'Above-ground Carbon Sequestration Potential of',
-                  fieldExpression: 'ST_NM'
-                },
-                {
-                  label: 'In Protection Areas (million tonnes):',
-                  fieldExpression: 'Protection'
-                },
-                {
-                  label: 'In Wide-scale Restoration Areas (million tonnes):',
-                  fieldExpression: 'Widescale'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
-                  fieldExpression: 'Agri_tc20'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
-                  fieldExpression: 'Agri_tc40'
-                },
-                {
-                  label: 'In Other Areas (million tonnes)',
-                  fieldExpression: 'Others'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: 'This excludes protected areas. *',
-                  fieldExpression: '*'
-                }
-              ]
-            }
-          }
-        }
-      ]
+      layers: []
     },
     GROUP_LC: {
-      groupttype: 'default',
+      groupType: 'default',
       order: 3,
       label: {
         en: 'Land Cover',
@@ -861,7 +881,7 @@ module.exports = {
       ]
     },
     GROUP_IMAGERY: {
-      grouptype: 'imagery',
+      groupType: 'imagery',
       order: 4,
       label: {
         en: 'Recent Imagery',
@@ -981,15 +1001,37 @@ module.exports = {
       ]
     },
     extraLayers: [
-      {
-        id: 'MASK',
-        type: 'dynamic',
-        order: 10000,
-        url:
-          'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-        opacity: 0.35,
-        layerIds: [0]
-      },
+      // {
+      // id: 'MASKK',
+      // type: 'feature',
+      // order: 10000,
+      // url:
+      // 'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/LandCover/FeatureServer/0',
+      // opacity: 0.35
+      // },
+      // {
+      // order: 2,
+      // id: 'CTC',
+      // type: 'dynamic',
+      // url:
+      // 'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+      // layerIds: [2],
+      // technicalName: 'ind_treecover',
+      // visible: true,
+      // label: {
+      //   en:
+      //   'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+      // }
+      // },
+      // {
+      // id: 'MASK',
+      // type: 'dynamic',
+      // order: 10000,
+      // url:
+      //   'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+      // opacity: 0.35,
+      // layerIds: [0]
+      // },
       {
         id: 'LEGEND_LAYER',
         type: 'dynamic',
