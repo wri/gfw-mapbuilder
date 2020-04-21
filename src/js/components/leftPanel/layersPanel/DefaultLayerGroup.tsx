@@ -13,11 +13,68 @@ interface NestedLayerGroupProps {
   groupConfig: any;
   selectedLanguage: string;
 }
+
 const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
-  console.log(props.groupConfig);
+  const [activeGroups, setActiveGroups] = useState<string[]>([]);
+
+  function handleGroupToggle(val: string) {
+    //if activegroup is already in the list, remove it, otherwise add it
+    if (activeGroups.includes(val)) {
+      const index = activeGroups.indexOf(val);
+      let newGroupArray = [...activeGroups];
+      newGroupArray.splice(index, 1);
+      setActiveGroups(newGroupArray);
+    } else {
+      const newGroupArray = activeGroups.concat(val);
+      setActiveGroups(newGroupArray);
+    }
+  }
+
+  const LayerGroup = (props: any) => {
+    const { lGroup, layers, activeGroups, changeActiveGroups } = props;
+    // const [groupIsActive, setGroupIsActive] = useState(false);
+    function handleGroupToggle(groupID: string): void {
+      if (activeGroups.includes(groupID)) {
+        //Turn Off all layers
+        changeActiveGroups(groupID);
+        lGroup.nestedLayers.forEach((nestedLayer: any) => {
+          mapController.changeLayerVisibility(nestedLayer.id, false);
+        });
+      } else {
+        //Turn On all layers
+        changeActiveGroups(groupID);
+        lGroup.nestedLayers.forEach((nestedLayer: any) => {
+          mapController.changeLayerVisibility(nestedLayer.id, true);
+        });
+      }
+    }
+    return (
+      <div className="nested-group-container">
+        <div className="nested-group-top">
+          <div className="layer-checkbox">
+            <input
+              type="checkbox"
+              name="styled-checkbox"
+              className="styled-checkbox"
+              id={`layer-checkbox-${lGroup.id}`}
+              checked={activeGroups.includes(lGroup.id)}
+              onChange={() => handleGroupToggle(lGroup.id)}
+            />
+            <label
+              className="styled-checkboxlabel"
+              htmlFor={`layer-checkbox-${lGroup.id}`}
+            >
+              {'somelayer'}
+            </label>
+          </div>
+          <div>{lGroup.label[props.selectedLanguage] || 'Unitled Group'}</div>
+        </div>
+        <div>{layers}</div>
+      </div>
+    );
+  };
 
   const layerGroups = props.groupConfig.layers.map((lGroup: any) => {
-    console.log(lGroup);
     const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
     const layers = props.layersInGroup
       .filter((layer: any) => nestedLayerIDs.includes(layer.id))
@@ -25,14 +82,15 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
         <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
       ));
     return (
-      <div>
-        <p>
-          {props.groupConfig.label[props.selectedLanguage] || 'Untitled Group'}
-        </p>
-        {layers}
-      </div>
+      <LayerGroup
+        lGroup={lGroup}
+        layers={layers}
+        activeGroups={activeGroups}
+        changeActiveGroups={handleGroupToggle}
+      />
     );
   });
+
   return <>{layerGroups}</>;
 };
 
@@ -84,18 +142,19 @@ interface LayerGroupProps {
 }
 
 const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
-  const { selectedLanguage, leftPanel } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
+  const leftPanel = useSelector((store: RootState) => store.appState.leftPanel);
 
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
   );
 
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
   //If layer group is nested, layer ids are also nested, so find those appropriatly
-  let groupLayerIds: any[] = [];
+  let groupLayerIds: string[] = [];
   if (layerGroupConfig.groupType === 'nested') {
     layerGroupConfig.layers.forEach((lg: any) => {
       groupLayerIds = groupLayerIds.concat(
@@ -117,7 +176,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
     dispatch(setOpenLayerGroup(openGroupKey));
   };
 
-  function renderLayerGroup(): JSX.Element | null {
+  function renderLayerGroup(): JSX.Element {
     switch (layerGroupConfig.groupType) {
       case 'checkbox':
         return (

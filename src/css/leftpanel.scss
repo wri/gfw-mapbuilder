@@ -335,6 +335,13 @@
   }
 }
 
+.nested-group-top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 10px;
+  margin-top: 15px;
+}
+
 .layers-control-container {
   color: $dark-grey;
 
