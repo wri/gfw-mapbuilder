@@ -100,6 +100,7 @@ export function setNewGraphic({
 
     graphicsLayer.graphics.push(...allGraphics);
 
+    mapController.deleteSketchVM();
     mapController.initializeAndSetSketch(graphicsLayer.graphics);
 
     if (isUploadFile) {
