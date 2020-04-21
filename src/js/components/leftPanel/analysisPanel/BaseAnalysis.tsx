@@ -363,16 +363,18 @@ const BaseAnalysis = (): JSX.Element => {
                 className="orange-button base-analysis-size"
                 onClick={(): void => setEditSketch()}
               >
-                Edit
+                {analysisTranslations.editButton[selectedLanguage]}
               </button>
             ) : (
-              <button onClick={(): void => setSaveSketch()}>Save</button>
+              <button
+                className="orange-button base-analysis-size"
+                onClick={(): void => setSaveSketch()}
+              >
+                {analysisTranslations.saveButton[selectedLanguage]}
+              </button>
             )}
-            <button
-              className="generic-button"
-              onClick={(): void => setDelete()}
-            >
-              Delete
+            <button className="delete-button" onClick={(): void => setDelete()}>
+              {analysisTranslations.deleteButton[selectedLanguage]}
             </button>
           </div>
           <AnalysisOptions />

@@ -185,6 +185,10 @@
         border: none;
         font-family: 'Fira Sans', sans-serif;
         font-size: 14px;
+
+        &.delete-button {
+          color: #6f6f6f;
+        }
       }
 
       span {
