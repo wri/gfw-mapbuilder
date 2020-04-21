@@ -15,6 +15,8 @@ export interface AppSettings {
   narrative: string;
   alternativeNarrative: string;
   analysisModules: AnalysisModule[];
+  alternativeLanguageTitle: string;
+  iso: string;
 }
 
 type LayerGroupKey =
@@ -29,7 +31,7 @@ type LayerGroup = {
   [key in LayerGroupKey]: LayerGroupInfo;
 };
 
-interface AnalysisModule {
+export interface AnalysisModule {
   analysisId: string;
   chartType: string;
   label: { [key: string]: string };

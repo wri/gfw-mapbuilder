@@ -1,6 +1,8 @@
 import store from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
 import { selectActiveTab, setCanopyDensity } from 'js/store/appState/actions';
+import { LayerFeatureResult } from 'js/store/mapview/types';
+import { registerGeometry } from 'js/helpers/geometryRegistration';
 
 /* eslint no-case-declarations: 0 */
 
@@ -22,11 +24,48 @@ const urlEncodingMap = {
   me: 'modis_end_date'
 };
 
+function getGeostoreID(
+  activeFeatureIndex: number[],
+  activeFeatures: LayerFeatureResult[]
+): Promise<string> {
+  const activeLayer = activeFeatures[activeFeatureIndex[0]];
+  const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+  return registerGeometry(activeFeature)
+    .then(response => response.json())
+    .then(res => {
+      return res.data.id;
+    });
+}
+
 //Generates a shareable URL
-export function getShareableURL(): string {
+interface ShareURLProps {
+  report: boolean;
+}
+export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const urlParams = [];
 
   const { appState, mapviewState } = store.getState();
+
+  //Report boolean
+  urlParams.push(`report=${props.report}`);
+
+  //Active Feature geostoreID specificly for the report usecase
+  if (props.report) {
+    const geostoreID = await getGeostoreID(
+      mapviewState.activeFeatureIndex,
+      mapviewState.activeFeatures
+    );
+    urlParams.push(`geostoreID=${geostoreID}`);
+
+    //Report queries active feature for attributes, so we need objectID, layerID and subLayerID tracking also
+    const activeLayer =
+      mapviewState.activeFeatures[mapviewState.activeFeatureIndex[0]];
+    const activeFeature =
+      activeLayer.features[mapviewState.activeFeatureIndex[1]];
+    urlParams.push(`acLayer=${activeLayer.layerID}`);
+    urlParams.push(`acSublayer=${activeLayer.sublayerID}`);
+    urlParams.push(`objectid=${activeFeature.objectid}`);
+  }
 
   //Basemap LayerID
   const { activeBasemap } = mapviewState;
@@ -36,11 +75,13 @@ export function getShareableURL(): string {
   const { selectedLanguage } = appState;
   urlParams.push(`lang=${selectedLanguage}`);
 
-  //X Y Z
-  const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
-  console.log(zoom);
-  urlParams.push(`z=${zoom}`);
-  urlParams.push(`coords=${longitude}%2C${latitude}`);
+  //X Y Z, In case of Report, we do not need this, because we are zooming to the active feature
+  if (!props.report) {
+    const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
+    console.log(zoom);
+    urlParams.push(`z=${zoom}`);
+    urlParams.push(`coords=${longitude}%2C${latitude}`);
+  }
 
   //Canopy Density Value
   const { density } = appState.leftPanel;

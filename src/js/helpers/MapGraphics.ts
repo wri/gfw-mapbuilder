@@ -12,6 +12,62 @@ import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
 
 import { FeatureResult } from 'js/store/mapview/types';
 
+import store from 'js/store/index';
+
+import { setActiveFeatures } from 'js/store/mapview/actions';
+
+const setSymbol = (symbolType: string): any => {
+  switch (symbolType) {
+    case 'polygon':
+      return getCustomSymbol();
+    case 'point':
+      return getPointSymbol();
+    default:
+      console.warn('potential edge case in setSymbol()', symbolType);
+      return getCustomSymbol();
+  }
+};
+
+const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
+  switch (symbolType) {
+    case 'polygon':
+      return new Polygon(geometry);
+    case 'point':
+      return new Point(geometry);
+    default:
+      console.warn('potential edge case in setGeometry()', symbolType);
+      return new Polygon(geometry);
+  }
+};
+
+//Helper for Report graphics in order to add POINT to the map
+export function addPointGraphic(map: Map, feature: any): void {
+  let graphicsLayer: any = map.findLayerById('active-feature-layer');
+  let graphicsLayerExists = graphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+    graphicsLayerExists = true;
+  } else {
+    graphicsLayer = new GraphicsLayer({
+      id: 'active-feature-layer'
+    });
+    graphicsLayerExists = false;
+  }
+  const symbol = setSymbol('point');
+  const geometry = new Point({
+    x: feature.geometry.x,
+    y: feature.geometry.y
+  });
+  const pointGraphic = new Graphic({
+    symbol: symbol,
+    geometry: geometry
+  });
+  graphicsLayer.add(pointGraphic);
+  if (!graphicsLayerExists) {
+    map.add(graphicsLayer);
+  }
+}
+
 interface GraphicConfig {
   map: Map;
   mapview: Mapview;
@@ -99,8 +155,6 @@ export function setNewGraphic({
     });
 
     graphicsLayer.graphics.push(...allGraphics);
-
-    mapController.deleteSketchVM();
     mapController.initializeAndSetSketch(graphicsLayer.graphics);
 
     if (isUploadFile) {

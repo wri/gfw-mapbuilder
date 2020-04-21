@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef } from 'react';
+import React, { FunctionComponent, useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
@@ -13,12 +13,14 @@ import { getShareableURL } from 'js/helpers/shareFunctionality';
 
 const ShareContent: FunctionComponent = () => {
   const urlRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const { allAvailableLayers } = useSelector(
-    (state: RootState) => state.mapviewState
+  const allAvailableLayers = useSelector(
+    (state: RootState) => state.mapviewState.allAvailableLayers
   );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
+
+  const [urlValue, setUrlValue] = useState<any>('');
   const { title, instructions } = shareContent[selectedLanguage];
   const popupDimensions = 'toolbar=0,status=0,height=650,width=450';
 
@@ -47,11 +49,35 @@ const ShareContent: FunctionComponent = () => {
     );
   };
 
-  const returnURL = (): string => {
-    const stateUrl = getShareableURL();
-    const baseUrl = new URL(window.location.href).origin;
-    return `${baseUrl}?${stateUrl}`;
-  };
+  useEffect((): any => {
+    async function returnURL(): Promise<void> {
+      //Let's check if we are in the report mode or not
+      const reportParam = new URL(window.location.href).searchParams.get(
+        'report'
+      );
+      let reportView;
+      if (reportParam) {
+        reportView = reportParam === 'true';
+      } else {
+        reportView = false;
+      }
+
+      const baseUrl = new URL(window.location.href);
+
+      if (reportView) {
+        //If we are in Report VIEW, we already have a share URL, no need to do anything
+        setUrlValue(baseUrl);
+      } else {
+        //Construct share URL based on parameters. For REPORT view, we need to register geometry and
+        //get back geostoreID to add to the URL, for NORMAL views we do not share the active feature
+        //so that is not done currently.
+        const stateUrl = await getShareableURL({ report: reportView });
+        const urlVal = `${baseUrl}?${stateUrl}`;
+        setUrlValue(urlVal);
+      }
+    }
+    returnURL();
+  }, []);
 
   return (
     <div className="modal-content-container">
@@ -59,7 +85,7 @@ const ShareContent: FunctionComponent = () => {
         <h4 className="title">{title}</h4>
         <p>{instructions}</p>
         <div className="copy-link-wrapper">
-          <input type="text" readOnly value={returnURL()} ref={urlRef}></input>
+          <input type="text" readOnly value={urlValue} ref={urlRef}></input>
           <button onClick={(): void => copyURLToClipboard()}>COPY</button>
         </div>
         <div className="share-button-wrapper">

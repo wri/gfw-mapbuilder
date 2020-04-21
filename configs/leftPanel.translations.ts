@@ -206,6 +206,44 @@ export const basemapLayersContent = {
   ]
 };
 
+export const layersPanelTranslations = {
+  en: {
+    layers: 'Layers',
+    selectAll: 'Select All',
+    clearAll: 'Clear All'
+  },
+  fr: {
+    layers: 'Couches',
+    selectAll: 'Tout sélectionner',
+    clearAll: 'Tout effacer'
+  },
+  es: {
+    layers: 'Capas',
+    selectAll: 'Seleccionar Todo',
+    clearAll: 'Borrar Todo'
+  },
+  pt: {
+    layers: 'Camadas',
+    selectAll: 'Selecionar tudo',
+    clearAll: 'Limpar tudo'
+  },
+  id: {
+    layers: 'Layers',
+    selectAll: 'Select All',
+    clearAll: 'Clear All'
+  },
+  zh: {
+    layers: '图层',
+    selectAll: '全选',
+    clearAll: '全部清除'
+  },
+  ka: {
+    layers: 'ფენები',
+    selectAll: 'ყველაფრის მონიშვნა',
+    clearAll: 'ყველაფრის წაშლა'
+  }
+};
+
 export const documentsContent = {
   en: {
     instructions:

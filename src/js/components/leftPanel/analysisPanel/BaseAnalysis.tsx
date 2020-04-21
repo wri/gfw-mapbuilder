@@ -13,6 +13,10 @@ import 'css/leftpanel.scss';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { PrintReportButton } from 'js/components/sharedComponents/PrintReportButton';
+import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.svg';
+import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
+import Loader from 'js/components/sharedComponents/Loader';
 import { mapController } from 'js/controllers/mapController';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
@@ -47,6 +51,10 @@ const AnalysisSpinner = (): React.ReactElement => (
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
+  const [chartDownloadURL, setChartDownloadURL] = useState('');
+  const [chartDownTitle, setChartDownTitle] = useState('');
+  const [base64ChartURL, setBase64ChartURL] = useState('');
+  const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
   const [renderEditButton, setRenderEditButton] = useState(true);
   //This is used for date picker analysis module
 
@@ -150,6 +158,8 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   function runAnalysis() {
+    setBase64ChartURL('');
+    setVegaSpec(null);
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
@@ -167,6 +177,31 @@ const BaseAnalysis = (): JSX.Element => {
         .then((analysisMod: any) => {
           //TODO: we need to handle loading and error states
           setVegaSpec(analysisMod.data.attributes.widgetConfig);
+          const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${mod.widgetId}/metadata?language=${selectedLanguage}`;
+          const widgetConfigData =
+            analysisMod.data.attributes.widgetConfig.data;
+          const downloadUrl = widgetConfigData.find(
+            (e: any) => e.name === 'data'
+          );
+
+          if (!downloadUrl) return;
+          fetch(downloadUrl.url)
+            .then((response: any) => response.json())
+            .then((data: any) => {
+              const chartTitle =
+                data.data && data.data.type
+                  ? data.data.type + '-analysis.png'
+                  : 'analysis.png';
+              //unclear why are we matching 'month' here but that's how it was done in 3x
+              if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
+                setChartDownTitle(chartTitle);
+                setChartDownloadURL(
+                  'https://production-api.globalforestwatch.org' +
+                    data.data.attributes.downloadUrls.csv
+                );
+              }
+            })
+            .catch((e: Error) => console.error(e));
         });
     }
   }
@@ -309,6 +344,14 @@ const BaseAnalysis = (): JSX.Element => {
       ? `${activeLayer.layerTitle}: ${activeLayer.sublayerTitle}`
       : returnLayerTitle;
 
+  function handleCloseDownloadOptions(): void {
+    setDownloadOptionsVisible(false);
+  }
+
+  function handlePNGURL(base64: string): void {
+    setBase64ChartURL(base64);
+  }
+
   return (
     <>
       {geostoreReady ? (
@@ -328,7 +371,45 @@ const BaseAnalysis = (): JSX.Element => {
               <AnalysisInstructions />
             </div>
           )}
-          {vegaSpec && <VegaChart spec={vegaSpec} />}
+          {vegaSpec && (
+            <>
+              <div
+                style={{ cursor: 'pointer', float: 'right' }}
+                onClick={(): void =>
+                  setDownloadOptionsVisible(!downloadOptionsVisible)
+                }
+              >
+                <DownloadIcon width={25} height={25} />
+                {downloadOptionsVisible && (
+                  <DownloadOptions
+                    report={false}
+                    csv={chartDownloadURL}
+                    chartDownTitle={chartDownTitle}
+                    base64ChartURL={base64ChartURL}
+                    closeCB={handleCloseDownloadOptions}
+                  />
+                )}
+              </div>
+              <VegaChart
+                spec={vegaSpec}
+                language={selectedLanguage}
+                sendBackURL={handlePNGURL}
+              />
+              {base64ChartURL === '' && (
+                <Loader
+                  containerPositionStyling={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-25px',
+                    marginLeft: '-25px'
+                  }}
+                  color={'#cfcdcd'}
+                  size={50}
+                />
+              )}
+            </>
+          )}
           <button
             disabled={selectedAnalysis === 'default'}
             className={
@@ -340,6 +421,9 @@ const BaseAnalysis = (): JSX.Element => {
           >
             {analysisTranslations.runAnalysisButton[selectedLanguage]}
           </button>
+          <div className="print-button-container">
+            <PrintReportButton />
+          </div>
         </div>
       ) : (
         <AnalysisSpinner />

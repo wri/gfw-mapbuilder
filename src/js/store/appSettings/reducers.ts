@@ -5,7 +5,7 @@ const initialState: AppSettings = {
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  logoLinkUrl: 'https://developers.globalforestwatch.org/map-builder/',
   useAlternativeLanguage: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
@@ -13,6 +13,7 @@ const initialState: AppSettings = {
   printServiceUrl:
     'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
   language: 'en',
+  iso: '',
   layerPanel: {
     GROUP_WEBMAP: {},
     GROUP_BASEMAP: {},
@@ -23,6 +24,7 @@ const initialState: AppSettings = {
   },
   narrative: '',
   alternativeNarrative: '',
+  alternativeLanguageTitle: '',
   analysisModules: [
     {
       analysisId: '',

@@ -6,7 +6,7 @@ import { getDocuments } from 'js/helpers/mapController/Documents';
 import { RootState } from 'js/store';
 import { AttachmentWithURLProps } from 'js/interfaces/Attachment';
 
-import { documentsContent } from 'configs/leftPanel.config';
+import { documentsContent } from 'configs/leftPanel.translations';
 
 import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
 
