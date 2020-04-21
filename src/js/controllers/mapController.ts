@@ -621,6 +621,27 @@ export class MapController {
     }
   }
 
+  changeLayerVisibility(layerID: string, visibility: boolean): void {
+    const layer = mapController._map?.findLayerById(layerID);
+    if (layer) {
+      //1. update the map
+      layer.visible = visibility;
+      //2. Update redux
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            visible: layer.visible
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
+    }
+  }
+
   toggleLayerVisibility(
     layerID: string,
     sublayer?: boolean,
