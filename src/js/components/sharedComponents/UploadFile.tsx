@@ -139,8 +139,6 @@ const UploadFile = (): JSX.Element => {
 
             dispatch(setActiveFeatureIndex([0, 0]));
             dispatch(setActiveFeatures([shapeFileFeatures]));
-
-            // mapController.processGeojson(arcGISResults);
           } else {
             // TODO [ ] - error handling logic if array is empty
           }

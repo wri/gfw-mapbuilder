@@ -747,11 +747,6 @@ export class MapController {
   }
 
   initializeAndSetSketch(graphics = []): void {
-    // const activeFeatures = store.getState().mapviewState.activeFeatures;
-    // const activeFeatureIndex = store.getState().mapviewState.activeFeatureIndex;
-    // const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
-    // const activeFeature = activeLayerInfo.features[activeFeatureIndex[1]];
-
     if (this._sketchVMGraphicsLayer) {
       this._sketchVMGraphicsLayer.graphics.removeAll();
     }
@@ -762,19 +757,6 @@ export class MapController {
 
     if (graphics.length) {
       this._sketchVMGraphicsLayer.graphics.addMany(graphics);
-
-      // const graphic = graphics.filter(
-      //   (graphic: any) =>
-      //     graphic.attributes.geostoreId === activeFeature.attributes.geostoreId
-      // ) as any; // ? do I even need this?
-
-      // console.log('graphic', graphic);
-
-      // (this._sketchVMGraphicsLayer.graphics as any).items.push(graphic);
-      // this._sketchVMGraphicsLayer.graphics.push(activeFeature as any); // * DIDN'T WORK
-      // TODO [ ] When user clicks the next button, next steps may involve
-      // TODO [ ] removing the graphic on this._sketchVMGraphicsLayer
-      // todo and adding the activeFeature instead
     }
 
     this._sketchVM = new SketchViewModel({
