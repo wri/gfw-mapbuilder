@@ -1116,7 +1116,6 @@ export class MapController {
   }
 
   processGeojson(esriJson: Array<FeatureResult>): void {
-    console.log('processGeojson()');
     if (this._map) {
       setNewGraphic({
         map: this._map,
