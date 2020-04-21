@@ -8,6 +8,18 @@ import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
 
+interface NestedLayerGroupProps {
+  layersInGroup: any[];
+}
+const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
+  console.log(props);
+
+  const layers = props.layersInGroup.map(layer => (
+    <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
+  ));
+  return <>{layers}</>;
+};
+
 interface RadioLayerGroupProps {
   layersInGroup: any[];
 }
@@ -67,8 +79,16 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
   //If layer group is nested, layer ids are also nested, so find those appropriatly
-  console.log(layerGroupKey);
-  const groupLayerIds = layerGroupConfig.layers.map((layer: any) => layer.id);
+  let groupLayerIds: any[] = [];
+  if (layerGroupConfig.groupType === 'nested') {
+    layerGroupConfig.layers.forEach((lg: any) => {
+      groupLayerIds = groupLayerIds.concat(
+        lg.nestedLayers.map((l: any) => l.id)
+      );
+    });
+  } else {
+    groupLayerIds = layerGroupConfig.layers.map((layer: any) => layer.id);
+  }
   const layerGroupTitle =
     layerGroupConfig.label?.[selectedLanguage] || 'Untranslated Layer Group';
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
@@ -96,7 +116,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
           </>
         );
       case 'nested':
-        return null;
+        return <NestedLayerGroup layersInGroup={layersInGroup} />;
       case 'radio':
         return <RadioLayerGroup layersInGroup={layersInGroup} />;
       default:
