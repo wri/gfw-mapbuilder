@@ -357,14 +357,24 @@ const BaseAnalysis = (): JSX.Element => {
       {geostoreReady ? (
         <div className="base-analysis-content">
           <div className="layer-title">
-            {title === null ? 'User Drawn Feature' : title}
+            <span>{title === null ? 'User Drawn Feature' : title}</span>
+            {renderEditButton ? (
+              <button
+                className="orange-button base-analysis-size"
+                onClick={(): void => setEditSketch()}
+              >
+                Edit
+              </button>
+            ) : (
+              <button onClick={(): void => setSaveSketch()}>Save</button>
+            )}
+            <button
+              className="generic-button"
+              onClick={(): void => setDelete()}
+            >
+              Delete
+            </button>
           </div>
-          {renderEditButton ? (
-            <button onClick={(): void => setEditSketch()}>Edit</button>
-          ) : (
-            <button onClick={(): void => setSaveSketch()}>Save</button>
-          )}
-          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">
