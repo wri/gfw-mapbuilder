@@ -1000,6 +1000,113 @@ module.exports = {
         }
       ]
     },
+    GROUP_Orth: {
+      groupType: 'nested',
+      order: 8,
+      label: {
+        en: 'Orthophotos/Topographic Maps',
+        ka: 'ორთოფოტოები/ტოპოგრაფიული რუკები'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'ortho',
+          label: {
+            en: 'Orthophotos',
+            ka: 'ორთოფოტოები'
+          },
+          nestedLayers: [
+            {
+              id: 'Adjara',
+              order: 1,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2015_ADJARA/wmts/ORTHO_2015_ADJARA/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2015 Adjara',
+                ka: 'აჭარის ა/რ 2015'
+              }
+            },
+            {
+              id: 'Samegrelo',
+              order: 2,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2015_SAMEGRELO/wmts/ORTHO_2015_SAMEGRELO/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2015 Samegrelo',
+                ka: 'სამეგრელო 2015'
+              }
+            },
+            {
+              id: 'Vere',
+              order: 3,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2015_VERE/wmts/ORTHO_2015_VERE/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2015 Vere',
+                ka: 'ვერეს ხეობა 2015'
+              }
+            },
+            {
+              id: 'Norv',
+              order: 4,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2016-17_NORV/wmts/ORTHO_2016-17_NORV/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2016-17 Norv',
+                ka: 'ორთოფოტო გეგმა 2016-2017'
+              }
+            },
+            {
+              id: 'Dasavleti',
+              order: 5,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2014_DASAVLETI/wmts/ORTHO_2014_DASAVLETI/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2014 Dasavleti',
+                ka: 'დასავლეთი 2014'
+              }
+            }
+          ]
+        },
+        {
+          order: 2,
+          id: 'topo',
+          label: {
+            en: 'Topographic Maps',
+            ka: 'ტოპოგრაფიული რუკები'
+          },
+          nestedLayers: [
+            {
+              id: 'Topo1000',
+              order: 1,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/TOPO_10k_1952_2007/wmts/TOPO_10000_1952_2007/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: 'TOPO 10000 1952_2007',
+                ka: '10 000 - იანი ტოპოგრაფიული რუკები 1952-2007'
+              }
+            },
+            {
+              id: 'TOPO50000',
+              order: 1,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/TOPO_50k_GEO_2007/wmts/TOPO_50000_GEO_2007/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: 'TOPO 50000 GEO_2007',
+                ka: '50 000 - იანი ტოპოგრაფიული რუკები 2007'
+              }
+            }
+          ]
+        }
+      ]
+    },
     extraLayers: [
       // {
       // id: 'MASKK',
