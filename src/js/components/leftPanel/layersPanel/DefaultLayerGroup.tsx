@@ -22,8 +22,11 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
+  //If layer group is nested, layer ids are also nested, so find those appropriatly
+  console.log(layerGroupKey);
   const groupLayerIds = layerGroupConfig.layers.map((layer: any) => layer.id);
-  const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage];
+  const layerGroupTitle =
+    layerGroupConfig.label?.[selectedLanguage] || 'Untranslated Layer Group';
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
   const handleGroupToggle = () => {
@@ -47,7 +50,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
         {allAvailableLayers
-          .filter(laya => groupLayerIds.includes(laya.id))
+          .filter(l => groupLayerIds.includes(l.id))
           .map(layer => (
             <GenericLayerControl id={layer.id} key={layer.id} />
           ))}
