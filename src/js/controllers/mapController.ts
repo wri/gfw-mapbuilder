@@ -234,12 +234,9 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              let legendInfoObject;
-              try {
-                legendInfoObject = await fetchLegendInfo(remoteLayerObject.url);
-              } catch (e) {
-                console.error('Error fetching Legend Info', e);
-              }
+              const legendInfoObject = await fetchLegendInfo(
+                remoteLayerObject.url
+              );
               const layerLegendInfo =
                 legendInfoObject &&
                 legendInfoObject?.layers.filter((l: any) =>
