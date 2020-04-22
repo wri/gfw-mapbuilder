@@ -37,6 +37,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
   const layerGroupsToRender = Object.keys(layerPanel)
     .sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order)
     .map((layerGroupKey: string) => {
+      console.log(layerGroupKey, layerPanel[layerGroupKey]);
       switch (layerGroupKey) {
         case 'GROUP_WEBMAP':
           return (

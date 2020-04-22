@@ -685,6 +685,17 @@ module.exports = {
       },
       layers: [
         {
+          // * NEW!!!
+          order: 4,
+          id: 'TESTINGGGGG',
+          type: 'dynamic',
+          url:
+            'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/AGOL_Full_Metadata/FeatureServer/0',
+          layerIds: [4],
+          technicalName: 'testinggggg_gggg',
+          visible: true
+        },
+        {
           order: 3,
           id: 'CTC2',
           type: 'dynamic',

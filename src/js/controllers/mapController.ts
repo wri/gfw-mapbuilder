@@ -115,13 +115,22 @@ export class MapController {
     //   }
     // });
 
+    // http://gis-forest-atlas.wri.org/arcgis/rest/services/CMR/CMR_Online_En/MapServer
+
     this._map = new WebMap({
       portalItem: {
-        id: '168f2b9b1da3438189c49c9e80e27342'
+        id: webmapID //'d8a7fd2ea0424af6b2ccf903b43277b8'
       }
     });
 
-    (this._map as any).load();
+    /** TODO layers to extract
+     * layer w/full metadata - https://blueraster.maps.arcgis.com/home/item.html?id=0a8c80dc2ab745c1ab28bbcdbc106e60
+     *  - https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/Layer_with_description_and_summary/FeatureServer/0
+     *  - https://gis-gfw.wri.org/arcgis/rest/services/country_data/africa/MapServer/1
+     *
+     */
+
+    // (this._map as any).load();
 
     this._mapview = new MapView({
       map: this._map,
