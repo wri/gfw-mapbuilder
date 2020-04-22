@@ -21,7 +21,7 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
     //if activegroup is already in the list, remove it, otherwise add it
     if (activeGroups.includes(val)) {
       const index = activeGroups.indexOf(val);
-      let newGroupArray = [...activeGroups];
+      const newGroupArray = [...activeGroups];
       newGroupArray.splice(index, 1);
       setActiveGroups(newGroupArray);
     } else {
@@ -74,22 +74,26 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
     );
   };
 
-  const layerGroups = props.groupConfig.layers.map((lGroup: any) => {
-    const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
-    const layers = props.layersInGroup
-      .filter((layer: any) => nestedLayerIDs.includes(layer.id))
-      .map((layer: any) => (
-        <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
-      ));
-    return (
-      <LayerGroup
-        lGroup={lGroup}
-        layers={layers}
-        activeGroups={activeGroups}
-        changeActiveGroups={handleGroupToggle}
-      />
-    );
-  });
+  const layerGroups = props.groupConfig.layers.map(
+    (lGroup: any, k: number): JSX.Element => {
+      const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
+      const layers = props.layersInGroup
+        .filter((layer: any) => nestedLayerIDs.includes(layer.id))
+        .map((layer: any, i: number) => (
+          <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
+        ));
+      return (
+        <LayerGroup
+          key={k}
+          selectedLanguage={props.selectedLanguage}
+          lGroup={lGroup}
+          layers={layers}
+          activeGroups={activeGroups}
+          changeActiveGroups={handleGroupToggle}
+        />
+      );
+    }
+  );
 
   return <>{layerGroups}</>;
 };
