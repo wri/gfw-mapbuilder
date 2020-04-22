@@ -234,9 +234,10 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              const legendInfoObject = await fetchLegendInfo(
-                remoteLayerObject.url
-              );
+              const legendInfoObject =
+                remoteLayerObject.type !== 'webtiled'
+                  ? await fetchLegendInfo(remoteLayerObject.url)
+                  : undefined;
               const layerLegendInfo =
                 legendInfoObject &&
                 legendInfoObject?.layers.filter((l: any) =>
@@ -515,10 +516,6 @@ export class MapController {
         }
       });
     });
-  }
-
-  log(): void {
-    console.log(this._map?.basemap);
   }
 
   // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression
@@ -1687,16 +1684,13 @@ export class MapController {
         layerOnMap.definitionExpression = defExp;
       }
     } else if (layerInfo.type === 'dynamic') {
-      console.log(layerInfo);
       const layerOnMap = this._map?.findLayerById(
         layerInfo.id
       ) as __esri.MapImageLayer;
       if (layerOnMap) {
-        console.log(layerOnMap);
         layerOnMap.allSublayers.forEach(
           sub => (sub.definitionExpression = defExp)
         );
-        console.log(layerOnMap);
       }
     }
   }
