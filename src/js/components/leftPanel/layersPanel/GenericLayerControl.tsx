@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
+import LayerRadioButton from './LayerRadioButton';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRange from './DateRange';
@@ -19,6 +20,9 @@ interface LayerControlProps {
   id: string;
   sublayer?: boolean;
   parentID?: string;
+  type: 'radio' | 'checkbox' | 'nested' | 'default';
+  activeLayer?: string;
+  sendActiveLayer?: (val: string) => void;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
@@ -86,15 +90,36 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  return (
-    <>
-      <div className="layers-control-checkbox">
+  const returnLayerControl = (): JSX.Element => {
+    function handleLayerRadioClick(val: string) {
+      if (props.sendActiveLayer) {
+        props.sendActiveLayer(val);
+      }
+    }
+    if (props.type === 'radio') {
+      return (
+        <LayerRadioButton
+          layerID={props.id}
+          activeLayerID={props.activeLayer}
+          handleLayerRadioClick={handleLayerRadioClick}
+        />
+      );
+    } else {
+      return (
         <LayerToggleSwitch
           layerIsVisible={layer?.visible}
           layerID={props.id}
           sublayer={props.sublayer}
           parentID={props.parentID}
         />
+      );
+    }
+  };
+
+  return (
+    <>
+      <div className="layers-control-checkbox">
+        {returnLayerControl()}
         <div className="title-wrapper">
           <span className="layer-label">{layer?.title}</span>
           {returnSubtitle()}
