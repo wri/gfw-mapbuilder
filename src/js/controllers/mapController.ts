@@ -1677,6 +1677,29 @@ export class MapController {
       event.stopPropagation();
     });
   }
+
+  changeLayerDefinitionExpression(layerInfo: LayerProps, defExp: string): void {
+    if (layerInfo.type === 'feature') {
+      const layerOnMap = this._map?.findLayerById(
+        layerInfo.id
+      ) as __esri.FeatureLayer;
+      if (layerOnMap) {
+        layerOnMap.definitionExpression = defExp;
+      }
+    } else if (layerInfo.type === 'dynamic') {
+      console.log(layerInfo);
+      const layerOnMap = this._map?.findLayerById(
+        layerInfo.id
+      ) as __esri.MapImageLayer;
+      if (layerOnMap) {
+        console.log(layerOnMap);
+        layerOnMap.allSublayers.forEach(
+          sub => (sub.definitionExpression = defExp)
+        );
+        console.log(layerOnMap);
+      }
+    }
+  }
 }
 
 export const mapController = new MapController();

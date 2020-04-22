@@ -9,13 +9,10 @@ import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRange from './DateRange';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
-
 import { RootState } from 'js/store';
-
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
-
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
-import { FeatureResult } from 'js/store/mapview/types';
+import { mapController } from 'js/controllers/mapController';
 
 interface LayerInfo {
   layerInfo: any;
@@ -24,6 +21,17 @@ interface LayerInfo {
 const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
   const { layerInfo, selectedLanguage } = props;
   const [options, setOptions] = React.useState<any>([]);
+
+  function handleFilterSelection(option: any): void {
+    let defExpression;
+    if (option) {
+      defExpression = `${layerInfo.filterField[selectedLanguage]} = '${option.value}'`;
+    } else {
+      defExpression = '1=1';
+    }
+    mapController.changeLayerDefinitionExpression(layerInfo, defExpression);
+  }
+
   React.useEffect(() => {
     //Fetch Selections on load
     async function getFilters(): Promise<void> {
@@ -73,10 +81,43 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
     getFilters();
   }, []);
 
+  const customStyles = {
+    clearIndicator: (provided: any, state: any) => ({
+      ...provided,
+      cursor: 'pointer',
+      padding: '4px'
+    }),
+    dropdownIndicator: (provided: any, state: any) => ({
+      ...provided,
+      cursor: 'pointer',
+      padding: '4px'
+    }),
+    container: (provided: any, state: any) => ({
+      ...provided,
+      fontSize: '12px',
+      width: '200px'
+    }),
+    indicatorsContainer: (provided: any, state: any) => ({
+      ...provided,
+      padding: '4px'
+    }),
+    control: (provided: any, state: any) => ({
+      ...provided,
+      minHeight: '20px'
+    })
+  };
+
   return (
-    <div>
-      <p>Filter</p>
-      <Select options={options} />
+    <div className="layer-filter-container">
+      <p style={{ fontSize: '11px' }}>Filter by category</p>
+      <Select
+        styles={customStyles}
+        placeholder="None Selected"
+        options={options}
+        isSearchable
+        onChange={handleFilterSelection}
+        isClearable={true}
+      />
     </div>
   );
 };
