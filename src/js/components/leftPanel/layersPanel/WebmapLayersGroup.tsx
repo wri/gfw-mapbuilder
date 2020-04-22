@@ -52,6 +52,7 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
               parentID={layer.parentID}
               id={layer.id}
               key={layer.id}
+              type="default"
             />
           ))}
       </div>

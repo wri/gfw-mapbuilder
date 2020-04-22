@@ -361,9 +361,20 @@ export class MapController {
         return groupName !== 'GROUP_BASEMAP' && groupName !== 'extraLayers';
       })
       .reduce((list, groupName, groupIndex) => {
-        const orderedGroups = layerPanel[groupName].layers.map((layer: any) => {
-          return { groupId: groupName, ...layer };
-        });
+        let orderedGroups;
+        if (layerPanel[groupName]?.groupType === 'nested') {
+          let allNestedLayers: any[] = [];
+          layerPanel[groupName].layers.forEach((layerG: any) => {
+            allNestedLayers = allNestedLayers.concat(layerG.nestedLayers);
+          });
+          orderedGroups = allNestedLayers.map((layer: any) => {
+            return { groupId: groupName, ...layer };
+          });
+        } else {
+          orderedGroups = layerPanel[groupName].layers.map((layer: any) => {
+            return { groupId: groupName, ...layer };
+          });
+        }
         return list.concat(orderedGroups);
       }, []);
 
@@ -607,6 +618,27 @@ export class MapController {
         allFeatures: specificFeature,
         isUploadFile: false
       });
+    }
+  }
+
+  changeLayerVisibility(layerID: string, visibility: boolean): void {
+    const layer = mapController._map?.findLayerById(layerID);
+    if (layer) {
+      //1. update the map
+      layer.visible = visibility;
+      //2. Update redux
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            visible: layer.visible
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
 
