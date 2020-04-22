@@ -353,11 +353,11 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   const returnButtons = (): JSX.Element | undefined => {
-    if ((activeLayer as any).userClickedMap) {
-      return;
-    }
+    const isUploadOrDrawn =
+      (activeLayer as any).layerID === 'user_features' ||
+      (activeLayer as any).layerID === 'upload_file_features';
 
-    if (renderEditButton) {
+    if (isUploadOrDrawn && renderEditButton) {
       return (
         <>
           <button
@@ -371,7 +371,9 @@ const BaseAnalysis = (): JSX.Element => {
           </button>
         </>
       );
-    } else {
+    }
+
+    if (isUploadOrDrawn && renderEditButton === false) {
       return (
         <>
           <button
