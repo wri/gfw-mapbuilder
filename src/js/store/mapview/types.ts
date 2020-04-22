@@ -130,6 +130,7 @@ export interface LayerFeatureResult {
   sublayerID?: string;
   features: FeatureResult[];
   fieldNames: FieldName[] | null;
+  userClickedMap?: boolean;
 }
 
 //Action types

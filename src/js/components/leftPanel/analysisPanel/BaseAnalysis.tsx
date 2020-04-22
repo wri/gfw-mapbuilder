@@ -352,30 +352,49 @@ const BaseAnalysis = (): JSX.Element => {
     setBase64ChartURL(base64);
   }
 
+  const returnButtons = (): JSX.Element | undefined => {
+    if ((activeLayer as any).userClickedMap) {
+      return;
+    }
+
+    if (renderEditButton) {
+      return (
+        <>
+          <button
+            className="orange-button base-analysis-size"
+            onClick={(): void => setEditSketch()}
+          >
+            {analysisTranslations.editButton[selectedLanguage]}
+          </button>
+          <button className="delete-button" onClick={(): void => setDelete()}>
+            {analysisTranslations.deleteButton[selectedLanguage]}
+          </button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <button
+            className="orange-button base-analysis-size"
+            onClick={(): void => setSaveSketch()}
+          >
+            {analysisTranslations.saveButton[selectedLanguage]}
+          </button>
+          <button className="delete-button" onClick={(): void => setDelete()}>
+            {analysisTranslations.deleteButton[selectedLanguage]}
+          </button>
+        </>
+      );
+    }
+  };
+
   return (
     <>
       {geostoreReady ? (
         <div className="base-analysis-content">
           <div className="layer-title">
             <span>{title === null ? 'User Drawn Feature' : title}</span>
-            {renderEditButton ? (
-              <button
-                className="orange-button base-analysis-size"
-                onClick={(): void => setEditSketch()}
-              >
-                {analysisTranslations.editButton[selectedLanguage]}
-              </button>
-            ) : (
-              <button
-                className="orange-button base-analysis-size"
-                onClick={(): void => setSaveSketch()}
-              >
-                {analysisTranslations.saveButton[selectedLanguage]}
-              </button>
-            )}
-            <button className="delete-button" onClick={(): void => setDelete()}>
-              {analysisTranslations.deleteButton[selectedLanguage]}
-            </button>
+            {returnButtons()}
           </div>
           <AnalysisOptions />
           {!vegaSpec && (

@@ -206,7 +206,8 @@ export async function queryLayersForFeatures(
               sublayerID: sublayer.id,
               sublayerTitle: sublayer.title,
               features: features,
-              fieldNames
+              fieldNames,
+              userClickedMap: true
             });
           }
         }
@@ -229,7 +230,8 @@ export async function queryLayersForFeatures(
               layerID: layer.id,
               layerTitle: layer.title,
               features: features,
-              fieldNames
+              fieldNames,
+              userClickedMap: true
             });
           }
         } else {
@@ -245,7 +247,8 @@ export async function queryLayersForFeatures(
               layerID: layer.id,
               layerTitle: layer.title,
               features: features,
-              fieldNames
+              fieldNames,
+              userClickedMap: true
             });
           }
         }
