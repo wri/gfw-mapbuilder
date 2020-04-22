@@ -105,6 +105,8 @@ export interface LayerProps {
   layerIds?: any[] | null;
   label?: any;
   technicalName?: string;
+  filterField?: { [key: string]: string };
+  filterLabel?: { [key: string]: string };
 }
 
 interface Attributes {

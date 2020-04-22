@@ -259,6 +259,8 @@ export class MapController {
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
+              newRemoteLayerObject.filterField = remoteLayerObject.filterField;
             }
             remoteLayerObjects.push(newRemoteLayerObject);
           }
