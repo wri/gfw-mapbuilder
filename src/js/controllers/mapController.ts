@@ -234,9 +234,10 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              const legendInfoObject = await fetchLegendInfo(
-                remoteLayerObject.url
-              );
+              const legendInfoObject =
+                remoteLayerObject.type !== 'webtiled'
+                  ? await fetchLegendInfo(remoteLayerObject.url)
+                  : undefined;
               const layerLegendInfo =
                 legendInfoObject &&
                 legendInfoObject?.layers.filter((l: any) =>
@@ -259,6 +260,8 @@ export class MapController {
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
+              newRemoteLayerObject.filterField = remoteLayerObject.filterField;
             }
             remoteLayerObjects.push(newRemoteLayerObject);
           }
@@ -513,10 +516,6 @@ export class MapController {
         }
       });
     });
-  }
-
-  log(): void {
-    console.log(this._map?.basemap);
   }
 
   // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression
@@ -1674,6 +1673,26 @@ export class MapController {
     this._mapview.on('drag', function(event) {
       event.stopPropagation();
     });
+  }
+
+  changeLayerDefinitionExpression(layerInfo: LayerProps, defExp: string): void {
+    if (layerInfo.type === 'feature') {
+      const layerOnMap = this._map?.findLayerById(
+        layerInfo.id
+      ) as __esri.FeatureLayer;
+      if (layerOnMap) {
+        layerOnMap.definitionExpression = defExp;
+      }
+    } else if (layerInfo.type === 'dynamic') {
+      const layerOnMap = this._map?.findLayerById(
+        layerInfo.id
+      ) as __esri.MapImageLayer;
+      if (layerOnMap) {
+        layerOnMap.allSublayers.forEach(
+          sub => (sub.definitionExpression = defExp)
+        );
+      }
+    }
   }
 }
 

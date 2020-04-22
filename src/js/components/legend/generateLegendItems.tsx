@@ -100,7 +100,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const items = props.visibleLayers.map(layer => {
     if (layer.origin === 'webmap') {
-      const labelIcons = layer.legendInfo.map((item: any, i: number) => {
+      const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
         //deal with no label
         item.label = item.label && item.label.length ? item.label : layer.title;
         return (
@@ -151,7 +151,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       let labelIcons;
       //let's handle dynamic layer types first
       if (layer.type === 'dynamic') {
-        labelIcons = layer.legendInfo.map((infoObject: any, i: number) => {
+        labelIcons = layer.legendInfo?.map((infoObject: any, i: number) => {
           const sublayerLabels = infoObject.legend.map(
             (item: any, j: number) => (
               <div className="label-item" key={j}>

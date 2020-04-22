@@ -335,6 +335,13 @@
   }
 }
 
+.layer-filter-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding-bottom: 15px;
+}
+
 .nested-group-top {
   display: grid;
   grid-template-columns: auto 1fr;
