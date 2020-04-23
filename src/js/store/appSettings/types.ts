@@ -18,6 +18,8 @@ export interface AppSettings {
   alternativeLanguageTitle: string;
   alternativeLanguageSubtitle: string;
   iso: string;
+  hideFooter?: boolean;
+  hideHeader?: boolean;
   navLinksInNewTab?: boolean;
   recentImagery?: boolean;
 }
