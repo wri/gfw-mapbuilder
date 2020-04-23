@@ -210,7 +210,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       );
     };
 
-    //TODO: needs to be active language aware
+    //TODO: needs to be active language aware!
     return (
       <div className="data-tabview-container">
         <LayerAttributesElement
