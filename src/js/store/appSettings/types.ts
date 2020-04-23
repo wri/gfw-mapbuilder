@@ -20,6 +20,7 @@ export interface AppSettings {
   iso: string;
   hideFooter?: boolean;
   hideHeader?: boolean;
+  navLinksInNewTab?: boolean;
   recentImagery?: boolean;
 }
 

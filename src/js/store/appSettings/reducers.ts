@@ -12,6 +12,7 @@ const initialState: AppSettings = {
   includeMyGFWLogin: true,
   hideFooter: false,
   hideHeader: false,
+  navLinksInNewTab: true,
   printServiceUrl:
     'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
   language: 'en',
