@@ -79,7 +79,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
       }
     }
     getFilters();
-  }, []);
+  }, [selectedLanguage]);
 
   const customStyles = {
     clearIndicator: (provided: any, state: any) => ({
