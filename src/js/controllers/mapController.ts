@@ -735,7 +735,6 @@ export class MapController {
           tool: 'transform',
           enableRotation: true,
           toggleToolOnClick: true,
-          multipleSelectionEnabled: true,
           enableScaling: true,
           preserveAspectRatio: false
         });
