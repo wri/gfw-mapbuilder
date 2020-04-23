@@ -17,6 +17,8 @@ export interface AppSettings {
   analysisModules: AnalysisModule[];
   alternativeLanguageTitle: string;
   iso: string;
+  hideFooter?: boolean;
+  hideHeader?: boolean;
 }
 
 type LayerGroupKey =

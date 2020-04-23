@@ -27,6 +27,9 @@ const App = (props: AppSettings | any): JSX.Element => {
   const isMapReady = useSelector(
     (store: RootState) => store.mapviewState.isMapReady
   );
+  const hideHeader = useSelector(
+    (store: RootState) => store.appSettings.hideHeader
+  );
   //INIT with global spinner set to true
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
@@ -83,7 +86,7 @@ const App = (props: AppSettings | any): JSX.Element => {
         <MapSpinner />
       ) : (
         <>
-          {!reportView && <Header />}
+          {!reportView && !hideHeader && <Header />}
           <MapContent report={reportView} />
           {modalType !== '' && <ModalCard />}
         </>
