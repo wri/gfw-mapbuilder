@@ -393,7 +393,6 @@ export class MapController {
       RECENT_IMAGERY: 'recentImagery'
     };
     const configLayerIDs = Object.keys(configLayerFilters);
-    console.log(configLayerIDs);
 
     function checkLayerFilterConfig(l: any): boolean {
       const checkLayer = configLayerIDs.includes(l.id);
