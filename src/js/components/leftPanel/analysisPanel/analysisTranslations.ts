@@ -42,5 +42,32 @@ export default {
       'Pilih analisis dari menu tarik turun untuk memulai.'
     ],
     zh: ['未选择分析。', '从下拉菜单中选择一项分析以开始']
+  },
+  saveButton: {
+    en: 'Save',
+    fr: 'Sauvegarder',
+    ka: 'დამახსოვრება',
+    es: 'Guardar',
+    pt: 'Salvar',
+    id: 'Simpan',
+    zh: '保存'
+  },
+  editButton: {
+    en: 'Edit',
+    fr: 'Modifier',
+    ka: 'რედაქტირება',
+    es: 'Editar',
+    pt: 'Editar',
+    id: 'Ubah',
+    zh: '编辑'
+  },
+  deleteButton: {
+    en: 'Delete',
+    fr: 'Supprimer',
+    ka: 'წაშლა',
+    es: 'Eliminar',
+    pt: 'Excluir',
+    id: 'Delete',
+    zh: '删除'
   }
 };

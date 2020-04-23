@@ -352,19 +352,52 @@ const BaseAnalysis = (): JSX.Element => {
     setBase64ChartURL(base64);
   }
 
+  const returnButtons = (): JSX.Element | undefined => {
+    const isUploadOrDrawn =
+      (activeLayer as any).layerID === 'user_features' ||
+      (activeLayer as any).layerID === 'upload_file_features';
+
+    if (isUploadOrDrawn && renderEditButton) {
+      return (
+        <>
+          <button
+            className="orange-button base-analysis-size"
+            onClick={(): void => setEditSketch()}
+          >
+            {analysisTranslations.editButton[selectedLanguage]}
+          </button>
+          <button className="delete-button" onClick={(): void => setDelete()}>
+            {analysisTranslations.deleteButton[selectedLanguage]}
+          </button>
+        </>
+      );
+    }
+
+    if (isUploadOrDrawn && renderEditButton === false) {
+      return (
+        <>
+          <button
+            className="orange-button base-analysis-size"
+            onClick={(): void => setSaveSketch()}
+          >
+            {analysisTranslations.saveButton[selectedLanguage]}
+          </button>
+          <button className="delete-button" onClick={(): void => setDelete()}>
+            {analysisTranslations.deleteButton[selectedLanguage]}
+          </button>
+        </>
+      );
+    }
+  };
+
   return (
     <>
       {geostoreReady ? (
         <div className="base-analysis-content">
           <div className="layer-title">
-            {title === null ? 'User Drawn Feature' : title}
+            <span>{title === null ? 'User Drawn Feature' : title}</span>
+            {returnButtons()}
           </div>
-          {renderEditButton ? (
-            <button onClick={(): void => setEditSketch()}>Edit</button>
-          ) : (
-            <button onClick={(): void => setSaveSketch()}>Save</button>
-          )}
-          <button onClick={(): void => setDelete()}>Delete</button>
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">
