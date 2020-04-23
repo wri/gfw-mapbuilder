@@ -16,8 +16,10 @@ export interface AppSettings {
   alternativeNarrative: string;
   analysisModules: AnalysisModule[];
   alternativeLanguageTitle: string;
+  alternativeLanguageSubtitle: string;
   iso: string;
   navLinksInNewTab?: boolean;
+  recentImagery?: boolean;
 }
 
 type LayerGroupKey =

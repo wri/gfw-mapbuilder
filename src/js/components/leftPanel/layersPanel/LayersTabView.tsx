@@ -47,6 +47,9 @@ const LayersTabView = (props: LayersTabViewProps) => {
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
+  const recentImagery = useSelector(
+    (store: RootState) => store.appSettings.recentImagery
+  );
 
   const { layerPanel } = useSelector((store: RootState) => store.appSettings);
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
@@ -71,6 +74,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
             />
           );
         case 'GROUP_IMAGERY':
+          if (!recentImagery) return null;
           return (
             <ImageryLayersGroup
               key={layerGroupKey}
