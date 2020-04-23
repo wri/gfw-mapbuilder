@@ -1,5 +1,8 @@
 import React, { FunctionComponent } from 'react';
+
 import { mapController } from 'js/controllers/mapController';
+
+import { ReactComponent as InfoBoxIcon } from 'src/images/infoBoxIcon.svg';
 
 interface DropProps {
   language: string;
@@ -39,10 +42,16 @@ function valueToLang(abbrev: string): string {
   return lang;
 }
 
-const LanguageDropdown = (props: DropProps) => {
-  return (
-    <div className="language-dropdown-container">
-      <select
+/**
+ *
+ * TODO
+ * todo [ ] SELECT LANGUAGE default text
+ * todo [ ] style that sucker
+ * todo [ ] should still be accessible
+ */
+
+{
+  /* <select
         value={props.selectedLanguage}
         onChange={e => mapController.changeLanguage(e.target.value)}
       >
@@ -50,7 +59,17 @@ const LanguageDropdown = (props: DropProps) => {
         <option value={props.alternativeLanguage}>
           {valueToLang(props.alternativeLanguage)}
         </option>
-      </select>
+      </select> */
+}
+const LanguageDropdown = (props: DropProps) => {
+  return (
+    <div className="language-dropdown-container">
+      <InfoBoxIcon height={16} width={16} fill={'#555'} />
+      <div className="label">SELECT LANGUAGE</div>
+      <ul className="lang-dropdown">
+        <li>A</li>
+        <li>B</li>
+      </ul>
     </div>
   );
 };
