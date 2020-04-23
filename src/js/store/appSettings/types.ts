@@ -18,6 +18,7 @@ export interface AppSettings {
   alternativeLanguageTitle: string;
   alternativeLanguageSubtitle: string;
   iso: string;
+  navLinksInNewTab?: boolean;
   recentImagery?: boolean;
 }
 
