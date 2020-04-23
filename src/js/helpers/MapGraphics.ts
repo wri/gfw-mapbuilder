@@ -4,10 +4,17 @@ import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
 import Point from 'esri/geometry/Point';
 import Polygon from 'esri/geometry/Polygon';
+import * as projection from 'esri/geometry/projection';
+
+import { mapController } from 'js/controllers/mapController';
 
 import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
 
 import { FeatureResult } from 'js/store/mapview/types';
+
+import store from 'js/store/index';
+
+import { setActiveFeatures } from 'js/store/mapview/actions';
 
 const setSymbol = (symbolType: string): any => {
   switch (symbolType) {
@@ -84,34 +91,74 @@ export function setNewGraphic({
     });
   }
 
-  allFeatures.forEach((feature: FeatureResult) => {
-    const isPolygon =
-      (feature.geometry as any).rings || feature.geometry.type === 'polygon';
-    /**
-     * * NOTE:
-     * * File uploads don't have a geometry.type,
-     * * so we have to check if it has geometry.rings
-     */
-    const symbol = isPolygon
-      ? setSymbol('polygon')
-      : setSymbol(feature.geometry.type);
+  const setSymbol = (symbolType: string): any => {
+    switch (symbolType) {
+      case 'polygon':
+        return getCustomSymbol();
+      case 'point':
+        return getPointSymbol();
+      default:
+        console.warn('potential edge case in setSymbol()', symbolType);
+        return getCustomSymbol();
+    }
+  };
 
-    const geometry = isPolygon
-      ? setGeometry('polygon', feature.geometry)
-      : setGeometry(feature.geometry.type, feature.geometry);
+  const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
+    switch (symbolType) {
+      case 'polygon':
+        return new Polygon(geometry);
+      case 'point':
+        return new Point(geometry);
+      default:
+        console.warn('potential edge case in setGeometry()', symbolType);
+        return new Polygon(geometry);
+    }
+  };
 
-    const featureGraphic = new Graphic({
-      geometry: geometry,
-      attributes: feature.attributes,
-      symbol: symbol
+  projection.load().then(() => {
+    const allGraphics = allFeatures.map((feature: FeatureResult) => {
+      const isPolygon =
+        (feature.geometry as any).rings || feature.geometry.type === 'polygon';
+
+      /**
+       * * NOTE:
+       * * File uploads don't have a geometry.type,
+       * * so we have to check if it has geometry.rings
+       */
+
+      const symbol = isPolygon
+        ? setSymbol('polygon')
+        : setSymbol(feature.geometry.type);
+
+      const geometry = isPolygon
+        ? setGeometry('polygon', feature.geometry)
+        : setGeometry(feature.geometry.type, feature.geometry);
+
+      const featureGraphic = new Graphic({
+        geometry: geometry,
+        attributes: feature.attributes,
+        symbol: symbol
+      });
+
+      const transformation = projection.getTransformation(
+        featureGraphic.geometry.spatialReference,
+        mapController._mapview.spatialReference
+      );
+
+      featureGraphic.geometry = projection.project(
+        featureGraphic.geometry,
+        mapController._mapview.spatialReference,
+        transformation
+      ) as __esri.Geometry;
+
+      return featureGraphic;
     });
 
-    graphicsLayer.graphics.push(featureGraphic);
+    graphicsLayer.graphics.push(...allGraphics);
+    mapController.initializeAndSetSketch(graphicsLayer.graphics);
+
+    if (isUploadFile) {
+      mapview.goTo(allGraphics);
+    }
   });
-
-  map.add(graphicsLayer);
-
-  if (isUploadFile) {
-    mapview.goTo(graphicsLayer.graphics);
-  }
 }

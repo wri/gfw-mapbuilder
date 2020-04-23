@@ -46,7 +46,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       const activeFeature = new Array(
         activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
       );
-      if (activeLayerInfo.layerID !== 'user_features') {
+      if (
+        activeLayerInfo.layerID !== 'user_features' &&
+        activeLayerInfo.layerID !== 'upload_file_features'
+      ) {
         mapController.drawGraphic(activeFeature);
       }
     }
@@ -62,10 +65,14 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const activeFeature = new Array(
           activeFeatures[activeLayerIndex].features[newPage]
         );
-        if (activeLayerInfo.layerID !== 'user_features') {
+        if (
+          activeLayerInfo.layerID !== 'user_features' &&
+          activeLayerInfo.layerID !== 'upload_file_features'
+        ) {
           mapController.drawGraphic(activeFeature);
-          dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
         }
+
+        dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
       }
 
       interface AttributeObject {
@@ -203,7 +210,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       );
     };
 
-    //TODO: needs to be active language aware
+    //TODO: needs to be active language aware!
     return (
       <div className="data-tabview-container">
         <LayerAttributesElement

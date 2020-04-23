@@ -713,13 +713,28 @@ export class MapController {
 
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
-        tool: 'reshape',
-        enableRotation: false,
-        toggleToolOnClick: false,
-        enableScaling: false,
-        preserveAspectRatio: false
-      });
+      if (this._sketchVMGraphicsLayer.graphics['items'].length === 1) {
+        this._sketchVM?.update(
+          this._sketchVMGraphicsLayer.graphics['items'][0],
+          {
+            tool: 'reshape',
+            enableRotation: false,
+            toggleToolOnClick: false,
+            enableScaling: false,
+            preserveAspectRatio: false
+          }
+        );
+      }
+
+      if (this._sketchVMGraphicsLayer.graphics['items'].length > 1) {
+        this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'], {
+          tool: 'transform',
+          enableRotation: true,
+          toggleToolOnClick: true,
+          enableScaling: true,
+          preserveAspectRatio: false
+        });
+      }
     }
   }
 
@@ -758,10 +773,18 @@ export class MapController {
     store.dispatch(selectActiveTab('analysis'));
   }
 
-  initializeAndSetSketch(): void {
+  initializeAndSetSketch(graphics = []): void {
+    if (this._sketchVMGraphicsLayer) {
+      this._sketchVMGraphicsLayer.graphics.removeAll();
+    }
+
     this._sketchVMGraphicsLayer = new GraphicsLayer({
       id: 'sketchGraphics'
     });
+
+    if (graphics.length) {
+      this._sketchVMGraphicsLayer.graphics.addMany(graphics);
+    }
 
     this._sketchVM = new SketchViewModel({
       layer: this._sketchVMGraphicsLayer,
