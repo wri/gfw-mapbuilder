@@ -51,18 +51,24 @@ const Header: FunctionComponent = () => {
     (store: RootState) => store.appState.renderGFWDropdown
   );
 
+  const navLinksInNewTab = useSelector(
+    (store: RootState) => store.appSettings.navLinksInNewTab
+  );
+
   const closeGFWDropdown = () => {
     if (renderGFWDropdown) {
       dispatch(setRenderGFWDropdown(false));
     }
   };
 
+  const target = navLinksInNewTab ? '_blank' : '_self';
+
   return (
     <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">
         <a
           href={logoLinkUrl}
-          target="_blank"
+          target={target}
           rel="noopener noreferrer"
           tabIndex={0}
         >

@@ -17,6 +17,7 @@ export interface AppSettings {
   analysisModules: AnalysisModule[];
   alternativeLanguageTitle: string;
   iso: string;
+  navLinksInNewTab?: boolean;
 }
 
 type LayerGroupKey =
