@@ -618,7 +618,7 @@ export class MapController {
   }
 
   changeLayerVisibility(layerID: string, visibility: boolean): void {
-    const layer = mapController._map?.findLayerById(layerID);
+    const layer = this._map?.findLayerById(layerID);
     if (layer) {
       //1. update the map
       layer.visible = visibility;
