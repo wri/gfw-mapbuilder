@@ -21,7 +21,9 @@ const appSettingsSelector = createSelector(
     useAlternativeLanguage: appSettings.useAlternativeLanguage,
     alternativeWebmap: appSettings.alternativeWebmap,
     alternativeLanguage: appSettings.alternativeLanguage,
-    includeMyGFWLogin: appSettings.includeMyGFWLogin
+    includeMyGFWLogin: appSettings.includeMyGFWLogin,
+    alternativeLanguageTitle: appSettings.alternativeLanguageTitle,
+    alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle
   })
 );
 
@@ -36,7 +38,9 @@ const Header: FunctionComponent = () => {
     useAlternativeLanguage,
     alternativeWebmap,
     alternativeLanguage,
-    includeMyGFWLogin
+    includeMyGFWLogin,
+    alternativeLanguageTitle,
+    alternativeLanguageSubtitle
   } = useSelector(appSettingsSelector);
 
   const selectedLanguage = useSelector(
@@ -57,6 +61,11 @@ const Header: FunctionComponent = () => {
     }
   };
 
+  const appTitle =
+    selectedLanguage === language ? title : alternativeLanguageTitle;
+  const appSubtitle =
+    selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
+
   return (
     <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">
@@ -73,8 +82,8 @@ const Header: FunctionComponent = () => {
           />
         </a>
         <div className="titles">
-          <h1>{title.toUpperCase()}</h1>
-          <h2>{subtitle}</h2>
+          <h1>{appTitle.toUpperCase()}</h1>
+          <h2>{appSubtitle}</h2>
         </div>
       </div>
       {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (

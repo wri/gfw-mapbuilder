@@ -16,6 +16,7 @@ export interface AppSettings {
   alternativeNarrative: string;
   analysisModules: AnalysisModule[];
   alternativeLanguageTitle: string;
+  alternativeLanguageSubtitle: string;
   iso: string;
 }
 

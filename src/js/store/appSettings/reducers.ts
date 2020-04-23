@@ -25,6 +25,7 @@ const initialState: AppSettings = {
   narrative: '',
   alternativeNarrative: '',
   alternativeLanguageTitle: '',
+  alternativeLanguageSubtitle: '',
   analysisModules: [
     {
       analysisId: '',
