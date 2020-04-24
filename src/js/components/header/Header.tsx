@@ -91,14 +91,16 @@ const Header: FunctionComponent = () => {
           <h2>{appSubtitle}</h2>
         </div>
       </div>
-      {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
-        <LanguageDropdown
-          language={language}
-          alternativeLanguage={alternativeLanguage}
-          selectedLanguage={selectedLanguage}
-        />
-      )}
-      {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+      <div className="lang-login-container">
+        {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
+          <LanguageDropdown
+            language={language}
+            alternativeLanguage={alternativeLanguage}
+            selectedLanguage={selectedLanguage}
+          />
+        )}
+        {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+      </div>
     </div>
   );
 };
