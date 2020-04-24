@@ -3,7 +3,6 @@ import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
@@ -26,7 +25,6 @@ interface LayerOptions {
 
 export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
   let esriLayer;
-  console.log(layerConfig);
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
     case 'dynamic':
