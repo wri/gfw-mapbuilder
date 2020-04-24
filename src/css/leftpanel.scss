@@ -377,6 +377,18 @@
   margin-top: 15px;
 }
 
+.layer-version-picker-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  margin-bottom: 10px;
+  font-size: 11px;
+  p {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+}
+
 .layers-control-container {
   color: $dark-grey;
 

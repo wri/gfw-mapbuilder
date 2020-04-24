@@ -827,7 +827,73 @@ module.exports = {
         zh: 'TEST',
         ka: 'TEST'
       },
-      layers: []
+      layers: [
+        {
+          order: 1,
+          id: 'Versioned Dynamic Layer',
+          type: 'dynamic',
+          visible: true,
+          label: {
+            en: 'Versioned Dynamic Layer',
+            fr: 'Versioned Dynamic Layer'
+          },
+          versionHeaderText: {
+            en: 'Pick a version',
+            fr: 'Pick a version'
+          },
+          versions: [
+            {
+              label: {
+                en: 'Landcover 2008',
+                fr: 'Landcover 2008'
+              },
+              url:
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer',
+              layerIds: [0]
+            },
+            {
+              label: {
+                en: 'Landcover 2015',
+                fr: 'Landcover 2015'
+              },
+              url:
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer',
+              layerIds: [6]
+            }
+          ]
+        }
+        // {
+        //   order: 1,
+        //   id: "Versioned Feature Layer",
+        //   type: "feature",
+        //   visible: true,
+        //   label: {
+        //     en: "Versioned Feature Layer",
+        //     fr: "Versioned Feature Layer"
+        //     },
+        //   versionHeaderText: {
+        //     en: "Pick a version",
+        //     fr: "Pick a version"
+        //   },
+        //   versions: [
+        //     {
+        //       label: {
+        //         en: 'Flood',
+        //         fr: 'Flood'
+        //       },
+        //       url: 'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
+        //     },
+        //     {
+        //       label: {
+        //         en: 'Esri_Partners',
+        //         fr: 'Esri_Partners'
+        //       },
+        //       url: 'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
+        //     },
+
+        //   ]
+        // }
+      ]
     },
     GROUP_LC: {
       groupType: 'default',
@@ -1437,14 +1503,14 @@ module.exports = {
       // opacity: 0.35,
       // layerIds: [0]
       // },
-      {
-        id: 'LEGEND_LAYER',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-        visible: false,
-        opacity: 0,
-        layerIds: []
-      },
+      // {
+      //   id: 'LEGEND_LAYER',
+      //   type: 'dynamic',
+      //   url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+      //   visible: false,
+      //   opacity: 0,
+      //   layerIds: []
+      // },
       {
         id: 'USER_FEATURES',
         type: 'graphic',

@@ -13,6 +13,82 @@ import { RootState } from 'js/store';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { mapController } from 'js/controllers/mapController';
+import { LayerFactory } from 'js/helpers/LayerFactory';
+import { cloneDeep } from 'lodash-es';
+
+interface LayerVersionPickerProps {
+  layerInfo: any;
+  selectedLanguage: string;
+}
+
+interface VersionInfo {
+  label: { [key: string]: string };
+  url: string;
+  layerIds: number[];
+}
+
+const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element => {
+  const { layerInfo, selectedLanguage } = props;
+  const [activeVersion, setActiveVersion] = React.useState(
+    layerInfo.versions[0].label[selectedLanguage]
+  );
+
+  React.useEffect(() => {
+    // setVersions([]);
+  }, [selectedLanguage]);
+
+  function handleLayerVersionChange(e: any): void {
+    //if we are changing the version, swap the layers, otherwise do nothing
+    if (e.target.value === activeVersion) {
+      //
+    } else {
+      console.log('swapping layer');
+      // const prevLayer = mapController._map?.findLayerById(layerInfo.id);
+      // if (!prevLayer) return;
+      // mapController._map?.remove(prevLayer);
+      const newVersionIndex = layerInfo.versions.findIndex(
+        (v: VersionInfo) => v.label[selectedLanguage] === e.target.value
+      );
+      // console.log(newVersionIndex);
+      // console.log(layerInfo.versions[newVersionIndex].layerIds);
+      // const newLayerVersionConfig = cloneDeep(layerInfo);
+      // newLayerVersionConfig.ulr =  layerInfo.versions[newVersionIndex].url;
+      // newLayerVersionConfig.layerIds = layerInfo.versions[newVersionIndex].layerIds;
+      const newconf = Object.assign(layerInfo, { layerIds: [6] });
+      console.log(newconf);
+
+      // console.log(newLayerVersionConfig);
+      // const esriLayer = LayerFactory(mapController._map, newconf);
+      //get the layer leend info
+      // if(!mapController._map) return;
+      // mapController._map.add(esriLayer);
+
+      // add new layer
+      // setActiveVersion(e.target.value);
+    }
+  }
+
+  const versionOptions = layerInfo.versions.map((version: any, i: number) => {
+    return (
+      <option key={i} value={version.label[selectedLanguage]}>
+        {version.label[selectedLanguage]}
+      </option>
+    );
+  });
+
+  return (
+    <div className="layer-version-picker-container">
+      <p>{layerInfo.versionHeaderText[selectedLanguage]}</p>
+      <select
+        className="date-time-toggle"
+        onChange={handleLayerVersionChange}
+        value={activeVersion}
+      >
+        {versionOptions}
+      </select>
+    </div>
+  );
+};
 
 interface LayerInfo {
   layerInfo: any;
@@ -133,11 +209,11 @@ interface LayerControlProps {
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const dispatch = useDispatch();
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
   );
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
@@ -235,6 +311,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
       {layer?.visible && densityPicker && <CanopyDensityPicker label={true} />}
+      {layer?.visible && layer.versions && (
+        <LayerVersionPicker
+          layerInfo={layer}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
       {layer?.visible && layer.filterField && (
         <LayerFilterSelection
           layerInfo={layer}

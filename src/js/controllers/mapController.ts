@@ -234,6 +234,15 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
+              if (
+                !remoteLayerObject.url &&
+                remoteLayerObject.versions &&
+                remoteLayerObject.versions[0].url
+              ) {
+                remoteLayerObject.layerIds =
+                  remoteLayerObject.versions[0].layerIds;
+                remoteLayerObject.url = remoteLayerObject.versions[0].url;
+              }
               const legendInfoObject =
                 remoteLayerObject.type !== 'webtiled'
                   ? await fetchLegendInfo(remoteLayerObject.url)
@@ -262,6 +271,9 @@ export class MapController {
               newRemoteLayerObject.parentID = undefined;
               newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
               newRemoteLayerObject.filterField = remoteLayerObject.filterField;
+              newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionHeaderText =
+                remoteLayerObject.versionHeaderText;
             }
             remoteLayerObjects.push(newRemoteLayerObject);
           }
