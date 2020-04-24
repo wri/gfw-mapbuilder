@@ -378,17 +378,50 @@ export class MapController {
         return list.concat(orderedGroups);
       }, []);
 
-    layers.forEach((layer: any): void => {
-      if (layer.type === 'remoteDataLayer') {
-        remoteDataLayers.push({
-          order: layer.order,
-          layerGroupId: layer.groupId,
-          dataLayer: layer
-        });
+    const configLayerFilters = {
+      VIIRS_ACTIVE_FIRES: 'viirsFires',
+      MODIS_ACTIVE_FIRES: 'modisFires',
+      LAND_COVER: 'landCover',
+      AG_BIOMASS: 'aboveGroundBiomass',
+      IFL: 'intactForests',
+      PRIMARY_FORESTS: 'primaryForests',
+      FORMA_ALERTS: 'forma',
+      GLOB_MANGROVE: 'mangroves',
+      IMAZON_SAD: 'sadAlerts',
+      GLAD_ALERTS: 'gladAlerts',
+      TERRA_I_ALERTS: 'terraIAlerts',
+      RECENT_IMAGERY: 'recentImagery'
+    };
+    const configLayerIDs = Object.keys(configLayerFilters);
+
+    function checkLayerFilterConfig(l: any): boolean {
+      const checkLayer = configLayerIDs.includes(l.id);
+      if (checkLayer) {
+        //Check for settings on that layer
+        const settingID = configLayerFilters[l.id];
+        //If no setting exist for the layer, we default to showing the layer
+        const settingValue = appSettings.hasOwnProperty(settingID)
+          ? appSettings[settingID]
+          : true;
+        return settingValue;
       } else {
-        detailedLayers.push(layer);
+        return true;
       }
-    });
+    }
+
+    layers
+      .filter((l: any) => checkLayerFilterConfig(l))
+      .forEach((layer: any): void => {
+        if (layer.type === 'remoteDataLayer') {
+          remoteDataLayers.push({
+            order: layer.order,
+            layerGroupId: layer.groupId,
+            dataLayer: layer
+          });
+        } else {
+          detailedLayers.push(layer);
+        }
+      });
 
     const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
       return fetch(
