@@ -844,21 +844,21 @@ module.exports = {
           versions: [
             {
               label: {
-                en: 'Landcover 2008',
-                fr: 'Landcover 2008'
+                en: 'All Protected Areas',
+                fr: 'All Protected Areas'
               },
               url:
-                'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer',
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
               layerIds: [0]
             },
             {
               label: {
-                en: 'Landcover 2015',
-                fr: 'Landcover 2015'
+                en: 'National Parks',
+                fr: 'National Parks'
               },
               url:
-                'https://gis.forest-atlas.org/server/rest/services/Richard_test/LandCover/MapServer',
-              layerIds: [6]
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+              layerIds: [1]
             }
           ]
         }

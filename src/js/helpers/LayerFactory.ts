@@ -30,14 +30,8 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
     case 'dynamic':
-      if (
-        !layerConfig.url &&
-        layerConfig.versions &&
-        layerConfig.versions[0].url
-      ) {
+      if (layerConfig.versions && layerConfig.versions[0].url) {
         layerConfig.url = layerConfig.versions[0].url;
-      }
-      if (layerConfig.versions && layerConfig.versions[0].layerIds) {
         layerConfig.layerIds = layerConfig.versions[0].layerIds;
       }
       const layerOptions: LayerOptions = {

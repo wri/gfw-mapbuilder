@@ -9,12 +9,15 @@ import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRange from './DateRange';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
+import { allAvailableLayers as allAvailableLayersAction } from 'js/store/mapview/actions';
 import { RootState } from 'js/store';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { mapController } from 'js/controllers/mapController';
+import MapImageLayer from 'esri/layers/MapImageLayer';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { cloneDeep } from 'lodash-es';
+import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 interface LayerVersionPickerProps {
   layerInfo: any;
@@ -28,43 +31,72 @@ interface VersionInfo {
 }
 
 const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element => {
+  const dispatch = useDispatch();
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
+  );
   const { layerInfo, selectedLanguage } = props;
   const [activeVersion, setActiveVersion] = React.useState(
     layerInfo.versions[0].label[selectedLanguage]
   );
 
-  React.useEffect(() => {
-    // setVersions([]);
-  }, [selectedLanguage]);
+  async function swapLayersAndSyncMap(
+    layerInfo: any,
+    versionValue: string
+  ): Promise<void> {
+    //Remove previous version layer from the map
+    const prevLayer = mapController._map?.findLayerById(layerInfo.id);
+    if (!prevLayer) return;
+    mapController._map?.remove(prevLayer);
+    const newVersionIndex = layerInfo.versions.findIndex(
+      (v: VersionInfo) => v.label[selectedLanguage] === versionValue
+    );
+    const versionLayerIds = layerInfo.versions[newVersionIndex].layerIds;
+    const versionLayerURL = layerInfo.versions[newVersionIndex].url;
+
+    //Generate new legend iformation
+    const legendInfoObject = await fetchLegendInfo(versionLayerURL);
+    const layerLegendInfo =
+      legendInfoObject &&
+      legendInfoObject?.layers.filter((l: any) =>
+        versionLayerIds.includes(l.layerId)
+      );
+    const newconf = Object.assign(layerInfo, {
+      layerIds: versionLayerIds,
+      url: versionLayerURL,
+      legendInfo: layerLegendInfo
+    });
+    const layerOptions = {
+      id: newconf.id,
+      title: newconf.title,
+      visible: newconf.visible,
+      url: newconf.url
+    };
+
+    layerOptions['sublayers'] = newconf.layerIds.map((id: any) => {
+      return { id: id, visible: true };
+    });
+
+    //Add layer to the map
+    const esriLayer = new MapImageLayer(layerOptions);
+    mapController._map?.add(esriLayer);
+
+    //Update Redux
+    const newLayersArray = allAvailableLayers.map(l => {
+      if (l.id === newconf.id) {
+        return newconf;
+      } else {
+        return l;
+      }
+    });
+    dispatch(allAvailableLayersAction(newLayersArray));
+  }
 
   function handleLayerVersionChange(e: any): void {
     //if we are changing the version, swap the layers, otherwise do nothing
-    if (e.target.value === activeVersion) {
-      //
-    } else {
-      console.log('swapping layer');
-      // const prevLayer = mapController._map?.findLayerById(layerInfo.id);
-      // if (!prevLayer) return;
-      // mapController._map?.remove(prevLayer);
-      const newVersionIndex = layerInfo.versions.findIndex(
-        (v: VersionInfo) => v.label[selectedLanguage] === e.target.value
-      );
-      // console.log(newVersionIndex);
-      // console.log(layerInfo.versions[newVersionIndex].layerIds);
-      // const newLayerVersionConfig = cloneDeep(layerInfo);
-      // newLayerVersionConfig.ulr =  layerInfo.versions[newVersionIndex].url;
-      // newLayerVersionConfig.layerIds = layerInfo.versions[newVersionIndex].layerIds;
-      const newconf = Object.assign(layerInfo, { layerIds: [6] });
-      console.log(newconf);
-
-      // console.log(newLayerVersionConfig);
-      // const esriLayer = LayerFactory(mapController._map, newconf);
-      //get the layer leend info
-      // if(!mapController._map) return;
-      // mapController._map.add(esriLayer);
-
-      // add new layer
-      // setActiveVersion(e.target.value);
+    if (e.target.value !== activeVersion) {
+      swapLayersAndSyncMap(layerInfo, e.target.value);
+      setActiveVersion(e.target.value);
     }
   }
 
