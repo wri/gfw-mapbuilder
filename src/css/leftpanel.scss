@@ -73,6 +73,16 @@
   .info-content-container {
     display: flex;
     min-height: 5rem;
+    margin: 1rem;
+
+    p {
+      font-family: 'Fira Sans', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 23.8px;
+      font-weight: 400;
+      color: #555;
+    }
   }
 
   .analysis-tab-container {
