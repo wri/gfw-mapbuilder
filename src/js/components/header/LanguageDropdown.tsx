@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 
 import { mapController } from 'js/controllers/mapController';
 
@@ -42,33 +42,54 @@ function valueToLang(abbrev: string): string {
   return lang;
 }
 
-/**
- *
- * TODO
- * todo [ ] SELECT LANGUAGE default text
- * todo [ ] style that sucker
- * todo [ ] should still be accessible
- */
+const config = {
+  en: 'SELECT LANGUAGE',
+  es: 'Seleccionar idioma',
+  fr: 'Choisir Langue',
+  pt: 'Selecionar Idioma',
+  id: 'Select Language',
+  ka: 'ენის არჩევა',
+  zh: '选择语言'
+};
 
-{
-  /* <select
-        value={props.selectedLanguage}
-        onChange={e => mapController.changeLanguage(e.target.value)}
-      >
-        <option value={props.language}>{valueToLang(props.language)}</option>
-        <option value={props.alternativeLanguage}>
-          {valueToLang(props.alternativeLanguage)}
-        </option>
-      </select> */
-}
 const LanguageDropdown = (props: DropProps) => {
   return (
     <div className="language-dropdown-container">
-      <InfoBoxIcon height={16} width={16} fill={'#555'} />
-      <div className="label">SELECT LANGUAGE</div>
-      <ul className="lang-dropdown">
-        <li>A</li>
-        <li>B</li>
+      <ul className="dropdown">
+        <span className="label-wrapper">
+          <InfoBoxIcon height={16} width={16} fill={'#555'} />
+          <li className="dropdown-label">{config[props.selectedLanguage]}</li>
+        </span>
+        <ul className="options">
+          <li
+            role="button"
+            aria-labelledby="dropdown-label"
+            id="dropdown__selected"
+            tabIndex={0}
+            onClick={(): void => mapController.changeLanguage(props.language)}
+            className={
+              props.selectedLanguage === props.language ? 'selected' : ''
+            }
+          >
+            {valueToLang(props.language)}
+          </li>
+          <li
+            role="button"
+            aria-labelledby="dropdown-label"
+            id="dropdown__selected"
+            tabIndex={0}
+            onClick={(): void =>
+              mapController.changeLanguage(props.alternativeLanguage)
+            }
+            className={
+              props.selectedLanguage === props.alternativeLanguage
+                ? 'selected'
+                : ''
+            }
+          >
+            {valueToLang(props.alternativeLanguage)}
+          </li>
+        </ul>
       </ul>
     </div>
   );

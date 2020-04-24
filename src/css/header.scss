@@ -47,36 +47,75 @@
 
     .language-dropdown-container {
       display: flex;
-      // margin-top: auto;
-      // margin-bottom: auto;
+      margin-top: auto;
+      margin-bottom: auto;
       padding-right: 1rem;
 
-      svg {
-        margin-top: auto;
-        margin-bottom: auto;
-      }
-
-      .lang-dropdown {
+      ul {
         list-style: none;
-        position: relative;
-        border: 1px solid #a2a4b2;
-        border-bottom-left-radius: 2px;
-        border-bottom-right-radius: 2px;
-        width: 250px;
-        height: 40px;
-        cursor: pointer;
-        // margin: 100px;
         padding: 0;
       }
 
-      // select {
-      //   background-color: rgba(255, 255, 255, 0.5);
-      //   border: none;
-      //   height: 50px;
-      //   width: 132px;
-      //   text-transform: uppercase;
-      //   font-size: 12px;
-      // }
+      .dropdown,
+      .options {
+        width: 132px;
+      }
+
+      .dropdown {
+        list-style: none;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        height: auto;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-top: auto;
+        margin-bottom: auto;
+        position: absolute;
+        right: 10rem;
+        top: 1.25rem;
+
+        .label-wrapper {
+          display: flex;
+          justify-content: space-evenly;
+          margin-bottom: 0.75rem;
+
+          svg {
+            margin-top: auto;
+            margin-bottom: auto;
+          }
+        }
+
+        .options {
+          display: none;
+          background-color: #fff;
+          position: absolute;
+          z-index: 10;
+          overflow-x: hidden;
+          overflow-y: auto;
+          max-height: 80vh;
+          min-width: 100px;
+          border-top: 3px solid rgb(240, 171, 0);
+          height: auto;
+
+          li {
+            border-bottom: 1px solid #aaa;
+            padding: 10px;
+
+            &.selected {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+
+      .dropdown:hover {
+        top: 1.25rem;
+      }
+
+      .dropdown:hover .options {
+        display: block;
+      }
     }
 
     .gfw-login-container {
