@@ -249,6 +249,7 @@ export class MapController {
                   : undefined;
               const layerLegendInfo =
                 legendInfoObject &&
+                !legendInfoObject.error &&
                 legendInfoObject?.layers.filter((l: any) =>
                   remoteLayerObject.layerIds?.includes(l.layerId)
                 );

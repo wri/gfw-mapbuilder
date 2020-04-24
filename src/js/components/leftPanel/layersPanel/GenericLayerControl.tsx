@@ -15,8 +15,7 @@ import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { mapController } from 'js/controllers/mapController';
 import MapImageLayer from 'esri/layers/MapImageLayer';
-import { LayerFactory } from 'js/helpers/LayerFactory';
-import { cloneDeep } from 'lodash-es';
+import FeatureLayer from 'esri/layers/FeatureLayer';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 
 interface LayerVersionPickerProps {
@@ -51,16 +50,19 @@ const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element => {
     const newVersionIndex = layerInfo.versions.findIndex(
       (v: VersionInfo) => v.label[selectedLanguage] === versionValue
     );
-    const versionLayerIds = layerInfo.versions[newVersionIndex].layerIds;
+    const versionLayerIds = layerInfo.versions[newVersionIndex]?.layerIds;
     const versionLayerURL = layerInfo.versions[newVersionIndex].url;
 
+    //TODO: Implement fetching for featureServer layers not only mapimage ones!!!
     //Generate new legend iformation
     const legendInfoObject = await fetchLegendInfo(versionLayerURL);
     const layerLegendInfo =
       legendInfoObject &&
+      !legendInfoObject.error &&
       legendInfoObject?.layers.filter((l: any) =>
         versionLayerIds.includes(l.layerId)
       );
+
     const newconf = Object.assign(layerInfo, {
       layerIds: versionLayerIds,
       url: versionLayerURL,
@@ -73,13 +75,16 @@ const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element => {
       url: newconf.url
     };
 
-    layerOptions['sublayers'] = newconf.layerIds.map((id: any) => {
-      return { id: id, visible: true };
-    });
-
-    //Add layer to the map
-    const esriLayer = new MapImageLayer(layerOptions);
-    mapController._map?.add(esriLayer);
+    if (newconf.type === 'dynamic') {
+      layerOptions['sublayers'] = newconf.layerIds.map((id: any) => {
+        return { id: id, visible: true };
+      });
+      const esriLayer = new MapImageLayer(layerOptions);
+      mapController._map?.add(esriLayer);
+    } else {
+      const esriLayer = new FeatureLayer(layerOptions);
+      mapController._map?.add(esriLayer);
+    }
 
     //Update Redux
     const newLayersArray = allAvailableLayers.map(l => {

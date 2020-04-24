@@ -861,38 +861,39 @@ module.exports = {
               layerIds: [1]
             }
           ]
+        },
+        {
+          order: 1,
+          id: 'Versioned Feature Layer',
+          type: 'feature',
+          visible: true,
+          label: {
+            en: 'Versioned Feature Layer',
+            fr: 'Versioned Feature Layer'
+          },
+          versionHeaderText: {
+            en: 'Pick a version',
+            fr: 'Pick a version'
+          },
+          versions: [
+            {
+              label: {
+                en: 'Flood',
+                fr: 'Flood'
+              },
+              url:
+                'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
+            },
+            {
+              label: {
+                en: 'Esri_Partners',
+                fr: 'Esri_Partners'
+              },
+              url:
+                'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
+            }
+          ]
         }
-        // {
-        //   order: 1,
-        //   id: "Versioned Feature Layer",
-        //   type: "feature",
-        //   visible: true,
-        //   label: {
-        //     en: "Versioned Feature Layer",
-        //     fr: "Versioned Feature Layer"
-        //     },
-        //   versionHeaderText: {
-        //     en: "Pick a version",
-        //     fr: "Pick a version"
-        //   },
-        //   versions: [
-        //     {
-        //       label: {
-        //         en: 'Flood',
-        //         fr: 'Flood'
-        //       },
-        //       url: 'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
-        //     },
-        //     {
-        //       label: {
-        //         en: 'Esri_Partners',
-        //         fr: 'Esri_Partners'
-        //       },
-        //       url: 'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
-        //     },
-
-        //   ]
-        // }
       ]
     },
     GROUP_LC: {

@@ -84,6 +84,9 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       }
       break;
     case 'feature':
+      if (layerConfig.versions && layerConfig.versions[0].url) {
+        layerConfig.url = layerConfig.versions[0].url;
+      }
       esriLayer = new FeatureLayer({
         id: layerConfig.id,
         title: layerConfig.title,
