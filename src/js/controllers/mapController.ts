@@ -234,16 +234,10 @@ export class MapController {
               //dealing with resouces (config file) layers
 
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              const legendInfoObject =
-                remoteLayerObject.type !== 'webtiled'
-                  ? await fetchLegendInfo(remoteLayerObject.url)
-                  : undefined;
-              const layerLegendInfo =
-                legendInfoObject &&
-                legendInfoObject?.layers.filter((l: any) =>
-                  remoteLayerObject.layerIds?.includes(l.layerId)
-                );
-              newRemoteLayerObject.legendInfo = layerLegendInfo;
+              const legendInfoObject = await this.retrieveLegendInfo(
+                remoteLayerObject
+              );
+              newRemoteLayerObject.legendInfo = legendInfoObject;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
                 appState.selectedLanguage
@@ -451,6 +445,21 @@ export class MapController {
       remoteDataLayerRequests.push(detailedLayer);
     });
     return Promise.all(remoteDataLayerRequests);
+  }
+
+  async retrieveLegendInfo(layerObject: LayerProps): Promise<any> {
+    console.log(layerObject);
+    const legendInfoObject =
+      layerObject.type !== 'webtiled'
+        ? await fetchLegendInfo(layerObject.url)
+        : undefined;
+
+    const layerLegendInfo =
+      legendInfoObject &&
+      legendInfoObject?.layers.filter((l: any) =>
+        layerObject.layerIds?.includes(l.layerId)
+      );
+    return layerLegendInfo;
   }
 
   changeLanguage(lang: string): void {
