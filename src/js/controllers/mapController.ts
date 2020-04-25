@@ -123,6 +123,21 @@ export class MapController {
       container: domRef.current
     });
 
+    //if we have init extent, use it.
+    if (
+      appSettings.initialExtent &&
+      appSettings.initialExtent.hasOwnProperty('x') &&
+      appSettings.initialExtent.hasOwnProperty('y') &&
+      appSettings.initialExtent.hasOwnProperty('z')
+    ) {
+      //@ts-ignore
+      this._mapview.center = [
+        appSettings.initialExtent['x'],
+        appSettings.initialExtent['y']
+      ];
+      this._mapview.zoom = appSettings.initialExtent['z'];
+    }
+
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
 
@@ -523,6 +538,20 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
+    //if we have init extent, use it.
+    if (
+      appSettings.initialExtent &&
+      appSettings.initialExtent.hasOwnProperty('x') &&
+      appSettings.initialExtent.hasOwnProperty('y') &&
+      appSettings.initialExtent.hasOwnProperty('z')
+    ) {
+      //@ts-ignore
+      this._mapview.center = [
+        appSettings.initialExtent['x'],
+        appSettings.initialExtent['y']
+      ];
+      this._mapview.zoom = appSettings.initialExtent['z'];
+    }
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
