@@ -231,29 +231,20 @@ export class MapController {
                 remoteLayerObject.layer.outputRange;
               newRemoteLayerObject.parentID = undefined;
             } else {
-              //dealing with resouces (config file) layers
-
-              //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
               if (
-                !remoteLayerObject.url &&
                 remoteLayerObject.versions &&
                 remoteLayerObject.versions[0].url
               ) {
                 remoteLayerObject.layerIds =
                   remoteLayerObject.versions[0].layerIds;
                 remoteLayerObject.url = remoteLayerObject.versions[0].url;
+                remoteLayerObject.versionIndex = 0;
               }
-              const legendInfoObject =
-                remoteLayerObject.type !== 'webtiled'
-                  ? await fetchLegendInfo(remoteLayerObject.url)
-                  : undefined;
-              const layerLegendInfo =
-                legendInfoObject &&
-                !legendInfoObject.error &&
-                legendInfoObject?.layers.filter((l: any) =>
-                  remoteLayerObject.layerIds?.includes(l.layerId)
-                );
-              newRemoteLayerObject.legendInfo = layerLegendInfo;
+              //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
+              const legendInfoObject = await this.retrieveLegendInfo(
+                remoteLayerObject
+              );
+              newRemoteLayerObject.legendInfo = legendInfoObject;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
                 appState.selectedLanguage
@@ -273,6 +264,8 @@ export class MapController {
               newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
               newRemoteLayerObject.filterField = remoteLayerObject.filterField;
               newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionIndex =
+                remoteLayerObject.versionIndex;
               newRemoteLayerObject.versionHeaderText =
                 remoteLayerObject.versionHeaderText;
             }
@@ -317,6 +310,20 @@ export class MapController {
                 store.dispatch(setLayersLoading(false));
               });
             }
+          } else {
+            //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+
+            combinedLayers.forEach(l => {
+              if (l.loaded === true) {
+                store.dispatch(setLayersLoading(false));
+              } else {
+                once(l, 'loaded', () => {
+                  store.dispatch(setLayersLoading(false));
+                });
+              }
+            });
           }
 
           this._map?.addMany(allLayers);
@@ -464,6 +471,22 @@ export class MapController {
       remoteDataLayerRequests.push(detailedLayer);
     });
     return Promise.all(remoteDataLayerRequests);
+  }
+
+  async retrieveLegendInfo(
+    layerObject: LayerProps
+  ): Promise<any[] | undefined> {
+    const legendInfoObject =
+      layerObject.type !== 'webtiled'
+        ? await fetchLegendInfo(layerObject.url)
+        : undefined;
+    const layerLegendInfo =
+      legendInfoObject &&
+      !legendInfoObject.error &&
+      legendInfoObject?.layers.filter((l: any) =>
+        layerObject.layerIds?.includes(l.layerId)
+      );
+    return layerLegendInfo;
   }
 
   changeLanguage(lang: string): void {
