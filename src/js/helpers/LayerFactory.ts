@@ -3,7 +3,6 @@ import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
@@ -29,6 +28,10 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
     case 'dynamic':
+      if (layerConfig.versions && layerConfig.versions[0].url) {
+        layerConfig.url = layerConfig.versions[0].url;
+        layerConfig.layerIds = layerConfig.versions[0].layerIds;
+      }
       const layerOptions: LayerOptions = {
         id: layerConfig.id,
         title: layerConfig.title,
@@ -79,6 +82,9 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       }
       break;
     case 'feature':
+      if (layerConfig.versions && layerConfig.versions[0].url) {
+        layerConfig.url = layerConfig.versions[0].url;
+      }
       esriLayer = new FeatureLayer({
         id: layerConfig.id,
         title: layerConfig.title,

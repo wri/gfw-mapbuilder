@@ -231,8 +231,15 @@ export class MapController {
                 remoteLayerObject.layer.outputRange;
               newRemoteLayerObject.parentID = undefined;
             } else {
-              //dealing with resouces (config file) layers
-
+              if (
+                !remoteLayerObject.url &&
+                remoteLayerObject.versions &&
+                remoteLayerObject.versions[0].url
+              ) {
+                remoteLayerObject.layerIds =
+                  remoteLayerObject.versions[0].layerIds;
+                remoteLayerObject.url = remoteLayerObject.versions[0].url;
+              }
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
               const legendInfoObject = await this.retrieveLegendInfo(
                 remoteLayerObject
@@ -256,6 +263,9 @@ export class MapController {
               newRemoteLayerObject.parentID = undefined;
               newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
               newRemoteLayerObject.filterField = remoteLayerObject.filterField;
+              newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionHeaderText =
+                remoteLayerObject.versionHeaderText;
             }
             remoteLayerObjects.push(newRemoteLayerObject);
           }
@@ -447,15 +457,16 @@ export class MapController {
     return Promise.all(remoteDataLayerRequests);
   }
 
-  async retrieveLegendInfo(layerObject: LayerProps): Promise<any> {
-    console.log(layerObject);
+  async retrieveLegendInfo(
+    layerObject: LayerProps
+  ): Promise<any[] | undefined> {
     const legendInfoObject =
       layerObject.type !== 'webtiled'
         ? await fetchLegendInfo(layerObject.url)
         : undefined;
-
     const layerLegendInfo =
       legendInfoObject &&
+      !legendInfoObject.error &&
       legendInfoObject?.layers.filter((l: any) =>
         layerObject.layerIds?.includes(l.layerId)
       );
