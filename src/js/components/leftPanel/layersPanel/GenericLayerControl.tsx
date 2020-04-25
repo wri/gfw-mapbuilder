@@ -10,9 +10,10 @@ import DateRange from './DateRange';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
 import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
+import { mapController } from 'js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
-import { mapController } from 'js/controllers/mapController';
+import { LayerVersionPicker } from './LayerVersionPicker';
 
 interface LayerInfo {
   layerInfo: any;
@@ -133,11 +134,11 @@ interface LayerControlProps {
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const dispatch = useDispatch();
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
   );
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
@@ -235,6 +236,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
       {layer?.visible && densityPicker && <CanopyDensityPicker label={true} />}
+      {layer?.visible && layer.versions && (
+        <LayerVersionPicker
+          layerInfo={layer}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
       {layer?.visible && layer.filterField && (
         <LayerFilterSelection
           layerInfo={layer}
