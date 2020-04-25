@@ -232,13 +232,13 @@ export class MapController {
               newRemoteLayerObject.parentID = undefined;
             } else {
               if (
-                !remoteLayerObject.url &&
                 remoteLayerObject.versions &&
                 remoteLayerObject.versions[0].url
               ) {
                 remoteLayerObject.layerIds =
                   remoteLayerObject.versions[0].layerIds;
                 remoteLayerObject.url = remoteLayerObject.versions[0].url;
+                remoteLayerObject.versionIndex = 0;
               }
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
               const legendInfoObject = await this.retrieveLegendInfo(
@@ -264,6 +264,8 @@ export class MapController {
               newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
               newRemoteLayerObject.filterField = remoteLayerObject.filterField;
               newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionIndex =
+                remoteLayerObject.versionIndex;
               newRemoteLayerObject.versionHeaderText =
                 remoteLayerObject.versionHeaderText;
             }
@@ -308,6 +310,20 @@ export class MapController {
                 store.dispatch(setLayersLoading(false));
               });
             }
+          } else {
+            //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+
+            combinedLayers.forEach(l => {
+              if (l.loaded === true) {
+                store.dispatch(setLayersLoading(false));
+              } else {
+                once(l, 'loaded', () => {
+                  store.dispatch(setLayersLoading(false));
+                });
+              }
+            });
           }
 
           this._map?.addMany(allLayers);
