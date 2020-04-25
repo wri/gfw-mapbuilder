@@ -57,8 +57,10 @@ export const LayerVersionPicker = (
     const newconf = Object.assign(layerInfo, {
       layerIds: versionLayerIds,
       url: versionLayerURL,
-      legendInfo: layerLegendInfo
+      legendInfo: layerLegendInfo,
+      versionIndex: newVersionIndex
     });
+
     const layerOptions = {
       id: newconf.id,
       title: newconf.title,
