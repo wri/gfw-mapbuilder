@@ -24,7 +24,10 @@ const appSettingsSelector = createSelector(
     alternativeLanguage: appSettings.alternativeLanguage,
     includeMyGFWLogin: appSettings.includeMyGFWLogin,
     alternativeLanguageTitle: appSettings.alternativeLanguageTitle,
-    alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle
+    alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle,
+    mapThemes: appSettings.mapThemes,
+    mapThemeIds: appSettings.mapThemeIds,
+    alternativeMapThemes: appSettings.alternativeMapThemes
   })
 );
 
@@ -41,7 +44,10 @@ const Header: FunctionComponent = () => {
     alternativeLanguage,
     includeMyGFWLogin,
     alternativeLanguageTitle,
-    alternativeLanguageSubtitle
+    alternativeLanguageSubtitle,
+    mapThemes,
+    mapThemeIds,
+    alternativeMapThemes
   } = useSelector(appSettingsSelector);
 
   const selectedLanguage = useSelector(
@@ -72,6 +78,11 @@ const Header: FunctionComponent = () => {
   const appSubtitle =
     selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
 
+  const mapThemeArray = mapThemes?.split(';');
+  const mapThemeIDArray = mapThemeIds?.split(';');
+  const alternativeMapThemeArray = alternativeMapThemes?.split(';');
+  const renderThemeDropdown = mapThemeIDArray.length === mapThemeArray.length;
+
   return (
     <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">
@@ -93,7 +104,15 @@ const Header: FunctionComponent = () => {
         </div>
       </div>
       <div className="selectors-container">
-        <ThemeDropdown />
+        {renderThemeDropdown && (
+          <ThemeDropdown
+            selectedLanguage={selectedLanguage}
+            alternativeLanguage={alternativeLanguage}
+            mapThemeIds={mapThemeIDArray}
+            mapThemes={mapThemeArray}
+            alternativeMapThemes={alternativeMapThemeArray}
+          />
+        )}
         {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
           <LanguageDropdown
             language={language}

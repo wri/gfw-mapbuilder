@@ -1,43 +1,69 @@
 import React from 'react';
-// import { mapController } from 'js/controllers/mapController';
 import { ReactComponent as ThemesIcon } from 'src/images/themesIcon.svg';
-
-interface DropProps {
-  language?: string;
-  alternativeLanguage?: string;
-  selectedLanguage?: string;
+import { headerContent } from './header.translations';
+import { RootState } from 'js/store/index';
+import { useSelector } from 'react-redux';
+interface ThemeDropdownProps {
+  selectedLanguage: string;
+  alternativeLanguage: string;
+  mapThemes: string[];
+  mapThemeIds: string[];
+  alternativeMapThemes: string[];
 }
 
-const ThemeDropdown = (): JSX.Element => {
+const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
+  const [activeTheme, setActiveTheme] = React.useState('');
+
+  const navLinksInNewTab = useSelector(
+    (store: RootState) => store.appSettings.navLinksInNewTab
+  );
+  const target = navLinksInNewTab ? '_blank' : '_self';
+
+  function handleThemeSelection(themeID: string): void {
+    console.log(themeID);
+    setActiveTheme(themeID);
+  }
+
+  const themeMap = props.mapThemeIds.map((id: string, index: number) => {
+    return {
+      title: props.mapThemes[index],
+      alternativeTitle: props.alternativeMapThemes[index],
+      id: props.mapThemeIds[index]
+    };
+  });
+
+  const options = props.mapThemeIds.map((id: string, index: number) => {
+    return (
+      <li
+        key={index}
+        role="button"
+        aria-labelledby="dropdown-label"
+        id="dropdown__selected"
+        tabIndex={0}
+        onClick={(): void => handleThemeSelection(id)}
+        className={activeTheme === id ? 'selected' : ''}
+      >
+        <a
+          target={target}
+          href={`${window.location.origin}/?appid=${id}&l=${props.selectedLanguage}`}
+        >
+          {props.selectedLanguage === props.alternativeLanguage
+            ? themeMap[index].alternativeTitle
+            : themeMap[index].title}
+        </a>
+      </li>
+    );
+  });
   return (
     <div className="theme-dropdown-container">
       <ul className="dropdown">
         <span className="label-wrapper">
           <ThemesIcon height={16} width={16} fill={'#555'} />
-          <li className="dropdown-label">Themes select them</li>
+          <li className="dropdown-label">
+            {headerContent[props.selectedLanguage]?.mapThemes}
+          </li>
         </span>
-        <ul className="options">
-          <li
-            role="button"
-            aria-labelledby="dropdown-label"
-            id="dropdown__selected"
-            tabIndex={0}
-            onClick={(): void => console.log('a')}
-            className={'selected'}
-          >
-            option1
-          </li>
-          <li
-            role="button"
-            aria-labelledby="dropdown-label"
-            id="dropdown__selected"
-            tabIndex={0}
-            onClick={(): void => console.log('a')}
-            className={''}
-          >
-            option2
-          </li>
-        </ul>
+        <ul className="options">{options}</ul>
       </ul>
     </div>
   );

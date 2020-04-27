@@ -48,17 +48,20 @@
     .language-dropdown-container,
     .theme-dropdown-container {
       display: flex;
-      padding-right: 0.5rem;
+      padding-right: 1rem;
       margin-top: 1rem;
       ul {
         list-style: none;
         padding: 0;
       }
 
-      .dropdown,
-      .options {
-        width: 132px;
+      .dropdown {
+        width: fit-content;
       }
+      // .dropdown,
+      // .options {
+      //   width: 140px;
+      // }
 
       .dropdown {
         list-style: none;
@@ -71,7 +74,6 @@
 
         .label-wrapper {
           display: flex;
-          justify-content: space-evenly;
           margin-bottom: 0.75rem;
 
           svg {
