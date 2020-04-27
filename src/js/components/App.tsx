@@ -55,22 +55,40 @@ const App = (props: AppSettings | any): JSX.Element => {
       const portalURL = sharinghost || 'https://www.arcgis.com';
       const portalA = new Portal({ url: portalURL });
       const portItem = new PortalItem({ id: appID, portal: portalA });
-      portItem.fetchData('json').then(res => {
-        console.log(res);
-        const { values } = res;
-        dispatch(overwriteSettings({ ...cameroon, ...values, ...props }));
-        //Check URL for language param which comes in after user shares the application.
-        const langFromURL = new URL(window.location.href).searchParams.get(
-          'lang'
-        );
-        if (langFromURL) {
-          dispatch(setLanguage(langFromURL));
-        } else {
-          //just set default lang
-          dispatch(setLanguage(values.language));
-        }
-        setShowGlobalSpinner(false);
-      });
+      portItem
+        .fetchData('json')
+        .then(res => {
+          console.log(res);
+          const { values } = res;
+          dispatch(overwriteSettings({ ...cameroon, ...values, ...props }));
+          //Check URL for language param which comes in after user shares the application.
+          const langFromURL = new URL(window.location.href).searchParams.get(
+            'lang'
+          );
+          if (langFromURL) {
+            dispatch(setLanguage(langFromURL));
+          } else {
+            //set the language based on appid info, if nothing is set, just default to resources.js
+            dispatch(setLanguage(values?.language || cameroon.language));
+          }
+          setShowGlobalSpinner(false);
+        })
+        .catch(e => {
+          console.error(e);
+          // just fall thrrough in case of error and load the default resources
+          dispatch(overwriteSettings({ ...cameroon, ...props }));
+          //Check URL for language param which comes in after user shares the application.
+          const langFromURL = new URL(window.location.href).searchParams.get(
+            'lang'
+          );
+          if (langFromURL) {
+            dispatch(setLanguage(langFromURL));
+          } else {
+            //just set default lang
+            dispatch(setLanguage(cameroon.language));
+          }
+          setShowGlobalSpinner(false);
+        });
     } else {
       //Read our local resources.js file And any external library resources (which are prioritized)
       dispatch(overwriteSettings({ ...cameroon, ...props }));
