@@ -22,6 +22,10 @@ module.exports = {
   alternativeWebmap: '3ab4c186c87b44d8bf2520609fba783e',
   alternativeLanguageTitle: 'Forest Atlas of Cameroon',
   alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
+  mapThemeIds:
+    '1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19',
+  mapThemes: ' Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea',
+  alternativeMapThemes: 'Alt name 1; Alt name 2',
   alternativeNarrative:
     '\u003cp\u003eThis map show the general land use allocation in Cameroon. It includes mining permits, hunting zones, various forest titles as well as agro-industrial plantations.\u003cbr\u003e\u003c/p\u003e',
   alternativeWebmapMenuName: 'Land Use',
