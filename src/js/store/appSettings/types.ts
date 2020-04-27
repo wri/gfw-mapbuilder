@@ -1,5 +1,7 @@
 export interface AppSettings {
   webmap?: string;
+  webmapMenuName?: string;
+  alternativeWebmapMenuName?: string;
   title: string;
   subtitle?: string;
   logoUrl?: string;
@@ -26,6 +28,7 @@ export interface AppSettings {
   mapThemes: string;
   mapThemeIds: string;
   alternativeMapThemes: string;
+  initialExtent?: { x: number; y: number; z: number };
 }
 
 type LayerGroupKey =
