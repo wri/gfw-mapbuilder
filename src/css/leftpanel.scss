@@ -71,6 +71,22 @@
         border-radius: 50%;
       }
     }
+
+    button[data-tip='analysis'] {
+      .yellow-alert {
+        position: absolute;
+        top: 0.25rem;
+        right: calc(60px + 0.25rem); // * NOTE: 60px is the width of the tab
+      }
+    }
+
+    button[data-tip='documents'] {
+      .yellow-alert {
+        position: absolute;
+        top: 0.25rem;
+        right: calc(60px - 3.5rem); // * NOTE: 60px is the width of the tab
+      }
+    }
   }
 
   .documents-container {
