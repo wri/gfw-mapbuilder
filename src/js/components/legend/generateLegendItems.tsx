@@ -188,7 +188,11 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {label}
         </div>
       );
-    } else if (layer.legendInfo && layer.origin === 'webmap') {
+    } else if (
+      layer.legendInfo &&
+      !layer.legendInfo.error &&
+      layer.origin === 'webmap'
+    ) {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
         //deal with no label
         item.label = item.label && item.label.length ? item.label : layer.title;
