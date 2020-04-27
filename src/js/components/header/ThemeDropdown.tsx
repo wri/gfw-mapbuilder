@@ -45,6 +45,7 @@ const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
       >
         <a
           target={target}
+          style={{ textDecoration: 'none', color: 'inherit' }}
           href={`${window.location.origin}/?appid=${id}&l=${props.selectedLanguage}`}
         >
           {props.selectedLanguage === props.alternativeLanguage
