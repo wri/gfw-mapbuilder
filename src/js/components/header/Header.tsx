@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
+import ThemeDropdown from 'js/components/header/ThemeDropdown';
 import GFWLogin from 'js/components/header/GFWLogin';
 
 import { RootState } from 'js/store/index';
@@ -91,7 +92,8 @@ const Header: FunctionComponent = () => {
           <h2>{appSubtitle}</h2>
         </div>
       </div>
-      <div className="lang-login-container">
+      <div className="selectors-container">
+        <ThemeDropdown />
         {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
           <LanguageDropdown
             language={language}

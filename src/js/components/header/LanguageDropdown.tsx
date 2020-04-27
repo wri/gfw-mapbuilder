@@ -4,6 +4,8 @@ import { mapController } from 'js/controllers/mapController';
 
 import { ReactComponent as InfoBoxIcon } from 'src/images/infoBoxIcon.svg';
 
+import { headerContent } from './header.translations';
+
 interface DropProps {
   language: string;
   alternativeLanguage: string;
@@ -42,23 +44,15 @@ function valueToLang(abbrev: string): string {
   return lang;
 }
 
-const config = {
-  en: 'SELECT LANGUAGE',
-  es: 'Seleccionar idioma',
-  fr: 'Choisir Langue',
-  pt: 'Selecionar Idioma',
-  id: 'Select Language',
-  ka: 'ენის არჩევა',
-  zh: '选择语言'
-};
-
 const LanguageDropdown = (props: DropProps) => {
   return (
     <div className="language-dropdown-container">
       <ul className="dropdown">
         <span className="label-wrapper">
           <InfoBoxIcon height={16} width={16} fill={'#555'} />
-          <li className="dropdown-label">{config[props.selectedLanguage]}</li>
+          <li className="dropdown-label">
+            {headerContent[props.selectedLanguage].language}
+          </li>
         </span>
         <ul className="options">
           <li
