@@ -1,5 +1,7 @@
 export interface AppSettings {
   webmap?: string;
+  webmapMenuName?: string;
+  alternativeWebmapMenuName?: string;
   title: string;
   subtitle?: string;
   logoUrl?: string;
