@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 
@@ -25,11 +25,23 @@ export interface TabProps {
   icon: React.SFC<React.SVGProps<SVGSVGElement>>;
   tooltipText: string;
   activeTab: string;
+  documentFlashingActive: boolean;
+  setDocumentFlashing: (isFlashing: boolean) => void;
+  analysisFlashingActive: boolean;
+  setAnalysisFlashing: (isFlashing: boolean) => void;
 }
 
 // Individual TAB Logic
 const Tab = (props: TabProps): React.ReactElement => {
-  const { activeTab, label, icon: Icon } = props;
+  const {
+    activeTab,
+    label,
+    icon: Icon,
+    documentFlashingActive,
+    setDocumentFlashing,
+    analysisFlashingActive,
+    setAnalysisFlashing
+  } = props;
 
   const dispatch = useDispatch();
 
@@ -42,6 +54,12 @@ const Tab = (props: TabProps): React.ReactElement => {
   );
 
   function handleTabClick(): void {
+    if (label === 'documents') {
+      setDocumentFlashing(false);
+    }
+    if (label === 'analysis') {
+      setAnalysisFlashing(false);
+    }
     if (savedActiveTab === label) {
       dispatch(toggleTabviewPanel(!tabViewVisible));
     } else {
@@ -63,6 +81,8 @@ const Tab = (props: TabProps): React.ReactElement => {
         onClick={handleTabClick}
       >
         <Icon width={25} height={25} fill={'#555'} />
+        {documentFlashingActive && <span className="yellow-alert" />}
+        {analysisFlashingActive && <span className="yellow-alert" />}
       </button>
       <ReactTooltip effect="solid" className="tab-tooltip" />
     </>
@@ -81,20 +101,52 @@ interface TabsProps {
 }
 
 const Tabs = (props: TabsProps): React.ReactElement => {
+  const [documentFlashing, setDocumentFlashing] = useState(false);
+  const [analysisFlashing, setAnalysisFlashing] = useState(false);
   //Active Tab in the store
   const savedActiveTab = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
-  const tabsGroupRow = props.tabsToRender.map(tab => (
-    <Tab
-      key={tab.label}
-      label={tab.label}
-      tooltipText={tab.tooltipText}
-      icon={tab.icon}
-      activeTab={savedActiveTab}
-    />
-  ));
+  const activeFeatures = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatures
+  );
+
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
+  );
+
+  const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
+
+  useEffect(() => {
+    const specificFeature =
+      activeFeatures[featureCollectionIndex]?.features[featureIndex];
+
+    if (specificFeature) {
+      setDocumentFlashing(true);
+      setAnalysisFlashing(true);
+    }
+  }, [activeFeatures, activeFeatureIndex]);
+
+  const tabsGroupRow = props.tabsToRender.map(tab => {
+    const documentFlashingActive =
+      tab.label === 'documents' && documentFlashing;
+    const analysisFlashingActive = tab.label === 'analysis' && analysisFlashing;
+
+    return (
+      <Tab
+        key={tab.label}
+        label={tab.label}
+        tooltipText={tab.tooltipText}
+        icon={tab.icon}
+        activeTab={savedActiveTab}
+        documentFlashingActive={documentFlashingActive}
+        setDocumentFlashing={setDocumentFlashing}
+        analysisFlashingActive={analysisFlashingActive}
+        setAnalysisFlashing={setAnalysisFlashing}
+      />
+    );
+  });
 
   return <div className="tab-header-container">{tabsGroupRow}</div>;
 };

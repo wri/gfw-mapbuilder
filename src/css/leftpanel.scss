@@ -12,6 +12,35 @@
   max-height: 50rem;
   overflow-y: scroll;
 
+  .tab-header-container {
+    button[data-tip='documents'],
+    button[data-tip='analysis'] {
+      display: flex;
+
+      .yellow-alert {
+        width: 5px;
+        height: 5px;
+        border: 1px solid;
+        border-color: $base-yellow;
+        background-color: $base-yellow;
+        border-radius: 50%;
+        animation: blink-animation 1s steps(3, start) infinite;
+        -webkit-animation: blink-animation 1s steps(3, start) infinite;
+      }
+
+      @keyframes blink-animation {
+        to {
+          visibility: hidden;
+        }
+      }
+      @-webkit-keyframes blink-animation {
+        to {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
   .documents-container {
     display: flex;
     flex-wrap: wrap;
