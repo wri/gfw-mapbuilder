@@ -3,6 +3,7 @@ module.exports = {
   title: 'Atlas Forestier du Cameroun',
   subtitle: 'Ministère des Forêts et de la Faune',
   webmapMenuName: 'Affectation des Terres',
+  // initialExtent: {"x": -91.7,"y": 16.6,"z": 9},
   logoUrl:
     'https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590',
   logoLinkUrl: 'http://www.minfof.cm/',

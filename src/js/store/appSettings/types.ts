@@ -22,6 +22,7 @@ export interface AppSettings {
   hideHeader?: boolean;
   navLinksInNewTab?: boolean;
   recentImagery?: boolean;
+  initialExtent?: { x: number; y: number; z: number };
 }
 
 type LayerGroupKey =
