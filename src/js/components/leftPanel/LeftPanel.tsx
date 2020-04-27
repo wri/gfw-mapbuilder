@@ -68,6 +68,16 @@ const Tab = (props: TabProps): React.ReactElement => {
     }
   }
 
+  const setClassName = (): string => {
+    if (documentFlashingActive) {
+      return 'doc-flash-icon';
+    } else if (analysisFlashingActive) {
+      return 'analysis-flash-icon';
+    } else {
+      return '';
+    }
+  };
+
   return (
     <>
       <button
@@ -80,7 +90,7 @@ const Tab = (props: TabProps): React.ReactElement => {
         }
         onClick={handleTabClick}
       >
-        <Icon width={25} height={25} fill={'#555'} />
+        <Icon width={25} height={25} fill={'#555'} className={setClassName()} />
         {documentFlashingActive && <span className="yellow-alert" />}
         {analysisFlashingActive && <span className="yellow-alert" />}
       </button>
@@ -123,8 +133,16 @@ const Tabs = (props: TabsProps): React.ReactElement => {
       activeFeatures[featureCollectionIndex]?.features[featureIndex];
 
     if (specificFeature) {
-      setDocumentFlashing(true);
-      setAnalysisFlashing(true);
+      if (savedActiveTab === 'documents') {
+        setDocumentFlashing(false);
+      } else {
+        setDocumentFlashing(true);
+      }
+      if (savedActiveTab === 'analysis') {
+        setAnalysisFlashing(false);
+      } else {
+        setAnalysisFlashing(true);
+      }
     }
   }, [activeFeatures, activeFeatureIndex]);
 

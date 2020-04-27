@@ -13,30 +13,62 @@
   overflow-y: scroll;
 
   .tab-header-container {
+    button {
+      .doc-flash-icon,
+      .analysis-flash-icon {
+        animation-name: animate-pulse;
+        animation-iteration-count: infinite;
+        animation-duration: 1000ms;
+      }
+
+      @keyframes animate-pulse {
+        0% {
+          transform: scale(1);
+        }
+        10% {
+          transform: scale(0.95);
+        }
+        20% {
+          transform: scale(0.9);
+        }
+        30% {
+          transform: scale(0.85);
+        }
+        40% {
+          transform: scale(0.8);
+        }
+        50% {
+          transform: scale(0.75);
+        }
+        60% {
+          transform: scale(0.8);
+        }
+        70% {
+          transform: scale(0.85);
+        }
+        80% {
+          transform: scale(0.9);
+        }
+        90% {
+          transform: scale(0.95);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
+
     button[data-tip='documents'],
     button[data-tip='analysis'] {
       display: flex;
 
       .yellow-alert {
-        width: 5px;
-        height: 5px;
+        width: 2.5px;
+        height: 2.5px;
         border: 1px solid;
         border-color: $base-yellow;
         background-color: $base-yellow;
         border-radius: 50%;
-        animation: blink-animation 1s steps(3, start) infinite;
-        -webkit-animation: blink-animation 1s steps(3, start) infinite;
-      }
-
-      @keyframes blink-animation {
-        to {
-          visibility: hidden;
-        }
-      }
-      @-webkit-keyframes blink-animation {
-        to {
-          visibility: hidden;
-        }
       }
     }
   }
