@@ -24,6 +24,7 @@ export interface AppSettings {
   hideHeader?: boolean;
   navLinksInNewTab?: boolean;
   recentImagery?: boolean;
+  sharinghost?: string;
   initialExtent?: { x: number; y: number; z: number };
 }
 
