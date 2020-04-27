@@ -25,6 +25,9 @@ export interface AppSettings {
   navLinksInNewTab?: boolean;
   recentImagery?: boolean;
   sharinghost?: string;
+  mapThemes: string;
+  mapThemeIds: string;
+  alternativeMapThemes: string;
   initialExtent?: { x: number; y: number; z: number };
 }
 

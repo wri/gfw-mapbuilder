@@ -42,24 +42,26 @@
     }
   }
 
-  .lang-login-container {
+  .selectors-container {
     display: flex;
-
-    .language-dropdown-container {
+    align-items: center;
+    .language-dropdown-container,
+    .theme-dropdown-container {
       display: flex;
-      margin-top: auto;
-      margin-bottom: auto;
       padding-right: 1rem;
-
+      margin-top: 1rem;
       ul {
         list-style: none;
         padding: 0;
       }
 
-      .dropdown,
-      .options {
-        width: 132px;
+      .dropdown {
+        width: fit-content;
       }
+      // .dropdown,
+      // .options {
+      //   width: 140px;
+      // }
 
       .dropdown {
         list-style: none;
@@ -69,15 +71,9 @@
         height: auto;
         text-transform: uppercase;
         font-size: 12px;
-        margin-top: auto;
-        margin-bottom: auto;
-        position: absolute;
-        right: 10rem;
-        top: 1.25rem;
 
         .label-wrapper {
           display: flex;
-          justify-content: space-evenly;
           margin-bottom: 0.75rem;
 
           svg {

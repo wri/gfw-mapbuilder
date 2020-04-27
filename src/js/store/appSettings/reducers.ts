@@ -29,6 +29,9 @@ const initialState: AppSettings = {
   alternativeNarrative: '',
   alternativeLanguageTitle: '',
   alternativeLanguageSubtitle: '',
+  mapThemeIds: '',
+  mapThemes: '',
+  alternativeMapThemes: '',
   analysisModules: [
     {
       analysisId: '',
