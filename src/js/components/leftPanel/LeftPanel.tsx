@@ -78,6 +78,10 @@ const Tab = (props: TabProps): React.ReactElement => {
     }
   };
 
+  useEffect(() => {
+    handleTabClick();
+  }, [label]);
+
   return (
     <>
       <button
@@ -128,23 +132,20 @@ const Tabs = (props: TabsProps): React.ReactElement => {
 
   const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
 
-  useEffect(() => {
-    const specificFeature =
-      activeFeatures[featureCollectionIndex]?.features[featureIndex];
+  const specificFeature =
+    activeFeatures[featureCollectionIndex]?.features[featureIndex];
 
+  useEffect(() => {
     if (specificFeature) {
-      if (savedActiveTab === 'documents') {
-        setDocumentFlashing(false);
-      } else {
+      if (savedActiveTab !== 'documents') {
         setDocumentFlashing(true);
       }
-      if (savedActiveTab === 'analysis') {
-        setAnalysisFlashing(false);
-      } else {
+
+      if (savedActiveTab !== 'analysis') {
         setAnalysisFlashing(true);
       }
     }
-  }, [activeFeatures, activeFeatureIndex]);
+  }, [specificFeature]);
 
   const tabsGroupRow = props.tabsToRender.map(tab => {
     const documentFlashingActive =
