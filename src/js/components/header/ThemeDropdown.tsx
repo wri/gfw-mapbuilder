@@ -32,6 +32,10 @@ const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
     };
   });
 
+  //@ts-ignore
+  const baseURL = new URL(window.location);
+  const pathName = baseURL.pathname.length === 0 ? '' : baseURL.pathname;
+  const shareURLBase = baseURL.origin + pathName;
   const options = props.mapThemeIds.map((id: string, index: number) => {
     return (
       <li
@@ -46,7 +50,7 @@ const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
         <a
           target={target}
           style={{ textDecoration: 'none', color: 'inherit' }}
-          href={`${window.location.origin}/?appid=${id}&l=${props.selectedLanguage}`}
+          href={`${shareURLBase}?appid=${id}&l=${props.selectedLanguage}`}
         >
           {props.selectedLanguage === props.alternativeLanguage
             ? themeMap[index].alternativeTitle
