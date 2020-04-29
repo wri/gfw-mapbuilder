@@ -94,16 +94,24 @@ const BaseAnalysis = (): JSX.Element => {
       setGeostoreReady(true);
       return;
     } else {
-      registerGeometry(activeFeature)
-        .then(response => response.json())
-        .then(res => {
-          const oldActiveFeatures = [...activeFeatures];
-          const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
-          const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
-          activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
-          dispatch(setActiveFeatures(oldActiveFeatures));
-          setGeostoreReady(true);
-        });
+      setTimeout(() => {
+        registerGeometry(activeFeature)
+          .then(response => response.json())
+          .then(res => {
+            const oldActiveFeatures = [...activeFeatures];
+            const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
+            const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+            activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
+            dispatch(setActiveFeatures(oldActiveFeatures));
+            setGeostoreReady(true);
+          });
+      }, 1500);
+      /**
+       * * NOTE:
+       * - setTimeout() ensures registerGeometry()
+       * does not fire if user is toggling tabs quickly
+       * - also resolves React memory leaks
+       */
     }
   }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
