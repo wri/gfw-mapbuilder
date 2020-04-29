@@ -53,13 +53,17 @@ const Tab = (props: TabProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
-  function handleTabClick(): void {
+  const setFlashingTab = (): void => {
     if (label === 'documents') {
       setDocumentFlashing(false);
     }
     if (label === 'analysis') {
       setAnalysisFlashing(false);
     }
+  };
+
+  function handleTabClick(): void {
+    setFlashingTab();
     if (savedActiveTab === label) {
       dispatch(toggleTabviewPanel(!tabViewVisible));
     } else {
@@ -79,7 +83,7 @@ const Tab = (props: TabProps): React.ReactElement => {
   };
 
   useEffect(() => {
-    handleTabClick();
+    setFlashingTab();
   }, [label]);
 
   return (
