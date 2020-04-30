@@ -1,5 +1,7 @@
 export interface AppSettings {
   webmap?: string;
+  webmapMenuName?: string;
+  alternativeWebmapMenuName?: string;
   title: string;
   subtitle?: string;
   logoUrl?: string;
@@ -15,6 +17,18 @@ export interface AppSettings {
   narrative: string;
   alternativeNarrative: string;
   analysisModules: AnalysisModule[];
+  alternativeLanguageTitle: string;
+  alternativeLanguageSubtitle: string;
+  iso: string;
+  hideFooter?: boolean;
+  hideHeader?: boolean;
+  navLinksInNewTab?: boolean;
+  recentImagery?: boolean;
+  sharinghost?: string;
+  mapThemes: string;
+  mapThemeIds: string;
+  alternativeMapThemes: string;
+  initialExtent?: { x: number; y: number; z: number };
 }
 
 type LayerGroupKey =
@@ -29,7 +43,7 @@ type LayerGroup = {
   [key in LayerGroupKey]: LayerGroupInfo;
 };
 
-interface AnalysisModule {
+export interface AnalysisModule {
   analysisId: string;
   chartType: string;
   label: { [key: string]: string };

@@ -26,6 +26,8 @@ import store from '../store/index';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
 import { getSortedLayers } from 'js/helpers/mapController/layerSorting';
+import { addPointGraphic } from 'js/helpers/MapGraphics';
+import { once } from 'esri/core/watchUtils';
 import {
   allAvailableLayers,
   mapError,
@@ -33,7 +35,8 @@ import {
   setActiveFeatureIndex,
   setActiveFeatures,
   changeMapScale,
-  changeMapCenterCoordinates
+  changeMapCenterCoordinates,
+  setLayersLoading
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -139,8 +142,30 @@ export class MapController {
       container: domRef.current
     });
 
+    //if we have init extent, use it.
+    if (
+      appSettings.initialExtent &&
+      appSettings.initialExtent.hasOwnProperty('x') &&
+      appSettings.initialExtent.hasOwnProperty('y') &&
+      appSettings.initialExtent.hasOwnProperty('z')
+    ) {
+      //@ts-ignore
+      this._mapview.center = [
+        appSettings.initialExtent['x'],
+        appSettings.initialExtent['y']
+      ];
+      this._mapview.zoom = appSettings.initialExtent['z'];
+    }
+
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
+
+    this.setPageTitle(
+      appState.selectedLanguage,
+      appSettings.language,
+      appSettings.title,
+      appSettings.alternativeLanguageTitle
+    );
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
@@ -240,21 +265,20 @@ export class MapController {
                 remoteLayerObject.layer.outputRange;
               newRemoteLayerObject.parentID = undefined;
             } else {
-              //dealing with resouces (config file) layers
-
-              //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              let legendInfoObject;
-              try {
-                legendInfoObject = await fetchLegendInfo(remoteLayerObject.url);
-              } catch (e) {
-                console.error('Error fetching Legend Info', e);
+              if (
+                remoteLayerObject.versions &&
+                remoteLayerObject.versions[0].url
+              ) {
+                remoteLayerObject.layerIds =
+                  remoteLayerObject.versions[0].layerIds;
+                remoteLayerObject.url = remoteLayerObject.versions[0].url;
+                remoteLayerObject.versionIndex = 0;
               }
-              const layerLegendInfo =
-                legendInfoObject &&
-                legendInfoObject?.layers.filter((l: any) =>
-                  remoteLayerObject.layerIds?.includes(l.layerId)
-                );
-              newRemoteLayerObject.legendInfo = layerLegendInfo;
+              //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
+              const legendInfoObject = await this.retrieveLegendInfo(
+                remoteLayerObject
+              );
+              newRemoteLayerObject.legendInfo = legendInfoObject;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
                 appState.selectedLanguage
@@ -271,6 +295,13 @@ export class MapController {
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
+              newRemoteLayerObject.filterField = remoteLayerObject.filterField;
+              newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionIndex =
+                remoteLayerObject.versionIndex;
+              newRemoteLayerObject.versionHeaderText =
+                remoteLayerObject.versionHeaderText;
             }
             remoteLayerObjects.push(newRemoteLayerObject);
           }
@@ -283,7 +314,53 @@ export class MapController {
               return LayerFactory(this._mapview, layerObject);
             })
             .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
-          this._map?.addMany(esriRemoteLayers);
+
+          //Get VIIRS and MODIS layers
+          const viirsLayers = this.initializeAndSetVIIRSLayers();
+          const modisLayers = this.initializeAndSetMODISLayers();
+
+          const allLayers = [
+            ...viirsLayers,
+            ...modisLayers,
+            ...esriRemoteLayers
+          ];
+
+          //If we have report active, we need to know when our feature layer has loaded
+          const report = new URL(window.location.href).searchParams.get(
+            'report'
+          );
+          if (report && report === 'true') {
+            const layerID = new URL(window.location.href).searchParams.get(
+              'acLayer'
+            );
+            if (!layerID) return;
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+            const activeLayer = combinedLayers.find(l => l.id === layerID);
+            if (activeLayer.loaded === true) {
+              store.dispatch(setLayersLoading(false));
+            } else {
+              once(activeLayer, 'loaded', () => {
+                store.dispatch(setLayersLoading(false));
+              });
+            }
+          } else {
+            //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+
+            combinedLayers.forEach(l => {
+              if (l.loaded === true) {
+                store.dispatch(setLayersLoading(false));
+              } else {
+                once(l, 'loaded', () => {
+                  store.dispatch(setLayersLoading(false));
+                });
+              }
+            });
+          }
+
+          this._map?.addMany(allLayers);
 
           //Retrieve sorted layer array
           const mapLayerIDs = getSortedLayers(
@@ -300,9 +377,8 @@ export class MapController {
             }
           });
 
+          this.addExtraLayers();
           this.initializeAndSetSketch();
-          this.initializeAndSetVIIRSLayers();
-          this.initializeAndSetMODISLayers();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -313,6 +389,19 @@ export class MapController {
         console.log('error in initializeMap()', error);
         store.dispatch(mapError(true));
       });
+  }
+
+  setPageTitle(
+    currentLanguage: string,
+    defaultLanguage: string,
+    primaryTitle: string,
+    secondaryTitle: string
+  ): void {
+    if (currentLanguage === defaultLanguage) {
+      window.document.title = primaryTitle;
+    } else {
+      window.document.title = secondaryTitle;
+    }
   }
 
   getRemoteAndServiceLayers(): Promise<any> {
@@ -326,23 +415,67 @@ export class MapController {
         return groupName !== 'GROUP_BASEMAP' && groupName !== 'extraLayers';
       })
       .reduce((list, groupName, groupIndex) => {
-        const orderedGroups = layerPanel[groupName].layers.map((layer: any) => {
-          return { groupId: groupName, ...layer };
-        });
+        let orderedGroups;
+        if (layerPanel[groupName]?.groupType === 'nested') {
+          let allNestedLayers: any[] = [];
+          layerPanel[groupName].layers.forEach((layerG: any) => {
+            allNestedLayers = allNestedLayers.concat(layerG.nestedLayers);
+          });
+          orderedGroups = allNestedLayers.map((layer: any) => {
+            return { groupId: groupName, ...layer };
+          });
+        } else {
+          orderedGroups = layerPanel[groupName].layers.map((layer: any) => {
+            return { groupId: groupName, ...layer };
+          });
+        }
         return list.concat(orderedGroups);
       }, []);
 
-    layers.forEach((layer: any): void => {
-      if (layer.type === 'remoteDataLayer') {
-        remoteDataLayers.push({
-          order: layer.order,
-          layerGroupId: layer.groupId,
-          dataLayer: layer
-        });
+    const configLayerFilters = {
+      VIIRS_ACTIVE_FIRES: 'viirsFires',
+      MODIS_ACTIVE_FIRES: 'modisFires',
+      LAND_COVER: 'landCover',
+      AG_BIOMASS: 'aboveGroundBiomass',
+      IFL: 'intactForests',
+      PRIMARY_FORESTS: 'primaryForests',
+      FORMA_ALERTS: 'forma',
+      GLOB_MANGROVE: 'mangroves',
+      IMAZON_SAD: 'sadAlerts',
+      GLAD_ALERTS: 'gladAlerts',
+      TERRA_I_ALERTS: 'terraIAlerts',
+      RECENT_IMAGERY: 'recentImagery'
+    };
+    const configLayerIDs = Object.keys(configLayerFilters);
+
+    function checkLayerFilterConfig(l: any): boolean {
+      const checkLayer = configLayerIDs.includes(l.id);
+      if (checkLayer) {
+        //Check for settings on that layer
+        const settingID = configLayerFilters[l.id];
+        //If no setting exist for the layer, we default to showing the layer
+        const settingValue = appSettings.hasOwnProperty(settingID)
+          ? appSettings[settingID]
+          : true;
+        return settingValue;
       } else {
-        detailedLayers.push(layer);
+        return true;
       }
-    });
+    }
+
+    layers
+      .filter((l: any) => checkLayerFilterConfig(l))
+      .forEach((layer: any): void => {
+        if (layer.type === 'remoteDataLayer') {
+          remoteDataLayers.push({
+            order: layer.order,
+            layerGroupId: layer.groupId,
+            dataLayer: layer
+          });
+        } else {
+          detailedLayers.push(layer);
+        }
+      });
 
     const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
       return fetch(
@@ -374,14 +507,37 @@ export class MapController {
     return Promise.all(remoteDataLayerRequests);
   }
 
+  async retrieveLegendInfo(
+    layerObject: LayerProps
+  ): Promise<any[] | undefined> {
+    const legendInfoObject =
+      layerObject.type !== 'webtiled'
+        ? await fetchLegendInfo(layerObject.url)
+        : undefined;
+    const layerLegendInfo =
+      legendInfoObject &&
+      !legendInfoObject.error &&
+      legendInfoObject?.layers.filter((l: any) =>
+        layerObject.layerIds?.includes(l.layerId)
+      );
+    return layerLegendInfo;
+  }
+
   changeLanguage(lang: string): void {
     if (!this._map) return;
-    const { mapviewState, appSettings } = store.getState();
+    const { mapviewState, appSettings, appState } = store.getState();
     const {
       language,
       webmap,
       alternativeWebmap
     } = store.getState().appSettings;
+
+    this.setPageTitle(
+      lang,
+      appSettings.language,
+      appSettings.title,
+      appSettings.alternativeLanguageTitle
+    );
 
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
     const nonWebmapLayers = mapviewState.allAvailableLayers.filter(
@@ -401,6 +557,20 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
+    //if we have init extent, use it.
+    if (
+      appSettings.initialExtent &&
+      appSettings.initialExtent.hasOwnProperty('x') &&
+      appSettings.initialExtent.hasOwnProperty('y') &&
+      appSettings.initialExtent.hasOwnProperty('z')
+    ) {
+      //@ts-ignore
+      this._mapview.center = [
+        appSettings.initialExtent['x'],
+        appSettings.initialExtent['y']
+      ];
+      this._mapview.zoom = appSettings.initialExtent['z'];
+    }
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
@@ -452,6 +622,9 @@ export class MapController {
         allLayerObjects,
         this._map
       );
+
+      this.addExtraLayers();
+
       //Reorder layers on the map!
       this._map?.layers.forEach((layer: any) => {
         const layerIndex = mapLayerIDs?.findIndex(i => i === layer.id);
@@ -462,8 +635,24 @@ export class MapController {
     });
   }
 
-  log(): void {
-    console.log(this._map?.basemap);
+  // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression
+  // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
+  addExtraLayers(): void {
+    const appSettings = store.getState().appSettings;
+    const { layerPanel } = appSettings;
+    const extraLayers = layerPanel['extraLayers'];
+    extraLayers.forEach((exLayer: any) => {
+      let extraEsriLayer;
+      if (exLayer.id === 'MASK') {
+        exLayer.type = 'MASK';
+        extraEsriLayer = LayerFactory(this._mapview, exLayer);
+      } else {
+        extraEsriLayer = LayerFactory(this._mapview, exLayer);
+      }
+      if (extraEsriLayer) {
+        this._map!.add(extraEsriLayer);
+      }
+    });
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
@@ -485,7 +674,6 @@ export class MapController {
   }
 
   clearAllLayers(): void {
-    console.log('clear all layers');
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach((layer: any) => {
       if (layer.sublayers) {
@@ -509,7 +697,6 @@ export class MapController {
   }
 
   selectAllLayers(): void {
-    console.log('select all layers');
     this._map?.layers.forEach((layer: any) => {
       if (layer.sublayers) {
         layer.sublayers.forEach((sub: any) => (sub.visible = true));
@@ -544,6 +731,27 @@ export class MapController {
         allFeatures: specificFeature,
         isUploadFile: false
       });
+    }
+  }
+
+  changeLayerVisibility(layerID: string, visibility: boolean): void {
+    const layer = this._map?.findLayerById(layerID);
+    if (layer) {
+      //1. update the map
+      layer.visible = visibility;
+      //2. Update redux
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            visible: layer.visible
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
 
@@ -612,7 +820,7 @@ export class MapController {
     }
   }
 
-  completeSketchVM(): void {
+  completeSketchVM(): any {
     this._sketchVM?.complete();
   }
 
@@ -622,13 +830,28 @@ export class MapController {
 
   updateSketchVM(): any {
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'][0], {
-        tool: 'reshape',
-        enableRotation: false,
-        toggleToolOnClick: false,
-        enableScaling: false,
-        preserveAspectRatio: false
-      });
+      if (this._sketchVMGraphicsLayer.graphics['items'].length === 1) {
+        this._sketchVM?.update(
+          this._sketchVMGraphicsLayer.graphics['items'][0],
+          {
+            tool: 'reshape',
+            enableRotation: false,
+            toggleToolOnClick: false,
+            enableScaling: false,
+            preserveAspectRatio: false
+          }
+        );
+      }
+
+      if (this._sketchVMGraphicsLayer.graphics['items'].length > 1) {
+        this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'], {
+          tool: 'transform',
+          enableRotation: true,
+          toggleToolOnClick: true,
+          enableScaling: true,
+          preserveAspectRatio: false
+        });
+      }
     }
   }
 
@@ -640,34 +863,45 @@ export class MapController {
     }
   }
 
-  listenToSketchCreate(event: any): any {
-    if (event.state === 'complete') {
-      event.graphic.attributes = {
-        OBJECTID: event.graphic.uid
-      };
-
-      event.graphic.symbol.outline.color = [115, 252, 253];
-      event.graphic.symbol.color = [0, 0, 0, 0];
-      //Replace all active features with our drawn feature, assigning custom layerID and Title
-      const drawnFeatures: LayerFeatureResult = {
-        layerID: 'user_features',
-        layerTitle: 'User Features',
-        // sublayerID: null,
-        // sublayerTitle: null,
-        features: [event.graphic],
-        fieldNames: null
-      };
-
-      store.dispatch(setActiveFeatures([drawnFeatures]));
-      store.dispatch(setActiveFeatureIndex([0, 0]));
-      store.dispatch(selectActiveTab('analysis'));
+  listenToSketchCreate(event: any): void {
+    let eventGraphics;
+    if (event.hasOwnProperty('graphic')) {
+      eventGraphics = event.graphic;
+    } else if (event.hasOwnProperty('graphics')) {
+      eventGraphics = event.graphics[0];
     }
+    eventGraphics.attributes = {
+      OBJECTID: eventGraphics.uid
+    };
+
+    eventGraphics.symbol.outline.color = [115, 252, 253];
+    eventGraphics.symbol.color = [0, 0, 0, 0];
+
+    const drawnFeatures: LayerFeatureResult = {
+      layerID: 'user_features',
+      layerTitle: 'User Features',
+      features: [eventGraphics],
+      fieldNames: null
+    };
+
+    //Replace all active features with our drawn feature, assigning custom layerID and Title
+    store.dispatch(setActiveFeatures([drawnFeatures]));
+    store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(selectActiveTab('analysis'));
   }
 
-  initializeAndSetSketch(): void {
+  initializeAndSetSketch(graphics = []): void {
+    if (this._sketchVMGraphicsLayer) {
+      this._sketchVMGraphicsLayer.graphics.removeAll();
+    }
+
     this._sketchVMGraphicsLayer = new GraphicsLayer({
       id: 'sketchGraphics'
     });
+
+    if (graphics.length) {
+      this._sketchVMGraphicsLayer.graphics.addMany(graphics);
+    }
 
     this._sketchVM = new SketchViewModel({
       layer: this._sketchVMGraphicsLayer,
@@ -682,18 +916,24 @@ export class MapController {
     this._map?.add(this._sketchVMGraphicsLayer);
 
     this._sketchVM?.on('create', (event: any) => {
-      this.listenToSketchCreate(event);
+      if (event.state === 'complete') {
+        this.listenToSketchCreate(event);
+      }
     });
 
     this._sketchVM?.on('delete', () => {
       this.listenToSketchDelete();
     });
+
+    this._sketchVM?.on('update', (event: any) => {
+      if (event.state === 'complete') {
+        this.listenToSketchCreate(event);
+      }
+    });
   }
 
   createPolygonSketch = (): void => {
     this.deleteSketchVM();
-    store.dispatch(setActiveFeatures([]));
-    store.dispatch(setActiveFeatureIndex([0, 0]));
     this._sketchVM?.create('polygon', { mode: 'freehand' });
   };
 
@@ -1116,6 +1356,34 @@ export class MapController {
     }
   }
 
+  addActiveFeatureGraphic(esriJson: Array<FeatureResult>): void {
+    if (this._map) {
+      setNewGraphic({
+        map: this._map,
+        mapview: this._mapview,
+        allFeatures: esriJson,
+        isUploadFile: false
+      });
+
+      const graphicsLayer: any = this._map.findLayerById(
+        'active-feature-layer'
+      );
+      this._mapview.goTo(graphicsLayer.graphics);
+    }
+  }
+
+  addActiveFeaturePointGraphic(esriJson: FeatureResult): void {
+    if (this._map) {
+      addPointGraphic(this._map, esriJson);
+      const graphicsLayer: any = this._map.findLayerById(
+        'active-feature-layer'
+      );
+      this._mapview.goTo(graphicsLayer.graphics);
+      //TODO: For some reason it does not zoom to points?
+      this._mapview.zoom = 12;
+    }
+  }
+
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
     const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;
@@ -1198,28 +1466,26 @@ export class MapController {
     return;
   }
 
-  initializeAndSetVIIRSLayers(): void {
-    const viirsLayerIDs = VIIRSLayerIDs.map(({ layerID, url }) => {
+  initializeAndSetVIIRSLayers(): any {
+    const viirsLayers = VIIRSLayerIDs.map(({ layerID, url }) => {
       return new FeatureLayer({
         id: layerID,
         url,
         visible: false
       });
     });
-
-    this._map?.addMany(viirsLayerIDs);
+    return viirsLayers;
   }
 
-  initializeAndSetMODISLayers(): void {
-    const modisLayerIDs = MODISLayerIDs.map(({ layerID, url }) => {
+  initializeAndSetMODISLayers(): any {
+    const modisLayers = MODISLayerIDs.map(({ layerID, url }) => {
       return new FeatureLayer({
         id: layerID,
         url,
         visible: false
       });
     });
-
-    this._map?.addMany(modisLayerIDs);
+    return modisLayers;
   }
 
   setMODISDefinedRange(layer: any, sublayerType: string): void {
@@ -1537,19 +1803,50 @@ export class MapController {
     });
   }
 
-  testGrabMetadata(layerID: string): any {
-    const test = (this._map?.layers as any).items.filter(
-      (l: any) => l.id === layerID
-    )[0];
-    // is there a way to grab this data?
+  // testGrabMetadata(layerID: string): any {
+  //   const test = (this._map?.layers as any).items.filter(
+  //     (l: any) => l.id === layerID
+  //   )[0];
+  //   // is there a way to grab this data?
 
-    const layer = new FeatureLayer({
-      portalItem: {
-        id: layerID
-      }
+  //   const layer = new FeatureLayer({
+  //     portalItem: {
+  //       id: layerID
+  //     }
+  //   });
+
+  //   debugger;
+
+  disableMapInteractions(): void {
+    this._mapview.on('mouse-wheel', function(event) {
+      event.stopPropagation();
     });
+    this._mapview.on('double-click', function(event) {
+      event.stopPropagation();
+    });
+    this._mapview.on('drag', function(event) {
+      event.stopPropagation();
+    });
+  }
 
-    debugger;
+  changeLayerDefinitionExpression(layerInfo: LayerProps, defExp: string): void {
+    if (layerInfo.type === 'feature') {
+      const layerOnMap = this._map?.findLayerById(
+        layerInfo.id
+      ) as __esri.FeatureLayer;
+      if (layerOnMap) {
+        layerOnMap.definitionExpression = defExp;
+      }
+    } else if (layerInfo.type === 'dynamic') {
+      const layerOnMap = this._map?.findLayerById(
+        layerInfo.id
+      ) as __esri.MapImageLayer;
+      if (layerOnMap) {
+        layerOnMap.allSublayers.forEach(
+          sub => (sub.definitionExpression = defExp)
+        );
+      }
+    }
   }
 }
 

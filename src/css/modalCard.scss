@@ -4,7 +4,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   z-index: 4;
   padding: 1rem;
   background: $white;
@@ -497,7 +497,7 @@
 }
 
 .dim-container {
-  position: absolute;
+  position: fixed;
   z-index: 3;
   opacity: 0.5;
   width: 100%;

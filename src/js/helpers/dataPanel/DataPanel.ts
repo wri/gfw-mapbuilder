@@ -25,7 +25,7 @@ export interface FieldInfo {
 }
 
 //Helper fn to get all available layer fields for the data tab. If layer has fields itself we are using those, but if that is not the case, attempt to fetch it by hitting layer url endpoint with pjson prefix
-async function getAllLayerFields(
+export async function getAllLayerFields(
   layer: __esri.FeatureLayer
 ): Promise<__esri.Field[] | undefined> {
   let layerFields = [] as __esri.Field[] | undefined;
@@ -180,7 +180,8 @@ export async function queryLayersForFeatures(
         l.visible &&
         l.type !== 'graphics' &&
         l.type !== 'base-tile' &&
-        l.type !== 'imagery'
+        l.type !== 'imagery' &&
+        l.id !== 'MASK'
     )
     .filter((l: any) => layerIsInScale(l, mapview.scale))
     .toArray();

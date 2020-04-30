@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
+import ThemeDropdown from 'js/components/header/ThemeDropdown';
 import GFWLogin from 'js/components/header/GFWLogin';
 
 import { RootState } from 'js/store/index';
@@ -21,7 +22,12 @@ const appSettingsSelector = createSelector(
     useAlternativeLanguage: appSettings.useAlternativeLanguage,
     alternativeWebmap: appSettings.alternativeWebmap,
     alternativeLanguage: appSettings.alternativeLanguage,
-    includeMyGFWLogin: appSettings.includeMyGFWLogin
+    includeMyGFWLogin: appSettings.includeMyGFWLogin,
+    alternativeLanguageTitle: appSettings.alternativeLanguageTitle,
+    alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle,
+    mapThemes: appSettings.mapThemes,
+    mapThemeIds: appSettings.mapThemeIds,
+    alternativeMapThemes: appSettings.alternativeMapThemes
   })
 );
 
@@ -36,7 +42,12 @@ const Header: FunctionComponent = () => {
     useAlternativeLanguage,
     alternativeWebmap,
     alternativeLanguage,
-    includeMyGFWLogin
+    includeMyGFWLogin,
+    alternativeLanguageTitle,
+    alternativeLanguageSubtitle,
+    mapThemes,
+    mapThemeIds,
+    alternativeMapThemes
   } = useSelector(appSettingsSelector);
 
   const selectedLanguage = useSelector(
@@ -51,18 +62,33 @@ const Header: FunctionComponent = () => {
     (store: RootState) => store.appState.renderGFWDropdown
   );
 
+  const navLinksInNewTab = useSelector(
+    (store: RootState) => store.appSettings.navLinksInNewTab
+  );
+
   const closeGFWDropdown = () => {
     if (renderGFWDropdown) {
       dispatch(setRenderGFWDropdown(false));
     }
   };
 
+  const target = navLinksInNewTab ? '_blank' : '_self';
+  const appTitle =
+    selectedLanguage === language ? title : alternativeLanguageTitle;
+  const appSubtitle =
+    selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
+
+  const mapThemeArray = mapThemes?.split(';');
+  const mapThemeIDArray = mapThemeIds?.split(';');
+  const alternativeMapThemeArray = alternativeMapThemes?.split(';');
+  const renderThemeDropdown = mapThemeIDArray.length === mapThemeArray.length;
+
   return (
     <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">
         <a
           href={logoLinkUrl}
-          target="_blank"
+          target={target}
           rel="noopener noreferrer"
           tabIndex={0}
         >
@@ -73,18 +99,29 @@ const Header: FunctionComponent = () => {
           />
         </a>
         <div className="titles">
-          <h1>{title.toUpperCase()}</h1>
-          <h2>{subtitle}</h2>
+          <h1>{appTitle.toUpperCase()}</h1>
+          <h2>{appSubtitle}</h2>
         </div>
       </div>
-      {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
-        <LanguageDropdown
-          language={language}
-          alternativeLanguage={alternativeLanguage}
-          selectedLanguage={selectedLanguage}
-        />
-      )}
-      {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+      <div className="selectors-container">
+        {renderThemeDropdown && (
+          <ThemeDropdown
+            selectedLanguage={selectedLanguage}
+            alternativeLanguage={alternativeLanguage}
+            mapThemeIds={mapThemeIDArray}
+            mapThemes={mapThemeArray}
+            alternativeMapThemes={alternativeMapThemeArray}
+          />
+        )}
+        {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
+          <LanguageDropdown
+            language={language}
+            alternativeLanguage={alternativeLanguage}
+            selectedLanguage={selectedLanguage}
+          />
+        )}
+        {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+      </div>
     </div>
   );
 };

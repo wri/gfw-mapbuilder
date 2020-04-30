@@ -66,7 +66,7 @@ export async function extractWebmapLayerObjects(
     if (layer.sublayers && layer.sublayers.length > 0) {
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
-        const sublayerLegendInfo = legendInfo.layers.find(
+        const sublayerLegendInfo = legendInfo?.layers.find(
           (l: any) => l.layerId === sub.id
         );
         //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity

@@ -3,6 +3,7 @@ module.exports = {
   title: 'Atlas Forestier du Cameroun',
   subtitle: 'Ministère des Forêts et de la Faune',
   webmapMenuName: 'Affectation des Terres',
+  // initialExtent: {"x": -91.7,"y": 16.6,"z": 9},
   logoUrl:
     'https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590',
   logoLinkUrl: 'http://www.minfof.cm/',
@@ -22,6 +23,10 @@ module.exports = {
   alternativeWebmap: '3ab4c186c87b44d8bf2520609fba783e',
   alternativeLanguageTitle: 'Forest Atlas of Cameroon',
   alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
+  mapThemeIds:
+    '1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19',
+  mapThemes: ' Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea',
+  alternativeMapThemes: 'Alt name 1; Alt name 2',
   alternativeNarrative:
     '\u003cp\u003eThis map show the general land use allocation in Cameroon. It includes mining permits, hunting zones, various forest titles as well as agro-industrial plantations.\u003cbr\u003e\u003c/p\u003e',
   alternativeWebmapMenuName: 'Land Use',
@@ -613,8 +618,152 @@ module.exports = {
       label: {},
       layers: []
     },
+    GROUP_Hazards: {
+      order: 6,
+      groupType: 'radio',
+      label: {
+        en: 'Hazards',
+        ka: 'საფრთხეები'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'ForestHazard',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+          layerIds: [0],
+          opacity: 0.75,
+          label: {
+            en: 'Forest General Hazard Risk',
+            ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
+          }
+        },
+        {
+          order: 2,
+          id: 'Elevation',
+          type: 'dynamic',
+          opacity: 0.8,
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+          layerIds: [1],
+          label: {
+            en: 'Elevation in Forested Areas',
+            ka: 'სიმაღლე ტყიან ზონებში'
+          }
+        },
+        {
+          order: 3,
+          id: 'Slope',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+          layerIds: [0],
+          opacity: 0.8,
+          label: {
+            en: 'Slope in Forested Areas',
+            ka: 'დაქანება ტყიან ზონებში'
+          }
+        },
+        {
+          order: 4,
+          id: 'Aspect',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+          layerIds: [2],
+          opacity: 0.8,
+          label: {
+            en: 'Aspect in Forested Areas',
+            ka: 'ექსპოზიცია ტყიან ზონებში'
+          }
+        },
+        {
+          order: 5,
+          id: 'Landslide',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+          layerIds: [1],
+          opacity: 0.6,
+          label: {
+            en: 'Landslide Zoning',
+            ka: 'ბუნებრივი კატასტროფები'
+          },
+          popup: {
+            title: {
+              en: 'Landslide Zoning',
+              ka: 'ბუნებრივი კატასტროფები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'კატეგორია',
+                  fieldExpression: 'Category_KA'
+                },
+                {
+                  label: 'ფართობი ჰა',
+                  fieldExpression: 'Area_ha_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Category',
+                  fieldExpression: 'Category_EN'
+                },
+                {
+                  label: 'Area ha',
+                  fieldExpression: 'Area_ha_EN'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 6,
+          id: 'Debrisflow',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+          layerIds: [2],
+          opacity: 0.6,
+          label: {
+            en: 'Debrisflow Zoning',
+            ka: 'რისკის ზონები'
+          },
+          popup: {
+            title: {
+              en: 'Debrisflow Zoning',
+              ka: 'რისკის ზონები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'კატეგორია',
+                  fieldExpression: 'Category_KA'
+                },
+                {
+                  label: 'ფართობი ჰა',
+                  fieldExpression: 'Area_ha_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Category',
+                  fieldExpression: 'Category_EN'
+                },
+                {
+                  label: 'Area ha',
+                  fieldExpression: 'Area_ha_EN'
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
     GROUP_LCD: {
-      grouptype: 'default',
+      groupType: 'default',
       order: 7,
       label: {
         en: 'Land Cover Dynamics',
@@ -672,7 +821,7 @@ module.exports = {
     },
     GROUP_TEST: {
       // This is a test group consisting of various layers not related to cameroon, this should not make to PROD
-      grouptype: 'default',
+      groupType: 'default',
       order: 1,
       label: {
         en: 'TEST',
@@ -685,143 +834,75 @@ module.exports = {
       },
       layers: [
         {
-          // * NEW!!!
-          order: 4,
-          id: 'TESTINGGGGG',
+          order: 1,
+          id: 'Versioned Dynamic Layer',
           type: 'dynamic',
-          url:
-            'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/AGOL_Full_Metadata/FeatureServer/0',
-          layerIds: [4],
-          technicalName: 'testinggggg_gggg',
-          visible: true
-        },
-        {
-          order: 3,
-          id: 'CTC2',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-          layerIds: [3],
-          technicalName: 'ind_treecover2',
           visible: true,
           label: {
-            en:
-              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 40%'
-          }
-        },
-        {
-          order: 2,
-          id: 'CTC',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
-          layerIds: [2],
-          technicalName: 'ind_treecover',
-          visible: true,
-          label: {
-            en:
-              'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
-          }
+            en: 'Versioned Dynamic Layer',
+            fr: 'Versioned Dynamic Layer'
+          },
+          versionHeaderText: {
+            en: 'Pick a version',
+            fr: 'Pick a version'
+          },
+          versions: [
+            {
+              label: {
+                en: 'All Protected Areas',
+                fr: 'All Protected Areas'
+              },
+              url:
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+              layerIds: [0]
+            },
+            {
+              label: {
+                en: 'National Parks',
+                fr: 'National Parks'
+              },
+              url:
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+              layerIds: [1]
+            }
+          ]
         },
         {
           order: 1,
-          id: 'MTC',
-          type: 'dynamic',
-          url:
-            'https://gis.forest-atlas.org/server/rest/services/ind/VectorUpdates_14Feb2019/MapServer',
-          layerIds: [1, 7],
-          technicalName: 'ind_statecarbon',
+          id: 'Versioned Feature Layer',
+          type: 'feature',
           visible: true,
           label: {
-            en:
-              'State-wise Potential for Increase in Above-ground Carbon Sequestration'
+            en: 'Versioned Feature Layer',
+            fr: 'Versioned Feature Layer'
           },
-          popup: {
-            title: {
-              en: ''
+          versionHeaderText: {
+            en: 'Pick a version',
+            fr: 'Pick a version'
+          },
+          versions: [
+            {
+              label: {
+                en: 'Esri_Partners',
+                fr: 'Esri_Partners'
+              },
+              url:
+                'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
             },
-            content: {
-              en: [
-                {
-                  label: 'Above-ground Carbon Sequestration Potential of India',
-                  fieldExpression: '*'
-                },
-                {
-                  label: 'In Protection Areas (million tonnes):',
-                  fieldExpression: 'Nat_prot'
-                },
-                {
-                  label: 'In Wide-scale Restoration Areas (million tonnes):',
-                  fieldExpression: 'Nat_widesc'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
-                  fieldExpression: 'Nat_Agri20'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
-                  fieldExpression: 'Nat_Agri40'
-                },
-                {
-                  label: 'In Other Areas (million tonnes):',
-                  fieldExpression: 'Nat_Others'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: 'Above-ground Carbon Sequestration Potential of',
-                  fieldExpression: 'ST_NM'
-                },
-                {
-                  label: 'In Protection Areas (million tonnes):',
-                  fieldExpression: 'Protection'
-                },
-                {
-                  label: 'In Wide-scale Restoration Areas (million tonnes):',
-                  fieldExpression: 'Widescale'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 20% (million tonnes):',
-                  fieldExpression: 'Agri_tc20'
-                },
-                {
-                  label:
-                    'In Cultivated Areas where Maximum Tree Cover is 40% (million tonnes):',
-                  fieldExpression: 'Agri_tc40'
-                },
-                {
-                  label: 'In Other Areas (million tonnes)',
-                  fieldExpression: 'Others'
-                },
-                {
-                  label: '',
-                  fieldExpression: '*'
-                },
-                {
-                  label: 'This excludes protected areas. *',
-                  fieldExpression: '*'
-                }
-              ]
+            {
+              label: {
+                en: 'Flood',
+                fr: 'Flood'
+              },
+              url:
+                'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
             }
-          }
+          ]
         }
       ]
     },
     GROUP_LC: {
-      groupttype: 'default',
+      groupType: 'default',
       order: 3,
       label: {
         en: 'Land Cover',
@@ -872,7 +953,7 @@ module.exports = {
       ]
     },
     GROUP_IMAGERY: {
-      grouptype: 'imagery',
+      groupType: 'imagery',
       order: 4,
       label: {
         en: 'Recent Imagery',
@@ -991,24 +1072,451 @@ module.exports = {
         }
       ]
     },
+    GROUP_Orth: {
+      groupType: 'nested',
+      order: 8,
+      label: {
+        en: 'Orthophotos/Topographic Maps',
+        ka: 'ორთოფოტოები/ტოპოგრაფიული რუკები'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'ortho',
+          label: {
+            en: 'Orthophotos',
+            ka: 'ორთოფოტოები'
+          },
+          nestedLayers: [
+            {
+              id: 'Adjara',
+              order: 1,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2015_ADJARA/wmts/ORTHO_2015_ADJARA/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2015 Adjara',
+                ka: 'აჭარის ა/რ 2015'
+              }
+            },
+            {
+              id: 'Samegrelo',
+              order: 2,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2015_SAMEGRELO/wmts/ORTHO_2015_SAMEGRELO/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2015 Samegrelo',
+                ka: 'სამეგრელო 2015'
+              }
+            },
+            {
+              id: 'Vere',
+              order: 3,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2015_VERE/wmts/ORTHO_2015_VERE/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2015 Vere',
+                ka: 'ვერეს ხეობა 2015'
+              }
+            },
+            {
+              id: 'Norv',
+              order: 4,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2016-17_NORV/wmts/ORTHO_2016-17_NORV/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2016-17 Norv',
+                ka: 'ორთოფოტო გეგმა 2016-2017'
+              }
+            },
+            {
+              id: 'Dasavleti',
+              order: 5,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/ORTHO_2014_DASAVLETI/wmts/ORTHO_2014_DASAVLETI/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: '2014 Dasavleti',
+                ka: 'დასავლეთი 2014'
+              }
+            }
+          ]
+        },
+        {
+          order: 2,
+          id: 'topo',
+          label: {
+            en: 'Topographic Maps',
+            ka: 'ტოპოგრაფიული რუკები'
+          },
+          nestedLayers: [
+            {
+              id: 'Topo1000',
+              order: 1,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/TOPO_10k_1952_2007/wmts/TOPO_10000_1952_2007/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: 'TOPO 10000 1952_2007',
+                ka: '10 000 - იანი ტოპოგრაფიული რუკები 1952-2007'
+              }
+            },
+            {
+              id: 'TOPO50000',
+              order: 1,
+              type: 'webtiled',
+              url:
+                'http://mp1.napr.gov.ge/TOPO_50k_GEO_2007/wmts/TOPO_50000_GEO_2007/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+              label: {
+                en: 'TOPO 50000 GEO_2007',
+                ka: '50 000 - იანი ტოპოგრაფიული რუკები 2007'
+              }
+            }
+          ]
+        }
+      ]
+    },
+    GROUP_PA: {
+      order: 3,
+      label: {
+        en: 'Protected Areas',
+        ka: 'დაცული ტერიტორიები'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'PAInf',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+          layerIds: [0],
+          label: {
+            en: 'Infrastructure of Protected Areas',
+            ka: 'ინფრასტრუქტურა'
+          },
+          popup: {
+            title: {
+              en: 'Infrastructure of Protected Areas',
+              ka: 'ინფრასტრუქტურა'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'დასახელება',
+                  fieldExpression: 'Name_KA'
+                },
+                {
+                  label: 'დაცული ტერიტორია',
+                  fieldExpression: 'Protected_Areas_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Name',
+                  fieldExpression: 'Name_EN'
+                },
+                {
+                  label: 'Protected Area',
+                  fieldExpression: 'Protected_Areas_EN'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 2,
+          id: 'PARoads',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+          layerIds: [1],
+          label: {
+            en: 'Touristic Routes of Protected Areas',
+            ka: 'ტურისტული ბილიკები'
+          },
+          filterField: {
+            en: 'Type_EN',
+            ka: 'Type_KA'
+          },
+          filterLabel: {
+            en: 'Filter by Type',
+            ka: 'ფილტრი ტიპის მიხედვით'
+          },
+          popup: {
+            title: {
+              en: 'Touristic Routes of Protected Areas',
+              ka: 'ტურისტული ბილიკები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'დაცული ტერიტორია',
+                  fieldExpression: 'Protected_Area_KA'
+                },
+                {
+                  label: 'ხანგძლივობა',
+                  fieldExpression: 'Duraction_KA'
+                },
+                {
+                  label: 'სირთულე',
+                  fieldExpression: 'Difficulty_KA'
+                },
+                {
+                  label: 'დასახელება',
+                  fieldExpression: 'Trail_Name_KA'
+                },
+                {
+                  label: 'ტიპი',
+                  fieldExpression: 'Type_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Protected areas',
+                  fieldExpression: 'Protected_Area_EN'
+                },
+                {
+                  label: 'Duraction',
+                  fieldExpression: 'Duraction_EN'
+                },
+                {
+                  label: 'Difficulty',
+                  fieldExpression: 'Difficulty_EN'
+                },
+                {
+                  label: 'Trail Name',
+                  fieldExpression: 'Trail_Name_EN'
+                },
+                {
+                  label: 'Type',
+                  fieldExpression: 'Type_EN'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 3,
+          id: 'PALease',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+          layerIds: [2],
+          label: {
+            en: 'Lease of Protected Areas',
+            ka: 'იჯარები'
+          },
+          popup: {
+            title: {
+              en: 'Protected Area Zoning',
+              ka: 'ფუნქციური ზონები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'დაცული ტერიტორია',
+                  fieldExpression: 'Protected_areas_KA'
+                },
+                {
+                  label: 'დანიშნულება',
+                  fieldExpression: 'Purpose_KA'
+                },
+                {
+                  label: 'ჰექტარი',
+                  fieldExpression: 'Hectare_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Protected Area',
+                  fieldExpression: 'Protected_Area_EN'
+                },
+                {
+                  label: 'Purpose',
+                  fieldExpression: 'Purpose_EN'
+                },
+                {
+                  label: 'Area (ha)',
+                  fieldExpression: 'Hectare_KA'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 4,
+          id: 'PAFunction',
+          type: 'dynamic',
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+          layerIds: [3],
+          label: {
+            en: 'Functional Zoning of Protected Areas',
+            ka: 'ფუნქციური ზონები'
+          },
+          filterField: {
+            en: 'Zone_EN',
+            ka: 'Zone_KA'
+          },
+          filterLabel: {
+            en: 'Filter by Zone',
+            ka: 'ფილტრი ზონების მიხედვით'
+          },
+          popup: {
+            title: {
+              en: 'Functional Zoning of Protected Areas',
+              ka: 'ფუნქციური ზონები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'დაცული ტერიტორია',
+                  fieldExpression: 'Protected_areas_KA'
+                },
+                {
+                  label: 'ზონა',
+                  fieldExpression: 'Zone_KA'
+                },
+                {
+                  label: 'ფართობი ჰა',
+                  fieldExpression: 'PA_Area_ha_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Protected Area',
+                  fieldExpression: 'Protected_Areas_EN'
+                },
+                {
+                  label: 'Zone',
+                  fieldExpression: 'Zone_EN'
+                },
+                {
+                  label: 'Area (ha)',
+                  fieldExpression: 'PA_Area_ha_KA'
+                }
+              ]
+            }
+          }
+        },
+        {
+          order: 5,
+          id: 'PA',
+          type: 'dynamic',
+          visible: true,
+          url:
+            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+          layerIds: [4],
+          label: {
+            en: 'Protected Areas',
+            ka: 'დაცული ტერიტორიები'
+          },
+          filterField: {
+            en: 'Category_EN',
+            ka: 'Category_KA'
+          },
+          filterLabel: {
+            en: 'Filter by Category',
+            ka: 'ფილტრი კატეგორიების მიხედვით'
+          },
+          popup: {
+            title: {
+              en: 'Protected Areas',
+              ka: 'კატეგორიები'
+            },
+            content: {
+              ka: [
+                {
+                  label: 'დაცული ტერიტორია',
+                  fieldExpression: 'Protected_Areas_KA'
+                },
+                {
+                  label: 'დაარსების წელი',
+                  fieldExpression: 'Year_of_Establishment_KA'
+                },
+                {
+                  label: 'ადმინისტრაცია',
+                  fieldExpression: 'Administration_KA'
+                },
+                {
+                  label: 'კატეგორია',
+                  fieldExpression: 'Category_KA'
+                },
+                {
+                  label: 'ფართობი ჰა',
+                  fieldExpression: 'PA_Area_ha_KA'
+                }
+              ],
+              en: [
+                {
+                  label: 'Protected Area Name',
+                  fieldExpression: 'Protected_Areas_EN'
+                },
+                {
+                  label: 'Year of Establishment',
+                  fieldExpression: 'Year_of_Establishment_KA'
+                },
+                {
+                  label: 'Administration',
+                  fieldExpression: 'Administration_EN'
+                },
+                {
+                  label: 'Category',
+                  fieldExpression: 'Category_EN'
+                },
+                {
+                  label: 'Area (ha)',
+                  fieldExpression: 'PA_Area_ha_KA'
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
     extraLayers: [
-      {
-        id: 'MASK',
-        type: 'dynamic',
-        order: 10000,
-        url:
-          'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-        opacity: 0.35,
-        layerIds: [0]
-      },
-      {
-        id: 'LEGEND_LAYER',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-        visible: false,
-        opacity: 0,
-        layerIds: []
-      },
+      // {
+      // id: 'MASKK',
+      // type: 'feature',
+      // order: 10000,
+      // url:
+      // 'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/LandCover/FeatureServer/0',
+      // opacity: 0.35
+      // },
+      // {
+      // order: 2,
+      // id: 'CTC',
+      // type: 'dynamic',
+      // url:
+      // 'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+      // layerIds: [2],
+      // technicalName: 'ind_treecover',
+      // visible: true,
+      // label: {
+      //   en:
+      //   'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+      // }
+      // },
+      // {
+      // id: 'MASK',
+      // type: 'dynamic',
+      // order: 10000,
+      // url:
+      //   'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+      // opacity: 0.35,
+      // layerIds: [0]
+      // },
+      // {
+      //   id: 'LEGEND_LAYER',
+      //   type: 'dynamic',
+      //   url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+      //   visible: false,
+      //   opacity: 0,
+      //   layerIds: []
+      // },
       {
         id: 'USER_FEATURES',
         type: 'graphic',

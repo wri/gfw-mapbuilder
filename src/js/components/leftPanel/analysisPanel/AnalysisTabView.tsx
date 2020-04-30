@@ -10,7 +10,7 @@ import { renderModal } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
 import BaseAnalysis from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 
-import { analysisContent } from 'configs/leftPanel.config';
+import { analysisContent } from 'configs/leftPanel.translations';
 
 import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
@@ -44,6 +44,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     analyzeExistingShapeTitle,
     analyzeExistingShapeDirections,
     analyzeYourShapeTitle,
+    analyzeYourShapeFirstDirection,
     analyzeYourShapeDirections,
     drawButton,
     enterCoordinatesTitle,
@@ -55,6 +56,44 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const activeFeaturesLength = useSelector(selectActiveFeaturesLength);
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
+
+  const returnFirstInstruction = (): JSX.Element => {
+    if (analyzeYourShapeFirstDirection[1]) {
+      return (
+        <>
+          {analyzeYourShapeFirstDirection[0]}
+          <PenIcon height={25} width={25} fill={'#555'} />
+          {analyzeYourShapeFirstDirection[1]}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {analyzeYourShapeFirstDirection[0]}
+          <PenIcon height={25} width={25} fill={'#555'} />
+        </>
+      );
+    }
+  };
+
+  const returnVisitTitle = (): JSX.Element => {
+    if (visitTitle.length === 2) {
+      return (
+        <>
+          {visitTitle[0]}
+          <PenIcon height={21} width={21} fill={'#555'} />
+          {visitTitle[1]}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {visitTitle[0]}
+          <PenIcon height={21} width={21} fill={'#555'} />
+        </>
+      );
+    }
+  };
 
   const DefaultAnalysisContent = (): JSX.Element => (
     <div className="analysis-tab-container">
@@ -80,6 +119,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
             <h4>{analyzeYourShapeTitle}</h4>
           </figcaption>
           <ol>
+            <li>{returnFirstInstruction()}</li>
             {analyzeYourShapeDirections.map(
               (direction: string, index: number) => (
                 <li key={index}>{direction}</li>
@@ -120,10 +160,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           <span className="left" /> Or <span className="right" />
         </div>
         <div className="drop-shapefile-container">
-          <h4>
-            {visitTitle}
-            <PenIcon height={21} width={21} fill={'#555'} />
-          </h4>
+          <h4>{returnVisitTitle()}</h4>
           <UploadFile />
         </div>
       </div>

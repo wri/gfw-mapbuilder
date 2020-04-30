@@ -3,7 +3,6 @@ import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
@@ -20,6 +19,8 @@ interface LayerOptions {
   visible: boolean;
   url: string;
   sublayers?: { id: number; visible: boolean }[];
+  opacity?: number;
+  definitionExpression?: string;
 }
 
 export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
@@ -27,6 +28,10 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
     case 'dynamic':
+      if (layerConfig.versions && layerConfig.versions[0].url) {
+        layerConfig.url = layerConfig.versions[0].url;
+        layerConfig.layerIds = layerConfig.versions[0].layerIds;
+      }
       const layerOptions: LayerOptions = {
         id: layerConfig.id,
         title: layerConfig.title,
@@ -77,6 +82,9 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       }
       break;
     case 'feature':
+      if (layerConfig.versions && layerConfig.versions[0].url) {
+        layerConfig.url = layerConfig.versions[0].url;
+      }
       esriLayer = new FeatureLayer({
         id: layerConfig.id,
         title: layerConfig.title,
@@ -119,6 +127,23 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      break;
+    case 'MASK':
+      const { appSettings } = store.getState();
+      const countryISOCode = appSettings?.iso;
+      const maskDefExp = `code_iso3 <> '${countryISOCode}'`;
+      const maskLayerOptions: LayerOptions = {
+        id: layerConfig.id,
+        visible: true,
+        url: layerConfig.url,
+        opacity: layerConfig.opacity
+      };
+      if (layerConfig.layerIds) {
+        maskLayerOptions.sublayers = layerConfig.layerIds.map(id => {
+          return { id: id, visible: true, definitionExpression: maskDefExp };
+        });
+      }
+      esriLayer = new MapImageLayer(maskLayerOptions);
       break;
     default:
       console.error('No error type!');

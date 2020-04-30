@@ -9,6 +9,7 @@ import {
   SET_TIME_SLIDER,
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
+  SET_LAYERS_LOADING,
   MapviewState
 } from './types';
 
@@ -86,6 +87,15 @@ export function changeMapCenterCoordinates(
 ) {
   return {
     type: CHANGE_MAP_CENTER_COORDINATES as typeof CHANGE_MAP_CENTER_COORDINATES,
+    payload: mapCenterCoordinates
+  };
+}
+
+export function setLayersLoading(
+  mapCenterCoordinates: MapviewState['layersLoading']
+) {
+  return {
+    type: SET_LAYERS_LOADING as typeof SET_LAYERS_LOADING,
     payload: mapCenterCoordinates
   };
 }

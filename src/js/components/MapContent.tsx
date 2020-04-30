@@ -1,21 +1,41 @@
-import React, { FunctionComponent } from 'react';
-
+import React from 'react';
+import { useSelector } from 'react-redux';
 import Mapview from '../components/mapview/Mapview';
 import MapWidgets from './mapWidgets/mapWidgets';
 import Legend from './legend/Legend';
 import LeftPanel from './leftPanel/LeftPanel';
 import Footer from './Footer';
+import Report from './Report';
+import { RootState } from 'js/store';
 
-const MapContent: FunctionComponent = () => {
-  return (
-    <>
-      <LeftPanel />
-      <MapWidgets />
-      <Mapview />
-      <Legend />
-      <Footer />
-    </>
+interface MapContentProps {
+  report: boolean;
+}
+
+function determineMapContent(
+  renderReport?: boolean,
+  hideFooter?: boolean
+): JSX.Element {
+  if (renderReport) {
+    return <Report mapview={Mapview} />;
+  } else {
+    return (
+      <>
+        <LeftPanel />
+        <MapWidgets />
+        <Mapview />
+        <Legend />
+        {!hideFooter && <Footer />}
+      </>
+    );
+  }
+}
+
+const MapContent = (props: MapContentProps): JSX.Element => {
+  const hideFooter = useSelector(
+    (store: RootState) => store.appSettings.hideFooter
   );
+  return <>{determineMapContent(props.report, hideFooter)}</>;
 };
 
 export default MapContent;

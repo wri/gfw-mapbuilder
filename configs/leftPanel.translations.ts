@@ -1,5 +1,3 @@
-const drawTool = 'DRAW_ICON_HERE';
-
 export const analysisContent = {
   en: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
@@ -9,8 +7,11 @@ export const analysisContent = {
       'Click on the analyze tab'
     ],
     analyzeYourShapeTitle: 'Analyze your own shape',
+    analyzeYourShapeFirstDirection: [
+      'Choose the draw tool ',
+      ' in the toolbox'
+    ],
     analyzeYourShapeDirections: [
-      `Choose the draw tool ${drawTool} in the toolbox`,
       'Draw a shape anywhere on the map',
       'Select the shape to run the analysis'
     ],
@@ -21,7 +22,9 @@ export const analysisContent = {
       `Add up to 10 points to make shapes`
     ],
     coordinatesButton: 'Enter Values',
-    visitTitle: 'Add additional shapes in the future by visiting the draw tool'
+    visitTitle: [
+      'Add additional shapes in the future by visiting the draw tool'
+    ]
   },
   ka: {
     analyzeExistingShapeTitle: 'ჩაატარეთ ფიგურის ანალიზი რუკაზე',
@@ -31,8 +34,11 @@ export const analysisContent = {
       'დააჭირეთ ანალიზისი მენიუს'
     ],
     analyzeYourShapeTitle: 'ჩაატარეთ თქვენი ფიგურის ანალიზი',
+    analyzeYourShapeFirstDirection: [
+      'შეარჩიეთ სახაზავი ინსტრუმენტი ',
+      ' ტულბოქსიდან'
+    ],
     analyzeYourShapeDirections: [
-      `შეარჩიეთ სახაზავი ინსტრუმენტი ${drawTool} ტულბოქსიდან`,
       'რუკაზე ნებისმიერი ფიგურა დახაზეთ',
       'ანალიზის ჩასატარებლად შეარჩიეთ ფიგურა'
     ],
@@ -43,7 +49,10 @@ export const analysisContent = {
       `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`
     ],
     coordinatesButton: `მნიშვნელობების შეტანა`,
-    visitTitle: `მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ${drawTool} მეშვეობით`
+    visitTitle: [
+      'მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ',
+      ' მეშვეობით'
+    ]
   },
   fr: {
     analyzeExistingShapeTitle: 'Analysez un polygone sur la carte',
@@ -53,8 +62,11 @@ export const analysisContent = {
       "Cliquez sur l'onglet analyse"
     ],
     analyzeYourShapeTitle: 'Analysez votre propre polygone',
+    analyzeYourShapeFirstDirection: [
+      "Utiliser l'outil dessin ",
+      ' dans la boîte à outil`'
+    ],
     analyzeYourShapeDirections: [
-      `Utiliser l'outil dessin ${drawTool} dans la boîte à outil`,
       'Tracez un polygone sur la carte',
       "Cliquez sur le polygone pour lancer l'analyse"
     ],
@@ -65,7 +77,7 @@ export const analysisContent = {
       `Ajoutez jusqu’à 10 points pour définir votre zone`
     ],
     coordinatesButton: `Entrez les valeurs`,
-    visitTitle: "Ajouter des polygones supplémentaires grâce à l'outil dessin"
+    visitTitle: ["Ajouter des polygones supplémentaires grâce à l'outil dessin"]
   },
   es: {
     analyzeExistingShapeTitle: 'Analizar un polígono  en el mapa',
@@ -75,8 +87,11 @@ export const analysisContent = {
       'Hacer clic en la pestaña de analizar'
     ],
     analyzeYourShapeTitle: 'Analizar su propio polígono',
+    analyzeYourShapeFirstDirection: [
+      'Escoger la herramienta de dibujo ',
+      ' en la caja de herramientas'
+    ],
     analyzeYourShapeDirections: [
-      `Escoger la herramienta de dibujo ${drawTool} en la caja de herramientas`,
       'Dibujar un polígono en cualquier lugar del mapa',
       'Seleccionar el polígono para hacer el análisis'
     ],
@@ -87,8 +102,9 @@ export const analysisContent = {
       `Agrega hasta 10 puntos para generar el polígono`
     ],
     coordinatesButton: `Ingresa valores`,
-    visitTitle:
+    visitTitle: [
       'Añadir polígonos adicionales en el futuro usando la herramienta de dibujo '
+    ]
   },
   pt: {
     analyzeExistingShapeTitle: 'Analise a área selecionada no mapa',
@@ -98,8 +114,11 @@ export const analysisContent = {
       'Clique na guia de Análise'
     ],
     analyzeYourShapeTitle: 'Use sua propria área de Análise',
+    analyzeYourShapeFirstDirection: [
+      'Escolha a ferramenta de desenho ',
+      ' na caixa de ferramentas'
+    ],
     analyzeYourShapeDirections: [
-      `Escolha a ferramenta de desenho ${drawTool} na caixa de ferramentas`,
       'Desenhe uma área de interesse no mapa',
       'Selecione a área na qual irá executar a análise'
     ],
@@ -110,8 +129,9 @@ export const analysisContent = {
       `Adicione até 10 pontos para desenhar o shape`
     ],
     coordinatesButton: `Entre com os valores`,
-    visitTitle:
+    visitTitle: [
       'Adicionar formas adicionais no futuro, visitando a ferramenta de desenho'
+    ]
   },
   id: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
@@ -121,8 +141,11 @@ export const analysisContent = {
       'Click on the analyze tab'
     ],
     analyzeYourShapeTitle: 'Analyze your own shape',
+    analyzeYourShapeFirstDirection: [
+      'Choose the draw tool ',
+      ' in the toolbox'
+    ],
     analyzeYourShapeDirections: [
-      `Choose the draw tool ${drawTool} in the toolbox`,
       'Draw a shape anywhere on the map',
       'Select the shape to run the analysis'
     ],
@@ -133,7 +156,9 @@ export const analysisContent = {
       `Tambahkan sampai 10 titik untuk membuat bentuk`
     ],
     coordinatesButton: `Masukkan Nilai`,
-    visitTitle: 'Add additional shapes in the future by visiting the draw tool '
+    visitTitle: [
+      'Add additional shapes in the future by visiting the draw tool '
+    ]
   },
   zh: {
     analyzeExistingShapeTitle: '分析地图上的图形',
@@ -143,8 +168,8 @@ export const analysisContent = {
       '点击分析键'
     ],
     analyzeYourShapeTitle: '',
+    analyzeYourShapeFirstDirection: ['在工具箱里选择一个绘画工具 '],
     analyzeYourShapeDirections: [
-      `在工具箱里选择一个绘画工具 ${drawTool}`,
       '在地图上任意地方画一个图形',
       '选择进行分析的图形'
     ],
@@ -155,7 +180,7 @@ export const analysisContent = {
       `添加最多10个坐标来完成作图`
     ],
     coordinatesButton: `输入`,
-    visitTitle: '使用绘画工具来添加更多图形'
+    visitTitle: ['使用绘画工具来添加更多图形']
   }
 };
 
@@ -204,6 +229,44 @@ export const basemapLayersContent = {
       }
     }
   ]
+};
+
+export const layersPanelTranslations = {
+  en: {
+    layers: 'Layers',
+    selectAll: 'Select All',
+    clearAll: 'Clear All'
+  },
+  fr: {
+    layers: 'Couches',
+    selectAll: 'Tout sélectionner',
+    clearAll: 'Tout effacer'
+  },
+  es: {
+    layers: 'Capas',
+    selectAll: 'Seleccionar Todo',
+    clearAll: 'Borrar Todo'
+  },
+  pt: {
+    layers: 'Camadas',
+    selectAll: 'Selecionar tudo',
+    clearAll: 'Limpar tudo'
+  },
+  id: {
+    layers: 'Layers',
+    selectAll: 'Select All',
+    clearAll: 'Clear All'
+  },
+  zh: {
+    layers: '图层',
+    selectAll: '全选',
+    clearAll: '全部清除'
+  },
+  ka: {
+    layers: 'ფენები',
+    selectAll: 'ყველაფრის მონიშვნა',
+    clearAll: 'ყველაფრის წაშლა'
+  }
 };
 
 export const documentsContent = {

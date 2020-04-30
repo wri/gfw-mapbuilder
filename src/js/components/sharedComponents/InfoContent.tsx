@@ -59,7 +59,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
 
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
-      mapController.testGrabMetadata(layer.id);
+      // mapController.testGrabMetadata(layer.id);
       //
       const results = await getWebmapGroupContent(layer);
       setContent(results);

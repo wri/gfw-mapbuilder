@@ -1,15 +1,10 @@
 import * as React from 'react';
+import { PrintReportButton } from 'js/components/sharedComponents/PrintReportButton';
 
 const DataTabFooter = (): JSX.Element => {
   return (
     <div className="data-tabview-footer">
-      <button onClick={(): void => console.log('Print Report!')}>
-        Print Report{' '}
-        <img
-          src="https://my.gfw-mapbuilder.org/img/print-icon.svg"
-          alt="print"
-        />
-      </button>
+      <PrintReportButton />
     </div>
   );
 };
