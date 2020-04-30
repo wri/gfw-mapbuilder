@@ -112,6 +112,9 @@
             line-height: 1rem;
             border-bottom: 1px solid #e5e5df;
             padding-left: 0.85rem;
+            font-size: 0.8125rem;
+            line-height: 22.1px;
+            color: rgb(85, 85, 85);
           }
         }
       }
@@ -177,8 +180,10 @@
 
           p {
             color: red;
-            font-size: 0.85rem;
             margin: 0px;
+            font-size: 0.8125rem;
+            line-height: 21.1px;
+            font-weight: 400;
           }
 
           .input-coordinates {
@@ -231,6 +236,15 @@
   &.share-widget {
     h4 {
       margin-bottom: auto;
+      font-size: 1.3125rem;
+      font-weight: 400;
+      line-height: 35.7px;
+    }
+
+    p {
+      font-size: 0.8125rem;
+      line-height: 21.1px;
+      font-weight: 400;
     }
 
     .copy-link-wrapper {
@@ -243,7 +257,7 @@
       }
 
       input {
-        font-size: 14px;
+        font-size: 0.8125rem;
       }
 
       button {
@@ -251,6 +265,7 @@
         border: 1px solid $black;
         background-color: $white;
         color: $base-yellow;
+        font-size: 0.875rem;
       }
     }
 

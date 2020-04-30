@@ -357,12 +357,17 @@
   font-family: $fira-sans;
   color: $light-grey;
 
+  button,
+  span {
+    font-weight: 100;
+  }
+
   span {
     font-size: 14px;
   }
   button {
     text-align: right;
-    font-size: 12px;
+    font-size: 0.7rem;
     height: 100%;
     outline: 0;
     cursor: pointer;
@@ -478,10 +483,12 @@
         margin-left: 0.5rem;
         max-width: 12rem;
         flex-grow: 1;
+        font-weight: 400;
+        line-height: 22px;
       }
 
       .layer-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         margin-left: 0.5rem;
         color: $medium-dark-grey;
       }
@@ -615,6 +622,8 @@
 
   span {
     text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.9375rem;
   }
 
   .caret-button {

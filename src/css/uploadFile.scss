@@ -20,6 +20,8 @@
     span {
       font-family: $fira-sans;
       font-size: 1.25rem;
+      color: rgb(111, 111, 111);
+      line-height: 34px;
     }
   }
 
@@ -27,6 +29,8 @@
     font-size: 0.75rem;
     margin-left: 3rem;
     margin-right: 3rem;
+    color: rgb(111, 111, 111);
+    line-height: 20.4px;
 
     &.red {
       color: red;

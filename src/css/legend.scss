@@ -20,6 +20,9 @@
       margin: 0.5rem;
       padding: 0;
       font-size: 14px;
+      color: rgb(85, 85, 85);
+      font-weight: 400;
+      line-height: 23.8px;
     }
     .caret-button {
       outline: 0;
@@ -35,7 +38,9 @@
 
     .layer-item {
       .layer-title {
-        font-weight: bold;
+        font-size: 0.8125rem;
+        font-weight: 400;
+        line-height: 22.1px;
       }
       .label-item {
         display: grid;
@@ -45,6 +50,9 @@
         p {
           margin: 0;
           padding: 0;
+          font-size: 0.8125rem;
+          font-weight: 400;
+          line-height: 22.1px;
         }
       }
     }

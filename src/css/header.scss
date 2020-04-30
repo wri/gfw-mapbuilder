@@ -30,14 +30,16 @@
       h2 {
         margin-top: 0;
         margin-bottom: 0;
+        font-weight: normal;
       }
 
       h1 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        line-height: 25px;
       }
 
       h2 {
-        font-size: 1rem;
+        font-size: 0.875rem;
       }
     }
   }
@@ -125,6 +127,8 @@
         display: flex;
         border: none;
         background-color: inherit;
+        font-size: 0.75rem;
+        text-transform: uppercase;
 
         svg,
         p {
