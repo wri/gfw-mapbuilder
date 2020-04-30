@@ -19,7 +19,7 @@ import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import { debounce } from 'lodash-es';
-
+import { landsatBaselayerURL } from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
@@ -358,7 +358,9 @@ export class MapController {
             }
           });
 
+          //Extra layer group that acts as a "masked" layers with which you cannot interact
           this.addExtraLayers();
+
           this.initializeAndSetSketch();
         },
         (error: Error) => {
@@ -634,6 +636,24 @@ export class MapController {
         this._map!.add(extraEsriLayer);
       }
     });
+  }
+
+  addLandsatLayer(layerConfig: LayerProps, year: string): void {
+    const landsatURL = landsatBaselayerURL;
+    const landsatConfig = {
+      type: 'webtiled',
+      url: landsatURL,
+      title: 'landsat',
+      id: 'landsat'
+    };
+    layerConfig.type = 'webtiled';
+
+    layerConfig.url = landsatURL.replace(/\/\d{4}\//, `/${year}/`);
+    const landsatEsriLayer = LayerFactory(this._mapview, layerConfig);
+    const landsatBase = new Basemap({
+      baseLayers: [landsatEsriLayer]
+    });
+    this._map!.basemap = landsatBase;
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
