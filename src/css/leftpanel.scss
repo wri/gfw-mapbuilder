@@ -76,7 +76,7 @@
     margin: 1rem;
 
     p {
-      font-family: 'Fira Sans', sans-serif;
+      font-family: $fira-sans;
       font-weight: 300;
       font-size: 14px;
       line-height: 23.8px;
@@ -193,7 +193,7 @@
 
       button {
         border: none;
-        font-family: 'Fira Sans', sans-serif;
+        font-family: $fira-sans;
         font-size: 14px;
 
         &.delete-button {
