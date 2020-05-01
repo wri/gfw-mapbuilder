@@ -30,6 +30,8 @@ export interface AppSettings {
   alternativeMapThemes: string;
   initialExtent?: { x: number; y: number; z: number };
   customColorTheme?: string;
+  aboutLinkUrl?: string;
+  downloadLinkUrl?: string;
 }
 
 type LayerGroupKey =

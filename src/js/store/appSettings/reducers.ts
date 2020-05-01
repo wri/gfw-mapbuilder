@@ -13,6 +13,8 @@ const initialState: AppSettings = {
   hideFooter: false,
   hideHeader: false,
   navLinksInNewTab: true,
+  aboutLinkUrl: '',
+  downloadLinkUrl: '',
   printServiceUrl:
     'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
   language: 'en',
