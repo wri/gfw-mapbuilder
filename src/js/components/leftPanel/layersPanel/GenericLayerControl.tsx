@@ -14,6 +14,54 @@ import { mapController } from 'js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
+import styled from 'styled-components';
+
+interface GladControlsProps {
+  customColorTheme?: string;
+}
+const GladControls = (props: GladControlsProps): JSX.Element => {
+  const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(false);
+
+  function handleConfirmedAlertsToggle(): void {
+    setUnconfirmedAlerts(!unconfirmedAlerts);
+  }
+
+  const colorTheme = props.customColorTheme?.length
+    ? props.customColorTheme
+    : '#f0ab00';
+
+  //Dynamic custom theme override using styled-components lib
+  const CheckboxWrapper = styled.div`
+    .styled-checkbox:checked + .styled-checkboxlabel:before {
+      background-color: ${colorTheme};
+    }
+  `;
+
+  return (
+    <div>
+      <div className="glad-control-container">
+        <div className="layer-checkbox">
+          <CheckboxWrapper>
+            <input
+              type="checkbox"
+              name="styled-checkbox"
+              className="styled-checkbox"
+              id="layer-checkbox-glad"
+              checked={unconfirmedAlerts}
+              onChange={handleConfirmedAlertsToggle}
+            />
+            <label
+              className="styled-checkboxlabel"
+              htmlFor="layer-checkbox-glad"
+            ></label>
+          </CheckboxWrapper>
+        </div>
+        <p>Hide unconfirmed alerts</p>
+      </div>
+      <div>Date Range</div>
+    </div>
+  );
+};
 
 interface LayerInfo {
   layerInfo: any;
@@ -140,6 +188,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
+
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
   //Determine if we need density control on this layer
@@ -191,6 +243,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       case 'VIIRS_ACTIVE_FIRES':
       case 'MODIS_ACTIVE_FIRES':
         return <DateRange layer={layer} />;
+        break;
+      case 'GLAD_ALERTS':
+        return <GladControls customColorTheme={customColorTheme} />;
       default:
         break;
     }
@@ -248,6 +303,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           selectedLanguage={selectedLanguage}
         />
       )}
+      {layer?.visible && returnDateRange(props.id)}
       {layer?.visible && (
         <LayerTransparencySlider
           layerID={props.id}
@@ -256,7 +312,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
       )}
-      {layer?.visible && returnDateRange(props.id)}
     </>
   );
 };
