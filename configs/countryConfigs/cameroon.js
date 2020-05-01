@@ -620,150 +620,150 @@ module.exports = {
       label: {},
       layers: []
     },
-    GROUP_Hazards: {
-      order: 6,
-      groupType: 'radio',
-      label: {
-        en: 'Hazards',
-        ka: 'საფრთხეები'
-      },
-      layers: [
-        {
-          order: 1,
-          id: 'ForestHazard',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
-          layerIds: [0],
-          opacity: 0.75,
-          label: {
-            en: 'Forest General Hazard Risk',
-            ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
-          }
-        },
-        {
-          order: 2,
-          id: 'Elevation',
-          type: 'dynamic',
-          opacity: 0.8,
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
-          layerIds: [1],
-          label: {
-            en: 'Elevation in Forested Areas',
-            ka: 'სიმაღლე ტყიან ზონებში'
-          }
-        },
-        {
-          order: 3,
-          id: 'Slope',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
-          layerIds: [0],
-          opacity: 0.8,
-          label: {
-            en: 'Slope in Forested Areas',
-            ka: 'დაქანება ტყიან ზონებში'
-          }
-        },
-        {
-          order: 4,
-          id: 'Aspect',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
-          layerIds: [2],
-          opacity: 0.8,
-          label: {
-            en: 'Aspect in Forested Areas',
-            ka: 'ექსპოზიცია ტყიან ზონებში'
-          }
-        },
-        {
-          order: 5,
-          id: 'Landslide',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
-          layerIds: [1],
-          opacity: 0.6,
-          label: {
-            en: 'Landslide Zoning',
-            ka: 'ბუნებრივი კატასტროფები'
-          },
-          popup: {
-            title: {
-              en: 'Landslide Zoning',
-              ka: 'ბუნებრივი კატასტროფები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'კატეგორია',
-                  fieldExpression: 'Category_KA'
-                },
-                {
-                  label: 'ფართობი ჰა',
-                  fieldExpression: 'Area_ha_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Category',
-                  fieldExpression: 'Category_EN'
-                },
-                {
-                  label: 'Area ha',
-                  fieldExpression: 'Area_ha_EN'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 6,
-          id: 'Debrisflow',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
-          layerIds: [2],
-          opacity: 0.6,
-          label: {
-            en: 'Debrisflow Zoning',
-            ka: 'რისკის ზონები'
-          },
-          popup: {
-            title: {
-              en: 'Debrisflow Zoning',
-              ka: 'რისკის ზონები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'კატეგორია',
-                  fieldExpression: 'Category_KA'
-                },
-                {
-                  label: 'ფართობი ჰა',
-                  fieldExpression: 'Area_ha_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Category',
-                  fieldExpression: 'Category_EN'
-                },
-                {
-                  label: 'Area ha',
-                  fieldExpression: 'Area_ha_EN'
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
+    // GROUP_Hazards: {
+    //   order: 6,
+    //   groupType: 'radio',
+    //   label: {
+    //     en: 'Hazards',
+    //     ka: 'საფრთხეები'
+    //   },
+    //   layers: [
+    //     {
+    //       order: 1,
+    //       id: 'ForestHazard',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [0],
+    //       opacity: 0.75,
+    //       label: {
+    //         en: 'Forest General Hazard Risk',
+    //         ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
+    //       }
+    //     },
+    //     {
+    //       order: 2,
+    //       id: 'Elevation',
+    //       type: 'dynamic',
+    //       opacity: 0.8,
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [1],
+    //       label: {
+    //         en: 'Elevation in Forested Areas',
+    //         ka: 'სიმაღლე ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 3,
+    //       id: 'Slope',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [0],
+    //       opacity: 0.8,
+    //       label: {
+    //         en: 'Slope in Forested Areas',
+    //         ka: 'დაქანება ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 4,
+    //       id: 'Aspect',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [2],
+    //       opacity: 0.8,
+    //       label: {
+    //         en: 'Aspect in Forested Areas',
+    //         ka: 'ექსპოზიცია ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 5,
+    //       id: 'Landslide',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [1],
+    //       opacity: 0.6,
+    //       label: {
+    //         en: 'Landslide Zoning',
+    //         ka: 'ბუნებრივი კატასტროფები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Landslide Zoning',
+    //           ka: 'ბუნებრივი კატასტროფები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area ha',
+    //               fieldExpression: 'Area_ha_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 6,
+    //       id: 'Debrisflow',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [2],
+    //       opacity: 0.6,
+    //       label: {
+    //         en: 'Debrisflow Zoning',
+    //         ka: 'რისკის ზონები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Debrisflow Zoning',
+    //           ka: 'რისკის ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area ha',
+    //               fieldExpression: 'Area_ha_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
     GROUP_LCD: {
       groupType: 'default',
       order: 7,

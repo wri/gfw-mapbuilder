@@ -404,6 +404,55 @@
   }
 }
 
+.glad-control-wrapper {
+  .calendar-wrapper {
+    display: grid;
+    justify-content: space-around;
+    .date-section-wrapper {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      align-items: center;
+      label {
+        font-size: 12px;
+      }
+      input {
+        font-size: 12px;
+        padding: 0px;
+        width: auto;
+      }
+    }
+  }
+}
+
+.glad-control-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  grid-gap: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-family: 'Fira Sans', sans-serif;
+  }
+  .styled-checkboxlabel {
+    width: 18px;
+    height: 8px;
+  }
+  .styled-checkboxlabel:after {
+    width: 10px;
+    height: 10px;
+  }
+  .styled-checkboxlabel:before {
+    height: 10px;
+  }
+  .styled-checkbox:checked + .styled-checkboxlabel:after {
+    left: 10px;
+  }
+}
+
 .layers-control-container {
   color: $dark-grey;
 

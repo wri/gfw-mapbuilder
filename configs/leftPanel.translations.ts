@@ -319,3 +319,34 @@ export const documentsContent = {
     size: 'Size'
   }
 };
+
+export const layerControlsTranslations = {
+  en: {
+    timeStart: 'Start: ',
+    timeEnd: 'End: '
+  },
+  ka: {
+    timeStart: 'დასაწყისი: ',
+    timeEnd: 'დასასრული: '
+  },
+  fr: {
+    timeStart: 'Début: ',
+    timeEnd: 'Fin: '
+  },
+  es: {
+    timeStart: 'Empezar: ',
+    timeEnd: 'Parar: '
+  },
+  pt: {
+    timeStart: 'Início: ',
+    timeEnd: 'Fim: '
+  },
+  id: {
+    timeStart: 'Start: ',
+    timeEnd: 'End: '
+  },
+  zh: {
+    timeStart: '开始：',
+    timeEnd: '结束：'
+  }
+};

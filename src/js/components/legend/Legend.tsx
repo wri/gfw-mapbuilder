@@ -52,8 +52,7 @@ const Legend = (): JSX.Element => {
       .filter(l => layerIsInScale(l, scale));
     //sync layer loading state with legend comp
     setVisibleLayersToShow(visibleLayers);
-  }, [layersLoading]);
-
+  }, [layersLoading, allAvailableLayers]);
   return (
     <>
       {visibleLayersToShow.length > 0 && (

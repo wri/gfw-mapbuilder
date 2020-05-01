@@ -7,6 +7,7 @@ import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
+import { GladLayer } from 'js/layers/GladLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
@@ -121,6 +122,15 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       break;
     case 'imagery':
       esriLayer = new TreeCoverGainLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      break;
+    case 'glad':
+      esriLayer = new GladLayer({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
