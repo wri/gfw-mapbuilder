@@ -404,6 +404,26 @@
   }
 }
 
+.glad-control-wrapper {
+  .calendar-wrapper {
+    display: grid;
+    justify-content: space-around;
+    .date-section-wrapper {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      align-items: center;
+      label {
+        font-size: 12px;
+      }
+      input {
+        font-size: 12px;
+        padding: 0px;
+        width: auto;
+      }
+    }
+  }
+}
+
 .glad-control-container {
   display: grid;
   grid-template-columns: auto 1fr;

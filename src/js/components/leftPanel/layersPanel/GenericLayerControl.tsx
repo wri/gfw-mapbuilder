@@ -15,14 +15,56 @@ import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import styled from 'styled-components';
+import { format } from 'date-fns';
 import { LayerFactory } from 'js/helpers/LayerFactory';
+import { layerControlsTranslations } from '../../../../../configs/leftPanel.translations';
 
 interface GladControlsProps {
   customColorTheme?: string;
   layerConfig: any;
+  selectedLanguage: string;
 }
 const GladControls = (props: GladControlsProps): JSX.Element => {
+  const getTodayDate = new Date().toISOString().split('T')[0];
+  const defaultStartDate = format(new Date(2015, 0, 1), 'yyyy-MM-dd');
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(false);
+
+  const [startDate, setStartDate] = React.useState(String(defaultStartDate));
+  const [endDate, setEndDate] = React.useState(getTodayDate);
+
+  function handleStartDateChange(e: any): void {
+    setStartDate(e.target.value);
+    //@ts-ignore
+    const start = new Date(e.target.value).getJulian();
+    //@ts-ignore
+    const end = new Date(endDate).getJulian();
+    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    mapController._map?.remove(gladLayerOld);
+    const gladLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    gladLayerNew.julianFrom = start;
+    gladLayerNew.julianTo = end;
+    mapController._map?.add(gladLayerNew);
+  }
+
+  function handleEndDateChange(e: any): void {
+    setEndDate(e.target.value);
+    //@ts-ignore
+    const end = new Date(e.target.value).getJulian();
+    //@ts-ignore
+    const start = new Date(startDate).getJulian();
+    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    mapController._map?.remove(gladLayerOld);
+    const gladLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    gladLayerNew.julianFrom = start;
+    gladLayerNew.julianTo = end;
+    mapController._map?.add(gladLayerNew);
+  }
 
   function handleConfirmedAlertsToggle(): void {
     setUnconfirmedAlerts(!unconfirmedAlerts);
@@ -48,7 +90,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   `;
 
   return (
-    <div>
+    <div className="glad-control-wrapper">
       <div className="glad-control-container">
         <div className="layer-checkbox">
           <CheckboxWrapper>
@@ -68,7 +110,35 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
         </div>
         <p>Hide unconfirmed alerts</p>
       </div>
-      <div>Date Range</div>
+      <div>
+        <div className="calendar-wrapper">
+          <div className="date-section-wrapper">
+            <label htmlFor="start-date">
+              {layerControlsTranslations[props.selectedLanguage].timeEnd}
+            </label>
+            <input
+              className="date-time-toggle input"
+              type="date"
+              defaultValue={startDate}
+              min={undefined}
+              onChange={handleStartDateChange}
+            />
+          </div>
+
+          <div className="date-section-wrapper">
+            <label htmlFor="end-date">
+              {layerControlsTranslations[props.selectedLanguage].timeEnd}
+            </label>
+            <input
+              className="date-time-toggle input"
+              type="date"
+              value={endDate}
+              max={getTodayDate}
+              onChange={handleEndDateChange}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -242,7 +312,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const returnDateRange = (
     id: string,
-    layerConfig: any
+    layerConfig: any,
+    selectedLanguage: string
   ): JSX.Element | undefined => {
     if (!layer) {
       return;
@@ -262,6 +333,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <GladControls
             customColorTheme={customColorTheme}
             layerConfig={layerConfig}
+            selectedLanguage={selectedLanguage}
           />
         );
       default:
@@ -321,7 +393,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           selectedLanguage={selectedLanguage}
         />
       )}
-      {layer?.visible && returnDateRange(props.id, layer)}
+      {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
       {layer?.visible && (
         <LayerTransparencySlider
           layerID={props.id}
