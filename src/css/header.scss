@@ -47,6 +47,22 @@
   .selectors-container {
     display: flex;
     align-items: center;
+    .header-link {
+      cursor: pointer;
+      border: none;
+      height: auto;
+      text-transform: uppercase;
+      font-size: 12px;
+      text-decoration: none;
+      color: #555;
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      margin-right: 1rem;
+      svg {
+        margin-right: 4px;
+      }
+    }
     .language-dropdown-container,
     .theme-dropdown-container {
       display: flex;

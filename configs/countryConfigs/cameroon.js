@@ -17,6 +17,8 @@ module.exports = {
   analyticsCode: 'UA-62288390-1',
   iso: 'CMR',
   customColorTheme: '#ff8000',
+  aboutLinkUrl: 'https://www.blueraster.com',
+  downloadLinkUrl: 'https://www.blueraster.com',
   language: 'fr',
   useAlternativeLanguage: true,
   alternativeLanguage: 'en',
