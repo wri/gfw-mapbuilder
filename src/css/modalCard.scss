@@ -27,9 +27,14 @@
     background-color: $white;
 
     svg {
-      height: 2rem;
-      width: 1rem;
+      height: 1.5rem;
+      width: 1.5rem;
     }
+  }
+  &.subscription-widget {
+    height: 28.125rem;
+    top: 40%;
+    width: 21rem;
   }
 
   &.info-content {
@@ -63,7 +68,7 @@
         }
       }
       .button-container {
-        border-top: 1px solid #e5e5df;
+        border-top: 1px solid $modal-border;
         a {
           text-decoration: none;
         }
@@ -103,14 +108,14 @@
             font-weight: 500;
             font-size: 0.7rem;
             width: 120px; // * pixels are required
-            border-right: 1px solid #e5e5df;
-            border-bottom: 1px solid #e5e5df;
+            border-right: 1px solid $modal-border;
+            border-bottom: 1px solid $modal-border;
             padding: 0.65rem;
           }
 
           td.label-info {
             line-height: 1rem;
-            border-bottom: 1px solid #e5e5df;
+            border-bottom: 1px solid $modal-border;
             padding-left: 0.85rem;
             font-size: 0.8125rem;
             line-height: 22.1px;
@@ -311,6 +316,12 @@
     }
   }
 
+  .subscribe-button-container,
+  .date-created,
+  .other-row {
+    margin: 1rem;
+  }
+
   .subscribe-button-container {
     display: flex;
     justify-content: space-between;
@@ -458,16 +469,13 @@
     margin-left: 0;
   }
   .source-row {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid $modal-border;
     display: table;
     width: 100%;
     margin: 0;
   }
   .source-row:nth-child(even) {
     background: #f2f2f3;
-  }
-  .source-row.subscribe-row {
-    padding: 10px;
   }
   .source-row .other-row {
     font-size: 14px;

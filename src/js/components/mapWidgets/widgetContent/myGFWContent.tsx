@@ -86,7 +86,7 @@ const MyGFWContent: FunctionComponent = () => {
       <div className="options-modal">
         <ul className="more-list">
           <li onClick={getSubscriptions} className="gfw-api-option">
-            Subscriptions
+            My Subscriptions
           </li>
           <li className="gfw-api-option">
             <a href="http://www.globalforestwatch.org/my_gfw">My GFW Profile</a>
