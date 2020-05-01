@@ -245,6 +245,8 @@ export class MapController {
               newRemoteLayerObject.metadata.outputRange =
                 remoteLayerObject.layer.outputRange;
               newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.legendInfo =
+                remoteLayerObject.layer.metadata.legendConfig;
             } else {
               if (
                 remoteLayerObject.versions &&
