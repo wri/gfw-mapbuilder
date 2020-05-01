@@ -22,20 +22,11 @@ export const SubscribeButton = (): JSX.Element => {
     (store: RootState) => store.appSettings.customColorTheme
   );
 
-  async function subscribeHandler(): Promise<void> {
-    //const appID = new URL(window.location.href).searchParams.get('appid');
-    ////Get the base and state urls
-    //const baseUrl = new URL(window.location.href);
-    //const stateUrl = await getShareableURL({ report: true });
-    //const urlVal = appID
-    //  ? `${baseUrl.href}&${stateUrl}`
-    //  : `${baseUrl}?${stateUrl}`;
-    //window.open(urlVal);
+  function subscribeHandler(): void {
+    //
   }
 
-  const colorTheme = customColorTheme?.length
-    ? props.customColorTheme
-    : '#f0ab00';
+  const colorTheme = customColorTheme?.length ? customColorTheme : '#f0ab00';
 
   return (
     <button
