@@ -15,15 +15,25 @@ import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import styled from 'styled-components';
+import { LayerFactory } from 'js/helpers/LayerFactory';
 
 interface GladControlsProps {
   customColorTheme?: string;
+  layerConfig: any;
 }
 const GladControls = (props: GladControlsProps): JSX.Element => {
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(false);
 
   function handleConfirmedAlertsToggle(): void {
     setUnconfirmedAlerts(!unconfirmedAlerts);
+    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    mapController._map?.remove(gladLayerOld);
+    const gladLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    gladLayerNew.confirmed = !unconfirmedAlerts;
+    mapController._map?.add(gladLayerNew);
   }
 
   const colorTheme = props.customColorTheme?.length
@@ -230,7 +240,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  const returnDateRange = (id: string): JSX.Element | undefined => {
+  const returnDateRange = (
+    id: string,
+    layerConfig: any
+  ): JSX.Element | undefined => {
     if (!layer) {
       return;
     }
@@ -245,7 +258,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return <DateRange layer={layer} />;
         break;
       case 'GLAD_ALERTS':
-        return <GladControls customColorTheme={customColorTheme} />;
+        return (
+          <GladControls
+            customColorTheme={customColorTheme}
+            layerConfig={layerConfig}
+          />
+        );
       default:
         break;
     }
@@ -303,7 +321,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           selectedLanguage={selectedLanguage}
         />
       )}
-      {layer?.visible && returnDateRange(props.id)}
+      {layer?.visible && returnDateRange(props.id, layer)}
       {layer?.visible && (
         <LayerTransparencySlider
           layerID={props.id}
