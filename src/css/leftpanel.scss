@@ -639,6 +639,7 @@
   border-bottom: 1px solid #aaa;
   font-family: $fira-sans;
   font-size: 0.85rem;
+  cursor: pointer;
 
   img {
     border-radius: 50px;
@@ -646,6 +647,33 @@
     height: 44px;
     margin: 10px;
     vertical-align: middle;
+  }
+
+  .landsat-thumb {
+    border-radius: 50px;
+    width: 44px;
+    height: 44px;
+    background-position: 0 -352px;
+    margin: 10px;
+    vertical-align: middle;
+  }
+
+  .landsat-years {
+    margin-left: 10px;
+    position: relative;
+    background: transparent;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1;
+    height: 1.5rem;
+    border-radius: 16px;
+    -webkit-appearance: none;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: 1px solid #f0ab00;
+    background-color: #fff;
+    color: #555;
+    font-size: 11px;
   }
 }
 

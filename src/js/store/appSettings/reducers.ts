@@ -32,6 +32,7 @@ const initialState: AppSettings = {
   mapThemeIds: '',
   mapThemes: '',
   alternativeMapThemes: '',
+  customColorTheme: '',
   analysisModules: [
     {
       analysisId: '',

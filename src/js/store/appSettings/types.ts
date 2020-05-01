@@ -29,6 +29,7 @@ export interface AppSettings {
   mapThemeIds: string;
   alternativeMapThemes: string;
   initialExtent?: { x: number; y: number; z: number };
+  customColorTheme?: string;
 }
 
 type LayerGroupKey =

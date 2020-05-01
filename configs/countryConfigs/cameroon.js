@@ -1013,7 +1013,7 @@ module.exports = {
           thumbnailUrl:
             'https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png',
           templateUrl:
-            'https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png',
+            'https://production-api.globalforestwatch.org/v2/landsat-tiles/2017/{level}/{col}/{row}',
           years: [
             '2000',
             '2001',
@@ -1056,20 +1056,20 @@ module.exports = {
             zh: 'WRI Mono',
             ka: 'WRI Mono'
           }
-        },
-        {
-          id: 'wri_contextual',
-          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
-          title: {
-            en: 'WRI Contextual',
-            fr: 'WRI Contextual',
-            es: 'WRI Contextual',
-            pt: 'WRI Contextual',
-            id: 'WRI Contextual',
-            zh: 'WRI Contextual',
-            ka: 'WRI Contextual'
-          }
         }
+        // {
+        //   id: 'wri_contextual',
+        //   thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
+        //   title: {
+        //     en: 'WRI Contextual',
+        //     fr: 'WRI Contextual',
+        //     es: 'WRI Contextual',
+        //     pt: 'WRI Contextual',
+        //     id: 'WRI Contextual',
+        //     zh: 'WRI Contextual',
+        //     ka: 'WRI Contextual'
+        //   }
+        // }
       ]
     },
     GROUP_Orth: {
