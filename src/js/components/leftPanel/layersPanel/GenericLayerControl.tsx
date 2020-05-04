@@ -140,7 +140,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
         <div className="calendar-wrapper">
           <div className="date-section-wrapper">
             <label htmlFor="start-date">
-              {layerControlsTranslations[props.selectedLanguage].timeEnd}
+              {layerControlsTranslations[props.selectedLanguage].timeStart}
             </label>
             <input
               className="date-time-toggle input"
