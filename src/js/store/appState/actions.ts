@@ -15,7 +15,10 @@ import {
   SET_CANOPY_DENSITY,
   SET_ANALYSIS_DATE,
   SET_ANALYSIS_YEAR_RANGE,
-  SET_SELECTED_SEARCH_WIDGET_LAYER
+  SET_SELECTED_SEARCH_WIDGET_LAYER,
+  SET_GLAD_CONFIRMED,
+  SET_GLAD_START,
+  SET_GLAD_END
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -127,6 +130,29 @@ export function setAnalysisYearRange(
 ) {
   return {
     type: SET_ANALYSIS_YEAR_RANGE as typeof SET_ANALYSIS_YEAR_RANGE,
+    payload: payload
+  };
+}
+
+export function setGladConfirmed(
+  payload: AppState['leftPanel']['gladConfirmed']
+) {
+  return {
+    type: SET_GLAD_CONFIRMED as typeof SET_GLAD_CONFIRMED,
+    payload: payload
+  };
+}
+
+export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
+  return {
+    type: SET_GLAD_START as typeof SET_GLAD_START,
+    payload: payload
+  };
+}
+
+export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
+  return {
+    type: SET_GLAD_END as typeof SET_GLAD_END,
     payload: payload
   };
 }

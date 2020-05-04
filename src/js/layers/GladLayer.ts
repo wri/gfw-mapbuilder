@@ -26,7 +26,7 @@ Date.prototype.getJulian = function() {
 
 export const GladLayer = BaseTileLayer.createSubclass({
   properties: {
-    julianFrom: 15000,
+    julianFrom: '15000',
     julianTo: new Date().getJulian(),
     confirmed: false
   },

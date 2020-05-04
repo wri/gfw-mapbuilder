@@ -5,6 +5,9 @@ export interface LeftPanel {
   density: 1 | 2 | 3 | 4 | 5 | 6 | 7 | number; //careful about introducing any more density numbers, AG_BIOMASS layer depends on those to render and update
   analysisDateRange: string[];
   analysisYearRange: number[];
+  gladConfirmed: boolean;
+  gladStart: string;
+  gladEnd: string;
 }
 
 interface SpecificAreaResults {
@@ -63,6 +66,9 @@ export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
 export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
 export const SET_SELECTED_SEARCH_WIDGET_LAYER =
   'SET_SELECTED_SEARCH_WIDGET_LAYER';
+export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
+export const SET_GLAD_START = 'SET_GLAD_START';
+export const SET_GLAD_END = 'SET_GLAD_END';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -139,6 +145,21 @@ interface SetAnalysisYearRange {
   payload: AppState['leftPanel']['analysisYearRange'];
 }
 
+interface SetGladConfirmed {
+  type: typeof SET_GLAD_CONFIRMED;
+  payload: AppState['leftPanel']['gladConfirmed'];
+}
+
+interface SetGladStart {
+  type: typeof SET_GLAD_START;
+  payload: AppState['leftPanel']['gladStart'];
+}
+
+interface SetGladEnd {
+  type: typeof SET_GLAD_END;
+  payload: AppState['leftPanel']['gladEnd'];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -154,4 +175,7 @@ export type AppStateTypes =
   | SetCanopyDensity
   | SetAnalysisDate
   | SetAnalysisYearRange
-  | SetSelectedSearchWidgetLayer;
+  | SetSelectedSearchWidgetLayer
+  | SetGladConfirmed
+  | SetGladStart
+  | SetGladEnd;
