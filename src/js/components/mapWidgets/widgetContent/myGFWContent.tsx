@@ -5,14 +5,14 @@ import { RootState } from 'js/store';
 import { setUserSubscriptions } from 'js/store/mapview/actions';
 import { renderModal } from 'js/store/appState/actions';
 
-import { myGFWConfig } from 'configs/myGFW';
+import { headerContent } from 'src/js/components/header/header.translations';
 
 const MyGFWContent: FunctionComponent = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(
     (state: RootState) => state.appState.isLoggedIn
   );
-  const subscriptions = useSelector(
+  const userSubscriptions = useSelector(
     (state: RootState) => state.mapviewState.userSubscriptions
   );
   const selectedLanguage = useSelector(
@@ -20,15 +20,15 @@ const MyGFWContent: FunctionComponent = () => {
   );
 
   const {
-    mySubscriptions,
-    myGFWProfile,
+    subscriptions,
+    profile,
     logout,
-    twitterLogin,
-    facebookLogin,
-    googleLogin,
-    loginRequired,
+    twitter,
+    facebook,
+    google,
+    loginReq,
     contactUs
-  } = myGFWConfig[selectedLanguage];
+  } = headerContent[selectedLanguage];
 
   function logOut(): void {
     fetch('https://production-api.globalforestwatch.org/auth/logout', {
@@ -42,7 +42,7 @@ const MyGFWContent: FunctionComponent = () => {
   }
 
   function getSubscriptions(): void {
-    if (subscriptions.length === 0) {
+    if (userSubscriptions.length === 0) {
       fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
         credentials: 'include'
       })
@@ -63,7 +63,7 @@ const MyGFWContent: FunctionComponent = () => {
     return (
       <ul className="subscription-authentication">
         <p>
-          {loginRequired}
+          {loginReq}
           <a href="mailto:gfw@wri.org">{contactUs}</a>
         </p>
         <li className="subscribe-method twitter-box">
@@ -71,7 +71,7 @@ const MyGFWContent: FunctionComponent = () => {
             href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw"
             className="-twitter"
           >
-            {twitterLogin}
+            {twitter}
           </a>
         </li>
 
@@ -80,7 +80,7 @@ const MyGFWContent: FunctionComponent = () => {
             href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw"
             className="-facebook"
           >
-            {facebookLogin}
+            {facebook}
           </a>
         </li>
 
@@ -89,7 +89,7 @@ const MyGFWContent: FunctionComponent = () => {
             href="https://production-api.globalforestwatch.org/auth/google?applications=gfw"
             className="-google"
           >
-            {googleLogin}
+            {google}
           </a>
         </li>
       </ul>
@@ -101,10 +101,10 @@ const MyGFWContent: FunctionComponent = () => {
       <div className="options-modal">
         <ul className="more-list">
           <li onClick={getSubscriptions} className="gfw-api-option">
-            {mySubscriptions}
+            {subscriptions}
           </li>
           <li className="gfw-api-option">
-            <a href="http://www.globalforestwatch.org/my_gfw">{myGFWProfile}</a>
+            <a href="http://www.globalforestwatch.org/my_gfw">{profile}</a>
           </li>
           <li className="gfw-api-option">
             <p onClick={logOut}>{logout}</p>
