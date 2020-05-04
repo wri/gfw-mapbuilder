@@ -18,7 +18,9 @@ import {
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_GLAD_CONFIRMED,
   SET_GLAD_START,
-  SET_GLAD_END
+  SET_GLAD_END,
+  SET_TERRA_START,
+  SET_TERRA_END
 } from './types';
 
 const initialState: AppState = {
@@ -41,7 +43,9 @@ const initialState: AppState = {
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     gladStart: '2015-01-01',
-    gladEnd: new Date().toISOString().split('T')[0]
+    gladEnd: new Date().toISOString().split('T')[0],
+    terraStart: '2004-01-01',
+    terraEnd: new Date().toISOString().split('T')[0]
   },
   measureContent: {
     activeButton: '',
@@ -162,6 +166,22 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           gladEnd: action.payload
+        }
+      };
+    case SET_TERRA_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          terraStart: action.payload
+        }
+      };
+    case SET_TERRA_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          terraEnd: action.payload
         }
       };
     default:
