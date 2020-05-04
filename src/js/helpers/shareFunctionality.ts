@@ -5,7 +5,9 @@ import {
   setCanopyDensity,
   setGladConfirmed,
   setGladStart,
-  setGladEnd
+  setGladEnd,
+  setTerraStart,
+  setTerraEnd
 } from 'js/store/appState/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
@@ -28,7 +30,9 @@ const urlEncodingMap = {
   vs: 'virs_start_date',
   ve: 'virs_end_date',
   ms: 'modis_start_date',
-  me: 'modis_end_date'
+  me: 'modis_end_date',
+  ts: 'terra_start',
+  te: 'terra_end'
 };
 
 function getGeostoreID(
@@ -123,6 +127,13 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
     urlParams.push(`gs=${leftPanel.gladStart}`);
     urlParams.push(`ge=${leftPanel.gladEnd}`);
   }
+
+  const terraLayer: any = mapController._map?.findLayerById('TERRA_I_ALERTS');
+  if (terraLayer) {
+    urlParams.push(`ts=${leftPanel.terraStart}`);
+    urlParams.push(`te=${leftPanel.terraEnd}`);
+  }
+
   return urlParams.join('&');
 }
 
@@ -191,6 +202,12 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'ge':
           store.dispatch(setGladEnd(urlParamValue));
+          break;
+        case 'ts':
+          store.dispatch(setTerraStart(urlParamValue));
+          break;
+        case 'te':
+          store.dispatch(setTerraEnd(urlParamValue));
           break;
         default:
           break;
