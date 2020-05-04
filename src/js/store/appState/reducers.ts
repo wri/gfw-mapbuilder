@@ -15,7 +15,10 @@ import {
   SET_CANOPY_DENSITY,
   SET_ANALYSIS_DATE,
   SET_ANALYSIS_YEAR_RANGE,
-  SET_SELECTED_SEARCH_WIDGET_LAYER
+  SET_SELECTED_SEARCH_WIDGET_LAYER,
+  SET_GLAD_CONFIRMED,
+  SET_GLAD_START,
+  SET_GLAD_END
 } from './types';
 
 const initialState: AppState = {
@@ -35,7 +38,10 @@ const initialState: AppState = {
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
     analysisDateRange: ['', ''],
-    analysisYearRange: [2001, 2018]
+    analysisYearRange: [2001, 2018],
+    gladConfirmed: false,
+    gladStart: '2015-01-01',
+    gladEnd: new Date().toISOString().split('T')[0]
   },
   measureContent: {
     activeButton: '',
@@ -132,6 +138,30 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           analysisYearRange: action.payload
+        }
+      };
+    case SET_GLAD_CONFIRMED:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gladConfirmed: action.payload
+        }
+      };
+    case SET_GLAD_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gladStart: action.payload
+        }
+      };
+    case SET_GLAD_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gladEnd: action.payload
         }
       };
     default:

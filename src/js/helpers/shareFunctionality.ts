@@ -1,6 +1,12 @@
 import store from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
-import { selectActiveTab, setCanopyDensity } from 'js/store/appState/actions';
+import {
+  selectActiveTab,
+  setCanopyDensity,
+  setGladConfirmed,
+  setGladStart,
+  setGladEnd
+} from 'js/store/appState/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 
@@ -16,6 +22,7 @@ const urlEncodingMap = {
   tab: 'activeTab',
   l: 'layers',
   o: 'opacity',
+  gladconfirmed: 'glad_confirmed',
   gs: 'glad_start_date',
   ge: 'glad_end_date',
   vs: 'virs_start_date',
@@ -71,14 +78,13 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const { activeBasemap } = mapviewState;
   urlParams.push(`b=${activeBasemap}`);
 
-  //Basemap LayerID
-  const { selectedLanguage } = appState;
+  //Language
+  const { selectedLanguage, leftPanel } = appState;
   urlParams.push(`lang=${selectedLanguage}`);
 
   //X Y Z, In case of Report, we do not need this, because we are zooming to the active feature
   if (!props.report) {
     const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
-    console.log(zoom);
     urlParams.push(`z=${zoom}`);
     urlParams.push(`coords=${longitude}%2C${latitude}`);
   }
@@ -109,6 +115,14 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   //Active Tab
   const { activeTab } = appState.leftPanel;
   urlParams.push(`tab=${activeTab}`);
+
+  // Glad alerts > start date gs, end date ge and toggle gladconfirmed=true/false
+  const gladLayer: any = mapController._map?.findLayerById('GLAD_ALERTS');
+  if (gladLayer) {
+    urlParams.push(`gladconfirmed=${gladLayer.confirmed}`);
+    urlParams.push(`gs=${leftPanel.gladStart}`);
+    urlParams.push(`ge=${leftPanel.gladEnd}`);
+  }
   return urlParams.join('&');
 }
 
@@ -166,6 +180,17 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'tab':
           store.dispatch(selectActiveTab(urlParamValue));
+          break;
+        case 'gladconfirmed':
+          //Url params always come in as strings so we need to do exact check
+          const gladConfirmedValue = urlParamValue === 'true' ? true : false;
+          store.dispatch(setGladConfirmed(gladConfirmedValue));
+          break;
+        case 'gs':
+          store.dispatch(setGladStart(urlParamValue));
+          break;
+        case 'ge':
+          store.dispatch(setGladEnd(urlParamValue));
           break;
         default:
           break;

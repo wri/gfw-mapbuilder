@@ -8,14 +8,18 @@ import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPic
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRange from './DateRange';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
-import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
+import {
+  renderModal,
+  setInfoModalLayerID,
+  setGladStart,
+  setGladEnd
+} from 'js/store/appState/actions';
 import { RootState } from 'js/store';
 import { mapController } from 'js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import styled from 'styled-components';
-import { format } from 'date-fns';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/leftPanel.translations';
 
@@ -24,13 +28,27 @@ interface GladControlsProps {
   layerConfig: any;
   selectedLanguage: string;
 }
-const GladControls = (props: GladControlsProps): JSX.Element => {
-  const getTodayDate = new Date().toISOString().split('T')[0];
-  const defaultStartDate = format(new Date(2015, 0, 1), 'yyyy-MM-dd');
-  const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(false);
 
-  const [startDate, setStartDate] = React.useState(String(defaultStartDate));
-  const [endDate, setEndDate] = React.useState(getTodayDate);
+const GladControls = (props: GladControlsProps): JSX.Element => {
+  const dispatch = useDispatch();
+  const gladConfirmed = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladConfirmed
+  );
+
+  const gladStart = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladStart
+  );
+
+  const gladEnd = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladEnd
+  );
+
+  const getTodayDate = new Date().toISOString().split('T')[0];
+  const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(
+    gladConfirmed
+  );
+  const [startDate, setStartDate] = React.useState(String(gladStart));
+  const [endDate, setEndDate] = React.useState(gladEnd);
 
   function handleStartDateChange(e: any): void {
     setStartDate(e.target.value);
@@ -47,6 +65,10 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
     mapController._map?.add(gladLayerNew);
+
+    //update redux
+    dispatch(setGladStart(e.target.value));
+    dispatch(setGladEnd(endDate));
   }
 
   function handleEndDateChange(e: any): void {
@@ -64,6 +86,10 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
     mapController._map?.add(gladLayerNew);
+
+    //update redux
+    dispatch(setGladStart(startDate));
+    dispatch(setGladEnd(e.target.value));
   }
 
   function handleConfirmedAlertsToggle(): void {
@@ -327,7 +353,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       case 'VIIRS_ACTIVE_FIRES':
       case 'MODIS_ACTIVE_FIRES':
         return <DateRange layer={layer} />;
-        break;
       case 'GLAD_ALERTS':
         return (
           <GladControls

@@ -25,6 +25,7 @@ interface LayerOptions {
 }
 
 export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
+  const { appState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
@@ -47,7 +48,6 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       esriLayer = new MapImageLayer(layerOptions);
       break;
     case 'image':
-      const { appState } = store.getState();
       esriLayer = new ImageryLayer({
         id: layerConfig.id,
         visible: layerConfig.visible,
@@ -137,6 +137,13 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer.confirmed = appState.leftPanel.gladConfirmed;
+      //@ts-ignore
+      const startDate = new Date(appState.leftPanel.gladStart).getJulian();
+      //@ts-ignore
+      const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
+      esriLayer.julianFrom = startDate;
+      esriLayer.julianTo = endDate;
       break;
     case 'MASK':
       const { appSettings } = store.getState();
