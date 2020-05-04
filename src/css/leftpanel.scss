@@ -259,7 +259,7 @@
         .date-section-wrapper {
           display: grid;
           grid-template-columns: 40px 1fr;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
           label {
             margin-right: 5px;
           }
@@ -411,6 +411,7 @@
     .date-section-wrapper {
       display: grid;
       grid-template-columns: 40px 1fr;
+      margin-bottom: 4px;
       align-items: center;
       label {
         font-size: 12px;
@@ -606,7 +607,6 @@
         display: flex;
         width: -webkit-fill-available;
         justify-content: space-evenly;
-
         label {
           margin-top: auto;
           margin-bottom: auto;

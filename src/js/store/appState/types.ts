@@ -8,6 +8,8 @@ export interface LeftPanel {
   gladConfirmed: boolean;
   gladStart: string;
   gladEnd: string;
+  terraStart: string;
+  terraEnd: string;
 }
 
 interface SpecificAreaResults {
@@ -69,6 +71,8 @@ export const SET_SELECTED_SEARCH_WIDGET_LAYER =
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
+export const SET_TERRA_START = 'SET_TERRA_START';
+export const SET_TERRA_END = 'SET_TERRA_END';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -160,6 +164,16 @@ interface SetGladEnd {
   payload: AppState['leftPanel']['gladEnd'];
 }
 
+interface SetTerraStart {
+  type: typeof SET_TERRA_START;
+  payload: AppState['leftPanel']['terraStart'];
+}
+
+interface SetTerraEnd {
+  type: typeof SET_TERRA_END;
+  payload: AppState['leftPanel']['terraEnd'];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -178,4 +192,6 @@ export type AppStateTypes =
   | SetSelectedSearchWidgetLayer
   | SetGladConfirmed
   | SetGladStart
-  | SetGladEnd;
+  | SetGladEnd
+  | SetTerraStart
+  | SetTerraEnd;
