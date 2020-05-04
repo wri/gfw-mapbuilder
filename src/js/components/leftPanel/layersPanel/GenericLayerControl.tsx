@@ -117,6 +117,7 @@ const TerraControls = (props: TerraLayerControls): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeStart}
             </label>
             <input
+              style={{ border: `2px solid ${colorTheme}` }}
               className="date-time-toggle input"
               type="date"
               defaultValue={startDate}
@@ -130,6 +131,7 @@ const TerraControls = (props: TerraLayerControls): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeEnd}
             </label>
             <input
+              style={{ border: `2px solid ${colorTheme}` }}
               className="date-time-toggle input"
               type="date"
               value={endDate}
@@ -262,6 +264,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeStart}
             </label>
             <input
+              style={{ border: `2px solid ${colorTheme}` }}
               className="date-time-toggle input"
               type="date"
               defaultValue={startDate}
@@ -275,6 +278,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeEnd}
             </label>
             <input
+              style={{ border: `2px solid ${colorTheme}` }}
               className="date-time-toggle input"
               type="date"
               value={endDate}
