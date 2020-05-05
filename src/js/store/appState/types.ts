@@ -10,6 +10,10 @@ export interface LeftPanel {
   gladEnd: string;
   terraStart: string;
   terraEnd: string;
+  modisStart: string;
+  modisEnd: string;
+  viirsStart: string;
+  viirsEnd: string;
 }
 
 interface SpecificAreaResults {
@@ -73,6 +77,10 @@ export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
 export const SET_TERRA_START = 'SET_TERRA_START';
 export const SET_TERRA_END = 'SET_TERRA_END';
+export const SET_VIIRS_START = 'SET_VIIRS_START';
+export const SET_VIIRS_END = 'SET_VIIRS_END';
+export const SET_MODIS_START = 'SET_MODIS_START';
+export const SET_MODIS_END = 'SET_MODIS_END';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -174,6 +182,26 @@ interface SetTerraEnd {
   payload: AppState['leftPanel']['terraEnd'];
 }
 
+interface SetModisStart {
+  type: typeof SET_MODIS_START;
+  payload: AppState['leftPanel']['modisStart'];
+}
+
+interface SetModisEnd {
+  type: typeof SET_MODIS_END;
+  payload: AppState['leftPanel']['modisEnd'];
+}
+
+interface SetViirsStart {
+  type: typeof SET_VIIRS_START;
+  payload: AppState['leftPanel']['viirsStart'];
+}
+
+interface SetViirsEnd {
+  type: typeof SET_VIIRS_END;
+  payload: AppState['leftPanel']['viirsEnd'];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -194,4 +222,8 @@ export type AppStateTypes =
   | SetGladStart
   | SetGladEnd
   | SetTerraStart
-  | SetTerraEnd;
+  | SetTerraEnd
+  | SetModisStart
+  | SetModisEnd
+  | SetViirsStart
+  | SetViirsEnd;

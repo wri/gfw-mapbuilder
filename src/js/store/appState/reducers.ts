@@ -1,3 +1,5 @@
+import { format, subYears } from 'date-fns';
+
 import {
   AppState,
   AppStateTypes,
@@ -20,7 +22,11 @@ import {
   SET_GLAD_START,
   SET_GLAD_END,
   SET_TERRA_START,
-  SET_TERRA_END
+  SET_TERRA_END,
+  SET_MODIS_START,
+  SET_MODIS_END,
+  SET_VIIRS_START,
+  SET_VIIRS_END
 } from './types';
 
 const initialState: AppState = {
@@ -43,9 +49,13 @@ const initialState: AppState = {
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     gladStart: '2015-01-01',
-    gladEnd: new Date().toISOString().split('T')[0],
+    gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     terraStart: '2004-01-01',
-    terraEnd: new Date().toISOString().split('T')[0]
+    terraEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
+    viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd')
   },
   measureContent: {
     activeButton: '',
@@ -182,6 +192,38 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           terraEnd: action.payload
+        }
+      };
+    case SET_MODIS_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          modisStart: action.payload
+        }
+      };
+    case SET_MODIS_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          modisEnd: action.payload
+        }
+      };
+    case SET_VIIRS_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          viirsStart: action.payload
+        }
+      };
+    case SET_VIIRS_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          viirsEnd: action.payload
         }
       };
     default:

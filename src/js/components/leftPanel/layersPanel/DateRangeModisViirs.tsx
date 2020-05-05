@@ -1,41 +1,39 @@
 import React, { useState, ChangeEvent } from 'react';
 
 import { mapController } from 'js/controllers/mapController';
-
+import { RootState } from 'js/store/index';
+import { useSelector } from 'react-redux';
 import { LayerProps } from 'js/store/mapview/types';
+import { format } from 'date-fns';
 
 interface DateRangeProps {
   layer: LayerProps;
+  id: string;
 }
-
-const returnDateToday = (): string => {
-  const dateToday = new Date().toLocaleDateString();
-  const [monthToday, dayToday, yearToday] = dateToday.split('/');
-  const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
-  const monthTodayFormatted =
-    monthToday.length === 1 ? `0${monthToday}` : monthToday;
-  const dateTodayFormatted = `${yearToday}-${monthTodayFormatted}-${dayTodayFormatted}`;
-  return dateTodayFormatted;
-};
-
-const returnOneYearAgoToday = (): any => {
-  const dateToday = new Date().toLocaleDateString();
-  const [monthToday, dayToday, yearToday] = dateToday.split('/');
-  const lastYear = String(Number(yearToday) - 1);
-  const dayTodayFormatted = dayToday.length === 1 ? `0${dayToday}` : dayToday;
-  const monthTodayFormatted =
-    monthToday.length === 1 ? `0${monthToday}` : monthToday;
-
-  const dateTodayFormatted = `${lastYear}-${monthTodayFormatted}-${dayTodayFormatted}`;
-
-  return dateTodayFormatted;
-};
+const getTodayDate = format(new Date(Date.now()), 'yyyy-MM-dd');
 
 const DateRange = (props: DateRangeProps): JSX.Element => {
+  const modisStart = useSelector(
+    (store: RootState) => store.appState.leftPanel.modisStart
+  );
+  const modisEnd = useSelector(
+    (store: RootState) => store.appState.leftPanel.modisEnd
+  );
+  const viirsStart = useSelector(
+    (store: RootState) => store.appState.leftPanel.viirsStart
+  );
+  const viirsEnd = useSelector(
+    (store: RootState) => store.appState.leftPanel.viirsEnd
+  );
+
   const { layer } = props;
 
-  const [startDate, setStartDate] = useState(returnOneYearAgoToday());
-  const [endDate, setEndDate] = useState(returnDateToday());
+  const [startDate, setStartDate] = useState<string>(
+    props.id === 'VIIRS_ACTIVE_FIRES' ? viirsStart : modisStart
+  );
+  const [endDate, setEndDate] = useState(
+    props.id === 'VIIRS_ACTIVE_FIRES' ? viirsEnd : modisEnd
+  );
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
 
@@ -96,7 +94,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
                 type="date"
                 value={startDate}
                 min="2018-01-01"
-                max={returnDateToday()}
+                max={getTodayDate}
                 onChange={(e): void => updateStartDate(e)}
               />
             </div>
@@ -107,7 +105,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
                 type="date"
                 value={endDate}
                 min="2018-01-01"
-                max={returnDateToday()}
+                max={getTodayDate}
                 onChange={(e): void => updateEndDate(e)}
               />
             </div>
