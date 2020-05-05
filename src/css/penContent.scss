@@ -16,16 +16,33 @@
       figcaption {
         h4 {
           margin: 0;
+          font-weight: 400;
+          line-height: 23.8px;
+          font-size: 0.875rem;
+          color: rgb(111, 111, 111);
         }
       }
 
       ol {
         padding-left: 1rem;
+
+        li {
+          color: rgb(111, 111, 111);
+          font-size: 0.8125rem;
+          font-weight: 400;
+          line-height: 22.1px;
+        }
       }
     }
 
     hr {
       width: 75%;
+    }
+
+    .orange-button {
+      font-size: 0.875rem;
+      line-height: 15px;
+      font-weight: 400;
     }
   }
 }

@@ -153,7 +153,7 @@
     margin: 1rem;
 
     p {
-      font-family: 'Fira Sans', sans-serif;
+      font-family: $fira-sans;
       font-weight: 300;
       font-size: 14px;
       line-height: 23.8px;
@@ -270,7 +270,7 @@
 
       button {
         border: none;
-        font-family: 'Fira Sans', sans-serif;
+        font-family: $fira-sans;
         font-size: 14px;
 
         &.delete-button {
@@ -336,7 +336,7 @@
         .date-section-wrapper {
           display: grid;
           grid-template-columns: 40px 1fr;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
           label {
             margin-right: 5px;
           }
@@ -385,7 +385,7 @@
 }
 
 .tab-button {
-  background: #eee;
+  background: $light-light-grey;
   border: 0;
   justify-content: center;
   height: 40px;
@@ -434,12 +434,17 @@
   font-family: $fira-sans;
   color: $light-grey;
 
+  button,
+  span {
+    font-weight: 100;
+  }
+
   span {
     font-size: 14px;
   }
   button {
     text-align: right;
-    font-size: 12px;
+    font-size: 0.7rem;
     height: 100%;
     outline: 0;
     cursor: pointer;
@@ -462,6 +467,68 @@
   grid-template-columns: auto 1fr;
   grid-gap: 10px;
   margin-top: 15px;
+}
+
+.layer-version-picker-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  margin-bottom: 10px;
+  font-size: 11px;
+  p {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+}
+
+.glad-control-wrapper {
+  .calendar-wrapper {
+    display: grid;
+    justify-content: space-around;
+    .date-section-wrapper {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      margin-bottom: 4px;
+      align-items: center;
+      label {
+        font-size: 12px;
+      }
+      input {
+        font-size: 12px;
+        padding: 0px;
+        width: auto;
+      }
+    }
+  }
+}
+
+.glad-control-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  grid-gap: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-family: 'Fira Sans', sans-serif;
+  }
+  .styled-checkboxlabel {
+    width: 18px;
+    height: 8px;
+  }
+  .styled-checkboxlabel:after {
+    width: 10px;
+    height: 10px;
+  }
+  .styled-checkboxlabel:before {
+    height: 10px;
+  }
+  .styled-checkbox:checked + .styled-checkboxlabel:after {
+    left: 10px;
+  }
 }
 
 .layers-control-container {
@@ -543,10 +610,12 @@
         margin-left: 0.5rem;
         max-width: 12rem;
         flex-grow: 1;
+        font-weight: 400;
+        line-height: 22px;
       }
 
       .layer-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         margin-left: 0.5rem;
         color: $medium-dark-grey;
       }
@@ -615,7 +684,6 @@
         display: flex;
         width: -webkit-fill-available;
         justify-content: space-evenly;
-
         label {
           margin-top: auto;
           margin-bottom: auto;
@@ -680,6 +748,8 @@
 
   span {
     text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.9375rem;
   }
 
   .caret-button {
@@ -695,6 +765,7 @@
   border-bottom: 1px solid #aaa;
   font-family: $fira-sans;
   font-size: 0.85rem;
+  cursor: pointer;
 
   img {
     border-radius: 50px;
@@ -702,6 +773,33 @@
     height: 44px;
     margin: 10px;
     vertical-align: middle;
+  }
+
+  .landsat-thumb {
+    border-radius: 50px;
+    width: 44px;
+    height: 44px;
+    background-position: 0 -352px;
+    margin: 10px;
+    vertical-align: middle;
+  }
+
+  .landsat-years {
+    margin-left: 10px;
+    position: relative;
+    background: transparent;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1;
+    height: 1.5rem;
+    border-radius: 16px;
+    -webkit-appearance: none;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: 1px solid #f0ab00;
+    background-color: #fff;
+    color: #555;
+    font-size: 11px;
   }
 }
 
@@ -840,31 +938,33 @@
       color: #555;
     }
   }
-  .data-tabview-footer {
+}
+
+.data-tabview-footer {
+  display: flex;
+  justify-content: center;
+  height: 30px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  box-shadow: 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
+  button {
+    border: 1px solid $base-yellow;
+    text-transform: uppercase;
+    -webkit-appearance: none;
+    font-weight: 500;
+    font-size: 12px;
+    outline: none;
+    line-height: 14px;
     display: flex;
-    justify-content: center;
-    padding-top: 5px;
-    padding-bottom: 10px;
-    background-color: #fff;
-    box-shadow: 0px -1px 4px 0 rgba(0, 0, 0, 0.2);
-    button {
-      border: 1px solid $base-yellow;
-      text-transform: uppercase;
-      -webkit-appearance: none;
-      font-weight: 500;
-      font-size: 12px;
-      outline: none;
-      line-height: 14px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      background-color: inherit;
-      border-radius: 16px;
-      color: #555;
-      padding: 10px;
-      img {
-        margin-left: 7px;
-      }
+    justify-content: space-around;
+    align-items: center;
+    background-color: inherit;
+    border-radius: 16px;
+    color: #555;
+    img {
+      margin-left: 7px;
     }
   }
 }
@@ -913,7 +1013,7 @@
     grid-gap: 20px;
     grid-template-columns: 1fr 1fr;
     margin-top: 10px;
-    border-bottom: #e5e5df 0.5px solid;
+    border-bottom: $modal-border 0.5px solid;
     padding-bottom: 20px;
   }
 
@@ -984,7 +1084,7 @@
   }
   .imagery-secondary-filters {
     margin-top: 15px;
-    border-bottom: #e5e5df 0.5px solid;
+    border-bottom: $modal-border 0.5px solid;
     display: grid;
     grid-template-columns: 1fr auto;
     padding-bottom: 10px;

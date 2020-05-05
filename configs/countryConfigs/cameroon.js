@@ -3,6 +3,7 @@ module.exports = {
   title: 'Atlas Forestier du Cameroun',
   subtitle: 'Ministère des Forêts et de la Faune',
   webmapMenuName: 'Affectation des Terres',
+  // initialExtent: {"x": -91.7,"y": 16.6,"z": 9},
   logoUrl:
     'https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590',
   logoLinkUrl: 'http://www.minfof.cm/',
@@ -16,12 +17,18 @@ module.exports = {
   analyticsCode: 'UA-62288390-1',
   iso: 'CMR',
   customColorTheme: '#ff8000',
+  aboutLinkUrl: 'https://www.blueraster.com',
+  downloadLinkUrl: 'https://www.blueraster.com',
   language: 'fr',
   useAlternativeLanguage: true,
   alternativeLanguage: 'en',
   alternativeWebmap: '3ab4c186c87b44d8bf2520609fba783e',
   alternativeLanguageTitle: 'Forest Atlas of Cameroon',
   alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
+  mapThemeIds:
+    '1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19',
+  mapThemes: ' Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea',
+  alternativeMapThemes: 'Alt name 1; Alt name 2',
   alternativeNarrative:
     '\u003cp\u003eThis map show the general land use allocation in Cameroon. It includes mining permits, hunting zones, various forest titles as well as agro-industrial plantations.\u003cbr\u003e\u003c/p\u003e',
   alternativeWebmapMenuName: 'Land Use',
@@ -613,150 +620,150 @@ module.exports = {
       label: {},
       layers: []
     },
-    GROUP_Hazards: {
-      order: 6,
-      groupType: 'radio',
-      label: {
-        en: 'Hazards',
-        ka: 'საფრთხეები'
-      },
-      layers: [
-        {
-          order: 1,
-          id: 'ForestHazard',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
-          layerIds: [0],
-          opacity: 0.75,
-          label: {
-            en: 'Forest General Hazard Risk',
-            ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
-          }
-        },
-        {
-          order: 2,
-          id: 'Elevation',
-          type: 'dynamic',
-          opacity: 0.8,
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
-          layerIds: [1],
-          label: {
-            en: 'Elevation in Forested Areas',
-            ka: 'სიმაღლე ტყიან ზონებში'
-          }
-        },
-        {
-          order: 3,
-          id: 'Slope',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
-          layerIds: [0],
-          opacity: 0.8,
-          label: {
-            en: 'Slope in Forested Areas',
-            ka: 'დაქანება ტყიან ზონებში'
-          }
-        },
-        {
-          order: 4,
-          id: 'Aspect',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
-          layerIds: [2],
-          opacity: 0.8,
-          label: {
-            en: 'Aspect in Forested Areas',
-            ka: 'ექსპოზიცია ტყიან ზონებში'
-          }
-        },
-        {
-          order: 5,
-          id: 'Landslide',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
-          layerIds: [1],
-          opacity: 0.6,
-          label: {
-            en: 'Landslide Zoning',
-            ka: 'ბუნებრივი კატასტროფები'
-          },
-          popup: {
-            title: {
-              en: 'Landslide Zoning',
-              ka: 'ბუნებრივი კატასტროფები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'კატეგორია',
-                  fieldExpression: 'Category_KA'
-                },
-                {
-                  label: 'ფართობი ჰა',
-                  fieldExpression: 'Area_ha_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Category',
-                  fieldExpression: 'Category_EN'
-                },
-                {
-                  label: 'Area ha',
-                  fieldExpression: 'Area_ha_EN'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 6,
-          id: 'Debrisflow',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
-          layerIds: [2],
-          opacity: 0.6,
-          label: {
-            en: 'Debrisflow Zoning',
-            ka: 'რისკის ზონები'
-          },
-          popup: {
-            title: {
-              en: 'Debrisflow Zoning',
-              ka: 'რისკის ზონები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'კატეგორია',
-                  fieldExpression: 'Category_KA'
-                },
-                {
-                  label: 'ფართობი ჰა',
-                  fieldExpression: 'Area_ha_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Category',
-                  fieldExpression: 'Category_EN'
-                },
-                {
-                  label: 'Area ha',
-                  fieldExpression: 'Area_ha_EN'
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
+    // GROUP_Hazards: {
+    //   order: 6,
+    //   groupType: 'radio',
+    //   label: {
+    //     en: 'Hazards',
+    //     ka: 'საფრთხეები'
+    //   },
+    //   layers: [
+    //     {
+    //       order: 1,
+    //       id: 'ForestHazard',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [0],
+    //       opacity: 0.75,
+    //       label: {
+    //         en: 'Forest General Hazard Risk',
+    //         ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
+    //       }
+    //     },
+    //     {
+    //       order: 2,
+    //       id: 'Elevation',
+    //       type: 'dynamic',
+    //       opacity: 0.8,
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [1],
+    //       label: {
+    //         en: 'Elevation in Forested Areas',
+    //         ka: 'სიმაღლე ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 3,
+    //       id: 'Slope',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [0],
+    //       opacity: 0.8,
+    //       label: {
+    //         en: 'Slope in Forested Areas',
+    //         ka: 'დაქანება ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 4,
+    //       id: 'Aspect',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [2],
+    //       opacity: 0.8,
+    //       label: {
+    //         en: 'Aspect in Forested Areas',
+    //         ka: 'ექსპოზიცია ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 5,
+    //       id: 'Landslide',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [1],
+    //       opacity: 0.6,
+    //       label: {
+    //         en: 'Landslide Zoning',
+    //         ka: 'ბუნებრივი კატასტროფები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Landslide Zoning',
+    //           ka: 'ბუნებრივი კატასტროფები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area ha',
+    //               fieldExpression: 'Area_ha_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 6,
+    //       id: 'Debrisflow',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [2],
+    //       opacity: 0.6,
+    //       label: {
+    //         en: 'Debrisflow Zoning',
+    //         ka: 'რისკის ზონები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Debrisflow Zoning',
+    //           ka: 'რისკის ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area ha',
+    //               fieldExpression: 'Area_ha_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
     GROUP_LCD: {
       groupType: 'default',
       order: 7,
@@ -827,7 +834,74 @@ module.exports = {
         zh: 'TEST',
         ka: 'TEST'
       },
-      layers: []
+      layers: [
+        {
+          order: 1,
+          id: 'Versioned Dynamic Layer',
+          type: 'dynamic',
+          visible: true,
+          label: {
+            en: 'Versioned Dynamic Layer',
+            fr: 'Versioned Dynamic Layer'
+          },
+          versionHeaderText: {
+            en: 'Pick a version',
+            fr: 'Pick a version'
+          },
+          versions: [
+            {
+              label: {
+                en: 'All Protected Areas',
+                fr: 'All Protected Areas'
+              },
+              url:
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+              layerIds: [0]
+            },
+            {
+              label: {
+                en: 'National Parks',
+                fr: 'National Parks'
+              },
+              url:
+                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+              layerIds: [1]
+            }
+          ]
+        },
+        {
+          order: 1,
+          id: 'Versioned Feature Layer',
+          type: 'feature',
+          visible: true,
+          label: {
+            en: 'Versioned Feature Layer',
+            fr: 'Versioned Feature Layer'
+          },
+          versionHeaderText: {
+            en: 'Pick a version',
+            fr: 'Pick a version'
+          },
+          versions: [
+            {
+              label: {
+                en: 'Esri_Partners',
+                fr: 'Esri_Partners'
+              },
+              url:
+                'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
+            },
+            {
+              label: {
+                en: 'Flood',
+                fr: 'Flood'
+              },
+              url:
+                'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
+            }
+          ]
+        }
+      ]
     },
     GROUP_LC: {
       groupType: 'default',
@@ -941,7 +1015,7 @@ module.exports = {
           thumbnailUrl:
             'https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png',
           templateUrl:
-            'https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png',
+            'https://production-api.globalforestwatch.org/v2/landsat-tiles/2017/{level}/{col}/{row}',
           years: [
             '2000',
             '2001',
@@ -984,20 +1058,20 @@ module.exports = {
             zh: 'WRI Mono',
             ka: 'WRI Mono'
           }
-        },
-        {
-          id: 'wri_contextual',
-          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
-          title: {
-            en: 'WRI Contextual',
-            fr: 'WRI Contextual',
-            es: 'WRI Contextual',
-            pt: 'WRI Contextual',
-            id: 'WRI Contextual',
-            zh: 'WRI Contextual',
-            ka: 'WRI Contextual'
-          }
         }
+        // {
+        //   id: 'wri_contextual',
+        //   thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
+        //   title: {
+        //     en: 'WRI Contextual',
+        //     fr: 'WRI Contextual',
+        //     es: 'WRI Contextual',
+        //     pt: 'WRI Contextual',
+        //     id: 'WRI Contextual',
+        //     zh: 'WRI Contextual',
+        //     ka: 'WRI Contextual'
+        //   }
+        // }
       ]
     },
     GROUP_Orth: {
@@ -1107,304 +1181,304 @@ module.exports = {
         }
       ]
     },
-    GROUP_PA: {
-      order: 3,
-      label: {
-        en: 'Protected Areas',
-        ka: 'დაცული ტერიტორიები'
-      },
-      layers: [
-        {
-          order: 1,
-          id: 'PAInf',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
-          layerIds: [0],
-          label: {
-            en: 'Infrastructure of Protected Areas',
-            ka: 'ინფრასტრუქტურა'
-          },
-          popup: {
-            title: {
-              en: 'Infrastructure of Protected Areas',
-              ka: 'ინფრასტრუქტურა'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'დასახელება',
-                  fieldExpression: 'Name_KA'
-                },
-                {
-                  label: 'დაცული ტერიტორია',
-                  fieldExpression: 'Protected_Areas_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Name',
-                  fieldExpression: 'Name_EN'
-                },
-                {
-                  label: 'Protected Area',
-                  fieldExpression: 'Protected_Areas_EN'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 2,
-          id: 'PARoads',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
-          layerIds: [1],
-          label: {
-            en: 'Touristic Routes of Protected Areas',
-            ka: 'ტურისტული ბილიკები'
-          },
-          filterField: {
-            en: 'Type_EN',
-            ka: 'Type_KA'
-          },
-          filterLabel: {
-            en: 'Filter by Type',
-            ka: 'ფილტრი ტიპის მიხედვით'
-          },
-          popup: {
-            title: {
-              en: 'Touristic Routes of Protected Areas',
-              ka: 'ტურისტული ბილიკები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'დაცული ტერიტორია',
-                  fieldExpression: 'Protected_Area_KA'
-                },
-                {
-                  label: 'ხანგძლივობა',
-                  fieldExpression: 'Duraction_KA'
-                },
-                {
-                  label: 'სირთულე',
-                  fieldExpression: 'Difficulty_KA'
-                },
-                {
-                  label: 'დასახელება',
-                  fieldExpression: 'Trail_Name_KA'
-                },
-                {
-                  label: 'ტიპი',
-                  fieldExpression: 'Type_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Protected areas',
-                  fieldExpression: 'Protected_Area_EN'
-                },
-                {
-                  label: 'Duraction',
-                  fieldExpression: 'Duraction_EN'
-                },
-                {
-                  label: 'Difficulty',
-                  fieldExpression: 'Difficulty_EN'
-                },
-                {
-                  label: 'Trail Name',
-                  fieldExpression: 'Trail_Name_EN'
-                },
-                {
-                  label: 'Type',
-                  fieldExpression: 'Type_EN'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 3,
-          id: 'PALease',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
-          layerIds: [2],
-          label: {
-            en: 'Lease of Protected Areas',
-            ka: 'იჯარები'
-          },
-          popup: {
-            title: {
-              en: 'Protected Area Zoning',
-              ka: 'ფუნქციური ზონები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'დაცული ტერიტორია',
-                  fieldExpression: 'Protected_areas_KA'
-                },
-                {
-                  label: 'დანიშნულება',
-                  fieldExpression: 'Purpose_KA'
-                },
-                {
-                  label: 'ჰექტარი',
-                  fieldExpression: 'Hectare_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Protected Area',
-                  fieldExpression: 'Protected_Area_EN'
-                },
-                {
-                  label: 'Purpose',
-                  fieldExpression: 'Purpose_EN'
-                },
-                {
-                  label: 'Area (ha)',
-                  fieldExpression: 'Hectare_KA'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 4,
-          id: 'PAFunction',
-          type: 'dynamic',
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
-          layerIds: [3],
-          label: {
-            en: 'Functional Zoning of Protected Areas',
-            ka: 'ფუნქციური ზონები'
-          },
-          filterField: {
-            en: 'Zone_EN',
-            ka: 'Zone_KA'
-          },
-          filterLabel: {
-            en: 'Filter by Zone',
-            ka: 'ფილტრი ზონების მიხედვით'
-          },
-          popup: {
-            title: {
-              en: 'Functional Zoning of Protected Areas',
-              ka: 'ფუნქციური ზონები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'დაცული ტერიტორია',
-                  fieldExpression: 'Protected_areas_KA'
-                },
-                {
-                  label: 'ზონა',
-                  fieldExpression: 'Zone_KA'
-                },
-                {
-                  label: 'ფართობი ჰა',
-                  fieldExpression: 'PA_Area_ha_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Protected Area',
-                  fieldExpression: 'Protected_Areas_EN'
-                },
-                {
-                  label: 'Zone',
-                  fieldExpression: 'Zone_EN'
-                },
-                {
-                  label: 'Area (ha)',
-                  fieldExpression: 'PA_Area_ha_KA'
-                }
-              ]
-            }
-          }
-        },
-        {
-          order: 5,
-          id: 'PA',
-          type: 'dynamic',
-          visible: true,
-          url:
-            'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
-          layerIds: [4],
-          label: {
-            en: 'Protected Areas',
-            ka: 'დაცული ტერიტორიები'
-          },
-          filterField: {
-            en: 'Category_EN',
-            ka: 'Category_KA'
-          },
-          filterLabel: {
-            en: 'Filter by Category',
-            ka: 'ფილტრი კატეგორიების მიხედვით'
-          },
-          popup: {
-            title: {
-              en: 'Protected Areas',
-              ka: 'კატეგორიები'
-            },
-            content: {
-              ka: [
-                {
-                  label: 'დაცული ტერიტორია',
-                  fieldExpression: 'Protected_Areas_KA'
-                },
-                {
-                  label: 'დაარსების წელი',
-                  fieldExpression: 'Year_of_Establishment_KA'
-                },
-                {
-                  label: 'ადმინისტრაცია',
-                  fieldExpression: 'Administration_KA'
-                },
-                {
-                  label: 'კატეგორია',
-                  fieldExpression: 'Category_KA'
-                },
-                {
-                  label: 'ფართობი ჰა',
-                  fieldExpression: 'PA_Area_ha_KA'
-                }
-              ],
-              en: [
-                {
-                  label: 'Protected Area Name',
-                  fieldExpression: 'Protected_Areas_EN'
-                },
-                {
-                  label: 'Year of Establishment',
-                  fieldExpression: 'Year_of_Establishment_KA'
-                },
-                {
-                  label: 'Administration',
-                  fieldExpression: 'Administration_EN'
-                },
-                {
-                  label: 'Category',
-                  fieldExpression: 'Category_EN'
-                },
-                {
-                  label: 'Area (ha)',
-                  fieldExpression: 'PA_Area_ha_KA'
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
+    // GROUP_PA: {
+    //   order: 3,
+    //   label: {
+    //     en: 'Protected Areas',
+    //     ka: 'დაცული ტერიტორიები'
+    //   },
+    //   layers: [
+    //     {
+    //       order: 1,
+    //       id: 'PAInf',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [0],
+    //       label: {
+    //         en: 'Infrastructure of Protected Areas',
+    //         ka: 'ინფრასტრუქტურა'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Infrastructure of Protected Areas',
+    //           ka: 'ინფრასტრუქტურა'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დასახელება',
+    //               fieldExpression: 'Name_KA'
+    //             },
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_Areas_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Name',
+    //               fieldExpression: 'Name_EN'
+    //             },
+    //             {
+    //               label: 'Protected Area',
+    //               fieldExpression: 'Protected_Areas_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 2,
+    //       id: 'PARoads',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [1],
+    //       label: {
+    //         en: 'Touristic Routes of Protected Areas',
+    //         ka: 'ტურისტული ბილიკები'
+    //       },
+    //       filterField: {
+    //         en: 'Type_EN',
+    //         ka: 'Type_KA'
+    //       },
+    //       filterLabel: {
+    //         en: 'Filter by Type',
+    //         ka: 'ფილტრი ტიპის მიხედვით'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Touristic Routes of Protected Areas',
+    //           ka: 'ტურისტული ბილიკები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_Area_KA'
+    //             },
+    //             {
+    //               label: 'ხანგძლივობა',
+    //               fieldExpression: 'Duraction_KA'
+    //             },
+    //             {
+    //               label: 'სირთულე',
+    //               fieldExpression: 'Difficulty_KA'
+    //             },
+    //             {
+    //               label: 'დასახელება',
+    //               fieldExpression: 'Trail_Name_KA'
+    //             },
+    //             {
+    //               label: 'ტიპი',
+    //               fieldExpression: 'Type_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected areas',
+    //               fieldExpression: 'Protected_Area_EN'
+    //             },
+    //             {
+    //               label: 'Duraction',
+    //               fieldExpression: 'Duraction_EN'
+    //             },
+    //             {
+    //               label: 'Difficulty',
+    //               fieldExpression: 'Difficulty_EN'
+    //             },
+    //             {
+    //               label: 'Trail Name',
+    //               fieldExpression: 'Trail_Name_EN'
+    //             },
+    //             {
+    //               label: 'Type',
+    //               fieldExpression: 'Type_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 3,
+    //       id: 'PALease',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [2],
+    //       label: {
+    //         en: 'Lease of Protected Areas',
+    //         ka: 'იჯარები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Protected Area Zoning',
+    //           ka: 'ფუნქციური ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_areas_KA'
+    //             },
+    //             {
+    //               label: 'დანიშნულება',
+    //               fieldExpression: 'Purpose_KA'
+    //             },
+    //             {
+    //               label: 'ჰექტარი',
+    //               fieldExpression: 'Hectare_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected Area',
+    //               fieldExpression: 'Protected_Area_EN'
+    //             },
+    //             {
+    //               label: 'Purpose',
+    //               fieldExpression: 'Purpose_EN'
+    //             },
+    //             {
+    //               label: 'Area (ha)',
+    //               fieldExpression: 'Hectare_KA'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 4,
+    //       id: 'PAFunction',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [3],
+    //       label: {
+    //         en: 'Functional Zoning of Protected Areas',
+    //         ka: 'ფუნქციური ზონები'
+    //       },
+    //       filterField: {
+    //         en: 'Zone_EN',
+    //         ka: 'Zone_KA'
+    //       },
+    //       filterLabel: {
+    //         en: 'Filter by Zone',
+    //         ka: 'ფილტრი ზონების მიხედვით'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Functional Zoning of Protected Areas',
+    //           ka: 'ფუნქციური ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_areas_KA'
+    //             },
+    //             {
+    //               label: 'ზონა',
+    //               fieldExpression: 'Zone_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected Area',
+    //               fieldExpression: 'Protected_Areas_EN'
+    //             },
+    //             {
+    //               label: 'Zone',
+    //               fieldExpression: 'Zone_EN'
+    //             },
+    //             {
+    //               label: 'Area (ha)',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 5,
+    //       id: 'PA',
+    //       type: 'dynamic',
+    //       visible: true,
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [4],
+    //       label: {
+    //         en: 'Protected Areas',
+    //         ka: 'დაცული ტერიტორიები'
+    //       },
+    //       filterField: {
+    //         en: 'Category_EN',
+    //         ka: 'Category_KA'
+    //       },
+    //       filterLabel: {
+    //         en: 'Filter by Category',
+    //         ka: 'ფილტრი კატეგორიების მიხედვით'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Protected Areas',
+    //           ka: 'კატეგორიები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_Areas_KA'
+    //             },
+    //             {
+    //               label: 'დაარსების წელი',
+    //               fieldExpression: 'Year_of_Establishment_KA'
+    //             },
+    //             {
+    //               label: 'ადმინისტრაცია',
+    //               fieldExpression: 'Administration_KA'
+    //             },
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected Area Name',
+    //               fieldExpression: 'Protected_Areas_EN'
+    //             },
+    //             {
+    //               label: 'Year of Establishment',
+    //               fieldExpression: 'Year_of_Establishment_KA'
+    //             },
+    //             {
+    //               label: 'Administration',
+    //               fieldExpression: 'Administration_EN'
+    //             },
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area (ha)',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
     extraLayers: [
       // {
       // id: 'MASKK',
@@ -1437,14 +1511,14 @@ module.exports = {
       // opacity: 0.35,
       // layerIds: [0]
       // },
-      {
-        id: 'LEGEND_LAYER',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-        visible: false,
-        opacity: 0,
-        layerIds: []
-      },
+      // {
+      //   id: 'LEGEND_LAYER',
+      //   type: 'dynamic',
+      //   url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+      //   visible: false,
+      //   opacity: 0,
+      //   layerIds: []
+      // },
       {
         id: 'USER_FEATURES',
         type: 'graphic',

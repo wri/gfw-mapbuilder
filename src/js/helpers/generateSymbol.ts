@@ -6,7 +6,6 @@ export const getCustomSymbol = (): SimpleFillSymbol => {
     style: 'solid',
     color: [210, 210, 210, 0.0],
     outline: {
-      // autocasts as new SimpleLineSymbol()
       color: [3, 188, 255],
       width: 3
     }
@@ -18,7 +17,6 @@ export const getImagerySymbol = (): SimpleFillSymbol => {
     style: 'solid',
     color: [210, 210, 210, 0.0],
     outline: {
-      // autocasts as new SimpleLineSymbol()
       color: [210, 210, 210, 0],
       width: 1
     }

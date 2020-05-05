@@ -2,13 +2,17 @@ import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
+import ThemeDropdown from 'js/components/header/ThemeDropdown';
 import GFWLogin from 'js/components/header/GFWLogin';
 
+import { ReactComponent as AboutIcon } from 'src/images/aboutIcon.svg';
+import { ReactComponent as DownloadIcon } from 'src/images/downloadIcon.svg';
 import { RootState } from 'js/store/index';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
 
 import 'css/header.scss';
 import { createSelector } from 'reselect';
+import { headerContent } from './header.translations';
 
 const appSettingsSelector = createSelector(
   (state: RootState) => state.appSettings,
@@ -23,7 +27,10 @@ const appSettingsSelector = createSelector(
     alternativeLanguage: appSettings.alternativeLanguage,
     includeMyGFWLogin: appSettings.includeMyGFWLogin,
     alternativeLanguageTitle: appSettings.alternativeLanguageTitle,
-    alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle
+    alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle,
+    mapThemes: appSettings.mapThemes,
+    mapThemeIds: appSettings.mapThemeIds,
+    alternativeMapThemes: appSettings.alternativeMapThemes
   })
 );
 
@@ -40,7 +47,10 @@ const Header: FunctionComponent = () => {
     alternativeLanguage,
     includeMyGFWLogin,
     alternativeLanguageTitle,
-    alternativeLanguageSubtitle
+    alternativeLanguageSubtitle,
+    mapThemes,
+    mapThemeIds,
+    alternativeMapThemes
   } = useSelector(appSettingsSelector);
 
   const selectedLanguage = useSelector(
@@ -59,7 +69,15 @@ const Header: FunctionComponent = () => {
     (store: RootState) => store.appSettings.navLinksInNewTab
   );
 
-  const closeGFWDropdown = () => {
+  const downloadLinkUrl = useSelector(
+    (store: RootState) => store.appSettings.downloadLinkUrl
+  );
+
+  const aboutLinkUrl = useSelector(
+    (store: RootState) => store.appSettings.aboutLinkUrl
+  );
+
+  const closeGFWDropdown = (): void => {
     if (renderGFWDropdown) {
       dispatch(setRenderGFWDropdown(false));
     }
@@ -71,6 +89,10 @@ const Header: FunctionComponent = () => {
   const appSubtitle =
     selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
 
+  const mapThemeArray = mapThemes?.split(';');
+  const mapThemeIDArray = mapThemeIds?.split(';');
+  const alternativeMapThemeArray = alternativeMapThemes?.split(';');
+  const renderThemeDropdown = mapThemeIDArray.length === mapThemeArray.length;
   return (
     <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">
@@ -91,14 +113,51 @@ const Header: FunctionComponent = () => {
           <h2>{appSubtitle}</h2>
         </div>
       </div>
-      {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
-        <LanguageDropdown
-          language={language}
-          alternativeLanguage={alternativeLanguage}
-          selectedLanguage={selectedLanguage}
-        />
-      )}
-      {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+      <div className="selectors-container">
+        {renderThemeDropdown && (
+          <ThemeDropdown
+            selectedLanguage={selectedLanguage}
+            alternativeLanguage={alternativeLanguage}
+            mapThemeIds={mapThemeIDArray}
+            mapThemes={mapThemeArray}
+            alternativeMapThemes={alternativeMapThemeArray}
+          />
+        )}
+        {downloadLinkUrl && downloadLinkUrl.length && (
+          <div>
+            <a
+              className="header-link"
+              href={aboutLinkUrl}
+              target={target}
+              rel="noopener noreferrer"
+            >
+              <DownloadIcon width={16} height={16} fill={'#555'} />
+              {headerContent[selectedLanguage].download}
+            </a>
+          </div>
+        )}
+        {aboutLinkUrl && aboutLinkUrl.length && (
+          <div>
+            <a
+              className="header-link"
+              href={aboutLinkUrl}
+              target={target}
+              rel="noopener noreferrer"
+            >
+              <AboutIcon width={16} height={16} fill={'#555'} />
+              {headerContent[selectedLanguage].about}
+            </a>
+          </div>
+        )}
+        {useAlternativeLanguage && alternativeWebmap && alternativeLanguage && (
+          <LanguageDropdown
+            language={language}
+            alternativeLanguage={alternativeLanguage}
+            selectedLanguage={selectedLanguage}
+          />
+        )}
+        {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+      </div>
     </div>
   );
 };

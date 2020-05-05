@@ -9,7 +9,6 @@ import { setActiveFeatures } from 'js/store/mapview/actions';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
-import 'css/leftpanel.scss';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
@@ -18,6 +17,9 @@ import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.
 import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
 import Loader from 'js/components/sharedComponents/Loader';
 import { mapController } from 'js/controllers/mapController';
+import DataTabFooter from '../dataPanel/DataTabFooter';
+
+import 'css/leftpanel.scss';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -462,9 +464,7 @@ const BaseAnalysis = (): JSX.Element => {
           >
             {analysisTranslations.runAnalysisButton[selectedLanguage]}
           </button>
-          <div className="print-button-container">
-            <PrintReportButton />
-          </div>
+          <DataTabFooter />
         </div>
       ) : (
         <AnalysisSpinner />

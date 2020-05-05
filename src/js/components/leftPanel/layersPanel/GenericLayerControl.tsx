@@ -6,13 +6,291 @@ import LayerTransparencySlider from './LayerTransparencySlider';
 import LayerRadioButton from './LayerRadioButton';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
-import DateRange from './DateRange';
+import DateRange from './DateRangeModisViirs';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
-import { renderModal, setInfoModalLayerID } from 'js/store/appState/actions';
+import {
+  renderModal,
+  setInfoModalLayerID,
+  setGladStart,
+  setGladEnd,
+  setTerraStart,
+  setTerraEnd
+} from 'js/store/appState/actions';
 import { RootState } from 'js/store';
+import { mapController } from 'js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
-import { mapController } from 'js/controllers/mapController';
+import { LayerVersionPicker } from './LayerVersionPicker';
+import styled from 'styled-components';
+import { LayerFactory } from 'js/helpers/LayerFactory';
+import { layerControlsTranslations } from '../../../../../configs/leftPanel.translations';
+
+interface TerraLayerControls {
+  customColorTheme?: string;
+  layerConfig: any;
+  selectedLanguage: string;
+}
+
+const TerraControls = (props: TerraLayerControls): JSX.Element => {
+  const dispatch = useDispatch();
+
+  const terraStart = useSelector(
+    (store: RootState) => store.appState.leftPanel.terraStart
+  );
+
+  const terraEnd = useSelector(
+    (store: RootState) => store.appState.leftPanel.terraEnd
+  );
+
+  const getTodayDate = new Date().toISOString().split('T')[0];
+
+  const [startDate, setStartDate] = React.useState(String(terraStart));
+  const [endDate, setEndDate] = React.useState(terraEnd);
+
+  function handleStartDateChange(e: any): void {
+    setStartDate(e.target.value);
+    //@ts-ignore
+    const start = new Date(e.target.value).getJulian();
+    //@ts-ignore
+    const end = new Date(endDate).getJulian();
+    const terraLayerOld: any = mapController._map!.findLayerById(
+      'TERRA_I_ALERTS'
+    );
+    mapController._map?.remove(terraLayerOld);
+    const terraLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    terraLayerNew.julianFrom = start;
+    terraLayerNew.julianTo = end;
+    terraLayerNew.startDate = e.target.value;
+    terraLayerNew.endDate = endDate;
+    mapController._map?.add(terraLayerNew);
+
+    //update redux
+    dispatch(setTerraStart(e.target.value));
+    dispatch(setTerraEnd(endDate));
+  }
+
+  function handleEndDateChange(e: any): void {
+    setEndDate(e.target.value);
+    //@ts-ignore
+    const end = new Date(e.target.value).getJulian();
+    //@ts-ignore
+    const start = new Date(startDate).getJulian();
+    const terraLayerOld: any = mapController._map!.findLayerById(
+      'TERRA_I_ALERTS'
+    );
+    mapController._map?.remove(terraLayerOld);
+    const terraLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    terraLayerNew.julianFrom = start;
+    terraLayerNew.julianTo = end;
+    terraLayerNew.startDate = startDate;
+    terraLayerNew.endDate = e.target.value;
+    mapController._map?.add(terraLayerNew);
+
+    //update redux
+    dispatch(setTerraStart(startDate));
+    dispatch(setTerraEnd(e.target.value));
+  }
+
+  const colorTheme = props.customColorTheme?.length
+    ? props.customColorTheme
+    : '#f0ab00';
+
+  //Dynamic custom theme override using styled-components lib
+  const CheckboxWrapper = styled.div`
+    .styled-checkbox:checked + .styled-checkboxlabel:before {
+      background-color: ${colorTheme};
+    }
+  `;
+
+  return (
+    <div className="glad-control-wrapper">
+      <div>
+        <div className="calendar-wrapper">
+          <div className="date-section-wrapper">
+            <label htmlFor="start-date">
+              {layerControlsTranslations[props.selectedLanguage].timeStart}
+            </label>
+            <input
+              style={{ border: `2px solid ${colorTheme}` }}
+              className="date-time-toggle input"
+              type="date"
+              defaultValue={startDate}
+              min={undefined}
+              onChange={handleStartDateChange}
+            />
+          </div>
+
+          <div className="date-section-wrapper">
+            <label htmlFor="end-date">
+              {layerControlsTranslations[props.selectedLanguage].timeEnd}
+            </label>
+            <input
+              style={{ border: `2px solid ${colorTheme}` }}
+              className="date-time-toggle input"
+              type="date"
+              value={endDate}
+              max={getTodayDate}
+              onChange={handleEndDateChange}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+interface GladControlsProps {
+  customColorTheme?: string;
+  layerConfig: any;
+  selectedLanguage: string;
+}
+
+const GladControls = (props: GladControlsProps): JSX.Element => {
+  const dispatch = useDispatch();
+  const gladConfirmed = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladConfirmed
+  );
+
+  const gladStart = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladStart
+  );
+
+  const gladEnd = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladEnd
+  );
+
+  const getTodayDate = new Date().toISOString().split('T')[0];
+  const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(
+    gladConfirmed
+  );
+  const [startDate, setStartDate] = React.useState(String(gladStart));
+  const [endDate, setEndDate] = React.useState(gladEnd);
+
+  function handleStartDateChange(e: any): void {
+    setStartDate(e.target.value);
+    //@ts-ignore
+    const start = new Date(e.target.value).getJulian();
+    //@ts-ignore
+    const end = new Date(endDate).getJulian();
+    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    mapController._map?.remove(gladLayerOld);
+    const gladLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    gladLayerNew.julianFrom = start;
+    gladLayerNew.julianTo = end;
+    mapController._map?.add(gladLayerNew);
+
+    //update redux
+    dispatch(setGladStart(e.target.value));
+    dispatch(setGladEnd(endDate));
+  }
+
+  function handleEndDateChange(e: any): void {
+    setEndDate(e.target.value);
+    //@ts-ignore
+    const end = new Date(e.target.value).getJulian();
+    //@ts-ignore
+    const start = new Date(startDate).getJulian();
+    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    mapController._map?.remove(gladLayerOld);
+    const gladLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    gladLayerNew.julianFrom = start;
+    gladLayerNew.julianTo = end;
+    mapController._map?.add(gladLayerNew);
+
+    //update redux
+    dispatch(setGladStart(startDate));
+    dispatch(setGladEnd(e.target.value));
+  }
+
+  function handleConfirmedAlertsToggle(): void {
+    setUnconfirmedAlerts(!unconfirmedAlerts);
+    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    mapController._map?.remove(gladLayerOld);
+    const gladLayerNew: any = LayerFactory(
+      mapController._mapview,
+      props.layerConfig
+    );
+    gladLayerNew.confirmed = !unconfirmedAlerts;
+    mapController._map?.add(gladLayerNew);
+  }
+
+  const colorTheme = props.customColorTheme?.length
+    ? props.customColorTheme
+    : '#f0ab00';
+
+  //Dynamic custom theme override using styled-components lib
+  const CheckboxWrapper = styled.div`
+    .styled-checkbox:checked + .styled-checkboxlabel:before {
+      background-color: ${colorTheme};
+    }
+  `;
+
+  return (
+    <div className="glad-control-wrapper">
+      <div className="glad-control-container">
+        <div className="layer-checkbox">
+          <CheckboxWrapper>
+            <input
+              type="checkbox"
+              name="styled-checkbox"
+              className="styled-checkbox"
+              id="layer-checkbox-glad"
+              checked={unconfirmedAlerts}
+              onChange={handleConfirmedAlertsToggle}
+            />
+            <label
+              className="styled-checkboxlabel"
+              htmlFor="layer-checkbox-glad"
+            ></label>
+          </CheckboxWrapper>
+        </div>
+        <p>Hide unconfirmed alerts</p>
+      </div>
+      <div>
+        <div className="calendar-wrapper">
+          <div className="date-section-wrapper">
+            <label htmlFor="start-date">
+              {layerControlsTranslations[props.selectedLanguage].timeStart}
+            </label>
+            <input
+              style={{ border: `2px solid ${colorTheme}` }}
+              className="date-time-toggle input"
+              type="date"
+              defaultValue={startDate}
+              min={undefined}
+              onChange={handleStartDateChange}
+            />
+          </div>
+
+          <div className="date-section-wrapper">
+            <label htmlFor="end-date">
+              {layerControlsTranslations[props.selectedLanguage].timeEnd}
+            </label>
+            <input
+              style={{ border: `2px solid ${colorTheme}` }}
+              className="date-time-toggle input"
+              type="date"
+              value={endDate}
+              max={getTodayDate}
+              onChange={handleEndDateChange}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 interface LayerInfo {
   layerInfo: any;
@@ -133,11 +411,15 @@ interface LayerControlProps {
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const dispatch = useDispatch();
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
   );
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
+
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
   );
   const layer = allAvailableLayers.find(l => l.id === props.id);
 
@@ -177,19 +459,32 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  const returnDateRange = (id: string): JSX.Element | undefined => {
-    if (!layer) {
-      return;
-    }
-    /**
-     * TODO
-     * [ ] glad alerts
-     * [ ] terra-I alerts
-     */
+  const returnDateRange = (
+    id: string,
+    layerConfig: any,
+    selectedLanguage: string
+  ): JSX.Element | undefined => {
+    if (!layer) return;
     switch (id) {
       case 'VIIRS_ACTIVE_FIRES':
       case 'MODIS_ACTIVE_FIRES':
-        return <DateRange layer={layer} />;
+        return <DateRange layer={layer} id={id} />;
+      case 'TERRA_I_ALERTS':
+        return (
+          <TerraControls
+            customColorTheme={customColorTheme}
+            layerConfig={layerConfig}
+            selectedLanguage={selectedLanguage}
+          />
+        );
+      case 'GLAD_ALERTS':
+        return (
+          <GladControls
+            customColorTheme={customColorTheme}
+            layerConfig={layerConfig}
+            selectedLanguage={selectedLanguage}
+          />
+        );
       default:
         break;
     }
@@ -235,12 +530,19 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
       {layer?.visible && densityPicker && <CanopyDensityPicker label={true} />}
+      {layer?.visible && layer.versions && (
+        <LayerVersionPicker
+          layerInfo={layer}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
       {layer?.visible && layer.filterField && (
         <LayerFilterSelection
           layerInfo={layer}
           selectedLanguage={selectedLanguage}
         />
       )}
+      {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
       {layer?.visible && (
         <LayerTransparencySlider
           layerID={props.id}
@@ -249,7 +551,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
       )}
-      {layer?.visible && returnDateRange(props.id)}
     </>
   );
 };

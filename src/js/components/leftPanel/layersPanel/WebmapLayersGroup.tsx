@@ -11,16 +11,31 @@ interface LayerGroupProps {
 
 const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const { leftPanel } = useSelector((store: RootState) => store.appState);
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
 
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
 
+  const language = useSelector(
+    (store: RootState) => store.appSettings.language
+  );
+  const webmapMenuName = useSelector(
+    (store: RootState) => store.appSettings.webmapMenuName
+  );
+  const alternativeWebmapMenuName = useSelector(
+    (store: RootState) => store.appSettings.alternativeWebmapMenuName
+  );
+
   const dispatch = useDispatch();
+
   const { layerGroupKey } = props;
 
-  //How should we handle webmap group name?
-  const layerGroupTitle = 'Webmap Group';
+  const webmapNameToUse =
+    language === selectedLanguage ? webmapMenuName : alternativeWebmapMenuName;
+  const layerGroupTitle = webmapNameToUse || 'Webmap Group';
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 

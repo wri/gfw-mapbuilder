@@ -71,6 +71,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'share-widget';
       case 'InfoContent':
         return 'info-content';
+      case 'SubscriptionWidget':
+        return 'subscription-widget';
       default:
         return '';
     }

@@ -1,6 +1,18 @@
 import store from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
-import { selectActiveTab, setCanopyDensity } from 'js/store/appState/actions';
+import {
+  selectActiveTab,
+  setCanopyDensity,
+  setGladConfirmed,
+  setGladStart,
+  setGladEnd,
+  setTerraStart,
+  setTerraEnd,
+  setModisStart,
+  setModisEnd,
+  setViirsStart,
+  setViirsEnd
+} from 'js/store/appState/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 
@@ -16,12 +28,15 @@ const urlEncodingMap = {
   tab: 'activeTab',
   l: 'layers',
   o: 'opacity',
+  gladconfirmed: 'glad_confirmed',
   gs: 'glad_start_date',
   ge: 'glad_end_date',
   vs: 'virs_start_date',
   ve: 'virs_end_date',
   ms: 'modis_start_date',
-  me: 'modis_end_date'
+  me: 'modis_end_date',
+  ts: 'terra_start',
+  te: 'terra_end'
 };
 
 function getGeostoreID(
@@ -71,14 +86,13 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const { activeBasemap } = mapviewState;
   urlParams.push(`b=${activeBasemap}`);
 
-  //Basemap LayerID
-  const { selectedLanguage } = appState;
+  //Language
+  const { selectedLanguage, leftPanel } = appState;
   urlParams.push(`lang=${selectedLanguage}`);
 
   //X Y Z, In case of Report, we do not need this, because we are zooming to the active feature
   if (!props.report) {
     const { zoom, latitude, longitude } = mapController.getMapviewCoordinates();
-    console.log(zoom);
     urlParams.push(`z=${zoom}`);
     urlParams.push(`coords=${longitude}%2C${latitude}`);
   }
@@ -109,6 +123,31 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   //Active Tab
   const { activeTab } = appState.leftPanel;
   urlParams.push(`tab=${activeTab}`);
+
+  // Glad alerts > start date gs, end date ge and toggle gladconfirmed=true/false
+  const gladLayer: any = mapController._map?.findLayerById('GLAD_ALERTS');
+  if (gladLayer) {
+    urlParams.push(`gladconfirmed=${gladLayer.confirmed}`);
+    urlParams.push(`gs=${leftPanel.gladStart}`);
+    urlParams.push(`ge=${leftPanel.gladEnd}`);
+  }
+
+  const terraLayer: any = mapController._map?.findLayerById('TERRA_I_ALERTS');
+  if (terraLayer) {
+    urlParams.push(`ts=${leftPanel.terraStart}`);
+    urlParams.push(`te=${leftPanel.terraEnd}`);
+  }
+
+  const viirsLayer = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
+  if (viirsLayer) {
+    urlParams.push(`vs=${leftPanel.viirsStart}`);
+    urlParams.push(`ve=${leftPanel.viirsEnd}`);
+  }
+  const modisLayer = mapController._map?.findLayerById('MODIS_ACTIVE_FIRES');
+  if (modisLayer) {
+    urlParams.push(`ms=${leftPanel.modisStart}`);
+    urlParams.push(`me=${leftPanel.modisEnd}`);
+  }
   return urlParams.join('&');
 }
 
@@ -157,6 +196,21 @@ export function parseURLandApplyChanges(): void {
         case 'z':
           mapController._mapview.zoom = Number(urlParamValue);
           break;
+        case 'b':
+          //if our basemap is not webmap we need to switch it up
+          if (urlParamValue === 'webmap') {
+            return;
+          } else if (urlParamValue.includes('landsat')) {
+            const year = urlParamValue.split('-')[1];
+            console.log(year);
+            const landsatConfig = {};
+            //@ts-ignore
+            mapController.addLandsatLayer(landsatConfig, year);
+          } else {
+            //@ts-ignore
+            mapController._map!.basemap = urlParamValue;
+          }
+          break;
         case 'coords':
           const coordinates = urlParamValue.split(',').map(c => Number(c));
           mapController._mapview.goTo(coordinates);
@@ -166,6 +220,35 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'tab':
           store.dispatch(selectActiveTab(urlParamValue));
+          break;
+        case 'gladconfirmed':
+          //Url params always come in as strings so we need to do exact check
+          const gladConfirmedValue = urlParamValue === 'true' ? true : false;
+          store.dispatch(setGladConfirmed(gladConfirmedValue));
+          break;
+        case 'gs':
+          store.dispatch(setGladStart(urlParamValue));
+          break;
+        case 'ge':
+          store.dispatch(setGladEnd(urlParamValue));
+          break;
+        case 'ts':
+          store.dispatch(setTerraStart(urlParamValue));
+          break;
+        case 'te':
+          store.dispatch(setTerraEnd(urlParamValue));
+          break;
+        case 'vs':
+          store.dispatch(setViirsStart(urlParamValue));
+          break;
+        case 've':
+          store.dispatch(setViirsEnd(urlParamValue));
+          break;
+        case 'ms':
+          store.dispatch(setModisStart(urlParamValue));
+          break;
+        case 'me':
+          store.dispatch(setModisEnd(urlParamValue));
           break;
         default:
           break;

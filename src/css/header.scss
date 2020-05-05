@@ -30,124 +30,216 @@
       h2 {
         margin-top: 0;
         margin-bottom: 0;
+        font-weight: normal;
       }
 
       h1 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        line-height: 25px;
       }
 
       h2 {
-        font-size: 1rem;
+        font-size: 0.875rem;
       }
     }
   }
 
-  .language-dropdown-container {
-    margin-top: auto;
-    margin-bottom: auto;
-    padding-right: 1rem;
-  }
-
-  .gfw-login-container {
+  .selectors-container {
     display: flex;
-    margin-right: 1rem;
-    align-content: center;
-    font-family: $fira-sans;
-    font-size: 0.75rem;
-
-    .gfw-login-button {
-      display: flex;
+    align-items: center;
+    .header-link {
+      cursor: pointer;
       border: none;
-      background-color: inherit;
+      height: auto;
+      text-transform: uppercase;
+      font-size: 12px;
+      text-decoration: none;
+      color: #555;
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      margin-right: 1rem;
+      svg {
+        margin-right: 4px;
+      }
+    }
+    .language-dropdown-container,
+    .theme-dropdown-container {
+      display: flex;
+      padding-right: 1rem;
+      margin-top: 1rem;
+      ul {
+        list-style: none;
+        padding: 0;
+      }
 
-      svg,
-      p {
-        margin: 0.25rem;
+      .dropdown {
+        width: fit-content;
+      }
+      // .dropdown,
+      // .options {
+      //   width: 140px;
+      // }
+
+      .dropdown {
+        list-style: none;
+        cursor: pointer;
+        // background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        height: auto;
+        text-transform: uppercase;
+        font-size: 12px;
+
+        .label-wrapper {
+          display: flex;
+          margin-bottom: 0.75rem;
+
+          svg {
+            margin-top: auto;
+            margin-bottom: auto;
+          }
+        }
+
+        .options {
+          display: none;
+          background-color: #fff;
+          position: absolute;
+          z-index: 10;
+          overflow-x: hidden;
+          overflow-y: auto;
+          max-height: 80vh;
+          min-width: 100px;
+          border-top: 3px solid rgb(240, 171, 0);
+          height: auto;
+
+          li {
+            border-bottom: 1px solid #aaa;
+            padding: 10px;
+
+            &.selected {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+
+      .dropdown:hover {
+        top: 1.25rem;
+      }
+
+      .dropdown:hover .options {
+        display: block;
       }
     }
 
-    .dropdown-wrapper {
-      position: absolute;
-      right: 20px;
-      z-index: 100;
-      top: 50px;
-      min-width: 200px;
-      max-width: 200px;
-      background: $white;
-      border: 1px solid $dropdown-border;
-      color: $black;
+    .gfw-login-container {
+      display: flex;
+      margin-right: 1rem;
+      align-content: center;
+      font-family: $fira-sans;
+      font-size: 0.75rem;
 
-      .subscription-authentication,
-      .options-modal {
-        list-style: none;
+      .gfw-login-button {
+        display: flex;
+        border: none;
+        background-color: inherit;
+        font-size: 0.75rem;
+        text-transform: uppercase;
 
-        .subscribe-method,
-        .more-list {
-          vertical-align: baseline;
-          list-style-type: none;
-          padding: 0;
-          margin: 0;
-          border: 0;
+        svg,
+        p {
+          margin: 0.25rem;
+        }
 
-          .gfw-api-option {
+        &.grey {
+          background-color: $light-light-grey;
+        }
+      }
+
+      .dropdown-wrapper {
+        position: absolute;
+        right: 20px;
+        z-index: 100;
+        top: 50px;
+        min-width: 200px;
+        max-width: 200px;
+        background: $white;
+        border: 1px solid $dropdown-border;
+        color: $black;
+
+        .subscription-authentication,
+        .options-modal {
+          list-style: none;
+
+          .subscribe-method,
+          .more-list {
+            vertical-align: baseline;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border: 0;
+
+            .gfw-api-option {
+              font-size: 0.9375rem;
+              font-weight: 400;
+
+              padding: 12px 15px;
+              max-width: none;
+              margin-right: 0 !important;
+              cursor: pointer;
+
+              p {
+                margin: unset;
+              }
+
+              a {
+                text-decoration: none;
+              }
+
+              &:hover {
+                background-color: $light-light-grey;
+              }
+            }
+          }
+        }
+        .subscription-authentication {
+          padding: 1rem;
+
+          p {
+            font-size: 0.75rem;
+          }
+
+          .subscribe-method {
             font-size: 1rem;
-
             padding: 12px 15px;
             max-width: none;
             margin-right: 0 !important;
-            cursor: pointer;
 
-            p {
-              margin: unset;
-            }
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            text-decoration: none;
 
-            a {
+            .-facebook,
+            .-google,
+            .-twitter {
+              color: $white;
               text-decoration: none;
             }
 
-            &:hover {
-              background-color: $light-grey;
+            &.twitter-box {
+              background: #598dca;
             }
-          }
-        }
-      }
-      .subscription-authentication {
-        padding: 1rem;
 
-        p {
-          font-size: 0.75rem;
-        }
+            &.facebook-box {
+              background: #39579b;
+            }
 
-        .subscribe-method {
-          font-size: 1rem;
-          padding: 12px 15px;
-          max-width: none;
-          margin-right: 0 !important;
-
-          text-align: center;
-          margin-top: 20px;
-          color: #fff;
-          padding-top: 15px;
-          padding-bottom: 15px;
-          text-decoration: none;
-
-          .-facebook,
-          .-google,
-          .-twitter {
-            color: $white;
-            text-decoration: none;
-          }
-
-          &.twitter-box {
-            background: #598dca;
-          }
-
-          &.facebook-box {
-            background: #39579b;
-          }
-
-          &.google-box {
-            background: #da4735;
+            &.google-box {
+              background: #da4735;
+            }
           }
         }
       }

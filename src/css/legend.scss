@@ -1,7 +1,9 @@
+@import './variables.scss';
+
 .legend-container {
-  font-family: 'Fira Sans', sans-serif;
+  font-family: $fira-sans;
   width: 300px;
-  max-height: 500px;
+  max-height: 400px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   line-height: 1.3em;
   background-color: #ffffff;
@@ -20,6 +22,9 @@
       margin: 0.5rem;
       padding: 0;
       font-size: 14px;
+      color: rgb(85, 85, 85);
+      font-weight: 400;
+      line-height: 23.8px;
     }
     .caret-button {
       outline: 0;
@@ -35,7 +40,9 @@
 
     .layer-item {
       .layer-title {
-        font-weight: bold;
+        font-size: 0.8125rem;
+        font-weight: 400;
+        line-height: 22.1px;
       }
       .label-item {
         display: grid;
@@ -45,6 +52,9 @@
         p {
           margin: 0;
           padding: 0;
+          font-size: 0.8125rem;
+          font-weight: 400;
+          line-height: 22.1px;
         }
       }
     }

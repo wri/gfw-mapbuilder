@@ -18,8 +18,9 @@ import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import FeatureLayer from 'esri/layers/FeatureLayer';
+import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
-
+import { landsatBaselayerURL } from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
@@ -46,7 +47,11 @@ import {
   setMeasureResults,
   setLanguage,
   setRenderGFWDropdown,
-  setSelectedSearchWidgetLayer
+  setSelectedSearchWidgetLayer,
+  setModisStart,
+  setModisEnd,
+  setViirsStart,
+  setViirsEnd
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -122,6 +127,21 @@ export class MapController {
       map: this._map,
       container: domRef.current
     });
+
+    //if we have init extent, use it.
+    if (
+      appSettings.initialExtent &&
+      appSettings.initialExtent.hasOwnProperty('x') &&
+      appSettings.initialExtent.hasOwnProperty('y') &&
+      appSettings.initialExtent.hasOwnProperty('z')
+    ) {
+      //@ts-ignore
+      this._mapview.center = [
+        appSettings.initialExtent['x'],
+        appSettings.initialExtent['y']
+      ];
+      this._mapview.zoom = appSettings.initialExtent['z'];
+    }
 
     this._mapview.ui.remove('zoom');
     this._mapview.ui.remove('attribution');
@@ -230,20 +250,23 @@ export class MapController {
               newRemoteLayerObject.metadata.outputRange =
                 remoteLayerObject.layer.outputRange;
               newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.legendInfo =
+                remoteLayerObject.layer.metadata.legendConfig;
             } else {
-              //dealing with resouces (config file) layers
-
+              if (
+                remoteLayerObject.versions &&
+                remoteLayerObject.versions[0].url
+              ) {
+                remoteLayerObject.layerIds =
+                  remoteLayerObject.versions[0].layerIds;
+                remoteLayerObject.url = remoteLayerObject.versions[0].url;
+                remoteLayerObject.versionIndex = 0;
+              }
               //TODO: This fetches legend info from mapservice, but not all layers in the config may be that. we need to figure out other types too
-              const legendInfoObject =
-                remoteLayerObject.type !== 'webtiled'
-                  ? await fetchLegendInfo(remoteLayerObject.url)
-                  : undefined;
-              const layerLegendInfo =
-                legendInfoObject &&
-                legendInfoObject?.layers.filter((l: any) =>
-                  remoteLayerObject.layerIds?.includes(l.layerId)
-                );
-              newRemoteLayerObject.legendInfo = layerLegendInfo;
+              const legendInfoObject = await this.retrieveLegendInfo(
+                remoteLayerObject
+              );
+              newRemoteLayerObject.legendInfo = legendInfoObject;
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[
                 appState.selectedLanguage
@@ -262,6 +285,11 @@ export class MapController {
               newRemoteLayerObject.parentID = undefined;
               newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
               newRemoteLayerObject.filterField = remoteLayerObject.filterField;
+              newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionIndex =
+                remoteLayerObject.versionIndex;
+              newRemoteLayerObject.versionHeaderText =
+                remoteLayerObject.versionHeaderText;
             }
             remoteLayerObjects.push(newRemoteLayerObject);
           }
@@ -278,7 +306,6 @@ export class MapController {
           //Get VIIRS and MODIS layers
           const viirsLayers = this.initializeAndSetVIIRSLayers();
           const modisLayers = this.initializeAndSetMODISLayers();
-
           const allLayers = [
             ...viirsLayers,
             ...modisLayers,
@@ -304,6 +331,20 @@ export class MapController {
                 store.dispatch(setLayersLoading(false));
               });
             }
+          } else {
+            //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+            //@ts-ignore
+            const combinedLayers = [...allLayers, ...this._map.layers.items];
+
+            combinedLayers.forEach(l => {
+              if (l.loaded === true) {
+                store.dispatch(setLayersLoading(false));
+              } else {
+                once(l, 'loaded', () => {
+                  store.dispatch(setLayersLoading(false));
+                });
+              }
+            });
           }
 
           this._map?.addMany(allLayers);
@@ -323,7 +364,9 @@ export class MapController {
             }
           });
 
+          //Extra layer group that acts as a "masked" layers with which you cannot interact
           this.addExtraLayers();
+
           this.initializeAndSetSketch();
         },
         (error: Error) => {
@@ -453,6 +496,22 @@ export class MapController {
     return Promise.all(remoteDataLayerRequests);
   }
 
+  async retrieveLegendInfo(
+    layerObject: LayerProps
+  ): Promise<any[] | undefined> {
+    const legendInfoObject =
+      layerObject.type !== 'webtiled'
+        ? await fetchLegendInfo(layerObject.url)
+        : undefined;
+    const layerLegendInfo =
+      legendInfoObject &&
+      !legendInfoObject.error &&
+      legendInfoObject?.layers.filter((l: any) =>
+        layerObject.layerIds?.includes(l.layerId)
+      );
+    return layerLegendInfo;
+  }
+
   changeLanguage(lang: string): void {
     if (!this._map) return;
     const { mapviewState, appSettings, appState } = store.getState();
@@ -487,6 +546,20 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
+    //if we have init extent, use it.
+    if (
+      appSettings.initialExtent &&
+      appSettings.initialExtent.hasOwnProperty('x') &&
+      appSettings.initialExtent.hasOwnProperty('y') &&
+      appSettings.initialExtent.hasOwnProperty('z')
+    ) {
+      //@ts-ignore
+      this._mapview.center = [
+        appSettings.initialExtent['x'],
+        appSettings.initialExtent['y']
+      ];
+      this._mapview.zoom = appSettings.initialExtent['z'];
+    }
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
@@ -569,6 +642,25 @@ export class MapController {
         this._map!.add(extraEsriLayer);
       }
     });
+  }
+
+  addLandsatLayer(layerConfig: LayerProps, year: string): void {
+    const landsatURL = landsatBaselayerURL;
+    const landsatConfig = {
+      type: 'webtiled',
+      url: landsatURL,
+      title: 'landsat',
+      id: 'landsat'
+    };
+    layerConfig.type = 'webtiled';
+
+    layerConfig.url = landsatURL.replace(/\/\d{4}\//, `/${year}/`);
+    const landsatEsriLayer = LayerFactory(this._mapview, layerConfig);
+    const landsatBase = new Basemap({
+      baseLayers: [landsatEsriLayer]
+    });
+    this._map!.basemap = landsatBase;
+    store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
@@ -1346,82 +1438,88 @@ export class MapController {
     startDate: string | Date,
     endDate: string | Date
   ): void {
-    const { mapviewState } = store.getState();
-
-    if (!this._map) {
-      return;
-    }
-
-    const layer = (this._map.allLayers as any).items.filter(
-      (layer: FeatureLayer) => layer.id === layerID
-    )[0];
-
-    if (layer.sublayers) {
-      const defExpression = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
-      const twentyFourHourSublayer = layer.sublayers.items.filter(
-        (sublayer: Sublayer) =>
-          sublayer.title === 'Global Fires (MODIS) 24 hrs' ||
-          sublayer.title === 'Global Fires (VIIRS) 24 hrs'
-      )[0];
-
-      twentyFourHourSublayer.definitionExpression = defExpression;
-
-      const newLayersArray = mapviewState.allAvailableLayers.map(
-        (layer: LayerProps) => {
-          if (layer.id === layerID) {
-            layer.definitionExpression = defExpression;
-          }
-
-          return layer;
+    //Custom date range is always set on the 1 year layer, all other layers must be turned off first
+    //and definition expression will be applied to that 1 year layer
+    const defExpression = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
+    if (layerID === 'MODIS_ACTIVE_FIRES') {
+      const modis24H = this._map!.findLayerById('MODIS_ACTIVE_FIRES');
+      modis24H.visible = false;
+      const modis1Y = this._map!.findLayerById('MODIS1Y') as any;
+      modis1Y.sublayers.items[0].definitionExpression = defExpression;
+      const modisIds = MODISLayerIDs.map(l => l.id);
+      this._map!.layers.forEach(l => {
+        if (modisIds.includes(l.id)) {
+          l.visible = l.id === 'MODIS1Y';
         }
-      );
-
-      store.dispatch(allAvailableLayers(newLayersArray));
+      });
+      store.dispatch(setModisStart(String(startDate)));
+      store.dispatch(setModisEnd(String(endDate)));
+    } else if (layerID === 'VIIRS_ACTIVE_FIRES') {
+      const viirs24H = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
+      viirs24H.visible = false;
+      const viirs1Y = this._map!.findLayerById('VIIRS1Y') as any;
+      viirs1Y.sublayers.items[0].definitionExpression = defExpression;
+      const viirsIds = VIIRSLayerIDs.map(l => l.id);
+      this._map!.layers.forEach(l => {
+        if (viirsIds.includes(l.id)) {
+          l.visible = l.id === 'VIIRS1Y';
+        }
+      });
+      //sync the new date with redux
+      store.dispatch(setViirsStart(String(startDate)));
+      store.dispatch(setViirsEnd(String(endDate)));
     }
-
-    return;
   }
 
   initializeAndSetVIIRSLayers(): any {
-    const viirsLayers = VIIRSLayerIDs.map(({ layerID, url }) => {
-      return new FeatureLayer({
-        id: layerID,
+    const viirsLayers = VIIRSLayerIDs.map(({ id, url, layerIds }) => {
+      return new MapImageLayer({
+        id: id,
         url,
-        visible: false
+        visible: false,
+        sublayers: [
+          {
+            id: layerIds[0],
+            visible: true
+          }
+        ]
       });
     });
     return viirsLayers;
   }
 
   initializeAndSetMODISLayers(): any {
-    const modisLayers = MODISLayerIDs.map(({ layerID, url }) => {
-      return new FeatureLayer({
-        id: layerID,
+    const modisLayers = MODISLayerIDs.map(({ id, url, layerIds }) => {
+      return new MapImageLayer({
+        id: id,
         url,
-        visible: false
+        visible: false,
+        sublayers: [
+          {
+            id: layerIds[0],
+            visible: true
+          }
+        ]
       });
     });
     return modisLayers;
   }
 
-  setMODISDefinedRange(layer: any, sublayerType: string): void {
-    if (!this._map) {
-      return;
-    }
-
-    const MODIS24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
-    );
+  setMODISDefinedRange(sublayerType: string): void {
+    //Turn off 1Y layer as it does not apply for defined range controls
+    const MODIS1Y = this._map?.findLayerById('MODIS1Y');
+    MODIS1Y!.visible = false;
+    const MODIS24 = this._map!.findLayerById('MODIS_ACTIVE_FIRES');
 
     switch (sublayerType) {
       case '24 hrs':
         {
           MODIS24.visible = true;
-          MODISLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
+          MODISLayerIDs.forEach(({ id }) => {
+            const modisLayer = this._map?.findLayerById(id);
 
-            if (specificLayer) {
-              specificLayer.visible = false;
+            if (modisLayer) {
+              modisLayer.visible = false;
             }
           });
         }
@@ -1429,13 +1527,13 @@ export class MapController {
       case '48 hrs':
         {
           MODIS24.visible = false;
-          MODISLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-            if (specificLayer) {
-              if (specificLayer.id === 'MODIS48') {
-                specificLayer.visible = true;
+          MODISLayerIDs.forEach(({ id }) => {
+            const modisLayer = this._map?.findLayerById(id);
+            if (modisLayer) {
+              if (modisLayer.id === 'MODIS48') {
+                modisLayer.visible = true;
               } else {
-                specificLayer.visible = false;
+                modisLayer.visible = false;
               }
             }
           });
@@ -1444,13 +1542,13 @@ export class MapController {
       case '72 hrs':
         {
           MODIS24.visible = false;
-          MODISLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-            if (specificLayer) {
-              if (specificLayer.id === 'MODIS72') {
-                specificLayer.visible = true;
+          MODISLayerIDs.forEach(({ id }) => {
+            const modisLayer = this._map?.findLayerById(id);
+            if (modisLayer) {
+              if (modisLayer.id === 'MODIS72') {
+                modisLayer.visible = true;
               } else {
-                specificLayer.visible = false;
+                modisLayer.visible = false;
               }
             }
           });
@@ -1459,13 +1557,13 @@ export class MapController {
       case '7 days':
         {
           MODIS24.visible = false;
-          MODISLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-            if (specificLayer) {
-              if (specificLayer.id === 'MODIS7D') {
-                specificLayer.visible = true;
+          MODISLayerIDs.forEach(({ id }) => {
+            const modisLayer = this._map?.findLayerById(id);
+            if (modisLayer) {
+              if (modisLayer.id === 'MODIS7D') {
+                modisLayer.visible = true;
               } else {
-                specificLayer.visible = false;
+                modisLayer.visible = false;
               }
             }
           });
@@ -1476,23 +1574,20 @@ export class MapController {
     }
   }
 
-  setVIIRSDefinedRange(layer: any, sublayerType: string): void {
-    if (!this._map) {
-      return;
-    }
-    const VIIRS24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
-    );
+  setVIIRSDefinedRange(sublayerType: string): void {
+    //Turn off 1Y layer as it does not apply for defined range controls
+    const VIIRS1Y = this._map?.findLayerById('VIIRS1Y');
+    VIIRS1Y!.visible = false;
+    const VIIRS24 = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
 
     switch (sublayerType) {
       case '24 hrs':
         {
           VIIRS24.visible = true;
-          VIIRSLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-
-            if (specificLayer) {
-              specificLayer.visible = false;
+          VIIRSLayerIDs.forEach(({ id }) => {
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              viirsLayer.visible = false;
             }
           });
         }
@@ -1500,13 +1595,13 @@ export class MapController {
       case '48 hrs':
         {
           VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-            if (specificLayer) {
-              if (specificLayer.id === 'VIIRS48') {
-                specificLayer.visible = true;
+          VIIRSLayerIDs.forEach(({ id }) => {
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              if (viirsLayer.id === 'VIIRS48') {
+                viirsLayer.visible = true;
               } else {
-                specificLayer.visible = false;
+                viirsLayer.visible = false;
               }
             }
           });
@@ -1515,13 +1610,13 @@ export class MapController {
       case '72 hrs':
         {
           VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-            if (specificLayer) {
-              if (specificLayer.id === 'VIIRS72') {
-                specificLayer.visible = true;
+          VIIRSLayerIDs.forEach(({ id }) => {
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              if (viirsLayer.id === 'VIIRS72') {
+                viirsLayer.visible = true;
               } else {
-                specificLayer.visible = false;
+                viirsLayer.visible = false;
               }
             }
           });
@@ -1530,13 +1625,13 @@ export class MapController {
       case '7 days':
         {
           VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ layerID }) => {
-            const specificLayer = this._map?.findLayerById(layerID);
-            if (specificLayer) {
-              if (specificLayer.id === 'VIIRS7D') {
-                specificLayer.visible = true;
+          VIIRSLayerIDs.forEach(({ id }) => {
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              if (viirsLayer.id === 'VIIRS7D') {
+                viirsLayer.visible = true;
               } else {
-                specificLayer.visible = false;
+                viirsLayer.visible = false;
               }
             }
           });
@@ -1573,16 +1668,16 @@ export class MapController {
     }
 
     if (layer.id === 'VIIRS_ACTIVE_FIRES') {
-      VIIRSLayerIDs.forEach(({ layerID }) => {
-        const specificLayer = this._map?.findLayerById(layerID);
+      VIIRSLayerIDs.forEach(({ id }) => {
+        const specificLayer = this._map?.findLayerById(id);
 
         if (specificLayer) {
           specificLayer.visible = false;
         }
       });
     } else if (layer.id === 'MODIS_ACTIVE_FIRES') {
-      MODISLayerIDs.forEach(({ layerID }) => {
-        const specificLayer = this._map?.findLayerById(layerID);
+      MODISLayerIDs.forEach(({ id }) => {
+        const specificLayer = this._map?.findLayerById(id);
 
         if (specificLayer) {
           specificLayer.visible = false;
@@ -1640,16 +1735,16 @@ export class MapController {
     sublayer24.opacity = opacity;
 
     if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      VIIRSLayerIDs.forEach(({ layerID }) => {
-        const specificLayer = this._map?.findLayerById(layerID);
+      VIIRSLayerIDs.forEach(({ id }) => {
+        const specificLayer = this._map?.findLayerById(id);
 
         if (specificLayer) {
           specificLayer.opacity = opacity;
         }
       });
     } else if (layerID === 'MODIS_ACTIVE_FIRES') {
-      MODISLayerIDs.forEach(({ layerID }) => {
-        const specificLayer = this._map?.findLayerById(layerID);
+      MODISLayerIDs.forEach(({ id }) => {
+        const specificLayer = this._map?.findLayerById(id);
 
         if (specificLayer) {
           specificLayer.opacity = opacity;
@@ -1672,20 +1767,11 @@ export class MapController {
   }
 
   setDefinedDateRange(layerID: string, sublayerType: string): void {
-    if (!this._map) {
-      return;
-    }
-
-    const layer = (this._map.allLayers as any).items.filter(
-      (layer: LayerProps) => layer.id === layerID
-    )[0];
-
     if (layerID === 'MODIS_ACTIVE_FIRES') {
-      this.setMODISDefinedRange(layer, sublayerType);
+      this.setMODISDefinedRange(sublayerType);
     }
-
     if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      this.setVIIRSDefinedRange(layer, sublayerType);
+      this.setVIIRSDefinedRange(sublayerType);
     }
   }
 
