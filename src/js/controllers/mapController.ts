@@ -1471,9 +1471,6 @@ export class MapController {
   }
 
   initializeAndSetVIIRSLayers(): any {
-    //TODO: check for state here and apply def expression
-    // const { viirsStart, viirsEnd } = store.getState().appState.leftPanel;
-    // const defExpression = `ACQ_DATE > date '${viirsStart}' AND ACQ_DATE < date '${viirsEnd}'`;
     const viirsLayers = VIIRSLayerIDs.map(({ id, url, layerIds }) => {
       return new MapImageLayer({
         id: id,
@@ -1491,9 +1488,6 @@ export class MapController {
   }
 
   initializeAndSetMODISLayers(): any {
-    //TODO: check for state here and apply def expression
-    // const { modisStart, modisEnd } = store.getState().appState.leftPanel;
-    // const defExpression = `ACQ_DATE > date '${modisStart}' AND ACQ_DATE < date '${modisEnd}'`;
     const modisLayers = MODISLayerIDs.map(({ id, url, layerIds }) => {
       return new MapImageLayer({
         id: id,
