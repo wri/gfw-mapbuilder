@@ -1515,10 +1515,10 @@ export class MapController {
         {
           MODIS24.visible = true;
           MODISLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
+            const modisLayer = this._map?.findLayerById(id);
 
-            if (fireLayer) {
-              fireLayer.visible = false;
+            if (modisLayer) {
+              modisLayer.visible = false;
             }
           });
         }
@@ -1527,12 +1527,12 @@ export class MapController {
         {
           MODIS24.visible = false;
           MODISLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              if (fireLayer.id === 'MODIS48') {
-                fireLayer.visible = true;
+            const modisLayer = this._map?.findLayerById(id);
+            if (modisLayer) {
+              if (modisLayer.id === 'MODIS48') {
+                modisLayer.visible = true;
               } else {
-                fireLayer.visible = false;
+                modisLayer.visible = false;
               }
             }
           });
@@ -1542,12 +1542,12 @@ export class MapController {
         {
           MODIS24.visible = false;
           MODISLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              if (fireLayer.id === 'MODIS72') {
-                fireLayer.visible = true;
+            const modisLayer = this._map?.findLayerById(id);
+            if (modisLayer) {
+              if (modisLayer.id === 'MODIS72') {
+                modisLayer.visible = true;
               } else {
-                fireLayer.visible = false;
+                modisLayer.visible = false;
               }
             }
           });
@@ -1557,12 +1557,12 @@ export class MapController {
         {
           MODIS24.visible = false;
           MODISLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              if (fireLayer.id === 'MODIS7D') {
-                fireLayer.visible = true;
+            const modisLayer = this._map?.findLayerById(id);
+            if (modisLayer) {
+              if (modisLayer.id === 'MODIS7D') {
+                modisLayer.visible = true;
               } else {
-                fireLayer.visible = false;
+                modisLayer.visible = false;
               }
             }
           });
@@ -1584,9 +1584,9 @@ export class MapController {
         {
           VIIRS24.visible = true;
           VIIRSLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              fireLayer.visible = false;
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              viirsLayer.visible = false;
             }
           });
         }
@@ -1595,12 +1595,12 @@ export class MapController {
         {
           VIIRS24.visible = false;
           VIIRSLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              if (fireLayer.id === 'VIIRS48') {
-                fireLayer.visible = true;
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              if (viirsLayer.id === 'VIIRS48') {
+                viirsLayer.visible = true;
               } else {
-                fireLayer.visible = false;
+                viirsLayer.visible = false;
               }
             }
           });
@@ -1610,12 +1610,12 @@ export class MapController {
         {
           VIIRS24.visible = false;
           VIIRSLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              if (fireLayer.id === 'VIIRS72') {
-                fireLayer.visible = true;
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              if (viirsLayer.id === 'VIIRS72') {
+                viirsLayer.visible = true;
               } else {
-                fireLayer.visible = false;
+                viirsLayer.visible = false;
               }
             }
           });
@@ -1625,12 +1625,12 @@ export class MapController {
         {
           VIIRS24.visible = false;
           VIIRSLayerIDs.forEach(({ id }) => {
-            const fireLayer = this._map?.findLayerById(id);
-            if (fireLayer) {
-              if (fireLayer.id === 'VIIRS7D') {
-                fireLayer.visible = true;
+            const viirsLayer = this._map?.findLayerById(id);
+            if (viirsLayer) {
+              if (viirsLayer.id === 'VIIRS7D') {
+                viirsLayer.visible = true;
               } else {
-                fireLayer.visible = false;
+                viirsLayer.visible = false;
               }
             }
           });
