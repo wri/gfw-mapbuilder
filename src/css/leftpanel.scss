@@ -308,7 +308,7 @@
 }
 
 .tab-button {
-  background: #eee;
+  background: $light-light-grey;
   border: 0;
   justify-content: center;
   height: 40px;
@@ -936,7 +936,7 @@
     grid-gap: 20px;
     grid-template-columns: 1fr 1fr;
     margin-top: 10px;
-    border-bottom: #e5e5df 0.5px solid;
+    border-bottom: $modal-border 0.5px solid;
     padding-bottom: 20px;
   }
 
@@ -1007,7 +1007,7 @@
   }
   .imagery-secondary-filters {
     margin-top: 15px;
-    border-bottom: #e5e5df 0.5px solid;
+    border-bottom: $modal-border 0.5px solid;
     display: grid;
     grid-template-columns: 1fr auto;
     padding-bottom: 10px;

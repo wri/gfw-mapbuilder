@@ -21,7 +21,7 @@ const GFWLogin = (props: LoginProps): JSX.Element => {
   return (
     <div className="gfw-login-container">
       <button
-        className="gfw-login-button"
+        className={`gfw-login-button ${renderGFWDropdown ? 'grey' : ''}`}
         onClick={() => dispatch(setRenderGFWDropdown(!renderGFWDropdown))}
       >
         <UserIcon height={15} width={15} />

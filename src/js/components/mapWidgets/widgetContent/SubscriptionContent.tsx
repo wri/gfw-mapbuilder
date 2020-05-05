@@ -261,7 +261,7 @@ const SubscriptionContent: FunctionComponent = () => {
           {endDateString}
         </p>
         <div className="other-row">
-          Data sets:
+          <p>Data sets:</p>
           <div className="subscribe-datasets">
             {datasetMap.map((dataset, i) => (
               <DatasetAlerts

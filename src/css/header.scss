@@ -150,6 +150,10 @@
         p {
           margin: 0.25rem;
         }
+
+        &.grey {
+          background-color: $light-light-grey;
+        }
       }
 
       .dropdown-wrapper {
@@ -176,7 +180,8 @@
             border: 0;
 
             .gfw-api-option {
-              font-size: 1rem;
+              font-size: 0.9375rem;
+              font-weight: 400;
 
               padding: 12px 15px;
               max-width: none;
@@ -192,7 +197,7 @@
               }
 
               &:hover {
-                background-color: $light-grey;
+                background-color: $light-light-grey;
               }
             }
           }
