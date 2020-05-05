@@ -196,6 +196,21 @@ export function parseURLandApplyChanges(): void {
         case 'z':
           mapController._mapview.zoom = Number(urlParamValue);
           break;
+        case 'b':
+          //if our basemap is not webmap we need to switch it up
+          if (urlParamValue === 'webmap') {
+            return;
+          } else if (urlParamValue.includes('landsat')) {
+            const year = urlParamValue.split('-')[1];
+            console.log(year);
+            const landsatConfig = {};
+            //@ts-ignore
+            mapController.addLandsatLayer(landsatConfig, year);
+          } else {
+            //@ts-ignore
+            mapController._map!.basemap = urlParamValue;
+          }
+          break;
         case 'coords':
           const coordinates = urlParamValue.split(',').map(c => Number(c));
           mapController._mapview.goTo(coordinates);

@@ -660,6 +660,7 @@ export class MapController {
       baseLayers: [landsatEsriLayer]
     });
     this._map!.basemap = landsatBase;
+    store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
