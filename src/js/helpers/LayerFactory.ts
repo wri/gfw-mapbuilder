@@ -8,11 +8,11 @@ import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
 import { GladLayer } from 'js/layers/GladLayer';
+import { PrimaryForestLayer } from 'js/layers/PrimaryForestLayer';
 import { TerraLayer } from 'js/layers/TerraLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
-
 import { LayerProps } from 'js/store/mapview/types';
 
 interface LayerOptions {
@@ -163,6 +163,15 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       esriLayer.endDate = appState.leftPanel.terraEnd;
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
+      break;
+    case 'primed':
+      esriLayer = new PrimaryForestLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
       break;
     case 'MASK':
       const { appSettings } = store.getState();
