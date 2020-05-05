@@ -20,7 +20,11 @@ import {
   SET_GLAD_START,
   SET_GLAD_END,
   SET_TERRA_START,
-  SET_TERRA_END
+  SET_TERRA_END,
+  SET_VIIRS_START,
+  SET_VIIRS_END,
+  SET_MODIS_START,
+  SET_MODIS_END
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -169,6 +173,34 @@ export function setTerraStart(payload: AppState['leftPanel']['terraStart']) {
 export function setTerraEnd(payload: AppState['leftPanel']['terraEnd']) {
   return {
     type: SET_TERRA_END as typeof SET_TERRA_END,
+    payload: payload
+  };
+}
+
+export function setModisStart(payload: AppState['leftPanel']['modisStart']) {
+  return {
+    type: SET_MODIS_START as typeof SET_MODIS_START,
+    payload: payload
+  };
+}
+
+export function setModisEnd(payload: AppState['leftPanel']['modisEnd']) {
+  return {
+    type: SET_MODIS_END as typeof SET_MODIS_END,
+    payload: payload
+  };
+}
+
+export function setViirsStart(payload: AppState['leftPanel']['viirsStart']) {
+  return {
+    type: SET_VIIRS_START as typeof SET_VIIRS_START,
+    payload: payload
+  };
+}
+
+export function setViirsEnd(payload: AppState['leftPanel']['viirsEnd']) {
+  return {
+    type: SET_VIIRS_END as typeof SET_VIIRS_END,
     payload: payload
   };
 }
