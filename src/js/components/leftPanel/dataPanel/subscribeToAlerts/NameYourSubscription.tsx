@@ -1,41 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
 
-const config = {
-  en: {
-    title: 'Name your subscription',
-    nameLabel: 'Name',
-    subscribeLabel: 'Subscribe to alerts'
-  },
-  ka: {
-    title: 'დაარქვით თქვენ ხელმოწერას',
-    nameLabel: 'გვარი',
-    subscribeLabel: 'ხელმოწერა შეტყობინებებზე'
-  },
-  fr: {
-    title: 'Nommer votre abonnement',
-    nameLabel: 'Nom',
-    subscribeLabel: 'S’abonner aux alertes'
-  },
-  es: {
-    title: 'Denomine su suscripción',
-    nameLabel: 'Nombre',
-    subscribeLabel: 'Suscribirse a las alertas'
-  },
-  pt: {
-    title: 'Nomeie sua assinatura',
-    nameLabel: 'Nome',
-    subscribeLabel: 'Inscreva-se para receber alertas'
-  },
-  id: {
-    title: 'Beri nama langganan Anda',
-    nameLabel: 'Nama',
-    subscribeLabel: 'Berlangganan peringatan'
-  },
-  zh: { title: '为您的订阅命名', nameLabel: '姓名', subscribeLabel: '订阅预警' }
-};
+import { nameSubscriptionConfig } from 'configs/subscribeToAlerts';
 
 interface NameYourSubscriptionProps {
   setNextStep: () => void;
@@ -59,7 +27,9 @@ const NameYourSubscription = (
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
-  const { title, nameLabel, subscribeLabel } = config[selectedLanguage];
+  const { title, nameLabel, subscribeLabel } = nameSubscriptionConfig[
+    selectedLanguage
+  ];
 
   const langs = [
     { label: 'English', field: 'en' },
@@ -72,12 +42,6 @@ const NameYourSubscription = (
       field: 'es'
     }
   ];
-
-  /**
-   * TODO
-   * todo [ ] style to match PROD
-   * todo [X] make content and next/back buttons language aware
-   */
 
   return (
     <div className="name-your-subscriptions-container">

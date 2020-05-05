@@ -6,10 +6,6 @@ import { renderModal } from 'js/store/appState/actions';
 const SubscriptionSaved = (): JSX.Element => {
   const dispatch = useDispatch();
 
-  /**
-   * TODO
-   * todo [ ] style to match PROD
-   */
   // * NOTE: this content in v1 is not language aware
 
   return (
