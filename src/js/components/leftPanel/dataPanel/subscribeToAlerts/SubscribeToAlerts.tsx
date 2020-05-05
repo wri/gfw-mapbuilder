@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
@@ -14,14 +14,15 @@ const subscribeConfig = {
     PRODESLabel: 'PRODES deforestation data',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'Tree cover loss data',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'SAD tree cover loss alerts',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'FORMA alerts data',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Terra-i tree cover loss alerts',
     TERRAField: 'terrai-alerts'
   },
+  //  ["umd-loss-gain", "imazon-alerts"]
   fr: {
     title: 'Alertes sur l’évolution des forêts',
     subtitle:
@@ -33,9 +34,9 @@ const subscribeConfig = {
     PRODESLabel: 'Données PRODES sur la déforestation',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'Données sur la perte de la couverture arborée',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'Alertes SAD sur les pertes de la couverture arborée',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'Données d’alertes FORMA',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Terra-i tree cover loss alerts',
@@ -51,9 +52,9 @@ const subscribeConfig = {
     PRODESLabel: 'PRODES გაუტყევების მონაცემები',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'ხის ვარჯის კარგვის მონაცემები',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'SAD ხის ვარჯის კარგვის შეტყობინებები',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'FORMA შეტყობინებების მონაცემები',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Terra-i  ხის ვარჯის კარგვის შეტყობინებები',
@@ -69,9 +70,9 @@ const subscribeConfig = {
     PRODESLabel: 'Datos PRODES sobre deforestación',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'Datos sobre la pérdida de cobertura arbórea',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'Alertas SAD sobre pérdida de cobertura arbórea',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'Datos de alertas FORMA',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Alertas Terra-i sobre pérdida de cobertura arbórea',
@@ -87,9 +88,9 @@ const subscribeConfig = {
     PRODESLabel: 'Dados de desmatamento PRODES',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'Dados de perda de cobertura arbórea',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'Alertas de perda de cobertura arbórea SAD',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'Dados de alertas FORMA',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Alertas de perda de cobertura arbórea Terra-I',
@@ -105,9 +106,9 @@ const subscribeConfig = {
     PRODESLabel: 'Data deforestasi PRODES',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'Tree cover loss data',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'Peringatan kehilangan tutupan pohon SAD',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'Dados de alertas FORMA',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Peringatan kehilangan tutupan pohon Terra-i',
@@ -123,9 +124,9 @@ const subscribeConfig = {
     PRODESLabel: 'PRODES 毁林数据',
     PRODESField: 'prodes-loss',
     treeCoverLossLabel: 'Tree cover loss data',
-    treeCoverLossField: 'TBD', // TODO [ ],
+    treeCoverLossField: 'umd-loss-gain',
     SADLabel: 'SAD 森林覆盖减少预警',
-    SADField: 'TBD', // TODO [ ],
+    SADField: 'imazon-alerts',
     FORMALabel: 'FORMA 预警数据',
     FORMAField: 'forma-alerts',
     TERRALabel: 'Terra-i 森林覆盖减少预警',
@@ -181,13 +182,16 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
       <h2>{title}</h2>
       <p>{subtitle}</p>
       <div className="options-container">
-        <ul onChange={(e: any): void => setAlerts(e.target.value)}>
+        <ul>
           <li>
             <input
               type="checkbox"
               name={VIIRSLabel}
               value={VIIRSField}
               checked={selectedAlerts.includes(VIIRSField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{VIIRSLabel}</label>
           </li>
@@ -197,6 +201,9 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
               name={GLADLabel}
               value={GLADField}
               checked={selectedAlerts.includes(GLADField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{GLADLabel}</label>
           </li>
@@ -206,6 +213,9 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
               name={FORMALabel}
               value={FORMAField}
               checked={selectedAlerts.includes(FORMAField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{FORMALabel}</label>
           </li>
@@ -215,6 +225,9 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
               name={PRODESLabel}
               value={PRODESField}
               checked={selectedAlerts.includes(PRODESField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{PRODESLabel}</label>
           </li>
@@ -224,6 +237,9 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
               name={treeCoverLossLabel}
               value={treeCoverLossField}
               checked={selectedAlerts.includes(treeCoverLossField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{treeCoverLossLabel}</label>
           </li>
@@ -233,6 +249,9 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
               name={SADLabel}
               value={SADField}
               checked={selectedAlerts.includes(SADField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{SADLabel}</label>
           </li>
@@ -242,6 +261,9 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
               name={TERRALabel}
               value={TERRAField}
               checked={selectedAlerts.includes(TERRAField)}
+              onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                setAlerts(e.target.value)
+              }
             />
             <label>{TERRALabel}</label>
           </li>
