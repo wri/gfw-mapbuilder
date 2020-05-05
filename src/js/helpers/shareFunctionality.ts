@@ -7,7 +7,11 @@ import {
   setGladStart,
   setGladEnd,
   setTerraStart,
-  setTerraEnd
+  setTerraEnd,
+  setModisStart,
+  setModisEnd,
+  setViirsStart,
+  setViirsEnd
 } from 'js/store/appState/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
@@ -134,6 +138,16 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
     urlParams.push(`te=${leftPanel.terraEnd}`);
   }
 
+  const viirsLayer = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
+  if (viirsLayer) {
+    urlParams.push(`vs=${leftPanel.viirsStart}`);
+    urlParams.push(`ve=${leftPanel.viirsEnd}`);
+  }
+  const modisLayer = mapController._map?.findLayerById('MODIS_ACTIVE_FIRES');
+  if (modisLayer) {
+    urlParams.push(`ms=${leftPanel.modisStart}`);
+    urlParams.push(`me=${leftPanel.modisEnd}`);
+  }
   return urlParams.join('&');
 }
 
@@ -208,6 +222,18 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'te':
           store.dispatch(setTerraEnd(urlParamValue));
+          break;
+        case 'vs':
+          store.dispatch(setViirsStart(urlParamValue));
+          break;
+        case 've':
+          store.dispatch(setViirsEnd(urlParamValue));
+          break;
+        case 'ms':
+          store.dispatch(setModisStart(urlParamValue));
+          break;
+        case 'me':
+          store.dispatch(setModisEnd(urlParamValue));
           break;
         default:
           break;
