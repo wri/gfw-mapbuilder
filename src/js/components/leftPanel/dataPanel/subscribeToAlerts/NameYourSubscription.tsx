@@ -40,23 +40,37 @@ const config = {
 interface NameYourSubscriptionProps {
   setNextStep: () => void;
   setPrevStep: () => void;
+  subscriptionName: string;
+  setSubscriptionName: (subscriptionName: string) => void;
+  setSubscriptionLanguage: (subscriptionLanguage: string) => void;
 }
 
 const NameYourSubscription = (
   props: NameYourSubscriptionProps
 ): JSX.Element => {
-  const [subscriptionName, setSubscriptionName] = useState('');
+  const {
+    setNextStep,
+    setPrevStep,
+    subscriptionName,
+    setSubscriptionName,
+    setSubscriptionLanguage
+  } = props;
+
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
   const { title, nameLabel, subscribeLabel } = config[selectedLanguage];
+
   const langs = [
-    'English',
-    '中文',
-    'Français',
-    'Bahasa Indonesia',
-    'Português (Brasil)',
-    'Español (Mexico)'
+    { label: 'English', field: 'en' },
+    { label: '中文', field: 'zh' },
+    { label: 'Français', field: 'fr' },
+    { label: 'Bahasa Indonesia', field: 'id' },
+    { label: 'Português (Brasil)', field: 'pt' },
+    {
+      label: 'Español (Mexico)',
+      field: 'es'
+    }
   ];
 
   /**
@@ -77,18 +91,22 @@ const NameYourSubscription = (
       />
 
       <label>{subscribeLabel}</label>
-      <select>
-        {langs.map((language: string, index: number) => (
-          <option key={index}>{language}</option>
+      <select
+        onClick={(e: any): void => setSubscriptionLanguage(e.target.value)}
+      >
+        {langs.map(({ label, field }, index: number) => (
+          <option key={index} value={field}>
+            {label}
+          </option>
         ))}
       </select>
       <div>
         <button
-          onClick={(): void => props.setPrevStep()}
+          onClick={(): void => setPrevStep()}
           className="esri-icon-left-arrow"
         />
         <button
-          onClick={(): void => props.setNextStep()}
+          onClick={(): void => setNextStep()}
           disabled={subscriptionName.length ? false : true}
           className="esri-icon-right-arrow"
         />

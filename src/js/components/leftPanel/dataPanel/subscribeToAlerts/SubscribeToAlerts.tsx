@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
@@ -7,89 +7,140 @@ const subscribeConfig = {
   en: {
     title: 'Forest change alerts',
     subtitle: 'Select the forest change alerts you would like to receive',
-    VIIRS: 'VIIRS active fire alerts',
-    GLAD: 'GLAD tree cover loss alerts',
-    FORMA: 'FORMA alerts data',
-    PRODES: 'PRODES deforestation data',
-    treeCoverLoss: 'Tree cover loss data',
-    SADTreeCoverLoss: 'SAD tree cover loss alerts',
-    terraTreeCoverLoss: 'Terra-i tree cover loss alerts'
-  },
-  ka: {
-    title: 'ტყის ცვლილების შეტყობინებები',
-    subtitle: 'Select the forest change alerts you would like to receive',
-    VIIRS: 'VIIRS აქტიური ხანძრების შეტყობინებები',
-    GLAD: 'GLAD ხის ვარჯის კარგვის შეტყობინებები',
-    FORMA: 'FORMA შეტყობინებების მონაცემები',
-    PRODES: 'PRODES გაუტყევების მონაცემები',
-    treeCoverLoss: 'ხის ვარჯის კარგვის მონაცემები',
-    SADTreeCoverLoss: 'SAD ხის ვარჯის კარგვის შეტყობინებები',
-    terraTreeCoverLoss: 'Terra-i  ხის ვარჯის კარგვის შეტყობინებები'
+    VIIRSLabel: 'VIIRS active fire alerts',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD tree cover loss alerts',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES deforestation data',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Tree cover loss data',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'SAD tree cover loss alerts',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'FORMA alerts data',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Terra-i tree cover loss alerts',
+    TERRAField: 'terrai-alerts'
   },
   fr: {
     title: 'Alertes sur l’évolution des forêts',
     subtitle:
       'Sélectionnez les alertes de changement forestier que vous souhaitez recevoir',
-    VIIRS: 'Alertes incendies actifs VIIRS',
-    GLAD: 'Alertes GLAD sur les pertes de couvert arboré',
-    FORMA: 'Données d’alertes FORMA',
-    PRODES: 'Données PRODES sur la déforestation',
-    treeCoverLoss: 'Données sur la perte de la couverture arborée',
-    SADTreeCoverLoss: 'Alertes SAD sur les pertes de la couverture arborée',
-    terraTreeCoverLoss: 'Terra-i tree cover loss alerts'
+    VIIRSLabel: 'Alertes incendies actifs VIIRS',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'Alertes GLAD sur les pertes de couvert arboré',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'Données PRODES sur la déforestation',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Données sur la perte de la couverture arborée',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'Alertes SAD sur les pertes de la couverture arborée',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'Données d’alertes FORMA',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Terra-i tree cover loss alerts',
+    TERRAField: 'terrai-alerts'
+  },
+  ka: {
+    title: 'ტყის ცვლილების შეტყობინებები',
+    subtitle: 'Select the forest change alerts you would like to receive',
+    VIIRSLabel: 'VIIRS აქტიური ხანძრების შეტყობინებები',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD ხის ვარჯის კარგვის შეტყობინებები',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES გაუტყევების მონაცემები',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'ხის ვარჯის კარგვის მონაცემები',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'SAD ხის ვარჯის კარგვის შეტყობინებები',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'FORMA შეტყობინებების მონაცემები',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Terra-i  ხის ვარჯის კარგვის შეტყობინებები',
+    TERRAField: 'terrai-alerts'
   },
   es: {
     title: 'Alertas de cambio forestal',
     subtitle: 'Select the forest change alerts you would like to receive',
-    VIIRS: 'Alertas VIIRS sobre incendios activos',
-    GLAD: 'Alertas GLAD sobre pérdida de cobertura arbórea',
-    FORMA: 'Datos de alertas FORMA',
-    PRODES: 'Datos PRODES sobre deforestación',
-    treeCoverLoss: 'Datos sobre la pérdida de cobertura arbórea',
-    SADTreeCoverLoss: 'Alertas SAD sobre pérdida de cobertura arbórea',
-    terraTreeCoverLoss: 'Alertas Terra-i sobre pérdida de cobertura arbórea'
+    VIIRSLabel: 'Alertas VIIRS sobre incendios activos',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'Alertas GLAD sobre pérdida de cobertura arbórea',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'Datos PRODES sobre deforestación',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Datos sobre la pérdida de cobertura arbórea',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'Alertas SAD sobre pérdida de cobertura arbórea',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'Datos de alertas FORMA',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Alertas Terra-i sobre pérdida de cobertura arbórea',
+    TERRAField: 'terrai-alerts'
   },
   pt: {
     title: 'Alertas de alterações florestais',
     subtitle: 'Select the forest change alerts you would like to receive',
-    VIIRS: 'Alertas de incêndios ativos VIIRS',
-    GLAD: 'Alertas de perda de cobertura arbórea GLAD',
-    FORMA: 'Dados de alertas FORMA',
-    PRODES: 'Dados de desmatamento PRODES',
-    treeCoverLoss: 'Dados de perda de cobertura arbórea',
-    SADTreeCoverLoss: 'Alertas de perda de cobertura arbórea SAD',
-    terraTreeCoverLoss: 'Alertas de perda de cobertura arbórea Terra-I'
+    VIIRSLabel: 'Alertas de incêndios ativos VIIRS',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'Alertas de perda de cobertura arbórea GLAD',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'Dados de desmatamento PRODES',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Dados de perda de cobertura arbórea',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'Alertas de perda de cobertura arbórea SAD',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'Dados de alertas FORMA',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Alertas de perda de cobertura arbórea Terra-I',
+    TERRAField: 'terrai-alerts'
   },
   id: {
     title: 'Peringatan perubahan hutan',
     subtitle: 'Select the forest change alerts you would like to receive',
-    VIIRS: 'Peringatan kebakaran aktif VIIRS',
-    GLAD: 'Peringatan kehilangan tutupan pohon  GLAD',
-    FORMA: 'Data peringatan FORMA',
-    PRODES: 'Data deforestasi PRODES',
-    treeCoverLoss: 'Tree cover loss data',
-    SADTreeCoverLoss: 'Peringatan kehilangan tutupan pohon SAD',
-    terraTreeCoverLoss: 'Peringatan kehilangan tutupan pohon Terra-i'
+    VIIRSLabel: 'Peringatan kebakaran aktif VIIRS',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'Peringatan kehilangan tutupan pohon  GLAD',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'Data deforestasi PRODES',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Tree cover loss data',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'Peringatan kehilangan tutupan pohon SAD',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'Dados de alertas FORMA',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Peringatan kehilangan tutupan pohon Terra-i',
+    TERRAField: 'terrai-alerts'
   },
   zh: {
     title: '森林变化预警',
     subtitle: 'Select the forest change alerts you would like to receive',
-    VIIRS: 'VIIRS 活跃火点预警',
-    GLAD: 'GLAD 森林覆盖减少预警',
-    FORMA: 'FORMA 预警数据',
-    PRODES: 'PRODES 毁林数据',
-    treeCoverLoss: 'Tree cover loss data',
-    SADTreeCoverLoss: 'SAD 森林覆盖减少预警',
-    terraTreeCoverLoss: 'Terra-i 森林覆盖减少预警'
+    VIIRSLabel: 'VIIRS 活跃火点预警',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD 森林覆盖减少预警',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES 毁林数据',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Tree cover loss data',
+    treeCoverLossField: 'TBD', // TODO [ ],
+    SADLabel: 'SAD 森林覆盖减少预警',
+    SADField: 'TBD', // TODO [ ],
+    FORMALabel: 'FORMA 预警数据',
+    FORMAField: 'forma-alerts',
+    TERRALabel: 'Terra-i 森林覆盖减少预警',
+    TERRAField: 'terrai-alerts'
   }
 };
 
 interface Props {
   setNextStep: () => void;
+  selectedAlerts: Array<string>;
+  setSelectedAlerts: (selectedAlerts: Array<string>) => void;
 }
 
 const SubscribeToAlerts = (props: Props): JSX.Element => {
-  const [selectedAlerts, setSelectedAlerts] = useState<Array<string>>([]);
+  const { selectedAlerts, setSelectedAlerts, setNextStep } = props;
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
@@ -97,14 +148,21 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
   const {
     title,
     subtitle,
-    VIIRS,
-    GLAD,
-    FORMA,
-    PRODES,
-    treeCoverLoss,
-    SADTreeCoverLoss,
-    terraTreeCoverLoss
-  } = subscribeConfig[selectedLanguage];
+    VIIRSLabel,
+    VIIRSField,
+    GLADLabel,
+    GLADField,
+    PRODESLabel,
+    PRODESField,
+    treeCoverLossLabel,
+    treeCoverLossField,
+    FORMALabel,
+    FORMAField,
+    TERRALabel,
+    TERRAField,
+    SADLabel,
+    SADField
+  } = subscribeConfig[selectedLanguage]; //subscribeConfig[selectedLanguage];
 
   const setAlerts = (value: string): void => {
     const selectedAlertsCopy = [...selectedAlerts];
@@ -118,12 +176,6 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
     setSelectedAlerts(selectedAlertsCopy);
   };
 
-  /**
-   * TODO
-   * todo [ ] style to match PROD
-   * todo [X] make next/back buttons language aware
-   */
-
   return (
     <div className="subscribe-to-content-container">
       <h2>{title}</h2>
@@ -133,70 +185,70 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
           <li>
             <input
               type="checkbox"
-              name={VIIRS}
-              value={'VIIRS'}
-              checked={selectedAlerts.includes('VIIRS')}
+              name={VIIRSLabel}
+              value={VIIRSField}
+              checked={selectedAlerts.includes(VIIRSField)}
             />
-            <label>{VIIRS}</label>
+            <label>{VIIRSLabel}</label>
           </li>
           <li>
             <input
               type="checkbox"
-              name={GLAD}
-              value="GLAD"
-              checked={selectedAlerts.includes('GLAD')}
+              name={GLADLabel}
+              value={GLADField}
+              checked={selectedAlerts.includes(GLADField)}
             />
-            <label>{GLAD}</label>
+            <label>{GLADLabel}</label>
           </li>
           <li>
             <input
               type="checkbox"
-              name={FORMA}
-              value="FORMA"
-              checked={selectedAlerts.includes('FORMA')}
+              name={FORMALabel}
+              value={FORMAField}
+              checked={selectedAlerts.includes(FORMAField)}
             />
-            <label>{FORMA}</label>
+            <label>{FORMALabel}</label>
           </li>
           <li>
             <input
               type="checkbox"
-              name={PRODES}
-              value="PRODES"
-              checked={selectedAlerts.includes('PRODES')}
+              name={PRODESLabel}
+              value={PRODESField}
+              checked={selectedAlerts.includes(PRODESField)}
             />
-            <label>{PRODES}</label>
+            <label>{PRODESLabel}</label>
           </li>
           <li>
             <input
               type="checkbox"
-              name={treeCoverLoss}
-              value="treeCoverLoss"
-              checked={selectedAlerts.includes('treeCoverLoss')}
+              name={treeCoverLossLabel}
+              value={treeCoverLossField}
+              checked={selectedAlerts.includes(treeCoverLossField)}
             />
-            <label>{treeCoverLoss}</label>
+            <label>{treeCoverLossLabel}</label>
           </li>
           <li>
             <input
               type="checkbox"
-              name={SADTreeCoverLoss}
-              value="SAD"
-              checked={selectedAlerts.includes('SAD')}
+              name={SADLabel}
+              value={SADField}
+              checked={selectedAlerts.includes(SADField)}
             />
-            <label>{SADTreeCoverLoss}</label>
+            <label>{SADLabel}</label>
           </li>
           <li>
             <input
               type="checkbox"
-              name={terraTreeCoverLoss}
-              value="terraTreeCoverLoss"
-              checked={selectedAlerts.includes('terraTreeCoverLoss')}
+              name={TERRALabel}
+              value={TERRAField}
+              checked={selectedAlerts.includes(TERRAField)}
             />
-            <label>{terraTreeCoverLoss}</label>
+            <label>{TERRALabel}</label>
           </li>
         </ul>
       </div>
       <button
-        onClick={(): void => props.setNextStep()}
+        onClick={(): void => setNextStep()}
         disabled={selectedAlerts.length ? false : true}
         className="esri-icon-right-arrow"
       />
