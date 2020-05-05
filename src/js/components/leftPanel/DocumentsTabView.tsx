@@ -49,19 +49,21 @@ const DocumentsTabView = (props: Props): JSX.Element => {
       const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
 
       const specificFeature =
-        activeFeatures[featureCollectionIndex].features[featureIndex];
-      const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
+        activeFeatures[featureCollectionIndex]?.features[featureIndex];
+      if (specificFeature) {
+        const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
 
-      const urlProperties = {
-        sublayerID,
-        specificFeatureID: specificFeature.objectid,
-        layerID
-      } as any;
+        const urlProperties = {
+          sublayerID,
+          specificFeatureID: specificFeature.objectid,
+          layerID
+        } as any;
 
-      const attachments = await getDocuments(urlProperties);
+        const attachments = await getDocuments(urlProperties);
 
-      if (attachments !== allAttachments) {
-        setAllAttachments(attachments as any);
+        if (attachments !== allAttachments) {
+          setAllAttachments(attachments as any);
+        }
       }
     };
 

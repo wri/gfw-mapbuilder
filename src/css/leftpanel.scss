@@ -12,6 +12,83 @@
   max-height: 50rem;
   overflow-y: scroll;
 
+  .tab-header-container {
+    button {
+      .doc-flash-icon,
+      .analysis-flash-icon {
+        animation-name: animate-pulse;
+        animation-iteration-count: infinite;
+        animation-duration: 1000ms;
+      }
+
+      @keyframes animate-pulse {
+        0% {
+          transform: scale(1);
+        }
+        10% {
+          transform: scale(0.95);
+        }
+        20% {
+          transform: scale(0.9);
+        }
+        30% {
+          transform: scale(0.85);
+        }
+        40% {
+          transform: scale(0.8);
+        }
+        50% {
+          transform: scale(0.75);
+        }
+        60% {
+          transform: scale(0.8);
+        }
+        70% {
+          transform: scale(0.85);
+        }
+        80% {
+          transform: scale(0.9);
+        }
+        90% {
+          transform: scale(0.95);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
+
+    button[data-tip='documents'],
+    button[data-tip='analysis'] {
+      display: flex;
+
+      .yellow-alert {
+        width: 2.5px;
+        height: 2.5px;
+        border: 1px solid;
+        border-color: $base-yellow;
+        background-color: $base-yellow;
+        border-radius: 50%;
+      }
+    }
+
+    button[data-tip='analysis'] {
+      .yellow-alert {
+        position: absolute;
+        top: 0.25rem;
+        right: calc(60px + 0.25rem); // * NOTE: 60px is the width of the tab
+      }
+    }
+
+    button[data-tip='documents'] {
+      .yellow-alert {
+        position: absolute;
+        top: 0.25rem;
+        right: calc(60px - 3.5rem); // * NOTE: 60px is the width of the tab
+      }
+    }
+  }
+
   .documents-container {
     display: flex;
     flex-wrap: wrap;
