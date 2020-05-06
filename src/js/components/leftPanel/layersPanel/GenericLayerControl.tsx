@@ -515,10 +515,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   return (
     <>
       <div className="layers-control-checkbox">
-        {returnLayerControl()}
-        <div className="title-wrapper">
-          <span className="layer-label">{layer?.title}</span>
-          {returnSubtitle()}
+        <div className="label-wrapper">
+          {returnLayerControl()}
+          <div className="title-wrapper">
+            <span className="layer-label">{layer?.title}</span>
+            {returnSubtitle()}
+          </div>
         </div>
         <div
           className="info-icon-container"
