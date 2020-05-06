@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
 
-import { subscribeConfig } from 'configs/subscribeToAlerts';
+import { subscribeConfig } from 'configs/subscribeToAlerts.translations';
 
 interface Props {
   setNextStep: () => void;

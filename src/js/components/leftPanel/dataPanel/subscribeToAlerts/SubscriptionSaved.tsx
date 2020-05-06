@@ -6,8 +6,6 @@ import { renderModal } from 'js/store/appState/actions';
 const SubscriptionSaved = (): JSX.Element => {
   const dispatch = useDispatch();
 
-  // * NOTE: this content in v1 is not language aware
-
   return (
     <div className="subscription-saved-container">
       <h3>Subscription saved!</h3>

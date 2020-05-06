@@ -6,7 +6,7 @@ import { RootState } from 'js/store/index';
 import {
   nameSubscriptionConfig,
   languageOptions
-} from 'configs/subscribeToAlerts';
+} from 'configs/subscribeToAlerts.translations';
 
 interface NameYourSubscriptionProps {
   setNextStep: () => void;
