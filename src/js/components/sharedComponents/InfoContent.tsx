@@ -6,6 +6,45 @@ import { RootState } from 'js/store';
 
 import { downloadData } from '../../../../configs/modal.config';
 
+const getMetadata = async (layer: any): Promise<any> => {
+  let content: any;
+  const metadataURL = `${layer.url}/info/metadata`;
+  const xmlResults = await fetch(metadataURL).then(res => res.text());
+  const results = convert.xml2js(xmlResults);
+
+  const element = results.elements[0].elements.find(
+    (element: any) => element.name === 'dataIdInfo'
+  );
+
+  const elementNames = element.elements.map((element: any) => element.name);
+
+  const metadataExists =
+    elementNames.includes('idCitation') &&
+    elementNames.includes('idAbs') &&
+    elementNames.includes('idPurp');
+
+  if (metadataExists) {
+    const title = element.elements
+      .find((element: any) => element.name === 'idCitation')
+      .elements.find((subElement: any) => subElement.name === 'resTitle')
+      .elements[0].text;
+    const overview = element.elements.find(
+      (element: any) => element.name === 'idAbs'
+    ).elements[0].text;
+    const functionOrPurpose = element.elements.find(
+      (element: any) => element.name === 'idPurp'
+    ).elements[0].text;
+
+    content = {
+      title,
+      functionOrPurpose,
+      overview
+    };
+
+    return content;
+  }
+};
+
 //Extracting INFO from WebMaps
 const getWebmapGroupContent = async (layer: any): Promise<any> => {
   let content: any;
@@ -114,14 +153,20 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
       const results = await getWebmapGroupContent(layer);
-      console.log('results', results);
       setContent(results);
       setDataLoading(false);
     };
 
     const getServiceContent = async (): Promise<void> => {
       if (layer.technicalName) {
+        // * if layer has technical name
+        // * grab metadata from GFW metadata API
         const results = await getServiceGroupContent(layer.technicalName);
+        setContent(results);
+        setDataLoading(false);
+      } else {
+        // * grab metadata from Arcgis
+        const results = await getMetadata(layer);
         setContent(results);
         setDataLoading(false);
       }
@@ -208,114 +253,146 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     }
   };
 
-  const returnOtherGroupContent = (): JSX.Element => {
-    const {
-      resolution,
-      tags,
-      geographic_coverage,
-      source,
-      frequency_of_updates,
-      date_of_content,
-      cautions,
-      license,
-      overview,
-      citation,
-      title,
-      subtitle,
-      download_data
-    } = content;
+  const returnOtherGroupContent = (): JSX.Element | undefined => {
+    if (content.function) {
+      // * if metadata cam from GFW metadata API
+      const {
+        resolution,
+        tags,
+        geographic_coverage,
+        source,
+        frequency_of_updates,
+        date_of_content,
+        cautions,
+        license,
+        overview,
+        citation,
+        title,
+        subtitle,
+        download_data
+      } = content;
 
-    return (
-      <>
-        <div className="header">
-          <h2>{title}</h2>
-          <h3>{subtitle}</h3>
-        </div>
-        <table>
-          <tbody>
-            <tr>
-              <td className="label">Function</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: content.function }}
-              />
-            </tr>
-            <tr>
-              <td className="label">Resolution</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: resolution }}
-              />
-            </tr>
-            <tr>
-              <td className="label">Tags</td>
-              <td className="label-info">{tags}</td>
-            </tr>
-            <tr>
-              <td className="label">Geographic Coverage</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: geographic_coverage }}
-              />
-            </tr>
-            <tr>
-              <td className="label">Source</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: source }}
-              />
-            </tr>
-            <tr>
-              <td className="label">Frequency</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: frequency_of_updates }}
-              />
-            </tr>
-            <tr>
-              <td className="label">Date of Content</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: date_of_content }}
-              />
-            </tr>
-            <tr>
-              <td className="label">Cautions</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: cautions }}
-              />
-            </tr>
-            <tr>
-              <td className="label">License</td>
-              <td
-                className="label-info"
-                dangerouslySetInnerHTML={{ __html: license }}
-              />
-            </tr>
-          </tbody>
-        </table>
-        <div className="overview-container">
-          <h3>Overview</h3>
-          <div dangerouslySetInnerHTML={{ __html: overview }} />
-        </div>
-        <div className="citation-container">
-          <h4>Citation</h4>
-          <div dangerouslySetInnerHTML={{ __html: citation }} />
-        </div>
-        {download_data && (
-          <div className="button-container">
-            <a href={download_data} target="_blank" rel="noopener noreferrer">
-              <button className="orange-button">
-                {downloadData[selectedLanguage]
-                  ? downloadData[selectedLanguage]
-                  : 'Download Data'}
-              </button>
-            </a>
+      return (
+        <>
+          <div className="header">
+            <h2>{title}</h2>
+            <h3>{subtitle}</h3>
           </div>
-        )}
-      </>
-    );
+          <table>
+            <tbody>
+              <tr>
+                <td className="label">Function</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: content.function }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Resolution</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: resolution }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Tags</td>
+                <td className="label-info">{tags}</td>
+              </tr>
+              <tr>
+                <td className="label">Geographic Coverage</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: geographic_coverage }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Source</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: source }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Frequency</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: frequency_of_updates }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Date of Content</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: date_of_content }}
+                />
+              </tr>
+              <tr>
+                <td className="label">Cautions</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: cautions }}
+                />
+              </tr>
+              <tr>
+                <td className="label">License</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{ __html: license }}
+                />
+              </tr>
+            </tbody>
+          </table>
+          <div className="overview-container">
+            <h3>Overview</h3>
+            <div dangerouslySetInnerHTML={{ __html: overview }} />
+          </div>
+          <div className="citation-container">
+            <h4>Citation</h4>
+            <div dangerouslySetInnerHTML={{ __html: citation }} />
+          </div>
+          {download_data && (
+            <div className="button-container">
+              <a href={download_data} target="_blank" rel="noopener noreferrer">
+                <button className="orange-button">
+                  {downloadData[selectedLanguage]
+                    ? downloadData[selectedLanguage]
+                    : 'Download Data'}
+                </button>
+              </a>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    if (content.functionOrPurpose) {
+      // * if content came from metadata from GFW/ArcGIS endpount
+
+      const { title, functionOrPurpose, overview } = content;
+
+      return (
+        <>
+          <div className="header">
+            <h2>{title}</h2>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="label">Function</td>
+                  <td
+                    className="label-info"
+                    dangerouslySetInnerHTML={{ __html: functionOrPurpose }}
+                  />
+                </tr>
+              </tbody>
+            </table>
+            <div className="overview-container">
+              <h3>Overview</h3>
+              <div dangerouslySetInnerHTML={{ __html: overview }} />
+            </div>
+          </div>
+        </>
+      );
+    }
   };
 
   const RenderLayerContent = (): any => {
