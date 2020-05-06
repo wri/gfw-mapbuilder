@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
 import LayerToggleSwitch from './LayerToggleSwitch';
@@ -21,9 +22,19 @@ import { mapController } from 'js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
-import styled from 'styled-components';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/leftPanel.translations';
+
+//Dynamic custom theme override using styled-components lib
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
 
 interface TerraLayerControls {
   customColorTheme?: string;
@@ -96,13 +107,6 @@ const TerraControls = (props: TerraLayerControls): JSX.Element => {
     dispatch(setTerraStart(startDate));
     dispatch(setTerraEnd(e.target.value));
   }
-
-  //Dynamic custom theme override using styled-components lib
-  const CheckboxWrapper = styled.div`
-    .styled-checkbox:checked + .styled-checkboxlabel:before {
-      background-color: ${props.customColorTheme};
-    }
-  `;
 
   return (
     <div className="glad-control-wrapper">

@@ -5,6 +5,17 @@ import { mapController } from 'js/controllers/mapController';
 import styled from 'styled-components';
 import 'css/layer-toggle-checkbox.scss';
 
+//Dynamic custom theme override using styled-components lib
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+//Override speudo element styling with our custom style
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
+
 interface LayerToggleProps {
   layerIsVisible: boolean | undefined;
   layerID: string;
@@ -27,15 +38,8 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
     }
   };
 
-  //Override speudo element styling with our custom style
-  const CheckboxWrapper = styled.div`
-    .styled-checkbox:checked + .styled-checkboxlabel:before {
-      background-color: ${customColorTheme};
-    }
-  `;
-
   return (
-    <CheckboxWrapper>
+    <CheckboxWrapper customColorTheme={customColorTheme}>
       <div className="layer-checkbox">
         <input
           type="checkbox"

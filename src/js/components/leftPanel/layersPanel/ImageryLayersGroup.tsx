@@ -12,6 +12,16 @@ import { format } from 'date-fns';
 import { mapController } from 'js/controllers/mapController';
 import styled from 'styled-components';
 
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+//Override speudo element styling with our custom style
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
+
 interface LayerGroupProps {
   layerGroupKey: string;
   layerGroupConfig: any;
@@ -128,15 +138,8 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
       }
     };
 
-    //Override speudo element styling with our custom style
-    const CheckboxWrapper = styled.div`
-      .styled-checkbox:checked + .styled-checkboxlabel:before {
-        background-color: ${props.customColorTheme};
-      }
-    `;
-
     return (
-      <CheckboxWrapper>
+      <CheckboxWrapper customColorTheme={props.customColorTheme}>
         <div className="layer-checkbox imagery">
           <input
             type="checkbox"

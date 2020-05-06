@@ -9,6 +9,16 @@ import { setOpenLayerGroup } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
 import styled from 'styled-components';
 
+//Override speudo element styling with our custom style
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
+
 interface NestedLayerGroupProps {
   layersInGroup: any[];
   groupConfig: any;
@@ -51,17 +61,10 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
       }
     }
 
-    //Override speudo element styling with our custom style
-    const CheckboxWrapper = styled.div`
-      .styled-checkbox:checked + .styled-checkboxlabel:before {
-        background-color: ${props.customColorTheme};
-      }
-    `;
-
     return (
       <div className="nested-group-container">
         <div className="nested-group-top">
-          <CheckboxWrapper>
+          <CheckboxWrapper customColorTheme={props.customColorTheme}>
             <div className="layer-checkbox">
               <input
                 type="checkbox"

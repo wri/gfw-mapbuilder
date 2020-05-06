@@ -15,6 +15,16 @@ import styled from 'styled-components';
 import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
 import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
 
+//Dynamic custom theme override using styled-components lib
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
+
 const selectAnalysisModules = createSelector(
   (state: RootState) => state.appSettings,
   settings => settings.analysisModules
@@ -267,12 +277,6 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     setDownloadOptionsVisible(false);
   }
 
-  const CheckboxWrapper = styled.div`
-    .styled-checkbox:checked + .styled-checkboxlabel:before {
-      background-color: ${customColorTheme};
-    }
-  `;
-
   return (
     <div className={submoduleIsHidden ? 'print-hidden' : 'chart-module'}>
       <div className="report-top-toolbar">
@@ -302,7 +306,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             )}
           </div>
 
-          <CheckboxWrapper>
+          <CheckboxWrapper customColorTheme={customColorTheme}>
             <div className="layer-checkbox">
               <input
                 type="checkbox"
