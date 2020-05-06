@@ -85,14 +85,6 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
               </p>
             </div>
           </div>
-          <div className="title-wrapper">
-            <span className="layer-label">
-              {props.info?.label[props.selectedLanguage]}
-            </span>
-            <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
-              {parseDynamicSublabel()}
-            </p>
-          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <button
               style={{ border: `1px solid ${customColorTheme}` }}
