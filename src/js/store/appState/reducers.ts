@@ -1,3 +1,5 @@
+import { format, subYears } from 'date-fns';
+
 import {
   AppState,
   AppStateTypes,
@@ -15,7 +17,16 @@ import {
   SET_CANOPY_DENSITY,
   SET_ANALYSIS_DATE,
   SET_ANALYSIS_YEAR_RANGE,
-  SET_SELECTED_SEARCH_WIDGET_LAYER
+  SET_SELECTED_SEARCH_WIDGET_LAYER,
+  SET_GLAD_CONFIRMED,
+  SET_GLAD_START,
+  SET_GLAD_END,
+  SET_TERRA_START,
+  SET_TERRA_END,
+  SET_MODIS_START,
+  SET_MODIS_END,
+  SET_VIIRS_START,
+  SET_VIIRS_END
 } from './types';
 
 const initialState: AppState = {
@@ -35,7 +46,16 @@ const initialState: AppState = {
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
     analysisDateRange: ['', ''],
-    analysisYearRange: [2001, 2018]
+    analysisYearRange: [2001, 2018],
+    gladConfirmed: false,
+    gladStart: '2015-01-01',
+    gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    terraStart: '2004-01-01',
+    terraEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
+    viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd')
   },
   measureContent: {
     activeButton: '',
@@ -132,6 +152,78 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           analysisYearRange: action.payload
+        }
+      };
+    case SET_GLAD_CONFIRMED:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gladConfirmed: action.payload
+        }
+      };
+    case SET_GLAD_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gladStart: action.payload
+        }
+      };
+    case SET_GLAD_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gladEnd: action.payload
+        }
+      };
+    case SET_TERRA_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          terraStart: action.payload
+        }
+      };
+    case SET_TERRA_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          terraEnd: action.payload
+        }
+      };
+    case SET_MODIS_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          modisStart: action.payload
+        }
+      };
+    case SET_MODIS_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          modisEnd: action.payload
+        }
+      };
+    case SET_VIIRS_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          viirsStart: action.payload
+        }
+      };
+    case SET_VIIRS_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          viirsEnd: action.payload
         }
       };
     default:

@@ -94,6 +94,9 @@ const CoordinatesForm: FunctionComponent = () => {
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
+  const customColorTheme = useSelector(
+    (state: RootState) => state.appSettings.customColorTheme
+  );
 
   const { degree, minutes, seconds } = coordinatesContent;
   const { title, dropdownTitle, decimalOptions } = coordinatesContent[
@@ -256,7 +259,11 @@ const CoordinatesForm: FunctionComponent = () => {
           })}
         <div className="buttons-wrapper">
           <button onClick={(): void => setSection(true)}>Add more</button>
-          <button className="orange-button" onClick={(): void => setShape()}>
+          <button
+            className="orange-button"
+            style={{ backgroundColor: customColorTheme }}
+            onClick={(): void => setShape()}
+          >
             Make shape
           </button>
         </div>

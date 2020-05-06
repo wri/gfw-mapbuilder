@@ -7,17 +7,29 @@ import GenericLayerControl from './GenericLayerControl';
 import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
+import styled from 'styled-components';
+
+//Override speudo element styling with our custom style
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
 
 interface NestedLayerGroupProps {
   layersInGroup: any[];
   groupConfig: any;
   selectedLanguage: string;
+  customColorTheme: string;
 }
 
 const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
   const [activeGroups, setActiveGroups] = useState<string[]>([]);
 
-  function handleGroupToggle(val: string) {
+  function handleGroupToggle(val: string): void {
     //if activegroup is already in the list, remove it, otherwise add it
     if (activeGroups.includes(val)) {
       const index = activeGroups.indexOf(val);
@@ -30,7 +42,7 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
     }
   }
 
-  const LayerGroup = (props: any) => {
+  const LayerGroup = (props: any): JSX.Element => {
     const { lGroup, layers, activeGroups, changeActiveGroups } = props;
     // const [groupIsActive, setGroupIsActive] = useState(false);
     function handleGroupToggle(groupID: string): void {
@@ -48,25 +60,28 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
         });
       }
     }
+
     return (
       <div className="nested-group-container">
         <div className="nested-group-top">
-          <div className="layer-checkbox">
-            <input
-              type="checkbox"
-              name="styled-checkbox"
-              className="styled-checkbox"
-              id={`layer-checkbox-${lGroup.id}`}
-              checked={activeGroups.includes(lGroup.id)}
-              onChange={() => handleGroupToggle(lGroup.id)}
-            />
-            <label
-              className="styled-checkboxlabel"
-              htmlFor={`layer-checkbox-${lGroup.id}`}
-            >
-              {'somelayer'}
-            </label>
-          </div>
+          <CheckboxWrapper customColorTheme={props.customColorTheme}>
+            <div className="layer-checkbox">
+              <input
+                type="checkbox"
+                name="styled-checkbox"
+                className="styled-checkbox"
+                id={`layer-checkbox-${lGroup.id}`}
+                checked={activeGroups.includes(lGroup.id)}
+                onChange={() => handleGroupToggle(lGroup.id)}
+              />
+              <label
+                className="styled-checkboxlabel"
+                htmlFor={`layer-checkbox-${lGroup.id}`}
+              >
+                {'somelayer'}
+              </label>
+            </div>
+          </CheckboxWrapper>
           <div>{lGroup.label[props.selectedLanguage] || 'Unitled Group'}</div>
         </div>
         <div>{layers}</div>
@@ -155,6 +170,10 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
     (store: RootState) => store.mapviewState.allAvailableLayers
   );
 
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
+
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
   //If layer group is nested, layer ids are also nested, so find those appropriatly
@@ -200,6 +219,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
             layersInGroup={layersInGroup}
             groupConfig={layerGroupConfig}
             selectedLanguage={selectedLanguage}
+            customColorTheme={customColorTheme}
           />
         );
       case 'radio':

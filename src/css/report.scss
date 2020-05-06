@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .report {
   p {
     margin: 0;
@@ -226,7 +228,7 @@
       width: 100%;
       max-width: 60rem;
       margin: 0 auto;
-      border: 1px solid #eee;
+      border: 1px solid $light-light-grey;
     }
   }
   @media print {
@@ -256,14 +258,14 @@
     color: #555;
     font-size: 12px;
     background: #fff;
-    border: 0.75px solid #eee;
+    border: 0.75px solid $light-light-grey;
     text-align: center;
     span {
       text-transform: uppercase;
     }
   }
   .download-option:hover {
-    background: #eee;
+    background: $light-light-grey;
     text-decoration: underline;
   }
 }

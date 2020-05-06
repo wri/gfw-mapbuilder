@@ -7,6 +7,7 @@ interface DatePickerProps {
   defaultStartDate?: string;
   defaultEndDate?: string;
   sendDateValue: (start: string, end: string) => void;
+  customColorTheme: string;
 }
 const getTodayDate = new Date().toISOString().split('T')[0];
 
@@ -37,6 +38,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
         <label htmlFor="start-date">Start:</label>
         <input
           className="date-time-toggle input"
+          style={{ border: `1px solid ${props.customColorTheme}` }}
           type="date"
           defaultValue={startDate}
           min={minDate ? minDate : undefined}
@@ -48,6 +50,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
           <label htmlFor="end-date">End:</label>
           <input
             className="date-time-toggle input"
+            style={{ border: `1px solid ${props.customColorTheme}` }}
             type="date"
             value={endDate}
             max={maxDate ? maxDate : undefined}

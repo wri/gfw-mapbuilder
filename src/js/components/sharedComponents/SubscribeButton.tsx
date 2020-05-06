@@ -26,11 +26,13 @@ export const SubscribeButton = (): JSX.Element => {
     (store: RootState) => store.appSettings.customColorTheme
   );
 
-  const colorTheme = customColorTheme?.length ? customColorTheme : '#f0ab00';
+  function subscribeHandler(): void {
+    //
+  }
 
   return (
     <button
-      style={{ border: `1px solid ${colorTheme}` }}
+      style={{ border: `1px solid ${customColorTheme}` }}
       className="subscribe-button"
       onClick={(): any => dispatch(renderModal('AlertCarousel'))}
     >

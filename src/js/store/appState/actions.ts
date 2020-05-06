@@ -15,7 +15,16 @@ import {
   SET_CANOPY_DENSITY,
   SET_ANALYSIS_DATE,
   SET_ANALYSIS_YEAR_RANGE,
-  SET_SELECTED_SEARCH_WIDGET_LAYER
+  SET_SELECTED_SEARCH_WIDGET_LAYER,
+  SET_GLAD_CONFIRMED,
+  SET_GLAD_START,
+  SET_GLAD_END,
+  SET_TERRA_START,
+  SET_TERRA_END,
+  SET_VIIRS_START,
+  SET_VIIRS_END,
+  SET_MODIS_START,
+  SET_MODIS_END
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -127,6 +136,71 @@ export function setAnalysisYearRange(
 ) {
   return {
     type: SET_ANALYSIS_YEAR_RANGE as typeof SET_ANALYSIS_YEAR_RANGE,
+    payload: payload
+  };
+}
+
+export function setGladConfirmed(
+  payload: AppState['leftPanel']['gladConfirmed']
+) {
+  return {
+    type: SET_GLAD_CONFIRMED as typeof SET_GLAD_CONFIRMED,
+    payload: payload
+  };
+}
+
+export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
+  return {
+    type: SET_GLAD_START as typeof SET_GLAD_START,
+    payload: payload
+  };
+}
+
+export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
+  return {
+    type: SET_GLAD_END as typeof SET_GLAD_END,
+    payload: payload
+  };
+}
+
+export function setTerraStart(payload: AppState['leftPanel']['terraStart']) {
+  return {
+    type: SET_TERRA_START as typeof SET_TERRA_START,
+    payload: payload
+  };
+}
+
+export function setTerraEnd(payload: AppState['leftPanel']['terraEnd']) {
+  return {
+    type: SET_TERRA_END as typeof SET_TERRA_END,
+    payload: payload
+  };
+}
+
+export function setModisStart(payload: AppState['leftPanel']['modisStart']) {
+  return {
+    type: SET_MODIS_START as typeof SET_MODIS_START,
+    payload: payload
+  };
+}
+
+export function setModisEnd(payload: AppState['leftPanel']['modisEnd']) {
+  return {
+    type: SET_MODIS_END as typeof SET_MODIS_END,
+    payload: payload
+  };
+}
+
+export function setViirsStart(payload: AppState['leftPanel']['viirsStart']) {
+  return {
+    type: SET_VIIRS_START as typeof SET_VIIRS_START,
+    payload: payload
+  };
+}
+
+export function setViirsEnd(payload: AppState['leftPanel']['viirsEnd']) {
+  return {
+    type: SET_VIIRS_END as typeof SET_VIIRS_END,
     payload: payload
   };
 }

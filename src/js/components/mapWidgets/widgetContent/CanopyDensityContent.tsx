@@ -44,8 +44,11 @@ const marks = {
 
 const CanopyDensityContent = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { density } = useSelector(
-    (store: RootState) => store.appState.leftPanel
+  const density = useSelector(
+    (store: RootState) => store.appState.leftPanel.density
+  );
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
   );
 
   function handleSliderChange(value: number): void {
@@ -72,18 +75,18 @@ const CanopyDensityContent = (): JSX.Element => {
         marks={marks}
         defaultValue={density}
         tipFormatter={(val: number): string => markValueMap[val] + '%'}
-        railStyle={{ height: 10, backgroundColor: 'rgb(240, 171, 0)' }}
+        railStyle={{ height: 10, backgroundColor: customColorTheme }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
         activeDotStyle={{ border: '2px solid #e9e9e9' }}
         dotStyle={{
-          border: `2px solid rgb(240, 171, 0)`,
+          border: `2px solid ${customColorTheme}`,
           height: 10,
           width: 10,
           bottom: -6
         }}
         handleStyle={[
           {
-            border: `2px solid rgb(240, 171, 0)`,
+            border: `2px solid ${customColorTheme}`,
             height: 20,
             width: 20
           }

@@ -30,6 +30,9 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   const activeFeatureIndex = useSelector(
     (store: RootState) => store.mapviewState.activeFeatureIndex
   );
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
 
   const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
@@ -155,9 +158,21 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       }
 
       //determine if next/prev buttons are enabled or disabled
-      const prevBtn = page === 0 ? 'disabled' : '';
+      const enabledButtonCustomStyle = {
+        backgroundColor: customColorTheme,
+        color: '#FFF'
+      };
+      const disabledButtonCustomStyle = {
+        backgroundColor: 'rgb(238, 238, 238)',
+        color: '#555'
+      };
+
+      const prevBtn =
+        page === 0 ? disabledButtonCustomStyle : enabledButtonCustomStyle;
       const nextBtn =
-        page === props.activeLayerInfo.features.length - 1 ? 'disabled' : '';
+        page === props.activeLayerInfo.features.length - 1
+          ? disabledButtonCustomStyle
+          : enabledButtonCustomStyle;
 
       // if we have sublayer title, show it as well
       const layerTitle = props.activeLayerInfo.sublayerTitle
@@ -183,6 +198,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
               <div className="attribute-page-buttons">
                 <button
                   className={`attribute-page-button ${prevBtn}`}
+                  style={prevBtn}
                   disabled={page === 0}
                   onClick={() => turnAttributeTablePage(false)}
                 >
@@ -190,6 +206,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 </button>
                 <button
                   className={`attribute-page-button ${nextBtn}`}
+                  style={nextBtn}
                   disabled={page === props.activeLayerInfo.features.length - 1}
                   onClick={() => turnAttributeTablePage(true)}
                 >
@@ -230,7 +247,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'
       }
     >
-      {activeFeatures.length === 0 ? <DefaultTabView /> : <FeatureDataView />}
+      {activeFeatures.length === 0 ? (
+        <DefaultTabView customColorTheme={customColorTheme} />
+      ) : (
+        <FeatureDataView />
+      )}
     </div>
   );
 };

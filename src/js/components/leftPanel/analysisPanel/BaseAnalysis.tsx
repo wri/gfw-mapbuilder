@@ -87,6 +87,10 @@ const BaseAnalysis = (): JSX.Element => {
     (store: RootState) => store.appState.leftPanel.analysisYearRange
   );
 
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
+
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
     const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
@@ -364,6 +368,7 @@ const BaseAnalysis = (): JSX.Element => {
         <>
           <button
             className="orange-button base-analysis-size"
+            style={{ backgroundColor: customColorTheme }}
             onClick={(): void => setEditSketch()}
           >
             {analysisTranslations.editButton[selectedLanguage]}
@@ -380,6 +385,7 @@ const BaseAnalysis = (): JSX.Element => {
         <>
           <button
             className="orange-button base-analysis-size"
+            style={{ backgroundColor: customColorTheme }}
             onClick={(): void => setSaveSketch()}
           >
             {analysisTranslations.saveButton[selectedLanguage]}
@@ -447,6 +453,11 @@ const BaseAnalysis = (): JSX.Element => {
           )}
           <button
             disabled={selectedAnalysis === 'default'}
+            style={
+              selectedAnalysis !== 'default'
+                ? { backgroundColor: customColorTheme }
+                : {}
+            }
             className={
               selectedAnalysis === 'default'
                 ? 'orange-button disabled'

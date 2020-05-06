@@ -20,11 +20,17 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
   );
-  const { activeFeatures, activeFeatureIndex } = useSelector(
-    (store: RootState) => store.mapviewState
+  const activeFeatures = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatures
   );
-  const { selectedLanguage } = useSelector(
-    (state: RootState) => state.appState
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
+  );
+  const selectedLanguage = useSelector(
+    (state: RootState) => state.appState.selectedLanguage
+  );
+  const customColorTheme = useSelector(
+    (state: RootState) => state.appSettings.customColorTheme
   );
 
   const { instructions, name, pdf, size } = documentsContent[selectedLanguage];
@@ -49,19 +55,21 @@ const DocumentsTabView = (props: Props): JSX.Element => {
       const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
 
       const specificFeature =
-        activeFeatures[featureCollectionIndex].features[featureIndex];
-      const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
+        activeFeatures[featureCollectionIndex]?.features[featureIndex];
+      if (specificFeature) {
+        const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
 
-      const urlProperties = {
-        sublayerID,
-        specificFeatureID: specificFeature.objectid,
-        layerID
-      } as any;
+        const urlProperties = {
+          sublayerID,
+          specificFeatureID: specificFeature.objectid,
+          layerID
+        } as any;
 
-      const attachments = await getDocuments(urlProperties);
+        const attachments = await getDocuments(urlProperties);
 
-      if (attachments !== allAttachments) {
-        setAllAttachments(attachments as any);
+        if (attachments !== allAttachments) {
+          setAllAttachments(attachments as any);
+        }
       }
     };
 
@@ -84,7 +92,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
               <td>{Math.round(size / 1000)} KB</td>
               <td>
                 <a href={url} target="_blank" rel="noopener noreferrer">
-                  <DocIcon height={20} width={20} fill={'#F0AB00'} />
+                  <DocIcon height={20} width={20} fill={customColorTheme} />
                 </a>
               </td>
             </tr>

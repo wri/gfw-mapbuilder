@@ -50,17 +50,6 @@ const SubscriptionContent: FunctionComponent = () => {
   }
   const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
     const { subscription, datasetLabel, dataset } = props;
-    console.log('datasetNamedatasetName', props.datasetLabel);
-
-    // const colorTheme = '#929292';
-    // const { customColorTheme } = this.context.settings;
-    // if (subscription.attributes.datasets.indexOf(dataset) !== -1 && customColorTheme && customColorTheme !== '') {
-    //     colorTheme = customColorTheme;
-    // } else if (subscription.attributes.datasets.indexOf(dataset) !== -1 && (!customColorTheme || customColorTheme === '')) {
-    //     colorTheme = defaultColorTheme;
-    // } else {
-    //     colorTheme = '#929292';
-    // }
 
     const updateDataset = (): void => {
       const jsonData: JSONData = {
@@ -261,7 +250,7 @@ const SubscriptionContent: FunctionComponent = () => {
           {endDateString}
         </p>
         <div className="other-row">
-          Data sets:
+          <p>Data sets:</p>
           <div className="subscribe-datasets">
             {datasetMap.map((dataset, i) => (
               <DatasetAlerts
