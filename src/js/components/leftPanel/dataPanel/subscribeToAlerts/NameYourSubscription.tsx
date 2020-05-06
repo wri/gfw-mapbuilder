@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from 'js/store/index';
 
-import { nameSubscriptionConfig } from 'configs/subscribeToAlerts';
+import {
+  nameSubscriptionConfig,
+  languageOptions
+} from 'configs/subscribeToAlerts';
 
 interface NameYourSubscriptionProps {
   setNextStep: () => void;
@@ -31,18 +34,6 @@ const NameYourSubscription = (
     selectedLanguage
   ];
 
-  const langs = [
-    { label: 'English', field: 'en' },
-    { label: '中文', field: 'zh' },
-    { label: 'Français', field: 'fr' },
-    { label: 'Bahasa Indonesia', field: 'id' },
-    { label: 'Português (Brasil)', field: 'pt' },
-    {
-      label: 'Español (Mexico)',
-      field: 'es'
-    }
-  ];
-
   return (
     <div className="name-your-subscriptions-container">
       <h3>{title}</h3>
@@ -58,7 +49,7 @@ const NameYourSubscription = (
       <select
         onClick={(e: any): void => setSubscriptionLanguage(e.target.value)}
       >
-        {langs.map(({ label, field }, index: number) => (
+        {languageOptions.map(({ label, field }, index: number) => (
           <option key={index} value={field}>
             {label}
           </option>

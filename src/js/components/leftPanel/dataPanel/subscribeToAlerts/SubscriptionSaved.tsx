@@ -23,7 +23,9 @@ const SubscriptionSaved = (): JSX.Element => {
         </a>
         to manage them.
       </p>
-      <button onClick={(): any => dispatch(renderModal(''))}>OK</button>
+      <button onClick={(): any => dispatch(renderModal('SubscriptionWidget'))}>
+        OK
+      </button>
     </div>
   );
 };

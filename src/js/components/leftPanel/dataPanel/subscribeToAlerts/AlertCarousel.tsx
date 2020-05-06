@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import SubscribeToAlerts from './SubscribeToAlerts';
-// import EmailSignup from './EmailSignup';
 import NameYourSubscription from './NameYourSubscription';
 import SubscriptionSaved from './SubscriptionSaved';
 
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 
-import { setActiveFeatures } from 'js/store/mapview/actions';
+import {
+  setActiveFeatures,
+  setUserSubscriptions
+} from 'js/store/mapview/actions';
 import { RootState } from 'js/store/index';
 
 const AlertCarousel = (): JSX.Element => {
   const allSteps: ReadonlyArray<string> = [
     'SubscribeToAlerts',
-    // 'EmailSignup',
     'NameYourSubscription',
     'SubscriptionSaved'
   ];
@@ -30,14 +31,12 @@ const AlertCarousel = (): JSX.Element => {
   const activeFeatureIndex = useSelector(
     (state: RootState) => state.mapviewState.activeFeatureIndex
   );
-
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
 
   const getGeostoreID = (): any => {
     if ((activeFeature.attributes as any).geostoreId) {
-      console.log('HERE!');
-      return (activeFeature.geometry as any).geostoreId;
+      return (activeFeature.attributes as any).geostoreId;
     } else {
       return registerGeometry(activeFeature)
         .then(response => response.json())
@@ -96,7 +95,28 @@ const AlertCarousel = (): JSX.Element => {
           return response.json();
         }
       })
-      .catch(e => console.error('error in updateSubscriptions()', e));
+      .catch(e =>
+        console.error('error POSTING subscriptions in updateSubscriptions()', e)
+      );
+
+    fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        }
+      })
+      .then(results => {
+        dispatch(setUserSubscriptions(results.data));
+      })
+      .catch(e =>
+        console.error('error GETTING subscriptions in updateSubscriptions()', e)
+      );
   };
 
   const setNextStep = (): void => {
@@ -118,7 +138,7 @@ const AlertCarousel = (): JSX.Element => {
     setActiveStep(prevStep);
   };
 
-  const returnStep = (): JSX.Element | undefined => {
+  const returnCurrentStep = (): JSX.Element | undefined => {
     switch (activeStep) {
       case 'SubscribeToAlerts':
         return (
@@ -128,10 +148,6 @@ const AlertCarousel = (): JSX.Element => {
             setSelectedAlerts={setSelectedAlerts}
           />
         );
-      // case 'EmailSignup':
-      //   return (
-      //     <EmailSignup setNextStep={setNextStep} setPrevStep={setPrevStep} />
-      //   );
       case 'NameYourSubscription':
         return (
           <NameYourSubscription
@@ -149,7 +165,7 @@ const AlertCarousel = (): JSX.Element => {
     }
   };
 
-  return <div className="alert-carousel-container">{returnStep()}</div>;
+  return <div className="alert-carousel-container">{returnCurrentStep()}</div>;
 };
 
 export default AlertCarousel;
