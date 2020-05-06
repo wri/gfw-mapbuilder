@@ -10,6 +10,7 @@ interface TileThumbnailsProps {
   tiles: any[];
   handleHover: (e: any, tile: any) => void;
   cloudCoverRange: number[];
+  customColorTheme: string;
 }
 export const TileThumbnails = (props: TileThumbnailsProps): JSX.Element => {
   const [activeTile, setActiveTile] = useState<null | number>(null);
@@ -34,11 +35,14 @@ export const TileThumbnails = (props: TileThumbnailsProps): JSX.Element => {
       tile,
       props.cloudCoverRange
     );
+
+    const borderColor = tileIsSelected ? props.customColorTheme : 'transparent';
     return (
       <React.Fragment key={i}>
         {thumbIsInCloudRange && (
           <div
             className={tileIsSelected ? 'thumbnail active' : 'thumbnail'}
+            style={{ border: `2px solid ${borderColor}` }}
             onMouseEnter={e => props.handleHover(e, tile)}
             onMouseLeave={e => handleMouseLeave(e, tile)}
             onClick={e => handleThumbnailClick(e, tile, i)}

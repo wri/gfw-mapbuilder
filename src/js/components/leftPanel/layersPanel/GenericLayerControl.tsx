@@ -97,14 +97,10 @@ const TerraControls = (props: TerraLayerControls): JSX.Element => {
     dispatch(setTerraEnd(e.target.value));
   }
 
-  const colorTheme = props.customColorTheme?.length
-    ? props.customColorTheme
-    : '#f0ab00';
-
   //Dynamic custom theme override using styled-components lib
   const CheckboxWrapper = styled.div`
     .styled-checkbox:checked + .styled-checkboxlabel:before {
-      background-color: ${colorTheme};
+      background-color: ${props.customColorTheme};
     }
   `;
 
@@ -117,7 +113,7 @@ const TerraControls = (props: TerraLayerControls): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeStart}
             </label>
             <input
-              style={{ border: `2px solid ${colorTheme}` }}
+              style={{ border: `1px solid ${props.customColorTheme}` }}
               className="date-time-toggle input"
               type="date"
               defaultValue={startDate}
@@ -131,7 +127,7 @@ const TerraControls = (props: TerraLayerControls): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeEnd}
             </label>
             <input
-              style={{ border: `2px solid ${colorTheme}` }}
+              style={{ border: `1px solid ${props.customColorTheme}` }}
               className="date-time-toggle input"
               type="date"
               value={endDate}
@@ -225,14 +221,10 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gladLayerNew);
   }
 
-  const colorTheme = props.customColorTheme?.length
-    ? props.customColorTheme
-    : '#f0ab00';
-
   //Dynamic custom theme override using styled-components lib
   const CheckboxWrapper = styled.div`
     .styled-checkbox:checked + .styled-checkboxlabel:before {
-      background-color: ${colorTheme};
+      background-color: ${props.customColorTheme};
     }
   `;
 
@@ -264,7 +256,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeStart}
             </label>
             <input
-              style={{ border: `2px solid ${colorTheme}` }}
+              style={{ border: `1px solid ${props.customColorTheme}` }}
               className="date-time-toggle input"
               type="date"
               defaultValue={startDate}
@@ -278,7 +270,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
               {layerControlsTranslations[props.selectedLanguage].timeEnd}
             </label>
             <input
-              style={{ border: `2px solid ${colorTheme}` }}
+              style={{ border: `1px solid ${props.customColorTheme}` }}
               className="date-time-toggle input"
               type="date"
               value={endDate}
@@ -524,7 +516,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <span className="layer-label">{layer?.title}</span>
           {returnSubtitle()}
         </div>
-        <div className="info-icon-container" onClick={() => openInfoModal()}>
+        <div
+          className="info-icon-container"
+          style={{ backgroundColor: `${customColorTheme}` }}
+          onClick={() => openInfoModal()}
+        >
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>
       </div>

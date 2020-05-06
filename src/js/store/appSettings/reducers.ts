@@ -34,7 +34,7 @@ const initialState: AppSettings = {
   mapThemeIds: '',
   mapThemes: '',
   alternativeMapThemes: '',
-  customColorTheme: '',
+  customColorTheme: '#f0ab00', // #f0ab00 - is the default, it will be overwritten if configed
   analysisModules: [
     {
       analysisId: '',

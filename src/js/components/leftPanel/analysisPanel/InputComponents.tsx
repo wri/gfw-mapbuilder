@@ -3,7 +3,8 @@ import {
   setAnalysisDateRange,
   setAnalysisYearRange
 } from 'js/store/appState/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'js/store/index';
 import { createSliderWithTooltip, Range } from 'rc-slider';
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
@@ -18,6 +19,10 @@ const getTodayDate = new Date().toISOString().split('T')[0];
 
 const DatePicker = (props: DatePickerProps): JSX.Element => {
   const dispatch = useDispatch();
+
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const { multi, minDate, maxDate, defaultEndDate, defaultStartDate } = props;
 
   const [startDate, setStartDate] = React.useState(
@@ -49,6 +54,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
         <label htmlFor="start-date">Start:</label>
         <input
           className="date-time-toggle input"
+          style={{ border: `1px solid ${customColorTheme}` }}
           type="date"
           defaultValue={startDate}
           min={minDate ? minDate : undefined}
@@ -60,6 +66,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
           <label htmlFor="end-date">End:</label>
           <input
             className="date-time-toggle input"
+            style={{ border: `1px solid ${customColorTheme}` }}
             type="date"
             value={endDate}
             max={maxDate ? maxDate : undefined}
@@ -91,6 +98,9 @@ interface RangeSliderProps {
 const RangeSlider = (props: RangeSliderProps): JSX.Element => {
   //Sync at the start too
   const dispatch = useDispatch();
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
 
   const [activeYearRange, setActiveYearRange] = React.useState<number[]>(
     props.yearRange
@@ -121,12 +131,12 @@ const RangeSlider = (props: RangeSliderProps): JSX.Element => {
         dots={true}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
-        handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
+        handleStyle={[{ borderColor: customColorTheme }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: '1px solid #F0AB00'
+          border: `1px solid ${customColorTheme}`
         }}
-        trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+        trackStyle={[{ backgroundColor: customColorTheme }]}
         onChange={(value: Array<number>): void => handleSliderRange(value)}
       />
     </div>

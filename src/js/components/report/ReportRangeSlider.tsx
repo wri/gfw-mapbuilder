@@ -18,6 +18,7 @@ function generateMarks(range: number[]): any[] | {} {
 interface RangeSliderProps {
   yearRange: number[];
   handleSliderChange: (val: number[]) => void;
+  customColorTheme: string;
 }
 const ReportRangeSlider = (props: RangeSliderProps): JSX.Element => {
   const [activeYearRange, setActiveYearRange] = React.useState<number[]>(
@@ -45,12 +46,12 @@ const ReportRangeSlider = (props: RangeSliderProps): JSX.Element => {
         dots={true}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
-        handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
+        handleStyle={[{ borderColor: props.customColorTheme }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: '1px solid #F0AB00'
+          border: `1px solid ${props.customColorTheme}`
         }}
-        trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+        trackStyle={[{ backgroundColor: props.customColorTheme }]}
         onChange={(value: Array<number>): void => handleSliderRange(value)}
       />
     </div>
