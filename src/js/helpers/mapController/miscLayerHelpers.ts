@@ -124,8 +124,9 @@ export async function extractWebmapLayerObjects(
           url,
           maxScale,
           minScale,
-          sublayer: false
-        });
+          sublayer: false,
+          portalItemID: layer.portalItem.id
+        } as any);
       } else {
         legendInfo = layer.layerId
           ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId)
@@ -154,8 +155,9 @@ export async function extractWebmapLayerObjects(
           maxScale,
           minScale,
           sublayer: false,
-          legendInfo
-        });
+          legendInfo,
+          portalItemID: layer.portalItem.id
+        } as any);
       }
     }
   }

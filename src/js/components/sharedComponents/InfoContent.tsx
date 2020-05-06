@@ -8,35 +8,43 @@ import { downloadData } from '../../../../configs/modal.config';
 
 //Extracting INFO from WebMaps
 const getWebmapGroupContent = async (layer: any): Promise<any> => {
+  let content: any;
   const metadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
+  const results = convert.xml2js(xmlResults);
 
-  if (xmlResults) {
+  const element = results.elements[0].elements.find(
+    (element: any) => element.name === 'dataIdInfo'
+  );
+  const elementNames = element.elements.map((element: any) => element.name);
+  const metadataExists =
+    elementNames.includes('idCitation') &&
+    elementNames.includes('idAbs') &&
+    elementNames.includes('idPurp') &&
+    elementNames.includes('dataExt');
+
+  if (xmlResults && metadataExists) {
     // * IF metadata exists from ArcGIS, use it!
-    const results = convert.xml2js(xmlResults);
-    const element = results.elements[0].elements.find(
-      (element: any) => element.name === 'dataIdInfo'
-    );
+    // const subElement = element.elements.find(
+    //   (element: any) => element.name === 'idCitation'
+    // );
 
     const title = element.elements
       .find((element: any) => element.name === 'idCitation')
       .elements.find((subElement: any) => subElement.name === 'resTitle')
       .elements[0].text;
-
     const overview = element.elements.find(
       (element: any) => element.name === 'idAbs'
     ).elements[0].text;
-
     const functionOrPurpose = element.elements.find(
       (element: any) => element.name === 'idPurp'
     ).elements[0].text;
-
     const geographicCoverage = element.elements
       .find((element: any) => element.name === 'dataExt')
       .elements.find((subElement: any) => subElement.name === 'exDesc')
       .elements[0].text;
 
-    return {
+    content = {
       title,
       functionOrPurpose,
       geographicCoverage,
@@ -44,7 +52,7 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
     };
   } else {
     // * ELSE, use the description and summary instead
-    return await fetch(`${layer.url}/?f=pjson`)
+    content = await fetch(`${layer.url}/?f=pjson`)
       .then(res => res.json())
       .then(results => {
         return {
@@ -52,7 +60,28 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
           copyrightText: results.copyrightText
         };
       });
+
+    // ? what are we using to determine when to fetch
+    // ? by portalItemID vs layer.url?
+
+    if (
+      content.description.length === 0 ||
+      content.copyrightText.length === 0
+    ) {
+      content = await fetch(
+        `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
+      )
+        .then(res => res.json())
+        .then(results => {
+          return {
+            description: results.description,
+            copyrightText: results.copyrightText
+          };
+        });
+    }
   }
+
+  return content;
 };
 
 //Extracting info from Service Layers with technicalName
@@ -85,6 +114,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
       const results = await getWebmapGroupContent(layer);
+      console.log('results', results);
       setContent(results);
       setDataLoading(false);
     };
