@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import convert from 'xml-js';
 
 import { RootState } from 'js/store';
 
@@ -7,20 +8,51 @@ import { downloadData } from '../../../../configs/modal.config';
 
 //Extracting INFO from WebMaps
 const getWebmapGroupContent = async (layer: any): Promise<any> => {
-  // TODO [ ] IF metadata exists from ArcGIS, use it!
-  //    const metadataURL = `${layer.url}/info/metadata`;
-  //    const xmlResults = await fetch(metadataURL).then(res => res.text());
-  //    const results = convert.xml2js(xmlResults); // uses module 'xml-js'
-  //
-  // TODO [ ] ELSE, use the description and summary instead
-  return await fetch(`${layer.url}/?f=pjson`)
-    .then(res => res.json())
-    .then(results => {
-      return {
-        description: results.description,
-        copyrightText: results.copyrightText
-      };
-    });
+  const metadataURL = `${layer.url}/info/metadata`;
+  const xmlResults = await fetch(metadataURL).then(res => res.text());
+
+  if (xmlResults) {
+    // * IF metadata exists from ArcGIS, use it!
+    const results = convert.xml2js(xmlResults);
+    const element = results.elements[0].elements.find(
+      (element: any) => element.name === 'dataIdInfo'
+    );
+
+    const title = element.elements
+      .find((element: any) => element.name === 'idCitation')
+      .elements.find((subElement: any) => subElement.name === 'resTitle')
+      .elements[0].text;
+
+    const overview = element.elements.find(
+      (element: any) => element.name === 'idAbs'
+    ).elements[0].text;
+
+    const functionOrPurpose = element.elements.find(
+      (element: any) => element.name === 'idPurp'
+    ).elements[0].text;
+
+    const geographicCoverage = element.elements
+      .find((element: any) => element.name === 'dataExt')
+      .elements.find((subElement: any) => subElement.name === 'exDesc')
+      .elements[0].text;
+
+    return {
+      title,
+      functionOrPurpose,
+      geographicCoverage,
+      overview
+    };
+  } else {
+    // * ELSE, use the description and summary instead
+    return await fetch(`${layer.url}/?f=pjson`)
+      .then(res => res.json())
+      .then(results => {
+        return {
+          description: results.description,
+          copyrightText: results.copyrightText
+        };
+      });
+  }
 };
 
 //Extracting info from Service Layers with technicalName
@@ -36,7 +68,7 @@ const getServiceGroupContent = async (technicalName: string): Promise<any> => {
 };
 
 const InfoContent: FunctionComponent<{}> = (): any => {
-  const [content, setContent] = useState<any>('');
+  const [content, setContent] = useState<any>({});
   const [dataLoading, setDataLoading] = useState(true);
 
   const { infoModalLayerID: layerID, selectedLanguage } = useSelector(
@@ -80,36 +112,70 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     }
   }, []);
 
-  const returnWebmapGroupContent = (): JSX.Element => {
-    const { description, copyrightText } = content;
-
-    return (
-      <>
-        <div className="header">
-          <h2>{layer.title}</h2>
-          {description.length || copyrightText.length ? (
-            <>
-              <table>
-                <tbody>
-                  <tr>
-                    <td className="label">Description</td>
-                    <td className="label-info">{description}</td>
-                  </tr>
-                  <tr>
-                    <td className="label">License</td>
-                    <td className="label-info">{copyrightText}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </>
-          ) : (
-            <>
-              <h3>No information available</h3>
-            </>
-          )}
+  const returnWebmapGroupContent = (): JSX.Element | undefined => {
+    if (content.title) {
+      // * return metadata
+      const {
+        title,
+        functionOrPurpose,
+        geographicCoverage,
+        overview
+      } = content;
+      return (
+        <div className="header metadata">
+          <h2>{title}</h2>
+          <>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="label">Function</td>
+                  <td className="label-info">{functionOrPurpose}</td>
+                </tr>
+                <tr>
+                  <td className="label">Geographic Coverage</td>
+                  <td className="label-info">{geographicCoverage}</td>
+                </tr>
+              </tbody>
+            </table>
+          </>
+          <div className="overview-container">
+            <h3>Overview</h3>
+            <div dangerouslySetInnerHTML={{ __html: overview }} />
+          </div>
         </div>
-      </>
-    );
+      );
+    } else {
+      // * return description & summary
+      const { description, copyrightText } = content;
+
+      return (
+        <>
+          <div className="header">
+            <h2>{layer.title}</h2>
+            {description.length || copyrightText.length ? (
+              <>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td className="label">Description</td>
+                      <td className="label-info">{description}</td>
+                    </tr>
+                    <tr>
+                      <td className="label">License</td>
+                      <td className="label-info">{copyrightText}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </>
+            ) : (
+              <>
+                <h3>No information available</h3>
+              </>
+            )}
+          </div>
+        </>
+      );
+    }
   };
 
   const returnOtherGroupContent = (): JSX.Element => {

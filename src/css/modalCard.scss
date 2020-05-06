@@ -49,6 +49,11 @@
       padding: 1rem;
 
       .header {
+        &.metadata {
+          table {
+            width: 100%;
+          }
+        }
         h2 {
           text-transform: uppercase;
           line-height: 1rem;
