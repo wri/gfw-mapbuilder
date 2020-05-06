@@ -1,5 +1,8 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
+import styled from 'styled-components';
 import 'css/layer-toggle-checkbox.scss';
 
 interface LayerToggleProps {
@@ -10,6 +13,10 @@ interface LayerToggleProps {
 }
 
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
+
   const { layerIsVisible, layerID, sublayer, parentID } = props;
 
   const toggleVisibility = (): void => {
@@ -20,23 +27,32 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
     }
   };
 
+  //Override speudo element styling with our custom style
+  const CheckboxWrapper = styled.div`
+    .styled-checkbox:checked + .styled-checkboxlabel:before {
+      background-color: ${customColorTheme};
+    }
+  `;
+
   return (
-    <div className="layer-checkbox">
-      <input
-        type="checkbox"
-        name="styled-checkbox"
-        className="styled-checkbox"
-        id={`layer-checkbox-${layerID}`}
-        checked={layerIsVisible}
-        onChange={(): void => toggleVisibility()}
-      />
-      <label
-        className="styled-checkboxlabel"
-        htmlFor={`layer-checkbox-${layerID}`}
-      >
-        {layerID}
-      </label>
-    </div>
+    <CheckboxWrapper>
+      <div className="layer-checkbox">
+        <input
+          type="checkbox"
+          name="styled-checkbox"
+          className="styled-checkbox"
+          id={`layer-checkbox-${layerID}`}
+          checked={layerIsVisible}
+          onChange={(): void => toggleVisibility()}
+        />
+        <label
+          className="styled-checkboxlabel"
+          htmlFor={`layer-checkbox-${layerID}`}
+        >
+          {layerID}
+        </label>
+      </div>
+    </CheckboxWrapper>
   );
 };
 

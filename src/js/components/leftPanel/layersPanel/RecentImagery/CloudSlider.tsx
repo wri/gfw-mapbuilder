@@ -6,6 +6,7 @@ const SliderWithTooltip = createSliderWithTooltip(Range);
 interface CloudSliderProps {
   handleSliderChange: (val: any) => void;
   cloudRange: number[];
+  customColorTheme: string;
 }
 
 export const CloudSlider = (props: CloudSliderProps): JSX.Element => {
@@ -35,13 +36,13 @@ export const CloudSlider = (props: CloudSliderProps): JSX.Element => {
       value={props.cloudRange}
       tipFormatter={(val: number): number => val}
       step={25}
-      railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
-      handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
+      railStyle={{ backgroundColor: props.customColorTheme }}
+      handleStyle={[{ borderColor: props.customColorTheme }]}
       dotStyle={{ border: '1px solid #e9e9e9' }}
       activeDotStyle={{
-        border: '1px solid #F0AB00'
+        border: `1px solid ${props.customColorTheme}`
       }}
-      trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+      trackStyle={[{ backgroundColor: props.customColorTheme }]}
       onChange={props.handleSliderChange}
     />
   );

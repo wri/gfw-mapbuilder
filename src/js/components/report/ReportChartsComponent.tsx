@@ -11,7 +11,7 @@ import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensi
 import VegaChart from 'js/components/leftPanel/analysisPanel/VegaChartContainer';
 import analysisTranslations from 'js/components/leftPanel/analysisPanel/analysisTranslations';
 import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
-
+import styled from 'styled-components';
 import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
 import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
 
@@ -119,6 +119,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const density = useSelector(
     (store: RootState) => store.appState.leftPanel.density
   );
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
@@ -174,6 +177,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             <MemoReportRangeSlider
               yearRange={bounds}
               handleSliderChange={updateDate}
+              customColorTheme={customColorTheme}
             />
           );
         break;
@@ -188,6 +192,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             defaultStartDate={defaultStartDate}
             defaultEndDate={defaultEndDate}
             sendDateValue={updateDatePickerValues}
+            customColorTheme={customColorTheme}
           />
         );
       default:
@@ -262,6 +267,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     setDownloadOptionsVisible(false);
   }
 
+  const CheckboxWrapper = styled.div`
+    .styled-checkbox:checked + .styled-checkboxlabel:before {
+      background-color: ${customColorTheme};
+    }
+  `;
+
   return (
     <div className={submoduleIsHidden ? 'print-hidden' : 'chart-module'}>
       <div className="report-top-toolbar">
@@ -290,22 +301,25 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
               />
             )}
           </div>
-          <div className="layer-checkbox">
-            <input
-              type="checkbox"
-              name="styled-checkbox"
-              className="styled-checkbox"
-              id={`layer-checkbox-${translatedLabel}`}
-              checked={!submoduleIsHidden}
-              onChange={(): void => setSubmoduleIsHidden(!submoduleIsHidden)}
-            />
-            <label
-              className="styled-checkboxlabel"
-              htmlFor={`layer-checkbox-${translatedLabel}`}
-            >
-              {'a'}
-            </label>
-          </div>
+
+          <CheckboxWrapper>
+            <div className="layer-checkbox">
+              <input
+                type="checkbox"
+                name="styled-checkbox"
+                className="styled-checkbox"
+                id={`layer-checkbox-${translatedLabel}`}
+                checked={!submoduleIsHidden}
+                onChange={(): void => setSubmoduleIsHidden(!submoduleIsHidden)}
+              />
+              <label
+                className="styled-checkboxlabel"
+                htmlFor={`layer-checkbox-${translatedLabel}`}
+              >
+                {'a'}
+              </label>
+            </div>
+          </CheckboxWrapper>
         </div>
       </div>
       <div
@@ -334,6 +348,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           {currentAnalysis?.uiParams !== 'none' && (
             <button
               className="orange-button"
+              style={{ backgroundColor: customColorTheme }}
               onClick={(): void => setForceRender()}
             >
               {analysisTranslations.runAnalysisButton[language]}

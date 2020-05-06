@@ -10,6 +10,7 @@ import 'css/layer-toggle-checkbox.scss';
 import RecentImagery from './RecentImagery/RecentImageryModal';
 import { format } from 'date-fns';
 import { mapController } from 'js/controllers/mapController';
+import styled from 'styled-components';
 
 interface LayerGroupProps {
   layerGroupKey: string;
@@ -27,6 +28,9 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     id?: string;
   }
   const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
+    const customColorTheme = useSelector(
+      (store: RootState) => store.appSettings.customColorTheme
+    );
     const dispatch = useDispatch();
     const openInfoModal = (): void => {
       if (props.id) {
@@ -57,7 +61,10 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     return (
       <>
         <div className="layers-control-checkbox">
-          <ImageryLayerSwitch layerID={props.id} />
+          <ImageryLayerSwitch
+            layerID={props.id}
+            customColorTheme={customColorTheme}
+          />
           <div className="title-wrapper">
             <span className="layer-label">
               {props.info?.label[props.selectedLanguage]}
@@ -68,6 +75,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <button
+              style={{ border: `1px solid ${customColorTheme}` }}
               className="imagery-edit-button"
               onClick={(): void => setImageryModalOpen(true)}
             >
@@ -90,6 +98,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   interface ImageryToggleProps {
     layerID?: string;
+    customColorTheme: string;
   }
   const ImageryLayerSwitch = (props: ImageryToggleProps): JSX.Element => {
     let imageryLayer: any;
@@ -119,23 +128,32 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
       }
     };
 
+    //Override speudo element styling with our custom style
+    const CheckboxWrapper = styled.div`
+      .styled-checkbox:checked + .styled-checkboxlabel:before {
+        background-color: ${props.customColorTheme};
+      }
+    `;
+
     return (
-      <div className="layer-checkbox imagery">
-        <input
-          type="checkbox"
-          name="styled-checkbox"
-          className="styled-checkbox"
-          id={`layer-checkbox-${props.layerID}`}
-          checked={toggleIsOn}
-          onChange={handleImagerySwitch}
-        />
-        <label
-          className="styled-checkboxlabel"
-          htmlFor={`layer-checkbox-${props.layerID}`}
-        >
-          {props.layerID}
-        </label>
-      </div>
+      <CheckboxWrapper>
+        <div className="layer-checkbox imagery">
+          <input
+            type="checkbox"
+            name="styled-checkbox"
+            className="styled-checkbox"
+            id={`layer-checkbox-${props.layerID}`}
+            checked={toggleIsOn}
+            onChange={handleImagerySwitch}
+          />
+          <label
+            className="styled-checkboxlabel"
+            htmlFor={`layer-checkbox-${props.layerID}`}
+          >
+            {props.layerID}
+          </label>
+        </div>
+      </CheckboxWrapper>
     );
   };
 

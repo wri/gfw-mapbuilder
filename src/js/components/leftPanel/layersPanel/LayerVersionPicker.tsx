@@ -25,6 +25,9 @@ export const LayerVersionPicker = (
   const allAvailableLayers = useSelector(
     (store: RootState) => store.mapviewState.allAvailableLayers
   );
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const { layerInfo, selectedLanguage } = props;
   const [activeVersion, setActiveVersion] = React.useState(
     layerInfo.versions[0].label[selectedLanguage]
@@ -110,6 +113,7 @@ export const LayerVersionPicker = (
     <div className="layer-version-picker-container">
       <p>{layerInfo.versionHeaderText[selectedLanguage]}</p>
       <select
+        style={{ border: `1px solid ${customColorTheme}` }}
         className="date-time-toggle"
         onChange={handleLayerVersionChange}
         value={activeVersion}

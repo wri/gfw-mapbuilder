@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'js/store/index';
 import { useState } from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 
@@ -13,6 +15,10 @@ const SliderWithTooltip = createSliderWithTooltip(Slider);
 const ImageryLayerTransparencySlider = (
   props: LayerTransparencyProps
 ): React.ReactElement => {
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
+
   const { layerID } = props;
   const [opacity, setOpacity] = useState(1);
   const handleOpacityChange = (eventValue: any): void => {
@@ -45,16 +51,16 @@ const ImageryLayerTransparencySlider = (
         tipFormatter={(val: number): string => `${val * 100}%`}
         onChange={handleOpacityChange}
         railStyle={{ height: 5, backgroundColor: '#e9e9e9' }}
-        trackStyle={{ backgroundColor: 'rgb(240, 171, 0)', height: 5 }}
+        trackStyle={{ backgroundColor: `${customColorTheme}`, height: 5 }}
         dotStyle={{
-          border: `2px solid rgb(240, 171, 0)`,
+          border: `2px solid ${customColorTheme}`,
           height: 10,
           width: 10,
           bottom: -6
         }}
         handleStyle={[
           {
-            border: `2px solid rgb(240, 171, 0)`,
+            border: `2px solid ${customColorTheme}`,
             height: 15,
             width: 15
           }

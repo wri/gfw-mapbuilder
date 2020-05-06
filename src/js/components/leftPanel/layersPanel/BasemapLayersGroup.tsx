@@ -50,10 +50,6 @@ const BaseLayerControlLandsat = (props: any): JSX.Element => {
     backgroundRepeat: 'no-repeat center'
   };
 
-  const colorTheme = props.customColorTheme?.length
-    ? props.customColorTheme
-    : '#f0ab00';
-
   return (
     <div className="layer-basemap landsat">
       <span
@@ -67,7 +63,7 @@ const BaseLayerControlLandsat = (props: any): JSX.Element => {
       <select
         value={selectedYear}
         onChange={handleYearSelection}
-        style={{ border: `1px solid ${colorTheme}` }}
+        style={{ border: `1px solid ${props.customColorTheme}` }}
         className="landsat-years"
       >
         {yearsOptions}

@@ -102,6 +102,9 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const { timeSlider } = useSelector((store: RootState) => store.mapviewState);
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const [marks, setMarks] = useState(defaultMarks);
 
   useEffect(() => {
@@ -183,7 +186,10 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   return (
     <div className="time-slider-container">
       {playButton ? (
-        <button onClick={(): void => playOrPauseTimeSlider(true)}>
+        <button
+          style={{ color: customColorTheme }}
+          onClick={(): void => playOrPauseTimeSlider(true)}
+        >
           &#9658;
         </button>
       ) : (
@@ -201,12 +207,12 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         dots={true}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
-        handleStyle={[{ borderColor: 'rgb(240, 171, 0)' }]}
+        handleStyle={[{ borderColor: customColorTheme }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: '1px solid #F0AB00'
+          border: `1px solid ${customColorTheme}`
         }}
-        trackStyle={[{ backgroundColor: 'rgb(240, 171, 0)' }]}
+        trackStyle={[{ backgroundColor: customColorTheme }]}
         className={playButton ? '' : 'playing'}
         onChange={(value: Array<number>): void => setSelectedRange(value)}
       />

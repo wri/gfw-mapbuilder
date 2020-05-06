@@ -13,6 +13,9 @@ interface DateRangeProps {
 const getTodayDate = format(new Date(Date.now()), 'yyyy-MM-dd');
 
 const DateRange = (props: DateRangeProps): JSX.Element => {
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const modisStart = useSelector(
     (store: RootState) => store.appState.leftPanel.modisStart
   );
@@ -71,6 +74,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
       >
         <select
           className="date-time-toggle"
+          style={{ border: `1px solid ${customColorTheme}` }}
           onChange={(e): void => setDefinedDateRange(e)}
           value={definedRange.length ? definedRange : '24 hrs'}
         >
@@ -81,6 +85,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         </select>
         <button
           className="date-time-toggle"
+          style={{ border: `1px solid ${customColorTheme}` }}
           onClick={(): void => setCustomRange()}
         >
           Custom Range
@@ -91,6 +96,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               <label htmlFor="start-date">Start:</label>
               <input
                 className="date-time-toggle input"
+                style={{ border: `1px solid ${customColorTheme}` }}
                 type="date"
                 value={startDate}
                 min="2018-01-01"
@@ -102,6 +108,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               <label htmlFor="end-date">End:</label>
               <input
                 className="date-time-toggle input"
+                style={{ border: `1px solid ${customColorTheme}` }}
                 type="date"
                 value={endDate}
                 min="2018-01-01"

@@ -19,6 +19,9 @@ interface ImageryProps {
 const getTodayDate = new Date().toISOString().split('T')[0];
 
 const RecentImagery = (props: ImageryProps): JSX.Element => {
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const { selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
@@ -182,6 +185,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
             <MonthSelector
               lang={selectedLanguage}
               monthRange={monthRange}
+              customColorTheme={customColorTheme}
               changeMonthHandler={(e: any): void =>
                 setMonthRange(e.target.value)
               }
@@ -191,6 +195,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
               todayDate={getTodayDate}
               day={day}
               setDay={(val: string): void => setDay(val)}
+              customColorTheme={customColorTheme}
             />
           </div>
         </div>
@@ -199,6 +204,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
             {imageryText[selectedLanguage].cloudPercentage}˝
           </p>
           <CloudSlider
+            customColorTheme={customColorTheme}
             cloudRange={cloudRange}
             handleSliderChange={(val: number[]): void => setCloudRange(val)}
           />
@@ -220,6 +226,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
           imageryStyle={imageryStyle}
           lang={selectedLanguage}
           changeStyleHandler={handleImageryStyleChange}
+          customColorTheme={customColorTheme}
         />
       </div>
       <div className="imagery-thumbnails">
@@ -228,6 +235,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
             tiles={recentTiles}
             handleHover={handleTileHover}
             cloudCoverRange={cloudRange}
+            customColorTheme={customColorTheme}
           />
         ) : (
           <p>Loading data</p>

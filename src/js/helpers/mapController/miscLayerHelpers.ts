@@ -101,7 +101,8 @@ export async function extractWebmapLayerObjects(
     } else {
       //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
       legendInfo = layer.layerId
-        ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId).legend
+        ? legendInfo?.layers?.find((l: any) => l.layerId === layer.layerId)
+            .legend
         : legendInfo;
       const {
         id,

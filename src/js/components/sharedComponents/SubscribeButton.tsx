@@ -26,11 +26,9 @@ export const SubscribeButton = (): JSX.Element => {
     //
   }
 
-  const colorTheme = customColorTheme?.length ? customColorTheme : '#f0ab00';
-
   return (
     <button
-      style={{ border: `1px solid ${colorTheme}` }}
+      style={{ border: `1px solid ${customColorTheme}` }}
       className="subscribe-button"
       onClick={subscribeHandler}
     >
