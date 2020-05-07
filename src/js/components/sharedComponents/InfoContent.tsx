@@ -8,22 +8,21 @@ import { downloadData } from '../../../../configs/modal.config';
 
 const getMetadata = async (layer: any): Promise<any> => {
   let content: any;
-  const metadataURL = `${layer.url}/info/metadata`;
+  const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
+  const layerMetadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
-  const results = convert.xml2js(xmlResults);
-
-  const element = results.elements[0].elements.find(
-    (element: any) => element.name === 'dataIdInfo'
-  );
-
-  const elementNames = element.elements.map((element: any) => element.name);
-
-  const metadataExists =
-    elementNames.includes('idCitation') &&
-    elementNames.includes('idAbs') &&
-    elementNames.includes('idPurp');
+  const layerXMLResults = await fetch(layerMetadataURL).then(res => res.text());
+  const metadataExists = !xmlResults.includes('Error');
+  const layerMetadataExists =
+    !layerXMLResults.includes('Error') &&
+    !layerXMLResults.includes('invalid request');
 
   if (metadataExists) {
+    const results = convert.xml2js(xmlResults);
+    const element = results.elements[0].elements.find(
+      (element: any) => element.name === 'dataIdInfo'
+    );
+
     const title = element.elements
       .find((element: any) => element.name === 'idCitation')
       .elements.find((subElement: any) => subElement.name === 'resTitle')
@@ -40,9 +39,35 @@ const getMetadata = async (layer: any): Promise<any> => {
       functionOrPurpose,
       overview
     };
+  } else if (layerMetadataExists) {
+    const results = convert.xml2js(layerXMLResults);
+    const element = results.elements[0].elements.find(
+      (element: any) => element.name === 'dataIdInfo'
+    );
 
-    return content;
+    const title = element.elements
+      .find((element: any) => element.name === 'idCitation')
+      .elements.find((subElement: any) => subElement.name === 'resTitle')
+      .elements[0].text;
+    const overview = element.elements.find(
+      (element: any) => element.name === 'idAbs'
+    ).elements[0].text;
+    const functionOrPurpose = element.elements.find(
+      (element: any) => element.name === 'idPurp'
+    ).elements[0].text;
+
+    content = {
+      title,
+      functionOrPurpose,
+      overview
+    };
+  } else {
+    content = {
+      error: 'Information Unavailable'
+    };
   }
+
+  return content;
 };
 
 //Extracting INFO from WebMaps
@@ -106,29 +131,7 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
           copyrightText: results.copyrightText
         };
       });
-
-    // // ? what are we using to determine when to fetch
-    // // ? by portalItemID vs layer.url?
-
-    // if (
-    //   content.description.length === 0 ||
-    //   content.copyrightText.length === 0
-    // ) {
-    //   content = await fetch(
-    //     `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
-    //   )
-    //     .then(res => res.json())
-    //     .then(results => {
-    //       return {
-    //         description: results.description,
-    //         copyrightText: results.copyrightText
-    //       };
-    //     });
-    // }
   }
-
-  // TODO [ ] if the layer was added to the map via URL, use metadata
-  console.log('LAYA', layer);
 
   return content;
 };
@@ -137,6 +140,7 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
 const getServiceGroupContent = async (technicalName: string): Promise<any> => {
   // const technicalName = 'recent_satellite_imagery';
   const baseURL = 'https://gis-gfw.wri.org/metadata';
+
   const metaURL = `${baseURL}/${technicalName}`;
   return await fetch(metaURL)
     .then(res => res.json())
@@ -175,7 +179,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         setContent(results);
         setDataLoading(false);
       } else {
-        // * grab metadata from Arcgis
+        // * else grab metadata from Arcgis
         const results = await getMetadata(layer);
         setContent(results);
         setDataLoading(false);
@@ -232,7 +236,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
         </div>
       );
-    } else {
+    } else if (content.copyrightText) {
       // * return description & summary
       const { description, copyrightText } = content;
 
@@ -263,11 +267,14 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
         </>
       );
+    } else {
+      console.warn('edge case in returnWebmapGroupContent()');
+      return undefined;
     }
   };
 
   const returnOtherGroupContent = (): JSX.Element | undefined => {
-    if (content.function) {
+    if (content && content.function) {
       // * if metadata cam from GFW metadata API
       const {
         resolution,
@@ -376,9 +383,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           )}
         </>
       );
-    }
-
-    if (content.functionOrPurpose) {
+    } else if (content && content.functionOrPurpose) {
       // * if content came from metadata from GFW/ArcGIS endpount
 
       const { title, functionOrPurpose, overview } = content;
@@ -405,6 +410,17 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
         </>
       );
+    } else if (content.error) {
+      return (
+        <>
+          <div className="header">
+            <h2>{content.error}</h2>
+          </div>
+        </>
+      );
+    } else {
+      console.warn('edge case in returnOtherGroupContent()');
+      return undefined;
     }
   };
 
