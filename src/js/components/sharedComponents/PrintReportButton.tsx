@@ -24,13 +24,13 @@ export const PrintReportButton = (): JSX.Element => {
 
   async function printReportHandler(): Promise<void> {
     const appID = new URL(window.location.href).searchParams.get('appid');
-    //Get the base and state urls
-    const baseUrl = new URL(window.location.href);
+    const baseURL = new URL(window.location.href);
+    let combinedReportURL = baseURL.origin + baseURL.pathname;
     const stateUrl = await getShareableURL({ report: true });
-    const urlVal = appID
-      ? `${baseUrl.href}&${stateUrl}`
-      : `${baseUrl}?${stateUrl}`;
-    window.open(urlVal);
+    combinedReportURL = appID
+      ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
+      : combinedReportURL + '?' + stateUrl;
+    window.open(combinedReportURL);
   }
 
   return (
