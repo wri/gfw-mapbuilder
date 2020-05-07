@@ -21,7 +21,7 @@ interface ContentError {
 type Content = MetadataContent | ContentError;
 
 const getMetadata = async (layer: any): Promise<any> => {
-  let content: Content;
+  let content: any;
   const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const layerMetadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
@@ -53,7 +53,8 @@ const getMetadata = async (layer: any): Promise<any> => {
       functionOrPurpose,
       overview
     };
-  } else if (layerMetadataExists) {
+  }
+  if (!metadataExists && layerMetadataExists) {
     const results = convert.xml2js(layerXMLResults);
     const element = results.elements[0].elements.find(
       (element: any) => element.name === 'dataIdInfo'
@@ -75,10 +76,6 @@ const getMetadata = async (layer: any): Promise<any> => {
       functionOrPurpose,
       overview
     };
-  } else {
-    content = {
-      error: 'Information Unavailable'
-    };
   }
 
   return content;
@@ -86,7 +83,7 @@ const getMetadata = async (layer: any): Promise<any> => {
 
 //Extracting INFO from WebMaps
 const getWebmapGroupContent = async (layer: any): Promise<MetadataContent> => {
-  let content: MetadataContent;
+  let content: any;
   const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
 
@@ -133,23 +130,39 @@ const getWebmapGroupContent = async (layer: any): Promise<MetadataContent> => {
       };
     }
   } else {
-    // * ELSE, use the description and summary instead
-    const results = await fetch(
-      `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
-    )
-      .then(res => res.json())
-      .then(results => {
-        return {
-          description: results.description,
-          copyrightText: results.copyrightText,
-          tags: results.tags
-        };
-      });
+    // * if portalItemID exists, fetch info w/ it
 
-    content = results;
+    if (layer.portalItemID) {
+      const results = await fetch(
+        `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
+      )
+        .then(res => res.json())
+        .then(results => {
+          return {
+            description: results.description,
+            copyrightText: results.copyrightText,
+            tags: results.tags
+          };
+        });
+
+      content = results;
+    } else {
+      // * ELSE, fetch info via layer URL
+
+      const results = await fetch(`${layer.url}/?f=pjson`)
+        .then(res => res.json())
+        .then(results => {
+          return {
+            description: results.description,
+            copyrightText: results.copyrightText
+          };
+        });
+
+      content = results;
+    }
   }
 
-  return content;
+  return content as MetadataContent;
 };
 
 //Extracting info from Service Layers with technicalName
@@ -255,9 +268,8 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           )}
         </div>
       );
-    } else if (content.description) {
+    } else if (content.description || content.copyrightText || content.tags) {
       // * return description & summary/copyright & tags
-      const { tags, description, copyrightText } = content;
 
       return (
         <>
@@ -266,22 +278,22 @@ const InfoContent: FunctionComponent<{}> = (): any => {
             <>
               <table>
                 <tbody>
-                  {description && (
+                  {content.description && (
                     <tr>
                       <td className="label">Description</td>
-                      <td className="label-info">{description}</td>
+                      <td className="label-info">{content.description}</td>
                     </tr>
                   )}
-                  {copyrightText && (
+                  {content.copyrightText && (
                     <tr>
                       <td className="label">License</td>
-                      <td className="label-info">{copyrightText}</td>
+                      <td className="label-info">{content.copyrightText}</td>
                     </tr>
                   )}
-                  {tags && (
+                  {content.tags && (
                     <tr>
                       <td className="label">tags</td>
-                      <td className="label-info">{tags}</td>
+                      <td className="label-info">{content.tags}</td>
                     </tr>
                   )}
                 </tbody>
@@ -291,8 +303,16 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         </>
       );
     } else {
-      console.warn('edge case in returnWebmapGroupContent()');
-      return undefined;
+      console.warn('potential edge case in returnWebmapGroupContent()', layer);
+
+      return (
+        <>
+          <div className="header">
+            <h2>{layer.title}</h2>
+            <h3>No information available</h3>
+          </div>
+        </>
+      );
     }
   };
 
@@ -439,17 +459,16 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
         </>
       );
-    } else if (content.error) {
+    } else {
+      console.warn('potential edge case in returnOtherGroupContent()', layer);
       return (
         <>
           <div className="header">
-            <h2>{content.error}</h2>
+            <h2>{layer.title}</h2>
+            <h3>No information available</h3>
           </div>
         </>
       );
-    } else {
-      console.warn('edge case in returnOtherGroupContent()');
-      return undefined;
     }
   };
 

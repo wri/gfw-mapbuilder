@@ -119,8 +119,8 @@ export class MapController {
 
     this._map = new WebMap({
       portalItem: {
-        // id: webmapID
-        id: 'a81c9f897c7041d59f1076687d2bde16'
+        id: webmapID
+        // id: 'a81c9f897c7041d59f1076687d2bde16' // * Christina's test app ID
       }
     });
 

@@ -142,22 +142,40 @@ export async function extractWebmapLayerObjects(
           maxScale,
           minScale
         } = layer;
-        mapLayerObjects.push({
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          group: 'webmap',
-          type: 'webmap',
-          origin: 'webmap',
-          url,
-          maxScale,
-          minScale,
-          sublayer: false,
-          legendInfo,
-          portalItemID: layer.portalItem.id
-        });
+        if (layer.portalItem) {
+          mapLayerObjects.push({
+            id,
+            title,
+            opacity,
+            visible,
+            definitionExpression,
+            group: 'webmap',
+            type: 'webmap',
+            origin: 'webmap',
+            url,
+            maxScale,
+            minScale,
+            sublayer: false,
+            legendInfo,
+            portalItemID: layer.portalItem.id
+          });
+        } else {
+          mapLayerObjects.push({
+            id,
+            title,
+            opacity,
+            visible,
+            definitionExpression,
+            group: 'webmap',
+            type: 'webmap',
+            origin: 'webmap',
+            url,
+            maxScale,
+            minScale,
+            sublayer: false,
+            legendInfo
+          });
+        }
       }
     }
   }
