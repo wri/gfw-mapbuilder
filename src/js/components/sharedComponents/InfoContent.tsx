@@ -48,25 +48,21 @@ const getMetadata = async (layer: any): Promise<any> => {
 //Extracting INFO from WebMaps
 const getWebmapGroupContent = async (layer: any): Promise<any> => {
   let content: any;
-  const metadataURL = `${layer.url}/info/metadata`;
+  const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
+  // const metadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
-  const results = convert.xml2js(xmlResults);
 
-  const element = results.elements[0].elements.find(
-    (element: any) => element.name === 'dataIdInfo'
-  );
-  const elementNames = element.elements.map((element: any) => element.name);
-  const metadataExists =
-    elementNames.includes('idCitation') &&
-    elementNames.includes('idAbs') &&
-    elementNames.includes('idPurp') &&
-    elementNames.includes('dataExt');
+  const metadataExists = !xmlResults.includes('Error');
 
-  if (xmlResults && metadataExists) {
+  if (metadataExists) {
     // * IF metadata exists from ArcGIS, use it!
-    // const subElement = element.elements.find(
-    //   (element: any) => element.name === 'idCitation'
-    // );
+    const results = convert.xml2js(xmlResults);
+
+    const element = results.elements[0].elements.find(
+      (element: any) => element.name === 'dataIdInfo'
+    );
+
+    const elementNames = element.elements.map((element: any) => element.name);
 
     const title = element.elements
       .find((element: any) => element.name === 'idCitation')
@@ -78,20 +74,31 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
     const functionOrPurpose = element.elements.find(
       (element: any) => element.name === 'idPurp'
     ).elements[0].text;
-    const geographicCoverage = element.elements
-      .find((element: any) => element.name === 'dataExt')
-      .elements.find((subElement: any) => subElement.name === 'exDesc')
-      .elements[0].text;
 
-    content = {
-      title,
-      functionOrPurpose,
-      geographicCoverage,
-      overview
-    };
+    if (elementNames.includes('dataExt')) {
+      const geographicCoverage = element.elements
+        .find((element: any) => element.name === 'dataExt')
+        .elements.find((subElement: any) => subElement.name === 'exDesc')
+        .elements[0].text;
+
+      content = {
+        title,
+        functionOrPurpose,
+        geographicCoverage,
+        overview
+      };
+    } else {
+      content = {
+        title,
+        functionOrPurpose,
+        overview
+      };
+    }
   } else {
     // * ELSE, use the description and summary instead
-    content = await fetch(`${layer.url}/?f=pjson`)
+    content = await fetch(
+      `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
+    )
       .then(res => res.json())
       .then(results => {
         return {
@@ -100,25 +107,28 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
         };
       });
 
-    // ? what are we using to determine when to fetch
-    // ? by portalItemID vs layer.url?
+    // // ? what are we using to determine when to fetch
+    // // ? by portalItemID vs layer.url?
 
-    if (
-      content.description.length === 0 ||
-      content.copyrightText.length === 0
-    ) {
-      content = await fetch(
-        `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
-      )
-        .then(res => res.json())
-        .then(results => {
-          return {
-            description: results.description,
-            copyrightText: results.copyrightText
-          };
-        });
-    }
+    // if (
+    //   content.description.length === 0 ||
+    //   content.copyrightText.length === 0
+    // ) {
+    //   content = await fetch(
+    //     `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
+    //   )
+    //     .then(res => res.json())
+    //     .then(results => {
+    //       return {
+    //         description: results.description,
+    //         copyrightText: results.copyrightText
+    //       };
+    //     });
+    // }
   }
+
+  // TODO [ ] if the layer was added to the map via URL, use metadata
+  console.log('LAYA', layer);
 
   return content;
 };
@@ -178,6 +188,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       setDataLoading(false);
     };
 
+    console.log('LAYER!!!', layer);
     if (layer.type === 'webmap') {
       getWebmapContent();
     } else if (layer.origin === 'service') {
@@ -206,10 +217,12 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                   <td className="label">Function</td>
                   <td className="label-info">{functionOrPurpose}</td>
                 </tr>
-                <tr>
-                  <td className="label">Geographic Coverage</td>
-                  <td className="label-info">{geographicCoverage}</td>
-                </tr>
+                {geographicCoverage && (
+                  <tr>
+                    <td className="label">Geographic Coverage</td>
+                    <td className="label-info">{geographicCoverage}</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </>
