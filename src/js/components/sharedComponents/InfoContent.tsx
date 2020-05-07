@@ -6,8 +6,22 @@ import { RootState } from 'js/store';
 
 import { downloadData } from '../../../../configs/modal.config';
 
+interface MetadataContent {
+  title?: string;
+  functionOrPurpose?: string;
+  geographicCoverage?: string;
+  tags?: string;
+  overview?: string;
+}
+
+interface ContentError {
+  error: string;
+}
+
+type Content = MetadataContent | ContentError;
+
 const getMetadata = async (layer: any): Promise<any> => {
-  let content: any;
+  let content: Content;
   const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const layerMetadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
@@ -71,10 +85,9 @@ const getMetadata = async (layer: any): Promise<any> => {
 };
 
 //Extracting INFO from WebMaps
-const getWebmapGroupContent = async (layer: any): Promise<any> => {
-  let content: any;
+const getWebmapGroupContent = async (layer: any): Promise<MetadataContent> => {
+  let content: MetadataContent;
   const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
-  // const metadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
 
   const metadataExists = !xmlResults.includes('Error');
@@ -121,16 +134,19 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
     }
   } else {
     // * ELSE, use the description and summary instead
-    content = await fetch(
+    const results = await fetch(
       `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
     )
       .then(res => res.json())
       .then(results => {
         return {
           description: results.description,
-          copyrightText: results.copyrightText
+          copyrightText: results.copyrightText,
+          tags: results.tags
         };
       });
+
+    content = results;
   }
 
   return content;
@@ -138,10 +154,9 @@ const getWebmapGroupContent = async (layer: any): Promise<any> => {
 
 //Extracting info from Service Layers with technicalName
 const getServiceGroupContent = async (technicalName: string): Promise<any> => {
-  // const technicalName = 'recent_satellite_imagery';
   const baseURL = 'https://gis-gfw.wri.org/metadata';
-
   const metaURL = `${baseURL}/${technicalName}`;
+
   return await fetch(metaURL)
     .then(res => res.json())
     .then(results => {
@@ -167,6 +182,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
       const results = await getWebmapGroupContent(layer);
+
       setContent(results);
       setDataLoading(false);
     };
@@ -192,7 +208,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       setDataLoading(false);
     };
 
-    console.log('LAYER!!!', layer);
     if (layer.type === 'webmap') {
       getWebmapContent();
     } else if (layer.origin === 'service') {
@@ -217,10 +232,12 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           <>
             <table>
               <tbody>
-                <tr>
-                  <td className="label">Function</td>
-                  <td className="label-info">{functionOrPurpose}</td>
-                </tr>
+                {functionOrPurpose && (
+                  <tr>
+                    <td className="label">Function</td>
+                    <td className="label-info">{functionOrPurpose}</td>
+                  </tr>
+                )}
                 {geographicCoverage && (
                   <tr>
                     <td className="label">Geographic Coverage</td>
@@ -230,40 +247,46 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               </tbody>
             </table>
           </>
-          <div className="overview-container">
-            <h3>Overview</h3>
-            <div dangerouslySetInnerHTML={{ __html: overview }} />
-          </div>
+          {overview && (
+            <div className="overview-container">
+              <h3>Overview</h3>
+              <div dangerouslySetInnerHTML={{ __html: overview }} />
+            </div>
+          )}
         </div>
       );
-    } else if (content.copyrightText) {
-      // * return description & summary
-      const { description, copyrightText } = content;
+    } else if (content.description) {
+      // * return description & summary/copyright & tags
+      const { tags, description, copyrightText } = content;
 
       return (
         <>
           <div className="header">
             <h2>{layer.title}</h2>
-            {description.length || copyrightText.length ? (
-              <>
-                <table>
-                  <tbody>
+            <>
+              <table>
+                <tbody>
+                  {description && (
                     <tr>
                       <td className="label">Description</td>
                       <td className="label-info">{description}</td>
                     </tr>
+                  )}
+                  {copyrightText && (
                     <tr>
                       <td className="label">License</td>
                       <td className="label-info">{copyrightText}</td>
                     </tr>
-                  </tbody>
-                </table>
-              </>
-            ) : (
-              <>
-                <h3>No information available</h3>
-              </>
-            )}
+                  )}
+                  {tags && (
+                    <tr>
+                      <td className="label">tags</td>
+                      <td className="label-info">{tags}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </>
           </div>
         </>
       );
@@ -366,10 +389,12 @@ const InfoContent: FunctionComponent<{}> = (): any => {
             <h3>Overview</h3>
             <div dangerouslySetInnerHTML={{ __html: overview }} />
           </div>
-          <div className="citation-container">
-            <h4>Citation</h4>
-            <div dangerouslySetInnerHTML={{ __html: citation }} />
-          </div>
+          {citation && (
+            <div className="citation-container">
+              <h4>Citation</h4>
+              <div dangerouslySetInnerHTML={{ __html: citation }} />
+            </div>
+          )}
           {download_data && (
             <div className="button-container">
               <a href={download_data} target="_blank" rel="noopener noreferrer">
@@ -384,7 +409,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         </>
       );
     } else if (content && content.functionOrPurpose) {
-      // * if content came from metadata from GFW/ArcGIS endpount
+      // * if content came from metadata from GFW/ArcGIS endpoint
 
       const { title, functionOrPurpose, overview } = content;
 
@@ -394,19 +419,23 @@ const InfoContent: FunctionComponent<{}> = (): any => {
             <h2>{title}</h2>
             <table>
               <tbody>
-                <tr>
-                  <td className="label">Function</td>
-                  <td
-                    className="label-info"
-                    dangerouslySetInnerHTML={{ __html: functionOrPurpose }}
-                  />
-                </tr>
+                {functionOrPurpose && (
+                  <tr>
+                    <td className="label">Function</td>
+                    <td
+                      className="label-info"
+                      dangerouslySetInnerHTML={{ __html: functionOrPurpose }}
+                    />
+                  </tr>
+                )}
               </tbody>
             </table>
-            <div className="overview-container">
-              <h3>Overview</h3>
-              <div dangerouslySetInnerHTML={{ __html: overview }} />
-            </div>
+            {overview && (
+              <div className="overview-container">
+                <h3>Overview</h3>
+                <div dangerouslySetInnerHTML={{ __html: overview }} />
+              </div>
+            )}
           </div>
         </>
       );
