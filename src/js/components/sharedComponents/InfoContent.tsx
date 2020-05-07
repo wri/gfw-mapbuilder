@@ -208,7 +208,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         setContent(results);
         setDataLoading(false);
       } else {
-        // * else grab metadata from Arcgis
+        // * else conditionally grab metadata from 2 locations
         const results = await getMetadata(layer);
         setContent(results);
         setDataLoading(false);
