@@ -1,6 +1,9 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { renderModal } from 'js/store/appState/actions';
 import { RootState } from 'js/store/index';
+
 import 'css/subscribeButton.scss';
 
 const subscribeButtonTranslations = {
@@ -14,6 +17,7 @@ const subscribeButtonTranslations = {
 };
 
 export const SubscribeButton = (): JSX.Element => {
+  const dispatch = useDispatch();
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
@@ -26,13 +30,11 @@ export const SubscribeButton = (): JSX.Element => {
     //
   }
 
-  const colorTheme = customColorTheme?.length ? customColorTheme : '#f0ab00';
-
   return (
     <button
-      style={{ border: `1px solid ${colorTheme}` }}
+      style={{ border: `1px solid ${customColorTheme}` }}
       className="subscribe-button"
-      onClick={subscribeHandler}
+      onClick={(): any => dispatch(renderModal('AlertCarousel'))}
     >
       {subscribeButtonTranslations[selectedLanguage]}{' '}
       <div className="subscribe-icon"></div>

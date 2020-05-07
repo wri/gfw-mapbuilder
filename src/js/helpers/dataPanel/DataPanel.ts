@@ -58,7 +58,7 @@ async function fetchQueryTask(
     where: '1=1',
     outFields: ['*'],
     units: 'miles',
-    distance: 0.02 * mapview.resolution,
+    distance: 0.01 * mapview.resolution, //reduce the distance if you want more precision
     geometry: event.mapPoint,
     returnGeometry: true
   };
@@ -171,7 +171,6 @@ export async function queryLayersForFeatures(
   event: __esri.MapViewClickEvent
 ): Promise<void> {
   const layerFeatureResults: LayerFeatureResult[] = [];
-
   //TODO: This is where we would add exceptions to layers (e.g. TREE_COVER_LOSS/GAIN should not be querable etc)
   // we need exhaustive list here!
   const allLayersVisibleLayers: any = map?.layers
@@ -183,7 +182,6 @@ export async function queryLayersForFeatures(
         l.type !== 'imagery' &&
         l.id !== 'MASK'
     )
-    .filter((l: any) => layerIsInScale(l, mapview.scale))
     .toArray();
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {

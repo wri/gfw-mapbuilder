@@ -207,7 +207,6 @@
         color: rgb(111, 111, 111);
 
         span {
-          border-top: 1px solid $base-yellow;
           width: 7rem;
           margin-top: auto;
           margin-bottom: auto;
@@ -538,6 +537,10 @@
     display: flex;
     justify-content: space-between;
     padding: 1rem;
+    .label-wrapper {
+      display: flex;
+    }
+
     .radio-container {
       $primary-color: rgb(234, 125, 68);
       $secondary-color: rgb(102, 102, 102);
@@ -706,7 +709,6 @@
 }
 
 .info-icon-container {
-  background-color: #f0ab00;
   border-radius: 50%;
   width: 16px;
   height: 16px;
@@ -928,14 +930,10 @@
       border-radius: 35px;
       line-height: 25px;
       padding: 0 1rem;
-      background-color: $base-yellow;
       cursor: pointer;
-      color: #fff;
     }
     .attribute-page-button.disabled {
-      background-color: rgb(238, 238, 238);
       cursor: disabled;
-      color: #555;
     }
   }
 }

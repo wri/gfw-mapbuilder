@@ -20,11 +20,17 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
   );
-  const { activeFeatures, activeFeatureIndex } = useSelector(
-    (store: RootState) => store.mapviewState
+  const activeFeatures = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatures
   );
-  const { selectedLanguage } = useSelector(
-    (state: RootState) => state.appState
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
+  );
+  const selectedLanguage = useSelector(
+    (state: RootState) => state.appState.selectedLanguage
+  );
+  const customColorTheme = useSelector(
+    (state: RootState) => state.appSettings.customColorTheme
   );
 
   const { instructions, name, pdf, size } = documentsContent[selectedLanguage];
@@ -86,7 +92,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
               <td>{Math.round(size / 1000)} KB</td>
               <td>
                 <a href={url} target="_blank" rel="noopener noreferrer">
-                  <DocIcon height={20} width={20} fill={'#F0AB00'} />
+                  <DocIcon height={20} width={20} fill={customColorTheme} />
                 </a>
               </td>
             </tr>

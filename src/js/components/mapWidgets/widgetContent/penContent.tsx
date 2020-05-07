@@ -9,7 +9,7 @@ import { mapController } from 'js/controllers/mapController';
 
 import { penContent } from 'configs/modal.config';
 
-import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
+import { PolygonIcon } from 'images/PolygonIcon';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
 
@@ -20,6 +20,9 @@ const PenContent: FunctionComponent = () => {
 
   const selectedLanguage = useSelector(
     (state: any) => state.appState.selectedLanguage
+  );
+  const customColorTheme = useSelector(
+    (state: any) => state.appSettings.customColorTheme
   );
   const {
     drawTitle,
@@ -51,12 +54,15 @@ const PenContent: FunctionComponent = () => {
           </ol>
         </figure>
         <PolygonIcon
-          className="polygon-icon"
-          fill={'#fff'}
+          customColorTheme={customColorTheme}
           height={75}
           width={100}
         />
-        <button className="orange-button" onClick={() => setDrawTool()}>
+        <button
+          className="orange-button"
+          style={{ backgroundColor: customColorTheme }}
+          onClick={() => setDrawTool()}
+        >
           <PenIcon fill={'#000'} height={25} width={25} />
           {drawButton}
         </button>
@@ -73,6 +79,7 @@ const PenContent: FunctionComponent = () => {
         </figure>
         <button
           className="orange-button"
+          style={{ backgroundColor: customColorTheme }}
           onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
         >
           <PlusIcon fill={'#fff'} height={25} width={25} />

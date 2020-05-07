@@ -18,20 +18,27 @@ export const PrintReportButton = (): JSX.Element => {
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
 
   async function printReportHandler(): Promise<void> {
     const appID = new URL(window.location.href).searchParams.get('appid');
-    //Get the base and state urls
-    const baseUrl = new URL(window.location.href);
+    const baseURL = new URL(window.location.href);
+    let combinedReportURL = baseURL.origin + baseURL.pathname;
     const stateUrl = await getShareableURL({ report: true });
-    const urlVal = appID
-      ? `${baseUrl.href}&${stateUrl}`
-      : `${baseUrl}?${stateUrl}`;
-    window.open(urlVal);
+    combinedReportURL = appID
+      ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
+      : combinedReportURL + '?' + stateUrl;
+    window.open(combinedReportURL);
   }
 
   return (
-    <button className="print-button" onClick={printReportHandler}>
+    <button
+      className="print-button"
+      onClick={printReportHandler}
+      style={{ border: `1px solid ${customColorTheme}` }}
+    >
       {printReportTranslations[selectedLanguage]}{' '}
       <img src="https://my.gfw-mapbuilder.org/img/print-icon.svg" alt="print" />
     </button>

@@ -12,7 +12,8 @@ import BaseAnalysis from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 
 import { analysisContent } from 'configs/leftPanel.translations';
 
-import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
+// import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
+import { PolygonIcon } from 'images/PolygonIcon';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
 
@@ -38,6 +39,9 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   );
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
+  );
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
   );
 
   const {
@@ -110,9 +114,21 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
             )}
           </ol>
         </figure>
-        <PolygonIcon width={100} height={100} />
+        <PolygonIcon
+          width={100}
+          height={100}
+          customColorTheme={customColorTheme}
+        />
         <div className="span-wrapper">
-          <span className="left" /> Or <span className="right" />
+          <span
+            className="left"
+            style={{ borderTop: `1px solid ${customColorTheme}` }}
+          />{' '}
+          Or{' '}
+          <span
+            className="right"
+            style={{ borderBottom: `1px solid ${customColorTheme}` }}
+          />
         </div>
         <figure>
           <figcaption className="title">
@@ -128,6 +144,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </ol>
         </figure>
         <button
+          style={{ backgroundColor: customColorTheme }}
           className="orange-button"
           onClick={(): void => mapController.createPolygonSketch()}
         >
@@ -135,7 +152,15 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           {drawButton}
         </button>
         <div className="span-wrapper buffer">
-          <span className="left" /> Or <span className="right" />
+          <span
+            className="left"
+            style={{ borderTop: `1px solid ${customColorTheme}` }}
+          />{' '}
+          Or{' '}
+          <span
+            className="right"
+            style={{ borderBottom: `1px solid ${customColorTheme}` }}
+          />
         </div>
         <figure>
           <figcaption className="title">
@@ -150,6 +175,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </ol>
         </figure>
         <button
+          style={{ backgroundColor: customColorTheme }}
           className="orange-button"
           onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
         >
@@ -157,7 +183,15 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           {coordinatesButton}
         </button>
         <div className="span-wrapper buffer">
-          <span className="left" /> Or <span className="right" />
+          <span
+            className="left"
+            style={{ borderTop: `1px solid ${customColorTheme}` }}
+          />{' '}
+          Or{' '}
+          <span
+            className="right"
+            style={{ borderBottom: `1px solid ${customColorTheme}` }}
+          />
         </div>
         <div className="drop-shapefile-container">
           <h4>{returnVisitTitle()}</h4>

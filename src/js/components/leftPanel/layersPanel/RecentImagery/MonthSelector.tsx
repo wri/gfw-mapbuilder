@@ -5,6 +5,7 @@ interface MonthSelectorProps {
   changeMonthHandler: (val: any) => void;
   lang: string;
   monthRange: string;
+  customColorTheme: string;
 }
 
 export const MonthSelector = (props: MonthSelectorProps): JSX.Element => {
@@ -20,6 +21,7 @@ export const MonthSelector = (props: MonthSelectorProps): JSX.Element => {
   return (
     <select
       className="date-time-toggle imagery"
+      style={{ border: `1px solid ${props.customColorTheme}` }}
       onChange={props.changeMonthHandler}
       value={props.monthRange}
     >

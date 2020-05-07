@@ -10,6 +10,17 @@ import 'css/layer-toggle-checkbox.scss';
 import RecentImagery from './RecentImagery/RecentImageryModal';
 import { format } from 'date-fns';
 import { mapController } from 'js/controllers/mapController';
+import styled from 'styled-components';
+
+interface CheckBoxWrapperProps {
+  customColorTheme: string;
+}
+//Override speudo element styling with our custom style
+const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
+  .styled-checkbox:checked + .styled-checkboxlabel:before {
+    background-color: ${props => props.customColorTheme};
+  }
+`;
 
 interface LayerGroupProps {
   layerGroupKey: string;
@@ -27,6 +38,9 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     id?: string;
   }
   const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
+    const customColorTheme = useSelector(
+      (store: RootState) => store.appSettings.customColorTheme
+    );
     const dispatch = useDispatch();
     const openInfoModal = (): void => {
       if (props.id) {
@@ -57,17 +71,23 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     return (
       <>
         <div className="layers-control-checkbox">
-          <ImageryLayerSwitch layerID={props.id} />
-          <div className="title-wrapper">
-            <span className="layer-label">
-              {props.info?.label[props.selectedLanguage]}
-            </span>
-            <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
-              {parseDynamicSublabel()}
-            </p>
+          <div className="label-wrapper">
+            <ImageryLayerSwitch
+              layerID={props.id}
+              customColorTheme={customColorTheme}
+            />
+            <div className="title-wrapper">
+              <span className="layer-label">
+                {props.info?.label[props.selectedLanguage]}
+              </span>
+              <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
+                {parseDynamicSublabel()}
+              </p>
+            </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <button
+              style={{ border: `1px solid ${customColorTheme}` }}
               className="imagery-edit-button"
               onClick={(): void => setImageryModalOpen(true)}
             >
@@ -90,6 +110,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   interface ImageryToggleProps {
     layerID?: string;
+    customColorTheme: string;
   }
   const ImageryLayerSwitch = (props: ImageryToggleProps): JSX.Element => {
     let imageryLayer: any;
@@ -120,22 +141,24 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     };
 
     return (
-      <div className="layer-checkbox imagery">
-        <input
-          type="checkbox"
-          name="styled-checkbox"
-          className="styled-checkbox"
-          id={`layer-checkbox-${props.layerID}`}
-          checked={toggleIsOn}
-          onChange={handleImagerySwitch}
-        />
-        <label
-          className="styled-checkboxlabel"
-          htmlFor={`layer-checkbox-${props.layerID}`}
-        >
-          {props.layerID}
-        </label>
-      </div>
+      <CheckboxWrapper customColorTheme={props.customColorTheme}>
+        <div className="layer-checkbox imagery">
+          <input
+            type="checkbox"
+            name="styled-checkbox"
+            className="styled-checkbox"
+            id={`layer-checkbox-${props.layerID}`}
+            checked={toggleIsOn}
+            onChange={handleImagerySwitch}
+          />
+          <label
+            className="styled-checkboxlabel"
+            htmlFor={`layer-checkbox-${props.layerID}`}
+          >
+            {props.layerID}
+          </label>
+        </div>
+      </CheckboxWrapper>
     );
   };
 
