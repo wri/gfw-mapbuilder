@@ -58,7 +58,7 @@ async function fetchQueryTask(
     where: '1=1',
     outFields: ['*'],
     units: 'miles',
-    distance: 0.02 * mapview.resolution,
+    distance: 0.01 * mapview.resolution, //reduce the distance if you want more precision
     geometry: event.mapPoint,
     returnGeometry: true
   };
