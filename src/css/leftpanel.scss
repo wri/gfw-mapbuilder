@@ -537,6 +537,10 @@
     display: flex;
     justify-content: space-between;
     padding: 1rem;
+    .label-wrapper {
+      display: flex;
+    }
+
     .radio-container {
       $primary-color: rgb(234, 125, 68);
       $secondary-color: rgb(102, 102, 102);

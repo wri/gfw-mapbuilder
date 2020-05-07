@@ -71,17 +71,19 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     return (
       <>
         <div className="layers-control-checkbox">
-          <ImageryLayerSwitch
-            layerID={props.id}
-            customColorTheme={customColorTheme}
-          />
-          <div className="title-wrapper">
-            <span className="layer-label">
-              {props.info?.label[props.selectedLanguage]}
-            </span>
-            <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
-              {parseDynamicSublabel()}
-            </p>
+          <div className="label-wrapper">
+            <ImageryLayerSwitch
+              layerID={props.id}
+              customColorTheme={customColorTheme}
+            />
+            <div className="title-wrapper">
+              <span className="layer-label">
+                {props.info?.label[props.selectedLanguage]}
+              </span>
+              <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
+                {parseDynamicSublabel()}
+              </p>
+            </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <button
