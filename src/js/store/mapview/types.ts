@@ -110,6 +110,7 @@ export interface LayerProps {
   versions?: any;
   versionHeaderText?: any;
   versionIndex?: number;
+  portalItemID?: string;
 }
 
 interface Attributes {
