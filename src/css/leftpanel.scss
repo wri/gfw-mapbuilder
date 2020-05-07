@@ -533,12 +533,17 @@
 .layers-control-container {
   color: $dark-grey;
 
+  .buffer {
+    padding-bottom: 1rem;
+  }
+
   .layers-control-checkbox {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+
     .label-wrapper {
       display: flex;
+      width: 14rem;
     }
 
     .radio-container {
