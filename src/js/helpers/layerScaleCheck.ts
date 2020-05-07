@@ -10,6 +10,12 @@ export function layerIsInScale(
     if (layer.minScale === 0 && layer.maxScale === 0) {
       return true;
       //@ts-ignore -- TS is not understanding the above check for properties for some reason.
+    } else if (layer.maxScale === 0 && layer.minScale > currentScale) {
+      return true;
+      //@ts-ignore -- TS is not understanding the above check for properties for some reason.
+    } else if (layer.maxScale < currentScale && layer.minScale === 0) {
+      return true;
+      //@ts-ignore -- TS is not understanding the above check for properties for some reason.
     } else if (layer.maxScale < currentScale && layer.minScale > currentScale) {
       //Our mapview is within the scale that is defined! show this legend item
       return true;

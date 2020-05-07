@@ -125,7 +125,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
             : `rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${symbol.color.a}) `;
         style.width = '15px';
         style.height = '15px';
-        style['border-radius'] = '50%';
+        style['borderRadius'] = '50%';
 
         //BORDER FILL
         const border = symbol.outline;
@@ -144,6 +144,29 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
           ></div>
         );
         break;
+      }
+      case 'solid': {
+        //BG FILL COLOR
+        style.backgroundColor =
+          symbol.color === null
+            ? 'transparent'
+            : `rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${symbol.color.a}) `;
+        style.width = '15px';
+        style.height = '15px';
+        const border = symbol.outline;
+        if (border && border.style !== 'none') {
+          style.border = `1px ${borderStyleMap[border.style]} rgba(${
+            border.color.r
+          }, ${border.color.g}, ${border.color.b}, ${border.color.a}) `;
+        }
+        symbolDOMElement = (
+          <div
+            style={style}
+            className={`legend-symbol ${
+              symbolType === 'circle' ? 'circle' : ''
+            }`}
+          ></div>
+        );
       }
     }
     return symbolDOMElement;
@@ -166,7 +189,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const items = props.visibleLayers.map(layer => {
-    if (!layer.legendInfo) {
+    if (!layer.legendInfo || layer.legendInfo.error) {
       //TODO: This needs to handle all types of potential renderers, so far it is accounting only for simple renderer/circle type.
       // If we have no legend info available here it means that we already tried to fetch it from the server, or access it as a webmap. As the last resort, this will try to access layer's renderer and draw create legend
       // items from that
@@ -179,7 +202,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       const label = (
         <div className="label-item">
           {legendInfo}
-          {versionedLabel}
+          {versionedLabel !== '' && versionedLabel}
         </div>
       );
       return (

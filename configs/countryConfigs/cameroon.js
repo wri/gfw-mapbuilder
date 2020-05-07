@@ -835,72 +835,72 @@ module.exports = {
         ka: 'TEST'
       },
       layers: [
-        {
-          order: 1,
-          id: 'Versioned Dynamic Layer',
-          type: 'dynamic',
-          visible: true,
-          label: {
-            en: 'Versioned Dynamic Layer',
-            fr: 'Versioned Dynamic Layer'
-          },
-          versionHeaderText: {
-            en: 'Pick a version',
-            fr: 'Pick a version'
-          },
-          versions: [
-            {
-              label: {
-                en: 'All Protected Areas',
-                fr: 'All Protected Areas'
-              },
-              url:
-                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
-              layerIds: [0]
-            },
-            {
-              label: {
-                en: 'National Parks',
-                fr: 'National Parks'
-              },
-              url:
-                'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
-              layerIds: [1]
-            }
-          ]
-        },
-        {
-          order: 1,
-          id: 'Versioned Feature Layer',
-          type: 'feature',
-          visible: true,
-          label: {
-            en: 'Versioned Feature Layer',
-            fr: 'Versioned Feature Layer'
-          },
-          versionHeaderText: {
-            en: 'Pick a version',
-            fr: 'Pick a version'
-          },
-          versions: [
-            {
-              label: {
-                en: 'Esri_Partners',
-                fr: 'Esri_Partners'
-              },
-              url:
-                'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
-            },
-            {
-              label: {
-                en: 'Flood',
-                fr: 'Flood'
-              },
-              url:
-                'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
-            }
-          ]
-        }
+        // {
+        //   order: 1,
+        //   id: 'Versioned Dynamic Layer',
+        //   type: 'dynamic',
+        //   visible: true,
+        //   label: {
+        //     en: 'Versioned Dynamic Layer',
+        //     fr: 'Versioned Dynamic Layer'
+        //   },
+        //   versionHeaderText: {
+        //     en: 'Pick a version',
+        //     fr: 'Pick a version'
+        //   },
+        //   versions: [
+        //     {
+        //       label: {
+        //         en: 'All Protected Areas',
+        //         fr: 'All Protected Areas'
+        //       },
+        //       url:
+        //         'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+        //       layerIds: [0]
+        //     },
+        //     {
+        //       label: {
+        //         en: 'National Parks',
+        //         fr: 'National Parks'
+        //       },
+        //       url:
+        //         'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+        //       layerIds: [1]
+        //     }
+        //   ]
+        // },
+        // {
+        //   order: 1,
+        //   id: 'Versioned Feature Layer',
+        //   type: 'feature',
+        //   visible: true,
+        //   label: {
+        //     en: 'Versioned Feature Layer',
+        //     fr: 'Versioned Feature Layer'
+        //   },
+        //   versionHeaderText: {
+        //     en: 'Pick a version',
+        //     fr: 'Pick a version'
+        //   },
+        //   versions: [
+        //     {
+        //       label: {
+        //         en: 'Esri_Partners',
+        //         fr: 'Esri_Partners'
+        //       },
+        //       url:
+        //         'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
+        //     },
+        //     {
+        //       label: {
+        //         en: 'Flood',
+        //         fr: 'Flood'
+        //       },
+        //       url:
+        //         'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
+        //     }
+        //   ]
+        // }
       ]
     },
     GROUP_LC: {
