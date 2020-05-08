@@ -19,10 +19,45 @@ interface ContentError {
 }
 
 type Content = MetadataContent | ContentError;
+type SharingHost = string | undefined;
 
-const getMetadata = async (layer: any): Promise<any> => {
+const returnMetadataContent = (xmlResults: any) => {
+  const content: MetadataContent = {};
+  const results = convert.xml2js(xmlResults);
+  const element = results.elements[0].elements.find(
+    (element: any) => element.name === 'dataIdInfo'
+  );
+  const elementNames = element.elements.map((element: any) => element.name);
+
+  content.title = element.elements
+    .find((element: any) => element.name === 'idCitation')
+    .elements.find(
+      (subElement: any) => subElement.name === 'resTitle'
+    ).elements[0].text;
+  content.overview = element.elements.find(
+    (element: any) => element.name === 'idAbs'
+  ).elements[0].text;
+  content.functionOrPurpose = element.elements.find(
+    (element: any) => element.name === 'idPurp'
+  ).elements[0].text;
+
+  if (elementNames.includes('dataExt')) {
+    content.geographicCoverage = element.elements
+      .find((element: any) => element.name === 'dataExt')
+      .elements.find(
+        (subElement: any) => subElement.name === 'exDesc'
+      ).elements[0].text;
+  }
+
+  return content;
+};
+
+const getMetadata = async (
+  layer: any,
+  sharinghost: SharingHost
+): Promise<any> => {
   let content: any;
-  const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
+  const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const layerMetadataURL = `${layer.url}/info/metadata`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
   const layerXMLResults = await fetch(layerMetadataURL).then(res => res.text());
@@ -32,109 +67,35 @@ const getMetadata = async (layer: any): Promise<any> => {
     !layerXMLResults.includes('invalid request');
 
   if (metadataExists) {
-    const results = convert.xml2js(xmlResults);
-    const element = results.elements[0].elements.find(
-      (element: any) => element.name === 'dataIdInfo'
-    );
-
-    const title = element.elements
-      .find((element: any) => element.name === 'idCitation')
-      .elements.find((subElement: any) => subElement.name === 'resTitle')
-      .elements[0].text;
-    const overview = element.elements.find(
-      (element: any) => element.name === 'idAbs'
-    ).elements[0].text;
-    const functionOrPurpose = element.elements.find(
-      (element: any) => element.name === 'idPurp'
-    ).elements[0].text;
-
-    content = {
-      title,
-      functionOrPurpose,
-      overview
-    };
+    content = returnMetadataContent(xmlResults);
+  } else if (!metadataExists && layerMetadataExists) {
+    content = returnMetadataContent(layerXMLResults);
+  } else {
+    return content;
   }
-  if (!metadataExists && layerMetadataExists) {
-    const results = convert.xml2js(layerXMLResults);
-    const element = results.elements[0].elements.find(
-      (element: any) => element.name === 'dataIdInfo'
-    );
-
-    const title = element.elements
-      .find((element: any) => element.name === 'idCitation')
-      .elements.find((subElement: any) => subElement.name === 'resTitle')
-      .elements[0].text;
-    const overview = element.elements.find(
-      (element: any) => element.name === 'idAbs'
-    ).elements[0].text;
-    const functionOrPurpose = element.elements.find(
-      (element: any) => element.name === 'idPurp'
-    ).elements[0].text;
-
-    content = {
-      title,
-      functionOrPurpose,
-      overview
-    };
-  }
-
-  return content;
 };
 
 //Extracting INFO from WebMaps
-const getWebmapGroupContent = async (layer: any): Promise<MetadataContent> => {
+const getWebmapGroupContent = async (
+  layer: any,
+  sharinghost: SharingHost
+): Promise<MetadataContent> => {
   let content: any;
-  const metadataURL = `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
+  const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const xmlResults = await fetch(metadataURL).then(res => res.text());
 
   const metadataExists = !xmlResults.includes('Error');
 
   if (metadataExists) {
     // * IF metadata exists from ArcGIS, use it!
-    const results = convert.xml2js(xmlResults);
 
-    const element = results.elements[0].elements.find(
-      (element: any) => element.name === 'dataIdInfo'
-    );
-
-    const elementNames = element.elements.map((element: any) => element.name);
-
-    const title = element.elements
-      .find((element: any) => element.name === 'idCitation')
-      .elements.find((subElement: any) => subElement.name === 'resTitle')
-      .elements[0].text;
-    const overview = element.elements.find(
-      (element: any) => element.name === 'idAbs'
-    ).elements[0].text;
-    const functionOrPurpose = element.elements.find(
-      (element: any) => element.name === 'idPurp'
-    ).elements[0].text;
-
-    if (elementNames.includes('dataExt')) {
-      const geographicCoverage = element.elements
-        .find((element: any) => element.name === 'dataExt')
-        .elements.find((subElement: any) => subElement.name === 'exDesc')
-        .elements[0].text;
-
-      content = {
-        title,
-        functionOrPurpose,
-        geographicCoverage,
-        overview
-      };
-    } else {
-      content = {
-        title,
-        functionOrPurpose,
-        overview
-      };
-    }
+    content = returnMetadataContent(xmlResults);
   } else {
     // * if portalItemID exists, fetch info w/ it
 
     if (layer.portalItemID) {
       const results = await fetch(
-        `https://www.arcgis.com/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
+        `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
       )
         .then(res => res.json())
         .then(results => {
@@ -180,7 +141,9 @@ const getServiceGroupContent = async (technicalName: string): Promise<any> => {
 const InfoContent: FunctionComponent<{}> = (): any => {
   const [content, setContent] = useState<any>({});
   const [dataLoading, setDataLoading] = useState(true);
-
+  const sharinghost = useSelector(
+    (state: RootState) => state.appSettings.sharinghost
+  );
   const { infoModalLayerID: layerID, selectedLanguage } = useSelector(
     (store: RootState) => store.appState
   );
@@ -194,7 +157,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
 
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
-      const results = await getWebmapGroupContent(layer);
+      const results = await getWebmapGroupContent(layer, sharinghost);
 
       setContent(results);
       setDataLoading(false);
@@ -209,7 +172,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         setDataLoading(false);
       } else {
         // * else conditionally grab metadata from 2 locations
-        const results = await getMetadata(layer);
+        const results = await getMetadata(layer, sharinghost);
         setContent(results);
         setDataLoading(false);
       }

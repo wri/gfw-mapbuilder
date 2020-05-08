@@ -100,83 +100,37 @@ export async function extractWebmapLayerObjects(
       });
     } else {
       //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
-
-      if (legendInfo.error) {
-        const {
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          url,
-          maxScale,
-          minScale
-        } = layer;
-        mapLayerObjects.push({
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          group: 'webmap',
-          type: 'webmap',
-          origin: 'webmap',
-          url,
-          maxScale,
-          minScale,
-          sublayer: false,
-          portalItemID: layer.portalItem.id
-        });
-      } else {
-        legendInfo = layer.layerId
-          ? legendInfo.layers.find((l: any) => l.layerId === layer.layerId)
-              .legend
-          : legendInfo;
-        const {
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          url,
-          maxScale,
-          minScale
-        } = layer;
-        if (layer.portalItem) {
-          mapLayerObjects.push({
-            id,
-            title,
-            opacity,
-            visible,
-            definitionExpression,
-            group: 'webmap',
-            type: 'webmap',
-            origin: 'webmap',
-            url,
-            maxScale,
-            minScale,
-            sublayer: false,
-            legendInfo,
-            portalItemID: layer.portalItem.id
-          });
-        } else {
-          mapLayerObjects.push({
-            id,
-            title,
-            opacity,
-            visible,
-            definitionExpression,
-            group: 'webmap',
-            type: 'webmap',
-            origin: 'webmap',
-            url,
-            maxScale,
-            minScale,
-            sublayer: false,
-            legendInfo
-          });
-        }
-      }
+      legendInfo = layer.layerId
+        ? legendInfo?.layers?.find((l: any) => l.layerId === layer.layerId)
+            .legend
+        : legendInfo;
+      const {
+        id,
+        title,
+        opacity,
+        visible,
+        definitionExpression,
+        url,
+        maxScale,
+        minScale
+      } = layer;
+      mapLayerObjects.push({
+        id,
+        title,
+        opacity,
+        visible,
+        definitionExpression,
+        group: 'webmap',
+        type: 'webmap',
+        origin: 'webmap',
+        url,
+        maxScale,
+        minScale,
+        sublayer: false,
+        legendInfo,
+        portalItemID:
+          layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null
+      });
     }
   }
   return mapLayerObjects;
