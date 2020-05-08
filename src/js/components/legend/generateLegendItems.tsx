@@ -189,10 +189,8 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const items = props.visibleLayers.map(layer => {
-    if (!layer.legendInfo || layer.legendInfo.error) {
-      //TODO: This needs to handle all types of potential renderers, so far it is accounting only for simple renderer/circle type.
-      // If we have no legend info available here it means that we already tried to fetch it from the server, or access it as a webmap. As the last resort, this will try to access layer's renderer and draw create legend
-      // items from that
+    if (!layer.legendInfo) {
+      //No legend Info available, that usually means that we are dealing with FeatureServer layers and need to attempt to create legend symbols manually
       const legendInfo = getLegendInfoFromRenderer(layer);
       let versionedLabel = '';
       if (layer.versions) {
@@ -211,13 +209,8 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {label}
         </div>
       );
-    } else if (
-      layer.legendInfo &&
-      !layer.legendInfo.error &&
-      layer.origin === 'webmap'
-    ) {
+    } else if (layer.legendInfo && layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
-        //deal with no label
         item.label = item.label && item.label.length ? item.label : layer.title;
         return (
           <div className="label-item" key={i}>
@@ -263,34 +256,6 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {labelIcons}
         </div>
       );
-    } else if (layer.legendInfo && layer.origin === 'service') {
-      let labelIcons;
-      //let's handle dynamic layer types first
-      if (layer.type === 'dynamic') {
-        labelIcons = layer.legendInfo?.map((infoObject: any, i: number) => {
-          const sublayerLabels = infoObject.legend.map(
-            (item: any, j: number) => (
-              <div className="label-item" key={j}>
-                {getLegendLabel('webmap', item, layer.opacity)}
-                <p>{item.label}</p>
-              </div>
-            )
-          );
-          return (
-            <div className="label-item-group" key={i}>
-              <p className="sublayer-title">{infoObject.layerName}</p>
-              {sublayerLabels}
-            </div>
-          );
-        });
-      }
-      return (
-        <div className="layer-item" key={layer.id}>
-          <p className="layer-title">{layer.title}</p>
-          {labelIcons}
-        </div>
-      );
-      //nothing found about the legend config information? what to do?
     }
   });
   return <div className="legend-item-container">{items}</div>;
