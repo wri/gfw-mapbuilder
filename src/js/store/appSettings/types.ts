@@ -24,7 +24,7 @@ export interface AppSettings {
   hideHeader?: boolean;
   navLinksInNewTab?: boolean;
   recentImagery?: boolean;
-  sharinghost?: string;
+  sharinghost: string;
   mapThemes: string;
   mapThemeIds: string;
   alternativeMapThemes: string;

@@ -131,7 +131,9 @@ export async function extractWebmapLayerObjects(
         maxScale,
         minScale,
         sublayer: false,
-        legendInfo
+        legendInfo,
+        portalItemID:
+          layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null
       });
     }
   }

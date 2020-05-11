@@ -536,9 +536,11 @@
   .layers-control-checkbox {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    margin-top: 1rem;
+
     .label-wrapper {
       display: flex;
+      width: 14rem;
     }
 
     .radio-container {
