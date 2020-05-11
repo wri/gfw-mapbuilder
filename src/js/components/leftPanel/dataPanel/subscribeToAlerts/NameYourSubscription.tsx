@@ -27,6 +27,9 @@ const NameYourSubscription = (
     setSubscriptionLanguage
   } = props;
 
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -50,6 +53,10 @@ const NameYourSubscription = (
         <div className="column">
           <label>{subscribeLabel}</label>
           <select
+            style={{
+              border: `1px solid ${customColorTheme}`,
+              backgroundColor: customColorTheme
+            }}
             onClick={(e: any): void => setSubscriptionLanguage(e.target.value)}
           >
             {languageOptions.map(({ label, field }, index: number) => (
@@ -66,7 +73,7 @@ const NameYourSubscription = (
           />
           <button
             onClick={(): void => setNextStep()}
-            disabled={subscriptionName.length ? false : true}
+            disabled={subscriptionName.length === 0}
             className={`orange-button custom esri-icon-right-arrow ${
               subscriptionName.length ? '' : 'inactive'
             }`}

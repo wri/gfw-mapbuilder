@@ -34,8 +34,7 @@
     ul {
       display: grid;
       list-style: none;
-      grid-template-columns: 8rem 8rem;
-
+      grid-template-columns: 1.5fr 1.5fr;
       li {
         font-size: 0.875rem;
         font-weight: 400;
@@ -89,7 +88,6 @@
           appearance: none;
           padding: 0.75rem;
           padding-right: 2rem;
-          background-color: transparent;
           cursor: pointer;
           height: 2rem;
           width: auto;
