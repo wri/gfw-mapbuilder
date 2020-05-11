@@ -27,6 +27,9 @@ const NameYourSubscription = (
     setSubscriptionLanguage
   } = props;
 
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -36,35 +39,48 @@ const NameYourSubscription = (
 
   return (
     <div className="name-your-subscriptions-container">
-      <h3>{title}</h3>
-      <label>{nameLabel}</label>
-      <input
-        type="text"
-        value={subscriptionName}
-        placeholder={'Area name'}
-        onChange={(e: any): void => setSubscriptionName(e.target.value)}
-      />
-
-      <label>{subscribeLabel}</label>
-      <select
-        onClick={(e: any): void => setSubscriptionLanguage(e.target.value)}
-      >
-        {languageOptions.map(({ label, field }, index: number) => (
-          <option key={index} value={field}>
-            {label}
-          </option>
-        ))}
-      </select>
-      <div>
-        <button
-          onClick={(): void => setPrevStep()}
-          className="esri-icon-left-arrow"
-        />
-        <button
-          onClick={(): void => setNextStep()}
-          disabled={subscriptionName.length ? false : true}
-          className="esri-icon-right-arrow"
-        />
+      <div className="form-wrapper">
+        <h3>{title}</h3>
+        <div className="column">
+          <label>{nameLabel}</label>
+          <input
+            type="text"
+            value={subscriptionName}
+            placeholder={'Area name'}
+            onChange={(e: any): void => setSubscriptionName(e.target.value)}
+          />
+        </div>
+        <div className="column">
+          <label>{subscribeLabel}</label>
+          <select
+            style={{
+              border: `1px solid ${customColorTheme}`,
+              backgroundColor: customColorTheme
+            }}
+            onClick={(e: any): void => setSubscriptionLanguage(e.target.value)}
+          >
+            {languageOptions.map(({ label, field }, index: number) => (
+              <option key={index} value={field}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="buttons-wrapper">
+          <button
+            onClick={(): void => setPrevStep()}
+            className="orange-button custom esri-icon-left-arrow"
+            style={{ backgroundColor: customColorTheme }}
+          />
+          <button
+            onClick={(): void => setNextStep()}
+            disabled={subscriptionName.length === 0}
+            className={`orange-button custom esri-icon-right-arrow ${
+              subscriptionName.length ? '' : 'inactive'
+            }`}
+            style={{ backgroundColor: customColorTheme }}
+          />
+        </div>
       </div>
     </div>
   );

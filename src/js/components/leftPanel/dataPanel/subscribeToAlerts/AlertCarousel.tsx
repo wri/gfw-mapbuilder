@@ -13,6 +13,8 @@ import {
 } from 'js/store/mapview/actions';
 import { RootState } from 'js/store/index';
 
+import 'css/alertCarousel.scss';
+
 const AlertCarousel = (): JSX.Element => {
   const allSteps: ReadonlyArray<string> = [
     'SubscribeToAlerts',

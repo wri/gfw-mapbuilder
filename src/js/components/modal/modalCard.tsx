@@ -76,6 +76,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'info-content';
       case 'SubscriptionWidget':
         return 'subscription-widget';
+      case 'AlertCarousel':
+        return 'alert-carousel';
       default:
         return '';
     }

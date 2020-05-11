@@ -1,0 +1,121 @@
+@import './variables.scss';
+
+.alert-carousel-container {
+  display: flex;
+
+  .orange-button {
+    &.custom {
+      width: 3rem;
+      font-weight: 400;
+    }
+
+    &.inactive {
+      opacity: 0.5;
+    }
+  }
+
+  .subscribe-to-content-container {
+    h2,
+    p,
+    ul {
+      padding: 0 1.5rem 0 1.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    p {
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    ul {
+      display: grid;
+      list-style: none;
+      grid-template-columns: 1.5fr 1.5fr;
+      li {
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.7;
+        padding: 0.25rem;
+      }
+    }
+  }
+
+  .name-your-subscriptions-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-top: 2rem;
+
+    h3 {
+      font-size: 1.5rem;
+      color: #555;
+      text-align: center;
+      width: 10rem;
+    }
+
+    .form-wrapper {
+      display: grid;
+      grid-auto-rows: 5rem 5rem 2.5rem;
+      align-items: center;
+      margin: 0 auto;
+
+      .column {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-size: 0.875rem;
+          font-weight: 400;
+          line-height: 1.7;
+        }
+
+        input {
+          height: 2rem;
+          font-size: 0.875rem;
+          padding-left: 5px;
+          width: auto;
+          margin-top: 0.25rem;
+          margin-bottom: 0.5rem;
+        }
+
+        select {
+          position: relative;
+          z-index: 1;
+          appearance: none;
+          padding: 0.75rem;
+          padding-right: 2rem;
+          cursor: pointer;
+          height: 2rem;
+          width: auto;
+
+          border: 1px solid rgb(166, 166, 166);
+          border-radius: 0.25rem;
+          border-style: solid;
+          background-color: rgb(247, 247, 247);
+        }
+      }
+    }
+
+    .buttons-wrapper {
+      display: flex;
+    }
+  }
+
+  .subscription-saved-container {
+    padding: 0.5rem;
+
+    h3 {
+      line-height: 1.7;
+    }
+
+    p {
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+  }
+}
