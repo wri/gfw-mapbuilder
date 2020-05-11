@@ -13,6 +13,9 @@ interface Props {
 
 const SubscribeToAlerts = (props: Props): JSX.Element => {
   const { selectedAlerts, setSelectedAlerts, setNextStep } = props;
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
@@ -155,6 +158,7 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
         className={`orange-button custom esri-icon-right-arrow ${
           selectedAlerts.length ? '' : 'inactive'
         }`}
+        style={{ backgroundColor: customColorTheme }}
       />
     </div>
   );

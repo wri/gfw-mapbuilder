@@ -70,6 +70,7 @@ const NameYourSubscription = (
           <button
             onClick={(): void => setPrevStep()}
             className="orange-button custom esri-icon-left-arrow"
+            style={{ backgroundColor: customColorTheme }}
           />
           <button
             onClick={(): void => setNextStep()}
@@ -77,6 +78,7 @@ const NameYourSubscription = (
             className={`orange-button custom esri-icon-right-arrow ${
               subscriptionName.length ? '' : 'inactive'
             }`}
+            style={{ backgroundColor: customColorTheme }}
           />
         </div>
       </div>

@@ -1,10 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { renderModal } from 'js/store/appState/actions';
 
+import { RootState } from 'js/store/index';
+
 const SubscriptionSaved = (): JSX.Element => {
   const dispatch = useDispatch();
+
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
 
   return (
     <div className="subscription-saved-container">
@@ -28,6 +34,7 @@ const SubscriptionSaved = (): JSX.Element => {
       <button
         onClick={(): any => dispatch(renderModal('SubscriptionWidget'))}
         className="orange-button custom"
+        style={{ backgroundColor: customColorTheme }}
       >
         OK
       </button>
