@@ -14,13 +14,6 @@ interface MetadataContent {
   overview?: string;
 }
 
-interface ContentError {
-  error: string;
-}
-
-type Content = MetadataContent | ContentError;
-type SharingHost = string | undefined;
-
 const returnMetadataContent = (xmlResults: any) => {
   const content: MetadataContent = {};
   const results = convert.xml2js(xmlResults);
@@ -54,7 +47,7 @@ const returnMetadataContent = (xmlResults: any) => {
 
 const getMetadata = async (
   layer: any,
-  sharinghost: SharingHost
+  sharinghost: RootState['appSettings']['sharinghost']
 ): Promise<any> => {
   let content: any;
   const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
@@ -78,7 +71,7 @@ const getMetadata = async (
 //Extracting INFO from WebMaps
 const getWebmapGroupContent = async (
   layer: any,
-  sharinghost: SharingHost
+  sharinghost: RootState['appSettings']['sharinghost']
 ): Promise<MetadataContent> => {
   let content: any;
   const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;

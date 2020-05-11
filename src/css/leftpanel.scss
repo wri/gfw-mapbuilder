@@ -533,13 +533,10 @@
 .layers-control-container {
   color: $dark-grey;
 
-  .buffer {
-    padding-bottom: 1rem;
-  }
-
   .layers-control-checkbox {
     display: flex;
     justify-content: space-between;
+    margin-top: 1rem;
 
     .label-wrapper {
       display: flex;

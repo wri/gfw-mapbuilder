@@ -514,7 +514,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   return (
     <>
-      <div className="buffer" />
       <div className="layers-control-checkbox">
         <div className="label-wrapper">
           {returnLayerControl()}
