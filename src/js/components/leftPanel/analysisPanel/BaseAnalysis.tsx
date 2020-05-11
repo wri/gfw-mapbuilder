@@ -46,10 +46,6 @@ const selectAnalysisDaterange = createSelector(
   appState => appState.leftPanel.analysisDateRange
 );
 
-const AnalysisSpinner = (): React.ReactElement => (
-  <h4>Geometry is Registering...</h4>
-);
-
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
@@ -470,7 +466,19 @@ const BaseAnalysis = (): JSX.Element => {
           <DataTabFooter />
         </div>
       ) : (
-        <AnalysisSpinner />
+        <div className="base-analysis-content">
+          <Loader
+            containerPositionStyling={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-25px',
+              marginLeft: '-25px'
+            }}
+            color={'#cfcdcd'}
+            size={50}
+          />
+        </div>
       )}
     </>
   );
