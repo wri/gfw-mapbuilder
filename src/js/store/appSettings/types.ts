@@ -6,6 +6,7 @@ export interface AppSettings {
   subtitle?: string;
   logoUrl?: string;
   logoLinkUrl?: string;
+  analyticsCode: string;
   language: string;
   includeDocumentsTab?: boolean;
   layerPanel: LayerGroup;
