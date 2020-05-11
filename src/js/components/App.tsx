@@ -35,6 +35,9 @@ const App = (props: AppSettings | any): JSX.Element => {
   const sharinghost = useSelector(
     (store: RootState) => store.appSettings.sharinghost
   );
+  const analyticsCode = useSelector(
+    (store: RootState) => store.appSettings.analyticsCode
+  );
   //INIT with global spinner set to true
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
@@ -105,6 +108,11 @@ const App = (props: AppSettings | any): JSX.Element => {
       setShowGlobalSpinner(false);
     }
   }, [dispatch, props]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
+
+  useEffect(() => {
+    window['ga']('create', analyticsCode, 'auto');
+    window['ga']('send', 'pageview');
+  }, [analyticsCode]);
 
   const modalType = useSelector(
     (store: RootState) => store.appState.renderModal
