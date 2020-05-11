@@ -112,7 +112,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
     container: any,
     idx?: any,
     info?: any
-  ): any {
+  ): JSX.Element | undefined {
     const style = {} as any;
     let symbolDOMElement;
     const symbolType = symbol?.style; // "circle"|"square"|"cross"|"x"|"diamond"|"triangle"|"path"
