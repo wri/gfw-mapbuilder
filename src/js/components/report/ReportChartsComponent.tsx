@@ -8,6 +8,7 @@ import { MemoReportDatePicker } from './DatePicker';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { UIParams } from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import Loader from 'js/components/sharedComponents/Loader';
 import VegaChart from 'js/components/leftPanel/analysisPanel/VegaChartContainer';
 import analysisTranslations from 'js/components/leftPanel/analysisPanel/analysisTranslations';
 import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
@@ -360,15 +361,30 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           )}
         </div>
         <div className="vega-chart-wrapper">
-          {vegaSpec && (
-            <VegaChart
-              spec={vegaSpec}
-              language={language}
-              report={true}
-              chartType={currentAnalysis?.chartType}
-              sendBackURL={handlePNGURL}
-            />
-          )}
+          <>
+            {!chartLoading && vegaSpec ? (
+              <VegaChart
+                spec={vegaSpec}
+                language={language}
+                report={true}
+                chartType={currentAnalysis?.chartType}
+                sendBackURL={handlePNGURL}
+              />
+            ) : (
+              <div style={{ width: 900, height: 344, background: '#8080801f' }}>
+                <Loader
+                  containerPositionStyling={{
+                    position: 'relative',
+                    top: '40%',
+                    left: '50%',
+                    marginLeft: '-50px'
+                  }}
+                  color={'#cfcdcd'}
+                  size={100}
+                />
+              </div>
+            )}
+          </>
         </div>
         <div className="vega-chart-description">{chartDescription}</div>
       </div>
