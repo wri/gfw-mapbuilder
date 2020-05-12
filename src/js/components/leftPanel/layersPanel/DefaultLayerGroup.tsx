@@ -95,7 +95,12 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
       const layers = props.layersInGroup
         .filter((layer: any) => nestedLayerIDs.includes(layer.id))
         .map((layer: any, i: number) => (
-          <GenericLayerControl id={layer.id} key={layer.id} type={'default'} />
+          <GenericLayerControl
+            layer={layer}
+            id={layer.id}
+            key={layer.id}
+            type={'default'}
+          />
         ));
       return (
         <LayerGroup
@@ -145,6 +150,7 @@ const RadioLayerGroup = (props: RadioLayerGroupProps): JSX.Element => {
 
   const layers = props.layersInGroup.map(layer => (
     <GenericLayerControl
+      layer={layer}
       id={layer.id}
       key={layer.id}
       type="radio"
@@ -164,7 +170,9 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
-  const leftPanel = useSelector((store: RootState) => store.appState.leftPanel);
+  const openLayerGroup = useSelector(
+    (store: RootState) => store.appState.leftPanel.openLayerGroup
+  );
 
   const allAvailableLayers = useSelector(
     (store: RootState) => store.mapviewState.allAvailableLayers
@@ -189,7 +197,9 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
   }
   const layerGroupTitle =
     layerGroupConfig.label?.[selectedLanguage] || 'Untranslated Layer Group';
-  const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
+
+  const groupOpen = openLayerGroup === layerGroupKey;
+
   const layersInGroup = allAvailableLayers.filter(layer =>
     groupLayerIds.includes(layer.id)
   );
@@ -206,6 +216,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
           <>
             {layersInGroup.map(layer => (
               <GenericLayerControl
+                layer={layer}
                 id={layer.id}
                 key={layer.id}
                 type={layerGroupConfig.groupType}
@@ -229,6 +240,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
           <>
             {layersInGroup.map(layer => (
               <GenericLayerControl
+                layer={layer}
                 id={layer.id}
                 key={layer.id}
                 type={layerGroupConfig.groupType}
