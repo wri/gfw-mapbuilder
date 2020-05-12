@@ -283,12 +283,16 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       <div className="report-top-toolbar">
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
-          <div
-            onClick={(): void => setInputsAreHidden(!inputsAreHidden)}
-            style={{ cursor: 'pointer' }}
-          >
-            <GearIcon width={22} height={22} fill={'#888888'} />
-          </div>
+          {currentAnalysis?.uiParams && currentAnalysis?.uiParams !== 'none' ? (
+            <div
+              onClick={(): void => setInputsAreHidden(!inputsAreHidden)}
+              style={{ cursor: 'pointer' }}
+            >
+              <GearIcon width={22} height={22} fill={'#888888'} />
+            </div>
+          ) : (
+            <div></div>
+          )}
           <div
             style={{ cursor: 'pointer' }}
             onClick={(): void =>
