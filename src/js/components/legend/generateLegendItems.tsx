@@ -145,7 +145,8 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         );
         break;
       }
-      case 'solid': {
+      case 'solid':
+      case 'fill': {
         //BG FILL COLOR
         style.backgroundColor =
           symbol.color === null
@@ -167,7 +168,39 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
             }`}
           ></div>
         );
+        break;
       }
+      case 'line': {
+        style.height = '0'; // give the div a height of 0, so it appears as a line
+
+        const border = symbol.outline || null;
+
+        if (border && border.style !== 'none') {
+          // if it has a border, use the border color
+          style.borderTop = `${(border.width || 1) * 1.5}px ${
+            borderStyleMap[border.style]
+          } rgba(${border.color.r}, ${border.color.g}, ${border.color.b}, ${
+            border.color.a
+          })`;
+        }
+
+        if (!border) {
+          // if it doesn't have a border, it's just a line so use the symbol color
+          style.borderTop = `${(symbol.width || 1) * 1.5}px ${
+            borderStyleMap[symbol.style]
+          } rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${
+            symbol.color.a
+          })`;
+        }
+
+        symbolDOMElement = <div style={style} className="legend-symbol"></div>;
+        break;
+      }
+      case 'image':
+        symbolDOMElement = (
+          <img style={style} className="legend-symbol" src={symbol.url} />
+        );
+        break;
     }
     return symbolDOMElement;
   }
