@@ -40,6 +40,7 @@ function getLegendLabel(
   } = options;
   switch (type) {
     case 'basic':
+    case 'choropleth':
       return (
         <BasicItem
           color={color}
