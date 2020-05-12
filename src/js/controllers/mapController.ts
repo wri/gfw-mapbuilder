@@ -2,8 +2,11 @@ import Map from 'esri/Map';
 import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
+import geometryEngine from 'esri/geometry/geometryEngine';
+import Geometry from 'esri/geometry/Geometry';
 import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
+import Extent from 'esri/geometry/Extent';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import CoordinateConversion from 'esri/widgets/CoordinateConversion';
@@ -834,6 +837,45 @@ export class MapController {
 
   deleteSketchVM(): void {
     this._sketchVM?.emit('delete');
+  }
+
+  getSketchVMCenter(): any {
+    let allRings: Array<Array<number>> = [];
+
+    if (this._sketchVMGraphicsLayer) {
+      this._sketchVMGraphicsLayer.graphics['items'].forEach(
+        (item: any) => (allRings = allRings.concat(...item.geometry.rings))
+      );
+
+      // console.log('allRings', allRings);
+    }
+
+    if (allRings.length) {
+      this._mapview.on('pointer-move', event => {
+        const point = this._mapview.toMap({ x: event.x, y: event.y });
+        // console.log('pointttt', point);
+        // console.log('allRingssss', allRings);
+        // ? Can I use geometryEngine
+        // ? to determine if the sketchVM contains the constant point?
+
+        const userHovering = allRings.map((ring: any) => {
+          const [ringLat, ringLong] = ring;
+
+          return (
+            Math.round(ringLat) === Math.round(point.x) &&
+            Math.round(ringLong) === Math.round(point.y)
+          );
+        });
+
+        // console.log('userHovering', userHovering);
+
+        if (userHovering.includes(true)) {
+          console.log('USER IS HOVERINGGG!!!');
+          console.log('allRings', allRings);
+          console.log('pointer-move', event);
+        }
+      });
+    }
   }
 
   updateSketchVM(): any {

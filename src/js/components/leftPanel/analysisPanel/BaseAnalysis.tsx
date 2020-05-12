@@ -333,6 +333,9 @@ const BaseAnalysis = (): JSX.Element => {
   const setEditSketch = (): void => {
     setRenderEditButton(false);
     mapController.updateSketchVM();
+    mapController.getSketchVMCenter();
+    // ? can I grab the polygon's computer coordinates
+    // ? and use to render a popup?
   };
 
   const setDelete = (): void => {
