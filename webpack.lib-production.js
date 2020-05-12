@@ -8,7 +8,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
 
-const cameroonConfig = require('./configs/cameroon.js');
+const cameroonConfig = require('./configs/countryConfigs/cameroon.js');
 
 module.exports = env => {
   console.log(env);
