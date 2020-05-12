@@ -114,10 +114,6 @@ const App = (props: AppSettings | any): JSX.Element => {
     window['ga']('send', 'pageview');
   }, [analyticsCode]);
 
-  const modalType = useSelector(
-    (store: RootState) => store.appState.renderModal
-  );
-
   useEffect(() => {
     fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
       credentials: 'include'
@@ -143,7 +139,7 @@ const App = (props: AppSettings | any): JSX.Element => {
         <>
           {!reportView && !hideHeader && <Header />}
           <MapContent report={reportView} />
-          {modalType !== '' && <ModalCard />}
+          <ModalCard />
         </>
       )}
     </>
