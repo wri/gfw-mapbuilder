@@ -92,8 +92,6 @@ async function fetchQueryTask(
 
     if (sublayerResult.features.length > 0) {
       featureResult = sublayerResult.features.map(f => {
-        //this is where formating should happen?
-
         const formattedAttributes = formatAttributeValues(
           f.attributes,
           fieldNames

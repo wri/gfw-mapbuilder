@@ -33,8 +33,22 @@ export function formatAttributeValues(
       );
       formatAttributeObject[attribute] = formattedNumber;
     } else {
-      //no formatting options found,  use original value
-      formatAttributeObject[attribute] = attributes[attribute];
+      //We are doing a string matching against attribute name, this is not ideal and should be addressed on the API level with new formatting options compatible with 4x esri api
+      //TODO: This is a short term workaround as proper solution needs to modify all datasets with correct formatting options as described in this issue:
+      // https://github.com/wri/gfw-mapbuilder/issues/1051
+      if (attribute.toLowerCase().includes('date')) {
+        const dateFormatIntlOptions = esriIntl.convertDateFormatToIntlOptions(
+          'long-date'
+        );
+        const formatDate = esriIntl.formatDate(
+          attributes[attribute],
+          dateFormatIntlOptions
+        );
+        formatAttributeObject[attribute] = formatDate;
+      } else {
+        //no formatting options found,  use original value
+        formatAttributeObject[attribute] = attributes[attribute];
+      }
     }
   });
   return formatAttributeObject;
