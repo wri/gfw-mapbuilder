@@ -72,8 +72,6 @@ function getLegendLabel(
           opacity={opacity}
         />
       );
-    case 'group':
-      return null;
     default:
       return (
         <BasicItem
@@ -267,6 +265,38 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         labelIcons = generateGradientItem(
           layer.metadata?.legendConfig,
           language
+        );
+      } else if (layer.metadata?.legendConfig?.type === 'group') {
+        labelIcons = layer.metadata?.legendConfig?.items.map(
+          (item: any, i: number) => {
+            let subgroupItems;
+            if (item.subgroup.type === 'gradient') {
+              subgroupItems = (
+                <div>{generateGradientItem(item.subgroup, language)}</div>
+              );
+            } else {
+              subgroupItems = item.subgroup.items.map(
+                (subItem: any, i: number) => {
+                  return (
+                    <div key={i} className="subgroup-item">
+                      {getLegendLabel(
+                        item.subgroup.type,
+                        subItem,
+                        layer.opacity
+                      )}
+                      <p>{subItem.name[language]}</p>
+                    </div>
+                  );
+                }
+              );
+            }
+            return (
+              <div className="label-item subgroup" key={i}>
+                <p>{item.name[language]}</p>
+                <div>{subgroupItems}</div>
+              </div>
+            );
+          }
         );
       } else {
         labelIcons = layer.metadata?.legendConfig?.items.map(
