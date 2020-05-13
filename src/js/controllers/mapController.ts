@@ -189,7 +189,7 @@ export class MapController {
             const clickGeo = event.mapPoint;
             const userFeatLayer = this._map?.findLayerById(
               'user_features'
-            ) as GraphicsLayer;
+            ) as any;
             //@ts-ignore
             if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
               //@ts-ignore
@@ -200,6 +200,27 @@ export class MapController {
               );
               if (!clickedWithinUserFeature) {
                 queryLayersForFeatures(this._mapview, this._map, event);
+              } else {
+                //display drawn/uploaded feature as active feature
+                const drawnFeatures: LayerFeatureResult = {
+                  layerID: 'user_features',
+                  layerTitle: 'User Features',
+                  features: [
+                    {
+                      objectid: 1,
+                      //@ts-ignore
+                      attributes: this._sketchVMGraphicsLayer?.graphics.items[0]
+                        .attributes,
+                      //@ts-ignore
+                      geometry: this._sketchVMGraphicsLayer?.graphics.items[0]
+                        .geometry
+                    }
+                  ],
+                  fieldNames: null
+                };
+                store.dispatch(setActiveFeatures([drawnFeatures]));
+                store.dispatch(setActiveFeatureIndex([0, 0]));
+                store.dispatch(selectActiveTab('analysis'));
               }
             } else {
               queryLayersForFeatures(this._mapview, this._map, event);
@@ -616,6 +637,27 @@ export class MapController {
           );
           if (!clickedWithinUserFeature) {
             queryLayersForFeatures(this._mapview, this._map, event);
+          } else {
+            //display drawn/uploaded feature as active feature
+            const drawnFeatures: LayerFeatureResult = {
+              layerID: 'user_features',
+              layerTitle: 'User Features',
+              features: [
+                {
+                  objectid: 1,
+                  //@ts-ignore
+                  attributes: this._sketchVMGraphicsLayer?.graphics.items[0]
+                    .attributes,
+                  //@ts-ignore
+                  geometry: this._sketchVMGraphicsLayer?.graphics.items[0]
+                    .geometry
+                }
+              ],
+              fieldNames: null
+            };
+            store.dispatch(setActiveFeatures([drawnFeatures]));
+            store.dispatch(setActiveFeatureIndex([0, 0]));
+            store.dispatch(selectActiveTab('analysis'));
           }
         } else {
           queryLayersForFeatures(this._mapview, this._map, event);
