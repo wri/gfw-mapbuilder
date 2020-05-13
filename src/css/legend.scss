@@ -57,6 +57,17 @@
           line-height: 22.1px;
         }
       }
+      .subgroup {
+        grid-template-columns: 1fr;
+        grid-gap: 0px;
+        margin-bottom: 10px;
+        .subgroup-item {
+          display: grid;
+          grid-template-columns: auto 1fr;
+          grid-gap: 10px;
+          align-items: center;
+        }
+      }
     }
   }
 }
