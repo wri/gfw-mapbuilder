@@ -312,6 +312,7 @@ export class MapController {
             ...modisLayers,
             ...esriRemoteLayers
           ];
+          this.initializeAndSetSketch();
 
           //If we have report active, we need to know when our feature layer has loaded
           const report = new URL(window.location.href).searchParams.get(
@@ -367,8 +368,6 @@ export class MapController {
 
           //Extra layer group that acts as a "masked" layers with which you cannot interact
           this.addExtraLayers();
-
-          this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -901,11 +900,12 @@ export class MapController {
   initializeAndSetSketch(graphics = []): void {
     if (this._sketchVMGraphicsLayer) {
       this._sketchVMGraphicsLayer.graphics.removeAll();
+    } else {
+      this._sketchVMGraphicsLayer = new GraphicsLayer({
+        id: 'user_features'
+      });
+      this._map?.add(this._sketchVMGraphicsLayer);
     }
-
-    this._sketchVMGraphicsLayer = new GraphicsLayer({
-      id: 'sketchGraphics'
-    });
 
     if (graphics.length) {
       this._sketchVMGraphicsLayer.graphics.addMany(graphics);
@@ -920,8 +920,6 @@ export class MapController {
         width: 3
       }
     });
-
-    this._map?.add(this._sketchVMGraphicsLayer);
 
     this._sketchVM?.on('create', (event: any) => {
       if (event.state === 'complete') {

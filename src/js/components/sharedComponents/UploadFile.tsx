@@ -129,7 +129,7 @@ const UploadFile = (): JSX.Element => {
         .then((registeredGeometries: any) => {
           if (registeredGeometries.length) {
             const shapeFileFeatures: LayerFeatureResult = {
-              layerID: 'upload_file_features',
+              layerID: 'user_features',
               layerTitle: 'Upload File Features',
               features: arcGISResults.map((g: __esri.Graphic) => {
                 return { attributes: g.attributes, geometry: g.geometry };
