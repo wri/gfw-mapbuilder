@@ -17,6 +17,7 @@ import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
+import geometryEngine from 'esri/geometry/geometryEngine';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
@@ -184,7 +185,25 @@ export class MapController {
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
             store.dispatch(selectActiveTab('data'));
-            queryLayersForFeatures(this._mapview, this._map, event);
+            //if user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
+            const clickGeo = event.mapPoint;
+            const userFeatLayer = this._map?.findLayerById(
+              'user_features'
+            ) as GraphicsLayer;
+            //@ts-ignore
+            if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
+              //@ts-ignore
+              const userGeo = userFeatLayer.graphics.items[0].geometry;
+              const clickedWithinUserFeature = geometryEngine.within(
+                clickGeo,
+                userGeo
+              );
+              if (!clickedWithinUserFeature) {
+                queryLayersForFeatures(this._mapview, this._map, event);
+              }
+            } else {
+              queryLayersForFeatures(this._mapview, this._map, event);
+            }
           });
 
           //In case of sharing functionality, check for URL containing layer visibility and opacity information
@@ -312,7 +331,6 @@ export class MapController {
             ...modisLayers,
             ...esriRemoteLayers
           ];
-          this.initializeAndSetSketch();
 
           //If we have report active, we need to know when our feature layer has loaded
           const report = new URL(window.location.href).searchParams.get(
@@ -326,7 +344,7 @@ export class MapController {
             //@ts-ignore
             const combinedLayers = [...allLayers, ...this._map.layers.items];
             const activeLayer = combinedLayers.find(l => l.id === layerID);
-            if (activeLayer.loaded === true) {
+            if (!activeLayer || activeLayer.loaded === true) {
               store.dispatch(setLayersLoading(false));
             } else {
               once(activeLayer, 'loaded', () => {
@@ -368,6 +386,7 @@ export class MapController {
 
           //Extra layer group that acts as a "masked" layers with which you cannot interact
           this.addExtraLayers();
+          this.initializeAndSetSketch();
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -582,10 +601,26 @@ export class MapController {
         store.dispatch(setActiveFeatures([]));
         store.dispatch(setActiveFeatureIndex([0, 0]));
         store.dispatch(selectActiveTab('data'));
-        queryLayersForFeatures(this._mapview, this._map, event);
+        //if user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
+        const clickGeo = event.mapPoint;
+        const userFeatLayer = this._map?.findLayerById(
+          'user_features'
+        ) as GraphicsLayer;
+        //@ts-ignore
+        if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
+          //@ts-ignore
+          const userGeo = userFeatLayer.graphics.items[0].geometry;
+          const clickedWithinUserFeature = geometryEngine.within(
+            clickGeo,
+            userGeo
+          );
+          if (!clickedWithinUserFeature) {
+            queryLayersForFeatures(this._mapview, this._map, event);
+          }
+        } else {
+          queryLayersForFeatures(this._mapview, this._map, event);
+        }
       });
-
-      this.initializeAndSetSketch();
 
       const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
         this._map
@@ -620,6 +655,7 @@ export class MapController {
           this._map?.reorder(layer, layerIndex);
         }
       });
+      this.initializeAndSetSketch();
     });
   }
 
@@ -899,6 +935,17 @@ export class MapController {
 
   initializeAndSetSketch(graphics = []): void {
     if (this._sketchVMGraphicsLayer) {
+      //let's make sure this layer is actually on the map, on lang changes sometimes we have sketchVM
+      //layer instance but it is not necessarily on the map
+      const userLayer = this._map?.findLayerById(
+        'user_features'
+      ) as GraphicsLayer;
+      if (!userLayer) {
+        this._sketchVMGraphicsLayer = new GraphicsLayer({
+          id: 'user_features'
+        });
+        this._map?.add(this._sketchVMGraphicsLayer);
+      }
       this._sketchVMGraphicsLayer.graphics.removeAll();
     } else {
       this._sketchVMGraphicsLayer = new GraphicsLayer({
