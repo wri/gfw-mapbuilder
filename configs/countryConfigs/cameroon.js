@@ -835,6 +835,12 @@ module.exports = {
         ka: 'TEST'
       },
       layers: [
+        {
+          order: 1,
+          id: 'GROUP_LAYER_TEST',
+          type: 'remoteDataLayer',
+          uuid: 'bb5dc1f1-06b9-4117-943a-e2dd9341ea6b'
+        }
         // {
         //   order: 1,
         //   id: 'Versioned Dynamic Layer',
