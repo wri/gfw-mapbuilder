@@ -6,7 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { RootState } from 'js/store';
-import { setActiveFeatures } from 'js/store/mapview/actions';
+import {
+  setActiveFeatures,
+  setUserCoordinates
+} from 'js/store/mapview/actions';
 import { setRenderPopup } from 'js/store/appState/actions';
 
 import { registerGeometry } from 'js/helpers/geometryRegistration';
@@ -331,13 +334,14 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   const setSaveSketch = (): void => {
+    dispatch(setRenderPopup(false));
     mapController.removeUserPointListener();
     mapController.completeSketchVM();
     setRenderEditButton(true);
-    dispatch(setRenderPopup(false));
   };
 
   const setEditSketch = (): void => {
+    dispatch(setUserCoordinates(undefined));
     setRenderEditButton(false);
     mapController.updateSketchVM();
     mapController.getUserCoordinates();
