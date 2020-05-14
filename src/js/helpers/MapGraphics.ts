@@ -112,44 +112,50 @@ export function setNewGraphic({
 
   if (isUploadFile) {
     projection.load().then(() => {
-      const allGraphics = allFeatures.map((feature: FeatureResult) => {
-        const isPolygon =
-          (feature.geometry as any).rings ||
-          feature.geometry.type === 'polygon';
+      const allGraphics = allFeatures.map(
+        (feature: FeatureResult, index: number) => {
+          const isPolygon =
+            (feature.geometry as any).rings ||
+            feature.geometry.type === 'polygon';
 
-        /**
-         * * NOTE:
-         * * File uploads don't have a geometry.type,
-         * * so we have to check if it has geometry.rings
-         */
+          /**
+           * * NOTE:
+           * * File uploads don't have a geometry.type,
+           * * so we have to check if it has geometry.rings
+           */
 
-        const symbol = isPolygon
-          ? setSymbol('polygon')
-          : setSymbol(feature.geometry.type);
+          const symbol = isPolygon
+            ? setSymbol('polygon')
+            : setSymbol(feature.geometry.type);
 
-        const geometry = isPolygon
-          ? setGeometry('polygon', feature.geometry)
-          : setGeometry(feature.geometry.type, feature.geometry);
+          if (index === 0) {
+            //First feature is "active" by default > change it to appropriate color
+            symbol.outline.color = [115, 252, 253];
+          }
+          const geometry = isPolygon
+            ? setGeometry('polygon', feature.geometry)
+            : setGeometry(feature.geometry.type, feature.geometry);
 
-        const featureGraphic = new Graphic({
-          geometry: geometry,
-          attributes: feature.attributes,
-          symbol: symbol
-        });
+          const featureGraphic = new Graphic({
+            geometry: geometry,
+            attributes: feature.attributes,
+            symbol: symbol
+          });
 
-        const transformation = projection.getTransformation(
-          featureGraphic.geometry.spatialReference,
-          mapController._mapview.spatialReference
-        );
+          const transformation = projection.getTransformation(
+            featureGraphic.geometry.spatialReference,
+            mapController._mapview.spatialReference
+          );
 
-        featureGraphic.geometry = projection.project(
-          featureGraphic.geometry,
-          mapController._mapview.spatialReference,
-          transformation
-        ) as __esri.Geometry;
+          featureGraphic.geometry = projection.project(
+            featureGraphic.geometry,
+            mapController._mapview.spatialReference,
+            transformation
+          ) as __esri.Geometry;
 
-        return featureGraphic;
-      });
+          return featureGraphic;
+        }
+      );
 
       graphicsLayer.graphics.push(...allGraphics);
       mapController.initializeAndSetSketch(graphicsLayer.graphics);
