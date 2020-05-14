@@ -328,7 +328,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const setEditSketch = (): void => {
     setRenderEditButton(false);
-    mapController.updateSketchVM();
+    mapController.updateSketchVM(activeFeatureIndex[1]);
   };
 
   const setDelete = (): void => {
