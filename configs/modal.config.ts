@@ -467,12 +467,110 @@ export const measureContent = {
   }
 };
 
-export const downloadData = {
-  en: 'download data',
-  ka: 'მონაცემების ჩამოტვირთვა',
-  fr: 'Téléchargez les données',
-  es: 'Descarga información',
-  pt: 'Baixar dados',
-  zh: '下载数据',
-  id: 'download data'
+export const infoContent = {
+  en: {
+    functionLabel: 'function',
+    resolutionLabel: 'resolution',
+    geographicCoverageLabel: 'geographic coverage',
+    sourceLabel: 'source',
+    frequencyLabel: 'frequency',
+    contentDateLabel: 'date of content',
+    cautionsLabel: 'cautions',
+    licenseLabel: 'license',
+    learnMoreLabel: 'learn more',
+    downloadDataLabel: 'download data',
+    descriptionLabel: 'description',
+    noInfoLabel: 'No Information Available',
+    overviewLabel: 'Overview'
+  },
+  ka: {
+    functionLabel: 'ფუნქცია',
+    resolutionLabel: 'რეზოლუცია',
+    geographicCoverageLabel: 'გეოგრაფიული არეალი',
+    sourceLabel: 'წყარო',
+    frequencyLabel: 'სიხშირე',
+    contentDateLabel: 'მონაცემების თარიღი',
+    cautionsLabel: 'გაფრთხილება',
+    licenseLabel: 'ლიცენზია',
+    learnMoreLabel: 'მეტი ინფო',
+    downloadDataLabel: 'მონაცემების ჩამოტვირთვა',
+    descriptionLabel: 'აღწერა',
+    noInfoLabel: 'ინფორმაცია არ არსებობს',
+    overviewLabel: 'მიმოხილვა'
+  },
+  fr: {
+    functionLabel: 'Fonction',
+    resolutionLabel: 'résolution',
+    geographicCoverageLabel: 'couverture géographique',
+    sourceLabel: 'source',
+    frequencyLabel: 'fréquence',
+    contentDateLabel: "date d'acquisition",
+    cautionsLabel: 'Avertissements',
+    licenseLabel: 'licence',
+    learnMoreLabel: 'En savoir plus',
+    downloadDataLabel: 'Téléchargez les données',
+    descriptionLabel: 'description',
+    noInfoLabel: "Pas d'informations disponibles",
+    overviewLabel: "Vue d'ensemble"
+  },
+  es: {
+    functionLabel: 'Función',
+    resolutionLabel: 'Resolución',
+    geographicCoverageLabel: 'Cobertura geográfica',
+    sourceLabel: 'Fuente',
+    frequencyLabel: 'Frecuencia',
+    contentDateLabel: 'Fecha del contenido',
+    cautionsLabel: 'Precauciones',
+    licenseLabel: 'Licencia',
+    learnMoreLabel: 'Conozca más',
+    downloadDataLabel: 'Descarga información',
+    descriptionLabel: 'Descripción',
+    noInfoLabel: 'No hay información disponible',
+    overviewLabel: 'Resumen'
+  },
+  pt: {
+    functionLabel: 'função',
+    resolutionLabel: 'resolução',
+    geographicCoverageLabel: 'cobertura geográfica',
+    sourceLabel: 'fonte',
+    frequencyLabel: 'frequência',
+    contentDateLabel: 'data do conteúdo',
+    cautionsLabel: 'precauções',
+    licenseLabel: 'licença',
+    learnMoreLabel: 'Saiba mais',
+    downloadDataLabel: 'Baixar dados',
+    descriptionLabel: 'Descrição',
+    noInfoLabel: 'Sem informação disponível.',
+    overviewLabel: 'Visão geral'
+  },
+  id: {
+    functionLabel: 'function',
+    resolutionLabel: 'resolution',
+    geographicCoverageLabel: 'geographic coverage',
+    sourceLabel: 'source',
+    frequencyLabel: 'frequency',
+    contentDateLabel: 'date of content',
+    cautionsLabel: 'cautions',
+    licenseLabel: 'license',
+    learnMoreLabel: 'learn more',
+    downloadDataLabel: 'download data',
+    descriptionLabel: 'description',
+    noInfoLabel: 'No Information Available',
+    overviewLabel: 'Overview'
+  },
+  zh: {
+    functionLabel: '功能',
+    resolutionLabel: '清晰度',
+    geographicCoverageLabel: '空间覆盖范围',
+    sourceLabel: '来源',
+    frequencyLabel: '更新频率',
+    contentDateLabel: '内容日期',
+    cautionsLabel: '注意',
+    licenseLabel: '数据分享执照',
+    learnMoreLabel: '了解更多',
+    downloadDataLabel: '下载数据',
+    descriptionLabel: '说明',
+    noInfoLabel: '没有相关信息',
+    overviewLabel: '概述'
+  }
 };

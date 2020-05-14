@@ -4,7 +4,7 @@ import convert from 'xml-js';
 
 import { RootState } from 'js/store';
 
-import { downloadData } from '../../../../configs/modal.config';
+import { infoContent } from '../../../../configs/modal.config';
 
 interface MetadataContent {
   title?: string;
@@ -143,10 +143,24 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   const { allAvailableLayers } = useSelector(
     (store: RootState) => store.mapviewState
   );
-
   const layer = allAvailableLayers.filter(
     (layer: any) => layer.id === layerID
   )[0];
+
+  const {
+    functionLabel,
+    resolutionLabel,
+    geographicCoverageLabel,
+    sourceLabel,
+    frequencyLabel,
+    contentDateLabel,
+    cautionsLabel,
+    licenseLabel,
+    downloadDataLabel,
+    descriptionLabel,
+    noInfoLabel,
+    overviewLabel
+  } = infoContent[selectedLanguage];
 
   useEffect(() => {
     const getWebmapContent = async (): Promise<void> => {
@@ -203,13 +217,13 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               <tbody>
                 {functionOrPurpose && (
                   <tr>
-                    <td className="label">Function</td>
+                    <td className="label">{functionLabel}</td>
                     <td className="label-info">{functionOrPurpose}</td>
                   </tr>
                 )}
                 {geographicCoverage && (
                   <tr>
-                    <td className="label">Geographic Coverage</td>
+                    <td className="label">{geographicCoverageLabel}</td>
                     <td className="label-info">{geographicCoverage}</td>
                   </tr>
                 )}
@@ -218,7 +232,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </>
           {overview && (
             <div className="overview-container">
-              <h3>Overview</h3>
+              <h3>{overviewLabel}</h3>
               <div dangerouslySetInnerHTML={{ __html: overview }} />
             </div>
           )}
@@ -236,13 +250,13 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                 <tbody>
                   {content.description && (
                     <tr>
-                      <td className="label">Description</td>
+                      <td className="label">{descriptionLabel}</td>
                       <td className="label-info">{content.description}</td>
                     </tr>
                   )}
                   {content.copyrightText && (
                     <tr>
-                      <td className="label">License</td>
+                      <td className="label">{licenseLabel}</td>
                       <td className="label-info">{content.copyrightText}</td>
                     </tr>
                   )}
@@ -265,7 +279,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         <>
           <div className="header">
             <h2>{layer.title}</h2>
-            <h3>No information available</h3>
+            <h3>{noInfoLabel}</h3>
           </div>
         </>
       );
@@ -300,14 +314,14 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           <table>
             <tbody>
               <tr>
-                <td className="label">Function</td>
+                <td className="label">{functionLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: content.function }}
                 />
               </tr>
               <tr>
-                <td className="label">Resolution</td>
+                <td className="label">{resolutionLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: resolution }}
@@ -318,42 +332,42 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                 <td className="label-info">{tags}</td>
               </tr>
               <tr>
-                <td className="label">Geographic Coverage</td>
+                <td className="label">{geographicCoverageLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: geographic_coverage }}
                 />
               </tr>
               <tr>
-                <td className="label">Source</td>
+                <td className="label">{sourceLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: source }}
                 />
               </tr>
               <tr>
-                <td className="label">Frequency</td>
+                <td className="label">{frequencyLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: frequency_of_updates }}
                 />
               </tr>
               <tr>
-                <td className="label">Date of Content</td>
+                <td className="label">{contentDateLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: date_of_content }}
                 />
               </tr>
               <tr>
-                <td className="label">Cautions</td>
+                <td className="label">{cautionsLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: cautions }}
                 />
               </tr>
               <tr>
-                <td className="label">License</td>
+                <td className="label">{licenseLabel}</td>
                 <td
                   className="label-info"
                   dangerouslySetInnerHTML={{ __html: license }}
@@ -362,23 +376,19 @@ const InfoContent: FunctionComponent<{}> = (): any => {
             </tbody>
           </table>
           <div className="overview-container">
-            <h3>Overview</h3>
+            <h3>{overviewLabel}</h3>
             <div dangerouslySetInnerHTML={{ __html: overview }} />
           </div>
           {citation && (
             <div className="citation-container">
-              <h4>Citation</h4>
+              <h4>{cautionsLabel}</h4>
               <div dangerouslySetInnerHTML={{ __html: citation }} />
             </div>
           )}
           {download_data && (
             <div className="button-container">
               <a href={download_data} target="_blank" rel="noopener noreferrer">
-                <button className="orange-button">
-                  {downloadData[selectedLanguage]
-                    ? downloadData[selectedLanguage]
-                    : 'Download Data'}
-                </button>
+                <button className="orange-button">{downloadDataLabel}</button>
               </a>
             </div>
           )}
@@ -397,7 +407,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               <tbody>
                 {functionOrPurpose && (
                   <tr>
-                    <td className="label">Function</td>
+                    <td className="label">{functionLabel}</td>
                     <td
                       className="label-info"
                       dangerouslySetInnerHTML={{ __html: functionOrPurpose }}
@@ -408,7 +418,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
             </table>
             {overview && (
               <div className="overview-container">
-                <h3>Overview</h3>
+                <h3>{overviewLabel}</h3>
                 <div dangerouslySetInnerHTML={{ __html: overview }} />
               </div>
             )}
@@ -421,7 +431,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         <>
           <div className="header">
             <h2>{layer.title}</h2>
-            <h3>No information available</h3>
+            <h3>{noInfoLabel}</h3>
           </div>
         </>
       );
