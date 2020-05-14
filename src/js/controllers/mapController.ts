@@ -40,7 +40,8 @@ import {
   setActiveFeatures,
   changeMapScale,
   changeMapCenterCoordinates,
-  setLayersLoading
+  setLayersLoading,
+  setUserCoordinates
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -54,7 +55,8 @@ import {
   setModisStart,
   setModisEnd,
   setViirsStart,
-  setViirsEnd
+  setViirsEnd,
+  setRenderPopup
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -101,6 +103,7 @@ export class MapController {
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
   _domRef: RefObject<any>;
   _imageryOpacity: number;
+  _userPointEventListener: IHandle | undefined;
 
   constructor() {
     this._map = undefined;
@@ -109,6 +112,7 @@ export class MapController {
     this._printTask = undefined;
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
+    this._userPointEventListener = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -839,42 +843,33 @@ export class MapController {
     this._sketchVM?.emit('delete');
   }
 
-  getSketchVMCenter(): any {
-    let allRings: Array<Array<number>> = [];
+  getUserCoordinates(): void {
+    let allGeometries: Array<Geometry> = [];
 
     if (this._sketchVMGraphicsLayer) {
-      this._sketchVMGraphicsLayer.graphics['items'].forEach(
-        (item: any) => (allRings = allRings.concat(...item.geometry.rings))
+      allGeometries = this._sketchVMGraphicsLayer.graphics['items'].map(
+        (item: any) => item.geometry
       );
-
-      // console.log('allRings', allRings);
     }
 
-    if (allRings.length) {
-      this._mapview.on('pointer-move', event => {
-        const point = this._mapview.toMap({ x: event.x, y: event.y });
-        // console.log('pointttt', point);
-        // console.log('allRingssss', allRings);
-        // ? Can I use geometryEngine
-        // ? to determine if the sketchVM contains the constant point?
+    if (allGeometries.length) {
+      this._userPointEventListener = this._mapview.on('pointer-move', event => {
+        const userPoint = this._mapview.toMap({ x: event.x, y: event.y });
 
-        const userHovering = allRings.map((ring: any) => {
-          const [ringLat, ringLong] = ring;
-
-          return (
-            Math.round(ringLat) === Math.round(point.x) &&
-            Math.round(ringLong) === Math.round(point.y)
-          );
+        const userHovering = allGeometries.map((geometry: Geometry) => {
+          return geometryEngine.contains(geometry, userPoint);
         });
 
-        // console.log('userHovering', userHovering);
-
         if (userHovering.includes(true)) {
-          console.log('USER IS HOVERINGGG!!!');
-          console.log('allRings', allRings);
-          console.log('pointer-move', event);
+          store.dispatch(setUserCoordinates(userPoint));
         }
       });
+    }
+  }
+
+  removeUserPointListener(): void {
+    if (this._userPointEventListener) {
+      this._userPointEventListener.remove();
     }
   }
 

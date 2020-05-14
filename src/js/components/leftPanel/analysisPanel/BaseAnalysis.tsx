@@ -2,11 +2,15 @@
 /* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { createSelector } from 'reselect';
-import { RootState } from 'js/store';
 import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from 'reselect';
+
+import { RootState } from 'js/store';
 import { setActiveFeatures } from 'js/store/mapview/actions';
+import { setRenderPopup } from 'js/store/appState/actions';
+
 import { registerGeometry } from 'js/helpers/geometryRegistration';
+
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
@@ -58,6 +62,7 @@ const BaseAnalysis = (): JSX.Element => {
   const [base64ChartURL, setBase64ChartURL] = useState('');
   const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
   const [renderEditButton, setRenderEditButton] = useState(true);
+
   //This is used for date picker analysis module
 
   const selectedLanguage = useSelector(
@@ -326,16 +331,17 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   const setSaveSketch = (): void => {
+    mapController.removeUserPointListener();
     mapController.completeSketchVM();
     setRenderEditButton(true);
+    dispatch(setRenderPopup(false));
   };
 
   const setEditSketch = (): void => {
     setRenderEditButton(false);
     mapController.updateSketchVM();
-    mapController.getSketchVMCenter();
-    // ? can I grab the polygon's computer coordinates
-    // ? and use to render a popup?
+    mapController.getUserCoordinates();
+    dispatch(setRenderPopup(true));
   };
 
   const setDelete = (): void => {

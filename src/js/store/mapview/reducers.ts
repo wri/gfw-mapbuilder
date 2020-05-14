@@ -11,7 +11,8 @@ import {
   SET_TIME_SLIDER,
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
-  SET_LAYERS_LOADING
+  SET_LAYERS_LOADING,
+  SET_USER_COORDINATES
 } from './types';
 
 const initialState: MapviewState = {
@@ -25,7 +26,8 @@ const initialState: MapviewState = {
   timeSlider: [2000, 2018],
   scale: 0,
   mapCenterCoordinates: { latitude: 0, longitude: 0 },
-  layersLoading: true
+  layersLoading: true,
+  userCoordinates: undefined
 };
 
 export function mapviewReducer(
@@ -55,6 +57,8 @@ export function mapviewReducer(
       return { ...state, mapCenterCoordinates: action.payload };
     case SET_LAYERS_LOADING:
       return { ...state, layersLoading: action.payload };
+    case SET_USER_COORDINATES:
+      return { ...state, userCoordinates: action.payload };
     default:
       return state;
   }

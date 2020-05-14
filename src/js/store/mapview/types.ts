@@ -61,6 +61,7 @@ export interface MapviewState {
   scale: number;
   mapCenterCoordinates: { latitude: number; longitude: number };
   layersLoading: boolean;
+  userCoordinates: __esri.Point | undefined;
 }
 
 interface Popup {
@@ -150,7 +151,12 @@ export const SET_TIME_SLIDER = 'SET_TIME_SLIDER';
 export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
 export const CHANGE_MAP_CENTER_COORDINATES = 'CHANGE_MAP_CENTER_COORDINATES';
 export const SET_LAYERS_LOADING = 'SET_LAYERS_LOADING';
+export const SET_USER_COORDINATES = 'SET_USER_COORDINATES';
 
+interface SetUserPoint {
+  type: typeof SET_USER_COORDINATES;
+  payload: __esri.Point | undefined;
+}
 interface MapIsReadyAction {
   type: typeof MAP_READY;
   payload: boolean;
@@ -216,4 +222,5 @@ export type MapviewStateTypes =
   | SetTimeSlider
   | ChangeMapScale
   | ChangeMapCenterCoordinates
-  | SetLayersLoading;
+  | SetLayersLoading
+  | SetUserPoint;

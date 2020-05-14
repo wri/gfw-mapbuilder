@@ -1,11 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+
 import Mapview from '../components/mapview/Mapview';
 import MapWidgets from './mapWidgets/mapWidgets';
 import Legend from './legend/Legend';
 import LeftPanel from './leftPanel/LeftPanel';
 import Footer from './Footer';
 import Report from './Report';
+import UserPointPopup from './mapWidgets/userPointPopup';
+
 import { RootState } from 'js/store';
 
 interface MapContentProps {
@@ -25,6 +28,7 @@ function determineMapContent(
         <MapWidgets />
         <Mapview />
         <Legend />
+        <UserPointPopup />
         {!hideFooter && <Footer />}
       </>
     );
