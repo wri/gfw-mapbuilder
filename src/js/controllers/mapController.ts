@@ -180,47 +180,77 @@ export class MapController {
               store.dispatch(setRenderGFWDropdown(false));
             }
 
-            //TODO: We need a better loading handling, probably a spinner!
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
             store.dispatch(selectActiveTab('data'));
-            //if user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
+
+            //If user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
             const clickGeo = event.mapPoint;
             const userFeatLayer = this._map?.findLayerById(
               'user_features'
             ) as any;
-            //@ts-ignore
             if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
-              //@ts-ignore
-              const userGeo = userFeatLayer.graphics.items[0].geometry;
-              const clickedWithinUserFeature = geometryEngine.within(
-                clickGeo,
-                userGeo
+              const activeOutlineColor = [115, 252, 253];
+              const inactiveOutlineColor = [3, 188, 255];
+              //In the event of multiple graphics items on the layer (situation with multi polygon uploads) we iterate over then and find if any are intersecting with click
+
+              //Go over all graphics on the user_features layer and find which ones we are clicking on (if any)
+              const graphicsWeClickedOn = userFeatLayer.graphics.items.filter(
+                (graphic: __esri.Graphic) => {
+                  return geometryEngine.within(clickGeo, graphic.geometry);
+                }
               );
-              if (!clickedWithinUserFeature) {
-                queryLayersForFeatures(this._mapview, this._map, event);
-              } else {
-                //display drawn/uploaded feature as active feature
-                const drawnFeatures: LayerFeatureResult = {
+
+              if (graphicsWeClickedOn.length !== 0) {
+                const graphicIndex = graphicsWeClickedOn[0].attributes
+                  ?.attributeIndex
+                  ? graphicsWeClickedOn[0].attributes.attributeIndex
+                  : 0;
+
+                const graphicsWeMissed = userFeatLayer.graphics.items.filter(
+                  (item: any) => {
+                    return item.attributes.attributeIndex !== graphicIndex;
+                  }
+                );
+
+                //Update colors on multi poly layer
+                const copyGraphicsWeClickedOn = graphicsWeClickedOn[0].clone();
+                copyGraphicsWeClickedOn.symbol.outline.color = activeOutlineColor;
+                this._sketchVMGraphicsLayer!.remove(graphicsWeClickedOn[0]);
+                this._sketchVMGraphicsLayer!.add(copyGraphicsWeClickedOn);
+
+                //Update colors on the rest of the graphics
+                graphicsWeMissed.forEach((graphic: any) => {
+                  const graphicCopy = graphic.clone();
+                  graphicCopy.symbol.outline.color = inactiveOutlineColor;
+                  this._sketchVMGraphicsLayer!.remove(graphic);
+                  this._sketchVMGraphicsLayer!.add(graphicCopy);
+                });
+                //create and sort features because sorting gets out of whack due to this updating process
+                const userFeatures = userFeatLayer.graphics.items
+                  .map((graphic: __esri.Graphic) => {
+                    return {
+                      attributes: graphic.attributes,
+                      geometry: graphic.geometry
+                    };
+                  })
+                  .sort(
+                    (a: any, b: any) =>
+                      a.attributes.attributeIndex - b.attributes.attributeIndex
+                  );
+                const featuresOnMap: LayerFeatureResult = {
                   layerID: 'user_features',
                   layerTitle: 'User Features',
-                  features: [
-                    {
-                      objectid: 1,
-                      //@ts-ignore
-                      attributes: this._sketchVMGraphicsLayer?.graphics.items[0]
-                        .attributes,
-                      //@ts-ignore
-                      geometry: this._sketchVMGraphicsLayer?.graphics.items[0]
-                        .geometry
-                    }
-                  ],
+                  features: userFeatures,
                   fieldNames: null
                 };
-                store.dispatch(setActiveFeatures([drawnFeatures]));
-                store.dispatch(setActiveFeatureIndex([0, 0]));
+                store.dispatch(setActiveFeatures([featuresOnMap]));
+                store.dispatch(setActiveFeatureIndex([0, graphicIndex]));
                 store.dispatch(selectActiveTab('analysis'));
+              } else {
+                //pass through to normal click handler to query features on layers
+                queryLayersForFeatures(this._mapview, this._map, event);
               }
             } else {
               queryLayersForFeatures(this._mapview, this._map, event);
@@ -624,40 +654,71 @@ export class MapController {
         store.dispatch(selectActiveTab('data'));
         //if user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
         const clickGeo = event.mapPoint;
-        const userFeatLayer = this._map?.findLayerById(
-          'user_features'
-        ) as GraphicsLayer;
-        //@ts-ignore
+        const userFeatLayer = this._map?.findLayerById('user_features') as any;
         if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
-          //@ts-ignore
-          const userGeo = userFeatLayer.graphics.items[0].geometry;
-          const clickedWithinUserFeature = geometryEngine.within(
-            clickGeo,
-            userGeo
+          //TODO: Needs refactor, we essentially copy pasting this from initialize click event handler
+          //need to be extracted into utility method for cleaner approach
+          //
+          const activeOutlineColor = [115, 252, 253];
+          const inactiveOutlineColor = [3, 188, 255];
+          //In the event of multiple graphics items on the layer (situation with multi polygon uploads) we iterate over then and find if any are intersecting with click
+
+          //Go over all graphics on the user_features layer and find which ones we are clicking on (if any)
+          const graphicsWeClickedOn = userFeatLayer.graphics.items.filter(
+            (graphic: __esri.Graphic) => {
+              return geometryEngine.within(clickGeo, graphic.geometry);
+            }
           );
-          if (!clickedWithinUserFeature) {
-            queryLayersForFeatures(this._mapview, this._map, event);
-          } else {
-            //display drawn/uploaded feature as active feature
-            const drawnFeatures: LayerFeatureResult = {
+
+          if (graphicsWeClickedOn.length !== 0) {
+            const graphicIndex = graphicsWeClickedOn[0].attributes
+              ?.attributeIndex
+              ? graphicsWeClickedOn[0].attributes.attributeIndex
+              : 0;
+
+            const graphicsWeMissed = userFeatLayer.graphics.items.filter(
+              (item: any) => {
+                return item.attributes.attributeIndex !== graphicIndex;
+              }
+            );
+
+            //Update colors on multi poly layer
+            const copyGraphicsWeClickedOn = graphicsWeClickedOn[0].clone();
+            copyGraphicsWeClickedOn.symbol.outline.color = activeOutlineColor;
+            this._sketchVMGraphicsLayer!.remove(graphicsWeClickedOn[0]);
+            this._sketchVMGraphicsLayer!.add(copyGraphicsWeClickedOn);
+
+            //Update colors on the rest of the graphics
+            graphicsWeMissed.forEach((graphic: any) => {
+              const graphicCopy = graphic.clone();
+              graphicCopy.symbol.outline.color = inactiveOutlineColor;
+              this._sketchVMGraphicsLayer!.remove(graphic);
+              this._sketchVMGraphicsLayer!.add(graphicCopy);
+            });
+            //create and sort features because sorting gets out of whack due to this updating process
+            const userFeatures = userFeatLayer.graphics.items
+              .map((graphic: __esri.Graphic) => {
+                return {
+                  attributes: graphic.attributes,
+                  geometry: graphic.geometry
+                };
+              })
+              .sort(
+                (a: any, b: any) =>
+                  a.attributes.attributeIndex - b.attributes.attributeIndex
+              );
+            const featuresOnMap: LayerFeatureResult = {
               layerID: 'user_features',
               layerTitle: 'User Features',
-              features: [
-                {
-                  objectid: 1,
-                  //@ts-ignore
-                  attributes: this._sketchVMGraphicsLayer?.graphics.items[0]
-                    .attributes,
-                  //@ts-ignore
-                  geometry: this._sketchVMGraphicsLayer?.graphics.items[0]
-                    .geometry
-                }
-              ],
+              features: userFeatures,
               fieldNames: null
             };
-            store.dispatch(setActiveFeatures([drawnFeatures]));
-            store.dispatch(setActiveFeatureIndex([0, 0]));
+            store.dispatch(setActiveFeatures([featuresOnMap]));
+            store.dispatch(setActiveFeatureIndex([0, graphicIndex]));
             store.dispatch(selectActiveTab('analysis'));
+          } else {
+            //pass through to normal click handler to query features on layers
+            queryLayersForFeatures(this._mapview, this._map, event);
           }
         } else {
           queryLayersForFeatures(this._mapview, this._map, event);
@@ -819,6 +880,35 @@ export class MapController {
     }
   }
 
+  updateActivePolyGraphic(activeFeature: FeatureResult[]): void {
+    const activeOutlineColor = [115, 252, 253];
+    const inactiveOutlineColor = [3, 188, 255];
+    const activeIndex = activeFeature[0].attributes.attributeIndex;
+    const newActiveGraphic = this._sketchVMGraphicsLayer!.graphics[
+      'items'
+    ].filter((item: any) => {
+      return item.attributes.attributeIndex === activeIndex;
+    });
+
+    const newActiveGraphicClone = newActiveGraphic[0].clone();
+    newActiveGraphicClone.symbol.outline.color = activeOutlineColor;
+    this._sketchVMGraphicsLayer!.remove(newActiveGraphic[0]);
+    this._sketchVMGraphicsLayer!.add(newActiveGraphicClone);
+
+    const inactiveGraphics = this._sketchVMGraphicsLayer!.graphics[
+      'items'
+    ].filter((item: any) => {
+      return item.attributes.attributeIndex !== activeIndex;
+    });
+
+    inactiveGraphics.forEach((graphic: any) => {
+      const graphicCopy = graphic.clone();
+      graphicCopy.symbol.outline.color = inactiveOutlineColor;
+      this._sketchVMGraphicsLayer!.remove(graphic);
+      this._sketchVMGraphicsLayer!.add(graphicCopy);
+    });
+  }
+
   changeLayerVisibility(layerID: string, visibility: boolean): void {
     const layer = this._map?.findLayerById(layerID);
     if (layer) {
@@ -913,30 +1003,26 @@ export class MapController {
     this._sketchVM?.emit('delete');
   }
 
-  updateSketchVM(): any {
-    if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
-      if (this._sketchVMGraphicsLayer.graphics['items'].length === 1) {
-        this._sketchVM?.update(
-          this._sketchVMGraphicsLayer.graphics['items'][0],
-          {
-            tool: 'reshape',
-            enableRotation: false,
-            toggleToolOnClick: false,
-            enableScaling: false,
-            preserveAspectRatio: false
-          }
-        );
-      }
+  updateSketchVM(graphicIndex?: number): void {
+    const updateOptions = {
+      tool: 'reshape',
+      enableRotation: false,
+      toggleToolOnClick: false,
+      enableScaling: false,
+      preserveAspectRatio: false
+    };
 
-      if (this._sketchVMGraphicsLayer.graphics['items'].length > 1) {
-        this._sketchVM?.update(this._sketchVMGraphicsLayer.graphics['items'], {
-          tool: 'transform',
-          enableRotation: true,
-          toggleToolOnClick: true,
-          enableScaling: true,
-          preserveAspectRatio: false
-        });
-      }
+    if (this._sketchVM && this._sketchVMGraphicsLayer) {
+      //find the right graphic and run updater on it leaving other graphics in tact
+      const graphicToUpdate = this._sketchVMGraphicsLayer.graphics[
+        'items'
+      ].findIndex((graphic: __esri.Graphic) => {
+        return graphic.attributes['attributeIndex'] === graphicIndex;
+      });
+      this._sketchVM.update(
+        this._sketchVMGraphicsLayer.graphics['items'][graphicToUpdate],
+        updateOptions
+      );
     }
   }
 
@@ -949,30 +1035,33 @@ export class MapController {
   }
 
   listenToSketchCreate(event: any): void {
+    //this method is fired when we have 1) new sketch being drawn and created 2) when we mod that drawn feature and save it 3) when we save modded upload feature
     let eventGraphics;
     if (event.hasOwnProperty('graphic')) {
+      //Handle the very first draw action of the sketch widget
       eventGraphics = event.graphic;
+      eventGraphics.attributes = {
+        OBJECTID: eventGraphics.uid,
+        attributeIndex: 0
+      };
+      eventGraphics.symbol.outline.color = [115, 252, 253];
+      eventGraphics.symbol.color = [0, 0, 0, 0];
+      const drawnFeatures: LayerFeatureResult = {
+        layerID: 'user_features',
+        layerTitle: 'User Features',
+        features: [eventGraphics],
+        fieldNames: null
+      };
+
+      //Replace all active features with our drawn feature, assigning custom layerID and Title
+      store.dispatch(setActiveFeatures([drawnFeatures]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
+      store.dispatch(selectActiveTab('analysis'));
     } else if (event.hasOwnProperty('graphics')) {
       eventGraphics = event.graphics[0];
+      eventGraphics.symbol.outline.color = [115, 252, 253];
+      eventGraphics.symbol.color = [0, 0, 0, 0];
     }
-    eventGraphics.attributes = {
-      OBJECTID: eventGraphics.uid
-    };
-
-    eventGraphics.symbol.outline.color = [115, 252, 253];
-    eventGraphics.symbol.color = [0, 0, 0, 0];
-
-    const drawnFeatures: LayerFeatureResult = {
-      layerID: 'user_features',
-      layerTitle: 'User Features',
-      features: [eventGraphics],
-      fieldNames: null
-    };
-
-    //Replace all active features with our drawn feature, assigning custom layerID and Title
-    store.dispatch(setActiveFeatures([drawnFeatures]));
-    store.dispatch(setActiveFeatureIndex([0, 0]));
-    store.dispatch(selectActiveTab('analysis'));
   }
 
   initializeAndSetSketch(graphics = []): void {
@@ -1003,6 +1092,7 @@ export class MapController {
     this._sketchVM = new SketchViewModel({
       layer: this._sketchVMGraphicsLayer,
       view: this._mapview,
+      updateOnGraphicClick: false,
       polylineSymbol: {
         type: 'simple-line',
         color: 'red',
