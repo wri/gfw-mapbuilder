@@ -844,19 +844,42 @@ export class MapController {
   }
 
   getUserCoordinates(): void {
-    let allGeometries: Array<Geometry> = [];
+    interface CustomGeometry {
+      geometry: __esri.Geometry;
+      uid: number;
+    }
+    let allGeometries: Array<CustomGeometry> = [];
 
     if (this._sketchVMGraphicsLayer) {
       allGeometries = this._sketchVMGraphicsLayer.graphics['items'].map(
-        (item: any) => item.geometry
+        (item: __esri.Graphic) => {
+          return {
+            geometry: item.geometry,
+            uid: item['uid']
+          };
+        }
       );
+
+      this._sketchVM?.on('update', (event: any) => {
+        const allGeometriesCopy = [...allGeometries];
+        const graphic = event.graphics[0];
+        const matchingGraphic = allGeometriesCopy.find(
+          (customGeometry: CustomGeometry) => customGeometry.uid === graphic.uid
+        );
+
+        if (matchingGraphic) {
+          const index = allGeometriesCopy.indexOf(matchingGraphic);
+          allGeometriesCopy[index] = graphic;
+          allGeometries = allGeometriesCopy;
+        }
+      });
     }
 
     if (allGeometries.length) {
       this._userPointEventListener = this._mapview.on('pointer-move', event => {
         const userPoint = this._mapview.toMap({ x: event.x, y: event.y });
 
-        const userHovering = allGeometries.map((geometry: Geometry) => {
+        const userHovering = allGeometries.map(({ geometry }) => {
           const intersects = geometryEngine.intersects(geometry, userPoint);
           const contains = geometryEngine.contains(geometry, userPoint);
           return intersects || contains;
@@ -876,6 +899,8 @@ export class MapController {
   }
 
   updateSketchVM(): any {
+    // ? is there anything
+    // ? I can do to update the graphics-items??
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
       if (this._sketchVMGraphicsLayer.graphics['items'].length === 1) {
         this._sketchVM?.update(
