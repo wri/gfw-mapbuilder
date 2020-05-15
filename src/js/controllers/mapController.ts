@@ -2,11 +2,8 @@ import Map from 'esri/Map';
 import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
-import geometryEngine from 'esri/geometry/geometryEngine';
-import Geometry from 'esri/geometry/Geometry';
 import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
-import Extent from 'esri/geometry/Extent';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import CoordinateConversion from 'esri/widgets/CoordinateConversion';
@@ -55,8 +52,7 @@ import {
   setModisStart,
   setModisEnd,
   setViirsStart,
-  setViirsEnd,
-  setRenderPopup
+  setViirsEnd
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -103,7 +99,7 @@ export class MapController {
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
   _domRef: RefObject<any>;
   _imageryOpacity: number;
-  _userPointEventListener: IHandle | undefined;
+  _mouseTrackingEvent: IHandle | undefined;
 
   constructor() {
     this._map = undefined;
@@ -112,7 +108,7 @@ export class MapController {
     this._printTask = undefined;
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
-    this._userPointEventListener = undefined;
+    this._mouseTrackingEvent = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -843,64 +839,19 @@ export class MapController {
     this._sketchVM?.emit('delete');
   }
 
-  getUserCoordinates(): void {
-    interface CustomGeometry {
-      geometry: __esri.Geometry;
-      uid: number;
-    }
-    let allGeometries: Array<CustomGeometry> = [];
-
-    if (this._sketchVMGraphicsLayer) {
-      allGeometries = this._sketchVMGraphicsLayer.graphics['items'].map(
-        (item: __esri.Graphic) => {
-          return {
-            geometry: item.geometry,
-            uid: item['uid']
-          };
-        }
-      );
-
-      this._sketchVM?.on('update', (event: any) => {
-        const allGeometriesCopy = [...allGeometries];
-        const graphic = event.graphics[0];
-        const matchingGraphic = allGeometriesCopy.find(
-          (customGeometry: CustomGeometry) => customGeometry.uid === graphic.uid
-        );
-
-        if (matchingGraphic) {
-          const index = allGeometriesCopy.indexOf(matchingGraphic);
-          allGeometriesCopy[index] = graphic;
-          allGeometries = allGeometriesCopy;
-        }
-      });
-    }
-
-    if (allGeometries.length) {
-      this._userPointEventListener = this._mapview.on('pointer-move', event => {
-        const userPoint = this._mapview.toMap({ x: event.x, y: event.y });
-
-        const userHovering = allGeometries.map(({ geometry }) => {
-          const intersects = geometryEngine.intersects(geometry, userPoint);
-          const contains = geometryEngine.contains(geometry, userPoint);
-          return intersects || contains;
-        });
-
-        if (userHovering.includes(true)) {
-          store.dispatch(setUserCoordinates(userPoint));
-        }
-      });
-    }
+  detachMouseLocationTracking(): void {
+    this._mouseTrackingEvent?.remove();
   }
 
-  removeUserPointListener(): void {
-    if (this._userPointEventListener) {
-      this._userPointEventListener.remove();
-    }
+  attachMouseLocationTracking(): void {
+    //sets mouse tracking event on the map in order to display coordinates live in the popup when user is editing drawn/uploaded polygon
+    this._mouseTrackingEvent = this._mapview.on('pointer-move', event => {
+      const userPoint = this._mapview.toMap({ x: event.x, y: event.y });
+      store.dispatch(setUserCoordinates(userPoint));
+    });
   }
 
   updateSketchVM(): any {
-    // ? is there anything
-    // ? I can do to update the graphics-items??
     if (this._sketchVM && this._map && this._sketchVMGraphicsLayer) {
       if (this._sketchVMGraphicsLayer.graphics['items'].length === 1) {
         this._sketchVM?.update(
