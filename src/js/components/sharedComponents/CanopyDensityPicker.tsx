@@ -6,11 +6,7 @@ import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensi
 
 import { canopyDensityPickerConfig } from 'configs/leftPanel.translations';
 
-interface CanopyDensityPickerProps {
-  label: boolean;
-}
-
-const CanopyDensityPicker = (props: CanopyDensityPickerProps): JSX.Element => {
+const CanopyDensityPicker = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const customColorTheme = useSelector(
@@ -32,29 +28,13 @@ const CanopyDensityPicker = (props: CanopyDensityPickerProps): JSX.Element => {
   return (
     <>
       <div>
-        {props.label &&
-          displayLabel.map((label: string, index: number) => {
-            if (index === 0) {
-              return (
-                <div key={index}>
-                  <span>
-                    {label}{' '}
-                    <button
-                      className="canopy-density-picker"
-                      style={{ backgroundColor: `${customColorTheme}` }}
-                      onClick={handleDensityButtonClick}
-                    >{`> ${markValueMap[density]}%`}</button>
-                  </span>
-                </div>
-              );
-            } else {
-              return (
-                <div key={index}>
-                  <span> {label}</span>
-                </div>
-              );
-            }
-          })}
+        <span>{displayLabel[0]} </span>
+        <button
+          className="canopy-density-picker"
+          style={{ backgroundColor: `${customColorTheme}` }}
+          onClick={handleDensityButtonClick}
+        >{`> ${markValueMap[density]}%`}</button>
+        <span> {displayLabel[1]}</span>
       </div>
     </>
   );

@@ -224,7 +224,7 @@ const BaseAnalysis = (): JSX.Element => {
         if (bounds) return <MemoRangeSlider yearRange={bounds} />;
         break;
       case 'tcd':
-        return <CanopyDensityPicker label={false} />;
+        return <CanopyDensityPicker />;
       case 'datepicker':
         return (
           <MemoDatePicker

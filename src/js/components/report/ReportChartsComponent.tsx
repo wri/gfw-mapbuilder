@@ -193,7 +193,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           );
         break;
       case 'tcd':
-        return <CanopyDensityPicker label={false} />;
+        return <CanopyDensityPicker />;
       case 'datepicker':
         return (
           <MemoReportDatePicker
