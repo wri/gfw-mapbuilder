@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-
 import Mapview from '../components/mapview/Mapview';
 import MapWidgets from './mapWidgets/mapWidgets';
 import Legend from './legend/Legend';

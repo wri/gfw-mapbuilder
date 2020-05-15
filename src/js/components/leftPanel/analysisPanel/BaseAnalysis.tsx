@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
@@ -19,7 +18,6 @@ import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import { PrintReportButton } from 'js/components/sharedComponents/PrintReportButton';
 import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.svg';
 import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
 import Loader from 'js/components/sharedComponents/Loader';
@@ -334,17 +332,16 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   const setSaveSketch = (): void => {
-    dispatch(setRenderPopup(false));
-    mapController.removeUserPointListener();
     mapController.completeSketchVM();
     setRenderEditButton(true);
+    mapController.detachMouseLocationTracking();
+    dispatch(setRenderPopup(false));
   };
 
   const setEditSketch = (): void => {
-    dispatch(setUserCoordinates(undefined));
     setRenderEditButton(false);
     mapController.updateSketchVM();
-    mapController.getUserCoordinates();
+    mapController.attachMouseLocationTracking();
     dispatch(setRenderPopup(true));
   };
 
