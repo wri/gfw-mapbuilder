@@ -40,39 +40,25 @@ export const printContent = {
 
 export const shareContent = {
   en: {
-    title: 'Share',
-    instructions:
-      'EN: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Share'
   },
   ka: {
-    title: 'გაზიარება',
-    instructions:
-      'KA: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'გაზიარება'
   },
   fr: {
-    title: 'Partager',
-    instructions:
-      'FR: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Partager'
   },
   es: {
-    title: 'Compartir',
-    instructions:
-      'ES: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Compartir'
   },
   pt: {
-    title: 'Compartilhar',
-    instructions:
-      'PT: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Compartilhar'
   },
   id: {
-    title: 'Share',
-    instructions:
-      'ID: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Share'
   },
   zh: {
-    title: '分享',
-    instructions:
-      'ZH: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: '分享'
   }
 };
 
