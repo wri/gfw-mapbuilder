@@ -969,15 +969,20 @@
     }
   }
 }
-
-.canopy-density-picker {
-  margin-left: 5px;
-  font-size: 10px;
-  border: 0;
-  border-radius: 20px;
-  padding: 0.25rem 0.5rem;
-  background-color: $base-yellow;
-  color: #fff;
+.canopy-density-picker-wrapper {
+  text-align: center;
+  span {
+    font-size: 12px;
+  }
+  .canopy-density-picker {
+    margin-left: 5px;
+    font-size: 10px;
+    border: 0;
+    border-radius: 20px;
+    padding: 0.25rem 0.5rem;
+    background-color: $base-yellow;
+    color: #fff;
+  }
 }
 
 .recent-imagery-container {

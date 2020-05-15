@@ -350,3 +350,76 @@ export const layerControlsTranslations = {
     timeEnd: '结束：'
   }
 };
+
+export const dataTabConfig = {
+  en: {
+    header: 'Select a shape on the map',
+    instructionsList: [
+      'Use the layers tab to turn on a data layer',
+      'Select a shape on the map'
+    ]
+  },
+  ka: {
+    header: 'აარჩიეთ პოლიგონი რუკაზე',
+    instructionsList: [
+      'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
+      'აარჩიეთ ფიგურა რუკაზე'
+    ]
+  },
+  fr: {
+    header: 'Sélectionnez un polygone sur la carte',
+    instructionsList: [
+      "Utiliser l'onglet Couches pour activer une couche de données",
+      'Sélectionnez un polygone sur la carte'
+    ]
+  },
+  es: {
+    header: 'Seleccionar un polígono en el mapa',
+    instructionsList: [
+      'Usar la pestaña de capas para encender una capa',
+      'Seleccionar un polígono en el mapa'
+    ]
+  },
+  pt: {
+    header: 'Selecione uma área no mapa',
+    instructionsList: [
+      'Use a guia camadas para ativar os dados da camada',
+      'Selecione uma área no mapa'
+    ]
+  },
+  id: {
+    header: 'Select a shape on the map',
+    instructionsList: [
+      'Use the layers tab to turn on a data layer',
+      'Select a shape on the map'
+    ]
+  },
+  zh: {
+    header: '在地图上选择图形',
+    instructionsList: ['使用图层键来打开图层', '在地图上选择图形']
+  }
+};
+
+export const canopyDensityPickerConfig = {
+  en: {
+    displayLabel: ['Displaying', 'canopy density.']
+  },
+  ka: {
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.']
+  },
+  fr: {
+    displayLabel: ['Affichage', 'Densité de la canopée.']
+  },
+  es: {
+    displayLabel: ['Mostrando', 'densidad de follaje.']
+  },
+  pt: {
+    displayLabel: ['Exibindo', 'densidade de dossel']
+  },
+  id: {
+    displayLabel: ['Displaying', 'canopy density.']
+  },
+  zh: {
+    displayLabel: ['显示中', '林冠覆盖密度']
+  }
+};

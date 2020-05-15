@@ -530,7 +530,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </div>
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
-      {layer?.visible && densityPicker && <CanopyDensityPicker label={true} />}
+      {layer?.visible && densityPicker && <CanopyDensityPicker />}
       {layer?.visible && layer.versions && (
         <LayerVersionPicker
           layerInfo={layer}

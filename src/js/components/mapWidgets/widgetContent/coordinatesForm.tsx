@@ -99,9 +99,13 @@ const CoordinatesForm: FunctionComponent = () => {
   );
 
   const { degree, minutes, seconds } = coordinatesContent;
-  const { title, dropdownTitle, decimalOptions } = coordinatesContent[
-    selectedLanguage
-  ];
+  const {
+    title,
+    dropdownTitle,
+    decimalOptions,
+    addMoreLabel,
+    makeShapeLabel
+  } = coordinatesContent[selectedLanguage];
 
   const setDDFormValues = ({
     userInput,
@@ -258,13 +262,13 @@ const CoordinatesForm: FunctionComponent = () => {
             );
           })}
         <div className="buttons-wrapper">
-          <button onClick={(): void => setSection(true)}>Add more</button>
+          <button onClick={(): void => setSection(true)}>{addMoreLabel}</button>
           <button
             className="orange-button"
             style={{ backgroundColor: customColorTheme }}
             onClick={(): void => setShape()}
           >
-            Make shape
+            {makeShapeLabel}
           </button>
         </div>
       </div>

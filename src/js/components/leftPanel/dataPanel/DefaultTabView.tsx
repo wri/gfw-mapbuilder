@@ -1,16 +1,28 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+
+import { dataTabConfig } from 'configs/leftPanel.translations';
+
+import { RootState } from 'js/store/index';
 
 interface DefaultTabViewProps {
   customColorTheme: string;
 }
+
 const DefaultTabView = (props: DefaultTabViewProps): JSX.Element => {
+  const selectedLanguage = useSelector(
+    (state: RootState) => state.appState.selectedLanguage
+  );
+  const { header, instructionsList } = dataTabConfig[selectedLanguage];
+
   return (
     <div className="data-tab-default-container">
       <figure>
-        <figcaption className="title">Select a shape on the map</figcaption>
+        <figcaption className="title">{header}</figcaption>
         <ol>
-          <li>Use the layers tab to turn on a data layer</li>
-          <li>Select a shape on the map</li>
+          {instructionsList.map((instruction: string, index: number) => (
+            <li key={index}>{instruction}</li>
+          ))}
         </ol>
       </figure>
       <svg className="svg-icon" style={{ width: 95, height: 75 }}>
