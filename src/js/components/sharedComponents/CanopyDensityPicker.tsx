@@ -26,17 +26,15 @@ const CanopyDensityPicker = (): JSX.Element => {
   }
 
   return (
-    <>
-      <div>
-        <span>{displayLabel[0]} </span>
-        <button
-          className="canopy-density-picker"
-          style={{ backgroundColor: `${customColorTheme}` }}
-          onClick={handleDensityButtonClick}
-        >{`> ${markValueMap[density]}%`}</button>
-        <span> {displayLabel[1]}</span>
-      </div>
-    </>
+    <div className="canopy-density-picker-wrapper">
+      <span>{displayLabel[0]} </span>
+      <button
+        className="canopy-density-picker"
+        style={{ backgroundColor: `${customColorTheme}` }}
+        onClick={handleDensityButtonClick}
+      >{`> ${markValueMap[density]}%`}</button>
+      <span> {displayLabel[1]}</span>
+    </div>
   );
 };
 
