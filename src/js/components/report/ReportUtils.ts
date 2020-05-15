@@ -26,7 +26,7 @@ export function extractLayerInfo(
 
   //Find the layer on the map and construct output object to be consumed for queries
   const activeLayerInfo = {} as any;
-  if (activeLayer.parentID) {
+  if (activeLayer?.parentID) {
     activeLayerInfo.sublayer = true;
     const parentLayer: any = map.findLayerById(activeLayer.parentID);
     activeLayerInfo.parentLayer = parentLayer;

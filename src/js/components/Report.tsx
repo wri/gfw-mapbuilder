@@ -45,6 +45,9 @@ const Report = (props: ReportProps): JSX.Element => {
   const [sublayerTitle, setSublayerTitle] = React.useState('');
   const [layerTitle, setLayerTitle] = React.useState('');
   const [attributes, setAttributes] = React.useState<null | object>(null);
+  const [hideAttributeTable, setHideAttributeTable] = React.useState<boolean>(
+    false
+  );
 
   const isMapReady = useSelector(
     (store: RootState) => store.mapviewState.isMapReady
@@ -131,14 +134,20 @@ const Report = (props: ReportProps): JSX.Element => {
         'objectid'
       );
 
-      const { activeLayer, activeLayerInfo }: any = extractLayerInfo(
-        layerID,
-        sublayerID,
-        allAvailableLayers,
-        mapController._map
-      );
-
-      getFeatures(activeLayer, activeLayerInfo, objectID);
+      // ObjectID comes in as undefined in certain cases such as when report is loaded with user drawn or user uploaded polygon feature, in those cases we do not need attribute table loaded so this will short-circuit the
+      // logic below and prevent breaking attribute table logic
+      if (objectID !== 'undefined') {
+        const { activeLayer, activeLayerInfo }: any = extractLayerInfo(
+          layerID,
+          sublayerID,
+          allAvailableLayers,
+          mapController._map
+        );
+        getFeatures(activeLayer, activeLayerInfo, objectID);
+      } else {
+        setAttributes({});
+        setHideAttributeTable(true);
+      }
     }
   }, [featureGeometry, layersLoading]);
 
@@ -194,7 +203,7 @@ const Report = (props: ReportProps): JSX.Element => {
           <>
             <p className="analysis-title">AREA OF ANALYSIS</p>
             <p className="analysis-subtitle">{layerTitle}</p>
-            <ReportTable attr={attributes} />
+            {!hideAttributeTable && <ReportTable attr={attributes} />}
           </>
         )}
       </div>
