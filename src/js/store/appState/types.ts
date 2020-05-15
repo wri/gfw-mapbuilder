@@ -53,6 +53,7 @@ export interface AppState {
   hideWidgetActive: boolean;
   isLoggedIn: boolean;
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
+  renderPopup: boolean;
 }
 
 //Action names available
@@ -81,6 +82,7 @@ export const SET_VIIRS_START = 'SET_VIIRS_START';
 export const SET_VIIRS_END = 'SET_VIIRS_END';
 export const SET_MODIS_START = 'SET_MODIS_START';
 export const SET_MODIS_END = 'SET_MODIS_END';
+export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -202,6 +204,11 @@ interface SetViirsEnd {
   payload: AppState['leftPanel']['viirsEnd'];
 }
 
+interface SetRenderPopup {
+  type: typeof SET_RENDER_POPUP;
+  payload: AppState['renderPopup'];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -226,4 +233,5 @@ export type AppStateTypes =
   | SetModisStart
   | SetModisEnd
   | SetViirsStart
-  | SetViirsEnd;
+  | SetViirsEnd
+  | SetRenderPopup;
