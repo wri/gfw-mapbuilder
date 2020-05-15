@@ -556,3 +556,33 @@ export const infoContent = {
     overviewLabel: '概述'
   }
 };
+
+export const canopyDensityContentConfig = {
+  en: {
+    directions:
+      'Adjust the minimum canopy density for tree cover and tree cover loss'
+  },
+  ka: {
+    directions:
+      'დააზუსტეთ მინიმალური ვარჯის სიხშირე, რომ დაინახოთ ხის საფარი და ხის საფარის კარგვა'
+  },
+  fr: {
+    directions:
+      'Ajuster la densité minimum de la canopée pour le couvert arboré et la perte en couvert arboré'
+  },
+  es: {
+    directions:
+      'Ajustar el mínimo densidad del follaje para la cobertura arbórea y la pérdida de la cobertura arbórea'
+  },
+  pt: {
+    directions:
+      'Ajuste a densidade mínima de dossel para cobertura florestal e perda de cobertura florestal'
+  },
+  id: {
+    directions:
+      'Adjust the minimum canopy density for tree cover and tree cover loss'
+  },
+  zh: {
+    directions: '对森林覆盖和森林覆盖损失图层调试最低林冠覆盖密度'
+  }
+};
