@@ -6,8 +6,6 @@ import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensi
 
 import { canopyDensityPickerConfig } from 'configs/leftPanel.translations';
 
-//TODO: Language awareness
-//
 interface CanopyDensityPickerProps {
   label: boolean;
 }
