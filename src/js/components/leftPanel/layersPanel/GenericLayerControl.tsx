@@ -18,6 +18,7 @@ import {
   setTerraEnd
 } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
+import { LayerProps } from 'js/store/mapview/types';
 import { mapController } from 'js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
@@ -403,13 +404,13 @@ interface LayerControlProps {
   type: 'radio' | 'checkbox' | 'nested' | 'default';
   activeLayer?: string;
   sendActiveLayer?: (val: string) => void;
+  layer: LayerProps;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
+  const layer = props.layer;
   const dispatch = useDispatch();
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
+
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
@@ -417,8 +418,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
-  const layer = allAvailableLayers.find(l => l.id === props.id);
-
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
 
@@ -531,7 +530,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </div>
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
-      {layer?.visible && densityPicker && <CanopyDensityPicker label={true} />}
+      {layer?.visible && densityPicker && <CanopyDensityPicker />}
       {layer?.visible && layer.versions && (
         <LayerVersionPicker
           layerInfo={layer}
@@ -557,4 +556,4 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   );
 };
 
-export default GenericLayerControl;
+export default React.memo(GenericLayerControl);

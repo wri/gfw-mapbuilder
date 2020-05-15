@@ -24,7 +24,8 @@ import {
   SET_VIIRS_START,
   SET_VIIRS_END,
   SET_MODIS_START,
-  SET_MODIS_END
+  SET_MODIS_END,
+  SET_RENDER_POPUP
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -201,6 +202,13 @@ export function setViirsStart(payload: AppState['leftPanel']['viirsStart']) {
 export function setViirsEnd(payload: AppState['leftPanel']['viirsEnd']) {
   return {
     type: SET_VIIRS_END as typeof SET_VIIRS_END,
+    payload: payload
+  };
+}
+
+export function setRenderPopup(payload: AppState['renderPopup']) {
+  return {
+    type: SET_RENDER_POPUP as typeof SET_RENDER_POPUP,
     payload: payload
   };
 }

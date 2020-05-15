@@ -4,13 +4,9 @@ import { RootState } from 'js/store';
 import { renderModal } from 'js/store/appState/actions';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 
-//TODO: Language awareness
-//
-interface CanopyDensityPickerProps {
-  label: boolean;
-}
+import { canopyDensityPickerConfig } from 'configs/leftPanel.translations';
 
-const CanopyDensityPicker = (props: CanopyDensityPickerProps): JSX.Element => {
+const CanopyDensityPicker = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const customColorTheme = useSelector(
@@ -19,22 +15,26 @@ const CanopyDensityPicker = (props: CanopyDensityPickerProps): JSX.Element => {
   const density = useSelector(
     (store: RootState) => store.appState.leftPanel.density
   );
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
+
+  const { displayLabel } = canopyDensityPickerConfig[selectedLanguage];
 
   function handleDensityButtonClick(): void {
     dispatch(renderModal('CanopyDensity'));
   }
 
   return (
-    <>
-      <div>
-        {props.label && <span>Change canopy density</span>}
-        <button
-          className="canopy-density-picker"
-          style={{ backgroundColor: `${customColorTheme}` }}
-          onClick={handleDensityButtonClick}
-        >{`> ${markValueMap[density]}%`}</button>
-      </div>
-    </>
+    <div className="canopy-density-picker-wrapper">
+      <span>{displayLabel[0]} </span>
+      <button
+        className="canopy-density-picker"
+        style={{ backgroundColor: `${customColorTheme}` }}
+        onClick={handleDensityButtonClick}
+      >{`> ${markValueMap[density]}%`}</button>
+      <span> {displayLabel[1]}</span>
+    </div>
   );
 };
 

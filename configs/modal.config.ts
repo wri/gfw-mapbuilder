@@ -40,39 +40,25 @@ export const printContent = {
 
 export const shareContent = {
   en: {
-    title: 'Share',
-    instructions:
-      'EN: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Share'
   },
   ka: {
-    title: 'გაზიარება',
-    instructions:
-      'KA: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'გაზიარება'
   },
   fr: {
-    title: 'Partager',
-    instructions:
-      'FR: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Partager'
   },
   es: {
-    title: 'Compartir',
-    instructions:
-      'ES: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Compartir'
   },
   pt: {
-    title: 'Compartilhar',
-    instructions:
-      'PT: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Compartilhar'
   },
   id: {
-    title: 'Share',
-    instructions:
-      'ID: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: 'Share'
   },
   zh: {
-    title: '分享',
-    instructions:
-      'ZH: Copy and paste the link to share it or use the buttons below to share on social media.'
+    title: '分享'
   }
 };
 
@@ -224,68 +210,64 @@ export const coordinatesContent = {
     title: 'Enter your own coordinates',
     dropdownTitle: 'Select Format',
     decimalOptions: ['Degrees Decimal Seconds (DMS)', 'Decimal Degrees (DD)'],
-    latitude: 'Latitude',
-    longitude: 'Longitude'
+    latitudeLabel: 'Latitude',
+    longitudeLabel: 'Longitude',
+    addMoreLabel: 'Add More',
+    makeShapeLabel: 'Make Shape'
   },
   ka: {
-    title: 'KA: Enter your own coordinates',
-    dropdownTitle: 'KA: Select Format',
-    decimalOptions: [
-      'KA: Degrees Decimal Seconds (DMS)',
-      'KA: Decimal Degrees (DD)'
-    ],
-    latitude: 'KA: Latitude',
-    longitude: 'KA: Longitude'
+    title: 'შეიტანეთ თქვენი კოორდინატები',
+    dropdownTitle: `შეარჩიეთ ფორმატი`,
+    decimalOptions: [`გრადუსის მეათედი წუთები (DMS)`, `მეათედი გრადუსები (DD)`],
+    latitudeLabel: 'განედი',
+    longitudeLabel: 'გრძედი',
+    addMoreLabel: 'დამატება',
+    makeShapeLabel: 'პოლიგონის შექმნა'
   },
   fr: {
-    title: 'FR: Enter your own coordinates',
-    dropdownTitle: 'FR: Select Format',
-    decimalOptions: [
-      'FR: Degrees Decimal Seconds (DMS)',
-      'FR: Decimal Degrees (DD)'
-    ],
-    latitude: 'FR: Latitude',
-    longitude: 'FR: Longitude'
+    title: 'Entrez vos propres coordonnées',
+    dropdownTitle: `Sélectionner le format`,
+    decimalOptions: [`Degrés Minutes Secondes (DMS)`, `Degrés Décimaux (DD)`],
+    latitudeLabel: 'Latitude',
+    longitudeLabel: 'Longitude',
+    addMoreLabel: 'Ajouter',
+    makeShapeLabel: 'Créer la zone'
   },
   es: {
-    title: 'ES: Enter your own coordinates',
-    dropdownTitle: 'ES: Select Format',
-    decimalOptions: [
-      'ES: Degrees Decimal Seconds (DMS)',
-      'ES: Decimal Degrees (DD)'
-    ],
-    latitude: 'ES: Latitude',
-    longitude: 'ES: Longitude'
+    title: 'Ingresa las coordenadas',
+    dropdownTitle: `Selecciona el Formato`,
+    decimalOptions: [`Grados y Minutos y Decimales`, `Grados Decimales`],
+    latitudelabel: 'Latitud',
+    longitudeLabel: 'Longitud',
+    addMoreLabel: 'Agrega más',
+    makeShapeLabel: 'Genera el polígno'
   },
   pt: {
-    title: 'PT: Enter your own coordinates',
-    dropdownTitle: 'PT: Select Format',
-    decimalOptions: [
-      'PT: Degrees Decimal Seconds (DMS)',
-      'PT: Decimal Degrees (DD)'
-    ],
-    latitude: 'PT: Latitude',
-    longitude: 'PT: Longitude'
+    title: 'Entre com suas coordenadas',
+    dropdownTitle: `Selecione o formato`,
+    decimalOptions: [`Graus Minutos Segundos (DMS)`, `Graus Decimais (DD)`],
+    latitudelabel: 'Latitude',
+    longitudeLabel: 'Longitude',
+    addMoreLabel: 'Adicione mais',
+    makeShapeLabel: ''
   },
   id: {
-    title: 'ID: Enter your own coordinates',
-    dropdownTitle: 'ID: Select Format',
-    decimalOptions: [
-      'ID: Degrees Decimal Seconds (DMS)',
-      'ID: Decimal Degrees (DD)'
-    ],
-    latitude: 'ID: Latitude',
-    longitude: 'ID: Longitude'
+    title: 'Masukkan koordinat Anda',
+    dropdownTitle: `Pilih Format`,
+    decimalOptions: [`Derajat Menit Detik (DMS)`, `Derajat Desimal (DD)`],
+    latitudelabel: 'Lintang',
+    longitudeLabel: 'Bujur',
+    addMoreLabel: 'Tambah Lagi',
+    makeShapeLabel: 'Buat Bentuk'
   },
   zh: {
-    title: 'ZH: Enter your own coordinates',
-    dropdownTitle: 'ZH: Select Format',
-    decimalOptions: [
-      'ZH: Degrees Decimal Seconds (DMS)',
-      'ZH: Decimal Degrees (DD)'
-    ],
-    latitude: 'ZH: Latitude',
-    longitude: 'ZH: Longitude'
+    title: '输入你的坐标',
+    dropdownTitle: '选择样式',
+    decimalOptions: [`度分秒`, `十进制度`],
+    latitudelabel: '纬度',
+    longitudeLabel: '经度',
+    addMoreLabel: '添加更多',
+    makeShapeLabel: '作图'
   }
 };
 
@@ -467,12 +449,140 @@ export const measureContent = {
   }
 };
 
-export const downloadData = {
-  en: 'download data',
-  ka: 'მონაცემების ჩამოტვირთვა',
-  fr: 'Téléchargez les données',
-  es: 'Descarga información',
-  pt: 'Baixar dados',
-  zh: '下载数据',
-  id: 'download data'
+export const infoContent = {
+  en: {
+    functionLabel: 'function',
+    resolutionLabel: 'resolution',
+    geographicCoverageLabel: 'geographic coverage',
+    sourceLabel: 'source',
+    frequencyLabel: 'frequency',
+    contentDateLabel: 'date of content',
+    cautionsLabel: 'cautions',
+    licenseLabel: 'license',
+    learnMoreLabel: 'learn more',
+    downloadDataLabel: 'download data',
+    descriptionLabel: 'description',
+    noInfoLabel: 'No Information Available',
+    overviewLabel: 'Overview'
+  },
+  ka: {
+    functionLabel: 'ფუნქცია',
+    resolutionLabel: 'რეზოლუცია',
+    geographicCoverageLabel: 'გეოგრაფიული არეალი',
+    sourceLabel: 'წყარო',
+    frequencyLabel: 'სიხშირე',
+    contentDateLabel: 'მონაცემების თარიღი',
+    cautionsLabel: 'გაფრთხილება',
+    licenseLabel: 'ლიცენზია',
+    learnMoreLabel: 'მეტი ინფო',
+    downloadDataLabel: 'მონაცემების ჩამოტვირთვა',
+    descriptionLabel: 'აღწერა',
+    noInfoLabel: 'ინფორმაცია არ არსებობს',
+    overviewLabel: 'მიმოხილვა'
+  },
+  fr: {
+    functionLabel: 'Fonction',
+    resolutionLabel: 'résolution',
+    geographicCoverageLabel: 'couverture géographique',
+    sourceLabel: 'source',
+    frequencyLabel: 'fréquence',
+    contentDateLabel: "date d'acquisition",
+    cautionsLabel: 'Avertissements',
+    licenseLabel: 'licence',
+    learnMoreLabel: 'En savoir plus',
+    downloadDataLabel: 'Téléchargez les données',
+    descriptionLabel: 'description',
+    noInfoLabel: "Pas d'informations disponibles",
+    overviewLabel: "Vue d'ensemble"
+  },
+  es: {
+    functionLabel: 'Función',
+    resolutionLabel: 'Resolución',
+    geographicCoverageLabel: 'Cobertura geográfica',
+    sourceLabel: 'Fuente',
+    frequencyLabel: 'Frecuencia',
+    contentDateLabel: 'Fecha del contenido',
+    cautionsLabel: 'Precauciones',
+    licenseLabel: 'Licencia',
+    learnMoreLabel: 'Conozca más',
+    downloadDataLabel: 'Descarga información',
+    descriptionLabel: 'Descripción',
+    noInfoLabel: 'No hay información disponible',
+    overviewLabel: 'Resumen'
+  },
+  pt: {
+    functionLabel: 'função',
+    resolutionLabel: 'resolução',
+    geographicCoverageLabel: 'cobertura geográfica',
+    sourceLabel: 'fonte',
+    frequencyLabel: 'frequência',
+    contentDateLabel: 'data do conteúdo',
+    cautionsLabel: 'precauções',
+    licenseLabel: 'licença',
+    learnMoreLabel: 'Saiba mais',
+    downloadDataLabel: 'Baixar dados',
+    descriptionLabel: 'Descrição',
+    noInfoLabel: 'Sem informação disponível.',
+    overviewLabel: 'Visão geral'
+  },
+  id: {
+    functionLabel: 'function',
+    resolutionLabel: 'resolution',
+    geographicCoverageLabel: 'geographic coverage',
+    sourceLabel: 'source',
+    frequencyLabel: 'frequency',
+    contentDateLabel: 'date of content',
+    cautionsLabel: 'cautions',
+    licenseLabel: 'license',
+    learnMoreLabel: 'learn more',
+    downloadDataLabel: 'download data',
+    descriptionLabel: 'description',
+    noInfoLabel: 'No Information Available',
+    overviewLabel: 'Overview'
+  },
+  zh: {
+    functionLabel: '功能',
+    resolutionLabel: '清晰度',
+    geographicCoverageLabel: '空间覆盖范围',
+    sourceLabel: '来源',
+    frequencyLabel: '更新频率',
+    contentDateLabel: '内容日期',
+    cautionsLabel: '注意',
+    licenseLabel: '数据分享执照',
+    learnMoreLabel: '了解更多',
+    downloadDataLabel: '下载数据',
+    descriptionLabel: '说明',
+    noInfoLabel: '没有相关信息',
+    overviewLabel: '概述'
+  }
+};
+
+export const canopyDensityContentConfig = {
+  en: {
+    directions:
+      'Adjust the minimum canopy density for tree cover and tree cover loss'
+  },
+  ka: {
+    directions:
+      'დააზუსტეთ მინიმალური ვარჯის სიხშირე, რომ დაინახოთ ხის საფარი და ხის საფარის კარგვა'
+  },
+  fr: {
+    directions:
+      'Ajuster la densité minimum de la canopée pour le couvert arboré et la perte en couvert arboré'
+  },
+  es: {
+    directions:
+      'Ajustar el mínimo densidad del follaje para la cobertura arbórea y la pérdida de la cobertura arbórea'
+  },
+  pt: {
+    directions:
+      'Ajuste a densidade mínima de dossel para cobertura florestal e perda de cobertura florestal'
+  },
+  id: {
+    directions:
+      'Adjust the minimum canopy density for tree cover and tree cover loss'
+  },
+  zh: {
+    directions: '对森林覆盖和森林覆盖损失图层调试最低林冠覆盖密度'
+  }
 };

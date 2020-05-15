@@ -163,12 +163,17 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   };
 
   const { layerGroupKey, layerGroupConfig } = props;
-  const { selectedLanguage, leftPanel } = useSelector(
-    (store: RootState) => store.appState
+
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
 
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
+  const openLayerGroup = useSelector(
+    (store: RootState) => store.appState.leftPanel.openLayerGroup
+  );
+
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
   );
 
   const imagerylayer = allAvailableLayers.find(
@@ -183,7 +188,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage];
 
-  const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
+  const groupOpen = openLayerGroup === layerGroupKey;
 
   const handleGroupToggle = (): void => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;

@@ -1,4 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
+import { RootState } from 'js/store/index';
+
+import { coordinatesContent } from 'configs/modal.config';
 
 import { DMSFormValues, CoordinateProps } from 'js/interfaces/coordinateForm';
 
@@ -23,6 +28,12 @@ interface DMSSectionProps {
 }
 
 export default function DMSSection(props: DMSSectionProps): JSX.Element {
+  const selectedLanguage = useSelector(
+    (state: RootState) => state.appState.selectedLanguage
+  );
+  const { latitudeLabel, longitudeLabel } = coordinatesContent[
+    selectedLanguage
+  ];
   const {
     dmsSection,
     setDMSFormValues,
@@ -46,7 +57,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
             REMOVE <TrashCanIcon height={20} width={20} fill={'#555'} />
           </button>
         )}
-        <span>Latitude</span>
+        <span>{latitudeLabel}</span>
         <div className="input-wrapper">
           <input
             type="number"
@@ -106,7 +117,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
         </div>
       </div>
       <div className="dms-wrapper">
-        <span>Longitude</span>
+        <span>{longitudeLabel}</span>
         <div className="input-wrapper">
           <input
             type="number"

@@ -1,10 +1,22 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
+import { RootState } from 'js/store/index';
 
 import { DDSectionProps } from 'js/interfaces/coordinateForm';
+
+import { coordinatesContent } from 'configs/modal.config';
 
 import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 
 export default function DDSection(props: DDSectionProps): JSX.Element {
+  const selectedLanguage = useSelector(
+    (state: RootState) => state.appState.selectedLanguage
+  );
+  const { latitudeLabel, longitudeLabel } = coordinatesContent[
+    selectedLanguage
+  ];
+
   const {
     ddSection,
     degreeSymbol,
@@ -26,7 +38,7 @@ export default function DDSection(props: DDSectionProps): JSX.Element {
       )}
       <div className="dds-wrapper">
         <div className="degree-section">
-          <span>Latitude</span>
+          <span>{latitudeLabel}</span>
 
           <div className="input-wrapper">
             <input
@@ -47,7 +59,7 @@ export default function DDSection(props: DDSectionProps): JSX.Element {
           </div>
         </div>
         <div className="degree-section">
-          <span>Longitude</span>
+          <span>{longitudeLabel}</span>
 
           <div className="input-wrapper">
             <input

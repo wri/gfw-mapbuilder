@@ -21,7 +21,7 @@ const ShareContent: FunctionComponent = () => {
   );
 
   const [urlValue, setUrlValue] = useState<any>('');
-  const { title, instructions } = shareContent[selectedLanguage];
+  const { title } = shareContent[selectedLanguage];
   const popupDimensions = 'toolbar=0,status=0,height=650,width=450';
 
   const copyURLToClipboard = (): void => {
@@ -88,7 +88,10 @@ const ShareContent: FunctionComponent = () => {
     <div className="modal-content-container">
       <div className="directions">
         <h4 className="title">{title}</h4>
-        <p>{instructions}</p>
+        <p>
+          Copy and paste the link to share it or use the buttons below to share
+          on social media.
+        </p>
         <div className="copy-link-wrapper">
           <input type="text" readOnly value={urlValue} ref={urlRef}></input>
           <button onClick={(): void => copyURLToClipboard()}>COPY</button>

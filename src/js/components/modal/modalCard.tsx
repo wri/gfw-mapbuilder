@@ -85,29 +85,32 @@ const ModalCard: FunctionComponent<{}> = () => {
 
   return (
     <>
-      <div
-        className={`dim-container ${setClassName()}`}
-        onClick={() => dispatch(renderModal(''))}
-        onKeyDown={() => dispatch(renderModal(''))}
-        role="button"
-        tabIndex={0}
-      ></div>
-      {/* <div className={`modal-card-container ${className}`}> */}
-      <div className={`modal-card-container ${setClassName()}`}>
-        <button
-          className="exit-button"
-          onClick={() => dispatch(renderModal(''))}
-          onKeyDown={(e): void => handleEscapeKey(e)}
-        >
-          <svg className="svg-icon">
-            <svg id="shape-close" viewBox="0 0 25 25">
-              <title>Close</title>
-              <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
-            </svg>
-          </svg>
-        </button>
-        {returnContent()}
-      </div>
+      {modalType !== '' ? (
+        <>
+          <div
+            className={`dim-container ${setClassName()}`}
+            onClick={() => dispatch(renderModal(''))}
+            onKeyDown={() => dispatch(renderModal(''))}
+            role="button"
+            tabIndex={0}
+          ></div>
+          <div className={`modal-card-container ${setClassName()}`}>
+            <button
+              className="exit-button"
+              onClick={() => dispatch(renderModal(''))}
+              onKeyDown={(e): void => handleEscapeKey(e)}
+            >
+              <svg className="svg-icon">
+                <svg id="shape-close" viewBox="0 0 25 25">
+                  <title>Close</title>
+                  <path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+                </svg>
+              </svg>
+            </button>
+            {returnContent()}
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

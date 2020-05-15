@@ -26,7 +26,8 @@ import {
   SET_MODIS_START,
   SET_MODIS_END,
   SET_VIIRS_START,
-  SET_VIIRS_END
+  SET_VIIRS_END,
+  SET_RENDER_POPUP
 } from './types';
 
 const initialState: AppState = {
@@ -63,7 +64,8 @@ const initialState: AppState = {
     distanceResults: {},
     coordinateMouseClickResults: {},
     coordinatePointerMoveResults: {}
-  }
+  },
+  renderPopup: false
 };
 
 export function appStateReducer(
@@ -225,6 +227,11 @@ export function appStateReducer(
           ...state.leftPanel,
           viirsEnd: action.payload
         }
+      };
+    case SET_RENDER_POPUP:
+      return {
+        ...state,
+        renderPopup: action.payload
       };
     default:
       return state;

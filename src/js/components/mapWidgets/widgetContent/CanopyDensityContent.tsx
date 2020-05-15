@@ -7,6 +7,8 @@ import 'css/canopyDensityModal';
 import { setCanopyDensity } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
 
+import { canopyDensityContentConfig } from 'configs/modal.config';
+
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 //TODO: This needs to be Language aware
@@ -51,6 +53,12 @@ const CanopyDensityContent = (): JSX.Element => {
     (store: RootState) => store.appSettings.customColorTheme
   );
 
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
+
+  const { directions } = canopyDensityContentConfig[selectedLanguage];
+
   function handleSliderChange(value: number): void {
     dispatch(setCanopyDensity(value));
     //send % value to modify the layer
@@ -61,9 +69,7 @@ const CanopyDensityContent = (): JSX.Element => {
 
   return (
     <div className="canopy-density-container">
-      <div>
-        Adjust the minimum canopy density for tree cover and tree cover loss
-      </div>
+      <div>{directions}</div>
       <div className="tree-range">
         <div className="tree"></div>
         <div className="forest"></div>

@@ -38,7 +38,8 @@ import {
   setActiveFeatures,
   changeMapScale,
   changeMapCenterCoordinates,
-  setLayersLoading
+  setLayersLoading,
+  setUserCoordinates
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -99,6 +100,7 @@ export class MapController {
   _sketchVMGraphicsLayer: GraphicsLayer | undefined;
   _domRef: RefObject<any>;
   _imageryOpacity: number;
+  _mouseTrackingEvent: IHandle | undefined;
 
   constructor() {
     this._map = undefined;
@@ -107,6 +109,7 @@ export class MapController {
     this._printTask = undefined;
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
+    this._mouseTrackingEvent = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -993,6 +996,18 @@ export class MapController {
       });
       store.dispatch(allAvailableLayers(newLayersArray));
     }
+  }
+
+  detachMouseLocationTracking(): void {
+    this._mouseTrackingEvent?.remove();
+  }
+
+  attachMouseLocationTracking(): void {
+    //sets mouse tracking event on the map in order to display coordinates live in the popup when user is editing drawn/uploaded polygon
+    this._mouseTrackingEvent = this._mapview.on('pointer-move', event => {
+      const userPoint = this._mapview.toMap({ x: event.x, y: event.y });
+      store.dispatch(setUserCoordinates(userPoint));
+    });
   }
 
   completeSketchVM(): any {

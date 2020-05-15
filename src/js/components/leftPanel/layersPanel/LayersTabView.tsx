@@ -51,7 +51,9 @@ const LayersTabView = (props: LayersTabViewProps) => {
     (store: RootState) => store.appSettings.recentImagery
   );
 
-  const { layerPanel } = useSelector((store: RootState) => store.appSettings);
+  const layerPanel = useSelector(
+    (store: RootState) => store.appSettings.layerPanel
+  );
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
   const layerGroupsToRender = Object.keys(layerPanel)
     .sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order)

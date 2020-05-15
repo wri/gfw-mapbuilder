@@ -10,6 +10,7 @@ import {
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
   SET_LAYERS_LOADING,
+  SET_USER_COORDINATES,
   MapviewState
 } from './types';
 
@@ -97,5 +98,12 @@ export function setLayersLoading(
   return {
     type: SET_LAYERS_LOADING as typeof SET_LAYERS_LOADING,
     payload: mapCenterCoordinates
+  };
+}
+
+export function setUserCoordinates(payload: MapviewState['userCoordinates']) {
+  return {
+    type: SET_USER_COORDINATES as typeof SET_USER_COORDINATES,
+    payload
   };
 }
