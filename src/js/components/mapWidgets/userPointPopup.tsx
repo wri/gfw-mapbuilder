@@ -7,9 +7,14 @@ import { RootState } from 'js/store';
 
 import 'css/popup.scss';
 
+interface Coordinates {
+  latitude: string;
+  longitude: string;
+}
+
 const UserPointPopup = (): JSX.Element | null => {
   const dispatch = useDispatch();
-  const [coordinates, setCoordinates] = useState<any | null>(null);
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 
   const userCoordinates = useSelector(
     (state: RootState) => state.mapviewState.userCoordinates
@@ -20,13 +25,9 @@ const UserPointPopup = (): JSX.Element | null => {
 
   useEffect(() => {
     if (renderPopup && userCoordinates) {
-      const latitude = (userCoordinates as any).latitude
-        .toString()
-        .match(/^-?\d+(?:\.\d{0,2})?/)[0];
+      const latitude = userCoordinates.latitude.toFixed(2);
+      const longitude = userCoordinates.longitude.toFixed(2);
 
-      const longitude = (userCoordinates as any).longitude
-        .toString()
-        .match(/^-?\d+(?:\.\d{0,2})?/)[0];
       setCoordinates({
         latitude,
         longitude
