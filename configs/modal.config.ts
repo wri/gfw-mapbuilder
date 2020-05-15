@@ -224,68 +224,64 @@ export const coordinatesContent = {
     title: 'Enter your own coordinates',
     dropdownTitle: 'Select Format',
     decimalOptions: ['Degrees Decimal Seconds (DMS)', 'Decimal Degrees (DD)'],
-    latitude: 'Latitude',
-    longitude: 'Longitude'
+    latitudeLabel: 'Latitude',
+    longitudeLabel: 'Longitude',
+    addMoreLabel: 'Add More',
+    makeShapeLabel: 'Make Shape'
   },
   ka: {
-    title: 'KA: Enter your own coordinates',
-    dropdownTitle: 'KA: Select Format',
-    decimalOptions: [
-      'KA: Degrees Decimal Seconds (DMS)',
-      'KA: Decimal Degrees (DD)'
-    ],
-    latitude: 'KA: Latitude',
-    longitude: 'KA: Longitude'
+    title: 'შეიტანეთ თქვენი კოორდინატები',
+    dropdownTitle: `შეარჩიეთ ფორმატი`,
+    decimalOptions: [`გრადუსის მეათედი წუთები (DMS)`, `მეათედი გრადუსები (DD)`],
+    latitudeLabel: 'განედი',
+    longitudeLabel: 'გრძედი',
+    addMoreLabel: 'დამატება',
+    makeShapeLabel: 'პოლიგონის შექმნა'
   },
   fr: {
-    title: 'FR: Enter your own coordinates',
-    dropdownTitle: 'FR: Select Format',
-    decimalOptions: [
-      'FR: Degrees Decimal Seconds (DMS)',
-      'FR: Decimal Degrees (DD)'
-    ],
-    latitude: 'FR: Latitude',
-    longitude: 'FR: Longitude'
+    title: 'Entrez vos propres coordonnées',
+    dropdownTitle: `Sélectionner le format`,
+    decimalOptions: [`Degrés Minutes Secondes (DMS)`, `Degrés Décimaux (DD)`],
+    latitudeLabel: 'Latitude',
+    longitudeLabel: 'Longitude',
+    addMoreLabel: 'Ajouter',
+    makeShapeLabel: 'Créer la zone'
   },
   es: {
-    title: 'ES: Enter your own coordinates',
-    dropdownTitle: 'ES: Select Format',
-    decimalOptions: [
-      'ES: Degrees Decimal Seconds (DMS)',
-      'ES: Decimal Degrees (DD)'
-    ],
-    latitude: 'ES: Latitude',
-    longitude: 'ES: Longitude'
+    title: 'Ingresa las coordenadas',
+    dropdownTitle: `Selecciona el Formato`,
+    decimalOptions: [`Grados y Minutos y Decimales`, `Grados Decimales`],
+    latitudelabel: 'Latitud',
+    longitudeLabel: 'Longitud',
+    addMoreLabel: 'Agrega más',
+    makeShapeLabel: 'Genera el polígno'
   },
   pt: {
-    title: 'PT: Enter your own coordinates',
-    dropdownTitle: 'PT: Select Format',
-    decimalOptions: [
-      'PT: Degrees Decimal Seconds (DMS)',
-      'PT: Decimal Degrees (DD)'
-    ],
-    latitude: 'PT: Latitude',
-    longitude: 'PT: Longitude'
+    title: 'Entre com suas coordenadas',
+    dropdownTitle: `Selecione o formato`,
+    decimalOptions: [`Graus Minutos Segundos (DMS)`, `Graus Decimais (DD)`],
+    latitudelabel: 'Latitude',
+    longitudeLabel: 'Longitude',
+    addMoreLabel: 'Adicione mais',
+    makeShapeLabel: ''
   },
   id: {
-    title: 'ID: Enter your own coordinates',
-    dropdownTitle: 'ID: Select Format',
-    decimalOptions: [
-      'ID: Degrees Decimal Seconds (DMS)',
-      'ID: Decimal Degrees (DD)'
-    ],
-    latitude: 'ID: Latitude',
-    longitude: 'ID: Longitude'
+    title: 'Masukkan koordinat Anda',
+    dropdownTitle: `Pilih Format`,
+    decimalOptions: [`Derajat Menit Detik (DMS)`, `Derajat Desimal (DD)`],
+    latitudelabel: 'Lintang',
+    longitudeLabel: 'Bujur',
+    addMoreLabel: 'Tambah Lagi',
+    makeShapeLabel: 'Buat Bentuk'
   },
   zh: {
-    title: 'ZH: Enter your own coordinates',
-    dropdownTitle: 'ZH: Select Format',
-    decimalOptions: [
-      'ZH: Degrees Decimal Seconds (DMS)',
-      'ZH: Decimal Degrees (DD)'
-    ],
-    latitude: 'ZH: Latitude',
-    longitude: 'ZH: Longitude'
+    title: '输入你的坐标',
+    dropdownTitle: '选择样式',
+    decimalOptions: [`度分秒`, `十进制度`],
+    latitudelabel: '纬度',
+    longitudeLabel: '经度',
+    addMoreLabel: '添加更多',
+    makeShapeLabel: '作图'
   }
 };
 
