@@ -857,7 +857,9 @@ export class MapController {
         const userPoint = this._mapview.toMap({ x: event.x, y: event.y });
 
         const userHovering = allGeometries.map((geometry: Geometry) => {
-          return geometryEngine.contains(geometry, userPoint);
+          const intersects = geometryEngine.intersects(geometry, userPoint);
+          const contains = geometryEngine.contains(geometry, userPoint);
+          return intersects || contains;
         });
 
         if (userHovering.includes(true)) {
