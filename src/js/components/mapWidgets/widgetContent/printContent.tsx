@@ -9,9 +9,15 @@ import { RootState } from 'js/store/index';
 const PrintContent: FunctionComponent = () => {
   const [pdfLoading, setPDFLoading] = useState(false);
   const [url, setURL] = useState('');
+
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
+
+  const customColorTheme = useSelector(
+    (state: RootState) => state.appSettings.customColorTheme
+  );
+
   const { buttonLabel, dropdownLabel, printOptions } = printContent[
     selectedLanguage
   ];
@@ -32,6 +38,7 @@ const PrintContent: FunctionComponent = () => {
           return (
             <button
               className="orange-button"
+              style={{ backgroundColor: customColorTheme }}
               key={index}
               onClick={(e): Promise<void> => printMap(printOption)}
             >
