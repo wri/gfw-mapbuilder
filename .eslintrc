@@ -17,7 +17,6 @@
     "describe": true,
     "it": true,
     "saveAs": true,
-    "expect": true,
     "test": true,
     "define": true,
     "require": true,
