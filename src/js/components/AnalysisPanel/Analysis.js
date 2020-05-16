@@ -366,16 +366,10 @@ export default class Analysis extends Component {
   }
 
   renderResults = (type, results, language, config) => {
-
-    console.log('type', type);
-    console.log('results', results);
-    console.log('config', config);
-
     const { chartType, label, colors } = config;
     const { analysisSliderIndices } = this.props;
     let chartComponent = null;
 
-    console.log('chartType', chartType);
     switch (chartType) {
       case 'bar': {
         const { chartBounds, analysisId, valueAttribute } = config;
@@ -516,8 +510,6 @@ export default class Analysis extends Component {
               "FRAGMENTATION"
             );
             if (analysisIsFragmentation) {
-              console.log("results", results);
-              console.log("config", config);
               const style = {
                 borderColor: "purple",
                 color: "purple",
@@ -633,13 +625,7 @@ export default class Analysis extends Component {
         if (analysisSettings.useGfwWidget) {
           analysisSettings.chartType = 'vega';
 
-          console.log('analysisParams', analysisParams);
-
-          console.log('analysisSettings', analysisSettings);
-          console.log('uiParamsToAppend', uiParamsToAppend);
-          console.log('');
           analysisUtils.getCustomAnalysis(analysisSettings, uiParamsToAppend).then(results => {
-            console.log('results', results);
             this.renderResults(analysisId, results, language, analysisSettings);
           });
           return;
@@ -667,7 +653,6 @@ export default class Analysis extends Component {
               body: JSON.stringify(content)
             }
           ).then(results => {
-            console.log('results', results);
 
             if (results.json) {
               results.json().then((newRes) => {
@@ -675,11 +660,6 @@ export default class Analysis extends Component {
                 let startYear;
                 let endYear;
                 if (analysisSettings.uiParams !== "none") {
-                  console.log("newResss", newRes);
-                  console.log(
-                    "uiParamsToAppend.period",
-                    uiParamsToAppend.period
-                  );
                   dates = uiParamsToAppend.period.split(",");
                   startYear = dates[0].split("-")[0];
                   endYear = dates[1].split("-")[0];
