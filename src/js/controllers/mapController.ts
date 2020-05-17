@@ -77,6 +77,7 @@ import {
   extractWebmapLayerObjects
 } from 'js/helpers/mapController/miscLayerHelpers';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
+import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
 
 interface URLCoordinates {
   zoom: number;
@@ -133,18 +134,17 @@ export class MapController {
     });
 
     //if we have init extent, use it.
-    if (
-      appSettings.initialExtent &&
-      appSettings.initialExtent.hasOwnProperty('x') &&
-      appSettings.initialExtent.hasOwnProperty('y') &&
-      appSettings.initialExtent.hasOwnProperty('z')
-    ) {
-      //@ts-ignore
-      this._mapview.center = [
-        appSettings.initialExtent['x'],
-        appSettings.initialExtent['y']
-      ];
-      this._mapview.zoom = appSettings.initialExtent['z'];
+    if (appSettings.initialExtent) {
+      const parsedInitExtent = parseExtentConfig(appSettings.initialExtent);
+      if (parsedInitExtent.center) {
+        debugger;
+        //@ts-ignore
+        this._mapview.center = parsedInitExtent.center;
+      }
+      if (parsedInitExtent.zoom) {
+        console.log(parsedInitExtent.zoom);
+        this._mapview.zoom = parsedInitExtent.zoom;
+      }
     }
 
     this._mapview.ui.remove('zoom');
@@ -618,19 +618,17 @@ export class MapController {
       map: this._map,
       container: this._domRef.current
     });
+
     //if we have init extent, use it.
-    if (
-      appSettings.initialExtent &&
-      appSettings.initialExtent.hasOwnProperty('x') &&
-      appSettings.initialExtent.hasOwnProperty('y') &&
-      appSettings.initialExtent.hasOwnProperty('z')
-    ) {
-      //@ts-ignore
-      this._mapview.center = [
-        appSettings.initialExtent['x'],
-        appSettings.initialExtent['y']
-      ];
-      this._mapview.zoom = appSettings.initialExtent['z'];
+    if (appSettings.initialExtent) {
+      const parsedInitExtent = parseExtentConfig(appSettings.initialExtent);
+      if (parsedInitExtent.center) {
+        //@ts-ignore
+        this._mapview.center = parsedInitExtent.center;
+      }
+      if (parsedInitExtent.zoom) {
+        this._mapview.zoom = parsedInitExtent.zoom;
+      }
     }
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {

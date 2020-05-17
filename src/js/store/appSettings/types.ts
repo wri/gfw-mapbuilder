@@ -29,7 +29,11 @@ export interface AppSettings {
   mapThemes: string;
   mapThemeIds: string;
   alternativeMapThemes: string;
-  initialExtent?: { x: number; y: number; z: number };
+  initialExtent?: {
+    x: number | string;
+    y: number | string;
+    z: number | string;
+  };
   customColorTheme: string;
   aboutLinkUrl?: string;
   downloadLinkUrl?: string;
