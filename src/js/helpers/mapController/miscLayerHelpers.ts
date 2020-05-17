@@ -2,6 +2,43 @@
 import { LayerInfo } from 'src/js/helpers/shareFunctionality';
 import { LayerProps } from 'js/store/mapview/types';
 import { fetchLegendInfo } from '../legendInfo';
+
+async function createVectorLayerLegendInfo(layer: any): Promise<any> {
+  const layerStyleInfo = await fetch(layer.url)
+    .then(res => res.json())
+    .then(data => data)
+    .catch(e => {
+      return undefined;
+    });
+
+  if (layerStyleInfo) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 20;
+    canvas.height = 20;
+
+    if (canvas.getContext('2d')) {
+      const ctx = canvas.getContext('2d');
+      ctx!.fillStyle = layerStyleInfo.layers[0].paint['fill-color'];
+      ctx!.fillRect(0, 0, 20, 20);
+    }
+
+    const uri = canvas.toDataURL('image/png');
+    const dataURI = uri.substring(uri.indexOf(',') + 1);
+
+    const drawInfo = layerStyleInfo.layers[0];
+    const legendObject = {
+      height: 20,
+      width: 20,
+      contentType: 'image/png',
+      imageData: dataURI,
+      label: drawInfo.id
+    };
+    return [legendObject];
+  } else {
+    return undefined;
+  }
+}
+
 export function determineLayerOpacity(
   apiLayer: any,
   layerInfosFromURL: LayerInfo[]
@@ -58,19 +95,21 @@ export async function extractWebmapLayerObjects(
 ): Promise<LayerProps[]> {
   const mapLayerObjects: LayerProps[] = [];
   if (!esriMap) return [];
+
   const layerArray = esriMap.layers.toArray() as any;
+
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
     //Get the legend information for each layer
-    let legendInfo = await fetchLegendInfo(layer.url);
+
+    //Dealing with sublayers first
     if (layer.sublayers && layer.sublayers.length > 0) {
+      const legendInfo = await fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
         const sublayerLegendInfo = legendInfo?.layers.find(
           (l: any) => l.layerId === sub.id
         );
-        //TODO:how do we handle default opacity? seems like these subs are mostly undefined for opacity
-        sub.opacity = sub.opacity ? sub.opacity : 1;
         const {
           id,
           title,
@@ -98,15 +137,58 @@ export async function extractWebmapLayerObjects(
           legendInfo: sublayerLegendInfo?.legend
         });
       });
-    } else {
-      //TODO: This needs research, some layers have not only "id" but also "layerId" property. Those will differ, "id" will be "parent id for mapservice", and "layerId" will be its sublayer. Tricky part is that this happens with some layers on webmap in CMR, sublayers do not show on layer itself but the presense of layerId property indicates that it is indeed a sub
+
+      //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
+    } else if (layer.hasOwnProperty('layerId')) {
+      let legendInfo = await fetchLegendInfo(layer.url);
+      // let legendInfo = await fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
         legendInfo = undefined;
       } else {
-        legendInfo = layer.layerId
-          ? legendInfo?.layers?.find((l: any) => l.layerId === layer.layerId)
-              .legend
-          : legendInfo;
+        const sublayerLegendInfo = legendInfo?.layers.find(
+          (l: any) => l.layerId === layer.layerId
+        );
+        const {
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          url,
+          maxScale,
+          minScale
+        } = layer;
+        mapLayerObjects.push({
+          id,
+          title,
+          opacity,
+          visible,
+          definitionExpression,
+          group: 'webmap',
+          type: 'webmap',
+          origin: 'webmap',
+          url,
+          maxScale,
+          minScale,
+          sublayer: true,
+          parentID: layer.id,
+          legendInfo: sublayerLegendInfo?.legend
+        });
+      }
+    } else {
+      let legendInfo = await fetchLegendInfo(layer.url);
+      // => Handle all other layers that are not sublayers here
+      if (legendInfo?.error) {
+        legendInfo = undefined;
+      } else if (layer.type === 'vector-tile') {
+        legendInfo = await createVectorLayerLegendInfo(layer);
+        //Attempt to fetch vector tile styling info to generate legend item
+      } else {
+        legendInfo = layer.legendInfo ? layer.legendInfo : undefined;
+        // legendInfo = layer.layerId
+        //   ? legendInfo?.layers?.find((l: any) => l.layerId === layer.layerId)
+        //       .legend
+        //   : legendInfo.layers;
       }
       const {
         id,
