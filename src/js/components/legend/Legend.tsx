@@ -10,8 +10,11 @@ import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 import 'css/legend.scss';
 
 const Legend = (): JSX.Element => {
-  //How to ensure that we have layers loaded on the map first?
   const dispatch = useDispatch();
+
+  const hideLegend = useSelector(
+    (store: RootState) => store.appSettings.hideLegend
+  );
   const hideWidgetActive = useSelector(
     (store: RootState) => store.appState.hideWidgetActive
   );
@@ -21,16 +24,17 @@ const Legend = (): JSX.Element => {
   const renderGFWDropdown = useSelector(
     (store: RootState) => store.appState.renderGFWDropdown
   );
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
+  const allAvailableLayers = useSelector(
+    (store: RootState) => store.mapviewState.allAvailableLayers
   );
+
   const scale = useSelector((store: RootState) => store.mapviewState.scale);
 
   const layersLoading = useSelector(
     (store: RootState) => store.mapviewState.layersLoading
   );
 
-  const [legendOpen, setLegendOpen] = useState(!hideWidgetActive);
+  const [legendOpen, setLegendOpen] = useState(!hideLegend);
 
   function handleLegendToggle(): void {
     setLegendOpen(!legendOpen);

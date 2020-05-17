@@ -137,7 +137,6 @@ export class MapController {
     if (appSettings.initialExtent) {
       const parsedInitExtent = parseExtentConfig(appSettings.initialExtent);
       if (parsedInitExtent.center) {
-        debugger;
         //@ts-ignore
         this._mapview.center = parsedInitExtent.center;
       }
