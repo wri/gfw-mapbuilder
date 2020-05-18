@@ -106,12 +106,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
     none: 'none'
   };
 
-  function createSymbolStyles(
-    symbol: any,
-    container: any,
-    idx?: any,
-    info?: any
-  ): JSX.Element | undefined {
+  function createSymbolStyles(symbol: any): JSX.Element | undefined {
     const style = {} as any;
     let symbolDOMElement;
     const symbolType = symbol?.style; // "circle"|"square"|"cross"|"x"|"diamond"|"triangle"|"path"
@@ -207,9 +202,22 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
   function createLegendSymbol(esriLayer: any): any {
     if (!esriLayer.renderer) return;
     const container: any[] = [];
-    const defaultSymbol = esriLayer.renderer.symbol;
-    const symbolDOMElement = createSymbolStyles(defaultSymbol, container);
-    container.push(symbolDOMElement);
+    if (esriLayer.renderer.symbol) {
+      const defaultSymbol = esriLayer.renderer.symbol;
+      const symbolDOMElement = createSymbolStyles(defaultSymbol);
+      container.push(symbolDOMElement);
+    } else if (esriLayer.renderer.uniqueValueInfos?.length) {
+      esriLayer.renderer.uniqueValueInfos.forEach((value: any) => {
+        const defaultSymbol = value.symbol;
+        const symbolDOMElement = createSymbolStyles(defaultSymbol);
+        container.push(
+          <div className="sublayer-item-feature">
+            <div>{symbolDOMElement}</div>
+            <span>{value.label}</span>
+          </div>
+        );
+      });
+    }
 
     return container;
   }
@@ -220,7 +228,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
-  const items = props.visibleLayers.map(layer => {
+  const items = props.visibleLayers.map((layer, i) => {
     if (!layer.legendInfo) {
       //No legend Info available, that usually means that we are dealing with FeatureServer layers and need to attempt to create legend symbols manually
       const legendInfo = getLegendInfoFromRenderer(layer);
@@ -230,19 +238,20 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         versionedLabel = layer.versions[idx].label[language];
       }
       const label = (
-        <div className="label-item">
+        <div className="label-item-feature">
           {legendInfo}
           {versionedLabel !== '' && versionedLabel}
         </div>
       );
       return (
-        <div className="layer-item" key={layer.id}>
+        <div className="layer-item" key={layer.id + i}>
           <p className="layer-title">{layer.title}</p>
           {label}
         </div>
       );
     } else if (layer.legendInfo && layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
+        console.log(item);
         item.label = item.label && item.label.length ? item.label : layer.title;
         return (
           <div className="label-item" key={i}>
@@ -252,7 +261,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       });
       return (
-        <div className="layer-item" key={layer.id}>
+        <div className="layer-item" key={layer.id + i}>
           <p className="layer-title">{layer.title}</p>
           {labelIcons}
         </div>

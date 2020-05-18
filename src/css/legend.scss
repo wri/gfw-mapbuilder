@@ -57,6 +57,13 @@
           line-height: 22.1px;
         }
       }
+      .sublayer-item-feature {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-gap: 5px;
+        align-items: center;
+        margin-bottom: 3px;
+      }
       .subgroup {
         grid-template-columns: 1fr;
         grid-gap: 0px;
