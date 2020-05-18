@@ -6,6 +6,7 @@ import Measure from 'react-measure';
 interface ChartProps {
   spec: any | null;
   language: string;
+  baseConfig: any;
   report?: boolean;
   chartType?: string;
   sendBackURL?: (pngString: string) => void;
@@ -91,6 +92,7 @@ const Chart = (props: ChartProps): JSX.Element => {
       props.spec,
       chartRef.current,
       props.language,
+      props.baseConfig,
       props.report,
       callback
     );
