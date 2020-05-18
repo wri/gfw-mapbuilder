@@ -110,6 +110,7 @@ export async function extractWebmapLayerObjects(
         const sublayerLegendInfo = legendInfo?.layers.find(
           (l: any) => l.layerId === sub.id
         );
+        sub.opacity = sub.opacity ? sub.opacity : 1;
         const {
           id,
           title,

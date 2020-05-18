@@ -250,6 +250,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         </div>
       );
     } else if (layer.legendInfo && layer.origin === 'service') {
+      //TODO: needs testing for other types of layers, this accounts for mapimageserver
       const labelIcons = layer.legendInfo.map((item: any, i: number) => {
         item.label = item.label && item.label.length ? item.label : layer.title;
         const subLabels = item.legend.map((subitem: any, i: number) => {
@@ -274,7 +275,6 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       );
     } else if (layer.legendInfo && layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
-        console.log(item);
         item.label = item.label && item.label.length ? item.label : layer.title;
         return (
           <div className="label-item" key={i}>
