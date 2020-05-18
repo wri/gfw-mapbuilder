@@ -249,6 +249,29 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {label}
         </div>
       );
+    } else if (layer.legendInfo && layer.origin === 'service') {
+      const labelIcons = layer.legendInfo.map((item: any, i: number) => {
+        item.label = item.label && item.label.length ? item.label : layer.title;
+        const subLabels = item.legend.map((subitem: any, i: number) => {
+          return (
+            <div key={i} className="sublayer-item-feature">
+              <div>{getLegendLabel('webmap', subitem, layer.opacity)}</div>
+              <span>{subitem.label}</span>
+            </div>
+          );
+        });
+        return (
+          <div className="label-item-feature" key={i}>
+            {subLabels}
+          </div>
+        );
+      });
+      return (
+        <div className="layer-item" key={layer.id + i}>
+          <p className="layer-title">{layer.title}</p>
+          {labelIcons}
+        </div>
+      );
     } else if (layer.legendInfo && layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
         console.log(item);
