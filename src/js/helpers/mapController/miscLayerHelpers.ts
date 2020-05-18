@@ -172,19 +172,17 @@ export async function extractWebmapLayerObjects(
         legendInfo: subLegendInfo?.legend
       });
     } else {
-      let legendInfo = await fetchLegendInfo(layer.url);
       // => Handle all other layers that are not sublayers here
+      let legendInfo = await fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
         legendInfo = undefined;
+      } else if (layer.type === 'tile') {
+        legendInfo = legendInfo.layers[0].legend;
       } else if (layer.type === 'vector-tile') {
         legendInfo = await createVectorLayerLegendInfo(layer);
         //Attempt to fetch vector tile styling info to generate legend item
       } else {
         legendInfo = layer.legendInfo ? layer.legendInfo : undefined;
-        // legendInfo = layer.layerId
-        //   ? legendInfo?.layers?.find((l: any) => l.layerId === layer.layerId)
-        //       .legend
-        //   : legendInfo.layers;
       }
       const {
         id,
