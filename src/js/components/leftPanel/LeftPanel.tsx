@@ -96,6 +96,7 @@ const Tab = (props: TabProps): React.ReactElement => {
             ? 'tab-button tab-button__active'
             : 'tab-button'
         }
+        aria-label="left panel tab"
         onClick={handleTabClick}
       >
         <Icon width={25} height={25} fill={'#555'} className={setClassName()} />

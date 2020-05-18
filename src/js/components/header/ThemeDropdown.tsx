@@ -42,7 +42,7 @@ const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
         key={index}
         role="button"
         aria-labelledby="dropdown-label"
-        id="dropdown__selected"
+        id={`dropdown__selected label_${index}`}
         tabIndex={0}
         onClick={(): void => handleThemeSelection(id)}
         className={activeTheme === id ? 'selected' : ''}
@@ -62,7 +62,7 @@ const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
   return (
     <div className="theme-dropdown-container">
       <ul className="dropdown">
-        <span className="label-wrapper">
+        <span className="label-wrapper" role="listitem">
           <ThemesIcon height={16} width={16} fill={'#555'} />
           <li className="dropdown-label">
             {headerContent[props.selectedLanguage]?.mapThemes}

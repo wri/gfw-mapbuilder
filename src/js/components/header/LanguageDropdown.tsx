@@ -47,18 +47,20 @@ function valueToLang(abbrev: string): string {
 const LanguageDropdown = (props: DropProps) => {
   return (
     <div className="language-dropdown-container">
-      <ul className="dropdown">
-        <span className="label-wrapper">
+      <ul className="dropdown" role="list">
+        <span className="label-wrapper" role="listitem">
           <InfoBoxIcon height={16} width={16} fill={'#555'} />
           <li className="dropdown-label">
             {headerContent[props.selectedLanguage].language}
           </li>
         </span>
-        <ul className="options">
+        <ul className="options" role="listitem">
           <li
             role="button"
             aria-labelledby="dropdown-label"
-            id="dropdown__selected"
+            id={`dropdown__selected ${
+              headerContent[props.selectedLanguage].language
+            }`}
             tabIndex={0}
             onClick={(): void => mapController.changeLanguage(props.language)}
             className={
@@ -70,7 +72,7 @@ const LanguageDropdown = (props: DropProps) => {
           <li
             role="button"
             aria-labelledby="dropdown-label"
-            id="dropdown__selected"
+            id={`dropdown__selected ${props.alternativeLanguage}`}
             tabIndex={0}
             onClick={(): void =>
               mapController.changeLanguage(props.alternativeLanguage)
