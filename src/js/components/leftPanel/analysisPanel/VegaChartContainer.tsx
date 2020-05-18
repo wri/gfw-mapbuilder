@@ -62,31 +62,30 @@ const Chart = (props: ChartProps): JSX.Element => {
   React.useEffect(() => {
     if (!spec) return;
     //In case of report, we tell chart to resize appropriately
-    if (report) {
-      if (!spec.signals) {
-        spec.signals = [];
-      }
-      spec.autosize = {
-        type: 'fit',
-        resize: true
-      };
-
-      const resizeWidthSignal = {
-        name: 'width',
-        update: 'containerSize()[0]*0.95',
-        value: '',
-        on: [
-          {
-            events: {
-              source: 'window',
-              type: 'resize'
-            },
-            update: 'containerSize()[0]*0.95'
-          }
-        ]
-      };
-      spec.signals.push(resizeWidthSignal);
+    if (!spec.signals) {
+      spec.signals = [];
     }
+
+    spec.autosize = {
+      type: 'fit',
+      resize: true
+    };
+
+    const resizeWidthSignal = {
+      name: 'width',
+      update: 'containerSize()[0]*0.95',
+      value: '',
+      on: [
+        {
+          events: {
+            source: 'window',
+            type: 'resize'
+          },
+          update: 'containerSize()[0]*0.95'
+        }
+      ]
+    };
+    spec.signals.push(resizeWidthSignal);
 
     generateAndAttachVegaChart(
       props.spec,
@@ -112,7 +111,7 @@ const Chart = (props: ChartProps): JSX.Element => {
           {({ measureRef }) => (
             <div ref={measureRef} style={chartWrapperStyle}>
               <div
-                className="temptemp"
+                className="canvas-chart-wrapper"
                 style={{
                   width: dimensions.dimensions.width
                 }}
@@ -125,7 +124,7 @@ const Chart = (props: ChartProps): JSX.Element => {
     } else {
       return (
         <div
-          className="temptemp"
+          className="canvas-chart-wrapper"
           style={{
             width: dimensions.dimensions.width,
             height: dimensions.dimensions.height

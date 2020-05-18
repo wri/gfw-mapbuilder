@@ -23,10 +23,10 @@ export function generateAndAttachVegaChart(
   }
   function renderVega(spec: any): void {
     new vega.View(vega.parse(spec), {
-      rendered: 'png',
+      rendered: 'canvas',
       container: domref
     })
-      .renderer('png') // Vega needs to be rendered in an svg, not canvas!
+      .renderer('canvas') // Vega needs to be rendered in an svg, not canvas!
       .hover()
       .run()
       .toImageURL('png')
@@ -79,10 +79,25 @@ export function generateAndAttachVegaChart(
     const url = `${baseUrl}?${queryParams}`;
     fetch(url)
       .then(res => res.json())
-      .then(data => renderVega(data));
+      .then(data => {
+        const resizeWidthSignal = {
+          name: 'width',
+          update: 'containerSize()[0]*0.95',
+          value: '',
+          on: [
+            {
+              events: {
+                source: 'window',
+                type: 'resize'
+              },
+              update: 'containerSize()[0]*0.95'
+            }
+          ]
+        };
+        data.signals.push(resizeWidthSignal);
+        renderVega(data);
+      });
   } else {
     renderVega(spec);
   }
-
-  renderVega(spec);
 }
