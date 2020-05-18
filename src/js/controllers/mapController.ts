@@ -762,7 +762,7 @@ export class MapController {
     });
   }
 
-  // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression
+  // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression (if no ISO code is present, we do not add mask layer)
   // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
   addExtraLayers(): void {
     const appSettings = store.getState().appSettings;
@@ -770,9 +770,17 @@ export class MapController {
     const extraLayers = layerPanel['extraLayers'];
     extraLayers.forEach((exLayer: any) => {
       let extraEsriLayer;
-      if (exLayer.id === 'MASK') {
+      if (
+        exLayer.id === 'MASK' &&
+        appSettings.iso && appSettings.iso.length !== 0
+      ) {
         exLayer.type = 'MASK';
         extraEsriLayer = LayerFactory(this._mapview, exLayer);
+      } else if (
+        exLayer.id === 'MASK' &&
+        (!appSettings.iso || appSettings.iso.length === 0)
+      ) {
+        extraEsriLayer = null;
       } else {
         extraEsriLayer = LayerFactory(this._mapview, exLayer);
       }
