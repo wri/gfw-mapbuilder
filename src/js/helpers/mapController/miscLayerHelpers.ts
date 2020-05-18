@@ -140,41 +140,37 @@ export async function extractWebmapLayerObjects(
 
       //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
     } else if (layer.hasOwnProperty('layerId')) {
-      let legendInfo = await fetchLegendInfo(layer.url);
-      // let legendInfo = await fetchLegendInfo(layer.url);
-      if (legendInfo?.error) {
-        legendInfo = undefined;
-      } else {
-        const sublayerLegendInfo = legendInfo?.layers.find(
-          (l: any) => l.layerId === layer.layerId
-        );
-        const {
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          url,
-          maxScale,
-          minScale
-        } = layer;
-        mapLayerObjects.push({
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          group: 'webmap',
-          type: 'webmap',
-          origin: 'webmap',
-          url,
-          maxScale,
-          minScale,
-          sublayer: true,
-          parentID: layer.id,
-          legendInfo: sublayerLegendInfo?.legend
-        });
-      }
+      const legendInfo = await fetchLegendInfo(layer.url);
+      const subLegendInfo = legendInfo?.error
+        ? undefined
+        : legendInfo?.layers.find((l: any) => l.layerId === layer.layerId);
+
+      const {
+        id,
+        title,
+        opacity,
+        visible,
+        definitionExpression,
+        url,
+        maxScale,
+        minScale
+      } = layer;
+      mapLayerObjects.push({
+        id,
+        title,
+        opacity,
+        visible,
+        definitionExpression,
+        group: 'webmap',
+        type: 'webmap',
+        origin: 'webmap',
+        url,
+        maxScale,
+        minScale,
+        sublayer: false,
+        parentID: layer.id,
+        legendInfo: subLegendInfo?.legend
+      });
     } else {
       let legendInfo = await fetchLegendInfo(layer.url);
       // => Handle all other layers that are not sublayers here
