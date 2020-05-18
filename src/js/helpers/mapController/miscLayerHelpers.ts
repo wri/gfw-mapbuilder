@@ -169,7 +169,6 @@ export async function extractWebmapLayerObjects(
         maxScale,
         minScale,
         sublayer: false,
-        parentID: layer.id,
         legendInfo: subLegendInfo?.legend
       });
     } else {

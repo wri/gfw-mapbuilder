@@ -101,7 +101,11 @@ const Report = (props: ReportProps): JSX.Element => {
         objectIds: objectID
       };
 
-      const url = activeLayer.url;
+      //TODO: this may need more testing, we are accounting here for edge case with layerId prop (usually to do with FeatureServer layers but unclear if this is 100% coverage solution)
+      const url = activeLayerInfo?.parentLayer?.hasOwnProperty('layerId')
+        ? activeLayerInfo.parentLayer.url +
+          `/${activeLayerInfo.parentLayer.layerId}`
+        : activeLayer.url;
       const responseAttributes = await esriQuery(url, qParams);
       const formattedAttributes = formatAttributeValues(
         responseAttributes.features[0].attributes,
