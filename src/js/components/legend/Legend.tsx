@@ -8,6 +8,7 @@ import LegendItems from './generateLegendItems';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 
 import 'css/legend.scss';
+import { layersPanelTranslations } from 'configs/leftPanel.translations';
 
 const Legend = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -66,7 +67,9 @@ const Legend = (): JSX.Element => {
             onClick={handleLegendToggle}
             role="button"
           >
-            <p>Legend</p>
+            <p>
+              {layersPanelTranslations[selectedLanguage].legend || 'Legend'}
+            </p>
             <button className="caret-button">
               {legendOpen && !hideWidgetActive ? '▼' : '▲'}
             </button>
