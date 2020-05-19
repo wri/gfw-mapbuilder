@@ -26,6 +26,11 @@ import DataTabFooter from '../dataPanel/DataTabFooter';
 
 import 'css/leftpanel.scss';
 import { AnalysisModule } from 'js/store/appSettings/types';
+import {
+  fetchGFWWidgetConfig,
+  fetchDownloadInfo,
+  fetchWCSAnalysis
+} from './analysisUtils';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -168,7 +173,7 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   //Main Func to run the analysis with selected option and geometry
-  function runAnalysis() {
+  function runAnalysis(): void {
     setBase64ChartURL('');
     setVegaSpec(null);
     const mod = analysisModules.find(
@@ -178,42 +183,43 @@ const BaseAnalysis = (): JSX.Element => {
     if (mod) {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-      const widgetURL = generateWidgetURL(
-        mod.uiParams,
-        mod.widgetId,
-        activeFeature.attributes.geostoreId,
-        mod.params
-      );
-      fetch(widgetURL)
-        .then((response: any) => response.json())
-        .then((analysisMod: any) => {
-          //TODO: we need to handle loading and error states
-          setVegaSpec(analysisMod.data.attributes.widgetConfig);
-          const widgetConfigData =
-            analysisMod.data.attributes.widgetConfig.data;
+      let widgetURL = '';
+
+      if (mod.widgetId) {
+        //Generate GFW Widget URL for the request
+        widgetURL = generateWidgetURL(
+          mod.uiParams,
+          mod.widgetId,
+          activeFeature.attributes.geostoreId,
+          mod.params
+        );
+        fetchGFWWidgetConfig(widgetURL).then(res => {
+          console.log(res);
+          setVegaSpec(res);
+          //grab download urls if they exist
+          const widgetConfigData = res.data;
           const downloadUrl = widgetConfigData.find(
             (e: any) => e.name === 'data'
           );
-
           if (!downloadUrl) return;
-          fetch(downloadUrl.url)
-            .then((response: any) => response.json())
-            .then((data: any) => {
-              const chartTitle =
-                data.data && data.data.type
-                  ? data.data.type + '-analysis.png'
-                  : 'analysis.png';
-              //unclear why are we matching 'month' here but that's how it was done in 3x
-              if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
-                setChartDownTitle(chartTitle);
-                setChartDownloadURL(
-                  'https://production-api.globalforestwatch.org' +
-                    data.data.attributes.downloadUrls.csv
-                );
-              }
-            })
-            .catch((e: Error) => console.error(e));
+          fetchDownloadInfo(downloadUrl.url).then((res: any) => {
+            setChartDownTitle(res.chartTitle ? res.chartTitle : '');
+            setChartDownloadURL(res.downloadUrl ? res.downloadUrl : '');
+          });
         });
+      } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
+        debugger;
+        widgetURL = mod.analysisUrl;
+        fetchWCSAnalysis(
+          mod,
+          mod.analysisUrl,
+          activeFeature,
+          analysisYearRange
+        ).then((res: any) => {
+          debugger;
+          setVegaSpec(res);
+        });
+      }
     }
   }
 

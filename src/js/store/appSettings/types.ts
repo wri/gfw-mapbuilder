@@ -66,6 +66,7 @@ export interface AnalysisModule {
   widgetId: string;
   uiParams: any;
   params: { name: string; value: string }[];
+  analysisUrl?: string;
 }
 
 export interface LayerGroupInfo {

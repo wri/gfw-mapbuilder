@@ -1,3 +1,6 @@
+import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
+import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
+
 export async function fetchGFWWidgetConfig(url: string): Promise<any> {
   //GET request to grab the vega spec from the API
   return await fetch(url)
@@ -34,4 +37,67 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
     })
     .catch((e: Error) => console.error(e));
 }
-// export function wcsWidget() {}
+
+export function fetchWCSAnalysis(
+  analysisSettings: any,
+  url: string,
+  activeFeature: any,
+  yearRange: number[]
+): any {
+  if (activeFeature.geometry.spatialReference.isWebMercator) {
+    debugger;
+    activeFeature.geometry = webMercatorUtils.webMercatorToGeographic(
+      activeFeature.geometry
+    );
+  }
+  const geojson = arcgisToGeoJSON(activeFeature.geometry);
+  const content = {
+    polygon: geojson.coordinates
+  };
+  debugger;
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(content)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      //CALCULATIONS
+      //
+      // let dates;
+      let startYear;
+      let endYear;
+      if (analysisSettings.uiParams !== 'none') {
+        // dates = uiParamsToAppend.period.split(',');
+        startYear = yearRange[0];
+        endYear = yearRange[1];
+        analysisSettings.startYear = Number(startYear);
+        analysisSettings.endYear = Number(endYear);
+      }
+      let totalResult = 0;
+      Object.keys(data).forEach(year => {
+        if (year === 'constant') {
+          totalResult = data[year];
+        }
+        if (
+          parseInt(year) >= analysisSettings.startYear &&
+          parseInt(year) <= analysisSettings.endYear
+        ) {
+          totalResult += data[year];
+        }
+      });
+      data.totalResult = totalResult;
+
+      return {
+        data: data
+      };
+      debugger;
+    })
+    .catch((e: Error) => console.error(e));
+
+  //
+  // return new Promise((resolve) => resolve(true));
+}
