@@ -135,6 +135,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   );
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
+  const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
   const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(
     getDefaultYearRange(uiParams)
@@ -226,6 +227,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       .then((response: any) => response.json())
       .then((analysisMod: any) => {
         setChartLoading(false);
+        setBaseConfig(props.moduleInfo);
         //TODO: we need to handle loading and error states
         const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${props.moduleInfo.widgetId}/metadata?language=${language}`;
 
@@ -369,6 +371,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             {!chartLoading && vegaSpec ? (
               <VegaChart
                 spec={vegaSpec}
+                baseConfig={baseConfig}
                 language={language}
                 report={true}
                 chartType={currentAnalysis?.chartType}

@@ -141,10 +141,8 @@ async function fetchQueryFeatures(
       queryParams.outFields = [layerObjectField.name];
     }
   }
-  const newOutFields = attributesToFetch?.map(f => f.fieldName);
-  queryParams.outFields = newOutFields
-    ? [...queryParams.outFields, ...newOutFields]
-    : ['*'];
+
+  queryParams.outFields = ['*'];
   try {
     const featureResults = await layer.queryFeatures(queryParams);
     //Ignore empty results

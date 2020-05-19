@@ -25,6 +25,7 @@ import { mapController } from 'js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
 import 'css/leftpanel.scss';
+import { AnalysisModule } from 'js/store/appSettings/types';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -59,6 +60,7 @@ const BaseAnalysis = (): JSX.Element => {
   const [base64ChartURL, setBase64ChartURL] = useState('');
   const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
   const [renderEditButton, setRenderEditButton] = useState(true);
+  const [baseConfig, setBaseConfig] = useState<AnalysisModule>();
 
   //This is used for date picker analysis module
 
@@ -165,12 +167,14 @@ const BaseAnalysis = (): JSX.Element => {
     return baseURL;
   }
 
+  //Main Func to run the analysis with selected option and geometry
   function runAnalysis() {
     setBase64ChartURL('');
     setVegaSpec(null);
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
+    setBaseConfig(mod);
     if (mod) {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
@@ -185,7 +189,6 @@ const BaseAnalysis = (): JSX.Element => {
         .then((analysisMod: any) => {
           //TODO: we need to handle loading and error states
           setVegaSpec(analysisMod.data.attributes.widgetConfig);
-          const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${mod.widgetId}/metadata?language=${selectedLanguage}`;
           const widgetConfigData =
             analysisMod.data.attributes.widgetConfig.data;
           const downloadUrl = widgetConfigData.find(
@@ -440,6 +443,7 @@ const BaseAnalysis = (): JSX.Element => {
               <VegaChart
                 spec={vegaSpec}
                 language={selectedLanguage}
+                baseConfig={baseConfig}
                 sendBackURL={handlePNGURL}
               />
               {base64ChartURL === '' && (

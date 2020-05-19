@@ -69,13 +69,13 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         </button>
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
-        {webmapLayers.map(layer => (
+        {webmapLayers.map((layer, i) => (
           <GenericLayerControl
             layer={layer}
             sublayer={layer.sublayer}
             parentID={layer.parentID}
             id={layer.id}
-            key={layer.id}
+            key={`${layer.id} + ${i}`}
             type="default"
           />
         ))}

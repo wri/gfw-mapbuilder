@@ -244,6 +244,11 @@
     padding: 6px;
     min-height: 10rem;
 
+    .canvas-chart-wrapper {
+      canvas {
+        max-width: 100%;
+      }
+    }
     .chart-icon {
       background-image: url('../images/chart-icon.svg');
       height: 180px;

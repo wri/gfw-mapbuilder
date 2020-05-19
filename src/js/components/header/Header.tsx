@@ -92,7 +92,9 @@ const Header: FunctionComponent = () => {
   const mapThemeArray = mapThemes?.split(';');
   const mapThemeIDArray = mapThemeIds?.split(';');
   const alternativeMapThemeArray = alternativeMapThemes?.split(';');
-  const renderThemeDropdown = mapThemeIDArray.length === mapThemeArray.length;
+  const renderThemeDropdown =
+    Boolean(mapThemes.length) &&
+    mapThemeIDArray.length === mapThemeArray.length;
   return (
     <div className="header-container" onClick={() => closeGFWDropdown()}>
       <div className="title-container">

@@ -23,13 +23,18 @@ export interface AppSettings {
   iso: string;
   hideFooter?: boolean;
   hideHeader?: boolean;
+  hideLegend?: boolean;
   navLinksInNewTab?: boolean;
   recentImagery?: boolean;
   sharinghost: string;
   mapThemes: string;
   mapThemeIds: string;
   alternativeMapThemes: string;
-  initialExtent?: { x: number; y: number; z: number };
+  initialExtent?: {
+    x: number | string;
+    y: number | string;
+    z: number | string;
+  };
   customColorTheme: string;
   aboutLinkUrl?: string;
   downloadLinkUrl?: string;
