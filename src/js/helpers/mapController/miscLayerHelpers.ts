@@ -213,5 +213,6 @@ export async function extractWebmapLayerObjects(
       });
     }
   }
+  mapLayerObjects.reverse();
   return mapLayerObjects;
 }
