@@ -42,7 +42,6 @@ function createChartWrapperStyle(chartType?: string): object {
       return {
         maxWidth: '60rem',
         width: '100%',
-        height: '300px',
         margin: '1rem auto'
       };
   }
@@ -100,39 +99,26 @@ const Chart = (props: ChartProps): JSX.Element => {
   const chartWrapperStyle = createChartWrapperStyle(chartType);
 
   function renderChartRef(): JSX.Element {
-    if (report) {
-      return (
-        <Measure
-          bounds
-          onResize={(contentRec): void => {
-            setDimensions({ dimensions: contentRec.bounds });
-          }}
-        >
-          {({ measureRef }) => (
-            <div ref={measureRef} style={chartWrapperStyle}>
-              <div
-                className="canvas-chart-wrapper"
-                style={{
-                  width: dimensions.dimensions.width
-                }}
-                ref={chartRef}
-              ></div>
-            </div>
-          )}
-        </Measure>
-      );
-    } else {
-      return (
-        <div
-          className="canvas-chart-wrapper"
-          style={{
-            width: dimensions.dimensions.width,
-            height: dimensions.dimensions.height
-          }}
-          ref={chartRef}
-        ></div>
-      );
-    }
+    return (
+      <Measure
+        bounds
+        onResize={(contentRec): void => {
+          setDimensions({ dimensions: contentRec.bounds });
+        }}
+      >
+        {({ measureRef }) => (
+          <div ref={measureRef} style={chartWrapperStyle}>
+            <div
+              className="canvas-chart-wrapper"
+              style={{
+                width: dimensions.dimensions.width
+              }}
+              ref={chartRef}
+            ></div>
+          </div>
+        )}
+      </Measure>
+    );
   }
 
   return <>{renderChartRef()}</>;
