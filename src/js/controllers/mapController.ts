@@ -772,7 +772,8 @@ export class MapController {
       let extraEsriLayer;
       if (
         exLayer.id === 'MASK' &&
-        appSettings.iso && appSettings.iso.length !== 0
+        appSettings.iso &&
+        appSettings.iso.length !== 0
       ) {
         exLayer.type = 'MASK';
         extraEsriLayer = LayerFactory(this._mapview, exLayer);
@@ -830,11 +831,7 @@ export class MapController {
   clearAllLayers(): void {
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach((layer: any) => {
-      if (layer.sublayers) {
-        layer.sublayers.forEach((sub: any) => (sub.visible = false));
-      } else {
-        layer.visible = false;
-      }
+      layer.visible = false;
     });
     //2. Update redux state with visible layers array being empty
 
@@ -852,11 +849,7 @@ export class MapController {
 
   selectAllLayers(): void {
     this._map?.layers.forEach((layer: any) => {
-      if (layer.sublayers) {
-        layer.sublayers.forEach((sub: any) => (sub.visible = true));
-      } else {
-        layer.visible = true;
-      }
+      layer.visible = true;
     });
     const { mapviewState } = store.getState();
     const newLayersArray = mapviewState.allAvailableLayers.map(
