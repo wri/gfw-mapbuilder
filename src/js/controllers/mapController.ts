@@ -626,6 +626,9 @@ export class MapController {
       container: this._domRef.current
     });
 
+    this._mapview.ui.remove('zoom');
+    this._mapview.ui.remove('attribution');
+
     //if we have init extent, use it.
     if (appSettings.initialExtent) {
       const parsedInitExtent = parseExtentConfig(appSettings.initialExtent);
