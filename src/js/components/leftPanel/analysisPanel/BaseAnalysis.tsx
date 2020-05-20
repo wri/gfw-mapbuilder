@@ -12,7 +12,7 @@ import {
 import { setRenderPopup } from 'js/store/appState/actions';
 
 import { registerGeometry } from 'js/helpers/geometryRegistration';
-
+import fragmentationSpec from './fragmentationVegaSpec';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
@@ -60,6 +60,7 @@ const selectAnalysisDaterange = createSelector(
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
+  const [chartLoading, setChartLoading] = useState(false);
   const [chartDownloadURL, setChartDownloadURL] = useState('');
   const [chartDownTitle, setChartDownTitle] = useState('');
   const [base64ChartURL, setBase64ChartURL] = useState('');
@@ -175,6 +176,7 @@ const BaseAnalysis = (): JSX.Element => {
   //Main Func to run the analysis with selected option and geometry
   function runAnalysis(): void {
     setBase64ChartURL('');
+    setChartLoading(true);
     setVegaSpec(null);
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
@@ -208,16 +210,25 @@ const BaseAnalysis = (): JSX.Element => {
           });
         });
       } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
-        debugger;
         widgetURL = mod.analysisUrl;
         fetchWCSAnalysis(
           mod,
           mod.analysisUrl,
           activeFeature,
-          analysisYearRange
+          analysisYearRange,
+          selectedLanguage
         ).then((res: any) => {
-          debugger;
-          setVegaSpec(res);
+          //Title value overwrite
+          fragmentationSpec.marks[1].encode.enter.text!.value = `${res.data.title}`;
+          //Year sublaybel overwrite
+          fragmentationSpec.marks[2].encode.enter.text!.value = `${res.data.startYear} - ${res.data.endYear}`;
+          //Computed value overwrite
+          fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
+            3
+          );
+
+          //@ts-ignore ts is not liking my hand crafted base spec for some reason
+          setVegaSpec(fragmentationSpec);
         });
       }
     }
@@ -371,6 +382,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   function handlePNGURL(base64: string): void {
     setBase64ChartURL(base64);
+    setChartLoading(false);
   }
 
   const returnButtons = (): JSX.Element | undefined => {
@@ -424,7 +436,22 @@ const BaseAnalysis = (): JSX.Element => {
           <AnalysisOptions />
           {!vegaSpec && (
             <div className="analysis-instructions">
-              <AnalysisInstructions />
+              {!chartLoading && <AnalysisInstructions />}
+            </div>
+          )}
+          {chartLoading && (
+            <div style={{ display: 'grid', minHeight: 300 }}>
+              <Loader
+                containerPositionStyling={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-25px',
+                  marginLeft: '-25px'
+                }}
+                color={'#cfcdcd'}
+                size={50}
+              />
             </div>
           )}
           {vegaSpec && (
@@ -452,19 +479,6 @@ const BaseAnalysis = (): JSX.Element => {
                 baseConfig={baseConfig}
                 sendBackURL={handlePNGURL}
               />
-              {base64ChartURL === '' && (
-                <Loader
-                  containerPositionStyling={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-25px',
-                    marginLeft: '-25px'
-                  }}
-                  color={'#cfcdcd'}
-                  size={50}
-                />
-              )}
             </>
           )}
           <button

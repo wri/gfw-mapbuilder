@@ -38,14 +38,14 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
     .catch((e: Error) => console.error(e));
 }
 
-export function fetchWCSAnalysis(
+export async function fetchWCSAnalysis(
   analysisSettings: any,
   url: string,
   activeFeature: any,
-  yearRange: number[]
-): any {
+  yearRange: number[],
+  selectedLanguage: string
+): Promise<any> {
   if (activeFeature.geometry.spatialReference.isWebMercator) {
-    debugger;
     activeFeature.geometry = webMercatorUtils.webMercatorToGeographic(
       activeFeature.geometry
     );
@@ -54,8 +54,7 @@ export function fetchWCSAnalysis(
   const content = {
     polygon: geojson.coordinates
   };
-  debugger;
-  fetch(url, {
+  return await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -64,14 +63,9 @@ export function fetchWCSAnalysis(
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
-      //CALCULATIONS
-      //
-      // let dates;
       let startYear;
       let endYear;
       if (analysisSettings.uiParams !== 'none') {
-        // dates = uiParamsToAppend.period.split(',');
         startYear = yearRange[0];
         endYear = yearRange[1];
         analysisSettings.startYear = Number(startYear);
@@ -90,14 +84,12 @@ export function fetchWCSAnalysis(
         }
       });
       data.totalResult = totalResult;
-
+      data.startYear = yearRange[0];
+      data.endYear = yearRange[1];
+      data.title = analysisSettings.label[selectedLanguage];
       return {
         data: data
       };
-      debugger;
     })
     .catch((e: Error) => console.error(e));
-
-  //
-  // return new Promise((resolve) => resolve(true));
 }
