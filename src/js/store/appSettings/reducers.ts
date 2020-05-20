@@ -1,4 +1,9 @@
-import { AppSettings, AppSettingsTypes, OVERWRITE_SETTINGS } from './types';
+import {
+  AppSettings,
+  AppSettingsTypes,
+  OVERWRITE_SETTINGS,
+  OVERWRITE_COLOR_THEME
+} from './types';
 
 const initialState: AppSettings = {
   webmap: '512eef95997b4e7486cdbdc45078739d',
@@ -65,6 +70,8 @@ export function appSettingsReducer(
   switch (action.type) {
     case OVERWRITE_SETTINGS:
       return { ...state, ...action.payload };
+    case OVERWRITE_COLOR_THEME:
+      return { ...state, customColorTheme: action.payload };
     default:
       return state;
   }

@@ -78,6 +78,7 @@ import {
 } from 'js/helpers/mapController/miscLayerHelpers';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
+import { overwriteColorTheme } from 'js/store/appSettings/actions';
 
 interface URLCoordinates {
   zoom: number;
@@ -155,6 +156,13 @@ export class MapController {
       appSettings.title,
       appSettings.alternativeLanguageTitle
     );
+
+    //Set Default Theme in case we have empty string indicating no theme
+    const customColorTheme = appSettings.customColorTheme;
+    if (customColorTheme.length === 0) {
+      const defaultTheme = '#f0ab00';
+      store.dispatch(overwriteColorTheme(defaultTheme));
+    }
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
