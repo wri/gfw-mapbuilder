@@ -196,7 +196,6 @@ const BaseAnalysis = (): JSX.Element => {
           mod.params
         );
         fetchGFWWidgetConfig(widgetURL).then(res => {
-          console.log(res);
           setVegaSpec(res);
           //grab download urls if they exist
           const widgetConfigData = res.data;
@@ -229,6 +228,8 @@ const BaseAnalysis = (): JSX.Element => {
 
           //@ts-ignore ts is not liking my hand crafted base spec for some reason
           setVegaSpec(fragmentationSpec);
+          setChartDownTitle('');
+          setChartDownloadURL('');
         });
       }
     }
@@ -424,7 +425,6 @@ const BaseAnalysis = (): JSX.Element => {
       );
     }
   };
-
   return (
     <>
       {geostoreReady ? (
@@ -433,26 +433,25 @@ const BaseAnalysis = (): JSX.Element => {
             <span>{title === null ? 'User Drawn Feature' : title}</span>
             {returnButtons()}
           </div>
-          <AnalysisOptions />
+          {!chartLoading && <AnalysisOptions />}
           {!vegaSpec && (
-            <div className="analysis-instructions">
+            <div className="analysis-instructions" style={{ height: 300 }}>
               {!chartLoading && <AnalysisInstructions />}
             </div>
           )}
           {chartLoading && (
-            <div style={{ display: 'grid', minHeight: 300 }}>
-              <Loader
-                containerPositionStyling={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-25px',
-                  marginLeft: '-25px'
-                }}
-                color={'#cfcdcd'}
-                size={50}
-              />
-            </div>
+            // <div style={{ display: 'grid', minHeight: 300 }}>
+            <Loader
+              containerPositionStyling={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: '-25px',
+                marginLeft: '-25px'
+              }}
+              color={'#cfcdcd'}
+              size={50}
+            />
           )}
           {vegaSpec && (
             <>

@@ -17,30 +17,35 @@ function createChartWrapperStyle(chartType?: string): object {
     case 'badge':
       return {
         maxWidth: '30rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     case 'pie':
       return {
         maxWidth: '290px',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     case 'line':
       return {
         maxWidth: '60rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     case 'bar':
       return {
         maxWidth: '60rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     default:
       return {
         maxWidth: '60rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
