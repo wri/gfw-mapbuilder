@@ -6,6 +6,7 @@ import { landsatBaselayerYears } from 'configs/layer-config';
 import { mapController } from 'js/controllers/mapController';
 import { basemapLayersContent } from 'configs/leftPanel.translations';
 import { LayerProps } from 'js/store/mapview/types';
+
 interface DefaultBasemapProps {
   layerInfo: {
     id: string;
@@ -20,7 +21,9 @@ interface BaseLayerControlLandsatProps {
   selectedLanguage: string;
   customColorTheme?: string;
 }
-const BaseLayerControlLandsat = (props: any): JSX.Element => {
+const BaseLayerControlLandsat = (
+  props: BaseLayerControlLandsatProps
+): JSX.Element => {
   const { thumbnailUrl, title } = props.layerInfo;
   const years = landsatBaselayerYears;
   const [selectedYear, setSelectedYear] = React.useState(
@@ -58,7 +61,7 @@ const BaseLayerControlLandsat = (props: any): JSX.Element => {
         style={imgStyles}
       ></span>
       <span onClick={handleBasemapSectionClick}>
-        {title[props.selectedLanguage]}
+        {title && title[props.selectedLanguage]}
       </span>
       <select
         value={selectedYear}

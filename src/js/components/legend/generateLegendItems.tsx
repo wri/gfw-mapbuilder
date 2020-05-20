@@ -206,6 +206,17 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
       const defaultSymbol = esriLayer.renderer.symbol;
       const symbolDOMElement = createSymbolStyles(defaultSymbol);
       container.push(symbolDOMElement);
+    } else if (esriLayer.renderer.classBreakInfos?.length) {
+      esriLayer.renderer.classBreakInfos.forEach((value: any) => {
+        const defaultSymbol = value.symbol;
+        const symbolDOMElement = createSymbolStyles(defaultSymbol);
+        container.push(
+          <div className="sublayer-item-feature">
+            <div>{symbolDOMElement}</div>
+            <span>{value.label}</span>
+          </div>
+        );
+      });
     } else if (esriLayer.renderer.uniqueValueInfos?.length) {
       esriLayer.renderer.uniqueValueInfos.forEach((value: any) => {
         const defaultSymbol = value.symbol;
