@@ -21,13 +21,6 @@ const InfoTabView = (props: Props) => {
   const narrativeContent =
     selectedLanguage === language ? narrative : alternativeNarrative;
 
-  /**
-   * ? QUESTION
-   * ? Should we consider organizing custom content in the
-   * ? resources.js so it's organized by component/language?
-   * ? This could prevent future regressions
-   */
-
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
   return (
     <>
