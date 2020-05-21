@@ -42,7 +42,7 @@ export async function fetchWCSAnalysis(
   analysisSettings: any,
   url: string,
   activeFeature: any,
-  yearRange: number[],
+  yearRange: number[] | null,
   selectedLanguage: string
 ): Promise<any> {
   if (activeFeature.geometry.spatialReference.isWebMercator) {
@@ -65,7 +65,7 @@ export async function fetchWCSAnalysis(
     .then(data => {
       let startYear;
       let endYear;
-      if (analysisSettings.uiParams !== 'none') {
+      if (analysisSettings.uiParams !== 'none' && yearRange) {
         startYear = yearRange[0];
         endYear = yearRange[1];
         analysisSettings.startYear = Number(startYear);
@@ -84,8 +84,8 @@ export async function fetchWCSAnalysis(
         }
       });
       data.totalResult = totalResult;
-      data.startYear = yearRange[0];
-      data.endYear = yearRange[1];
+      data.startYear = yearRange ? yearRange[0] : null;
+      data.endYear = yearRange ? yearRange[1] : null;
       data.title = analysisSettings.label[selectedLanguage];
       return {
         data: data

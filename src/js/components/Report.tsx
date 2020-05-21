@@ -41,6 +41,7 @@ const Report = (props: ReportProps): JSX.Element => {
   );
 
   const [featureGeometry, setFeatureGeometry] = React.useState<any>('');
+  const [esriGeometry, setEsriGeometry] = React.useState();
   const [geostoreID, setGeostoreID] = React.useState<string | null>(null);
   const [sublayerTitle, setSublayerTitle] = React.useState('');
   const [layerTitle, setLayerTitle] = React.useState('');
@@ -119,7 +120,7 @@ const Report = (props: ReportProps): JSX.Element => {
     }
     if (featureGeometry && isMapReady && !layersLoading) {
       const esriGeo = geojsonToArcGIS(featureGeometry.geojson);
-
+      setEsriGeometry(esriGeo[0]);
       //Add Geometry graphic to the map
       if (esriGeo[0].geometry.hasOwnProperty('rings')) {
         //Dealing with a poly
@@ -162,7 +163,6 @@ const Report = (props: ReportProps): JSX.Element => {
   function shareReport(): void {
     dispatch(renderModal('ShareWidget'));
   }
-
   return (
     <div className="report">
       <div className="report-header">
@@ -213,7 +213,12 @@ const Report = (props: ReportProps): JSX.Element => {
       </div>
       <div className="report-charts">
         <div className="pagebreak"></div>
-        {geostoreID && <MemoReportChartsComponent geostoreID={geostoreID} />}
+        {geostoreID && esriGeometry && (
+          <MemoReportChartsComponent
+            esriGeometry={esriGeometry}
+            geostoreID={geostoreID}
+          />
+        )}
       </div>
     </div>
   );

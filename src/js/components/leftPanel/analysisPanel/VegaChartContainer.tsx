@@ -70,10 +70,10 @@ const Chart = (props: ChartProps): JSX.Element => {
       spec.signals = [];
     }
 
-    spec.autosize = {
-      type: 'fit',
-      resize: true
-    };
+    // spec.autosize = {
+    //   type: 'fit',
+    //   resize: true
+    // };
 
     const resizeWidthSignal = {
       name: 'width',
