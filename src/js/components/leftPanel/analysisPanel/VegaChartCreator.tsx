@@ -33,40 +33,34 @@ export function generateAndAttachVegaChart(
       .then((url: string) => callback(url));
   }
 
-  if (spec.featureDataFieldsToPass) {
+  if (spec.featureDataFieldsToPass && spec.attributes) {
     // WCS Specific logic
-    // const baseConfig = analysisMod
-    //   ? analysisMod
-    //   : resources.analysisModules.find(mod => mod.widgetId === id);
-    // console.log('baseConfig', baseConfig);
-    // const baseUrl = config.data[0].url.split('?')[0];
-    // let queryParams = encodeURI(
-    //   config.featureDataFieldsToPass
-    //     .filter(fieldName => {
-    //       const fieldToSubstitute = baseConfig.fieldToSubstitute
-    //         ? baseConfig.fieldToSubstitute
-    //         : 'analyticId';
-    //       return selectedAttributes[
-    //         fieldName === 'analyticid' ? fieldToSubstitute : fieldName
-    //       ];
-    //     })
-    //     .map(fieldName => {
-    //       const fieldToSubstitute = baseConfig.fieldToSubstitute
-    //         ? baseConfig.fieldToSubstitute
-    //         : 'analyticId';
-    //       fieldName =
-    //         fieldName === 'analyticid' ? fieldToSubstitute : fieldName;
-    //       const value = selectedAttributes[fieldName];
-    //       fieldName =
-    //         fieldName === fieldToSubstitute ? 'analyticid' : fieldName;
-    //       return `${fieldName}=${value}`;
-    //     })
-    //     .join('&')
-    // );
+    let queryParams = encodeURI(
+      spec.featureDataFieldsToPass
+        .filter((fieldName: any) => {
+          const fieldToSubstitute = baseConfig.fieldToSubstitute
+            ? baseConfig.fieldToSubstitute
+            : 'analyticId';
+          return spec.attributes[
+            fieldName === 'analyticid' ? fieldToSubstitute : fieldName
+          ];
+        })
+        .map((fieldName: any) => {
+          const fieldToSubstitute = baseConfig.fieldToSubstitute
+            ? baseConfig.fieldToSubstitute
+            : 'analyticId';
+          fieldName =
+            fieldName === 'analyticid' ? fieldToSubstitute : fieldName;
+          const value = spec.attributes[fieldName];
+          fieldName =
+            fieldName === fieldToSubstitute ? 'analyticid' : fieldName;
+          return `${fieldName}=${value}`;
+        })
+        .join('&')
+    );
 
     //We have the correct queryParams, but this 'MapBuilderVegaSQL' also requires the analysisId from the analysisModule sent in as a param: analysisId=...
     let analysisSuffix = '';
-    let queryParams: string | undefined;
     if (baseConfig.analysisId) {
       analysisSuffix = encodeURI('analysisId=' + baseConfig.analysisId);
       if (queryParams) {
