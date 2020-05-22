@@ -255,7 +255,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         </div>
       );
       return (
-        <div className="layer-item" key={layer.id + i}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
           {label}
         </div>
@@ -279,7 +279,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       });
       return (
-        <div className="layer-item" key={layer.id + i}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
           {labelIcons}
         </div>
@@ -295,7 +295,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       });
       return (
-        <div className="layer-item" key={layer.id + i}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
           {labelIcons}
         </div>
@@ -358,7 +358,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       }
       return (
-        <div className="layer-item" key={layer.id}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{title ? title : layer.title}</p>
           {labelIcons}
         </div>
