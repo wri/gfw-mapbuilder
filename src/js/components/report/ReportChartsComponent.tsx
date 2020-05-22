@@ -125,7 +125,9 @@ interface ChartModuleProps {
   lang: string;
   geostoreID: string;
   esriGeometry: __esri.Graphic | undefined;
+  activeFeatureAttributes: any;
 }
+
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const { label, uiParams } = props.moduleInfo;
   const language = props.lang;
@@ -217,6 +219,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         return null;
     }
   };
+
   React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
@@ -259,7 +262,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           const downloadUrl = widgetConfigData.find(
             (e: any) => e.name === 'data'
           );
-          setVegaSpec(analysisMod.data.attributes.widgetConfig);
+
+          // WCS specific modules need attribute data to be passed down as well, GFW analysis mods do not need that but we send it anyway,
+          // they get ignored downstream at Chart creator
+          const newSpec = analysisMod.data.attributes.widgetConfig;
+          newSpec['attributes'] = props.activeFeatureAttributes;
+          setVegaSpec(newSpec);
         })
         .catch(e => {
           console.error(e);
@@ -430,12 +438,14 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
 interface ChartProps {
   geostoreID: string;
   esriGeometry: __esri.Graphic | undefined;
+  attributes: any;
 }
 const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const analysisModules = useSelector(selectAnalysisModules);
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
+
   return (
     <div className="chart-area-container">
       {analysisModules.map((module, i) => (
@@ -445,6 +455,7 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
           lang={selectedLanguage}
           geostoreID={props.geostoreID}
           esriGeometry={props.esriGeometry}
+          activeFeatureAttributes={props.attributes}
         />
       ))}
     </div>

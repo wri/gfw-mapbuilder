@@ -45,7 +45,7 @@ const Report = (props: ReportProps): JSX.Element => {
   const [geostoreID, setGeostoreID] = React.useState<string | null>(null);
   const [sublayerTitle, setSublayerTitle] = React.useState('');
   const [layerTitle, setLayerTitle] = React.useState('');
-  const [attributes, setAttributes] = React.useState<null | object>(null);
+  const [attributes, setAttributes] = React.useState<null | any>(null);
   const [hideAttributeTable, setHideAttributeTable] = React.useState<boolean>(
     false
   );
@@ -213,10 +213,11 @@ const Report = (props: ReportProps): JSX.Element => {
       </div>
       <div className="report-charts">
         <div className="pagebreak"></div>
-        {geostoreID && esriGeometry && (
+        {geostoreID && esriGeometry && attributes && (
           <MemoReportChartsComponent
             esriGeometry={esriGeometry}
             geostoreID={geostoreID}
+            attributes={attributes?.attributes}
           />
         )}
       </div>
