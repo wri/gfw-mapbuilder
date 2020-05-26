@@ -842,6 +842,9 @@ export class MapController {
   clearAllLayers(): void {
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach((layer: any) => {
+      if (layer.sublayers) {
+        layer.allSublayers.items.forEach((sub: any) => (sub.visible = false));
+      }
       layer.visible = false;
     });
     //2. Update redux state with visible layers array being empty
@@ -860,6 +863,9 @@ export class MapController {
 
   selectAllLayers(): void {
     this._map?.layers.forEach((layer: any) => {
+      if (layer.sublayers) {
+        layer.allSublayers.items.forEach((sub: any) => (sub.visible = true));
+      }
       layer.visible = true;
     });
     const { mapviewState } = store.getState();
@@ -957,8 +963,15 @@ export class MapController {
       layer = this._map?.findLayerById(layerID);
     }
     if (layer) {
+      const visibility = !layer.visible;
+      if (visibility) {
+        //sync parent layer with sublayer
+        if (layer.parent && layer.parent.type === 'map-image') {
+          layer.parent.visible = visibility;
+        }
+      }
       //1. update the map
-      layer.visible = !layer.visible;
+      layer.visible = visibility;
       //2. Update redux
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {
