@@ -196,6 +196,13 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         );
         break;
     }
+    if (symbol.type === 'picture-marker') {
+      style.width = 12;
+      style.height = 12;
+      symbolDOMElement = (
+        <img style={style} className="legend-symbol" src={symbol.url} />
+      );
+    }
     return symbolDOMElement;
   }
 
