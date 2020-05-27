@@ -17,32 +17,36 @@ function createChartWrapperStyle(chartType?: string): object {
     case 'badge':
       return {
         maxWidth: '30rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     case 'pie':
       return {
         maxWidth: '290px',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     case 'line':
       return {
         maxWidth: '60rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     case 'bar':
       return {
         maxWidth: '60rem',
+        minHeight: '350px',
         width: '100%',
         margin: '1rem auto'
       };
     default:
       return {
         maxWidth: '60rem',
+        minHeight: '350px',
         width: '100%',
-        height: '300px',
         margin: '1rem auto'
       };
   }
@@ -66,10 +70,10 @@ const Chart = (props: ChartProps): JSX.Element => {
       spec.signals = [];
     }
 
-    spec.autosize = {
-      type: 'fit',
-      resize: true
-    };
+    // spec.autosize = {
+    //   type: 'fit',
+    //   resize: true
+    // };
 
     const resizeWidthSignal = {
       name: 'width',
@@ -100,39 +104,26 @@ const Chart = (props: ChartProps): JSX.Element => {
   const chartWrapperStyle = createChartWrapperStyle(chartType);
 
   function renderChartRef(): JSX.Element {
-    if (report) {
-      return (
-        <Measure
-          bounds
-          onResize={(contentRec): void => {
-            setDimensions({ dimensions: contentRec.bounds });
-          }}
-        >
-          {({ measureRef }) => (
-            <div ref={measureRef} style={chartWrapperStyle}>
-              <div
-                className="canvas-chart-wrapper"
-                style={{
-                  width: dimensions.dimensions.width
-                }}
-                ref={chartRef}
-              ></div>
-            </div>
-          )}
-        </Measure>
-      );
-    } else {
-      return (
-        <div
-          className="canvas-chart-wrapper"
-          style={{
-            width: dimensions.dimensions.width,
-            height: dimensions.dimensions.height
-          }}
-          ref={chartRef}
-        ></div>
-      );
-    }
+    return (
+      <Measure
+        bounds
+        onResize={(contentRec): void => {
+          setDimensions({ dimensions: contentRec.bounds });
+        }}
+      >
+        {({ measureRef }) => (
+          <div ref={measureRef} style={chartWrapperStyle}>
+            <div
+              className="canvas-chart-wrapper"
+              style={{
+                width: dimensions.dimensions.width
+              }}
+              ref={chartRef}
+            ></div>
+          </div>
+        )}
+      </Measure>
+    );
   }
 
   return <>{renderChartRef()}</>;

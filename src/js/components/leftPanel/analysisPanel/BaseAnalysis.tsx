@@ -12,7 +12,7 @@ import {
 import { setRenderPopup } from 'js/store/appState/actions';
 
 import { registerGeometry } from 'js/helpers/geometryRegistration';
-
+import fragmentationSpec from './fragmentationVegaSpec';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
@@ -26,6 +26,11 @@ import DataTabFooter from '../dataPanel/DataTabFooter';
 
 import 'css/leftpanel.scss';
 import { AnalysisModule } from 'js/store/appSettings/types';
+import {
+  fetchGFWWidgetConfig,
+  fetchDownloadInfo,
+  fetchWCSAnalysis
+} from './analysisUtils';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -55,6 +60,7 @@ const selectAnalysisDaterange = createSelector(
 const BaseAnalysis = (): JSX.Element => {
   const dispatch = useDispatch();
   const [vegaSpec, setVegaSpec] = useState(null);
+  const [chartLoading, setChartLoading] = useState(false);
   const [chartDownloadURL, setChartDownloadURL] = useState('');
   const [chartDownTitle, setChartDownTitle] = useState('');
   const [base64ChartURL, setBase64ChartURL] = useState('');
@@ -168,8 +174,9 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   //Main Func to run the analysis with selected option and geometry
-  function runAnalysis() {
+  function runAnalysis(): void {
     setBase64ChartURL('');
+    setChartLoading(true);
     setVegaSpec(null);
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
@@ -178,42 +185,55 @@ const BaseAnalysis = (): JSX.Element => {
     if (mod) {
       const activeLayer = activeFeatures[activeFeatureIndex[0]];
       const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-      const widgetURL = generateWidgetURL(
-        mod.uiParams,
-        mod.widgetId,
-        activeFeature.attributes.geostoreId,
-        mod.params
-      );
-      fetch(widgetURL)
-        .then((response: any) => response.json())
-        .then((analysisMod: any) => {
-          //TODO: we need to handle loading and error states
-          setVegaSpec(analysisMod.data.attributes.widgetConfig);
-          const widgetConfigData =
-            analysisMod.data.attributes.widgetConfig.data;
+      let widgetURL = '';
+
+      if (mod.widgetId) {
+        //Generate GFW Widget URL for the request
+        widgetURL = generateWidgetURL(
+          mod.uiParams,
+          mod.widgetId,
+          activeFeature.attributes.geostoreId,
+          mod.params
+        );
+        fetchGFWWidgetConfig(widgetURL).then(res => {
+          //Send attributes over for processing
+          res.attributes = activeFeature.attributes;
+          setVegaSpec(res);
+          //grab download urls if they exist
+          const widgetConfigData = res.data;
           const downloadUrl = widgetConfigData.find(
             (e: any) => e.name === 'data'
           );
-
           if (!downloadUrl) return;
-          fetch(downloadUrl.url)
-            .then((response: any) => response.json())
-            .then((data: any) => {
-              const chartTitle =
-                data.data && data.data.type
-                  ? data.data.type + '-analysis.png'
-                  : 'analysis.png';
-              //unclear why are we matching 'month' here but that's how it was done in 3x
-              if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
-                setChartDownTitle(chartTitle);
-                setChartDownloadURL(
-                  'https://production-api.globalforestwatch.org' +
-                    data.data.attributes.downloadUrls.csv
-                );
-              }
-            })
-            .catch((e: Error) => console.error(e));
+          fetchDownloadInfo(downloadUrl.url).then((res: any) => {
+            setChartDownTitle(res.chartTitle ? res.chartTitle : '');
+            setChartDownloadURL(res.downloadUrl ? res.downloadUrl : '');
+          });
         });
+      } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
+        widgetURL = mod.analysisUrl;
+        fetchWCSAnalysis(
+          mod,
+          mod.analysisUrl,
+          activeFeature,
+          analysisYearRange,
+          selectedLanguage
+        ).then((res: any) => {
+          //Title value overwrite
+          fragmentationSpec.marks[1].encode.enter.text!.value = `${res.data.title}`;
+          //Year sublaybel overwrite
+          fragmentationSpec.marks[2].encode.enter.text!.value = `${res.data.startYear} - ${res.data.endYear}`;
+          //Computed value overwrite
+          fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
+            3
+          );
+
+          //@ts-ignore ts is not liking my hand crafted base spec for some reason
+          setVegaSpec(fragmentationSpec);
+          setChartDownTitle('');
+          setChartDownloadURL('');
+        });
+      }
     }
   }
 
@@ -365,6 +385,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   function handlePNGURL(base64: string): void {
     setBase64ChartURL(base64);
+    setChartLoading(false);
   }
 
   const returnButtons = (): JSX.Element | undefined => {
@@ -406,7 +427,6 @@ const BaseAnalysis = (): JSX.Element => {
       );
     }
   };
-
   return (
     <>
       {geostoreReady ? (
@@ -415,11 +435,25 @@ const BaseAnalysis = (): JSX.Element => {
             <span>{title === null ? 'User Drawn Feature' : title}</span>
             {returnButtons()}
           </div>
-          <AnalysisOptions />
+          {!chartLoading && <AnalysisOptions />}
           {!vegaSpec && (
-            <div className="analysis-instructions">
-              <AnalysisInstructions />
+            <div className="analysis-instructions" style={{ height: 300 }}>
+              {!chartLoading && <AnalysisInstructions />}
             </div>
+          )}
+          {chartLoading && (
+            // <div style={{ display: 'grid', minHeight: 300 }}>
+            <Loader
+              containerPositionStyling={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: '-25px',
+                marginLeft: '-25px'
+              }}
+              color={'#cfcdcd'}
+              size={50}
+            />
           )}
           {vegaSpec && (
             <>
@@ -446,19 +480,6 @@ const BaseAnalysis = (): JSX.Element => {
                 baseConfig={baseConfig}
                 sendBackURL={handlePNGURL}
               />
-              {base64ChartURL === '' && (
-                <Loader
-                  containerPositionStyling={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-25px',
-                    marginLeft: '-25px'
-                  }}
-                  color={'#cfcdcd'}
-                  size={50}
-                />
-              )}
             </>
           )}
           <button

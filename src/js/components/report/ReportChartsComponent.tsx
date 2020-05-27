@@ -15,7 +15,12 @@ import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions'
 import styled from 'styled-components';
 import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
 import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
-
+import fragmentationSpec from 'js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
+import {
+  fetchGFWWidgetConfig,
+  fetchDownloadInfo,
+  fetchWCSAnalysis
+} from 'js/components/leftPanel/analysisPanel/analysisUtils';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -119,7 +124,10 @@ interface ChartModuleProps {
   moduleInfo: AnalysisModule;
   lang: string;
   geostoreID: string;
+  esriGeometry: __esri.Graphic | undefined;
+  activeFeatureAttributes: any;
 }
+
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const { label, uiParams } = props.moduleInfo;
   const language = props.lang;
@@ -211,65 +219,92 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         return null;
     }
   };
-  React.useEffect(() => {
-    const widgetURL = generateWidgetURL(
-      uiParams,
-      props.moduleInfo.widgetId,
-      props.geostoreID,
-      startDate,
-      endDate,
-      yearRangeValue,
-      density,
-      props.moduleInfo.params
-    );
-    setChartLoading(true);
-    fetch(widgetURL)
-      .then((response: any) => response.json())
-      .then((analysisMod: any) => {
-        setChartLoading(false);
-        setBaseConfig(props.moduleInfo);
-        //TODO: we need to handle loading and error states
-        const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${props.moduleInfo.widgetId}/metadata?language=${language}`;
 
-        fetch(descriptionURL)
-          .then((response: any) => response.json())
-          .then((data: any) => {
-            setChartDescription(data && data?.data[0]?.attributes?.description);
-          })
-          .catch(e => {
-            setChartDescription('Error retrieving chart analysis description.');
-            console.error(e);
-          });
-        //download urls
-        const widgetConfigData = analysisMod.data.attributes.widgetConfig.data;
-        const downloadUrl = widgetConfigData.find(
-          (e: any) => e.name === 'data'
-        );
-        setVegaSpec(analysisMod.data.attributes.widgetConfig);
-        if (!downloadUrl) return;
-        fetch(downloadUrl.url)
-          .then((response: any) => response.json())
-          .then((data: any) => {
-            const chartTitle =
-              data.data && data.data.type
-                ? data.data.type + '-analysis.png'
-                : 'analysis.png';
-            //unclear why are we matching 'month' here but that's how it was done in 3x
-            if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
-              setChartDownloadTitle(chartTitle);
-              setDownloadUrl(
-                'https://production-api.globalforestwatch.org' +
-                  data.data.attributes.downloadUrls.csv
+  React.useEffect(() => {
+    setChartLoading(true);
+    if (props.moduleInfo.widgetId) {
+      // GFW WIDGET
+      const widgetURL = generateWidgetURL(
+        uiParams,
+        props.moduleInfo.widgetId,
+        props.geostoreID,
+        startDate,
+        endDate,
+        yearRangeValue,
+        density,
+        props.moduleInfo.params
+      );
+
+      fetch(widgetURL)
+        .then((response: any) => response.json())
+        .then((analysisMod: any) => {
+          setChartLoading(false);
+          setBaseConfig(props.moduleInfo);
+
+          const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${props.moduleInfo.widgetId}/metadata?language=${language}`;
+
+          fetch(descriptionURL)
+            .then((response: any) => response.json())
+            .then((data: any) => {
+              setChartDescription(
+                data && data?.data[0]?.attributes?.description
               );
-            }
-          })
-          .catch((e: Error) => console.error(e));
-      })
-      .catch(e => {
-        console.error(e);
-        setChartError(true);
+            })
+            .catch(e => {
+              setChartDescription(
+                'Error retrieving chart analysis description.'
+              );
+              console.error(e);
+            });
+          //download urls
+          const widgetConfigData =
+            analysisMod.data.attributes.widgetConfig.data;
+          const downloadUrl = widgetConfigData.find(
+            (e: any) => e.name === 'data'
+          );
+
+          // WCS specific modules need attribute data to be passed down as well, GFW analysis mods do not need that but we send it anyway,
+          // they get ignored downstream at Chart creator
+          const newSpec = analysisMod.data.attributes.widgetConfig;
+          newSpec['attributes'] = props.activeFeatureAttributes;
+          setVegaSpec(newSpec);
+        })
+        .catch(e => {
+          console.error(e);
+          setChartError(true);
+          setChartLoading(false);
+        });
+    } else if (
+      props.moduleInfo.analysisId.includes('FRAGMENTATION') &&
+      props.moduleInfo.analysisUrl
+    ) {
+      //HANDLE WCS Fragmentation analysis modules
+      fetchWCSAnalysis(
+        props.moduleInfo,
+        props.moduleInfo.analysisUrl,
+        props.esriGeometry,
+        yearRangeValue,
+        language
+      ).then((res: any) => {
         setChartLoading(false);
+        setChartError(false);
+        //Title value overwrite
+        fragmentationSpec.marks[1].encode.enter.text!.value = `${res.data.title}`;
+        //Year sublaybel overwrite
+        fragmentationSpec.marks[2].encode.enter.text!.value = res.data.startYear
+          ? `${res.data.startYear} - ${res.data.endYear}`
+          : '';
+        //Computed value overwrite
+        fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
+          3
+        );
+        fragmentationSpec.width = 500;
+        fragmentationSpec.marks[0].encode.enter.width!.signal = '460';
+        fragmentationSpec.signals = [];
+        //@ts-ignore ts is not liking my hand crafted base spec for some reason
+        setVegaSpec(fragmentationSpec);
       });
+    }
   }, [props.geostoreID, forceRender]);
 
   function handlePNGURL(base64: string): void {
@@ -402,12 +437,15 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
 
 interface ChartProps {
   geostoreID: string;
+  esriGeometry: __esri.Graphic | undefined;
+  attributes: any;
 }
 const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const analysisModules = useSelector(selectAnalysisModules);
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
+
   return (
     <div className="chart-area-container">
       {analysisModules.map((module, i) => (
@@ -416,6 +454,8 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
           moduleInfo={module}
           lang={selectedLanguage}
           geostoreID={props.geostoreID}
+          esriGeometry={props.esriGeometry}
+          activeFeatureAttributes={props.attributes}
         />
       ))}
     </div>
