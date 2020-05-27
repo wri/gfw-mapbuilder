@@ -1,5 +1,5 @@
 export default {
-  webmap: '4554ede8463646bbb952c694269ff023',
+  webmap: '7b64776e2f8b4280a806b7b46ccddc78',
   title: 'Natures Strongholds Impact Platform',
   subtitle: 'Demonstrating Our Global Impact',
   logoUrl: 'https://programs.wcs.org/Desktopmodules/WCSMapBuilder/wcslogo.png',
@@ -80,7 +80,6 @@ export default {
           'Population trend analysis based on field surveys and peer reviewed papers'
       },
       useGfwWidget: true,
-      chartType: 'bar',
       widgetId: '53a2ad48-46c2-41b0-9a72-8d6ef34131c9',
       uiParams: 'none',
       featureDataFieldsToPass: ['polygonname'],
