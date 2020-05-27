@@ -13,6 +13,7 @@ const ShareWidget: FunctionComponent = () => {
       <div className="widget-container">
         <button
           className="image-wrapper"
+          aria-label="share widget"
           onClick={() => dispatch(renderModal('ShareWidget'))}
         >
           <ShareIcon height={25} width={25} fill={'#555'} />

@@ -235,37 +235,44 @@ export const layersPanelTranslations = {
   en: {
     layers: 'Layers',
     selectAll: 'Select All',
-    clearAll: 'Clear All'
+    clearAll: 'Clear All',
+    legend: 'Legend'
   },
   fr: {
     layers: 'Couches',
     selectAll: 'Tout sélectionner',
-    clearAll: 'Tout effacer'
+    clearAll: 'Tout effacer',
+    legend: 'Légende'
   },
   es: {
     layers: 'Capas',
     selectAll: 'Seleccionar Todo',
-    clearAll: 'Borrar Todo'
+    clearAll: 'Borrar Todo',
+    legend: 'Leyenda'
   },
   pt: {
     layers: 'Camadas',
     selectAll: 'Selecionar tudo',
-    clearAll: 'Limpar tudo'
+    clearAll: 'Limpar tudo',
+    legend: 'Legenda'
   },
   id: {
     layers: 'Layers',
     selectAll: 'Select All',
-    clearAll: 'Clear All'
+    clearAll: 'Clear All',
+    legend: 'Legend'
   },
   zh: {
     layers: '图层',
     selectAll: '全选',
-    clearAll: '全部清除'
+    clearAll: '全部清除',
+    legend: '图例'
   },
   ka: {
     layers: 'ფენები',
     selectAll: 'ყველაფრის მონიშვნა',
-    clearAll: 'ყველაფრის წაშლა'
+    clearAll: 'ყველაფრის წაშლა',
+    legend: 'ლეგენდა'
   }
 };
 

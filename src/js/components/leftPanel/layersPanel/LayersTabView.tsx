@@ -18,13 +18,13 @@ const AllLayerControls = (props: LayerControlProps): JSX.Element => {
       <span>
         {layersPanelTranslations[props.selectedLanguage]?.layers || 'Layers'}
       </span>
-      <button onClick={() => mapController.clearAllLayers()}>
-        {layersPanelTranslations[props.selectedLanguage]?.clearAll ||
-          'Clear All'}
-      </button>
       <button onClick={() => mapController.selectAllLayers()}>
         {layersPanelTranslations[props.selectedLanguage]?.selectAll ||
           'Select All'}
+      </button>
+      <button onClick={() => mapController.clearAllLayers()}>
+        {layersPanelTranslations[props.selectedLanguage]?.clearAll ||
+          'Clear All'}
       </button>
     </div>
   );

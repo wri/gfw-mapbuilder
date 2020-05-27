@@ -24,7 +24,11 @@ const MeasureWidget: FunctionComponent = () => {
   return (
     <>
       <div className="widget-container">
-        <button className="image-wrapper" onClick={handleWidget}>
+        <button
+          className="image-wrapper"
+          aria-label="measure widget"
+          onClick={handleWidget}
+        >
           <MeasureIcon height={25} width={25} fill={'#555'} />
         </button>
       </div>

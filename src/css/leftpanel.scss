@@ -148,7 +148,6 @@
   }
 
   .info-content-container {
-    display: flex;
     min-height: 5rem;
     margin: 1rem;
 
@@ -880,8 +879,10 @@
       }
     }
     .layer-control {
-      display: flex;
-      justify-content: space-around;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-gap: 2px;
+      margin-left: 5px;
       margin-bottom: 10px;
       select {
         -webkit-appearance: none;
@@ -930,6 +931,9 @@
       text-align: center;
       margin: 0.5rem 0.5rem 0.5rem;
       font-weight: bold;
+    }
+    .attribute-page-buttons {
+      display: flex;
     }
     .attribute-page-button {
       margin-left: 5px;

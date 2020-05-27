@@ -78,6 +78,7 @@ import {
 } from 'js/helpers/mapController/miscLayerHelpers';
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
+import { overwriteColorTheme } from 'js/store/appSettings/actions';
 
 interface URLCoordinates {
   zoom: number;
@@ -155,6 +156,13 @@ export class MapController {
       appSettings.title,
       appSettings.alternativeLanguageTitle
     );
+
+    //Set Default Theme in case we have empty string indicating no theme
+    const customColorTheme = appSettings.customColorTheme;
+    if (customColorTheme.length === 0) {
+      const defaultTheme = '#f0ab00';
+      store.dispatch(overwriteColorTheme(defaultTheme));
+    }
 
     function syncExtent(ext: __esri.Extent, mapview: MapView): any {
       const { latitude, longitude } = ext.center;
@@ -618,6 +626,9 @@ export class MapController {
       container: this._domRef.current
     });
 
+    this._mapview.ui.remove('zoom');
+    this._mapview.ui.remove('attribution');
+
     //if we have init extent, use it.
     if (appSettings.initialExtent) {
       const parsedInitExtent = parseExtentConfig(appSettings.initialExtent);
@@ -772,7 +783,8 @@ export class MapController {
       let extraEsriLayer;
       if (
         exLayer.id === 'MASK' &&
-        appSettings.iso && appSettings.iso.length !== 0
+        appSettings.iso &&
+        appSettings.iso.length !== 0
       ) {
         exLayer.type = 'MASK';
         extraEsriLayer = LayerFactory(this._mapview, exLayer);
@@ -831,10 +843,9 @@ export class MapController {
     //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
     this._map?.layers.forEach((layer: any) => {
       if (layer.sublayers) {
-        layer.sublayers.forEach((sub: any) => (sub.visible = false));
-      } else {
-        layer.visible = false;
+        layer.allSublayers.items.forEach((sub: any) => (sub.visible = false));
       }
+      layer.visible = false;
     });
     //2. Update redux state with visible layers array being empty
 
@@ -853,10 +864,9 @@ export class MapController {
   selectAllLayers(): void {
     this._map?.layers.forEach((layer: any) => {
       if (layer.sublayers) {
-        layer.sublayers.forEach((sub: any) => (sub.visible = true));
-      } else {
-        layer.visible = true;
+        layer.allSublayers.items.forEach((sub: any) => (sub.visible = true));
       }
+      layer.visible = true;
     });
     const { mapviewState } = store.getState();
     const newLayersArray = mapviewState.allAvailableLayers.map(
@@ -953,8 +963,15 @@ export class MapController {
       layer = this._map?.findLayerById(layerID);
     }
     if (layer) {
+      const visibility = !layer.visible;
+      if (visibility) {
+        //sync parent layer with sublayer
+        if (layer.parent && layer.parent.type === 'map-image') {
+          layer.parent.visible = visibility;
+        }
+      }
       //1. update the map
-      layer.visible = !layer.visible;
+      layer.visible = visibility;
       //2. Update redux
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {

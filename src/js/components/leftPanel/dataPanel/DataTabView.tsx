@@ -186,7 +186,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           <div className="layer-control-container">
             <div className="remove-attribute-button">
               <button id="remove-attr-btn" onClick={removeAttribute}>
-                <CloseAttribute width={25} height={25} />
+                <CloseAttribute width={20} height={20} />
               </button>
             </div>
             <div className="layer-control">

@@ -20,7 +20,11 @@ const HideWidget: FunctionComponent = () => {
   return (
     <>
       <div className="widget-container">
-        <button className="image-wrapper" onClick={toggleContent}>
+        <button
+          className="image-wrapper"
+          aria-label="hide left panel and legend"
+          onClick={toggleContent}
+        >
           <HideIcon height={25} width={25} fill={'#555'} />
         </button>
       </div>

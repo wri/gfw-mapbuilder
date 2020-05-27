@@ -213,6 +213,17 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
       const defaultSymbol = esriLayer.renderer.symbol;
       const symbolDOMElement = createSymbolStyles(defaultSymbol);
       container.push(symbolDOMElement);
+    } else if (esriLayer.renderer.classBreakInfos?.length) {
+      esriLayer.renderer.classBreakInfos.forEach((value: any) => {
+        const defaultSymbol = value.symbol;
+        const symbolDOMElement = createSymbolStyles(defaultSymbol);
+        container.push(
+          <div className="sublayer-item-feature">
+            <div>{symbolDOMElement}</div>
+            <span>{value.label}</span>
+          </div>
+        );
+      });
     } else if (esriLayer.renderer.uniqueValueInfos?.length) {
       esriLayer.renderer.uniqueValueInfos.forEach((value: any) => {
         const defaultSymbol = value.symbol;
@@ -251,7 +262,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         </div>
       );
       return (
-        <div className="layer-item" key={layer.id + i}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
           {label}
         </div>
@@ -275,7 +286,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       });
       return (
-        <div className="layer-item" key={layer.id + i}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
           {labelIcons}
         </div>
@@ -291,7 +302,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       });
       return (
-        <div className="layer-item" key={layer.id + i}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
           {labelIcons}
         </div>
@@ -354,7 +365,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         );
       }
       return (
-        <div className="layer-item" key={layer.id}>
+        <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{title ? title : layer.title}</p>
           {labelIcons}
         </div>

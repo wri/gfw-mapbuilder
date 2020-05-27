@@ -94,10 +94,18 @@ interface LayerInfo {
 
 //Action names available
 export const OVERWRITE_SETTINGS = 'OVERWRITE_SETTINGS';
+export const OVERWRITE_COLOR_THEME = 'OVERWRITE_COLOR_THEME';
 
 interface OverwriteSettingsAction {
   type: typeof OVERWRITE_SETTINGS;
   payload: AppSettings;
 }
 
-export type AppSettingsTypes = OverwriteSettingsAction;
+interface OverwriteColorThemeAction {
+  type: typeof OVERWRITE_COLOR_THEME;
+  payload: string;
+}
+
+export type AppSettingsTypes =
+  | OverwriteSettingsAction
+  | OverwriteColorThemeAction;

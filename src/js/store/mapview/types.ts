@@ -112,6 +112,7 @@ export interface LayerProps {
   versionHeaderText?: any;
   versionIndex?: number;
   portalItemID?: string | null;
+  thumbnailUrl?: string;
 }
 
 interface Attributes {
