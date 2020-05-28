@@ -104,6 +104,7 @@ const MenuTabView = (props: any): JSX.Element => {
           target={target}
           href={`${shareURLBase}?appid=${id}&l=${props.selectedLanguage}`}
         >
+          Theme:{' '}
           {props.selectedLanguage === props.alternativeLanguage
             ? themeMap[index].alternativeTitle
             : themeMap[index].title}
@@ -159,11 +160,16 @@ const MenuTabView = (props: any): JSX.Element => {
                   </a>
                 </li>
               )}
-              <button
-                onClick={(): void => setRenderMyGFWOptions(!renderMyGFWOptions)}
-              >
-                My GFW
-              </button>
+              <li>
+                <button
+                  className="my-gfw"
+                  onClick={(): void =>
+                    setRenderMyGFWOptions(!renderMyGFWOptions)
+                  }
+                >
+                  My GFW
+                </button>
+              </li>
               {renderMyGFWOptions && <MyGFWContent />}
               {themeOptions}
               <LanguageDropdown

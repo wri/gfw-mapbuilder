@@ -1168,11 +1168,91 @@
 
 .menu-container {
   display: none;
+  padding: 2rem;
 
   .title-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+
+    .menu-items {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      width: -webkit-fill-available;
+      font-family: $fira-sans;
+      font-size: 1rem;
+      color: rgb(104, 104, 104);
+
+      a,
+      button {
+        color: rgb(104, 104, 104);
+      }
+
+      .subscription-authentication > .directions {
+        display: none;
+      }
+
+      li {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        border-top: 1px solid grey;
+        height: 3rem;
+        text-align: center;
+        text-transform: uppercase;
+
+        a {
+          text-decoration: none;
+          margin-top: auto;
+          margin-bottom: auto;
+          height: auto;
+        }
+
+        button {
+          font-size: 1rem;
+          background-color: white;
+          border: none;
+          text-transform: uppercase;
+          font-family: $fira-sans;
+        }
+      }
+
+      .language-dropdown-container {
+        width: -webkit-fill-available;
+        font-family: $fira-sans;
+        font-size: 1rem;
+
+        ul {
+          margin: 0 auto;
+          width: -webkit-fill-available;
+          padding-left: 0;
+        }
+
+        .dropdown {
+          span {
+            display: none;
+          }
+
+          .options > li {
+            line-height: 3rem;
+          }
+        }
+      }
+
+      .options-modal {
+        .more-list {
+          margin: 0 auto;
+          li {
+            line-height: 3rem;
+
+            p {
+              margin: 0 auto;
+            }
+          }
+        }
+      }
+    }
 
     img {
       width: 15rem;
