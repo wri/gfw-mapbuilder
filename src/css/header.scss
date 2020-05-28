@@ -247,6 +247,18 @@
   }
 }
 
+@media screen and (max-width: $tablet-device) {
+  .header-container {
+    .title-container > .titles > h1 {
+      font-size: 1rem;
+      max-width: 14rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
 @media screen and (max-width: $mobile-device) {
   .header-container {
     justify-content: flex-end;
@@ -258,13 +270,17 @@
         margin-left: 0.25rem;
 
         h1 {
-          font-size: 1rem;
+          max-width: 10rem;
         }
 
         h2 {
           font-size: 0.75rem;
         }
       }
+    }
+
+    .selectors-container {
+      display: none;
     }
   }
 
