@@ -228,6 +228,12 @@ const LeftPanel = (): React.ReactElement => {
       icon: DocumentsTabIcon,
       tooltipText: 'Documents',
       render: renderDocTab //Example of it coming from resources file
+    },
+    {
+      label: 'menu',
+      icon: InfoTabIcon,
+      tooltipText: 'Menu',
+      render: true
     }
   ];
 
