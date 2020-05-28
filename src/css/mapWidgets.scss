@@ -36,7 +36,14 @@
 
 @media screen and (max-width: 475px) {
   .widget-wrapper {
-    right: 0px;
+    // top: auto;
+    // right: auto;
+    // left: 19rem;
+    // bottom: 7rem;
+    top: auto;
+    right: 0;
+    /* left: 19rem; */
+    bottom: 7rem;
 
     .widget-row {
       flex-direction: column;
