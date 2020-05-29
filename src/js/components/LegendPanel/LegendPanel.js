@@ -298,7 +298,8 @@ export default class LegendPanel extends Component {
 
           let visibility = activeLayers.indexOf(esriLayer.id) > -1;
 
-          if (esriLayer.hasOwnProperty('visibleAtMapScale') && !esriLayer.visibleAtMapScale) {
+          const freshEsriLayer = map.getLayer(layer.id);
+          if (esriLayer.hasOwnProperty('visibleAtMapScale') && !freshEsriLayer.visibleAtMapScale) {
             const scale = map.getScale();
             if ((scale > esriLayer.minScale) || (scale < esriLayer.maxScale)) {
               visibility = false;

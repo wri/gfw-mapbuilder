@@ -64,27 +64,30 @@ const LayersHelper = {
   },
 
   isLayerVisible (map, layerInfo) {
-    // Non-webmap layers, always assume visible.
+
+    //layerInfo.esriLayer state does not represent the actual map visibility at scale state so we pull in a "fresh" reference here and use it below
+    const freshEsriLayer = map.getLayer(layerInfo.id);
     let visible = true;
-    // Layers have a visibleAtMapScale property which make this easy.
-    
+
     if (layerInfo.esriLayer && layerInfo.esriLayer.loaded) {
-      if (layerInfo.esriLayer.hasOwnProperty('visibleAtMapScale') && !layerInfo.esriLayer.visibleAtMapScale) {
+      if (layerInfo.esriLayer.hasOwnProperty('visibleAtMapScale') && !freshEsriLayer.visibleAtMapScale) {
         const scale = map.getScale();
         // if ((scale > layerInfo.esriLayer.minScale) || (scale < layerInfo.esriLayer.maxScale)) {
           visible = false;
-          layerInfo.visible = visible;
+          // layerInfo.visible = visible;
         // }
       }
+
     }
     if (map && map.getScale && layerInfo.esriLayer) {
       // Explicitly check scale depencency for sub-layers in a dynamic map service.
       const scale = map.getScale();
       if (layerInfo.hasScaleDependency && ((scale > layerInfo.minScale && layerInfo.minScale !== 0) || scale < layerInfo.maxScale)) {
         visible = false;
-        layerInfo.visible = visible;
+        // layerInfo.visible = visible;
       }
     }
+
     return visible;
   },
 
