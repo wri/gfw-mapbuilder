@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
+const webpack = require('webpack');
 
 const cameroonConfig = require('./configs/countryConfigs/cameroon.js');
 
@@ -19,8 +20,8 @@ module.exports = env => {
   }
 
   return {
-    mode: 'development',
-    devtool: 'inline-source-map',
+    mode: 'production',
+    devtool: false,
     entry: {
       index: ['./src/js/lib.tsx']
     },
@@ -85,7 +86,9 @@ module.exports = env => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1
+      }),
       new ArcGISPlugin({
         useDefaultAssetLoaders: false,
         features: {
