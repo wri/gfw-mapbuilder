@@ -20,13 +20,13 @@ import { registerGeometry } from 'js/helpers/geometryRegistration';
 
 //this is a map of what we are tracking and parsing
 const urlEncodingMap = {
-  lang: 'selectedLanguage',
+  l: 'selectedLanguage',
   b: 'activeBasemap',
   z: 'zoom',
   coords: 'coordinates',
   d: 'density',
   tab: 'activeTab',
-  l: 'layers',
+  layers: 'layers',
   o: 'opacity',
   gladconfirmed: 'glad_confirmed',
   gs: 'glad_start_date',
@@ -88,7 +88,7 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
 
   //Language
   const { selectedLanguage, leftPanel } = appState;
-  urlParams.push(`lang=${selectedLanguage}`);
+  urlParams.push(`l=${selectedLanguage}`);
 
   //X Y Z, In case of Report, we do not need this, because we are zooming to the active feature
   if (!props.report) {
@@ -117,7 +117,7 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const layerIDSString = layerIDS.join('%2C');
   const layerOpacitiesString = layerOpacities.join('%2C');
 
-  urlParams.push(`l=${layerIDSString}`);
+  urlParams.push(`layers=${layerIDSString}`);
   urlParams.push(`o=${layerOpacitiesString}`);
 
   //Active Tab
@@ -159,7 +159,7 @@ export interface LayerInfo {
 }
 export function getLayerInfoFromURL(): LayerInfo[] {
   const parsedURL = new URL(window.location.href);
-  const allLayerIDS = parsedURL.searchParams.get('l')?.split(',');
+  const allLayerIDS = parsedURL.searchParams.get('layers')?.split(',');
   const opacityArray = parsedURL.searchParams
     .get('o')
     ?.split(',')

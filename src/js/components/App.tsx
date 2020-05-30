@@ -66,7 +66,7 @@ const App = (props: AppSettings | any): JSX.Element => {
           dispatch(overwriteSettings({ ...cameroon, ...values, ...props }));
           //Check URL for language param which comes in after user shares the application.
           const langFromURL = new URL(window.location.href).searchParams.get(
-            'lang'
+            'l'
           );
           if (langFromURL) {
             dispatch(setLanguage(langFromURL));
@@ -82,7 +82,7 @@ const App = (props: AppSettings | any): JSX.Element => {
           dispatch(overwriteSettings({ ...cameroon, ...props }));
           //Check URL for language param which comes in after user shares the application.
           const langFromURL = new URL(window.location.href).searchParams.get(
-            'lang'
+            'l'
           );
           if (langFromURL) {
             dispatch(setLanguage(langFromURL));
@@ -96,9 +96,7 @@ const App = (props: AppSettings | any): JSX.Element => {
       //Read our local resources.js file And any external library resources (which are prioritized)
       dispatch(overwriteSettings({ ...cameroon, ...props }));
       //Check URL for language param which comes in after user shares the application.
-      const langFromURL = new URL(window.location.href).searchParams.get(
-        'lang'
-      );
+      const langFromURL = new URL(window.location.href).searchParams.get('l');
       if (langFromURL) {
         dispatch(setLanguage(langFromURL));
       } else {
