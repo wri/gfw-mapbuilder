@@ -2,8 +2,7 @@
 //@ts-nocheck
 
 const mb = function(cb) {
-  //Improt vega chart library through a script tag
-
+  //Import vega chart library through a script tag
   const vegaScript = document.createElement('script');
   vegaScript.src = 'https://cdn.jsdelivr.net/npm/vega@5';
   document.getElementsByTagName('head')[0].appendChild(vegaScript);
