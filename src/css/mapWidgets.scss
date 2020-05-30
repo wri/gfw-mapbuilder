@@ -17,6 +17,7 @@
     .widget-container {
       display: flex;
       border: 1px solid $medium-dark-grey;
+      box-sizing: content-box;
       background-color: $white;
       width: $map-widget-square;
       height: $map-widget-square;
