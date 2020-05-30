@@ -1,15 +1,17 @@
 //@ts-ignore
 //@ts-nocheck
 
-// In "CMS lib we already have a root div" <div id="root"></div> to which we need to mount the application
-
-// whatever is in 1.5.0.js is being evaluated
-
-//1. make sure library-bundle.js loads up first
-//2. initialize mapbuilder instance
-
-let aa;
 const mb = function(cb) {
+  //Improt vega chart library through a script tag
+
+  const vegaScript = document.createElement('script');
+  vegaScript.src = 'https://cdn.jsdelivr.net/npm/vega@5';
+  document.getElementsByTagName('head')[0].appendChild(vegaScript);
+
+  //Main library bundle loading happens here, this is executed which fires a callback which in turn instantiates
+  //MapBuilder library with config and id for the root div passed. Root div already exists in CMS HTML File,
+  //so we are attaching to it this way
+
   const script = document.createElement('script');
   script.src =
     'https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/library-bundle.js';
@@ -20,9 +22,6 @@ const mb = function(cb) {
 };
 
 mb(function cb() {
-  console.log('script loaded');
-  // console.log(aa)
-  console.log(window.gon.page.content.settings);
   new MapBuilderLoader({
     el: 'root',
     config: window.gon.page.content.settings
@@ -36,8 +35,5 @@ window._app = {
     'https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0.js'
 };
 
-const Loader = function(args) {
-  // console.log(args);
-  aa = args;
-};
+const Loader = function(args) {};
 window.MapBuilder = Loader;
