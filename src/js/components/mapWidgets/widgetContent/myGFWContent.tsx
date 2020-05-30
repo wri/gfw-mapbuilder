@@ -62,7 +62,7 @@ const MyGFWContent: FunctionComponent = () => {
   const RenderLogins = (): JSX.Element => {
     return (
       <ul className="subscription-authentication">
-        <p>
+        <p className="directions">
           {loginReq}
           <a href="mailto:gfw@wri.org">{contactUs}</a>
         </p>

@@ -4,6 +4,7 @@ import LayerTabView from './layersPanel/LayersTabView';
 import DataTabView from './dataPanel/DataTabView';
 import AnalysisTabView from './analysisPanel/AnalysisTabView';
 import DocumentsTabView from './DocumentsTabView';
+import MenuTabView from './MenuTabView';
 
 interface TabViewRender {
   label: string;
@@ -36,6 +37,8 @@ class TabViewContainer extends React.Component<TabViewContainerProps, {}> {
             return (
               <DocumentsTabView label={tabView.label} key={tabView.label} />
             );
+          case 'menu':
+            return <MenuTabView label={tabView.label} key={tabView.label} />;
           default:
             break;
         }

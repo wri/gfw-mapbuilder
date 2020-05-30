@@ -18,6 +18,7 @@ import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
 import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
 import { ReactComponent as DocumentsTabIcon } from 'images/documentsTabIcon.svg';
 import { ReactComponent as InfoTabIcon } from 'images/infoTabIcon.svg';
+import { ReactComponent as HamburgerIcon } from 'images/hamburgerIcon.svg';
 
 export interface TabProps {
   key: string;
@@ -228,6 +229,12 @@ const LeftPanel = (): React.ReactElement => {
       icon: DocumentsTabIcon,
       tooltipText: 'Documents',
       render: renderDocTab //Example of it coming from resources file
+    },
+    {
+      label: 'menu',
+      icon: HamburgerIcon,
+      tooltipText: 'Menu',
+      render: true
     }
   ];
 
