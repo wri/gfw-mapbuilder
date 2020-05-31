@@ -31,7 +31,6 @@ module.exports = env => {
     },
     output: {
       filename: 'library-bundle.js',
-      //how do we set the one below dynamic based on our version?
       publicPath: publicPathURL
     },
     module: {
@@ -92,7 +91,7 @@ module.exports = env => {
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 5
+        maxChunks: 100
       }),
       new ArcGISPlugin({
         useDefaultAssetLoaders: false,
