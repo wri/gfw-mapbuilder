@@ -74,11 +74,11 @@ const ShareContent: FunctionComponent = () => {
         //get back geostoreID to add to the URL, for NORMAL views we do not share the active feature
         //so that is not done currently.
         const stateUrl = await getShareableURL({ report: reportView });
-        const urlVal = appID
-          ? `${baseUrl.href}&${stateUrl}`
-          : `${baseUrl}?${stateUrl}`;
-        console.log(baseUrl);
-        setUrlValue(urlVal);
+        let combinedReportURL = baseUrl.origin + baseUrl.pathname;
+        combinedReportURL = appID
+          ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
+          : combinedReportURL + '?' + stateUrl;
+        setUrlValue(combinedReportURL);
       }
     }
     returnURL();
