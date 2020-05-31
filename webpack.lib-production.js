@@ -25,7 +25,7 @@ module.exports = env => {
 
   return {
     mode: 'production',
-    devtool: false,
+    devtool: 'source-map',
     entry: {
       'library-bundle': ['./src/js/lib.tsx'],
       [`loader/${PACKAGE.version}`]: [`./src/lib/libLoader.js`]
