@@ -9,10 +9,7 @@
  * */
 //@ts-ignore
 const url = new URL(document.currentScript.src);
-console.log(url);
 const widgetLink = url.href.substring(0, url.href.lastIndexOf('/') + 1);
-console.log('pathpathpath');
-console.log(widgetLink);
 //@ts-ignore
 __webpack_public_path__ = widgetLink;
 console.log(__webpack_public_path__);
