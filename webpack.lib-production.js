@@ -27,10 +27,11 @@ module.exports = env => {
     mode: 'production',
     devtool: false,
     entry: {
-      index: ['./src/js/lib.tsx']
+      'library-bundle': ['./src/js/lib.tsx'],
+      [`loader/${PACKAGE.version}`]: [`./src/lib/libLoader.js`]
     },
     output: {
-      filename: 'library-bundle.js',
+      filename: '[name].js',
       publicPath: publicPathURL
     },
     module: {
