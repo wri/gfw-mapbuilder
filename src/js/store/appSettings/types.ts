@@ -95,6 +95,7 @@ interface LayerInfo {
 //Action names available
 export const OVERWRITE_SETTINGS = 'OVERWRITE_SETTINGS';
 export const OVERWRITE_COLOR_THEME = 'OVERWRITE_COLOR_THEME';
+export const SET_HIDE_LEGEND = 'SET_HIDE_LEGEND';
 
 interface OverwriteSettingsAction {
   type: typeof OVERWRITE_SETTINGS;
@@ -106,6 +107,12 @@ interface OverwriteColorThemeAction {
   payload: string;
 }
 
+interface SetHideLegendAction {
+  type: typeof SET_HIDE_LEGEND;
+  payload: boolean;
+}
+
 export type AppSettingsTypes =
   | OverwriteSettingsAction
-  | OverwriteColorThemeAction;
+  | OverwriteColorThemeAction
+  | SetHideLegendAction;

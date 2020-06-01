@@ -8,6 +8,7 @@ import HideWidget from './hideWidget';
 import RefreshWidget from './refreshWidget';
 import ZoomWidget from './zoomWidget';
 import MeasureWidget from './measureWidget';
+import LegendWidget from './legendWidget';
 
 import '../../../css/mapWidgets';
 
@@ -30,6 +31,9 @@ const MapWidgets: FunctionComponent = () => {
           <HideWidget />
           {/* <RefreshWidget /> */}
           <MeasureWidget />
+        </div>
+        <div className="widget-row legend">
+          <LegendWidget />
         </div>
       </div>
     </>

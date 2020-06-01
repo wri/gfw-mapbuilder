@@ -60,7 +60,7 @@ const Legend = (): JSX.Element => {
   }, [layersLoading, allAvailableLayers, scale]);
   return (
     <>
-      {visibleLayersToShow.length > 0 && (
+      {!hideLegend && visibleLayersToShow.length > 0 && (
         <div className="legend-container" onClick={() => closeGFWDropdown()}>
           <div
             className="legend-title"
