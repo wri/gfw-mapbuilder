@@ -21,6 +21,20 @@ interface BaseLayerControlLandsatProps {
   selectedLanguage: string;
   customColorTheme?: string;
 }
+
+const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
+  const { id, thumbnailUrl, title, activeBasemap } = props.layerInfo;
+  return (
+    <div
+      className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
+      onClick={(): void => mapController.setWRIBasemap(id)}
+    >
+      <img src={thumbnailUrl} alt="basemap" />
+      <span>{title}</span>
+    </div>
+  );
+};
+
 const BaseLayerControlLandsat = (
   props: BaseLayerControlLandsatProps
 ): JSX.Element => {
@@ -120,18 +134,36 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   };
 
   const basemapsToRender = layerGroupConfig.layers.filter(
-    (baselayer: any) => baselayer.id === 'landsat'
+    (baselayer: any) =>
+      baselayer.id === 'landsat' ||
+      baselayer.id === 'wri_mono' ||
+      baselayer.id === 'wri_contextual'
   );
-  const allowedBaseLayers = basemapsToRender.map((baselayer: any) => (
-    //TODO: Once we allow WRI custom basemaps, this needs to handle those cases, for not it is only working with landsat
-    // * NOTE: these are custom Basemap layers that are set via resources.js
-    <BaseLayerControlLandsat
-      key={baselayer.id}
-      layerInfo={baselayer}
-      selectedLanguage={selectedLanguage}
-      customColorTheme={customColorTheme}
-    />
-  ));
+  const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {
+    if (baselayer.id === 'landsat') {
+      return (
+        <BaseLayerControlLandsat
+          key={baselayer.id}
+          layerInfo={baselayer}
+          selectedLanguage={selectedLanguage}
+          customColorTheme={customColorTheme}
+        />
+      );
+    }
+    if (baselayer.id === 'wri_mono' || baselayer.id === 'wri_contextual') {
+      return (
+        <BaseLayerWRI
+          key={baselayer.id}
+          layerInfo={{
+            id: baselayer.id,
+            thumbnailUrl: baselayer.thumbnailUrl,
+            title: baselayer.title[selectedLanguage],
+            activeBasemap
+          }}
+        />
+      );
+    }
+  });
 
   const esriBasemapsToRender = basemapLayersContent.defaultESRIBasemaps.map(
     // * NOTE: these are generic Basemap layers that exist across custom maps
