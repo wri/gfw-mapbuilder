@@ -1,7 +1,11 @@
-module.exports = {
+export default {
   //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
   //- General Settings
-  // webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
+  // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
+  // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
+  // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
+  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
@@ -37,13 +41,14 @@ module.exports = {
     z: null // 9,
   },
   //- Tab Settings
-  includeDocumentsTab: true,
+  includeDocumentsTab: false,
   //- Layers/Analysis Settings
   iso: '',
   viirsFires: true,
   modisFires: true,
   intactForests: true,
   primaryForests: true,
+  forma: false,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
@@ -715,26 +720,32 @@ module.exports = {
           uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
         },
         {
-          id: 'GLAD_ALERTS',
+          id: 'FORMA_ALERTS',
           order: 4,
+          type: 'remoteDataLayer',
+          uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3'
+        },
+        {
+          id: 'GLAD_ALERTS',
+          order: 5,
           type: 'remoteDataLayer',
           uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
         },
         {
           id: 'TERRA_I_ALERTS',
-          order: 5,
+          order: 6,
           type: 'remoteDataLayer',
           uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
         },
         {
           id: 'VIIRS_ACTIVE_FIRES',
-          order: 6,
+          order: 7,
           type: 'remoteDataLayer',
           uuid: '15cb32c9-874f-4552-afdc-8a35ef70682f'
         },
         {
           id: 'MODIS_ACTIVE_FIRES',
-          order: 7,
+          order: 8,
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
         }

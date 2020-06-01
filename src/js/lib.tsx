@@ -1,3 +1,4 @@
+import './publicPath';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -7,7 +8,7 @@ import { MapBuilderMain } from 'js/MapBuilderMain';
 
 declare global {
   interface Window {
-    MapBuilder: Function;
+    MapBuilderLoader: Function;
   }
 }
 
@@ -15,16 +16,21 @@ interface BuilderMain {
   render: Function;
 }
 
+type Params = {
+  el: string;
+  config: any;
+};
+
 class MapBuilder {
   element: string;
   config: object;
   builderMain: BuilderMain;
 
-  constructor(element: string, config: object) {
-    this.config = config;
-    this.element = element;
-    this.builderMain = new MapBuilderMain(config);
-
+  constructor(params: Params) {
+    // this.config = config;
+    this.element = params.el;
+    this.builderMain = new MapBuilderMain(params.config);
+    console.log(params);
     this.render();
   }
 
@@ -36,4 +42,4 @@ class MapBuilder {
   }
 }
 
-window.MapBuilder = MapBuilder;
+window.MapBuilderLoader = MapBuilder;

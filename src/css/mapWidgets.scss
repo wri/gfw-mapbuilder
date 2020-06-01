@@ -6,7 +6,7 @@
   flex-direction: column; //row;
   right: 20px;
   width: 76px;
-  top: 80px;
+  top: 90px;
   position: absolute;
   z-index: 1;
 
@@ -17,6 +17,7 @@
     .widget-container {
       display: flex;
       border: 1px solid $medium-dark-grey;
+      box-sizing: content-box;
       background-color: $white;
       width: $map-widget-square;
       height: $map-widget-square;
