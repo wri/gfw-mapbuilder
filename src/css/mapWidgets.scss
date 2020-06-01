@@ -3,7 +3,7 @@
 .widget-wrapper {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column; //row;
+  flex-direction: column;
   right: 20px;
   width: 76px;
   top: 80px;
@@ -36,13 +36,8 @@
 
 @media screen and (max-width: 475px) {
   .widget-wrapper {
-    // top: auto;
-    // right: auto;
-    // left: 19rem;
-    // bottom: 7rem;
     top: auto;
     right: 0;
-    /* left: 19rem; */
     bottom: 7rem;
 
     .widget-row {

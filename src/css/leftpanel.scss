@@ -382,7 +382,6 @@
 .tabview-container {
   height: 600px;
   color: $dark-grey;
-  overflow: scroll;
 }
 
 .tab-header-container {
@@ -1186,5 +1185,9 @@
     flex-direction: column-reverse;
     bottom: 0;
     top: auto;
+
+    .tabview-container {
+      overflow-y: scroll;
+    }
   }
 }
