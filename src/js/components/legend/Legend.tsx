@@ -73,9 +73,11 @@ const Legend = (): JSX.Element => {
   useEffect(() => {
     const { width } = windowDimensions;
 
-    if (width > 475) {
+    if (width > 475 && hideLegend === true) {
       dispatch(setHideLegend(false));
-    } else {
+    }
+
+    if (width > 475 && hideLegend === false) {
       dispatch(setHideLegend(true));
     }
   }, [windowDimensions.width]);
