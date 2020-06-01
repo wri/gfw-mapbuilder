@@ -202,10 +202,11 @@ export function parseURLandApplyChanges(): void {
             return;
           } else if (urlParamValue.includes('landsat')) {
             const year = urlParamValue.split('-')[1];
-            console.log(year);
             const landsatConfig = {};
             //@ts-ignore
             mapController.addLandsatLayer(landsatConfig, year);
+          } else if (urlParamValue.includes('wri')) {
+            mapController.setWRIBasemap(urlParamValue);
           } else {
             //@ts-ignore
             mapController._map!.basemap = urlParamValue;

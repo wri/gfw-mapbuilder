@@ -15,13 +15,17 @@ import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import Basemap from 'esri/Basemap';
+import WebTileLayer from 'esri/layers/WebTileLayer';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import geometryEngine from 'esri/geometry/geometryEngine';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
-import { landsatBaselayerURL } from '../../../configs/layer-config';
+import {
+  landsatBaselayerURL,
+  WRIBasemapConfig
+} from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
@@ -1565,6 +1569,19 @@ export class MapController {
       this._map.basemap = basemap;
       store.dispatch(setSelectedBasemap(id));
     }
+  }
+
+  setWRIBasemap(id: string): void {
+    if (!this._map) return;
+    const basemapURL = WRIBasemapConfig[id];
+    const wriLayer = new WebTileLayer({
+      urlTemplate: basemapURL
+    });
+    const baselayer = new Basemap({
+      baseLayers: [wriLayer]
+    });
+    this._map.basemap = baselayer;
+    store.dispatch(setSelectedBasemap(id));
   }
 
   processGeojson(esriJson: Array<FeatureResult>): void {
