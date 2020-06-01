@@ -78,3 +78,9 @@
     }
   }
 }
+
+@media screen and (max-width: 475px) {
+  .legend-container {
+    display: none;
+  }
+}

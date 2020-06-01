@@ -103,9 +103,9 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   };
 
   return (
-    <div className="documents-container">
+    <div>
       {tabViewIsVisible && (
-        <>
+        <div className="documents-container">
           {allAttachments && allAttachments.length ? (
             <h3 className="feature-collection-title">
               {featureCollectionTitle}
@@ -129,7 +129,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
               <p className="no-documents">{instructions}</p>
             </>
           )}
-        </>
+        </div>
       )}
     </div>
   );

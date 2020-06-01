@@ -1304,5 +1304,13 @@
     left: 0px;
     z-index: 2;
     max-height: unset;
+
+    flex-direction: column-reverse;
+    bottom: 0;
+    top: auto;
+
+    .tabview-container {
+      overflow-y: scroll;
+    }
   }
 }
