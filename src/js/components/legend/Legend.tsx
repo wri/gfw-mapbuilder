@@ -10,6 +10,12 @@ import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 import 'css/legend.scss';
 import { layersPanelTranslations } from 'configs/leftPanel.translations';
 
+const getWindowDimensions = () => {
+  return {
+    width: window.innerWidth
+  };
+};
+
 const Legend = (): JSX.Element => {
   const dispatch = useDispatch();
 
@@ -36,6 +42,9 @@ const Legend = (): JSX.Element => {
   );
 
   const [legendOpen, setLegendOpen] = useState(!hideLegend);
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
 
   function handleLegendToggle(): void {
     setLegendOpen(!legendOpen);
@@ -52,6 +61,23 @@ const Legend = (): JSX.Element => {
   );
 
   useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions(getWindowDimensions());
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const { width } = windowDimensions;
+
+    if (width < 475 && hideLegend) {
+      setLegendOpen(hideLegend);
+    }
+  }, [windowDimensions.width, hideLegend]);
+
+  useEffect(() => {
     //TODO: order should be applied here I think!
     const visibleLayers = allAvailableLayers
       .filter(l => l.visible)
@@ -60,15 +86,14 @@ const Legend = (): JSX.Element => {
     setVisibleLayersToShow(visibleLayers);
   }, [layersLoading, allAvailableLayers, scale]);
 
-  useEffect(() => {
-    if (hideLegend) {
-      setLegendOpen(hideLegend);
-    }
-  }, [hideLegend]);
+  const onMobileOrDesktop =
+    windowDimensions.width < 475
+      ? !hideLegend && visibleLayersToShow.length > 0
+      : visibleLayersToShow.length > 0;
 
   return (
     <>
-      {!hideLegend && visibleLayersToShow.length > 0 && (
+      {onMobileOrDesktop && (
         <div className="legend-container" onClick={() => closeGFWDropdown()}>
           <div
             className="legend-title"
