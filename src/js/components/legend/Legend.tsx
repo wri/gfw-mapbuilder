@@ -3,19 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { RootState } from 'js/store';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
-import { setHideLegend } from 'js/store/appSettings/actions';
 import { LayerProps } from 'js/store/mapview/types';
 import LegendItems from './generateLegendItems';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 
 import 'css/legend.scss';
 import { layersPanelTranslations } from 'configs/leftPanel.translations';
-
-const getWindowDimensions = () => {
-  return {
-    width: window.innerWidth
-  };
-};
 
 const Legend = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -43,9 +36,6 @@ const Legend = (): JSX.Element => {
   );
 
   const [legendOpen, setLegendOpen] = useState(!hideLegend);
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
 
   function handleLegendToggle(): void {
     setLegendOpen(!legendOpen);
@@ -62,27 +52,6 @@ const Legend = (): JSX.Element => {
   );
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions(getWindowDimensions());
-    };
-
-    window.addEventListener('resize', handleResize);
-    window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    const { width } = windowDimensions;
-
-    if (width > 475 && hideLegend === true) {
-      dispatch(setHideLegend(false));
-    }
-
-    if (width > 475 && hideLegend === false) {
-      dispatch(setHideLegend(true));
-    }
-  }, [windowDimensions.width]);
-
-  useEffect(() => {
     //TODO: order should be applied here I think!
     const visibleLayers = allAvailableLayers
       .filter(l => l.visible)
@@ -90,6 +59,13 @@ const Legend = (): JSX.Element => {
     //sync layer loading state with legend comp
     setVisibleLayersToShow(visibleLayers);
   }, [layersLoading, allAvailableLayers, scale]);
+
+  useEffect(() => {
+    if (hideLegend) {
+      setLegendOpen(hideLegend);
+    }
+  }, [hideLegend]);
+
   return (
     <>
       {!hideLegend && visibleLayersToShow.length > 0 && (
