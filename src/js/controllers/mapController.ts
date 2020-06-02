@@ -107,6 +107,7 @@ export class MapController {
   _domRef: RefObject<any>;
   _imageryOpacity: number;
   _mouseTrackingEvent: IHandle | undefined;
+  _webmapBasemap: __esri.Basemap | undefined;
 
   constructor() {
     this._map = undefined;
@@ -116,6 +117,7 @@ export class MapController {
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
     this._mouseTrackingEvent = undefined;
+    this._webmapBasemap = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -181,6 +183,8 @@ export class MapController {
         async () => {
           store.dispatch(isMapReady(true));
           //default scale for map
+          const wbBase = this._map?.basemap.clone();
+          this._webmapBasemap = wbBase;
           store.dispatch(changeMapScale(this._mapview.scale));
           const { latitude, longitude } = this._mapview.center;
           store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
@@ -625,6 +629,7 @@ export class MapController {
     this._map = new WebMap({
       portalItem: { id: newWebMapId }
     });
+
     this._mapview = new MapView({
       map: this._map,
       container: this._domRef.current
@@ -655,6 +660,8 @@ export class MapController {
 
     this._mapview.when(async () => {
       //Set default state and other event listeners
+      const wbBase = this._map?.basemap.clone();
+      this._webmapBasemap = wbBase;
       store.dispatch(isMapReady(true));
       store.dispatch(setLanguage(lang));
       store.dispatch(changeMapScale(this._mapview.scale));
@@ -1576,6 +1583,12 @@ export class MapController {
       this._map.basemap = basemap;
       store.dispatch(setSelectedBasemap(id));
     }
+  }
+
+  setWebmapOriginalBasemap(id: string): void {
+    if (!this._webmapBasemap || !this._map) return;
+    this._map.basemap = this._webmapBasemap;
+    store.dispatch(setSelectedBasemap(id));
   }
 
   setWRIBasemap(id: string): void {

@@ -22,6 +22,19 @@ interface BaseLayerControlLandsatProps {
   customColorTheme?: string;
 }
 
+const WebmapOriginal = (props: DefaultBasemapProps): JSX.Element => {
+  const { id, thumbnailUrl, title, activeBasemap } = props.layerInfo;
+  return (
+    <div
+      className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
+      onClick={(): void => mapController.setWebmapOriginalBasemap(id)}
+    >
+      <img src={thumbnailUrl} alt="basemap" />
+      <span>{title}</span>
+    </div>
+  );
+};
+
 const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
   const { id, thumbnailUrl, title, activeBasemap } = props.layerInfo;
   return (
@@ -137,6 +150,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     (baselayer: any) =>
       baselayer.id === 'landsat' ||
       baselayer.id === 'wri_mono' ||
+      baselayer.id === 'webmap_original' ||
       baselayer.id === 'wri_contextual'
   );
   const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {
@@ -147,6 +161,19 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           layerInfo={baselayer}
           selectedLanguage={selectedLanguage}
           customColorTheme={customColorTheme}
+        />
+      );
+    }
+    if (baselayer.id === 'webmap_original') {
+      return (
+        <WebmapOriginal
+          key={baselayer.id}
+          layerInfo={{
+            id: baselayer.id,
+            thumbnailUrl: baselayer.thumbnailUrl,
+            title: baselayer.title[selectedLanguage],
+            activeBasemap
+          }}
         />
       );
     }
