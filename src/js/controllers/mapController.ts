@@ -844,15 +844,19 @@ export class MapController {
   }
 
   clearAllLayers(): void {
-    //1. Iterate over map's layers and turn them off one by one - do we toggle visibility or unload them?
-    this._map?.layers.forEach((layer: any) => {
+    if (!this._map) return;
+    //1. Iterate over map's layers and turn them off one by one
+    this._map.layers.forEach((layer: any) => {
+      if (layer.id === 'MASK') return; // mask layers should never be cleared from the map
       if (layer.sublayers) {
-        layer.allSublayers.items.forEach((sub: any) => (sub.visible = false));
+        layer.allSublayers.items.forEach(
+          (sub: __esri.Sublayer) => (sub.visible = false)
+        );
       }
       layer.visible = false;
     });
-    //2. Update redux state with visible layers array being empty
 
+    //2. Update redux state with visible layers array being empty
     const { mapviewState } = store.getState();
     const newLayersArray = mapviewState.allAvailableLayers.map(
       (l: LayerProps) => {
@@ -866,9 +870,12 @@ export class MapController {
   }
 
   selectAllLayers(): void {
-    this._map?.layers.forEach((layer: any) => {
+    if (!this._map) return;
+    this._map.layers.forEach((layer: any) => {
       if (layer.sublayers) {
-        layer.allSublayers.items.forEach((sub: any) => (sub.visible = true));
+        layer.allSublayers.items.forEach(
+          (sub: __esri.Sublayer) => (sub.visible = true)
+        );
       }
       layer.visible = true;
     });
