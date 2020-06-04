@@ -8,8 +8,6 @@ export interface LeftPanel {
   gladConfirmed: boolean;
   gladStart: string;
   gladEnd: string;
-  terraStart: string;
-  terraEnd: string;
   modisStart: string;
   modisEnd: string;
   viirsStart: string;
@@ -76,8 +74,6 @@ export const SET_SELECTED_SEARCH_WIDGET_LAYER =
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
-export const SET_TERRA_START = 'SET_TERRA_START';
-export const SET_TERRA_END = 'SET_TERRA_END';
 export const SET_VIIRS_START = 'SET_VIIRS_START';
 export const SET_VIIRS_END = 'SET_VIIRS_END';
 export const SET_MODIS_START = 'SET_MODIS_START';
@@ -174,16 +170,6 @@ interface SetGladEnd {
   payload: AppState['leftPanel']['gladEnd'];
 }
 
-interface SetTerraStart {
-  type: typeof SET_TERRA_START;
-  payload: AppState['leftPanel']['terraStart'];
-}
-
-interface SetTerraEnd {
-  type: typeof SET_TERRA_END;
-  payload: AppState['leftPanel']['terraEnd'];
-}
-
 interface SetModisStart {
   type: typeof SET_MODIS_START;
   payload: AppState['leftPanel']['modisStart'];
@@ -228,8 +214,6 @@ export type AppStateTypes =
   | SetGladConfirmed
   | SetGladStart
   | SetGladEnd
-  | SetTerraStart
-  | SetTerraEnd
   | SetModisStart
   | SetModisEnd
   | SetViirsStart

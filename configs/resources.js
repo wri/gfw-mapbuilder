@@ -55,7 +55,6 @@ export default {
   mangroves: false,
   sadAlerts: true,
   gladAlerts: true,
-  terraIAlerts: true,
   recentImagery: true,
   webmapMenuName: 'Land Use',
   // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
@@ -731,12 +730,6 @@ export default {
           order: 5,
           type: 'remoteDataLayer',
           uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-        },
-        {
-          id: 'TERRA_I_ALERTS',
-          order: 6,
-          type: 'remoteDataLayer',
-          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
         },
         {
           id: 'VIIRS_ACTIVE_FIRES',
