@@ -19,8 +19,6 @@ import {
   SET_GLAD_CONFIRMED,
   SET_GLAD_START,
   SET_GLAD_END,
-  SET_TERRA_START,
-  SET_TERRA_END,
   SET_VIIRS_START,
   SET_VIIRS_END,
   SET_MODIS_START,
@@ -160,20 +158,6 @@ export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
 export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
   return {
     type: SET_GLAD_END as typeof SET_GLAD_END,
-    payload: payload
-  };
-}
-
-export function setTerraStart(payload: AppState['leftPanel']['terraStart']) {
-  return {
-    type: SET_TERRA_START as typeof SET_TERRA_START,
-    payload: payload
-  };
-}
-
-export function setTerraEnd(payload: AppState['leftPanel']['terraEnd']) {
-  return {
-    type: SET_TERRA_END as typeof SET_TERRA_END,
     payload: payload
   };
 }

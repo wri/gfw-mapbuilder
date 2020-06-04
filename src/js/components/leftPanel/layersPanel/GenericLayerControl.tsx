@@ -13,9 +13,7 @@ import {
   renderModal,
   setInfoModalLayerID,
   setGladStart,
-  setGladEnd,
-  setTerraStart,
-  setTerraEnd
+  setGladEnd
 } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
 import { LayerProps } from 'js/store/mapview/types';
@@ -37,114 +35,6 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
   }
 `;
 
-interface TerraLayerControls {
-  customColorTheme?: string;
-  layerConfig: any;
-  selectedLanguage: string;
-}
-
-const TerraControls = (props: TerraLayerControls): JSX.Element => {
-  const dispatch = useDispatch();
-
-  const terraStart = useSelector(
-    (store: RootState) => store.appState.leftPanel.terraStart
-  );
-
-  const terraEnd = useSelector(
-    (store: RootState) => store.appState.leftPanel.terraEnd
-  );
-
-  const getTodayDate = new Date().toISOString().split('T')[0];
-
-  const [startDate, setStartDate] = React.useState(String(terraStart));
-  const [endDate, setEndDate] = React.useState(terraEnd);
-
-  function handleStartDateChange(e: any): void {
-    setStartDate(e.target.value);
-    //@ts-ignore
-    const start = new Date(e.target.value).getJulian();
-    //@ts-ignore
-    const end = new Date(endDate).getJulian();
-    const terraLayerOld: any = mapController._map!.findLayerById(
-      'TERRA_I_ALERTS'
-    );
-    mapController._map?.remove(terraLayerOld);
-    const terraLayerNew: any = LayerFactory(
-      mapController._mapview,
-      props.layerConfig
-    );
-    terraLayerNew.julianFrom = start;
-    terraLayerNew.julianTo = end;
-    terraLayerNew.startDate = e.target.value;
-    terraLayerNew.endDate = endDate;
-    mapController._map?.add(terraLayerNew);
-
-    //update redux
-    dispatch(setTerraStart(e.target.value));
-    dispatch(setTerraEnd(endDate));
-  }
-
-  function handleEndDateChange(e: any): void {
-    setEndDate(e.target.value);
-    //@ts-ignore
-    const end = new Date(e.target.value).getJulian();
-    //@ts-ignore
-    const start = new Date(startDate).getJulian();
-    const terraLayerOld: any = mapController._map!.findLayerById(
-      'TERRA_I_ALERTS'
-    );
-    mapController._map?.remove(terraLayerOld);
-    const terraLayerNew: any = LayerFactory(
-      mapController._mapview,
-      props.layerConfig
-    );
-    terraLayerNew.julianFrom = start;
-    terraLayerNew.julianTo = end;
-    terraLayerNew.startDate = startDate;
-    terraLayerNew.endDate = e.target.value;
-    mapController._map?.add(terraLayerNew);
-
-    //update redux
-    dispatch(setTerraStart(startDate));
-    dispatch(setTerraEnd(e.target.value));
-  }
-
-  return (
-    <div className="glad-control-wrapper">
-      <div>
-        <div className="calendar-wrapper">
-          <div className="date-section-wrapper">
-            <label htmlFor="start-date">
-              {layerControlsTranslations[props.selectedLanguage].timeStart}
-            </label>
-            <input
-              style={{ border: `1px solid ${props.customColorTheme}` }}
-              className="date-time-toggle input"
-              type="date"
-              defaultValue={startDate}
-              min={undefined}
-              onChange={handleStartDateChange}
-            />
-          </div>
-
-          <div className="date-section-wrapper">
-            <label htmlFor="end-date">
-              {layerControlsTranslations[props.selectedLanguage].timeEnd}
-            </label>
-            <input
-              style={{ border: `1px solid ${props.customColorTheme}` }}
-              className="date-time-toggle input"
-              type="date"
-              value={endDate}
-              max={getTodayDate}
-              onChange={handleEndDateChange}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 interface GladControlsProps {
   customColorTheme?: string;
   layerConfig: any;
@@ -465,14 +355,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       case 'VIIRS_ACTIVE_FIRES':
       case 'MODIS_ACTIVE_FIRES':
         return <DateRange layer={layer} id={id} />;
-      case 'TERRA_I_ALERTS':
-        return (
-          <TerraControls
-            customColorTheme={customColorTheme}
-            layerConfig={layerConfig}
-            selectedLanguage={selectedLanguage}
-          />
-        );
       case 'GLAD_ALERTS':
         return (
           <GladControls

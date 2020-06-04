@@ -6,8 +6,6 @@ import {
   setGladConfirmed,
   setGladStart,
   setGladEnd,
-  setTerraStart,
-  setTerraEnd,
   setModisStart,
   setModisEnd,
   setViirsStart,
@@ -34,9 +32,7 @@ const urlEncodingMap = {
   vs: 'virs_start_date',
   ve: 'virs_end_date',
   ms: 'modis_start_date',
-  me: 'modis_end_date',
-  ts: 'terra_start',
-  te: 'terra_end'
+  me: 'modis_end_date'
 };
 
 function getGeostoreID(
@@ -130,12 +126,6 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
     urlParams.push(`gladconfirmed=${gladLayer.confirmed}`);
     urlParams.push(`gs=${leftPanel.gladStart}`);
     urlParams.push(`ge=${leftPanel.gladEnd}`);
-  }
-
-  const terraLayer: any = mapController._map?.findLayerById('TERRA_I_ALERTS');
-  if (terraLayer) {
-    urlParams.push(`ts=${leftPanel.terraStart}`);
-    urlParams.push(`te=${leftPanel.terraEnd}`);
   }
 
   const viirsLayer = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
@@ -232,12 +222,6 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'ge':
           store.dispatch(setGladEnd(urlParamValue));
-          break;
-        case 'ts':
-          store.dispatch(setTerraStart(urlParamValue));
-          break;
-        case 'te':
-          store.dispatch(setTerraEnd(urlParamValue));
           break;
         case 'vs':
           store.dispatch(setViirsStart(urlParamValue));

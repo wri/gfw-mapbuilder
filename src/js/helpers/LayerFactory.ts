@@ -9,7 +9,6 @@ import RasterFunction from 'esri/layers/support/RasterFunction';
 import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
 import { GladLayer } from 'js/layers/GladLayer';
 import { PrimaryForestLayer } from 'js/layers/PrimaryForestLayer';
-import { TerraLayer } from 'js/layers/TerraLayer';
 import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
@@ -143,24 +142,6 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       const startDate = new Date(appState.leftPanel.gladStart).getJulian();
       //@ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
-      esriLayer.julianFrom = startDate;
-      esriLayer.julianTo = endDate;
-      break;
-    case 'terra':
-      esriLayer = new TerraLayer({
-        id: layerConfig.id,
-        title: layerConfig.title,
-        visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
-        view: mapView
-      });
-      //@ts-ignore
-      const startDate = new Date(appState.leftPanel.terraStart).getJulian();
-      //@ts-ignore
-      const endDate = new Date(appState.leftPanel.terraEnd).getJulian();
-
-      esriLayer.startDate = appState.leftPanel.terraStart;
-      esriLayer.endDate = appState.leftPanel.terraEnd;
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
       break;
