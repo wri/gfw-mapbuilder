@@ -66,11 +66,17 @@ const Legend = (): JSX.Element => {
     };
 
     window.addEventListener('resize', handleResize);
-    window.removeEventListener('resize', handleResize);
+    () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
     const { width } = windowDimensions;
+
+    /**
+     * * NOTE:
+     * If device is mobile,
+     * ensure legendOpen is synced with hideLegend
+     */
 
     if (width < 475 && hideLegend) {
       setLegendOpen(hideLegend);
