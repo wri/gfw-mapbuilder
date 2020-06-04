@@ -14,6 +14,10 @@
     display: flex;
     flex-direction: row;
 
+    &.legend {
+      display: none;
+    }
+
     .widget-container {
       display: flex;
       border: 1px solid $medium-dark-grey;
@@ -43,6 +47,10 @@
 
     .widget-row {
       flex-direction: column;
+
+      &.legend {
+        display: flex;
+      }
 
       .widget-container {
         .image-wrapper,

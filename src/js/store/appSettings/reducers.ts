@@ -2,7 +2,8 @@ import {
   AppSettings,
   AppSettingsTypes,
   OVERWRITE_SETTINGS,
-  OVERWRITE_COLOR_THEME
+  OVERWRITE_COLOR_THEME,
+  SET_HIDE_LEGEND
 } from './types';
 
 const initialState: AppSettings = {
@@ -18,6 +19,7 @@ const initialState: AppSettings = {
   includeMyGFWLogin: true,
   hideFooter: false,
   hideHeader: false,
+  hideLegend: false,
   navLinksInNewTab: true,
   aboutLinkUrl: '',
   downloadLinkUrl: '',
@@ -72,6 +74,8 @@ export function appSettingsReducer(
       return { ...state, ...action.payload };
     case OVERWRITE_COLOR_THEME:
       return { ...state, customColorTheme: action.payload };
+    case SET_HIDE_LEGEND:
+      return { ...state, hideLegend: action.payload };
     default:
       return state;
   }
