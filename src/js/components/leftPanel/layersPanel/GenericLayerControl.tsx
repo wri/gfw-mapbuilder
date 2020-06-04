@@ -420,6 +420,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   );
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
+  const altLayerName = layer.label && layer.label[selectedLanguage];
 
   const returnTimeSlider = (id: string): any => {
     switch (id) {
@@ -517,7 +518,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         <div className="label-wrapper">
           {returnLayerControl()}
           <div className="title-wrapper">
-            <span className="layer-label">{layer?.title}</span>
+            <span className="layer-label">
+              {altLayerName ? altLayerName : layer?.title}
+            </span>
             {returnSubtitle()}
           </div>
         </div>
