@@ -11,6 +11,7 @@
   overflow-y: auto;
   max-height: 50rem;
   overflow-y: scroll;
+  max-height: calc(100% - 140px - $footer-height);
 
   .tab-header-container {
     button {
@@ -1296,21 +1297,26 @@
 
   .left-panel {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
+    flex-wrap: unset;
+    flex-direction: column-reverse;
     width: 100%;
-    height: auto;
-    top: 50px;
+    top: $header-height;
     left: 0px;
     z-index: 2;
     max-height: unset;
-
-    flex-direction: column-reverse;
     bottom: 0;
-    top: auto;
+    height: calc(100% - $header-height);
 
     .tabview-container {
       overflow-y: scroll;
+      height: 100%;
+    }
+
+    .tab-header-container {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      z-index: 10;
     }
   }
 }
