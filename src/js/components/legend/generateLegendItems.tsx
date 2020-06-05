@@ -12,6 +12,7 @@ import { mapController } from 'js/controllers/mapController';
 interface LegendItemProps {
   visibleLayers: LayerProps[];
   language: string;
+  gladConfirmed: boolean;
 }
 
 type LabelTypes =
@@ -308,7 +309,12 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         </div>
       );
     } else if (layer.legendInfo && layer.origin === 'remote') {
-      const title = layer.metadata?.legendConfig?.name[language];
+      let title = layer.metadata?.legendConfig?.name[language];
+      if (layer.id === 'GLAD_ALERTS') {
+        title = `${layer.title} (${
+          props.gladConfirmed ? 'Confirmed' : 'Unconfirmed'
+        })`;
+      }
       let labelIcons;
       if (layer.metadata?.legendConfig?.type === 'gradient') {
         //Gradient requires combining items into a single image, so we deal with it separately

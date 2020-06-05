@@ -14,6 +14,7 @@ import {
   setInfoModalLayerID,
   setGladStart,
   setGladEnd,
+  setGladConfirmed,
   setTerraStart,
   setTerraEnd
 } from 'js/store/appState/actions';
@@ -216,6 +217,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
 
   function handleConfirmedAlertsToggle(): void {
     setUnconfirmedAlerts(!unconfirmedAlerts);
+    dispatch(setGladConfirmed(!unconfirmedAlerts));
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
     mapController._map?.remove(gladLayerOld);
     const gladLayerNew: any = LayerFactory(

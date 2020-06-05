@@ -25,6 +25,9 @@ const Legend = (): JSX.Element => {
   const renderGFWDropdown = useSelector(
     (store: RootState) => store.appState.renderGFWDropdown
   );
+  const gladConfirmed = useSelector(
+    (store: RootState) => store.appState.leftPanel.gladConfirmed
+  );
   const allAvailableLayers = useSelector(
     (store: RootState) => store.mapviewState.allAvailableLayers
   );
@@ -82,6 +85,7 @@ const Legend = (): JSX.Element => {
             <LegendItems
               visibleLayers={visibleLayersToShow}
               language={selectedLanguage}
+              gladConfirmed={gladConfirmed}
             />
           </div>
         </div>
