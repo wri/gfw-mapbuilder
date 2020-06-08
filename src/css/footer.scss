@@ -1,15 +1,35 @@
 .footer-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   position: absolute;
   bottom: 0;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
-  height: 1.5rem;
   padding: 0.25rem;
   align-items: center;
 
-  p {
-    margin: 0 1rem 0 1rem;
+  .footer-links {
+    display: flex;
+    width: 350px;
+    p {
+      color: black;
+      margin: 0.2rem 1rem 0 1rem;
+      a {
+        color: inherit;
+      }
+    }
+    span {
+      margin-top: 0.2rem;
+    }
+  }
+
+  .attribution {
+    max-width: 900px;
+    white-space: nowrap;
+
+    .esri-attribution__sources--open {
+      max-width: 900px !important;
+    }
   }
 }
 
