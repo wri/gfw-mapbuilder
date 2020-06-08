@@ -79,28 +79,26 @@ const DocumentsTabView = (props: Props): JSX.Element => {
     }
   }, [tabViewIsVisible]);
 
-  const returnDocuments = (): Array<JSX.Element> | undefined => {
-    return allAttachments.map(
-      (attachment: AttachmentWithURLProps, key: number) => {
-        const { url, size, name } = attachment;
-        return (
-          <Fragment key={key}>
-            <tr>
-              <td title={name} className="file-name">
-                {name}
-              </td>
-              <td>{Math.round(size / 1000)} KB</td>
-              <td>
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  <DocIcon height={20} width={20} fill={customColorTheme} />
-                </a>
-              </td>
-            </tr>
-          </Fragment>
-        );
-      }
-    );
-  };
+  const documentsList: React.ReactFragment[] | undefined = allAttachments?.map(
+    (attachment: AttachmentWithURLProps, key: number) => {
+      const { url, size, name } = attachment;
+      return (
+        <Fragment key={key}>
+          <tr>
+            <td title={name} className="file-name">
+              {name}
+            </td>
+            <td>{Math.round(size / 1000)} KB</td>
+            <td>
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                <DocIcon height={20} width={20} fill={customColorTheme} />
+              </a>
+            </td>
+          </tr>
+        </Fragment>
+      );
+    }
+  );
 
   return (
     <div>
@@ -112,22 +110,18 @@ const DocumentsTabView = (props: Props): JSX.Element => {
             </h3>
           ) : null}
           {allAttachments && allAttachments.length ? (
-            <>
-              <table className="documents-table">
-                <thead className="table-headers">
-                  <tr>
-                    <th>{name}</th>
-                    <th>{size}</th>
-                    <th>{pdf}</th>
-                  </tr>
-                </thead>
-                <tbody>{returnDocuments()}</tbody>
-              </table>
-            </>
+            <table className="documents-table">
+              <thead className="table-headers">
+                <tr>
+                  <th>{name}</th>
+                  <th>{size}</th>
+                  <th>{pdf}</th>
+                </tr>
+              </thead>
+              <tbody>{documentsList}</tbody>
+            </table>
           ) : (
-            <>
-              <p className="no-documents">{instructions}</p>
-            </>
+            <p className="no-documents">{instructions}</p>
           )}
         </div>
       )}
