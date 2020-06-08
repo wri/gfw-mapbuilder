@@ -1,27 +1,25 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import UploadFile from 'js/components/sharedComponents/UploadFile';
-
 import { mapController } from 'js/controllers/mapController';
-
 import { renderModal } from 'js/store/appState/actions';
-
 import { RootState } from 'js/store';
 import BaseAnalysis from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
-
 import { analysisContent } from 'configs/leftPanel.translations';
-
-// import { ReactComponent as PolygonIcon } from 'images/polygonIcon.svg';
 import { PolygonIcon } from 'images/PolygonIcon';
 import { ReactComponent as PenIcon } from 'images/penIcon.svg';
 import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
-
 import { createSelector } from 'reselect';
+
 //Memo'd selectors
 const selectActiveFeaturesLength = createSelector(
   (state: RootState) => state.mapviewState,
   mapviewState => mapviewState.activeFeatures.length
+);
+
+const selectTabview = createSelector(
+  (state: RootState) => state.appState,
+  appState => appState.leftPanel.tabViewVisible
 );
 
 interface TabProps {
@@ -32,9 +30,6 @@ interface TabProps {
 const AnalysisTabView = (props: TabProps): JSX.Element => {
   const dispatch = useDispatch();
   const activeTab = useSelector(
-    (store: RootState) => store.appState.leftPanel.activeTab
-  );
-  const tabViewVisible = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
   const selectedLanguage = useSelector(
@@ -59,7 +54,8 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
 
   const activeFeaturesLength = useSelector(selectActiveFeaturesLength);
 
-  const tabViewIsVisible = tabViewVisible && activeTab === props.label;
+  const tabview = useSelector(selectTabview);
+  const tabViewIsVisible = tabview && activeTab === props.label;
 
   const returnFirstInstruction = (): JSX.Element => {
     if (analyzeYourShapeFirstDirection[1]) {
