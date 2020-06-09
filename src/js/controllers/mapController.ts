@@ -848,7 +848,16 @@ export class MapController {
     //1. Iterate over map's layers and turn them off one by one
     this._map.layers.forEach((layer: any) => {
       if (layer.id === 'MASK') return; // mask layers should never be cleared from the map
-      if (layer.sublayers) {
+      if (layer.id === 'user_features') {
+        //user drawn feature graphics layer visibility is ignored, but graphics are moved
+        layer.graphics.removeAll();
+        return;
+      }
+      if (
+        layer.sublayers &&
+        !layer.id.includes('VIIRS') &&
+        !layer.id.includes('MODIS')
+      ) {
         layer.allSublayers.items.forEach(
           (sub: __esri.Sublayer) => (sub.visible = false)
         );

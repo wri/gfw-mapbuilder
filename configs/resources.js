@@ -17,6 +17,7 @@ module.exports = {
   mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
   mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
   narrative: '',
+  hideLegend: false,
   hideHeader: false,
   hideFooter: false,
   includeMyGFWLogin: true,
@@ -54,7 +55,6 @@ module.exports = {
   mangroves: false,
   sadAlerts: true,
   gladAlerts: true,
-  terraIAlerts: true,
   recentImagery: true,
   webmapMenuName: 'Land Use',
   // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
@@ -730,12 +730,6 @@ module.exports = {
           order: 5,
           type: 'remoteDataLayer',
           uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
-        },
-        {
-          id: 'TERRA_I_ALERTS',
-          order: 6,
-          type: 'remoteDataLayer',
-          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
         },
         {
           id: 'VIIRS_ACTIVE_FIRES',

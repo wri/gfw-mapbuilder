@@ -7,7 +7,6 @@ export const allowedLayers = [
   'webtiled',
   'imagery',
   'glad',
-  'terra',
   'primed'
 ]; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 

@@ -13,9 +13,7 @@ export const subscribeConfig = {
     SADLabel: 'SAD tree cover loss alerts',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA alerts data',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Terra-i tree cover loss alerts',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   },
   fr: {
     title: 'Alertes sur l’évolution des forêts',
@@ -32,9 +30,7 @@ export const subscribeConfig = {
     SADLabel: 'Alertes SAD sur les pertes de la couverture arborée',
     SADField: 'imazon-alerts',
     FORMALabel: 'Données d’alertes FORMA',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Terra-i tree cover loss alerts',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   },
   ka: {
     title: 'ტყის ცვლილების შეტყობინებები',
@@ -50,9 +46,7 @@ export const subscribeConfig = {
     SADLabel: 'SAD ხის ვარჯის კარგვის შეტყობინებები',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA შეტყობინებების მონაცემები',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Terra-i  ხის ვარჯის კარგვის შეტყობინებები',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   },
   es: {
     title: 'Alertas de cambio forestal',
@@ -68,9 +62,7 @@ export const subscribeConfig = {
     SADLabel: 'Alertas SAD sobre pérdida de cobertura arbórea',
     SADField: 'imazon-alerts',
     FORMALabel: 'Datos de alertas FORMA',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Alertas Terra-i sobre pérdida de cobertura arbórea',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   },
   pt: {
     title: 'Alertas de alterações florestais',
@@ -86,9 +78,7 @@ export const subscribeConfig = {
     SADLabel: 'Alertas de perda de cobertura arbórea SAD',
     SADField: 'imazon-alerts',
     FORMALabel: 'Dados de alertas FORMA',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Alertas de perda de cobertura arbórea Terra-I',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   },
   id: {
     title: 'Peringatan perubahan hutan',
@@ -104,9 +94,7 @@ export const subscribeConfig = {
     SADLabel: 'Peringatan kehilangan tutupan pohon SAD',
     SADField: 'imazon-alerts',
     FORMALabel: 'Dados de alertas FORMA',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Peringatan kehilangan tutupan pohon Terra-i',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   },
   zh: {
     title: '森林变化预警',
@@ -122,9 +110,7 @@ export const subscribeConfig = {
     SADLabel: 'SAD 森林覆盖减少预警',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA 预警数据',
-    FORMAField: 'forma-alerts',
-    TERRALabel: 'Terra-i 森林覆盖减少预警',
-    TERRAField: 'terrai-alerts'
+    FORMAField: 'forma-alerts'
   }
 };
 

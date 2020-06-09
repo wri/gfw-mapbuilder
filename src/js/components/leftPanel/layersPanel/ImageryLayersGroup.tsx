@@ -71,7 +71,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     return (
       <>
         <div className="layers-control-checkbox">
-          <div className="label-wrapper">
+          <div className="label-wrapper" style={{ width: 'auto' }}>
             <ImageryLayerSwitch
               layerID={props.id}
               customColorTheme={customColorTheme}
@@ -85,7 +85,13 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
               </p>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              alignItems: 'center'
+            }}
+          >
             <button
               style={{ border: `1px solid ${customColorTheme}` }}
               className="imagery-edit-button"
@@ -96,7 +102,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
             <div
               className="info-icon-container"
-              style={{ marginLeft: 10 }}
+              style={{ marginLeft: 10, backgroundColor: `${customColorTheme}` }}
               onClick={(): void => openInfoModal()}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />

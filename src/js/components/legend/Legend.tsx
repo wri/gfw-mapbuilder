@@ -10,6 +10,12 @@ import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 import 'css/legend.scss';
 import { layersPanelTranslations } from 'configs/leftPanel.translations';
 
+const getWindowDimensions = () => {
+  return {
+    width: window.innerWidth
+  };
+};
+
 const Legend = (): JSX.Element => {
   const dispatch = useDispatch();
 
@@ -39,6 +45,9 @@ const Legend = (): JSX.Element => {
   );
 
   const [legendOpen, setLegendOpen] = useState(!hideLegend);
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
 
   function handleLegendToggle(): void {
     setLegendOpen(!legendOpen);
@@ -53,6 +62,30 @@ const Legend = (): JSX.Element => {
   const [visibleLayersToShow, setVisibleLayersToShow] = useState<LayerProps[]>(
     []
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions(getWindowDimensions());
+    };
+
+    window.addEventListener('resize', handleResize);
+    () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const { width } = windowDimensions;
+
+    /**
+     * * NOTE:
+     * If device is mobile,
+     * ensure legendOpen is synced with hideLegend
+     */
+
+    if (width < 475 && hideLegend) {
+      setLegendOpen(hideLegend);
+    }
+  }, [windowDimensions.width, hideLegend]);
+
   useEffect(() => {
     //TODO: order should be applied here I think!
     const visibleLayers = allAvailableLayers
@@ -61,9 +94,15 @@ const Legend = (): JSX.Element => {
     //sync layer loading state with legend comp
     setVisibleLayersToShow(visibleLayers);
   }, [layersLoading, allAvailableLayers, scale]);
+
+  const onMobileOrDesktop =
+    windowDimensions.width < 475
+      ? !hideLegend && visibleLayersToShow.length > 0
+      : visibleLayersToShow.length > 0;
+
   return (
     <>
-      {visibleLayersToShow.length > 0 && (
+      {onMobileOrDesktop && (
         <div className="legend-container" onClick={() => closeGFWDropdown()}>
           <div
             className="legend-title"

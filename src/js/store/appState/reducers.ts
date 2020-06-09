@@ -21,8 +21,6 @@ import {
   SET_GLAD_CONFIRMED,
   SET_GLAD_START,
   SET_GLAD_END,
-  SET_TERRA_START,
-  SET_TERRA_END,
   SET_MODIS_START,
   SET_MODIS_END,
   SET_VIIRS_START,
@@ -51,8 +49,6 @@ const initialState: AppState = {
     gladConfirmed: false,
     gladStart: '2015-01-01',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
-    terraStart: '2004-01-01',
-    terraEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
@@ -178,22 +174,6 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           gladEnd: action.payload
-        }
-      };
-    case SET_TERRA_START:
-      return {
-        ...state,
-        leftPanel: {
-          ...state.leftPanel,
-          terraStart: action.payload
-        }
-      };
-    case SET_TERRA_END:
-      return {
-        ...state,
-        leftPanel: {
-          ...state.leftPanel,
-          terraEnd: action.payload
         }
       };
     case SET_MODIS_START:
