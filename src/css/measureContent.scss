@@ -4,26 +4,23 @@
   display: flex;
   width: inherit;
   justify-content: center;
-  margin: 1rem 0.5rem;
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
 
   .buttons-select-wrapper {
     display: flex;
-    flex-direction: row;
     align-items: center;
+
+    button {
+      margin-left: 4px;
+      width: 32px;
+      height: 32px;
+    }
 
     span {
       margin-left: 0.5rem;
       margin-right: 0.5rem;
-    }
-
-    .esri-icon-measure-line,
-    .esri-icon-measure-area {
-      width: 2rem;
-      height: $measure-content-button-height;
-      margin: 0 0.25rem 0 0.25rem;
     }
 
     select {
@@ -31,12 +28,13 @@
     }
 
     .selected {
-      border: 1px solid $dark-grey;
+      border: 2px solid #187d29;
+      background-color: #fff;
     }
   }
 
   p {
-    margin: 1rem 0 0 0;
+    margin: 0.5rem 0 0 0;
     font-weight: bold;
     font-size: 0.75rem;
     line-height: 20.4px;
