@@ -32,6 +32,10 @@
   </head>
   <body>
     <noscript> JavaScript is required in order to use this app </noscript>
-    <div id="main"></div>
+    <div id="root"></div>
   </body>
+  <script defer type="module">
+    import config from './configuration.js';
+    const gfwLib = new MapBuilderLoader({ el: 'root', config });
+  </script>
 </html>
