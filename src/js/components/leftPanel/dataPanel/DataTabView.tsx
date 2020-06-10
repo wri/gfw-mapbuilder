@@ -12,7 +12,7 @@ import LayerSelector from './LayerSelector';
 import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
 import { mapController } from 'js/controllers/mapController';
 import { LayerFeatureResult } from 'js/store/mapview/types';
-import { getDocuments } from 'js/helpers/mapController/documents';
+import { getDocuments } from 'js/helpers/mapController/documentsQuery';
 
 interface DataTabProps {
   key: string;
