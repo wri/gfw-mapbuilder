@@ -9,6 +9,7 @@ import {
   SET_ACTIVE_FEATURE_INDEX,
   SET_ACTIVE_BASEMAP,
   SET_TIME_SLIDER,
+  SET_DOCUMENTS,
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
   SET_LAYERS_LOADING,
@@ -22,6 +23,7 @@ const initialState: MapviewState = {
   allAvailableLayers: [],
   activeFeatures: [],
   activeFeatureIndex: [0, 0], //first element is the index of the layer, second is the index of feature
+  documents: null,
   activeBasemap: 'webmap',
   timeSlider: [2000, 2018],
   scale: 0,
@@ -59,6 +61,8 @@ export function mapviewReducer(
       return { ...state, layersLoading: action.payload };
     case SET_USER_COORDINATES:
       return { ...state, userCoordinates: action.payload };
+    case SET_DOCUMENTS:
+      return { ...state, documents: action.payload };
     default:
       return state;
   }

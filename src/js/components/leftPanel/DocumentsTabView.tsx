@@ -1,13 +1,8 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-
-import { getDocuments } from 'js/helpers/mapController/Documents';
-
 import { RootState } from 'js/store';
-import { AttachmentWithURLProps } from 'js/interfaces/Attachment';
-
+import { Attachment } from 'js/interfaces/Attachment';
 import { documentsContent } from 'configs/leftPanel.translations';
-
 import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
 
 interface Props {
@@ -16,15 +11,17 @@ interface Props {
 }
 
 const DocumentsTabView = (props: Props): JSX.Element => {
-  const [allAttachments, setAllAttachments] = useState([]);
   const { activeTab, tabViewVisible } = useSelector(
     (store: RootState) => store.appState.leftPanel
+  );
+  const activeFeatureIndex = useSelector(
+    (store: RootState) => store.mapviewState.activeFeatureIndex
   );
   const activeFeatures = useSelector(
     (store: RootState) => store.mapviewState.activeFeatures
   );
-  const activeFeatureIndex = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatureIndex
+  const documents = useSelector(
+    (store: RootState) => store.mapviewState.documents
   );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
@@ -36,51 +33,15 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const { instructions, name, pdf, size } = documentsContent[selectedLanguage];
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
-  const [featureCollectionIndex] = activeFeatureIndex;
+  let documentTitle = '';
+  if (activeFeatures && activeFeatures.length) {
+    documentTitle =
+      activeFeatures[activeFeatureIndex[0]].sublayerTitle ||
+      activeFeatures[activeFeatureIndex[0]].layerTitle;
+  }
 
-  const returnFeatureCollectionTitle = (): string => {
-    if (activeFeatures[featureCollectionIndex].sublayerTitle) {
-      return activeFeatures[featureCollectionIndex].sublayerTitle as string;
-    } else {
-      return activeFeatures[featureCollectionIndex].layerTitle;
-    }
-  };
-
-  const featureCollectionTitle = activeFeatures[featureCollectionIndex]
-    ? returnFeatureCollectionTitle()
-    : null;
-
-  useEffect(() => {
-    const getAndSetDocuments = async (): Promise<void> => {
-      const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
-
-      const specificFeature =
-        activeFeatures[featureCollectionIndex]?.features[featureIndex];
-      if (specificFeature) {
-        const { sublayerID, layerID } = activeFeatures[featureCollectionIndex];
-
-        const urlProperties = {
-          sublayerID,
-          specificFeatureID: specificFeature.objectid,
-          layerID
-        } as any;
-
-        const attachments = await getDocuments(urlProperties);
-
-        if (attachments !== allAttachments) {
-          setAllAttachments(attachments as any);
-        }
-      }
-    };
-
-    if (tabViewIsVisible) {
-      // TODO dispatch loader
-      getAndSetDocuments();
-    }
-  }, [tabViewIsVisible]);
-
-  const documentsList: React.ReactFragment[] | undefined = allAttachments?.map(
-    (attachment: AttachmentWithURLProps, key: number) => {
+  const documentsList: React.ReactFragment[] | undefined = documents?.map(
+    (attachment: Attachment, key: number) => {
       const { url, size, name } = attachment;
       return (
         <Fragment key={key}>
@@ -101,31 +62,29 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   );
 
   return (
-    <div>
+    <>
       {tabViewIsVisible && (
         <div className="documents-container">
-          {allAttachments && allAttachments.length ? (
-            <h3 className="feature-collection-title">
-              {featureCollectionTitle}
-            </h3>
-          ) : null}
-          {allAttachments && allAttachments.length ? (
-            <table className="documents-table">
-              <thead className="table-headers">
-                <tr>
-                  <th>{name}</th>
-                  <th>{size}</th>
-                  <th>{pdf}</th>
-                </tr>
-              </thead>
-              <tbody>{documentsList}</tbody>
-            </table>
+          {documents && documents.length ? (
+            <div>
+              <h3 className="feature-collection-title">{documentTitle}</h3>
+              <table className="documents-table">
+                <thead className="table-headers">
+                  <tr>
+                    <th>{name}</th>
+                    <th>{size}</th>
+                    <th>{pdf}</th>
+                  </tr>
+                </thead>
+                <tbody>{documentsList}</tbody>
+              </table>
+            </div>
           ) : (
             <p className="no-documents">{instructions}</p>
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

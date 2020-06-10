@@ -13,8 +13,7 @@
 
   .tab-header-container {
     button {
-      .doc-flash-icon,
-      .analysis-flash-icon {
+      .resize-effect {
         animation-name: animate-pulse;
         animation-iteration-count: infinite;
         animation-duration: 1000ms;

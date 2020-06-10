@@ -9,7 +9,7 @@ export interface Attachment {
 export type AttachmentWithURLProps = Attachment & URLProperties;
 
 export interface URLProperties {
-  sublayerID: number;
+  sublayerID?: number | string;
   specificFeatureID: number;
   layerID: string;
   iso?: string;

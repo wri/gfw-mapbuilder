@@ -1,19 +1,18 @@
-import Sublayer from 'esri/layers/support/Sublayer';
-
 import { mapController } from 'js/controllers/mapController';
-
 import { Attachment, URLProperties } from 'js/interfaces/Attachment';
 
 export const getDocuments = async (
   urlProperties: URLProperties
 ): Promise<Array<Attachment> | null> => {
   const { sublayerID, specificFeatureID, layerID } = urlProperties;
-  let endPoint = '';
-  const layer = mapController._map?.findLayerById(layerID);
 
-  if ((layer as any).sublayers.length && specificFeatureID) {
-    const sublayer = (layer as any).sublayers.items.filter(
-      (s: Sublayer) => s.id === sublayerID
+  let endPoint = '';
+
+  const layer: any = mapController._map?.findLayerById(layerID);
+
+  if (layer.sublayers.length && specificFeatureID) {
+    const sublayer = layer.sublayers.items.filter(
+      (s: __esri.Sublayer) => String(s.id) === String(sublayerID)
     );
 
     endPoint = `${sublayer[0].url}/${specificFeatureID}/attachments?f=pjson`;
