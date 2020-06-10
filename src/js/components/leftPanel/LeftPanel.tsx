@@ -54,6 +54,10 @@ const Tab = (props: TabProps): React.ReactElement => {
     (store: RootState) => store.appState.leftPanel.activeTab
   );
 
+  const documents = useSelector(
+    (store: RootState) => store.mapviewState.documents
+  );
+
   const setFlashingTab = (): void => {
     if (label === 'documents') {
       setDocumentFlashing(false);
@@ -74,10 +78,10 @@ const Tab = (props: TabProps): React.ReactElement => {
   }
 
   const setClassName = (): string => {
-    if (documentFlashingActive) {
-      return 'doc-flash-icon';
+    if (documentFlashingActive && documents && documents.length) {
+      return 'resize-effect';
     } else if (analysisFlashingActive) {
-      return 'analysis-flash-icon';
+      return 'resize-effect';
     } else {
       return '';
     }
@@ -101,7 +105,9 @@ const Tab = (props: TabProps): React.ReactElement => {
         onClick={handleTabClick}
       >
         <Icon width={25} height={25} fill={'#555'} className={setClassName()} />
-        {documentFlashingActive && <span className="yellow-alert" />}
+        {documentFlashingActive && documents && documents.length && (
+          <span className="yellow-alert" />
+        )}
         {analysisFlashingActive && <span className="yellow-alert" />}
       </button>
       <ReactTooltip effect="solid" className="tab-tooltip" />
