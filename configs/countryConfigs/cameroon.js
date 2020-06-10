@@ -42,7 +42,6 @@ module.exports = {
   mangroves: false,
   sadAlerts: false,
   gladAlerts: true,
-  terraIAlerts: true,
   primaryForests: true,
   recentImagery: true,
   analysisModules: [
