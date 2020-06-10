@@ -26,7 +26,6 @@ const datasetMap = [
   { id: 'glad-alerts', label: 'GLAD tree cover loss alerts' },
   { id: 'imazon-alerts', label: 'SAD tree cover loss alerts' },
   { id: 'forma-alerts', label: 'FORMA active clearing alerts' },
-  { id: 'terrai-alerts', label: 'Terra-i tree cover loss alerts' },
   { id: 'prodes-loss', label: 'PRODES deforestation data' }
 ];
 
