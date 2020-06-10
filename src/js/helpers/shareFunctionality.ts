@@ -116,10 +116,6 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   urlParams.push(`layers=${layerIDSString}`);
   urlParams.push(`o=${layerOpacitiesString}`);
 
-  //Active Tab
-  const { activeTab } = appState.leftPanel;
-  urlParams.push(`tab=${activeTab}`);
-
   // Glad alerts > start date gs, end date ge and toggle gladconfirmed=true/false
   const gladLayer: any = mapController._map?.findLayerById('GLAD_ALERTS');
   if (gladLayer) {
@@ -208,9 +204,6 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'd':
           store.dispatch(setCanopyDensity(Number(urlParamValue)));
-          break;
-        case 'tab':
-          store.dispatch(selectActiveTab(urlParamValue));
           break;
         case 'gladconfirmed':
           //Url params always come in as strings so we need to do exact check
