@@ -1,9 +1,10 @@
 module.exports = {
-  webmap: '8892b20e94244843b8e46d71ea1b03f2',
+  webmap: '8892b20e94244843b8e46d71ea1b03f2 ',
   title: 'Atlas Forestier du Cameroun',
   subtitle: 'Ministère des Forêts et de la Faune',
   webmapMenuName: 'Affectation des Terres',
   // initialExtent: {"x": -91.7,"y": 16.6,"z": 9},
+  hideLegend: false,
   logoUrl:
     'https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590',
   logoLinkUrl: 'http://www.minfof.cm/',
@@ -1064,20 +1065,20 @@ module.exports = {
             zh: 'WRI Mono',
             ka: 'WRI Mono'
           }
-        },
-        {
-          id: 'wri_contextual',
-          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
-          title: {
-            en: 'WRI Contextual',
-            fr: 'WRI Contextual',
-            es: 'WRI Contextual',
-            pt: 'WRI Contextual',
-            id: 'WRI Contextual',
-            zh: 'WRI Contextual',
-            ka: 'WRI Contextual'
-          }
         }
+        // {
+        //   id: 'wri_contextual',
+        //   thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
+        //   title: {
+        //     en: 'WRI Contextual',
+        //     fr: 'WRI Contextual',
+        //     es: 'WRI Contextual',
+        //     pt: 'WRI Contextual',
+        //     id: 'WRI Contextual',
+        //     zh: 'WRI Contextual',
+        //     ka: 'WRI Contextual'
+        //   }
+        // }
       ]
     },
     // GROUP_Orth: {
