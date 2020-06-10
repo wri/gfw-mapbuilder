@@ -33,8 +33,6 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
     treeCoverLossField,
     FORMALabel,
     FORMAField,
-    TERRALabel,
-    TERRAField,
     SADLabel,
     SADField
   } = subscribeConfig[selectedLanguage];
@@ -133,20 +131,6 @@ const SubscribeToAlerts = (props: Props): JSX.Element => {
                 }
               />
               <label>{SADLabel}</label>
-            </li>
-          </div>
-          <div className="column">
-            <li>
-              <input
-                type="checkbox"
-                name={TERRALabel}
-                value={TERRAField}
-                checked={selectedAlerts.includes(TERRAField)}
-                onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-                  setAlerts(e.target.value)
-                }
-              />
-              <label>{TERRALabel}</label>
             </li>
           </div>
         </ul>

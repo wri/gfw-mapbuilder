@@ -520,7 +520,6 @@ export class MapController {
       GLOB_MANGROVE: 'mangroves',
       IMAZON_SAD: 'sadAlerts',
       GLAD_ALERTS: 'gladAlerts',
-      TERRA_I_ALERTS: 'terraIAlerts',
       RECENT_IMAGERY: 'recentImagery'
     };
     const configLayerIDs = Object.keys(configLayerFilters);
