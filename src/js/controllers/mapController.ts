@@ -1047,6 +1047,7 @@ export class MapController {
 
   detachMouseLocationTracking(): void {
     this._mouseTrackingEvent?.remove();
+    this._mouseTrackingEvent = undefined;
   }
 
   attachMouseLocationTracking(): void {
