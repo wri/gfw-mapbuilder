@@ -26,8 +26,6 @@ export default {
   //- Language Settings
   language: 'en',
   useAlternativeLanguage: false,
-  //- Custom Basemap
-  useWebmapBasemap: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
   alternativeLanguageTitle: 'GFW Mapbuilder',

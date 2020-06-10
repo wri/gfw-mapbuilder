@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
-import { landsatBaselayerYears } from 'configs/layer-config';
+import { landsatBaselayerYears, customBasemapIcon } from 'configs/layer-config';
 import { mapController } from 'js/controllers/mapController';
 import { basemapLayersContent } from 'configs/leftPanel.translations';
 import { LayerProps } from 'js/store/mapview/types';
@@ -10,8 +10,8 @@ import { LayerProps } from 'js/store/mapview/types';
 interface DefaultBasemapProps {
   layerInfo: {
     id: string;
-    thumbnailUrl: string;
-    title: string;
+    thumbnailUrl?: string;
+    title?: string;
     activeBasemap: string;
   };
 }
@@ -23,14 +23,14 @@ interface BaseLayerControlLandsatProps {
 }
 
 const WebmapOriginal = (props: DefaultBasemapProps): JSX.Element => {
-  const { id, thumbnailUrl, title, activeBasemap } = props.layerInfo;
+  const { id, activeBasemap } = props.layerInfo;
   return (
     <div
       className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
       onClick={(): void => mapController.setWebmapOriginalBasemap(id)}
     >
-      <img src={thumbnailUrl} alt="basemap" />
-      <span>{title}</span>
+      <img src={customBasemapIcon} alt="basemap" />
+      <span>{mapController._webmapBasemap?.title}</span>
     </div>
   );
 };
@@ -150,9 +150,12 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     (baselayer: any) =>
       baselayer.id === 'landsat' ||
       baselayer.id === 'wri_mono' ||
-      baselayer.id === 'webmap_original' ||
       baselayer.id === 'wri_contextual'
   );
+
+  //Add BASEMAP from Webmap
+  basemapsToRender.push({ id: 'webmap_original' });
+
   const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {
     if (baselayer.id === 'landsat') {
       return (
@@ -170,8 +173,6 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           key={baselayer.id}
           layerInfo={{
             id: baselayer.id,
-            thumbnailUrl: baselayer.thumbnailUrl,
-            title: baselayer.title[selectedLanguage],
             activeBasemap
           }}
         />

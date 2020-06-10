@@ -1077,19 +1077,6 @@ module.exports = {
             zh: 'WRI Contextual',
             ka: 'WRI Contextual'
           }
-        },
-        {
-          id: 'webmap_original',
-          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
-          title: {
-            en: 'Original Webmap',
-            fr: 'Original Webmap',
-            es: 'Original Webmap',
-            pt: 'Original Webmap',
-            id: 'Original Webmap',
-            zh: 'Original Webmap',
-            ka: 'Original Webmap'
-          }
         }
       ]
     },
