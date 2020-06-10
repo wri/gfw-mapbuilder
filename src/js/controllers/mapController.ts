@@ -148,7 +148,6 @@ export class MapController {
         this._mapview.center = parsedInitExtent.center;
       }
       if (parsedInitExtent.zoom) {
-        console.log(parsedInitExtent.zoom);
         this._mapview.zoom = parsedInitExtent.zoom;
       }
     }
@@ -1443,25 +1442,50 @@ export class MapController {
   };
 
   setPolygon = (points: Array<Point>): void => {
+    const userLayer = this._map?.findLayerById(
+      'user_features'
+    ) as GraphicsLayer;
+    if (userLayer) {
+      userLayer.graphics.removeAll();
+    } else {
+      const userLayer = new GraphicsLayer({
+        id: 'user_features'
+      });
+      this._map?.add(userLayer);
+    }
+
     const simpleFillSymbol = {
-      type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+      type: 'simple-fill',
       color: [240, 171, 0, 0.0],
       outline: {
-        // autocasts as new SimpleLineSymbol()
         color: [0, 255, 254],
         width: 2
       }
     };
 
-    this._mapview.graphics.removeAll();
+    const rings: number[][] = points.map(pt => [pt.x, pt.y]);
 
-    const polygon = new Polygon().addRing(points);
+    const polygon = new Polygon({
+      rings: [rings],
+      spatialReference: { wkid: 102100 }
+    });
 
     const graphic = new Graphic({
       geometry: polygon,
       symbol: simpleFillSymbol
     });
-    this._mapview.graphics.add(graphic);
+    const drawnGraphic: any = graphic.clone();
+
+    drawnGraphic.attributes = {
+      OBJECTID: 1,
+      attributeIndex: 0
+    };
+
+    drawnGraphic.objectid = 1;
+    drawnGraphic.symbol.outline.color = [115, 252, 253];
+    drawnGraphic.symbol.color = [0, 0, 0, 0];
+
+    userLayer.graphics.add(drawnGraphic);
 
     this._mapview.goTo(
       {
@@ -1471,6 +1495,18 @@ export class MapController {
         duration: 1000
       }
     );
+
+    const drawnFeatures: LayerFeatureResult = {
+      layerID: 'user_features',
+      layerTitle: 'User Features',
+      features: [drawnGraphic],
+      fieldNames: null
+    };
+
+    store.dispatch(setActiveFeatures([drawnFeatures]));
+    store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(selectActiveTab('analysis'));
+
     store.dispatch(renderModal(''));
   };
 
