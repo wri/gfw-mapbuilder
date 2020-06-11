@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 import GenericLayerControl from './GenericLayerControl';
 
 import { RootState } from 'js/store';
@@ -178,6 +178,12 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
     (store: RootState) => store.mapviewState.allAvailableLayers
   );
 
+  const scale = useSelector((store: RootState) => store.mapviewState.scale);
+
+  const allLayersInScale = allAvailableLayers.filter(l =>
+    layerIsInScale(l, scale)
+  );
+
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
@@ -200,7 +206,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const groupOpen = openLayerGroup === layerGroupKey;
 
-  const layersInGroup = allAvailableLayers.filter(layer =>
+  const layersInGroup = allLayersInScale.filter(layer =>
     groupLayerIds.includes(layer.id)
   );
 
