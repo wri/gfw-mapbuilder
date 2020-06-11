@@ -6,7 +6,7 @@
     padding: 0;
   }
   display: grid;
-  padding-top: 5rem;
+  padding-top: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
   justify-items: center;
@@ -34,14 +34,18 @@
       width: 100%;
     }
     background-color: #555;
-    height: 50px;
-    width: 90%;
+    width: 900px;
     padding-right: 10px;
+    padding: 3px;
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto;
     grid-gap: 5px;
     align-items: center;
     -webkit-print-color-adjust: exact;
+
+    .logo {
+      width: 100px;
+    }
     button {
       @media print {
         display: none;
@@ -63,6 +67,9 @@
     }
   }
   .report-analysis {
+    min-width: 30vw;
+    width: 900px;
+    border: 1px dashed gray;
     color: #555;
     .analysis-title {
       font-size: 1.5rem;
@@ -76,8 +83,6 @@
       margin-top: 10px;
       margin-bottom: 10px;
     }
-    width: 800px;
-    min-width: 30vw;
     table {
       overflow-wrap: break-word;
       font-size: 13px;
@@ -102,6 +107,7 @@
     color: #555;
     margin-top: 20px;
     .chart-area-container {
+      width: 900px;
       .canvas-chart-wrapper {
         @media print {
           display: flex;
