@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
 import GenericLayerControl from './GenericLayerControl';
+import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 
 //Memo Selectors
 const allAvailableLayersSelector = (state: RootState) =>
@@ -27,7 +28,12 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     (store: RootState) => store.appState.selectedLanguage
   );
 
+  const scale = useSelector((store: RootState) => store.mapviewState.scale);
+
   const webmapLayers = useSelector(webmapLayerSelector);
+  const webmapLayersInScale = webmapLayers.filter(l =>
+    layerIsInScale(l, scale)
+  );
 
   const language = useSelector(
     (store: RootState) => store.appSettings.language
@@ -69,7 +75,7 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         </button>
       </div>
       <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
-        {webmapLayers.map((layer, i) => (
+        {webmapLayersInScale.map((layer, i) => (
           <GenericLayerControl
             layer={layer}
             sublayer={layer.sublayer}
