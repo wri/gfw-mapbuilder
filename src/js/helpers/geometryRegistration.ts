@@ -2,8 +2,7 @@ import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
 import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
 import { FeatureResult } from 'js/store/mapview/types';
 
-//TODO: Will need to type this better
-export function registerGeometry(feature: FeatureResult): Promise<any> {
+export async function registerGeometry(feature: FeatureResult): Promise<any> {
   let geographic;
 
   if (feature.geometry.spatialReference.wkid === 4326) {
@@ -27,13 +26,32 @@ export function registerGeometry(feature: FeatureResult): Promise<any> {
   };
   const content = JSON.stringify(geoStore);
 
-  //TODO: Extract to the endpoints config file
-  return fetch('https://production-api.globalforestwatch.org/v1/geostore', {
+  //Geostore API endpoint sometimes fails to register geometry, we are trying up to 3 times and then failing out
+  function fetchRetry(url: string, options = {}, retries = 3): any {
+    return fetch(url, options)
+      .then(res => {
+        if (res.ok) return res;
+        if (retries > 0) {
+          return fetchRetry(url, options, retries - 1);
+        } else {
+          throw new Error('error in fetching geostore results');
+        }
+      })
+      .catch(e => console.error(e));
+  }
+  const options = {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json'
     },
     body: content
-  });
+  };
+
+  const res = fetchRetry(
+    'https://production-api.globalforestwatch.org/v1/geostore',
+    options,
+    3
+  );
+  return res;
 }

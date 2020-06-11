@@ -113,13 +113,17 @@ const BaseAnalysis = (): JSX.Element => {
       registerGeometry(activeFeature)
         .then(response => response.json())
         .then(res => {
+          if (res?.errors) {
+            throw new Error('failed to register geostore');
+          }
           const oldActiveFeatures = [...activeFeatures];
           const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
           const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
           activeFeature.attributes.geostoreId = res.data.id; //splice this out and update the copy..?
           dispatch(setActiveFeatures(oldActiveFeatures));
           setGeostoreReady(true);
-        });
+        })
+        .catch(e => console.log('failed to register geostore', e));
     }
   }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
 

@@ -187,7 +187,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         //Attempt to fetch documents associated with the selected feature, this
         //useEffect should used only for that purpose and should dispatch
         //results to the redux so documents tab can be appropriately styled
-        console.log('data panel mount, fetch docs');
         const selectedFeatureInfo = activeFeatures[activeFeatureIndex[0]];
 
         const { sublayerID, layerID } = selectedFeatureInfo;
@@ -203,7 +202,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
         const docs = getDocuments(urlProperties)
           .then(res => {
-            console.log(res);
             dispatch(setDocuments(res));
           })
           .catch(e => dispatch(setDocuments(null)));
