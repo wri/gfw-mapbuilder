@@ -32,6 +32,8 @@ interface ReportProps {
 const Report = (props: ReportProps): JSX.Element => {
   const dispatch = useDispatch();
 
+  const logoURL = useSelector((store: RootState) => store.appSettings.logoUrl);
+
   const allAvailableLayers = useSelector(
     (store: RootState) => store.mapviewState.allAvailableLayers
   );
@@ -166,6 +168,9 @@ const Report = (props: ReportProps): JSX.Element => {
   return (
     <div className="report">
       <div className="report-header">
+        {logoURL && logoURL.length && (
+          <img src={logoURL} alt="logo" className="logo" />
+        )}
         <p className="title">{`${window.document.title} Custom Analysis`}</p>
         <button onClick={printReport}>
           <PrintIcon height={25} width={25} fill={'#fff'} />
