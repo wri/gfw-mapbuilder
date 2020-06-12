@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
-
+import ReactTooltip from 'react-tooltip';
 import { RootState } from 'js/store';
 import {
   setActiveFeatures,
@@ -431,6 +431,14 @@ const BaseAnalysis = (): JSX.Element => {
       );
     }
   };
+
+  //Analysis is disabled for point and polyline features
+  const selectedFeature =
+    activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
+  const selectedFeatureType = selectedFeature.geometry.type;
+  const featureIsNotAllowed =
+    selectedFeatureType === 'point' || selectedFeatureType === 'polyline';
+
   return (
     <>
       {geostoreReady ? (
@@ -446,7 +454,6 @@ const BaseAnalysis = (): JSX.Element => {
             </div>
           )}
           {chartLoading && (
-            // <div style={{ display: 'grid', minHeight: 300 }}>
             <Loader
               containerPositionStyling={{
                 position: 'absolute',
@@ -486,22 +493,32 @@ const BaseAnalysis = (): JSX.Element => {
               />
             </>
           )}
-          <button
-            disabled={selectedAnalysis === 'default'}
-            style={
-              selectedAnalysis !== 'default'
-                ? { backgroundColor: customColorTheme }
-                : {}
-            }
-            className={
-              selectedAnalysis === 'default'
-                ? 'orange-button disabled'
-                : 'orange-button'
-            }
-            onClick={runAnalysis}
+          <span
+            data-tip={'Analysis disabled for point and line features'}
+            data-offset="{'top': -5}"
           >
-            {analysisTranslations.runAnalysisButton[selectedLanguage]}
-          </button>
+            <button
+              disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
+              style={
+                selectedAnalysis !== 'default'
+                  ? { backgroundColor: customColorTheme }
+                  : {}
+              }
+              className={
+                selectedAnalysis === 'default' || featureIsNotAllowed
+                  ? 'orange-button disabled'
+                  : 'orange-button'
+              }
+              onClick={runAnalysis}
+            >
+              {analysisTranslations.runAnalysisButton[selectedLanguage]}
+            </button>
+          </span>
+          <ReactTooltip
+            effect="solid"
+            className="tab-tooltip"
+            disable={!featureIsNotAllowed}
+          />
           <DataTabFooter />
         </div>
       ) : (
