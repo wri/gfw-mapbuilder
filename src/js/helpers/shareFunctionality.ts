@@ -13,6 +13,7 @@ import {
 } from 'js/store/appState/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
+import { setTimeSlider } from 'js/store/mapview/actions';
 
 /* eslint no-case-declarations: 0 */
 
@@ -32,7 +33,8 @@ const urlEncodingMap = {
   vs: 'virs_start_date',
   ve: 'virs_end_date',
   ms: 'modis_start_date',
-  me: 'modis_end_date'
+  me: 'modis_end_date',
+  ty: 'tree_cover_loss_years'
 };
 
 function getGeostoreID(
@@ -96,6 +98,10 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   //Canopy Density Value
   const { density } = appState.leftPanel;
   urlParams.push(`d=${density}`);
+
+  //Tree Cover Loss years
+  const { timeSlider } = mapviewState;
+  urlParams.push(`ty=${timeSlider[0]}%2C${timeSlider[1]}`);
 
   //Visible Layer IDS Opacity
   const { allAvailableLayers } = mapviewState;
@@ -227,6 +233,10 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'me':
           store.dispatch(setModisEnd(urlParamValue));
+          break;
+        case 'ty':
+          const yearRange = urlParamValue.split(',').map(c => Number(c));
+          store.dispatch(setTimeSlider(yearRange));
           break;
         default:
           break;

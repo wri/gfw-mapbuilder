@@ -1690,12 +1690,12 @@ export class MapController {
 
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
-    const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;
+    const treeCoverLossLayer: any = this._map?.findLayerById(id);
 
-    if (specificLayer) {
-      (specificLayer as any).minYear = startYear;
-      (specificLayer as any).maxYear = endYear;
-      specificLayer.refresh();
+    if (treeCoverLossLayer) {
+      treeCoverLossLayer.minYear = startYear;
+      treeCoverLossLayer.maxYear = endYear;
+      treeCoverLossLayer.refresh();
     }
   }
 
