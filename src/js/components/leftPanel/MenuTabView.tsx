@@ -116,7 +116,7 @@ const MenuTabView = (props: any): JSX.Element => {
   return (
     <>
       {tabViewIsVisible && (
-        <div className="menu-container">
+        <div className="menu-container-wrapper">
           <div className="title-container">
             <a
               href={logoLinkUrl}
