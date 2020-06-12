@@ -194,15 +194,13 @@
       }
 
       .span-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        width: fit-content;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         margin: 1.5rem 0;
         color: rgb(111, 111, 111);
 
         span {
-          width: 7rem;
+          width: 6.5rem;
           margin-top: auto;
           margin-bottom: auto;
 
