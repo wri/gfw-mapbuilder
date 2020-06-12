@@ -121,23 +121,23 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   //Subscriptions for the CMS usecase and trustedServers setup
   useEffect(() => {
-    //TODO: this may need investigation/refactor depending on the CMS setup in the future
+    //TODO: this may need investigation/refactor depending on the CMS setup in the future, this also breaks GLAD alerts for some reason, need further work
     const corsServers: string[] = [
-      'gis-gfw.wri.org',
-      'gis-potico.wri.org',
-      'gis-treecover.wri.org',
-      'api.globalforestwatch.org',
-      'alpha.blueraster.io',
-      'staging.blueraster.io',
-      'stg.blueraster.com.s3.amazonaws.com',
-      'production-api.globalforestwatch.org',
-      'production-api.globalforestwatch.org/v1/ogr',
-      'production-api.globalforestwatch.org/v1/ogr/convert',
-      'api.resourcewatch.org',
-      'gis.wri.org',
-      'tiles.globalforestwatch.org',
-      'staging-api.globalforestwatch.org',
-      'wri-01.carto.com'
+      // 'gis-gfw.wri.org',
+      // 'gis-potico.wri.org',
+      // 'gis-treecover.wri.org',
+      // 'api.globalforestwatch.org',
+      // 'alpha.blueraster.io',
+      // 'staging.blueraster.io',
+      // 'stg.blueraster.com.s3.amazonaws.com',
+      // 'production-api.globalforestwatch.org',
+      // 'production-api.globalforestwatch.org/v1/ogr',
+      // 'production-api.globalforestwatch.org/v1/ogr/convert',
+      // 'api.resourcewatch.org',
+      // 'gis.wri.org',
+      // 'tiles.globalforestwatch.org',
+      // 'staging-api.globalforestwatch.org',
+      // 'wri-01.carto.com'
     ];
 
     corsServers.forEach(server =>
