@@ -103,7 +103,7 @@
     }
 
     .no-documents {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-align: center;
     }
 
@@ -149,8 +149,7 @@
 
     p {
       font-family: $fira-sans;
-      font-weight: 300;
-      font-size: 14px;
+      font-size: 0.9rem;
       line-height: 23.8px;
       font-weight: 400;
       color: #555;
@@ -166,7 +165,7 @@
 
     h4,
     ol {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: #6f6f6f;
     }
 
@@ -827,17 +826,18 @@
   font-family: $fira-sans;
 
   figure {
-    margin-bottom: 0;
-    font-size: 0.85rem;
+    color: #6f6f6f;
+    font-size: 0.9rem;
+    margin: 2rem 1.5rem 0 1.5rem;
 
     figcaption {
       margin: 0;
-      font-size: 0.87rem;
+      font-size: 0.9rem;
+      font-weight: 600;
     }
 
     ol {
       padding-left: 1rem;
-      font-size: 0.8rem;
     }
   }
 
