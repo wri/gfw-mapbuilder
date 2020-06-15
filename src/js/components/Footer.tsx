@@ -1,9 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import Attribution from 'esri/widgets/Attribution';
+import { useSelector } from 'react-redux';
+import { RootState } from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
 import 'css/footer.scss';
 
 const Footer = (): JSX.Element => {
+  const footerLinks = useSelector(
+    (store: RootState) => store.appSettings.footerLinks
+  );
+
   const attRef: any = useRef();
   useEffect(() => {
     new Attribution({
@@ -11,29 +17,20 @@ const Footer = (): JSX.Element => {
       container: attRef.current
     });
   }, [attRef]);
+
+  const footerLinksItems = footerLinks.map((item, i: number) => {
+    return (
+      <p key={i}>
+        <a href={item.link} target="_blank" rel="noopener noreferrer">
+          {item.label}
+        </a>
+      </p>
+    );
+  });
+
   return (
     <div className="footer-container">
-      <div className="footer-links">
-        <p>
-          <a
-            href="https://www.wri.org/about/privacy-policy"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            WRI Privacy Policy
-          </a>
-        </p>
-        <span> | </span>
-        <p>
-          <a
-            href="https://www.globalforestwatch.org/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GFW Terms of Service
-          </a>
-        </p>
-      </div>
+      <div className="footer-links">{footerLinksItems}</div>
       <div className="attribution" ref={attRef}></div>
     </div>
   );

@@ -44,6 +44,16 @@ module.exports = {
   gladAlerts: true,
   primaryForests: true,
   recentImagery: true,
+  footerLinks: [
+    {
+      label: 'WRI Privacy Policy',
+      link: 'https://www.wri.org/about/privacy-policy'
+    },
+    {
+      label: 'GFW Terms of Service',
+      link: 'https://www.globalforestwatch.org/terms'
+    }
+  ],
   analysisModules: [
     {
       analysisId: 'TC_LOSS_GAIN',
