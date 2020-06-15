@@ -31,9 +31,11 @@
         height: auto;
         width: $map-widget-square;
         background-color: $white;
-        margin-top: auto;
-        margin-bottom: auto;
         border: none;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
