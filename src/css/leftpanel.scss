@@ -749,6 +749,7 @@
 .layer-group-title {
   cursor: pointer;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0 5px;
   border-bottom: solid 1px #555;
@@ -760,9 +761,13 @@
   }
 
   .caret-button {
+    padding: 0;
+    margin: 0;
     outline: 0;
     border: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    color: #555;
+    padding-bottom: 1px;
   }
 }
 
