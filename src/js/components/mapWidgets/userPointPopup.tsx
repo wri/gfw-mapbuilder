@@ -4,6 +4,7 @@ import { setRenderPopup } from 'js/store/appState/actions';
 import { RootState } from 'js/store';
 
 import 'css/popup.scss';
+import { mapController } from 'js/controllers/mapController';
 
 const UserPointPopup = (): JSX.Element | null => {
   const dispatch = useDispatch();
@@ -19,11 +20,14 @@ const UserPointPopup = (): JSX.Element | null => {
     (state: RootState) => state.appState.renderPopup
   );
 
+  function handlePopupClose(): void {
+    dispatch(setRenderPopup(!renderPopup));
+    mapController.detachMouseLocationTracking();
+  }
+
   return renderPopup ? (
     <div className="user-point-popup-wrapper">
-      <button onClick={(): any => dispatch(setRenderPopup(!renderPopup))}>
-        X
-      </button>
+      <button onClick={handlePopupClose}>X</button>
       <div className="content-wrapper">
         <p className="header">Coordinate Values</p>
         <p>(Decimal degrees)</p>

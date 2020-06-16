@@ -7,11 +7,17 @@ import { RootState } from 'js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from 'js/components/sharedComponents/Loader';
 import { overwriteSettings } from 'js/store/appSettings/actions';
-import { setLoggedIn, setLanguage } from 'js/store/appState/actions';
+import {
+  setLoggedIn,
+  setLanguage,
+  renderModal
+} from 'js/store/appState/actions';
+import { setUserSubscriptions } from 'js/store/mapview/actions';
 import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
-// import resources from '../../../configs/resources';
+import esriConfig from 'esri/config';
+//import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
 import 'arcgis-js-api/themes/light/main.scss';
@@ -113,6 +119,44 @@ const App = (props: AppSettings | any): JSX.Element => {
     window['ga']('send', 'pageview');
   }, [analyticsCode]);
 
+  //Subscriptions for the CMS usecase and trustedServers setup
+  useEffect(() => {
+    //TODO: this may need investigation/refactor depending on the CMS setup in the future, this also breaks GLAD alerts for some reason, need further work
+    const corsServers: string[] = [
+      // 'gis-gfw.wri.org',
+      // 'gis-potico.wri.org',
+      // 'gis-treecover.wri.org',
+      // 'api.globalforestwatch.org',
+      // 'alpha.blueraster.io',
+      // 'staging.blueraster.io',
+      // 'stg.blueraster.com.s3.amazonaws.com',
+      // 'production-api.globalforestwatch.org',
+      // 'production-api.globalforestwatch.org/v1/ogr',
+      // 'production-api.globalforestwatch.org/v1/ogr/convert',
+      // 'api.resourcewatch.org',
+      // 'gis.wri.org',
+      // 'tiles.globalforestwatch.org',
+      // 'staging-api.globalforestwatch.org',
+      // 'wri-01.carto.com'
+    ];
+
+    corsServers.forEach(server =>
+      //@ts-ignore
+      esriConfig.request.trustedServers.push(server)
+    );
+
+    const handleExternalSubscriptionCall = (request: any) => {
+      dispatch(setUserSubscriptions(request.detail));
+      dispatch(renderModal('SubscriptionWidget'));
+    };
+
+    window.addEventListener(
+      'listenToThisSubscriptionCall',
+      handleExternalSubscriptionCall
+    );
+  }, []);
+
+  //Check that we are logged in
   useEffect(() => {
     fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
       credentials: 'include'

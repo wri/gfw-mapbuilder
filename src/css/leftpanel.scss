@@ -13,8 +13,7 @@
 
   .tab-header-container {
     button {
-      .doc-flash-icon,
-      .analysis-flash-icon {
+      .resize-effect {
         animation-name: animate-pulse;
         animation-iteration-count: infinite;
         animation-duration: 1000ms;
@@ -93,6 +92,7 @@
     font-family: $fira-sans;
     color: #6f6f6f;
     font-weight: normal;
+    height: 600px;
 
     .feature-collection-title {
       flex-wrap: wrap;
@@ -104,7 +104,7 @@
     }
 
     .no-documents {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-align: center;
     }
 
@@ -145,13 +145,12 @@
   }
 
   .info-content-container {
-    min-height: 5rem;
-    margin: 1rem;
+    height: 600px;
+    padding: 1rem;
 
     p {
       font-family: $fira-sans;
-      font-weight: 300;
-      font-size: 14px;
+      font-size: 0.9rem;
       line-height: 23.8px;
       font-weight: 400;
       color: #555;
@@ -162,12 +161,12 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    height: 30rem;
+    height: 600px;
     font-family: $fira-sans;
 
     h4,
     ol {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: #6f6f6f;
     }
 
@@ -195,15 +194,13 @@
       }
 
       .span-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        width: fit-content;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         margin: 1.5rem 0;
         color: rgb(111, 111, 111);
 
         span {
-          width: 7rem;
+          width: 6.5rem;
           margin-top: auto;
           margin-bottom: auto;
 
@@ -317,7 +314,7 @@
       top: 0;
     }
     .disabled {
-      background-color: gray;
+      background-color: gray !important;
       cursor: not-allowed;
     }
     .ui-analysis-wrapper {
@@ -752,6 +749,7 @@
 .layer-group-title {
   cursor: pointer;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0 5px;
   border-bottom: solid 1px #555;
@@ -763,9 +761,13 @@
   }
 
   .caret-button {
+    padding: 0;
+    margin: 0;
     outline: 0;
     border: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    color: #555;
+    padding-bottom: 1px;
   }
 }
 
@@ -825,17 +827,18 @@
   font-family: $fira-sans;
 
   figure {
-    margin-bottom: 0;
-    font-size: 0.85rem;
+    color: #6f6f6f;
+    font-size: 0.9rem;
+    margin: 2rem 1.5rem 0 1.5rem;
 
     figcaption {
       margin: 0;
-      font-size: 0.87rem;
+      font-size: 0.9rem;
+      font-weight: 600;
     }
 
     ol {
       padding-left: 1rem;
-      font-size: 0.8rem;
     }
   }
 

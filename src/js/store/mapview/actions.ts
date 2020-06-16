@@ -7,6 +7,7 @@ import {
   SET_ACTIVE_FEATURE_INDEX,
   SET_ACTIVE_BASEMAP,
   SET_TIME_SLIDER,
+  SET_DOCUMENTS,
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
   SET_LAYERS_LOADING,
@@ -104,6 +105,13 @@ export function setLayersLoading(
 export function setUserCoordinates(payload: MapviewState['userCoordinates']) {
   return {
     type: SET_USER_COORDINATES as typeof SET_USER_COORDINATES,
+    payload
+  };
+}
+
+export function setDocuments(payload: MapviewState['documents']) {
+  return {
+    type: SET_DOCUMENTS as typeof SET_DOCUMENTS,
     payload
   };
 }

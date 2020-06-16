@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
 import {
   setActiveFeatureIndex,
-  setActiveFeatures
+  setActiveFeatures,
+  setDocuments
 } from 'js/store/mapview/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
@@ -11,6 +12,7 @@ import LayerSelector from './LayerSelector';
 import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
 import { mapController } from 'js/controllers/mapController';
 import { LayerFeatureResult } from 'js/store/mapview/types';
+import { getDocuments } from 'js/helpers/mapController/documentsQuery';
 
 interface DataTabProps {
   key: string;
@@ -180,6 +182,30 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       const layerTitle = props.activeLayerInfo.sublayerTitle
         ? `${props.activeLayerInfo.layerTitle}: ${props.activeLayerInfo.sublayerTitle}`
         : props.activeLayerInfo.layerTitle;
+
+      React.useEffect(() => {
+        //Attempt to fetch documents associated with the selected feature, this
+        //useEffect should used only for that purpose and should dispatch
+        //results to the redux so documents tab can be appropriately styled
+        const selectedFeatureInfo = activeFeatures[activeFeatureIndex[0]];
+
+        const { sublayerID, layerID } = selectedFeatureInfo;
+
+        const selectedFeature =
+          selectedFeatureInfo.features[activeFeatureIndex[1]];
+
+        const urlProperties = {
+          sublayerID,
+          specificFeatureID: selectedFeature.objectid,
+          layerID
+        };
+
+        const docs = getDocuments(urlProperties)
+          .then(res => {
+            dispatch(setDocuments(res));
+          })
+          .catch(e => dispatch(setDocuments(null)));
+      }, [activeFeatures, activeFeatureIndex]);
 
       return (
         <div className="layer-feature-group">

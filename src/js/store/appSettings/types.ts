@@ -38,7 +38,10 @@ export interface AppSettings {
   customColorTheme: string;
   aboutLinkUrl?: string;
   downloadLinkUrl?: string;
+  footerLinks: FooterLink[];
 }
+
+type FooterLink = { label: string; link: string };
 
 type LayerGroupKey =
   | 'GROUP_WEBMAP'

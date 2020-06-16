@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, DefaultRootState } from 'react-redux';
 
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
@@ -98,10 +98,12 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
   const { layerID } = props;
-  const [range, setRange] = useState([2000, 2018]);
+  const timeSlider = useSelector(
+    (store: RootState) => store.mapviewState.timeSlider
+  );
+  const [range, setRange] = useState(timeSlider);
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
-  const { timeSlider } = useSelector((store: RootState) => store.mapviewState);
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );

@@ -27,8 +27,6 @@ module.exports = {
   //- Language Settings
   language: 'en',
   useAlternativeLanguage: false,
-  //- Custom Basemap
-  useWebmapBasemap: false,
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
   alternativeLanguageTitle: 'GFW Mapbuilder',
@@ -68,6 +66,16 @@ module.exports = {
     en: 'Carto Layers',
     fr: 'Carto Layers'
   },
+  footerLinks: [
+    {
+      label: 'WRI Privacy Policy',
+      link: 'https://www.wri.org/about/privacy-policy'
+    },
+    {
+      label: 'GFW Terms of Service',
+      link: 'https://www.globalforestwatch.org/terms'
+    }
+  ],
 
   /**
    * Custom Analysis Module Configuration

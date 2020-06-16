@@ -13,6 +13,7 @@ import {
 } from 'js/store/appState/actions';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { registerGeometry } from 'js/helpers/geometryRegistration';
+import { setTimeSlider } from 'js/store/mapview/actions';
 
 /* eslint no-case-declarations: 0 */
 
@@ -32,7 +33,8 @@ const urlEncodingMap = {
   vs: 'virs_start_date',
   ve: 'virs_end_date',
   ms: 'modis_start_date',
-  me: 'modis_end_date'
+  me: 'modis_end_date',
+  ty: 'tree_cover_loss_years'
 };
 
 function getGeostoreID(
@@ -97,6 +99,10 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const { density } = appState.leftPanel;
   urlParams.push(`d=${density}`);
 
+  //Tree Cover Loss years
+  const { timeSlider } = mapviewState;
+  urlParams.push(`ty=${timeSlider[0]}%2C${timeSlider[1]}`);
+
   //Visible Layer IDS Opacity
   const { allAvailableLayers } = mapviewState;
   const visibleLayers = allAvailableLayers.filter(l => l.visible);
@@ -115,10 +121,6 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
 
   urlParams.push(`layers=${layerIDSString}`);
   urlParams.push(`o=${layerOpacitiesString}`);
-
-  //Active Tab
-  const { activeTab } = appState.leftPanel;
-  urlParams.push(`tab=${activeTab}`);
 
   // Glad alerts > start date gs, end date ge and toggle gladconfirmed=true/false
   const gladLayer: any = mapController._map?.findLayerById('GLAD_ALERTS');
@@ -209,9 +211,6 @@ export function parseURLandApplyChanges(): void {
         case 'd':
           store.dispatch(setCanopyDensity(Number(urlParamValue)));
           break;
-        case 'tab':
-          store.dispatch(selectActiveTab(urlParamValue));
-          break;
         case 'gladconfirmed':
           //Url params always come in as strings so we need to do exact check
           const gladConfirmedValue = urlParamValue === 'true' ? true : false;
@@ -234,6 +233,10 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'me':
           store.dispatch(setModisEnd(urlParamValue));
+          break;
+        case 'ty':
+          const yearRange = urlParamValue.split(',').map(c => Number(c));
+          store.dispatch(setTimeSlider(yearRange));
           break;
         default:
           break;

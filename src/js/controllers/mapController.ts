@@ -107,6 +107,7 @@ export class MapController {
   _domRef: RefObject<any>;
   _imageryOpacity: number;
   _mouseTrackingEvent: IHandle | undefined;
+  _webmapBasemap: __esri.Basemap | undefined;
 
   constructor() {
     this._map = undefined;
@@ -116,6 +117,7 @@ export class MapController {
     this._selectedWidget = undefined;
     this._sketchVMGraphicsLayer = undefined;
     this._mouseTrackingEvent = undefined;
+    this._webmapBasemap = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -146,7 +148,6 @@ export class MapController {
         this._mapview.center = parsedInitExtent.center;
       }
       if (parsedInitExtent.zoom) {
-        console.log(parsedInitExtent.zoom);
         this._mapview.zoom = parsedInitExtent.zoom;
       }
     }
@@ -181,6 +182,8 @@ export class MapController {
         async () => {
           store.dispatch(isMapReady(true));
           //default scale for map
+          const wbBase = this._map?.basemap.clone();
+          this._webmapBasemap = wbBase;
           store.dispatch(changeMapScale(this._mapview.scale));
           const { latitude, longitude } = this._mapview.center;
           store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
@@ -516,7 +519,6 @@ export class MapController {
       GLOB_MANGROVE: 'mangroves',
       IMAZON_SAD: 'sadAlerts',
       GLAD_ALERTS: 'gladAlerts',
-      TERRA_I_ALERTS: 'terraIAlerts',
       RECENT_IMAGERY: 'recentImagery'
     };
     const configLayerIDs = Object.keys(configLayerFilters);
@@ -625,6 +627,7 @@ export class MapController {
     this._map = new WebMap({
       portalItem: { id: newWebMapId }
     });
+
     this._mapview = new MapView({
       map: this._map,
       container: this._domRef.current
@@ -655,6 +658,8 @@ export class MapController {
 
     this._mapview.when(async () => {
       //Set default state and other event listeners
+      const wbBase = this._map?.basemap.clone();
+      this._webmapBasemap = wbBase;
       store.dispatch(isMapReady(true));
       store.dispatch(setLanguage(lang));
       store.dispatch(changeMapScale(this._mapview.scale));
@@ -1042,6 +1047,7 @@ export class MapController {
 
   detachMouseLocationTracking(): void {
     this._mouseTrackingEvent?.remove();
+    this._mouseTrackingEvent = undefined;
   }
 
   attachMouseLocationTracking(): void {
@@ -1437,25 +1443,50 @@ export class MapController {
   };
 
   setPolygon = (points: Array<Point>): void => {
+    const userLayer = this._map?.findLayerById(
+      'user_features'
+    ) as GraphicsLayer;
+    if (userLayer) {
+      userLayer.graphics.removeAll();
+    } else {
+      const userLayer = new GraphicsLayer({
+        id: 'user_features'
+      });
+      this._map?.add(userLayer);
+    }
+
     const simpleFillSymbol = {
-      type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+      type: 'simple-fill',
       color: [240, 171, 0, 0.0],
       outline: {
-        // autocasts as new SimpleLineSymbol()
         color: [0, 255, 254],
         width: 2
       }
     };
 
-    this._mapview.graphics.removeAll();
+    const rings: number[][] = points.map(pt => [pt.x, pt.y]);
 
-    const polygon = new Polygon().addRing(points);
+    const polygon = new Polygon({
+      rings: [rings],
+      spatialReference: { wkid: 102100 }
+    });
 
     const graphic = new Graphic({
       geometry: polygon,
       symbol: simpleFillSymbol
     });
-    this._mapview.graphics.add(graphic);
+    const drawnGraphic: any = graphic.clone();
+
+    drawnGraphic.attributes = {
+      OBJECTID: 1,
+      attributeIndex: 0
+    };
+
+    drawnGraphic.objectid = 1;
+    drawnGraphic.symbol.outline.color = [115, 252, 253];
+    drawnGraphic.symbol.color = [0, 0, 0, 0];
+
+    userLayer.graphics.add(drawnGraphic);
 
     this._mapview.goTo(
       {
@@ -1465,6 +1496,18 @@ export class MapController {
         duration: 1000
       }
     );
+
+    const drawnFeatures: LayerFeatureResult = {
+      layerID: 'user_features',
+      layerTitle: 'User Features',
+      features: [drawnGraphic],
+      fieldNames: null
+    };
+
+    store.dispatch(setActiveFeatures([drawnFeatures]));
+    store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(selectActiveTab('analysis'));
+
     store.dispatch(renderModal(''));
   };
 
@@ -1587,6 +1630,12 @@ export class MapController {
     }
   }
 
+  setWebmapOriginalBasemap(id: string): void {
+    if (!this._webmapBasemap || !this._map) return;
+    this._map.basemap = this._webmapBasemap;
+    store.dispatch(setSelectedBasemap(id));
+  }
+
   setWRIBasemap(id: string): void {
     if (!this._map) return;
     const basemapURL = WRIBasemapConfig[id];
@@ -1641,12 +1690,12 @@ export class MapController {
 
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
-    const specificLayer = this._map?.findLayerById(id) as __esri.BaseTileLayer;
+    const treeCoverLossLayer: any = this._map?.findLayerById(id);
 
-    if (specificLayer) {
-      (specificLayer as any).minYear = startYear;
-      (specificLayer as any).maxYear = endYear;
-      specificLayer.refresh();
+    if (treeCoverLossLayer) {
+      treeCoverLossLayer.minYear = startYear;
+      treeCoverLossLayer.maxYear = endYear;
+      treeCoverLossLayer.refresh();
     }
   }
 

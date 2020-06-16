@@ -25,7 +25,7 @@ interface LayerOptions {
 }
 
 export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
-  const { appState } = store.getState();
+  const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
@@ -94,6 +94,12 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
       });
       break;
     case 'loss':
+      const densityValue = markValueMap[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(
+        /(tc)(?:[^\/]+)/,
+        `tc${densityValue}`
+      );
+      const yearRange = mapviewState.timeSlider;
       esriLayer = new TreeCoverLossLayer({
         id: layerConfig.id,
         title: layerConfig.title,
@@ -101,6 +107,9 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer.minYear = yearRange[0];
+      esriLayer.maxYear = yearRange[1];
+      esriLayer.refresh();
       break;
     case 'gain':
       esriLayer = new TreeCoverGainLayer({

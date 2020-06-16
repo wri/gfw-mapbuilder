@@ -80,12 +80,12 @@
     "react-spinners-css": "^1.1.7",
     "react-tooltip": "^3.11.2",
     "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
     "reselect": "^4.0.0",
     "styled-components": "^5.1.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "redux-logger": "^3.0.6",
     "@arcgis/webpack-plugin": "~4.14.0",
     "@svgr/webpack": "^5.0.1",
     "@types/jest": "^24.9.1",

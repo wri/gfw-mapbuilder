@@ -1,3 +1,5 @@
+import { Attachment } from 'js/interfaces/Attachment';
+
 interface SpecificAreaResults {
   area: string;
   perimeter: string;
@@ -62,6 +64,7 @@ export interface MapviewState {
   mapCenterCoordinates: { latitude: number; longitude: number };
   layersLoading: boolean;
   userCoordinates: __esri.Point | undefined;
+  documents: null | Attachment[];
 }
 
 interface Popup {
@@ -153,6 +156,7 @@ export const CHANGE_MAP_SCALE = 'CHANGE_MAP_SCALE';
 export const CHANGE_MAP_CENTER_COORDINATES = 'CHANGE_MAP_CENTER_COORDINATES';
 export const SET_LAYERS_LOADING = 'SET_LAYERS_LOADING';
 export const SET_USER_COORDINATES = 'SET_USER_COORDINATES';
+export const SET_DOCUMENTS = 'SET_DOCUMENTS';
 
 interface SetUserPoint {
   type: typeof SET_USER_COORDINATES;
@@ -192,6 +196,11 @@ interface SetActiveFeatureIndex {
   payload: MapviewState['activeFeatureIndex'];
 }
 
+interface SetDocuments {
+  type: typeof SET_DOCUMENTS;
+  payload: MapviewState['documents'];
+}
+
 interface SetTimeSlider {
   type: typeof SET_TIME_SLIDER;
   payload: MapviewState['timeSlider'];
@@ -224,4 +233,5 @@ export type MapviewStateTypes =
   | ChangeMapScale
   | ChangeMapCenterCoordinates
   | SetLayersLoading
-  | SetUserPoint;
+  | SetUserPoint
+  | SetDocuments;

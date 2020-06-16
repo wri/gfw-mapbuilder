@@ -28,3 +28,6 @@ export const WRIBasemapConfig = {
   wri_contextual:
     'https://api.mapbox.com/styles/v1/resourcewatch/ckaoehoff02fn1ipfan4jblxh/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoicmVzb3VyY2V3YXRjaCIsImEiOiJjajFlcXZhNzcwMDBqMzNzMTQ0bDN6Y3U4In0.FRcIP_yusVaAy0mwAX1B8w'
 };
+
+export const customBasemapIcon =
+  'https://my.gfw-mapbuilder.org/img/custom_basemap.png';

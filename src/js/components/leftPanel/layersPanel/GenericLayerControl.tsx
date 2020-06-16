@@ -37,7 +37,7 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
 `;
 
 interface GladControlsProps {
-  customColorTheme?: string;
+  customColorTheme: string;
   layerConfig: any;
   selectedLanguage: string;
 }
@@ -70,6 +70,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     //@ts-ignore
     const end = new Date(endDate).getJulian();
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
     mapController._map?.remove(gladLayerOld);
     const gladLayerNew: any = LayerFactory(
       mapController._mapview,
@@ -77,9 +78,8 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     );
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
-    mapController._map?.add(gladLayerNew);
+    mapController._map?.add(gladLayerNew, gladIndex);
 
-    //update redux
     dispatch(setGladStart(e.target.value));
     dispatch(setGladEnd(endDate));
   }
@@ -91,6 +91,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     //@ts-ignore
     const start = new Date(startDate).getJulian();
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+    const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
     mapController._map?.remove(gladLayerOld);
     const gladLayerNew: any = LayerFactory(
       mapController._mapview,
@@ -98,9 +99,8 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     );
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
-    mapController._map?.add(gladLayerNew);
+    mapController._map?.add(gladLayerNew, gladIndex);
 
-    //update redux
     dispatch(setGladStart(startDate));
     dispatch(setGladEnd(e.target.value));
   }
@@ -118,18 +118,11 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gladLayerNew);
   }
 
-  //Dynamic custom theme override using styled-components lib
-  const CheckboxWrapper = styled.div`
-    .styled-checkbox:checked + .styled-checkboxlabel:before {
-      background-color: ${props.customColorTheme};
-    }
-  `;
-
   return (
     <div className="glad-control-wrapper">
       <div className="glad-control-container">
         <div className="layer-checkbox">
-          <CheckboxWrapper>
+          <CheckboxWrapper customColorTheme={props.customColorTheme}>
             <input
               type="checkbox"
               name="styled-checkbox"
