@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   webmap: '8892b20e94244843b8e46d71ea1b03f2 ',
   title: 'Atlas Forestier du Cameroun',
   subtitle: 'Ministère des Forêts et de la Faune',
