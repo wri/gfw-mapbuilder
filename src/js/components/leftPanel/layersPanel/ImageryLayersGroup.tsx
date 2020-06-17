@@ -72,17 +72,16 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
       <>
         <div className="layers-control-checkbox">
           <div className="label-wrapper" style={{ width: 'auto' }}>
-            <ImageryLayerSwitch
-              layerID={props.id}
-              customColorTheme={customColorTheme}
-            />
-            <div className="title-wrapper">
-              <span className="layer-label">
-                {props.info?.label[props.selectedLanguage]}
-              </span>
-              <p className="layer-subtitle" style={{ margin: 0, padding: 0 }}>
-                {parseDynamicSublabel()}
-              </p>
+            <div className="label-control-top">
+              <ImageryLayerSwitch
+                layerID={props.id}
+                customColorTheme={customColorTheme}
+              />
+              <div className="title-wrapper">
+                <span className="layer-label">
+                  {props.info?.label[props.selectedLanguage]}
+                </span>
+              </div>
             </div>
           </div>
           <div
@@ -109,6 +108,17 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             </div>
           </div>
         </div>
+        <p
+          className="layer-subtitle"
+          style={{
+            margin: 0,
+            paddingLeft: '2rem',
+            fontSize: '0.7rem',
+            color: '#aaa'
+          }}
+        >
+          {parseDynamicSublabel()}
+        </p>
         {props.id && <ImagerySlider layerID={props.id} />}
       </>
     );

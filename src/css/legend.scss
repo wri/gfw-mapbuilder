@@ -83,7 +83,8 @@
   .legend-container {
     margin: 0 auto;
     width: 100%;
-    bottom: 4rem;
+    bottom: 2.5rem;
+    z-index: 1;
 
     .legend-title {
       pointer-events: none;
