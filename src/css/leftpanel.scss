@@ -93,6 +93,7 @@
     color: #6f6f6f;
     font-weight: normal;
     height: 600px;
+    overflow: auto;
 
     .feature-collection-title {
       flex-wrap: wrap;
@@ -147,6 +148,7 @@
   .info-content-container {
     height: 600px;
     padding: 1rem;
+    overflow: auto;
 
     p {
       font-family: $fira-sans;
@@ -174,6 +176,7 @@
       display: flex;
       align-items: center;
       flex-direction: column;
+      overflow: auto;
 
       figure:first-of-type {
         margin: 2rem 1.5rem 0 1.5rem;
