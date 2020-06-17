@@ -356,20 +356,6 @@
         },
         {
           "type": "boolean",
-          "fieldName": "useWebmapBasemap",
-          "tooltip": "Set to true if you ArcGIS Online webmap uses a custom basemap which is not a standard ESRI or WRI Basemap",
-          "label": "Set to true if you ArcGIS Online webmap uses a custom basemap",
-          "value": false
-        },
-        {
-          "type": "boolean",
-          "fieldName": "useWebmapBasemap",
-          "tooltip": "Set to true if you ArcGIS Online webmap uses a custom basemap which is not a standard ESRI or WRI Basemap",
-          "label": "Set to true if you ArcGIS Online webmap uses a custom basemap",
-          "value": false
-        },
-        {
-          "type": "boolean",
           "fieldName": "includeDocumentsTab",
           "tooltip": "Attachments of feature layers will be shown in a separate tab",
           "label": "Show attached documents in separate tab",

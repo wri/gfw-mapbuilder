@@ -8,20 +8,13 @@ const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
 const webpack = require('webpack');
 const PACKAGE = require('./package.json');
-const cameroonConfig = require('./configs/countryConfigs/cameroon.js');
 
 module.exports = env => {
-  console.log(env);
-  let customConfig = {};
-
   //Generate a public path that is pointing at WRI server appropriate folder corresponding to the folder name that reflects the version, this is done so various esri files
   //like font files and others are loaded correctly due to dynamic pathing issues
   const base =
     'https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/';
   const publicPathURL = `${base}${PACKAGE.version}/`;
-  if (env && env.COUNTRY_CONFIG) {
-    customConfig = cameroonConfig; //TODO: Let's make this dynamic!
-  }
 
   return {
     mode: 'production',
@@ -104,22 +97,10 @@ module.exports = env => {
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
         template: './src/library.html',
-        filename: './library.html',
+        filename: './index.html',
         favicon: './src/assets/favicon.ico',
         chunksSortMode: 'none',
-        inlineSource: '.(css)$',
-        templateParameters: (compilation, assets, assetTags, options) => {
-          return {
-            compilation,
-            webpackConfig: compilation.options,
-            htmlWebpackPlugin: {
-              tags: assetTags,
-              files: assets,
-              options
-            },
-            libConfig: JSON.stringify(customConfig)
-          };
-        }
+        inlineSource: '.(css)$'
       }),
 
       new MiniCssExtractPlugin({

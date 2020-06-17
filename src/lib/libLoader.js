@@ -20,10 +20,12 @@ const mb = function(cb) {
 };
 
 mb(function cb() {
-  new MapBuilderLoader({
-    el: 'root',
-    config: window.gon.page.content.settings
-  });
+  if (window.gon && window.gon.page && window.gon.page.content) {
+    new MapBuilderLoader({
+      el: 'root',
+      config: window.gon.page.content.settings
+    });
+  }
 });
 
 window._app = {

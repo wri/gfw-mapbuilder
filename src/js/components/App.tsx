@@ -70,7 +70,7 @@ const App = (props: AppSettings | any): JSX.Element => {
         .then(res => {
           console.log(res);
           const { values } = res;
-          dispatch(overwriteSettings({ ...resources, ...values, ...props }));
+          dispatch(overwriteSettings({ ...resources, ...props, ...values }));
           //Check URL for language param which comes in after user shares the application.
           const langFromURL = new URL(window.location.href).searchParams.get(
             'l'
