@@ -141,6 +141,7 @@ export interface LayerFeatureResult {
   sublayerID?: string;
   features: FeatureResult[];
   fieldNames: FieldName[] | null;
+  displayField?: string;
 }
 
 //Action types
