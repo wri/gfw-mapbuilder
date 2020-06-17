@@ -14,12 +14,26 @@ import { mapController } from 'js/controllers/mapController';
 import { LayerFeatureResult } from 'js/store/mapview/types';
 import { getDocuments } from 'js/helpers/mapController/documentsQuery';
 
+//Constructs layer tile based on sublayer existance
+function generateLayerTitle(activeLayerInfo: any): string {
+  let result = '';
+  const { layerTitle, sublayerTitle, displayField } = activeLayerInfo;
+  const displayName = activeLayerInfo.features[0].attributes[displayField];
+  if (sublayerTitle) {
+    result = `${sublayerTitle}: ${displayName}`;
+  } else {
+    result = `${layerTitle}`;
+  }
+  return result;
+}
+
 interface DataTabProps {
   key: string;
   label: string;
 }
 const DataTabView = (props: DataTabProps): JSX.Element => {
   const dispatch = useDispatch();
+  const [layerTitle, setLayerTitle] = React.useState('');
   const activeTab = useSelector(
     (store: RootState) => store.appState.leftPanel.activeTab
   );
@@ -178,11 +192,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           ? disabledButtonCustomStyle
           : enabledButtonCustomStyle;
 
-      // if we have sublayer title, show it as well
-      const layerTitle = props.activeLayerInfo.sublayerTitle
-        ? `${props.activeLayerInfo.layerTitle}: ${props.activeLayerInfo.sublayerTitle}`
-        : props.activeLayerInfo.layerTitle;
-
       React.useEffect(() => {
         //Attempt to fetch documents associated with the selected feature, this
         //useEffect should used only for that purpose and should dispatch
@@ -190,6 +199,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const selectedFeatureInfo = activeFeatures[activeFeatureIndex[0]];
 
         const { sublayerID, layerID } = selectedFeatureInfo;
+
+        setLayerTitle(generateLayerTitle(props.activeLayerInfo));
 
         const selectedFeature =
           selectedFeatureInfo.features[activeFeatureIndex[1]];
@@ -217,6 +228,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
             </div>
             <div className="layer-control">
               <LayerSelector
+                generateLayerTitle={generateLayerTitle}
                 activeFeatures={activeFeatures}
                 activeLayerInfo={activeLayerInfo}
                 handleLayerSelection={(layerID: string): void =>
