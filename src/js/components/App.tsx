@@ -17,8 +17,8 @@ import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
 import esriConfig from 'esri/config';
-//import resources from '../../../configs/resources';
-import resources from '../../../configs/countryConfigs/cameroon';
+import resources from '../../../configs/resources';
+//import resources from '../../../configs/countryConfigs/cameroon';
 
 import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';

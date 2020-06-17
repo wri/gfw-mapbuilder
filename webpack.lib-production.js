@@ -8,12 +8,8 @@ const path = require('path');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
 const webpack = require('webpack');
 const PACKAGE = require('./package.json');
-const resources = require('./configs/resources');
 
 module.exports = env => {
-  console.log(env);
-  const customConfig = resources;
-
   //Generate a public path that is pointing at WRI server appropriate folder corresponding to the folder name that reflects the version, this is done so various esri files
   //like font files and others are loaded correctly due to dynamic pathing issues
   const base =
@@ -104,19 +100,7 @@ module.exports = env => {
         filename: './index.html',
         favicon: './src/assets/favicon.ico',
         chunksSortMode: 'none',
-        inlineSource: '.(css)$',
-        templateParameters: (compilation, assets, assetTags, options) => {
-          return {
-            compilation,
-            webpackConfig: compilation.options,
-            htmlWebpackPlugin: {
-              tags: assetTags,
-              files: assets,
-              options
-            },
-            libConfig: JSON.stringify(customConfig)
-          };
-        }
+        inlineSource: '.(css)$'
       }),
 
       new MiniCssExtractPlugin({

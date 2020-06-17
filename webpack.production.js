@@ -85,7 +85,9 @@ module.exports = () => {
         }
       }),
 
-      new CopyWebpackPlugin([{ from: './configs/configuration.js', to: '' }]),
+      new CopyWebpackPlugin([
+        { from: './configs/resources.js', to: 'configuration.js' }
+      ]),
 
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
