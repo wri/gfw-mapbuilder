@@ -25,12 +25,18 @@ export interface FieldInfo {
 }
 
 //Helper fn to get all available layer fields for the data tab. If layer has fields itself we are using those, but if that is not the case, attempt to fetch it by hitting layer url endpoint with pjson prefix
+type LayerFieldInfos = {
+  layerFields: __esri.Field[] | undefined;
+  displayField: string;
+};
 export async function getAllLayerFields(
   layer: __esri.FeatureLayer
-): Promise<__esri.Field[] | undefined> {
+): Promise<LayerFieldInfos> {
   let layerFields = [] as __esri.Field[] | undefined;
+  let displayField = '';
   if (layer.fields) {
     layerFields = layer.fields;
+    displayField = layer.displayField;
   } else {
     layerFields = await fetch(`${layer.url}?f=pjson`, {
       body: null,
@@ -39,11 +45,12 @@ export async function getAllLayerFields(
       .then(response => response.json())
       .then(data => {
         if (data?.fields) {
+          displayField = data.displayField;
           return data.fields;
         }
       });
   }
-  return layerFields;
+  return { layerFields, displayField };
 }
 
 async function fetchQueryTask(
@@ -51,7 +58,11 @@ async function fetchQueryTask(
   mapview: MapView,
   event: __esri.MapViewClickEvent,
   isSubLayer?: boolean
-): Promise<{ fieldNames: FieldName[] | null; features: FeatureResult[] }> {
+): Promise<{
+  fieldNames: FieldName[] | null;
+  features: FeatureResult[];
+  displayField: string;
+}> {
   let featureResult = [] as FeatureResult[];
   let fieldNames = [] as FieldName[] | null;
   const queryParams: any = {
@@ -64,8 +75,13 @@ async function fetchQueryTask(
     returnGeometry: true
   };
   const url = layer.url;
+  let displayField = '';
   try {
-    const allLayerFields = await getAllLayerFields(layer);
+    const {
+      layerFields: allLayerFields,
+      displayField: fetchedField
+    } = await getAllLayerFields(layer);
+    displayField = fetchedField;
     let objectid: string | null = null;
     if (allLayerFields) {
       const layerObjectField = allLayerFields.find(
@@ -107,7 +123,7 @@ async function fetchQueryTask(
     console.error(e);
   }
 
-  return { features: featureResult, fieldNames };
+  return { features: featureResult, fieldNames, displayField };
 }
 
 async function fetchQueryFeatures(
@@ -128,7 +144,9 @@ async function fetchQueryFeatures(
   };
   const attributesToFetch = getAttributesToFetch(layer);
   fieldNames = attributesToFetch;
-  const allLayerFields = await getAllLayerFields(layer);
+  const { layerFields: allLayerFields, displayField } = await getAllLayerFields(
+    layer
+  );
   let objectid: string | null = null;
   if (allLayerFields) {
     const layerObjectField = allLayerFields.find(
@@ -159,7 +177,7 @@ async function fetchQueryFeatures(
     console.error(e);
   }
 
-  return { features: featureResult, fieldNames };
+  return { features: featureResult, fieldNames, displayField };
 }
 
 //Feature Fetching Logic starts
@@ -190,7 +208,7 @@ export async function queryLayersForFeatures(
           if (!sublayer.visible) continue;
           //sublayers do not have a type, so it always defaults to QueryTask
           //use generic QueryTask approach
-          const { features, fieldNames } = await fetchQueryTask(
+          const { features, fieldNames, displayField } = await fetchQueryTask(
             sublayer,
             mapview,
             event,
@@ -203,7 +221,8 @@ export async function queryLayersForFeatures(
               sublayerID: sublayer.id,
               sublayerTitle: sublayer.title,
               features: features,
-              fieldNames
+              fieldNames,
+              displayField
             });
           }
         }
@@ -216,22 +235,23 @@ export async function queryLayersForFeatures(
           layer.type === 'scene'
         ) {
           //deal with queryFeatures() approach
-          const { features, fieldNames } = await fetchQueryFeatures(
-            layer,
-            mapview,
-            event
-          );
+          const {
+            features,
+            fieldNames,
+            displayField
+          } = await fetchQueryFeatures(layer, mapview, event);
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: layer.title,
               features: features,
-              fieldNames
+              fieldNames,
+              displayField
             });
           }
         } else {
           //use generic QueryTask approach
-          const { features, fieldNames } = await fetchQueryTask(
+          const { features, fieldNames, displayField } = await fetchQueryTask(
             layer,
             mapview,
             event,
@@ -242,7 +262,8 @@ export async function queryLayersForFeatures(
               layerID: layer.id,
               layerTitle: layer.title,
               features: features,
-              fieldNames
+              fieldNames,
+              displayField
             });
           }
         }

@@ -83,7 +83,7 @@ const Report = (props: ReportProps): JSX.Element => {
       objectID: any
     ): Promise<any> {
       //Get The Fields
-      const fields = activeLayerInfo.sublayer
+      const { layerFields: fields } = activeLayerInfo.sublayer
         ? await getAllLayerFields(activeLayerInfo.sub)
         : await getAllLayerFields(activeLayerInfo.parentLayer);
 
