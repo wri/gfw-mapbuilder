@@ -543,8 +543,18 @@
     margin-top: 1rem;
 
     .label-wrapper {
+      flex-direction: column;
       display: flex;
-      width: 14rem;
+
+      .label-control-top {
+        display: flex;
+        align-items: center;
+      }
+      .layer-subtitle {
+        font-size: 0.7rem;
+        padding-left: 2rem;
+        color: $medium-dark-grey;
+      }
     }
 
     .radio-container {
@@ -717,6 +727,8 @@
 .info-icon-container {
   border-radius: 50%;
   width: 16px;
+  min-width: 16px;
+  min-height: 16px;
   height: 16px;
   display: flex;
   justify-content: center;
@@ -1000,6 +1012,7 @@
 }
 
 .recent-imagery-container {
+  font-family: $fira-sans;
   color: #555;
   font-size: 12px;
   position: fixed;
@@ -1011,11 +1024,12 @@
   border-radius: 2px;
   border: 0.5px solid #80808033;
   box-shadow: 1px 2px 1px 0px rgba(85, 85, 85, 0.18);
-  // transform: translate(-20vw, -20vw);
+
   p {
     margin: 0;
     padding: 0;
   }
+
   .exit-button {
     position: absolute;
     border: none;

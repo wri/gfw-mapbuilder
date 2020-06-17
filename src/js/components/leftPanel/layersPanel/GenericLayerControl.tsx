@@ -328,10 +328,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     let subTitle = '';
     if (layer?.sublabel) {
       subTitle = layer.sublabel[selectedLanguage];
-
       return (
         <>
-          <br />
           <span className="layer-subtitle">{subTitle}</span>
         </>
       );
@@ -393,13 +391,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     <>
       <div className="layers-control-checkbox">
         <div className="label-wrapper">
-          {returnLayerControl()}
-          <div className="title-wrapper">
-            <span className="layer-label">
-              {altLayerName ? altLayerName : layer?.title}
-            </span>
-            {returnSubtitle()}
+          <div className="label-control-top">
+            {returnLayerControl()}
+            <div className="title-wrapper">
+              <span className="layer-label">
+                {altLayerName ? altLayerName : layer?.title}
+              </span>
+            </div>
           </div>
+          {returnSubtitle()}
         </div>
         <div
           className="info-icon-container"
