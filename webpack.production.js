@@ -86,7 +86,7 @@ module.exports = () => {
       }),
 
       new CopyWebpackPlugin([
-        { from: './configs/resources.js', to: 'configuration.js' }
+        { from: './configs/countryConfigs/cameroon.js', to: 'configuration.js' } //TODO: this needs to be somehow dynamic
       ]),
 
       new HtmlWebPackPlugin({
