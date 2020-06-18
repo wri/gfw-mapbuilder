@@ -76,7 +76,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
             />
           );
         case 'GROUP_IMAGERY':
-          if (!recentImagery) return null;
+          if (recentImagery !== undefined && !recentImagery) return null;
           return (
             <ImageryLayersGroup
               key={layerGroupKey}
