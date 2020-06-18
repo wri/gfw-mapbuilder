@@ -1293,6 +1293,13 @@
   }
 }
 
+//Vega overrides
+.vega-bind {
+  select {
+    width: 100% !important;
+  }
+}
+
 @media screen and (max-width: $mobile-device) {
   .left-panel
     > .analysis-tab-container
