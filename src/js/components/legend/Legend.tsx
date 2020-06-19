@@ -87,9 +87,12 @@ const Legend = (): JSX.Element => {
   }, [windowDimensions.width, hideLegend]);
 
   useEffect(() => {
-    //TODO: order should be applied here I think!
+    //TODO: order should be applied here
+    //IDS of layers you want to specifically ignore in the legend
+    const ignoredLayers = ['RECENT_IMAGERY'];
     const visibleLayers = allAvailableLayers
       .filter(l => l.visible)
+      .filter(l => !ignoredLayers.includes(l.id))
       .filter(l => layerIsInScale(l, scale));
     //sync layer loading state with legend comp
     setVisibleLayersToShow(visibleLayers);
