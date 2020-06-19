@@ -6,6 +6,10 @@ import { RootState } from 'js/store';
 
 import { infoContent } from '../../../../configs/modal.config';
 
+function createMarkup(content: any) {
+  return { __html: content };
+}
+
 interface MetadataContent {
   title?: string;
   functionOrPurpose?: string;
@@ -251,7 +255,12 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                   {content.description && (
                     <tr>
                       <td className="label">{descriptionLabel}</td>
-                      <td className="label-info">{content.description}</td>
+                      <td
+                        className="label-info"
+                        dangerouslySetInnerHTML={createMarkup(
+                          content.description
+                        )}
+                      ></td>
                     </tr>
                   )}
                   {content.copyrightText && (

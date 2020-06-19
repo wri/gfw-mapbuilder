@@ -379,7 +379,8 @@
 .tabview-container {
   height: 600px;
   color: $dark-grey;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tab-header-container {
