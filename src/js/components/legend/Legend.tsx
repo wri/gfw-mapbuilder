@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { RootState } from 'js/store';
-import { setRenderGFWDropdown } from 'js/store/appState/actions';
 import { LayerProps } from 'js/store/mapview/types';
 import LegendItems from './generateLegendItems';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
@@ -28,9 +27,6 @@ const Legend = (): JSX.Element => {
   const selectedLanguage = useSelector(
     (store: RootState) => store.appState.selectedLanguage
   );
-  const renderGFWDropdown = useSelector(
-    (store: RootState) => store.appState.renderGFWDropdown
-  );
   const gladConfirmed = useSelector(
     (store: RootState) => store.appState.leftPanel.gladConfirmed
   );
@@ -52,12 +48,6 @@ const Legend = (): JSX.Element => {
   function handleLegendToggle(): void {
     setLegendOpen(!legendOpen);
   }
-
-  const closeGFWDropdown = (): void => {
-    if (renderGFWDropdown) {
-      dispatch(setRenderGFWDropdown(false));
-    }
-  };
 
   const [visibleLayersToShow, setVisibleLayersToShow] = useState<LayerProps[]>(
     []
@@ -106,7 +96,7 @@ const Legend = (): JSX.Element => {
   return (
     <>
       {onMobileOrDesktop && (
-        <div className="legend-container" onClick={() => closeGFWDropdown()}>
+        <div className="legend-container">
           <div
             className="legend-title"
             onClick={handleLegendToggle}

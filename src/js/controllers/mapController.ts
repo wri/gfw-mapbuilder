@@ -52,7 +52,6 @@ import {
   selectActiveTab,
   setMeasureResults,
   setLanguage,
-  setRenderGFWDropdown,
   setSelectedSearchWidgetLayer,
   setModisStart,
   setModisEnd,

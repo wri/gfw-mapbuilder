@@ -3,11 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 
 import { RootState } from 'js/store/index';
-import {
-  selectActiveTab,
-  toggleTabviewPanel,
-  setRenderGFWDropdown
-} from 'js/store/appState/actions';
+import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
 
 import TabViewContainer from './TabViewContainer';
 
@@ -183,12 +179,8 @@ const Tabs = (props: TabsProps): React.ReactElement => {
 };
 
 const LeftPanel = (): React.ReactElement => {
-  const dispatch = useDispatch();
   const hideWidgetActive = useSelector(
     (store: RootState) => store.appState.hideWidgetActive
-  );
-  const renderGFWDropdown = useSelector(
-    (store: RootState) => store.appState.renderGFWDropdown
   );
   const renderDocTab = useSelector(
     (store: RootState) => store.appSettings.includeDocumentsTab
@@ -246,17 +238,8 @@ const LeftPanel = (): React.ReactElement => {
 
   const tabsToRender = tabsArray.filter(tab => tab.render);
 
-  const closeGFWDropdown = () => {
-    if (renderGFWDropdown) {
-      dispatch(setRenderGFWDropdown(false));
-    }
-  };
-
   return (
-    <div
-      className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}
-      onClick={() => closeGFWDropdown()}
-    >
+    <div className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}>
       <Tabs tabsToRender={tabsToRender} />
       <TabViewContainer tabViewsToRender={tabsToRender} />
     </div>
