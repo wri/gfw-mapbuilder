@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
-import MyGFWContent from 'js/components/mapWidgets/widgetContent/myGFWContent';
-
-import { mapController } from 'js/controllers/mapController';
+import MyGFWContent from 'js/components/mapWidgets/widgetContent/GFWLoginOptions';
 
 import { RootState } from 'js/store/index';
 
 import { headerContent } from 'js/components/header/header.translations';
 
 import 'css/leftpanel.scss';
+import GFWLoginOptions from 'js/components/mapWidgets/widgetContent/GFWLoginOptions';
 
 const MenuTabView = (props: any): JSX.Element => {
   const [renderMyGFWOptions, setRenderMyGFWOptions] = useState(false);
@@ -170,7 +169,7 @@ const MenuTabView = (props: any): JSX.Element => {
                   My GFW
                 </button>
               </li>
-              {renderMyGFWOptions && <MyGFWContent />}
+              {renderMyGFWOptions && <GFWLoginOptions />}
               {themeOptions}
               <LanguageDropdown
                 language={language}

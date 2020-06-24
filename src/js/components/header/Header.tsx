@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LanguageDropdown from 'js/components/header/LanguageDropdown';
 import ThemeDropdown from 'js/components/header/ThemeDropdown';
-import GFWLogin from 'js/components/header/GFWLogin';
-
+import GFWLoginDropdown from 'js/components/header/GFWLoginDropdown';
 import { ReactComponent as AboutIcon } from 'src/images/aboutIcon.svg';
 import { ReactComponent as DownloadIcon } from 'src/images/downloadIcon.svg';
 import { RootState } from 'js/store/index';
-import { setRenderGFWDropdown } from 'js/store/appState/actions';
 
 import 'css/header.scss';
 import { createSelector } from 'reselect';
@@ -35,7 +33,6 @@ const appSettingsSelector = createSelector(
 );
 
 const Header: FunctionComponent = () => {
-  const dispatch = useDispatch();
   const {
     language,
     title,
@@ -77,12 +74,6 @@ const Header: FunctionComponent = () => {
     (store: RootState) => store.appSettings.aboutLinkUrl
   );
 
-  const closeGFWDropdown = (): void => {
-    if (renderGFWDropdown) {
-      dispatch(setRenderGFWDropdown(false));
-    }
-  };
-
   const target = navLinksInNewTab ? '_blank' : '_self';
   const appTitle =
     selectedLanguage === language ? title : alternativeLanguageTitle;
@@ -96,7 +87,7 @@ const Header: FunctionComponent = () => {
     Boolean(mapThemes.length) &&
     mapThemeIDArray.length === mapThemeArray.length;
   return (
-    <div className="header-container" onClick={() => closeGFWDropdown()}>
+    <div className="header-container">
       <div className="title-container">
         <a
           href={logoLinkUrl}
@@ -158,7 +149,7 @@ const Header: FunctionComponent = () => {
             selectedLanguage={selectedLanguage}
           />
         )}
-        {includeMyGFWLogin && <GFWLogin loggedIn={isLoggedIn} />}
+        {includeMyGFWLogin && <GFWLoginDropdown loggedIn={isLoggedIn} />}
       </div>
     </div>
   );
