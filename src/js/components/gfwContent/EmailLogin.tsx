@@ -7,19 +7,48 @@ const defaultLoginURL =
   ' https://production-api.globalforestwatch.org/auth/login';
 const checkLogURL =
   'https://production-api.globalforestwatch.org/auth/check-logged';
+const registerURL = 'https://production-api.globalforestwatch.org/auth/sign-up';
 
 export const EmailLogin = () => {
   const dispatch = useDispatch();
   const [showDefaultLogin, setShowDefaultLogin] = React.useState(true);
   const [showLostPassword, setShowLostPassword] = React.useState(false);
   const [showRegister, setShowRegister] = React.useState(false);
+  const [registerSuccess, setRegisterSuccess] = React.useState(false);
 
   const [defaultLoginError, setDefaultLoginError] = React.useState<
     boolean | string
   >(false);
 
   const { register, handleSubmit, errors } = useForm();
-  const onDefaultSubmit = (data: any) => {
+
+  type FormType = 'register' | 'default' | 'forgot';
+
+  const handleFormSwitch = (id: FormType): void => {
+    switch (id) {
+      case 'register':
+        setShowRegister(true);
+        setShowDefaultLogin(false);
+        setShowLostPassword(false);
+        break;
+      case 'default':
+        setShowRegister(false);
+        setShowDefaultLogin(true);
+        setShowLostPassword(false);
+        break;
+      case 'forgot':
+        setShowRegister(false);
+        setShowDefaultLogin(false);
+        setShowLostPassword(true);
+        break;
+      default:
+        setShowRegister(false);
+        setShowDefaultLogin(true);
+        setShowLostPassword(false);
+    }
+  };
+
+  const onDefaultSubmit = (data: any): void => {
     fetch(defaultLoginURL, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -57,6 +86,33 @@ export const EmailLogin = () => {
       });
   };
 
+  const onRegisterSubmit = (data: any): void => {
+    const payload = {
+      apps: ['gfw'],
+      email: data.email,
+      password: data.password,
+      repeatPassword: data.repeatPassword
+    };
+
+    console.log(payload);
+    fetch(registerURL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.data && data.data?.id) {
+          console.log(data);
+          setRegisterSuccess(true);
+          //handle success login logic
+        }
+      })
+      .catch(e => console.error(e));
+  };
+
   return (
     <>
       {showDefaultLogin && (
@@ -77,14 +133,62 @@ export const EmailLogin = () => {
               ref={register({ required: true })}
             />
             {errors.password && <span>This field is required</span>}
+            <p>Forgot Password!</p>
+            <p onClick={() => handleFormSwitch('register')}>
+              Not a member? Sign Up!
+            </p>
             {defaultLoginError && (
               <div>
-                <p>Forgot Password!</p>
                 <span>{defaultLoginError}</span>
               </div>
             )}
-            <input type="submit" />
+            <input type="submit" value="Login" />
           </form>
+        </div>
+      )}
+      {showRegister && (
+        <div>
+          <p>Register Flow</p>
+          {!registerSuccess && (
+            <form onSubmit={handleSubmit(onRegisterSubmit)}>
+              <input
+                type="email"
+                placeholder="example@globalforestwatch.com"
+                name="email"
+                ref={register({ required: true })}
+              />
+              {errors.password && <span>This field is required</span>}
+              <input
+                type="password"
+                placeholder="********"
+                name="password"
+                ref={register({ required: true })}
+              />
+              {errors.password && <span>This field is required</span>}
+              <input
+                type="password"
+                placeholder="********"
+                name="repeatPassword"
+                ref={register({ required: true })}
+              />
+              {errors.repeatPassword && <span>This field is required</span>}
+              <p onClick={() => handleFormSwitch('default')}>
+                Already joined? Sign In!
+              </p>
+              {defaultLoginError && (
+                <div>
+                  <span>{defaultLoginError}</span>
+                </div>
+              )}
+              <input type="submit" value="Register" />
+            </form>
+          )}
+          {registerSuccess && (
+            <div>
+              Registered successful login
+              <button onClick={() => handleFormSwitch('default')}>Login</button>
+            </div>
+          )}
         </div>
       )}
     </>
