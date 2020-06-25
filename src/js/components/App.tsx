@@ -158,12 +158,22 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   //Check that we are logged in by looking for token in localStorage and hitting the auth API
   useEffect(() => {
+    //Check for url param token as well, incase we had a redirect
+    const urlToken = new URL(window.location.href).searchParams.get('token');
     const token = localStorage.getItem('userToken');
-    if (token) {
+    let userToken = null;
+    //URL token takes priority
+    if (urlToken) {
+      userToken = urlToken;
+      localStorage.setItem('userToken', userToken);
+    } else if (!urlToken && token) {
+      userToken = token;
+    }
+    if (userToken) {
       fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
         credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${userToken}`
         }
       })
         .then(response => {

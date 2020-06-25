@@ -89,7 +89,7 @@ const GFWLoginOptions = (props: any) => {
           </p>
           <li className="subscribe-method twitter-box">
             <a
-              href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw"
+              href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw&token=true"
               className="-twitter"
             >
               {twitter}
@@ -98,7 +98,7 @@ const GFWLoginOptions = (props: any) => {
 
           <li className="subscribe-method facebook-box">
             <a
-              href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw"
+              href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw&token=true"
               className="-facebook"
             >
               {facebook}
@@ -107,7 +107,7 @@ const GFWLoginOptions = (props: any) => {
 
           <li className="subscribe-method google-box">
             <a
-              href="https://production-api.globalforestwatch.org/auth/google?applications=gfw"
+              href="https://production-api.globalforestwatch.org/auth/google?applications=gfw&token=true"
               className="-google"
             >
               {google}
