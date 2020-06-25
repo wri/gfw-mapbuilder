@@ -156,22 +156,27 @@ const App = (props: AppSettings | any): JSX.Element => {
     );
   }, []);
 
-  //Check that we are logged in
+  //Check that we are logged in by looking for token in localStorage and hitting the auth API
   useEffect(() => {
-    fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
-      credentials: 'include'
-    })
-      .then(response => {
-        const hasError = response.status !== 200;
-        response.json().then(() => {
-          if (hasError) {
-            console.error('Login Failed, User is currently not logged in');
-            return;
-          }
-          dispatch(setLoggedIn(true));
-        });
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
+        credentials: 'include',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
-      .catch(e => console.error(e));
+        .then(response => {
+          const hasError = response.status !== 200;
+          response.json().then(() => {
+            if (hasError) {
+              return;
+            }
+            dispatch(setLoggedIn(true));
+          });
+        })
+        .catch(e => console.error(e));
+    }
   }, [dispatch]);
 
   return (

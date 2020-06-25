@@ -1,10 +1,15 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { setLoggedIn } from 'js/store/appState/actions';
+import { useDispatch } from 'react-redux';
 
 const defaultLoginURL =
   ' https://production-api.globalforestwatch.org/auth/login';
+const checkLogURL =
+  'https://production-api.globalforestwatch.org/auth/check-logged';
 
 export const EmailLogin = () => {
+  const dispatch = useDispatch();
   const [showDefaultLogin, setShowDefaultLogin] = React.useState(true);
   const [showLostPassword, setShowLostPassword] = React.useState(false);
   const [showRegister, setShowRegister] = React.useState(false);
@@ -28,8 +33,24 @@ export const EmailLogin = () => {
         if (data.errors && data.errors[0].detail) {
           setDefaultLoginError(data.errors[0].detail);
         }
-        console.log(data);
-        //Handle redirect-login
+        //Clear out local storage
+        localStorage.clear();
+
+        localStorage.setItem('userToken', data.data.token);
+
+        const bearer = `Bearer ${data.data.token}`;
+
+        fetch(checkLogURL, {
+          method: 'GET',
+          headers: {
+            Authorization: bearer
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            dispatch(setLoggedIn(true));
+          })
+          .catch(e => console.error(e));
       })
       .catch(e => {
         setDefaultLoginError(e.errors[0].detail);
