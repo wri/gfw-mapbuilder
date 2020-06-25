@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from 'js/store';
@@ -6,6 +6,7 @@ import { setUserSubscriptions } from 'js/store/mapview/actions';
 import { renderModal } from 'js/store/appState/actions';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
 import { headerContent } from 'src/js/components/header/header.translations';
+import { EmailLogin } from 'src/js/components/gfwContent/EmailLogin';
 
 const GFWLoginOptions = (props: any) => {
   const dropdownRef = React.useRef<HTMLDivElement | null>(null);
@@ -106,7 +107,7 @@ const GFWLoginOptions = (props: any) => {
             </a>
           </li>
         </ul>
-        <div>email:pass:login</div>
+        <EmailLogin />
       </>
     );
   };
