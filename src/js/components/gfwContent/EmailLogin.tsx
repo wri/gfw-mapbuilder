@@ -8,6 +8,8 @@ const defaultLoginURL =
 const checkLogURL =
   'https://production-api.globalforestwatch.org/auth/check-logged';
 const registerURL = 'https://production-api.globalforestwatch.org/auth/sign-up';
+const resetURL =
+  'https://production-api.globalforestwatch.org/auth/reset-password';
 
 export const EmailLogin = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,7 @@ export const EmailLogin = () => {
   const [showLostPassword, setShowLostPassword] = React.useState(false);
   const [showRegister, setShowRegister] = React.useState(false);
   const [registerSuccess, setRegisterSuccess] = React.useState(false);
+  const [resetPasswordSuccess, setResetPasswordSuccess] = React.useState(false);
 
   const [defaultLoginError, setDefaultLoginError] = React.useState<
     boolean | string
@@ -94,7 +97,6 @@ export const EmailLogin = () => {
       repeatPassword: data.repeatPassword
     };
 
-    console.log(payload);
     fetch(registerURL, {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -105,9 +107,28 @@ export const EmailLogin = () => {
       .then(res => res.json())
       .then(data => {
         if (data.data && data.data?.id) {
-          console.log(data);
           setRegisterSuccess(true);
-          //handle success login logic
+        }
+      })
+      .catch(e => console.error(e));
+  };
+
+  const onForgotSubmit = (data: any): void => {
+    fetch(resetURL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        //Early check for error that come in the response object
+        if (data.errors && data.errors[0].detail) {
+          setDefaultLoginError(data.errors[0].detail);
+          setResetPasswordSuccess(false);
+        } else {
+          setResetPasswordSuccess(true);
         }
       })
       .catch(e => console.error(e));
@@ -133,7 +154,7 @@ export const EmailLogin = () => {
               ref={register({ required: true })}
             />
             {errors.password && <span>This field is required</span>}
-            <p>Forgot Password!</p>
+            <p onClick={() => handleFormSwitch('forgot')}>Forgot Password!</p>
             <p onClick={() => handleFormSwitch('register')}>
               Not a member? Sign Up!
             </p>
@@ -186,6 +207,37 @@ export const EmailLogin = () => {
           {registerSuccess && (
             <div>
               Registered successful login
+              <button onClick={() => handleFormSwitch('default')}>Login</button>
+            </div>
+          )}
+        </div>
+      )}
+      {showLostPassword && (
+        <div>
+          <p>Forgot Flow</p>
+          {!resetPasswordSuccess && (
+            <form onSubmit={handleSubmit(onForgotSubmit)}>
+              <input
+                type="email"
+                placeholder="example@globalforestwatch.com"
+                name="email"
+                ref={register({ required: true })}
+              />
+              {errors.email && <span>This field is required</span>}
+              <p onClick={() => handleFormSwitch('default')}>
+                Already joined? Sign In!
+              </p>
+              {defaultLoginError && (
+                <div>
+                  <span>{defaultLoginError}</span>
+                </div>
+              )}
+              <input type="submit" value="Reset" />
+            </form>
+          )}
+          {resetPasswordSuccess && (
+            <div>
+              RESET successful login
               <button onClick={() => handleFormSwitch('default')}>Login</button>
             </div>
           )}
