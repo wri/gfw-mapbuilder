@@ -119,7 +119,7 @@ const GFWLoginOptions = (props: any) => {
     );
   };
 
-  const RenderDropdowns = (): JSX.Element => {
+  const MYGFWOptions = (): JSX.Element => {
     return (
       <div className="options-modal">
         <ul className="more-list">
@@ -146,7 +146,7 @@ const GFWLoginOptions = (props: any) => {
 
   return (
     <div ref={dropdownRef}>
-      {isLoggedIn ? <RenderDropdowns /> : <RenderLogins />}
+      {isLoggedIn ? <MYGFWOptions /> : <RenderLogins />}
     </div>
   );
 };

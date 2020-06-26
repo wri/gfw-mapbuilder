@@ -1,7 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { setLoggedIn } from 'js/store/appState/actions';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'js/store';
+import 'css/formInputs.scss';
 
 const defaultLoginURL =
   ' https://production-api.globalforestwatch.org/auth/login';
@@ -18,16 +20,20 @@ export const EmailLogin = () => {
   const [showRegister, setShowRegister] = React.useState(false);
   const [registerSuccess, setRegisterSuccess] = React.useState(false);
   const [resetPasswordSuccess, setResetPasswordSuccess] = React.useState(false);
-
   const [defaultLoginError, setDefaultLoginError] = React.useState<
     boolean | string
   >(false);
 
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
   const { register, handleSubmit, errors } = useForm();
 
   type FormType = 'register' | 'default' | 'forgot';
 
   const handleFormSwitch = (id: FormType): void => {
+    setRegisterSuccess(false);
+    setDefaultLoginError(false);
     switch (id) {
       case 'register':
         setShowRegister(true);
@@ -106,6 +112,9 @@ export const EmailLogin = () => {
     })
       .then(res => res.json())
       .then(data => {
+        if (data.errors && data.errors[0].detail) {
+          setDefaultLoginError(data.errors[0].detail);
+        }
         if (data.data && data.data?.id) {
           setRegisterSuccess(true);
         }
@@ -135,114 +144,213 @@ export const EmailLogin = () => {
   };
 
   return (
-    <>
+    <div className="email-login-container">
       {showDefaultLogin && (
         <div>
-          <p>Default Email login</p>
           <form onSubmit={handleSubmit(onDefaultSubmit)}>
-            <input
-              type="email"
-              placeholder="example@globalforestwatch.com"
-              name="email"
-              ref={register({ required: true })}
-            />
-            {errors.password && <span>This field is required</span>}
-            <input
-              type="password"
-              placeholder="********"
-              name="password"
-              ref={register({ required: true })}
-            />
-            {errors.password && <span>This field is required</span>}
-            <p onClick={() => handleFormSwitch('forgot')}>Forgot Password!</p>
-            <p onClick={() => handleFormSwitch('register')}>
-              Not a member? Sign Up!
-            </p>
-            {defaultLoginError && (
-              <div>
-                <span>{defaultLoginError}</span>
-              </div>
-            )}
-            <input type="submit" value="Login" />
-          </form>
-        </div>
-      )}
-      {showRegister && (
-        <div>
-          <p>Register Flow</p>
-          {!registerSuccess && (
-            <form onSubmit={handleSubmit(onRegisterSubmit)}>
+            <div className="form-section">
+              <label htmlFor="email" className="input-label">
+                email *
+              </label>
               <input
+                className="input-text"
                 type="email"
                 placeholder="example@globalforestwatch.com"
                 name="email"
                 ref={register({ required: true })}
               />
-              {errors.password && <span>This field is required</span>}
+              {errors.password && (
+                <p className="input-error">This field is required</p>
+              )}
+            </div>
+            <div className="form-section">
+              <label htmlFor="password" className="input-label">
+                password *
+              </label>
               <input
+                className="input-text"
                 type="password"
                 placeholder="********"
                 name="password"
                 ref={register({ required: true })}
               />
-              {errors.password && <span>This field is required</span>}
+              {errors.password && (
+                <p className="input-error">This field is required</p>
+              )}
+            </div>
+            <p
+              className="input-forgot-pass"
+              onClick={() => handleFormSwitch('forgot')}
+            >
+              Forgot Password!
+            </p>
+            {defaultLoginError && (
+              <div className="input-error">
+                <span>{defaultLoginError}</span>
+              </div>
+            )}
+            <div className="bottom-action">
+              <button onClick={() => handleFormSwitch('register')}>
+                Not a member? <b>Sign Up!</b>
+              </button>
               <input
-                type="password"
-                placeholder="********"
-                name="repeatPassword"
-                ref={register({ required: true })}
+                className="orange-button form-submit"
+                style={{ backgroundColor: customColorTheme }}
+                type="submit"
+                value="Login"
               />
-              {errors.repeatPassword && <span>This field is required</span>}
-              <p onClick={() => handleFormSwitch('default')}>
-                Already joined? Sign In!
-              </p>
+            </div>
+          </form>
+        </div>
+      )}
+      {showRegister && (
+        <div>
+          {!registerSuccess && (
+            <form onSubmit={handleSubmit(onRegisterSubmit)}>
+              <div className="form-section">
+                <label htmlFor="email" className="input-label">
+                  email *
+                </label>
+                <input
+                  type="email"
+                  className="input-text"
+                  placeholder="example@globalforestwatch.com"
+                  name="email"
+                  ref={register({ required: true })}
+                />
+                {errors.password && (
+                  <p className="input-error">This field is required</p>
+                )}
+              </div>
+              <div className="form-section">
+                <label htmlFor="password" className="input-label">
+                  password *
+                </label>
+                <input
+                  className="input-text"
+                  type="password"
+                  placeholder="********"
+                  name="password"
+                  ref={register({ required: true })}
+                />
+                {errors.password && (
+                  <p className="input-error">This field is required</p>
+                )}
+              </div>
+              <div className="form-section">
+                <label htmlFor="password" className="input-label">
+                  repeat password *
+                </label>
+                <input
+                  className="input-text"
+                  type="password"
+                  placeholder="********"
+                  name="repeatPassword"
+                  ref={register({ required: true })}
+                />
+                {errors.password && (
+                  <p className="input-error">This field is required</p>
+                )}
+              </div>
               {defaultLoginError && (
-                <div>
+                <div className="input-error">
                   <span>{defaultLoginError}</span>
                 </div>
               )}
-              <input type="submit" value="Register" />
+              <div className="bottom-action">
+                <button onClick={() => handleFormSwitch('default')}>
+                  Already joined? <b>Sign In!</b>
+                </button>
+                <input
+                  className="orange-button form-submit"
+                  style={{ backgroundColor: customColorTheme }}
+                  type="submit"
+                  value="Register"
+                />
+              </div>
             </form>
           )}
           {registerSuccess && (
-            <div>
-              Registered successful login
-              <button onClick={() => handleFormSwitch('default')}>Login</button>
+            <div className="register-success">
+              <div className="tree-success"></div>
+              <p>
+                {
+                  "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder."
+                }
+              </p>
+              <button
+                className="orange-button form-submit"
+                style={{ backgroundColor: customColorTheme }}
+                onClick={() => handleFormSwitch('default')}
+              >
+                Login
+              </button>
             </div>
           )}
         </div>
       )}
       {showLostPassword && (
         <div>
-          <p>Forgot Flow</p>
           {!resetPasswordSuccess && (
-            <form onSubmit={handleSubmit(onForgotSubmit)}>
-              <input
-                type="email"
-                placeholder="example@globalforestwatch.com"
-                name="email"
-                ref={register({ required: true })}
-              />
-              {errors.email && <span>This field is required</span>}
-              <p onClick={() => handleFormSwitch('default')}>
-                Already joined? Sign In!
+            <>
+              <p style={{ marginTop: 0 }}>
+                To reset your password, enter your email and follow the
+                instructions.
               </p>
-              {defaultLoginError && (
-                <div>
-                  <span>{defaultLoginError}</span>
+              <form onSubmit={handleSubmit(onForgotSubmit)}>
+                <div className="form-section">
+                  <label htmlFor="email" className="input-label">
+                    email *
+                  </label>
+                  <input
+                    className="input-text"
+                    type="email"
+                    placeholder="example@globalforestwatch.com"
+                    name="email"
+                    ref={register({ required: true })}
+                  />
+                  {errors.password && (
+                    <p className="input-error">This field is required</p>
+                  )}
                 </div>
-              )}
-              <input type="submit" value="Reset" />
-            </form>
+                {defaultLoginError && (
+                  <div className="input-error">
+                    <span>{defaultLoginError}</span>
+                  </div>
+                )}
+                <div className="bottom-action">
+                  <button onClick={() => handleFormSwitch('default')}>
+                    Already joined? <b>Sign In!</b>
+                  </button>
+                  <input
+                    type="submit"
+                    value="Reset"
+                    className="orange-button form-submit"
+                    style={{ backgroundColor: customColorTheme }}
+                  />
+                </div>
+              </form>
+            </>
           )}
           {resetPasswordSuccess && (
-            <div>
-              RESET successful login
-              <button onClick={() => handleFormSwitch('default')}>Login</button>
+            <div className="register-success">
+              <div className="tree-success"></div>
+              <p>
+                {
+                  "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder."
+                }
+              </p>
+              <button
+                className="orange-button form-submit"
+                style={{ backgroundColor: customColorTheme }}
+                onClick={() => handleFormSwitch('default')}
+              >
+                Login
+              </button>
             </div>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };

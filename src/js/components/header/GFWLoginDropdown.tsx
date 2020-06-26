@@ -16,17 +16,16 @@ const GFWLoginDropdown = (props: LoginProps): JSX.Element => {
     (state: RootState) => state.appState.renderGFWDropdown
   );
 
-  function toggleGFWLoginOptions() {
-    dispatch(setRenderGFWDropdown(true));
+  function toggleGFWLoginOptions(): void {
+    dispatch(setRenderGFWDropdown(!renderGFWDropdown));
   }
 
   return (
-    <div
-      className="gfw-login-container"
-      onClick={toggleGFWLoginOptions}
-      ref={dropdownButtonRef}
-    >
-      <button className={`gfw-login-button ${renderGFWDropdown ? 'grey' : ''}`}>
+    <div className="gfw-login-container" ref={dropdownButtonRef}>
+      <button
+        onClick={toggleGFWLoginOptions}
+        className={`gfw-login-button ${renderGFWDropdown ? 'grey' : ''}`}
+      >
         <UserIcon height={15} width={15} />
         <p> {props.loggedIn ? 'MY GFW' : 'Login to MY GFW'}</p>
       </button>
