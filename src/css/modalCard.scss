@@ -23,14 +23,28 @@
     position: absolute;
     border: none;
     right: 0;
-    top: 0;
+    top: 4px;
     background-color: $white;
 
     svg {
+      fill: #555;
       height: 1.5rem;
       width: 1.5rem;
     }
   }
+
+  &.edit-profile {
+    height: 750px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    margin: 0 auto;
+    margin-top: 120px;
+    width: 700px;
+    padding: 1.875rem 6.25rem 2.5rem;
+  }
+
   &.subscription-widget {
     height: 28.125rem;
     top: 40%;

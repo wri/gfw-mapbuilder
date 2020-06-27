@@ -103,6 +103,7 @@ const ModalCard: FunctionComponent<{}> = () => {
           ></div>
           <div className={`modal-card-container ${setClassName()}`}>
             <button
+              style={{ color: '#555' }}
               className="exit-button"
               onClick={() => dispatch(renderModal(''))}
               onKeyDown={(e): void => handleEscapeKey(e)}
