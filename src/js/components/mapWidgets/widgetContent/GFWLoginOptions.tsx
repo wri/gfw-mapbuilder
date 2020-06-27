@@ -80,6 +80,7 @@ const GFWLoginOptions = (props: any) => {
   }
 
   const RenderLogins = (): JSX.Element => {
+    const baseURL = window.document.location.href;
     return (
       <>
         <ul className="subscription-authentication">
@@ -89,7 +90,7 @@ const GFWLoginOptions = (props: any) => {
           </p>
           <li className="subscribe-method twitter-box">
             <a
-              href="https://production-api.globalforestwatch.org/auth/twitter?applications=gfw&token=true"
+              href={`https://production-api.globalforestwatch.org/auth/twitter?applications=gfw&token=true&callbackUrl=${baseURL}`}
               className="-twitter"
             >
               {twitter}
@@ -98,7 +99,7 @@ const GFWLoginOptions = (props: any) => {
 
           <li className="subscribe-method facebook-box">
             <a
-              href="https://production-api.globalforestwatch.org/auth/facebook?applications=gfw&token=true"
+              href={`https://production-api.globalforestwatch.org/auth/facebook?applications=gfw&token=true&callbackUrl=${baseURL}`}
               className="-facebook"
             >
               {facebook}
@@ -107,7 +108,7 @@ const GFWLoginOptions = (props: any) => {
 
           <li className="subscribe-method google-box">
             <a
-              href="https://production-api.globalforestwatch.org/auth/google?applications=gfw&token=true"
+              href={`https://production-api.globalforestwatch.org/auth/google?applications=gfw&token=true&callbackUrl=${baseURL}`}
               className="-google"
             >
               {google}
