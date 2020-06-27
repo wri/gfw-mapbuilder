@@ -52,7 +52,6 @@ import {
   selectActiveTab,
   setMeasureResults,
   setLanguage,
-  setRenderGFWDropdown,
   setSelectedSearchWidgetLayer,
   setModisStart,
   setModisEnd,
@@ -191,12 +190,6 @@ export class MapController {
             throtthledUpdater(newExtent, this._mapview)
           );
           this._mapview.on('click', event => {
-            const { renderGFWDropdown } = store.getState().appState;
-
-            if (renderGFWDropdown) {
-              store.dispatch(setRenderGFWDropdown(false));
-            }
-
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
             store.dispatch(setActiveFeatureIndex([0, 0]));
