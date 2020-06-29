@@ -5,4 +5,16 @@
   .MuiFormControlLabel-label {
     font-size: 0.8rem;
   }
+  .multi-select {
+    width: 100%;
+    border: 1px solid #e5e5df;
+  }
+  .multi-option {
+    color: #555555;
+    padding: 6px 12px;
+    height: auto;
+    overflow: hidden;
+    word-wrap: normal !important;
+    white-space: normal;
+  }
 }

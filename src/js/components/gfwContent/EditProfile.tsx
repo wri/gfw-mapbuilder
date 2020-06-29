@@ -15,6 +15,114 @@ import {
 import 'css/formInputs.scss';
 import 'css/editProfile.scss';
 
+type Usage = { label: string; id: string };
+const usage: Topic[] = [
+  {
+    label: 'Advocacy/campaigning',
+    id: 'Advocacy/campaigning'
+  },
+  {
+    label: 'Data or visuals for blogs or media stories',
+    id: 'Data or visuals for blogs or media stories'
+  },
+  {
+    label: 'Data or visuals for presentations and reports',
+    id: 'Data or visuals for presentations and reports'
+  },
+  {
+    label: 'Educational support materials',
+    id: 'Educational support materials'
+  },
+  {
+    label: 'General research',
+    id: 'General research'
+  },
+  {
+    label: 'Identify illegal activity',
+    id: 'Identify illegal activity'
+  },
+  {
+    label: 'Inform grant funding decisions/results-based payments',
+    id: 'Inform grant funding decisions/results-based payments'
+  },
+  {
+    label: 'Inform purchasing/procurement/investment decisions',
+    id: 'Inform purchasing/procurement/investment decisions'
+  },
+  {
+    label: 'Land use planning/land use allocation',
+    id: 'Land use planning/land use allocation'
+  },
+  {
+    label: 'Learn about forests/my country',
+    id: 'Learn about forests/my country'
+  },
+  {
+    label: 'Monitor or manage an area',
+    id: 'Monitor or manage an area'
+  },
+  {
+    label: 'Monitor results/impacts',
+    id: 'Monitor results/impacts'
+  },
+  {
+    label: 'Not sure; new to GFW',
+    id: 'Not sure; new to GFW'
+  },
+  {
+    label: 'Plan field work (patrols/investigations)',
+    id: 'Plan field work (patrols/investigations)'
+  },
+  {
+    label: 'Other',
+    id: 'Other'
+  }
+];
+
+type Topic = { label: string; id: string };
+const topics: Topic[] = [
+  {
+    label: 'Agricultural supply chains',
+    id: 'Agricultural_supply_chains'
+  },
+  {
+    label: 'Biodiversity',
+    id: 'Biodiversity'
+  },
+  {
+    label: 'Climate/Carbon',
+    id: 'Climate_Carbon'
+  },
+  {
+    label: 'Deforestation/Forest Degradation',
+    id: 'Deforestation_Forest_Degradation'
+  },
+  {
+    label: 'Fires',
+    id: 'Fires'
+  },
+  {
+    label: 'Innovations in forest monitoring',
+    id: 'Innovations_in_forest_monitoring'
+  },
+  {
+    id: 'My_region_or_country',
+    label: 'My region or country'
+  },
+  {
+    id: 'Reforestation_Landscape_restoration',
+    label: 'Reforestation/Landscape restoration'
+  },
+  {
+    id: 'Small_Grants_Fund_and_Tech_Fellowship',
+    label: 'Small Grants Fund and Tech Fellowship'
+  },
+  {
+    label: 'Watersheds',
+    id: 'Watersheds_'
+  }
+];
+
 type Sector = { sector: string; subsectors: { label: string; id: string }[] };
 const sectors: Sector[] = [
   {
@@ -207,12 +315,16 @@ const EditProfile = (): JSX.Element => {
   );
   const [activeSector, setActiveSector] = React.useState(sectors[0].sector);
   const [activeSubsector, setActiveSubsector] = React.useState();
+  const [activeUsage, setActiveUsage] = React.useState<string[]>([]);
+  const [activeTopics, setActiveTopics] = React.useState<string[]>([]);
   const [activeCountry, setActiveCountry] = React.useState('');
   const { register, handleSubmit, errors, control } = useForm();
 
   const onDefaultSubmit = (data: any): void => {
     console.log('activeSector: sector', activeSector);
     console.log('activeCountry', activeCountry);
+    console.log('activeTopics', activeTopics);
+    console.log('activeUsage', activeUsage);
     console.log(data);
   };
 
@@ -374,6 +486,18 @@ const EditProfile = (): JSX.Element => {
     return subsectors;
   };
 
+  function handleTopics(e: any): void {
+    const options = Array.from(e.target.selectedOptions);
+    const optionValues = options.map((o: any) => o.value);
+    setActiveTopics(optionValues);
+  }
+
+  function handleUsage(e: any): void {
+    const options = Array.from(e.target.selectedOptions);
+    const optionValues = options.map((o: any) => o.value);
+    setActiveUsage(optionValues);
+  }
+
   return (
     <div className="edit-profile-container">
       <h2>Your profile</h2>
@@ -517,6 +641,37 @@ const EditProfile = (): JSX.Element => {
             />
           </div>
           <h4>What area are you most interested in?</h4>
+          <div className="form-section">
+            <p className="input-label">what topics are you interested in? *</p>
+            <p className="input-sublabel">select all that apply</p>
+            <select className="multi-select" multiple onChange={handleTopics}>
+              {topics.map((topic, i: number) => (
+                <option className="multi-option" key={i} value={topic.id}>
+                  {topic.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-section">
+            <p className="input-label">how do you use global forest watch? *</p>
+            <p className="input-sublabel">select all that apply</p>
+            <select className="multi-select" multiple onChange={handleUsage}>
+              {usage.map((usage, i: number) => (
+                <option className="multi-option" key={i} value={usage.id}>
+                  {usage.label}
+                </option>
+              ))}
+            </select>
+            {activeUsage!.includes('Other') && (
+              <input
+                className="input-text"
+                type="usage-other"
+                placeholder=""
+                name="usage-other"
+                ref={register({ required: false })}
+              />
+            )}
+          </div>
           <input
             className="orange-button profile-submit"
             style={{
