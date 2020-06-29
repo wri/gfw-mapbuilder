@@ -1,194 +1,215 @@
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
+import { makeStyles } from '@material-ui/core/styles';
 import { RootState } from 'js/store';
+import clsx from 'clsx';
+import {
+  Select,
+  MenuItem,
+  RadioGroup,
+  FormControlLabel,
+  Radio
+} from '@material-ui/core';
 import 'css/formInputs.scss';
 import 'css/editProfile.scss';
 
+type Sector = { sector: string; subsectors: { label: string; id: string }[] };
+const sectors: Sector[] = [
+  {
+    sector: 'Government',
+    subsectors: [
+      {
+        label: 'Forest Management/Park Management',
+        id: 'Forest_Management_Park_Management'
+      },
+      {
+        label: 'Law Enforcement',
+        id: 'Law_Enforcement'
+      },
+      {
+        label: 'Legislature/Parliament',
+        id: 'Legislature_Parliament'
+      },
+      {
+        label: 'Ministry/National Agency',
+        id: 'Ministry_National_Agency'
+      },
+      {
+        label: 'Subnational Agency',
+        id: 'Subnational_Agency'
+      },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Donor Institution / Agency',
+    subsectors: [
+      { label: 'Director/Executive', id: 'Director_Executive' },
+      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+      { label: 'Researcher', id: 'Researcher' },
+      { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+      { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Local NGO (national or subnational)',
+    subsectors: [
+      { label: 'Director/Executive', id: 'Director_Executive' },
+      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+      {
+        label: 'Monitoring/Evaluation Specialist',
+        id: 'Monitoring_Evaluation'
+      },
+      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+      { label: 'Researcher', id: 'Researcher' },
+      { label: 'Field Staff', id: 'Field_Staff' },
+      { label: 'Communications Specialist', id: 'Communications_Specialist' },
+      { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'International NGO',
+    subsectors: [
+      { label: 'Director/Executive', id: 'Director_Executive' },
+      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+      {
+        label: 'Monitoring/Evaluation Specialist',
+        id: 'Monitoring_Evaluation'
+      },
+      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+      { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+      { label: 'Communications Specialist', id: 'Communications_Specialist' },
+      { label: 'Researcher', id: 'Researcher' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'UN or International Organization',
+    subsectors: [
+      { label: 'Director/Executive', id: 'Director_Executive' },
+      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+      { label: 'Researcher', id: 'Researcher' },
+      { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+      {
+        label: 'Monitoring/Evaluation Specialit',
+        id: 'Monitoring_Evaluation'
+      },
+      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+      { label: 'Communications Specialist', id: 'Communications_Specialist' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Academic / Research Organization',
+    subsectors: [
+      {
+        label: 'Faculty (Primary/Secondary)',
+        id: 'Faculty_(Primary_Secondary)'
+      },
+      { label: 'Faculty (University)', id: 'Faculty_(University)' },
+      {
+        label: 'Student (Primary/Secondary)',
+        id: 'Student_(Primary_Secondary)'
+      },
+      {
+        label: 'Student (University/Graduate)',
+        id: 'Student_(University_Graduate)'
+      },
+      {
+        label: 'Researcher (Post-Doc, Fellow, etc.)',
+        id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+      },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Journalist / Media Organization',
+    subsectors: [
+      { label: 'Reporter', id: 'Reporter' },
+      { label: 'Editor', id: 'Editor' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Indigenous or Community-Based Organization',
+    subsectors: [
+      { label: 'Community Leader', id: 'Community_Leader' },
+      { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+      { label: 'Communications Specialist', id: 'Communications_Specialist' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Private sector',
+    subsectors: [
+      { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+      { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+      { label: 'Procurement Staff', id: 'Procurement_Staff' },
+      { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+      { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Individual / No Affiliation',
+    subsectors: [
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  },
+  {
+    sector: 'Other:',
+    subsectors: [
+      {
+        label: 'Other',
+        id: 'Other: '
+      }
+    ]
+  }
+];
 const EditProfile = (): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
-  const { register, handleSubmit, errors } = useForm();
+  const [activeSector, setActiveSector] = React.useState(sectors[0].sector);
+  const { register, handleSubmit, errors, control } = useForm();
 
   const onDefaultSubmit = (data: any): void => {
     console.log(data);
   };
-
-  const sectors = [
-    {
-      Government: [
-        {
-          label: 'Forest Management/Park Management',
-          id: 'Forest_Management_Park_Management'
-        },
-        {
-          label: 'Law Enforcement',
-          id: 'Law_Enforcement'
-        },
-        {
-          label: 'Legislature/Parliament',
-          id: 'Legislature_Parliament'
-        },
-        {
-          label: 'Ministry/National Agency',
-          id: 'Ministry_National_Agency'
-        },
-        {
-          label: 'Subnational Agency',
-          id: 'Subnational_Agency'
-        },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Donor Institution / Agency': [
-        { label: 'Director/Executive', id: 'Director_Executive' },
-        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-        { label: 'Researcher', id: 'Researcher' },
-        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
-        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Local NGO (national or subnational)': [
-        { label: 'Director/Executive', id: 'Director_Executive' },
-        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-        {
-          label: 'Monitoring/Evaluation Specialist',
-          id: 'Monitoring_Evaluation'
-        },
-        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-        { label: 'Researcher', id: 'Researcher' },
-        { label: 'Field Staff', id: 'Field_Staff' },
-        { label: 'Communications Specialist', id: 'Communications_Specialist' },
-        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'International NGO': [
-        { label: 'Director/Executive', id: 'Director_Executive' },
-        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-        {
-          label: 'Monitoring/Evaluation Specialist',
-          id: 'Monitoring_Evaluation'
-        },
-        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
-        { label: 'Communications Specialist', id: 'Communications_Specialist' },
-        { label: 'Researcher', id: 'Researcher' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'UN or International Organization': [
-        { label: 'Director/Executive', id: 'Director_Executive' },
-        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-        { label: 'Researcher', id: 'Researcher' },
-        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
-        {
-          label: 'Monitoring/Evaluation Specialit',
-          id: 'Monitoring_Evaluation'
-        },
-        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-        { label: 'Communications Specialist', id: 'Communications_Specialist' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Academic / Research Organization': [
-        {
-          label: 'Faculty (Primary/Secondary)',
-          id: 'Faculty_(Primary_Secondary)'
-        },
-        { label: 'Faculty (University)', id: 'Faculty_(University)' },
-        {
-          label: 'Student (Primary/Secondary)',
-          id: 'Student_(Primary_Secondary)'
-        },
-        {
-          label: 'Student (University/Graduate)',
-          id: 'Student_(University_Graduate)'
-        },
-        {
-          label: 'Researcher (Post-Doc, Fellow, etc.)',
-          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
-        },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Journalist / Media Organization': [
-        { label: 'Reporter', id: 'Reporter' },
-        { label: 'Editor', id: 'Editor' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Indigenous or Community-Based Organization': [
-        { label: 'Community Leader', id: 'Community_Leader' },
-        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
-        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-        { label: 'Communications Specialist', id: 'Communications_Specialist' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Private sector': [
-        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
-        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
-        { label: 'Procurement Staff', id: 'Procurement_Staff' },
-        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
-        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Individual / No Affiliation': [
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    },
-    {
-      'Other:': [
-        {
-          label: 'Other',
-          id: 'Other: '
-        }
-      ]
-    }
-  ];
 
   /*
    *
@@ -225,6 +246,126 @@ const EditProfile = (): JSX.Element => {
   //   "profileComplete": false
   // }
   // }
+
+  const useSelectStyles = makeStyles({
+    root: {
+      borderRadius: '4px',
+      color: '#555',
+      height: '2.2rem',
+      padding: '0',
+      fontSize: '0.8rem',
+      width: '100%'
+    }
+  });
+
+  const useMenuItemStyles = makeStyles({
+    root: {
+      paddingLeft: '10px'
+    }
+  });
+
+  const selectClasses = useSelectStyles();
+  const menuItems = useMenuItemStyles();
+  const sectorsItems = sectors.map((sectorObject, i: number) => {
+    return (
+      <MenuItem
+        className={clsx(selectClasses.root, menuItems.root)}
+        key={i}
+        value={sectorObject.sector}
+      >
+        {sectorObject.sector}
+      </MenuItem>
+    );
+  });
+
+  const useStyles = makeStyles({
+    root: {
+      fontSize: '0.8rem',
+      '&:hover': {
+        backgroundColor: 'transparent'
+      }
+    },
+    icon: {
+      borderRadius: '50%',
+      width: 16,
+      height: 16,
+      boxShadow:
+        'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
+      backgroundColor: '#f5f8fa',
+      backgroundImage:
+        'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+      '$root.Mui-focusVisible &': {
+        outline: '2px auto rgba(19,124,189,.6)',
+        outlineOffset: 2
+      },
+      'input:hover ~ &': {
+        backgroundColor: '#ebf1f5'
+      },
+      'input:disabled ~ &': {
+        boxShadow: 'none',
+        background: 'rgba(206,217,224,.5)'
+      }
+    },
+    checkedIcon: {
+      backgroundColor: customColorTheme,
+      backgroundImage:
+        'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+      '&:before': {
+        display: 'block',
+        width: 16,
+        height: 16,
+        backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
+        content: '""'
+      },
+      'input:hover ~ &': {
+        backgroundColor: customColorTheme
+      }
+    }
+  });
+
+  const useFormControlStyles = makeStyles({
+    root: {}
+  });
+
+  function StyledRadio(props: any) {
+    const classes = useStyles();
+
+    return (
+      <Radio
+        className={classes.root}
+        disableRipple
+        color="default"
+        checkedIcon={
+          <span className={clsx(classes.icon, classes.checkedIcon)} />
+        }
+        icon={<span className={classes.icon} />}
+        {...props}
+      />
+    );
+  }
+
+  const formClasses = useFormControlStyles();
+  function renderSubsectorMenuItem(subsector: { label: string; id: string }) {
+    return (
+      <FormControlLabel
+        className={formClasses.root}
+        value={subsector.id}
+        control={<StyledRadio />}
+        label={subsector.label}
+      />
+    );
+  }
+
+  const subSectors = () => {
+    //Find the active sector object
+    const activeSectorObject = sectors.find(
+      sectorObject => sectorObject.sector === activeSector
+    );
+    const subsectors = activeSectorObject!.subsectors.map(subsector => {
+      return renderSubsectorMenuItem(subsector);
+    });
+    return subsectors;
+  };
 
   return (
     <div className="edit-profile-container">
@@ -282,10 +423,25 @@ const EditProfile = (): JSX.Element => {
             )}
           </div>
           <div className="form-section">
-            <p>Sector</p>
+            <p className="input-label">Sector</p>
+            <Select
+              variant="outlined"
+              className={clsx(selectClasses.root)}
+              defaultValue={sectors[0].sector}
+              onChange={(e: any): void => setActiveSector(e.target.value)}
+            >
+              {sectorsItems}
+            </Select>
           </div>
           <div className="form-section">
-            <p>Role</p>
+            <p className="input-label">Role</p>
+            <Controller
+              as={
+                <RadioGroup aria-label="subsectors">{subSectors()}</RadioGroup>
+              }
+              name="subsectors"
+              control={control}
+            />
           </div>
           <div className="form-section">
             <label htmlFor="jobTitle" className="input-label">

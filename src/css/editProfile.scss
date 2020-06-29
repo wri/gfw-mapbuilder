@@ -1,2 +1,8 @@
 .edit-profile-container {
+  .MuiInputBase-input {
+    background-color: transparent !important;
+  }
+  .MuiFormControlLabel-label {
+    font-size: 0.8rem;
+  }
 }
