@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
 import { RootState } from 'js/store';
+import { MemoCountryPicker } from './CountryPicker';
 import clsx from 'clsx';
 import {
   Select,
@@ -206,9 +207,12 @@ const EditProfile = (): JSX.Element => {
   );
   const [activeSector, setActiveSector] = React.useState(sectors[0].sector);
   const [activeSubsector, setActiveSubsector] = React.useState();
+  const [activeCountry, setActiveCountry] = React.useState('');
   const { register, handleSubmit, errors, control } = useForm();
 
   const onDefaultSubmit = (data: any): void => {
+    console.log('activeSector: sector', activeSector);
+    console.log('activeCountry', activeCountry);
     console.log(data);
   };
 
@@ -269,13 +273,13 @@ const EditProfile = (): JSX.Element => {
   const menuItems = useMenuItemStyles();
   const sectorsItems = sectors.map((sectorObject, i: number) => {
     return (
-      <MenuItem
+      <option
         className={clsx(selectClasses.root, menuItems.root)}
         key={i}
         value={sectorObject.sector}
       >
         {sectorObject.sector}
-      </MenuItem>
+      </option>
     );
   });
 
@@ -349,6 +353,7 @@ const EditProfile = (): JSX.Element => {
   function renderSubsectorMenuItem(subsector: { label: string; id: string }) {
     return (
       <FormControlLabel
+        key={subsector.id}
         className={formClasses.root}
         value={subsector.id}
         onChange={(e: any): void => setActiveSubsector(e.target.value)}
@@ -427,6 +432,7 @@ const EditProfile = (): JSX.Element => {
           <div className="form-section">
             <p className="input-label">Sector</p>
             <Select
+              native
               variant="outlined"
               className={clsx(selectClasses.root)}
               defaultValue={sectors[0].sector}
@@ -483,9 +489,9 @@ const EditProfile = (): JSX.Element => {
           </div>
 
           <h4>Where are you located?</h4>
-          <div className="form-section">
-            <p>Country Picker</p>
-          </div>
+          <MemoCountryPicker
+            activeCountryCallback={(id: any): any => setActiveCountry(id)}
+          />
           <div className="form-section">
             <label htmlFor="city" className="input-label">
               city
@@ -513,7 +519,11 @@ const EditProfile = (): JSX.Element => {
           <h4>What area are you most interested in?</h4>
           <input
             className="orange-button profile-submit"
-            style={{ backgroundColor: customColorTheme, width: '120px' }}
+            style={{
+              backgroundColor: customColorTheme,
+              width: '120px',
+              marginTop: '50px'
+            }}
             type="submit"
             value="Save"
           />
