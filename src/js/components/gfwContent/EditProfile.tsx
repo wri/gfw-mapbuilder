@@ -205,6 +205,7 @@ const EditProfile = (): JSX.Element => {
     (store: RootState) => store.appSettings.customColorTheme
   );
   const [activeSector, setActiveSector] = React.useState(sectors[0].sector);
+  const [activeSubsector, setActiveSubsector] = React.useState();
   const { register, handleSubmit, errors, control } = useForm();
 
   const onDefaultSubmit = (data: any): void => {
@@ -350,6 +351,7 @@ const EditProfile = (): JSX.Element => {
       <FormControlLabel
         className={formClasses.root}
         value={subsector.id}
+        onChange={(e: any): void => setActiveSubsector(e.target.value)}
         control={<StyledRadio />}
         label={subsector.label}
       />
@@ -442,6 +444,15 @@ const EditProfile = (): JSX.Element => {
               name="subsectors"
               control={control}
             />
+            {activeSubsector === 'Other: ' && (
+              <input
+                className="input-text"
+                type="other"
+                placeholder=""
+                name="other"
+                ref={register({ required: false })}
+              />
+            )}
           </div>
           <div className="form-section">
             <label htmlFor="jobTitle" className="input-label">
