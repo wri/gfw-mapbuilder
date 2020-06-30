@@ -317,12 +317,15 @@ const EditProfile = (): JSX.Element => {
   const [originalSectorIndex, setOriginalSectorIndex] = React.useState<
     number | undefined
   >();
+  const [updateSuccess, setUpdateSuccess] = React.useState(false);
+  const [updateError, setUpdateError] = React.useState();
   const { register, handleSubmit, errors, control } = useForm();
 
+  const userID = localStorage.getItem('userID');
+  const userToken = localStorage.getItem('userToken');
+  const profileURL = `https://production-api.globalforestwatch.org/user/${userID}`;
+
   React.useEffect(() => {
-    const userID = localStorage.getItem('userID');
-    const userToken = localStorage.getItem('userToken');
-    const profileURL = `https://production-api.globalforestwatch.org/user/${userID}`;
     fetch(profileURL, {
       credentials: 'include',
       headers: {
@@ -331,20 +334,6 @@ const EditProfile = (): JSX.Element => {
     })
       .then(res => res.json())
       .then(data => {
-        // country: "USA"
-        // createdAt: "2020-02-26T20:55:52.174Z"
-        // email: "vaidotasp@gmail.com"
-        // fullName: "Vaidotas Piekus"
-        // howDoYouUse: []
-        // interests: []
-        // language: "en"
-        // primaryResponsibilities: []
-        // profileComplete: false
-        // sector: "Government (public sector)"
-        // signUpForTesting: false
-        // signUpToNewsletter: false
-        // topics: []
-
         const profileData = data.data.attributes;
         if (profileData.fullName) {
           const name = profileData.fullName.split(' ');
@@ -381,7 +370,13 @@ const EditProfile = (): JSX.Element => {
       country: activeCountry,
       sector: activeSector,
       interests: activeTopics,
-      howDoYouUse: ''
+      howDoYouUse: '',
+      id: userID,
+      loggedIn: true,
+      signUpForNewsletter: false,
+      signUpForTesting: false,
+      signUpToNewsletter: false,
+      profileComplete: false
     };
 
     //Get the subsectors
@@ -402,12 +397,22 @@ const EditProfile = (): JSX.Element => {
     });
     payload.howDoYouUse = activeUsagePayload;
 
+    fetch(profileURL, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(msg => console.log(msg))
+      .catch(e => {
+        console.log(e);
+        setUpdateError(e);
+      });
     console.log(payload);
-    //Update through the api
-    //Request URL: https://production-api.globalforestwatch.org/user/[userid] PATCH
   };
-
-  //https://production-api.globalforestwatch.org/user/5e174a050e4ae500105d3d4e --
 
   const useSelectStyles = makeStyles({
     root: {
