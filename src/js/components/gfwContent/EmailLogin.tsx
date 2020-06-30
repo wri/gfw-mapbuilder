@@ -86,6 +86,7 @@ export const EmailLogin = () => {
         })
           .then(res => res.json())
           .then(data => {
+            localStorage.setItem('userID', data.data.id);
             dispatch(setLoggedIn(true));
           })
           .catch(e => console.error(e));
