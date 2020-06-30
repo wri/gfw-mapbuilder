@@ -23,16 +23,19 @@ const useMenuItemStyles = makeStyles({
 
 type CountryPickerProps = {
   activeCountryCallback: (e: any) => void;
+  defaultCountry: string | undefined;
 };
 
 const CountryPicker = (props: CountryPickerProps) => {
   const selectClasses = useSelectStyles();
   const menuItems = useMenuItemStyles();
+  const defaultCountry = props.defaultCountry ? props.defaultCountry : '';
 
   const countryItemsList = Object.keys(countryList).map(
     (iso: string, i: number) => {
       return (
         <option
+          selected={defaultCountry === iso}
           className={clsx(selectClasses.root, menuItems.root)}
           key={i}
           value={iso}

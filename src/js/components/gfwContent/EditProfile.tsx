@@ -5,13 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { RootState } from 'js/store';
 import { MemoCountryPicker } from './CountryPicker';
 import clsx from 'clsx';
-import {
-  Select,
-  MenuItem,
-  RadioGroup,
-  FormControlLabel,
-  Radio
-} from '@material-ui/core';
+import { Select, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import 'css/formInputs.scss';
 import 'css/editProfile.scss';
 
@@ -318,51 +312,102 @@ const EditProfile = (): JSX.Element => {
   const [activeUsage, setActiveUsage] = React.useState<string[]>([]);
   const [activeTopics, setActiveTopics] = React.useState<string[]>([]);
   const [activeCountry, setActiveCountry] = React.useState('');
+  const [interestActiveCountry, setInterestActiveCountry] = React.useState('');
+  const [existingProfileInfo, setExistingProfileInfo] = React.useState<any>({});
+  const [originalSectorIndex, setOriginalSectorIndex] = React.useState<
+    number | undefined
+  >();
   const { register, handleSubmit, errors, control } = useForm();
+
+  React.useEffect(() => {
+    const userID = localStorage.getItem('userID');
+    const userToken = localStorage.getItem('userToken');
+    const profileURL = `https://production-api.globalforestwatch.org/user/${userID}`;
+    fetch(profileURL, {
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // country: "USA"
+        // createdAt: "2020-02-26T20:55:52.174Z"
+        // email: "vaidotasp@gmail.com"
+        // fullName: "Vaidotas Piekus"
+        // howDoYouUse: []
+        // interests: []
+        // language: "en"
+        // primaryResponsibilities: []
+        // profileComplete: false
+        // sector: "Government (public sector)"
+        // signUpForTesting: false
+        // signUpToNewsletter: false
+        // topics: []
+
+        const profileData = data.data.attributes;
+        if (profileData.fullName) {
+          const name = profileData.fullName.split(' ');
+          profileData.firstName = name[0];
+          profileData.lastName = name[1];
+        }
+        console.log(data.data.attributes);
+        console.log(data.data.attributes.sector);
+        // Figure out sector and subsector selections
+        if (data.data.attributes.sector) {
+          const sectorIdx = sectors.findIndex(
+            sector => sector.sector === data.data.attributes.sector
+          );
+          console.log(sectorIdx);
+          setOriginalSectorIndex(sectorIdx);
+        }
+        setExistingProfileInfo(data.data.attributes);
+      })
+      .catch(e => console.error(e));
+  }, []);
 
   const onDefaultSubmit = (data: any): void => {
     console.log('activeSector: sector', activeSector);
+    console.log('subsector', activeSubsector);
     console.log('activeCountry', activeCountry);
     console.log('activeTopics', activeTopics);
     console.log('activeUsage', activeUsage);
+    console.log('interestActiveCountry', interestActiveCountry);
     console.log(data);
+
+    const payload = {
+      ...data,
+      aoiCountry: interestActiveCountry,
+      country: activeCountry,
+      sector: activeSector,
+      interests: activeTopics,
+      howDoYouUse: ''
+    };
+
+    //Get the subsectors
+    if (
+      data.hasOwnProperty('subsectorOther') &&
+      data.subsectorOther.length !== 0
+    ) {
+      payload.subsector = payload.subsector + data.subsectorOther;
+    }
+
+    //Get the usage
+    const activeUsagePayload = activeUsage.map(usage => {
+      if (usage === 'Other' && data.usageOther !== 0) {
+        return `${usage} ${data.usageOther}`;
+      } else {
+        return usage;
+      }
+    });
+    payload.howDoYouUse = activeUsagePayload;
+
+    console.log(payload);
+    //Update through the api
+    //Request URL: https://production-api.globalforestwatch.org/user/[userid] PATCH
   };
 
-  /*
-   *
-   * sector: 'Individual / No Affiliation', subsector: 'Other: na'
-   */
-
   //https://production-api.globalforestwatch.org/user/5e174a050e4ae500105d3d4e --
-
-  // {
-  // "type": "user",
-  // "id": "5e174a050e4ae500105d3d4e",
-  // "attributes": {
-  //   "firstName": "Vaidotas",
-  //   "lastName": "Piekus",
-  //   "email": "vpiekus@blueraster.com",
-  //   "createdAt": "2020-06-10T16:59:19.718Z",
-  //   "sector": "Individual / No Affiliation",
-  //   "primaryResponsibilities": [],
-  //   "subsector": "Other: na",
-  //   "jobTitle": "dev",
-  //   "company": "Blue Raster LLC",
-  //   "country": "USA",
-  //   "aoiCountry": "USA",
-  //   aoiState: 'dc'
-  //   "interests": [
-  //     "Agricultural_supply_chains"
-  //   ],
-  //   "howDoYouUse": [
-  //     "Advocacy/campaigning"
-  //   ],
-  //   "signUpForTesting": false,
-  //   "signUpToNewsletter": false,
-  //   "topics": [],
-  //   "profileComplete": false
-  // }
-  // }
 
   const useSelectStyles = makeStyles({
     root: {
@@ -384,8 +429,14 @@ const EditProfile = (): JSX.Element => {
   const selectClasses = useSelectStyles();
   const menuItems = useMenuItemStyles();
   const sectorsItems = sectors.map((sectorObject, i: number) => {
+    let optionIsSelected = false;
+    if (originalSectorIndex && originalSectorIndex === i) {
+      optionIsSelected = true;
+    }
+
     return (
       <option
+        selected={optionIsSelected}
         className={clsx(selectClasses.root, menuItems.root)}
         key={i}
         value={sectorObject.sector}
@@ -513,6 +564,7 @@ const EditProfile = (): JSX.Element => {
               first name
             </label>
             <input
+              defaultValue={existingProfileInfo?.firstName}
               className="input-text"
               type="firstName"
               placeholder="First Name"
@@ -528,6 +580,7 @@ const EditProfile = (): JSX.Element => {
               last name *
             </label>
             <input
+              defaultValue={existingProfileInfo?.lastName || ''}
               className="input-text"
               type="lastName"
               placeholder="Last Name"
@@ -543,6 +596,7 @@ const EditProfile = (): JSX.Element => {
               email *
             </label>
             <input
+              defaultValue={existingProfileInfo?.email || ''}
               className="input-text"
               type="email"
               placeholder="example@globalforestwatch.com"
@@ -559,7 +613,11 @@ const EditProfile = (): JSX.Element => {
               native
               variant="outlined"
               className={clsx(selectClasses.root)}
-              defaultValue={sectors[0].sector}
+              defaultValue={
+                originalSectorIndex
+                  ? sectors[originalSectorIndex].sector
+                  : sectors[0].sector
+              }
               onChange={(e: any): void => setActiveSector(e.target.value)}
             >
               {sectorsItems}
@@ -569,17 +627,17 @@ const EditProfile = (): JSX.Element => {
             <p className="input-label">Role</p>
             <Controller
               as={
-                <RadioGroup aria-label="subsectors">{subSectors()}</RadioGroup>
+                <RadioGroup aria-label="subsector">{subSectors()}</RadioGroup>
               }
-              name="subsectors"
+              name="subsector"
               control={control}
             />
             {activeSubsector === 'Other: ' && (
               <input
                 className="input-text"
-                type="other"
+                type="subsectorOther"
                 placeholder=""
-                name="other"
+                name="subsectorOther"
                 ref={register({ required: false })}
               />
             )}
@@ -589,6 +647,7 @@ const EditProfile = (): JSX.Element => {
               job title
             </label>
             <input
+              defaultValue={existingProfileInfo?.jobTitle}
               className="input-text"
               type="jobTitle"
               placeholder="Job Title"
@@ -601,6 +660,7 @@ const EditProfile = (): JSX.Element => {
               company / organization *
             </label>
             <input
+              defaultValue={existingProfileInfo?.company}
               className="input-text"
               type="company"
               placeholder="Company / Organization"
@@ -614,6 +674,7 @@ const EditProfile = (): JSX.Element => {
 
           <h4>Where are you located?</h4>
           <MemoCountryPicker
+            defaultCountry={existingProfileInfo.country}
             activeCountryCallback={(id: any): any => setActiveCountry(id)}
           />
           <div className="form-section">
@@ -621,10 +682,44 @@ const EditProfile = (): JSX.Element => {
               city
             </label>
             <input
+              defaultValue={existingProfileInfo?.city}
               className="input-text"
               type="city"
-              placeholder="Company / Organization"
+              placeholder="City"
               name="city"
+              ref={register({ required: false })}
+            />
+          </div>
+          <div className="form-section">
+            <label htmlFor="state" className="input-label">
+              state / department / province
+            </label>
+            <input
+              defaultValue={existingProfileInfo?.state}
+              className="input-text"
+              type="state"
+              placeholder="State / Department / Province"
+              name="state"
+              ref={register({ required: false })}
+            />
+          </div>
+          <h4>What area are you most interested in?</h4>
+          <MemoCountryPicker
+            defaultCountry={existingProfileInfo?.aoiCountry}
+            activeCountryCallback={(id: any): any =>
+              setInterestActiveCountry(id)
+            }
+          />
+          <div className="form-section">
+            <label htmlFor="aoiCity" className="input-label">
+              city
+            </label>
+            <input
+              defaultValue={existingProfileInfo?.aoiCity}
+              className="input-text"
+              type="aoiCity"
+              placeholder="City"
+              name="aoiCity"
               ref={register({ required: false })}
             />
           </div>
@@ -633,6 +728,7 @@ const EditProfile = (): JSX.Element => {
               state / department / province
             </label>
             <input
+              defaultValue={existingProfileInfo?.aoiState}
               className="input-text"
               type="aoiState"
               placeholder="State / Department / Province"
@@ -640,34 +736,51 @@ const EditProfile = (): JSX.Element => {
               ref={register({ required: false })}
             />
           </div>
-          <h4>What area are you most interested in?</h4>
           <div className="form-section">
             <p className="input-label">what topics are you interested in? *</p>
             <p className="input-sublabel">select all that apply</p>
             <select className="multi-select" multiple onChange={handleTopics}>
-              {topics.map((topic, i: number) => (
-                <option className="multi-option" key={i} value={topic.id}>
-                  {topic.label}
-                </option>
-              ))}
+              {topics.map((topic, i: number) => {
+                return (
+                  <option
+                    selected={existingProfileInfo?.interests?.includes(
+                      topic.id
+                    )}
+                    className="multi-option"
+                    key={i}
+                    value={topic.id}
+                  >
+                    {topic.label}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div className="form-section">
             <p className="input-label">how do you use global forest watch? *</p>
             <p className="input-sublabel">select all that apply</p>
             <select className="multi-select" multiple onChange={handleUsage}>
-              {usage.map((usage, i: number) => (
-                <option className="multi-option" key={i} value={usage.id}>
-                  {usage.label}
-                </option>
-              ))}
+              {usage.map((usage, i: number) => {
+                return (
+                  <option
+                    selected={existingProfileInfo?.howDoYouUse?.includes(
+                      usage.id
+                    )}
+                    className="multi-option"
+                    key={i}
+                    value={usage.id}
+                  >
+                    {usage.label}
+                  </option>
+                );
+              })}
             </select>
             {activeUsage!.includes('Other') && (
               <input
                 className="input-text"
-                type="usage-other"
+                type="usageOther"
                 placeholder=""
-                name="usage-other"
+                name="usageOther"
                 ref={register({ required: false })}
               />
             )}
@@ -676,23 +789,28 @@ const EditProfile = (): JSX.Element => {
             className="orange-button profile-submit"
             style={{
               backgroundColor: customColorTheme,
-              width: '120px',
-              marginTop: '50px'
+              marginTop: '30px',
+              width: '200px'
             }}
             type="submit"
             value="Save"
           />
         </form>
       </div>
-      <p>
-        <a
-          href="mailto:gfw@wri-org"
-          style={{ cursor: 'pointer', color: customColorTheme }}
-        >
-          Email us
-        </a>{' '}
-        to delete your MyGFW account.
-      </p>
+      <div style={{ textAlign: 'center', fontSize: '0.8rem' }}>
+        <p>
+          <a
+            href="mailto:gfw@wri-org"
+            style={{
+              cursor: 'pointer',
+              color: customColorTheme
+            }}
+          >
+            Email us
+          </a>{' '}
+          to delete your MyGFW account.
+        </p>
+      </div>
     </div>
   );
 };
