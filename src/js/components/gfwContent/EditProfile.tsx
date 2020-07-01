@@ -67,11 +67,7 @@ const EditProfile = (): JSX.Element => {
       interests: activeTopics,
       howDoYouUse: '',
       id: userID,
-      loggedIn: true,
-      signUpForNewsletter: false,
-      signUpForTesting: false,
-      signUpToNewsletter: false,
-      profileComplete: false
+      loggedIn: true
     };
 
     //Get the subsectors
@@ -102,7 +98,13 @@ const EditProfile = (): JSX.Element => {
       body: JSON.stringify(payload)
     })
       .then(res => res.json())
-      .then(msg => console.log(msg))
+      .then(msg => {
+        if (msg?.errors) {
+          setUpdateError(msg.errors[0].detail);
+        } else {
+          setUpdateSuccess(true);
+        }
+      })
       .catch(e => {
         setUpdateError(e);
       });
@@ -248,268 +250,323 @@ const EditProfile = (): JSX.Element => {
     setActiveUsage(optionValues);
   }
 
-  return (
-    <div className="edit-profile-container">
-      <h2>Your profile</h2>
-      <p>
-        {
-          "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent."
-        }
-      </p>
-      <div>
-        <form onSubmit={handleSubmit(onDefaultSubmit)}>
-          <div className="form-section">
-            <label htmlFor="firstName" className="input-label">
-              first name
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.firstName}
-              className="input-text"
-              type="firstName"
-              placeholder="First Name"
-              name="firstName"
-              ref={register({ required: false })}
-            />
-            {errors.fname && (
-              <p className="input-error">This field is required</p>
-            )}
-          </div>
-          <div className="form-section">
-            <label htmlFor="lastName" className="input-label">
-              last name *
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.lastName || ''}
-              className="input-text"
-              type="lastName"
-              placeholder="Last Name"
-              name="lastName"
-              ref={register({ required: true })}
-            />
-            {errors.lname && (
-              <p className="input-error">This field is required</p>
-            )}
-          </div>
-          <div className="form-section">
-            <label htmlFor="email" className="input-label">
-              email *
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.email || ''}
-              className="input-text"
-              type="email"
-              placeholder="example@globalforestwatch.com"
-              name="email"
-              ref={register({ required: true })}
-            />
-            {errors.email && (
-              <p className="input-error">This field is required</p>
-            )}
-          </div>
-          <div className="form-section">
-            <p className="input-label">Sector</p>
-            <Select
-              native
-              variant="outlined"
-              className={clsx(selectClasses.root)}
-              defaultValue={
-                originalSectorIndex
-                  ? sectors[originalSectorIndex].sector
-                  : sectors[0].sector
-              }
-              onChange={(e: any): void => setActiveSector(e.target.value)}
-            >
-              {sectorsItems}
-            </Select>
-          </div>
-          <div className="form-section">
-            <p className="input-label">Role</p>
-            <Controller
-              as={
-                <RadioGroup aria-label="subsector">{subSectors()}</RadioGroup>
-              }
-              name="subsector"
-              control={control}
-            />
-            {activeSubsector === 'Other: ' && (
-              <input
-                className="input-text"
-                type="subsectorOther"
-                placeholder=""
-                name="subsectorOther"
-                ref={register({ required: false })}
-              />
-            )}
-          </div>
-          <div className="form-section">
-            <label htmlFor="jobTitle" className="input-label">
-              job title
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.jobTitle}
-              className="input-text"
-              type="jobTitle"
-              placeholder="Job Title"
-              name="jobTitle"
-              ref={register({ required: false })}
-            />
-          </div>
-          <div className="form-section">
-            <label htmlFor="company" className="input-label">
-              company / organization *
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.company}
-              className="input-text"
-              type="company"
-              placeholder="Company / Organization"
-              name="company"
-              ref={register({ required: true })}
-            />
-            {errors.company && (
-              <p className="input-error">This field is required</p>
-            )}
-          </div>
-
-          <h4>Where are you located?</h4>
-          <MemoCountryPicker
-            defaultCountry={existingProfileInfo.country}
-            activeCountryCallback={(id: any): any => setActiveCountry(id)}
-          />
-          <div className="form-section">
-            <label htmlFor="city" className="input-label">
-              city
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.city}
-              className="input-text"
-              type="city"
-              placeholder="City"
-              name="city"
-              ref={register({ required: false })}
-            />
-          </div>
-          <div className="form-section">
-            <label htmlFor="state" className="input-label">
-              state / department / province
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.state}
-              className="input-text"
-              type="state"
-              placeholder="State / Department / Province"
-              name="state"
-              ref={register({ required: false })}
-            />
-          </div>
-          <h4>What area are you most interested in?</h4>
-          <MemoCountryPicker
-            defaultCountry={existingProfileInfo?.aoiCountry}
-            activeCountryCallback={(id: any): any =>
-              setInterestActiveCountry(id)
-            }
-          />
-          <div className="form-section">
-            <label htmlFor="aoiCity" className="input-label">
-              city
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.aoiCity}
-              className="input-text"
-              type="aoiCity"
-              placeholder="City"
-              name="aoiCity"
-              ref={register({ required: false })}
-            />
-          </div>
-          <div className="form-section">
-            <label htmlFor="aoiState" className="input-label">
-              state / department / province
-            </label>
-            <input
-              defaultValue={existingProfileInfo?.aoiState}
-              className="input-text"
-              type="aoiState"
-              placeholder="State / Department / Province"
-              name="aoiState"
-              ref={register({ required: false })}
-            />
-          </div>
-          <div className="form-section">
-            <p className="input-label">what topics are you interested in? *</p>
-            <p className="input-sublabel">select all that apply</p>
-            <select className="multi-select" multiple onChange={handleTopics}>
-              {topics.map((topic, i: number) => {
-                return (
-                  <option
-                    selected={existingProfileInfo?.interests?.includes(
-                      topic.id
-                    )}
-                    className="multi-option"
-                    key={i}
-                    value={topic.id}
-                  >
-                    {topic.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className="form-section">
-            <p className="input-label">how do you use global forest watch? *</p>
-            <p className="input-sublabel">select all that apply</p>
-            <select className="multi-select" multiple onChange={handleUsage}>
-              {usage.map((usage, i: number) => {
-                return (
-                  <option
-                    selected={existingProfileInfo?.howDoYouUse?.includes(
-                      usage.id
-                    )}
-                    className="multi-option"
-                    key={i}
-                    value={usage.id}
-                  >
-                    {usage.label}
-                  </option>
-                );
-              })}
-            </select>
-            {activeUsage!.includes('Other') && (
-              <input
-                className="input-text"
-                type="usageOther"
-                placeholder=""
-                name="usageOther"
-                ref={register({ required: false })}
-              />
-            )}
-          </div>
-          <input
-            className="orange-button profile-submit"
-            style={{
-              backgroundColor: customColorTheme,
-              marginTop: '30px',
-              width: '200px'
-            }}
-            type="submit"
-            value="Save"
-          />
-        </form>
-      </div>
-      <div style={{ textAlign: 'center', fontSize: '0.8rem' }}>
+  const SuccessScreen = () => {
+    return (
+      <div className="success-screen">
+        <div className="tree-success"></div>
+        <p>Thank you for updating your My GFW profile!</p>
         <p>
+          You may wish to read our{' '}
           <a
-            href="mailto:gfw@wri-org"
+            href="https://www.globalforestwatch.org/privacy-policy"
             style={{
               cursor: 'pointer',
               color: customColorTheme
             }}
           >
-            Email us
-          </a>{' '}
-          to delete your MyGFW account.
+            privacy policy
+          </a>
+          , which provides further information about how we use personal data.
         </p>
+        <button
+          className="orange-button profile-submit"
+          onClick={() => setUpdateSuccess(false)}
+          style={{
+            backgroundColor: customColorTheme,
+            marginTop: '30px',
+            width: '200px'
+          }}
+        >
+          BACK TO MY PROFILE
+        </button>
       </div>
+    );
+  };
+
+  return (
+    <div className="edit-profile-container">
+      <>
+        {!updateSuccess && (
+          <>
+            <h2>Your profile</h2>
+            <p>
+              {
+                "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent."
+              }
+            </p>
+            <div>
+              <form onSubmit={handleSubmit(onDefaultSubmit)}>
+                <div className="form-section">
+                  <label htmlFor="firstName" className="input-label">
+                    first name
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.firstName}
+                    className="input-text"
+                    type="firstName"
+                    placeholder="First Name"
+                    name="firstName"
+                    ref={register({ required: false })}
+                  />
+                  {errors.fname && (
+                    <p className="input-error">This field is required</p>
+                  )}
+                </div>
+                <div className="form-section">
+                  <label htmlFor="lastName" className="input-label">
+                    last name *
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.lastName || ''}
+                    className="input-text"
+                    type="lastName"
+                    placeholder="Last Name"
+                    name="lastName"
+                    ref={register({ required: true })}
+                  />
+                  {errors.lname && (
+                    <p className="input-error">This field is required</p>
+                  )}
+                </div>
+                <div className="form-section">
+                  <label htmlFor="email" className="input-label">
+                    email *
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.email || ''}
+                    className="input-text"
+                    type="email"
+                    placeholder="example@globalforestwatch.com"
+                    name="email"
+                    ref={register({ required: true })}
+                  />
+                  {errors.email && (
+                    <p className="input-error">This field is required</p>
+                  )}
+                </div>
+                <div className="form-section">
+                  <p className="input-label">Sector</p>
+                  <Select
+                    native
+                    variant="outlined"
+                    className={clsx(selectClasses.root)}
+                    defaultValue={
+                      originalSectorIndex
+                        ? sectors[originalSectorIndex].sector
+                        : sectors[0].sector
+                    }
+                    onChange={(e: any): void => setActiveSector(e.target.value)}
+                  >
+                    {sectorsItems}
+                  </Select>
+                </div>
+                <div className="form-section">
+                  <p className="input-label">Role</p>
+                  <Controller
+                    as={
+                      <RadioGroup aria-label="subsector">
+                        {subSectors()}
+                      </RadioGroup>
+                    }
+                    name="subsector"
+                    control={control}
+                  />
+                  {activeSubsector === 'Other: ' && (
+                    <input
+                      className="input-text"
+                      type="subsectorOther"
+                      placeholder=""
+                      name="subsectorOther"
+                      ref={register({ required: false })}
+                    />
+                  )}
+                </div>
+                <div className="form-section">
+                  <label htmlFor="jobTitle" className="input-label">
+                    job title
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.jobTitle}
+                    className="input-text"
+                    type="jobTitle"
+                    placeholder="Job Title"
+                    name="jobTitle"
+                    ref={register({ required: false })}
+                  />
+                </div>
+                <div className="form-section">
+                  <label htmlFor="company" className="input-label">
+                    company / organization *
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.company}
+                    className="input-text"
+                    type="company"
+                    placeholder="Company / Organization"
+                    name="company"
+                    ref={register({ required: true })}
+                  />
+                  {errors.company && (
+                    <p className="input-error">This field is required</p>
+                  )}
+                </div>
+
+                <h4>Where are you located?</h4>
+                <MemoCountryPicker
+                  defaultCountry={existingProfileInfo.country}
+                  activeCountryCallback={(id: any): any => setActiveCountry(id)}
+                />
+                <div className="form-section">
+                  <label htmlFor="city" className="input-label">
+                    city
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.city}
+                    className="input-text"
+                    type="city"
+                    placeholder="City"
+                    name="city"
+                    ref={register({ required: false })}
+                  />
+                </div>
+                <div className="form-section">
+                  <label htmlFor="state" className="input-label">
+                    state / department / province
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.state}
+                    className="input-text"
+                    type="state"
+                    placeholder="State / Department / Province"
+                    name="state"
+                    ref={register({ required: false })}
+                  />
+                </div>
+                <h4>What area are you most interested in?</h4>
+                <MemoCountryPicker
+                  defaultCountry={existingProfileInfo?.aoiCountry}
+                  activeCountryCallback={(id: any): any =>
+                    setInterestActiveCountry(id)
+                  }
+                />
+                <div className="form-section">
+                  <label htmlFor="aoiCity" className="input-label">
+                    city
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.aoiCity}
+                    className="input-text"
+                    type="aoiCity"
+                    placeholder="City"
+                    name="aoiCity"
+                    ref={register({ required: false })}
+                  />
+                </div>
+                <div className="form-section">
+                  <label htmlFor="aoiState" className="input-label">
+                    state / department / province
+                  </label>
+                  <input
+                    defaultValue={existingProfileInfo?.aoiState}
+                    className="input-text"
+                    type="aoiState"
+                    placeholder="State / Department / Province"
+                    name="aoiState"
+                    ref={register({ required: false })}
+                  />
+                </div>
+                <div className="form-section">
+                  <p className="input-label">
+                    what topics are you interested in? *
+                  </p>
+                  <p className="input-sublabel">select all that apply</p>
+                  <select
+                    className="multi-select"
+                    multiple
+                    onChange={handleTopics}
+                  >
+                    {topics.map((topic, i: number) => {
+                      return (
+                        <option
+                          selected={existingProfileInfo?.interests?.includes(
+                            topic.id
+                          )}
+                          className="multi-option"
+                          key={i}
+                          value={topic.id}
+                        >
+                          {topic.label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="form-section">
+                  <p className="input-label">
+                    how do you use global forest watch? *
+                  </p>
+                  <p className="input-sublabel">select all that apply</p>
+                  <select
+                    className="multi-select"
+                    multiple
+                    onChange={handleUsage}
+                  >
+                    {usage.map((usage, i: number) => {
+                      return (
+                        <option
+                          selected={existingProfileInfo?.howDoYouUse?.includes(
+                            usage.id
+                          )}
+                          className="multi-option"
+                          key={i}
+                          value={usage.id}
+                        >
+                          {usage.label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  {activeUsage!.includes('Other') && (
+                    <input
+                      className="input-text"
+                      type="usageOther"
+                      placeholder=""
+                      name="usageOther"
+                      ref={register({ required: false })}
+                    />
+                  )}
+                </div>
+                {updateError && <p className="input-error">{updateError}</p>}
+                <input
+                  className="orange-button profile-submit"
+                  style={{
+                    backgroundColor: customColorTheme,
+                    marginTop: '30px',
+                    width: '200px'
+                  }}
+                  type="submit"
+                  value="Save"
+                />
+              </form>
+            </div>
+            <div style={{ textAlign: 'center', fontSize: '0.8rem' }}>
+              <p>
+                <a
+                  href="mailto:gfw@wri-org"
+                  style={{
+                    cursor: 'pointer',
+                    color: customColorTheme
+                  }}
+                >
+                  Email us
+                </a>{' '}
+                to delete your MyGFW account.
+              </p>
+            </div>
+          </>
+        )}
+        {updateSuccess && <SuccessScreen />}
+      </>
     </div>
   );
 };

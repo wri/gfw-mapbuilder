@@ -35,7 +35,9 @@
 
   &.edit-profile {
     border-radius: 2px;
-    height: 750px;
+    min-height: 500px;
+    max-height: 750px;
+    height: max-content;
     top: 0px;
     left: 0px;
     bottom: 0px;
