@@ -10,10 +10,6 @@ import { Select, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import 'css/formInputs.scss';
 import 'css/editProfile.scss';
 
-const userID = localStorage.getItem('userID');
-const userToken = localStorage.getItem('userToken');
-const profileURL = `https://production-api.globalforestwatch.org/user/${userID}`;
-
 const EditProfile = (): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
@@ -30,9 +26,17 @@ const EditProfile = (): JSX.Element => {
   >();
   const [updateSuccess, setUpdateSuccess] = React.useState(false);
   const [updateError, setUpdateError] = React.useState();
+  const [userInfo, setUserInfo] = React.useState<{
+    userToken: null | string;
+    userID: null | string;
+    profileURL: null | string;
+  }>({ userToken: null, userID: null, profileURL: null });
   const { register, handleSubmit, errors, control } = useForm();
 
   React.useEffect(() => {
+    const userID = localStorage.getItem('userID');
+    const userToken = localStorage.getItem('userToken');
+    const profileURL = `https://production-api.globalforestwatch.org/user/${userID}`;
     fetch(profileURL, {
       credentials: 'include',
       headers: {
@@ -53,6 +57,7 @@ const EditProfile = (): JSX.Element => {
           );
           setOriginalSectorIndex(sectorIdx);
         }
+        setUserInfo({ userToken, userID, profileURL });
         setExistingProfileInfo(data.data.attributes);
       })
       .catch(e => console.error(e));
@@ -66,7 +71,7 @@ const EditProfile = (): JSX.Element => {
       sector: activeSector,
       interests: activeTopics,
       howDoYouUse: '',
-      id: userID,
+      id: userInfo.userID,
       loggedIn: true
     };
 
@@ -89,10 +94,11 @@ const EditProfile = (): JSX.Element => {
     payload.howDoYouUse = activeUsagePayload;
 
     //Update the API
-    fetch(profileURL, {
+    if (!userInfo.profileURL) return;
+    fetch(userInfo.profileURL, {
       method: 'PATCH',
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${userInfo.userToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
