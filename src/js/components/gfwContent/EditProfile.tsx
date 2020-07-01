@@ -56,7 +56,7 @@ const EditProfile = (): JSX.Element => {
         setExistingProfileInfo(data.data.attributes);
       })
       .catch(e => console.error(e));
-  }, []);
+  }, [updateSuccess]);
 
   const onDefaultSubmit = (data: any): void => {
     const payload = {
