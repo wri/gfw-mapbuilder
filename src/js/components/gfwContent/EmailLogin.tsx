@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { setLoggedIn } from 'js/store/appState/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
+import { emailLoginTranslations } from './staticOptions';
 import 'css/formInputs.scss';
 
 const defaultLoginURL =
@@ -27,6 +28,11 @@ export const EmailLogin = () => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
+
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
+
   const { register, handleSubmit, errors } = useForm();
 
   type FormType = 'register' | 'default' | 'forgot';
@@ -151,7 +157,7 @@ export const EmailLogin = () => {
           <form onSubmit={handleSubmit(onDefaultSubmit)}>
             <div className="form-section">
               <label htmlFor="email" className="input-label">
-                email *
+                {emailLoginTranslations[selectedLanguage].email} *
               </label>
               <input
                 className="input-text"
@@ -161,12 +167,14 @@ export const EmailLogin = () => {
                 ref={register({ required: true })}
               />
               {errors.password && (
-                <p className="input-error">This field is required</p>
+                <p className="input-error">
+                  {emailLoginTranslations[selectedLanguage].required}
+                </p>
               )}
             </div>
             <div className="form-section">
               <label htmlFor="password" className="input-label">
-                password *
+                {emailLoginTranslations[selectedLanguage].password} *
               </label>
               <input
                 className="input-text"
@@ -176,14 +184,16 @@ export const EmailLogin = () => {
                 ref={register({ required: true })}
               />
               {errors.password && (
-                <p className="input-error">This field is required</p>
+                <p className="input-error">
+                  {emailLoginTranslations[selectedLanguage].required}
+                </p>
               )}
             </div>
             <p
               className="input-forgot-pass"
               onClick={() => handleFormSwitch('forgot')}
             >
-              Forgot Password!
+              {emailLoginTranslations[selectedLanguage].forgotPassword}
             </p>
             {defaultLoginError && (
               <div className="input-error">
@@ -192,7 +202,8 @@ export const EmailLogin = () => {
             )}
             <div className="bottom-action">
               <button onClick={() => handleFormSwitch('register')}>
-                Not a member? <b>Sign Up!</b>
+                {emailLoginTranslations[selectedLanguage].signup[0]}
+                <b>{emailLoginTranslations[selectedLanguage].signup[1]}</b>
               </button>
               <input
                 className="orange-button form-submit"
@@ -203,7 +214,7 @@ export const EmailLogin = () => {
                   fontSize: '0.8rem'
                 }}
                 type="submit"
-                value="Login"
+                value={emailLoginTranslations[selectedLanguage].login}
               />
             </div>
           </form>
@@ -215,7 +226,7 @@ export const EmailLogin = () => {
             <form onSubmit={handleSubmit(onRegisterSubmit)}>
               <div className="form-section">
                 <label htmlFor="email" className="input-label">
-                  email *
+                  {emailLoginTranslations[selectedLanguage].email} *
                 </label>
                 <input
                   type="email"
@@ -225,12 +236,14 @@ export const EmailLogin = () => {
                   ref={register({ required: true })}
                 />
                 {errors.password && (
-                  <p className="input-error">This field is required</p>
+                  <p className="input-error">
+                    {emailLoginTranslations[selectedLanguage].required}
+                  </p>
                 )}
               </div>
               <div className="form-section">
                 <label htmlFor="password" className="input-label">
-                  password *
+                  {emailLoginTranslations[selectedLanguage].password} *
                 </label>
                 <input
                   className="input-text"
@@ -240,12 +253,14 @@ export const EmailLogin = () => {
                   ref={register({ required: true })}
                 />
                 {errors.password && (
-                  <p className="input-error">This field is required</p>
+                  <p className="input-error">
+                    {emailLoginTranslations[selectedLanguage].required}
+                  </p>
                 )}
               </div>
               <div className="form-section">
                 <label htmlFor="password" className="input-label">
-                  repeat password *
+                  {emailLoginTranslations[selectedLanguage].repeatPassword} *
                 </label>
                 <input
                   className="input-text"
@@ -255,7 +270,9 @@ export const EmailLogin = () => {
                   ref={register({ required: true })}
                 />
                 {errors.password && (
-                  <p className="input-error">This field is required</p>
+                  <p className="input-error">
+                    {emailLoginTranslations[selectedLanguage].required}
+                  </p>
                 )}
               </div>
               {defaultLoginError && (
@@ -265,7 +282,8 @@ export const EmailLogin = () => {
               )}
               <div className="bottom-action">
                 <button onClick={() => handleFormSwitch('default')}>
-                  Already joined? <b>Sign In!</b>
+                  {emailLoginTranslations[selectedLanguage].signin[0]}
+                  <b>{emailLoginTranslations[selectedLanguage].signin[1]}</b>
                 </button>
                 <input
                   className="orange-button form-submit"
@@ -276,7 +294,7 @@ export const EmailLogin = () => {
                     fontSize: '0.8rem'
                   }}
                   type="submit"
-                  value="Register"
+                  value={emailLoginTranslations[selectedLanguage].register}
                 />
               </div>
             </form>
@@ -284,11 +302,7 @@ export const EmailLogin = () => {
           {registerSuccess && (
             <div className="register-success">
               <div className="tree-success"></div>
-              <p>
-                {
-                  "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder."
-                }
-              </p>
+              <p>{emailLoginTranslations[selectedLanguage].registerSuccess}</p>
               <button
                 className="orange-button form-submit"
                 style={{
@@ -299,7 +313,7 @@ export const EmailLogin = () => {
                 }}
                 onClick={() => handleFormSwitch('default')}
               >
-                Login
+                {emailLoginTranslations[selectedLanguage].login}
               </button>
             </div>
           )}
@@ -310,13 +324,12 @@ export const EmailLogin = () => {
           {!resetPasswordSuccess && (
             <>
               <p style={{ marginTop: 0 }}>
-                To reset your password, enter your email and follow the
-                instructions.
+                {emailLoginTranslations[selectedLanguage].passwordReset}
               </p>
               <form onSubmit={handleSubmit(onForgotSubmit)}>
                 <div className="form-section">
                   <label htmlFor="email" className="input-label">
-                    email *
+                    {emailLoginTranslations[selectedLanguage].email} *
                   </label>
                   <input
                     className="input-text"
@@ -326,7 +339,9 @@ export const EmailLogin = () => {
                     ref={register({ required: true })}
                   />
                   {errors.password && (
-                    <p className="input-error">This field is required</p>
+                    <p className="input-error">
+                      {emailLoginTranslations[selectedLanguage].required}
+                    </p>
                   )}
                 </div>
                 {defaultLoginError && (
@@ -336,11 +351,12 @@ export const EmailLogin = () => {
                 )}
                 <div className="bottom-action">
                   <button onClick={() => handleFormSwitch('default')}>
-                    Already joined? <b>Sign In!</b>
+                    {emailLoginTranslations[selectedLanguage].signin[0]}
+                    <b>{emailLoginTranslations[selectedLanguage].signin[1]}</b>
                   </button>
                   <input
                     type="submit"
-                    value="Reset"
+                    value={emailLoginTranslations[selectedLanguage].reset}
                     className="orange-button form-submit"
                     style={{
                       backgroundColor: customColorTheme,
@@ -357,9 +373,7 @@ export const EmailLogin = () => {
             <div className="register-success">
               <div className="tree-success"></div>
               <p>
-                {
-                  "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder."
-                }
+                {emailLoginTranslations[selectedLanguage].passwordResetSuccess}
               </p>
               <button
                 className="orange-button form-submit"
@@ -371,7 +385,7 @@ export const EmailLogin = () => {
                 }}
                 onClick={() => handleFormSwitch('default')}
               >
-                Login
+                {emailLoginTranslations[selectedLanguage].login}
               </button>
             </div>
           )}

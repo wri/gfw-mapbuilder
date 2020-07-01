@@ -292,3 +292,131 @@ export const topics: Topic[] = [
     id: 'Watersheds_'
   }
 ];
+
+export const emailLoginTranslations = {
+  en: {
+    email: 'email',
+    password: 'password',
+    repeatPassword: 'repeat password',
+    required: 'This field is required',
+    forgotPassword: 'Forgot Password!',
+    signup: ['Not a member?', 'Sign Up!'],
+    signin: ['Already joined?', 'Sign In!'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
+    login: 'Login',
+    passwordReset:
+      'To reset your password, enter your email and follow the instructions.',
+    passwordResetSuccess:
+      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
+    reset: 'Reset',
+    register: 'Register'
+  },
+  ka: {
+    email: 'email',
+    password: 'password',
+    repeatPassword: 'repeat password',
+    required: 'This field is required',
+    forgotPassword: 'Forgot Password!',
+    signup: ['Not a member?', 'Sign Up!'],
+    signin: ['Already joined?', 'Sign In!'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
+    login: 'Login',
+    passwordReset:
+      'To reset your password, enter your email and follow the instructions.',
+    passwordResetSuccess:
+      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
+    reset: 'Reset',
+    register: 'Register'
+  },
+  es: {
+    email: 'Correo electrónic',
+    password: 'contraseña',
+    repeatPassword: 'repita la contraseña',
+    required: 'Obligatorio',
+    forgotPassword: 'Olvidé mi contraseña',
+    signup: ['¿No es miembro? ', '¡Regístrese!'],
+    signin: ['¿No es miembro? ', '¡Regístrese!'],
+    registerSuccess:
+      'Thank you for registering, please check your email and confirm your account. Si no aparece, revise su carpeta de correo no deseado.',
+    login: 'Nombre de usuario',
+    passwordReset:
+      'Para restablecer su contraseña, introduzca su correo electrónico y siga las instrucciones.',
+    passwordResetSuccess:
+      'Gracias. Por favor, revise su bandeja de entrada y siga las instrucciones para restablecer su contraseña. Si no aparece, revise su carpeta de correo no deseado.',
+    reset: 'Restablecer',
+    register: 'Register'
+  },
+  fr: {
+    email: 'e-mail',
+    password: 'mot de passe',
+    repeatPassword: 'répétez le mot de pas',
+    required: 'Requis',
+    forgotPassword: 'Mot de passe oublié',
+    signup: ["Vous n'êtes pas membre ", 'Inscrivez-vous !'],
+    signin: ["Vous n'êtes pas membre ", 'Inscrivez-vous !'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. S'il n'apparaît pas, vérifiez dans votre dossier spam.",
+    login: 'Connexion',
+    passwordReset:
+      'Pour réinitialiser votre mot de passe, entrez votre e-mail et suivez les instructions.',
+    passwordResetSuccess:
+      "Merci. Consultez votre boîte de réception et suivez les instructions pour réinitialiser votre mot de passeS'il n'apparaît pas, vérifiez dans votre dossier spam",
+    reset: 'Réinitialiser',
+    register: "S'inscrire"
+  },
+  pt: {
+    email: 'email',
+    password: 'SENHA',
+    repeatPassword: 'repita a senha',
+    required: 'Requerido',
+    forgotPassword: 'Esqueci a senha',
+    signup: ['Não é um membro? ', 'Registre-se!'],
+    signin: ['Não é um membro? ', 'Registre-se!'],
+    registerSuccess:
+      'Thank you for registering, please check your email and confirm your account. Se não aparecer, verifique sua pasta de spam.',
+    login: 'Login',
+    passwordReset:
+      'Para redefinir sua senha, insira seu e-mail e siga as instruções.',
+    passwordResetSuccess:
+      'Obrigado. Por favor, verifique sua caixa de entrada e siga as instruções para redefinir sua senha. Se não aparecer, verifique sua pasta de spam.',
+    reset: 'Redefinir',
+    register: "S'inscrire"
+  },
+  id: {
+    email: 'email',
+    password: 'SANDI',
+    repeatPassword: 'ulangi sandi',
+    required: 'Diperlukan',
+    forgotPassword: 'Lupa sandi',
+    signup: ['Bukan anggota? Silakan', 'mendaftar!'],
+    signin: ['Bukan anggota? Silakan ', 'mendaftar!'],
+    registerSuccess:
+      'Thank you for registering, please check your email and confirm your account. Jika tidak muncul silakan cek folder spam.',
+    login: 'log masuk',
+    passwordReset:
+      'Untuk mengatur ulang sandi, masukkan email Anda dan ikuti instruksinya.',
+    passwordResetSuccess:
+      'Terima kasih. Silakan cek kotak masuk Anda dan ikuti instruksi untuk mengatur ulang sandi. Jika tidak muncul silakan cek folder spam. ',
+    reset: 'Atur ulang',
+    register: "S'inscrire"
+  },
+  zh: {
+    email: '电子邮件',
+    password: '密码',
+    repeatPassword: '重复输入密码',
+    required: '必填',
+    forgotPassword: '忘记密码',
+    signup: ['不是会员吗？', '注册！'],
+    signin: ['不是会员吗？', '注册！'],
+    registerSuccess:
+      'Thank you for registering, please check your email and confirm your account. 如果没看到它，请检查您的垃圾文件夹。',
+    login: '登录',
+    passwordReset: '若要重置密码，请输入您的电子邮件并按照说明操作.',
+    passwordResetSuccess:
+      ' 谢谢！请检查您的收件箱，并按照说明重置您的密码。如果没看到它，请检查您的垃圾文件夹。',
+    reset: '重置',
+    register: "S'inscrire"
+  }
+};
