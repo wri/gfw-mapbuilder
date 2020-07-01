@@ -196,7 +196,12 @@ export const EmailLogin = () => {
               </button>
               <input
                 className="orange-button form-submit"
-                style={{ backgroundColor: customColorTheme }}
+                style={{
+                  backgroundColor: customColorTheme,
+                  width: '6rem',
+                  marginTop: 0,
+                  fontSize: '0.8rem'
+                }}
                 type="submit"
                 value="Login"
               />
@@ -264,7 +269,12 @@ export const EmailLogin = () => {
                 </button>
                 <input
                   className="orange-button form-submit"
-                  style={{ backgroundColor: customColorTheme }}
+                  style={{
+                    backgroundColor: customColorTheme,
+                    width: '6rem',
+                    marginTop: 0,
+                    fontSize: '0.8rem'
+                  }}
                   type="submit"
                   value="Register"
                 />
@@ -281,7 +291,12 @@ export const EmailLogin = () => {
               </p>
               <button
                 className="orange-button form-submit"
-                style={{ backgroundColor: customColorTheme }}
+                style={{
+                  backgroundColor: customColorTheme,
+                  width: '6rem',
+                  marginTop: 0,
+                  fontSize: '0.8rem'
+                }}
                 onClick={() => handleFormSwitch('default')}
               >
                 Login
@@ -327,7 +342,12 @@ export const EmailLogin = () => {
                     type="submit"
                     value="Reset"
                     className="orange-button form-submit"
-                    style={{ backgroundColor: customColorTheme }}
+                    style={{
+                      backgroundColor: customColorTheme,
+                      width: '6rem',
+                      marginTop: 0,
+                      fontSize: '0.8rem'
+                    }}
                   />
                 </div>
               </form>
@@ -343,7 +363,12 @@ export const EmailLogin = () => {
               </p>
               <button
                 className="orange-button form-submit"
-                style={{ backgroundColor: customColorTheme }}
+                style={{
+                  backgroundColor: customColorTheme,
+                  width: '6rem',
+                  marginTop: 0,
+                  fontSize: '0.8rem'
+                }}
                 onClick={() => handleFormSwitch('default')}
               >
                 Login

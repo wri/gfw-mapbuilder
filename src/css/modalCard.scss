@@ -35,17 +35,16 @@
 
   &.edit-profile {
     border-radius: 2px;
-    min-height: 500px;
-    max-height: 750px;
+    max-height: 91vh;
     height: max-content;
     top: 0px;
     left: 0px;
     bottom: 0px;
     right: 0px;
     margin: 0 auto;
-    margin-top: 120px;
+    margin-top: 50px;
     width: 700px;
-    padding: 1.875rem 6.25rem 2.5rem;
+    padding: 1.5rem 6.25rem 1.5rem 6.25rem;
   }
 
   &.subscription-widget {
