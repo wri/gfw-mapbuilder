@@ -1,189 +1,1453 @@
-type Sector = { sector: string; subsectors: { label: string; id: string }[] };
-export const sectors: Sector[] = [
-  {
-    sector: 'Government',
-    subsectors: [
-      {
-        label: 'Forest Management/Park Management',
-        id: 'Forest_Management_Park_Management'
+// type Sector = { sector: string; subsectors: { label: string; id: string }[] };
+type SectorsObject = {
+  [key: string]: { sector: Sector; subsectors: Subsectors }[];
+};
+type Subsectors = { label: string; id: string }[];
+type Sector = { label: string; value: string };
+export const sectors: SectorsObject = {
+  en: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
       },
-      {
-        label: 'Law Enforcement',
-        id: 'Law_Enforcement'
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
       },
-      {
-        label: 'Legislature/Parliament',
-        id: 'Legislature_Parliament'
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
       },
-      {
-        label: 'Ministry/National Agency',
-        id: 'Ministry_National_Agency'
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
       },
-      {
-        label: 'Subnational Agency',
-        id: 'Subnational_Agency'
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
       },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Donor Institution / Agency',
-    subsectors: [
-      { label: 'Director/Executive', id: 'Director_Executive' },
-      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-      { label: 'Researcher', id: 'Researcher' },
-      { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
-      { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Local NGO (national or subnational)',
-    subsectors: [
-      { label: 'Director/Executive', id: 'Director_Executive' },
-      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-      {
-        label: 'Monitoring/Evaluation Specialist',
-        id: 'Monitoring_Evaluation'
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
       },
-      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-      { label: 'Researcher', id: 'Researcher' },
-      { label: 'Field Staff', id: 'Field_Staff' },
-      { label: 'Communications Specialist', id: 'Communications_Specialist' },
-      { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'International NGO',
-    subsectors: [
-      { label: 'Director/Executive', id: 'Director_Executive' },
-      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-      {
-        label: 'Monitoring/Evaluation Specialist',
-        id: 'Monitoring_Evaluation'
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
       },
-      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-      { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
-      { label: 'Communications Specialist', id: 'Communications_Specialist' },
-      { label: 'Researcher', id: 'Researcher' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'UN or International Organization',
-    subsectors: [
-      { label: 'Director/Executive', id: 'Director_Executive' },
-      { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
-      { label: 'Researcher', id: 'Researcher' },
-      { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
-      {
-        label: 'Monitoring/Evaluation Specialit',
-        id: 'Monitoring_Evaluation'
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  fr: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
       },
-      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-      { label: 'Communications Specialist', id: 'Communications_Specialist' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Academic / Research Organization',
-    subsectors: [
-      {
-        label: 'Faculty (Primary/Secondary)',
-        id: 'Faculty_(Primary_Secondary)'
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
       },
-      { label: 'Faculty (University)', id: 'Faculty_(University)' },
-      {
-        label: 'Student (Primary/Secondary)',
-        id: 'Student_(Primary_Secondary)'
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
       },
-      {
-        label: 'Student (University/Graduate)',
-        id: 'Student_(University_Graduate)'
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
       },
-      {
-        label: 'Researcher (Post-Doc, Fellow, etc.)',
-        id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
       },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Journalist / Media Organization',
-    subsectors: [
-      { label: 'Reporter', id: 'Reporter' },
-      { label: 'Editor', id: 'Editor' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Indigenous or Community-Based Organization',
-    subsectors: [
-      { label: 'Community Leader', id: 'Community_Leader' },
-      { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
-      { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
-      { label: 'Communications Specialist', id: 'Communications_Specialist' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Private sector',
-    subsectors: [
-      { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
-      { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
-      { label: 'Procurement Staff', id: 'Procurement_Staff' },
-      { label: 'Retailer/Trader', id: 'Retailer_Trader' },
-      { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Individual / No Affiliation',
-    subsectors: [
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  },
-  {
-    sector: 'Other:',
-    subsectors: [
-      {
-        label: 'Other',
-        id: 'Other: '
-      }
-    ]
-  }
-];
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  es: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  pt: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  ka: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  zh: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  id: [
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ]
+};
 
 type Usage = { label: string; id: string };
 type Topic = { label: string; id: string };

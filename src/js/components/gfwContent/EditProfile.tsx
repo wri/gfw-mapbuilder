@@ -14,7 +14,12 @@ const EditProfile = (): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
-  const [activeSector, setActiveSector] = React.useState(sectors[0].sector);
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
+  const [activeSector, setActiveSector] = React.useState(
+    sectors[selectedLanguage][0].sector.value
+  );
   const [activeSubsector, setActiveSubsector] = React.useState();
   const [activeUsage, setActiveUsage] = React.useState<string[]>([]);
   const [activeTopics, setActiveTopics] = React.useState<string[]>([]);
@@ -52,8 +57,8 @@ const EditProfile = (): JSX.Element => {
           profileData.lastName = name[1];
         }
         if (data.data.attributes.sector) {
-          const sectorIdx = sectors.findIndex(
-            sector => sector.sector === data.data.attributes.sector
+          const sectorIdx = sectors[selectedLanguage].findIndex(
+            sector => sector.sector.value === data.data.attributes.sector
           );
           setOriginalSectorIndex(sectorIdx);
         }
@@ -135,22 +140,24 @@ const EditProfile = (): JSX.Element => {
 
   const selectClasses = useSelectStyles();
   const menuItems = useMenuItemStyles();
-  const sectorsItems = sectors.map((sectorObject, i: number) => {
-    let optionIsSelected = false;
-    if (originalSectorIndex && originalSectorIndex === i) {
-      optionIsSelected = true;
+  const sectorsItems = sectors[selectedLanguage].map(
+    (sectorObject, i: number) => {
+      let optionIsSelected = false;
+      if (originalSectorIndex && originalSectorIndex === i) {
+        optionIsSelected = true;
+      }
+      return (
+        <option
+          selected={optionIsSelected}
+          className={clsx(selectClasses.root, menuItems.root)}
+          key={i}
+          value={sectorObject.sector.value}
+        >
+          {sectorObject.sector.label}
+        </option>
+      );
     }
-    return (
-      <option
-        selected={optionIsSelected}
-        className={clsx(selectClasses.root, menuItems.root)}
-        key={i}
-        value={sectorObject.sector}
-      >
-        {sectorObject.sector}
-      </option>
-    );
-  });
+  );
 
   const useStyles = makeStyles({
     root: {
@@ -235,8 +242,8 @@ const EditProfile = (): JSX.Element => {
 
   const subSectors = () => {
     //Find the active sector object
-    const activeSectorObject = sectors.find(
-      sectorObject => sectorObject.sector === activeSector
+    const activeSectorObject = sectors[selectedLanguage].find(
+      sectorObject => sectorObject.sector.value === activeSector
     );
     const subsectors = activeSectorObject!.subsectors.map(subsector => {
       return renderSubsectorMenuItem(subsector);
@@ -358,8 +365,9 @@ const EditProfile = (): JSX.Element => {
                     className={clsx(selectClasses.root)}
                     defaultValue={
                       originalSectorIndex
-                        ? sectors[originalSectorIndex].sector
-                        : sectors[0].sector
+                        ? sectors[selectedLanguage][originalSectorIndex].sector
+                            .value
+                        : sectors[selectedLanguage][0].sector.value
                     }
                     onChange={(e: any): void => setActiveSector(e.target.value)}
                   >
