@@ -24,6 +24,7 @@ const useMenuItemStyles = makeStyles({
 type CountryPickerProps = {
   activeCountryCallback: (e: any) => void;
   defaultCountry: string | undefined;
+  countryLabel: string;
 };
 
 const CountryPicker = (props: CountryPickerProps) => {
@@ -48,7 +49,7 @@ const CountryPicker = (props: CountryPickerProps) => {
 
   return (
     <div className="form-section">
-      <p className="input-label">Country</p>
+      <p className="input-label">{props.countryLabel}</p>
       <Select
         native
         variant="outlined"

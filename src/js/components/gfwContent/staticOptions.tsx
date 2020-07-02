@@ -1682,3 +1682,219 @@ export const emailLoginTranslations = {
     register: "S'inscrire"
   }
 };
+
+export const editProfileTranslations = {
+  en: {
+    profileHeader: 'Your Profile',
+    profileSubheader:
+      "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",
+    fName: 'First Name',
+    lName: 'Last Name',
+    required: 'This field is required',
+    email: 'email',
+    sector: 'Sector',
+    role: 'Role',
+    jobTitle: 'Job Title',
+    company: 'Company / Organization',
+    located: 'Where are you located?',
+    country: 'Country',
+    city: 'City',
+    state: 'state / department / province',
+    interest: 'What area are you most interested in?',
+    topics: 'what topics are you interested in?',
+    selectAll: 'select all that apply',
+    howUse: 'how do you use global forest watch?',
+    delete: ['Email us', 'to delete your MyGFW account.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SAVE',
+    back: 'BACK TO MY PROFILE'
+  },
+  fr: {
+    profileHeader: 'Your Profile',
+    profileSubheader:
+      "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",
+    fName: 'First Name',
+    lName: 'Last Name',
+    required: 'This field is required',
+    email: 'email',
+    sector: 'Sector',
+    role: 'Role',
+    jobTitle: 'Job Title',
+    company: 'Company / Organization',
+    located: 'Where are you located?',
+    country: 'Country',
+    city: 'City',
+    state: 'state / department / province',
+    interest: 'What area are you most interested in?',
+    topics: 'what topics are you interested in?',
+    selectAll: 'select all that apply',
+    howUse: 'how do you use global forest watch?',
+    delete: ['Email us', 'to delete your MyGFW account.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SAVE',
+    back: 'BACK TO MY PROFILE'
+  },
+  es: {
+    profileHeader: 'Su perfil',
+    profileSubheader:
+      'Utilizamos esta información para lograr que Global Forest Watch sea más útil para usted. Su privacidad es importante para nosotros y nunca compartiremos su información sin su consentimiento.',
+    fName: 'NOMBRE DE PILA',
+    lName: 'APELLIDOS',
+    required: 'Obligatorio',
+    email: 'CORREO ELECTRÓNICO',
+    sector: 'SECTOR',
+    role: 'FUNCIÓN',
+    jobTitle: 'CARGO',
+    company: 'EMPRESA/ORGANIZACIÓN',
+    located: '¿Dónde se encuent?ra',
+    country: 'PAÍS',
+    city: 'CIUDAD',
+    state: 'ESTADO/DIVISIÓN/PROVINCIA',
+    interest: '¿Qué es lo que más le interesa?',
+    topics: '¿QUÉ TEMAS LE INTERESAN ',
+    selectAll: 'SELECCIONE TODAS LAS OPCIONES QUE CORRESPONDAN.',
+    howUse: '¿CÓMO USA GLOBAL FOREST WATCH',
+    delete: [
+      'Envíenos un correo electrónio',
+      'para eliminar su cuenta de MyGFW.'
+    ],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SAVE',
+    back: 'BACK TO MY PROFILE'
+  },
+  pt: {
+    profileHeader: 'Seu perfil',
+    profileSubheader:
+      'Usamos essas informações para tornar o Global Forest Watch mais útil para você. Sua privacidade é importante para nós, e nunca compartilharemos suas informações sem o seu consentimento.',
+    fName: 'PRIMEIRO NOME',
+    lName: 'ÚLTIMO NOME/SOBRENOME',
+    required: 'Requerido',
+    email: 'E-MAIL',
+    sector: 'SETOR',
+    role: 'FUNÇÃO',
+    jobTitle: 'CARGO',
+    company: 'EMPRESA / ORGANIZAÇÃO',
+    located: 'Onde você está localiza?',
+    country: 'PAÍS',
+    city: 'CIDADE',
+    state: 'ESTADO /DEPARTAMENTO / PROVÍNCIA',
+    interest: 'Em que área você está mais interessado?',
+    topics: 'EM QUAIS TÓPICOS VOCÊ ESTÁ INTERESSADO?',
+    selectAll: 'SELECIONE TUDO QUE SE APLICA.',
+    howUse: 'COMO VOCÊ USA O GLOBAL FOREST WATCH?',
+    delete: ['Envie-nos um e-mail', ' para excluir sua conta no Meu GFW.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SALVAR',
+    back: 'BACK TO MY PROFILE'
+  },
+  ka: {
+    profileHeader: 'Your Profile',
+    profileSubheader:
+      "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",
+    fName: 'First Name',
+    lName: 'Last Name',
+    required: 'This field is required',
+    email: 'email',
+    sector: 'Sector',
+    role: 'Role',
+    jobTitle: 'Job Title',
+    company: 'Company / Organization',
+    located: 'Where are you located?',
+    country: 'Country',
+    city: 'City',
+    state: 'state / department / province',
+    interest: 'What area are you most interested in?',
+    topics: 'what topics are you interested in?',
+    selectAll: 'select all that apply',
+    howUse: 'how do you use global forest watch?',
+    delete: ['Email us', 'to delete your MyGFW account.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SAVE',
+    back: 'BACK TO MY PROFILE'
+  },
+  zh: {
+    profileHeader: '您的资料',
+    profileSubheader:
+      '我们需要使用这些信息以使 Global Forest Watch 对您更为有用。您的隐私对我们来说很重要。未经您的同意，我们绝不会分享您的信息。',
+    fName: '名字',
+    lName: '姓氏',
+    required: '必填',
+    email: '电子邮件',
+    sector: '部门',
+    role: '职责',
+    jobTitle: '职位',
+    company: '公司/组织',
+    located: '您在哪里？',
+    country: '国家/地区',
+    city: '城市',
+    state: '州/部门/省',
+    interest: '您对什么区域最感兴趣？',
+    topics: '您对哪些主题感兴趣？',
+    selectAll: '选择所有适用项',
+    howUse: '您如何使用 Global Forest Watch？',
+    delete: ['如需删除您的 MyGFW 账户，请', '给我们发电子邮件联系'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: '保存',
+    back: 'BACK TO MY PROFILE'
+  },
+  id: {
+    profileHeader: 'Profil Anda',
+    profileSubheader:
+      'Kami menggunakan informasi ini untuk menjadikan Global Forest Watch lebih bermanfaat bagi Anda. Privasi Anda penting bagi kami dan kami takkan pernah menyebarkan informasi tanpa persetujuan Anda.',
+    fName: 'nama depan',
+    lName: 'nama belakang',
+    required: 'Diperlukan',
+    email: 'email',
+    sector: 'SEKTOR',
+    role: 'TUGAS',
+    jobTitle: 'JABATAN',
+    company: 'PERUSAHAAN / ORGANISASI',
+    located: 'Di mana lokasi Anda?',
+    country: 'NEGARA',
+    city: 'KOTA',
+    state: 'NEGARA BAGIAN / DEPARTEMEN / PROVINSI',
+    interest: 'Di daerah mana Anda paling berminat?',
+    topics: 'TOPIK APA YANG ANDA MINATI?',
+    selectAll: 'PILIH SEMUA YANG BERLAKU.',
+    howUse: 'BAGAIMANA ANDA MENGGUNAKAN GLOBAL FOREST WATCH?',
+    delete: ['Kirim email kepada kami', ' untuk menghapus akun MyGFW Anda.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SIMPAN',
+    back: 'BACK TO MY PROFILE'
+  }
+};

@@ -4,7 +4,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
 import { RootState } from 'js/store';
 import { MemoCountryPicker } from './CountryPicker';
-import { sectors, usage, topics } from './staticOptions';
+import {
+  sectors,
+  usage,
+  topics,
+  editProfileTranslations
+} from './staticOptions';
 import clsx from 'clsx';
 import { Select, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import 'css/formInputs.scss';
@@ -267,9 +272,9 @@ const EditProfile = (): JSX.Element => {
     return (
       <div className="success-screen">
         <div className="tree-success"></div>
-        <p>Thank you for updating your My GFW profile!</p>
+        <p>{editProfileTranslations[selectedLanguage].success[0]}</p>
         <p>
-          You may wish to read our{' '}
+          {editProfileTranslations[selectedLanguage].success[1]}{' '}
           <a
             href="https://www.globalforestwatch.org/privacy-policy"
             style={{
@@ -277,9 +282,9 @@ const EditProfile = (): JSX.Element => {
               color: customColorTheme
             }}
           >
-            privacy policy
+            {editProfileTranslations[selectedLanguage].success[2]}
           </a>
-          , which provides further information about how we use personal data.
+          , {editProfileTranslations[selectedLanguage].success[3]}
         </p>
         <button
           className="orange-button profile-submit"
@@ -290,7 +295,7 @@ const EditProfile = (): JSX.Element => {
             width: '200px'
           }}
         >
-          BACK TO MY PROFILE
+          {editProfileTranslations[selectedLanguage].back}
         </button>
       </div>
     );
@@ -301,17 +306,13 @@ const EditProfile = (): JSX.Element => {
       <>
         {!updateSuccess && (
           <>
-            <h2>Your profile</h2>
-            <p>
-              {
-                "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent."
-              }
-            </p>
+            <h2>{editProfileTranslations[selectedLanguage].profileHeader}</h2>
+            <p>{editProfileTranslations[selectedLanguage].profileSubheader}</p>
             <div>
               <form onSubmit={handleSubmit(onDefaultSubmit)}>
                 <div className="form-section">
                   <label htmlFor="firstName" className="input-label">
-                    first name
+                    {editProfileTranslations[selectedLanguage].fName}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.firstName}
@@ -322,12 +323,14 @@ const EditProfile = (): JSX.Element => {
                     ref={register({ required: false })}
                   />
                   {errors.fname && (
-                    <p className="input-error">This field is required</p>
+                    <p className="input-error">
+                      {editProfileTranslations[selectedLanguage].required}
+                    </p>
                   )}
                 </div>
                 <div className="form-section">
                   <label htmlFor="lastName" className="input-label">
-                    last name *
+                    {editProfileTranslations[selectedLanguage].lName} *
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.lastName || ''}
@@ -338,12 +341,14 @@ const EditProfile = (): JSX.Element => {
                     ref={register({ required: true })}
                   />
                   {errors.lname && (
-                    <p className="input-error">This field is required</p>
+                    <p className="input-error">
+                      {editProfileTranslations[selectedLanguage].required}
+                    </p>
                   )}
                 </div>
                 <div className="form-section">
                   <label htmlFor="email" className="input-label">
-                    email *
+                    {editProfileTranslations[selectedLanguage].email} *
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.email || ''}
@@ -354,11 +359,15 @@ const EditProfile = (): JSX.Element => {
                     ref={register({ required: true })}
                   />
                   {errors.email && (
-                    <p className="input-error">This field is required</p>
+                    <p className="input-error">
+                      {editProfileTranslations[selectedLanguage].required}
+                    </p>
                   )}
                 </div>
                 <div className="form-section">
-                  <p className="input-label">Sector</p>
+                  <p className="input-label">
+                    {editProfileTranslations[selectedLanguage].sector}
+                  </p>
                   <Select
                     native
                     variant="outlined"
@@ -375,7 +384,9 @@ const EditProfile = (): JSX.Element => {
                   </Select>
                 </div>
                 <div className="form-section">
-                  <p className="input-label">Role</p>
+                  <p className="input-label">
+                    {editProfileTranslations[selectedLanguage].role}
+                  </p>
                   <Controller
                     as={
                       <RadioGroup aria-label="subsector">
@@ -397,7 +408,7 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <div className="form-section">
                   <label htmlFor="jobTitle" className="input-label">
-                    job title
+                    {editProfileTranslations[selectedLanguage].jobTitle}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.jobTitle}
@@ -410,7 +421,7 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <div className="form-section">
                   <label htmlFor="company" className="input-label">
-                    company / organization *
+                    {editProfileTranslations[selectedLanguage].company}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.company}
@@ -421,18 +432,23 @@ const EditProfile = (): JSX.Element => {
                     ref={register({ required: true })}
                   />
                   {errors.company && (
-                    <p className="input-error">This field is required</p>
+                    <p className="input-error">
+                      {editProfileTranslations[selectedLanguage].required}
+                    </p>
                   )}
                 </div>
 
-                <h4>Where are you located?</h4>
+                <h4>{editProfileTranslations[selectedLanguage].located}</h4>
                 <MemoCountryPicker
+                  countryLabel={
+                    editProfileTranslations[selectedLanguage].country
+                  }
                   defaultCountry={existingProfileInfo.country}
                   activeCountryCallback={(id: any): any => setActiveCountry(id)}
                 />
                 <div className="form-section">
                   <label htmlFor="city" className="input-label">
-                    city
+                    {editProfileTranslations[selectedLanguage].city}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.city}
@@ -445,7 +461,7 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <div className="form-section">
                   <label htmlFor="state" className="input-label">
-                    state / department / province
+                    {editProfileTranslations[selectedLanguage].state}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.state}
@@ -456,7 +472,7 @@ const EditProfile = (): JSX.Element => {
                     ref={register({ required: false })}
                   />
                 </div>
-                <h4>What area are you most interested in?</h4>
+                <h4>{editProfileTranslations[selectedLanguage].interest}</h4>
                 <MemoCountryPicker
                   defaultCountry={existingProfileInfo?.aoiCountry}
                   activeCountryCallback={(id: any): any =>
@@ -465,7 +481,7 @@ const EditProfile = (): JSX.Element => {
                 />
                 <div className="form-section">
                   <label htmlFor="aoiCity" className="input-label">
-                    city
+                    {editProfileTranslations[selectedLanguage].city}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.aoiCity}
@@ -478,7 +494,7 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <div className="form-section">
                   <label htmlFor="aoiState" className="input-label">
-                    state / department / province
+                    {editProfileTranslations[selectedLanguage].state}
                   </label>
                   <input
                     defaultValue={existingProfileInfo?.aoiState}
@@ -491,9 +507,11 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <div className="form-section">
                   <p className="input-label">
-                    what topics are you interested in? *
+                    {editProfileTranslations[selectedLanguage].topics} *
                   </p>
-                  <p className="input-sublabel">select all that apply</p>
+                  <p className="input-sublabel">
+                    {editProfileTranslations[selectedLanguage].selectAll}
+                  </p>
                   <select
                     className="multi-select"
                     multiple
@@ -517,9 +535,11 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <div className="form-section">
                   <p className="input-label">
-                    how do you use global forest watch? *
+                    {editProfileTranslations[selectedLanguage].howUse} *
                   </p>
-                  <p className="input-sublabel">select all that apply</p>
+                  <p className="input-sublabel">
+                    {editProfileTranslations[selectedLanguage].selectAll}
+                  </p>
                   <select
                     className="multi-select"
                     multiple
@@ -559,7 +579,7 @@ const EditProfile = (): JSX.Element => {
                     width: '200px'
                   }}
                   type="submit"
-                  value="Save"
+                  value={editProfileTranslations[selectedLanguage].save}
                 />
               </form>
             </div>
@@ -572,9 +592,9 @@ const EditProfile = (): JSX.Element => {
                     color: customColorTheme
                   }}
                 >
-                  Email us
+                  {editProfileTranslations[selectedLanguage].delete[0]}
                 </a>{' '}
-                to delete your MyGFW account.
+                {editProfileTranslations[selectedLanguage].delete[1]}
               </p>
             </div>
           </>
