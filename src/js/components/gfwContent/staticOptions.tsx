@@ -1,4 +1,3 @@
-// type Sector = { sector: string; subsectors: { label: string; id: string }[] };
 type SectorsObject = {
   [key: string]: { sector: Sector; subsectors: Subsectors }[];
 };
@@ -1037,7 +1036,7 @@ export const sectors: SectorsObject = {
   ],
   zh: [
     {
-      sector: { label: 'Government', value: 'Government' },
+      sector: { label: '政府', value: 'Government' },
       subsectors: [
         {
           label: 'Forest Management/Park Management',
@@ -1060,14 +1059,14 @@ export const sectors: SectorsObject = {
           id: 'Subnational_Agency'
         },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Donor Institution / Agency',
+        label: '捐赠机构',
         value: 'Donor Institution / Agency'
       },
       subsectors: [
@@ -1077,14 +1076,14 @@ export const sectors: SectorsObject = {
         { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Local NGO (national or subnational)',
+        label: '本地 NGO（国家级或亚国家级）',
         value: 'Local NGO (national or subnational)'
       },
       subsectors: [
@@ -1100,13 +1099,13 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'International NGO', value: 'International NGO' },
+      sector: { label: '国际 NGO', value: 'International NGO' },
       subsectors: [
         { label: 'Director/Executive', id: 'Director_Executive' },
         { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
@@ -1119,14 +1118,14 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Researcher', id: 'Researcher' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'UN or International Organization',
+        label: '联合国或国际组织',
         value: 'UN or International Organization'
       },
       subsectors: [
@@ -1141,14 +1140,14 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Academic / Research Organization',
+        label: '学术/研究组织',
         value: 'Academic / Research Organization'
       },
       subsectors: [
@@ -1170,28 +1169,28 @@ export const sectors: SectorsObject = {
           id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
         },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Journalist / Media Organization',
+        label: '新闻工作者/媒体组织',
         value: 'Journalist / Media Organization'
       },
       subsectors: [
         { label: 'Reporter', id: 'Reporter' },
         { label: 'Editor', id: 'Editor' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Indigenous or Community-Based Organization',
+        label: '本土或基于社区的组织',
         value: 'Indigenous or Community-Based Organization'
       },
       subsectors: [
@@ -1200,13 +1199,13 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Private sector', value: 'Private sector' },
+      sector: { label: '私营部门', value: 'Private sector' },
       subsectors: [
         { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
         { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
@@ -1214,28 +1213,28 @@ export const sectors: SectorsObject = {
         { label: 'Retailer/Trader', id: 'Retailer_Trader' },
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Individual / No Affiliation',
+        label: '个人/无隶属关系',
         value: 'Individual / No Affiliation'
       },
       subsectors: [
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Other:', value: 'Other:' },
+      sector: { label: '其他：', value: 'Other:' },
       subsectors: [
         {
-          label: 'Other',
+          label: '其他：',
           id: 'Other: '
         }
       ]
