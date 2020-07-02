@@ -212,7 +212,7 @@ export const sectors: SectorsObject = {
   ],
   fr: [
     {
-      sector: { label: 'Government', value: 'Government' },
+      sector: { label: 'Gouvernement', value: 'Government' },
       subsectors: [
         {
           label: 'Forest Management/Park Management',
@@ -235,14 +235,14 @@ export const sectors: SectorsObject = {
           id: 'Subnational_Agency'
         },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Donor Institution / Agency',
+        label: 'Institution / agence donatrice',
         value: 'Donor Institution / Agency'
       },
       subsectors: [
@@ -252,14 +252,14 @@ export const sectors: SectorsObject = {
         { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Local NGO (national or subnational)',
+        label: 'ONG locale (nationale ou infranationale)',
         value: 'Local NGO (national or subnational)'
       },
       subsectors: [
@@ -275,13 +275,13 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'International NGO', value: 'International NGO' },
+      sector: { label: 'ONG internationale', value: 'International NGO' },
       subsectors: [
         { label: 'Director/Executive', id: 'Director_Executive' },
         { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
@@ -294,14 +294,14 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Researcher', id: 'Researcher' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'UN or International Organization',
+        label: 'ONU ou organisation internationale',
         value: 'UN or International Organization'
       },
       subsectors: [
@@ -316,14 +316,14 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Academic / Research Organization',
+        label: 'Organisation académique / de recherche',
         value: 'Academic / Research Organization'
       },
       subsectors: [
@@ -345,28 +345,28 @@ export const sectors: SectorsObject = {
           id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
         },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Journalist / Media Organization',
+        label: 'Organisation journalistique / médiatique',
         value: 'Journalist / Media Organization'
       },
       subsectors: [
         { label: 'Reporter', id: 'Reporter' },
         { label: 'Editor', id: 'Editor' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Indigenous or Community-Based Organization',
+        label: 'Organisation autochtone ou communautaire',
         value: 'Indigenous or Community-Based Organization'
       },
       subsectors: [
@@ -375,13 +375,13 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Private sector', value: 'Private sector' },
+      sector: { label: 'Secteur privé', value: 'Private sector' },
       subsectors: [
         { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
         { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
@@ -389,28 +389,28 @@ export const sectors: SectorsObject = {
         { label: 'Retailer/Trader', id: 'Retailer_Trader' },
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Individual / No Affiliation',
+        label: 'Affiliation individuelle / Aucune affiliation',
         value: 'Individual / No Affiliation'
       },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Other:', value: 'Other:' },
+      sector: { label: 'Autre :', value: 'Other:' },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Autre :',
           id: 'Other: '
         }
       ]
@@ -418,7 +418,7 @@ export const sectors: SectorsObject = {
   ],
   es: [
     {
-      sector: { label: 'Government', value: 'Government' },
+      sector: { label: 'Gobierno', value: 'Government' },
       subsectors: [
         {
           label: 'Forest Management/Park Management',
@@ -441,14 +441,14 @@ export const sectors: SectorsObject = {
           id: 'Subnational_Agency'
         },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Donor Institution / Agency',
+        label: 'Agencia / Organismo de ayuda o asistencia financiera',
         value: 'Donor Institution / Agency'
       },
       subsectors: [
@@ -458,14 +458,14 @@ export const sectors: SectorsObject = {
         { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Local NGO (national or subnational)',
+        label: 'ONG local (nacional o subnacional)',
         value: 'Local NGO (national or subnational)'
       },
       subsectors: [
@@ -481,13 +481,13 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'International NGO', value: 'International NGO' },
+      sector: { label: 'ONG internacional', value: 'International NGO' },
       subsectors: [
         { label: 'Director/Executive', id: 'Director_Executive' },
         { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
@@ -500,14 +500,14 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Researcher', id: 'Researcher' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'UN or International Organization',
+        label: 'ONU u otra organización internacional',
         value: 'UN or International Organization'
       },
       subsectors: [
@@ -522,14 +522,14 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Academic / Research Organization',
+        label: 'Organización académica / de investigación',
         value: 'Academic / Research Organization'
       },
       subsectors: [
@@ -551,28 +551,28 @@ export const sectors: SectorsObject = {
           id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
         },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Journalist / Media Organization',
+        label: 'Organización de periodistas / medios de comunicación',
         value: 'Journalist / Media Organization'
       },
       subsectors: [
         { label: 'Reporter', id: 'Reporter' },
         { label: 'Editor', id: 'Editor' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Indigenous or Community-Based Organization',
+        label: 'Organización indígena o comunitaria',
         value: 'Indigenous or Community-Based Organization'
       },
       subsectors: [
@@ -581,13 +581,13 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Private sector', value: 'Private sector' },
+      sector: { label: 'Sector privado', value: 'Private sector' },
       subsectors: [
         { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
         { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
@@ -595,28 +595,28 @@ export const sectors: SectorsObject = {
         { label: 'Retailer/Trader', id: 'Retailer_Trader' },
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Individual / No Affiliation',
+        label: 'Particular / Sin afiliación',
         value: 'Individual / No Affiliation'
       },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Other:', value: 'Other:' },
+      sector: { label: 'Otros:', value: 'Other:' },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Otros:',
           id: 'Other: '
         }
       ]
@@ -624,7 +624,7 @@ export const sectors: SectorsObject = {
   ],
   pt: [
     {
-      sector: { label: 'Government', value: 'Government' },
+      sector: { label: 'Governo', value: 'Government' },
       subsectors: [
         {
           label: 'Forest Management/Park Management',
@@ -647,14 +647,14 @@ export const sectors: SectorsObject = {
           id: 'Subnational_Agency'
         },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Donor Institution / Agency',
+        label: 'Instituição / Agência Doadora',
         value: 'Donor Institution / Agency'
       },
       subsectors: [
@@ -664,14 +664,14 @@ export const sectors: SectorsObject = {
         { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Local NGO (national or subnational)',
+        label: 'ONG local (nacional ou subnacional)',
         value: 'Local NGO (national or subnational)'
       },
       subsectors: [
@@ -687,13 +687,13 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'International NGO', value: 'International NGO' },
+      sector: { label: 'ONG internacional', value: 'International NGO' },
       subsectors: [
         { label: 'Director/Executive', id: 'Director_Executive' },
         { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
@@ -706,14 +706,14 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Researcher', id: 'Researcher' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'UN or International Organization',
+        label: 'ONU ou Organização Internacional',
         value: 'UN or International Organization'
       },
       subsectors: [
@@ -728,14 +728,14 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Academic / Research Organization',
+        label: 'Organização de Pesquisa / Acadêmica',
         value: 'Academic / Research Organization'
       },
       subsectors: [
@@ -757,28 +757,28 @@ export const sectors: SectorsObject = {
           id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
         },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Journalist / Media Organization',
+        label: 'Organização de Mídia / Jornalista',
         value: 'Journalist / Media Organization'
       },
       subsectors: [
         { label: 'Reporter', id: 'Reporter' },
         { label: 'Editor', id: 'Editor' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Indigenous or Community-Based Organization',
+        label: 'Organização Indígena ou Comunitária',
         value: 'Indigenous or Community-Based Organization'
       },
       subsectors: [
@@ -787,13 +787,13 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Private sector', value: 'Private sector' },
+      sector: { label: 'Setor privado', value: 'Private sector' },
       subsectors: [
         { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
         { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
@@ -801,28 +801,28 @@ export const sectors: SectorsObject = {
         { label: 'Retailer/Trader', id: 'Retailer_Trader' },
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Individual / No Affiliation',
+        label: 'Individual / Sem Filiação',
         value: 'Individual / No Affiliation'
       },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Other:', value: 'Other:' },
+      sector: { label: 'Outro:', value: 'Other:' },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Outro:',
           id: 'Other: '
         }
       ]
@@ -1242,7 +1242,7 @@ export const sectors: SectorsObject = {
   ],
   id: [
     {
-      sector: { label: 'Government', value: 'Government' },
+      sector: { label: 'Pemerintah', value: 'Government' },
       subsectors: [
         {
           label: 'Forest Management/Park Management',
@@ -1265,14 +1265,14 @@ export const sectors: SectorsObject = {
           id: 'Subnational_Agency'
         },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Donor Institution / Agency',
+        label: 'Lembaga / Badan Donor',
         value: 'Donor Institution / Agency'
       },
       subsectors: [
@@ -1282,14 +1282,14 @@ export const sectors: SectorsObject = {
         { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Local NGO (national or subnational)',
+        label: 'LSM Lokal (nasional atau daerah)',
         value: 'Local NGO (national or subnational)'
       },
       subsectors: [
@@ -1305,13 +1305,13 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'International NGO', value: 'International NGO' },
+      sector: { label: 'LSM Internasional', value: 'International NGO' },
       subsectors: [
         { label: 'Director/Executive', id: 'Director_Executive' },
         { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
@@ -1324,14 +1324,14 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         { label: 'Researcher', id: 'Researcher' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'UN or International Organization',
+        label: 'PBB atau Organisasi Internasional',
         value: 'UN or International Organization'
       },
       subsectors: [
@@ -1346,14 +1346,14 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Academic / Research Organization',
+        label: 'Organisasi Akademis / Penelitian',
         value: 'Academic / Research Organization'
       },
       subsectors: [
@@ -1375,28 +1375,28 @@ export const sectors: SectorsObject = {
           id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
         },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Journalist / Media Organization',
+        label: 'Organisasi Wartawan / Media',
         value: 'Journalist / Media Organization'
       },
       subsectors: [
         { label: 'Reporter', id: 'Reporter' },
         { label: 'Editor', id: 'Editor' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Indigenous or Community-Based Organization',
+        label: 'Organisasi Masyarakat Adat atau Berbasis Komunitas',
         value: 'Indigenous or Community-Based Organization'
       },
       subsectors: [
@@ -1405,13 +1405,13 @@ export const sectors: SectorsObject = {
         { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Private sector', value: 'Private sector' },
+      sector: { label: 'Sektor swasta', value: 'Private sector' },
       subsectors: [
         { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
         { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
@@ -1419,28 +1419,28 @@ export const sectors: SectorsObject = {
         { label: 'Retailer/Trader', id: 'Retailer_Trader' },
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
       sector: {
-        label: 'Individual / No Affiliation',
+        label: 'Pribadi / Tidak Ada Afiliasi',
         value: 'Individual / No Affiliation'
       },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
     },
     {
-      sector: { label: 'Other:', value: 'Other:' },
+      sector: { label: 'Lainnya:', value: 'Other:' },
       subsectors: [
         {
-          label: 'Other',
+          label: 'Lainnya:',
           id: 'Other: '
         }
       ]
@@ -1448,7 +1448,6 @@ export const sectors: SectorsObject = {
   ]
 };
 
-type Usage = { label: string; id: string };
 type Topic = { label: string; id: string };
 export const usage: Topic[] = [
   {
