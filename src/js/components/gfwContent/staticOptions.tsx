@@ -1715,33 +1715,33 @@ export const editProfileTranslations = {
     back: 'BACK TO MY PROFILE'
   },
   fr: {
-    profileHeader: 'Your Profile',
+    profileHeader: 'Votre profil',
     profileSubheader:
-      "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",
-    fName: 'First Name',
-    lName: 'Last Name',
-    required: 'This field is required',
-    email: 'email',
-    sector: 'Sector',
-    role: 'Role',
-    jobTitle: 'Job Title',
-    company: 'Company / Organization',
-    located: 'Where are you located?',
-    country: 'Country',
-    city: 'City',
-    state: 'state / department / province',
-    interest: 'What area are you most interested in?',
-    topics: 'what topics are you interested in?',
-    selectAll: 'select all that apply',
-    howUse: 'how do you use global forest watch?',
-    delete: ['Email us', 'to delete your MyGFW account.'],
+      'Nous utilisons ces informations pour que Global Forest Watch vous soit plus utile. La protection de votre vie privée est importante pour nous et nous ne partagerons jamais vos informations sans votre consentement.',
+    fName: 'PRÉNOM',
+    lName: 'NOM/PRÉNOM',
+    required: 'Requis',
+    email: 'E-MAIL',
+    sector: 'SECTEUR',
+    role: 'RÔLE',
+    jobTitle: 'TITRE DU POSTE',
+    company: 'SOCIÉTÉ/ORGANISATION',
+    located: 'Où vous trouvez-vous ?',
+    country: 'PAYS',
+    city: 'VILLE',
+    state: 'ÉTAT / DÉPARTEMENT / PROVINCE',
+    interest: 'Quel est le domaine qui vous intéresse le plus ?',
+    topics: 'QUELS SONT LES SUJETS QUI VOUS INTÉRESSENT ?',
+    selectAll: "SÉLECTIONNEZ TOUT CE QUI S'APPLIQUE.",
+    howUse: 'COMMENT UTILISEZ-VOUS GLOBAL FOREST WATCH ?',
+    delete: ['Envoyez-nous un e-mail', 'pour supprimer votre compte MyGFW.'],
     success: [
       'Thank you for updating your My GFW profile!',
       'You may wish to read our',
       'privacy policy',
       'which provides further information about how we use personal data.'
     ],
-    save: 'SAVE',
+    save: 'ENREGISTRER',
     back: 'BACK TO MY PROFILE'
   },
   es: {
@@ -1774,7 +1774,7 @@ export const editProfileTranslations = {
       'privacy policy',
       'which provides further information about how we use personal data.'
     ],
-    save: 'SAVE',
+    save: 'GUARDAR',
     back: 'BACK TO MY PROFILE'
   },
   pt: {
