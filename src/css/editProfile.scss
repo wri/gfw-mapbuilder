@@ -1,0 +1,35 @@
+.edit-profile-container {
+  .MuiInputBase-input {
+    background-color: transparent !important;
+  }
+  .MuiFormControlLabel-label {
+    font-size: 0.8rem;
+  }
+  .multi-select {
+    width: 100%;
+    border: 1px solid #e5e5df;
+  }
+  .multi-option {
+    color: #555555;
+    padding: 6px 12px;
+    height: auto;
+    overflow: hidden;
+    word-wrap: normal !important;
+    white-space: normal;
+  }
+  .success-screen {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .tree-success {
+      background-color: #fff;
+      background-repeat: no-repeat no-repeat;
+      background-size: contain;
+      height: 60px;
+      background-image: url('../images/tree-success.png');
+      width: 300px;
+      height: 250px;
+    }
+  }
+}

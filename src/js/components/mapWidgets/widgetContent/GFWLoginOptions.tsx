@@ -127,8 +127,11 @@ const GFWLoginOptions = (props: any) => {
           <li onClick={getSubscriptions} className="gfw-api-option">
             {subscriptions}
           </li>
-          <li className="gfw-api-option">
-            <a href="http://www.globalforestwatch.org/my_gfw">{profile}</a>
+          <li
+            onClick={() => dispatch(renderModal('EditProfile'))}
+            className="gfw-api-option"
+          >
+            {profile}
           </li>
           <li className="gfw-api-option">
             <p onClick={logOut}>{logout}</p>

@@ -11,6 +11,7 @@ import CanopyDensityContent from 'js/components/mapWidgets/widgetContent/CanopyD
 import SubscriptionContent from '../mapWidgets/widgetContent/SubscriptionContent';
 import AlertCarousel from '../leftPanel/dataPanel/subscribeToAlerts/AlertCarousel';
 import InfoContent from 'js/components/sharedComponents/InfoContent';
+import EditProfile from 'js/components/gfwContent/EditProfile';
 
 import { renderModal } from 'js/store/appState/actions';
 
@@ -53,6 +54,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <CanopyDensityContent />;
       case 'InfoContent':
         return <InfoContent />;
+      case 'EditProfile':
+        return <EditProfile />;
       default:
         break;
     }
@@ -80,6 +83,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'subscription-widget';
       case 'AlertCarousel':
         return 'alert-carousel';
+      case 'EditProfile':
+        return 'edit-profile';
       default:
         return '';
     }
@@ -98,6 +103,7 @@ const ModalCard: FunctionComponent<{}> = () => {
           ></div>
           <div className={`modal-card-container ${setClassName()}`}>
             <button
+              style={{ color: '#555' }}
               className="exit-button"
               onClick={() => dispatch(renderModal(''))}
               onKeyDown={(e): void => handleEscapeKey(e)}

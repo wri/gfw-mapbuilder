@@ -178,10 +178,11 @@ const App = (props: AppSettings | any): JSX.Element => {
       })
         .then(response => {
           const hasError = response.status !== 200;
-          response.json().then(() => {
+          response.json().then(data => {
             if (hasError) {
               return;
             }
+            localStorage.setItem('userID', data.id);
             dispatch(setLoggedIn(true));
           });
         })

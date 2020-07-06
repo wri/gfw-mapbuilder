@@ -69,6 +69,8 @@
     ]
   },
   "dependencies": {
+    "@material-ui/core": "^4.10.2",
+    "clsx": "^1.1.1",
     "date-fns": "^2.11.1",
     "lodash-es": "^4.17.15",
     "rc-slider": "^9.2.2",
