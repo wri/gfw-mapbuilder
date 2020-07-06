@@ -209,10 +209,6 @@ const EditProfile = (): JSX.Element => {
     }
   });
 
-  const useFormControlStyles = makeStyles({
-    root: {}
-  });
-
   function StyledRadio(props: any) {
     const classes = useStyles();
 
@@ -230,13 +226,10 @@ const EditProfile = (): JSX.Element => {
     );
   }
 
-  const formClasses = useFormControlStyles();
-
   function renderSubsectorMenuItem(subsector: { label: string; id: string }) {
     return (
       <FormControlLabel
         key={subsector.id}
-        className={formClasses.root}
         value={subsector.id}
         onChange={(e: any): void => setActiveSubsector(e.target.value)}
         control={<StyledRadio />}
