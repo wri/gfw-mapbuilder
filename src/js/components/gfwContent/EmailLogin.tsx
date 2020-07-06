@@ -381,7 +381,8 @@ export const EmailLogin = () => {
                   backgroundColor: customColorTheme,
                   width: '6rem',
                   marginTop: 0,
-                  fontSize: '0.8rem'
+                  fontSize: '0.8rem',
+                  height: '35px'
                 }}
                 onClick={() => handleFormSwitch('default')}
               >

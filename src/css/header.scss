@@ -163,7 +163,19 @@
 
         .subscription-authentication,
         .options-modal {
+          text-decoration: none;
           list-style: none;
+          &.twitter-box {
+            background: #598dca;
+          }
+
+          &.facebook-box {
+            background: #39579b;
+          }
+
+          &.google-box {
+            background: #da4735;
+          }
 
           .subscribe-method,
           .more-list {
@@ -197,18 +209,16 @@
           }
         }
         .subscription-authentication {
-          padding: 1rem;
+          padding: 0 1rem 1rem 1rem;
 
           p {
             font-size: 0.75rem;
           }
 
           .subscribe-method {
-            font-size: 1rem;
-            padding: 12px 15px;
+            border-radius: 1.25rem;
+            font-size: 0.9rem;
             max-width: none;
-            margin-right: 0 !important;
-
             text-align: center;
             margin-top: 20px;
             color: #fff;

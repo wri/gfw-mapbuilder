@@ -1203,6 +1203,39 @@
       font-size: 1rem;
       color: rgb(104, 104, 104);
 
+      .twitter-box {
+        font-size: 0.9rem;
+        background: #598dca;
+        border-radius: 50px;
+        margin-bottom: 5px;
+        a {
+          color: white;
+        }
+      }
+
+      .facebook-box {
+        font-size: 0.9rem;
+        background: #39579b;
+        border-radius: 50px;
+        margin-bottom: 5px;
+        a {
+          color: white;
+        }
+      }
+
+      .google-box {
+        font-size: 0.9rem;
+        background: #da4735;
+        border-radius: 50px;
+        margin-bottom: 5px;
+        a {
+          color: white;
+        }
+      }
+      .subscription-authentication {
+        padding: 0;
+      }
+
       a,
       button {
         color: rgb(104, 104, 104);
