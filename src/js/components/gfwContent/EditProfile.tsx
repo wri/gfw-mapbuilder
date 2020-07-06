@@ -474,6 +474,9 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <h4>{editProfileTranslations[selectedLanguage].interest}</h4>
                 <MemoCountryPicker
+                  countryLabel={
+                    editProfileTranslations[selectedLanguage].country
+                  }
                   defaultCountry={existingProfileInfo?.aoiCountry}
                   activeCountryCallback={(id: any): any =>
                     setInterestActiveCountry(id)
@@ -517,7 +520,7 @@ const EditProfile = (): JSX.Element => {
                     multiple
                     onChange={handleTopics}
                   >
-                    {topics.map((topic, i: number) => {
+                    {topics[selectedLanguage].map((topic, i: number) => {
                       return (
                         <option
                           selected={existingProfileInfo?.interests?.includes(
@@ -545,7 +548,7 @@ const EditProfile = (): JSX.Element => {
                     multiple
                     onChange={handleUsage}
                   >
-                    {usage.map((usage, i: number) => {
+                    {usage[selectedLanguage].map((usage, i: number) => {
                       return (
                         <option
                           selected={existingProfileInfo?.howDoYouUse?.includes(

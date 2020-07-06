@@ -1448,112 +1448,776 @@ export const sectors: SectorsObject = {
   ]
 };
 
-type Topic = { label: string; id: string };
-export const usage: Topic[] = [
-  {
-    label: 'Advocacy/campaigning',
-    id: 'Advocacy/campaigning'
-  },
-  {
-    label: 'Data or visuals for blogs or media stories',
-    id: 'Data or visuals for blogs or media stories'
-  },
-  {
-    label: 'Data or visuals for presentations and reports',
-    id: 'Data or visuals for presentations and reports'
-  },
-  {
-    label: 'Educational support materials',
-    id: 'Educational support materials'
-  },
-  {
-    label: 'General research',
-    id: 'General research'
-  },
-  {
-    label: 'Identify illegal activity',
-    id: 'Identify illegal activity'
-  },
-  {
-    label: 'Inform grant funding decisions/results-based payments',
-    id: 'Inform grant funding decisions/results-based payments'
-  },
-  {
-    label: 'Inform purchasing/procurement/investment decisions',
-    id: 'Inform purchasing/procurement/investment decisions'
-  },
-  {
-    label: 'Land use planning/land use allocation',
-    id: 'Land use planning/land use allocation'
-  },
-  {
-    label: 'Learn about forests/my country',
-    id: 'Learn about forests/my country'
-  },
-  {
-    label: 'Monitor or manage an area',
-    id: 'Monitor or manage an area'
-  },
-  {
-    label: 'Monitor results/impacts',
-    id: 'Monitor results/impacts'
-  },
-  {
-    label: 'Not sure; new to GFW',
-    id: 'Not sure; new to GFW'
-  },
-  {
-    label: 'Plan field work (patrols/investigations)',
-    id: 'Plan field work (patrols/investigations)'
-  },
-  {
-    label: 'Other',
-    id: 'Other'
-  }
-];
+type Topic = { [key: string]: { label: string; id: string }[] };
+export const usage: Topic = {
+  en: [
+    {
+      label: 'Advocacy/campaigning',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: 'Data or visuals for blogs or media stories',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Data or visuals for presentations and reports',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Educational support materials',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'General research',
+      id: 'General research'
+    },
+    {
+      label: 'Identify illegal activity',
+      id: 'Identify illegal activity'
+    },
+    {
+      label: 'Inform grant funding decisions/results-based payments',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Inform purchasing/procurement/investment decisions',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: 'Land use planning/land use allocation',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Learn about forests/my country',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Monitor or manage an area',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Monitor results/impacts',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Not sure; new to GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Plan field work (patrols/investigations)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Other',
+      id: 'Other'
+    }
+  ],
+  ka: [
+    {
+      label: 'Advocacy/campaigning',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: 'Data or visuals for blogs or media stories',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Data or visuals for presentations and reports',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Educational support materials',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'General research',
+      id: 'General research'
+    },
+    {
+      label: 'Identify illegal activity',
+      id: 'Identify illegal activity'
+    },
+    {
+      label: 'Inform grant funding decisions/results-based payments',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Inform purchasing/procurement/investment decisions',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: 'Land use planning/land use allocation',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Learn about forests/my country',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Monitor or manage an area',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Monitor results/impacts',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Not sure; new to GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Plan field work (patrols/investigations)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Other',
+      id: 'Other'
+    }
+  ],
+  fr: [
+    {
+      label: 'Plaidoyer/Campagne',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label:
+        'Données ou illustrations pour les blogs ou les articles de presse',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Données ou visuels pour des présentations et des rapports',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Matériel de soutien pédagogique',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'Recherche générale',
+      id: 'General research'
+    },
+    {
+      label: 'Identifiez les activités illégales',
+      id: 'Identify illegal activity'
+    },
+    {
+      label:
+        'Informez les décisions de financement des subventions/paiements basés sur les résultats',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Inform purchasing/procurement/investment decisions',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: "Planification de l'utilisation des terres/allocation des terres",
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'En savoir plus sur les forêts/mon pays',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Surveillez ou gérez une zone',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Surveiller les résultats/impactes',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Pas sûr ; nouveau à GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Planifier le travail sur le terrain (patrouilles/enquêtes)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Autre',
+      id: 'Other'
+    }
+  ],
+  es: [
+    {
+      label: 'Defensa/campaña',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label:
+        'Datos o imágenes para blogs o historias de medios de comunicación',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Datos o imágenes para presentaciones e informes',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Materiales de apoyo educativo',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'Investigación general',
+      id: 'General research'
+    },
+    {
+      label: 'Identificar actividades ilegales',
+      id: 'Identify illegal activity'
+    },
+    {
+      label:
+        'Informar sobre las decisiones de financiación de las subvenciones/pagos basados en los resultados',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Informar sobre las decisiones de compra/adquisición/inversión',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label:
+        "PlanifiPlanificación del uso de la tierra/asignación del uso de la tierraation de l'utilisation des terres/allocation des terres",
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Aprender sobre bosques/mi país',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Vigilar o gestionar un área',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Monitorear resultados/efectos',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'No estoy seguro(a); soy nuevo(a) en GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Planifique el trabajo de campo (patrullas/investigaciones)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Otro',
+      id: 'Other'
+    }
+  ],
+  pt: [
+    {
+      label: 'Ativismo/campanha',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: 'Dados ou imagens para blogs ou artigos de  mídia',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Dados ou imagens para apresentações e relatórios',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Materiais de apoio educacional',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'Pesquisa geral',
+      id: 'General research'
+    },
+    {
+      label: 'Identifique atividade ilegal',
+      id: 'Identify illegal activity'
+    },
+    {
+      label:
+        'Informe decisões de financiamento de subsídios/pagamentos baseados em resultados',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Informar decisões de compras/aquisições/investimentos',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: 'Planejamento do uso da terra/alocação do uso da terra',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Saiba mais sobre florestas/meu país',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Monitore ou gerencie uma área',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Monitorar resultados/impactos',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Não tenho certeza; novo no GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Planejar trabalho de campo (patrulhas/investigações)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Outro',
+      id: 'Other'
+    }
+  ],
+  id: [
+    {
+      label: 'Advokasi/kampanye',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: 'Data atau visual untuk kisah blog atau media',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Data atau visual untuk presentasi dan laporan',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Materi pendukung edukasi',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'Penelitian umum',
+      id: 'General research'
+    },
+    {
+      label: 'Identifikasi aktivitas ilegal',
+      id: 'Identify illegal activity'
+    },
+    {
+      label:
+        'Memberi masukan untuk keputusan pendanaan hibah/pembayaran berbasis hasil',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Memberi masukan untuk keputusan pembelian/pengadaan/investasi',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: 'Perencanaan penggunaan lahan/alokasi penggunaan lahan',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Mempelajari tentang hutan/negara saya',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Pantau atau kelola sebuah area',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Memantau hasil/dampak',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Tidak yakin; pengguna baru GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Upaya lapangan lahan (patroli/investigasi)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Lainnya',
+      id: 'Other'
+    }
+  ],
+  zh: [
+    {
+      label: '倡导/宣传',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: '用于博客文章或媒体报道的数据或视觉效果图',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: '用于演示和报告的数据或视觉资料',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: '教育辅助材料',
+      id: 'Educational support materials'
+    },
+    {
+      label: '一般研究',
+      id: 'General research'
+    },
+    {
+      label: '识别非法活动',
+      id: 'Identify illegal activity'
+    },
+    {
+      label: '告知资助金拨款决定／基于结果的付款',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: '通知购买／采购／投资决策',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: '土地使用规划／土地用途分配',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: '了解森林/我的国家或地区',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: '监测或管理某片区域',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: '监测结果／影响',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: '不确定；GFW 新手',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: '规划实地工作（巡逻／调查）',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: '其他',
+      id: 'Other'
+    }
+  ]
+};
 
-export const topics: Topic[] = [
-  {
-    label: 'Agricultural supply chains',
-    id: 'Agricultural_supply_chains'
-  },
-  {
-    label: 'Biodiversity',
-    id: 'Biodiversity'
-  },
-  {
-    label: 'Climate/Carbon',
-    id: 'Climate_Carbon'
-  },
-  {
-    label: 'Deforestation/Forest Degradation',
-    id: 'Deforestation_Forest_Degradation'
-  },
-  {
-    label: 'Fires',
-    id: 'Fires'
-  },
-  {
-    label: 'Innovations in forest monitoring',
-    id: 'Innovations_in_forest_monitoring'
-  },
-  {
-    id: 'My_region_or_country',
-    label: 'My region or country'
-  },
-  {
-    id: 'Reforestation_Landscape_restoration',
-    label: 'Reforestation/Landscape restoration'
-  },
-  {
-    id: 'Small_Grants_Fund_and_Tech_Fellowship',
-    label: 'Small Grants Fund and Tech Fellowship'
-  },
-  {
-    label: 'Watersheds',
-    id: 'Watersheds_'
-  }
-];
+export const topics: Topic = {
+  en: [
+    {
+      label: 'Agricultural supply chains',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversity',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Climate/Carbon',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Deforestation/Forest Degradation',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Fires',
+      id: 'Fires'
+    },
+    {
+      label: 'General information/Data about forests',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Innovations in forest monitoring',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'My region or country',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reforestation/Landscape restoration',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: 'Small Grants Fund and Tech Fellowship',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Watersheds',
+      id: 'Watersheds_'
+    }
+  ],
+  ka: [
+    {
+      label: 'Agricultural supply chains',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversity',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Climate/Carbon',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Deforestation/Forest Degradation',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Fires',
+      id: 'Fires'
+    },
+    {
+      label: 'General information/Data about forests',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Innovations in forest monitoring',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'My region or country',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reforestation/Landscape restoration',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: 'Small Grants Fund and Tech Fellowship',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Watersheds',
+      id: 'Watersheds_'
+    }
+  ],
+  zh: [
+    {
+      label: '农业供应链',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: '生物多样性',
+      id: 'Biodiversity'
+    },
+    {
+      label: '气候/碳',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: '滥伐（毁林）／森林退化',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: '火灾',
+      id: 'Fires'
+    },
+    {
+      label: '有关森林的一般信息／数据',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: '森林监测创新',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: '我的国家或地区',
+      id: 'My_region_or_country'
+    },
+    {
+      label: '造林再造/景观恢复',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: '小额补助基金和科技奖',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: '流域 ',
+      id: 'Watersheds_'
+    }
+  ],
+  fr: [
+    {
+      label: "Chaînes d'approvisionnement agricoles",
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversité',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Climat/Carbone',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Déforestation/dégradation des forêts',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Feux',
+      id: 'Fires'
+    },
+    {
+      label: 'Informations générales/Données sur les forêts',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Innovations en matière de surveillance des forêts',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'Ma région ou mon pays',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reforestation/Restauration des paysages',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label:
+        'Fonds de petites subventions et bourse de recherche en technologie',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Bassins versants',
+      id: 'Watersheds_'
+    }
+  ],
+  es: [
+    {
+      label: 'Cadenas de suministro agrícola',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversidad',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Clima/carbono',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Deforestación y degradación forestal',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Incendios',
+      id: 'Fires'
+    },
+    {
+      label: 'Información general/Datos sobre los bosques',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Innovaciones en la monitorización de bosques',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'Mi región o país',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reforestación/Restauración del paisaje',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: ' Fondo de pequeñas subvenciones y beca tecnológica',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Cuencas hidrográficas ',
+      id: 'Watersheds_'
+    }
+  ],
+  pt: [
+    {
+      label: 'Cadeias de suprimentos agrícolas',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversidade',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Clima/Carbono',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Desmatamento/Degradação Florestal',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Incêndios',
+      id: 'Fires'
+    },
+    {
+      label: 'Informações gerais/Dados sobre florestas',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Inovações no monitoramento de florestas',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'Minha região ou país',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reflorestamento/Restauração da paisagem',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: 'Fundo de pequenos subsídios e bolsa de tecnologia',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Bacias hidrográficas ',
+      id: 'Watersheds_'
+    }
+  ],
+  id: [
+    {
+      label: 'Rantai pasokan pertanian',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Keanekaragaman hayati',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Iklim/Karbon',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Deforestasi/Degradasi Hutan',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Kebakaran',
+      id: 'Fires'
+    },
+    {
+      label: 'Informasi umum/Data tentang hutan',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Inovasi dalam pemantauan hutan',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'Daerah atau negara saya',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Penghutanan kembali/pemulihan bentang alam',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: 'Dana Hibah Kecil dan Beasiswa Teknologi',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Daerah Aliran Sungai ',
+      id: 'Watersheds_'
+    }
+  ]
+};
 
 export const emailLoginTranslations = {
   en: {
