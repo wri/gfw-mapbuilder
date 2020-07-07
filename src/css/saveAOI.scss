@@ -1,0 +1,44 @@
+.saveAOI-container {
+  .alerts-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #e5e5df;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+  .area-alerts-img {
+    background: url('../images/alert-email.png') no-repeat center;
+    background-size: contain;
+    height: 120px;
+    width: 250px;
+  }
+
+  .MuiChip-root {
+    // background-color: red !important;
+    height: 25px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .MuiChip-label {
+    color: white !important;
+  }
+
+  .MuiAutocomplete-input {
+    font-size: 0.7rem !important;
+  }
+
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] {
+    padding: 4px !important;
+  }
+
+  .MuiFormLabel-root {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 0.8rem !important;
+    line-height: 0.2 !important;
+  }
+
+  .MuiChip-deleteIcon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
