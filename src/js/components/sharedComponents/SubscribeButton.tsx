@@ -54,7 +54,7 @@ export const SubscribeButton = (): JSX.Element => {
             backgroundColor: `${backgroundColor}`
           }}
           className="subscribe-button"
-          onClick={(): any => dispatch(renderModal('AlertCarousel'))}
+          onClick={(): any => dispatch(renderModal('SaveAOI'))}
         >
           {subscribeButtonTranslations[selectedLanguage]}{' '}
           <div className="subscribe-icon"></div>
