@@ -5,6 +5,7 @@
     background: #e5e5df;
     align-items: center;
     font-size: 0.8rem;
+    margin-bottom: 10px;
   }
   .area-alerts-img {
     background: url('../images/alert-email.png') no-repeat center;
@@ -40,5 +41,9 @@
   .MuiChip-deleteIcon {
     width: 18px !important;
     height: 18px !important;
+  }
+
+  .MuiInputBase-input {
+    background-color: transparent !important;
   }
 }
