@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import MapView from 'esri/views/MapView';
-import WebMap from 'esri/WebMap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { saveAOIText } from './staticTextTranslations';
@@ -50,6 +48,11 @@ const SaveAOI = (): JSX.Element => {
   const [selectedAlerts, setSelectedAlerts] = useState<Array<string> | []>([]);
   const [subscriptionName, setSubscriptionName] = useState('');
   const [subscriptionLanguage, setSubscriptionLanguage] = useState('English');
+  const [deforestation, setDeforestationAlerts] = useState();
+  const [tags, setTags] = useState<(string | never[])[]>([]);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [language, setLanguage] = useState('en');
+  const [fire, setFireAlerts] = useState();
   const { register, handleSubmit, errors, control } = useForm();
   const iso = useSelector((state: RootState) => state.appSettings.iso);
   const activeFeatures = useSelector(
@@ -146,7 +149,38 @@ const SaveAOI = (): JSX.Element => {
   // };
   //
   const onDefaultSubmit = (data: any): void => {
-    console.log(data);
+    const userToken = localStorage.getItem('userToken');
+    const payload = {
+      ...data,
+      application: 'gfw',
+      fireAlerts: fire,
+      deforestationAlerts: deforestation,
+      geostore: activeFeature.attributes.geostoreId,
+      type: 'geostore',
+      language,
+      public: true, //unclear what this means, we are replicating flagship app,
+      tags
+    };
+
+    fetch('https://production-api.globalforestwatch.org/v2/area', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(msg => {
+        if (msg?.errors) {
+          setUpdateError(msg.errors[0].detail);
+        } else {
+          setUpdateSuccess(true);
+        }
+      })
+      .catch(e => {
+        setUpdateError(e);
+      });
   };
 
   const miniMap = React.useRef<HTMLDivElement>(null);
@@ -250,7 +284,7 @@ const SaveAOI = (): JSX.Element => {
   const classes = useCheckboxStyles();
 
   function handleLanguagePicker(e: any) {
-    console.log(e);
+    setLanguage(e);
   }
 
   return (
@@ -268,7 +302,7 @@ const SaveAOI = (): JSX.Element => {
             <input
               className="input-text"
               type="name"
-              placeholder="Area Name"
+              placeholder=""
               name="name"
               ref={register({ required: true })}
             />
@@ -288,6 +322,7 @@ const SaveAOI = (): JSX.Element => {
                   options={[]}
                   defaultValue={[]}
                   filterSelectedOptions
+                  onChange={(_, value): void => setTags(value)}
                   renderInput={params => (
                     <TextField
                       {...params}
@@ -331,15 +366,16 @@ const SaveAOI = (): JSX.Element => {
             </label>
             <section>
               <Controller
+                as={Checkbox}
                 color="default"
                 icon={<span className={classes.icon} />}
                 className={classes.root}
                 checkedIcon={
                   <span className={clsx(classes.icon, classes.checkedIcon)} />
                 }
-                as={Checkbox}
                 disableRipple
-                name="Checkbox-forFireDetected"
+                name="fireAlerts"
+                onChange={(e: any) => setFireAlerts(e[1])}
                 control={control}
               />
               <label style={{ fontSize: '0.8rem' }}>
@@ -356,8 +392,9 @@ const SaveAOI = (): JSX.Element => {
                 }
                 as={Checkbox}
                 disableRipple
-                name="Checkbox-forestChange"
+                name="deforestationAlerts"
                 control={control}
+                onChange={(e: any) => setDeforestationAlerts(e[1])}
               />
               <label style={{ fontSize: '0.8rem' }}>
                 {saveAOIText[selectedLanguage].forestChange}
