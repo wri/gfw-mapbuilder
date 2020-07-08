@@ -12,7 +12,12 @@ export const saveAOIText = {
     fireDetected: 'As soon as fires are detected',
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
-    save: 'SAVE'
+    save: 'SAVE',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   },
   fr: {
     title: "Enregistrer une zone d'intérêt",
@@ -27,7 +32,12 @@ export const saveAOIText = {
     fireDetected: "Dès qu'un incendie est détecté",
     forestChange: "Dès qu'un changement de forêt est détecté",
     language: 'LANGUE',
-    save: 'ENREGISTRER'
+    save: 'ENREGISTRER',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   },
   ka: {
     title: 'Save area of interest',
@@ -42,7 +52,12 @@ export const saveAOIText = {
     fireDetected: 'As soon as fires are detected',
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
-    save: 'SAVE'
+    save: 'SAVE',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   },
   es: {
     title: 'Guardar zona de interés',
@@ -57,7 +72,12 @@ export const saveAOIText = {
     fireDetected: 'Tan pronto como se detecten incendios',
     forestChange: 'Tan pronto como se detecte un cambio en el bosque',
     language: 'IDIOMA',
-    save: 'GUARDAR'
+    save: 'GUARDAR',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   },
   pt: {
     title: 'Salvar área de interesse',
@@ -72,7 +92,12 @@ export const saveAOIText = {
     fireDetected: 'Assim que incêndios forem detectados',
     forestChange: 'Assim que a mudança florestal for detectada',
     language: 'IDIOMA',
-    save: 'SALVAR'
+    save: 'SALVAR',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   },
   id: {
     title: 'Simpan daerah yang diminati',
@@ -88,7 +113,12 @@ export const saveAOIText = {
     fireDetected: 'Segera setelah api terdeteksi',
     forestChange: 'Segera setelah perubahan hutan terdeteksi',
     language: 'BAHASA',
-    save: 'SIMPAN'
+    save: 'SIMPAN',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   },
   zh: {
     title: '保存关注区域',
@@ -103,6 +133,11 @@ export const saveAOIText = {
     fireDetected: '一旦检测到火情',
     forestChange: '一旦检测到森林变化',
     language: '语言',
-    save: '保存'
+    save: '保存',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ]
   }
 };

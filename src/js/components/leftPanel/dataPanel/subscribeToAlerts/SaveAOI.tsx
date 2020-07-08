@@ -286,141 +286,174 @@ const SaveAOI = (): JSX.Element => {
   function handleLanguagePicker(e: any) {
     setLanguage(e);
   }
+  const SuccessScreen = () => {
+    return (
+      <div className="success-screen">
+        <div className="tree-success"></div>
+        <p>{saveAOIText[selectedLanguage].successText[0]}</p>
+        <p>{saveAOIText[selectedLanguage].successText[1]}</p>
+        <button
+          className="orange-button profile-submit"
+          onClick={() => setUpdateSuccess(false)}
+          style={{
+            backgroundColor: customColorTheme,
+            marginTop: '30px',
+            width: '200px'
+          }}
+        >
+          {saveAOIText[selectedLanguage].successButton}
+        </button>
+      </div>
+    );
+  };
 
   return (
     <div className="saveAOI-container">
-      <h2>{saveAOIText[selectedLanguage].title}</h2>
-      <div className="map-placeholder">
-        <div style={{ height: '200px' }} ref={miniMap}></div>
-      </div>
-      <div>
-        <form onSubmit={handleSubmit(onDefaultSubmit)}>
-          <div className="form-section">
-            <label htmlFor="name" className="input-label">
-              {saveAOIText[selectedLanguage].nameLabel}
-            </label>
-            <input
-              className="input-text"
-              type="name"
-              placeholder=""
-              name="name"
-              ref={register({ required: true })}
-            />
-            {errors.name && (
-              <p className="input-error">
-                {saveAOIText[selectedLanguage].required}
-              </p>
-            )}
-          </div>
-          <div className="form-section">
-            <div>
-              <AutocompleteWrapper customColorTheme={customColorTheme}>
-                <Autocomplete
-                  freeSolo
-                  multiple
-                  id="tags-outlined"
-                  options={[]}
-                  defaultValue={[]}
-                  filterSelectedOptions
-                  onChange={(_, value): void => setTags(value)}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label={saveAOIText[selectedLanguage].tagsLabel}
-                      placeholder="Tags"
-                    />
-                  )}
-                />
-              </AutocompleteWrapper>
+      <>
+        {!updateSuccess && (
+          <>
+            <h2>{saveAOIText[selectedLanguage].title}</h2>
+            <div className="map-placeholder">
+              <div style={{ height: '200px' }} ref={miniMap}></div>
             </div>
-            <span style={{ fontSize: '0.6rem' }}>
-              {saveAOIText[selectedLanguage].tagsSubLabel}
-            </span>
-          </div>
-          <div className="alerts-section">
-            <div className="area-alerts-img"></div>
-            <p>{saveAOIText[selectedLanguage].alertNote}</p>
-          </div>
-          <div className="form-section">
-            <label htmlFor="email" className="input-label">
-              {saveAOIText[selectedLanguage].email} *
-            </label>
-            <input
-              defaultValue={userEmail}
-              className="input-text"
-              type="email"
-              placeholder="example@globalforestwatch.com"
-              name="email"
-              ref={register({ required: true })}
-            />
-            {errors.email && (
-              <p className="input-error">
-                {saveAOIText[selectedLanguage].required}
-              </p>
-            )}
-          </div>
-          <div className="form-section">
-            <label htmlFor="notifications" className="input-label">
-              {saveAOIText[selectedLanguage].notifications} *
-            </label>
-            <section>
-              <Controller
-                as={Checkbox}
-                color="default"
-                icon={<span className={classes.icon} />}
-                className={classes.root}
-                checkedIcon={
-                  <span className={clsx(classes.icon, classes.checkedIcon)} />
-                }
-                disableRipple
-                name="fireAlerts"
-                onChange={(e: any) => setFireAlerts(e[1])}
-                control={control}
-              />
-              <label style={{ fontSize: '0.8rem' }}>
-                {saveAOIText[selectedLanguage].fireDetected}
-              </label>
-            </section>
-            <section>
-              <Controller
-                color="default"
-                icon={<span className={classes.icon} />}
-                className={classes.root}
-                checkedIcon={
-                  <span className={clsx(classes.icon, classes.checkedIcon)} />
-                }
-                as={Checkbox}
-                disableRipple
-                name="deforestationAlerts"
-                control={control}
-                onChange={(e: any) => setDeforestationAlerts(e[1])}
-              />
-              <label style={{ fontSize: '0.8rem' }}>
-                {saveAOIText[selectedLanguage].forestChange}
-              </label>
-            </section>
-          </div>
-          <div className="form-section">
-            <label htmlFor="language" className="input-label">
-              {saveAOIText[selectedLanguage].language} *
-            </label>
-            <MemoLanguagePicker activeLanguageCallback={handleLanguagePicker} />
-          </div>
-          {updateError && <p className="input-error">{updateError}</p>}
-          <input
-            className="orange-button profile-submit"
-            style={{
-              backgroundColor: customColorTheme,
-              marginTop: '30px',
-              width: '200px',
-              cursor: 'pointer'
-            }}
-            type="submit"
-            value={saveAOIText[selectedLanguage].save}
-          />
-        </form>
-      </div>
+            <div>
+              <form onSubmit={handleSubmit(onDefaultSubmit)}>
+                <div className="form-section">
+                  <label htmlFor="name" className="input-label">
+                    {saveAOIText[selectedLanguage].nameLabel}
+                  </label>
+                  <input
+                    className="input-text"
+                    type="name"
+                    placeholder=""
+                    name="name"
+                    ref={register({ required: true })}
+                  />
+                  {errors.name && (
+                    <p className="input-error">
+                      {saveAOIText[selectedLanguage].required}
+                    </p>
+                  )}
+                </div>
+                <div className="form-section">
+                  <div>
+                    <AutocompleteWrapper customColorTheme={customColorTheme}>
+                      <Autocomplete
+                        freeSolo
+                        multiple
+                        id="tags-outlined"
+                        options={[]}
+                        defaultValue={[]}
+                        filterSelectedOptions
+                        onChange={(_, value): void => setTags(value)}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            label={saveAOIText[selectedLanguage].tagsLabel}
+                            placeholder="Tags"
+                          />
+                        )}
+                      />
+                    </AutocompleteWrapper>
+                  </div>
+                  <span style={{ fontSize: '0.6rem' }}>
+                    {saveAOIText[selectedLanguage].tagsSubLabel}
+                  </span>
+                </div>
+                <div className="alerts-section">
+                  <div className="area-alerts-img"></div>
+                  <p>{saveAOIText[selectedLanguage].alertNote}</p>
+                </div>
+                <div className="form-section">
+                  <label htmlFor="email" className="input-label">
+                    {saveAOIText[selectedLanguage].email} *
+                  </label>
+                  <input
+                    defaultValue={userEmail}
+                    className="input-text"
+                    type="email"
+                    placeholder="example@globalforestwatch.com"
+                    name="email"
+                    ref={register({ required: true })}
+                  />
+                  {errors.email && (
+                    <p className="input-error">
+                      {saveAOIText[selectedLanguage].required}
+                    </p>
+                  )}
+                </div>
+                <div className="form-section">
+                  <label htmlFor="notifications" className="input-label">
+                    {saveAOIText[selectedLanguage].notifications} *
+                  </label>
+                  <section>
+                    <Controller
+                      as={Checkbox}
+                      color="default"
+                      icon={<span className={classes.icon} />}
+                      className={classes.root}
+                      checkedIcon={
+                        <span
+                          className={clsx(classes.icon, classes.checkedIcon)}
+                        />
+                      }
+                      disableRipple
+                      name="fireAlerts"
+                      onChange={(e: any) => setFireAlerts(e[1])}
+                      control={control}
+                    />
+                    <label style={{ fontSize: '0.8rem' }}>
+                      {saveAOIText[selectedLanguage].fireDetected}
+                    </label>
+                  </section>
+                  <section>
+                    <Controller
+                      color="default"
+                      icon={<span className={classes.icon} />}
+                      className={classes.root}
+                      checkedIcon={
+                        <span
+                          className={clsx(classes.icon, classes.checkedIcon)}
+                        />
+                      }
+                      as={Checkbox}
+                      disableRipple
+                      name="deforestationAlerts"
+                      control={control}
+                      onChange={(e: any) => setDeforestationAlerts(e[1])}
+                    />
+                    <label style={{ fontSize: '0.8rem' }}>
+                      {saveAOIText[selectedLanguage].forestChange}
+                    </label>
+                  </section>
+                </div>
+                <div className="form-section">
+                  <label htmlFor="language" className="input-label">
+                    {saveAOIText[selectedLanguage].language} *
+                  </label>
+                  <MemoLanguagePicker
+                    activeLanguageCallback={handleLanguagePicker}
+                  />
+                </div>
+                {updateError && <p className="input-error">{updateError}</p>}
+                <input
+                  className="orange-button profile-submit"
+                  style={{
+                    backgroundColor: customColorTheme,
+                    marginTop: '30px',
+                    width: '200px',
+                    cursor: 'pointer'
+                  }}
+                  type="submit"
+                  value={saveAOIText[selectedLanguage].save}
+                />
+              </form>
+            </div>
+          </>
+        )}
+        {updateSuccess && <SuccessScreen />}
+      </>
     </div>
   );
 };
