@@ -127,6 +127,7 @@ export interface FeatureResult {
   objectid: number;
   attributes: Attributes;
   geometry: __esri.Geometry;
+  layer?: any;
 }
 
 export interface FieldName {

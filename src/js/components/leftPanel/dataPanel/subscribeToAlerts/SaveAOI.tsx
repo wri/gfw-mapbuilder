@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import MapView from 'esri/views/MapView';
+import WebMap from 'esri/WebMap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { saveAOIText } from './staticTextTranslations';
@@ -12,6 +14,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import styled from 'styled-components';
 import { MemoLanguagePicker } from './LanguagePicker';
+import { miniMapInit } from './MiniMap';
 
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 
@@ -61,6 +64,7 @@ const SaveAOI = (): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
+  const webmapID = useSelector((store: RootState) => store.appSettings.webmap);
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
 
@@ -145,11 +149,22 @@ const SaveAOI = (): JSX.Element => {
     console.log(data);
   };
 
+  const miniMap = React.useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const email = localStorage.getItem('email');
     if (email) {
       setUserEmail(email);
     }
+
+    //Create Mini-Map
+    if (!miniMap?.current || !webmapID) return;
+    miniMapInit(
+      webmapID,
+      miniMap,
+      activeLayer.features[0]!.layer,
+      activeFeature.geometry
+    );
   }, []);
 
   // const returnCurrentStep = (): JSX.Element | undefined => {
@@ -241,7 +256,9 @@ const SaveAOI = (): JSX.Element => {
   return (
     <div className="saveAOI-container">
       <h2>{saveAOIText[selectedLanguage].title}</h2>
-      <p>Map placeholder</p>
+      <div className="map-placeholder">
+        <div style={{ height: '200px' }} ref={miniMap}></div>
+      </div>
       <div>
         <form onSubmit={handleSubmit(onDefaultSubmit)}>
           <div className="form-section">
