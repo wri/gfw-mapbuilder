@@ -13,7 +13,7 @@ module.exports = () => {
   return {
     mode: 'production',
     entry: {
-      main: ['./src/js/lib.tsx']
+      main: ['./src/js/index.tsx']
     },
     output: {
       filename: '[name].js'
@@ -86,7 +86,7 @@ module.exports = () => {
       }),
 
       new CopyWebpackPlugin([
-        { from: './configs/countryConfigs/cameroon.js', to: 'configuration.js' } //TODO: this needs to be somehow dynamic
+        { from: './configs/resources.js', to: 'configuration.js' } //TODO: this needs to be somehow dynamic
       ]),
 
       new HtmlWebPackPlugin({
