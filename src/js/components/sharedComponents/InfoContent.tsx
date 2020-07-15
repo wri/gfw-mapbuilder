@@ -125,7 +125,8 @@ const getWebmapGroupContent = async (
 
 //Extracting info from Service Layers with technicalName
 const getServiceGroupContent = async (technicalName: string): Promise<any> => {
-  const baseURL = 'https://gis-gfw.wri.org/metadata';
+  const baseURL =
+    'https://production-api.globalforestwatch.org/v1/gfw-metadata';
   const metaURL = `${baseURL}/${technicalName}`;
 
   return await fetch(metaURL)
