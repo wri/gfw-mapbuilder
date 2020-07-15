@@ -129,25 +129,6 @@ const SaveAOI = (): JSX.Element => {
       );
   };
 
-  // const setNextStep = (): void => {
-  //   const index = allSteps.indexOf(activeStep);
-  //   const nextStep = allSteps[index + 1];
-
-  //   if (nextStep === 'SubscriptionSaved') {
-  //     updateSubscriptions();
-  //     setActiveStep(nextStep);
-  //     return;
-  //   }
-
-  //   setActiveStep(nextStep);
-  // };
-
-  // const setPrevStep = (): void => {
-  //   const index = allSteps.indexOf(activeStep);
-  //   const prevStep = allSteps[index - 1];
-  //   setActiveStep(prevStep);
-  // };
-  //
   const onDefaultSubmit = (data: any): void => {
     const userToken = localStorage.getItem('userToken');
     const payload = {
@@ -195,39 +176,6 @@ const SaveAOI = (): JSX.Element => {
     if (!miniMap?.current || !webmapID) return;
     miniMapInit(webmapID, miniMap, activeFeature.geometry);
   }, []);
-
-  // const returnCurrentStep = (): JSX.Element | undefined => {
-  //   switch (activeStep) {
-  //     case 'SubscribeToAlerts':
-  //       return (
-  //         <SubscribeToAlerts
-  //           setNextStep={setNextStep}
-  //           selectedAlerts={selectedAlerts}
-  //           setSelectedAlerts={setSelectedAlerts}
-  //         />
-  //       );
-  //     case 'NameYourSubscription':
-  //       return (
-  //         <NameYourSubscription
-  //           setNextStep={setNextStep}
-  //           setPrevStep={setPrevStep}
-  //           subscriptionName={subscriptionName}
-  //           setSubscriptionName={setSubscriptionName}
-  //           setSubscriptionLanguage={setSubscriptionLanguage}
-  //         />
-  //       );
-  //     case 'SubscriptionSaved':
-  //       return <SubscriptionSaved />;
-  //     default:
-  //       break;
-  //   }
-  // };
-  //
-  // const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
-  //   .styled-checkbox:checked + .styled-checkboxlabel:before {
-  //     background-color: ${props => props.customColorTheme};
-  //   }
-  // `;
 
   const useCheckboxStyles = makeStyles({
     root: {
@@ -281,6 +229,7 @@ const SaveAOI = (): JSX.Element => {
   function handleLanguagePicker(e: any) {
     setLanguage(e);
   }
+
   const SuccessScreen = () => {
     return (
       <div className="success-screen">

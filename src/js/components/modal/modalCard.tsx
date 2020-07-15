@@ -8,7 +8,7 @@ import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent'
 import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
 import CanopyDensityContent from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import SubscriptionContent from '../mapWidgets/widgetContent/SubscriptionContent';
+import SubscriptionContent from 'js/components/dataPanel/subscribeToAlerts/SubscriptionContent';
 import SaveAOI from '../leftPanel/dataPanel/subscribeToAlerts/SaveAOI';
 import InfoContent from 'js/components/sharedComponents/InfoContent';
 import EditProfile from 'js/components/gfwContent/EditProfile';
