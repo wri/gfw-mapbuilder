@@ -1,11 +1,12 @@
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
-import GraphicLayer from 'esri/layers/GraphicsLayer';
+import GraphicsLayer from 'esri/layers/GraphicsLayer';
+import Graphic from 'esri/Graphic';
+import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 
 export function miniMapInit(
   webmapID: string,
   htmlRef: React.RefObject<HTMLDivElement | null>,
-  graphicLayer: GraphicLayer,
   geometry: __esri.Geometry
 ): void {
   if (!htmlRef.current) return;
@@ -38,8 +39,23 @@ export function miniMapInit(
     //Remove All layers that are not needed
     mapRef.removeAll();
 
-    //@ts-ignore
-    mapRef.add(graphicLayer);
+    const aoiGraphic = new Graphic({
+      geometry: geometry,
+      symbol: new SimpleFillSymbol({
+        style: 'solid',
+        color: [210, 210, 210, 0.0],
+        outline: {
+          color: [3, 188, 255],
+          width: 3
+        }
+      })
+    });
+
+    const gLayer = new GraphicsLayer({
+      graphics: [aoiGraphic]
+    });
+
+    mapRef.add(gLayer);
     miniMapView.goTo(geometry);
   });
 }

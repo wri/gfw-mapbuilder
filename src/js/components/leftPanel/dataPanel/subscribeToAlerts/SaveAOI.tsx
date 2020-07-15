@@ -193,12 +193,7 @@ const SaveAOI = (): JSX.Element => {
 
     //Create Mini-Map
     if (!miniMap?.current || !webmapID) return;
-    miniMapInit(
-      webmapID,
-      miniMap,
-      activeLayer.features[0]!.layer,
-      activeFeature.geometry
-    );
+    miniMapInit(webmapID, miniMap, activeFeature.geometry);
   }, []);
 
   // const returnCurrentStep = (): JSX.Element | undefined => {
