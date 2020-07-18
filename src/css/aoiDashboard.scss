@@ -1,0 +1,28 @@
+.aoi-dashboard {
+  text-align: center;
+  width: 100%;
+  .aoi-wrapper {
+    width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 500px;
+  }
+  .aoi-section {
+    border: 1px solid black;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .miniMap {
+    width: 150px;
+    height: 150px;
+    background-color: papayawhip;
+  }
+  .map-section {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column: 1/3;
+  }
+}

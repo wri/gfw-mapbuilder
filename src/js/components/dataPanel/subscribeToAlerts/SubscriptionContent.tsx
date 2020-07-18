@@ -1,16 +1,17 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { mapController } from 'js/controllers/mapController';
-
 import { renderModal } from 'js/store/appState/actions';
-
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
+// import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { setUserSubscriptions } from 'js/store/mapview/actions';
-
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
 import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
+import { format } from 'date-fns';
+import { miniMapInit } from 'js/components/leftPanel/dataPanel/subscribeToAlerts/MiniMap';
+import Loader from 'js/components/sharedComponents/Loader';
+
+import { geojsonToArcGIS } from 'js/helpers/tempConvert';
 
 import { RootState } from 'js/store/index';
 import {
@@ -19,246 +20,313 @@ import {
   SubscriptionAttributes
 } from 'js/store/mapview/types';
 
-//TODO: Investigate if this is exhaustive list or needs to be configed out somehow
-const datasetMap = [
-  { id: 'viirs-active-fires', label: 'VIIRS active fires alerts' },
-  { id: 'umd-loss-gain', label: 'Tree cover loss data' },
-  { id: 'glad-alerts', label: 'GLAD tree cover loss alerts' },
-  { id: 'imazon-alerts', label: 'SAD tree cover loss alerts' },
-  { id: 'forma-alerts', label: 'FORMA active clearing alerts' },
-  { id: 'prodes-loss', label: 'PRODES deforestation data' }
-];
+import 'css/aoiDashboard.scss';
 
-interface JSONData {
-  datasets: string[];
-  language: string;
-  resource: SubscriptionAttributes['resource'];
-  params: SubscriptionParams;
+function formatDate(dateStr: string): string {
+  const jsDate = new Date(dateStr);
+  return format(jsDate, 'MMM dd yyyy');
 }
 
-const SubscriptionContent: FunctionComponent = () => {
+type aoiData = {
+  attributes: {
+    admin: any;
+    application: string;
+    confirmed: boolean;
+    createdAt: string;
+    datasets: any[];
+    deforestationAlerts: boolean;
+    email: string;
+    fireAlerts: boolean;
+    geostore: string;
+    iso: any;
+    language: string;
+    monthlySummary: boolean;
+    name: string;
+    public: boolean;
+    status: string;
+    subscriptionId: string;
+    tags: string[];
+    use: any;
+    userId: string;
+    wdpaid: any;
+    webhookUrl: string;
+  };
+  id: string;
+  type: string;
+};
+
+const AOIDashboard = () => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [loadingError, setLoadingError] = useState(false);
+  const [data, setData] = useState<aoiData[]>();
+
   const { userSubscriptions } = useSelector(
     (state: RootState) => state.mapviewState
   );
 
-  interface DatasetAlertsProps {
-    dataset: string;
-    datasetLabel: string;
-    subscription: UserSubscription;
-  }
-  const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
-    const { subscription, datasetLabel, dataset } = props;
+  // interface DatasetAlertsProps {
+  //   dataset: string;
+  //   datasetLabel: string;
+  //   subscription: UserSubscription;
+  // }
+  // const DatasetAlerts = (props: DatasetAlertsProps): JSX.Element => {
+  //   const { subscription, datasetLabel, dataset } = props;
 
-    const updateDataset = (): void => {
-      const jsonData: JSONData = {
-        datasets: [],
-        language: subscription.attributes.language,
-        resource: subscription.attributes.resource,
-        params: subscription.attributes.params
-      };
-      const datasetOn = subscription.attributes.datasets.includes(dataset);
+  //   const updateDataset = (): void => {
+  //     const jsonData: JSONData = {
+  //       datasets: [],
+  //       language: subscription.attributes.language,
+  //       resource: subscription.attributes.resource,
+  //       params: subscription.attributes.params
+  //     };
+  //     const datasetOn = subscription.attributes.datasets.includes(dataset);
 
-      if (datasetOn) {
-        jsonData.datasets = subscription.attributes.datasets.filter(
-          datasetID => datasetID !== dataset
-        );
-      } else {
-        subscription.attributes.datasets.push(dataset);
-        jsonData.datasets = subscription.attributes.datasets;
+  //     if (datasetOn) {
+  //       jsonData.datasets = subscription.attributes.datasets.filter(
+  //         datasetID => datasetID !== dataset
+  //       );
+  //     } else {
+  //       subscription.attributes.datasets.push(dataset);
+  //       jsonData.datasets = subscription.attributes.datasets;
+  //     }
+
+  //     fetch(
+  //       `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}`,
+  //       {
+  //         method: 'PATCH',
+  //         credentials: 'include',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify(jsonData)
+  //       }
+  //     )
+  //       .then(response => (response.status === 200 ? response.json() : null))
+  //       .then(results => {
+  //         if (results) {
+  //           const copyUserSubscriptions = [...userSubscriptions];
+  //           const index = copyUserSubscriptions.findIndex(
+  //             u => u.id === results.data.id
+  //           );
+  //           copyUserSubscriptions[index] = { ...results.data };
+  //           dispatch(setUserSubscriptions(copyUserSubscriptions));
+  //         } else {
+  //           // TODO [ ] - dispatch error UI
+  //         }
+  //       })
+  //       .catch(e => console.log('error in updateDataset()', e));
+  //   };
+
+  //   return (
+  //     <p className="subscribe-dataset">
+  //       {datasetLabel}
+  //       <span
+  //         onClick={(): void => updateDataset()}
+  //         className={`toggle-switch-subscription pointer ${
+  //           subscription.attributes.datasets.indexOf(props.dataset) === -1
+  //             ? ''
+  //             : 'active-subscription'
+  //         }`}
+  //       >
+  //         <span></span>
+  //       </span>
+  //     </p>
+  //   );
+  // };
+
+  // interface SubscriptionProps {
+  //   subscription: UserSubscription;
+  //   userSubscriptions: UserSubscription[];
+  // }
+
+  //const SubscriptionDetails = (props: SubscriptionProps): JSX.Element => {
+  //  const { subscription, userSubscriptions } = props;
+
+  //  const date = new Date(subscription.attributes.createdAt);
+  //  let dd: any = date.getDate();
+  //  let months: any = date.getMonth() + 1;
+  //  let min: any = date.getMinutes();
+
+  //  if (dd < 10) {
+  //    dd = '0' + dd;
+  //  }
+  //  if (months < 10) {
+  //    months = '0' + months;
+  //  }
+  //  if (min < 10) {
+  //    min = '0' + min;
+  //  }
+
+  //  const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
+  //  //TODO: May need to push into the config
+  //  const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
+
+  //  const zoomToSubscription = async (
+  //    subscription: UserSubscription
+  //  ): Promise<void> => {
+  //    // TODO [ ] - Integrate spinner!
+  //    const geostoreID = subscription.attributes.params.geostore;
+  //    const countryCode = subscription.attributes.params.iso.country;
+  //    const regionCode = subscription.attributes.params.iso.region;
+  //    const endPoint = regionCode
+  //      ? `${countryCode}/${regionCode}`
+  //      : `${countryCode}`;
+
+  //    const geostoreEndpoint = `https://production-api.globalforestwatch.org/v1/geostore/${geostoreID}`;
+  //    const countryCodeEndpoint = `https://api.resourcewatch.org/v1/geostore/admin/${endPoint}`;
+  //    const specificEndpoint = geostoreID
+  //      ? geostoreEndpoint
+  //      : countryCodeEndpoint;
+
+  //    await fetch(specificEndpoint)
+  //      .then(response => {
+  //        if (response.status === 200) {
+  //          return response.json();
+  //        }
+  //      })
+  //      .then(results => {
+  //        const esriJson = geojsonToArcGIS(results.data.attributes.geojson);
+  //        mapController.processGeojson(esriJson);
+  //        dispatch(renderModal(''));
+  //      })
+  //      .catch(e => {
+  //        console.log('error in /geostore/ of zoomToSubscription()', e);
+  //        console.error('Edge case in zoomToSubscription()!');
+  //        /**
+  //         * ! Edge cases found via https://www.globalforestwatch.org/my-gfw/subscriptions/new;
+  //         * ! Workflow 1. Select an area from a GFW data set / selecting an area by clicking a shape on the map
+  //         * ! Workflow 2. Select a country or jurisdiction / creating a subscription with no country selected
+  //         */
+  //      });
+  //  };
+  //  const deleteSubscription = (subscriptionID: string): void => {
+  //    fetch(
+  //      `https://production-api.globalforestwatch.org/v1/subscriptions/${subscriptionID}`,
+  //      {
+  //        method: 'DELETE',
+  //        credentials: 'include'
+  //      }
+  //    )
+  //      .then(response => {
+  //        if (response.status === 200) {
+  //          const updatedSubscriptions = userSubscriptions.filter(
+  //            (s: UserSubscription) => s.id !== subscriptionID
+  //          );
+
+  //          dispatch(setUserSubscriptions(updatedSubscriptions));
+  //        }
+  //      })
+  //      .catch(e => {
+  //        console.log('error in deleteSubscription()', e);
+  //        // TODO [ ] - Need UI error handling logic!
+  //      });
+  //  };
+  //};
+
+  useEffect(() => {
+    setLoading(true);
+    const baseURL = 'https://production-api.globalforestwatch.org/v2/area';
+    const token = localStorage.getItem('userToken');
+
+    if (token) {
+      fetch(baseURL, {
+        credentials: 'include',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          const hasError = response.status !== 200;
+          response.json().then(data => {
+            if (hasError) {
+              setLoadingError(true);
+              return;
+            }
+            setLoadingError(false);
+            setLoading(false);
+            const tt = data.data;
+            setData(tt);
+            console.log(data.data);
+          });
+        })
+        .catch(e => {
+          console.error(e);
+          setLoadingError(true);
+        });
+    }
+  }, []);
+
+  const ErrorScreen = () => (
+    <div style={{ textAlign: 'center', marginTop: '40%', color: 'red' }}>
+      Error occured while fetching areas of interest. Refresh the page to try
+      again.
+    </div>
+  );
+
+  const LoadingScreen = () => (
+    <Loader
+      containerPositionStyling={{
+        position: 'absolute',
+        top: '40%',
+        left: '42%'
+      }}
+      color={'#cfcdcd'}
+      size={100}
+    />
+  );
+
+  type AOISectionProps = {
+    dataObject: aoiData;
+  };
+  const AOISection = (props: AOISectionProps): JSX.Element => {
+    const [esriGeometry, setEsriGeometry] = useState<null | any>(null);
+    const webmapID = useSelector(
+      (store: RootState) => store.appSettings.webmap
+    );
+    const miniMap = React.useRef<HTMLDivElement>(null);
+    const { name, createdAt, geostore, tags } = props.dataObject.attributes;
+
+    useEffect(() => {
+      const geostoreURL =
+        'https://production-api.globalforestwatch.org/v1/geostore/';
+      async function getGeometryFromGeostore(): Promise<any> {
+        fetch(`${geostoreURL}${geostore}`)
+          .then(response => response.json())
+          .then(data => {
+            const esriGeo = geojsonToArcGIS(data.data.attributes.geojson);
+            console.log(esriGeo);
+            setEsriGeometry(esriGeo[0]);
+          })
+          .catch(e => console.error(e));
+      }
+      getGeometryFromGeostore();
+    }, []);
+
+    useEffect(() => {
+      function initializeMiniMap(): void {
+        if (!esriGeometry || !miniMap?.current || !webmapID) return;
+        miniMapInit(webmapID, miniMap, esriGeometry.geometry);
       }
 
-      fetch(
-        `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}`,
-        {
-          method: 'PATCH',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(jsonData)
-        }
-      )
-        .then(response => (response.status === 200 ? response.json() : null))
-        .then(results => {
-          if (results) {
-            const copyUserSubscriptions = [...userSubscriptions];
-            const index = copyUserSubscriptions.findIndex(
-              u => u.id === results.data.id
-            );
-            copyUserSubscriptions[index] = { ...results.data };
-            dispatch(setUserSubscriptions(copyUserSubscriptions));
-          } else {
-            // TODO [ ] - dispatch error UI
-          }
-        })
-        .catch(e => console.log('error in updateDataset()', e));
-    };
-
+      if (esriGeometry) {
+        initializeMiniMap();
+      }
+    }, [esriGeometry]);
+    //Get the geometry from geostore include
+    //Get the Glad and Viirs alerts numbers, looks like we are hitting the dataset IDS (lift them from flagship?), hit those and sum those up
     return (
-      <p className="subscribe-dataset">
-        {datasetLabel}
-        <span
-          onClick={(): void => updateDataset()}
-          className={`toggle-switch-subscription pointer ${
-            subscription.attributes.datasets.indexOf(props.dataset) === -1
-              ? ''
-              : 'active-subscription'
-          }`}
-        >
-          <span></span>
-        </span>
-      </p>
-    );
-  };
-
-  interface SubscriptionProps {
-    subscription: UserSubscription;
-    userSubscriptions: UserSubscription[];
-  }
-
-  const SubscriptionDetails = (props: SubscriptionProps): JSX.Element => {
-    const { subscription, userSubscriptions } = props;
-
-    const date = new Date(subscription.attributes.createdAt);
-    let dd: any = date.getDate();
-    let months: any = date.getMonth() + 1;
-    let min: any = date.getMinutes();
-
-    if (dd < 10) {
-      dd = '0' + dd;
-    }
-    if (months < 10) {
-      months = '0' + months;
-    }
-    if (min < 10) {
-      min = '0' + min;
-    }
-
-    const endDateString = `${date.getFullYear()}-${months}-${dd} ${date.getHours()}:${min}`;
-    //TODO: May need to push into the config
-    const subscribeUrl = `https://production-api.globalforestwatch.org/v1/subscriptions/${subscription.id}/send_confirmation`;
-
-    const zoomToSubscription = async (
-      subscription: UserSubscription
-    ): Promise<void> => {
-      // TODO [ ] - Integrate spinner!
-      const geostoreID = subscription.attributes.params.geostore;
-      const countryCode = subscription.attributes.params.iso.country;
-      const regionCode = subscription.attributes.params.iso.region;
-      const endPoint = regionCode
-        ? `${countryCode}/${regionCode}`
-        : `${countryCode}`;
-
-      const geostoreEndpoint = `https://production-api.globalforestwatch.org/v1/geostore/${geostoreID}`;
-      const countryCodeEndpoint = `https://api.resourcewatch.org/v1/geostore/admin/${endPoint}`;
-      const specificEndpoint = geostoreID
-        ? geostoreEndpoint
-        : countryCodeEndpoint;
-
-      await fetch(specificEndpoint)
-        .then(response => {
-          if (response.status === 200) {
-            return response.json();
-          }
-        })
-        .then(results => {
-          const esriJson = geojsonToArcGIS(results.data.attributes.geojson);
-          mapController.processGeojson(esriJson);
-          dispatch(renderModal(''));
-        })
-        .catch(e => {
-          console.log('error in /geostore/ of zoomToSubscription()', e);
-          console.error('Edge case in zoomToSubscription()!');
-          /**
-           * ! Edge cases found via https://www.globalforestwatch.org/my-gfw/subscriptions/new;
-           * ! Workflow 1. Select an area from a GFW data set / selecting an area by clicking a shape on the map
-           * ! Workflow 2. Select a country or jurisdiction / creating a subscription with no country selected
-           */
-        });
-    };
-    const deleteSubscription = (subscriptionID: string): void => {
-      fetch(
-        `https://production-api.globalforestwatch.org/v1/subscriptions/${subscriptionID}`,
-        {
-          method: 'DELETE',
-          credentials: 'include'
-        }
-      )
-        .then(response => {
-          if (response.status === 200) {
-            const updatedSubscriptions = userSubscriptions.filter(
-              (s: UserSubscription) => s.id !== subscriptionID
-            );
-
-            dispatch(setUserSubscriptions(updatedSubscriptions));
-          }
-        })
-        .catch(e => {
-          console.log('error in deleteSubscription()', e);
-          // TODO [ ] - Need UI error handling logic!
-        });
-    };
-
-    return (
-      <div className="source-row subscribe-row">
-        <div className="subscribe-button-container">
-          <div className="subscription-unconfirmed">
-            <div
-              className={`subscription-unconfirmed-wrap ${
-                subscription.attributes.confirmed ? 'hidden' : ''
-              }`}
-            >
-              <a href={subscribeUrl} className="subscription-uncle">
-                <ShapeWarning height={25} width={25} fill={'#F0AB00'} />
-                <span className="subscribe-tooltipmap">
-                  Subscription has not been confirmed, click here to resend the
-                  confirmation email
-                </span>
-              </a>
-            </div>
-            <p
-              className={`name-row ${
-                subscription.attributes.confirmed ? 'no-warning' : ''
-              }`}
-            >
-              {subscription.attributes.name}
-            </p>
+      <div className="aoi-section">
+        <p className="area-name">{name}</p>
+        <p className="date">{formatDate(createdAt)}</p>
+        <div className="map-section">
+          <div className="miniMap">
+            <div style={{ height: '150px' }} ref={miniMap}></div>
           </div>
-          <div onClick={() => console.log('shoow')} className="map-row">
-            <button
-              title="Show on map"
-              className="btn-delete-subscription"
-              onClick={(): Promise<void> => zoomToSubscription(subscription)}
-            >
-              <WorldShape height={25} width={25} fill={'#555'} />
-            </button>
-          </div>
-          <div className="delete-row">
-            <button
-              title="Delete subscription"
-              onClick={(): void => deleteSubscription(subscription.id)}
-              className="btn-delete-subscription"
-            >
-              <DeleteIcon height={25} width={25} fill={'#555'} />
-            </button>
-          </div>
-        </div>
-        <p className="other-row date-created">
-          Created on <br />
-          {endDateString}
-        </p>
-        <div className="other-row">
-          <p>Data sets:</p>
-          <div className="subscribe-datasets">
-            {datasetMap.map((dataset, i) => (
-              <DatasetAlerts
-                key={i}
-                dataset={dataset.id}
-                datasetLabel={dataset.label}
-                subscription={subscription}
-              />
-            ))}
+          <div className="controls">
+            <div>alert section</div>
+            <button>view on map</button>
+            <button>edit area</button>
           </div>
         </div>
       </div>
@@ -266,21 +334,19 @@ const SubscriptionContent: FunctionComponent = () => {
   };
 
   return (
-    <div>
-      <h3>Subscriptions</h3>
-      <p>
-        To add new subscriptions select a feature on the map and click on
-        Subscribe in the info window.
-      </p>
-      {userSubscriptions.map((subscription: UserSubscription, i: number) => (
-        <SubscriptionDetails
-          subscription={subscription}
-          userSubscriptions={userSubscriptions}
-          key={i}
-        />
-      ))}
+    <div className="aoi-dashboard">
+      <h3>Dashboard</h3>
+      {loadingError && <ErrorScreen />}
+      {loading && <LoadingScreen />}
+      {!loading && !loadingError && data && (
+        <div className="aoi-wrapper">
+          {data.map((dataObject: aoiData, i: number) => (
+            <AOISection key={i} dataObject={dataObject} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-export default SubscriptionContent;
+export default AOIDashboard;

@@ -56,27 +56,27 @@ const GFWLoginOptions = (props: any) => {
   }
 
   function getSubscriptions(): void {
-    if (userSubscriptions.length === 0) {
-      const token = localStorage.getItem('userToken');
-      if (token) {
-        fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
-          credentials: 'include',
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-          .then(response => {
-            response.json().then(json => {
-              dispatch(setUserSubscriptions(json.data));
-              dispatch(renderModal('SubscriptionWidget'));
-            });
-          })
-          .catch(e => console.log('Failed to fetch subscriptions', e));
-      }
-    } else {
-      console.log('We already have subscriptions, render them instead');
-      dispatch(renderModal('SubscriptionWidget'));
-    }
+    dispatch(renderModal('SubscriptionWidget'));
+    // if (userSubscriptions.length === 0) {
+    //   const token = localStorage.getItem('userToken');
+    //   if (token) {
+    //     fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
+    //       credentials: 'include',
+    //       headers: {
+    //         Authorization: `Bearer ${token}`
+    //       }
+    //     })
+    //       .then(response => {
+    //         response.json().then(json => {
+    //           dispatch(setUserSubscriptions(json.data));
+    //           dispatch(renderModal('SubscriptionWidget'));
+    //         });
+    //       })
+    //       .catch(e => console.log('Failed to fetch subscriptions', e));
+    //   }
+    // } else {
+    //   console.log('We already have subscriptions, render them instead');
+    // }
   }
 
   const RenderLogins = (): JSX.Element => {
