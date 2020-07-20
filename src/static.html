@@ -1,8 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Google Analytics -->
-    <script>
+    <!-- End Google Analytics -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>GFW Mapbuilder</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  </head>
+  <body>
+    <noscript> JavaScript is required in order to use this app </noscript>
+    <div id="root"></div>
+  </body>
+  <script type="module">
+    import config from './configuration.js';
+    //In certain cases when GA is added by the CMS, mapbuilder should ignore its own google analytics scripts as to not
+    //create conflicts between the two. By default we load the script unless instructed otherwise in the config
+    if (
+      (config.hasOwnProperty('loadGoogleAnalyticsScript') &&
+        config.loadGoogleAnalyticsScript) ||
+      !config.hasOwnProperty('loadGoogleAnalyticsScript')
+    ) {
       (function(i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         (i[r] =
@@ -22,20 +40,7 @@
         'https://www.google-analytics.com/analytics.js',
         'ga'
       );
-    </script>
-    <!-- End Google Analytics -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <title>GFW Mapbuilder</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  </head>
-  <body>
-    <noscript> JavaScript is required in order to use this app </noscript>
-    <div id="root"></div>
-  </body>
-  <script type="module">
-    import config from './configuration.js';
+    }
     const gfwLib = new MapBuilderLoader({ el: 'root', config });
   </script>
 </html>

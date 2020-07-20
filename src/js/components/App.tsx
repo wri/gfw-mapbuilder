@@ -119,6 +119,7 @@ const App = (props: AppSettings | any): JSX.Element => {
   }, [dispatch, props]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
 
   useEffect(() => {
+    if (!window.hasOwnProperty('ga')) return;
     window['ga']('create', analyticsCode, 'auto');
     window['ga']('send', 'pageview');
   }, [analyticsCode]);
