@@ -17,7 +17,7 @@ import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
 import esriConfig from 'esri/config';
-//import resources from '../../../configs/resources';
+// import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
 import 'arcgis-js-api/themes/light/main.scss';
@@ -107,8 +107,12 @@ const App = (props: AppSettings | any): JSX.Element => {
       if (langFromURL) {
         dispatch(setLanguage(langFromURL));
       } else {
-        //just set default lang
-        dispatch(setLanguage(resources.language));
+        //Set the default language
+        if (props && Object.keys(props).length !== 0) {
+          dispatch(setLanguage(props.language));
+        } else {
+          dispatch(setLanguage(resources.language));
+        }
       }
       setShowGlobalSpinner(false);
     }

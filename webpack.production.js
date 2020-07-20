@@ -13,7 +13,7 @@ module.exports = () => {
   return {
     mode: 'production',
     entry: {
-      main: ['./src/js/index.tsx']
+      main: ['./src/js/static.tsx']
     },
     output: {
       filename: '[name].js'
@@ -91,7 +91,7 @@ module.exports = () => {
 
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
-        template: './src/index.html',
+        template: './src/static.html',
         filename: './index.html',
         favicon: './src/assets/favicon.ico',
         chunksSortMode: 'none',
