@@ -36,6 +36,7 @@ export default {
     y: '',
     z: ''
   },
+  loadGoogleAnalyticsScript: false,
   analysisModules: [
     {
       analysisId:
