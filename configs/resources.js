@@ -1,71 +1,49 @@
 export default {
-  //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
-  //- General Settings
-  // webmap to use for testing metadata.xml fetching/parsing - 4d426ef4be0f483e9dab047fbb4c6718
-  // webmap to use for testing document attachments - b514d31339954ba9a0c5822135bc2001
-  // webmap to use for testing time enabled layers - 9416e5b5beea4d329dbbfdc3312d2c35
-  // webmap to use for deployment, this should be the default - de85e3fcc07948238aa6c1afd2a4ceb0
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
-  title: 'GFW Mapbuilder',
-  subtitle: 'Make maps that matter',
-  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
-  aboutLinkUrl: '', // http://www.gfw-mapbuilder.org/
-  downloadLinkUrl: '', // http://data.globalforestwatch.org/
-  printServiceUrl:
-    'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
-  mapThemeIds: '', // e.g. 1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19
-  mapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-  narrative: '',
+  webmap: '8892b20e94244843b8e46d71ea1b03f2 ',
+  title: 'Atlas Forestier du Cameroun',
+  subtitle: 'Ministère des Forêts et de la Faune',
+  webmapMenuName: 'Affectation des Terres',
+  // initialExtent: {"x": -91.7,"y": 16.6,"z": 9},
   hideLegend: false,
-  hideHeader: false,
-  hideFooter: false,
-  includeMyGFWLogin: true,
-  navLinksInNewTab: false,
-  //- Color Settings
-  customColorTheme: '',
-  //- Language Settings
-  language: 'en',
-  useAlternativeLanguage: false,
-  alternativeWebmap: '',
-  alternativeLanguage: 'fr',
-  alternativeLanguageTitle: 'GFW Mapbuilder',
-  alternativeLanguageSubtitle: 'Make maps that matter',
-  alternativeMapThemes: '', // e.g. Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea
-  alternativeNarrative: '',
+  logoUrl:
+    'https://cmr.forest-atlas.org/system/site_settings/images/000/000/094/original/CAMEROON.png?1487267590',
+  logoLinkUrl: 'http://www.minfof.cm/',
+  printServiceUrl:
+    'https://gis.forest-atlas.org/server/rest/services/cmr/ExportWebMap/GPServer/Export%20Web%20Map',
+  narrative:
+    "\u003cp\u003eCe thème présente la situation générale de l'affectation des terres au Cameroun. Sont représentés : les permis minier (d'exploitation et de recherche), les zones d'intérêt cynégétique, les ventes de coupe, les forêts de production (UFA et forêt communale), les forêts communautaires, les aires protégées, les réserves forestières et les plantations agro industrielle.\u003cbr\u003e\u003c/p\u003e",
+  includeSubscribeButton: true,
+  useWebmapBasemap: false,
+  sharinghost: 'https://www.arcgis.com',
+  analyticsCode: 'UA-62288390-1',
+  iso: 'CMR',
+  customColorTheme: '#ff8000',
+  aboutLinkUrl: 'https://www.blueraster.com',
+  downloadLinkUrl: 'https://www.blueraster.com',
+  language: 'fr',
+  useAlternativeLanguage: true,
+  alternativeLanguage: 'en',
+  alternativeWebmap: '3ab4c186c87b44d8bf2520609fba783e',
+  alternativeLanguageTitle: 'Forest Atlas of Cameroon',
+  alternativeLanguageSubtitle: 'Ministry of Forest and Wildlife',
+  mapThemeIds:
+    '1c38ba1095fe49e3ba234bf9105c1077;c76d788b7487476bae4d09a4e933be19',
+  mapThemes: ' Forest Atlas of Cameroon;Forest Atlas of Equatorial Guinea',
+  alternativeMapThemes: 'Alt name 1; Alt name 2',
+  alternativeNarrative:
+    '\u003cp\u003eThis map show the general land use allocation in Cameroon. It includes mining permits, hunting zones, various forest titles as well as agro-industrial plantations.\u003cbr\u003e\u003c/p\u003e',
   alternativeWebmapMenuName: 'Land Use',
-  initialExtent: {
-    x: null, // -122.3,
-    y: null, // 47.6,
-    z: null // 9,
-  },
-  //- Tab Settings
-  includeDocumentsTab: false,
-  //- Layers/Analysis Settings
-  iso: '',
+  includeDocumentsTab: true,
   viirsFires: true,
   modisFires: true,
   intactForests: true,
-  primaryForests: true,
-  forma: false,
   aboveGroundBiomass: true,
   landCover: true,
   mangroves: false,
-  sadAlerts: true,
+  sadAlerts: false,
   gladAlerts: true,
+  primaryForests: true,
   recentImagery: true,
-  webmapMenuName: 'Land Use',
-  // DO NOT MODIFY SHARINGHOST unless you are configuring this for a Portal Environment
-  sharinghost: 'https://www.arcgis.com',
-  analyticsCode: '',
-  includeCartoTemplateLayers: false,
-  cartoUser: 'wri-01',
-  cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
-  cartoApiKey: 'your key here',
-  cartoGroupLabel: {
-    en: 'Carto Layers',
-    fr: 'Carto Layers'
-  },
   footerLinks: [
     {
       label: 'WRI Privacy Policy',
@@ -76,29 +54,6 @@ export default {
       link: 'https://www.globalforestwatch.org/terms'
     }
   ],
-
-  /**
-   * Custom Analysis Module Configuration
-   * This section provides the opportunity to define additional custom analysis modules.
-   * The modules are dependent on gfw widgets registered to the GFW API, so if you would
-   * like to define a custom module, you must first create a widget and register it.
-   *
-   * (we probably will NOT use the value property. we will just loop through all analysisModules
-   * and create a dropdown option for each if they have all of the required properties. maybe they have an order to sort them? This also
-   * means that all of the standard analyses will get their own entry in this array.)
-   * @property {string} value - a unique value for this analysis module
-   * @property {string} label - the label for the analysis in the dropdown
-   * @property {string} group - what group this analysis belongs to (maybe this is how we can differentiate
-   * the 'standard' analyses any thing with group 'standard' will not be required to have a widget
-   * until we get widgets for all of them)
-   * @property {string} widgetId - the widgetId from the gfw-api
-   * @property {string} queryUrl - the url to query for the analysis data
-   * @property {object[]} params - any params to pass along with the query url
-   * @property {string} params[].key - query param key
-   * @property {string} params[].value - query param value
-   *
-   * (geostore is automatically appended with each request)
-   */
   analysisModules: [
     {
       analysisId: 'TC_LOSS_GAIN',
@@ -108,7 +63,7 @@ export default {
         fr: 'Perte/gain total de la couverture arborée',
         es: 'Pérdida/ganancia de cobertura arbórea total',
         pt: 'Perda/ganho total de cobertura arbórea',
-        id: 'Total kehilangan/perolehan tutupan pohon ',
+        id: 'Total kehilangan/perolehan tutupan pohon',
         zh: '总森林覆盖减少/增加面积量',
         ka: 'ხის ვარჯის საერთო კარგვა / მატება'
       },
@@ -135,7 +90,7 @@ export default {
         zh:
           '选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。',
         ka:
-          'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
+          'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად. მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
       },
       useGfwWidget: true,
       widgetId: '95c2c559-ca78-4b7a-b18b-7b2bca14ce83',
@@ -148,7 +103,7 @@ export default {
           bounds: [2001, 2018],
           valueType: 'date',
           label: {
-            en: 'Select range for analysis',
+            en: 'Select range for analysis:',
             fr: 'Sélectionner une plage pour l’analyse:',
             es: 'Seleccione un rango para el análisis:',
             pt: 'Selecione o período para análise:',
@@ -334,7 +289,7 @@ export default {
         es:
           'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
         pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-        id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+        id: 'Kehilangan tutupan pohon tahunan berdasarkan kelas tutupan lahan',
         zh: '年度森林覆盖减少量（按土地覆盖分类）',
         ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
       },
@@ -345,7 +300,7 @@ export default {
         es:
           'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
         pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-        id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+        id: 'Kehilangan tutupan pohon tahunan berdasarkan kelas tutupan lahan',
         zh: '年度森林覆盖减少量（按土地覆盖分类）',
         ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
       },
@@ -505,19 +460,23 @@ export default {
         ka: 'GLAD შეტყობინებები'
       },
       description: {
-        en: 'Count the number of GLAD tree cover loss alerts per month.',
+        en:
+          'Count the number of GLAD tree cover loss alerts per month over the past two years and compare to the historical average.',
         fr:
-          'Compte le nombre d’alertes GLAD de perte de la couverture arborée par mois.',
+          'Compte le nombre d’alertes GLAD de perte de la couverture arborée par mois sur les deux dernières années et le compare à la moyenne historique.',
         es:
-          'Cuente el número de alertas GLAD sobre pérdida de cobertura arbórea por mes.',
+          'Cuente el número de alertas GLAD sobre pérdida de cobertura arbórea por mes en los últimos dos años y compárela con el promedio histórico.',
         pt:
-          'Quantificação de alertas GLAD de perda de cobertura arbórea por mês.',
-        id: 'Hitung jumlah peringatan kehilangan tutupan pohon GLAD per bulan.',
-        zh: 'Count the number of GLAD tree cover loss alerts per month.',
-        ka: 'Count the number of GLAD tree cover loss alerts per month.'
+          'Apresentação da quantidade de alertas GLAD de perda de cobertura arbórea por mês nos últimos dois anos e comparação com a média histórica.',
+        id:
+          'Hitung jumlah peringatan kehilangan tutupan pohon GLAD per bulan selama dua tahun terakhir dan bandingkan dengan rata-rata historis.',
+        zh:
+          '统计过去两年内每月 GLAD 森林覆盖减少预警次数，并与历史平均值比较。',
+        ka:
+          'Count the number of GLAD tree cover loss alerts per month over the past two years and compare to the historical average.'
       },
       useGfwWidget: true,
-      widgetId: '0734ba0a-3a6c-4388-aa4a-5871791b1d1f',
+      widgetId: 'b5e43ea3-2812-484e-bc31-1bf5d2fe8aa0',
       uiParams: 'none'
     },
     {
@@ -605,7 +564,8 @@ export default {
           'Cette analyse compte le nombre d’alertes de détection d’incendies VIIRS durant les 7 derniers jours',
         es:
           'Este análisis cuenta el número de detecciones de alertas de incendios VIIRS durante los últimos siete días',
-        pt: 'Incêndios ativos VIIRS',
+        pt:
+          'Esta análise apresenta a quantidade de detecções de alertas de incêndio VIIRS nos últimos 7 dias',
         id:
           'Analisis ini menghitung jumlah deteksi peringatan kebakaran VIIRS selama 7 hari terakhir',
         zh: '此分析可统计过去 7 天 VIIRS 火警监测的次数。',
@@ -651,7 +611,7 @@ export default {
         zh:
           '自 2015 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。 ',
         ka:
-          'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA)  და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
+          'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
       },
       useGfwWidget: true,
       widgetId: '1b84364d-0efd-4d60-81ef-870f7d13ee7b',
@@ -664,93 +624,299 @@ export default {
       ]
     }
   ],
-
-  /**
-   * Layer panel configuration, anything with an = is optional, {object=}
-   * Order at the group level controls the order of the accordions, the top most accordion's layers
-   * will also be the top most layers on the map. The order in the layer level controls how those layers
-   * are organized within their own group
-   ** @name layerPanel
-   ** Both labels and sublabels are objects whose properties are ISO codes for supported languages
-   ** and values are string labels
-   * @property {object=} label - Label for the group in the layer panel
-   * @property {number} order - Order the accordions, and their layers, appear in the UI and the map, MUST START AT 1
-   * @property {object[]=} layers - Layers placed in the various accordions
-   * @property {object[]=} extraLayers - Layers not placed in the Layer panel but are on the map
-   * @property {number} layers[].order - Order of this layer in this section only
-   * @property {string} layers[].id - Must be a unique id for the layer
-   * @property {string} layers[].type - The type of the layer, valid values are currently one of the following:
-   ** tiled | webtiled | image | dynamic | feature | graphic | glad | terra
-   * @property {boolean=} layers[].visible - Default visibility of the layer, default is false
-   * @property {string} layers[].technicalName - Technical name for the GFW Metadata API
-   * @property {number=} layers[].legendLayer - Optional layer id for an extra legend
-   * @property {string} layers[].url - URL for the service
-   * @property {object=} layers[].label - Label for the layer in the UI
-   * @property {object=} layers[].sublabel - Sublabel for the layer in the UI
-   * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
-   * @property {object=} popup - Popup configuration for the layer if it is available
-   */
   layerPanel: {
     GROUP_WEBMAP: {
       order: 2,
-      label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
-      layers: [] // Will get filled in with layers from the webmap
+      label: {},
+      layers: []
     },
+    // GROUP_Hazards: {
+    //   order: 6,
+    //   groupType: 'radio',
+    //   label: {
+    //     en: 'Hazards',
+    //     ka: 'საფრთხეები'
+    //   },
+    //   layers: [
+    //     {
+    //       order: 1,
+    //       id: 'ForestHazard',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [0],
+    //       opacity: 0.75,
+    //       label: {
+    //         en: 'Forest General Hazard Risk',
+    //         ka: 'ბუნებრივი კატასტროფები ტყით დაფარულ ტერიტორიებზე'
+    //       }
+    //     },
+    //     {
+    //       order: 2,
+    //       id: 'Elevation',
+    //       type: 'dynamic',
+    //       opacity: 0.8,
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [1],
+    //       label: {
+    //         en: 'Elevation in Forested Areas',
+    //         ka: 'სიმაღლე ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 3,
+    //       id: 'Slope',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [0],
+    //       opacity: 0.8,
+    //       label: {
+    //         en: 'Slope in Forested Areas',
+    //         ka: 'დაქანება ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 4,
+    //       id: 'Aspect',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards_Raster/MapServer',
+    //       layerIds: [2],
+    //       opacity: 0.8,
+    //       label: {
+    //         en: 'Aspect in Forested Areas',
+    //         ka: 'ექსპოზიცია ტყიან ზონებში'
+    //       }
+    //     },
+    //     {
+    //       order: 5,
+    //       id: 'Landslide',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [1],
+    //       opacity: 0.6,
+    //       label: {
+    //         en: 'Landslide Zoning',
+    //         ka: 'ბუნებრივი კატასტროფები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Landslide Zoning',
+    //           ka: 'ბუნებრივი კატასტროფები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area ha',
+    //               fieldExpression: 'Area_ha_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 6,
+    //       id: 'Debrisflow',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/Hazards/MapServer/',
+    //       layerIds: [2],
+    //       opacity: 0.6,
+    //       label: {
+    //         en: 'Debrisflow Zoning',
+    //         ka: 'რისკის ზონები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Debrisflow Zoning',
+    //           ka: 'რისკის ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area ha',
+    //               fieldExpression: 'Area_ha_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
     GROUP_LCD: {
       groupType: 'default',
-      order: 1,
+      order: 7,
       label: {
         en: 'Land Cover Dynamics',
         fr: 'Evolution de la couverture des sols',
         es: 'Dinámica de la Cobertura del Suelo',
-        pt: 'Dinâmica de cobertura da terra ',
+        pt: 'Dinâmica de cobertura da terra',
         id: 'Land Cover Dynamics',
         zh: '土地覆盖动态数据',
         ka: 'მიწის საფარის დინამიკა'
       },
       layers: [
         {
-          id: 'TREE_COVER_LOSS',
           order: 1,
+          id: 'TREE_COVER_LOSS',
           type: 'remoteDataLayer',
           uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
         },
         {
-          id: 'TREE_COVER_GAIN',
           order: 2,
           type: 'remoteDataLayer',
+          id: 'TREE_COVER_GAIN',
           uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
         },
         {
-          id: 'IMAZON_SAD',
           order: 3,
           type: 'remoteDataLayer',
+          id: 'IMAZON_SAD',
           uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
         },
         {
-          id: 'FORMA_ALERTS',
           order: 4,
-          type: 'remoteDataLayer',
-          uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3'
-        },
-        {
           id: 'GLAD_ALERTS',
-          order: 5,
           type: 'remoteDataLayer',
           uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
         },
         {
+          order: 5,
+          id: 'TERRA_I_ALERTS',
+          type: 'remoteDataLayer',
+          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
+        },
+        {
+          order: 6,
           id: 'VIIRS_ACTIVE_FIRES',
-          order: 7,
           type: 'remoteDataLayer',
           uuid: '15cb32c9-874f-4552-afdc-8a35ef70682f'
         },
         {
+          order: 7,
           id: 'MODIS_ACTIVE_FIRES',
-          order: 8,
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
         }
+      ]
+    },
+    GROUP_TEST: {
+      // This is a test group consisting of various layers not related to cameroon, this should not make to PROD
+      groupType: 'default',
+      order: 1,
+      label: {
+        en: 'TEST',
+        fr: 'TEST',
+        es: 'TEST',
+        pt: 'TEST',
+        id: 'TEST',
+        zh: 'TEST',
+        ka: 'TEST'
+      },
+      layers: [
+        {
+          order: 1,
+          id: 'GROUP_LAYER_TEST',
+          type: 'remoteDataLayer',
+          uuid: 'bb5dc1f1-06b9-4117-943a-e2dd9341ea6b'
+        }
+        // {
+        //   order: 1,
+        //   id: 'Versioned Dynamic Layer',
+        //   type: 'dynamic',
+        //   visible: true,
+        //   label: {
+        //     en: 'Versioned Dynamic Layer',
+        //     fr: 'Versioned Dynamic Layer'
+        //   },
+        //   versionHeaderText: {
+        //     en: 'Pick a version',
+        //     fr: 'Pick a version'
+        //   },
+        //   versions: [
+        //     {
+        //       label: {
+        //         en: 'All Protected Areas',
+        //         fr: 'All Protected Areas'
+        //       },
+        //       url:
+        //         'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+        //       layerIds: [0]
+        //     },
+        //     {
+        //       label: {
+        //         en: 'National Parks',
+        //         fr: 'National Parks'
+        //       },
+        //       url:
+        //         'https://gis.forest-atlas.org/server/rest/services/Richard_test/DRC_NationalParks_test/MapServer',
+        //       layerIds: [1]
+        //     }
+        //   ]
+        // },
+        // {
+        //   order: 1,
+        //   id: 'Versioned Feature Layer',
+        //   type: 'feature',
+        //   visible: true,
+        //   label: {
+        //     en: 'Versioned Feature Layer',
+        //     fr: 'Versioned Feature Layer'
+        //   },
+        //   versionHeaderText: {
+        //     en: 'Pick a version',
+        //     fr: 'Pick a version'
+        //   },
+        //   versions: [
+        //     {
+        //       label: {
+        //         en: 'Esri_Partners',
+        //         fr: 'Esri_Partners'
+        //       },
+        //       url:
+        //         'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/ArcGIS/rest/services/Esri_Partners/FeatureServer/0'
+        //     },
+        //     {
+        //       label: {
+        //         en: 'Flood',
+        //         fr: 'Flood'
+        //       },
+        //       url:
+        //         'https://services7.arcgis.com/gp50Ao2knMlOM89z/ArcGIS/rest/services/AG_PRD_FIESSI_2_1_2_2019Q2G01/FeatureServer/0'
+        //     }
+        //   ]
+        // }
       ]
     },
     GROUP_LC: {
@@ -767,38 +933,38 @@ export default {
       },
       layers: [
         {
-          id: 'GLOB_MANGROVE',
           order: 1,
+          id: 'GLOB_MANGROVE',
           type: 'remoteDataLayer',
           uuid: '533cbe18-22a6-46ac-99ca-027c96f33ac3'
         },
         {
-          id: 'IFL',
           order: 2,
+          id: 'IFL',
           type: 'remoteDataLayer',
           uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
         },
         {
-          id: 'PRIMARY_FORESTS',
           order: 3,
+          id: 'PRIMARY_FORESTS',
           type: 'remoteDataLayer',
           uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
         },
         {
-          id: 'AG_BIOMASS',
           order: 4,
+          id: 'AG_BIOMASS',
           type: 'remoteDataLayer',
           uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
         },
         {
-          id: 'LAND_COVER',
           order: 5,
+          id: 'LAND_COVER',
           type: 'remoteDataLayer',
           uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
         },
         {
-          id: 'TREE_COVER',
           order: 6,
+          id: 'TREE_COVER',
           type: 'remoteDataLayer',
           uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
         }
@@ -809,12 +975,12 @@ export default {
       order: 4,
       label: {
         en: 'Recent Imagery',
-        fr: 'Recent Imagery',
-        es: 'Recent Imagery',
-        pt: 'Recent Imagery',
-        id: 'Recent Imagery',
+        fr: 'Imagerie récente',
+        es: 'Imágenes recientes',
+        pt: 'Imagens recentes',
+        id: 'Citra Satelit Terbaru',
         zh: 'Recent Imagery',
-        ka: 'Recent Imagery'
+        ka: 'ბოლო გამოსახულება'
       },
       layers: [
         {
@@ -825,28 +991,31 @@ export default {
           visible: false,
           label: {
             en: 'Recent Imagery',
-            fr: 'Recent Imagery',
-            es: 'Recent Imagery',
-            pt: 'Recent Imagery',
-            id: 'Recent Imagery',
-            zh: 'Recent Imagery',
-            ka: 'Recent Imagery'
+            fr: 'Imagerie récente',
+            es: 'Imágenes recientes',
+            pt: 'Imagens recentes',
+            id: 'Citra Satelit Terbaru',
+            zh: '云层覆盖',
+            ka: 'ბოლო გამოსახულება'
           },
           dynamicSublabel: {
             en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            fr: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            es: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
+            fr:
+              '({DATE_TIME}, {CLOUD_COVERAGE}% Imagerie récente, {INSTRUMENT})',
+            es:
+              '({DATE_TIME}, {CLOUD_COVERAGE}% Cobertura de nubes, {INSTRUMENT})',
+            pt:
+              '({DATE_TIME}, {CLOUD_COVERAGE}% Cobertura de nuvens, {INSTRUMENT})',
+            id: '({DATE_TIME}, {CLOUD_COVERAGE}% Tutupan Awan, {INSTRUMENT})',
+            zh: '({DATE_TIME}, {CLOUD_COVERAGE}% 近期图像, {INSTRUMENT})',
+            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% ღრუბლიანობა, {INSTRUMENT})'
           }
         }
       ]
     },
     GROUP_BASEMAP: {
       groupType: 'basemap',
-      order: 200,
+      order: 6,
       label: {
         en: 'Basemap',
         fr: 'Basemap',
@@ -862,7 +1031,7 @@ export default {
           thumbnailUrl:
             'https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png',
           templateUrl:
-            'https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png',
+            'https://production-api.globalforestwatch.org/v2/landsat-tiles/2017/{level}/{col}/{row}',
           years: [
             '2000',
             '2001',
@@ -880,7 +1049,8 @@ export default {
             '2013',
             '2014',
             '2015',
-            '2016'
+            '2016',
+            '2017'
           ],
           title: {
             en: 'Landsat',
@@ -895,7 +1065,6 @@ export default {
         {
           id: 'wri_mono',
           thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
-          // thumbnailUrl: './css/images/wri_mono.png',
           title: {
             en: 'WRI Mono',
             fr: 'WRI Mono',
@@ -905,61 +1074,450 @@ export default {
             zh: 'WRI Mono',
             ka: 'WRI Mono'
           }
-        },
-        {
-          id: 'wri_contextual',
-          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
-          // thumbnailUrl: './css/images/wri_contextual.png',
-          title: {
-            en: 'WRI Contextual',
-            fr: 'WRI Contextual',
-            es: 'WRI Contextual',
-            pt: 'WRI Contextual',
-            id: 'WRI Contextual',
-            zh: 'WRI Contextual',
-            ka: 'WRI Contextual'
-          }
         }
+        // {
+        //   id: 'wri_contextual',
+        //   thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_contextual.png',
+        //   title: {
+        //     en: 'WRI Contextual',
+        //     fr: 'WRI Contextual',
+        //     es: 'WRI Contextual',
+        //     pt: 'WRI Contextual',
+        //     id: 'WRI Contextual',
+        //     zh: 'WRI Contextual',
+        //     ka: 'WRI Contextual'
+        //   }
+        // }
       ]
     },
-
-    /**
-     * CUSTOM GROUPS
-     * Add your custom groups below. The custom groups are similar to the groups defined above.
-     * They are an object defined with a unique key (this key MUST be unique).
-     * There are three (3) group types that you may choose from:
-     *    checkbox - This is a standard group type with checkboxes to turn layers on and off.
-     *               With this group type, more than one layer may be on at a time
-     *
-     *    radio - This group contains raio buttons instead of checkboxes for the layer toggles
-     *            Only one layer may be on at a time within the same group
-     *            You may optionally choose to turn this group off when any other radio group is selected
-     *
-     *    nested - This group allows for layers to be grouped further within a layer panel
-     *
-     * COMMON GROUP PROPERTIES
-     * @property {string} groupType - the group type, one of checkbox, radio, nested
-     * @property {number} order - the order of the group in the layer panel
-     * @property {object} label - the label for the group in the layer panel
-     * @property {object[]} layers - the layers to be placed in the group
-     * @property {string} layers[].id - the id of the layer as generated by your AGOL webmap
-     * @property {number} layers[].order - the order of the layer within the group
-     * @property {object=} layers[].sublabel - the sublabel displayed under the layer name
-     *
-     * RADIO GROUP PROPERTIES
-     * @property {object[]} layers[].includedSublayers - for a dynamic layer, this is which
-     * sublayers you would like to include in the group. This property is required, so if you
-     * wish to include all sublayers, you must still provide this property with all sublayers
-     * @property {object} sublabel - for a dynamic layer the sublabel property must specify
-     * which sublayer the sublabel belongs to
-     *
-     * NESTED GROUP PROPERTIES
-     * @property {number} layers[].order - the order of the nested group within the panel group
-     * @property {object} layers[].label - the label for the nested group
-     * @property {object[]} layers[].nestedLayers - the layers for the nested group
-     */
-
+    // GROUP_Orth: {
+    //   groupType: 'nested',
+    //   order: 8,
+    //   label: {
+    //     en: 'Orthophotos/Topographic Maps',
+    //     ka: 'ორთოფოტოები/ტოპოგრაფიული რუკები'
+    //   },
+    //   layers: [
+    //     {
+    //       order: 1,
+    //       id: 'ortho',
+    //       label: {
+    //         en: 'Orthophotos',
+    //         ka: 'ორთოფოტოები'
+    //       },
+    //       nestedLayers: [
+    //         {
+    //           id: 'Adjara',
+    //           order: 1,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/ORTHO_2015_ADJARA/wmts/ORTHO_2015_ADJARA/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: '2015 Adjara',
+    //             ka: 'აჭარის ა/რ 2015'
+    //           }
+    //         },
+    //         {
+    //           id: 'Samegrelo',
+    //           order: 2,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/ORTHO_2015_SAMEGRELO/wmts/ORTHO_2015_SAMEGRELO/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: '2015 Samegrelo',
+    //             ka: 'სამეგრელო 2015'
+    //           }
+    //         },
+    //         {
+    //           id: 'Vere',
+    //           order: 3,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/ORTHO_2015_VERE/wmts/ORTHO_2015_VERE/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: '2015 Vere',
+    //             ka: 'ვერეს ხეობა 2015'
+    //           }
+    //         },
+    //         {
+    //           id: 'Norv',
+    //           order: 4,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/ORTHO_2016-17_NORV/wmts/ORTHO_2016-17_NORV/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: '2016-17 Norv',
+    //             ka: 'ორთოფოტო გეგმა 2016-2017'
+    //           }
+    //         },
+    //         {
+    //           id: 'Dasavleti',
+    //           order: 5,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/ORTHO_2014_DASAVLETI/wmts/ORTHO_2014_DASAVLETI/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: '2014 Dasavleti',
+    //             ka: 'დასავლეთი 2014'
+    //           }
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       order: 2,
+    //       id: 'topo',
+    //       label: {
+    //         en: 'Topographic Maps',
+    //         ka: 'ტოპოგრაფიული რუკები'
+    //       },
+    //       nestedLayers: [
+    //         {
+    //           id: 'Topo1000',
+    //           order: 1,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/TOPO_10k_1952_2007/wmts/TOPO_10000_1952_2007/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: 'TOPO 10000 1952_2007',
+    //             ka: '10 000 - იანი ტოპოგრაფიული რუკები 1952-2007'
+    //           }
+    //         },
+    //         {
+    //           id: 'TOPO50000',
+    //           order: 1,
+    //           type: 'webtiled',
+    //           url:
+    //             'http://mp1.napr.gov.ge/TOPO_50k_GEO_2007/wmts/TOPO_50000_GEO_2007/GLOBAL_MERCATOR/{level}/{col}/{row}.png',
+    //           label: {
+    //             en: 'TOPO 50000 GEO_2007',
+    //             ka: '50 000 - იანი ტოპოგრაფიული რუკები 2007'
+    //           }
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // },
+    // GROUP_PA: {
+    //   order: 3,
+    //   label: {
+    //     en: 'Protected Areas',
+    //     ka: 'დაცული ტერიტორიები'
+    //   },
+    //   layers: [
+    //     {
+    //       order: 1,
+    //       id: 'PAInf',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [0],
+    //       label: {
+    //         en: 'Infrastructure of Protected Areas',
+    //         ka: 'ინფრასტრუქტურა'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Infrastructure of Protected Areas',
+    //           ka: 'ინფრასტრუქტურა'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დასახელება',
+    //               fieldExpression: 'Name_KA'
+    //             },
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_Areas_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Name',
+    //               fieldExpression: 'Name_EN'
+    //             },
+    //             {
+    //               label: 'Protected Area',
+    //               fieldExpression: 'Protected_Areas_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 2,
+    //       id: 'PARoads',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [1],
+    //       label: {
+    //         en: 'Touristic Routes of Protected Areas',
+    //         ka: 'ტურისტული ბილიკები'
+    //       },
+    //       filterField: {
+    //         en: 'Type_EN',
+    //         ka: 'Type_KA'
+    //       },
+    //       filterLabel: {
+    //         en: 'Filter by Type',
+    //         ka: 'ფილტრი ტიპის მიხედვით'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Touristic Routes of Protected Areas',
+    //           ka: 'ტურისტული ბილიკები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_Area_KA'
+    //             },
+    //             {
+    //               label: 'ხანგძლივობა',
+    //               fieldExpression: 'Duraction_KA'
+    //             },
+    //             {
+    //               label: 'სირთულე',
+    //               fieldExpression: 'Difficulty_KA'
+    //             },
+    //             {
+    //               label: 'დასახელება',
+    //               fieldExpression: 'Trail_Name_KA'
+    //             },
+    //             {
+    //               label: 'ტიპი',
+    //               fieldExpression: 'Type_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected areas',
+    //               fieldExpression: 'Protected_Area_EN'
+    //             },
+    //             {
+    //               label: 'Duraction',
+    //               fieldExpression: 'Duraction_EN'
+    //             },
+    //             {
+    //               label: 'Difficulty',
+    //               fieldExpression: 'Difficulty_EN'
+    //             },
+    //             {
+    //               label: 'Trail Name',
+    //               fieldExpression: 'Trail_Name_EN'
+    //             },
+    //             {
+    //               label: 'Type',
+    //               fieldExpression: 'Type_EN'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 3,
+    //       id: 'PALease',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [2],
+    //       label: {
+    //         en: 'Lease of Protected Areas',
+    //         ka: 'იჯარები'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Protected Area Zoning',
+    //           ka: 'ფუნქციური ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_areas_KA'
+    //             },
+    //             {
+    //               label: 'დანიშნულება',
+    //               fieldExpression: 'Purpose_KA'
+    //             },
+    //             {
+    //               label: 'ჰექტარი',
+    //               fieldExpression: 'Hectare_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected Area',
+    //               fieldExpression: 'Protected_Area_EN'
+    //             },
+    //             {
+    //               label: 'Purpose',
+    //               fieldExpression: 'Purpose_EN'
+    //             },
+    //             {
+    //               label: 'Area (ha)',
+    //               fieldExpression: 'Hectare_KA'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 4,
+    //       id: 'PAFunction',
+    //       type: 'dynamic',
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [3],
+    //       label: {
+    //         en: 'Functional Zoning of Protected Areas',
+    //         ka: 'ფუნქციური ზონები'
+    //       },
+    //       filterField: {
+    //         en: 'Zone_EN',
+    //         ka: 'Zone_KA'
+    //       },
+    //       filterLabel: {
+    //         en: 'Filter by Zone',
+    //         ka: 'ფილტრი ზონების მიხედვით'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Functional Zoning of Protected Areas',
+    //           ka: 'ფუნქციური ზონები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_areas_KA'
+    //             },
+    //             {
+    //               label: 'ზონა',
+    //               fieldExpression: 'Zone_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected Area',
+    //               fieldExpression: 'Protected_Areas_EN'
+    //             },
+    //             {
+    //               label: 'Zone',
+    //               fieldExpression: 'Zone_EN'
+    //             },
+    //             {
+    //               label: 'Area (ha)',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       order: 5,
+    //       id: 'PA',
+    //       type: 'dynamic',
+    //       visible: true,
+    //       url:
+    //         'https://gis.mepa.gov.ge/server/rest/services/atlas/protected_areas/MapServer',
+    //       layerIds: [4],
+    //       label: {
+    //         en: 'Protected Areas',
+    //         ka: 'დაცული ტერიტორიები'
+    //       },
+    //       filterField: {
+    //         en: 'Category_EN',
+    //         ka: 'Category_KA'
+    //       },
+    //       filterLabel: {
+    //         en: 'Filter by Category',
+    //         ka: 'ფილტრი კატეგორიების მიხედვით'
+    //       },
+    //       popup: {
+    //         title: {
+    //           en: 'Protected Areas',
+    //           ka: 'კატეგორიები'
+    //         },
+    //         content: {
+    //           ka: [
+    //             {
+    //               label: 'დაცული ტერიტორია',
+    //               fieldExpression: 'Protected_Areas_KA'
+    //             },
+    //             {
+    //               label: 'დაარსების წელი',
+    //               fieldExpression: 'Year_of_Establishment_KA'
+    //             },
+    //             {
+    //               label: 'ადმინისტრაცია',
+    //               fieldExpression: 'Administration_KA'
+    //             },
+    //             {
+    //               label: 'კატეგორია',
+    //               fieldExpression: 'Category_KA'
+    //             },
+    //             {
+    //               label: 'ფართობი ჰა',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ],
+    //           en: [
+    //             {
+    //               label: 'Protected Area Name',
+    //               fieldExpression: 'Protected_Areas_EN'
+    //             },
+    //             {
+    //               label: 'Year of Establishment',
+    //               fieldExpression: 'Year_of_Establishment_KA'
+    //             },
+    //             {
+    //               label: 'Administration',
+    //               fieldExpression: 'Administration_EN'
+    //             },
+    //             {
+    //               label: 'Category',
+    //               fieldExpression: 'Category_EN'
+    //             },
+    //             {
+    //               label: 'Area (ha)',
+    //               fieldExpression: 'PA_Area_ha_KA'
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
     extraLayers: [
+      // {
+      // id: 'MASKK',
+      // type: 'feature',
+      // order: 10000,
+      // url:
+      // 'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/LandCover/FeatureServer/0',
+      // opacity: 0.35
+      // },
+      // {
+      // order: 2,
+      // id: 'CTC',
+      // type: 'dynamic',
+      // url:
+      // 'https://gis.forest-atlas.org/server/rest/services/ind/RO_TC_Carbon_final/MapServer',
+      // layerIds: [2],
+      // technicalName: 'ind_treecover',
+      // visible: true,
+      // label: {
+      //   en:
+      //   'Potential for Increase in Forest and Tree Cover where Maximum Tree Cover in Cultivated Areas is Capped at 20%'
+      // }
+      // },
       {
         id: 'MASK',
         type: 'dynamic',
@@ -969,19 +1527,20 @@ export default {
         opacity: 0.35,
         layerIds: [0]
       },
-      {
-        id: 'LEGEND_LAYER',
-        type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-        visible: false,
-        opacity: 0,
-        layerIds: []
-      },
+      // {
+      //   id: 'LEGEND_LAYER',
+      //   type: 'dynamic',
+      //   url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+      //   visible: false,
+      //   opacity: 0,
+      //   layerIds: []
+      // },
       {
         id: 'USER_FEATURES',
         type: 'graphic',
         visible: true
       }
     ]
-  }
+  },
+  otherFieldsModules: ''
 };
