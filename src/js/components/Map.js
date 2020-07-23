@@ -530,12 +530,10 @@ export default class Map extends Component {
     const basemap = itemData && itemData.baseMap;
     const params = getUrlParams(location.href);
 
-    //- Set the default basemap in the store
-    basemapUtils.prepareDefaultBasemap(
-      map,
-      basemap.baseMapLayers,
-      basemap.title
-    );
+    if (!settings.useWebmapBasemap) {
+      //- Set the default basemap in the store
+      basemapUtils.prepareDefaultBasemap(map, basemap.baseMapLayers, basemap.title);
+    }
 
     if (params.b) {
       mapActions.changeBasemap(params.b);
