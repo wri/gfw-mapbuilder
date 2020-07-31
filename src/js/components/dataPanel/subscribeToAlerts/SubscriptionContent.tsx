@@ -59,11 +59,26 @@ const AOIDashboard = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(false);
-  const [data, setData] = useState<aoiData[]>();
+  const [data, setData] = useState<aoiData[][]>();
+  const [currentPage, setCurrentPage] = useState(0);
 
   const { userSubscriptions } = useSelector(
     (state: RootState) => state.mapviewState
   );
+
+  function turnPageForwards(): void {
+    if (!data) return;
+    if (currentPage !== data?.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function turnPageBackwards(): void {
+    if (!data) return;
+    if (currentPage !== 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
 
   // interface DatasetAlertsProps {
   //   dataset: string;
@@ -245,9 +260,12 @@ const AOIDashboard = () => {
             }
             setLoadingError(false);
             setLoading(false);
-            const tt = data.data;
-            setData(tt);
-            console.log(data.data);
+            //Put data in paginated chunks so we load only 5 at a time
+            const chunks = [];
+            while (data.data.length > 0) {
+              chunks.push(data.data.splice(0, 5));
+            }
+            setData(chunks);
           });
         })
         .catch(e => {
@@ -295,7 +313,6 @@ const AOIDashboard = () => {
           .then(response => response.json())
           .then(data => {
             const esriGeo = geojsonToArcGIS(data.data.attributes.geojson);
-            console.log(esriGeo);
             setEsriGeometry(esriGeo[0]);
           })
           .catch(e => console.error(e));
@@ -313,8 +330,7 @@ const AOIDashboard = () => {
         initializeMiniMap();
       }
     }, [esriGeometry]);
-    //Get the geometry from geostore include
-    //Get the Glad and Viirs alerts numbers, looks like we are hitting the dataset IDS (lift them from flagship?), hit those and sum those up
+
     return (
       <div className="aoi-section">
         <p className="area-name">{name}</p>
@@ -340,9 +356,14 @@ const AOIDashboard = () => {
       {loading && <LoadingScreen />}
       {!loading && !loadingError && data && (
         <div className="aoi-wrapper">
-          {data.map((dataObject: aoiData, i: number) => (
+          {data[currentPage].map((dataObject: aoiData, i: number) => (
             <AOISection key={i} dataObject={dataObject} />
           ))}
+          <button onClick={turnPageForwards}>Next</button>
+          <button onClick={turnPageBackwards}>Back</button>
+          <div>
+            Page {currentPage + 1}/{data.length}
+          </div>
         </div>
       )}
     </div>
