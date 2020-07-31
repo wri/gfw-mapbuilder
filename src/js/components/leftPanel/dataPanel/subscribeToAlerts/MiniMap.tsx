@@ -3,6 +3,7 @@ import WebMap from 'esri/WebMap';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import Graphic from 'esri/Graphic';
 import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
+import Polygon from 'esri/geometry/Polygon';
 
 export function miniMapInit(
   webmapID: string,
@@ -39,8 +40,9 @@ export function miniMapInit(
     //Remove All layers that are not needed
     mapRef.removeAll();
 
+    const poly = new Polygon(geometry);
     const aoiGraphic = new Graphic({
-      geometry: geometry,
+      geometry: poly,
       symbol: new SimpleFillSymbol({
         style: 'solid',
         color: [210, 210, 210, 0.0],
@@ -56,6 +58,6 @@ export function miniMapInit(
     });
 
     mapRef.add(gLayer);
-    miniMapView.goTo(geometry);
+    miniMapView.goTo(poly);
   });
 }
