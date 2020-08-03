@@ -17,10 +17,7 @@ import { miniMapInit } from './MiniMap';
 
 import { registerGeometry } from 'js/helpers/geometryRegistration';
 
-import {
-  setActiveFeatures,
-  setUserSubscriptions
-} from 'js/store/mapview/actions';
+import { setActiveFeatures } from 'js/store/mapview/actions';
 import { RootState } from 'js/store/index';
 
 import 'css/saveAOI.scss';

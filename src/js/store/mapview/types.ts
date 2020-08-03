@@ -44,17 +44,9 @@ export interface SubscriptionAttributes {
   params: SubscriptionParams;
 }
 
-export interface UserSubscription {
-  attributes: SubscriptionAttributes;
-  id: string;
-  type: string;
-}
-
-//Store types
 export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
-  userSubscriptions: UserSubscription[];
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
   activeFeatureIndex: number[];
@@ -179,10 +171,6 @@ interface AllAvailableLayersAction {
   payload: MapviewState['allAvailableLayers'];
 }
 
-interface SetUserSubscriptionsAction {
-  type: typeof USER_SUBSCRIPTIONS;
-  payload: MapviewState['userSubscriptions'];
-}
 interface SetActiveFeaturesAction {
   type: typeof SET_ACTIVE_FEATURES;
   payload: MapviewState['activeFeatures'];
@@ -226,7 +214,6 @@ interface SetLayersLoading {
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
-  | SetUserSubscriptionsAction
   | AllAvailableLayersAction
   | SetActiveFeaturesAction
   | SetActiveFeatureIndex
