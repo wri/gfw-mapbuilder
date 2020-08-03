@@ -242,7 +242,8 @@ const SaveAOI = (): JSX.Element => {
           style={{
             backgroundColor: customColorTheme,
             marginTop: '30px',
-            width: '200px'
+            width: '200px',
+            fontSize: '0.9rem'
           }}
         >
           {saveAOIText[selectedLanguage].successButton}

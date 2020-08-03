@@ -33,10 +33,10 @@ export const saveAOIText = {
     forestChange: "Dès qu'un changement de forêt est détecté",
     language: 'LANGUE',
     save: 'ENREGISTRER',
-    successButton: 'BACK TO MY AREAS',
+    successButton: 'Revenir vers mes zones',
     successText: [
-      'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      'Votre région a été enregistré',
+      'Vous pouvez visualiser toutes vos zones dans « Mon GFW »'
     ]
   },
   ka: {
@@ -73,10 +73,10 @@ export const saveAOIText = {
     forestChange: 'Tan pronto como se detecte un cambio en el bosque',
     language: 'IDIOMA',
     save: 'GUARDAR',
-    successButton: 'BACK TO MY AREAS',
+    successButton: 'Volver a mis zonas',
     successText: [
-      'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      'Su zona ha sido guardada',
+      'Puede ver todas sus zonas en My GFW'
     ]
   },
   pt: {
@@ -93,10 +93,10 @@ export const saveAOIText = {
     forestChange: 'Assim que a mudança florestal for detectada',
     language: 'IDIOMA',
     save: 'SALVAR',
-    successButton: 'BACK TO MY AREAS',
+    successButton: 'Voltar para minhas áreas',
     successText: [
-      'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      'Sua área foi salva',
+      'Você pode ver todas as suas áreas em Meu GFW'
     ]
   },
   id: {
@@ -114,10 +114,10 @@ export const saveAOIText = {
     forestChange: 'Segera setelah perubahan hutan terdeteksi',
     language: 'BAHASA',
     save: 'SIMPAN',
-    successButton: 'BACK TO MY AREAS',
+    successButton: 'Kembali ke daerah saya',
     successText: [
-      'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      'Daerah Anda telah disimpan',
+      'Anda dapat melihat semua area Anda di GFW Saya'
     ]
   },
   zh: {
@@ -134,10 +134,7 @@ export const saveAOIText = {
     forestChange: '一旦检测到森林变化',
     language: '语言',
     save: '保存',
-    successButton: 'BACK TO MY AREAS',
-    successText: [
-      'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
-    ]
+    successButton: '返回到我的区域',
+    successText: ['已保存您的区域', '您可以在“我的 GFW”中查看您所有的区域']
   }
 };
