@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { saveAOIText } from './staticTextTranslations';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { renderModal } from 'js/store/appState/actions';
 import SubscribeToAlerts from './SubscribeToAlerts';
 import NameYourSubscription from './NameYourSubscription';
 import SubscriptionSaved from './SubscriptionSaved';
@@ -238,7 +239,7 @@ const SaveAOI = (): JSX.Element => {
         <p>{saveAOIText[selectedLanguage].successText[1]}</p>
         <button
           className="orange-button profile-submit"
-          onClick={() => setUpdateSuccess(false)}
+          onClick={() => dispatch(renderModal('SubscriptionWidget'))}
           style={{
             backgroundColor: customColorTheme,
             marginTop: '30px',
