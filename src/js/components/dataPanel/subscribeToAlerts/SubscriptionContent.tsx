@@ -172,7 +172,7 @@ const AOIDashboard = () => {
             <div style={{ height: '150px' }} ref={miniMap}></div>
           </div>
           <div className="controls">
-            <div>alert section</div>
+            <div>alert section last weeks alerts only GLAD and VIIRS</div>
             <button>view on map</button>
             <button>edit area</button>
           </div>
