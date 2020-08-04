@@ -1,3 +1,12 @@
+//In some deployments, index.html is in a different spot than main javascript bundle code,
+//because of this we need to set the publicPath dynamically on the fly, below script achieves that
+//https://github.com/webpack/webpack/issues/7968
+//@ts-ignore
+const url = new URL(document.currentScript.src);
+const widgetLink = url.href.substring(0, url.href.lastIndexOf('/') + 1);
+//@ts-ignore
+__webpack_public_path__ = widgetLink;
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
