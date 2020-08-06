@@ -67,7 +67,7 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 
-import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
+import { MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
 import {
   parseURLandApplyChanges,
@@ -82,6 +82,7 @@ import {
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from 'js/store/appSettings/actions';
+import { viirsLayerCreator } from 'js/helpers/viirsLayer';
 
 interface URLCoordinates {
   zoom: number;
@@ -385,13 +386,11 @@ export class MapController {
             .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
 
           //Get VIIRS and MODIS layers
-          const viirsLayers = this.initializeAndSetVIIRSLayers();
+          const viirsLayer: __esri.VectorTileLayer = await viirsLayerCreator(
+            'nasa_viirs_fire_alerts'
+          );
           const modisLayers = this.initializeAndSetMODISLayers();
-          const allLayers = [
-            ...viirsLayers,
-            ...modisLayers,
-            ...esriRemoteLayers
-          ];
+          const allLayers = [viirsLayer, ...modisLayers, ...esriRemoteLayers];
 
           //If we have report active, we need to know when our feature layer has loaded
           const report = new URL(window.location.href).searchParams.get(
@@ -1744,38 +1743,38 @@ export class MapController {
       store.dispatch(setModisStart(String(startDate)));
       store.dispatch(setModisEnd(String(endDate)));
     } else if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      const viirs24H = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
-      viirs24H.visible = false;
-      const viirs1Y = this._map!.findLayerById('VIIRS1Y') as any;
-      viirs1Y.sublayers.items[0].definitionExpression = defExpression;
-      const viirsIds = VIIRSLayerIDs.map(l => l.id);
-      this._map!.layers.forEach(l => {
-        if (viirsIds.includes(l.id)) {
-          l.visible = l.id === 'VIIRS1Y';
-        }
-      });
-      //sync the new date with redux
-      store.dispatch(setViirsStart(String(startDate)));
-      store.dispatch(setViirsEnd(String(endDate)));
+      //const viirs24H = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
+      //viirs24H.visible = false;
+      //const viirs1Y = this._map!.findLayerById('VIIRS1Y') as any;
+      //viirs1Y.sublayers.items[0].definitionExpression = defExpression;
+      //const viirsIds = VIIRSLayerIDs.map(l => l.id);
+      //this._map!.layers.forEach(l => {
+      //  if (viirsIds.includes(l.id)) {
+      //    l.visible = l.id === 'VIIRS1Y';
+      //  }
+      //});
+      ////sync the new date with redux
+      //store.dispatch(setViirsStart(String(startDate)));
+      //store.dispatch(setViirsEnd(String(endDate)));
     }
   }
 
-  initializeAndSetVIIRSLayers(): any {
-    const viirsLayers = VIIRSLayerIDs.map(({ id, url, layerIds }) => {
-      return new MapImageLayer({
-        id: id,
-        url,
-        visible: false,
-        sublayers: [
-          {
-            id: layerIds[0],
-            visible: true
-          }
-        ]
-      });
-    });
-    return viirsLayers;
-  }
+  // initializeAndSetVIIRSLayers(): any {
+  //   const viirsLayers = VIIRSLayerIDs.map(({ id, url, layerIds }) => {
+  //     return new MapImageLayer({
+  //       id: id,
+  //       url,
+  //       visible: false,
+  //       sublayers: [
+  //         {
+  //           id: layerIds[0],
+  //           visible: true
+  //         }
+  //       ]
+  //     });
+  //   });
+  //   return viirsLayers;
+  // }
 
   initializeAndSetMODISLayers(): any {
     const modisLayers = MODISLayerIDs.map(({ id, url, layerIds }) => {
@@ -1864,71 +1863,70 @@ export class MapController {
   }
 
   setVIIRSDefinedRange(sublayerType: string): void {
-    //Turn off 1Y layer as it does not apply for defined range controls
-    const VIIRS1Y = this._map?.findLayerById('VIIRS1Y');
-    VIIRS1Y!.visible = false;
-    const VIIRS24 = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
-
-    switch (sublayerType) {
-      case '24 hrs':
-        {
-          VIIRS24.visible = true;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              viirsLayer.visible = false;
-            }
-          });
-        }
-        break;
-      case '48 hrs':
-        {
-          VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              if (viirsLayer.id === 'VIIRS48') {
-                viirsLayer.visible = true;
-              } else {
-                viirsLayer.visible = false;
-              }
-            }
-          });
-        }
-        break;
-      case '72 hrs':
-        {
-          VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              if (viirsLayer.id === 'VIIRS72') {
-                viirsLayer.visible = true;
-              } else {
-                viirsLayer.visible = false;
-              }
-            }
-          });
-        }
-        break;
-      case '7 days':
-        {
-          VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              if (viirsLayer.id === 'VIIRS7D') {
-                viirsLayer.visible = true;
-              } else {
-                viirsLayer.visible = false;
-              }
-            }
-          });
-        }
-        break;
-      default:
-        break;
-    }
+    ////Turn off 1Y layer as it does not apply for defined range controls
+    //const VIIRS1Y = this._map?.findLayerById('VIIRS1Y');
+    //VIIRS1Y!.visible = false;
+    //const VIIRS24 = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
+    //switch (sublayerType) {
+    //  case '24 hrs':
+    //    {
+    //      VIIRS24.visible = true;
+    //      VIIRSLayerIDs.forEach(({ id }) => {
+    //        const viirsLayer = this._map?.findLayerById(id);
+    //        if (viirsLayer) {
+    //          viirsLayer.visible = false;
+    //        }
+    //      });
+    //    }
+    //    break;
+    //  case '48 hrs':
+    //    {
+    //      VIIRS24.visible = false;
+    //      VIIRSLayerIDs.forEach(({ id }) => {
+    //        const viirsLayer = this._map?.findLayerById(id);
+    //        if (viirsLayer) {
+    //          if (viirsLayer.id === 'VIIRS48') {
+    //            viirsLayer.visible = true;
+    //          } else {
+    //            viirsLayer.visible = false;
+    //          }
+    //        }
+    //      });
+    //    }
+    //    break;
+    //  case '72 hrs':
+    //    {
+    //      VIIRS24.visible = false;
+    //      VIIRSLayerIDs.forEach(({ id }) => {
+    //        const viirsLayer = this._map?.findLayerById(id);
+    //        if (viirsLayer) {
+    //          if (viirsLayer.id === 'VIIRS72') {
+    //            viirsLayer.visible = true;
+    //          } else {
+    //            viirsLayer.visible = false;
+    //          }
+    //        }
+    //      });
+    //    }
+    //    break;
+    //  case '7 days':
+    //    {
+    //      VIIRS24.visible = false;
+    //      VIIRSLayerIDs.forEach(({ id }) => {
+    //        const viirsLayer = this._map?.findLayerById(id);
+    //        if (viirsLayer) {
+    //          if (viirsLayer.id === 'VIIRS7D') {
+    //            viirsLayer.visible = true;
+    //          } else {
+    //            viirsLayer.visible = false;
+    //          }
+    //        }
+    //      });
+    //    }
+    //    break;
+    //  default:
+    //    break;
+    //}
   }
 
   toggleVIIRSorMODIS(layerID: string): void {
@@ -1957,13 +1955,12 @@ export class MapController {
     }
 
     if (layer.id === 'VIIRS_ACTIVE_FIRES') {
-      VIIRSLayerIDs.forEach(({ id }) => {
-        const specificLayer = this._map?.findLayerById(id);
-
-        if (specificLayer) {
-          specificLayer.visible = false;
-        }
-      });
+      // VIIRSLayerIDs.forEach(({ id }) => {
+      //   const specificLayer = this._map?.findLayerById(id);
+      //   if (specificLayer) {
+      //     specificLayer.visible = false;
+      //   }
+      // });
     } else if (layer.id === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ id }) => {
         const specificLayer = this._map?.findLayerById(id);
@@ -2024,13 +2021,12 @@ export class MapController {
     sublayer24.opacity = opacity;
 
     if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      VIIRSLayerIDs.forEach(({ id }) => {
-        const specificLayer = this._map?.findLayerById(id);
-
-        if (specificLayer) {
-          specificLayer.opacity = opacity;
-        }
-      });
+      // VIIRSLayerIDs.forEach(({ id }) => {
+      //   const specificLayer = this._map?.findLayerById(id);
+      //   if (specificLayer) {
+      //     specificLayer.opacity = opacity;
+      //   }
+      // });
     } else if (layerID === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ id }) => {
         const specificLayer = this._map?.findLayerById(id);
