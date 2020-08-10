@@ -66,4 +66,19 @@
     height: 200px;
     margin-bottom: 20px;
   }
+
+  .remove-button {
+    display: flex;
+    display: grid;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    font-weight: 500;
+    font-size: 0.75rem;
+    background: none;
+    grid-template-columns: auto auto;
+    align-self: center;
+    font-weight: 600;
+    color: #ed1846;
+  }
 }

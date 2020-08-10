@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
 import { useForm, Controller } from 'react-hook-form';
 import { saveAOIText } from './staticTextTranslations';
 import { makeStyles } from '@material-ui/core/styles';
@@ -47,9 +48,11 @@ const SaveAOI = (): JSX.Element => {
   const [subscriptionName, setSubscriptionName] = useState('');
   const [subscriptionLanguage, setSubscriptionLanguage] = useState('English');
   const [deforestation, setDeforestationAlerts] = useState();
+  const [editingMode, setEditingMode] = useState(false);
   const [tags, setTags] = useState<(string | string[])[]>([]);
   const [aoiID, setAOIID] = useState<null | string>(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [language, setLanguage] = useState('en');
   const [fireAlerts, setFireAlerts] = useState(false);
   const { register, handleSubmit, errors, control } = useForm();
@@ -144,8 +147,13 @@ const SaveAOI = (): JSX.Element => {
       tags
     };
 
-    fetch('https://production-api.globalforestwatch.org/v2/area', {
-      method: 'POST',
+    const url = editingMode
+      ? `https://production-api.globalforestwatch.org/v2/area/${aoiID}`
+      : 'https://production-api.globalforestwatch.org/v2/area';
+    const method = editingMode ? 'PATCH' : 'POST';
+
+    fetch(url, {
+      method: method,
       headers: {
         Authorization: `Bearer ${userToken}`,
         'Content-Type': 'application/json'
@@ -180,6 +188,7 @@ const SaveAOI = (): JSX.Element => {
       setAOIID(activeFeature.attributes.id);
       setTags(activeFeature.attributes.tags);
       setLanguage(activeFeature.attributes.language);
+      setEditingMode(true);
     }
 
     //Create Mini-Map
@@ -238,6 +247,29 @@ const SaveAOI = (): JSX.Element => {
 
   function handleLanguagePicker(id: string): void {
     setLanguage(id);
+  }
+
+  function handleDelete(): void {
+    const userToken = localStorage.getItem('userToken');
+    const url = `https://production-api.globalforestwatch.org/v2/area/${aoiID}`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(msg => {
+        if (msg?.errors) {
+          console.error(msg.errors[0].detail);
+        } else {
+          setDeleteSuccess(true);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   const SuccessScreen = () => {
@@ -402,6 +434,12 @@ const SaveAOI = (): JSX.Element => {
                   />
                 </div>
                 {updateError && <p className="input-error">{updateError}</p>}
+                {editingMode && (
+                  <button className="remove-button" onClick={handleDelete}>
+                    <TrashCanIcon height={18} width={18} fill={'#ed1846'} />
+                    <span>{saveAOIText[selectedLanguage].delete}</span>
+                  </button>
+                )}
                 <input
                   className="orange-button profile-submit"
                   style={{
@@ -418,6 +456,7 @@ const SaveAOI = (): JSX.Element => {
           </>
         )}
         {updateSuccess && <SuccessScreen />}
+        {deleteSuccess && <SuccessScreen />}
       </>
     </div>
   );

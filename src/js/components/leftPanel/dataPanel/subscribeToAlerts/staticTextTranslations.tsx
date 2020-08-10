@@ -13,6 +13,7 @@ export const saveAOIText = {
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
     save: 'SAVE',
+    delete: 'DELETE AREA',
     successButton: 'BACK TO MY AREAS',
     successText: [
       'Your area has been saved',
@@ -33,6 +34,7 @@ export const saveAOIText = {
     forestChange: "Dès qu'un changement de forêt est détecté",
     language: 'LANGUE',
     save: 'ENREGISTRER',
+    delete: 'SUPPRIMER LA ZONE',
     successButton: 'Revenir vers mes zones',
     successText: [
       'Votre région a été enregistré',
@@ -53,6 +55,7 @@ export const saveAOIText = {
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
     save: 'SAVE',
+    delete: 'DELETE',
     successButton: 'BACK TO MY AREAS',
     successText: [
       'Your area has been saved',
@@ -73,6 +76,7 @@ export const saveAOIText = {
     forestChange: 'Tan pronto como se detecte un cambio en el bosque',
     language: 'IDIOMA',
     save: 'GUARDAR',
+    delete: 'ELIMINAR ZONA',
     successButton: 'Volver a mis zonas',
     successText: [
       'Su zona ha sido guardada',
@@ -93,6 +97,7 @@ export const saveAOIText = {
     forestChange: 'Assim que a mudança florestal for detectada',
     language: 'IDIOMA',
     save: 'SALVAR',
+    delete: 'EXCLUIR ÁREA',
     successButton: 'Voltar para minhas áreas',
     successText: [
       'Sua área foi salva',
@@ -114,6 +119,7 @@ export const saveAOIText = {
     forestChange: 'Segera setelah perubahan hutan terdeteksi',
     language: 'BAHASA',
     save: 'SIMPAN',
+    delete: 'HAPUS DAERAH',
     successButton: 'Kembali ke daerah saya',
     successText: [
       'Daerah Anda telah disimpan',
@@ -134,6 +140,7 @@ export const saveAOIText = {
     forestChange: '一旦检测到森林变化',
     language: '语言',
     save: '保存',
+    delete: '删除区域',
     successButton: '返回到我的区域',
     successText: ['已保存您的区域', '您可以在“我的 GFW”中查看您所有的区域']
   }
