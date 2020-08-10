@@ -120,6 +120,7 @@ export interface FeatureResult {
   attributes: Attributes;
   geometry: __esri.Geometry;
   layer?: any;
+  type?: string;
 }
 
 export interface FieldName {

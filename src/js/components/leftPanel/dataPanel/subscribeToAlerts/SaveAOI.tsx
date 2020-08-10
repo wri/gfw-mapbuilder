@@ -48,14 +48,18 @@ const SaveAOI = (): JSX.Element => {
   const [subscriptionLanguage, setSubscriptionLanguage] = useState('English');
   const [deforestation, setDeforestationAlerts] = useState();
   const [tags, setTags] = useState<(string | never[])[]>([]);
+  const [aoiID, setAOIID] = useState<null | string>(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [language, setLanguage] = useState('en');
-  const [fire, setFireAlerts] = useState();
+  const [fireAlerts, setFireAlerts] = useState(false);
   const { register, handleSubmit, errors, control } = useForm();
+
   const iso = useSelector((state: RootState) => state.appSettings.iso);
+
   const activeFeatures = useSelector(
     (state: RootState) => state.mapviewState.activeFeatures
   );
+  console.log(activeFeatures);
   const activeFeatureIndex = useSelector(
     (state: RootState) => state.mapviewState.activeFeatureIndex
   );
@@ -103,7 +107,7 @@ const SaveAOI = (): JSX.Element => {
       },
       resource: {
         type: 'EMAIL',
-        content: 'vaidotasp@gmail.com' //TODO: Needs to be fixed
+        content: userEmail
       }
     };
 
@@ -132,7 +136,7 @@ const SaveAOI = (): JSX.Element => {
     const payload = {
       ...data,
       application: 'gfw',
-      fireAlerts: fire,
+      fireAlerts: fireAlerts,
       deforestationAlerts: deforestation,
       geostore: activeFeature.attributes.geostoreId,
       type: 'geostore',
@@ -168,6 +172,21 @@ const SaveAOI = (): JSX.Element => {
     const email = localStorage.getItem('email');
     if (email) {
       setUserEmail(email);
+    }
+
+    console.log(activeFeature);
+    if (activeFeature?.attributes?.type === 'area') {
+      setSubscriptionName(activeFeature.attributes.name);
+      setDeforestationAlerts(activeFeature.attributes.deforestationAlerts);
+      console.log(typeof activeFeature.attributes.fireAlerts);
+      setFireAlerts(activeFeature.attributes.fireAlerts);
+      console.log(activeFeature.attributes.fireAlerts);
+      console.log(activeFeature.attributes.deforestationAlerts);
+      setAOIID(activeFeature.attributes.id);
+      setTags(activeFeature.attributes.tags);
+      setLanguage(activeFeature.attributes.language);
+      console.log('we got some defaults already friends');
+      //set the defaults heeere
     }
 
     //Create Mini-Map
@@ -224,8 +243,8 @@ const SaveAOI = (): JSX.Element => {
 
   const classes = useCheckboxStyles();
 
-  function handleLanguagePicker(e: any) {
-    setLanguage(e);
+  function handleLanguagePicker(id: string): void {
+    setLanguage(id);
   }
 
   const SuccessScreen = () => {
@@ -270,6 +289,8 @@ const SaveAOI = (): JSX.Element => {
                     type="name"
                     placeholder=""
                     name="name"
+                    value={subscriptionName}
+                    onChange={(e): void => setSubscriptionName(e.target.value)}
                     ref={register({ required: true })}
                   />
                   {errors.name && (
@@ -343,7 +364,10 @@ const SaveAOI = (): JSX.Element => {
                       }
                       disableRipple
                       name="fireAlerts"
-                      onChange={(e: any) => setFireAlerts(e[1])}
+                      checked={Boolean(fireAlerts)}
+                      onChange={(e: any) => {
+                        setFireAlerts(e[1]);
+                      }}
                       control={control}
                     />
                     <label style={{ fontSize: '0.8rem' }}>
@@ -364,6 +388,7 @@ const SaveAOI = (): JSX.Element => {
                       disableRipple
                       name="deforestationAlerts"
                       control={control}
+                      checked={Boolean(deforestation)}
                       onChange={(e: any) => setDeforestationAlerts(e[1])}
                     />
                     <label style={{ fontSize: '0.8rem' }}>
@@ -377,6 +402,7 @@ const SaveAOI = (): JSX.Element => {
                   </label>
                   <MemoLanguagePicker
                     activeLanguageCallback={handleLanguagePicker}
+                    defaultValue={language}
                   />
                 </div>
                 {updateError && <p className="input-error">{updateError}</p>}

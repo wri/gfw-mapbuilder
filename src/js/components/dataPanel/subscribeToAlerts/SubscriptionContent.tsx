@@ -15,6 +15,11 @@ import {
 } from 'js/store/mapview/types';
 
 import 'css/aoiDashboard.scss';
+import {
+  setActiveFeatures,
+  setActiveFeatureIndex
+} from 'js/store/mapview/actions';
+import { renderModal } from 'js/store/appState/actions';
 
 function formatDate(dateStr: string): string {
   const jsDate = new Date(dateStr);
@@ -138,6 +143,8 @@ const AOIDashboard = () => {
     const [esriGeometry, setEsriGeometry] = useState<null | any>(null);
     const [viirsAlers, setViirsAlerts] = useState(0);
     const [gladAlers, setGladAlerts] = useState(0);
+    const [attributes, setAttributes] = useState();
+    const dispatch = useDispatch();
     const webmapID = useSelector(
       (store: RootState) => store.appSettings.webmap
     );
@@ -195,6 +202,52 @@ const AOIDashboard = () => {
       }
     }, [esriGeometry]);
 
+    function handleEditAOI(): void {
+      const { type, id } = props.dataObject;
+      const {
+        name,
+        createdAt,
+        application,
+        fireAlerts,
+        deforestationAlerts,
+        tags,
+        confirmed,
+        geostore,
+        status,
+        language
+      } = props.dataObject.attributes;
+      const aoiAttr = {
+        name,
+        createdAt,
+        confirmed,
+        geostore,
+        status,
+        language,
+        type, //type: 'area'
+        id,
+        tags,
+        application,
+        fireAlerts,
+        deforestationAlerts
+      };
+      const activeFeature: any[] = [
+        {
+          features: [
+            {
+              attributes: aoiAttr,
+              geometry: esriGeometry.geometry
+            }
+          ],
+          fieldNames: null,
+          layerID: 'user_features',
+          layerTitle: 'User Features'
+        }
+      ];
+      dispatch(setActiveFeatureIndex([0, 0]));
+      dispatch(setActiveFeatures(activeFeature));
+      dispatch(renderModal('SaveAOI'));
+    }
+
     return (
       <div className="aoi-section">
         <p className="area-name">{name}</p>
@@ -209,7 +262,7 @@ const AOIDashboard = () => {
               <p>GLAD {gladAlers}</p>
             </div>
             <button>view on map</button>
-            <button>edit area</button>
+            <button onClick={handleEditAOI}>edit area</button>
           </div>
         </div>
       </div>

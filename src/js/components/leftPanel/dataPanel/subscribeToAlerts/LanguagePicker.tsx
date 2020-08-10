@@ -50,6 +50,7 @@ const useMenuItemStyles = makeStyles({
 
 type LanguagePickerProps = {
   activeLanguageCallback: (e: any) => void;
+  defaultValue: string;
 };
 
 const LanguagePicker = (props: LanguagePickerProps) => {
@@ -75,6 +76,7 @@ const LanguagePicker = (props: LanguagePickerProps) => {
       <Select
         native
         variant="outlined"
+        value={props.defaultValue}
         className={clsx(selectClasses.root)}
         onChange={(e: any): void =>
           props.activeLanguageCallback(e.target.value)
