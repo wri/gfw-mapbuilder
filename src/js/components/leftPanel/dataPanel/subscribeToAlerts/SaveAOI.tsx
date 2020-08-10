@@ -47,7 +47,7 @@ const SaveAOI = (): JSX.Element => {
   const [subscriptionName, setSubscriptionName] = useState('');
   const [subscriptionLanguage, setSubscriptionLanguage] = useState('English');
   const [deforestation, setDeforestationAlerts] = useState();
-  const [tags, setTags] = useState<(string | never[])[]>([]);
+  const [tags, setTags] = useState<(string | string[])[]>([]);
   const [aoiID, setAOIID] = useState<null | string>(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [language, setLanguage] = useState('en');
@@ -59,7 +59,6 @@ const SaveAOI = (): JSX.Element => {
   const activeFeatures = useSelector(
     (state: RootState) => state.mapviewState.activeFeatures
   );
-  console.log(activeFeatures);
   const activeFeatureIndex = useSelector(
     (state: RootState) => state.mapviewState.activeFeatureIndex
   );
@@ -174,19 +173,13 @@ const SaveAOI = (): JSX.Element => {
       setUserEmail(email);
     }
 
-    console.log(activeFeature);
     if (activeFeature?.attributes?.type === 'area') {
       setSubscriptionName(activeFeature.attributes.name);
       setDeforestationAlerts(activeFeature.attributes.deforestationAlerts);
-      console.log(typeof activeFeature.attributes.fireAlerts);
       setFireAlerts(activeFeature.attributes.fireAlerts);
-      console.log(activeFeature.attributes.fireAlerts);
-      console.log(activeFeature.attributes.deforestationAlerts);
       setAOIID(activeFeature.attributes.id);
       setTags(activeFeature.attributes.tags);
       setLanguage(activeFeature.attributes.language);
-      console.log('we got some defaults already friends');
-      //set the defaults heeere
     }
 
     //Create Mini-Map
@@ -308,8 +301,11 @@ const SaveAOI = (): JSX.Element => {
                         id="tags-outlined"
                         options={[]}
                         defaultValue={[]}
+                        value={tags}
                         filterSelectedOptions
-                        onChange={(_, value): void => setTags(value)}
+                        onChange={(_, value: any): void => {
+                          setTags(value);
+                        }}
                         renderInput={params => (
                           <TextField
                             {...params}
