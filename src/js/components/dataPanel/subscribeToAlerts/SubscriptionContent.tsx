@@ -1,14 +1,12 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
+import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
 import { ReactComponent as WorldShape } from 'images/worldShape.svg';
 import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { miniMapInit } from 'js/components/leftPanel/dataPanel/subscribeToAlerts/MiniMap';
 import Loader from 'js/components/sharedComponents/Loader';
-
-import { geojsonToArcGIS } from 'js/helpers/tempConvert';
 
 import { RootState } from 'js/store/index';
 import {
@@ -129,8 +127,17 @@ const AOIDashboard = () => {
   type AOISectionProps = {
     dataObject: aoiData;
   };
+  const geostoreURL =
+    'https://production-api.globalforestwatch.org/v1/geostore/';
+  const viirsAlertsURL =
+    'https://production-api.globalforestwatch.org/v1/viirs-active-fires';
+  // const gladAlertsURL = 'https://production-api.globalforestwatch.org/v1/glad-alerts?aggregate_values=false&period=2018-01-01,2020-08-10&geostore=94be69a5016d7356726b316b702d7b83';
+  const gladAlertsURL =
+    'https://production-api.globalforestwatch.org/v1/glad-alerts';
   const AOISection = (props: AOISectionProps): JSX.Element => {
     const [esriGeometry, setEsriGeometry] = useState<null | any>(null);
+    const [viirsAlers, setViirsAlerts] = useState(0);
+    const [gladAlers, setGladAlerts] = useState(0);
     const webmapID = useSelector(
       (store: RootState) => store.appSettings.webmap
     );
@@ -138,9 +145,7 @@ const AOIDashboard = () => {
     const { name, createdAt, geostore, tags } = props.dataObject.attributes;
 
     useEffect(() => {
-      const geostoreURL =
-        'https://production-api.globalforestwatch.org/v1/geostore/';
-      async function getGeometryFromGeostore(): Promise<any> {
+      async function getGeometryFromGeostore(): Promise<void> {
         fetch(`${geostoreURL}${geostore}`)
           .then(response => response.json())
           .then(data => {
@@ -158,8 +163,35 @@ const AOIDashboard = () => {
         miniMapInit(webmapID, miniMap, esriGeometry.geometry);
       }
 
+      function fetchAlerts(): void {
+        if (!esriGeometry) return;
+        const today = new Date();
+        const aWeekAgo = subDays(today, 7);
+        const params = `?period=${format(aWeekAgo, 'yyyy-MM-dd')},${format(
+          today,
+          'yyyy-MM-dd'
+        )}&geostore=${geostore}`;
+        const viirsAnalysisURL = viirsAlertsURL.concat(params);
+        const gladAnalysisURL = gladAlertsURL.concat(params);
+
+        fetch(viirsAnalysisURL)
+          .then(res => res.json())
+          .then(data => {
+            setViirsAlerts(data.data.attributes.value);
+          })
+          .catch(e => console.log(e));
+
+        fetch(gladAnalysisURL)
+          .then(res => res.json())
+          .then(data => {
+            setGladAlerts(data.data.attributes.value);
+          })
+          .catch(e => console.log(e));
+      }
+
       if (esriGeometry) {
         initializeMiniMap();
+        fetchAlerts();
       }
     }, [esriGeometry]);
 
@@ -172,7 +204,10 @@ const AOIDashboard = () => {
             <div style={{ height: '150px' }} ref={miniMap}></div>
           </div>
           <div className="controls">
-            <div>alert section last weeks alerts only GLAD and VIIRS</div>
+            <div>
+              <p>VIIRS {viirsAlers}</p>
+              <p>GLAD {gladAlers}</p>
+            </div>
             <button>view on map</button>
             <button>edit area</button>
           </div>
