@@ -48,11 +48,53 @@ type aoiData = {
   type: string;
 };
 
+const AOIDashboardText = {
+  en: {
+    created: 'Created',
+    glad: 'GLAD alerts',
+    viirs: 'VIIRS alerts'
+  },
+  fr: {
+    created: 'Créé le',
+    glad: 'Alertes GLAD',
+    viirs: 'Alertes VIIRS'
+  },
+  ka: {
+    created: 'Created',
+    glad: 'GLAD alerts',
+    viirs: 'VIIRS alerts'
+  },
+  es: {
+    created: 'Creado el',
+    glad: 'Alertas GLAD',
+    viirs: 'Alertas VIIRS'
+  },
+  pt: {
+    created: 'Criado',
+    glad: 'Alertas GLAD',
+    viirs: 'Alertas VIIRS'
+  },
+  id: {
+    created: 'Dibuat',
+    glad: 'Peringatan GLAD',
+    viirs: 'Peringatan VIIRS'
+  },
+  zh: {
+    created: '已创建',
+    glad: 'GLAD 预警',
+    viirs: 'VIIRS 警报'
+  }
+};
+
 const AOIDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(false);
   const [data, setData] = useState<aoiData[][]>();
   const [currentPage, setCurrentPage] = useState(0);
+
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
+  );
 
   function turnPageForwards(): void {
     if (!data) return;
@@ -301,19 +343,34 @@ const AOIDashboard = () => {
 
     return (
       <div className="aoi-section">
-        <p className="area-name">{name}</p>
-        <p className="date">Created at: {formatDate(createdAt)}</p>
+        <div className="name-section">
+          <p className="area-name">{name}</p>
+          <p className="date">
+            {AOIDashboardText[selectedLanguage].created} {formatDate(createdAt)}
+          </p>
+        </div>
         <div className="map-section">
           <div className="miniMap">
-            <div style={{ height: '150px' }} ref={miniMap}></div>
+            <div style={{ height: '147px' }} ref={miniMap}></div>
           </div>
           <div className="controls">
-            <div>
-              <p>VIIRS {viirsAlers}</p>
-              <p>GLAD {gladAlers}</p>
+            <div className="alert-section">
+              <p>{"Last week's alerts:"}</p>
+              <p className="viirs">
+                {AOIDashboardText[selectedLanguage].viirs} {viirsAlers}
+              </p>
+              <p className="glad">
+                {AOIDashboardText[selectedLanguage].glad} {gladAlers}
+              </p>
             </div>
-            <button onClick={handleViewOnMap}>view on map</button>
-            <button onClick={handleEditAOI}>edit area</button>
+            <div className="map-btns">
+              <button className="map" onClick={handleViewOnMap}>
+                view on map
+              </button>
+              <button className="edit" onClick={handleEditAOI}>
+                edit area
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -322,7 +379,7 @@ const AOIDashboard = () => {
 
   return (
     <div className="aoi-dashboard">
-      <h3>Dashboard</h3>
+      <h3>My GFW Areas</h3>
       {loadingError && <ErrorScreen />}
       {loading && <LoadingScreen />}
       {!loading && !loadingError && data && (
@@ -330,9 +387,15 @@ const AOIDashboard = () => {
           {data[currentPage].map((dataObject: aoiData, i: number) => (
             <AOISection key={i} dataObject={dataObject} />
           ))}
-          <button onClick={turnPageForwards}>Next</button>
-          <button onClick={turnPageBackwards}>Back</button>
           <div>
+            <button className="back-btn" onClick={turnPageBackwards}>
+              Back
+            </button>
+            <button className="next-btn" onClick={turnPageForwards}>
+              Next
+            </button>
+          </div>
+          <div style={{ fontSize: '0.8rem' }}>
             Page {currentPage + 1}/{data.length}
           </div>
         </div>
