@@ -15,10 +15,83 @@ import { mapController } from 'js/controllers/mapController';
 
 import 'css/aoiDashboard.scss';
 
+const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
+const viirsAlertsURL =
+  'https://production-api.globalforestwatch.org/v1/viirs-active-fires';
+const gladAlertsURL =
+  'https://production-api.globalforestwatch.org/v1/glad-alerts';
+
 function formatDate(dateStr: string): string {
   const jsDate = new Date(dateStr);
   return format(jsDate, 'MMM dd yyyy');
 }
+
+function createFeatureObject(aoiDataObject: aoiData, esriGeometry: any): any {
+  const { type, id } = aoiDataObject;
+  const {
+    name,
+    createdAt,
+    application,
+    fireAlerts,
+    deforestationAlerts,
+    tags,
+    confirmed,
+    geostore,
+    status,
+    language
+  } = aoiDataObject.attributes;
+  const aoiAttr = {
+    name,
+    createdAt,
+    confirmed,
+    geostore,
+    status,
+    language,
+    type, //type: 'area'
+    id,
+    tags,
+    application,
+    fireAlerts,
+    deforestationAlerts
+  };
+  const geometry = {
+    ...esriGeometry.geometry,
+    type: 'polygon'
+  };
+  const activeFeature: any[] = [
+    {
+      features: [
+        {
+          attributes: aoiAttr,
+          geometry
+        }
+      ],
+      fieldNames: null,
+      layerID: 'user_features',
+      layerTitle: 'User Features'
+    }
+  ];
+  return activeFeature;
+}
+
+const ErrorScreen = (): JSX.Element => (
+  <div style={{ textAlign: 'center', marginTop: '40%', color: 'red' }}>
+    Error occured while fetching areas of interest. Refresh the page to try
+    again.
+  </div>
+);
+
+const LoadingScreen = (): JSX.Element => (
+  <Loader
+    containerPositionStyling={{
+      position: 'absolute',
+      top: '40%',
+      left: '42%'
+    }}
+    color={'#cfcdcd'}
+    size={100}
+  />
+);
 
 type aoiData = {
   attributes: {
@@ -122,10 +195,9 @@ const AOIDashboard = () => {
           Authorization: `Bearer ${token}`
         }
       })
-        .then(response => {
-          const hasError = response.status !== 200;
-          response.json().then(data => {
-            if (hasError) {
+        .then(res => {
+          res.json().then(data => {
+            if (res.status !== 200) {
               setLoadingError(true);
               return;
             }
@@ -146,47 +218,22 @@ const AOIDashboard = () => {
     }
   }, []);
 
-  const ErrorScreen = () => (
-    <div style={{ textAlign: 'center', marginTop: '40%', color: 'red' }}>
-      Error occured while fetching areas of interest. Refresh the page to try
-      again.
-    </div>
-  );
-
-  const LoadingScreen = () => (
-    <Loader
-      containerPositionStyling={{
-        position: 'absolute',
-        top: '40%',
-        left: '42%'
-      }}
-      color={'#cfcdcd'}
-      size={100}
-    />
-  );
-
   type AOISectionProps = {
     dataObject: aoiData;
   };
-  const geostoreURL =
-    'https://production-api.globalforestwatch.org/v1/geostore/';
-  const viirsAlertsURL =
-    'https://production-api.globalforestwatch.org/v1/viirs-active-fires';
-  // const gladAlertsURL = 'https://production-api.globalforestwatch.org/v1/glad-alerts?aggregate_values=false&period=2018-01-01,2020-08-10&geostore=94be69a5016d7356726b316b702d7b83';
-  const gladAlertsURL =
-    'https://production-api.globalforestwatch.org/v1/glad-alerts';
+
   const AOISection = (props: AOISectionProps): JSX.Element => {
     const [esriGeometry, setEsriGeometry] = useState<null | any>(null);
     const [viirsAlers, setViirsAlerts] = useState(0);
     const [gladAlers, setGladAlerts] = useState(0);
-    const [attributes, setAttributes] = useState();
     const dispatch = useDispatch();
     const webmapID = useSelector(
       (store: RootState) => store.appSettings.webmap
     );
     const miniMap = React.useRef<HTMLDivElement>(null);
-    const { name, createdAt, geostore, tags } = props.dataObject.attributes;
+    const { name, createdAt, geostore } = props.dataObject.attributes;
 
+    //Effect responsible for converting geostore ID to ESRI geometry via API call
     useEffect(() => {
       async function getGeometryFromGeostore(): Promise<void> {
         fetch(`${geostoreURL}${geostore}`)
@@ -200,6 +247,7 @@ const AOIDashboard = () => {
       getGeometryFromGeostore();
     }, []);
 
+    //Effect response for fetching viirs and glad alerts for last week using geostoreID
     useEffect(() => {
       function initializeMiniMap(): void {
         if (!esriGeometry || !miniMap?.current || !webmapID) return;
@@ -238,106 +286,31 @@ const AOIDashboard = () => {
       }
     }, [esriGeometry]);
 
+    //Sets active feature to the AOI in redux, adds graphic on the map and zooms to the location on the map.
     function handleViewOnMap(): void {
-      const { type, id } = props.dataObject;
-      const {
-        name,
-        createdAt,
-        application,
-        fireAlerts,
-        deforestationAlerts,
-        tags,
-        confirmed,
-        geostore,
-        status,
-        language
-      } = props.dataObject.attributes;
-      const aoiAttr = {
-        name,
-        createdAt,
-        confirmed,
-        geostore,
-        status,
-        language,
-        type, //type: 'area'
-        id,
-        tags,
-        application,
-        fireAlerts,
-        deforestationAlerts
-      };
-      const geometry = {
-        ...esriGeometry.geometry,
-        type: 'polygon'
-      };
-      const activeFeature: any = [
-        {
-          features: [
-            {
-              attributes: aoiAttr,
-              geometry
-            }
-          ],
-          fieldNames: null,
-          layerID: 'user_features',
-          layerTitle: 'User Features'
-        }
-      ];
+      const featureFromAOIData = createFeatureObject(
+        props.dataObject,
+        esriGeometry
+      );
       const poly = new Polygon({
         rings: esriGeometry.geometry.rings,
         spatialReference: esriGeometry.geometry.spatialReference
       });
       dispatch(setActiveFeatureIndex([0, 0]));
-      dispatch(setActiveFeatures(activeFeature));
-      mapController.drawGraphic([activeFeature[0].features[0]]);
+      dispatch(setActiveFeatures(featureFromAOIData));
+      mapController.drawGraphic([featureFromAOIData[0].features[0]]);
       mapController._mapview.goTo({ target: poly }, { duration: 1000 });
       dispatch(selectActiveTab('data'));
       dispatch(renderModal(''));
     }
 
     function handleEditAOI(): void {
-      const { type, id } = props.dataObject;
-      const {
-        name,
-        createdAt,
-        application,
-        fireAlerts,
-        deforestationAlerts,
-        tags,
-        confirmed,
-        geostore,
-        status,
-        language
-      } = props.dataObject.attributes;
-      const aoiAttr = {
-        name,
-        createdAt,
-        confirmed,
-        geostore,
-        status,
-        language,
-        type, //type: 'area'
-        id,
-        tags,
-        application,
-        fireAlerts,
-        deforestationAlerts
-      };
-      const activeFeature: any[] = [
-        {
-          features: [
-            {
-              attributes: aoiAttr,
-              geometry: esriGeometry.geometry
-            }
-          ],
-          fieldNames: null,
-          layerID: 'user_features',
-          layerTitle: 'User Features'
-        }
-      ];
+      const featureFromAOIData = createFeatureObject(
+        props.dataObject,
+        esriGeometry
+      );
       dispatch(setActiveFeatureIndex([0, 0]));
-      dispatch(setActiveFeatures(activeFeature));
+      dispatch(setActiveFeatures(featureFromAOIData));
       dispatch(renderModal('SaveAOI'));
     }
 
