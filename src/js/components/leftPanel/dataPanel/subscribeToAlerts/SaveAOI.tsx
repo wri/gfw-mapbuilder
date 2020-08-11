@@ -262,22 +262,31 @@ const SaveAOI = (): JSX.Element => {
       .then(res => res.json())
       .then(msg => {
         if (msg?.errors) {
+          setDeleteSuccess(true);
+          setUpdateSuccess(true);
           console.error(msg.errors[0].detail);
         } else {
           setDeleteSuccess(true);
+          setUpdateSuccess(true);
         }
       })
       .catch(e => {
+        setDeleteSuccess(true);
+        setUpdateSuccess(true);
         console.log(e);
       });
   }
 
-  const SuccessScreen = () => {
+  const SuccessScreen = (): JSX.Element => {
     return (
       <div className="success-screen">
         <div className="tree-success"></div>
-        <p>{saveAOIText[selectedLanguage].successText[0]}</p>
-        <p>{saveAOIText[selectedLanguage].successText[1]}</p>
+        <p>
+          {deleteSuccess
+            ? saveAOIText[selectedLanguage].deleteText
+            : saveAOIText[selectedLanguage].successText[0]}
+        </p>
+        <p>{!deleteSuccess && saveAOIText[selectedLanguage].successText[1]}</p>
         <button
           className="orange-button profile-submit"
           onClick={() => dispatch(renderModal('SubscriptionWidget'))}
@@ -456,7 +465,6 @@ const SaveAOI = (): JSX.Element => {
           </>
         )}
         {updateSuccess && <SuccessScreen />}
-        {deleteSuccess && <SuccessScreen />}
       </>
     </div>
   );

@@ -18,7 +18,8 @@ export const saveAOIText = {
     successText: [
       'Your area has been saved',
       "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
-    ]
+    ],
+    deleteText: 'This area has been deleted from your My GFW.'
   },
   fr: {
     title: "Enregistrer une zone d'intérêt",
@@ -39,7 +40,8 @@ export const saveAOIText = {
     successText: [
       'Votre région a été enregistré',
       'Vous pouvez visualiser toutes vos zones dans « Mon GFW »'
-    ]
+    ],
+    deleteText: 'This area has been deleted from your My GFW.'
   },
   ka: {
     title: 'Save area of interest',
@@ -60,7 +62,8 @@ export const saveAOIText = {
     successText: [
       'Your area has been saved',
       "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
-    ]
+    ],
+    deleteText: 'This area has been deleted from your My GFW.'
   },
   es: {
     title: 'Guardar zona de interés',
@@ -81,7 +84,8 @@ export const saveAOIText = {
     successText: [
       'Su zona ha sido guardada',
       'Puede ver todas sus zonas en My GFW'
-    ]
+    ],
+    deleteText: 'This area has been deleted from your My GFW.'
   },
   pt: {
     title: 'Salvar área de interesse',
@@ -102,7 +106,8 @@ export const saveAOIText = {
     successText: [
       'Sua área foi salva',
       'Você pode ver todas as suas áreas em Meu GFW'
-    ]
+    ],
+    deleteText: 'This area has been deleted from your My GFW.'
   },
   id: {
     title: 'Simpan daerah yang diminati',
@@ -124,7 +129,8 @@ export const saveAOIText = {
     successText: [
       'Daerah Anda telah disimpan',
       'Anda dapat melihat semua area Anda di GFW Saya'
-    ]
+    ],
+    deleteText: 'This area has been deleted from your My GFW.'
   },
   zh: {
     title: '保存关注区域',
@@ -142,6 +148,7 @@ export const saveAOIText = {
     save: '保存',
     delete: '删除区域',
     successButton: '返回到我的区域',
-    successText: ['已保存您的区域', '您可以在“我的 GFW”中查看您所有的区域']
+    successText: ['已保存您的区域', '您可以在“我的 GFW”中查看您所有的区域'],
+    deleteText: 'This area has been deleted from your My GFW.'
   }
 };
