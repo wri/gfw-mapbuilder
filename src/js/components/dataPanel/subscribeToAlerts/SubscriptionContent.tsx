@@ -1,27 +1,19 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
-import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
-import { ReactComponent as WorldShape } from 'images/worldShape.svg';
-import { ReactComponent as DeleteIcon } from 'images/deleteIcon.svg';
 import { format, subDays } from 'date-fns';
 import { miniMapInit } from 'js/components/leftPanel/dataPanel/subscribeToAlerts/MiniMap';
 import Loader from 'js/components/sharedComponents/Loader';
-
 import { RootState } from 'js/store/index';
-import {
-  SubscriptionParams,
-  SubscriptionAttributes
-} from 'js/store/mapview/types';
-
-import 'css/aoiDashboard.scss';
 import {
   setActiveFeatures,
   setActiveFeatureIndex
 } from 'js/store/mapview/actions';
 import { renderModal, selectActiveTab } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
+
+import 'css/aoiDashboard.scss';
 
 function formatDate(dateStr: string): string {
   const jsDate = new Date(dateStr);
@@ -310,7 +302,7 @@ const AOIDashboard = () => {
     return (
       <div className="aoi-section">
         <p className="area-name">{name}</p>
-        <p className="date">{formatDate(createdAt)}</p>
+        <p className="date">Created at: {formatDate(createdAt)}</p>
         <div className="map-section">
           <div className="miniMap">
             <div style={{ height: '150px' }} ref={miniMap}></div>

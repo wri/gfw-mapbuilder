@@ -22,28 +22,6 @@ export interface SubscriptionResource {
   content: string;
 }
 
-export interface SubscriptionParams {
-  iso: {
-    country: string;
-    region: string;
-  };
-  wdpaid: any;
-  use: any;
-  useid: any;
-  geostore: string;
-}
-
-export interface SubscriptionAttributes {
-  name: string;
-  createdAt: string;
-  userId: string;
-  resource: SubscriptionResource;
-  datasets: string[];
-  confirmed: boolean;
-  language: string;
-  params: SubscriptionParams;
-}
-
 export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
