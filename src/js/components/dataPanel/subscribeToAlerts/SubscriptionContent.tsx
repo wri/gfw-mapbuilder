@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { ReactComponent as ShapeWarning } from 'images/shapeWarning.svg';
@@ -19,7 +20,8 @@ import {
   setActiveFeatures,
   setActiveFeatureIndex
 } from 'js/store/mapview/actions';
-import { renderModal } from 'js/store/appState/actions';
+import { renderModal, selectActiveTab } from 'js/store/appState/actions';
+import { mapController } from 'js/controllers/mapController';
 
 function formatDate(dateStr: string): string {
   const jsDate = new Date(dateStr);
@@ -202,6 +204,63 @@ const AOIDashboard = () => {
       }
     }, [esriGeometry]);
 
+    function handleViewOnMap(): void {
+      const { type, id } = props.dataObject;
+      const {
+        name,
+        createdAt,
+        application,
+        fireAlerts,
+        deforestationAlerts,
+        tags,
+        confirmed,
+        geostore,
+        status,
+        language
+      } = props.dataObject.attributes;
+      const aoiAttr = {
+        name,
+        createdAt,
+        confirmed,
+        geostore,
+        status,
+        language,
+        type, //type: 'area'
+        id,
+        tags,
+        application,
+        fireAlerts,
+        deforestationAlerts
+      };
+      const geometry = {
+        ...esriGeometry.geometry,
+        type: 'polygon'
+      };
+      const activeFeature: any = [
+        {
+          features: [
+            {
+              attributes: aoiAttr,
+              geometry
+            }
+          ],
+          fieldNames: null,
+          layerID: 'user_features',
+          layerTitle: 'User Features'
+        }
+      ];
+      const poly = new Polygon({
+        rings: esriGeometry.geometry.rings,
+        spatialReference: esriGeometry.geometry.spatialReference
+      });
+      dispatch(setActiveFeatureIndex([0, 0]));
+      dispatch(setActiveFeatures(activeFeature));
+      mapController.drawGraphic([activeFeature[0].features[0]]);
+      mapController._mapview.goTo({ target: poly }, { duration: 1000 });
+      dispatch(selectActiveTab('data'));
+      dispatch(renderModal(''));
+    }
+
     function handleEditAOI(): void {
       const { type, id } = props.dataObject;
       const {
@@ -261,7 +320,7 @@ const AOIDashboard = () => {
               <p>VIIRS {viirsAlers}</p>
               <p>GLAD {gladAlers}</p>
             </div>
-            <button>view on map</button>
+            <button onClick={handleViewOnMap}>view on map</button>
             <button onClick={handleEditAOI}>edit area</button>
           </div>
         </div>
