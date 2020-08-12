@@ -130,14 +130,29 @@ const SaveAOI = (): JSX.Element => {
       );
   };
 
-  const onDefaultSubmit = (data: any): void => {
+  const onDefaultSubmit = async (data: any): Promise<void> => {
+    let geostoreID;
+    //if feature is drawn by user, it will have geostoreID already, if it is poly from a layer, it will not and we will have to register it
+    if (activeFeature.attributes.geostoreId) {
+      geostoreID = activeFeature.attributes.geostoreId;
+    } else {
+      geostoreID = await registerGeometry(activeFeature)
+        .then(response => response.json())
+        .then(res => {
+          if (res?.errors) {
+            throw new Error('failed to register geostore');
+          }
+          return res.data.id;
+        })
+        .catch(e => console.log('failed to register geostore', e));
+    }
     const userToken = localStorage.getItem('userToken');
     const payload = {
       ...data,
       application: 'gfw',
       fireAlerts: fireAlerts,
       deforestationAlerts: deforestation,
-      geostore: activeFeature.attributes.geostoreId,
+      geostore: geostoreID,
       type: 'geostore',
       language,
       public: true, //unclear what this means, we are replicating flagship app,
