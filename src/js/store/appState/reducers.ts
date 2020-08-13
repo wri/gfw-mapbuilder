@@ -25,7 +25,8 @@ import {
   SET_MODIS_END,
   SET_VIIRS_START,
   SET_VIIRS_END,
-  SET_RENDER_POPUP
+  SET_RENDER_POPUP,
+  SET_AREA_IMAGES
 } from './types';
 
 const initialState: AppState = {
@@ -61,7 +62,8 @@ const initialState: AppState = {
     coordinateMouseClickResults: {},
     coordinatePointerMoveResults: {}
   },
-  renderPopup: false
+  renderPopup: false,
+  areaImages: []
 };
 
 export function appStateReducer(
@@ -213,6 +215,24 @@ export function appStateReducer(
         ...state,
         renderPopup: action.payload
       };
+    case SET_AREA_IMAGES: {
+      const newAreaImages = state.areaImages;
+      const incomingArea = newAreaImages.find(
+        areaID => areaID === action.payload
+      );
+      if (incomingArea) {
+        const index = newAreaImages.findIndex(
+          areaID => areaID === action.payload
+        );
+        newAreaImages.splice(index, 0, action.payload);
+      } else {
+        newAreaImages.push(action.payload);
+      }
+      return {
+        ...state,
+        areaImages: newAreaImages
+      };
+    }
     default:
       return state;
   }
