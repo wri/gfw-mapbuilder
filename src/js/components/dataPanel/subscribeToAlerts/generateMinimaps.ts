@@ -94,7 +94,12 @@ export async function generateMinimaps(areas: any): Promise<void> {
 
   async function executePrintTask(
     areaGeometry: any
-  ): Promise<__esri.PrintResponse | void> {
+  ): Promise<__esri.PrintResponse | void | null> {
+    //Check if our helper map is on the dom, if user closes the popup before it finished working through creating minimaps, it can cause issues. Thus the return here
+    const mapDOMRef = document.getElementById('minimap-print');
+    if (!mapDOMRef) {
+      return null;
+    }
     const poly = new Polygon(areaGeometry);
     const aoiGraphic = new Graphic({
       geometry: poly,
