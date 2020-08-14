@@ -42,7 +42,7 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <PenContent />;
       case 'PenWidget-CoordinatesForm':
         return <CoordinatesForm />;
-      case 'SubscriptionWidget':
+      case 'AOIDashboard':
         return <SubscriptionContent />;
       case 'SaveAOI':
         return <SaveAOI />;
@@ -79,7 +79,7 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'share-widget';
       case 'InfoContent':
         return 'info-content';
-      case 'SubscriptionWidget':
+      case 'AOIDashboard':
         return 'subscription-widget';
       case 'SaveAOI':
         return 'saveAOI';

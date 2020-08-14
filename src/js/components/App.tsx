@@ -142,7 +142,7 @@ const App = (props: AppSettings | any): JSX.Element => {
     );
 
     const handleExternalSubscriptionCall = (request: any) => {
-      dispatch(renderModal('SubscriptionWidget'));
+      dispatch(renderModal('AOIDashboard'));
     };
 
     window.addEventListener(

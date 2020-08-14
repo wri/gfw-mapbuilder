@@ -54,7 +54,7 @@ const GFWLoginOptions = (props: any) => {
   }
 
   function getSubscriptions(): void {
-    dispatch(renderModal('SubscriptionWidget'));
+    dispatch(renderModal('AOIDashboard'));
   }
 
   const RenderLogins = (): JSX.Element => {

@@ -301,7 +301,7 @@ const SaveAOI = (): JSX.Element => {
         <p>{!deleteSuccess && saveAOIText[selectedLanguage].successText[1]}</p>
         <button
           className="orange-button profile-submit"
-          onClick={() => dispatch(renderModal('SubscriptionWidget'))}
+          onClick={() => dispatch(renderModal('AOIDashboard'))}
           style={{
             backgroundColor: customColorTheme,
             marginTop: '30px',
