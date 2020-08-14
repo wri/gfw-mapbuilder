@@ -3,7 +3,6 @@ import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { format, subDays } from 'date-fns';
-import { miniMapInit } from 'js/components/leftPanel/dataPanel/subscribeToAlerts/MiniMap';
 import Loader from 'js/components/sharedComponents/Loader';
 import { RootState } from 'js/store/index';
 import {
@@ -14,6 +13,7 @@ import { renderModal, selectActiveTab } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
 
 import 'css/aoiDashboard.scss';
+import { generateMinimaps } from './generateMinimaps';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 const viirsAlertsURL =
@@ -26,7 +26,18 @@ function formatDate(dateStr: string): string {
   return format(jsDate, 'MMM dd yyyy');
 }
 
-function createFeatureObject(aoiDataObject: aoiData, esriGeometry: any): any {
+type EsriGeometryObject = {
+  attributes: {};
+  geometry: {
+    rings: number[][][];
+    spatialReference: any;
+  };
+};
+
+function createFeatureObject(
+  aoiDataObject: aoiData,
+  esriGeometry: EsriGeometryObject
+): any {
   const { type, id } = aoiDataObject;
   const {
     name,
@@ -121,6 +132,10 @@ type aoiData = {
   type: string;
 };
 
+type AOISectionProps = {
+  dataObject: aoiData;
+};
+
 const AOIDashboardText = {
   en: {
     created: 'Created',
@@ -204,6 +219,7 @@ const AOIDashboard = () => {
             setLoadingError(false);
             setLoading(false);
             //Put data in paginated chunks so we load only 5 at a time
+            generateMinimaps(data.data);
             const chunks = [];
             while (data.data.length > 0) {
               chunks.push(data.data.splice(0, 5));
@@ -216,22 +232,38 @@ const AOIDashboard = () => {
           setLoadingError(true);
         });
     }
+    return (): void => {
+      const mapHelper = document.getElementById('minimap-print');
+      mapHelper?.remove();
+    };
   }, []);
 
-  type AOISectionProps = {
-    dataObject: aoiData;
-  };
-
   const AOISection = (props: AOISectionProps): JSX.Element => {
-    const [esriGeometry, setEsriGeometry] = useState<null | any>(null);
+    const [esriGeometry, setEsriGeometry] = useState<null | EsriGeometryObject>(
+      null
+    );
     const [viirsAlers, setViirsAlerts] = useState(0);
     const [gladAlers, setGladAlerts] = useState(0);
+    const [mapLoading, setMapLoading] = useState(true);
     const dispatch = useDispatch();
     const webmapID = useSelector(
       (store: RootState) => store.appSettings.webmap
     );
-    const miniMap = React.useRef<HTMLDivElement>(null);
+    const { areaImages } = useSelector((store: RootState) => store.appState);
+    const miniMap = React.useRef<HTMLImageElement>(null);
     const { name, createdAt, geostore } = props.dataObject.attributes;
+
+    useEffect(() => {
+      console.log('area image useEffect');
+      const areaID = areaImages.find(id => id === props.dataObject.id);
+
+      if (areaID && miniMap.current) {
+        const uri = localStorage.getItem(`areaID-${areaID}`);
+        if (!uri) return;
+        setMapLoading(false);
+        miniMap.current.src = uri;
+      }
+    }, [areaImages.length, props.dataObject.id, areaImages]);
 
     //Effect responsible for converting geostore ID to ESRI geometry via API call
     useEffect(() => {
@@ -247,13 +279,8 @@ const AOIDashboard = () => {
       getGeometryFromGeostore();
     }, []);
 
-    //Effect response for fetching viirs and glad alerts for last week using geostoreID
+    //Effect for fetching viirs and glad alerts for last week using geostoreID
     useEffect(() => {
-      function initializeMiniMap(): void {
-        if (!esriGeometry || !miniMap?.current || !webmapID) return;
-        miniMapInit(webmapID, miniMap, esriGeometry.geometry);
-      }
-
       function fetchAlerts(): void {
         if (!esriGeometry) return;
         const today = new Date();
@@ -281,13 +308,13 @@ const AOIDashboard = () => {
       }
 
       if (esriGeometry) {
-        initializeMiniMap();
         fetchAlerts();
       }
     }, [esriGeometry]);
 
     //Sets active feature to the AOI in redux, adds graphic on the map and zooms to the location on the map.
     function handleViewOnMap(): void {
+      if (!esriGeometry) return;
       const featureFromAOIData = createFeatureObject(
         props.dataObject,
         esriGeometry
@@ -305,6 +332,7 @@ const AOIDashboard = () => {
     }
 
     function handleEditAOI(): void {
+      if (!esriGeometry) return;
       const featureFromAOIData = createFeatureObject(
         props.dataObject,
         esriGeometry
@@ -324,7 +352,29 @@ const AOIDashboard = () => {
         </div>
         <div className="map-section">
           <div className="miniMap">
-            <div style={{ height: '147px' }} ref={miniMap}></div>
+            <div style={{ height: '147px' }}>
+              {mapLoading && (
+                <div style={{ height: '147px', width: '190px' }}>
+                  <Loader
+                    containerPositionStyling={{
+                      position: 'relative',
+                      top: '30%'
+                    }}
+                    color={'#cfcdcd'}
+                    size={50}
+                  />
+                </div>
+              )}
+              <img
+                src=""
+                style={{
+                  height: '147px',
+                  width: '190px',
+                  visibility: mapLoading ? 'hidden' : 'visible'
+                }}
+                ref={miniMap}
+              />
+            </div>
           </div>
           <div className="controls">
             <div className="alert-section">

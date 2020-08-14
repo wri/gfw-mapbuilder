@@ -1429,7 +1429,7 @@ export class MapController {
     });
 
     const mapPDF = await this._printTask
-      ?.execute(params)
+      .execute(params)
       .catch(e => console.log('error in generateMapPDF()', e));
 
     return mapPDF;
