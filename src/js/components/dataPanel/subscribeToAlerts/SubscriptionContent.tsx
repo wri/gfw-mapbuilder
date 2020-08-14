@@ -254,7 +254,6 @@ const AOIDashboard = () => {
     const { name, createdAt, geostore } = props.dataObject.attributes;
 
     useEffect(() => {
-      console.log('area image useEffect');
       const areaID = areaImages.find(id => id === props.dataObject.id);
 
       if (areaID && miniMap.current) {
@@ -400,12 +399,26 @@ const AOIDashboard = () => {
     );
   };
 
+  const NoAreasScreen = (): JSX.Element => {
+    return (
+      <div className="no-areas-section">
+        <h4>{"You haven't created any Areas of Interest yet"}</h4>
+        <div className="area-alerts-img"></div>
+        <p className="no-areas-subsection">
+          Creating an Area of Interest lets you customize and perform an
+          in-depth analysis of the area, as well as receiving email
+          notifications when new deforestation alerts are available.
+        </p>
+      </div>
+    );
+  };
+
   return (
     <div className="aoi-dashboard">
       <h3>My GFW Areas</h3>
       {loadingError && <ErrorScreen />}
       {loading && <LoadingScreen />}
-      {!loading && !loadingError && data && (
+      {!loading && !loadingError && data && data.length !== 0 && (
         <div className="aoi-wrapper">
           {data[currentPage].map((dataObject: aoiData, i: number) => (
             <AOISection key={i} dataObject={dataObject} />
@@ -423,6 +436,7 @@ const AOIDashboard = () => {
           </div>
         </div>
       )}
+      {!loadingError && data?.length === 0 && <NoAreasScreen />}
     </div>
   );
 };
