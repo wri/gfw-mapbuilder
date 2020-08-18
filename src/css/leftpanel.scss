@@ -1371,3 +1371,11 @@
     }
   }
 }
+
+@media (max-height: $laptop-device) {
+  .left-panel {
+    .tabview-container {
+      height: 450px;
+    }
+  }
+}
