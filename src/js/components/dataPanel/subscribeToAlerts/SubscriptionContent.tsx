@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
+import { ReactComponent as PrintIcon } from '../../../../images/printIcon.svg';
+import { getShareableURL } from 'js/helpers/shareFunctionality';
 import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
 import { format, subDays } from 'date-fns';
 import Loader from 'js/components/sharedComponents/Loader';
@@ -341,6 +343,24 @@ const AOIDashboard = () => {
       dispatch(renderModal('SaveAOI'));
     }
 
+    async function printReport(): Promise<void> {
+      if (!esriGeometry) return;
+      const featureFromAOIData = createFeatureObject(
+        props.dataObject,
+        esriGeometry
+      );
+      dispatch(setActiveFeatureIndex([0, 0]));
+      dispatch(setActiveFeatures(featureFromAOIData));
+      const appID = new URL(window.location.href).searchParams.get('appid');
+      const baseURL = new URL(window.location.href);
+      let combinedReportURL = baseURL.origin + baseURL.pathname;
+      const stateUrl = await getShareableURL({ report: true });
+      combinedReportURL = appID
+        ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
+        : combinedReportURL + '?' + stateUrl;
+      window.open(combinedReportURL);
+    }
+
     return (
       <div className="aoi-section">
         <div className="name-section">
@@ -377,7 +397,7 @@ const AOIDashboard = () => {
           </div>
           <div className="controls">
             <div className="alert-section">
-              <p>{"Last week's alerts:"}</p>
+              <p className="title">{"Last week's alerts"}</p>
               <p className="viirs">
                 {AOIDashboardText[selectedLanguage].viirs} {viirsAlers}
               </p>
@@ -391,6 +411,10 @@ const AOIDashboard = () => {
               </button>
               <button className="edit" onClick={handleEditAOI}>
                 edit area
+              </button>
+              <button className="print" onClick={printReport}>
+                <PrintIcon height={15} width={15} fill={'#f0ab00'} />
+                <p>Print Report</p>
               </button>
             </div>
           </div>
