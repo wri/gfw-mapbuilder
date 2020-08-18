@@ -48,15 +48,32 @@
   }
 
   &.subscription-widget {
-    height: 28.125rem;
-    top: 40%;
-    width: 21rem;
+    overflow: hidden;
+    border-radius: 2px;
+    min-height: 75vh;
+    max-height: 91vh;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 700px;
+    padding: 1.5rem 1rem 1.5rem 1rem;
   }
 
-  &.alert-carousel {
-    width: 320px;
-    height: 450px;
-    top: 35%;
+  &.saveAOI {
+    border-radius: 2px;
+    max-height: 91vh;
+    height: max-content;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 700px;
+    padding: 1.5rem 6.25rem 1.5rem 6.25rem;
   }
 
   &.info-content {

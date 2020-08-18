@@ -8,8 +8,8 @@ import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent'
 import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
 import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
 import CanopyDensityContent from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import SubscriptionContent from '../mapWidgets/widgetContent/SubscriptionContent';
-import AlertCarousel from '../leftPanel/dataPanel/subscribeToAlerts/AlertCarousel';
+import SubscriptionContent from 'js/components/dataPanel/subscribeToAlerts/SubscriptionContent';
+import SaveAOI from '../leftPanel/dataPanel/subscribeToAlerts/SaveAOI';
 import InfoContent from 'js/components/sharedComponents/InfoContent';
 import EditProfile from 'js/components/gfwContent/EditProfile';
 
@@ -42,10 +42,10 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <PenContent />;
       case 'PenWidget-CoordinatesForm':
         return <CoordinatesForm />;
-      case 'SubscriptionWidget':
+      case 'AOIDashboard':
         return <SubscriptionContent />;
-      case 'AlertCarousel':
-        return <AlertCarousel />;
+      case 'SaveAOI':
+        return <SaveAOI />;
       case 'SearchWidget':
         return <SearchContent />;
       case 'MeasureWidget':
@@ -79,10 +79,10 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'share-widget';
       case 'InfoContent':
         return 'info-content';
-      case 'SubscriptionWidget':
+      case 'AOIDashboard':
         return 'subscription-widget';
-      case 'AlertCarousel':
-        return 'alert-carousel';
+      case 'SaveAOI':
+        return 'saveAOI';
       case 'EditProfile':
         return 'edit-profile';
       default:

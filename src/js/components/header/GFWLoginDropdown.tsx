@@ -4,6 +4,7 @@ import GFWLoginOptions from 'js/components/mapWidgets/widgetContent/GFWLoginOpti
 import { RootState } from 'js/store';
 import { ReactComponent as UserIcon } from 'images/userIcon.svg';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
+import { headerContent } from 'js/components/header/header.translations';
 
 interface LoginProps {
   loggedIn: boolean;
@@ -12,8 +13,13 @@ interface LoginProps {
 const GFWLoginDropdown = (props: LoginProps): JSX.Element => {
   const dispatch = useDispatch();
   const dropdownButtonRef = React.useRef<HTMLDivElement | null>(null);
+
   const renderGFWDropdown = useSelector(
     (state: RootState) => state.appState.renderGFWDropdown
+  );
+
+  const selectedLanguage = useSelector(
+    (store: RootState) => store.appState.selectedLanguage
   );
 
   function toggleGFWLoginOptions(): void {
@@ -27,7 +33,11 @@ const GFWLoginDropdown = (props: LoginProps): JSX.Element => {
         className={`gfw-login-button ${renderGFWDropdown ? 'grey' : ''}`}
       >
         <UserIcon height={15} width={15} />
-        <p> {props.loggedIn ? 'MY GFW' : 'Login to MY GFW'}</p>
+        <p>
+          {props.loggedIn
+            ? headerContent[selectedLanguage].myGFW
+            : headerContent[selectedLanguage].myGFWLogin}
+        </p>
       </button>
       {renderGFWDropdown && (
         <div className="dropdown-wrapper">

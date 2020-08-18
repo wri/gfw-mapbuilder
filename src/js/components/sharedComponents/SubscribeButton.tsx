@@ -7,13 +7,13 @@ import { RootState } from 'js/store/index';
 import 'css/subscribeButton.scss';
 
 const subscribeButtonTranslations = {
-  zh: '订阅',
-  en: 'Subscribe',
+  zh: '保存到“我的 GFW”中',
+  en: 'save in my gfw',
   ka: 'გამოწერა',
-  fr: "S'abonner",
-  es: 'Subscribirse',
-  pt: 'Inscrever-se',
-  id: 'Subscribe'
+  fr: 'enregistrer',
+  es: 'guardar en My GFW',
+  pt: 'salvar no meu GFW',
+  id: 'simpan di gfw saya'
 };
 
 export const SubscribeButton = (): JSX.Element => {
@@ -54,7 +54,7 @@ export const SubscribeButton = (): JSX.Element => {
             backgroundColor: `${backgroundColor}`
           }}
           className="subscribe-button"
-          onClick={(): any => dispatch(renderModal('AlertCarousel'))}
+          onClick={(): any => dispatch(renderModal('SaveAOI'))}
         >
           {subscribeButtonTranslations[selectedLanguage]}{' '}
           <div className="subscribe-icon"></div>

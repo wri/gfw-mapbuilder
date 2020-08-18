@@ -29,15 +29,6 @@ export function mapError(payload: MapviewState['loadError']) {
   };
 }
 
-export function setUserSubscriptions(
-  payload: MapviewState['userSubscriptions']
-) {
-  return {
-    type: USER_SUBSCRIPTIONS as typeof USER_SUBSCRIPTIONS,
-    payload
-  };
-}
-
 export function allAvailableLayers(
   payload: MapviewState['allAvailableLayers']
 ) {

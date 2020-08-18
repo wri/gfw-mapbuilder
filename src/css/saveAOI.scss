@@ -1,0 +1,99 @@
+.saveAOI-container {
+  .success-screen {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .tree-success {
+      background-color: #fff;
+      background-repeat: no-repeat no-repeat;
+      background-size: contain;
+      height: 60px;
+      background-image: url('../images/tree-success.png');
+      width: 300px;
+      height: 250px;
+    }
+  }
+  .delete-screen {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .delete-success {
+      background-color: #fff;
+      background-repeat: no-repeat no-repeat;
+      background-size: contain;
+      height: 60px;
+      background-image: url('../images/tree-success.png');
+      width: 300px;
+      height: 250px;
+    }
+  }
+  .alerts-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #e5e5df;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
+  .area-alerts-img {
+    background: url('../images/alert-email.png') no-repeat center;
+    background-size: contain;
+    height: 120px;
+    width: 250px;
+  }
+
+  .MuiChip-root {
+    height: 25px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .MuiChip-label {
+    color: white !important;
+  }
+
+  .MuiAutocomplete-input {
+    font-size: 0.7rem !important;
+  }
+
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] {
+    padding: 4px !important;
+  }
+
+  .MuiFormLabel-root {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 0.8rem !important;
+    line-height: 0.2 !important;
+  }
+
+  .MuiChip-deleteIcon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .MuiInputBase-input {
+    background-color: transparent !important;
+  }
+
+  .map-placeholder {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+  }
+
+  .remove-button {
+    display: flex;
+    display: grid;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    font-weight: 500;
+    font-size: 0.75rem;
+    background: none;
+    grid-template-columns: auto auto;
+    align-self: center;
+    font-weight: 600;
+    color: #ed1846;
+  }
+}

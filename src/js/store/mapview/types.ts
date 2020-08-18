@@ -22,39 +22,9 @@ export interface SubscriptionResource {
   content: string;
 }
 
-export interface SubscriptionParams {
-  iso: {
-    country: string;
-    region: string;
-  };
-  wdpaid: any;
-  use: any;
-  useid: any;
-  geostore: string;
-}
-
-export interface SubscriptionAttributes {
-  name: string;
-  createdAt: string;
-  userId: string;
-  resource: SubscriptionResource;
-  datasets: string[];
-  confirmed: boolean;
-  language: string;
-  params: SubscriptionParams;
-}
-
-export interface UserSubscription {
-  attributes: SubscriptionAttributes;
-  id: string;
-  type: string;
-}
-
-//Store types
 export interface MapviewState {
   isMapReady: boolean;
   loadError: boolean;
-  userSubscriptions: UserSubscription[];
   allAvailableLayers: LayerProps[];
   activeFeatures: LayerFeatureResult[];
   activeFeatureIndex: number[];
@@ -127,6 +97,8 @@ export interface FeatureResult {
   objectid: number;
   attributes: Attributes;
   geometry: __esri.Geometry;
+  layer?: any;
+  type?: string;
 }
 
 export interface FieldName {
@@ -178,10 +150,6 @@ interface AllAvailableLayersAction {
   payload: MapviewState['allAvailableLayers'];
 }
 
-interface SetUserSubscriptionsAction {
-  type: typeof USER_SUBSCRIPTIONS;
-  payload: MapviewState['userSubscriptions'];
-}
 interface SetActiveFeaturesAction {
   type: typeof SET_ACTIVE_FEATURES;
   payload: MapviewState['activeFeatures'];
@@ -225,7 +193,6 @@ interface SetLayersLoading {
 export type MapviewStateTypes =
   | MapIsReadyAction
   | MapErrorAction
-  | SetUserSubscriptionsAction
   | AllAvailableLayersAction
   | SetActiveFeaturesAction
   | SetActiveFeatureIndex

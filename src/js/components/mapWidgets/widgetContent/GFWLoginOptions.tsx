@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from 'js/store';
-import { setUserSubscriptions } from 'js/store/mapview/actions';
 import { renderModal } from 'js/store/appState/actions';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
 import { headerContent } from 'src/js/components/header/header.translations';
@@ -12,12 +11,11 @@ import { setLoggedIn } from 'js/store/appState/actions';
 const GFWLoginOptions = (props: any) => {
   const dropdownRef = React.useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
+
   const isLoggedIn = useSelector(
     (state: RootState) => state.appState.isLoggedIn
   );
-  const userSubscriptions = useSelector(
-    (state: RootState) => state.mapviewState.userSubscriptions
-  );
+
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
@@ -56,27 +54,7 @@ const GFWLoginOptions = (props: any) => {
   }
 
   function getSubscriptions(): void {
-    if (userSubscriptions.length === 0) {
-      const token = localStorage.getItem('userToken');
-      if (token) {
-        fetch('https://production-api.globalforestwatch.org/v1/subscriptions', {
-          credentials: 'include',
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-          .then(response => {
-            response.json().then(json => {
-              dispatch(setUserSubscriptions(json.data));
-              dispatch(renderModal('SubscriptionWidget'));
-            });
-          })
-          .catch(e => console.log('Failed to fetch subscriptions', e));
-      }
-    } else {
-      console.log('We already have subscriptions, render them instead');
-      dispatch(renderModal('SubscriptionWidget'));
-    }
+    dispatch(renderModal('AOIDashboard'));
   }
 
   const RenderLogins = (): JSX.Element => {
