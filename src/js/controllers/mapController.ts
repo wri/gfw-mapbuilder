@@ -904,12 +904,12 @@ export class MapController {
     }
   }
 
-  drawGraphic(specificFeature: Array<FeatureResult>): void {
+  drawGraphic(feature: Array<FeatureResult>): void {
     if (this._map) {
       setNewGraphic({
         map: this._map,
         mapview: this._mapview,
-        allFeatures: specificFeature,
+        allFeatures: feature,
         isUploadFile: false
       });
     }
@@ -1428,7 +1428,7 @@ export class MapController {
     });
 
     const mapPDF = await this._printTask
-      ?.execute(params)
+      .execute(params)
       .catch(e => console.log('error in generateMapPDF()', e));
 
     return mapPDF;

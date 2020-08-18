@@ -12,7 +12,6 @@ import {
   setLanguage,
   renderModal
 } from 'js/store/appState/actions';
-import { setUserSubscriptions } from 'js/store/mapview/actions';
 import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
@@ -33,9 +32,6 @@ const MapSpinner = (): React.ReactElement => (
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Listen to map loading state that comes from mapController via redux store change
-  const isMapReady = useSelector(
-    (store: RootState) => store.mapviewState.isMapReady
-  );
   const hideHeader = useSelector(
     (store: RootState) => store.appSettings.hideHeader
   );
@@ -151,8 +147,7 @@ const App = (props: AppSettings | any): JSX.Element => {
     );
 
     const handleExternalSubscriptionCall = (request: any) => {
-      dispatch(setUserSubscriptions(request.detail));
-      dispatch(renderModal('SubscriptionWidget'));
+      dispatch(renderModal('AOIDashboard'));
     };
 
     window.addEventListener(
@@ -188,6 +183,7 @@ const App = (props: AppSettings | any): JSX.Element => {
               return;
             }
             localStorage.setItem('userID', data.id);
+            localStorage.setItem('email', data?.email);
             dispatch(setLoggedIn(true));
           });
         })

@@ -52,6 +52,7 @@ export interface AppState {
   isLoggedIn: boolean;
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
   renderPopup: boolean;
+  areaImages: string[];
 }
 
 //Action names available
@@ -79,6 +80,7 @@ export const SET_VIIRS_END = 'SET_VIIRS_END';
 export const SET_MODIS_START = 'SET_MODIS_START';
 export const SET_MODIS_END = 'SET_MODIS_END';
 export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
+export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -195,6 +197,11 @@ interface SetRenderPopup {
   payload: AppState['renderPopup'];
 }
 
+interface SetAreaImages {
+  type: typeof SET_AREA_IMAGES;
+  payload: string;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -218,4 +225,5 @@ export type AppStateTypes =
   | SetModisEnd
   | SetViirsStart
   | SetViirsEnd
-  | SetRenderPopup;
+  | SetRenderPopup
+  | SetAreaImages;

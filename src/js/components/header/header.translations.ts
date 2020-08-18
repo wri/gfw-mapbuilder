@@ -24,15 +24,15 @@ export const headerContent = {
     myGFWLogin: 'GFW პროფილში შესვლა',
     myGFW: 'GFW',
     loginReq:
-      'Log in is required so you can return to Global Forest Watch to view, manage, and delete your subscriptions. Questions? ',
-    contactUs: 'Contact us at gfw@wri.org',
-    twitter: 'Log in with Twitter',
-    facebook: 'Log in with Facebook',
-    google: 'Log in with Google',
-    subscriptions: 'My Subscriptions',
+      'შესვლა აუცილებელია, იმისათვის, რომ შეძლოთ Global Forest Watch-ში თქვენი გამოწერების ნახვა, მართვა და წაშლა. კითხვები გაქვთ? დაგვიკავშირდით gfw@wri.org მისამართზე ',
+    contactUs: 'დაგვიკავშირდით gfw@wri.org მისამართზე ',
+    twitter: 'შესვლა Twitter',
+    facebook: 'შესვლა Facebook',
+    google: 'შესვლა Google',
+    subscriptions: 'ჩემი გამოწერები',
     stories: 'My Stories',
-    profile: 'My GFW Profile',
-    logout: 'Log Out',
+    profile: 'ჩემი "GFW" პროფილი',
+    logout: 'გამოსვლა',
     language: 'ენის არჩევა'
   },
   fr: {

@@ -23,7 +23,8 @@ import {
   SET_VIIRS_END,
   SET_MODIS_START,
   SET_MODIS_END,
-  SET_RENDER_POPUP
+  SET_RENDER_POPUP,
+  SET_AREA_IMAGES
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -193,6 +194,13 @@ export function setViirsEnd(payload: AppState['leftPanel']['viirsEnd']) {
 export function setRenderPopup(payload: AppState['renderPopup']) {
   return {
     type: SET_RENDER_POPUP as typeof SET_RENDER_POPUP,
+    payload: payload
+  };
+}
+
+export function setAreaImages(payload: string) {
+  return {
+    type: SET_AREA_IMAGES as typeof SET_AREA_IMAGES,
     payload: payload
   };
 }
