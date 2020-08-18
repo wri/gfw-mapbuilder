@@ -2239,22 +2239,22 @@ export const emailLoginTranslations = {
     register: 'Register'
   },
   ka: {
-    email: 'email',
-    password: 'password',
-    repeatPassword: 'repeat password',
-    required: 'This field is required',
-    forgotPassword: 'Forgot Password!',
-    signup: ['Not a member?', 'Sign Up!'],
-    signin: ['Already joined?', 'Sign In!'],
+    email: 'ელ. ფოსტა',
+    password: 'პაროლი ',
+    repeatPassword: 'Გაიმეორეთ პაროლი',
+    required: 'საჭიროა',
+    forgotPassword: 'პაროლი დაგავიწყდათ',
+    signup: ['არ ხართ წევრი?', 'დარეგისტრირდით'],
+    signin: ['უკვე ხართ წევრი?', 'გაიარეთ ავტორიზაცია'],
     registerSuccess:
-      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
-    login: 'Login',
+      "წერილი თუ არ ჩანს, შეამოწმეთ 'სპამის' საქაღალდე. შეგიძლიათ გაეცნოთ ჩვენს კონფიდენციალურობის პოლიტიკას და მიიღოთ დამატებითი ინფორმაცია იმის შესახებ თუ როგორ ვიყენებთ პერსონალურ მონაცემებს",
+    login: 'შესვლა',
     passwordReset:
-      'To reset your password, enter your email and follow the instructions.',
+      'პაროლის აღსადგენად, მიუთითეთ თქვენი ელ. ფოსტის მისამართი და მიყევით ინსტრუქციას',
     passwordResetSuccess:
-      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
-    reset: 'Reset',
-    register: 'Register'
+      'მადლობა. გთხოვთ შეამოწმოთ თქვენი ელ. ფოსტა და მიყვეთ ინსტრუქციას პაროლის აღსადგენად',
+    reset: 'ახლიდან ჩატვირთვა',
+    register: 'დარეგისტრირდით'
   },
   es: {
     email: 'Correo electrónic',
