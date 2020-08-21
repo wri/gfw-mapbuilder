@@ -82,7 +82,7 @@ import {
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from 'js/store/appSettings/actions';
-import { viirsLayerCreator } from 'js/helpers/viirsLayer';
+// import  { viirsLayer } from 'js/helpers/viirsLayer';
 
 interface URLCoordinates {
   zoom: number;
@@ -379,74 +379,75 @@ export class MapController {
 
           parseURLandApplyChanges();
           store.dispatch(allAvailableLayers(allLayerObjects));
-          const esriRemoteLayers = remoteLayerObjects
-            .map(layerObject => {
+          const esriRemoteLayersPromises: any = remoteLayerObjects.map(
+            layerObject => {
               return LayerFactory(this._mapview, layerObject);
-            })
-            .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
-
-          //Get VIIRS and MODIS layers
-          const viirsLayer: __esri.VectorTileLayer = await viirsLayerCreator(
-            'nasa_viirs_fire_alerts'
-          );
-          const modisLayers = this.initializeAndSetMODISLayers();
-          const allLayers = [viirsLayer, ...modisLayers, ...esriRemoteLayers];
-
-          //If we have report active, we need to know when our feature layer has loaded
-          const report = new URL(window.location.href).searchParams.get(
-            'report'
-          );
-          if (report && report === 'true') {
-            const layerID = new URL(window.location.href).searchParams.get(
-              'acLayer'
-            );
-            if (!layerID) return;
-            //@ts-ignore
-            const combinedLayers = [...allLayers, ...this._map.layers.items];
-            const activeLayer = combinedLayers.find(l => l.id === layerID);
-            if (!activeLayer || activeLayer.loaded === true) {
-              store.dispatch(setLayersLoading(false));
-            } else {
-              once(activeLayer, 'loaded', () => {
-                store.dispatch(setLayersLoading(false));
-              });
             }
-          } else {
-            //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
-            //@ts-ignore
-            const combinedLayers = [...allLayers, ...this._map.layers.items];
+          );
 
-            combinedLayers.forEach(l => {
-              if (l.loaded === true) {
+          Promise.all(
+            esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))
+          ).then(values => {
+            const esriRemoteLayers = values.filter(v => v);
+            const modisLayers = this.initializeAndSetMODISLayers();
+            const allLayers = [...modisLayers, ...esriRemoteLayers];
+            const report = new URL(window.location.href).searchParams.get(
+              'report'
+            );
+
+            //If we have report active, we need to know when our feature layer has loaded
+            if (report && report === 'true') {
+              const layerID = new URL(window.location.href).searchParams.get(
+                'acLayer'
+              );
+              if (!layerID) return;
+              //@ts-ignore
+              const combinedLayers = [...allLayers, ...this._map.layers.items];
+              const activeLayer = combinedLayers.find(l => l.id === layerID);
+              if (!activeLayer || activeLayer.loaded === true) {
                 store.dispatch(setLayersLoading(false));
               } else {
-                once(l, 'loaded', () => {
+                once(activeLayer, 'loaded', () => {
                   store.dispatch(setLayersLoading(false));
                 });
               }
-            });
-          }
+            } else {
+              //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+              //@ts-ignore
+              const combinedLayers = [...allLayers, ...this._map.layers.items];
 
-          this._map?.addMany(allLayers);
-
-          //Retrieve sorted layer array
-          const mapLayerIDs = getSortedLayers(
-            appSettings.layerPanel,
-            allLayerObjects,
-            this._map
-          );
-
-          //Reorder layers on the map!
-          this._map?.layers.forEach((layer: any) => {
-            const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
-            if (layerIndex !== -1) {
-              this._map?.reorder(layer, layerIndex);
+              combinedLayers.forEach(l => {
+                if (l.loaded === true) {
+                  store.dispatch(setLayersLoading(false));
+                } else {
+                  once(l, 'loaded', () => {
+                    store.dispatch(setLayersLoading(false));
+                  });
+                }
+              });
             }
-          });
 
-          //Extra layer group that acts as a "masked" layers with which you cannot interact
-          this.addExtraLayers();
-          this.initializeAndSetSketch();
+            this._map?.addMany(allLayers);
+
+            //Retrieve sorted layer array
+            const mapLayerIDs = getSortedLayers(
+              appSettings.layerPanel,
+              allLayerObjects,
+              this._map
+            );
+
+            //Reorder layers on the map!
+            this._map?.layers.forEach((layer: any) => {
+              const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
+              if (layerIndex !== -1) {
+                this._map?.reorder(layer, layerIndex);
+              }
+            });
+
+            //Extra layer group that acts as a "masked" layers with which you cannot interact
+            this.addExtraLayers();
+            this.initializeAndSetSketch();
+          });
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -803,7 +804,7 @@ export class MapController {
     });
   }
 
-  addLandsatLayer(layerConfig: LayerProps, year: string): void {
+  async addLandsatLayer(layerConfig: LayerProps, year: string): Promise<void> {
     const landsatURL = landsatBaselayerURL;
     const landsatConfig = {
       type: 'webtiled',
@@ -814,7 +815,7 @@ export class MapController {
     layerConfig.type = 'webtiled';
 
     layerConfig.url = landsatURL.replace(/\/\d{4}\//, `/${year}/`);
-    const landsatEsriLayer = LayerFactory(this._mapview, layerConfig);
+    const landsatEsriLayer = await LayerFactory(this._mapview, layerConfig);
     const landsatBase = new Basemap({
       baseLayers: [landsatEsriLayer]
     });
@@ -850,11 +851,7 @@ export class MapController {
         layer.graphics.removeAll();
         return;
       }
-      if (
-        layer.sublayers &&
-        !layer.id.includes('VIIRS') &&
-        !layer.id.includes('MODIS')
-      ) {
+      if (layer.sublayers && !layer.id.includes('MODIS')) {
         layer.allSublayers.items.forEach(
           (sub: __esri.Sublayer) => (sub.visible = false)
         );
@@ -1700,9 +1697,9 @@ export class MapController {
       (layer: FeatureLayer) => layer.id === 'MODIS_ACTIVE_FIRES'
     )[0];
 
-    const viirsLayer = (this._map.allLayers as any).items.filter(
-      (layer: FeatureLayer) => layer.id === 'VIIRS_ACTIVE_FIRES'
-    )[0];
+    // const viirsLayer = (this._map.allLayers as any).items.filter(
+    //   (layer: FeatureLayer) => layer.id === 'VIIRS_ACTIVE_FIRES'
+    // )[0];
 
     if (modisLayer.sublayers) {
       const twentyFourHourMODIS = modisLayer.sublayers.items.filter(
@@ -1711,12 +1708,12 @@ export class MapController {
       twentyFourHourMODIS.definitionExpression = undefined;
     }
 
-    if (viirsLayer.sublayers) {
-      const twentyFourHourVIIRS = viirsLayer.sublayers.items.filter(
-        (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
-      )[0];
-      twentyFourHourVIIRS.definitionExpression = undefined;
-    }
+    // if (viirsLayer.sublayers) {
+    //   const twentyFourHourVIIRS = viirsLayer.sublayers.items.filter(
+    //     (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
+    //   )[0];
+    //   twentyFourHourVIIRS.definitionExpression = undefined;
+    // }
 
     return;
   }

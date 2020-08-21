@@ -22,21 +22,11 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const modisEnd = useSelector(
     (store: RootState) => store.appState.leftPanel.modisEnd
   );
-  const viirsStart = useSelector(
-    (store: RootState) => store.appState.leftPanel.viirsStart
-  );
-  const viirsEnd = useSelector(
-    (store: RootState) => store.appState.leftPanel.viirsEnd
-  );
 
   const { layer } = props;
 
-  const [startDate, setStartDate] = useState<string>(
-    props.id === 'VIIRS_ACTIVE_FIRES' ? viirsStart : modisStart
-  );
-  const [endDate, setEndDate] = useState(
-    props.id === 'VIIRS_ACTIVE_FIRES' ? viirsEnd : modisEnd
-  );
+  const [startDate, setStartDate] = useState<string>(modisStart);
+  const [endDate, setEndDate] = useState(modisEnd);
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
 
