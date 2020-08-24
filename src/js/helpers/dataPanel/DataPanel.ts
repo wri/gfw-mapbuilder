@@ -1,4 +1,5 @@
 import MapView from 'esri/views/MapView';
+import Graphic from 'esri/Graphic';
 import Map from 'esri/Map';
 import store from 'js/store';
 import { esriQuery } from './esriQuery';
@@ -29,6 +30,38 @@ type LayerFieldInfos = {
   layerFields: __esri.Field[] | undefined;
   displayField: string;
 };
+
+const maxDateURL =
+  'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
+
+//Getting the latest available day for tiles as it will not always be today or yesterday.
+//Those assuptions cannot be made so that is why they have this endpoint to check the day.
+async function getMaxDateForViirsTiles(): Promise<string> {
+  const dateRes = await fetch(maxDateURL)
+    .then(res => res.json())
+    .catch(e => console.log(e));
+  return dateRes.data.max_date;
+}
+
+async function fetchVIIRSFeatures(
+  mapview: MapView,
+  mapPoint: any
+): Promise<any> {
+  const { appState, mapviewState } = store.getState();
+  const viirsConfig = mapviewState.allAvailableLayers.find(
+    l => l.id === 'VIIRS_ACTIVE_FIRES'
+  );
+  //@ts-ignore
+  let url = viirsConfig?.metadata.interactionConfig.config.url;
+
+  const params = `?lat=${mapPoint.latitude}&lng=${mapPoint.longitude}&z=${mapview.zoom}&start_date=${appState.leftPanel.viirsStart}&end_date=${appState.leftPanel.viirsEnd}`;
+  url = url.concat(params);
+  return fetch(url)
+    .then(res => res.json())
+    .then(data => data.data)
+    .catch(e => console.log(e));
+}
+
 export async function getAllLayerFields(
   layer: __esri.FeatureLayer
 ): Promise<LayerFieldInfos> {
@@ -247,6 +280,40 @@ export async function queryLayersForFeatures(
               features: features,
               fieldNames,
               displayField
+            });
+          }
+        } else if (
+          layer.type === 'vector-tile' &&
+          layer.id === 'VIIRS_ACTIVE_FIRES'
+        ) {
+          const viirsFeatures = await fetchVIIRSFeatures(
+            mapview,
+            event.mapPoint
+          );
+
+          if (viirsFeatures.length > 0) {
+            const popFeats = viirsFeatures.map((f: any) => {
+              const markerSymbol = {
+                type: 'simple-marker',
+                color: [226, 119, 40]
+              };
+              const point: any = {
+                type: 'point',
+                longitude: f.longitude,
+                latitude: f.latitude
+              };
+              const popF = new Graphic({
+                geometry: point,
+                symbol: markerSymbol,
+                attributes: f
+              });
+              return popF;
+            });
+            layerFeatureResults.push({
+              layerID: layer.id,
+              layerTitle: 'VIIRS Layer',
+              features: popFeats,
+              fieldNames: null
             });
           }
         } else {

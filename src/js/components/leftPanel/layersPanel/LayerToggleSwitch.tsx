@@ -32,10 +32,8 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
 
   const toggleVisibility = (): void => {
     if (layerID === 'MODIS_ACTIVE_FIRES') {
-      debugger;
       mapController.toggleVIIRSorMODIS(layerID);
     } else {
-      debugger;
       mapController.toggleLayerVisibility(layerID, sublayer, parentID);
     }
   };

@@ -14,6 +14,7 @@ import Point from 'esri/geometry/Point';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
+import { format, subDays, parse } from 'date-fns';
 import Basemap from 'esri/Basemap';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import Sublayer from 'esri/layers/support/Sublayer';
@@ -22,6 +23,7 @@ import geometryEngine from 'esri/geometry/geometryEngine';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
+import { getMaxDateForViirsTiles } from 'js/helpers/viirsLayerUtil';
 import {
   landsatBaselayerURL,
   WRIBasemapConfig
@@ -190,6 +192,10 @@ export class MapController {
           this._mapview.watch('extent', newExtent =>
             throtthledUpdater(newExtent, this._mapview)
           );
+
+          //Set VIIRS layer default dates
+          this.setVIIRSDates();
+
           this._mapview.on('click', event => {
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
@@ -312,6 +318,7 @@ export class MapController {
             } as LayerProps;
 
             if (remoteLayerObject.dataLayer) {
+              console.log(remoteLayerObject);
               //dealing with GFW API layers
               newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
               newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
@@ -446,6 +453,7 @@ export class MapController {
 
             //Extra layer group that acts as a "masked" layers with which you cannot interact
             this.addExtraLayers();
+            //Sketch view model setup
             this.initializeAndSetSketch();
           });
         },
@@ -471,6 +479,17 @@ export class MapController {
     } else {
       window.document.title = secondaryTitle;
     }
+  }
+
+  setVIIRSDates(): void {
+    getMaxDateForViirsTiles().then(date => {
+      console.log(date);
+      const fDate = parse(date, 'yyyy-MM-dd', new Date());
+      console.log(fDate);
+      const oneDayAgo = format(subDays(fDate, 1), 'yyyy-MM-dd');
+      store.dispatch(setViirsStart(oneDayAgo));
+      store.dispatch(setViirsEnd(date));
+    });
   }
 
   getRemoteAndServiceLayers(): Promise<any> {
@@ -556,13 +575,15 @@ export class MapController {
             .then(response => response.json())
             .then(metadata => {
               const attributes = layer.attributes;
+              const intConfig = layer.attributes?.interactionConfig;
               const itemGroup = item.group;
               item.layer = layer.attributes.layerConfig;
 
               item.group = itemGroup;
               item.layer.metadata = {
                 metadata,
-                legendConfig: attributes.legendConfig
+                legendConfig: attributes.legendConfig,
+                interactionConfig: intConfig
               };
               return item;
             })

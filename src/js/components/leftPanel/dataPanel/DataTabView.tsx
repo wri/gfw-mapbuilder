@@ -18,7 +18,7 @@ import { getDocuments } from 'js/helpers/mapController/documentsQuery';
 function generateLayerTitle(activeLayerInfo: any): string {
   let result = '';
   const { layerTitle, sublayerTitle, displayField } = activeLayerInfo;
-  const displayName = activeLayerInfo.features[0].attributes[displayField];
+  const displayName = activeLayerInfo.features[0]?.attributes[displayField];
   if (sublayerTitle) {
     result = `${sublayerTitle}: ${displayName}`;
   } else {

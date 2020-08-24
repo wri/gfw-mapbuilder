@@ -1,5 +1,5 @@
 import VectorTileLayer from 'esri/layers/VectorTileLayer';
-import moment from 'moment';
+import { format, subDays, parse } from 'date-fns';
 const maxDateURL =
   'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
 
@@ -24,9 +24,8 @@ async function viirsLayer(
     url = url.replace('{start_date}', customDaterange[0]);
   } else {
     const maxDate = await getMaxDateForViirsTiles();
-    const startDate = moment(maxDate)
-      .subtract(dayRange, 'days')
-      .format('YYYY-MM-DD');
+    const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
+    const startDate = format(subDays(fDate, dayRange), 'yyyy-MM-dd');
     url = url.replace('{end_date}', maxDate);
     url = url.replace('{start_date}', startDate);
 
@@ -196,23 +195,3 @@ async function viirsLayer(
 }
 
 export default viirsLayer;
-
-export async function fetchViirsFeatures(
-  config: any,
-  dayRange: number,
-  lat: number,
-  long: number,
-  zoom: number
-): Promise<any[]> {
-  let url = config.interactionConfig.config.url;
-  const maxDate = await getMaxDateForViirsTiles();
-  const startDate = moment(maxDate)
-    .subtract(dayRange, 'days')
-    .format('YYYY-MM-DD');
-  const params = `?lat=${lat}&lng=${long}&z=${zoom}&start_date=${startDate}&end_date=${maxDate}`;
-  url = url.concat(params);
-  return fetch(url)
-    .then(res => res.json())
-    .then(data => data.data)
-    .catch(e => console.log(e));
-}

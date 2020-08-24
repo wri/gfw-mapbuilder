@@ -90,14 +90,12 @@ export function setNewGraphic({
   }
 
   if (!isUploadFile) {
-    const isPolygon = allFeatures[0].geometry.type === 'polygon';
-    const symbol = isPolygon
-      ? setSymbol('polygon')
-      : setSymbol(allFeatures[0].geometry.type);
+    const isPolygon = allFeatures[0].geometry?.type === 'polygon';
+    const symbol = isPolygon ? setSymbol('polygon') : setSymbol('point');
 
     const geometry = isPolygon
       ? setGeometry('polygon', allFeatures[0].geometry)
-      : setGeometry(allFeatures[0].geometry.type, allFeatures[0].geometry);
+      : setGeometry('point', allFeatures[0].geometry);
 
     const featureGraphic = new Graphic({
       geometry: geometry,

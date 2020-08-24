@@ -1,17 +1,19 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
-
+import { useDispatch } from 'react-redux';
 import { mapController } from 'js/controllers/mapController';
 import { RootState } from 'js/store/index';
 import { useSelector } from 'react-redux';
 import { LayerProps } from 'js/store/mapview/types';
 import viirsLayer, { getMaxDateForViirsTiles } from 'js/helpers/viirsLayerUtil';
-import { format, subDays } from 'date-fns';
+import { format, subDays, parse } from 'date-fns';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import './datepicker.scss';
+import { setViirsStart, setViirsEnd } from 'js/store/appState/actions';
 
 interface DateRangeProps {
   layer: LayerProps;
   id: string;
 }
-// const getTodayDate = format(new Date(Date.now()), 'yyyy-MM-dd');
 
 const valueMap = {
   '24 hrs': 1,
@@ -37,37 +39,38 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
 
   const { layer } = props;
 
-  const [startDate, setStartDate] = useState<string>(viirsStart);
+  const [startDate, setStartDate] = useState(viirsStart);
   const [endDate, setEndDate] = useState(viirsEnd);
-  const [maxDate, setMaxDate] = useState('');
+  const [maxDate, setMaxDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [minDate, setMinDate] = useState('');
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
+  const dispatch = useDispatch();
 
-  const updateStartDate = (e: ChangeEvent<HTMLInputElement>): void => {
-    setStartDate(e.target.value);
-    // mapController.setCustomDateRange(layer.id, e.target.value, endDate);
-
+  const updateStartDate = (day: Date): void => {
+    const dFormat = format(day, 'yyyy-MM-dd');
+    setStartDate(dFormat);
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
     const viirsConfig = allAvailableLayers.find(
       l => l.id === 'VIIRS_ACTIVE_FIRES'
     );
+    // // mapController.setCustomDateRange(layer.id, e.target.value, endDate);
+
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
-      const viirsNew = viirsLayer(
-        viirsConfig.id,
-        viirsConfig.url,
-        true,
-        valueMap[e.target.value],
-        [e.target.value, endDate]
-      );
+      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, 7, [
+        dFormat,
+        endDate
+      ]);
       mapController._map?.add(viirsNew, viirsIndex);
     }
+    dispatch(setViirsStart(String(dFormat)));
   };
 
-  const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
-    setEndDate(e.target.value);
+  const updateEndDate = (day: Date): void => {
+    const dFormat = format(day, 'yyyy-MM-dd');
+    setEndDate(dFormat);
     // mapController.setCustomDateRange(layer.id, startDate, e.target.value);
 
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
@@ -77,16 +80,13 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
-      const viirsNew = viirsLayer(
-        viirsConfig.id,
-        viirsConfig.url,
-        true,
-        valueMap[e.target.value],
-        [startDate, e.target.value]
-      );
+      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, 7, [
+        startDate,
+        dFormat
+      ]);
       mapController._map?.add(viirsNew, viirsIndex);
-      console.log('gogo');
     }
+    dispatch(setViirsEnd(String(dFormat)));
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
@@ -108,34 +108,55 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         valueMap[e.target.value]
       );
       mapController._map?.add(viirsNew, viirsIndex);
+
+      const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
+      const startDate = format(
+        subDays(fDate, valueMap[e.target.value]),
+        'yyyy-MM-dd'
+      );
+      // const startDate = moment(maxDate)
+      //   .subtract(valueMap[e.target.value], 'days')
+      //   .format('YYYY-MM-DD');
+      setEndDate(maxDate);
+      setStartDate(startDate);
+      dispatch(setViirsStart(String(startDate)));
+      dispatch(setViirsEnd(String(maxDate)));
     }
-    // mapController.setDefinedDateRange(layer.id, e.target.value);
-    // mapController.resetCustomDateRange();
   };
 
   const setCustomRange = (): void => {
     setRenderCustomRange(!renderCustomRange);
-
-    // setDefinedRange('24 hrs');
-    // mapController.setDefinedDateRange(layer.id, '24 hrs');
-    // mapController.resetCustomDateRange();
   };
 
   useEffect(() => {
     async function getMaxDate(): Promise<void> {
+      //TODO:All these default values should be derived from REDUX state!
       const date = await getMaxDateForViirsTiles(); //YYYY-MM-DD
-      const fDate = new Date(date);
-      const ninetyDaysAgo = format(subDays(fDate, 90), 'yyyy-MM-dd');
-      console.log(ninetyDaysAgo);
-      console.log(date);
-      //Set the defaults
-      setMaxDate(date);
-      setStartDate(ninetyDaysAgo);
-      setMinDate(ninetyDaysAgo);
-      setEndDate(date);
+      const fDate = parse(date, 'yyyy-MM-dd', new Date());
+      setMaxDate(format(fDate, 'yyy-MM-dd'));
+      // const fDate = new Date(date);
+      // const ninetyDaysAgo = format(subDays(fDate, 90), 'yyyy-MM-dd');
+      // setMaxDate(date);
+      // setStartDate(ninetyDaysAgo);
+      // setMinDate(ninetyDaysAgo);
+      // setEndDate(date);
     }
     getMaxDate();
   }, []);
+
+  const fEndDate = parse(endDate, 'yyyy-MM-dd', new Date());
+  const fMaxDate = parse(maxDate, 'yyyy-MM-dd', new Date());
+  const fMinDate = parse(startDate, 'yyyy-MM-dd', new Date());
+  const ninetyDaysAgo = format(subDays(fEndDate, 90), 'yyyy-MM-dd');
+  const fNine = parse(ninetyDaysAgo, 'yyyy-MM-dd', new Date());
+
+  const startDateProps = {
+    disabledDays: { after: fMaxDate, before: fNine }
+  };
+
+  const endDateProps = {
+    disabledDays: { after: fMaxDate, before: fMinDate }
+  };
 
   return (
     <>
@@ -166,26 +187,22 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           <div className="calendar-wrapper">
             <div className="date-section-wrapper">
               <label htmlFor="start-date">Start:</label>
-              <input
-                className="date-time-toggle input"
-                style={{ border: `1px solid ${customColorTheme}` }}
-                type="date"
+              <DayPickerInput
+                placeholder="select a day"
+                showOverlay={false}
+                onDayChange={day => updateStartDate(day)}
+                dayPickerProps={startDateProps}
                 value={startDate}
-                min={minDate}
-                max={maxDate}
-                onChange={(e): void => updateStartDate(e)}
               />
             </div>
             <div className="date-section-wrapper">
               <label htmlFor="end-date">End:</label>
-              <input
-                className="date-time-toggle input"
-                style={{ border: `1px solid ${customColorTheme}` }}
-                type="date"
+              <DayPickerInput
+                placeholder="select a day"
+                showOverlay={false}
+                onDayChange={day => updateEndDate(day)}
+                dayPickerProps={endDateProps}
                 value={endDate}
-                min={minDate}
-                max={maxDate}
-                onChange={(e): void => updateEndDate(e)}
               />
             </div>
           </div>

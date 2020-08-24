@@ -698,24 +698,15 @@
 
     .calendar-wrapper {
       display: flex;
+      margin-left: 5px;
       flex-wrap: wrap;
-      justify-content: center;
-      width: -webkit-fill-available;
-      padding: 1.5rem 1.5rem 0rem 1.5rem;
-
       .date-section-wrapper {
-        display: flex;
-        width: -webkit-fill-available;
-        justify-content: space-evenly;
+        display: grid;
+        grid-template-columns: 35px auto;
+        align-items: center;
         label {
-          margin-top: auto;
-          margin-bottom: auto;
           font-size: 0.75rem;
-          color: $black;
-        }
-
-        input {
-          font-family: $fira-sans;
+          margin-right: 5px;
         }
       }
     }
