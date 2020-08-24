@@ -483,9 +483,7 @@ export class MapController {
 
   setVIIRSDates(): void {
     getMaxDateForViirsTiles().then(date => {
-      console.log(date);
       const fDate = parse(date, 'yyyy-MM-dd', new Date());
-      console.log(fDate);
       const oneDayAgo = format(subDays(fDate, 1), 'yyyy-MM-dd');
       store.dispatch(setViirsStart(oneDayAgo));
       store.dispatch(setViirsEnd(date));
@@ -1710,17 +1708,11 @@ export class MapController {
   }
 
   resetCustomDateRange(): void {
-    if (!this._map) {
-      return;
-    }
+    if (!this._map) return;
 
     const modisLayer = (this._map.allLayers as any).items.filter(
       (layer: FeatureLayer) => layer.id === 'MODIS_ACTIVE_FIRES'
     )[0];
-
-    // const viirsLayer = (this._map.allLayers as any).items.filter(
-    //   (layer: FeatureLayer) => layer.id === 'VIIRS_ACTIVE_FIRES'
-    // )[0];
 
     if (modisLayer.sublayers) {
       const twentyFourHourMODIS = modisLayer.sublayers.items.filter(
@@ -1728,15 +1720,6 @@ export class MapController {
       )[0];
       twentyFourHourMODIS.definitionExpression = undefined;
     }
-
-    // if (viirsLayer.sublayers) {
-    //   const twentyFourHourVIIRS = viirsLayer.sublayers.items.filter(
-    //     (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
-    //   )[0];
-    //   twentyFourHourVIIRS.definitionExpression = undefined;
-    // }
-
-    return;
   }
 
   setCustomDateRange(
@@ -1760,39 +1743,8 @@ export class MapController {
       });
       store.dispatch(setModisStart(String(startDate)));
       store.dispatch(setModisEnd(String(endDate)));
-    } else if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      //const viirs24H = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
-      //viirs24H.visible = false;
-      //const viirs1Y = this._map!.findLayerById('VIIRS1Y') as any;
-      //viirs1Y.sublayers.items[0].definitionExpression = defExpression;
-      //const viirsIds = VIIRSLayerIDs.map(l => l.id);
-      //this._map!.layers.forEach(l => {
-      //  if (viirsIds.includes(l.id)) {
-      //    l.visible = l.id === 'VIIRS1Y';
-      //  }
-      //});
-      ////sync the new date with redux
-      //store.dispatch(setViirsStart(String(startDate)));
-      //store.dispatch(setViirsEnd(String(endDate)));
     }
   }
-
-  // initializeAndSetVIIRSLayers(): any {
-  //   const viirsLayers = VIIRSLayerIDs.map(({ id, url, layerIds }) => {
-  //     return new MapImageLayer({
-  //       id: id,
-  //       url,
-  //       visible: false,
-  //       sublayers: [
-  //         {
-  //           id: layerIds[0],
-  //           visible: true
-  //         }
-  //       ]
-  //     });
-  //   });
-  //   return viirsLayers;
-  // }
 
   initializeAndSetMODISLayers(): any {
     const modisLayers = MODISLayerIDs.map(({ id, url, layerIds }) => {
@@ -1880,77 +1832,8 @@ export class MapController {
     }
   }
 
-  setVIIRSDefinedRange(sublayerType: string): void {
-    ////Turn off 1Y layer as it does not apply for defined range controls
-    //const VIIRS1Y = this._map?.findLayerById('VIIRS1Y');
-    //VIIRS1Y!.visible = false;
-    //const VIIRS24 = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
-    //switch (sublayerType) {
-    //  case '24 hrs':
-    //    {
-    //      VIIRS24.visible = true;
-    //      VIIRSLayerIDs.forEach(({ id }) => {
-    //        const viirsLayer = this._map?.findLayerById(id);
-    //        if (viirsLayer) {
-    //          viirsLayer.visible = false;
-    //        }
-    //      });
-    //    }
-    //    break;
-    //  case '48 hrs':
-    //    {
-    //      VIIRS24.visible = false;
-    //      VIIRSLayerIDs.forEach(({ id }) => {
-    //        const viirsLayer = this._map?.findLayerById(id);
-    //        if (viirsLayer) {
-    //          if (viirsLayer.id === 'VIIRS48') {
-    //            viirsLayer.visible = true;
-    //          } else {
-    //            viirsLayer.visible = false;
-    //          }
-    //        }
-    //      });
-    //    }
-    //    break;
-    //  case '72 hrs':
-    //    {
-    //      VIIRS24.visible = false;
-    //      VIIRSLayerIDs.forEach(({ id }) => {
-    //        const viirsLayer = this._map?.findLayerById(id);
-    //        if (viirsLayer) {
-    //          if (viirsLayer.id === 'VIIRS72') {
-    //            viirsLayer.visible = true;
-    //          } else {
-    //            viirsLayer.visible = false;
-    //          }
-    //        }
-    //      });
-    //    }
-    //    break;
-    //  case '7 days':
-    //    {
-    //      VIIRS24.visible = false;
-    //      VIIRSLayerIDs.forEach(({ id }) => {
-    //        const viirsLayer = this._map?.findLayerById(id);
-    //        if (viirsLayer) {
-    //          if (viirsLayer.id === 'VIIRS7D') {
-    //            viirsLayer.visible = true;
-    //          } else {
-    //            viirsLayer.visible = false;
-    //          }
-    //        }
-    //      });
-    //    }
-    //    break;
-    //  default:
-    //    break;
-    //}
-  }
-
   toggleVIIRSorMODIS(layerID: string): void {
-    if (!this._map) {
-      return;
-    }
+    if (!this._map) return;
 
     const layer = (this._map.allLayers as any).items.filter(
       (layer: LayerProps) => layer.id === layerID
@@ -1963,23 +1846,14 @@ export class MapController {
     layer.visible = !layer.visible;
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) =>
-        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
-        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     )[0];
 
     if (sublayer24) {
       sublayer24.visible = true;
     }
 
-    if (layer.id === 'VIIRS_ACTIVE_FIRES') {
-      // VIIRSLayerIDs.forEach(({ id }) => {
-      //   const specificLayer = this._map?.findLayerById(id);
-      //   if (specificLayer) {
-      //     specificLayer.visible = false;
-      //   }
-      // });
-    } else if (layer.id === 'MODIS_ACTIVE_FIRES') {
+    if (layer.id === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ id }) => {
         const specificLayer = this._map?.findLayerById(id);
 
@@ -2031,24 +1905,14 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) =>
-        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
-        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     sublayer24.opacity = opacity;
 
-    if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      // VIIRSLayerIDs.forEach(({ id }) => {
-      //   const specificLayer = this._map?.findLayerById(id);
-      //   if (specificLayer) {
-      //     specificLayer.opacity = opacity;
-      //   }
-      // });
-    } else if (layerID === 'MODIS_ACTIVE_FIRES') {
+    if (layerID === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ id }) => {
         const specificLayer = this._map?.findLayerById(id);
-
         if (specificLayer) {
           specificLayer.opacity = opacity;
         }
@@ -2072,9 +1936,6 @@ export class MapController {
   setDefinedDateRange(layerID: string, sublayerType: string): void {
     if (layerID === 'MODIS_ACTIVE_FIRES') {
       this.setMODISDefinedRange(sublayerType);
-    }
-    if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      this.setVIIRSDefinedRange(sublayerType);
     }
   }
 

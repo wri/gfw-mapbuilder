@@ -184,10 +184,7 @@ export async function LayerFactory(
       esriLayer = new MapImageLayer(maskLayerOptions);
       break;
     case 'Vector.Layer':
-      //
-      console.log('creatingviirs');
       esriLayer = await viirsLayer(layerConfig.id, layerConfig.url);
-      console.log('done creatingviirs');
       break;
     default:
       console.error('No error type!');

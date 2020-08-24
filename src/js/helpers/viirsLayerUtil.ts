@@ -28,8 +28,6 @@ async function viirsLayer(
     const startDate = format(subDays(fDate, dayRange), 'yyyy-MM-dd');
     url = url.replace('{end_date}', maxDate);
     url = url.replace('{start_date}', startDate);
-
-    console.log(url);
   }
   //This json is reponsonsible for VIIRS layer visualization
   //We can adjust the size of the dots, color and scaling stops to our needs
@@ -184,14 +182,12 @@ async function viirsLayer(
     ]
   };
 
-  const l = new VectorTileLayer({
+  return new VectorTileLayer({
     style: viirsStyleJSON,
     id,
     url,
     visible
   });
-  console.log(l);
-  return l;
 }
 
 export default viirsLayer;
