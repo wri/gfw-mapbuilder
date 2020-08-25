@@ -25,7 +25,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
-  //TODO: VIIRS Start is today - 90 days ago is the max, and today is not really today, it is the max date from the API!
+
   const viirsStart = useSelector(
     (store: RootState) => store.appState.leftPanel.viirsStart
   );
@@ -37,12 +37,9 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     (store: RootState) => store.mapviewState.allAvailableLayers
   );
 
-  const { layer } = props;
-
   const [startDate, setStartDate] = useState(viirsStart);
   const [endDate, setEndDate] = useState(viirsEnd);
   const [maxDate, setMaxDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [minDate, setMinDate] = useState('');
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
   const dispatch = useDispatch();
@@ -54,7 +51,6 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     const viirsConfig = allAvailableLayers.find(
       l => l.id === 'VIIRS_ACTIVE_FIRES'
     );
-    // // mapController.setCustomDateRange(layer.id, e.target.value, endDate);
 
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
@@ -71,7 +67,6 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const updateEndDate = (day: Date): void => {
     const dFormat = format(day, 'yyyy-MM-dd');
     setEndDate(dFormat);
-    // mapController.setCustomDateRange(layer.id, startDate, e.target.value);
 
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
     const viirsConfig = allAvailableLayers.find(
@@ -114,9 +109,6 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         subDays(fDate, valueMap[e.target.value]),
         'yyyy-MM-dd'
       );
-      // const startDate = moment(maxDate)
-      //   .subtract(valueMap[e.target.value], 'days')
-      //   .format('YYYY-MM-DD');
       setEndDate(maxDate);
       setStartDate(startDate);
       dispatch(setViirsStart(String(startDate)));
@@ -130,16 +122,9 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
 
   useEffect(() => {
     async function getMaxDate(): Promise<void> {
-      //TODO:All these default values should be derived from REDUX state!
       const date = await getMaxDateForViirsTiles(); //YYYY-MM-DD
       const fDate = parse(date, 'yyyy-MM-dd', new Date());
       setMaxDate(format(fDate, 'yyy-MM-dd'));
-      // const fDate = new Date(date);
-      // const ninetyDaysAgo = format(subDays(fDate, 90), 'yyyy-MM-dd');
-      // setMaxDate(date);
-      // setStartDate(ninetyDaysAgo);
-      // setMinDate(ninetyDaysAgo);
-      // setEndDate(date);
     }
     getMaxDate();
   }, []);
