@@ -21,6 +21,7 @@ export default function placeTileOnMap(tile: any): void {
     url: tileURL,
     type: 'imagery'
   });
+  if (!imageryLayer) return;
   mapController._map?.add(imageryLayer);
   //Sync opacity from previous tile
   imageryLayer.opacity = mapController._imageryOpacity;

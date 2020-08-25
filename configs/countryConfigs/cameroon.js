@@ -821,7 +821,7 @@ export default {
           order: 6,
           id: 'VIIRS_ACTIVE_FIRES',
           type: 'remoteDataLayer',
-          uuid: '15cb32c9-874f-4552-afdc-8a35ef70682f'
+          uuid: '6d316908-92c8-4f95-8598-f2a0c72786af'
         },
         {
           order: 7,

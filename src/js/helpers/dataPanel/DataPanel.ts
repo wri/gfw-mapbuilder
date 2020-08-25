@@ -1,4 +1,5 @@
 import MapView from 'esri/views/MapView';
+import Graphic from 'esri/Graphic';
 import Map from 'esri/Map';
 import store from 'js/store';
 import { esriQuery } from './esriQuery';
@@ -12,6 +13,7 @@ import {
 } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
+import { viirsFieldNames } from 'js/helpers/viirsLayerUtil';
 
 export interface FormatOptions {
   dateFormat: null | any;
@@ -29,6 +31,24 @@ type LayerFieldInfos = {
   layerFields: __esri.Field[] | undefined;
   displayField: string;
 };
+
+async function fetchVIIRSFeatures(
+  mapview: MapView,
+  mapPoint: any,
+  viirsConfig: any
+): Promise<any> {
+  const { appState } = store.getState();
+  //@ts-ignore
+  let url = viirsConfig?.metadata.interactionConfig.config.url;
+
+  const params = `?lat=${mapPoint.latitude}&lng=${mapPoint.longitude}&z=${mapview.zoom}&start_date=${appState.leftPanel.viirsStart}&end_date=${appState.leftPanel.viirsEnd}`;
+  url = url.concat(params);
+  return fetch(url)
+    .then(res => res.json())
+    .then(data => data.data)
+    .catch(e => console.log(e));
+}
+
 export async function getAllLayerFields(
   layer: __esri.FeatureLayer
 ): Promise<LayerFieldInfos> {
@@ -247,6 +267,48 @@ export async function queryLayersForFeatures(
               features: features,
               fieldNames,
               displayField
+            });
+          }
+        } else if (
+          layer.type === 'vector-tile' &&
+          layer.id === 'VIIRS_ACTIVE_FIRES'
+        ) {
+          const { mapviewState, appState } = store.getState();
+          const lang = appState.selectedLanguage;
+          const viirsConfig = mapviewState.allAvailableLayers.find(
+            l => l.id === 'VIIRS_ACTIVE_FIRES'
+          );
+          if (!viirsConfig) return;
+          const viirsFeatures = await fetchVIIRSFeatures(
+            mapview,
+            event.mapPoint,
+            viirsConfig
+          );
+
+          if (viirsFeatures.length > 0) {
+            const popFeats = viirsFeatures.map((f: any) => {
+              const markerSymbol = {
+                type: 'simple-marker',
+                color: [226, 119, 40]
+              };
+              const point: any = {
+                type: 'point',
+                longitude: f.longitude,
+                latitude: f.latitude
+              };
+              const popF = new Graphic({
+                geometry: point,
+                symbol: markerSymbol,
+                attributes: f
+              });
+              return popF;
+            });
+
+            layerFeatureResults.push({
+              layerID: layer.id,
+              layerTitle: viirsConfig.label[lang],
+              features: popFeats,
+              fieldNames: viirsFieldNames
             });
           }
         } else {

@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-import Layer from 'esri/layers/Layer';
 import ImageryLayer from 'esri/layers/ImageryLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
@@ -13,6 +12,7 @@ import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from 'js/store/index';
 import { LayerProps } from 'js/store/mapview/types';
+import viirsLayer from './viirsLayerUtil';
 
 interface LayerOptions {
   id: string;
@@ -24,7 +24,10 @@ interface LayerOptions {
   definitionExpression?: string;
 }
 
-export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
+export async function LayerFactory(
+  mapView: any,
+  layerConfig: LayerProps
+): Promise<any> {
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {
@@ -179,6 +182,13 @@ export function LayerFactory(mapView: any, layerConfig: LayerProps): Layer {
         });
       }
       esriLayer = new MapImageLayer(maskLayerOptions);
+      break;
+    case 'Vector.Layer':
+      esriLayer = await viirsLayer(
+        layerConfig.id,
+        layerConfig.url,
+        layerConfig.visible
+      );
       break;
     default:
       console.error('No error type!');

@@ -7,7 +7,8 @@ import LayerTransparencySlider from './LayerTransparencySlider';
 import LayerRadioButton from './LayerRadioButton';
 import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
-import DateRange from './DateRangeModisViirs';
+import DateRangeModis from './DateRangeModis';
+import DateRangeViirs from './DateRangeVIIRS';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
 import {
   renderModal,
@@ -346,8 +347,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     if (!layer) return;
     switch (id) {
       case 'VIIRS_ACTIVE_FIRES':
+        return <DateRangeViirs layer={layer} id={id} />;
       case 'MODIS_ACTIVE_FIRES':
-        return <DateRange layer={layer} id={id} />;
+        return <DateRangeModis layer={layer} id={id} />;
       case 'GLAD_ALERTS':
         return (
           <GladControls

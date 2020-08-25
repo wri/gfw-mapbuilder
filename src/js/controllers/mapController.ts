@@ -14,6 +14,7 @@ import Point from 'esri/geometry/Point';
 import PrintTask from 'esri/tasks/PrintTask';
 import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
+import { format, subDays, parse } from 'date-fns';
 import Basemap from 'esri/Basemap';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import Sublayer from 'esri/layers/support/Sublayer';
@@ -22,6 +23,7 @@ import geometryEngine from 'esri/geometry/geometryEngine';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
+import { getMaxDateForViirsTiles } from 'js/helpers/viirsLayerUtil';
 import {
   landsatBaselayerURL,
   WRIBasemapConfig
@@ -67,7 +69,7 @@ import { OptionType } from 'js/interfaces/measureWidget';
 import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from 'js/helpers/MapGraphics';
 
-import { VIIRSLayerIDs, MODISLayerIDs } from 'configs/modis-viirs';
+import { MODISLayerIDs } from 'configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
 import {
   parseURLandApplyChanges,
@@ -189,6 +191,10 @@ export class MapController {
           this._mapview.watch('extent', newExtent =>
             throtthledUpdater(newExtent, this._mapview)
           );
+
+          //Set VIIRS layer default dates
+          this.setVIIRSDates();
+
           this._mapview.on('click', event => {
             //clean active indexes for data tab and activeFeatures
             store.dispatch(setActiveFeatures([]));
@@ -378,76 +384,76 @@ export class MapController {
 
           parseURLandApplyChanges();
           store.dispatch(allAvailableLayers(allLayerObjects));
-          const esriRemoteLayers = remoteLayerObjects
-            .map(layerObject => {
+          const esriRemoteLayersPromises: any = remoteLayerObjects.map(
+            layerObject => {
               return LayerFactory(this._mapview, layerObject);
-            })
-            .filter(esriLayer => esriLayer); //get rid of failed layer creation attempts
-
-          //Get VIIRS and MODIS layers
-          const viirsLayers = this.initializeAndSetVIIRSLayers();
-          const modisLayers = this.initializeAndSetMODISLayers();
-          const allLayers = [
-            ...viirsLayers,
-            ...modisLayers,
-            ...esriRemoteLayers
-          ];
-
-          //If we have report active, we need to know when our feature layer has loaded
-          const report = new URL(window.location.href).searchParams.get(
-            'report'
-          );
-          if (report && report === 'true') {
-            const layerID = new URL(window.location.href).searchParams.get(
-              'acLayer'
-            );
-            if (!layerID) return;
-            //@ts-ignore
-            const combinedLayers = [...allLayers, ...this._map.layers.items];
-            const activeLayer = combinedLayers.find(l => l.id === layerID);
-            if (!activeLayer || activeLayer.loaded === true) {
-              store.dispatch(setLayersLoading(false));
-            } else {
-              once(activeLayer, 'loaded', () => {
-                store.dispatch(setLayersLoading(false));
-              });
             }
-          } else {
-            //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
-            //@ts-ignore
-            const combinedLayers = [...allLayers, ...this._map.layers.items];
+          );
 
-            combinedLayers.forEach(l => {
-              if (l.loaded === true) {
+          Promise.all(
+            esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))
+          ).then(values => {
+            const esriRemoteLayers = values.filter(v => v);
+            const modisLayers = this.initializeAndSetMODISLayers();
+            const allLayers = [...modisLayers, ...esriRemoteLayers];
+            const report = new URL(window.location.href).searchParams.get(
+              'report'
+            );
+
+            //If we have report active, we need to know when our feature layer has loaded
+            if (report && report === 'true') {
+              const layerID = new URL(window.location.href).searchParams.get(
+                'acLayer'
+              );
+              if (!layerID) return;
+              //@ts-ignore
+              const combinedLayers = [...allLayers, ...this._map.layers.items];
+              const activeLayer = combinedLayers.find(l => l.id === layerID);
+              if (!activeLayer || activeLayer.loaded === true) {
                 store.dispatch(setLayersLoading(false));
               } else {
-                once(l, 'loaded', () => {
+                once(activeLayer, 'loaded', () => {
                   store.dispatch(setLayersLoading(false));
                 });
               }
-            });
-          }
+            } else {
+              //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+              //@ts-ignore
+              const combinedLayers = [...allLayers, ...this._map.layers.items];
 
-          this._map?.addMany(allLayers);
-
-          //Retrieve sorted layer array
-          const mapLayerIDs = getSortedLayers(
-            appSettings.layerPanel,
-            allLayerObjects,
-            this._map
-          );
-
-          //Reorder layers on the map!
-          this._map?.layers.forEach((layer: any) => {
-            const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
-            if (layerIndex !== -1) {
-              this._map?.reorder(layer, layerIndex);
+              combinedLayers.forEach(l => {
+                if (l.loaded === true) {
+                  store.dispatch(setLayersLoading(false));
+                } else {
+                  once(l, 'loaded', () => {
+                    store.dispatch(setLayersLoading(false));
+                  });
+                }
+              });
             }
-          });
 
-          //Extra layer group that acts as a "masked" layers with which you cannot interact
-          this.addExtraLayers();
-          this.initializeAndSetSketch();
+            this._map?.addMany(allLayers);
+
+            //Retrieve sorted layer array
+            const mapLayerIDs = getSortedLayers(
+              appSettings.layerPanel,
+              allLayerObjects,
+              this._map
+            );
+
+            //Reorder layers on the map!
+            this._map?.layers.forEach((layer: any) => {
+              const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
+              if (layerIndex !== -1) {
+                this._map?.reorder(layer, layerIndex);
+              }
+            });
+
+            //Extra layer group that acts as a "masked" layers with which you cannot interact
+            this.addExtraLayers();
+            //Sketch view model setup
+            this.initializeAndSetSketch();
+          });
         },
         (error: Error) => {
           console.log('error in re-initializeMap()', error);
@@ -471,6 +477,15 @@ export class MapController {
     } else {
       window.document.title = secondaryTitle;
     }
+  }
+
+  setVIIRSDates(): void {
+    getMaxDateForViirsTiles().then(date => {
+      const fDate = parse(date, 'yyyy-MM-dd', new Date());
+      const oneDayAgo = format(subDays(fDate, 1), 'yyyy-MM-dd');
+      store.dispatch(setViirsStart(oneDayAgo));
+      store.dispatch(setViirsEnd(date));
+    });
   }
 
   getRemoteAndServiceLayers(): Promise<any> {
@@ -556,13 +571,15 @@ export class MapController {
             .then(response => response.json())
             .then(metadata => {
               const attributes = layer.attributes;
+              const intConfig = layer.attributes?.interactionConfig;
               const itemGroup = item.group;
               item.layer = layer.attributes.layerConfig;
 
               item.group = itemGroup;
               item.layer.metadata = {
                 metadata,
-                legendConfig: attributes.legendConfig
+                legendConfig: attributes.legendConfig,
+                interactionConfig: intConfig
               };
               return item;
             })
@@ -804,7 +821,7 @@ export class MapController {
     });
   }
 
-  addLandsatLayer(layerConfig: LayerProps, year: string): void {
+  async addLandsatLayer(layerConfig: LayerProps, year: string): Promise<void> {
     const landsatURL = landsatBaselayerURL;
     const landsatConfig = {
       type: 'webtiled',
@@ -815,7 +832,7 @@ export class MapController {
     layerConfig.type = 'webtiled';
 
     layerConfig.url = landsatURL.replace(/\/\d{4}\//, `/${year}/`);
-    const landsatEsriLayer = LayerFactory(this._mapview, layerConfig);
+    const landsatEsriLayer = await LayerFactory(this._mapview, layerConfig);
     const landsatBase = new Basemap({
       baseLayers: [landsatEsriLayer]
     });
@@ -851,11 +868,7 @@ export class MapController {
         layer.graphics.removeAll();
         return;
       }
-      if (
-        layer.sublayers &&
-        !layer.id.includes('VIIRS') &&
-        !layer.id.includes('MODIS')
-      ) {
+      if (layer.sublayers && !layer.id.includes('MODIS')) {
         layer.allSublayers.items.forEach(
           (sub: __esri.Sublayer) => (sub.visible = false)
         );
@@ -1693,16 +1706,10 @@ export class MapController {
   }
 
   resetCustomDateRange(): void {
-    if (!this._map) {
-      return;
-    }
+    if (!this._map) return;
 
     const modisLayer = (this._map.allLayers as any).items.filter(
       (layer: FeatureLayer) => layer.id === 'MODIS_ACTIVE_FIRES'
-    )[0];
-
-    const viirsLayer = (this._map.allLayers as any).items.filter(
-      (layer: FeatureLayer) => layer.id === 'VIIRS_ACTIVE_FIRES'
     )[0];
 
     if (modisLayer.sublayers) {
@@ -1711,15 +1718,6 @@ export class MapController {
       )[0];
       twentyFourHourMODIS.definitionExpression = undefined;
     }
-
-    if (viirsLayer.sublayers) {
-      const twentyFourHourVIIRS = viirsLayer.sublayers.items.filter(
-        (sublayer: Sublayer) => sublayer.title === 'Global Fires (VIIRS) 24 hrs'
-      )[0];
-      twentyFourHourVIIRS.definitionExpression = undefined;
-    }
-
-    return;
   }
 
   setCustomDateRange(
@@ -1743,38 +1741,7 @@ export class MapController {
       });
       store.dispatch(setModisStart(String(startDate)));
       store.dispatch(setModisEnd(String(endDate)));
-    } else if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      const viirs24H = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
-      viirs24H.visible = false;
-      const viirs1Y = this._map!.findLayerById('VIIRS1Y') as any;
-      viirs1Y.sublayers.items[0].definitionExpression = defExpression;
-      const viirsIds = VIIRSLayerIDs.map(l => l.id);
-      this._map!.layers.forEach(l => {
-        if (viirsIds.includes(l.id)) {
-          l.visible = l.id === 'VIIRS1Y';
-        }
-      });
-      //sync the new date with redux
-      store.dispatch(setViirsStart(String(startDate)));
-      store.dispatch(setViirsEnd(String(endDate)));
     }
-  }
-
-  initializeAndSetVIIRSLayers(): any {
-    const viirsLayers = VIIRSLayerIDs.map(({ id, url, layerIds }) => {
-      return new MapImageLayer({
-        id: id,
-        url,
-        visible: false,
-        sublayers: [
-          {
-            id: layerIds[0],
-            visible: true
-          }
-        ]
-      });
-    });
-    return viirsLayers;
   }
 
   initializeAndSetMODISLayers(): any {
@@ -1863,78 +1830,8 @@ export class MapController {
     }
   }
 
-  setVIIRSDefinedRange(sublayerType: string): void {
-    //Turn off 1Y layer as it does not apply for defined range controls
-    const VIIRS1Y = this._map?.findLayerById('VIIRS1Y');
-    VIIRS1Y!.visible = false;
-    const VIIRS24 = this._map!.findLayerById('VIIRS_ACTIVE_FIRES');
-
-    switch (sublayerType) {
-      case '24 hrs':
-        {
-          VIIRS24.visible = true;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              viirsLayer.visible = false;
-            }
-          });
-        }
-        break;
-      case '48 hrs':
-        {
-          VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              if (viirsLayer.id === 'VIIRS48') {
-                viirsLayer.visible = true;
-              } else {
-                viirsLayer.visible = false;
-              }
-            }
-          });
-        }
-        break;
-      case '72 hrs':
-        {
-          VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              if (viirsLayer.id === 'VIIRS72') {
-                viirsLayer.visible = true;
-              } else {
-                viirsLayer.visible = false;
-              }
-            }
-          });
-        }
-        break;
-      case '7 days':
-        {
-          VIIRS24.visible = false;
-          VIIRSLayerIDs.forEach(({ id }) => {
-            const viirsLayer = this._map?.findLayerById(id);
-            if (viirsLayer) {
-              if (viirsLayer.id === 'VIIRS7D') {
-                viirsLayer.visible = true;
-              } else {
-                viirsLayer.visible = false;
-              }
-            }
-          });
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
   toggleVIIRSorMODIS(layerID: string): void {
-    if (!this._map) {
-      return;
-    }
+    if (!this._map) return;
 
     const layer = (this._map.allLayers as any).items.filter(
       (layer: LayerProps) => layer.id === layerID
@@ -1947,24 +1844,14 @@ export class MapController {
     layer.visible = !layer.visible;
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) =>
-        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
-        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     )[0];
 
     if (sublayer24) {
       sublayer24.visible = true;
     }
 
-    if (layer.id === 'VIIRS_ACTIVE_FIRES') {
-      VIIRSLayerIDs.forEach(({ id }) => {
-        const specificLayer = this._map?.findLayerById(id);
-
-        if (specificLayer) {
-          specificLayer.visible = false;
-        }
-      });
-    } else if (layer.id === 'MODIS_ACTIVE_FIRES') {
+    if (layer.id === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ id }) => {
         const specificLayer = this._map?.findLayerById(id);
 
@@ -2016,25 +1903,14 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) =>
-        sublayer.title === 'Global Fires (VIIRS) 24 hrs' ||
-        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     sublayer24.opacity = opacity;
 
-    if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      VIIRSLayerIDs.forEach(({ id }) => {
-        const specificLayer = this._map?.findLayerById(id);
-
-        if (specificLayer) {
-          specificLayer.opacity = opacity;
-        }
-      });
-    } else if (layerID === 'MODIS_ACTIVE_FIRES') {
+    if (layerID === 'MODIS_ACTIVE_FIRES') {
       MODISLayerIDs.forEach(({ id }) => {
         const specificLayer = this._map?.findLayerById(id);
-
         if (specificLayer) {
           specificLayer.opacity = opacity;
         }
@@ -2058,9 +1934,6 @@ export class MapController {
   setDefinedDateRange(layerID: string, sublayerType: string): void {
     if (layerID === 'MODIS_ACTIVE_FIRES') {
       this.setMODISDefinedRange(sublayerType);
-    }
-    if (layerID === 'VIIRS_ACTIVE_FIRES') {
-      this.setVIIRSDefinedRange(sublayerType);
     }
   }
 
