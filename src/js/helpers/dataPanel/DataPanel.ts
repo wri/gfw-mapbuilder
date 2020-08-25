@@ -34,12 +34,10 @@ type LayerFieldInfos = {
 
 async function fetchVIIRSFeatures(
   mapview: MapView,
-  mapPoint: any
+  mapPoint: any,
+  viirsConfig: any
 ): Promise<any> {
-  const { appState, mapviewState } = store.getState();
-  const viirsConfig = mapviewState.allAvailableLayers.find(
-    l => l.id === 'VIIRS_ACTIVE_FIRES'
-  );
+  const { appState } = store.getState();
   //@ts-ignore
   let url = viirsConfig?.metadata.interactionConfig.config.url;
 
@@ -275,9 +273,16 @@ export async function queryLayersForFeatures(
           layer.type === 'vector-tile' &&
           layer.id === 'VIIRS_ACTIVE_FIRES'
         ) {
+          const { mapviewState, appState } = store.getState();
+          const lang = appState.selectedLanguage;
+          const viirsConfig = mapviewState.allAvailableLayers.find(
+            l => l.id === 'VIIRS_ACTIVE_FIRES'
+          );
+          if (!viirsConfig) return;
           const viirsFeatures = await fetchVIIRSFeatures(
             mapview,
-            event.mapPoint
+            event.mapPoint,
+            viirsConfig
           );
 
           if (viirsFeatures.length > 0) {
@@ -301,7 +306,7 @@ export async function queryLayersForFeatures(
 
             layerFeatureResults.push({
               layerID: layer.id,
-              layerTitle: 'VIIRS Layer',
+              layerTitle: viirsConfig.label[lang],
               features: popFeats,
               fieldNames: viirsFieldNames
             });
