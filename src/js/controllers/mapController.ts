@@ -84,7 +84,6 @@ import {
 import { fetchLegendInfo } from 'js/helpers/legendInfo';
 import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from 'js/store/appSettings/actions';
-// import  { viirsLayer } from 'js/helpers/viirsLayer';
 
 interface URLCoordinates {
   zoom: number;
@@ -318,7 +317,6 @@ export class MapController {
             } as LayerProps;
 
             if (remoteLayerObject.dataLayer) {
-              console.log(remoteLayerObject);
               //dealing with GFW API layers
               newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
               newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
