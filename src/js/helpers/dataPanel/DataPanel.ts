@@ -13,6 +13,7 @@ import {
 } from 'js/store/mapview/types';
 import { selectActiveTab } from 'js/store/appState/actions';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
+import { viirsFieldNames } from 'js/helpers/viirsLayerUtil';
 
 export interface FormatOptions {
   dateFormat: null | any;
@@ -30,18 +31,6 @@ type LayerFieldInfos = {
   layerFields: __esri.Field[] | undefined;
   displayField: string;
 };
-
-const maxDateURL =
-  'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
-
-//Getting the latest available day for tiles as it will not always be today or yesterday.
-//Those assuptions cannot be made so that is why they have this endpoint to check the day.
-async function getMaxDateForViirsTiles(): Promise<string> {
-  const dateRes = await fetch(maxDateURL)
-    .then(res => res.json())
-    .catch(e => console.log(e));
-  return dateRes.data.max_date;
-}
 
 async function fetchVIIRSFeatures(
   mapview: MapView,
@@ -309,11 +298,12 @@ export async function queryLayersForFeatures(
               });
               return popF;
             });
+
             layerFeatureResults.push({
               layerID: layer.id,
               layerTitle: 'VIIRS Layer',
               features: popFeats,
-              fieldNames: null
+              fieldNames: viirsFieldNames
             });
           }
         } else {

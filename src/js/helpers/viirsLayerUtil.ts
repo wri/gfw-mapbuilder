@@ -1,8 +1,47 @@
 import VectorTileLayer from 'esri/layers/VectorTileLayer';
 import { format, subDays, parse } from 'date-fns';
-const maxDateURL =
-  'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
 
+//FieldNames that we pre-define. These field names will show in the info window
+export const viirsFieldNames = [
+  {
+    fieldName: 'latitude',
+    label: 'LATITUDE',
+    format: null
+  },
+  {
+    fieldName: 'longitude',
+    label: 'LONGITUDE',
+    format: null
+  },
+  {
+    fieldName: 'confidence__cat',
+    label: 'CONFIDENCE CATEGORY',
+    format: null
+  },
+  {
+    fieldName: 'alert__date',
+    label: 'ALERT DATE',
+    format: null
+  },
+  {
+    fieldName: 'alert__time_utc',
+    label: 'ALERT TIME (UTC)',
+    format: null
+  },
+  {
+    fieldName: 'frp__MW',
+    label: 'RADIATIVE POWER (MEGAWATSS)',
+    format: null
+  },
+  {
+    fieldName: 'bright_ti4__K',
+    label: 'BRIGHTNESS (KELVIN)',
+    format: null
+  }
+];
+
+export const maxDateURL =
+  'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
 //Getting the latest available day for tiles as it will not always be today or yesterday.
 //Those assuptions cannot be made so that is why they have this endpoint to check the day.
 export async function getMaxDateForViirsTiles(): Promise<string> {
