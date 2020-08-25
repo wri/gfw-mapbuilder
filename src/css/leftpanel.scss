@@ -880,10 +880,13 @@
       }
     }
     .layer-control-container {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      margin-top: 10px;
       .remove-attribute-button {
-        display: flex;
-        justify-content: flex-end;
         button {
+          margin-right: 2px;
+          margin-left: 2px;
           -webkit-appearance: none;
           outline: none;
           border: 0;

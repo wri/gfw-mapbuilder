@@ -221,11 +221,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       return (
         <div className="layer-feature-group">
           <div className="layer-control-container">
-            <div className="remove-attribute-button">
-              <button id="remove-attr-btn" onClick={removeAttribute}>
-                <CloseAttribute width={20} height={20} />
-              </button>
-            </div>
             <div className="layer-control">
               <LayerSelector
                 generateLayerTitle={generateLayerTitle}
@@ -253,6 +248,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                   Next
                 </button>
               </div>
+            </div>
+            <div className="remove-attribute-button">
+              <button id="remove-attr-btn" onClick={removeAttribute}>
+                <CloseAttribute width={20} height={20} />
+              </button>
             </div>
           </div>
           <div className="page-numbers">
