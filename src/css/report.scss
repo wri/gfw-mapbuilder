@@ -149,8 +149,10 @@
       }
     }
     .chart-module {
+      padding: 15px;
+      border: 2px solid #80808085;
+      border-radius: 2px;
       @media print {
-        // top: 50%;
         margin-top: 35vh;
       }
       margin-bottom: 25px;
