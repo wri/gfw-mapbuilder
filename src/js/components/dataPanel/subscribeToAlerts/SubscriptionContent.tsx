@@ -363,17 +363,11 @@ const AOIDashboard = () => {
 
     return (
       <div className="aoi-section">
-        <div className="name-section">
-          <p className="area-name">{name}</p>
-          <p className="date">
-            {AOIDashboardText[selectedLanguage].created} {formatDate(createdAt)}
-          </p>
-        </div>
         <div className="map-section">
           <div className="miniMap">
-            <div style={{ height: '147px' }}>
+            <div style={{ height: '120px' }}>
               {mapLoading && (
-                <div style={{ height: '147px', width: '190px' }}>
+                <div style={{ height: '120px', width: '160px' }}>
                   <Loader
                     containerPositionStyling={{
                       position: 'relative',
@@ -387,17 +381,26 @@ const AOIDashboard = () => {
               <img
                 src=""
                 style={{
-                  height: '147px',
-                  width: '190px',
+                  height: '120px',
+                  width: '160px',
                   visibility: mapLoading ? 'hidden' : 'visible'
                 }}
                 ref={miniMap}
               />
             </div>
           </div>
+        </div>
+        <div className="info-wrapper">
           <div className="controls">
+            <div className="name-section">
+              <p className="area-name">{name}</p>
+              <p className="date">
+                {AOIDashboardText[selectedLanguage].created}{' '}
+                {formatDate(createdAt)}
+              </p>
+            </div>
             <div className="alert-section">
-              <p className="title">{"Last week's alerts"}</p>
+              <p className="title">{"Last week's alerts:"}</p>
               <p className="viirs">
                 {AOIDashboardText[selectedLanguage].viirs} {viirsAlers}
               </p>
@@ -405,18 +408,18 @@ const AOIDashboard = () => {
                 {AOIDashboardText[selectedLanguage].glad} {gladAlers}
               </p>
             </div>
-            <div className="map-btns">
-              <button className="map" onClick={handleViewOnMap}>
-                view on map
-              </button>
-              <button className="edit" onClick={handleEditAOI}>
-                edit area
-              </button>
-              <button className="print" onClick={printReport}>
-                <PrintIcon height={15} width={15} fill={'#f0ab00'} />
-                <p>Print Report</p>
-              </button>
-            </div>
+          </div>
+          <div className="map-btns">
+            <button className="map" onClick={handleViewOnMap}>
+              view on map
+            </button>
+            <button className="edit" onClick={handleEditAOI}>
+              edit area
+            </button>
+            <button className="print" onClick={printReport}>
+              <PrintIcon height={15} width={15} fill={'#f0ab00'} />
+              <p>Print Report</p>
+            </button>
           </div>
         </div>
       </div>
