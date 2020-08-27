@@ -90,7 +90,13 @@ export function setNewGraphic({
   }
 
   if (!isUploadFile) {
-    const isPolygon = allFeatures[0].geometry?.type === 'polygon';
+    let isPolygon = false;
+    if (
+      allFeatures[0].geometry?.type === 'polygon' ||
+      allFeatures[0].geometry.hasOwnProperty('rings')
+    ) {
+      isPolygon = true;
+    }
     const symbol = isPolygon ? setSymbol('polygon') : setSymbol('point');
 
     const geometry = isPolygon
