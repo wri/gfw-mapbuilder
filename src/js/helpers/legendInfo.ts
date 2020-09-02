@@ -1,6 +1,6 @@
 export async function fetchLegendInfo(layerUrl: string): Promise<any> {
   const timeout = new Promise((resolve, reject) => {
-    setTimeout(reject, 1500, 'Legend info request time out');
+    setTimeout(reject, 2500, 'Legend info request time out');
   });
 
   const fetchLegendInfo = new Promise((resolve, reject) => {

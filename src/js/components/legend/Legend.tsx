@@ -16,8 +16,6 @@ const getWindowDimensions = () => {
 };
 
 const Legend = (): JSX.Element => {
-  const dispatch = useDispatch();
-
   const hideLegend = useSelector(
     (store: RootState) => store.appSettings.hideLegend
   );
