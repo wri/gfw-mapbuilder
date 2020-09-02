@@ -19,7 +19,8 @@ export const saveAOIText = {
       'Your area has been saved',
       "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
     ],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   },
   fr: {
     title: "Enregistrer une zone d'intérêt",
@@ -41,7 +42,8 @@ export const saveAOIText = {
       'Votre région a été enregistré',
       'Vous pouvez visualiser toutes vos zones dans « Mon GFW »'
     ],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   },
   ka: {
     title: 'Save area of interest',
@@ -63,7 +65,8 @@ export const saveAOIText = {
       'Your area has been saved',
       "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
     ],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   },
   es: {
     title: 'Guardar zona de interés',
@@ -85,7 +88,8 @@ export const saveAOIText = {
       'Su zona ha sido guardada',
       'Puede ver todas sus zonas en My GFW'
     ],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   },
   pt: {
     title: 'Salvar área de interesse',
@@ -107,7 +111,8 @@ export const saveAOIText = {
       'Sua área foi salva',
       'Você pode ver todas as suas áreas em Meu GFW'
     ],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   },
   id: {
     title: 'Simpan daerah yang diminati',
@@ -130,7 +135,8 @@ export const saveAOIText = {
       'Daerah Anda telah disimpan',
       'Anda dapat melihat semua area Anda di GFW Saya'
     ],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   },
   zh: {
     title: '保存关注区域',
@@ -149,6 +155,7 @@ export const saveAOIText = {
     delete: '删除区域',
     successButton: '返回到我的区域',
     successText: ['已保存您的区域', '您可以在“我的 GFW”中查看您所有的区域'],
-    deleteText: 'This area has been deleted from your My GFW.'
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
   }
 };

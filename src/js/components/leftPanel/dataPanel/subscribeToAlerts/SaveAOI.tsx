@@ -45,6 +45,7 @@ const SaveAOI = (): JSX.Element => {
   const [subscriptionName, setSubscriptionName] = useState('');
   const [subscriptionLanguage, setSubscriptionLanguage] = useState('English');
   const [deforestation, setDeforestationAlerts] = useState();
+  const [monthlySummary, setMonthlySummary] = useState();
   const [editingMode, setEditingMode] = useState(false);
   const [tags, setTags] = useState<(string | string[])[]>([]);
   const [aoiID, setAOIID] = useState<null | string>(null);
@@ -153,6 +154,7 @@ const SaveAOI = (): JSX.Element => {
       fireAlerts: fireAlerts,
       deforestationAlerts: deforestation,
       geostore: geostoreID,
+      monthlySummary: monthlySummary,
       type: 'geostore',
       language,
       public: true, //unclear what this means, we are replicating flagship app,
@@ -196,6 +198,7 @@ const SaveAOI = (): JSX.Element => {
     if (activeFeature?.attributes?.type === 'area') {
       setSubscriptionName(activeFeature.attributes.name);
       setDeforestationAlerts(activeFeature.attributes.deforestationAlerts);
+      setMonthlySummary(activeFeature.attributes.monthlySummary);
       setFireAlerts(activeFeature.attributes.fireAlerts);
       setAOIID(activeFeature.attributes.id);
       setTags(activeFeature.attributes.tags);
@@ -442,6 +445,27 @@ const SaveAOI = (): JSX.Element => {
                     />
                     <label style={{ fontSize: '0.8rem' }}>
                       {saveAOIText[selectedLanguage].forestChange}
+                    </label>
+                  </section>
+                  <section>
+                    <Controller
+                      color="default"
+                      icon={<span className={classes.icon} />}
+                      className={classes.root}
+                      checkedIcon={
+                        <span
+                          className={clsx(classes.icon, classes.checkedIcon)}
+                        />
+                      }
+                      as={Checkbox}
+                      disableRipple
+                      name="monthlySummary"
+                      control={control}
+                      checked={Boolean(monthlySummary)}
+                      onChange={(e: any) => setMonthlySummary(e[1])}
+                    />
+                    <label style={{ fontSize: '0.8rem' }}>
+                      {saveAOIText[selectedLanguage].monthly}
                     </label>
                   </section>
                 </div>

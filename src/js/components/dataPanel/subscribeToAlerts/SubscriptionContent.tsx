@@ -51,7 +51,8 @@ function createFeatureObject(
     confirmed,
     geostore,
     status,
-    language
+    language,
+    monthlySummary
   } = aoiDataObject.attributes;
   const aoiAttr = {
     name,
@@ -65,7 +66,8 @@ function createFeatureObject(
     tags,
     application,
     fireAlerts,
-    deforestationAlerts
+    deforestationAlerts,
+    monthlySummary
   };
   const geometry = {
     ...esriGeometry.geometry,
