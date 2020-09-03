@@ -15,7 +15,7 @@ import {
 import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
-import esriConfig from 'esri/config';
+// import esriConfig from 'esri/config';
 // import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
@@ -30,6 +30,14 @@ const MapSpinner = (): React.ReactElement => (
   />
 );
 
+function loadGoogleAnalytics(analyticsCode?: string): void {
+  if (!window.hasOwnProperty('ga') || !analyticsCode) {
+    return;
+  }
+  window['ga']('create', analyticsCode, 'auto');
+  window['ga']('send', 'pageview');
+}
+
 const App = (props: AppSettings | any): JSX.Element => {
   //Listen to map loading state that comes from mapController via redux store change
   const hideHeader = useSelector(
@@ -41,9 +49,23 @@ const App = (props: AppSettings | any): JSX.Element => {
   const analyticsCode = useSelector(
     (store: RootState) => store.appSettings.analyticsCode
   );
+
+  loadGoogleAnalytics(analyticsCode);
   //INIT with global spinner set to true
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
+
+  function changeDefaultLanguage(passedLanguage?: string): void {
+    //Check URL for language param which comes in after user shares the application.
+    const langFromURL = new URL(window.location.href).searchParams.get('l');
+
+    if (langFromURL) {
+      dispatch(setLanguage(langFromURL));
+    } else {
+      //set the language based on appid info, if nothing is set, just default to resources.js
+      dispatch(setLanguage(passedLanguage || resources.language));
+    }
+  }
 
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
   const reportParam = new URL(window.location.href).searchParams.get('report');
@@ -55,9 +77,9 @@ const App = (props: AppSettings | any): JSX.Element => {
   }
 
   useEffect(() => {
-    //AppID
     const appID = new URL(window.location.href).searchParams.get('appid');
     if (appID) {
+      // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template and we need to fetch settings using that app id to overwrite our default settings
       const portalURL = sharinghost || 'https://www.arcgis.com';
       const portalA = new Portal({ url: portalURL });
       const portItem = new PortalItem({ id: appID, portal: portalA });
@@ -67,89 +89,57 @@ const App = (props: AppSettings | any): JSX.Element => {
           console.log(res);
           const { values } = res;
           dispatch(overwriteSettings({ ...resources, ...props, ...values }));
-          //Check URL for language param which comes in after user shares the application.
-          const langFromURL = new URL(window.location.href).searchParams.get(
-            'l'
-          );
-          if (langFromURL) {
-            dispatch(setLanguage(langFromURL));
-          } else {
-            //set the language based on appid info, if nothing is set, just default to resources.js
-            dispatch(setLanguage(values?.language || resources.language));
-          }
+          changeDefaultLanguage(values?.language);
           setShowGlobalSpinner(false);
         })
         .catch(e => {
           console.error(e);
-          // just fall thrrough in case of error and load the default resources
           dispatch(overwriteSettings({ ...resources, ...props }));
-          //Check URL for language param which comes in after user shares the application.
-          const langFromURL = new URL(window.location.href).searchParams.get(
-            'l'
-          );
-          if (langFromURL) {
-            dispatch(setLanguage(langFromURL));
-          } else {
-            //just set default lang
-            dispatch(setLanguage(resources.language));
-          }
+          changeDefaultLanguage(resources.language);
           setShowGlobalSpinner(false);
         });
     } else {
       //Read our local resources.js file And any external library resources (which are prioritized)
       dispatch(overwriteSettings({ ...resources, ...props }));
-      //Check URL for language param which comes in after user shares the application.
-      const langFromURL = new URL(window.location.href).searchParams.get('l');
-      if (langFromURL) {
-        dispatch(setLanguage(langFromURL));
+      if (props && Object.keys(props).length !== 0) {
+        changeDefaultLanguage(props.language);
       } else {
-        //Set the default language
-        if (props && Object.keys(props).length !== 0) {
-          dispatch(setLanguage(props.language));
-        } else {
-          dispatch(setLanguage(resources.language));
-        }
+        changeDefaultLanguage(resources.language);
       }
       setShowGlobalSpinner(false);
     }
   }, [dispatch, props]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
 
-  useEffect(() => {
-    if (!window.hasOwnProperty('ga')) return;
-    window['ga']('create', analyticsCode, 'auto');
-    window['ga']('send', 'pageview');
-  }, [analyticsCode]);
-
   //Subscriptions for the CMS usecase and trustedServers setup
   useEffect(() => {
     //TODO: this may need investigation/refactor depending on the CMS setup in the future, this also breaks GLAD alerts for some reason, need further work
-    const corsServers: string[] = [
-      // 'gis-gfw.wri.org',
-      // 'gis-potico.wri.org',
-      // 'gis-treecover.wri.org',
-      // 'api.globalforestwatch.org',
-      // 'alpha.blueraster.io',
-      // 'staging.blueraster.io',
-      // 'stg.blueraster.com.s3.amazonaws.com',
-      // 'production-api.globalforestwatch.org',
-      // 'production-api.globalforestwatch.org/v1/ogr',
-      // 'production-api.globalforestwatch.org/v1/ogr/convert',
-      // 'api.resourcewatch.org',
-      // 'gis.wri.org',
-      // 'tiles.globalforestwatch.org',
-      // 'staging-api.globalforestwatch.org',
-      // 'wri-01.carto.com'
-    ];
+    // const corsServers: string[] = [
+    // 'gis-gfw.wri.org',
+    // 'gis-potico.wri.org',
+    // 'gis-treecover.wri.org',
+    // 'api.globalforestwatch.org',
+    // 'alpha.blueraster.io',
+    // 'staging.blueraster.io',
+    // 'stg.blueraster.com.s3.amazonaws.com',
+    // 'production-api.globalforestwatch.org',
+    // 'production-api.globalforestwatch.org/v1/ogr',
+    // 'production-api.globalforestwatch.org/v1/ogr/convert',
+    // 'api.resourcewatch.org',
+    // 'gis.wri.org',
+    // 'tiles.globalforestwatch.org',
+    // 'staging-api.globalforestwatch.org',
+    // 'wri-01.carto.com'
+    // ];
 
-    corsServers.forEach(server =>
-      //@ts-ignore
-      esriConfig.request.trustedServers.push(server)
-    );
+    //corsServers.forEach(server =>
+    //  //@ts-ignore
+    //  esriConfig.request.trustedServers.push(server)
+    //);
 
+    //This sets up the event listener that gets fired by CMS codebase when user click on CMS AOI Dashboard dropdown
     const handleExternalSubscriptionCall = (request: any) => {
       dispatch(renderModal('AOIDashboard'));
     };
-
     window.addEventListener(
       'listenToThisSubscriptionCall',
       handleExternalSubscriptionCall
@@ -189,7 +179,7 @@ const App = (props: AppSettings | any): JSX.Element => {
         })
         .catch(e => console.error(e));
     }
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
