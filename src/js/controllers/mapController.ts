@@ -58,7 +58,9 @@ import {
   setModisStart,
   setModisEnd,
   setViirsStart,
-  setViirsEnd
+  setViirsEnd,
+  setGladStart,
+  setGladEnd
 } from 'js/store/appState/actions';
 import {
   LayerProps,
@@ -192,8 +194,9 @@ export class MapController {
             throtthledUpdater(newExtent, this._mapview)
           );
 
-          //Set VIIRS layer default dates
+          //Set layer default dates
           this.setVIIRSDates();
+          this.setGLADDates();
 
           this._mapview.on('click', event => {
             //clean active indexes for data tab and activeFeatures
@@ -486,6 +489,17 @@ export class MapController {
       store.dispatch(setViirsStart(oneDayAgo));
       store.dispatch(setViirsEnd(date));
     });
+  }
+
+  setGLADDates(): void {
+    const { appSettings } = store.getState();
+    if (
+      appSettings.gladAlertDates?.startDate.length &&
+      appSettings.gladAlertDates.endDate.length
+    ) {
+      store.dispatch(setGladStart(appSettings.gladAlertDates.startDate));
+      store.dispatch(setGladEnd(appSettings.gladAlertDates.endDate));
+    }
   }
 
   getRemoteAndServiceLayers(): Promise<any> {

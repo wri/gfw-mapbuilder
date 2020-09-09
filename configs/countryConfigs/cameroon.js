@@ -42,6 +42,10 @@ export default {
   mangroves: false,
   sadAlerts: false,
   gladAlerts: true,
+  gladAlertDates: {
+    startDate: '',
+    endDate: '' //YYYY-MM-DD
+  },
   primaryForests: true,
   recentImagery: true,
   footerLinks: [

@@ -35,6 +35,10 @@ export interface AppSettings {
     y: number | string;
     z: number | string;
   };
+  gladAlertDates?: {
+    startDate: string;
+    endDate: string;
+  };
   customColorTheme: string;
   aboutLinkUrl?: string;
   downloadLinkUrl?: string;
