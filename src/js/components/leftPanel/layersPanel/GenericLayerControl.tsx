@@ -9,6 +9,8 @@ import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPic
 import TimeSlider from 'js/components/sharedComponents/TimeSlider';
 import DateRangeModis from './DateRangeModis';
 import DateRangeViirs from './DateRangeVIIRS';
+import { format } from 'date-fns';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
 import {
   renderModal,
@@ -25,6 +27,7 @@ import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from 'js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/leftPanel.translations';
+import './datepicker.scss';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -57,17 +60,17 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     (store: RootState) => store.appState.leftPanel.gladEnd
   );
 
-  const getTodayDate = new Date().toISOString().split('T')[0];
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(
     gladConfirmed
   );
   const [startDate, setStartDate] = React.useState(String(gladStart));
   const [endDate, setEndDate] = React.useState(gladEnd);
 
-  function handleStartDateChange(e: any): void {
-    setStartDate(e.target.value);
+  function handleStartDateChange(day: Date): void {
+    const dFormat = format(day, 'yyyy-MM-dd');
+    setStartDate(dFormat);
     //@ts-ignore
-    const start = new Date(e.target.value).getJulian();
+    const start = new Date(dFormat).getJulian();
     //@ts-ignore
     const end = new Date(endDate).getJulian();
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
@@ -81,14 +84,15 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     gladLayerNew.julianTo = end;
     mapController._map?.add(gladLayerNew, gladIndex);
 
-    dispatch(setGladStart(e.target.value));
+    dispatch(setGladStart(dFormat));
     dispatch(setGladEnd(endDate));
   }
 
-  function handleEndDateChange(e: any): void {
-    setEndDate(e.target.value);
+  function handleEndDateChange(day: Date): void {
+    const dFormat = format(day, 'yyyy-MM-dd');
+    setEndDate(dFormat);
     //@ts-ignore
-    const end = new Date(e.target.value).getJulian();
+    const end = new Date(dFormat).getJulian();
     //@ts-ignore
     const start = new Date(startDate).getJulian();
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
@@ -103,7 +107,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gladLayerNew, gladIndex);
 
     dispatch(setGladStart(startDate));
-    dispatch(setGladEnd(e.target.value));
+    dispatch(setGladEnd(dFormat));
   }
 
   function handleConfirmedAlertsToggle(): void {
@@ -140,35 +144,29 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
         </div>
         <p>Hide unconfirmed alerts</p>
       </div>
-      <div>
-        <div className="calendar-wrapper">
-          <div className="date-section-wrapper">
-            <label htmlFor="start-date">
-              {layerControlsTranslations[props.selectedLanguage].timeStart}
-            </label>
-            <input
-              style={{ border: `1px solid ${props.customColorTheme}` }}
-              className="date-time-toggle input"
-              type="date"
-              defaultValue={startDate}
-              min={undefined}
-              onChange={handleStartDateChange}
-            />
-          </div>
+      <div className="calendar-wrapper">
+        <div className="date-section-wrapper">
+          <label htmlFor="start-date">
+            {layerControlsTranslations[props.selectedLanguage].timeStart}
+          </label>
+          <DayPickerInput
+            placeholder="select a day"
+            showOverlay={false}
+            onDayChange={day => handleStartDateChange(day)}
+            value={startDate}
+          />
+        </div>
 
-          <div className="date-section-wrapper">
-            <label htmlFor="end-date">
-              {layerControlsTranslations[props.selectedLanguage].timeEnd}
-            </label>
-            <input
-              style={{ border: `1px solid ${props.customColorTheme}` }}
-              className="date-time-toggle input"
-              type="date"
-              value={endDate}
-              max={getTodayDate}
-              onChange={handleEndDateChange}
-            />
-          </div>
+        <div className="date-section-wrapper">
+          <label htmlFor="end-date">
+            {layerControlsTranslations[props.selectedLanguage].timeEnd}
+          </label>
+          <DayPickerInput
+            placeholder="select a day"
+            showOverlay={false}
+            onDayChange={day => handleEndDateChange(day)}
+            value={endDate}
+          />
         </div>
       </div>
     </div>
@@ -406,7 +404,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         <div
           className="info-icon-container"
           style={{ backgroundColor: `${customColorTheme}` }}
-          onClick={() => openInfoModal()}
+          onClick={(): void => openInfoModal()}
         >
           <InfoIcon width={10} height={10} fill={'#fff'} />
         </div>

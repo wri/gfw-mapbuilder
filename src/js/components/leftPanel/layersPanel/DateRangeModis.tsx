@@ -1,10 +1,11 @@
 import React, { useState, ChangeEvent } from 'react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { format, parse } from 'date-fns';
+import { useSelector } from 'react-redux';
 
 import { mapController } from 'js/controllers/mapController';
 import { RootState } from 'js/store/index';
-import { useSelector } from 'react-redux';
 import { LayerProps } from 'js/store/mapview/types';
-import { format } from 'date-fns';
 
 interface DateRangeProps {
   layer: LayerProps;
@@ -30,14 +31,16 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
 
-  const updateStartDate = (e: ChangeEvent<HTMLInputElement>): void => {
-    setStartDate(e.target.value);
-    mapController.setCustomDateRange(layer.id, e.target.value, endDate);
+  const updateStartDate = (day: Date): void => {
+    const dFormat = format(day, 'yyyy-MM-dd');
+    setStartDate(dFormat);
+    mapController.setCustomDateRange(layer.id, dFormat, endDate);
   };
 
-  const updateEndDate = (e: ChangeEvent<HTMLInputElement>): void => {
-    setEndDate(e.target.value);
-    mapController.setCustomDateRange(layer.id, startDate, e.target.value);
+  const updateEndDate = (day: Date): void => {
+    const dFormat = format(day, 'yyyy-MM-dd');
+    setEndDate(dFormat);
+    mapController.setCustomDateRange(layer.id, startDate, dFormat);
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
@@ -53,6 +56,17 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     setDefinedRange('24 hrs');
     mapController.setDefinedDateRange(layer.id, '24 hrs');
     mapController.resetCustomDateRange();
+  };
+
+  const fStartDate = parse(startDate, 'yyyy-MM-dd', new Date());
+  const fToday = parse(getTodayDate, 'yyyy-MM-dd', new Date());
+
+  const startDateProps = {
+    disabledDays: { after: fToday }
+  };
+
+  const endDateProps = {
+    disabledDays: { after: fToday, before: fStartDate }
   };
 
   return (
@@ -84,26 +98,22 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           <div className="calendar-wrapper">
             <div className="date-section-wrapper">
               <label htmlFor="start-date">Start:</label>
-              <input
-                className="date-time-toggle input"
-                style={{ border: `1px solid ${customColorTheme}` }}
-                type="date"
+              <DayPickerInput
+                placeholder="select a day"
+                showOverlay={false}
+                onDayChange={day => updateStartDate(day)}
+                dayPickerProps={startDateProps}
                 value={startDate}
-                min="2018-01-01"
-                max={getTodayDate}
-                onChange={(e): void => updateStartDate(e)}
               />
             </div>
             <div className="date-section-wrapper">
               <label htmlFor="end-date">End:</label>
-              <input
-                className="date-time-toggle input"
-                style={{ border: `1px solid ${customColorTheme}` }}
-                type="date"
+              <DayPickerInput
+                placeholder="select a day"
+                showOverlay={false}
+                onDayChange={day => updateEndDate(day)}
+                dayPickerProps={endDateProps}
                 value={endDate}
-                min="2018-01-01"
-                max={getTodayDate}
-                onChange={(e): void => updateEndDate(e)}
               />
             </div>
           </div>
