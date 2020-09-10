@@ -49,8 +49,8 @@ export async function generateMinimaps(areas: any): Promise<void> {
   mapRef.id = 'minimap-print';
   mapRef.style.width = '500px';
   mapRef.style.height = '500px';
-  mapRef.style.zIndex = '-1';
   mapRef.style.position = 'absolute';
+  mapRef.style.left = '-999px';
   const root = document.getElementById('root');
   root?.appendChild(mapRef);
   const miniMap = new Map({
