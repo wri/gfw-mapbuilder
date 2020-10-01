@@ -103,7 +103,9 @@ const LayersTabView = (props: LayersTabViewProps) => {
           <AllLayerControls selectedLanguage={selectedLanguage} />
           <div
             className={
-              hideWidgetActive ? 'hide tabview-container' : 'tabview-container'
+              hideWidgetActive
+                ? 'hide layer-tabview-container'
+                : 'layer-tabview-container'
             }
           >
             <div>{layerGroupsToRender}</div>

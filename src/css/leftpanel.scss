@@ -383,6 +383,13 @@
   overflow-x: hidden;
 }
 
+.layer-tabview-container {
+  height: 560px;
+  color: $dark-grey;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .tab-header-container {
   display: flex;
 }
@@ -1358,7 +1365,8 @@
     top: auto;
     flex-direction: column-reverse;
 
-    .tabview-container {
+    .tabview-container,
+    .layer-tabview-container {
       overflow-y: scroll;
     }
 
@@ -1370,7 +1378,8 @@
 
 @media (max-height: $laptop-device) {
   .left-panel {
-    .tabview-container {
+    .tabview-container,
+    .layer-tabview-container {
       height: 450px;
     }
   }
