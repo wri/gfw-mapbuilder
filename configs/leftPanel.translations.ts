@@ -30,9 +30,9 @@ export const analysisContent = {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
     // ^ no translation available
     analyzeExistingShapeDirections: [
-      'Use the layers tab to turn on a data layer',
+      'Gebruik het tabblad Lagen om een gegevenslaag in te schakelen',
       'Selecteer een vorm op de kaart',
-      'Click on the analyze tab'
+      'Klik op het tabblad analyse'
     ],
     analyzeYourShapeTitle: 'Analyseer je eigen vorm',
     analyzeYourShapeFirstDirection: [
@@ -458,7 +458,7 @@ export const dataTabConfig = {
   du: {
     header: 'Selecteer een vorm op de kaart',
     instructionsList: [
-      'Use the layers tab to turn on a data layer',
+      'Use the layers tab to turn on a data layer ', // * NOTE: translation unavailable
       'Selecteer een vorm op de kaart'
     ]
   },
