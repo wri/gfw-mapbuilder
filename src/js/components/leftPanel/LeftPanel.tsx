@@ -221,7 +221,6 @@ const LeftPanel = (): React.ReactElement => {
       tooltipText: 'Analysis',
       render: true
     },
-
     {
       label: 'documents',
       icon: DocumentsTabIcon,

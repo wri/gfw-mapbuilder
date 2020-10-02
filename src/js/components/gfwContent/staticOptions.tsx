@@ -2238,6 +2238,42 @@ export const emailLoginTranslations = {
     reset: 'Reset',
     register: 'Register'
   },
+  du: {
+    email: 'email',
+    password: 'password',
+    repeatPassword: 'repeat password',
+    required: 'This field is required',
+    forgotPassword: 'Forgot Password!',
+    signup: ['Not a member?', 'Sign Up!'],
+    signin: ['Already joined?', 'Sign In!'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
+    login: 'Login',
+    passwordReset:
+      'To reset your password, enter your email and follow the instructions.',
+    passwordResetSuccess:
+      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
+    reset: 'Reset',
+    register: 'Register'
+  }, // * NOTE: dutch translation document only had translation for 'reset' property (string -> Reset)
+  am: {
+    email: 'email',
+    password: 'password',
+    repeatPassword: 'repeat password',
+    required: 'This field is required',
+    forgotPassword: 'Forgot Password!',
+    signup: ['Not a member?', 'Sign Up!'],
+    signin: ['Already joined?', 'Sign In!'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
+    login: 'Login',
+    passwordReset:
+      'To reset your password, enter your email and follow the instructions.',
+    passwordResetSuccess:
+      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
+    reset: 'Վերադառնալ սկզբնական կարգավորումներին',
+    register: 'Register'
+  }, // * NOTE: armenian translation document only had translation for 'reset' property
   ka: {
     email: 'ელ. ფოსტა',
     password: 'პაროლი ',

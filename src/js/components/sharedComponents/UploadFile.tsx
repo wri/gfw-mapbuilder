@@ -36,6 +36,16 @@ const UploadFile = (): JSX.Element => {
       shapefileInstructions:
         'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 1MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.'
     },
+    du: {
+      shapefileButton: 'of plaats hier een aangepast shapefile hier',
+      shapefileInstructions:
+        'Alleen polygoongegevens worden ondersteund en zouden een ruimtelijke referentie van WGS84 moeten gebruiken. De aanbevolen maximale grootte is 1 MB, meer dan dat werkt mogelijk niet zoals verwacht. Esri-shapefiles moeten gezipt zijn (.zip) en GeoJSON-bestanden moeten in .json-bestanden zijn.'
+    },
+    am: {
+      shapefileButton: 'կամ գցել սովորական շեյփ-ֆայլ (shapefile) այստեղ',
+      shapefileInstructions:
+        'Անհրաժեշտ է մուտքագրել միայն բազմակնութուն տվյալներ և օգտագործել WGS84 կոորդինատային համակարգ: Մուտքագրվող տվյալների առաջարկվող առավելագույն ծավալը 1 ՄԲ է, դրանից ավել ծավալների դեպքում գործիքը կարող է նախատեսված կարգով չաշխատել: Esri շեյփ-ֆայլերը (shapefile) պետք է լինեն արխիվացված (.zip), իսկ GeoJSON ֆայլերը որպես .json ֆորմատով '
+    },
     ka: {
       shapefileButton: 'ან შემოიტანეთ სხვა შეიპფაილი',
       shapefileInstructions:

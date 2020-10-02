@@ -15,6 +15,40 @@ export const subscribeConfig = {
     FORMALabel: 'FORMA alerts data',
     FORMAField: 'forma-alerts'
   },
+  du: {
+    title: 'Meldingen voor verandering in (bos)beddeking',
+    subtitle:
+      'Kies de meldingen van verandering in bosbeddeking welke u wenst te ontvangen ',
+    VIIRSLabel: 'VIIRS actieve brandmeldingen',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD-meldingen voor afname  van boombedekking',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES ontbossing gegevens',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Gegevens van afname in boombedekking ',
+    treeCoverLossField: 'umd-loss-gain',
+    SADLabel: 'SAD meldingen voor afname  van boombedekking',
+    SADField: 'imazon-alerts',
+    FORMALabel: 'FORMA melding gegevens ',
+    FORMAField: 'forma-alerts'
+  },
+  am: {
+    title: 'Անտառներում տեղի ունեցող փոփոխությունների մասին նախազգուշացում ',
+    subtitle:
+      'Ընտրել անտառներում տեղի ունեցող որ փոփոխությունների մասին եք ցանկանում ստանալ նախազգուշացում ',
+    VIIRSLabel: 'VIIRS ակտիվ հրդեհների մասին ծանուցումներ ',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD ծառածածկույթի կորստի մասին ծանուցումներ ',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES անտառզրկումների մասին տվյալներ ',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'TԾառածածկույթի կորստի մասին տվյալներ',
+    treeCoverLossField: 'umd-loss-gain',
+    SADLabel: 'SAD ծառածածկույթի կորստի մասինծանուցումներ',
+    SADField: 'imazon-alerts',
+    FORMALabel: 'FORMA ծանուցումների տվյալներ ',
+    FORMAField: 'forma-alerts'
+  },
   fr: {
     title: 'Alertes sur l’évolution des forêts',
     subtitle:
@@ -119,6 +153,16 @@ export const nameSubscriptionConfig = {
     title: 'Name your subscription',
     nameLabel: 'Name',
     subscribeLabel: 'Subscribe to alerts'
+  },
+  du: {
+    title: 'Geef uw abonnement een naam',
+    nameLabel: 'Naam',
+    subscribeLabel: 'Abonneer voor meldingen'
+  },
+  am: {
+    title: 'Անվանել տվյալ բաժանորդագրությունը',
+    nameLabel: 'Անվանում',
+    subscribeLabel: 'Բաժանորդագրվել ծանուցումների համար'
   },
   ka: {
     title: 'დაარქვით თქვენ ხელმოწერას',

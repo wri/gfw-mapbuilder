@@ -161,6 +161,62 @@ export default {
       { label: `Vegetation Health` }
     ]
   },
+  du: {
+    imagery: [
+      'Recente afbeeldingen',
+      'Recente satellietbeelden met hoge resolutie'
+    ],
+    acquisition: 'Aankoopdatum ',
+    date: 'Datum',
+    naturalColor: 'Natuurlijke kleur ',
+    vegetation: 'Vegetatie Gezondheid',
+    instrument: 'Instrument',
+    cloud: 'Wolkendekking ',
+    months: 'Maanden ',
+    weeks: 'Weken ',
+    cloudPercentage: 'Maximaal bewolking percentage',
+    edit: 'Bewerken ',
+    before: 'Voordat ',
+    loadError: 'Fout bij het laden van recent beeldmateriaal.',
+    matchError:
+      'Er zijn geen resultaten die overeenkomen met de geselecteerde criteria.',
+    monthsOptions: [
+      { label: `4 months`, value: 4 },
+      { label: `3 months`, value: 3 },
+      { label: `6 months`, value: 6 },
+      { label: `12 months`, value: 12 }
+    ],
+    imageStyleOptions: [
+      { label: `Natuurlijke kleur` },
+      { label: `Vegetation Gezondheid` }
+    ]
+  },
+  am: {
+    imagery: ['Վերջին նկարը', 'Վերջին բարձր լուծաչափով արբանյակային նկարը '],
+    acquisition: 'Ստացման ամսաթիվ',
+    date: 'ամսաթիվ ',
+    naturalColor: 'Բնական գույներ ',
+    vegetation: 'Բուսականության առողջություն ',
+    instrument: 'Գործիքներ',
+    cloud: 'Ամպային ծածկույթ ',
+    months: 'Ամիսներ',
+    weeks: 'Շաբաթներ',
+    cloudPercentage: 'Ամպային ծածկույթի առավելագույն տոկոս ',
+    edit: 'Խմբագրել',
+    before: 'Նախորդ',
+    loadError: 'Վերջին նկարի բեռնման սխալ ',
+    matchError: 'Ընտրված չափանիշների համապատասխանող արդյունքներ չեն գտնվել',
+    monthsOptions: [
+      { label: `4 months`, value: 4 },
+      { label: `3 months`, value: 3 },
+      { label: `6 months`, value: 6 },
+      { label: `12 months`, value: 12 }
+    ],
+    imageStyleOptions: [
+      { label: `Բնական գույներ ` },
+      { label: `Բուսականության առողջություն` }
+    ]
+  },
   ka: {
     imagery: [
       'ბოლო გამოსახულება',
