@@ -161,6 +161,11 @@ const AOIDashboardText = {
     glad: 'GLAD ծանուցումներ',
     viirs: 'VIIRS alerts'
   },
+  du: {
+    created: 'Created',
+    glad: 'GLAD meldingen',
+    viirs: 'VIIRS branden'
+  },
   es: {
     created: 'Creado el',
     glad: 'Alertas GLAD',

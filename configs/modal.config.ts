@@ -374,6 +374,58 @@ export const measureContent = {
       { text: 'DMS', esriUnit: 'dms' }
     ]
   },
+  du: {
+    // * NOTE: translation document didn't have this section
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  am: {
+    // * NOTE: translation document didn't have this section
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
   ka: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
