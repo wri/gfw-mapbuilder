@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Attribution from 'esri/widgets/Attribution';
+import ScaleBar from 'esri/widgets/ScaleBar';
 import { useSelector } from 'react-redux';
 import { RootState } from 'js/store/index';
 import { mapController } from 'js/controllers/mapController';
@@ -11,12 +12,19 @@ const Footer = (): JSX.Element => {
   );
 
   const attRef: any = useRef();
+  const scaleRef: any = useRef();
   useEffect(() => {
     new Attribution({
       view: mapController._mapview,
       container: attRef.current
     });
-  }, [attRef]);
+    new ScaleBar({
+      view: mapController._mapview,
+      container: scaleRef.current,
+      style: 'ruler',
+      unit: 'metric'
+    });
+  }, [attRef, scaleRef]);
 
   const footerLinksItems = footerLinks.map((item, i: number) => {
     return (
@@ -30,6 +38,7 @@ const Footer = (): JSX.Element => {
 
   return (
     <div className="footer-container">
+      <div className="scaleBar" ref={scaleRef}></div>
       <div className="footer-links">{footerLinksItems}</div>
       <div className="attribution" ref={attRef}></div>
     </div>
