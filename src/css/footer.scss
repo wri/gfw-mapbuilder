@@ -2,7 +2,7 @@
 
 .footer-container {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr 2fr;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -39,6 +39,10 @@
     .esri-attribution__sources--open {
       max-width: 950px !important;
     }
+  }
+  .scaleBar {
+    margin-right: 15px;
+    margin-left: 10px;
   }
 }
 
