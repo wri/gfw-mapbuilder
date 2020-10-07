@@ -210,7 +210,7 @@ export const sectors: SectorsObject = {
       ]
     }
   ],
-  du: [
+  nl: [
     // * NOTE: translation was not provided
     {
       sector: { label: 'Government', value: 'Government' },
@@ -417,7 +417,7 @@ export const sectors: SectorsObject = {
       ]
     }
   ],
-  am: [
+  hy: [
     // * NOTE: translation was not provided
     {
       sector: { label: 'Government', value: 'Government' },
@@ -1926,7 +1926,7 @@ export const usage: Topic = {
       id: 'Other'
     }
   ],
-  du: [
+  nl: [
     // * NOTE: translation not provided
     {
       label: 'Advocacy/campaigning',
@@ -1989,7 +1989,7 @@ export const usage: Topic = {
       id: 'Other'
     }
   ],
-  am: [
+  hy: [
     // * NOTE: translation not provided
     {
       label: 'Advocacy/campaigning',
@@ -2480,7 +2480,7 @@ export const topics: Topic = {
       id: 'Watersheds_'
     }
   ],
-  du: [
+  nl: [
     // * NOTE: translation not provided
     {
       label: 'Agricultural supply chains',
@@ -2527,7 +2527,7 @@ export const topics: Topic = {
       id: 'Watersheds_'
     }
   ],
-  am: [
+  hy: [
     // * NOTE: translation not provided
     {
       label: 'Agricultural supply chains',
@@ -2872,7 +2872,7 @@ export const emailLoginTranslations = {
     reset: 'Reset',
     register: 'Register'
   },
-  du: {
+  nl: {
     email: 'email',
     password: 'password',
     repeatPassword: 'repeat password',
@@ -2890,7 +2890,7 @@ export const emailLoginTranslations = {
     reset: 'Reset',
     register: 'Register'
   }, // * NOTE: dutch translation document only had translation for 'reset' property (string -> Reset)
-  am: {
+  hy: {
     email: 'email',
     password: 'password',
     repeatPassword: 'repeat password',
@@ -3048,7 +3048,7 @@ export const editProfileTranslations = {
     save: 'SAVE',
     back: 'BACK TO MY PROFILE'
   },
-  am: {
+  hy: {
     // * NOTE: translation not provided
     profileHeader: 'Your Profile',
     profileSubheader:
@@ -3079,7 +3079,7 @@ export const editProfileTranslations = {
     save: 'SAVE',
     back: 'BACK TO MY PROFILE'
   },
-  du: {
+  nl: {
     // * NOTE: translation not provided
     profileHeader: 'Your Profile',
     profileSubheader:
