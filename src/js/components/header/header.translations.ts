@@ -17,7 +17,7 @@ export const headerContent = {
     logout: 'Log Out',
     language: 'Select Language'
   },
-  du: {
+  nl: {
     about: 'Over ons',
     download: 'Download Data',
     mapThemes: 'Map Themes', // * NOTE: doesn't exist in translations document
@@ -35,7 +35,7 @@ export const headerContent = {
     logout: 'Log Uit',
     language: 'Kies taal'
   },
-  am: {
+  hy: {
     about: 'Մեր մասին',
     download: 'Ներբեռնել տվյալները ',
     mapThemes: 'Map Themes', // * NOTE: doesn't exist in translations document

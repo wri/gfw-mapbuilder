@@ -161,7 +161,7 @@ export default {
       { label: `Vegetation Health` }
     ]
   },
-  du: {
+  nl: {
     imagery: [
       'Recente afbeeldingen',
       'Recente satellietbeelden met hoge resolutie'
@@ -191,7 +191,7 @@ export default {
       { label: `Vegetation Gezondheid` }
     ]
   },
-  am: {
+  hy: {
     imagery: ['Վերջին նկարը', 'Վերջին բարձր լուծաչափով արբանյակային նկարը '],
     acquisition: 'Ստացման ամսաթիվ',
     date: 'ամսաթիվ ',

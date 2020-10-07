@@ -19,10 +19,10 @@ function valueToLang(abbrev: string): string {
     case 'en':
       lang = 'English';
       break;
-    case 'du':
+    case 'nl':
       lang = 'Dutch';
       break;
-    case 'am':
+    case 'hy':
       lang = 'Armenian';
       break;
     case 'es':

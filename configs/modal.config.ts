@@ -6,12 +6,12 @@ export const printContent = {
     dropdownLabel: 'Print',
     printOptions: ['Landscape', 'MAP_ONLY']
   },
-  du: {
+  nl: {
     buttonLabel: 'Kies een afdruk output',
     dropdownLabel: 'Afdrukken ',
     printOptions: ['Landscape', 'MAP_ONLY']
   },
-  am: {
+  hy: {
     buttonLabel: 'Ընտրել արդյունքները տպման համար ',
     dropdownLabel: 'տպել',
     printOptions: ['Landscape', 'MAP_ONLY']
@@ -52,10 +52,10 @@ export const shareContent = {
   en: {
     title: 'Share'
   },
-  du: {
+  nl: {
     title: 'Delen'
   },
-  am: {
+  hy: {
     title: 'կիսվել'
   },
   ka: {
@@ -93,7 +93,7 @@ export const penContent = {
     ],
     coordinatesButton: 'Enter Values'
   },
-  du: {
+  nl: {
     drawTitle: 'Analyseer je eigen vorm',
     drawInstructions: [
       'Teken een vorm ergens op de kaart',
@@ -107,7 +107,7 @@ export const penContent = {
     ],
     coordinatesButton: 'Voer waarden in'
   },
-  am: {
+  hy: {
     drawTitle: 'Վերլուծել սեփական պատկերը',
     drawInstructions: [
       'Քարտեզի որևէ հատվածում նկարել պատկեր',
@@ -208,13 +208,13 @@ export const searchContent = {
     title: 'Search for feature:',
     buttonTitle: 'Search'
   },
-  du: {
+  nl: {
     latitude: 'Breedtegraad',
     longitude: 'Lengtegraad',
     title: 'Zoeken naar functie:',
     buttonTitle: 'zoeken'
   },
-  am: {
+  hy: {
     latitude: 'Լայնություն ',
     longitude: 'Երկայնություն',
     title: 'Փնտրել օբյեկտը:',
@@ -271,7 +271,7 @@ export const coordinatesContent = {
     addMoreLabel: 'Add More',
     makeShapeLabel: 'Make Shape'
   },
-  du: {
+  nl: {
     title: 'Voer uw eigen coördinaten in',
     dropdownTitle: 'Selecteer Formaat',
     decimalOptions: ['Graden Decimale Seconden (DMS)', 'Decimale graden (DD)'],
@@ -280,7 +280,7 @@ export const coordinatesContent = {
     addMoreLabel: 'Voeg meer toe ',
     makeShapeLabel: 'Vorm maken '
   },
-  am: {
+  hy: {
     title: 'Մուտքագրել Ձեր կոորդինատները ',
     dropdownTitle: 'Ընտրել ձևաչափը ',
     decimalOptions: [
@@ -374,7 +374,7 @@ export const measureContent = {
       { text: 'DMS', esriUnit: 'dms' }
     ]
   },
-  du: {
+  nl: {
     // * NOTE: translation document didn't have this section
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
@@ -400,7 +400,7 @@ export const measureContent = {
       { text: 'DMS', esriUnit: 'dms' }
     ]
   },
-  am: {
+  hy: {
     // * NOTE: translation document didn't have this section
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
@@ -594,7 +594,7 @@ export const infoContent = {
     noInfoLabel: 'No Information Available',
     overviewLabel: 'Overview'
   },
-  du: {
+  nl: {
     functionLabel: 'Functie',
     resolutionLabel: 'Resolutie',
     geographicCoverageLabel: 'geografische dekking',
@@ -609,7 +609,7 @@ export const infoContent = {
     noInfoLabel: 'Geen informative beschikbaar',
     overviewLabel: 'Omschrijving'
   },
-  am: {
+  hy: {
     functionLabel: 'Ֆունկցիա/գործողություն ',
     resolutionLabel: 'լուծաչափ',
     geographicCoverageLabel: 'Աշխարհագրական ծածկույթ ',
@@ -721,11 +721,11 @@ export const canopyDensityContentConfig = {
     directions:
       'Adjust the minimum canopy density for tree cover and tree cover loss'
   },
-  du: {
+  nl: {
     directions:
       'Pas de minimale luifeldichtheid aan voor boombedekking en afname  van boombedekkings'
   },
-  am: {
+  hy: {
     directions:
       'Կարգավորել սաղարթների նվազագույն խտությունը՝ ծառածածկույթի և ծառածակույթի կորստի համար'
   },

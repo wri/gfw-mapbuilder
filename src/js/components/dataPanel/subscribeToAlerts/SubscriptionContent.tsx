@@ -156,12 +156,12 @@ const AOIDashboardText = {
     glad: 'GLAD alerts',
     viirs: 'VIIRS alerts'
   },
-  am: {
+  hy: {
     created: 'Created',
     glad: 'GLAD ծանուցումներ',
     viirs: 'VIIRS alerts'
   },
-  du: {
+  nl: {
     created: 'Created',
     glad: 'GLAD meldingen',
     viirs: 'VIIRS branden'

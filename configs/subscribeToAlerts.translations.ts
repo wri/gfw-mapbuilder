@@ -15,7 +15,7 @@ export const subscribeConfig = {
     FORMALabel: 'FORMA alerts data',
     FORMAField: 'forma-alerts'
   },
-  du: {
+  nl: {
     title: 'Meldingen voor verandering in (bos)beddeking',
     subtitle:
       'Kies de meldingen van verandering in bosbeddeking welke u wenst te ontvangen ',
@@ -32,7 +32,7 @@ export const subscribeConfig = {
     FORMALabel: 'FORMA melding gegevens ',
     FORMAField: 'forma-alerts'
   },
-  am: {
+  hy: {
     title: 'Անտառներում տեղի ունեցող փոփոխությունների մասին նախազգուշացում ',
     subtitle:
       'Ընտրել անտառներում տեղի ունեցող որ փոփոխությունների մասին եք ցանկանում ստանալ նախազգուշացում ',
@@ -154,12 +154,12 @@ export const nameSubscriptionConfig = {
     nameLabel: 'Name',
     subscribeLabel: 'Subscribe to alerts'
   },
-  du: {
+  nl: {
     title: 'Geef uw abonnement een naam',
     nameLabel: 'Naam',
     subscribeLabel: 'Abonneer voor meldingen'
   },
-  am: {
+  hy: {
     title: 'Անվանել տվյալ բաժանորդագրությունը',
     nameLabel: 'Անվանում',
     subscribeLabel: 'Բաժանորդագրվել ծանուցումների համար'

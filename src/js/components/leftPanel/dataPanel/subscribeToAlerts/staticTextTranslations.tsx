@@ -22,7 +22,7 @@ export const saveAOIText = {
     deleteText: 'This area has been deleted from your My GFW.',
     monthly: 'Monthly summary'
   },
-  am: {
+  hy: {
     // * NOTE: translations not provided
     title: 'Save area of interest',
     nameLabel: 'Name this area for later reference *',
@@ -46,7 +46,7 @@ export const saveAOIText = {
     deleteText: 'This area has been deleted from your My GFW.',
     monthly: 'Monthly summary'
   },
-  du: {
+  nl: {
     // * NOTE: translations not provided
     title: 'Save area of interest',
     nameLabel: 'Name this area for later reference *',

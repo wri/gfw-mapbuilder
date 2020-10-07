@@ -26,7 +26,7 @@ export const analysisContent = {
       'Add additional shapes in the future by visiting the draw tool'
     ]
   },
-  du: {
+  nl: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
     // ^ no translation available
     analyzeExistingShapeDirections: [
@@ -54,7 +54,7 @@ export const analysisContent = {
       'Voeg in de toekomst extra vormen toe door naar de tekentool te gaa'
     ]
   },
-  am: {
+  hy: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
     analyzeExistingShapeDirections: [
       'Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը ',
@@ -293,13 +293,13 @@ export const layersPanelTranslations = {
     clearAll: 'Clear All',
     legend: 'Legend'
   },
-  du: {
+  nl: {
     layers: 'Lagen ',
     selectAll: 'Selecteer alles',
     clearAll: 'Wis alles',
     legend: 'Legende'
   },
-  am: {
+  hy: {
     layers: 'շերտեր',
     selectAll: 'Նշել բոլորը',
     clearAll: 'Ջնջել բոլորը',
@@ -351,14 +351,14 @@ export const documentsContent = {
     pdf: 'PDF',
     size: 'Size'
   },
-  du: {
+  nl: {
     instructions:
       'Selecteer een interessegebied om te zien of er gerelateerde documenten zijn',
     name: 'Naam ',
     pdf: 'PDF',
     size: 'Grootte'
   },
-  am: {
+  hy: {
     instructions:
       'Ընտրել հետաքրքրող տարածքը և ստուգել դրա հետ կապված փաստաթղթերի առկայությունը ',
     name: 'Անվանում',
@@ -413,11 +413,11 @@ export const layerControlsTranslations = {
     timeStart: 'Start: ',
     timeEnd: 'End: '
   },
-  du: {
+  nl: {
     timeStart: 'Begin: ',
     timeEnd: 'Einde: '
   },
-  am: {
+  hy: {
     timeStart: 'սկիզբ: ',
     timeEnd: 'Վերջ: '
   },
@@ -455,14 +455,14 @@ export const dataTabConfig = {
       'Select a shape on the map'
     ]
   },
-  du: {
+  nl: {
     header: 'Selecteer een vorm op de kaart',
     instructionsList: [
       'Use the layers tab to turn on a data layer ', // * NOTE: translation unavailable
       'Selecteer een vorm op de kaart'
     ]
   },
-  am: {
+  hy: {
     header: 'Քարտեզի վրա ընտրել պատկեր',
     instructionsList: [
       'Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը',
@@ -514,10 +514,10 @@ export const canopyDensityPickerConfig = {
   en: {
     displayLabel: ['Displaying', 'canopy density.']
   },
-  du: {
+  nl: {
     displayLabel: ['Weergeven', 'luifeldichtheid.']
   },
-  am: {
+  hy: {
     displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն ']
   },
   ka: {
