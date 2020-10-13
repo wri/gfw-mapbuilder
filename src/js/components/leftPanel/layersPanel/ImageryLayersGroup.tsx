@@ -53,15 +53,17 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
       if (hoverTileData) {
         let sublabelBase =
           props.info.layers[0].dynamicSublabel[props.selectedLanguage];
-        const parsedDate = Date.parse(props.hoverTileData.date_time);
-        const formatHoverDay = format(parsedDate, 'dd-MMM-yyyy');
-        const hoverCloud = Math.round(props.hoverTileData.cloud_score);
-        sublabelBase = sublabelBase.replace('{DATE_TIME}', formatHoverDay);
-        sublabelBase = sublabelBase.replace('{CLOUD_COVERAGE}', hoverCloud);
-        sublabelBase = sublabelBase.replace(
-          '{INSTRUMENT}',
-          props.hoverTileData.instrument
-        );
+        if (sublabelBase) {
+          const parsedDate = Date.parse(props.hoverTileData.date_time);
+          const formatHoverDay = format(parsedDate, 'dd-MMM-yyyy');
+          const hoverCloud = Math.round(props.hoverTileData.cloud_score);
+          sublabelBase = sublabelBase.replace('{DATE_TIME}', formatHoverDay);
+          sublabelBase = sublabelBase.replace('{CLOUD_COVERAGE}', hoverCloud);
+          sublabelBase = sublabelBase.replace(
+            '{INSTRUMENT}',
+            props.hoverTileData.instrument
+          );
+        }
         return sublabelBase;
       } else {
         return '';
