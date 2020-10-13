@@ -202,7 +202,8 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const dispatch = useDispatch();
 
-  const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage];
+  const layerGroupTitle =
+    layerGroupConfig.label?.[selectedLanguage] || 'Recent Imagery';
 
   const groupOpen = openLayerGroup === layerGroupKey;
 

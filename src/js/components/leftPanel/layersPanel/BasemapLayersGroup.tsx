@@ -137,7 +137,8 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
 
-  const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage];
+  const layerGroupTitle =
+    layerGroupConfig.label?.[selectedLanguage] || 'Basemap';
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
