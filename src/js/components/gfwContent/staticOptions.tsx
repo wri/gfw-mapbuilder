@@ -210,6 +210,420 @@ export const sectors: SectorsObject = {
       ]
     }
   ],
+  nl: [
+    // * NOTE: translation was not provided
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
+  hy: [
+    // * NOTE: translation was not provided
+    {
+      sector: { label: 'Government', value: 'Government' },
+      subsectors: [
+        {
+          label: 'Forest Management/Park Management',
+          id: 'Forest_Management_Park_Management'
+        },
+        {
+          label: 'Law Enforcement',
+          id: 'Law_Enforcement'
+        },
+        {
+          label: 'Legislature/Parliament',
+          id: 'Legislature_Parliament'
+        },
+        {
+          label: 'Ministry/National Agency',
+          id: 'Ministry_National_Agency'
+        },
+        {
+          label: 'Subnational Agency',
+          id: 'Subnational_Agency'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Donor Institution / Agency',
+        value: 'Donor Institution / Agency'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Monitoring/Evaluation', id: 'Monitoring_Evaluation' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Local NGO (national or subnational)',
+        value: 'Local NGO (national or subnational)'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field Staff', id: 'Field_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'International NGO', value: 'International NGO' },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        {
+          label: 'Monitoring/Evaluation Specialist',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        { label: 'Researcher', id: 'Researcher' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'UN or International Organization',
+        value: 'UN or International Organization'
+      },
+      subsectors: [
+        { label: 'Director/Executive', id: 'Director_Executive' },
+        { label: 'Project/Program Manager', id: 'Project_Program_Manager' },
+        { label: 'Researcher', id: 'Researcher' },
+        { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
+        {
+          label: 'Monitoring/Evaluation Specialit',
+          id: 'Monitoring_Evaluation'
+        },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Academic / Research Organization',
+        value: 'Academic / Research Organization'
+      },
+      subsectors: [
+        {
+          label: 'Faculty (Primary/Secondary)',
+          id: 'Faculty_(Primary_Secondary)'
+        },
+        { label: 'Faculty (University)', id: 'Faculty_(University)' },
+        {
+          label: 'Student (Primary/Secondary)',
+          id: 'Student_(Primary_Secondary)'
+        },
+        {
+          label: 'Student (University/Graduate)',
+          id: 'Student_(University_Graduate)'
+        },
+        {
+          label: 'Researcher (Post-Doc, Fellow, etc.)',
+          id: 'Researcher_(Post-Doc,_Fellow,_etc.)'
+        },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Journalist / Media Organization',
+        value: 'Journalist / Media Organization'
+      },
+      subsectors: [
+        { label: 'Reporter', id: 'Reporter' },
+        { label: 'Editor', id: 'Editor' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Indigenous or Community-Based Organization',
+        value: 'Indigenous or Community-Based Organization'
+      },
+      subsectors: [
+        { label: 'Community Leader', id: 'Community_Leader' },
+        { label: 'Forest Manager/Monitor', id: 'Forest_Manager_Monitor' },
+        { label: 'GIS/Technical Specialist', id: 'GIS_Technical_Specialist' },
+        { label: 'Communications Specialist', id: 'Communications_Specialist' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Private sector', value: 'Private sector' },
+      subsectors: [
+        { label: 'Supply Chain Manager', id: 'Supply_Chain_Manager' },
+        { label: 'Supply Chain Analyst', id: 'Supply_Chain_Analyst' },
+        { label: 'Procurement Staff', id: 'Procurement_Staff' },
+        { label: 'Retailer/Trader', id: 'Retailer_Trader' },
+        { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: {
+        label: 'Individual / No Affiliation',
+        value: 'Individual / No Affiliation'
+      },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    },
+    {
+      sector: { label: 'Other:', value: 'Other:' },
+      subsectors: [
+        {
+          label: 'Other',
+          id: 'Other: '
+        }
+      ]
+    }
+  ],
   fr: [
     {
       sector: { label: 'Gouvernement', value: 'Government' },
@@ -1512,6 +1926,132 @@ export const usage: Topic = {
       id: 'Other'
     }
   ],
+  nl: [
+    // * NOTE: translation not provided
+    {
+      label: 'Advocacy/campaigning',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: 'Data or visuals for blogs or media stories',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Data or visuals for presentations and reports',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Educational support materials',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'General research',
+      id: 'General research'
+    },
+    {
+      label: 'Identify illegal activity',
+      id: 'Identify illegal activity'
+    },
+    {
+      label: 'Inform grant funding decisions/results-based payments',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Inform purchasing/procurement/investment decisions',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: 'Land use planning/land use allocation',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Learn about forests/my country',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Monitor or manage an area',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Monitor results/impacts',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Not sure; new to GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Plan field work (patrols/investigations)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Other',
+      id: 'Other'
+    }
+  ],
+  hy: [
+    // * NOTE: translation not provided
+    {
+      label: 'Advocacy/campaigning',
+      id: 'Advocacy/campaigning'
+    },
+    {
+      label: 'Data or visuals for blogs or media stories',
+      id: 'Data or visuals for blogs or media stories'
+    },
+    {
+      label: 'Data or visuals for presentations and reports',
+      id: 'Data or visuals for presentations and reports'
+    },
+    {
+      label: 'Educational support materials',
+      id: 'Educational support materials'
+    },
+    {
+      label: 'General research',
+      id: 'General research'
+    },
+    {
+      label: 'Identify illegal activity',
+      id: 'Identify illegal activity'
+    },
+    {
+      label: 'Inform grant funding decisions/results-based payments',
+      id: 'Inform grant funding decisions/results-based payments'
+    },
+    {
+      label: 'Inform purchasing/procurement/investment decisions',
+      id: 'Inform purchasing/procurement/investment decisions'
+    },
+    {
+      label: 'Land use planning/land use allocation',
+      id: 'Land use planning/land use allocation'
+    },
+    {
+      label: 'Learn about forests/my country',
+      id: 'Learn about forests/my country'
+    },
+    {
+      label: 'Monitor or manage an area',
+      id: 'Monitor or manage an area'
+    },
+    {
+      label: 'Monitor results/impacts',
+      id: 'Monitor results/impacts'
+    },
+    {
+      label: 'Not sure; new to GFW',
+      id: 'Not sure; new to GFW'
+    },
+    {
+      label: 'Plan field work (patrols/investigations)',
+      id: 'Plan field work (patrols/investigations)'
+    },
+    {
+      label: 'Other',
+      id: 'Other'
+    }
+  ],
   ka: [
     {
       label: 'Advocacy/campaigning',
@@ -1940,6 +2480,100 @@ export const topics: Topic = {
       id: 'Watersheds_'
     }
   ],
+  nl: [
+    // * NOTE: translation not provided
+    {
+      label: 'Agricultural supply chains',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversity',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Climate/Carbon',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Deforestation/Forest Degradation',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Fires',
+      id: 'Fires'
+    },
+    {
+      label: 'General information/Data about forests',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Innovations in forest monitoring',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'My region or country',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reforestation/Landscape restoration',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: 'Small Grants Fund and Tech Fellowship',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Watersheds',
+      id: 'Watersheds_'
+    }
+  ],
+  hy: [
+    // * NOTE: translation not provided
+    {
+      label: 'Agricultural supply chains',
+      id: 'Agricultural_supply_chains'
+    },
+    {
+      label: 'Biodiversity',
+      id: 'Biodiversity'
+    },
+    {
+      label: 'Climate/Carbon',
+      id: 'Climate_Carbon'
+    },
+    {
+      label: 'Deforestation/Forest Degradation',
+      id: 'Deforestation_Forest_Degradation'
+    },
+    {
+      label: 'Fires',
+      id: 'Fires'
+    },
+    {
+      label: 'General information/Data about forests',
+      id: 'General_information_Data_about_forests'
+    },
+    {
+      label: 'Innovations in forest monitoring',
+      id: 'Innovations_in_forest_monitoring'
+    },
+    {
+      label: 'My region or country',
+      id: 'My_region_or_country'
+    },
+    {
+      label: 'Reforestation/Landscape restoration',
+      id: 'Reforestation_Landscape_restoration'
+    },
+    {
+      label: 'Small Grants Fund and Tech Fellowship',
+      id: 'Small_Grants_Fund_and_Tech_Fellowship'
+    },
+    {
+      label: 'Watersheds',
+      id: 'Watersheds_'
+    }
+  ],
   ka: [
     {
       label: 'Agricultural supply chains',
@@ -2238,6 +2872,42 @@ export const emailLoginTranslations = {
     reset: 'Reset',
     register: 'Register'
   },
+  nl: {
+    email: 'email',
+    password: 'password',
+    repeatPassword: 'repeat password',
+    required: 'This field is required',
+    forgotPassword: 'Forgot Password!',
+    signup: ['Not a member?', 'Sign Up!'],
+    signin: ['Already joined?', 'Sign In!'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
+    login: 'Login',
+    passwordReset:
+      'To reset your password, enter your email and follow the instructions.',
+    passwordResetSuccess:
+      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
+    reset: 'Reset',
+    register: 'Register'
+  }, // * NOTE: dutch translation document only had translation for 'reset' property (string -> Reset)
+  hy: {
+    email: 'email',
+    password: 'password',
+    repeatPassword: 'repeat password',
+    required: 'This field is required',
+    forgotPassword: 'Forgot Password!',
+    signup: ['Not a member?', 'Sign Up!'],
+    signin: ['Already joined?', 'Sign In!'],
+    registerSuccess:
+      "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
+    login: 'Login',
+    passwordReset:
+      'To reset your password, enter your email and follow the instructions.',
+    passwordResetSuccess:
+      "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
+    reset: 'Վերադառնալ սկզբնական կարգավորումներին',
+    register: 'Register'
+  }, // * NOTE: armenian translation document only had translation for 'reset' property
   ka: {
     email: 'ელ. ფოსტა',
     password: 'პაროლი ',
@@ -2349,6 +3019,68 @@ export const emailLoginTranslations = {
 
 export const editProfileTranslations = {
   en: {
+    profileHeader: 'Your Profile',
+    profileSubheader:
+      "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",
+    fName: 'First Name',
+    lName: 'Last Name',
+    required: 'This field is required',
+    email: 'email',
+    sector: 'Sector',
+    role: 'Role',
+    jobTitle: 'Job Title',
+    company: 'Company / Organization',
+    located: 'Where are you located?',
+    country: 'Country',
+    city: 'City',
+    state: 'state / department / province',
+    interest: 'What area are you most interested in?',
+    topics: 'what topics are you interested in?',
+    selectAll: 'select all that apply',
+    howUse: 'how do you use global forest watch?',
+    delete: ['Email us', 'to delete your MyGFW account.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SAVE',
+    back: 'BACK TO MY PROFILE'
+  },
+  hy: {
+    // * NOTE: translation not provided
+    profileHeader: 'Your Profile',
+    profileSubheader:
+      "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",
+    fName: 'First Name',
+    lName: 'Last Name',
+    required: 'This field is required',
+    email: 'email',
+    sector: 'Sector',
+    role: 'Role',
+    jobTitle: 'Job Title',
+    company: 'Company / Organization',
+    located: 'Where are you located?',
+    country: 'Country',
+    city: 'City',
+    state: 'state / department / province',
+    interest: 'What area are you most interested in?',
+    topics: 'what topics are you interested in?',
+    selectAll: 'select all that apply',
+    howUse: 'how do you use global forest watch?',
+    delete: ['Email us', 'to delete your MyGFW account.'],
+    success: [
+      'Thank you for updating your My GFW profile!',
+      'You may wish to read our',
+      'privacy policy',
+      'which provides further information about how we use personal data.'
+    ],
+    save: 'SAVE',
+    back: 'BACK TO MY PROFILE'
+  },
+  nl: {
+    // * NOTE: translation not provided
     profileHeader: 'Your Profile',
     profileSubheader:
       "We use this information to make Global Forest Watch more useful for you. Your privacy is important to us and we'll never share your information without your consent.",

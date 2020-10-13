@@ -17,6 +17,42 @@ export const headerContent = {
     logout: 'Log Out',
     language: 'Select Language'
   },
+  nl: {
+    about: 'Over ons',
+    download: 'Download Data',
+    mapThemes: 'Map Themes', // * NOTE: doesn't exist in translations document
+    myGFWLogin: 'Log in mijn GFW',
+    myGFW: 'Mijn GFW',
+    loginReq:
+      'Inloggen is vereist zodat u kunt terugkeren naar Global Forest Watch om uw abonnementen te bekijken, beheren en verwijderen. Vragen?',
+    contactUs: 'Contact ons op gfw@wri.org',
+    twitter: 'Log in met Twitter',
+    facebook: 'Log in met Facebook',
+    google: 'Log in met Google',
+    subscriptions: 'Mijn abonnementen ',
+    stories: 'Mijn verhalen ',
+    profile: 'Mijn GFW Profiel',
+    logout: 'Log Uit',
+    language: 'Kies taal'
+  },
+  hy: {
+    about: 'Մեր մասին',
+    download: 'Ներբեռնել տվյալները ',
+    mapThemes: 'Map Themes', // * NOTE: doesn't exist in translations document
+    myGFWLogin: 'Մուտքագրվել իմ ԱԳՀ էջ',
+    myGFW: 'Իմ ԱԳՀ էջ /Անտառների Գլոբալ Հսկողություն/ ',
+    loginReq:
+      'Անտառների Գլոբալ Հսկողության համակարգ վերադառնալու, Ձեր բաժանորդագրությունը դիտարկելու, կառավարելու և ջնջելու համար անհրաժեշտ է մուտքագրվել: Հարցերի դեպքում խնդրում ենք կապ հաստատել:  ',
+    contactUs: 'Մեզ հետ կարող եք կապ հաստատել gfw@wri.org էլ.փոստի միջոցով ',
+    twitter: 'Գրանցվել Twitter-ի միջոցով ',
+    facebook: 'Գրանցվել Facebook-ի միջոցով ',
+    google: 'ԳրանցվելGoogle-ի միջոցով  ',
+    subscriptions: 'Իմ բաժանորդագրությունները ',
+    stories: 'Իմ պատմությունները ',
+    profile: 'Իմ ԱԳՀ հաշիվը/էջը ',
+    logout: 'Դուրս գալ ',
+    language: 'Ընտրել լեզուն '
+  },
   ka: {
     about: 'პროექტის შესახებ',
     download: 'მონაცემების გადმოწერა',

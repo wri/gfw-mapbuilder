@@ -22,6 +22,54 @@ export const saveAOIText = {
     deleteText: 'This area has been deleted from your My GFW.',
     monthly: 'Monthly summary'
   },
+  hy: {
+    // * NOTE: translations not provided
+    title: 'Save area of interest',
+    nameLabel: 'Name this area for later reference *',
+    tagsLabel: 'Assign tags to organize and group areas',
+    tagsSubLabel: 'Hit enter to create and separate tags',
+    required: 'Required',
+    alertNote:
+      'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
+    email: 'email',
+    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
+    fireDetected: 'As soon as fires are detected',
+    forestChange: 'As soon as forest change is detected',
+    language: 'Language',
+    save: 'պահպանել',
+    delete: 'ջնջել',
+    successButton: 'Նախորդը',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ],
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
+  },
+  nl: {
+    // * NOTE: translations not provided
+    title: 'Save area of interest',
+    nameLabel: 'Name this area for later reference *',
+    tagsLabel: 'Assign tags to organize and group areas',
+    tagsSubLabel: 'Hit enter to create and separate tags',
+    required: 'Required',
+    alertNote:
+      'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
+    email: 'email',
+    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
+    fireDetected: 'As soon as fires are detected',
+    forestChange: 'As soon as forest change is detected',
+    language: 'Language',
+    save: 'SAVE',
+    delete: 'DELETE AREA',
+    successButton: 'BACK TO MY AREAS',
+    successText: [
+      'Your area has been saved',
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+    ],
+    deleteText: 'This area has been deleted from your My GFW.',
+    monthly: 'Monthly summary'
+  },
   fr: {
     title: "Enregistrer une zone d'intérêt",
     nameLabel: 'Donnez un nom à cette région pour référence ultérieure *',

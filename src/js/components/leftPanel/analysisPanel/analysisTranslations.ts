@@ -1,6 +1,8 @@
 export default {
   runAnalysisButton: {
     en: 'Run Analysis',
+    nl: 'Voer analyse uit',
+    hy: 'Կատարել վերլուծությունը ',
     fr: "Exécuter L'analyse",
     ka: 'Run Analysis',
     es: 'Run Analysis',
@@ -9,6 +11,8 @@ export default {
   },
   defaultAnalysisLabel: {
     en: 'Select analysis...',
+    nl: 'Selecteer analyse...',
+    hy: 'Ընտրել վերլուծությունը... ',
     fr: "Sélectionner l'analyse...",
     ka: 'Select analysis...',
     es: 'Select analysis...',
@@ -20,6 +24,14 @@ export default {
     en: [
       'Analysis not selected',
       'Select an analysis from the drop-down menu to begin.'
+    ],
+    nl: [
+      'Analyse niet geselecteerd',
+      'Selecteer een analyse in het vervolgkeuzemenu om te beginnen.'
+    ],
+    hy: [
+      'Վերլուծությունն ընտրված չէ ',
+      'Սկսելու համար բացվող ընտրացանկից ընտրել վերլուծության տեսակը'
     ],
     fr: [
       'Analyse non sélectionnée.',
@@ -50,16 +62,20 @@ export default {
     es: 'Guardar',
     pt: 'Salvar',
     id: 'Simpan',
-    zh: '保存'
+    zh: '保存',
+    hy: 'Պահպանել',
+    nl: 'Opslaan'
   },
   editButton: {
     en: 'Edit',
+    nl: 'Bewerk',
     fr: 'Modifier',
     ka: 'რედაქტირება',
     es: 'Editar',
     pt: 'Editar',
     id: 'Ubah',
-    zh: '编辑'
+    zh: '编辑',
+    hy: 'խմբագրել'
   },
   deleteButton: {
     en: 'Delete',
@@ -68,6 +84,8 @@ export default {
     es: 'Eliminar',
     pt: 'Excluir',
     id: 'Delete',
-    zh: '删除'
+    zh: '删除',
+    hy: 'Ջնջել',
+    nl: 'Verwijder '
   }
 };

@@ -11,7 +11,9 @@ const printReportTranslations = {
   id: 'Print Report',
   zh: '打印报告',
   en: 'Print Report',
-  ka: 'ანგარიშის ბეჭდვა'
+  hy: 'Տպել արդյունքները',
+  ka: 'ანგარიშის ბეჭდვა',
+  nl: 'Rapport afdrukken'
 };
 
 export const PrintReportButton = (): JSX.Element => {

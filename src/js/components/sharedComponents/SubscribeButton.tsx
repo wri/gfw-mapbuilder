@@ -9,6 +9,8 @@ import 'css/subscribeButton.scss';
 const subscribeButtonTranslations = {
   zh: '保存到“我的 GFW”中',
   en: 'save in my gfw',
+  hy: 'save in my gfw', // * NOTE: translation not provided
+  nl: 'save in my gfw', // * NOTE: translation not provided
   ka: 'გამოწერა',
   fr: 'enregistrer',
   es: 'guardar en My GFW',

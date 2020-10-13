@@ -6,6 +6,16 @@ export const printContent = {
     dropdownLabel: 'Print',
     printOptions: ['Landscape', 'MAP_ONLY']
   },
+  nl: {
+    buttonLabel: 'Kies een afdruk output',
+    dropdownLabel: 'Afdrukken ',
+    printOptions: ['Landscape', 'MAP_ONLY']
+  },
+  hy: {
+    buttonLabel: 'Ընտրել արդյունքները տպման համար ',
+    dropdownLabel: 'տպել',
+    printOptions: ['Landscape', 'MAP_ONLY']
+  },
   ka: {
     buttonLabel: 'აარჩიეთ ბეჭდვის ფორმატი',
     dropdownLabel: 'Print',
@@ -42,6 +52,12 @@ export const shareContent = {
   en: {
     title: 'Share'
   },
+  nl: {
+    title: 'Delen'
+  },
+  hy: {
+    title: 'կիսվել'
+  },
   ka: {
     title: 'გაზიარება'
   },
@@ -76,6 +92,34 @@ export const penContent = {
       'Add up to 10 points to make shapes'
     ],
     coordinatesButton: 'Enter Values'
+  },
+  nl: {
+    drawTitle: 'Analyseer je eigen vorm',
+    drawInstructions: [
+      'Teken een vorm ergens op de kaart',
+      'Selecteer de vorm om de analyse uit te voeren'
+    ],
+    drawButton: 'Begin met tekenen',
+    coordinatesTitle: 'Voer uw eigen coördinaten in',
+    coordinatesInstructions: [
+      'Voer minimaal 3 coördinaten in',
+      'Voeg maximaal 10 punten toe om vormen te maken'
+    ],
+    coordinatesButton: 'Voer waarden in'
+  },
+  hy: {
+    drawTitle: 'Վերլուծել սեփական պատկերը',
+    drawInstructions: [
+      'Քարտեզի որևէ հատվածում նկարել պատկեր',
+      'Վերլուծությունը սկսելու համար ընտրել որևէ պատկեր'
+    ],
+    drawButton: 'Նկարել',
+    coordinatesTitle: 'Մուտքագրել Ձեր կոորդինատները',
+    coordinatesInstructions: [
+      'Մուտքագրել առնվազն 3 կոորդինատ',
+      'Ավելացնել մինչև 10 կետեր` պատկեր ստանալու համար'
+    ],
+    coordinatesButton: 'Մուտքագրել արժեքներ'
   },
   ka: {
     drawTitle: 'ჩაატარეთ თქვენი ფიგურის ანალიზი',
@@ -164,6 +208,18 @@ export const searchContent = {
     title: 'Search for feature:',
     buttonTitle: 'Search'
   },
+  nl: {
+    latitude: 'Breedtegraad',
+    longitude: 'Lengtegraad',
+    title: 'Zoeken naar functie:',
+    buttonTitle: 'zoeken'
+  },
+  hy: {
+    latitude: 'Լայնություն ',
+    longitude: 'Երկայնություն',
+    title: 'Փնտրել օբյեկտը:',
+    buttonTitle: 'Search'
+  },
   ka: {
     latitude: 'განედი',
     longitude: 'გრძედი',
@@ -214,6 +270,27 @@ export const coordinatesContent = {
     longitudeLabel: 'Longitude',
     addMoreLabel: 'Add More',
     makeShapeLabel: 'Make Shape'
+  },
+  nl: {
+    title: 'Voer uw eigen coördinaten in',
+    dropdownTitle: 'Selecteer Formaat',
+    decimalOptions: ['Graden Decimale Seconden (DMS)', 'Decimale graden (DD)'],
+    latitudeLabel: 'Breedtegraad',
+    longitudeLabel: 'Lengtegraad',
+    addMoreLabel: 'Voeg meer toe ',
+    makeShapeLabel: 'Vorm maken '
+  },
+  hy: {
+    title: 'Մուտքագրել Ձեր կոորդինատները ',
+    dropdownTitle: 'Ընտրել ձևաչափը ',
+    decimalOptions: [
+      'Աստիճաններով տասնորդական վայրկյաններ (DMS)',
+      'Տասնորդական աստիճաններ (DD)'
+    ],
+    latitudeLabel: 'Լայնություն ',
+    longitudeLabel: 'Երկայնություն ',
+    addMoreLabel: 'Ավելացնել ',
+    makeShapeLabel: 'Կառուցել պատկեր '
   },
   ka: {
     title: 'შეიტანეთ თქვენი კოორდინატები',
@@ -273,6 +350,58 @@ export const coordinatesContent = {
 
 export const measureContent = {
   en: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  nl: {
+    // * NOTE: translation document didn't have this section
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  hy: {
+    // * NOTE: translation document didn't have this section
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
@@ -465,6 +594,36 @@ export const infoContent = {
     noInfoLabel: 'No Information Available',
     overviewLabel: 'Overview'
   },
+  nl: {
+    functionLabel: 'Functie',
+    resolutionLabel: 'Resolutie',
+    geographicCoverageLabel: 'geografische dekking',
+    sourceLabel: 'Bron ',
+    frequencyLabel: 'Frequentie ',
+    contentDateLabel: 'Datum van inhoud ',
+    cautionsLabel: 'Waarschuwingen ',
+    licenseLabel: 'Licentie ',
+    learnMoreLabel: 'Leer meer ',
+    downloadDataLabel: 'download gegevens ',
+    descriptionLabel: 'description',
+    noInfoLabel: 'Geen informative beschikbaar',
+    overviewLabel: 'Omschrijving'
+  },
+  hy: {
+    functionLabel: 'Ֆունկցիա/գործողություն ',
+    resolutionLabel: 'լուծաչափ',
+    geographicCoverageLabel: 'Աշխարհագրական ծածկույթ ',
+    sourceLabel: 'աղբյուր',
+    frequencyLabel: 'հաճախականություն',
+    contentDateLabel: 'Բովանդակության ամսաթիվ ',
+    cautionsLabel: 'զգուշացումներ',
+    licenseLabel: 'լիցենզիա',
+    learnMoreLabel: 'Իմանալ ավելին ',
+    downloadDataLabel: 'Ներբեռնել տվյալները ',
+    descriptionLabel: 'նկարագրություն',
+    noInfoLabel: 'Տեղեկատվությունն առկա չէ ',
+    overviewLabel: 'Ընդհանուր նկարագիր '
+  },
   ka: {
     functionLabel: 'ფუნქცია',
     resolutionLabel: 'რეზოლუცია',
@@ -561,6 +720,14 @@ export const canopyDensityContentConfig = {
   en: {
     directions:
       'Adjust the minimum canopy density for tree cover and tree cover loss'
+  },
+  nl: {
+    directions:
+      'Pas de minimale luifeldichtheid aan voor boombedekking en afname  van boombedekkings'
+  },
+  hy: {
+    directions:
+      'Կարգավորել սաղարթների նվազագույն խտությունը՝ ծառածածկույթի և ծառածակույթի կորստի համար'
   },
   ka: {
     directions:

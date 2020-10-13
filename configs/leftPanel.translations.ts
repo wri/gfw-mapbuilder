@@ -26,6 +26,61 @@ export const analysisContent = {
       'Add additional shapes in the future by visiting the draw tool'
     ]
   },
+  nl: {
+    analyzeExistingShapeTitle: 'Analyze a shape on the map',
+    // ^ no translation available
+    analyzeExistingShapeDirections: [
+      'Gebruik het tabblad Lagen om een gegevenslaag in te schakelen',
+      'Selecteer een vorm op de kaart',
+      'Klik op het tabblad analyse'
+    ],
+    analyzeYourShapeTitle: 'Analyseer je eigen vorm',
+    analyzeYourShapeFirstDirection: [
+      'Kies het tekengereedschap ',
+      ' in de gereedschapskist'
+    ],
+    analyzeYourShapeDirections: [
+      'Teken een vorm ergens op de kaart',
+      'Selecteer de vorm om de analyse uit te voeren'
+    ],
+    drawButton: 'Begin met tekenen',
+    enterCoordinatesTitle: 'Voer uw eigen coördinaten in',
+    enterCoordinatesDirections: [
+      `Voer minimaal 3 coördinaten in`,
+      `Voeg maximaal 10 punten toe om vormen te maken`
+    ],
+    coordinatesButton: 'Voer waarden in',
+    visitTitle: [
+      'Voeg in de toekomst extra vormen toe door naar de tekentool te gaa'
+    ]
+  },
+  hy: {
+    analyzeExistingShapeTitle: 'Analyze a shape on the map',
+    analyzeExistingShapeDirections: [
+      'Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը ',
+      'Քարտեզի վրա ընտրել պատկերը ',
+      'Սեղմել վերլուծության ներդիրը '
+    ],
+    analyzeYourShapeTitle: 'Վերլուծել սեփական պատկերը ',
+    analyzeYourShapeFirstDirection: [
+      'Գործիքների ներդիրից ընտրել ',
+      ' նկարչական գործիքը'
+    ],
+    analyzeYourShapeDirections: [
+      'Քարտեզի որևէ հատվածում նկարել պատկեր ',
+      'Վերլուծությունը սկսելու համար ընտրել որևէ պատկեր '
+    ],
+    drawButton: 'Նկարել',
+    enterCoordinatesTitle: 'Մուտքագրել Ձեր կոորդինատները ',
+    enterCoordinatesDirections: [
+      `Մուտքագրել առնվազն 3 կոորդինատ `,
+      'Ավելացնել մինչև 10 կետեր` պատկեր ստանալու համար '
+    ],
+    coordinatesButton: 'Մուտքագրել արժեքներ ',
+    visitTitle: [
+      'Add additional shapes in the future by visiting the draw tool'
+    ]
+  },
   ka: {
     analyzeExistingShapeTitle: 'ჩაატარეთ ფიგურის ანალიზი რუკაზე',
     analyzeExistingShapeDirections: [
@@ -238,6 +293,18 @@ export const layersPanelTranslations = {
     clearAll: 'Clear All',
     legend: 'Legend'
   },
+  nl: {
+    layers: 'Lagen ',
+    selectAll: 'Selecteer alles',
+    clearAll: 'Wis alles',
+    legend: 'Legende'
+  },
+  hy: {
+    layers: 'շերտեր',
+    selectAll: 'Նշել բոլորը',
+    clearAll: 'Ջնջել բոլորը',
+    legend: 'Պայմանական նշաններ'
+  },
   fr: {
     layers: 'Couches',
     selectAll: 'Tout sélectionner',
@@ -283,6 +350,20 @@ export const documentsContent = {
     name: 'Name',
     pdf: 'PDF',
     size: 'Size'
+  },
+  nl: {
+    instructions:
+      'Selecteer een interessegebied om te zien of er gerelateerde documenten zijn',
+    name: 'Naam ',
+    pdf: 'PDF',
+    size: 'Grootte'
+  },
+  hy: {
+    instructions:
+      'Ընտրել հետաքրքրող տարածքը և ստուգել դրա հետ կապված փաստաթղթերի առկայությունը ',
+    name: 'Անվանում',
+    pdf: 'PDF',
+    size: 'Ծավալ'
   },
   ka: {
     instructions:
@@ -332,6 +413,14 @@ export const layerControlsTranslations = {
     timeStart: 'Start: ',
     timeEnd: 'End: '
   },
+  nl: {
+    timeStart: 'Begin: ',
+    timeEnd: 'Einde: '
+  },
+  hy: {
+    timeStart: 'սկիզբ: ',
+    timeEnd: 'Վերջ: '
+  },
   ka: {
     timeStart: 'დასაწყისი: ',
     timeEnd: 'დასასრული: '
@@ -364,6 +453,20 @@ export const dataTabConfig = {
     instructionsList: [
       'Use the layers tab to turn on a data layer',
       'Select a shape on the map'
+    ]
+  },
+  nl: {
+    header: 'Selecteer een vorm op de kaart',
+    instructionsList: [
+      'Use the layers tab to turn on a data layer ', // * NOTE: translation unavailable
+      'Selecteer een vorm op de kaart'
+    ]
+  },
+  hy: {
+    header: 'Քարտեզի վրա ընտրել պատկեր',
+    instructionsList: [
+      'Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը',
+      'Քարտեզի վրա ընտրել պատկեր'
     ]
   },
   ka: {
@@ -410,6 +513,12 @@ export const dataTabConfig = {
 export const canopyDensityPickerConfig = {
   en: {
     displayLabel: ['Displaying', 'canopy density.']
+  },
+  nl: {
+    displayLabel: ['Weergeven', 'luifeldichtheid.']
+  },
+  hy: {
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն ']
   },
   ka: {
     displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.']
