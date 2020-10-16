@@ -16,6 +16,8 @@ import PrintTemplate from 'esri/tasks/support/PrintTemplate';
 import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { format, subDays, parse } from 'date-fns';
 import Basemap from 'esri/Basemap';
+import Attribution from 'esri/widgets/Attribution';
+import ScaleBar from 'esri/widgets/ScaleBar';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
@@ -2012,6 +2014,24 @@ export class MapController {
         );
       }
     }
+  }
+
+  addMapAttribution(container: RefObject<HTMLElement>): void {
+    if (!container.current) return;
+    new Attribution({
+      view: this._mapview,
+      container: container.current
+    });
+  }
+
+  addScaleBar(container: RefObject<HTMLElement>): void {
+    if (!container.current) return;
+    new ScaleBar({
+      view: this._mapview,
+      container: container.current,
+      style: 'ruler',
+      unit: 'metric'
+    });
   }
 }
 
