@@ -325,7 +325,8 @@ export class MapController {
               newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
               newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
               newRemoteLayerObject.title =
-                remoteLayerObject.layer.label[appState.selectedLanguage];
+                remoteLayerObject.layer.label[appState.selectedLanguage] ||
+                `Untranslated layer id: ${remoteLayerObject.dataLayer.id}`;
               newRemoteLayerObject.group = remoteLayerObject.dataLayer.groupId;
               newRemoteLayerObject.url = remoteLayerObject.layer.url;
               newRemoteLayerObject.type = remoteLayerObject.layer.type;

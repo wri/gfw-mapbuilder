@@ -186,7 +186,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           layerInfo={{
             id: baselayer.id,
             thumbnailUrl: baselayer.thumbnailUrl,
-            title: baselayer.title[selectedLanguage],
+            title: baselayer.title[selectedLanguage] || baselayer.id,
             activeBasemap
           }}
         />
@@ -202,7 +202,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         layerInfo={{
           id: baselayer.id,
           thumbnailUrl: baselayer.thumbnailUrl,
-          title: baselayer.title[selectedLanguage],
+          title: baselayer.title[selectedLanguage] || baselayer.id,
           activeBasemap
         }}
       />

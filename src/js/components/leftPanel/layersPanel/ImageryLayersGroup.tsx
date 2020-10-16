@@ -81,7 +81,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
               />
               <div className="title-wrapper">
                 <span className="layer-label">
-                  {props.info?.label[props.selectedLanguage]}
+                  {props.info?.label[props.selectedLanguage] || 'Imagery Layer'}
                 </span>
               </div>
             </div>
