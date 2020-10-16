@@ -78,10 +78,10 @@
   }
 
   &.info-content {
-    width: 31.25rem;
-    height: 25rem;
-    margin-left: -15.625rem;
-    margin-top: -15.625rem;
+    width: 50rem;
+    height: 35rem;
+    margin-left: -25rem;
+    top: 30%;
     font-family: $fira-sans;
     padding: 1rem;
 
@@ -269,6 +269,7 @@
   }
   &.share-widget,
   &.print-widget {
+    top: 30%;
     .directions {
       display: flex;
       flex-wrap: wrap;
@@ -293,6 +294,9 @@
   }
 
   &.share-widget {
+    width: 36rem;
+    margin-left: -18rem;
+    margin-right: -18rem;
     h4 {
       margin-bottom: auto;
       font-size: 1.3125rem;
@@ -308,7 +312,7 @@
 
     .copy-link-wrapper {
       display: flex;
-      height: 3rem;
+      height: 2.5rem;
 
       input,
       button {
@@ -316,6 +320,7 @@
       }
 
       input {
+        width: 370px;
         font-size: 0.8125rem;
       }
 
@@ -325,6 +330,7 @@
         background-color: $white;
         color: $base-yellow;
         font-size: 0.875rem;
+        font-weight: 600;
       }
     }
 

@@ -346,7 +346,8 @@ const BaseAnalysis = (): JSX.Element => {
         {analysisModules.map((module: any, i: number) => {
           return (
             <option value={module.analysisId} key={i}>
-              {module.label[selectedLanguage]}
+              {module.label[selectedLanguage] ||
+                `Untranslated ${module.analysisId}`}
             </option>
           );
         })}
