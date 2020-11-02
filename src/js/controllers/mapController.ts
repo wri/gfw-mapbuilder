@@ -612,14 +612,16 @@ export class MapController {
   async retrieveLegendInfo(
     layerObject: LayerProps
   ): Promise<any[] | undefined> {
-    const legendInfoObject = await fetchLegendInfo(layerObject.url);
     let legendResult;
+    if (!layerObject.url) {
+      return legendResult;
+    }
+
+    const legendInfoObject = await fetchLegendInfo(layerObject.url);
     if (legendInfoObject && !legendInfoObject.error) {
       legendResult = legendInfoObject?.layers.filter((l: any) =>
         layerObject.layerIds?.includes(l.layerId)
       );
-    } else {
-      legendResult = undefined;
     }
     return legendResult;
   }
