@@ -94,27 +94,27 @@ export const saveAOIText = {
     monthly: 'Monthly summary'
   },
   ka: {
-    title: 'Save area of interest',
-    nameLabel: 'Name this area for later reference *',
-    tagsLabel: 'Assign tags to organize and group areas',
-    tagsSubLabel: 'Hit enter to create and separate tags',
+    title: 'შეინახეთ თქვენთვის საინტერესო არეალი',
+    nameLabel: 'ამ არეალს დაარქვით სახელი შემდგომ საცნობაროდ',
+    tagsLabel: 'მიანიჭეთ იარლიყი არეალების დაჯგუფებისა და ორგანიზებისთვის',
+    tagsSubLabel: 'დააჭირეთ შესვლას იარლიყების შექმნისა და განცალკევებისთვის',
     required: 'Required',
     alertNote:
-      'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
-    email: 'email',
-    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
-    fireDetected: 'As soon as fires are detected',
-    forestChange: 'As soon as forest change is detected',
-    language: 'Language',
+      'თქვენი სამომხმარებლო პროფილის მიხედვით ელ.ფოსტით გამოგიგზავნით სიახლეებს თქვენს მიერ შერჩეულ არეალებში გაფრთხილებისა და ტყის საფარის ცვლილების შესახებ.',
+    email: 'ელ.ფოსტა',
+    notifications: 'გსურთ მიიღოთ გაფრთხილების შეტყობინებები?',
+    fireDetected: 'როგორც კი ხანძრების გამოვლენა მოხდება',
+    forestChange: 'როგორც კი ტყის საფარის ცვლილების გამოვლენა მოხდება',
+    language: 'ენა',
     save: 'SAVE',
     delete: 'DELETE',
-    successButton: 'BACK TO MY AREAS',
+    successButton: 'არეალებზე დაბრუნება',
     successText: [
-      'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      'თქვენი არეალი შენახულია',
+      'შეამოწმეთ თქვენი ელ.ფოსტა და გამოწერა დაადასტურეთ ლინკზე დაჭერით. თუ ვერ ხედავთ წერილს, შეამოწმეთ სპამის საქაღალდე.'
     ],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'ყოველთვიური რეზიუმე'
   },
   es: {
     title: 'Guardar zona de interés',
