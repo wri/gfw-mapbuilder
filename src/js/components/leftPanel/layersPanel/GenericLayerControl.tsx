@@ -436,4 +436,4 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   );
 };
 
-export default React.memo(GenericLayerControl);
+export default GenericLayerControl;
