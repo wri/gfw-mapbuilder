@@ -281,11 +281,6 @@ export class MapController {
           //In case of sharing functionality, check for URL containing layer visibility and opacity information
           const layerInfosFromURL = getLayerInfoFromURL();
 
-          //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
-          if (layerInfosFromURL.length) {
-            this.syncWebmapLayersWithURL(layerInfosFromURL);
-          }
-
           //Add layers that are already on the map (webmap layers) to redux array
           const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
             this._map
@@ -389,6 +384,22 @@ export class MapController {
           const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
 
           parseURLandApplyChanges();
+
+          //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
+          if (layerInfosFromURL.length) {
+            //Sync visibility with existing layer objects before we push them into redux
+            allLayerObjects.forEach(layerObject => {
+              const urlLayer = layerInfosFromURL.find(l => {
+                const id = String(l.sublayerID ? l.sublayerID : l.layerID);
+                return id === String(layerObject.id);
+              });
+              layerObject.visible = urlLayer ? true : false;
+            });
+
+            //Sync esri map visibility
+            this.syncWebmapLayersWithURL(layerInfosFromURL);
+          }
+
           store.dispatch(allAvailableLayers(allLayerObjects));
           const esriRemoteLayersPromises: any = remoteLayerObjects.map(
             layerObject => {
@@ -1603,11 +1614,16 @@ export class MapController {
   }
 
   updateBiodensityValue(value: number): void {
-    const bioLayer: any = this._map?.findLayerById('AG_BIOMASS');
-    if (bioLayer) {
+    const bioLayer = this._map?.findLayerById(
+      'AG_BIOMASS'
+    ) as __esri.ImageryLayer;
+    //current biomass layer does not support density level below 20%, so we disable the layer if user selects such value
+    if (value < 3) {
+      bioLayer.mosaicRule.where = '1=0';
+    } else {
       bioLayer.mosaicRule.where = `OBJECTID = ${value}`;
-      bioLayer.refresh();
     }
+    bioLayer.refresh();
   }
 
   updateTreeCoverValue(value: number): void {
@@ -1960,8 +1976,11 @@ export class MapController {
 
   syncWebmapLayersWithURL(layerInfosFromURL: LayerInfo[]): void {
     this._map?.layers.forEach((webmapLayer: any) => {
-      if (webmapLayer.sublayers && webmapLayer.sublayers.length > 0) {
-        webmapLayer.sublayers.forEach((sub: Layer) => {
+      if (
+        webmapLayer.allSublayers &&
+        webmapLayer.allSublayers.items.length > 0
+      ) {
+        webmapLayer.sublayers.items.forEach((sub: Layer) => {
           const layerFromURL = layerInfosFromURL.find(
             l => l.sublayerID && String(l.sublayerID) === String(sub.id)
           );
