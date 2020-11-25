@@ -1614,11 +1614,16 @@ export class MapController {
   }
 
   updateBiodensityValue(value: number): void {
-    const bioLayer: any = this._map?.findLayerById('AG_BIOMASS');
-    if (bioLayer) {
+    const bioLayer = this._map?.findLayerById(
+      'AG_BIOMASS'
+    ) as __esri.ImageryLayer;
+    //current biomass layer does not support density level below 20%, so we disable the layer if user selects such value
+    if (value < 3) {
+      bioLayer.mosaicRule.where = '1=0';
+    } else {
       bioLayer.mosaicRule.where = `OBJECTID = ${value}`;
-      bioLayer.refresh();
     }
+    bioLayer.refresh();
   }
 
   updateTreeCoverValue(value: number): void {
