@@ -185,8 +185,6 @@ export async function LayerFactory(
       break;
     case 'Vector.Layer': //only viirs is supported at this time
       if (layerConfig.id === 'VIIRS_ACTIVE_FIRES') {
-        console.log('go');
-        console.log(layerConfig);
         esriLayer = await viirsLayer(
           layerConfig.id,
           layerConfig.url,
