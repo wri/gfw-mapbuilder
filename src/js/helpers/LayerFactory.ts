@@ -183,12 +183,16 @@ export async function LayerFactory(
       }
       esriLayer = new MapImageLayer(maskLayerOptions);
       break;
-    case 'Vector.Layer':
-      esriLayer = await viirsLayer(
-        layerConfig.id,
-        layerConfig.url,
-        layerConfig.visible
-      );
+    case 'Vector.Layer': //only viirs is supported at this time
+      if (layerConfig.id === 'VIIRS_ACTIVE_FIRES') {
+        console.log('go');
+        console.log(layerConfig);
+        esriLayer = await viirsLayer(
+          layerConfig.id,
+          layerConfig.url,
+          layerConfig.visible
+        );
+      }
       break;
     default:
       console.error('No error type!');
