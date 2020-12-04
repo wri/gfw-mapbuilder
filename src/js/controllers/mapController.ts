@@ -47,7 +47,8 @@ import {
   changeMapScale,
   changeMapCenterCoordinates,
   setLayersLoading,
-  setUserCoordinates
+  setUserCoordinates,
+  setDocuments
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -650,7 +651,13 @@ export class MapController {
 
   changeLanguage(lang: string): void {
     if (!this._map) return;
-    const { mapviewState, appSettings, appState } = store.getState();
+    const { mapviewState, appSettings } = store.getState();
+
+    //reset all active/selected features as we have no way of confirming that new webmap has said feature
+    store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(setActiveFeatures([]));
+    store.dispatch(setDocuments(null));
+
     const {
       language,
       webmap,
