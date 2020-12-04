@@ -62,11 +62,20 @@ async function viirsLayer(
     url = url.replace('{end_date}', customDaterange[1]);
     url = url.replace('{start_date}', customDaterange[0]);
   } else {
-    const maxDate = await getMaxDateForViirsTiles();
-    const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
-    const startDate = format(subDays(fDate, dayRange), 'yyyy-MM-dd');
-    url = url.replace('{end_date}', maxDate);
-    url = url.replace('{start_date}', startDate);
+    //check for params on the url, otherwise fall back to defaults
+    const parsedURL = new URL(window.location.href);
+    const startDateParam = parsedURL.searchParams.get('vs');
+    const endDateParam = parsedURL.searchParams.get('ve');
+    if (startDateParam && endDateParam) {
+      url = url.replace('{end_date}', endDateParam);
+      url = url.replace('{start_date}', startDateParam);
+    } else {
+      const maxDate = await getMaxDateForViirsTiles();
+      const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
+      const startDate = format(subDays(fDate, dayRange), 'yyyy-MM-dd');
+      url = url.replace('{end_date}', maxDate);
+      url = url.replace('{start_date}', startDate);
+    }
   }
   //This json is reponsonsible for VIIRS layer visualization
   //We can adjust the size of the dots, color and scaling stops to our needs

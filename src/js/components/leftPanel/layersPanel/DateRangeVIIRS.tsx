@@ -5,10 +5,11 @@ import { RootState } from 'js/store/index';
 import { useSelector } from 'react-redux';
 import { LayerProps } from 'js/store/mapview/types';
 import viirsLayer, { getMaxDateForViirsTiles } from 'js/helpers/viirsLayerUtil';
-import { format, subDays, parse } from 'date-fns';
+import { format, subDays, parse, differenceInDays } from 'date-fns';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import './datepicker.scss';
 import { setViirsStart, setViirsEnd } from 'js/store/appState/actions';
+
+import './datepicker.scss';
 
 interface DateRangeProps {
   layer: LayerProps;
@@ -21,6 +22,28 @@ const valueMap = {
   '72 hrs': 3,
   '7 days': 7
 };
+
+const checkForURLRange = (s: string, e: string): string => {
+  const parsedURL = new URL(window.location.href);
+  const startDate = parsedURL.searchParams.get('vs');
+  const endDate = parsedURL.searchParams.get('ve');
+  if (startDate && endDate) {
+    const fStartDate = parse(s, 'yyyy-MM-dd', new Date());
+    const fEndDate = parse(e, 'yyyy-MM-dd', new Date());
+    const diff: number = differenceInDays(fEndDate, fStartDate);
+    if (diff === 1) {
+      return '24 hrs';
+    } else if (diff === 2) {
+      return '48 hrs';
+    } else if (diff === 3) {
+      return '72 hrs';
+    } else if (diff >= 7) {
+      return '7 days';
+    }
+  }
+  return '24 hrs';
+};
+
 const DateRange = (props: DateRangeProps): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
@@ -41,7 +64,9 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const [endDate, setEndDate] = useState(viirsEnd);
   const [maxDate, setMaxDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [renderCustomRange, setRenderCustomRange] = useState(false);
-  const [definedRange, setDefinedRange] = useState('');
+  const [definedRange, setDefinedRange] = useState(
+    checkForURLRange(startDate, endDate)
+  ); //this should come from url if at all?
   const dispatch = useDispatch();
 
   const updateStartDate = (day: Date): void => {
@@ -85,7 +110,6 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   };
 
   const setDefinedDateRange = (e: ChangeEvent<HTMLSelectElement>): void => {
-    console.log(e.target.value);
     setRenderCustomRange(false);
     setDefinedRange(e.target.value);
 
@@ -154,7 +178,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
           className="date-time-toggle"
           style={{ border: `1px solid ${customColorTheme}` }}
           onChange={(e): void => setDefinedDateRange(e)}
-          value={definedRange.length ? definedRange : '24 hrs'}
+          value={definedRange}
         >
           <option value={'24 hrs'}>Past 24 hours</option>
           <option value={'48 hrs'}>Past 48 hours</option>

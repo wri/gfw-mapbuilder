@@ -47,7 +47,8 @@ import {
   changeMapScale,
   changeMapCenterCoordinates,
   setLayersLoading,
-  setUserCoordinates
+  setUserCoordinates,
+  setDocuments
 } from 'js/store/mapview/actions';
 
 import { setSelectedBasemap } from 'js/store/mapview/actions';
@@ -496,13 +497,24 @@ export class MapController {
     }
   }
 
-  setVIIRSDates(): void {
-    getMaxDateForViirsTiles().then(date => {
-      const fDate = parse(date, 'yyyy-MM-dd', new Date());
+  async setVIIRSDates(): Promise<void> {
+    let sDate;
+    let eDate;
+    const parsedURL = new URL(window.location.href);
+    const startDate = parsedURL.searchParams.get('vs');
+    const endDate = parsedURL.searchParams.get('ve');
+    if (startDate && endDate) {
+      sDate = startDate;
+      eDate = endDate;
+    } else {
+      const maxDate = await getMaxDateForViirsTiles();
+      const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
       const oneDayAgo = format(subDays(fDate, 1), 'yyyy-MM-dd');
-      store.dispatch(setViirsStart(oneDayAgo));
-      store.dispatch(setViirsEnd(date));
-    });
+      sDate = oneDayAgo;
+      eDate = maxDate;
+    }
+    store.dispatch(setViirsStart(sDate));
+    store.dispatch(setViirsEnd(eDate));
   }
 
   setGLADDates(): void {
@@ -639,7 +651,13 @@ export class MapController {
 
   changeLanguage(lang: string): void {
     if (!this._map) return;
-    const { mapviewState, appSettings, appState } = store.getState();
+    const { mapviewState, appSettings } = store.getState();
+
+    //reset all active/selected features as we have no way of confirming that new webmap has said feature
+    store.dispatch(setActiveFeatureIndex([0, 0]));
+    store.dispatch(setActiveFeatures([]));
+    store.dispatch(setDocuments(null));
+
     const {
       language,
       webmap,
