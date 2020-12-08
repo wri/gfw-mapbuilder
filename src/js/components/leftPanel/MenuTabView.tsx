@@ -6,7 +6,7 @@ import MyGFWContent from 'js/components/mapWidgets/widgetContent/GFWLoginOptions
 
 import { RootState } from 'js/store/index';
 
-import { headerContent } from 'js/components/header/header.translations';
+import { headerContent } from 'configs/translations/header.translations';
 
 import 'css/leftpanel.scss';
 import GFWLoginOptions from 'js/components/mapWidgets/widgetContent/GFWLoginOptions';

@@ -1,9 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { mapController } from 'js/controllers/mapController';
-
-import { printContent } from '../../../../../configs/modal.config';
+import { printContent } from '../../../../../configs/translations/modal.tanslations';
 import { RootState } from 'js/store/index';
 
 const PrintContent: FunctionComponent = () => {
@@ -18,9 +16,7 @@ const PrintContent: FunctionComponent = () => {
     (state: RootState) => state.appSettings.customColorTheme
   );
 
-  const { buttonLabel, dropdownLabel, printOptions } = printContent[
-    selectedLanguage
-  ];
+  const { buttonLabel, printOptions } = printContent[selectedLanguage];
 
   const printMap = async (printType: string): Promise<void> => {
     setPDFLoading(true);

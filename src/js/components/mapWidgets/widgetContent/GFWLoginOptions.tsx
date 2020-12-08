@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'js/store';
 import { renderModal } from 'js/store/appState/actions';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
-import { headerContent } from 'src/js/components/header/header.translations';
+import { headerContent } from 'configs/translations/header.translations';
 import { EmailLogin } from 'src/js/components/gfwContent/EmailLogin';
 import { setLoggedIn } from 'js/store/appState/actions';
 

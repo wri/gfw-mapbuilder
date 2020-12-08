@@ -1,5 +1,3 @@
-// TODO confirm id (Indonesian?) translations are correct
-
 export const printContent = {
   en: {
     buttonLabel: 'Choose a print output',

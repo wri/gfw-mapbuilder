@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import convert from 'xml-js';
-
+import { useSelector } from 'react-redux';
 import { RootState } from 'js/store';
-
-import { infoContent } from '../../../../configs/modal.config';
+import { infoContent } from '../../../../configs/translations/modal.tanslations';
 
 function createMarkup(content: any) {
   return { __html: content };

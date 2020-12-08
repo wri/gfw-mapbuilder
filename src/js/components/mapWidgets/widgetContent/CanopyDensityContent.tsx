@@ -7,7 +7,7 @@ import 'css/canopyDensityModal';
 import { setCanopyDensity } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
 
-import { canopyDensityContentConfig } from 'configs/modal.config';
+import { canopyDensityContentConfig } from '../../../../../configs/translations/modal.tanslations';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 

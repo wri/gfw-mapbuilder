@@ -13,7 +13,7 @@ import {
 
 import { RootState } from 'js/store/index';
 
-import { coordinatesContent } from 'configs/modal.config';
+import { coordinatesContent } from 'configs/translations/modal.tanslations';
 
 import {
   DDFormValues,

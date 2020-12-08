@@ -2,18 +2,13 @@ import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
 import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
-
 import {
   setMeasureResults,
   setActiveMeasureButton
 } from 'js/store/appState/actions';
-
 import { mapController } from 'js/controllers/mapController';
-
-import { measureContent } from 'configs/modal.config';
-
+import { measureContent } from 'configs/translations/modal.tanslations';
 import { OptionType } from 'js/interfaces/measureWidget';
-
 import { RootState } from 'js/store/index';
 
 import 'css/measureContent.scss';

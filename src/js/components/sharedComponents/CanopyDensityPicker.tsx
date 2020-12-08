@@ -4,7 +4,7 @@ import { RootState } from 'js/store';
 import { renderModal } from 'js/store/appState/actions';
 import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
 
-import { canopyDensityPickerConfig } from 'configs/leftPanel.translations';
+import { canopyDensityPickerConfig } from 'configs/translations/leftPanel.translations';
 
 const CanopyDensityPicker = (): JSX.Element => {
   const dispatch = useDispatch();

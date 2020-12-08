@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactComponent as ThemesIcon } from 'src/images/themesIcon.svg';
-import { headerContent } from './header.translations';
+import { headerContent } from '../../../../configs/translations/header.translations';
 import { RootState } from 'js/store/index';
 import { useSelector } from 'react-redux';
 interface ThemeDropdownProps {

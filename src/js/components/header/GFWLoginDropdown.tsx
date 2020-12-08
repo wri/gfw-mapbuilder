@@ -4,7 +4,7 @@ import GFWLoginOptions from 'js/components/mapWidgets/widgetContent/GFWLoginOpti
 import { RootState } from 'js/store';
 import { ReactComponent as UserIcon } from 'images/userIcon.svg';
 import { setRenderGFWDropdown } from 'js/store/appState/actions';
-import { headerContent } from 'js/components/header/header.translations';
+import { headerContent } from 'configs/translations/header.translations';
 
 interface LoginProps {
   loggedIn: boolean;

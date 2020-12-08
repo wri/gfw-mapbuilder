@@ -203,3 +203,51 @@ export const languageOptions = [
     field: 'es'
   }
 ];
+
+export const AOIDashboardText = {
+  en: {
+    created: 'Created',
+    glad: 'GLAD alerts',
+    viirs: 'VIIRS alerts'
+  },
+  fr: {
+    created: 'Créé le',
+    glad: 'Alertes GLAD',
+    viirs: 'Alertes VIIRS'
+  },
+  ka: {
+    created: 'Created',
+    glad: 'GLAD alerts',
+    viirs: 'VIIRS alerts'
+  },
+  hy: {
+    created: 'Created',
+    glad: 'GLAD ծանուցումներ',
+    viirs: 'VIIRS alerts'
+  },
+  nl: {
+    created: 'Created',
+    glad: 'GLAD meldingen',
+    viirs: 'VIIRS branden'
+  },
+  es: {
+    created: 'Creado el',
+    glad: 'Alertas GLAD',
+    viirs: 'Alertas VIIRS'
+  },
+  pt: {
+    created: 'Criado',
+    glad: 'Alertas GLAD',
+    viirs: 'Alertas VIIRS'
+  },
+  id: {
+    created: 'Dibuat',
+    glad: 'Peringatan GLAD',
+    viirs: 'Peringatan VIIRS'
+  },
+  zh: {
+    created: '已创建',
+    glad: 'GLAD 预警',
+    viirs: 'VIIRS 警报'
+  }
+};

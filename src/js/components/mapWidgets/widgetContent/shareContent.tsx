@@ -1,21 +1,13 @@
 import React, { FunctionComponent, useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 import { RootState } from 'js/store/index';
-
 import { ReactComponent as TwitterIcon } from 'src/images/twitterIcon.svg';
 import { ReactComponent as FacebookIcon } from 'src/images/facebookIcon.svg';
-
-import { mapController } from 'js/controllers/mapController';
-
-import { shareContent } from '../../../../../configs/modal.config';
+import { shareContent } from '../../../../../configs/translations/modal.tanslations';
 import { getShareableURL } from 'js/helpers/shareFunctionality';
 
 const ShareContent: FunctionComponent = () => {
   const urlRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const allAvailableLayers = useSelector(
-    (state: RootState) => state.mapviewState.allAvailableLayers
-  );
   const selectedLanguage = useSelector(
     (state: RootState) => state.appState.selectedLanguage
   );
