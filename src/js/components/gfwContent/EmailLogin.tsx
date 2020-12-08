@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { setLoggedIn } from 'js/store/appState/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'js/store';
-import { emailLoginTranslations } from './staticOptions';
+import { emailLoginTranslations } from '../../../../configs/translations/staticOptions';
 import 'css/formInputs.scss';
 
 const defaultLoginURL =

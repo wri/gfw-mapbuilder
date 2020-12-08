@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { dataTabConfig } from 'configs/leftPanel.translations';
+import { dataTabConfig } from 'configs/translations/leftPanel.translations';
 
 import { RootState } from 'js/store/index';
 

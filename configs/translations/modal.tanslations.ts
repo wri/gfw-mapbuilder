@@ -1,9 +1,12 @@
-// TODO confirm id (Indonesian?) translations are correct
-
 export const printContent = {
   en: {
     buttonLabel: 'Choose a print output',
     dropdownLabel: 'Print',
+    printOptions: ['Landscape', 'MAP_ONLY']
+  },
+  az: {
+    buttonLabel: 'Çap çıxışını seçin',
+    dropdownLabel: 'Çap eding',
     printOptions: ['Landscape', 'MAP_ONLY']
   },
   nl: {
@@ -52,6 +55,9 @@ export const shareContent = {
   en: {
     title: 'Share'
   },
+  az: {
+    title: 'Paylaşın'
+  },
   nl: {
     title: 'Delen'
   },
@@ -92,6 +98,20 @@ export const penContent = {
       'Add up to 10 points to make shapes'
     ],
     coordinatesButton: 'Enter Values'
+  },
+  az: {
+    drawTitle: 'Öz formanızı təhlil edin',
+    drawInstructions: [
+      'Xəritədə istənilən formanı çəkin',
+      'Təhlili aparmaq üçün formanı seçin'
+    ],
+    drawButton: 'Rəsmi çəkməyə başlayın',
+    coordinatesTitle: 'Öz koordinatlarınızı daxil edin',
+    coordinatesInstructions: [
+      'Ən azı 3 koordinatı daxil edin',
+      'Formaları düzəltmək üçün 10-dək nöqtəni əlavə edin'
+    ],
+    coordinatesButton: 'Göstəriciləri daxil edin'
   },
   nl: {
     drawTitle: 'Analyseer je eigen vorm',
@@ -208,6 +228,12 @@ export const searchContent = {
     title: 'Search for feature:',
     buttonTitle: 'Search'
   },
+  az: {
+    latitude: 'Enlik',
+    longitude: 'Uzunluq',
+    title: 'Xüsusiyyəti axtarın:',
+    buttonTitle: 'Xüsusiyyəti'
+  },
   nl: {
     latitude: 'Breedtegraad',
     longitude: 'Lengtegraad',
@@ -270,6 +296,18 @@ export const coordinatesContent = {
     longitudeLabel: 'Longitude',
     addMoreLabel: 'Add More',
     makeShapeLabel: 'Make Shape'
+  },
+  az: {
+    title: 'Öz koordinatlarınızı daxil edin',
+    dropdownTitle: 'Formatı seçin',
+    decimalOptions: [
+      'Dərəcələr Onluq Saniyələr  (DOS)',
+      'Onluq Dərəcələr (OD)'
+    ],
+    latitudeLabel: 'Enlik',
+    longitudeLabel: 'Uzunluq',
+    addMoreLabel: 'Daha çox əlavə edin',
+    makeShapeLabel: 'Formaları düzəldin'
   },
   nl: {
     title: 'Voer uw eigen coördinaten in',
@@ -350,6 +388,31 @@ export const coordinatesContent = {
 
 export const measureContent = {
   en: {
+    defaultOption: [{ text: 'Unit', esriUnit: '' }],
+    areaUnitsOfLength: [
+      { text: 'Acres', esriUnit: 'acres' },
+      { text: 'Sq Miles', esriUnit: 'square-miles' },
+      { text: 'Sq Kilometers', esriUnit: 'square-kilometers' },
+      { text: 'Hectares', esriUnit: 'hectares' },
+      { text: 'Sq Yards', esriUnit: 'square-yards' },
+      { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
+      { text: 'Sq Meters', esriUnit: 'square-meters' }
+    ],
+    distanceUnitsOfLength: [
+      { text: 'Miles', esriUnit: 'miles' },
+      { text: 'Kilometers', esriUnit: 'kilometers' },
+      { text: 'Feet', esriUnit: 'feet' },
+      { text: 'Feet(US)', esriUnit: 'us-feet' },
+      { text: 'Meters', esriUnit: 'meters' },
+      { text: 'Yards', esriUnit: 'yards' },
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+    ],
+    latitudeLongitudeUnits: [
+      { text: 'Degree', esriUnit: 'degree' },
+      { text: 'DMS', esriUnit: 'dms' }
+    ]
+  },
+  az: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
     areaUnitsOfLength: [
       { text: 'Acres', esriUnit: 'acres' },
@@ -594,6 +657,21 @@ export const infoContent = {
     noInfoLabel: 'No Information Available',
     overviewLabel: 'Overview'
   },
+  az: {
+    functionLabel: 'funksiya',
+    resolutionLabel: 'həlletmə',
+    geographicCoverageLabel: 'coğrafi əhatə dairəsi',
+    sourceLabel: 'mənbə',
+    frequencyLabel: 'tezlik',
+    contentDateLabel: 'kontentin tarixi',
+    cautionsLabel: 'xəbərdarlıqlar',
+    licenseLabel: 'lisenziya',
+    learnMoreLabel: 'daha ətraflı',
+    downloadDataLabel: 'məlumatları yükləyin',
+    descriptionLabel: 'təsviri',
+    noInfoLabel: 'Məlumat yoxdur',
+    overviewLabel: 'İcmal'
+  },
   nl: {
     functionLabel: 'Functie',
     resolutionLabel: 'Resolutie',
@@ -720,6 +798,10 @@ export const canopyDensityContentConfig = {
   en: {
     directions:
       'Adjust the minimum canopy density for tree cover and tree cover loss'
+  },
+  az: {
+    directions:
+      'Ağac örtüyü və ağac örtüyü itkisi üçün minimal örtük sıxlığını tənzimləyin'
   },
   nl: {
     directions:

@@ -10,7 +10,7 @@ import { RootState } from 'js/store/index';
 
 import 'css/header.scss';
 import { createSelector } from 'reselect';
-import { headerContent } from './header.translations';
+import { headerContent } from '../../../../configs/translations/header.translations';
 
 const appSettingsSelector = createSelector(
   (state: RootState) => state.appSettings,

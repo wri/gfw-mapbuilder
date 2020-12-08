@@ -161,6 +161,32 @@ export default {
       { label: `Vegetation Health` }
     ]
   },
+  az: {
+    imagery: ['Son Təsvir', 'Son Yüksək Həlli Peyk Təsviri'],
+    acquisition: 'Alınma tarixi',
+    date: 'Tarix',
+    naturalColor: 'Təbii rəng',
+    vegetation: 'Bitkilərin sağlamlığı',
+    instrument: 'Alət',
+    cloud: 'Bulud örtüyü',
+    months: 'Aylar',
+    weeks: 'Həftələr',
+    cloudPercentage: 'Maksimal bulud örtüyü faizi',
+    edit: 'Redaktə edin',
+    before: 'Əvvəl',
+    loadError: 'Son təsvirin yüklənməsində xəta.',
+    matchError: 'Seçilmiş meyarlara uyğun nəticə yoxdur.',
+    monthsOptions: [
+      { label: `4 Aylar`, value: 4 },
+      { label: `3 Aylar`, value: 3 },
+      { label: `6 Aylar`, value: 6 },
+      { label: `12 Aylar`, value: 12 }
+    ],
+    imageStyleOptions: [
+      { label: 'Təbii rəng' },
+      { label: 'Bitkilərin sağlamlığı' }
+    ]
+  },
   nl: {
     imagery: [
       'Recente afbeeldingen',

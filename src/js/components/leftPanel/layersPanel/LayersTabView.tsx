@@ -7,7 +7,7 @@ import WebmapLayersGroup from './WebmapLayersGroup';
 import BasemapLayersGroup from './BasemapLayersGroup';
 import DefaultLayerGroup from './DefaultLayerGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
-import { layersPanelTranslations } from '../../../../../configs/leftPanel.translations';
+import { layersPanelTranslations } from '../../../../../configs/translations/leftPanel.translations';
 
 interface LayerControlProps {
   selectedLanguage: string;

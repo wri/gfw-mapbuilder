@@ -4,7 +4,7 @@ import { mapController } from 'js/controllers/mapController';
 
 import { ReactComponent as InfoBoxIcon } from 'src/images/infoBoxIcon.svg';
 
-import { headerContent } from './header.translations';
+import { headerContent } from '../../../../configs/translations/header.translations';
 
 interface DropProps {
   language: string;
@@ -42,6 +42,9 @@ function valueToLang(abbrev: string): string {
       break;
     case 'zh':
       lang = 'Chinese';
+      break;
+    case 'az':
+      lang = 'Azeri';
       break;
     default:
       break;

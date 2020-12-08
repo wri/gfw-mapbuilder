@@ -4,7 +4,7 @@ import { RootState } from 'js/store';
 import { setOpenLayerGroup } from 'js/store/appState/actions';
 import { landsatBaselayerYears, customBasemapIcon } from 'configs/layer-config';
 import { mapController } from 'js/controllers/mapController';
-import { basemapLayersContent } from 'configs/leftPanel.translations';
+import { basemapLayersContent } from 'configs/translations/leftPanel.translations';
 import { LayerProps } from 'js/store/mapview/types';
 
 interface DefaultBasemapProps {

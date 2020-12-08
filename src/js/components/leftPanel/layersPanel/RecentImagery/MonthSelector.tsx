@@ -1,5 +1,5 @@
 import * as React from 'react';
-import imageryText from './imageryLanguages';
+import imageryText from '../../../../../../configs/translations/imagery.translations';
 
 interface MonthSelectorProps {
   changeMonthHandler: (val: any) => void;

@@ -17,6 +17,24 @@ export const headerContent = {
     logout: 'Log Out',
     language: 'Select Language'
   },
+  az: {
+    about: 'About',
+    download: 'məlumatları yükləyin',
+    mapThemes: 'Map Themes',
+    myGFWLogin: 'Mənim GFW hesabıma giriş',
+    myGFW: 'Mənim GFW hesabım',
+    loginReq:
+      'Abunələrinizi nəzərdən keçirmək, idarə etmək və silmək üçün Global Forest Watch-a qayıda bilməniz üçün qeydiyyat tələb olunur. Sualınız varmı? ',
+    contactUs: 'gfw@wri.org vasitəsilə bizimlə əlaqə saxlayın',
+    twitter: 'Twitter vasitəsilə daxil olun',
+    facebook: 'Facebook vasitəsilə daxil olun',
+    google: 'Google vasitəsilə daxil olun',
+    subscriptions: 'Mənim Abunələrim',
+    stories: 'Mənim Hekayələrim',
+    profile: 'Mənim GFW profilim',
+    logout: 'Çıxış',
+    language: 'Dili seçin'
+  },
   nl: {
     about: 'Over ons',
     download: 'Download Data',

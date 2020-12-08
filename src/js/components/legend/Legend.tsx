@@ -7,7 +7,7 @@ import LegendItems from './generateLegendItems';
 import { layerIsInScale } from 'js/helpers/layerScaleCheck';
 
 import 'css/legend.scss';
-import { layersPanelTranslations } from 'configs/leftPanel.translations';
+import { layersPanelTranslations } from 'configs/translations/leftPanel.translations';
 
 const getWindowDimensions = () => {
   return {

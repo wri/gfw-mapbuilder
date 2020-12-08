@@ -11,11 +11,12 @@ import {
   setActiveFeatures,
   setActiveFeatureIndex
 } from 'js/store/mapview/actions';
+import { AOIDashboardText } from '../../../../../configs/translations/subscribeToAlerts.translations';
 import { renderModal, selectActiveTab } from 'js/store/appState/actions';
 import { mapController } from 'js/controllers/mapController';
+import { generateMinimaps } from './generateMinimaps';
 
 import 'css/aoiDashboard.scss';
-import { generateMinimaps } from './generateMinimaps';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 const viirsAlertsURL =
@@ -138,54 +139,6 @@ type aoiData = {
 
 type AOISectionProps = {
   dataObject: aoiData;
-};
-
-const AOIDashboardText = {
-  en: {
-    created: 'Created',
-    glad: 'GLAD alerts',
-    viirs: 'VIIRS alerts'
-  },
-  fr: {
-    created: 'Créé le',
-    glad: 'Alertes GLAD',
-    viirs: 'Alertes VIIRS'
-  },
-  ka: {
-    created: 'Created',
-    glad: 'GLAD alerts',
-    viirs: 'VIIRS alerts'
-  },
-  hy: {
-    created: 'Created',
-    glad: 'GLAD ծանուցումներ',
-    viirs: 'VIIRS alerts'
-  },
-  nl: {
-    created: 'Created',
-    glad: 'GLAD meldingen',
-    viirs: 'VIIRS branden'
-  },
-  es: {
-    created: 'Creado el',
-    glad: 'Alertas GLAD',
-    viirs: 'Alertas VIIRS'
-  },
-  pt: {
-    created: 'Criado',
-    glad: 'Alertas GLAD',
-    viirs: 'Alertas VIIRS'
-  },
-  id: {
-    created: 'Dibuat',
-    glad: 'Peringatan GLAD',
-    viirs: 'Peringatan VIIRS'
-  },
-  zh: {
-    created: '已创建',
-    glad: 'GLAD 预警',
-    viirs: 'VIIRS 警报'
-  }
 };
 
 const AOIDashboard = () => {

@@ -33,7 +33,14 @@
     "strictPropertyInitialization": false,
     "types": ["arcgis-js-api", "moment", "node"]
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "configs/translations/imageryLanguages.ts",
+    "configs/translations/header.translations.ts",
+    "configs/translations/staticOptions.tsx",
+    "configs/translations/modal.translations.ts",
+    "configs/translations/staticTextTranslations.tsx"
+  ],
   "exclude": ["node_modules"],
   "files": ["custom.d.ts"]
 }

@@ -9,7 +9,7 @@ import {
   usage,
   topics,
   editProfileTranslations
-} from './staticOptions';
+} from '../../../../configs/translations/staticOptions';
 import clsx from 'clsx';
 import { Select, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import 'css/formInputs.scss';

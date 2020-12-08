@@ -15,6 +15,23 @@ export const subscribeConfig = {
     FORMALabel: 'FORMA alerts data',
     FORMAField: 'forma-alerts'
   },
+  az: {
+    title: 'Meşə dəyişiklikləri barədə xəbərdarlıqlar',
+    subtitle:
+      'Meşə dəyişiklikləri barədə almaq istədiyiniz xəbərdarlıqları seçin ',
+    VIIRSLabel: 'VIIRS aktiv yanğın xəbərdarlıqları',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD ağac örtüyünün itkisi xəbərdarlıqları',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES meşələrin qırılması məlumatları',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Ağac örtüyünün itkisi məlumatları',
+    treeCoverLossField: 'umd-loss-gain',
+    SADLabel: 'SAD ağac örtüyünün itkisi xəbərdarlıqları',
+    SADField: 'imazon-alerts',
+    FORMALabel: 'FORMA xəbərdarlıq məlumatları',
+    FORMAField: 'forma-alerts'
+  },
   nl: {
     title: 'Meldingen voor verandering in (bos)beddeking',
     subtitle:
@@ -154,6 +171,11 @@ export const nameSubscriptionConfig = {
     nameLabel: 'Name',
     subscribeLabel: 'Subscribe to alerts'
   },
+  az: {
+    title: 'Abunənizi göstərin',
+    nameLabel: 'Ad',
+    subscribeLabel: 'Xəbərdarlıqlara abunə olun'
+  },
   nl: {
     title: 'Geef uw abonnement een naam',
     nameLabel: 'Naam',
@@ -195,6 +217,7 @@ export const nameSubscriptionConfig = {
 export const languageOptions = [
   { label: 'English', field: 'en' },
   { label: '中文', field: 'zh' },
+  { label: 'Azeri', field: 'az' },
   { label: 'Français', field: 'fr' },
   { label: 'Bahasa Indonesia', field: 'id' },
   { label: 'Português (Brasil)', field: 'pt' },
@@ -203,3 +226,56 @@ export const languageOptions = [
     field: 'es'
   }
 ];
+
+export const AOIDashboardText = {
+  en: {
+    created: 'Created',
+    glad: 'GLAD alerts',
+    viirs: 'VIIRS alerts'
+  },
+  az: {
+    created: 'Created',
+    glad: 'GLAD xəbərdarlıqları',
+    viirs: 'VIIRS yanğınları'
+  },
+  fr: {
+    created: 'Créé le',
+    glad: 'Alertes GLAD',
+    viirs: 'Alertes VIIRS'
+  },
+  ka: {
+    created: 'Created',
+    glad: 'GLAD alerts',
+    viirs: 'VIIRS alerts'
+  },
+  hy: {
+    created: 'Created',
+    glad: 'GLAD ծանուցումներ',
+    viirs: 'VIIRS alerts'
+  },
+  nl: {
+    created: 'Created',
+    glad: 'GLAD meldingen',
+    viirs: 'VIIRS branden'
+  },
+  es: {
+    created: 'Creado el',
+    glad: 'Alertas GLAD',
+    viirs: 'Alertas VIIRS'
+  },
+  pt: {
+    created: 'Criado',
+    glad: 'Alertas GLAD',
+    viirs: 'Alertas VIIRS'
+  },
+  id: {
+    created: 'Dibuat',
+    glad: 'Peringatan GLAD',
+    viirs: 'Peringatan VIIRS'
+  },
+  zh: {
+    created: '已创建',
+    glad: 'GLAD 预警',
+    viirs: 'VIIRS 警报'
+  }
+};

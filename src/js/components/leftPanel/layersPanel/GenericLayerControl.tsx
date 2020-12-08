@@ -26,7 +26,7 @@ import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from 'js/helpers/LayerFactory';
-import { layerControlsTranslations } from '../../../../../configs/leftPanel.translations';
+import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
 import './datepicker.scss';
 
 //Dynamic custom theme override using styled-components lib
