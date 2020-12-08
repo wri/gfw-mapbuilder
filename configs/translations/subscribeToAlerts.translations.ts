@@ -15,6 +15,23 @@ export const subscribeConfig = {
     FORMALabel: 'FORMA alerts data',
     FORMAField: 'forma-alerts'
   },
+  az: {
+    title: 'Meşə dəyişiklikləri barədə xəbərdarlıqlar',
+    subtitle:
+      'Meşə dəyişiklikləri barədə almaq istədiyiniz xəbərdarlıqları seçin ',
+    VIIRSLabel: 'VIIRS aktiv yanğın xəbərdarlıqları',
+    VIIRSField: 'viirs-active-fires',
+    GLADLabel: 'GLAD ağac örtüyünün itkisi xəbərdarlıqları',
+    GLADField: 'glad-alerts',
+    PRODESLabel: 'PRODES meşələrin qırılması məlumatları',
+    PRODESField: 'prodes-loss',
+    treeCoverLossLabel: 'Ağac örtüyünün itkisi məlumatları',
+    treeCoverLossField: 'umd-loss-gain',
+    SADLabel: 'SAD ağac örtüyünün itkisi xəbərdarlıqları',
+    SADField: 'imazon-alerts',
+    FORMALabel: 'FORMA xəbərdarlıq məlumatları',
+    FORMAField: 'forma-alerts'
+  },
   nl: {
     title: 'Meldingen voor verandering in (bos)beddeking',
     subtitle:
@@ -154,6 +171,11 @@ export const nameSubscriptionConfig = {
     nameLabel: 'Name',
     subscribeLabel: 'Subscribe to alerts'
   },
+  az: {
+    title: 'Abunənizi göstərin',
+    nameLabel: 'Ad',
+    subscribeLabel: 'Xəbərdarlıqlara abunə olun'
+  },
   nl: {
     title: 'Geef uw abonnement een naam',
     nameLabel: 'Naam',
@@ -195,6 +217,7 @@ export const nameSubscriptionConfig = {
 export const languageOptions = [
   { label: 'English', field: 'en' },
   { label: '中文', field: 'zh' },
+  { label: 'Azeri', field: 'az' },
   { label: 'Français', field: 'fr' },
   { label: 'Bahasa Indonesia', field: 'id' },
   { label: 'Português (Brasil)', field: 'pt' },
@@ -209,6 +232,11 @@ export const AOIDashboardText = {
     created: 'Created',
     glad: 'GLAD alerts',
     viirs: 'VIIRS alerts'
+  },
+  az: {
+    created: 'Created',
+    glad: 'GLAD xəbərdarlıqları',
+    viirs: 'VIIRS yanğınları'
   },
   fr: {
     created: 'Créé le',

@@ -43,6 +43,9 @@ function valueToLang(abbrev: string): string {
     case 'zh':
       lang = 'Chinese';
       break;
+    case 'az':
+      lang = 'Azeri';
+      break;
     default:
       break;
   }

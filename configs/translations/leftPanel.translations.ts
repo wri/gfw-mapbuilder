@@ -26,6 +26,30 @@ export const analysisContent = {
       'Add additional shapes in the future by visiting the draw tool'
     ]
   },
+  az: {
+    analyzeExistingShapeTitle: 'Təhlil cədvəlinə klikləyin ',
+    analyzeExistingShapeDirections: [
+      'Məlumatlara çıxış təbəqəsini açmaq üçün təbəqələr cədvəlindən istifadə edin',
+      'Xəritədəki formanı seçin',
+      'Təhlil cədvəlinə klikləyin '
+    ],
+    analyzeYourShapeTitle: 'Öz formanızı təhlil edin',
+    analyzeYourShapeFirstDirection: ['Alət dəstindəki rəsm alətini seçin', ''],
+    analyzeYourShapeDirections: [
+      'Xəritədə istənilən formanı çəkin',
+      'Təhlili aparmaq üçün formanı seçin'
+    ],
+    drawButton: 'Rəsmi çəkməyə başlayın',
+    enterCoordinatesTitle: 'Öz koordinatlarınızı daxil edin',
+    enterCoordinatesDirections: [
+      'Ən azı 3 koordinatı daxil edin',
+      'Formaları düzəltmək üçün 10-dək nöqtəni əlavə edin'
+    ],
+    coordinatesButton: 'Göstəriciləri daxil edin',
+    visitTitle: [
+      'Gələcəkdə rəsm alətinə daxil olaraq əlavə formalar əlavə edin,'
+    ]
+  },
   nl: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
     // ^ no translation available
@@ -293,6 +317,12 @@ export const layersPanelTranslations = {
     clearAll: 'Clear All',
     legend: 'Legend'
   },
+  az: {
+    layers: 'Təbəqələr',
+    selectAll: 'Hamısını seçin',
+    clearAll: 'Hamısını silin',
+    legend: 'Şərti işarələr'
+  },
   nl: {
     layers: 'Lagen ',
     selectAll: 'Selecteer alles',
@@ -350,6 +380,13 @@ export const documentsContent = {
     name: 'Name',
     pdf: 'PDF',
     size: 'Size'
+  },
+  az: {
+    instructions:
+      'Aidiyyəti sənədlərin olub-olmadığını görmək üçün maraq sahəsini seçin',
+    name: 'Ad',
+    pdf: 'PDF',
+    size: 'Ölçüsü'
   },
   nl: {
     instructions:
@@ -413,6 +450,10 @@ export const layerControlsTranslations = {
     timeStart: 'Start: ',
     timeEnd: 'End: '
   },
+  az: {
+    timeStart: 'Başlayın: ',
+    timeEnd: 'Bitirin: '
+  },
   nl: {
     timeStart: 'Begin: ',
     timeEnd: 'Einde: '
@@ -453,6 +494,13 @@ export const dataTabConfig = {
     instructionsList: [
       'Use the layers tab to turn on a data layer',
       'Select a shape on the map'
+    ]
+  },
+  az: {
+    header: 'Xəritədəki formanı seçin',
+    instructionsList: [
+      'Məlumatlara çıxış qatını açmaq üçün qatlar cədvəlindən istifadə edin',
+      'Xəritədəki formanı seçin'
     ]
   },
   nl: {
@@ -513,6 +561,9 @@ export const dataTabConfig = {
 export const canopyDensityPickerConfig = {
   en: {
     displayLabel: ['Displaying', 'canopy density.']
+  },
+  az: {
+    displayLabel: ['Göstərir', 'örtük sıxlığı.']
   },
   nl: {
     displayLabel: ['Weergeven', 'luifeldichtheid.']

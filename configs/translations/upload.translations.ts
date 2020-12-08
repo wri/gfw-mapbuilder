@@ -4,6 +4,11 @@ export const uploadContent = {
     shapefileInstructions:
       'Only polygon data is supported and should use a spatial reference of WGS84. The recommended maximum size is 1MB, anything more than that may not work as expected. Esri shapefiles must be zipped (.zip) and GeoJSON files must be in .json files.'
   },
+  az: {
+    shapefileButton: 'yaxud  xüsusi formanı  yerləşdirin',
+    shapefileInstructions:
+      'Yalnız poliqonal məlumatlar dəstəklənir və WGS84 məkan istinadından istifadə edilməlidir. Tövsiyə olunan maksimal ölçü 1MB-dir, bundan artıq ölçü gözlənildiyi kimi işləməyə bilər. Esri shapefiles zipped (.zip), və GeoJSON faylları  .json files olmalıdır.'
+  },
   nl: {
     shapefileButton: 'of plaats hier een aangepast shapefile hier',
     shapefileInstructions:
