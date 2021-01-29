@@ -238,7 +238,10 @@ const LeftPanel = (): React.ReactElement => {
   const tabsToRender = tabsArray.filter(tab => tab.render);
 
   return (
-    <div className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}>
+    <div
+      className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}
+      data-cy="left-panel"
+    >
       <Tabs tabsToRender={tabsToRender} />
       <TabViewContainer tabViewsToRender={tabsToRender} />
     </div>

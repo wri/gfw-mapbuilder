@@ -94,7 +94,7 @@ const Legend = (): JSX.Element => {
   return (
     <>
       {onMobileOrDesktop && (
-        <div className="legend-container">
+        <div className="legend-container" data-cy="legend">
           <div
             className="legend-title"
             onClick={handleLegendToggle}
