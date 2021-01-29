@@ -18,7 +18,10 @@ const AllLayerControls = (props: LayerControlProps): JSX.Element => {
       <span>
         {layersPanelTranslations[props.selectedLanguage]?.layers || 'Layers'}
       </span>
-      <button onClick={() => mapController.selectAllLayers()}>
+      <button
+        onClick={() => mapController.selectAllLayers()}
+        data-cy="all-layer-btn"
+      >
         {layersPanelTranslations[props.selectedLanguage]?.selectAll ||
           'Select All'}
       </button>

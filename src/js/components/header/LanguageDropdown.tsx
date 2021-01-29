@@ -56,7 +56,7 @@ function valueToLang(abbrev: string): string {
 const LanguageDropdown = (props: DropProps) => {
   const labels = [props.language, props.alternativeLanguage];
   return (
-    <div className="language-dropdown-container">
+    <div className="language-dropdown-container" data-cy="lang-dropdown">
       <ul className="dropdown" role="list">
         <span className="label-wrapper" role="listitem">
           <InfoBoxIcon height={16} width={16} fill={'#555'} />

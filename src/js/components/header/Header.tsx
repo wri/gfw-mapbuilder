@@ -87,7 +87,7 @@ const Header: FunctionComponent = () => {
     Boolean(mapThemes.length) &&
     mapThemeIDArray.length === mapThemeArray.length;
   return (
-    <div className="header-container">
+    <div className="header-container" data-cy="header">
       <div className="title-container">
         <a
           href={logoLinkUrl}
