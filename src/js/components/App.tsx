@@ -15,20 +15,11 @@ import {
 import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
-// import esriConfig from 'esri/config';
 // import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
 import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
-
-const MapSpinner = (): React.ReactElement => (
-  <Loader
-    containerPositionStyling={{ position: 'absolute', top: '40%', left: '50%' }}
-    color={'#cfcdcd'}
-    size={100}
-  />
-);
 
 function loadGoogleAnalytics(analyticsCode?: string): void {
   if (!window.hasOwnProperty('ga') || !analyticsCode) {
@@ -39,6 +30,8 @@ function loadGoogleAnalytics(analyticsCode?: string): void {
 }
 
 const App = (props: AppSettings | any): JSX.Element => {
+  const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
+  const dispatch = useDispatch();
   //Listen to map loading state that comes from mapController via redux store change
   const hideHeader = useSelector(
     (store: RootState) => store.appSettings.hideHeader
@@ -51,9 +44,6 @@ const App = (props: AppSettings | any): JSX.Element => {
   );
 
   loadGoogleAnalytics(analyticsCode);
-  //INIT with global spinner set to true
-  const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
-  const dispatch = useDispatch();
 
   function changeDefaultLanguage(passedLanguage?: string): void {
     //Check URL for language param which comes in after user shares the application.
@@ -69,7 +59,7 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
   const reportParam = new URL(window.location.href).searchParams.get('report');
-  let reportView;
+  let reportView = false;
   if (reportParam) {
     reportView = reportParam === 'true';
   } else {
@@ -112,30 +102,6 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   //Subscriptions for the CMS usecase and trustedServers setup
   useEffect(() => {
-    //TODO: this may need investigation/refactor depending on the CMS setup in the future, this also breaks GLAD alerts for some reason, need further work
-    // const corsServers: string[] = [
-    // 'gis-gfw.wri.org',
-    // 'gis-potico.wri.org',
-    // 'gis-treecover.wri.org',
-    // 'api.globalforestwatch.org',
-    // 'alpha.blueraster.io',
-    // 'staging.blueraster.io',
-    // 'stg.blueraster.com.s3.amazonaws.com',
-    // 'production-api.globalforestwatch.org',
-    // 'production-api.globalforestwatch.org/v1/ogr',
-    // 'production-api.globalforestwatch.org/v1/ogr/convert',
-    // 'api.resourcewatch.org',
-    // 'gis.wri.org',
-    // 'tiles.globalforestwatch.org',
-    // 'staging-api.globalforestwatch.org',
-    // 'wri-01.carto.com'
-    // ];
-
-    //corsServers.forEach(server =>
-    //  //@ts-ignore
-    //  esriConfig.request.trustedServers.push(server)
-    //);
-
     //This sets up the event listener that gets fired by CMS codebase when user click on CMS AOI Dashboard dropdown
     const handleExternalSubscriptionCall = (request: any) => {
       dispatch(renderModal('AOIDashboard'));
@@ -148,43 +114,59 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   //Check that we are logged in by looking for token in localStorage and hitting the auth API
   useEffect(() => {
-    //Check for url param token as well, incase we had a redirect
-    const urlToken = new URL(window.location.href).searchParams.get('token');
-    const token = localStorage.getItem('userToken');
-    let userToken = null;
-    //URL token takes priority
-    if (urlToken) {
-      userToken = urlToken;
-      localStorage.setItem('userToken', userToken);
-    } else if (!urlToken && token) {
-      userToken = token;
-    }
-    if (userToken) {
-      fetch('https://production-api.globalforestwatch.org/auth/check-logged', {
-        credentials: 'include',
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
-        .then(response => {
-          const hasError = response.status !== 200;
-          response.json().then(data => {
-            if (hasError) {
-              return;
+    function checkForLoginState(): void {
+      //Check for url param token as well, incase we had a redirect
+      const urlToken = new URL(window.location.href).searchParams.get('token');
+      const token = localStorage.getItem('userToken');
+      let userToken = null;
+      //URL token takes priority
+      if (urlToken) {
+        userToken = urlToken;
+        localStorage.setItem('userToken', userToken);
+      } else if (!urlToken && token) {
+        userToken = token;
+      }
+      if (userToken) {
+        fetch(
+          'https://production-api.globalforestwatch.org/auth/check-logged',
+          {
+            credentials: 'include',
+            headers: {
+              Authorization: `Bearer ${userToken}`
             }
-            localStorage.setItem('userID', data.id);
-            localStorage.setItem('email', data?.email);
-            dispatch(setLoggedIn(true));
-          });
-        })
-        .catch(e => console.error(e));
+          }
+        )
+          .then(response => {
+            const hasError = response.status !== 200;
+            response.json().then(data => {
+              if (hasError) return;
+              localStorage.setItem('userID', data.id);
+              localStorage.setItem('email', data?.email);
+              dispatch(setLoggedIn(true));
+            });
+          })
+          .catch(e => console.error(e));
+      }
+    }
+
+    //We dont care about login state for the report view as it does not have any info behind gfw login
+    if (!reportView) {
+      checkForLoginState();
     }
   }, []);
 
   return (
     <>
       {showGlobalSpinner ? (
-        <MapSpinner />
+        <Loader
+          containerPositionStyling={{
+            position: 'absolute',
+            top: '40%',
+            left: '50%'
+          }}
+          color={'#cfcdcd'}
+          size={100}
+        />
       ) : (
         <>
           {!reportView && !hideHeader && <Header />}
