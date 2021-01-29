@@ -2,6 +2,7 @@ import Map from 'esri/Map';
 import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
 import WebMap from 'esri/WebMap';
+import Portal from 'esri/portal/Portal';
 import Graphic from 'esri/Graphic';
 import GraphicsLayer from 'esri/layers/GraphicsLayer';
 import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
@@ -137,7 +138,8 @@ export class MapController {
 
     this._map = new WebMap({
       portalItem: {
-        id: webmapID
+        id: webmapID,
+        portal: new Portal({ url: appSettings.sharinghost })
       }
     });
 
@@ -661,7 +663,8 @@ export class MapController {
     const {
       language,
       webmap,
-      alternativeWebmap
+      alternativeWebmap,
+      sharinghost
     } = store.getState().appSettings;
 
     this.setPageTitle(
@@ -683,7 +686,7 @@ export class MapController {
     this._map.removeAll();
     this._map = undefined;
     this._map = new WebMap({
-      portalItem: { id: newWebMapId }
+      portalItem: { id: newWebMapId, portal: new Portal({ url: sharinghost }) }
     });
 
     this._mapview = new MapView({
