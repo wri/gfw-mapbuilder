@@ -7,29 +7,26 @@ import { RootState } from 'js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from 'js/components/sharedComponents/Loader';
 import { overwriteSettings } from 'js/store/appSettings/actions';
-import {
-  setLoggedIn,
-  setLanguage,
-  renderModal
-} from 'js/store/appState/actions';
+import { setLoggedIn } from 'js/store/appState/actions';
 import { AppSettings } from 'js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
-// import resources from '../../../configs/resources';
+import {
+  checkForReportView,
+  loadGoogleAnalytics,
+  changeDefaultLanguage,
+  attachCMSEventHandlers
+} from '../helpers/appLoading';
+
+//import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
 import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 
-function loadGoogleAnalytics(analyticsCode?: string): void {
-  if (!window.hasOwnProperty('ga') || !analyticsCode) {
-    return;
-  }
-  window['ga']('create', analyticsCode, 'auto');
-  window['ga']('send', 'pageview');
-}
-
 const App = (props: AppSettings | any): JSX.Element => {
+  //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
+  const reportView = checkForReportView();
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
   //Listen to map loading state that comes from mapController via redux store change
@@ -44,27 +41,6 @@ const App = (props: AppSettings | any): JSX.Element => {
   );
 
   loadGoogleAnalytics(analyticsCode);
-
-  function changeDefaultLanguage(passedLanguage?: string): void {
-    //Check URL for language param which comes in after user shares the application.
-    const langFromURL = new URL(window.location.href).searchParams.get('l');
-
-    if (langFromURL) {
-      dispatch(setLanguage(langFromURL));
-    } else {
-      //set the language based on appid info, if nothing is set, just default to resources.js
-      dispatch(setLanguage(passedLanguage || resources.language));
-    }
-  }
-
-  //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
-  const reportParam = new URL(window.location.href).searchParams.get('report');
-  let reportView = false;
-  if (reportParam) {
-    reportView = reportParam === 'true';
-  } else {
-    reportView = false;
-  }
 
   useEffect(() => {
     const appID = new URL(window.location.href).searchParams.get('appid');
@@ -98,19 +74,10 @@ const App = (props: AppSettings | any): JSX.Element => {
       }
       setShowGlobalSpinner(false);
     }
-  }, [dispatch, props]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
+  }, [dispatch, props, sharinghost]); //dispatch should never update and this useEffect should fire only once, adding per eslint rule warning
 
-  //Subscriptions for the CMS usecase and trustedServers setup
-  useEffect(() => {
-    //This sets up the event listener that gets fired by CMS codebase when user click on CMS AOI Dashboard dropdown
-    const handleExternalSubscriptionCall = (request: any) => {
-      dispatch(renderModal('AOIDashboard'));
-    };
-    window.addEventListener(
-      'listenToThisSubscriptionCall',
-      handleExternalSubscriptionCall
-    );
-  }, []);
+  //Subscriptions for the CMS
+  attachCMSEventHandlers();
 
   //Check that we are logged in by looking for token in localStorage and hitting the auth API
   useEffect(() => {
