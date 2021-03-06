@@ -1,7 +1,5 @@
 //@ts-ignore
-
 const path = require('path');
-const ArcGISPlugin = require('@arcgis/webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
@@ -70,14 +68,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-
-    new ArcGISPlugin({
-      useDefaultAssetLoaders: false,
-      features: {
-        '3d': false
-      }
-    }),
-
     new HtmlWebPackPlugin({
       title: 'ArcGIS Template Application',
       template: './src/index.html',
