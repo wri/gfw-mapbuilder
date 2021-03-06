@@ -804,6 +804,22 @@
     vertical-align: middle;
   }
 
+  .planet-selectors {
+    display: grid;
+    grid-gap: 5px;
+  }
+
+  .planet-thumb {
+    border-radius: 50px;
+    width: 44px;
+    height: 44px;
+    margin: 10px;
+    vertical-align: middle;
+    background-image: url('../images/planet.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
   .landsat-thumb {
     border-radius: 50px;
     width: 44px;

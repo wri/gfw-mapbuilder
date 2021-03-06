@@ -20,6 +20,7 @@ import Basemap from 'esri/Basemap';
 import Attribution from 'esri/widgets/Attribution';
 import ScaleBar from 'esri/widgets/ScaleBar';
 import WebTileLayer from 'esri/layers/WebTileLayer';
+import TileLayer from 'esri/layers/TileLayer';
 import Sublayer from 'esri/layers/support/Sublayer';
 import RasterFunction from 'esri/layers/support/RasterFunction';
 import geometryEngine from 'esri/geometry/geometryEngine';
@@ -115,6 +116,7 @@ export class MapController {
   _imageryOpacity: number;
   _mouseTrackingEvent: IHandle | undefined;
   _webmapBasemap: __esri.Basemap | undefined;
+  _planetBasemap: __esri.Basemap | undefined;
 
   constructor() {
     this._map = undefined;
@@ -125,6 +127,7 @@ export class MapController {
     this._sketchVMGraphicsLayer = undefined;
     this._mouseTrackingEvent = undefined;
     this._webmapBasemap = undefined;
+    this._planetBasemap = undefined;
   }
 
   initializeMap(domRef: RefObject<any>): void {
@@ -891,6 +894,36 @@ export class MapController {
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
+  async addPlanetTileLayer(): Promise<void> {
+    if (this._planetBasemap) {
+      this._map!.basemap = this._planetBasemap;
+    } else {
+      const planetConfig = {
+        type: 'webtiled',
+        url:
+          'https://tiles.planet.com/basemaps/v1/planet-tiles/planet_medres_normalized_analytic_2021-02_mosaic/gmap/{z}/{x}/{y}.png?api_key=af992066dc9b4bdaacfebe64b1455318',
+        title: 'planet',
+        id: 'planet'
+      };
+
+      const planetBasemapReferenceLayer = new TileLayer({
+        id: 'planet-basemap-reference-layer',
+        url:
+          'http://server.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer',
+        visible: true
+      });
+
+      const planetLayer = new WebTileLayer({
+        urlTemplate: planetConfig.url
+      });
+      const planetBase = new Basemap({
+        baseLayers: [planetLayer, planetBasemapReferenceLayer]
+      });
+      this._planetBasemap = planetBase;
+      this._map!.basemap = planetBase;
+    }
+  }
+
   zoomInOrOut({ zoomIn }: ZoomParams): void {
     if (this._mapview) {
       const zoomNum = zoomIn ? this._mapview.zoom + 1 : this._mapview.zoom - 1;
@@ -1124,7 +1157,11 @@ export class MapController {
   }
 
   updateSketchVM(graphicIndex?: number): void {
-    const updateOptions = {
+    interface CustomUpdateOptions
+      extends __esri.SketchViewModelDefaultUpdateOptions {
+      tool: 'reshape';
+    }
+    const updateOptions: CustomUpdateOptions = {
       tool: 'reshape',
       enableRotation: false,
       toggleToolOnClick: false,
