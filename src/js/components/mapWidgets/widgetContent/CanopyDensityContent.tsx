@@ -90,13 +90,11 @@ const CanopyDensityContent = (): JSX.Element => {
           width: 10,
           bottom: -6
         }}
-        handleStyle={[
-          {
-            border: `2px solid ${customColorTheme}`,
-            height: 20,
-            width: 20
-          }
-        ]}
+        handleStyle={{
+          border: `2px solid ${customColorTheme}`,
+          height: 20,
+          width: 20
+        }}
         onChange={handleSliderChange}
       />
     </div>

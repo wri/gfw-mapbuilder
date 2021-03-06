@@ -58,13 +58,11 @@ const ImageryLayerTransparencySlider = (
           width: 10,
           bottom: -6
         }}
-        handleStyle={[
-          {
-            border: `2px solid ${customColorTheme}`,
-            height: 15,
-            width: 15
-          }
-        ]}
+        handleStyle={{
+          border: `2px solid ${customColorTheme}`,
+          height: 15,
+          width: 15
+        }}
       />
     </div>
   );
