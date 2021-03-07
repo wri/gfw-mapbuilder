@@ -1,19 +1,19 @@
 import MapView from 'esri/views/MapView';
 import Graphic from 'esri/Graphic';
 import Map from 'esri/Map';
-import store from 'js/store';
+import store from '../../../js/store';
 import { esriQuery } from './esriQuery';
 import { getAttributesToFetch } from './getAttributes';
 import { formatAttributeValues } from './formatAttributes';
-import { setActiveFeatures } from 'js/store/mapview/actions';
+import { setActiveFeatures } from '../../../js/store/mapview/actions';
 import {
   LayerFeatureResult,
   FeatureResult,
   FieldName
-} from 'js/store/mapview/types';
-import { selectActiveTab } from 'js/store/appState/actions';
-import { layerIsInScale } from 'js/helpers/layerScaleCheck';
-import { viirsFieldNames } from 'js/helpers/viirsLayerUtil';
+} from '../../../js/store/mapview/types';
+import { selectActiveTab } from '../../../js/store/appState/actions';
+import { layerIsInScale } from '../../../js/helpers/layerScaleCheck';
+import { viirsFieldNames } from '../../../js/helpers/viirsLayerUtil';
 
 export interface FormatOptions {
   dateFormat: null | any;

@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import '../../configs/dojoConfig';
 import store from './store/index';
 
-import { MapBuilderMain } from 'js/MapBuilderMain';
+import { MapBuilderMain } from '../js/MapBuilderMain';
 
 declare global {
   interface Window {

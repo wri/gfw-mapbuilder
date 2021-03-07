@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { allAvailableLayers as allAvailableLayersAction } from 'js/store/mapview/actions';
-import { RootState } from 'js/store';
-import { mapController } from 'js/controllers/mapController';
-import { fetchLegendInfo } from 'js/helpers/legendInfo';
+import { allAvailableLayers as allAvailableLayersAction } from '../../../../js/store/mapview/actions';
+import { RootState } from '../../../../js/store';
+import { mapController } from '../../../../js/controllers/mapController';
+import { fetchLegendInfo } from '../../../../js/helpers/legendInfo';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 

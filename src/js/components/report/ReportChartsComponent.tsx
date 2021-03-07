@@ -1,26 +1,26 @@
 import * as React from 'react';
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
-import { AnalysisModule } from 'js/store/appSettings/types';
+import { AnalysisModule } from '../../../js/store/appSettings/types';
 import { MemoReportRangeSlider } from './ReportRangeSlider';
 import { MemoReportDatePicker } from './DatePicker';
-import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
-import { UIParams } from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
-import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import Loader from 'js/components/sharedComponents/Loader';
-import VegaChart from 'js/components/leftPanel/analysisPanel/VegaChartContainer';
-import analysisTranslations from 'js/components/leftPanel/analysisPanel/analysisTranslations';
-import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
+import CanopyDensityPicker from '../../../js/components/sharedComponents/CanopyDensityPicker';
+import { UIParams } from '../../../js/components/leftPanel/analysisPanel/BaseAnalysis';
+import { markValueMap } from '../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import Loader from '../../../js/components/sharedComponents/Loader';
+import VegaChart from '../../../js/components/leftPanel/analysisPanel/VegaChartContainer';
+import analysisTranslations from '../../../js/components/leftPanel/analysisPanel/analysisTranslations';
+import { DownloadOptions } from '../../../js/components/sharedComponents/DownloadOptions';
 import styled from 'styled-components';
 import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
 import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
-import fragmentationSpec from 'js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
+import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
 import {
   fetchGFWWidgetConfig,
   fetchDownloadInfo,
   fetchWCSAnalysis
-} from 'js/components/leftPanel/analysisPanel/analysisUtils';
+} from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;

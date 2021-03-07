@@ -1,3 +1,4 @@
+import { setDefaultOptions, loadModules } from 'esri-loader';
 import Map from 'esri/Map';
 import Layer from 'esri/layers/Layer';
 import MapView from 'esri/views/MapView';
@@ -26,7 +27,7 @@ import geometryEngine from 'esri/geometry/geometryEngine';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
-import { getMaxDateForViirsTiles } from 'js/helpers/viirsLayerUtil';
+import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
 import {
   landsatBaselayerURL,
   WRIBasemapConfig
@@ -34,10 +35,10 @@ import {
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
-import { LayerFactory } from 'js/helpers/LayerFactory';
-import { setLayerSearchSource } from 'js/helpers/mapController/searchSources';
-import { getSortedLayers } from 'js/helpers/mapController/layerSorting';
-import { addPointGraphic } from 'js/helpers/MapGraphics';
+import { LayerFactory } from '../../js/helpers/LayerFactory';
+import { setLayerSearchSource } from '../../js/helpers/mapController/searchSources';
+import { getSortedLayers } from '../../js/helpers/mapController/layerSorting';
+import { addPointGraphic } from '../../js/helpers/MapGraphics';
 import { once } from 'esri/core/watchUtils';
 import {
   allAvailableLayers,
@@ -50,9 +51,9 @@ import {
   setLayersLoading,
   setUserCoordinates,
   setDocuments
-} from 'js/store/mapview/actions';
+} from '../../js/store/mapview/actions';
 
-import { setSelectedBasemap } from 'js/store/mapview/actions';
+import { setSelectedBasemap } from '../../js/store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
@@ -65,31 +66,33 @@ import {
   setViirsEnd,
   setGladStart,
   setGladEnd
-} from 'js/store/appState/actions';
+} from '../../js/store/appState/actions';
 import {
   LayerProps,
   LayerFeatureResult,
   FeatureResult
-} from 'js/store/mapview/types';
-import { OptionType } from 'js/interfaces/measureWidget';
-import { queryLayersForFeatures } from 'js/helpers/dataPanel/DataPanel';
-import { setNewGraphic } from 'js/helpers/MapGraphics';
+} from '../../js/store/mapview/types';
+import { OptionType } from '../../js/interfaces/measureWidget';
+import { queryLayersForFeatures } from '../../js/helpers/dataPanel/DataPanel';
+import { setNewGraphic } from '../../js/helpers/MapGraphics';
 
-import { MODISLayerIDs } from 'configs/modis-viirs';
+import { MODISLayerIDs } from '../../../configs/modis-viirs';
 import { allowedLayers } from '../../../configs/layer-config';
 import {
   parseURLandApplyChanges,
   getLayerInfoFromURL,
   LayerInfo
-} from 'js/helpers/shareFunctionality';
+} from '../../js/helpers/shareFunctionality';
 import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects
-} from 'js/helpers/mapController/miscLayerHelpers';
-import { fetchLegendInfo } from 'js/helpers/legendInfo';
-import { parseExtentConfig } from 'js/helpers/mapController/configParsing';
-import { overwriteColorTheme } from 'js/store/appSettings/actions';
+} from '../../js/helpers/mapController/miscLayerHelpers';
+import { fetchLegendInfo } from '../../js/helpers/legendInfo';
+import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
+import { overwriteColorTheme } from '../../js/store/appSettings/actions';
+
+setDefaultOptions({ css: true, version: '4.14' });
 
 interface URLCoordinates {
   zoom: number;
@@ -303,7 +306,7 @@ export class MapController {
             }
           );
 
-          const remoteLayerObjects = [];
+          const remoteLayerObjects: any[] = [];
           for (const remoteLayerObject of allowedRemoteLayersObjects) {
             if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
 
@@ -1124,7 +1127,7 @@ export class MapController {
   }
 
   updateSketchVM(graphicIndex?: number): void {
-    const updateOptions = {
+    const updateOptions: __esri.SketchViewModelUpdateUpdateOptions = {
       tool: 'reshape',
       enableRotation: false,
       toggleToolOnClick: false,

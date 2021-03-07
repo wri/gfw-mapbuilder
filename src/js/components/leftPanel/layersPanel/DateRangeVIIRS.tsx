@@ -1,13 +1,18 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { mapController } from 'js/controllers/mapController';
-import { RootState } from 'js/store/index';
+import { mapController } from '../../../../js/controllers/mapController';
+import { RootState } from '../../../../js/store/index';
 import { useSelector } from 'react-redux';
-import { LayerProps } from 'js/store/mapview/types';
-import viirsLayer, { getMaxDateForViirsTiles } from 'js/helpers/viirsLayerUtil';
+import { LayerProps } from '../../../../js/store/mapview/types';
+import viirsLayer, {
+  getMaxDateForViirsTiles
+} from '../../../../js/helpers/viirsLayerUtil';
 import { format, subDays, parse, differenceInDays } from 'date-fns';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import { setViirsStart, setViirsEnd } from 'js/store/appState/actions';
+import {
+  setViirsStart,
+  setViirsEnd
+} from '../../../../js/store/appState/actions';
 
 import './datepicker.scss';
 

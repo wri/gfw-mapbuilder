@@ -5,11 +5,11 @@ import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import {
   setMeasureResults,
   setActiveMeasureButton
-} from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
-import { measureContent } from 'configs/translations/modal.tanslations';
-import { OptionType } from 'js/interfaces/measureWidget';
-import { RootState } from 'js/store/index';
+} from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
+import { measureContent } from '../../../../../configs/translations/modal.tanslations';
+import { OptionType } from '../../../../js/interfaces/measureWidget';
+import { RootState } from '../../../../js/store/index';
 
 import 'css/measureContent.scss';
 
@@ -82,7 +82,7 @@ const ReturnMeasurementResults = (): JSX.Element => {
   return <>{returnResults()}</>;
 };
 
-const ReturnDropdown: FunctionComponent = () => {
+const ReturnDropdown: any = () => {
   const { activeButton } = useSelector(
     (state: RootState) => state.appState.measureContent
   );

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setRenderPopup } from 'js/store/appState/actions';
-import { RootState } from 'js/store';
+import { setRenderPopup } from '../../../js/store/appState/actions';
+import { RootState } from '../../../js/store';
 
 import 'css/popup.scss';
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../js/controllers/mapController';
 
 const UserPointPopup = (): JSX.Element | null => {
   const dispatch = useDispatch();

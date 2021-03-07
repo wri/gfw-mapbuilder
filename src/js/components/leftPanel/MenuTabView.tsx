@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-
-import LanguageDropdown from 'js/components/header/LanguageDropdown';
-import MyGFWContent from 'js/components/mapWidgets/widgetContent/GFWLoginOptions';
-
-import { RootState } from 'js/store/index';
-
-import { headerContent } from 'configs/translations/header.translations';
+import LanguageDropdown from '../../../js/components/header/LanguageDropdown';
+import { RootState } from '../../../js/store/index';
+import { headerContent } from '../../../../configs/translations/header.translations';
+import GFWLoginOptions from '../../../js/components/mapWidgets/widgetContent/GFWLoginOptions';
 
 import 'css/leftpanel.scss';
-import GFWLoginOptions from 'js/components/mapWidgets/widgetContent/GFWLoginOptions';
 
 const MenuTabView = (props: any): JSX.Element => {
   const [renderMyGFWOptions, setRenderMyGFWOptions] = useState(false);

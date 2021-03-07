@@ -1,5 +1,5 @@
 import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
+import { arcgisToGeoJSON } from '../../../../js/helpers/spatialDataTransformation';
 
 export async function fetchGFWWidgetConfig(url: string): Promise<any> {
   //GET request to grab the vega spec from the API

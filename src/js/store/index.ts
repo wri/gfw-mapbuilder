@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-const middlewares = [];
+const middlewares: any[] = [];
 // Environment specific middlewares configuration
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-line no-undef

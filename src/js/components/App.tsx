@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 import MapContent from './MapContent';
 import Header from './header/Header';
 import ModalCard from './modal/modalCard';
-import { RootState } from 'js/store/index';
+import { RootState } from '../../js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
-import Loader from 'js/components/sharedComponents/Loader';
-import { overwriteSettings } from 'js/store/appSettings/actions';
-import { setLoggedIn } from 'js/store/appState/actions';
-import { AppSettings } from 'js/store/appSettings/types';
+import Loader from '../../js/components/sharedComponents/Loader';
+import { overwriteSettings } from '../../js/store/appSettings/actions';
+import { setLoggedIn } from '../../js/store/appState/actions';
+import { AppSettings } from '../../js/store/appSettings/types';
 import Portal from 'esri/portal/Portal';
 import PortalItem from 'esri/portal/PortalItem';
 import {
@@ -21,7 +21,6 @@ import {
 //import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
-import 'arcgis-js-api/themes/light/main.scss';
 import 'css/index.scss';
 
 const App = (props: AppSettings | any): JSX.Element => {
@@ -85,7 +84,7 @@ const App = (props: AppSettings | any): JSX.Element => {
       //Check for url param token as well, incase we had a redirect
       const urlToken = new URL(window.location.href).searchParams.get('token');
       const token = localStorage.getItem('userToken');
-      let userToken = null;
+      let userToken: any = null;
       //URL token takes priority
       if (urlToken) {
         userToken = urlToken;

@@ -4,7 +4,7 @@ import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
 import Sublayer from 'esri/layers/support/Sublayer';
 
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../js/controllers/mapController';
 
 type ArrayOfLayerSources = Array<LayerSearchSource>;
 

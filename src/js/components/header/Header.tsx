@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 
-import LanguageDropdown from 'js/components/header/LanguageDropdown';
-import ThemeDropdown from 'js/components/header/ThemeDropdown';
-import GFWLoginDropdown from 'js/components/header/GFWLoginDropdown';
-import { ReactComponent as AboutIcon } from 'src/images/aboutIcon.svg';
+import LanguageDropdown from '../../../js/components/header/LanguageDropdown';
+import ThemeDropdown from '../../../js/components/header/ThemeDropdown';
+import GFWLoginDropdown from '../../../js/components/header/GFWLoginDropdown';
+import { ReactComponent as AboutIcon } from '../../../../src/images/aboutIcon.svg';
 import { ReactComponent as DownloadIcon } from 'src/images/downloadIcon.svg';
-import { RootState } from 'js/store/index';
+import { RootState } from '../../../js/store/index';
 
 import 'css/header.scss';
 import { createSelector } from 'reselect';

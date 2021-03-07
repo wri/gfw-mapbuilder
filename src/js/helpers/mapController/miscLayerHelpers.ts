@@ -1,6 +1,6 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { LayerInfo } from 'src/js/helpers/shareFunctionality';
-import { LayerProps } from 'js/store/mapview/types';
+import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
+import { LayerProps } from '../../../js/store/mapview/types';
 import { fetchLegendInfo } from '../legendInfo';
 
 async function createVectorLayerLegendInfo(layer: any): Promise<any> {

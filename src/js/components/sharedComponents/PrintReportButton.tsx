@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store/index';
-import { getShareableURL } from 'js/helpers/shareFunctionality';
+import { RootState } from '../../../js/store/index';
+import { getShareableURL } from '../../../js/helpers/shareFunctionality';
 import 'css/printButton.scss';
 
 const printReportTranslations = {

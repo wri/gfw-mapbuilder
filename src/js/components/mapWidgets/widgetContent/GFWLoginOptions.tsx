@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from 'js/store';
-import { renderModal } from 'js/store/appState/actions';
-import { setRenderGFWDropdown } from 'js/store/appState/actions';
-import { headerContent } from 'configs/translations/header.translations';
-import { EmailLogin } from 'src/js/components/gfwContent/EmailLogin';
-import { setLoggedIn } from 'js/store/appState/actions';
+import { RootState } from '../../../../js/store';
+import { renderModal } from '../../../../js/store/appState/actions';
+import { setRenderGFWDropdown } from '../../../../js/store/appState/actions';
+import { headerContent } from '../../../../../configs/translations/header.translations';
+import { EmailLogin } from '../../../../js/components/gfwContent/EmailLogin';
+import { setLoggedIn } from '../../../../js/store/appState/actions';
 
 const GFWLoginOptions = (props: any) => {
   const dropdownRef = React.useRef<HTMLDivElement | null>(null);

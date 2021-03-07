@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store';
-import { mapController } from 'js/controllers/mapController';
+import { RootState } from '../../../../js/store';
+import { mapController } from '../../../../js/controllers/mapController';
 import 'css/leftpanel.scss';
 import WebmapLayersGroup from './WebmapLayersGroup';
 import BasemapLayersGroup from './BasemapLayersGroup';

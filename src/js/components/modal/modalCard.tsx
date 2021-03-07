@@ -1,21 +1,21 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from 'js/components/mapWidgets/widgetContent/printContent';
-import ShareContent from 'js/components/mapWidgets/widgetContent/shareContent';
-import PenContent from 'js/components/mapWidgets/widgetContent/penContent';
-import SearchContent from 'js/components/mapWidgets/widgetContent/searchContent';
-import CoordinatesForm from 'js/components/mapWidgets/widgetContent/coordinatesForm';
-import MeasureContent from 'js/components/mapWidgets/widgetContent/measureContent';
-import CanopyDensityContent from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import SubscriptionContent from 'js/components/dataPanel/subscribeToAlerts/SubscriptionContent';
+import PrintContent from '../../../js/components/mapWidgets/widgetContent/printContent';
+import ShareContent from '../../../js/components/mapWidgets/widgetContent/shareContent';
+import PenContent from '../../../js/components/mapWidgets/widgetContent/penContent';
+import SearchContent from '../../../js/components/mapWidgets/widgetContent/searchContent';
+import CoordinatesForm from '../../../js/components/mapWidgets/widgetContent/coordinatesForm';
+import MeasureContent from '../../../js/components/mapWidgets/widgetContent/measureContent';
+import CanopyDensityContent from '../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import SubscriptionContent from '../../../js/components/dataPanel/subscribeToAlerts/SubscriptionContent';
 import SaveAOI from '../leftPanel/dataPanel/subscribeToAlerts/SaveAOI';
-import InfoContent from 'js/components/sharedComponents/InfoContent';
-import EditProfile from 'js/components/gfwContent/EditProfile';
+import InfoContent from '../../../js/components/sharedComponents/InfoContent';
+import EditProfile from '../../../js/components/gfwContent/EditProfile';
 
-import { renderModal } from 'js/store/appState/actions';
+import { renderModal } from '../../../js/store/appState/actions';
 
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 
 import 'css/modalCard.scss';
 

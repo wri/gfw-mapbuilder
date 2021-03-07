@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import GFWLoginOptions from 'js/components/mapWidgets/widgetContent/GFWLoginOptions';
-import { RootState } from 'js/store';
+import GFWLoginOptions from '../../../js/components/mapWidgets/widgetContent/GFWLoginOptions';
+import { RootState } from '../../../js/store';
 import { ReactComponent as UserIcon } from 'images/userIcon.svg';
-import { setRenderGFWDropdown } from 'js/store/appState/actions';
-import { headerContent } from 'configs/translations/header.translations';
+import { setRenderGFWDropdown } from '../../../js/store/appState/actions';
+import { headerContent } from '../../../../configs/translations/header.translations';
 
 interface LoginProps {
   loggedIn: boolean;

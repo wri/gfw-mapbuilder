@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 
-import { RootState } from 'js/store/index';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
+import { RootState } from '../../../js/store/index';
+import {
+  selectActiveTab,
+  toggleTabviewPanel
+} from '../../../js/store/appState/actions';
 
 import TabViewContainer from './TabViewContainer';
 

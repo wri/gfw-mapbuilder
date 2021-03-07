@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactComponent as PrintIcon } from '../../../../images/printIcon.svg';
-import { getShareableURL } from 'js/helpers/shareFunctionality';
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
+import { getShareableURL } from '../../../../js/helpers/shareFunctionality';
+import { geojsonToArcGIS } from '../../../../js/helpers/spatialDataTransformation';
 import { format, subDays } from 'date-fns';
-import Loader from 'js/components/sharedComponents/Loader';
-import { RootState } from 'js/store/index';
+import Loader from '../../../../js/components/sharedComponents/Loader';
+import { RootState } from '../../../../js/store/index';
 import {
   setActiveFeatures,
   setActiveFeatureIndex
-} from 'js/store/mapview/actions';
+} from '../../../../js/store/mapview/actions';
 import { AOIDashboardText } from '../../../../../configs/translations/subscribeToAlerts.translations';
-import { renderModal, selectActiveTab } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
+import {
+  renderModal,
+  selectActiveTab
+} from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
 import { generateMinimaps } from './generateMinimaps';
 
 import 'css/aoiDashboard.scss';
@@ -187,7 +190,7 @@ const AOIDashboard = () => {
             setLoading(false);
             //Put data in paginated chunks so we load only 5 at a time
             generateMinimaps(data.data);
-            const chunks = [];
+            const chunks: any[] = [];
             while (data.data.length > 0) {
               chunks.push(data.data.splice(0, 5));
             }

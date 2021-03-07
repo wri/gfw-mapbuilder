@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../js/controllers/mapController';
 
 import { ReactComponent as InfoBoxIcon } from 'src/images/infoBoxIcon.svg';
 

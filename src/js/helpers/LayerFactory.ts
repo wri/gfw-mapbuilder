@@ -5,13 +5,13 @@ import MapImageLayer from 'esri/layers/MapImageLayer';
 import WebTileLayer from 'esri/layers/WebTileLayer';
 import MosaicRule from 'esri/layers/support/MosaicRule';
 import RasterFunction from 'esri/layers/support/RasterFunction';
-import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
-import { GladLayer } from 'js/layers/GladLayer';
-import { PrimaryForestLayer } from 'js/layers/PrimaryForestLayer';
-import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
-import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import store from 'js/store/index';
-import { LayerProps } from 'js/store/mapview/types';
+import { TreeCoverLossLayer } from '../../js/layers/TreeCoverLossLayer';
+import { GladLayer } from '../../js/layers/GladLayer';
+import { PrimaryForestLayer } from '../../js/layers/PrimaryForestLayer';
+import { TreeCoverGainLayer } from '../../js/layers/TreeCoverGainLayer';
+import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import store from '../../js/store/index';
+import { LayerProps } from '../../js/store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
 
 interface LayerOptions {

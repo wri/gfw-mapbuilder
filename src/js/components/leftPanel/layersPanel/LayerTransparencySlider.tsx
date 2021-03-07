@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store/index';
-import { mapController } from 'js/controllers/mapController';
+import { RootState } from '../../../../js/store/index';
+import { mapController } from '../../../../js/controllers/mapController';
 
 interface LayerTransparencyProps {
   layerID?: string;

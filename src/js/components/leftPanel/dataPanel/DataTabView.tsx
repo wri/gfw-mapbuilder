@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../../js/store';
 import {
   setActiveFeatureIndex,
   setActiveFeatures,
   setDocuments
-} from 'js/store/mapview/actions';
+} from '../../../../js/store/mapview/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
+import { mapController } from '../../../../js/controllers/mapController';
+import { LayerFeatureResult } from '../../../../js/store/mapview/types';
+import { getDocuments } from '../../../../js/helpers/mapController/documentsQuery';
 import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
-import { mapController } from 'js/controllers/mapController';
-import { LayerFeatureResult } from 'js/store/mapview/types';
-import { getDocuments } from 'js/helpers/mapController/documentsQuery';
 
 //Constructs layer tile based on sublayer existance
 function generateLayerTitle(activeLayerInfo: any): string {

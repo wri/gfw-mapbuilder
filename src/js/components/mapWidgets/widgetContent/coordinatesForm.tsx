@@ -4,16 +4,16 @@ import { useSelector } from 'react-redux';
 import DMSSection from './coordinatesDMSSection';
 import DDSection from './coordinatesDDSection';
 
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../../js/controllers/mapController';
 
 import {
   convertXYToPoint,
   convertDMSToXY
-} from 'js/helpers/coordinatesConversion';
+} from '../../../../js/helpers/coordinatesConversion';
 
-import { RootState } from 'js/store/index';
+import { RootState } from '../../../../js/store/index';
 
-import { coordinatesContent } from 'configs/translations/modal.tanslations';
+import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
 
 import {
   DDFormValues,
@@ -21,7 +21,7 @@ import {
   SpecificDMSSection,
   DMSFormValues,
   DMSCardinalPoint
-} from 'js/interfaces/coordinateForm';
+} from '../../../../js/interfaces/coordinateForm';
 
 import 'css/coordinatesForm';
 
@@ -208,7 +208,7 @@ const CoordinatesForm: FunctionComponent = () => {
   };
 
   const setShape = (): void => {
-    let points = [];
+    let points: any = [];
     if (decimalOptions[selectedFormat].includes('DMS')) {
       points = convertDMSToXY(dmsSections);
     } else {

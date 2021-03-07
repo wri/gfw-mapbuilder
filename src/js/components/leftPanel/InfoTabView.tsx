@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 
 interface Props {
   key: string;

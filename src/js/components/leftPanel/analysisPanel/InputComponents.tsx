@@ -2,9 +2,9 @@ import * as React from 'react';
 import {
   setAnalysisDateRange,
   setAnalysisYearRange
-} from 'js/store/appState/actions';
+} from '../../../../js/store/appState/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'js/store/index';
+import { RootState } from '../../../../js/store/index';
 import { createSliderWithTooltip, Range } from 'rc-slider';
 const SliderWithTooltip = createSliderWithTooltip(Range);
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 import { MemoCountryPicker } from './CountryPicker';
 import {
   sectors,

@@ -1,19 +1,20 @@
 import * as React from 'react';
-import { ReactComponent as ShareIcon } from '../../images/shareIcon.svg';
-import { ReactComponent as PrintIcon } from '../../images/printIcon.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { renderModal } from 'js/store/appState/actions';
-import { RootState } from 'js/store/index';
-import Loader from 'js/components/sharedComponents/Loader';
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
-import { mapController } from 'js/controllers/mapController';
-import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
-import { getAttributesToFetch } from 'js/helpers/dataPanel/getAttributes';
-import { getAllLayerFields } from 'js/helpers/dataPanel/DataPanel';
-import { formatAttributeValues } from 'js/helpers/dataPanel/formatAttributes';
+import { renderModal } from '../../js/store/appState/actions';
+import { RootState } from '../../js/store/index';
+import Loader from '../../js/components/sharedComponents/Loader';
+import { geojsonToArcGIS } from '../../js/helpers/spatialDataTransformation';
+import { mapController } from '../../js/controllers/mapController';
+import { esriQuery } from '../../js/helpers/dataPanel/esriQuery';
+import { getAttributesToFetch } from '../../js/helpers/dataPanel/getAttributes';
+import { getAllLayerFields } from '../../js/helpers/dataPanel/DataPanel';
+import { formatAttributeValues } from '../../js/helpers/dataPanel/formatAttributes';
 import { ReportTable } from './report/ReportTable';
 import { extractLayerInfo } from './report/ReportUtils';
 import { MemoReportChartsComponent } from './report/ReportChartsComponent';
+
+import { ReactComponent as ShareIcon } from '../../images/shareIcon.svg';
+import { ReactComponent as PrintIcon } from '../../images/printIcon.svg';
 
 import 'css/report.scss';
 

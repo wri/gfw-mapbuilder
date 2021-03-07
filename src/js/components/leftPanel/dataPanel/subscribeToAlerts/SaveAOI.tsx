@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { saveAOIText } from '../../../../../../configs/translations/mygfwstatic.translations';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { renderModal } from 'js/store/appState/actions';
+import { renderModal } from '../../../../../js/store/appState/actions';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -13,10 +13,10 @@ import styled from 'styled-components';
 import { MemoLanguagePicker } from './LanguagePicker';
 import { miniMapInit } from './MiniMap';
 
-import { registerGeometry } from 'js/helpers/geometryRegistration';
+import { registerGeometry } from '../../../../../js/helpers/geometryRegistration';
 
-import { setActiveFeatures } from 'js/store/mapview/actions';
-import { RootState } from 'js/store/index';
+import { setActiveFeatures } from '../../../../../js/store/mapview/actions';
+import { RootState } from '../../../../../js/store/index';
 
 import 'css/saveAOI.scss';
 

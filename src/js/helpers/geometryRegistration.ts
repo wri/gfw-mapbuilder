@@ -1,6 +1,6 @@
 import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
-import { FeatureResult } from 'js/store/mapview/types';
+import { arcgisToGeoJSON } from '../../js/helpers/spatialDataTransformation';
+import { FeatureResult } from '../../js/store/mapview/types';
 
 export async function registerGeometry(feature: FeatureResult): Promise<any> {
   let geographic;

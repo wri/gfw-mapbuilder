@@ -6,11 +6,14 @@ import Point from 'esri/geometry/Point';
 import Polygon from 'esri/geometry/Polygon';
 import * as projection from 'esri/geometry/projection';
 
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../js/controllers/mapController';
 
-import { getCustomSymbol, getPointSymbol } from 'js/helpers/generateSymbol';
+import {
+  getCustomSymbol,
+  getPointSymbol
+} from '../../js/helpers/generateSymbol';
 
-import { FeatureResult } from 'js/store/mapview/types';
+import { FeatureResult } from '../../js/store/mapview/types';
 
 const setSymbol = (symbolType: string): any => {
   switch (symbolType) {

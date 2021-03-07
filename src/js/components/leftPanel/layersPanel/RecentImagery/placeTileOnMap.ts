@@ -1,10 +1,10 @@
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../../../js/controllers/mapController';
 // import Polygon from 'esri/geometry/Polygon';
 // import ProjectParameters from 'esri/tasks/support/ProjectParameters';
 // import GeometryService from 'esri/tasks/GeometryService';
 // import SpatialReference from 'esri/geometry/SpatialReference';
 // import Graphic from 'esri/Graphic';
-import { LayerFactory } from 'js/helpers/LayerFactory';
+import { LayerFactory } from '../../../../../js/helpers/LayerFactory';
 
 export default function placeTileOnMap(tile: any): void {
   //Grab Imagery Layer
