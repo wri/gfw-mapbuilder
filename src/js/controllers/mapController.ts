@@ -1,27 +1,5 @@
 import { setDefaultOptions, loadModules } from 'esri-loader';
 import { format, subDays, parse } from 'date-fns';
-// import Map from 'esri/Map';
-// import Layer from 'esri/layers/Layer';
-// import Graphic from 'esri/Graphic';
-// import GraphicsLayer from 'esri/layers/GraphicsLayer';
-// import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
-// import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
-// import CoordinateConversion from 'esri/widgets/CoordinateConversion';
-// import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
-// import Polygon from 'esri/geometry/Polygon';
-// import Search from 'esri/widgets/Search';
-// import Point from 'esri/geometry/Point';
-// import PrintTask from 'esri/tasks/PrintTask';
-// import PrintTemplate from 'esri/tasks/support/PrintTemplate';
-// import PrintParameters from 'esri/tasks/support/PrintParameters';
-// import Basemap from 'esri/Basemap';
-// import Attribution from 'esri/widgets/Attribution';
-// import ScaleBar from 'esri/widgets/ScaleBar';
-// import WebTileLayer from 'esri/layers/WebTileLayer';
-// import Sublayer from 'esri/layers/support/Sublayer';
-// import RasterFunction from 'esri/layers/support/RasterFunction';
-// import FeatureLayer from 'esri/layers/FeatureLayer';
-// import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
 import {
@@ -448,7 +426,6 @@ export class MapController {
             return LayerFactory(this._mapview, layerObject);
           }
         );
-        console.log(esriRemoteLayersPromises);
 
         Promise.all(
           esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))
@@ -485,7 +462,6 @@ export class MapController {
               if (l.loaded === true) {
                 store.dispatch(setLayersLoading(false));
               } else {
-                console.log(l);
                 watchUtils.once(l, 'loaded', () => {
                   store.dispatch(setLayersLoading(false));
                 });
