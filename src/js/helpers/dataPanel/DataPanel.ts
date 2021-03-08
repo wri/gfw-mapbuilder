@@ -31,7 +31,7 @@ type LayerFieldInfos = {
 };
 
 async function fetchVIIRSFeatures(
-  mapview: MapView,
+  mapview: __esri.MapView,
   mapPoint: any,
   viirsConfig: any
 ): Promise<any> {

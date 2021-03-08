@@ -70,7 +70,7 @@ const LanguageDropdown = (props: DropProps) => {
               headerContent[props.selectedLanguage].language
             }`}
             tabIndex={0}
-            onClick={(): void => mapController.changeLanguage(props.language)}
+            onClick={() => mapController.changeLanguage(props.language)}
             className={`app-header__language
               ${props.selectedLanguage === props.language ? 'selected' : ''}
            `}
@@ -83,7 +83,7 @@ const LanguageDropdown = (props: DropProps) => {
             aria-labelledby="dropdown-label"
             id={`dropdown__selected ${props.alternativeLanguage}`}
             tabIndex={0}
-            onClick={(): void =>
+            onClick={() =>
               mapController.changeLanguage(props.alternativeLanguage)
             }
             className={`app-header__language

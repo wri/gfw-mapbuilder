@@ -1,10 +1,5 @@
 /* eslint-disable no-case-declarations */
-import ImageryLayer from 'esri/layers/ImageryLayer';
-import FeatureLayer from 'esri/layers/FeatureLayer';
-import MapImageLayer from 'esri/layers/MapImageLayer';
-import WebTileLayer from 'esri/layers/WebTileLayer';
-import MosaicRule from 'esri/layers/support/MosaicRule';
-import RasterFunction from 'esri/layers/support/RasterFunction';
+import { loadModules } from 'esri-loader';
 import { TreeCoverLossLayer } from '../../js/layers/TreeCoverLossLayer';
 import { GladLayer } from '../../js/layers/GladLayer';
 import { PrimaryForestLayer } from '../../js/layers/PrimaryForestLayer';
@@ -28,6 +23,21 @@ export async function LayerFactory(
   mapView: any,
   layerConfig: LayerProps
 ): Promise<any> {
+  const [
+    ImageryLayer,
+    FeatureLayer,
+    MapImageLayer,
+    WebTileLayer,
+    MosaicRule,
+    RasterFunction
+  ] = await loadModules([
+    'esri/layers/ImageryLayer',
+    'esri/layers/FeatureLayer',
+    'esri/layers/MapImageLayer',
+    'esri/layers/WebTileLayer',
+    'esri/layers/support/MosaicRule',
+    'esri/layers/support/RasterFunction'
+  ]);
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {

@@ -1,18 +1,10 @@
-import Map from 'esri/Map';
-import Mapview from 'esri/views/MapView';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
-import Graphic from 'esri/Graphic';
-import Point from 'esri/geometry/Point';
-import Polygon from 'esri/geometry/Polygon';
-import * as projection from 'esri/geometry/projection';
+import { loadModules } from 'esri-loader';
 
 import { mapController } from '../../js/controllers/mapController';
-
 import {
   getCustomSymbol,
   getPointSymbol
 } from '../../js/helpers/generateSymbol';
-
 import { FeatureResult } from '../../js/store/mapview/types';
 
 const setSymbol = (
@@ -29,7 +21,14 @@ const setSymbol = (
   }
 };
 
-const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
+const setGeometry = async (
+  symbolType: string,
+  geometry: __esri.Geometry
+): Promise<any> => {
+  const [Point, Polygon] = await loadModules([
+    'esri/geometry/Point',
+    'esri/geometry/Polygon'
+  ]);
   switch (symbolType) {
     case 'polygon':
       return new Polygon(geometry);
@@ -42,7 +41,16 @@ const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
 };
 
 //Helper for Report graphics in order to add POINT to the map
-export async function addPointGraphic(map: Map, feature: any): Promise<void> {
+export async function addPointGraphic(
+  map: __esri.Map,
+  feature: any
+): Promise<void> {
+  const [Map, GraphicsLayer, Graphic, Point] = await loadModules([
+    'esri/Map',
+    'esri/layers/GraphicsLayer',
+    'esri/Graphic',
+    'esri/geometry/Point'
+  ]);
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
   let graphicsLayerExists = graphicsLayer;
   if (graphicsLayer) {
@@ -70,8 +78,8 @@ export async function addPointGraphic(map: Map, feature: any): Promise<void> {
 }
 
 interface GraphicConfig {
-  map: Map;
-  mapview: Mapview;
+  map: __esri.Map;
+  mapview: __esri.MapView;
   allFeatures: Array<FeatureResult>;
   isUploadFile: boolean;
 }
@@ -82,6 +90,11 @@ export async function setNewGraphic({
   allFeatures,
   isUploadFile
 }: GraphicConfig): Promise<void> {
+  const [GraphicsLayer, Graphic, projection] = await loadModules([
+    'esri/layers/GraphicsLayer',
+    'esri/Graphic',
+    'esri/geometry/projection'
+  ]);
   //TODO: this needs a refactor, we are handling file uploads and featues on the map with a single
   //function, we likely need to either reuse multiple functions or split this up
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
@@ -107,8 +120,8 @@ export async function setNewGraphic({
       : await setSymbol('point');
 
     const geometry = isPolygon
-      ? setGeometry('polygon', allFeatures[0].geometry)
-      : setGeometry('point', allFeatures[0].geometry);
+      ? await setGeometry('polygon', allFeatures[0].geometry)
+      : await setGeometry('point', allFeatures[0].geometry);
 
     const featureGraphic = new Graphic({
       geometry: geometry,
@@ -145,8 +158,8 @@ export async function setNewGraphic({
             symbol.outline.color = [115, 252, 253];
           }
           const geometry = isPolygon
-            ? setGeometry('polygon', feature.geometry)
-            : setGeometry(feature.geometry.type, feature.geometry);
+            ? await setGeometry('polygon', feature.geometry)
+            : await setGeometry(feature.geometry.type, feature.geometry);
 
           const featureGraphic = new Graphic({
             geometry: geometry,

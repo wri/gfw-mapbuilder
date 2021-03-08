@@ -43,7 +43,7 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
   return (
     <div
       className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
-      onClick={(): void => mapController.setWRIBasemap(id)}
+      onClick={() => mapController.setWRIBasemap(id)}
     >
       <img src={thumbnailUrl} alt="basemap" />
       <span>{title}</span>
@@ -112,7 +112,7 @@ const GenericBaseLayerControl = ({
   return (
     <div
       className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
-      onClick={(): void => mapController.setActiveBasemap(id)}
+      onClick={() => mapController.setActiveBasemap(id)}
     >
       <img src={thumbnailUrl} alt="basemap" />
       <span>{title}</span>
