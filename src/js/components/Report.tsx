@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { loadModules } from 'esri-loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { renderModal } from '../../js/store/appState/actions';
 import { RootState } from '../../js/store/index';
@@ -111,9 +112,11 @@ const Report = (props: ReportProps): JSX.Element => {
           `/${activeLayerInfo.parentLayer.layerId}`
         : activeLayer.url;
       const responseAttributes = await esriQuery(url, qParams);
-      const formattedAttributes = formatAttributeValues(
+      const [esriIntl] = await loadModules(['esri/intl']);
+      const formattedAttributes = await formatAttributeValues(
         responseAttributes.features[0].attributes,
-        attributesToUse
+        attributesToUse,
+        esriIntl
       );
       setAttributes({
         attributes: formattedAttributes,

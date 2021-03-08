@@ -1,7 +1,10 @@
 // @ts-nocheck
+import { loadModules } from 'esri-loader';
 
-import BaseTileLayer from 'esri/layers/BaseTileLayer';
-import esriRequest from 'esri/request';
+const [BaseTileLayer, esriRequest] = await loadModules([
+  'esri/layers/BaseTileLayer',
+  'esri/request'
+]);
 
 // Power function to determine intensity
 const getScalePowFunc = (exp: number) => {

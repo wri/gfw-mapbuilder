@@ -1,6 +1,3 @@
-/* eslint-disable no-prototype-builtins */
-import { Geometry } from 'esri/geometry';
-
 interface SpatialReference {
   wkid: number;
 }
@@ -12,7 +9,7 @@ interface GenericProperties {
 }
 
 interface FeatureResult {
-  geometry?: Geometry;
+  geometry?: __esri.Geometry;
   attributes: GenericProperties;
   id?: number | string; // ? What's the type? Haven't been able to determine this
 }

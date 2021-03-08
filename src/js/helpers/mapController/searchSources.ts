@@ -1,17 +1,17 @@
-import LayerSearchSource from 'esri/widgets/Search/LayerSearchSource';
-import Layer from 'esri/layers/Layer';
-import FeatureLayer from 'esri/layers/FeatureLayer';
-import MapImageLayer from 'esri/layers/MapImageLayer';
-import Sublayer from 'esri/layers/support/Sublayer';
+import { loadModules } from 'esri-loader';
 
 import { mapController } from '../../../js/controllers/mapController';
 
-type ArrayOfLayerSources = Array<LayerSearchSource>;
+type ArrayOfLayerSources = Array<__esri.LayerSearchSource>;
 
-const returnLayerSearchSources = (
-  allFeatureLayers: Array<FeatureLayer>
-): ArrayOfLayerSources => {
-  return allFeatureLayers.map((layer: FeatureLayer) => {
+const layerSearchSources = async (
+  allFeatureLayers: Array<__esri.FeatureLayer>
+): Promise<ArrayOfLayerSources> => {
+  const [LayerSearchSource, FeatureLayer] = await loadModules([
+    'esri/widgets/Search/LayerSearchSource',
+    'esri/layers/FeatureLayer'
+  ]);
+  return allFeatureLayers.map((layer: __esri.FeatureLayer) => {
     return new LayerSearchSource({
       layer,
       name: layer.title,
@@ -29,9 +29,9 @@ const returnLayerSearchSources = (
   });
 };
 
-const setFeatureLayerSources = (): ArrayOfLayerSources => {
+const setFeatureLayerSources = (): Promise<ArrayOfLayerSources> => {
   const allFeatureLayers = (mapController._map?.allLayers as any).items.filter(
-    (layer: Layer) => {
+    (layer: __esri.Layer) => {
       const isVIIRSLayer =
         layer.id === 'VIIRS48' ||
         layer.id === 'VIIRS72' ||
@@ -52,37 +52,38 @@ const setFeatureLayerSources = (): ArrayOfLayerSources => {
     }
   );
 
-  return returnLayerSearchSources(allFeatureLayers);
+  return layerSearchSources(allFeatureLayers);
 };
 
 const setMapImageLayerSources = async (): Promise<ArrayOfLayerSources> => {
-  let allSublayers: Array<Sublayer> = [];
+  let allSublayers: Array<__esri.Sublayer> = [];
+  const [FeatureLayer] = await loadModules(['esri/layers/FeatureLayer']);
   const mapImageLayers = (mapController._map?.allLayers as any).items.filter(
-    (layer: Layer) => layer.type === 'map-image'
+    (layer: __esri.Layer) => layer.type === 'map-image'
   );
 
-  mapImageLayers.forEach((mapImageLayer: MapImageLayer) => {
+  mapImageLayers.forEach((mapImageLayer: __esri.MapImageLayer) => {
     allSublayers = allSublayers.concat(
       (mapImageLayer.allSublayers as any).items
     );
   });
 
-  const featureLayerPromises = allSublayers.map((sublayer: Sublayer) => {
+  const featureLayerPromises = allSublayers.map((sublayer: __esri.Sublayer) => {
     const featureLayer = new FeatureLayer({
       url: (sublayer as any).parent.url,
       layerId: sublayer.id
     });
 
-    return featureLayer.load().then((results: FeatureLayer) => results);
+    return featureLayer.load().then((results: __esri.FeatureLayer) => results);
   });
 
   const allFeatureLayers = await Promise.all(featureLayerPromises);
 
-  return returnLayerSearchSources(allFeatureLayers);
+  return layerSearchSources(allFeatureLayers);
 };
 
 export const setLayerSearchSource = async (): Promise<ArrayOfLayerSources> => {
-  const featureLayerSources = setFeatureLayerSources() as any;
+  const featureLayerSources = await setFeatureLayerSources();
 
   // const mapImageLayerSources = (await setMapImageLayerSources()) as any;
   // * NOTE: mapImageLayerSources returns console errors RE FeatureLayer

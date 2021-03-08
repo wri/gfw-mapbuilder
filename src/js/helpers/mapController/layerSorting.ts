@@ -1,4 +1,3 @@
-import Map from 'esri/Map';
 import { sortBy, flatten } from 'lodash-es';
 //Sorts layers by sorting configuration defined in resources
 //takes into account group sorting first and then individual layer sorting
@@ -6,7 +5,7 @@ import { sortBy, flatten } from 'lodash-es';
 export function getSortedLayers(
   layerPanelSettings: object,
   allLayerObjects: any[],
-  map?: Map
+  map?: __esri.Map
 ): string[] | undefined {
   if (!map) return;
   let mapLayerIDs = [] as string[];

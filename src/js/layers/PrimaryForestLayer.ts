@@ -1,6 +1,11 @@
 //@ts-nocheck
-import BaseTileLayer from 'esri/layers/BaseTileLayer';
-import esriRequest from 'esri/request';
+
+import { loadModules } from 'esri-loader';
+
+const [BaseTileLayer, esriRequest] = await loadModules([
+  'esri/layers/BaseTileLayer',
+  'esri/request'
+]);
 
 export const PrimaryForestLayer = BaseTileLayer.createSubclass({
   getTileUrl: function(level, row, column) {
