@@ -64,7 +64,6 @@ import {
 import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../../js/store/appSettings/actions';
-import { HighlightSpanKind } from 'typescript';
 
 setDefaultOptions({ css: true, version: '4.14' });
 
@@ -199,9 +198,6 @@ export class MapController {
           'esri/core/watchUtils',
           'esri/layers/MapImageLayer'
         ]);
-        const tt = watchUtils;
-        debugger;
-        // const { once } = watchUtils;
         store.dispatch(isMapReady(true));
         //default scale for map
         const wbBase = this._map?.basemap.clone();
