@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
-import { ReactComponent as PrintIcon } from '../../../../images/printIcon.svg';
+import { PrintIcon } from '../../../../images/printIcon';
+import { loadModules } from 'esri-loader';
 import { getShareableURL } from '../../../../js/helpers/shareFunctionality';
 import { geojsonToArcGIS } from '../../../../js/helpers/spatialDataTransformation';
 import { format, subDays } from 'date-fns';
@@ -282,8 +282,9 @@ const AOIDashboard = () => {
     }, [esriGeometry]);
 
     //Sets active feature to the AOI in redux, adds graphic on the map and zooms to the location on the map.
-    function handleViewOnMap(): void {
+    async function handleViewOnMap(): Promise<void> {
       if (!esriGeometry) return;
+      const [Polygon] = await loadModules(['esri/geometry/Polygon']);
       const featureFromAOIData = createFeatureObject(
         props.dataObject,
         esriGeometry

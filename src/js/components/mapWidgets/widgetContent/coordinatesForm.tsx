@@ -201,12 +201,12 @@ const CoordinatesForm: FunctionComponent = () => {
     }
   };
 
-  const setShape = (): void => {
-    let points: any = [];
+  const setShape = async (): Promise<void> => {
+    let points: __esri.Point[] = [];
     if (decimalOptions[selectedFormat].includes('DMS')) {
-      points = convertDMSToXY(dmsSections);
+      points = await convertDMSToXY(dmsSections);
     } else {
-      points = convertXYToPoint(ddSections);
+      points = await convertXYToPoint(ddSections);
     }
     mapController.setPolygon(points);
   };
@@ -260,7 +260,7 @@ const CoordinatesForm: FunctionComponent = () => {
           <button
             className="orange-button"
             style={{ backgroundColor: customColorTheme }}
-            onClick={(): void => setShape()}
+            onClick={() => setShape()}
           >
             {makeShapeLabel}
           </button>

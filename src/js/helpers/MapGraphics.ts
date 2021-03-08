@@ -15,7 +15,9 @@ import {
 
 import { FeatureResult } from '../../js/store/mapview/types';
 
-const setSymbol = (symbolType: string): any => {
+const setSymbol = (
+  symbolType: string
+): Promise<__esri.SimpleFillSymbol | __esri.SimpleMarkerSymbol> => {
   switch (symbolType) {
     case 'polygon':
       return getCustomSymbol();
@@ -40,7 +42,7 @@ const setGeometry = (symbolType: string, geometry: __esri.Geometry): any => {
 };
 
 //Helper for Report graphics in order to add POINT to the map
-export function addPointGraphic(map: Map, feature: any): void {
+export async function addPointGraphic(map: Map, feature: any): Promise<void> {
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
   let graphicsLayerExists = graphicsLayer;
   if (graphicsLayer) {
@@ -52,7 +54,7 @@ export function addPointGraphic(map: Map, feature: any): void {
     });
     graphicsLayerExists = false;
   }
-  const symbol = setSymbol('point');
+  const symbol = await setSymbol('point');
   const geometry = new Point({
     x: feature.geometry.x,
     y: feature.geometry.y
@@ -74,12 +76,12 @@ interface GraphicConfig {
   isUploadFile: boolean;
 }
 
-export function setNewGraphic({
+export async function setNewGraphic({
   map,
   mapview,
   allFeatures,
   isUploadFile
-}: GraphicConfig): void {
+}: GraphicConfig): Promise<void> {
   //TODO: this needs a refactor, we are handling file uploads and featues on the map with a single
   //function, we likely need to either reuse multiple functions or split this up
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
@@ -100,7 +102,9 @@ export function setNewGraphic({
     ) {
       isPolygon = true;
     }
-    const symbol = isPolygon ? setSymbol('polygon') : setSymbol('point');
+    const symbol = isPolygon
+      ? await setSymbol('polygon')
+      : await setSymbol('point');
 
     const geometry = isPolygon
       ? setGeometry('polygon', allFeatures[0].geometry)
@@ -120,7 +124,7 @@ export function setNewGraphic({
   if (isUploadFile) {
     projection.load().then(() => {
       const allGraphics = allFeatures.map(
-        (feature: FeatureResult, index: number) => {
+        async (feature: FeatureResult, index: number) => {
           const isPolygon =
             (feature.geometry as any).rings ||
             feature.geometry.type === 'polygon';
@@ -132,11 +136,12 @@ export function setNewGraphic({
            */
 
           const symbol = isPolygon
-            ? setSymbol('polygon')
-            : setSymbol(feature.geometry.type);
+            ? await setSymbol('polygon')
+            : await setSymbol(feature.geometry.type);
 
           if (index === 0) {
             //First feature is "active" by default > change it to appropriate color
+            //@ts-ignore TODO: test this
             symbol.outline.color = [115, 252, 253];
           }
           const geometry = isPolygon

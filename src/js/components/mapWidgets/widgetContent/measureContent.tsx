@@ -1,7 +1,5 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
-import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
 import {
   setMeasureResults,
   setActiveMeasureButton
@@ -151,19 +149,21 @@ const MeasureContent: FunctionComponent = () => {
   const dispatch = useDispatch();
 
   const setMeasurementUnit = (
-    selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
+    selectedUnit:
+      | __esri.AreaMeasurement2D['unit']
+      | __esri.DistanceMeasurement2D['unit']
   ): void => {
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
       mapController.updateSelectedMeasureWidget(
         'area',
-        selectedUnit as AreaMeasurement2D['unit']
+        selectedUnit as __esri.AreaMeasurement2D['unit']
       );
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
       mapController.updateSelectedMeasureWidget(
         'distance',
-        selectedUnit as AreaMeasurement2D['unit']
+        selectedUnit as __esri.AreaMeasurement2D['unit']
       );
     }
   };
@@ -232,8 +232,8 @@ const MeasureContent: FunctionComponent = () => {
               onChange={(e): void =>
                 setMeasurementUnit(
                   e.target.value as
-                    | AreaMeasurement2D['unit']
-                    | DistanceMeasurement2D['unit']
+                    | __esri.AreaMeasurement2D['unit']
+                    | __esri.DistanceMeasurement2D['unit']
                 )
               }
               disabled={activeButton === '' ? true : false}
