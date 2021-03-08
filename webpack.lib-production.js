@@ -63,7 +63,7 @@ module.exports = env => {
         },
         {
           test: /\.svg$/,
-          use: ['@svgr/webpack', 'url-loader']
+          loader: ['file-loader']
         }
       ]
     },
