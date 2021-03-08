@@ -59,8 +59,6 @@ const Report = (props: ReportProps): JSX.Element => {
   );
 
   React.useEffect(() => {
-    //disable map interactions
-    mapController.disableMapInteractions();
     const geostoreID = new URL(window.location.href).searchParams.get(
       'geostoreID'
     );
@@ -165,6 +163,9 @@ const Report = (props: ReportProps): JSX.Element => {
         setHideAttributeTable(true);
       }
     }
+
+    //disable map interactions
+    mapController.disableMapInteractions();
   }, [featureGeometry, layersLoading]);
 
   function printReport(): void {

@@ -2099,13 +2099,14 @@ export class MapController {
   }
 
   disableMapInteractions(): void {
-    this._mapview?.on('mouse-wheel', function(event) {
+    if (!this._mapview) return;
+    this._mapview.on('mouse-wheel', function(event) {
       event.stopPropagation();
     });
-    this._mapview?.on('double-click', function(event) {
+    this._mapview.on('double-click', function(event) {
       event.stopPropagation();
     });
-    this._mapview?.on('drag', function(event) {
+    this._mapview.on('drag', function(event) {
       event.stopPropagation();
     });
   }
