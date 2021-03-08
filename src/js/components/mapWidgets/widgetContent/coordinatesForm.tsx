@@ -1,29 +1,23 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import DMSSection from './coordinatesDMSSection';
 import DDSection from './coordinatesDDSection';
-
-import { mapController } from 'js/controllers/mapController';
-
+import { mapController } from '../../../../js/controllers/mapController';
 import {
   convertXYToPoint,
   convertDMSToXY
-} from 'js/helpers/coordinatesConversion';
-
-import { RootState } from 'js/store/index';
-
-import { coordinatesContent } from 'configs/translations/modal.tanslations';
-
+} from '../../../../js/helpers/coordinatesConversion';
+import { RootState } from '../../../../js/store/index';
+import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
 import {
   DDFormValues,
   SpecificDDSection,
   SpecificDMSSection,
   DMSFormValues,
   DMSCardinalPoint
-} from 'js/interfaces/coordinateForm';
+} from '../../../../js/interfaces/coordinateForm';
 
-import 'css/coordinatesForm';
+import '../../../../css/coordinatesForm';
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
@@ -207,12 +201,12 @@ const CoordinatesForm: FunctionComponent = () => {
     }
   };
 
-  const setShape = (): void => {
-    let points = [];
+  const setShape = async (): Promise<void> => {
+    let points: __esri.Point[] = [];
     if (decimalOptions[selectedFormat].includes('DMS')) {
-      points = convertDMSToXY(dmsSections);
+      points = await convertDMSToXY(dmsSections);
     } else {
-      points = convertXYToPoint(ddSections);
+      points = await convertXYToPoint(ddSections);
     }
     mapController.setPolygon(points);
   };
@@ -266,7 +260,7 @@ const CoordinatesForm: FunctionComponent = () => {
           <button
             className="orange-button"
             style={{ backgroundColor: customColorTheme }}
-            onClick={(): void => setShape()}
+            onClick={() => setShape()}
           >
             {makeShapeLabel}
           </button>

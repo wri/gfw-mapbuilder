@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 import { MemoCountryPicker } from './CountryPicker';
 import {
   sectors,
@@ -12,8 +12,8 @@ import {
 } from '../../../../configs/translations/staticOptions';
 import clsx from 'clsx';
 import { Select, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
-import 'css/formInputs.scss';
-import 'css/editProfile.scss';
+import '../../../css/formInputs.scss';
+import '../../../css/editProfile.scss';
 
 const EditProfile = (): JSX.Element => {
   const customColorTheme = useSelector(

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import UploadFile from 'js/components/sharedComponents/UploadFile';
-import { mapController } from 'js/controllers/mapController';
-import { renderModal } from 'js/store/appState/actions';
-import { RootState } from 'js/store';
-import BaseAnalysis from 'js/components/leftPanel/analysisPanel/BaseAnalysis';
-import { analysisContent } from 'configs/translations/leftPanel.translations';
-import { PolygonIcon } from 'images/PolygonIcon';
-import { ReactComponent as PenIcon } from 'images/penIcon.svg';
-import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
+import UploadFile from '../../../../js/components/sharedComponents/UploadFile';
+import { mapController } from '../../../../js/controllers/mapController';
+import { renderModal } from '../../../../js/store/appState/actions';
+import { RootState } from '../../../../js/store';
+import BaseAnalysis from '../../../../js/components/leftPanel/analysisPanel/BaseAnalysis';
+import { analysisContent } from '../../../../../configs/translations/leftPanel.translations';
+import { PolygonIcon } from '../../../../images/PolygonIcon';
+import { PenIcon } from '../../../../images/penIcon';
+import { PlusIcon } from '../../../../images/plusIcon';
 import { createSelector } from 'reselect';
 
 //Memo'd selectors

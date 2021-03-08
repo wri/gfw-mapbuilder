@@ -1,11 +1,12 @@
-import * as esriIntl from 'esri/intl';
 import { FieldInfo } from './DataPanel';
 
 //Helper to fetch format options for each attribute and format it according to the instruction found
 export function formatAttributeValues(
   attributes: __esri.Graphic['attributes'],
-  fields: FieldInfo[] | null
+  fields: FieldInfo[] | null,
+  esriIntl: any
 ): object {
+  // const [esriIntl] = await loadModules(['esri/intl']);
   const formatAttributeObject = {} as object;
   Object.keys(attributes).forEach(attribute => {
     const attributeField = fields?.find(f => f.fieldName === attribute);

@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import UploadFile from 'js/components/sharedComponents/UploadFile';
-import { renderModal } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
-import { penContent } from 'configs/translations/modal.tanslations';
-import { PolygonIcon } from 'images/PolygonIcon';
-import { ReactComponent as PenIcon } from 'images/penIcon.svg';
-import { ReactComponent as PlusIcon } from 'images/plusIcon.svg';
+import UploadFile from '../../../../js/components/sharedComponents/UploadFile';
+import { renderModal } from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
+import { penContent } from '../../../../../configs/translations/modal.tanslations';
+import { PolygonIcon } from '../../../../images/PolygonIcon';
+import { PenIcon } from '../../../../images/penIcon';
+import { PlusIcon } from '../../../../images/plusIcon';
 
-import 'css/penContent.scss';
+import '../../../../css/penContent.scss';
 
 const PenContent: FunctionComponent = () => {
   const dispatch = useDispatch();

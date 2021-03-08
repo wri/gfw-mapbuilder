@@ -3,9 +3,9 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { format, parse } from 'date-fns';
 import { useSelector } from 'react-redux';
 
-import { mapController } from 'js/controllers/mapController';
-import { RootState } from 'js/store/index';
-import { LayerProps } from 'js/store/mapview/types';
+import { mapController } from '../../../../js/controllers/mapController';
+import { RootState } from '../../../../js/store/index';
+import { LayerProps } from '../../../../js/store/mapview/types';
 
 interface DateRangeProps {
   layer: LayerProps;

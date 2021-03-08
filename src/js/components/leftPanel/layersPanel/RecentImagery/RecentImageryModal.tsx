@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../../../js/store';
 import imageryText from '../../../../../../configs/translations/imagery.translations';
 import { DaySelector } from './DaySelector';
 import { MonthSelector } from './MonthSelector';

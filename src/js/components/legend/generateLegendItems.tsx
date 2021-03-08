@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LayerProps } from 'js/store/mapview/types';
+import { LayerProps } from '../../../js/store/mapview/types';
 import {
   PointItem,
   BasicItem,
@@ -7,7 +7,7 @@ import {
   LineItem,
   GradientItem
 } from './LegendLabelComponents';
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../js/controllers/mapController';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];

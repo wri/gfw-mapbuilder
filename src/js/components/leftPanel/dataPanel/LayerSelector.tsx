@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LayerFeatureResult } from 'js/store/mapview/types';
+import { LayerFeatureResult } from '../../../../js/store/mapview/types';
 
 interface LayerSelectorProps {
   activeLayerInfo: LayerFeatureResult | undefined;

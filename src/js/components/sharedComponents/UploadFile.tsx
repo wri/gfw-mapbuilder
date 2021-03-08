@@ -1,25 +1,25 @@
 import React, { DragEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 
 import {
   renderModal,
   toggleTabviewPanel,
   selectActiveTab
-} from 'js/store/appState/actions';
-import { FeatureResult } from 'js/store/mapview/types';
-import { LayerFeatureResult } from 'js/store/mapview/types';
+} from '../../../js/store/appState/actions';
+import { FeatureResult } from '../../../js/store/mapview/types';
+import { LayerFeatureResult } from '../../../js/store/mapview/types';
 import {
   setActiveFeatures,
   setActiveFeatureIndex
-} from 'js/store/mapview/actions';
+} from '../../../js/store/mapview/actions';
 
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
-import { registerGeometry } from 'js/helpers/geometryRegistration';
-import { mapController } from 'js/controllers/mapController';
+import { geojsonToArcGIS } from '../../../js/helpers/spatialDataTransformation';
+import { registerGeometry } from '../../../js/helpers/geometryRegistration';
+import { mapController } from '../../../js/controllers/mapController';
 import { uploadContent } from '../../../../configs/translations/upload.translations';
 
-import 'css/uploadFile.scss';
+import '../../../css/uploadFile.scss';
 
 const UploadFile = (): JSX.Element => {
   const dispatch = useDispatch();

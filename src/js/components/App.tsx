@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { loadModules } from 'esri-loader';
 import MapContent from './MapContent';
 import Header from './header/Header';
 import ModalCard from './modal/modalCard';
-import { RootState } from 'js/store/index';
+import { RootState } from '../../js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
-import Loader from 'js/components/sharedComponents/Loader';
-import { overwriteSettings } from 'js/store/appSettings/actions';
-import { setLoggedIn } from 'js/store/appState/actions';
-import { AppSettings } from 'js/store/appSettings/types';
-import Portal from 'esri/portal/Portal';
-import PortalItem from 'esri/portal/PortalItem';
+import Loader from '../../js/components/sharedComponents/Loader';
+import { overwriteSettings } from '../../js/store/appSettings/actions';
+import { setLoggedIn } from '../../js/store/appState/actions';
+import { AppSettings } from '../../js/store/appSettings/types';
 import {
   checkForReportView,
   loadGoogleAnalytics,
@@ -21,8 +20,7 @@ import {
 //import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
-import 'arcgis-js-api/themes/light/main.scss';
-import 'css/index.scss';
+import '../../css/index.scss';
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
@@ -42,28 +40,37 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   loadGoogleAnalytics(analyticsCode);
 
+  const fetchPortalInfo = async (appID: string) => {
+    const [Portal, PortalItem] = await loadModules([
+      'esri/portal/Portal',
+      'esri/portal/PortalItem'
+    ]);
+
+    // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template and we need to fetch settings using that app id to overwrite our default settings
+    const portalURL = sharinghost || 'https://www.arcgis.com';
+    const portalA = new Portal({ url: portalURL });
+    const portItem = new PortalItem({ id: appID, portal: portalA });
+    portItem
+      .fetchData('json')
+      .then(res => {
+        console.log(res);
+        const { values } = res;
+        dispatch(overwriteSettings({ ...resources, ...props, ...values }));
+        changeDefaultLanguage(values?.language);
+        setShowGlobalSpinner(false);
+      })
+      .catch(e => {
+        console.error(e);
+        dispatch(overwriteSettings({ ...resources, ...props }));
+        changeDefaultLanguage(resources.language);
+        setShowGlobalSpinner(false);
+      });
+  };
+
   useEffect(() => {
     const appID = new URL(window.location.href).searchParams.get('appid');
     if (appID) {
-      // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template and we need to fetch settings using that app id to overwrite our default settings
-      const portalURL = sharinghost || 'https://www.arcgis.com';
-      const portalA = new Portal({ url: portalURL });
-      const portItem = new PortalItem({ id: appID, portal: portalA });
-      portItem
-        .fetchData('json')
-        .then(res => {
-          console.log(res);
-          const { values } = res;
-          dispatch(overwriteSettings({ ...resources, ...props, ...values }));
-          changeDefaultLanguage(values?.language);
-          setShowGlobalSpinner(false);
-        })
-        .catch(e => {
-          console.error(e);
-          dispatch(overwriteSettings({ ...resources, ...props }));
-          changeDefaultLanguage(resources.language);
-          setShowGlobalSpinner(false);
-        });
+      fetchPortalInfo(appID);
     } else {
       //Read our local resources.js file And any external library resources (which are prioritized)
       dispatch(overwriteSettings({ ...resources, ...props }));
@@ -85,7 +92,7 @@ const App = (props: AppSettings | any): JSX.Element => {
       //Check for url param token as well, incase we had a redirect
       const urlToken = new URL(window.location.href).searchParams.get('token');
       const token = localStorage.getItem('userToken');
-      let userToken = null;
+      let userToken: any = null;
       //URL token takes priority
       if (urlToken) {
         userToken = urlToken;

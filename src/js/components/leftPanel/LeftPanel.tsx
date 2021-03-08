@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-
-import { RootState } from 'js/store/index';
-import { selectActiveTab, toggleTabviewPanel } from 'js/store/appState/actions';
-
+import { RootState } from '../../../js/store/index';
+import {
+  selectActiveTab,
+  toggleTabviewPanel
+} from '../../../js/store/appState/actions';
 import TabViewContainer from './TabViewContainer';
 
-import 'css/leftpanel.scss';
+import { LayersTabIcon } from '../../../images/layersTabIcon';
+import { AnalysisTabIcon } from '../../../images/analysisTabIcon';
+import { DataTabIcon } from '../../../images/dataTabIcon';
+import { DocumentsTabIcon } from '../../../images/documentsTabIcon';
+import { InfoTabIcon } from '../../../images/infoTabIcon';
+import { HamburgerIcon } from '../../../images/hamburgerIcon';
 
-import { ReactComponent as LayersTabIcon } from 'images/layersTabIcon.svg';
-import { ReactComponent as AnalysisTabIcon } from 'images/analysisTabIcon.svg';
-import { ReactComponent as DataTabIcon } from 'images/dataTabIcon.svg';
-import { ReactComponent as DocumentsTabIcon } from 'images/documentsTabIcon.svg';
-import { ReactComponent as InfoTabIcon } from 'images/infoTabIcon.svg';
-import { ReactComponent as HamburgerIcon } from 'images/hamburgerIcon.svg';
+import '../../../css/leftpanel.scss';
 
 export interface TabProps {
   key: string;

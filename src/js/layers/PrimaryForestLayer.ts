@@ -1,45 +1,52 @@
 //@ts-nocheck
-import BaseTileLayer from 'esri/layers/BaseTileLayer';
-import esriRequest from 'esri/request';
+import { loadModules } from 'esri-loader';
 
-export const PrimaryForestLayer = BaseTileLayer.createSubclass({
-  getTileUrl: function(level, row, column) {
-    return this.urlTemplate
-      .replace('{z}', level)
-      .replace('{x}', column)
-      .replace('{y}', row);
-  },
+export const createPrimary = async () => {
+  const [esriRequest, BaseTileLayer] = await loadModules([
+    'esri/request',
+    'esri/layers/BaseTileLayer'
+  ]);
 
-  fetchTile: function(level, row, column) {
-    // call getTileUrl() method to construct the URL to tiles
-    // for a given level, row and col provided by the LayerView
-    const url = this.getTileUrl(level, row, column);
-    // request for tiles based on the generated url
-    // set allowImageDataAccess to true to allow
-    // cross-domain access to create WebGL textures for 3D.
-    return esriRequest(url, {
-      responseType: 'image',
-      allowImageDataAccess: true
-    }).then(response => {
-      const image = response.data;
-      const width = this.tileInfo.size[0];
-      const height = this.tileInfo.size[0];
+  const PrimaryForestLayer = BaseTileLayer.createSubclass({
+    getTileUrl: function(level, row, column) {
+      return this.urlTemplate
+        .replace('{z}', level)
+        .replace('{x}', column)
+        .replace('{y}', row);
+    },
 
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.width = width;
-      canvas.height = height;
+    fetchTile: function(level, row, column) {
+      // call getTileUrl() method to construct the URL to tiles
+      // for a given level, row and col provided by the LayerView
+      const url = this.getTileUrl(level, row, column);
+      // request for tiles based on the generated url
+      // set allowImageDataAccess to true to allow
+      // cross-domain access to create WebGL textures for 3D.
+      return esriRequest(url, {
+        responseType: 'image',
+        allowImageDataAccess: true
+      }).then(response => {
+        const image = response.data;
+        const width = this.tileInfo.size[0];
+        const height = this.tileInfo.size[0];
 
-      const imageObject = new Image();
-      imageObject.crossOrigin = 'Anonymous';
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
 
-      imageObject.onload = () => {
-        context.drawImage(imageObject, 0, 0, width, height);
-        const imageData = context.getImageData(0, 0, width, height);
-        context.putImageData(imageData, 0, 0);
-      };
-      imageObject.src = image.src;
-      return canvas;
-    });
-  }
-});
+        const imageObject = new Image();
+        imageObject.crossOrigin = 'Anonymous';
+
+        imageObject.onload = () => {
+          context.drawImage(imageObject, 0, 0, width, height);
+          const imageData = context.getImageData(0, 0, width, height);
+          context.putImageData(imageData, 0, 0);
+        };
+        imageObject.src = image.src;
+        return canvas;
+      });
+    }
+  });
+  return PrimaryForestLayer;
+};

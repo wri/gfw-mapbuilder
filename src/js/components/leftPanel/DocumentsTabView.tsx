@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store';
-import { Attachment } from 'js/interfaces/Attachment';
-import { documentsContent } from 'configs/translations/leftPanel.translations';
-import { ReactComponent as DocIcon } from 'src/images/documentIcon.svg';
+import { RootState } from '../../../js/store';
+import { Attachment } from '../../../js/interfaces/Attachment';
+import { documentsContent } from '../../../../configs/translations/leftPanel.translations';
+import { DocIcon } from '../../../images/documentIcon';
 
 interface Props {
   key: string;

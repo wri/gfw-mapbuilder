@@ -1,15 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../../../js/store/index';
+import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
+import {
+  DMSFormValues,
+  CoordinateProps
+} from '../../../../js/interfaces/coordinateForm';
+import { TrashCanIcon } from '../../../../images/trashCanIcon';
 
-import { RootState } from 'js/store/index';
-
-import { coordinatesContent } from 'configs/translations/modal.tanslations';
-
-import { DMSFormValues, CoordinateProps } from 'js/interfaces/coordinateForm';
-
-import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
-
-import 'css/coordinatesForm';
+import '../../../../css/coordinatesForm.scss';
 
 interface DMSSectionProps {
   dmsSection: {

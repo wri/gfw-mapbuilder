@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'js/store/index';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 
-import { mapController } from 'js/controllers/mapController';
+import { RootState } from '../../../../../js/store/index';
+import { mapController } from '../../../../../js/controllers/mapController';
 
 interface LayerTransparencyProps {
   layerID?: string;
@@ -58,13 +58,11 @@ const ImageryLayerTransparencySlider = (
           width: 10,
           bottom: -6
         }}
-        handleStyle={[
-          {
-            border: `2px solid ${customColorTheme}`,
-            height: 15,
-            width: 15
-          }
-        ]}
+        handleStyle={{
+          border: `2px solid ${customColorTheme}`,
+          height: 15,
+          width: 15
+        }}
       />
     </div>
   );

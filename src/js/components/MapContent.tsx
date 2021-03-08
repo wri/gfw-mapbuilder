@@ -8,7 +8,7 @@ import Footer from './Footer';
 import Report from './Report';
 import UserPointPopup from './mapWidgets/userPointPopup';
 
-import { RootState } from 'js/store';
+import { RootState } from '../../js/store';
 
 interface MapContentProps {
   report: boolean;

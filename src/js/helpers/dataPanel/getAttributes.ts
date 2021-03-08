@@ -1,5 +1,5 @@
 //Helper fn to grab WHICH attributes we want to show in the data panel. Those can be coming from either popupTemplate in case of webmaps or it can also come from layer metadata which is fetched at the layer loading point. This is the case with most non webmap layers.
-import store from 'js/store';
+import store from '../../../js/store';
 
 import { FieldInfo } from './DataPanel';
 

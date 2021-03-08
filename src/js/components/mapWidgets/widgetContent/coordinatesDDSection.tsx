@@ -1,13 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-
-import { RootState } from 'js/store/index';
-
-import { DDSectionProps } from 'js/interfaces/coordinateForm';
-
-import { coordinatesContent } from 'configs/translations/modal.tanslations';
-
-import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
+import { RootState } from '../../../../js/store/index';
+import { DDSectionProps } from '../../../../js/interfaces/coordinateForm';
+import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
+import { TrashCanIcon } from '../../../../images/trashCanIcon';
 
 export default function DDSection(props: DDSectionProps): JSX.Element {
   const selectedLanguage = useSelector(

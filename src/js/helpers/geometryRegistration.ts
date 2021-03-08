@@ -1,9 +1,12 @@
-import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
-import { FeatureResult } from 'js/store/mapview/types';
+import { loadModules } from 'esri-loader';
+import { arcgisToGeoJSON } from '../../js/helpers/spatialDataTransformation';
+import { FeatureResult } from '../../js/store/mapview/types';
 
 export async function registerGeometry(feature: FeatureResult): Promise<any> {
   let geographic;
+  const [webMercatorUtils] = await loadModules([
+    'esri/geometry/support/webMercatorUtils'
+  ]);
 
   if (feature.geometry.spatialReference.wkid === 4326) {
     geographic = feature.geometry;

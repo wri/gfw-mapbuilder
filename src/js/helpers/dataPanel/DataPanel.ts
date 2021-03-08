@@ -1,19 +1,17 @@
-import MapView from 'esri/views/MapView';
-import Graphic from 'esri/Graphic';
-import Map from 'esri/Map';
-import store from 'js/store';
+import { loadModules } from 'esri-loader';
+import store from '../../../js/store';
 import { esriQuery } from './esriQuery';
 import { getAttributesToFetch } from './getAttributes';
 import { formatAttributeValues } from './formatAttributes';
-import { setActiveFeatures } from 'js/store/mapview/actions';
+import { setActiveFeatures } from '../../../js/store/mapview/actions';
 import {
   LayerFeatureResult,
   FeatureResult,
   FieldName
-} from 'js/store/mapview/types';
-import { selectActiveTab } from 'js/store/appState/actions';
-import { layerIsInScale } from 'js/helpers/layerScaleCheck';
-import { viirsFieldNames } from 'js/helpers/viirsLayerUtil';
+} from '../../../js/store/mapview/types';
+import { selectActiveTab } from '../../../js/store/appState/actions';
+import { layerIsInScale } from '../../../js/helpers/layerScaleCheck';
+import { viirsFieldNames } from '../../../js/helpers/viirsLayerUtil';
 
 export interface FormatOptions {
   dateFormat: null | any;
@@ -33,7 +31,7 @@ type LayerFieldInfos = {
 };
 
 async function fetchVIIRSFeatures(
-  mapview: MapView,
+  mapview: __esri.MapView,
   mapPoint: any,
   viirsConfig: any
 ): Promise<any> {
@@ -75,7 +73,7 @@ export async function getAllLayerFields(
 
 async function fetchQueryTask(
   layer: __esri.FeatureLayer,
-  mapview: MapView,
+  mapview: __esri.MapView,
   event: __esri.MapViewClickEvent,
   isSubLayer?: boolean
 ): Promise<{
@@ -125,12 +123,14 @@ async function fetchQueryTask(
       ? queryParams.outFields.concat(newOutFields)
       : ['*'];
     const sublayerResult = await esriQuery(url, queryParams);
+    const [esriIntl] = await loadModules(['esri/intl']);
 
     if (sublayerResult.features.length > 0) {
       featureResult = sublayerResult.features.map(f => {
         const formattedAttributes = formatAttributeValues(
           f.attributes,
-          fieldNames
+          fieldNames,
+          esriIntl
         );
         return {
           attributes: formattedAttributes,
@@ -148,7 +148,7 @@ async function fetchQueryTask(
 
 async function fetchQueryFeatures(
   layer: __esri.FeatureLayer,
-  mapview: MapView,
+  mapview: __esri.MapView,
   event: __esri.MapViewClickEvent
 ): Promise<any> {
   let featureResult = [] as FeatureResult[];
@@ -202,8 +202,8 @@ async function fetchQueryFeatures(
 
 //Feature Fetching Logic starts
 export async function queryLayersForFeatures(
-  mapview: MapView,
-  map: Map | undefined,
+  mapview: __esri.MapView,
+  map: __esri.Map | undefined,
   event: __esri.MapViewClickEvent
 ): Promise<void> {
   const layerFeatureResults: LayerFeatureResult[] = [];
@@ -279,6 +279,8 @@ export async function queryLayersForFeatures(
             l => l.id === 'VIIRS_ACTIVE_FIRES'
           );
           if (!viirsConfig) return;
+
+          const [Graphic] = await loadModules(['esri/Graphic']);
           const viirsFeatures = await fetchVIIRSFeatures(
             mapview,
             event.mapPoint,

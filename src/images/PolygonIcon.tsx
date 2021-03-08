@@ -10,6 +10,7 @@ export const PolygonIcon = (props: PolygonIconProps) => {
   //
   return (
     <svg
+      {...props}
       className="svg-icon"
       style={{ width: props.width, height: props.height }}
     >

@@ -1,5 +1,5 @@
 import store from '../store/index';
-import { setLanguage, renderModal } from 'js/store/appState/actions';
+import { setLanguage, renderModal } from '../../js/store/appState/actions';
 import resources from '../../../configs/resources';
 //Check the URL for report parameter
 export function checkForReportView(): boolean {

@@ -6,7 +6,6 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
-const ArcGISPlugin = require('@arcgis/webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = () => {
@@ -69,7 +68,7 @@ module.exports = () => {
         },
         {
           test: /\.svg$/,
-          use: ['@svgr/webpack', 'url-loader']
+          loader: ['file-loader']
         }
       ]
     },
@@ -77,12 +76,6 @@ module.exports = () => {
       new CleanWebpackPlugin(),
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 20
-      }),
-      new ArcGISPlugin({
-        useDefaultAssetLoaders: false,
-        features: {
-          '3d': false
-        }
       }),
 
       new CopyWebpackPlugin([

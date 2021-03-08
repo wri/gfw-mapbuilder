@@ -1,13 +1,14 @@
-import Point from 'esri/geometry/Point';
+import { loadModules } from 'esri-loader';
 
 import {
   SpecificDMSSection,
   SpecificDDSection
 } from '../interfaces/coordinateForm';
 
-export const convertDMSToXY = (
+export const convertDMSToXY = async (
   setDMSForm: Array<SpecificDMSSection>
-): Array<Point> => {
+): Promise<__esri.Point[]> => {
+  const [Point] = await loadModules(['esri/geometry/Point']);
   return setDMSForm.map(point => {
     const { latitude, longitude } = point;
     let convertedLatitude;
@@ -44,9 +45,10 @@ export const convertDMSToXY = (
   });
 };
 
-export const convertXYToPoint = (
+export const convertXYToPoint = async (
   setDDForm: Array<SpecificDDSection>
-): Array<Point> => {
+): Promise<__esri.Point[]> => {
+  const [Point] = await loadModules(['esri/geometry/Point']);
   return setDDForm.map(point => {
     const { latitude, longitude } = point;
 

@@ -6,3 +6,7 @@ declare module '*.svg' {
 }
 
 declare module 'react-spinners-css';
+
+interface Date {
+  getJulian: any;
+}

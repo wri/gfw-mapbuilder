@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../../js/store';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import 'css/canopyDensityModal';
-import { setCanopyDensity } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
+import '../../../../css/canopyDensityModal.scss';
+import { setCanopyDensity } from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
 
 import { canopyDensityContentConfig } from '../../../../../configs/translations/modal.tanslations';
 
@@ -90,13 +90,11 @@ const CanopyDensityContent = (): JSX.Element => {
           width: 10,
           bottom: -6
         }}
-        handleStyle={[
-          {
-            border: `2px solid ${customColorTheme}`,
-            height: 20,
-            width: 20
-          }
-        ]}
+        handleStyle={{
+          border: `2px solid ${customColorTheme}`,
+          height: 20,
+          width: 20
+        }}
         onChange={handleSliderChange}
       />
     </div>

@@ -1,4 +1,4 @@
-import { LayerFactory } from 'js/helpers/LayerFactory';
+import { LayerFactory } from '../js/helpers/LayerFactory';
 import { allowedLayers } from '../configs/layer-config';
 
 const noTypeLayer = {

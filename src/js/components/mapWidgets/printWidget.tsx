@@ -1,9 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { renderModal } from '../../store/appState/actions';
 
-import { ReactComponent as PrintIcon } from '../../../images/printIcon.svg';
+import { PrintIcon } from '../../../images/printIcon';
 
 const PrintWidget: FunctionComponent = () => {
   const dispatch = useDispatch();

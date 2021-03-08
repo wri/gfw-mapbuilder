@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../../js/controllers/mapController';
 import { printContent } from '../../../../../configs/translations/modal.tanslations';
-import { RootState } from 'js/store/index';
+import { RootState } from '../../../../js/store/index';
 
 const PrintContent: FunctionComponent = () => {
   const [pdfLoading, setPDFLoading] = useState(false);

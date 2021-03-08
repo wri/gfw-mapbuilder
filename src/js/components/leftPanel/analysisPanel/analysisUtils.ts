@@ -1,5 +1,5 @@
-import * as webMercatorUtils from 'esri/geometry/support/webMercatorUtils';
-import { arcgisToGeoJSON } from 'js/helpers/spatialDataTransformation';
+import { loadModules } from 'esri-loader';
+import { arcgisToGeoJSON } from '../../../../js/helpers/spatialDataTransformation';
 
 export async function fetchGFWWidgetConfig(url: string): Promise<any> {
   //GET request to grab the vega spec from the API
@@ -45,6 +45,9 @@ export async function fetchWCSAnalysis(
   yearRange: number[] | null,
   selectedLanguage: string
 ): Promise<any> {
+  const [webMercatorUtils] = await loadModules([
+    'esri/geometry/support/webMercatorUtils'
+  ]);
   if (activeFeature.geometry.spatialReference.isWebMercator) {
     activeFeature.geometry = webMercatorUtils.webMercatorToGeographic(
       activeFeature.geometry
