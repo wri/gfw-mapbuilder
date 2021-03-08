@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import 'css/canopyDensityModal';
+import '../../../../css/canopyDensityModal.scss';
 import { setCanopyDensity } from '../../../../js/store/appState/actions';
 import { mapController } from '../../../../js/controllers/mapController';
 

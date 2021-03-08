@@ -2,7 +2,7 @@ import React from 'react';
 
 export const PenIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-draw-upload" viewBox="0 0 21 21">
         <title>Draw or Upload</title>
         <path

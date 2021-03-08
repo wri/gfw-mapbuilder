@@ -2,7 +2,7 @@ import React from 'react';
 
 export const PrintIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-print" viewBox="0 0 19 14">
         <title>Print</title>
         <path

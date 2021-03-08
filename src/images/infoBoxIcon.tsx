@@ -1,7 +1,7 @@
 import React from 'react';
 export const InfoboxIcon = (props: any) => {
   return (
-    <svg className="svg-icon__nav">
+    <svg {...props} className="svg-icon__nav">
       <svg className="svg-icon">
         <svg id="icon-h-language" viewBox="0 0 22 22">
           <title>Select Language</title>

@@ -19,7 +19,7 @@ import {
 import { mapController } from '../../../../js/controllers/mapController';
 import { generateMinimaps } from './generateMinimaps';
 
-import 'css/aoiDashboard.scss';
+import '../../../../css/aoiDashboard.scss';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 const viirsAlertsURL =

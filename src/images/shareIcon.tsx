@@ -2,7 +2,7 @@ import React from 'react';
 
 export const ShareIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-share" viewBox="0 0 1024 1024">
         <title>Share</title>
         <path

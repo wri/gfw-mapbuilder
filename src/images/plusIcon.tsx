@@ -3,6 +3,7 @@ import React from 'react';
 export const PlusIcon = (props: any) => {
   return (
     <svg
+      {...props}
       width="20px"
       height="21px"
       viewBox="0 0 20 21"

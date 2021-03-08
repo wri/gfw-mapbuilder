@@ -6,10 +6,9 @@ import {
   DMSFormValues,
   CoordinateProps
 } from '../../../../js/interfaces/coordinateForm';
-
 import { TrashCanIcon } from '../../../../images/trashCanIcon';
 
-import 'css/coordinatesForm';
+import '../../../../css/coordinatesForm.scss';
 
 interface DMSSectionProps {
   dmsSection: {

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const LegendIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-legend" viewBox="0 0 1081 1024">
         <title>Legend</title>
         <path

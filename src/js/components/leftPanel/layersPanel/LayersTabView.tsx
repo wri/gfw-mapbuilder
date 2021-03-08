@@ -2,12 +2,13 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../js/store';
 import { mapController } from '../../../../js/controllers/mapController';
-import 'css/leftpanel.scss';
 import WebmapLayersGroup from './WebmapLayersGroup';
 import BasemapLayersGroup from './BasemapLayersGroup';
 import DefaultLayerGroup from './DefaultLayerGroup';
 import ImageryLayersGroup from './ImageryLayersGroup';
 import { layersPanelTranslations } from '../../../../../configs/translations/leftPanel.translations';
+
+import '../../../../css/leftpanel.scss';
 
 interface LayerControlProps {
   selectedLanguage: string;

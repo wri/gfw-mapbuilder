@@ -1,7 +1,7 @@
 import React from 'react';
 export const DataTabIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-data" viewBox="0 0 1075 1024">
         <title>Data</title>
         <path

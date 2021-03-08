@@ -2,7 +2,7 @@ import React from 'react';
 
 export const MeasureIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-measure" viewBox="0 0 11 25">
         <title>Measure</title>
         <path fill="#555" d="M10 1v23H1V1h9m1-1H0v25h11V0z"></path>

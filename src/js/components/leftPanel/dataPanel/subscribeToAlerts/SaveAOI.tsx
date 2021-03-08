@@ -18,7 +18,7 @@ import { registerGeometry } from '../../../../../js/helpers/geometryRegistration
 import { setActiveFeatures } from '../../../../../js/store/mapview/actions';
 import { RootState } from '../../../../../js/store/index';
 
-import 'css/saveAOI.scss';
+import '../../../../../css/saveAOI.scss';
 
 const subscriptionURL =
   'https://production-api.globalforestwatch.org/v1/subscriptions';

@@ -17,7 +17,7 @@ import { renderModal } from '../../../js/store/appState/actions';
 
 import { RootState } from '../../../js/store';
 
-import 'css/modalCard.scss';
+import '../../../css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector(

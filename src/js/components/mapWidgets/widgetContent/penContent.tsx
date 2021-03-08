@@ -8,7 +8,7 @@ import { PolygonIcon } from '../../../../images/PolygonIcon';
 import { PenIcon } from '../../../../images/penIcon';
 import { PlusIcon } from '../../../../images/plusIcon';
 
-import 'css/penContent.scss';
+import '../../../../css/penContent.scss';
 
 const PenContent: FunctionComponent = () => {
   const dispatch = useDispatch();

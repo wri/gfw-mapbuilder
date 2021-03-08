@@ -15,7 +15,7 @@ import { DocumentsTabIcon } from '../../../images/documentsTabIcon';
 import { InfoTabIcon } from '../../../images/infoTabIcon';
 import { HamburgerIcon } from '../../../images/hamburgerIcon';
 
-import 'css/leftpanel.scss';
+import '../../../css/leftpanel.scss';
 
 export interface TabProps {
   key: string;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import 'css/report.scss';
+import '../../../css/report.scss';
 
 interface DownloadOptionsProps {
   csv: string;

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const AnalysisTabIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-analysis" viewBox="0 0 1138 1024">
         <title>Analysis</title>
         <path

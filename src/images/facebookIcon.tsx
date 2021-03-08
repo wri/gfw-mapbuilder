@@ -1,7 +1,7 @@
 import React from 'react';
 export const FacebookIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-facebook" viewBox="0 0 1024 1024">
         <title>Facebook</title>
         <path

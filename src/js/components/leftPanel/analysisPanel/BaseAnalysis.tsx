@@ -21,13 +21,14 @@ import Loader from '../../../../js/components/sharedComponents/Loader';
 import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
-import 'css/leftpanel.scss';
 import { AnalysisModule } from '../../../../js/store/appSettings/types';
 import {
   fetchGFWWidgetConfig,
   fetchDownloadInfo,
   fetchWCSAnalysis
 } from './analysisUtils';
+
+import '../../../../css/leftpanel.scss';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {

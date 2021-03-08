@@ -1,8 +1,8 @@
 import React from 'react';
 export const AboutIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
-      <svg id="icon-plus" viewBox="0 0 1024 1024">
+    <svg {...props} className="svg-icon">
+      <svg {...props} id="icon-plus" viewBox="0 0 1024 1024">
         <title>About Icon</title>
         <path
           className="path1"

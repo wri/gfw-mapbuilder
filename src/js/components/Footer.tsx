@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../js/store/index';
 import { mapController } from '../../js/controllers/mapController';
-import 'css/footer.scss';
+
+import '../../css/footer.scss';
 
 const Footer = (): JSX.Element => {
   const footerLinks = useSelector(

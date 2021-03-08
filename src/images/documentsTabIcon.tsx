@@ -2,7 +2,7 @@ import React from 'react';
 
 export const DocumentsTabIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-documents-tab" viewBox="0 0 13 15">
         <title>Documents</title>
         <path

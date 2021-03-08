@@ -5,7 +5,7 @@ import { RootState } from '../../../js/store/index';
 import { headerContent } from '../../../../configs/translations/header.translations';
 import GFWLoginOptions from '../../../js/components/mapWidgets/widgetContent/GFWLoginOptions';
 
-import 'css/leftpanel.scss';
+import '../../../css/leftpanel.scss';
 
 const MenuTabView = (props: any): JSX.Element => {
   const [renderMyGFWOptions, setRenderMyGFWOptions] = useState(false);

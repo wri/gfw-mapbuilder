@@ -216,11 +216,18 @@ export class MapController {
     this._mapview
       .when(
         async () => {
-          const [geometryEngine, once, MapImageLayer] = await loadModules([
+          const [
+            geometryEngine,
+            watchUtils,
+            MapImageLayer
+          ] = await loadModules([
             'esri/geometry/geometryEngine',
             'esri/core/watchUtils',
             'esri/layers/MapImageLayer'
           ]);
+          const tt = watchUtils;
+          debugger;
+          // const { once } = watchUtils;
           store.dispatch(isMapReady(true));
           //default scale for map
           const wbBase = this._map?.basemap.clone();
@@ -442,6 +449,7 @@ export class MapController {
               return LayerFactory(this._mapview, layerObject);
             }
           );
+          console.log(esriRemoteLayersPromises);
 
           Promise.all(
             esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))
@@ -465,7 +473,7 @@ export class MapController {
               if (!activeLayer || activeLayer.loaded === true) {
                 store.dispatch(setLayersLoading(false));
               } else {
-                once(activeLayer, 'loaded', () => {
+                watchUtils.once(activeLayer, 'loaded', () => {
                   store.dispatch(setLayersLoading(false));
                 });
               }
@@ -478,7 +486,8 @@ export class MapController {
                 if (l.loaded === true) {
                   store.dispatch(setLayersLoading(false));
                 } else {
-                  once(l, 'loaded', () => {
+                  console.log(l);
+                  watchUtils.once(l, 'loaded', () => {
                     store.dispatch(setLayersLoading(false));
                   });
                 }

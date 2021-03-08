@@ -4,16 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import ImagerySlider from './RecentImagery/ImagerySlider';
-import { ReactComponent as InfoIcon } from '../../../../images/infoIcon.svg';
+import { InfoIcon } from '../../../../images/infoIcon';
 import {
   renderModal,
   setInfoModalLayerID
 } from '../../../../js/store/appState/actions';
-import 'css/layer-toggle-checkbox.scss';
 import RecentImagery from './RecentImagery/RecentImageryModal';
 import { format } from 'date-fns';
 import { mapController } from '../../../../js/controllers/mapController';
 import styled from 'styled-components';
+
+import '../../../../css/layer-toggle-checkbox.scss';
 
 interface CheckBoxWrapperProps {
   customColorTheme: string;

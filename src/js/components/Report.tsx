@@ -17,7 +17,7 @@ import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 import { ShareIcon } from '../../images/shareIcon';
 import { PrintIcon } from '../../images/printIcon';
 
-import 'css/report.scss';
+import '../../css/report.scss';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 

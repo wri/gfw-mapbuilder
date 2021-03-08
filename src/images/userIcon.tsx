@@ -1,7 +1,7 @@
 import React from 'react';
 export const UserIcon = (props: any) => {
   return (
-    <svg className="svg-icon__nav">
+    <svg {...props} className="svg-icon__nav">
       <svg className="svg-icon">
         <svg id="icon-mygfw" viewBox="0 0 1024 1024">
           <title>My GFW</title>

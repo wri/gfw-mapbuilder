@@ -19,7 +19,7 @@ import { registerGeometry } from '../../../js/helpers/geometryRegistration';
 import { mapController } from '../../../js/controllers/mapController';
 import { uploadContent } from '../../../../configs/translations/upload.translations';
 
-import 'css/uploadFile.scss';
+import '../../../css/uploadFile.scss';
 
 const UploadFile = (): JSX.Element => {
   const dispatch = useDispatch();

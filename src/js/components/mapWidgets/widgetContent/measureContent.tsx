@@ -9,7 +9,7 @@ import { measureContent } from '../../../../../configs/translations/modal.tansla
 import { OptionType } from '../../../../js/interfaces/measureWidget';
 import { RootState } from '../../../../js/store/index';
 
-import 'css/measureContent.scss';
+import '../../../../css/measureContent.scss';
 
 const ESRICoordinatesWidget = (): JSX.Element => {
   const coordRef = useRef(null);

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const SearchIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-control-search" viewBox="0 0 1024 1024">
         <title>Search</title>
         <path

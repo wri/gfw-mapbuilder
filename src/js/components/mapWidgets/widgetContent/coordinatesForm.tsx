@@ -17,7 +17,7 @@ import {
   DMSCardinalPoint
 } from '../../../../js/interfaces/coordinateForm';
 
-import 'css/coordinatesForm';
+import '../../../../css/coordinatesForm';
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);

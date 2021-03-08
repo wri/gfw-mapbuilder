@@ -1,7 +1,7 @@
 import React from 'react';
 export const LayersTabIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-basemap" viewBox="0 0 1132 1024">
         <title>Basemap</title>
         <path

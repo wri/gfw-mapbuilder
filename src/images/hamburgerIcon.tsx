@@ -2,7 +2,7 @@ import React from 'react';
 
 export const HamburgerIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg className="svg-icon">
         <svg id="icon-menu" viewBox="0 0 1024 1024">
           <title>Menu</title>

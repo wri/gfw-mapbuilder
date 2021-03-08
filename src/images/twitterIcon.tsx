@@ -1,7 +1,7 @@
 import React from 'react';
 export const TwitterIcon = (props: any) => {
   return (
-    <svg className="svg-icon">
+    <svg {...props} className="svg-icon">
       <svg id="icon-twitter" viewBox="0 0 1024 1024">
         <title>Twitter</title>
         <path
