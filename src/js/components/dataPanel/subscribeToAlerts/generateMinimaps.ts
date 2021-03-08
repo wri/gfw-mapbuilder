@@ -1,19 +1,32 @@
-import MapView from 'esri/views/MapView';
-import Map from 'esri/Map';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
-import Graphic from 'esri/Graphic';
-import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import Polygon from 'esri/geometry/Polygon';
-import PrintTask from 'esri/tasks/PrintTask';
-import PrintTemplate from 'esri/tasks/support/PrintTemplate';
-import PrintParameters from 'esri/tasks/support/PrintParameters';
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
-import store from 'js/store/index';
-import { setAreaImages } from 'js/store/appState/actions';
+import { loadModules } from 'esri-loader';
+import { geojsonToArcGIS } from '../../../../js/helpers/spatialDataTransformation';
+import store from '../../../../js/store/index';
+import { setAreaImages } from '../../../../js/store/appState/actions';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
 export async function generateMinimaps(areas: any): Promise<void> {
+  const [
+    MapView,
+    Map,
+    GraphicsLayer,
+    Graphic,
+    SimpleFillSymbol,
+    Polygon,
+    PrintTask,
+    PrintTemplate,
+    PrintParameters
+  ] = await loadModules([
+    'esri/views/MapView',
+    'esri/Map',
+    'esri/layers/GraphicsLayer',
+    'esri/Graphic',
+    'esri/symbols/SimpleFillSymbol',
+    'esri/geometry/Polygon',
+    'esri/tasks/PrintTask',
+    'esri/tasks/support/PrintTemplate',
+    'esri/tasks/support/PrintParameters'
+  ]);
   const areaIds = areas.map((a: any) => {
     return {
       id: a.id,
@@ -117,12 +130,13 @@ export async function generateMinimaps(areas: any): Promise<void> {
     gLayer.graphics.add(aoiGraphic);
 
     return miniMapView.goTo({ target: aoiGraphic }).then(async () => {
-      //
       const params = new PrintParameters({
         view: miniMapView,
         template
       });
-      const img = await printTask.execute(params).catch(e => console.log(e));
+      const img = await printTask
+        .execute(params)
+        .catch((e: Error) => console.log(e));
       return img;
     });
   }

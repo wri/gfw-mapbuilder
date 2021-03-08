@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { allAvailableLayers as allAvailableLayersAction } from 'js/store/mapview/actions';
-import { RootState } from 'js/store';
-import { mapController } from 'js/controllers/mapController';
-import { fetchLegendInfo } from 'js/helpers/legendInfo';
-import MapImageLayer from 'esri/layers/MapImageLayer';
-import FeatureLayer from 'esri/layers/FeatureLayer';
+import { allAvailableLayers as allAvailableLayersAction } from '../../../../js/store/mapview/actions';
+import { RootState } from '../../../../js/store';
+import { mapController } from '../../../../js/controllers/mapController';
+import { fetchLegendInfo } from '../../../../js/helpers/legendInfo';
+import { loadModules } from 'esri-loader';
 
 interface LayerVersionPickerProps {
   layerInfo: any;
@@ -37,6 +36,10 @@ export const LayerVersionPicker = (
     layerInfo: any,
     versionValue: string
   ): Promise<void> {
+    const [MapImageLayer, FeatureLayer] = await loadModules([
+      'esri/layers/MapImageLayer',
+      'esri/layers/FeatureLayer'
+    ]);
     //Remove previous version layer from the map
     const prevLayer = mapController._map?.findLayerById(layerInfo.id);
     if (!prevLayer) return;

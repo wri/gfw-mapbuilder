@@ -1,16 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
-
-import LanguageDropdown from 'js/components/header/LanguageDropdown';
-import ThemeDropdown from 'js/components/header/ThemeDropdown';
-import GFWLoginDropdown from 'js/components/header/GFWLoginDropdown';
-import { ReactComponent as AboutIcon } from 'src/images/aboutIcon.svg';
-import { ReactComponent as DownloadIcon } from 'src/images/downloadIcon.svg';
-import { RootState } from 'js/store/index';
-
-import 'css/header.scss';
 import { createSelector } from 'reselect';
+import LanguageDropdown from '../../../js/components/header/LanguageDropdown';
+import ThemeDropdown from '../../../js/components/header/ThemeDropdown';
+import GFWLoginDropdown from '../../../js/components/header/GFWLoginDropdown';
+import { AboutIcon } from '../../../images/aboutIcon';
+import { DownloadIcon } from '../../../images/downloadIcon';
+import { RootState } from '../../../js/store/index';
 import { headerContent } from '../../../../configs/translations/header.translations';
+
+import '../../../css/header.scss';
 
 const appSettingsSelector = createSelector(
   (state: RootState) => state.appSettings,

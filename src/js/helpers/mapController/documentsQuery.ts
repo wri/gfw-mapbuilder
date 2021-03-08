@@ -1,5 +1,5 @@
-import { mapController } from 'js/controllers/mapController';
-import { Attachment, URLProperties } from 'js/interfaces/Attachment';
+import { mapController } from '../../../js/controllers/mapController';
+import { Attachment, URLProperties } from '../../../js/interfaces/Attachment';
 
 export const getDocuments = async (
   urlProperties: URLProperties

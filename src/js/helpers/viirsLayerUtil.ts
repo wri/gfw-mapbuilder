@@ -1,4 +1,4 @@
-import VectorTileLayer from 'esri/layers/VectorTileLayer';
+import { loadModules } from 'esri-loader';
 import { format, subDays, parse } from 'date-fns';
 
 //FieldNames that we pre-define. These field names will show in the info window
@@ -229,6 +229,8 @@ async function viirsLayer(
       }
     ]
   };
+
+  const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
 
   return new VectorTileLayer({
     style: viirsStyleJSON,

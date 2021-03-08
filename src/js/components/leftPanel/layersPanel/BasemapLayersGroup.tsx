@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
-import { setOpenLayerGroup } from 'js/store/appState/actions';
-import { landsatBaselayerYears, customBasemapIcon } from 'configs/layer-config';
-import { mapController } from 'js/controllers/mapController';
-import { basemapLayersContent } from 'configs/translations/leftPanel.translations';
-import { LayerProps } from 'js/store/mapview/types';
+import { RootState } from '../../../../js/store';
+import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
+import {
+  landsatBaselayerYears,
+  customBasemapIcon
+} from '../../../../../configs/layer-config';
+import { mapController } from '../../../../js/controllers/mapController';
+import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
+import { LayerProps } from '../../../../js/store/mapview/types';
 
 interface DefaultBasemapProps {
   layerInfo: {
@@ -40,7 +43,7 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
   return (
     <div
       className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
-      onClick={(): void => mapController.setWRIBasemap(id)}
+      onClick={() => mapController.setWRIBasemap(id)}
     >
       <img src={thumbnailUrl} alt="basemap" />
       <span>{title}</span>
@@ -109,7 +112,7 @@ const GenericBaseLayerControl = ({
   return (
     <div
       className={`layer-basemap ${activeBasemap === id ? 'selected' : ''}`}
-      onClick={(): void => mapController.setActiveBasemap(id)}
+      onClick={() => mapController.setActiveBasemap(id)}
     >
       <img src={thumbnailUrl} alt="basemap" />
       <span>{title}</span>

@@ -5,27 +5,27 @@ import Select from 'react-select';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
 import LayerRadioButton from './LayerRadioButton';
-import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
-import TimeSlider from 'js/components/sharedComponents/TimeSlider';
+import CanopyDensityPicker from '../../../../js/components/sharedComponents/CanopyDensityPicker';
+import TimeSlider from '../../../../js/components/sharedComponents/TimeSlider';
 import DateRangeModis from './DateRangeModis';
 import DateRangeViirs from './DateRangeVIIRS';
 import { format } from 'date-fns';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
+import { esriQuery } from '../../../../js/helpers/dataPanel/esriQuery';
 import {
   renderModal,
   setInfoModalLayerID,
   setGladStart,
   setGladEnd,
   setGladConfirmed
-} from 'js/store/appState/actions';
-import { RootState } from 'js/store';
-import { LayerProps } from 'js/store/mapview/types';
-import { mapController } from 'js/controllers/mapController';
+} from '../../../../js/store/appState/actions';
+import { RootState } from '../../../../js/store';
+import { LayerProps } from '../../../../js/store/mapview/types';
+import { mapController } from '../../../../js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
-import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
+import { InfoIcon } from '../../../../images/infoIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
-import { LayerFactory } from 'js/helpers/LayerFactory';
+import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
 import './datepicker.scss';
 

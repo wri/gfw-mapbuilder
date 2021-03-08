@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
-import { RootState } from 'js/store';
-import { setOpenLayerGroup } from 'js/store/appState/actions';
+import { RootState } from '../../../../js/store';
+import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import GenericLayerControl from './GenericLayerControl';
-import { layerIsInScale } from 'js/helpers/layerScaleCheck';
+import { layerIsInScale } from '../../../../js/helpers/layerScaleCheck';
 
 //Memo Selectors
 const allAvailableLayersSelector = (state: RootState) =>

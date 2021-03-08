@@ -1,11 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setHideLegend } from '../../../../src/js/store/appSettings/actions';
+import { RootState } from '../../../js/store/index';
 
-import { setHideLegend } from 'src/js/store/appSettings/actions';
-
-import { RootState } from 'js/store/index';
-
-import { ReactComponent as LegendIcon } from 'images/legendIcon.svg';
+import { LegendIcon } from '../../../images/legendIcon';
 
 const LegendWidget: FunctionComponent = () => {
   const dispatch = useDispatch();

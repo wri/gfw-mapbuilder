@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { layerIsInScale } from 'js/helpers/layerScaleCheck';
+import { layerIsInScale } from '../../../../js/helpers/layerScaleCheck';
 import GenericLayerControl from './GenericLayerControl';
 
-import { RootState } from 'js/store';
-import { setOpenLayerGroup } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
+import { RootState } from '../../../../js/store';
+import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
 import styled from 'styled-components';
 
 //Override speudo element styling with our custom style

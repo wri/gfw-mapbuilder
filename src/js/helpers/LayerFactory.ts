@@ -1,17 +1,12 @@
 /* eslint-disable no-case-declarations */
-import ImageryLayer from 'esri/layers/ImageryLayer';
-import FeatureLayer from 'esri/layers/FeatureLayer';
-import MapImageLayer from 'esri/layers/MapImageLayer';
-import WebTileLayer from 'esri/layers/WebTileLayer';
-import MosaicRule from 'esri/layers/support/MosaicRule';
-import RasterFunction from 'esri/layers/support/RasterFunction';
-import { TreeCoverLossLayer } from 'js/layers/TreeCoverLossLayer';
-import { GladLayer } from 'js/layers/GladLayer';
-import { PrimaryForestLayer } from 'js/layers/PrimaryForestLayer';
-import { TreeCoverGainLayer } from 'js/layers/TreeCoverGainLayer';
-import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import store from 'js/store/index';
-import { LayerProps } from 'js/store/mapview/types';
+import { loadModules } from 'esri-loader';
+import { createTCL } from '../../js/layers/TreeCoverLossLayer';
+import { createGlad } from '../../js/layers/GladLayer';
+import { createPrimary } from '../../js/layers/PrimaryForestLayer';
+import { createGain } from '../../js/layers/TreeCoverGainLayer';
+import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import store from '../../js/store/index';
+import { LayerProps } from '../../js/store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
 
 interface LayerOptions {
@@ -28,6 +23,21 @@ export async function LayerFactory(
   mapView: any,
   layerConfig: LayerProps
 ): Promise<any> {
+  const [
+    ImageryLayer,
+    FeatureLayer,
+    MapImageLayer,
+    WebTileLayer,
+    MosaicRule,
+    RasterFunction
+  ] = await loadModules([
+    'esri/layers/ImageryLayer',
+    'esri/layers/FeatureLayer',
+    'esri/layers/MapImageLayer',
+    'esri/layers/WebTileLayer',
+    'esri/layers/support/MosaicRule',
+    'esri/layers/support/RasterFunction'
+  ]);
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {
@@ -103,25 +113,29 @@ export async function LayerFactory(
         `tc${densityValue}`
       );
       const yearRange = mapviewState.timeSlider;
-      esriLayer = new TreeCoverLossLayer({
+      const tclConstructor = await createTCL();
+      const tclLayer = new tclConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer = tclLayer;
       esriLayer.minYear = yearRange[0];
       esriLayer.maxYear = yearRange[1];
       esriLayer.refresh();
       break;
     case 'gain':
-      esriLayer = new TreeCoverGainLayer({
+      const gainConstructor = await createGain();
+      const gainLayer = new gainConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer = gainLayer;
       break;
     case 'webtiled':
       esriLayer = new WebTileLayer({
@@ -133,38 +147,46 @@ export async function LayerFactory(
       });
       break;
     case 'imagery':
-      esriLayer = new TreeCoverGainLayer({
+      const imageConstructor = await createGain();
+      const imagery = new imageConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer = imagery;
       break;
     case 'glad':
-      esriLayer = new GladLayer({
+      const gladConstructor = await createGlad();
+      const gladLayer = new gladConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      //@ts-ignore
-      const startDate = new Date(appState.leftPanel.gladStart).getJulian();
-      //@ts-ignore
+      // //@ts-ignore
+      const startDate: any = new Date(
+        appState.leftPanel.gladStart
+      ).getJulian() as any;
+      // //@ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
       break;
     case 'primed':
-      esriLayer = new PrimaryForestLayer({
+      const primaryConstructor = await createPrimary();
+      const primaryLayer = new primaryConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      esriLayer = primaryLayer;
       break;
     case 'MASK':
       const { appSettings } = store.getState();

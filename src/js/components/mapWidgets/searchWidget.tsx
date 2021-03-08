@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { renderModal } from '../../store/appState/actions';
-
-import { ReactComponent as SearchIcon } from '../../../images/searchIcon.svg';
+import { SearchIcon } from '../../../images/searchIcon';
 
 const SearchWidget: FunctionComponent = () => {
   const dispatch = useDispatch();

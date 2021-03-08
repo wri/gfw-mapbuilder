@@ -2,7 +2,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import convert from 'xml-js';
 import { useSelector } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../js/store';
 import { infoContent } from '../../../../configs/translations/modal.tanslations';
 
 function createMarkup(content: any) {

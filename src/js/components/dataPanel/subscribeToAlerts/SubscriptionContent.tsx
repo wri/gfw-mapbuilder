@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import Polygon from 'esri/geometry/Polygon';
 import { useSelector, useDispatch } from 'react-redux';
-import { ReactComponent as PrintIcon } from '../../../../images/printIcon.svg';
-import { getShareableURL } from 'js/helpers/shareFunctionality';
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
+import { PrintIcon } from '../../../../images/printIcon';
+import { loadModules } from 'esri-loader';
+import { getShareableURL } from '../../../../js/helpers/shareFunctionality';
+import { geojsonToArcGIS } from '../../../../js/helpers/spatialDataTransformation';
 import { format, subDays } from 'date-fns';
-import Loader from 'js/components/sharedComponents/Loader';
-import { RootState } from 'js/store/index';
+import Loader from '../../../../js/components/sharedComponents/Loader';
+import { RootState } from '../../../../js/store/index';
 import {
   setActiveFeatures,
   setActiveFeatureIndex
-} from 'js/store/mapview/actions';
+} from '../../../../js/store/mapview/actions';
 import { AOIDashboardText } from '../../../../../configs/translations/subscribeToAlerts.translations';
-import { renderModal, selectActiveTab } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
+import {
+  renderModal,
+  selectActiveTab
+} from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
 import { generateMinimaps } from './generateMinimaps';
 
-import 'css/aoiDashboard.scss';
+import '../../../../css/aoiDashboard.scss';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 const viirsAlertsURL =
@@ -187,7 +190,7 @@ const AOIDashboard = () => {
             setLoading(false);
             //Put data in paginated chunks so we load only 5 at a time
             generateMinimaps(data.data);
-            const chunks = [];
+            const chunks: any[] = [];
             while (data.data.length > 0) {
               chunks.push(data.data.splice(0, 5));
             }
@@ -279,8 +282,9 @@ const AOIDashboard = () => {
     }, [esriGeometry]);
 
     //Sets active feature to the AOI in redux, adds graphic on the map and zooms to the location on the map.
-    function handleViewOnMap(): void {
+    async function handleViewOnMap(): Promise<void> {
       if (!esriGeometry) return;
+      const [Polygon] = await loadModules(['esri/geometry/Polygon']);
       const featureFromAOIData = createFeatureObject(
         props.dataObject,
         esriGeometry
@@ -291,8 +295,8 @@ const AOIDashboard = () => {
       });
       dispatch(setActiveFeatureIndex([0, 0]));
       dispatch(setActiveFeatures(featureFromAOIData));
-      mapController.drawGraphic([featureFromAOIData[0].features[0]]);
-      mapController._mapview.goTo({ target: poly }, { duration: 1000 });
+      await mapController.drawGraphic([featureFromAOIData[0].features[0]]);
+      mapController._mapview?.goTo({ target: poly }, { duration: 1000 });
       dispatch(selectActiveTab('data'));
       dispatch(renderModal(''));
     }

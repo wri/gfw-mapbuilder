@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../../js/store';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import 'css/canopyDensityModal';
-import { setCanopyDensity } from 'js/store/appState/actions';
-import { mapController } from 'js/controllers/mapController';
+import '../../../../css/canopyDensityModal.scss';
+import { setCanopyDensity } from '../../../../js/store/appState/actions';
+import { mapController } from '../../../../js/controllers/mapController';
 
 import { canopyDensityContentConfig } from '../../../../../configs/translations/modal.tanslations';
 

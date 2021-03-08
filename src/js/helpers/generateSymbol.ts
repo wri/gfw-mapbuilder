@@ -1,7 +1,9 @@
-import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import SimpleMarkerSymbol from 'esri/symbols/SimpleMarkerSymbol';
+import { loadModules } from 'esri-loader';
 
-export const getCustomSymbol = (): SimpleFillSymbol => {
+export const getCustomSymbol = async (): Promise<__esri.SimpleFillSymbol> => {
+  const [SimpleFillSymbol] = await loadModules([
+    'esri/symbols/SimpleFillSymbol'
+  ]);
   return new SimpleFillSymbol({
     style: 'solid',
     color: [210, 210, 210, 0.0],
@@ -12,7 +14,10 @@ export const getCustomSymbol = (): SimpleFillSymbol => {
   });
 };
 
-export const getImagerySymbol = (): SimpleFillSymbol => {
+export const getImagerySymbol = async (): Promise<__esri.SimpleFillSymbol> => {
+  const [SimpleFillSymbol] = await loadModules([
+    'esri/symbols/SimpleFillSymbol'
+  ]);
   return new SimpleFillSymbol({
     style: 'solid',
     color: [210, 210, 210, 0.0],
@@ -23,7 +28,10 @@ export const getImagerySymbol = (): SimpleFillSymbol => {
   });
 };
 
-export const getPointSymbol = (): SimpleMarkerSymbol => {
+export const getPointSymbol = async (): Promise<__esri.SimpleMarkerSymbol> => {
+  const [SimpleMarkerSymbol] = await loadModules([
+    'esri/symbols/SimpleMarkerSymbol'
+  ]);
   return new SimpleMarkerSymbol({
     style: 'circle',
     color: [210, 210, 210, 0.0],

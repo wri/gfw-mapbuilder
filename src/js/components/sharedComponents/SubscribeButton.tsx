@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { renderModal } from 'js/store/appState/actions';
-import { RootState } from 'js/store/index';
+import { renderModal } from '../../../js/store/appState/actions';
+import { RootState } from '../../../js/store/index';
 
-import 'css/subscribeButton.scss';
+import '../../../css/subscribeButton.scss';
 
 const subscribeButtonTranslations = {
   zh: '保存到“我的 GFW”中',

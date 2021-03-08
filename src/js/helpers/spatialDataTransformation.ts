@@ -1,6 +1,3 @@
-/* eslint-disable no-prototype-builtins */
-import { Geometry } from 'esri/geometry';
-
 interface SpatialReference {
   wkid: number;
 }
@@ -12,7 +9,7 @@ interface GenericProperties {
 }
 
 interface FeatureResult {
-  geometry?: Geometry;
+  geometry?: __esri.Geometry;
   attributes: GenericProperties;
   id?: number | string; // ? What's the type? Haven't been able to determine this
 }
@@ -80,7 +77,7 @@ const orientRings = (poly: any): any => {
   // * NOTE: haven't been able to typesafe param/return
   // * without TS Errors
   // TODO [ ] - typesafe param & return
-  const output = [];
+  const output: any[] = [];
   const polygon = poly.slice(0);
   const outerRing = closeRing(polygon.shift().slice(0));
   if (outerRing.length >= 4) {
@@ -108,7 +105,7 @@ const orientRings = (poly: any): any => {
 const flattenMultiPolygonRings = (
   rings: Array<Array<number>>
 ): Array<Array<number>> => {
-  const output = [];
+  const output: any[] = [];
   for (let i = 0; i < rings.length; i++) {
     const polygon = orientRings(rings[i]);
     for (let x = polygon.length - 1; x >= 0; x--) {
@@ -258,10 +255,10 @@ function coordinatesContainCoordinates(outer: any, inner: any): boolean {
 // used for checking for holes in arcgis rings
 // ported from terraformer-arcgis-parser.js https://github.com/Esri/terraformer-arcgis-parser/blob/master/terraformer-arcgis-parser.js#L117-L172
 function convertRingsToGeoJSON(rings: any) {
-  const outerRings = [];
-  const holes = [];
-  let x; // iterator
-  let outerRing; // current outer ring being evaluated
+  const outerRings: any[] = [];
+  const holes: any[] = [];
+  let x: any; // iterator
+  let outerRing: any; // current outer ring being evaluated
   let hole: any; // current hole being evaluated
 
   // for each ring
@@ -279,7 +276,7 @@ function convertRingsToGeoJSON(rings: any) {
     }
   }
 
-  const uncontainedHoles = [];
+  const uncontainedHoles: any[] = [];
 
   // while there are holes left...
   while (holes.length) {
@@ -343,7 +340,7 @@ function convertRingsToGeoJSON(rings: any) {
 
 // shallow object clone for feature properties and attributes
 // from http://jsperf.com/cloning-an-object/2
-function shallowClone(obj: any) {
+function shallowClone(obj) {
   const target = {};
   for (const i in obj) {
     if (obj.hasOwnProperty(i)) {

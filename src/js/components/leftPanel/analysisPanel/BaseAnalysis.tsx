@@ -4,33 +4,31 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
-import { RootState } from 'js/store';
-import {
-  setActiveFeatures,
-  setUserCoordinates
-} from 'js/store/mapview/actions';
-import { setRenderPopup } from 'js/store/appState/actions';
+import { RootState } from '../../../../js/store';
+import { setActiveFeatures } from '../../../../js/store/mapview/actions';
+import { setRenderPopup } from '../../../../js/store/appState/actions';
 
-import { registerGeometry } from 'js/helpers/geometryRegistration';
+import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
-import CanopyDensityPicker from 'js/components/sharedComponents/CanopyDensityPicker';
-import { markValueMap } from 'js/components/mapWidgets/widgetContent/CanopyDensityContent';
-import { ReactComponent as DownloadIcon } from '../../../../images/downloadIcon.svg';
-import { DownloadOptions } from 'js/components/sharedComponents/DownloadOptions';
-import Loader from 'js/components/sharedComponents/Loader';
-import { mapController } from 'js/controllers/mapController';
+import CanopyDensityPicker from '../../../../js/components/sharedComponents/CanopyDensityPicker';
+import { markValueMap } from '../../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { DownloadIcon } from '../../../../images/downloadIcon';
+import { DownloadOptions } from '../../../../js/components/sharedComponents/DownloadOptions';
+import Loader from '../../../../js/components/sharedComponents/Loader';
+import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
-import 'css/leftpanel.scss';
-import { AnalysisModule } from 'js/store/appSettings/types';
+import { AnalysisModule } from '../../../../js/store/appSettings/types';
 import {
   fetchGFWWidgetConfig,
   fetchDownloadInfo,
   fetchWCSAnalysis
 } from './analysisUtils';
+
+import '../../../../css/leftpanel.scss';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {

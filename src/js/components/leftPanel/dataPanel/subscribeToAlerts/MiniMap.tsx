@@ -1,16 +1,27 @@
-import MapView from 'esri/views/MapView';
-import WebMap from 'esri/WebMap';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
-import Graphic from 'esri/Graphic';
-import SimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import Polygon from 'esri/geometry/Polygon';
+import { loadModules } from 'esri-loader';
 
-export function miniMapInit(
+export async function miniMapInit(
   webmapID: string,
   htmlRef: React.RefObject<HTMLDivElement | null>,
   geometry: __esri.Geometry
-): void {
+): Promise<void> {
   if (!htmlRef.current) return;
+
+  const [
+    MapView,
+    WebMap,
+    GraphicsLayer,
+    Graphic,
+    SimpleFillSymbol,
+    Polygon
+  ] = await loadModules([
+    'esri/views/MapView',
+    'esri/WebMap',
+    'esri/layers/GraphicsLayer',
+    'esri/Graphic',
+    'esri/symbols/SimpleFillSymbol',
+    'esri/geometry/Polygon'
+  ]);
 
   const mapRef = new WebMap({
     portalItem: {

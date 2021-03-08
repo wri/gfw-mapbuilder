@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'js/store';
+import { RootState } from '../../../../js/store';
 import {
   setActiveFeatureIndex,
   setActiveFeatures,
   setDocuments
-} from 'js/store/mapview/actions';
+} from '../../../../js/store/mapview/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
-import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
-import { mapController } from 'js/controllers/mapController';
-import { LayerFeatureResult } from 'js/store/mapview/types';
-import { getDocuments } from 'js/helpers/mapController/documentsQuery';
+import { mapController } from '../../../../js/controllers/mapController';
+import { LayerFeatureResult } from '../../../../js/store/mapview/types';
+import { getDocuments } from '../../../../js/helpers/mapController/documentsQuery';
+import { CloseIcon } from '../../../../images/closeIcon';
 
 //Constructs layer tile based on sublayer existance
 function generateLayerTitle(activeLayerInfo: any): string {
@@ -79,7 +79,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     }): JSX.Element => {
       const page = activeFeatureIndex[1];
 
-      function turnAttributeTablePage(forward: boolean): void {
+      async function turnAttributeTablePage(forward: boolean): Promise<void> {
         const newPage = forward ? page + 1 : page - 1;
         const activeFeature = new Array(
           activeFeatures[activeLayerIndex].features[newPage]
@@ -88,7 +88,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           activeLayerInfo.layerID !== 'user_features' &&
           activeLayerInfo.layerID !== 'upload_file_features'
         ) {
-          mapController.drawGraphic(activeFeature);
+          await mapController.drawGraphic(activeFeature);
         } else {
           mapController.updateActivePolyGraphic(activeFeature);
         }
@@ -251,7 +251,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
             </div>
             <div className="remove-attribute-button">
               <button id="remove-attr-btn" onClick={removeAttribute}>
-                <CloseAttribute width={20} height={20} />
+                <CloseIcon width={20} height={20} />
               </button>
             </div>
           </div>

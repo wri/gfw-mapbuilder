@@ -6,8 +6,8 @@ import React, {
   ChangeEvent
 } from 'react';
 import { useSelector } from 'react-redux';
-import { mapController } from 'js/controllers/mapController';
-import { RootState } from 'js/store/index';
+import { mapController } from '../../../../js/controllers/mapController';
+import { RootState } from '../../../../js/store/index';
 import { searchContent } from '../../../../../configs/translations/modal.tanslations';
 
 const SearchContent: FunctionComponent = () => {

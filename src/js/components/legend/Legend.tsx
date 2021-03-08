@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { RootState } from 'js/store';
-import { LayerProps } from 'js/store/mapview/types';
+import { RootState } from '../../../js/store';
+import { LayerProps } from '../../../js/store/mapview/types';
 import LegendItems from './generateLegendItems';
-import { layerIsInScale } from 'js/helpers/layerScaleCheck';
+import { layerIsInScale } from '../../../js/helpers/layerScaleCheck';
 
-import 'css/legend.scss';
-import { layersPanelTranslations } from 'configs/translations/leftPanel.translations';
+import { layersPanelTranslations } from '../../../../configs/translations/leftPanel.translations';
+import '../../../css/legend.scss';
 
 const getWindowDimensions = () => {
   return {

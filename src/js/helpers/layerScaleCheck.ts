@@ -1,4 +1,4 @@
-import { LayerProps } from 'js/store/mapview/types';
+import { LayerProps } from '../../js/store/mapview/types';
 /*
  * Helper function to determine if layer is in mapview scale
  */

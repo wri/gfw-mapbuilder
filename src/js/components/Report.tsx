@@ -1,21 +1,23 @@
 import * as React from 'react';
-import { ReactComponent as ShareIcon } from '../../images/shareIcon.svg';
-import { ReactComponent as PrintIcon } from '../../images/printIcon.svg';
+import { loadModules } from 'esri-loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { renderModal } from 'js/store/appState/actions';
-import { RootState } from 'js/store/index';
-import Loader from 'js/components/sharedComponents/Loader';
-import { geojsonToArcGIS } from 'js/helpers/spatialDataTransformation';
-import { mapController } from 'js/controllers/mapController';
-import { esriQuery } from 'js/helpers/dataPanel/esriQuery';
-import { getAttributesToFetch } from 'js/helpers/dataPanel/getAttributes';
-import { getAllLayerFields } from 'js/helpers/dataPanel/DataPanel';
-import { formatAttributeValues } from 'js/helpers/dataPanel/formatAttributes';
+import { renderModal } from '../../js/store/appState/actions';
+import { RootState } from '../../js/store/index';
+import Loader from '../../js/components/sharedComponents/Loader';
+import { geojsonToArcGIS } from '../../js/helpers/spatialDataTransformation';
+import { mapController } from '../../js/controllers/mapController';
+import { esriQuery } from '../../js/helpers/dataPanel/esriQuery';
+import { getAttributesToFetch } from '../../js/helpers/dataPanel/getAttributes';
+import { getAllLayerFields } from '../../js/helpers/dataPanel/DataPanel';
+import { formatAttributeValues } from '../../js/helpers/dataPanel/formatAttributes';
 import { ReportTable } from './report/ReportTable';
 import { extractLayerInfo } from './report/ReportUtils';
 import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 
-import 'css/report.scss';
+import { ShareIcon } from '../../images/shareIcon';
+import { PrintIcon } from '../../images/printIcon';
+
+import '../../css/report.scss';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
@@ -57,8 +59,6 @@ const Report = (props: ReportProps): JSX.Element => {
   );
 
   React.useEffect(() => {
-    //disable map interactions
-    mapController.disableMapInteractions();
     const geostoreID = new URL(window.location.href).searchParams.get(
       'geostoreID'
     );
@@ -110,9 +110,11 @@ const Report = (props: ReportProps): JSX.Element => {
           `/${activeLayerInfo.parentLayer.layerId}`
         : activeLayer.url;
       const responseAttributes = await esriQuery(url, qParams);
-      const formattedAttributes = formatAttributeValues(
+      const [esriIntl] = await loadModules(['esri/intl']);
+      const formattedAttributes = await formatAttributeValues(
         responseAttributes.features[0].attributes,
-        attributesToUse
+        attributesToUse,
+        esriIntl
       );
       setAttributes({
         attributes: formattedAttributes,
@@ -120,13 +122,18 @@ const Report = (props: ReportProps): JSX.Element => {
       });
       setLayerTitle(activeLayer.title);
     }
+
+    async function addFeatures(esriGeo: any) {
+      await mapController.addActiveFeatureGraphic(esriGeo);
+    }
+
     if (featureGeometry && isMapReady && !layersLoading) {
       const esriGeo = geojsonToArcGIS(featureGeometry.geojson);
       setEsriGeometry(esriGeo[0]);
       //Add Geometry graphic to the map
       if (esriGeo[0].geometry.hasOwnProperty('rings')) {
         //Dealing with a poly
-        mapController.addActiveFeatureGraphic(esriGeo);
+        addFeatures(esriGeo);
       } else {
         //Dealing with a point
         mapController.addActiveFeaturePointGraphic(esriGeo[0]);
@@ -156,6 +163,9 @@ const Report = (props: ReportProps): JSX.Element => {
         setHideAttributeTable(true);
       }
     }
+
+    //disable map interactions
+    mapController.disableMapInteractions();
   }, [featureGeometry, layersLoading]);
 
   function printReport(): void {

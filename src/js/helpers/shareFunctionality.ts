@@ -1,7 +1,6 @@
-import store from 'js/store/index';
-import { mapController } from 'js/controllers/mapController';
+import store from '../../js/store/index';
+import { mapController } from '../../js/controllers/mapController';
 import {
-  selectActiveTab,
   setCanopyDensity,
   setGladConfirmed,
   setGladStart,
@@ -10,10 +9,10 @@ import {
   setModisEnd,
   setViirsStart,
   setViirsEnd
-} from 'js/store/appState/actions';
-import { LayerFeatureResult } from 'js/store/mapview/types';
-import { registerGeometry } from 'js/helpers/geometryRegistration';
-import { setTimeSlider } from 'js/store/mapview/actions';
+} from '../../js/store/appState/actions';
+import { LayerFeatureResult } from '../../js/store/mapview/types';
+import { registerGeometry } from '../../js/helpers/geometryRegistration';
+import { setTimeSlider } from '../../js/store/mapview/actions';
 
 /* eslint no-case-declarations: 0 */
 
@@ -55,7 +54,7 @@ interface ShareURLProps {
   report: boolean;
 }
 export async function getShareableURL(props: ShareURLProps): Promise<string> {
-  const urlParams = [];
+  const urlParams: string[] = [];
 
   const { appState, mapviewState } = store.getState();
 
@@ -182,7 +181,7 @@ export function parseURLandApplyChanges(): void {
   const parsedURL = new URL(window.location.href);
   Object.keys(urlEncodingMap).forEach((param: string) => {
     const urlParamValue = parsedURL.searchParams.get(param);
-    if (urlParamValue) {
+    if (urlParamValue && mapController._mapview) {
       //we got a param match, apply it to the global application state where appropriate
       switch (param) {
         case 'z':
@@ -193,8 +192,8 @@ export function parseURLandApplyChanges(): void {
           if (urlParamValue === 'webmap') {
             return;
           } else if (urlParamValue.includes('landsat')) {
-            const year = urlParamValue.split('-')[1];
-            const landsatConfig = {};
+            const year: string = urlParamValue.split('-')[1];
+            const landsatConfig: any = {};
             //@ts-ignore
             mapController.addLandsatLayer(landsatConfig, year);
           } else if (urlParamValue.includes('wri')) {
@@ -206,7 +205,7 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'coords':
           const coordinates = urlParamValue.split(',').map(c => Number(c));
-          mapController._mapview.goTo(coordinates);
+          mapController._mapview?.goTo(coordinates);
           break;
         case 'd':
           store.dispatch(setCanopyDensity(Number(urlParamValue)));

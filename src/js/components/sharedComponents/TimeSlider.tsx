@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector, DefaultRootState } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
-import { mapController } from 'js/controllers/mapController';
+import { mapController } from '../../../js/controllers/mapController';
 
-import { setTimeSlider } from 'js/store/mapview/actions';
+import { setTimeSlider } from '../../../js/store/mapview/actions';
 
-import { RootState } from 'js/store/index';
+import { RootState } from '../../../js/store/index';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
