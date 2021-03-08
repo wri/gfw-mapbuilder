@@ -1,20 +1,14 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import DMSSection from './coordinatesDMSSection';
 import DDSection from './coordinatesDDSection';
-
 import { mapController } from '../../../../js/controllers/mapController';
-
 import {
   convertXYToPoint,
   convertDMSToXY
 } from '../../../../js/helpers/coordinatesConversion';
-
 import { RootState } from '../../../../js/store/index';
-
 import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
-
 import {
   DDFormValues,
   SpecificDDSection,

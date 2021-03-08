@@ -5,7 +5,7 @@ import { setHideWidget } from '../../../js/store/appState/actions';
 
 import { RootState } from '../../../js/store/index';
 
-import { ReactComponent as HideIcon } from '../../../images/hideIcon.svg';
+import { HideIcon } from '../../../images/hideIcon';
 
 const HideWidget: FunctionComponent = () => {
   const dispatch = useDispatch();

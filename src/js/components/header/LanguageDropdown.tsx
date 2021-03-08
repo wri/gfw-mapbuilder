@@ -1,9 +1,6 @@
 import React from 'react';
-
 import { mapController } from '../../../js/controllers/mapController';
-
-import { ReactComponent as InfoBoxIcon } from 'src/images/infoBoxIcon.svg';
-
+import { InfoboxIcon } from '../../..//images/infoBoxIcon';
 import { headerContent } from '../../../../configs/translations/header.translations';
 
 interface DropProps {
@@ -59,7 +56,7 @@ const LanguageDropdown = (props: DropProps) => {
     <div className="language-dropdown-container" data-cy="lang-dropdown">
       <ul className="dropdown" role="list">
         <span className="label-wrapper" role="listitem">
-          <InfoBoxIcon height={16} width={16} fill={'#555'} />
+          <InfoboxIcon height={16} width={16} fill={'#555'} />
           <li className="dropdown-label">
             {headerContent[props.selectedLanguage].language}
           </li>

@@ -13,8 +13,8 @@ import VegaChart from '../../../js/components/leftPanel/analysisPanel/VegaChartC
 import analysisTranslations from '../../../js/components/leftPanel/analysisPanel/analysisTranslations';
 import { DownloadOptions } from '../../../js/components/sharedComponents/DownloadOptions';
 import styled from 'styled-components';
-import { ReactComponent as GearIcon } from '../../../images/gearIcon.svg';
-import { ReactComponent as DownloadIcon } from '../../../images/downloadIcon.svg';
+import { GearIcon } from '../../../images/gearIcon';
+import { DownloadIcon } from '../../../images/downloadIcon';
 import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
 import {
   fetchGFWWidgetConfig,

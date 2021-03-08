@@ -23,7 +23,7 @@ import { RootState } from '../../../../js/store';
 import { LayerProps } from '../../../../js/store/mapview/types';
 import { mapController } from '../../../../js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
-import { ReactComponent as InfoIcon } from 'images/infoIcon.svg';
+import { InfoIcon } from '../../../../images/infoIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';

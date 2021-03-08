@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as ThemesIcon } from 'src/images/themesIcon.svg';
+import { ThemeIcon } from '../../../images/themeIcon';
 import { headerContent } from '../../../../configs/translations/header.translations';
 import { RootState } from '../../../js/store/index';
 import { useSelector } from 'react-redux';
@@ -63,7 +63,7 @@ const ThemeDropdown = (props: ThemeDropdownProps): JSX.Element => {
     <div className="theme-dropdown-container">
       <ul className="dropdown">
         <span className="label-wrapper" role="listitem">
-          <ThemesIcon height={16} width={16} fill={'#555'} />
+          <ThemeIcon height={16} width={16} fill={'#555'} />
           <li className="dropdown-label">
             {headerContent[props.selectedLanguage]?.mapThemes}
           </li>

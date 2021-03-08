@@ -12,7 +12,7 @@ import LayerSelector from './LayerSelector';
 import { mapController } from '../../../../js/controllers/mapController';
 import { LayerFeatureResult } from '../../../../js/store/mapview/types';
 import { getDocuments } from '../../../../js/helpers/mapController/documentsQuery';
-import { ReactComponent as CloseAttribute } from 'images/closeIcon.svg';
+import { CloseIcon } from '../../../../images/closeIcon';
 
 //Constructs layer tile based on sublayer existance
 function generateLayerTitle(activeLayerInfo: any): string {
@@ -251,7 +251,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
             </div>
             <div className="remove-attribute-button">
               <button id="remove-attr-btn" onClick={removeAttribute}>
-                <CloseAttribute width={20} height={20} />
+                <CloseIcon width={20} height={20} />
               </button>
             </div>
           </div>

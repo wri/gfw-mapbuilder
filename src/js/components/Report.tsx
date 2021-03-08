@@ -13,8 +13,8 @@ import { ReportTable } from './report/ReportTable';
 import { extractLayerInfo } from './report/ReportUtils';
 import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 
-import { ReactComponent as ShareIcon } from '../../images/shareIcon.svg';
-import { ReactComponent as PrintIcon } from '../../images/printIcon.svg';
+import { ShareIcon } from '../../images/shareIcon';
+import { PrintIcon } from '../../images/printIcon';
 
 import 'css/report.scss';
 

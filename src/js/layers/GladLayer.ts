@@ -89,10 +89,10 @@ export const GladLayer = BaseTileLayer.createSubclass({
     const towoWeeksAgo = new Date();
     towoWeeksAgo.setDate(towoWeeksAgo.getDate() - 14);
     const weekAgoJulian = towoWeeksAgo.getJulian();
-    for (var i = 0; i < data.length; i += 4) {
+    for (let i = 0; i < data.length; i += 4) {
       // Decode the rgba/pixel so I can filter on confidence and date ranges
-      var slice = [data[i], data[i + 1], data[i + 2]];
-      var values = this.decodeDate(slice);
+      const slice = [data[i], data[i + 1], data[i + 2]];
+      const values = this.decodeDate(slice);
 
       // Check if pixel date is between Julian Date properties above
       if (values.date > this.julianFrom && values.date < this.julianTo) {
@@ -149,32 +149,32 @@ export const GladLayer = BaseTileLayer.createSubclass({
     // find the total days of the pixel by
     // multiplying the red band by 255 and adding
     // the green band to that
-    var total_days = pixel[0] * 255 + pixel[1];
+    const total_days = pixel[0] * 255 + pixel[1];
     // take the total days value and divide by 365 to
     // get the year_offset. Add 15 to this (i.e 0 + 15 = 2015)
     // or 1 + 15 = 2016
-    var year_int = parseInt(total_days / 365) + 15;
+    const year_int = parseInt(total_days / 365) + 15;
     // Multiply by 1000 to give us year in YYDDD format
     // (i.e. 15000 or 16000)
-    var year = parseInt(year_int * 1000);
+    const year = parseInt(year_int * 1000);
     // Find the remaining days to get the julian day for
     // that year
-    var julian_day = total_days % 365;
+    const julian_day = total_days % 365;
     // Add to get YYDDD date val
-    var date = year + julian_day;
+    const date = year + julian_day;
     // Convert the blue band to string, leading
     // zeros if it's not currently three digits
     // this occurs very rarely; where there's an intensity
     // value but no date/confidence for it. Due to bilinear
     // resampling
-    var band3_str = this.pad(pixel[2].toString());
+    const band3_str = this.pad(pixel[2].toString());
     // Grab confidence (the first value) from this string
     // confidence is stored as 1/2, subtract one to make it 0/1
-    var confidence = parseInt(band3_str[0]) - 1;
+    const confidence = parseInt(band3_str[0]) - 1;
     // Grab the raw intensity value from the pixel; ranges from 1 - 55
-    var intensity_raw = parseInt(band3_str.slice(1, 3));
+    const intensity_raw = parseInt(band3_str.slice(1, 3));
     // Scale the intensity to make it visible
-    var intensity = intensity_raw * 50;
+    const intensity = intensity_raw * 50;
     // Set intensity to 255 if it's > than that value
     if (intensity > 255) {
       intensity = 255;
@@ -186,7 +186,7 @@ export const GladLayer = BaseTileLayer.createSubclass({
     };
   },
   pad: function(num) {
-    var str = '00' + num;
+    const str = '00' + num;
     return str.slice(str.length - 3);
   }
 });

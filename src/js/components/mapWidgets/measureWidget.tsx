@@ -1,10 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { RootState } from '../../../js/store/index';
 import { renderModal } from '../../../js/store/appState/actions';
-
-import { ReactComponent as MeasureIcon } from 'images/measureIcon.svg';
+import { MeasureIcon } from '../../../images/measureIcon';
 
 const MeasureWidget: FunctionComponent = () => {
   const modalType = useSelector(

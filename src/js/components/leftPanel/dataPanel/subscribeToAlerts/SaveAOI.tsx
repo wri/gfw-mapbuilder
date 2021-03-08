@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ReactComponent as TrashCanIcon } from 'images/trashCanIcon.svg';
+import { TrashCanIcon } from '../../../../../images/trashCanIcon';
 import { useForm, Controller } from 'react-hook-form';
 import { saveAOIText } from '../../../../../../configs/translations/mygfwstatic.translations';
 import { makeStyles } from '@material-ui/core/styles';
