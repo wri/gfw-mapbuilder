@@ -2,7 +2,6 @@ import './publicPath';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import '../../configs/dojoConfig';
 import store from './store/index';
 import { MapBuilderMain } from '../js/MapBuilderMain';
 
