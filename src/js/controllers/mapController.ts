@@ -1,31 +1,27 @@
 import { setDefaultOptions, loadModules } from 'esri-loader';
-import Map from 'esri/Map';
-import Layer from 'esri/layers/Layer';
-import MapView from 'esri/views/MapView';
-import WebMap from 'esri/WebMap';
-import Portal from 'esri/portal/Portal';
-import Graphic from 'esri/Graphic';
-import GraphicsLayer from 'esri/layers/GraphicsLayer';
-import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
-import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
-import CoordinateConversion from 'esri/widgets/CoordinateConversion';
-import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
-import Polygon from 'esri/geometry/Polygon';
-import Search from 'esri/widgets/Search';
-import Point from 'esri/geometry/Point';
-import PrintTask from 'esri/tasks/PrintTask';
-import PrintTemplate from 'esri/tasks/support/PrintTemplate';
-import PrintParameters from 'esri/tasks/support/PrintParameters';
 import { format, subDays, parse } from 'date-fns';
-import Basemap from 'esri/Basemap';
-import Attribution from 'esri/widgets/Attribution';
-import ScaleBar from 'esri/widgets/ScaleBar';
-import WebTileLayer from 'esri/layers/WebTileLayer';
-import Sublayer from 'esri/layers/support/Sublayer';
-import RasterFunction from 'esri/layers/support/RasterFunction';
-import geometryEngine from 'esri/geometry/geometryEngine';
-import FeatureLayer from 'esri/layers/FeatureLayer';
-import MapImageLayer from 'esri/layers/MapImageLayer';
+// import Map from 'esri/Map';
+// import Layer from 'esri/layers/Layer';
+// import Graphic from 'esri/Graphic';
+// import GraphicsLayer from 'esri/layers/GraphicsLayer';
+// import SketchViewModel from 'esri/widgets/Sketch/SketchViewModel';
+// import DistanceMeasurement2D from 'esri/widgets/DistanceMeasurement2D';
+// import CoordinateConversion from 'esri/widgets/CoordinateConversion';
+// import AreaMeasurement2D from 'esri/widgets/AreaMeasurement2D';
+// import Polygon from 'esri/geometry/Polygon';
+// import Search from 'esri/widgets/Search';
+// import Point from 'esri/geometry/Point';
+// import PrintTask from 'esri/tasks/PrintTask';
+// import PrintTemplate from 'esri/tasks/support/PrintTemplate';
+// import PrintParameters from 'esri/tasks/support/PrintParameters';
+// import Basemap from 'esri/Basemap';
+// import Attribution from 'esri/widgets/Attribution';
+// import ScaleBar from 'esri/widgets/ScaleBar';
+// import WebTileLayer from 'esri/layers/WebTileLayer';
+// import Sublayer from 'esri/layers/support/Sublayer';
+// import RasterFunction from 'esri/layers/support/RasterFunction';
+// import FeatureLayer from 'esri/layers/FeatureLayer';
+// import MapImageLayer from 'esri/layers/MapImageLayer';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
 import {
@@ -39,7 +35,6 @@ import { LayerFactory } from '../../js/helpers/LayerFactory';
 import { setLayerSearchSource } from '../../js/helpers/mapController/searchSources';
 import { getSortedLayers } from '../../js/helpers/mapController/layerSorting';
 import { addPointGraphic } from '../../js/helpers/MapGraphics';
-import { once } from 'esri/core/watchUtils';
 import {
   allAvailableLayers,
   mapError,
@@ -91,6 +86,7 @@ import {
 import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../../js/store/appSettings/actions';
+import { HighlightSpanKind } from 'typescript';
 
 setDefaultOptions({ css: true, version: '4.14' });
 
@@ -105,19 +101,25 @@ interface ZoomParams {
 }
 
 export class MapController {
-  _map: Map | undefined;
-  _mapview: MapView;
-  _sketchVM: SketchViewModel | undefined;
+  _map: __esri.Map | undefined;
+  _mapview: __esri.MapView;
+  _sketchVM: __esri.SketchViewModel | undefined;
   _previousSketchGraphic: any;
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
-  _printTask: PrintTask | undefined;
-  _selectedWidget: DistanceMeasurement2D | AreaMeasurement2D | undefined;
-  _sketchVMGraphicsLayer: GraphicsLayer | undefined;
+  _printTask: __esri.PrintTask | undefined;
+  _selectedWidget:
+    | __esri.DistanceMeasurement2D
+    | __esri.AreaMeasurement2D
+    | undefined;
+  _sketchVMGraphicsLayer: __esri.GraphicsLayer | undefined;
   _domRef: RefObject<any>;
   _imageryOpacity: number;
   _mouseTrackingEvent: IHandle | undefined;
   _webmapBasemap: __esri.Basemap | undefined;
+  _GraphicsLayer: undefined | any;
+  _Polygon: undefined | any;
+  _Graphic: undefined | any;
 
   constructor() {
     this._map = undefined;
@@ -128,11 +130,34 @@ export class MapController {
     this._sketchVMGraphicsLayer = undefined;
     this._mouseTrackingEvent = undefined;
     this._webmapBasemap = undefined;
+    this._GraphicsLayer = undefined;
+    this._Polygon = undefined;
+    this._Graphic = undefined;
   }
 
-  initializeMap(domRef: RefObject<any>): void {
+  async initializeMap(domRef: RefObject<any>): Promise<void> {
     this._domRef = domRef;
     const { appSettings, appState } = store.getState();
+
+    const [
+      MapView,
+      WebMap,
+      Portal,
+      GraphicsLayer,
+      Polygon,
+      Graphic
+    ] = await loadModules([
+      'esri/views/MapView',
+      'esri/WebMap',
+      'esri/portal/Portal',
+      'esri/layers/GraphicsLayer',
+      'esri/geometry/Polygon',
+      'esri/Graphic'
+    ]);
+
+    this._GraphicsLayer = GraphicsLayer;
+    this._Polygon = Polygon;
+    this._Graphic = Graphic;
 
     const webmapID =
       appState.selectedLanguage === appSettings.language
@@ -180,7 +205,7 @@ export class MapController {
       store.dispatch(overwriteColorTheme(defaultTheme));
     }
 
-    function syncExtent(ext: __esri.Extent, mapview: MapView): any {
+    function syncExtent(ext: __esri.Extent, mapview: __esri.MapView): any {
       const { latitude, longitude } = ext.center;
       store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
       store.dispatch(changeMapScale(mapview.scale));
@@ -191,6 +216,11 @@ export class MapController {
     this._mapview
       .when(
         async () => {
+          const [geometryEngine, once, MapImageLayer] = await loadModules([
+            'esri/geometry/geometryEngine',
+            'esri/core/watchUtils',
+            'esri/layers/MapImageLayer'
+          ]);
           store.dispatch(isMapReady(true));
           //default scale for map
           const wbBase = this._map?.basemap.clone();
@@ -417,7 +447,7 @@ export class MapController {
             esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))
           ).then(values => {
             const esriRemoteLayers = values.filter(v => v);
-            const modisLayers = this.initializeAndSetMODISLayers();
+            const modisLayers = this.initializeAndSetMODISLayers(MapImageLayer);
             const allLayers = [...modisLayers, ...esriRemoteLayers];
             const report = new URL(window.location.href).searchParams.get(
               'report'
@@ -654,9 +684,16 @@ export class MapController {
     return legendResult;
   }
 
-  changeLanguage(lang: string): void {
+  async changeLanguage(lang: string): Promise<void> {
     if (!this._map) return;
     const { mapviewState, appSettings } = store.getState();
+
+    const [MapView, WebMap, Portal, geometryEngine] = await loadModules([
+      'esri/views/MapView',
+      'esri/WebMap',
+      'esri/portal/Portal',
+      'esri/geometry/geometryEngine'
+    ]);
 
     //reset all active/selected features as we have no way of confirming that new webmap has said feature
     store.dispatch(setActiveFeatureIndex([0, 0]));
@@ -712,7 +749,7 @@ export class MapController {
       }
     }
 
-    function syncExtent(ext: __esri.Extent, mapview: MapView): any {
+    function syncExtent(ext: __esri.Extent, mapview: __esri.MapView): any {
       const { latitude, longitude } = ext.center;
       store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
       store.dispatch(changeMapScale(mapview.scale));
@@ -876,6 +913,7 @@ export class MapController {
   }
 
   async addLandsatLayer(layerConfig: LayerProps, year: string): Promise<void> {
+    const [Basemap] = await loadModules(['esri/Basemap']);
     const landsatURL = landsatBaselayerURL;
     const landsatConfig = {
       type: 'webtiled',
@@ -905,7 +943,12 @@ export class MapController {
     }
   }
 
-  attachCoordinatesWidget(domref: React.MutableRefObject<any>): void {
+  async attachCoordinatesWidget(
+    domref: React.MutableRefObject<any>
+  ): Promise<void> {
+    const [CoordinateConversion] = await loadModules([
+      'esri/widgets/CoordinateConversion'
+    ]);
     new CoordinateConversion({
       view: this._mapview,
       container: domref.current
@@ -1187,29 +1230,35 @@ export class MapController {
     }
   }
 
-  initializeAndSetSketch(graphics = []): void {
+  async initializeAndSetSketch(graphics = []): Promise<void> {
+    const [GraphicsLayer, SketchViewModel] = await loadModules([
+      'esri/layers/GraphicsLayer',
+      'esri/widgets/Sketch/SketchViewModel'
+    ]);
     if (this._sketchVMGraphicsLayer) {
       //let's make sure this layer is actually on the map, on lang changes sometimes we have sketchVM
       //layer instance but it is not necessarily on the map
       const userLayer = this._map?.findLayerById(
         'user_features'
-      ) as GraphicsLayer;
+      ) as __esri.GraphicsLayer;
       if (!userLayer) {
         this._sketchVMGraphicsLayer = new GraphicsLayer({
           id: 'user_features'
         });
+        //@ts-ignore
         this._map?.add(this._sketchVMGraphicsLayer);
       }
-      this._sketchVMGraphicsLayer.graphics.removeAll();
+      this._sketchVMGraphicsLayer?.graphics.removeAll();
     } else {
       this._sketchVMGraphicsLayer = new GraphicsLayer({
         id: 'user_features'
       });
+      //@ts-ignore
       this._map?.add(this._sketchVMGraphicsLayer);
     }
 
     if (graphics.length) {
-      this._sketchVMGraphicsLayer.graphics.addMany(graphics);
+      this._sketchVMGraphicsLayer?.graphics.addMany(graphics);
     }
 
     this._sketchVM = new SketchViewModel({
@@ -1288,7 +1337,11 @@ export class MapController {
     this._pointerMoveEventListener = undefined;
   }
 
-  setActiveMeasureWidget(optionType: OptionType): void {
+  async setActiveMeasureWidget(optionType: OptionType): Promise<void> {
+    const [AreaMeasurement2D, DistanceMeasurement2D] = await loadModules([
+      'esri/widgets/AreaMeasurement2D',
+      'esri/widgets/DistanceMeasurement2D'
+    ]);
     switch (optionType) {
       case 'area':
         this._selectedWidget = new AreaMeasurement2D({
@@ -1319,7 +1372,9 @@ export class MapController {
 
   updateSelectedMeasureWidget(
     optionType: OptionType,
-    selectedUnit: AreaMeasurement2D['unit'] | DistanceMeasurement2D['unit']
+    selectedUnit:
+      | __esri.AreaMeasurement2D['unit']
+      | __esri.DistanceMeasurement2D['unit']
   ): void {
     let areaResults = {};
     let distanceResults = {};
@@ -1455,6 +1510,17 @@ export class MapController {
   // }
 
   generateMapPDF = async (layoutType: string): Promise<any> => {
+    const [
+      PrintTask,
+      PrintTemplate,
+      PrintParameters,
+      GraphicsLayer
+    ] = await loadModules([
+      'esri/tasks/PrintTask',
+      'esri/tasks/support/PrintTemplate',
+      'esri/tasks/support/PrintParameters',
+      'esri/layers/GraphicsLayer'
+    ]);
     const printServiceURL = store.getState().appSettings.printServiceUrl;
     let printOptions: Array<string>;
 
@@ -1495,21 +1561,23 @@ export class MapController {
       template
     });
 
+    if (!this._printTask) return;
     const mapPDF = await this._printTask
       .execute(params)
       .catch(e => console.log('error in generateMapPDF()', e));
 
     return mapPDF;
   };
-
-  setPolygon = (points: Array<Point>): void => {
+  // let GraphicsLayer
+  setPolygon = (points: Array<__esri.Point>): void => {
+    // import GraphicsLayer from 'esri/layers/GraphicsLayer';
     const userLayer = this._map?.findLayerById(
       'user_features'
-    ) as GraphicsLayer;
+    ) as __esri.GraphicsLayer;
     if (userLayer) {
       userLayer.graphics.removeAll();
     } else {
-      const userLayer = new GraphicsLayer({
+      const userLayer = new this._GraphicsLayer({
         id: 'user_features'
       });
       this._map?.add(userLayer);
@@ -1526,12 +1594,12 @@ export class MapController {
 
     const rings: number[][] = points.map(pt => [pt.x, pt.y]);
 
-    const polygon = new Polygon({
+    const polygon = new this._Polygon({
       rings: [rings],
       spatialReference: { wkid: 102100 }
     });
 
-    const graphic = new Graphic({
+    const graphic = new this._Graphic({
       geometry: polygon,
       symbol: simpleFillSymbol
     });
@@ -1573,6 +1641,7 @@ export class MapController {
 
   async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {
     const allSources = await setLayerSearchSource();
+    const [Search] = await loadModules(['esri/widgets/Search']);
 
     const searchWidget = new Search({
       view: this._mapview,
@@ -1589,7 +1658,11 @@ export class MapController {
     });
   }
 
-  setSearchWidget(latitude: string, longitude: string): void {
+  async setSearchWidget(latitude: string, longitude: string): Promise<void> {
+    const [Point, Graphic] = await loadModules([
+      'esri/geometry/Point',
+      'esri/Graphic'
+    ]);
     this._mapview.graphics.removeAll();
 
     const specificPoint = new Point({
@@ -1650,7 +1723,10 @@ export class MapController {
     bioLayer.refresh();
   }
 
-  updateTreeCoverValue(value: number): void {
+  async updateTreeCoverValue(value: number): Promise<void> {
+    const [RasterFunction] = await loadModules([
+      'esri/layers/support/RasterFunction'
+    ]);
     const { mapviewState } = store.getState();
     const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find(
       l => l.id === 'TREE_COVER'
@@ -1687,7 +1763,8 @@ export class MapController {
     };
   }
 
-  setActiveBasemap(id: string): void {
+  async setActiveBasemap(id: string): Promise<void> {
+    const [Basemap] = await loadModules(['esri/Basemap']);
     if (this._map) {
       const basemap = Basemap.fromId(id);
       this._map.basemap = basemap;
@@ -1701,7 +1778,11 @@ export class MapController {
     store.dispatch(setSelectedBasemap(id));
   }
 
-  setWRIBasemap(id: string): void {
+  async setWRIBasemap(id: string): Promise<void> {
+    const [WebTileLayer, Basemap] = await loadModules([
+      'esri/layers/WebTileLayer',
+      'esri/Basemap'
+    ]);
     if (!this._map) return;
     const basemapURL = WRIBasemapConfig[id];
     const wriLayer = new WebTileLayer({
@@ -1768,12 +1849,13 @@ export class MapController {
     if (!this._map) return;
 
     const modisLayer = (this._map.allLayers as any).items.filter(
-      (layer: FeatureLayer) => layer.id === 'MODIS_ACTIVE_FIRES'
+      (layer: __esri.FeatureLayer) => layer.id === 'MODIS_ACTIVE_FIRES'
     )[0];
 
     if (modisLayer.sublayers) {
       const twentyFourHourMODIS = modisLayer.sublayers.items.filter(
-        (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
+        (sublayer: __esri.Sublayer) =>
+          sublayer.title === 'Global Fires (MODIS) 24 hrs'
       )[0];
       twentyFourHourMODIS.definitionExpression = undefined;
     }
@@ -1803,7 +1885,7 @@ export class MapController {
     }
   }
 
-  initializeAndSetMODISLayers(): any {
+  initializeAndSetMODISLayers(MapImageLayer: any) {
     const modisLayers = MODISLayerIDs.map(({ id, url, layerIds }) => {
       return new MapImageLayer({
         id: id,
@@ -1903,7 +1985,8 @@ export class MapController {
     layer.visible = !layer.visible;
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: __esri.Sublayer) =>
+        sublayer.title === 'Global Fires (MODIS) 24 hrs'
     )[0];
 
     if (sublayer24) {
@@ -1962,7 +2045,8 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: __esri.Sublayer) =>
+        sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     sublayer24.opacity = opacity;
@@ -2004,7 +2088,7 @@ export class MapController {
         webmapLayer.allSublayers &&
         webmapLayer.allSublayers.items.length > 0
       ) {
-        webmapLayer.sublayers.items.forEach((sub: Layer) => {
+        webmapLayer.sublayers.items.forEach((sub: __esri.Layer) => {
           const layerFromURL = layerInfosFromURL.find(
             l => l.sublayerID && String(l.sublayerID) === String(sub.id)
           );
@@ -2061,7 +2145,8 @@ export class MapController {
     }
   }
 
-  addMapAttribution(container: RefObject<HTMLElement>): void {
+  async addMapAttribution(container: RefObject<HTMLElement>): Promise<void> {
+    const [Attribution] = await loadModules(['esri/widgets/Attribution']);
     if (!container.current) return;
     new Attribution({
       view: this._mapview,
@@ -2069,7 +2154,8 @@ export class MapController {
     });
   }
 
-  addScaleBar(container: RefObject<HTMLElement>): void {
+  async addScaleBar(container: RefObject<HTMLElement>): Promise<void> {
+    const [ScaleBar] = await loadModules(['esri/widgets/ScaleBar']);
     if (!container.current) return;
     new ScaleBar({
       view: this._mapview,
