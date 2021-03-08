@@ -295,8 +295,8 @@ const AOIDashboard = () => {
       });
       dispatch(setActiveFeatureIndex([0, 0]));
       dispatch(setActiveFeatures(featureFromAOIData));
-      mapController.drawGraphic([featureFromAOIData[0].features[0]]);
-      mapController._mapview.goTo({ target: poly }, { duration: 1000 });
+      await mapController.drawGraphic([featureFromAOIData[0].features[0]]);
+      mapController._mapview?.goTo({ target: poly }, { duration: 1000 });
       dispatch(selectActiveTab('data'));
       dispatch(renderModal(''));
     }

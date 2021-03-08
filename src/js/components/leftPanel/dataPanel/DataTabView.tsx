@@ -79,7 +79,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     }): JSX.Element => {
       const page = activeFeatureIndex[1];
 
-      function turnAttributeTablePage(forward: boolean): void {
+      async function turnAttributeTablePage(forward: boolean): Promise<void> {
         const newPage = forward ? page + 1 : page - 1;
         const activeFeature = new Array(
           activeFeatures[activeLayerIndex].features[newPage]
@@ -88,7 +88,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           activeLayerInfo.layerID !== 'user_features' &&
           activeLayerInfo.layerID !== 'upload_file_features'
         ) {
-          mapController.drawGraphic(activeFeature);
+          await mapController.drawGraphic(activeFeature);
         } else {
           mapController.updateActivePolyGraphic(activeFeature);
         }

@@ -181,7 +181,7 @@ export function parseURLandApplyChanges(): void {
   const parsedURL = new URL(window.location.href);
   Object.keys(urlEncodingMap).forEach((param: string) => {
     const urlParamValue = parsedURL.searchParams.get(param);
-    if (urlParamValue) {
+    if (urlParamValue && mapController._mapview) {
       //we got a param match, apply it to the global application state where appropriate
       switch (param) {
         case 'z':
@@ -205,7 +205,7 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'coords':
           const coordinates = urlParamValue.split(',').map(c => Number(c));
-          mapController._mapview.goTo(coordinates);
+          mapController._mapview?.goTo(coordinates);
           break;
         case 'd':
           store.dispatch(setCanopyDensity(Number(urlParamValue)));

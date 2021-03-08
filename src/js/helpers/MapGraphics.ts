@@ -167,6 +167,7 @@ export async function setNewGraphic({
             symbol: symbol
           });
 
+          if (!mapController._mapview) return;
           const transformation = projection.getTransformation(
             featureGraphic.geometry.spatialReference,
             mapController._mapview.spatialReference

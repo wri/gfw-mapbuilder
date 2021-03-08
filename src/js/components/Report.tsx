@@ -124,13 +124,18 @@ const Report = (props: ReportProps): JSX.Element => {
       });
       setLayerTitle(activeLayer.title);
     }
+
+    async function addFeatures(esriGeo: any) {
+      await mapController.addActiveFeatureGraphic(esriGeo);
+    }
+
     if (featureGeometry && isMapReady && !layersLoading) {
       const esriGeo = geojsonToArcGIS(featureGeometry.geojson);
       setEsriGeometry(esriGeo[0]);
       //Add Geometry graphic to the map
       if (esriGeo[0].geometry.hasOwnProperty('rings')) {
         //Dealing with a poly
-        mapController.addActiveFeatureGraphic(esriGeo);
+        addFeatures(esriGeo);
       } else {
         //Dealing with a point
         mapController.addActiveFeaturePointGraphic(esriGeo[0]);
