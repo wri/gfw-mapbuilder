@@ -5,11 +5,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: [
-      './src/css/index.scss',
-      '@dojo/framework/shim/Promise',
-      './src/js/index.tsx'
-    ]
+    index: ['./src/css/index.scss', './src/js/index.tsx']
   },
   output: {
     filename: '[name].[chunkhash].js',
@@ -62,7 +58,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader']
+        loader: ['file-loader']
       }
     ]
   },
@@ -78,21 +74,10 @@ module.exports = {
     })
   ],
   resolve: {
-    alias: {
-      js: path.join(__dirname, 'src/js'),
-      css: path.join(__dirname, 'src/css'),
-      images: path.join(__dirname, 'src/images')
-    },
     modules: [
       path.resolve(__dirname, '/src'),
       path.resolve(__dirname, 'node_modules/')
     ],
     extensions: ['.ts', '.tsx', '.js', '.scss', '.css']
-  },
-  node: {
-    process: false,
-    Buffer: false,
-    global: false,
-    fs: 'empty'
   }
 };

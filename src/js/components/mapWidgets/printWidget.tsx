@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { renderModal } from '../../store/appState/actions';
 
 import { PrintIcon } from '../../../images/printIcon';

@@ -20,7 +20,7 @@ import {
 //import resources from '../../../configs/resources';
 import resources from '../../../configs/countryConfigs/cameroon';
 
-import 'css/index.scss';
+import '../../css/index.scss';
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application

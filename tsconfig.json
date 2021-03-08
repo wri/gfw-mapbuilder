@@ -1,22 +1,18 @@
 {
   "compilerOptions": {
-    "module": "amd",
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "baseUrl": ".",
-    "paths": {
-      "js/*": ["src/js/*"],
-      "css/*": ["src/css/*"],
-      "images/*": ["src/images/*"]
-    },
     "lib": ["dom", "es2015.promise", "es5", "es6"],
-    "target": "es5",
     "allowJs": true,
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "removeComments": true,
     "jsx": "react",
-    "moduleResolution": "node",
     "esModuleInterop": true,
-    "isolatedModules": false,
     "experimentalDecorators": true,
     "declaration": false,
     "noLib": false,
@@ -31,16 +27,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": false,
     "strictPropertyInitialization": false,
-    "types": ["arcgis-js-api", "moment", "node", "cypress"]
+    "types": ["arcgis-js-api", "node", "cypress"]
   },
-  "include": [
-    "src/**/*",
-    "configs/translations/imageryLanguages.ts",
-    "configs/translations/header.translations.ts",
-    "configs/translations/staticOptions.tsx",
-    "configs/translations/modal.translations.ts",
-    "configs/translations/staticTextTranslations.tsx"
-  ],
   "exclude": ["node_modules"],
-  "files": ["custom.d.ts"]
+  "include": ["custom.d.ts"]
 }
