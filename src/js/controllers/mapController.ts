@@ -65,7 +65,7 @@ import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../../js/store/appSettings/actions';
 
-setDefaultOptions({ css: true, version: '4.14' });
+setDefaultOptions({ css: true, version: '4.18' });
 
 interface URLCoordinates {
   zoom: number;
@@ -919,34 +919,39 @@ export class MapController {
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
-  async addPlanetTileLayer(): Promise<void> {
-    if (this._planetBasemap) {
-      this._map!.basemap = this._planetBasemap;
-    } else {
-      const planetConfig = {
-        type: 'webtiled',
-        url:
-          'https://tiles.planet.com/basemaps/v1/planet-tiles/planet_medres_normalized_analytic_2021-02_mosaic/gmap/{z}/{x}/{y}.png?api_key=af992066dc9b4bdaacfebe64b1455318',
-        title: 'planet',
-        id: 'planet'
-      };
+  async addPlanetTileLayer(
+    planetColor: string,
+    selectedTile: string
+  ): Promise<void> {
+    const [Basemap, TileLayer, WebTileLayer] = await loadModules([
+      'esri/Basemap',
+      'esri/layers/TileLayer',
+      'esri/layers/WebTileLayer'
+    ]);
 
-      const planetBasemapReferenceLayer = new TileLayer({
-        id: 'planet-basemap-reference-layer',
-        url:
-          'http://server.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer',
-        visible: true
-      });
+    const planetBasemapReferenceLayer = new TileLayer({
+      id: 'planet-basemap-reference-layer',
+      url:
+        'http://server.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer',
+      visible: true
+    });
 
-      const planetLayer = new WebTileLayer({
-        urlTemplate: planetConfig.url
-      });
-      const planetBase = new Basemap({
-        baseLayers: [planetLayer, planetBasemapReferenceLayer]
-      });
-      this._planetBasemap = planetBase;
-      this._map!.basemap = planetBase;
-    }
+    const planetProxyURL = 'http://localhost:1337/getPlanetTile/';
+    const planetConfig = {
+      type: 'webtiled',
+      url: `${planetProxyURL}/basemaps/v1/planet-tiles/${selectedTile}/gmap/{z}/{x}/{y}.png?proc=${planetColor}`,
+      title: 'planet',
+      id: 'planet'
+    };
+
+    const planetLayer = new WebTileLayer({
+      urlTemplate: planetConfig.url
+    });
+    const planetBase = new Basemap({
+      baseLayers: [planetLayer, planetBasemapReferenceLayer]
+    });
+    this._planetBasemap = planetBase;
+    this._map!.basemap = planetBase;
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
@@ -1187,7 +1192,6 @@ export class MapController {
   }
 
   updateSketchVM(graphicIndex?: number): void {
-<<<<<<< HEAD
     interface CustomUpdateOptions
       extends __esri.SketchViewModelDefaultUpdateOptions {
       tool: 'reshape';

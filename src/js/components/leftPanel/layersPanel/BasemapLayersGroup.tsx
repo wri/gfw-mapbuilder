@@ -54,28 +54,17 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
 };
 
 const PlanetBasemap = (props: BaseLayerControlLandsatProps): JSX.Element => {
-  const { thumbnailUrl, title } = props.layerInfo;
-  const years = landsatBaselayerYears;
-  const [selectedYear, setSelectedYear] = React.useState(
-    years[years.length - 1]
-  );
+  const { title } = props.layerInfo;
   const [planetTiles, setPlanetTiles] = useState<any[]>();
-  const [planetColor, setPlanetColor] = useState('');
-  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState(
-    planetTiles && planetTiles[0].tileName
-  ); //TODO this needs to be maybe the first one?
+  const [planetColor, setPlanetColor] = useState('rgb');
+  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState('');
 
   console.log(planetTiles);
-  // gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
   const planetProxyURL = 'http://localhost:1337';
   useEffect(() => {
-    console.log('go?');
     fetch(`${planetProxyURL}/getPlanetTilesInfo`)
       .then((res: any) => res.json())
       .then(response => {
-        // const res = response.json();
-        debugger;
-        console.log(response);
         const tilesInfo = response.mosaics.map((tile: any) =>
           tile.name
             .replace('planet_medres_normalized_analytic_', '')
@@ -86,32 +75,24 @@ const PlanetBasemap = (props: BaseLayerControlLandsatProps): JSX.Element => {
               label: format(new Date(tileInfo), 'MMM yyyy')
             }))
         );
-        console.log(tilesInfo);
-        setPlanetTiles(tilesInfo.reverse());
+        const tileOptions = tilesInfo.reverse();
+        setPlanetTiles(tileOptions);
+        setSelectedPlanetTileLayer(tileOptions[0][0].tileName);
       });
   }, []);
 
-  function handleYearSelection(e: any): void {
-    setSelectedYear(e.target.value);
-    mapController.addLandsatLayer(props.layerInfo, e.target.value);
-  }
-
-  function handleBasemapSectionClick(e: any): void {
-    mapController.addLandsatLayer(props.layerInfo, String(selectedYear));
-  }
-
-  function handlePlanetTile(name: string): void {
-    //
+  function handlePlanetTileChange(name: string): void {
+    setSelectedPlanetTileLayer(name);
+    mapController.addPlanetTileLayer(planetColor, name);
   }
 
   function handlePlanetColorChange(val: string): void {
     setPlanetColor(val);
-    //
+    mapController.addPlanetTileLayer(val, selectedPlanetTileLayer);
   }
 
   function handlePlanetTileClick() {
-    console.log('yayaya');
-    mapController.addPlanetTileLayer();
+    mapController.addPlanetTileLayer(planetColor, selectedPlanetTileLayer);
   }
 
   const tileOptions = planetTiles?.map(tileInfo => {
@@ -144,15 +125,15 @@ const PlanetBasemap = (props: BaseLayerControlLandsatProps): JSX.Element => {
   return (
     <div className="layer-basemap landsat">
       <span
-        onClick={() => handlePlanetTileClick()}
         className="planet-thumb"
+        onClick={() => handlePlanetTileClick()}
       ></span>
       <span onClick={() => handlePlanetTileClick()}>
         {title && title[props.selectedLanguage]}
       </span>
       <div className="planet-selectors">
         <select
-          onChange={e => handlePlanetTile(e.target.value)}
+          onChange={e => handlePlanetTileChange(e.target.value)}
           value={selectedPlanetTileLayer}
           style={{ border: `1px solid ${props.customColorTheme}` }}
           className="landsat-years"
@@ -164,6 +145,7 @@ const PlanetBasemap = (props: BaseLayerControlLandsatProps): JSX.Element => {
     </div>
   );
 };
+
 const BaseLayerControlLandsat = (
   props: BaseLayerControlLandsatProps
 ): JSX.Element => {
