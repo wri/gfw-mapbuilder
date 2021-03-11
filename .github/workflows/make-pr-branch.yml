@@ -34,7 +34,7 @@ jobs:
           args: --acl public-read --follow-symlinks --delete
         env:
           SOURCE_DIR: './dist'
-          DEST_DIR: 'gfw-mapbuilder/pull-requests/'${{GITHUB_REF:11}}
+          DEST_DIR: 'gfw-mapbuilder/pull-requests/${{GITHUB_REF:11}}'
           AWS_REGION: 'us-east-1'
           AWS_S3_BUCKET: ${{ secrets.MB_AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.MB_AWS_ACCESS_KEY_ID }}
