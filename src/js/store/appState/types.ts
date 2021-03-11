@@ -12,6 +12,9 @@ export interface LeftPanel {
   modisEnd: string;
   viirsStart: string;
   viirsEnd: string;
+  versionedLayer: {
+    [key: string]: string;
+  };
 }
 
 interface SpecificAreaResults {
@@ -81,6 +84,7 @@ export const SET_MODIS_START = 'SET_MODIS_START';
 export const SET_MODIS_END = 'SET_MODIS_END';
 export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
+export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -202,6 +206,11 @@ interface SetAreaImages {
   payload: string;
 }
 
+interface SetVersionedLayer {
+  type: typeof SET_VERSIONED_LAYER;
+  payload: any;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -226,4 +235,5 @@ export type AppStateTypes =
   | SetViirsStart
   | SetViirsEnd
   | SetRenderPopup
-  | SetAreaImages;
+  | SetAreaImages
+  | SetVersionedLayer;
