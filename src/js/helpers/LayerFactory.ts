@@ -109,9 +109,12 @@ export async function LayerFactory(
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
       layerConfig.url = layerConfig.url.replace(
-        /(tc)(?:[^\/]+)/,
-        `tc${densityValue}`
+        /(tcd_)(?:[^\/]+)/,
+        `tcd_${densityValue}`
       );
+
+      //TODO: This needs to be removed once API is updated
+      layerConfig.url = `https://tiles.globalforestwatch.org/umd_tree_cover_loss/v1.7/tcd_${densityValue}/{z}/{x}/{y}.png`;
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
       const tclLayer = new tclConstructor({
