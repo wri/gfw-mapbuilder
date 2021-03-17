@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import resources from '../../configs/resources';
+import resources from '../../configs/countryConfigs/cameroon';
 
 describe('Main App E2E Test Suite', () => {
   it('Loads the app with local configuration, header, leftpanel and legend exist', () => {

@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import resources from '../../configs/resources';
+import resources from '../../configs/countryConfigs/cameroon';
 
 describe('Main App E2E Test Suite', () => {
   it('Language change works and loads the app main elements', () => {
