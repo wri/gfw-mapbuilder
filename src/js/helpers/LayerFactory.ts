@@ -2,6 +2,7 @@
 import { loadModules } from 'esri-loader';
 import { createTCL } from '../../js/layers/TreeCoverLossLayer';
 import { createGlad } from '../../js/layers/GladLayer';
+import { createCO2 } from '../../js/layers/CO2Layer';
 import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
 import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
@@ -136,6 +137,21 @@ export async function LayerFactory(
         view: mapView
       });
       esriLayer = gainLayer;
+      break;
+    case 'co2_emissions':
+      const co2Density = markValueMap[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace('{threshold}', `${co2Density}`);
+      const co2Constructor = await createGlad();
+      // const co2Constructor = await createCO2();
+      // const co2Constructor = await createTCL();
+      const co2Layer = new co2Constructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      esriLayer = co2Layer;
       break;
     case 'webtiled':
       esriLayer = new WebTileLayer({
