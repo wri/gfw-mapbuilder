@@ -629,7 +629,7 @@ export default {
     },
     GROUP_CLIMATE: {
       groupType: 'default',
-      order: 1,
+      order: 4,
       label: {
         en: 'Climate',
         fr: 'Climate',

@@ -138,21 +138,6 @@ export async function LayerFactory(
       });
       esriLayer = gainLayer;
       break;
-    case 'co2_emissions':
-      const co2Density = markValueMap[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace('{threshold}', `${co2Density}`);
-      const co2Constructor = await createGlad();
-      // const co2Constructor = await createCO2();
-      // const co2Constructor = await createTCL();
-      const co2Layer = new co2Constructor({
-        id: layerConfig.id,
-        title: layerConfig.title,
-        visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
-        view: mapView
-      });
-      esriLayer = co2Layer;
-      break;
     case 'webtiled':
       esriLayer = new WebTileLayer({
         id: layerConfig.id,
