@@ -920,6 +920,7 @@ export class MapController {
   }
 
   async addPlanetTileLayer(
+    proxyURL: string,
     planetColor: string,
     selectedTile: string
   ): Promise<void> {
@@ -936,10 +937,10 @@ export class MapController {
       visible: true
     });
 
-    const planetProxyURL = 'http://localhost:1337/getPlanetTile/';
+    const params = `?date_range=${selectedTile}&proc=${planetColor}`;
     const planetConfig = {
       type: 'webtiled',
-      url: `${planetProxyURL}/basemaps/v1/planet-tiles/${selectedTile}/gmap/{z}/{x}/{y}.png?proc=${planetColor}`,
+      url: proxyURL + params,
       title: 'planet',
       id: 'planet'
     };

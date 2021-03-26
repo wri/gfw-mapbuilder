@@ -1074,6 +1074,21 @@ export default {
             zh: 'WRI Mono',
             ka: 'WRI Mono'
           }
+        },
+        {
+          id: 'planet',
+          thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
+          url:
+            'https://dev-tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic/{z}/{x}/{y}.png',
+          title: {
+            en: 'Planet',
+            fr: 'Planet',
+            es: 'Planet',
+            pt: 'Planet',
+            id: 'Planet',
+            zh: 'Planet',
+            ka: 'Planet'
+          }
         }
         // {
         //   id: 'wri_contextual',

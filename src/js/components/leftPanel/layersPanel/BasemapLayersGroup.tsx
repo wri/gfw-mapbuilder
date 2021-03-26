@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { format } from 'date-fns';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import {
   landsatBaselayerYears,
-  customBasemapIcon
+  customBasemapIcon,
+  planetDateRanges
 } from '../../../../../configs/layer-config';
 import { mapController } from '../../../../js/controllers/mapController';
 import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
@@ -25,6 +26,10 @@ interface BaseLayerControlLandsatProps {
   layerInfo: LayerProps;
   selectedLanguage: string;
   customColorTheme?: string;
+}
+
+interface BaseLayerPlanet extends BaseLayerControlLandsatProps {
+  url: string;
 }
 
 const WebmapOriginal = (props: DefaultBasemapProps): JSX.Element => {
@@ -53,53 +58,39 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
   );
 };
 
-const PlanetBasemap = (props: BaseLayerControlLandsatProps): JSX.Element => {
-  const { title } = props.layerInfo;
-  const [planetTiles, setPlanetTiles] = useState<any[]>();
-  const [planetColor, setPlanetColor] = useState('rgb');
-  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState('');
+const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
+  const planetTiles = planetDateRanges.reverse().map(d => {
+    const label = d
+      .split('_')
+      .map(date => format(new Date(date), 'MMM yyyy'))
+      .join('-');
+    return { value: d, label };
+  });
 
-  console.log(planetTiles);
-  const planetProxyURL = 'http://localhost:1337';
-  useEffect(() => {
-    fetch(`${planetProxyURL}/getPlanetTilesInfo`)
-      .then((res: any) => res.json())
-      .then(response => {
-        const tilesInfo = response.mosaics.map((tile: any) =>
-          tile.name
-            .replace('planet_medres_normalized_analytic_', '')
-            .replace('_mosaic', '')
-            .split('_')
-            .map((tileInfo: any) => ({
-              tileName: tile.name,
-              label: format(new Date(tileInfo), 'MMM yyyy')
-            }))
-        );
-        const tileOptions = tilesInfo.reverse();
-        setPlanetTiles(tileOptions);
-        setSelectedPlanetTileLayer(tileOptions[0][0].tileName);
-      });
-  }, []);
+  const { title, url } = props.layerInfo;
+  const [planetColor, setPlanetColor] = useState('rgb');
+  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState(
+    planetTiles[0].value
+  );
 
   function handlePlanetTileChange(name: string): void {
     setSelectedPlanetTileLayer(name);
-    mapController.addPlanetTileLayer(planetColor, name);
+    mapController.addPlanetTileLayer(url, planetColor, name);
   }
 
   function handlePlanetColorChange(val: string): void {
     setPlanetColor(val);
-    mapController.addPlanetTileLayer(val, selectedPlanetTileLayer);
+    mapController.addPlanetTileLayer(url, val, selectedPlanetTileLayer);
   }
 
   function handlePlanetTileClick() {
-    mapController.addPlanetTileLayer(planetColor, selectedPlanetTileLayer);
+    mapController.addPlanetTileLayer(url, planetColor, selectedPlanetTileLayer);
   }
 
   const tileOptions = planetTiles?.map(tileInfo => {
     return (
-      <option value={tileInfo[0].tileName} key={tileInfo[0].tileName}>
-        {tileInfo[0].label}
-        {tileInfo.length > 1 && ` - ${tileInfo[1].label}`}
+      <option value={tileInfo.value} key={tileInfo.value}>
+        {tileInfo.label}
       </option>
     );
   });
@@ -160,7 +151,7 @@ const BaseLayerControlLandsat = (
     mapController.addLandsatLayer(props.layerInfo, e.target.value);
   }
 
-  function handleBasemapSectionClick(e: any): void {
+  function handleBasemapSectionClick(): void {
     mapController.addLandsatLayer(props.layerInfo, String(selectedYear));
   }
 
@@ -267,10 +258,15 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         />
       );
     }
-    if (baselayer.id === 'planet') {
+    if (
+      baselayer.id === 'planet' &&
+      baselayer?.url &&
+      baselayer.url.length !== 0
+    ) {
       return (
         <PlanetBasemap
           key={baselayer.id}
+          url={baselayer.url}
           layerInfo={baselayer}
           selectedLanguage={selectedLanguage}
           customColorTheme={customColorTheme}
