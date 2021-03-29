@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { format } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
@@ -12,6 +11,7 @@ import {
 import { mapController } from '../../../../js/controllers/mapController';
 import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
 import { LayerProps } from '../../../../js/store/mapview/types';
+import { format } from 'date-fns';
 
 interface DefaultBasemapProps {
   layerInfo: {
@@ -59,19 +59,34 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
 };
 
 const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
-  const planetTiles = planetDateRanges.reverse().map(d => {
-    const label = d
-      .split('_')
-      .map(date => format(new Date(date), 'MMM yyyy'))
-      .join('-');
-    return { value: d, label };
-  });
-
   const { title, url } = props.layerInfo;
   const [planetColor, setPlanetColor] = useState('rgb');
-  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState(
-    planetTiles[0].value
-  );
+  const [planetTiles, setPlanetTiles] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
+  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState<
+    string
+  >('2021-02');
+
+  useEffect(() => {
+    const tileInfoURL = 'https://dev-tiles.globalforestwatch.org/openapi.json';
+    fetch(tileInfoURL)
+      .then(res => res.json())
+      .then(data => {
+        const planetDateRanges: Array<string> =
+          data?.components?.schemas?.PlanetDateRange?.enum;
+        const planetTilesFormat = planetDateRanges.reverse().map(d => {
+          const label = d
+            .split('_')
+            .map(date => format(new Date(date), 'MMM yyyy'))
+            .join('-');
+          return { value: d, label };
+        });
+        setPlanetTiles(planetTilesFormat);
+        setSelectedPlanetTileLayer(planetTilesFormat[0].value);
+      })
+      .catch(e => console.log(e));
+  }, []);
 
   function handlePlanetTileChange(name: string): void {
     setSelectedPlanetTileLayer(name);
