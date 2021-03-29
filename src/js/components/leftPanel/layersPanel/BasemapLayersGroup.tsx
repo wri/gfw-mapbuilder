@@ -67,6 +67,10 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
     string
   >('2021-02');
 
+  const activeBasemap = useSelector(
+    (store: RootState) => store.mapviewState.activeBasemap
+  );
+
   useEffect(() => {
     const tileInfoURL = 'https://dev-tiles.globalforestwatch.org/openapi.json';
     fetch(tileInfoURL)
@@ -128,7 +132,11 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   };
 
   return (
-    <div className="layer-basemap landsat">
+    <div
+      className={`layer-basemap landsat ${
+        activeBasemap === 'planet' ? 'selected' : ''
+      }`}
+    >
       <span
         className="planet-thumb"
         onClick={() => handlePlanetTileClick()}
@@ -160,6 +168,10 @@ const BaseLayerControlLandsat = (
     years[years.length - 1]
   );
 
+  const activeBasemap = useSelector(
+    (store: RootState) => store.mapviewState.activeBasemap
+  );
+
   function handleYearSelection(e: any): void {
     setSelectedYear(e.target.value);
     mapController.addLandsatLayer(props.layerInfo, e.target.value);
@@ -184,7 +196,11 @@ const BaseLayerControlLandsat = (
   };
 
   return (
-    <div className="layer-basemap landsat">
+    <div
+      className={`layer-basemap ${
+        activeBasemap.includes('landsat') ? 'selected' : ''
+      }`}
+    >
       <span
         onClick={handleBasemapSectionClick}
         className="landsat-thumb"

@@ -953,6 +953,7 @@ export class MapController {
     });
     this._planetBasemap = planetBase;
     this._map!.basemap = planetBase;
+    store.dispatch(setSelectedBasemap(planetConfig.id));
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
