@@ -5,8 +5,7 @@ import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import {
   landsatBaselayerYears,
-  customBasemapIcon,
-  planetDateRanges
+  customBasemapIcon
 } from '../../../../../configs/layer-config';
 import { mapController } from '../../../../js/controllers/mapController';
 import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
