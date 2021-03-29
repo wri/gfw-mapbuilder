@@ -632,12 +632,15 @@ export default {
       order: 4,
       label: {
         en: 'Climate',
-        fr: 'Climate',
-        es: 'Climate',
-        pt: 'Climate',
-        id: 'Climate',
-        zh: 'Climate',
-        ka: 'Climate'
+        fr: 'Climat',
+        es: 'Clima',
+        pt: 'Clima',
+        id: 'Iklim',
+        zh: '气候',
+        ka: 'კლიმატი',
+        hy: 'Կլիմա',
+        az: 'İqlim',
+        nl: 'Klimaat'
       },
       layers: [
         {
