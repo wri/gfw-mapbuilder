@@ -181,18 +181,19 @@ const AOIDashboard = () => {
         }
       })
         .then(res => {
-          res.json().then(data => {
+          res.json().then(async areaRes => {
             if (res.status !== 200) {
               setLoadingError(true);
               return;
             }
             setLoadingError(false);
             setLoading(false);
+            const userAreas = areaRes.data;
             //Put data in paginated chunks so we load only 5 at a time
-            generateMinimaps(data.data);
+            await generateMinimaps(userAreas);
             const chunks: any[] = [];
-            while (data.data.length > 0) {
-              chunks.push(data.data.splice(0, 5));
+            while (areaRes.data.length > 0) {
+              chunks.push(areaRes.data.splice(0, 5));
             }
             setData(chunks);
           });
