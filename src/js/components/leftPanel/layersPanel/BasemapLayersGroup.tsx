@@ -2,7 +2,11 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
-import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
+import {
+  setOpenLayerGroup,
+  renderModal
+} from '../../../../js/store/appState/actions';
+import { InfoIcon } from '../../../../images/infoIcon';
 import {
   landsatBaselayerYears,
   customBasemapIcon
@@ -70,6 +74,12 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const activeBasemap = useSelector(
     (store: RootState) => store.mapviewState.activeBasemap
   );
+
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const tileInfoURL = 'https://dev-tiles.globalforestwatch.org/openapi.json';
@@ -154,6 +164,17 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
           {planetTiles && tileOptions}
         </select>
         <TileColors />
+      </div>
+      <div
+        onClick={() => dispatch(renderModal('PlanetInfo'))}
+        className="info-icon-container"
+        style={{
+          marginLeft: 25,
+          marginBottom: 30,
+          backgroundColor: `${customColorTheme}`
+        }}
+      >
+        <InfoIcon width={10} height={10} fill={'#fff'} />
       </div>
     </div>
   );
