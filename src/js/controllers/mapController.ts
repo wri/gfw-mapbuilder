@@ -930,10 +930,16 @@ export class MapController {
       'esri/layers/WebTileLayer'
     ]);
 
-    const planetBasemapReferenceLayer = new TileLayer({
+    const planetBasemapReferenceLayer1 = new TileLayer({
       id: 'planet-basemap-reference-layer',
       url:
-        'http://server.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer',
+        'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
+      visible: true
+    });
+    const planetBasemapReferenceLayer2 = new TileLayer({
+      id: 'planet-basemap-reference-layer',
+      url:
+        'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
       visible: true
     });
 
@@ -949,7 +955,11 @@ export class MapController {
       urlTemplate: planetConfig.url
     });
     const planetBase = new Basemap({
-      baseLayers: [planetLayer, planetBasemapReferenceLayer]
+      baseLayers: [
+        planetBasemapReferenceLayer1,
+        planetBasemapReferenceLayer2,
+        planetLayer
+      ]
     });
     this._planetBasemap = planetBase;
     this._map!.basemap = planetBase;
