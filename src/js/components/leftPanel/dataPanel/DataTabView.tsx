@@ -118,7 +118,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                           : attributeKey;
                       let value = props.attributes[attributeKey];
                       //Users can set the href tag on the data attribute on the service, we want to show an actual link instead of plain text
-                      if (value?.includes('href')) {
+                      if (
+                        typeof value === 'string' &&
+                        value?.includes('href')
+                      ) {
                         value = (
                           <div
                             dangerouslySetInnerHTML={{ __html: value }}
