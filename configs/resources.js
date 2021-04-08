@@ -762,13 +762,13 @@ export default {
           order: 5,
           type: 'remoteDataLayer',
           uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
+        },
+        {
+          id: 'TREE_COVER',
+          order: 6,
+          type: 'remoteDataLayer',
+          uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
         }
-        // {
-        //   id: 'TREE_COVER',
-        //   order: 6,
-        //   type: 'remoteDataLayer',
-        //   uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
-        // }
       ]
     },
     GROUP_IMAGERY: {

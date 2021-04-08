@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
 import { createTCL } from '../../js/layers/TreeCoverLossLayer';
+import { createTreeCover } from '../../js/layers/TreeCoverLayer';
 import { createGlad } from '../../js/layers/GladLayer';
 import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
@@ -127,6 +128,20 @@ export async function LayerFactory(
       esriLayer.minYear = yearRange[0];
       esriLayer.maxYear = yearRange[1];
       esriLayer.refresh();
+      break;
+    case 'tree-cover':
+      const dVal = markValueMap[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(/{thresh}/, `${dVal}`);
+      const treeCoverConstructor = await createTreeCover();
+      const treeCoverL = new treeCoverConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+        config: layerConfig
+      });
+      esriLayer = treeCoverL;
       break;
     case 'gain':
       const gainConstructor = await createGain();

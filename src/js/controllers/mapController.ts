@@ -1708,32 +1708,26 @@ export class MapController {
     bioLayer.refresh();
   }
 
-  async updateTreeCoverValue(value: number): Promise<void> {
-    const [RasterFunction] = await loadModules([
-      'esri/layers/support/RasterFunction'
-    ]);
+  async updateTreeCoverValue(value: number): Promise<any> {
     const { mapviewState } = store.getState();
     const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find(
       l => l.id === 'TREE_COVER'
     );
     const treeLayer: any = this._map?.findLayerById('TREE_COVER');
     if (treeLayer && treeCoverLayerInfo) {
-      const remapRF = new RasterFunction();
-      remapRF.functionName = 'Remap';
-      remapRF.functionArguments = {
-        InputRanges: [value, treeCoverLayerInfo.metadata.inputRange[1]],
-        OutputValues: treeCoverLayerInfo.metadata.outputRange,
-        AllowUnmatched: false,
-        Raster: '$$' // Apply remap to the image service
-      };
-      remapRF.outputPixelType = 'u8';
-      const colorRF = new RasterFunction();
-      colorRF.functionName = 'Colormap';
-      colorRF.functionArguments = {
-        Colormap: treeCoverLayerInfo.metadata.colormap,
-        Raster: remapRF
-      };
-      treeLayer.renderingRule = colorRF;
+      const oldLayer = treeLayer;
+      const newURL = treeCoverLayerInfo.url.replace('30', value);
+      oldLayer.urlTemplate = newURL;
+      const removeEventListener = this._map?.layers.on(
+        'after-remove',
+        (event: __esri.CollectionAfterEvent<__esri.WebTileLayer>) => {
+          if (event.item.id === 'TREE_COVER') {
+            this._map?.add(oldLayer);
+          }
+        }
+      );
+      this._map?.remove(treeLayer);
+      return removeEventListener;
     }
   }
 
