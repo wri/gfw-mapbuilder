@@ -2,7 +2,6 @@
 import { loadModules } from 'esri-loader';
 import { createTCL } from '../../js/layers/TreeCoverLossLayer';
 import { createGlad } from '../../js/layers/GladLayer';
-import { createCO2 } from '../../js/layers/CO2Layer';
 import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
 import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
@@ -219,7 +218,8 @@ export async function LayerFactory(
         esriLayer = new VectorTileLayer({
           id: layerConfig.id,
           url: layerConfig.url,
-          visible: layerConfig.visible
+          visible: layerConfig.visible,
+          opacity: layerConfig.opacity
         });
       }
       break;
