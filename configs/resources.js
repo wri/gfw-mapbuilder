@@ -733,24 +733,24 @@ export default {
         ka: 'მიწის საფარი'
       },
       layers: [
-        {
-          id: 'GLOB_MANGROVE',
-          order: 1,
-          type: 'remoteDataLayer',
-          uuid: '533cbe18-22a6-46ac-99ca-027c96f33ac3'
-        },
+        // {
+        //   id: 'GLOB_MANGROVE',
+        //   order: 1,
+        //   type: 'remoteDataLayer',
+        //   uuid: '533cbe18-22a6-46ac-99ca-027c96f33ac3'
+        // },
         {
           id: 'IFL',
           order: 2,
           type: 'remoteDataLayer',
           uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
         },
-        {
-          id: 'PRIMARY_FORESTS',
-          order: 3,
-          type: 'remoteDataLayer',
-          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
-        },
+        // {
+        //   id: 'PRIMARY_FORESTS',
+        //   order: 3,
+        //   type: 'remoteDataLayer',
+        //   uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
+        // },
         {
           id: 'AG_BIOMASS',
           order: 4,
@@ -762,13 +762,13 @@ export default {
           order: 5,
           type: 'remoteDataLayer',
           uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
-        },
-        {
-          id: 'TREE_COVER',
-          order: 6,
-          type: 'remoteDataLayer',
-          uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
         }
+        // {
+        //   id: 'TREE_COVER',
+        //   order: 6,
+        //   type: 'remoteDataLayer',
+        //   uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
+        // }
       ]
     },
     GROUP_IMAGERY: {
