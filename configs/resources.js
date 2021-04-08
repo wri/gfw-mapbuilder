@@ -745,12 +745,12 @@ export default {
           type: 'remoteDataLayer',
           uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
         },
-        // {
-        //   id: 'PRIMARY_FORESTS',
-        //   order: 3,
-        //   type: 'remoteDataLayer',
-        //   uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
-        // },
+        {
+          id: 'PRIMARY_FORESTS',
+          order: 3,
+          type: 'remoteDataLayer',
+          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
+        },
         {
           id: 'AG_BIOMASS',
           order: 4,

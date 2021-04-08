@@ -154,6 +154,7 @@ export async function LayerFactory(
       });
       esriLayer = gainLayer;
       break;
+    case 'primed':
     case 'webtiled':
       esriLayer = new WebTileLayer({
         id: layerConfig.id,
@@ -193,17 +194,6 @@ export async function LayerFactory(
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
-      break;
-    case 'primed':
-      const primaryConstructor = await createPrimary();
-      const primaryLayer = new primaryConstructor({
-        id: layerConfig.id,
-        title: layerConfig.title,
-        visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
-        view: mapView
-      });
-      esriLayer = primaryLayer;
       break;
     case 'MASK':
       const { appSettings } = store.getState();
