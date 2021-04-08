@@ -17,8 +17,8 @@ import {
   attachCMSEventHandlers
 } from '../helpers/appLoading';
 
-//import resources from '../../../configs/resources';
-import resources from '../../../configs/countryConfigs/cameroon';
+import resources from '../../../configs/resources';
+// import resources from '../../../configs/countryConfigs/cameroon';
 
 import '../../css/index.scss';
 
