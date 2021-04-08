@@ -29,6 +29,7 @@ export async function LayerFactory(
     FeatureLayer,
     MapImageLayer,
     WebTileLayer,
+    VectorTileLayer,
     MosaicRule,
     RasterFunction
   ] = await loadModules([
@@ -36,6 +37,7 @@ export async function LayerFactory(
     'esri/layers/FeatureLayer',
     'esri/layers/MapImageLayer',
     'esri/layers/WebTileLayer',
+    'esri/layers/VectorTileLayer',
     'esri/layers/support/MosaicRule',
     'esri/layers/support/RasterFunction'
   ]);
@@ -213,6 +215,12 @@ export async function LayerFactory(
           layerConfig.url,
           layerConfig.visible
         );
+      } else {
+        esriLayer = new VectorTileLayer({
+          id: layerConfig.id,
+          url: layerConfig.url,
+          visible: layerConfig.visible
+        });
       }
       break;
     default:
