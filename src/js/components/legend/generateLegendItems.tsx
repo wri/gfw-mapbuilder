@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { LayerProps } from '../../../js/store/mapview/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../js/store';
 import {
   PointItem,
   BasicItem,
@@ -247,6 +249,9 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
+  const timeSlider = useSelector(
+    (store: RootState) => store.mapviewState.timeSlider
+  );
   const items = props.visibleLayers.map((layer, i) => {
     if (!layer.legendInfo) {
       //No legend Info available, that usually means that we are dealing with FeatureServer layers and need to attempt to create legend symbols manually
@@ -314,6 +319,10 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         title = `${layer.title} (${
           props.gladConfirmed ? 'Confirmed' : 'Unconfirmed'
         })`;
+      }
+      if (layer.id === 'TREE_COVER_LOSS') {
+        console.log(timeSlider);
+        title = `${layer.title} (${timeSlider[0]} - ${timeSlider[1]})`;
       }
       let labelIcons;
       if (layer.metadata?.legendConfig?.type === 'gradient') {
