@@ -279,8 +279,11 @@
   }
 
   &.print-widget {
+    border-radius: 3px;
+    overflow: hidden;
     p {
       font-size: 1.25rem;
+      text-align: center;
     }
 
     a {
