@@ -450,10 +450,9 @@ export class MapController {
                   'acLayer'
                 );
                 if (!layerID) return;
-                //@ts-ignore
                 const combinedLayers = [
                   ...allLayers,
-                  ...this._map.layers.items
+                  ...(this._map as any)?.layers.items
                 ];
                 const activeLayer = combinedLayers.find(l => l.id === layerID);
                 if (!activeLayer || activeLayer.loaded === true) {
@@ -468,7 +467,7 @@ export class MapController {
                 //@ts-ignore
                 const combinedLayers = [
                   ...allLayers,
-                  ...this._map.layers.items
+                  ...(this._map as any)?.layers.items
                 ];
 
                 combinedLayers.forEach(l => {
