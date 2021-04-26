@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { LayerProps } from '../../../js/store/mapview/types';
 import {
   PointItem,
@@ -214,6 +215,43 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
       const defaultSymbol = esriLayer.renderer.symbol;
       const symbolDOMElement = createSymbolStyles(defaultSymbol);
       container.push(symbolDOMElement);
+    } else if (esriLayer.renderer?.visualVariables?.length) {
+      const visualStops = esriLayer.renderer.visualVariables.find(
+        (v: any) => v.type === 'color'
+      );
+      if (visualStops) {
+        interface GradientItem {
+          colors: string[];
+          labels: string[];
+        }
+        const gradientElement: GradientItem = {
+          colors: [],
+          labels: []
+        };
+        visualStops.stops.forEach(stop => {
+          const { r, g, b, a } = stop.color;
+          gradientElement.colors.push(`rgba(${r},${g},${b},${a})`);
+          gradientElement.labels.push(stop.label);
+        });
+
+        const gradientString = `linear-gradient(180deg, ${gradientElement.colors.join(
+          ','
+        )})`;
+        container.push(
+          <div className="sublayer-item-feature gradient">
+            <div
+              className="gradient-icon"
+              style={{ background: gradientString }}
+            ></div>
+            <div style={{ fontSize: '0.7rem' }}>
+              {gradientElement.labels.map(l => (
+                <p style={{ margin: 0, padding: 0 }}>{l}</p>
+              ))}
+            </div>
+            <span className="gradient-label">{visualStops?.field}</span>
+          </div>
+        );
+      }
     } else if (esriLayer.renderer.classBreakInfos?.length) {
       esriLayer.renderer.classBreakInfos.forEach((value: any) => {
         const defaultSymbol = value.symbol;

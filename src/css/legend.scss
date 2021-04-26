@@ -63,6 +63,17 @@
         grid-gap: 5px;
         align-items: center;
         margin-bottom: 3px;
+
+        &.gradient {
+          grid-template-columns: auto auto 1fr;
+          .gradient-label {
+            margin-left: 15px;
+          }
+        }
+        .gradient-icon {
+          height: 55px;
+          width: 20px;
+        }
       }
       .subgroup {
         grid-template-columns: 1fr;
