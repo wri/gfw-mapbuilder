@@ -244,8 +244,10 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
               style={{ background: gradientString }}
             ></div>
             <div style={{ fontSize: '0.7rem' }}>
-              {gradientElement.labels.map(l => (
-                <p style={{ margin: 0, padding: 0 }}>{l}</p>
+              {gradientElement.labels.map((l, i) => (
+                <p key={i} style={{ margin: 0, padding: 0 }}>
+                  {l}
+                </p>
               ))}
             </div>
             <span className="gradient-label">{visualStops?.field}</span>
