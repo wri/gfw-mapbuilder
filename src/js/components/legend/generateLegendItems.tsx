@@ -98,6 +98,14 @@ function generateGradientItem(
   );
 }
 
+function checkForRenderer(layer: LayerProps): boolean {
+  const esriLayer = mapController._map?.findLayerById(layer.id) as any;
+  if (esriLayer) {
+    return esriLayer.renderer;
+  }
+  return false;
+}
+
 function getLegendInfoFromRenderer(layer: LayerProps): any {
   const esriLayer = mapController._map?.findLayerById(layer.id) as any;
   if (!esriLayer) return;
@@ -335,9 +343,12 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
     } else if (layer.legendInfo && layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
         item.label = item.label && item.label.length ? item.label : layer.title;
+        const rendererExists = checkForRenderer(layer);
         return (
           <div className="label-item" key={i}>
-            {getLegendLabel(layer.type, item, layer.opacity)}
+            {!rendererExists
+              ? getLegendLabel(layer.type, item, layer.opacity)
+              : getLegendInfoFromRenderer(layer)}
             <p>{item.label}</p>
           </div>
         );
