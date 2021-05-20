@@ -125,7 +125,7 @@ export const GradientItem = (props: GradientItemProps): JSX.Element => {
       ></div>
       <div>
         {items.map((item: any, i: number) => (
-          <p key={i}>{item.name[language] ? item.name[language] : ''}</p>
+          <p key={i}>{item?.name[language] ? item.name[language] : '-'}</p>
         ))}
       </div>
     </>
