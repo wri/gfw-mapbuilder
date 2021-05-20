@@ -4,6 +4,7 @@ import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
 import {
   landsatBaselayerURL,
+  planetAPIKey,
   WRIBasemapConfig
 } from '../../../configs/layer-config';
 import { RefObject } from 'react';
@@ -924,10 +925,11 @@ export class MapController {
     planetColor: string,
     selectedTile: string
   ): Promise<void> {
-    const [Basemap, TileLayer, WebTileLayer] = await loadModules([
+    const [Basemap, TileLayer, WebTileLayer, esriConfig] = await loadModules([
       'esri/Basemap',
       'esri/layers/TileLayer',
-      'esri/layers/WebTileLayer'
+      'esri/layers/WebTileLayer',
+      'esri/config'
     ]);
 
     const planetBasemapReferenceLayer1 = new TileLayer({
@@ -951,14 +953,21 @@ export class MapController {
       id: 'planet'
     };
 
+    esriConfig.request.interceptors.push({
+      urls: 'https://staging-tiles.globalforestwatch.org/',
+      before: function(params) {
+        params.requestOptions['headers'] = { 'x-api-key': planetAPIKey };
+      }
+    });
+
     const planetLayer = new WebTileLayer({
       urlTemplate: planetConfig.url
     });
     const planetBase = new Basemap({
       baseLayers: [
         planetBasemapReferenceLayer1,
-        planetBasemapReferenceLayer2,
-        planetLayer
+        planetLayer,
+        planetBasemapReferenceLayer2
       ]
     });
     this._planetBasemap = planetBase;

@@ -32,3 +32,6 @@ export const WRIBasemapConfig = {
 
 export const customBasemapIcon =
   'https://my.gfw-mapbuilder.org/img/custom_basemap.png';
+
+// This can be public as keys are registered with the allowList domains, having just the key wont work without correct domain
+export const planetAPIKey = '2eabba47-3118-4d33-b361-5a30bb366e5c';
