@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { LayerProps } from '../../../js/store/mapview/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../js/store';
@@ -97,6 +98,14 @@ function generateGradientItem(
       <GradientItem items={legendConfig.items} language={language} />
     </div>
   );
+}
+
+function checkForRenderer(layer: LayerProps): boolean {
+  const esriLayer = mapController._map?.findLayerById(layer.id) as any;
+  if (esriLayer) {
+    return esriLayer.renderer;
+  }
+  return false;
 }
 
 function getLegendInfoFromRenderer(layer: LayerProps): any {
@@ -216,6 +225,45 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
       const defaultSymbol = esriLayer.renderer.symbol;
       const symbolDOMElement = createSymbolStyles(defaultSymbol);
       container.push(symbolDOMElement);
+    } else if (esriLayer.renderer?.visualVariables?.length) {
+      const visualStops = esriLayer.renderer.visualVariables.find(
+        (v: any) => v.type === 'color'
+      );
+      if (visualStops) {
+        interface GradientItem {
+          colors: string[];
+          labels: string[];
+        }
+        const gradientElement: GradientItem = {
+          colors: [],
+          labels: []
+        };
+        visualStops.stops.forEach(stop => {
+          const { r, g, b, a } = stop.color;
+          gradientElement.colors.push(`rgba(${r},${g},${b},${a})`);
+          gradientElement.labels.push(stop.label);
+        });
+
+        const gradientString = `linear-gradient(180deg, ${gradientElement.colors.join(
+          ','
+        )})`;
+        container.push(
+          <div className="sublayer-item-feature gradient">
+            <div
+              className="gradient-icon"
+              style={{ background: gradientString }}
+            ></div>
+            <div style={{ fontSize: '0.7rem' }}>
+              {gradientElement.labels.map((l, i) => (
+                <p key={i} style={{ margin: 0, padding: 0 }}>
+                  {l}
+                </p>
+              ))}
+            </div>
+            <span className="gradient-label">{visualStops?.field}</span>
+          </div>
+        );
+      }
     } else if (esriLayer.renderer.classBreakInfos?.length) {
       esriLayer.renderer.classBreakInfos.forEach((value: any) => {
         const defaultSymbol = value.symbol;
@@ -300,9 +348,12 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
     } else if (layer.legendInfo && layer.origin === 'webmap') {
       const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
         item.label = item.label && item.label.length ? item.label : layer.title;
+        const rendererExists = checkForRenderer(layer);
         return (
           <div className="label-item" key={i}>
-            {getLegendLabel(layer.type, item, layer.opacity)}
+            {!rendererExists
+              ? getLegendLabel(layer.type, item, layer.opacity)
+              : getLegendInfoFromRenderer(layer)}
             <p>{item.label}</p>
           </div>
         );

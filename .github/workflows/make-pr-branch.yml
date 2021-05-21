@@ -38,4 +38,3 @@ jobs:
         run: |
           aws s3 rm --recursive s3://${{ secrets.MB_AWS_S3_BUCKET }}/gfw-mapbuilder/pull-requests/${GITHUB_REF:11}
           aws s3 sync --acl public-read --include 'dist/' dist s3://${{ secrets.MB_AWS_S3_BUCKET }}/gfw-mapbuilder/pull-requests/${GITHUB_REF:11}
-

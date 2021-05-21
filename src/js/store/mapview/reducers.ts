@@ -24,7 +24,7 @@ const initialState: MapviewState = {
   activeFeatureIndex: [0, 0], //first element is the index of the layer, second is the index of feature
   documents: null,
   activeBasemap: 'webmap',
-  timeSlider: [2000, 2019],
+  timeSlider: [2000, 2018],
   scale: 0,
   mapCenterCoordinates: { latitude: 0, longitude: 0 },
   layersLoading: true,

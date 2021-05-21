@@ -115,12 +115,6 @@ module.exports = () => {
         path.resolve(__dirname, 'node_modules/')
       ],
       extensions: ['.ts', '.tsx', '.js', '.scss', '.css']
-    },
-    node: {
-      process: false,
-      Buffer: false,
-      global: false,
-      fs: 'empty'
     }
   };
 };
