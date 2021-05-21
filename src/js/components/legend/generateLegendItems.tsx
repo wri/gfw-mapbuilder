@@ -321,7 +321,6 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         })`;
       }
       if (layer.id === 'TREE_COVER_LOSS') {
-        console.log(timeSlider);
         title = `${layer.title} (${timeSlider[0]} - ${timeSlider[1]})`;
       }
       let labelIcons;
