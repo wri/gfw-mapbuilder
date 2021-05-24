@@ -65,7 +65,7 @@ import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../../js/store/appSettings/actions';
 
-setDefaultOptions({ css: true, version: '4.17' });
+setDefaultOptions({ css: true, version: '4.19' });
 
 interface URLCoordinates {
   zoom: number;
