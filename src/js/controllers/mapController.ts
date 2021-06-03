@@ -955,7 +955,7 @@ export class MapController {
     };
 
     esriConfig.request.interceptors.push({
-      urls: 'https://staging-tiles.globalforestwatch.org/',
+      urls: 'https://tiles.globalforestwatch.org/',
       before: function(params) {
         params.requestOptions['headers'] = { 'x-api-key': apiKey };
       }
