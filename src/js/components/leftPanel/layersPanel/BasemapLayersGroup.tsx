@@ -62,7 +62,7 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
 };
 
 const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
-  const { title, url } = props.layerInfo;
+  const { title, url, apiKey } = props.layerInfo;
   const [planetColor, setPlanetColor] = useState('rgb');
   const [planetTiles, setPlanetTiles] = useState<
     Array<{ label: string; value: string }>
@@ -82,8 +82,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const tileInfoURL =
-      'https://staging-tiles.globalforestwatch.org/openapi.json';
+    const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
     fetch(tileInfoURL)
       .then(res => res.json())
       .then(data => {
@@ -104,16 +103,21 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
 
   function handlePlanetTileChange(name: string): void {
     setSelectedPlanetTileLayer(name);
-    mapController.addPlanetTileLayer(url, planetColor, name);
+    mapController.addPlanetTileLayer(url, planetColor, name, apiKey);
   }
 
   function handlePlanetColorChange(val: string): void {
     setPlanetColor(val);
-    mapController.addPlanetTileLayer(url, val, selectedPlanetTileLayer);
+    mapController.addPlanetTileLayer(url, val, selectedPlanetTileLayer, apiKey);
   }
 
   function handlePlanetTileClick() {
-    mapController.addPlanetTileLayer(url, planetColor, selectedPlanetTileLayer);
+    mapController.addPlanetTileLayer(
+      url,
+      planetColor,
+      selectedPlanetTileLayer,
+      apiKey
+    );
   }
 
   const tileOptions = planetTiles?.map(tileInfo => {
