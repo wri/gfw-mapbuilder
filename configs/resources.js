@@ -1079,7 +1079,8 @@ export default {
           id: 'planet',
           thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
           url:
-            'https://staging-tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic/{z}/{x}/{y}.png',
+            'https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic/{z}/{x}/{y}.png',
+          apiKey: '90f59f82-8d32-46e4-accb-f8d7f35b309a',
           title: {
             en: 'Planet',
             fr: 'Planet',
