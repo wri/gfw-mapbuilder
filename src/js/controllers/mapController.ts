@@ -973,7 +973,7 @@ export class MapController {
     };
 
     esriConfig.request.interceptors.push({
-      urls: 'https://tiles.globalforestwatch.org/',
+      urls: 'https://tiles.globalforestwatch.org/planet',
       before: function(params) {
         params.requestOptions['headers'] = { 'x-api-key': apiKey };
       }
