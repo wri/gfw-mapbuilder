@@ -86,6 +86,7 @@ export interface LayerProps {
   versionIndex?: number;
   portalItemID?: string | null;
   thumbnailUrl?: string;
+  apiKey?: string;
 }
 
 interface Attributes {

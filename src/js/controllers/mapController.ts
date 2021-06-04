@@ -65,7 +65,7 @@ import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../../js/store/appSettings/actions';
 
-setDefaultOptions({ css: true, version: '4.17' });
+setDefaultOptions({ css: true, version: '4.18' });
 
 interface URLCoordinates {
   zoom: number;
@@ -94,6 +94,7 @@ export class MapController {
   _imageryOpacity: number;
   _mouseTrackingEvent: IHandle | undefined;
   _webmapBasemap: __esri.Basemap | undefined;
+  _planetBasemap: __esri.Basemap | undefined;
   _GraphicsLayer: undefined | any;
   _Polygon: undefined | any;
   _Graphic: undefined | any;
@@ -108,6 +109,7 @@ export class MapController {
     this._sketchVMGraphicsLayer = undefined;
     this._mouseTrackingEvent = undefined;
     this._webmapBasemap = undefined;
+    this._planetBasemap = undefined;
     this._GraphicsLayer = undefined;
     this._Polygon = undefined;
     this._Graphic = undefined;
@@ -935,6 +937,63 @@ export class MapController {
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
+  async addPlanetTileLayer(
+    proxyURL: string,
+    planetColor: string,
+    selectedTile: string,
+    apiKey?: string
+  ): Promise<void> {
+    if (!apiKey) return;
+    const [Basemap, TileLayer, WebTileLayer, esriConfig] = await loadModules([
+      'esri/Basemap',
+      'esri/layers/TileLayer',
+      'esri/layers/WebTileLayer',
+      'esri/config'
+    ]);
+
+    const planetBasemapReferenceLayer1 = new TileLayer({
+      id: 'planet-basemap-reference-layer',
+      url:
+        'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
+      visible: true
+    });
+    const planetBasemapReferenceLayer2 = new TileLayer({
+      id: 'planet-basemap-reference-layer',
+      url:
+        'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
+      visible: true
+    });
+
+    const params = `?date_range=${selectedTile}&proc=${planetColor}`;
+    const planetConfig = {
+      type: 'webtiled',
+      url: proxyURL + params,
+      title: 'planet',
+      id: 'planet'
+    };
+
+    esriConfig.request.interceptors.push({
+      urls: 'https://tiles.globalforestwatch.org/',
+      before: function(params) {
+        params.requestOptions['headers'] = { 'x-api-key': apiKey };
+      }
+    });
+
+    const planetLayer = new WebTileLayer({
+      urlTemplate: planetConfig.url
+    });
+    const planetBase = new Basemap({
+      baseLayers: [
+        planetBasemapReferenceLayer1,
+        planetLayer,
+        planetBasemapReferenceLayer2
+      ]
+    });
+    this._planetBasemap = planetBase;
+    this._map!.basemap = planetBase;
+    store.dispatch(setSelectedBasemap(planetConfig.id));
+  }
+
   zoomInOrOut({ zoomIn }: ZoomParams): void {
     if (this._mapview) {
       const zoomNum = zoomIn ? this._mapview.zoom + 1 : this._mapview.zoom - 1;
@@ -1173,7 +1232,11 @@ export class MapController {
   }
 
   updateSketchVM(graphicIndex?: number): void {
-    const updateOptions: __esri.SketchViewModelUpdateUpdateOptions = {
+    interface CustomUpdateOptions
+      extends __esri.SketchViewModelDefaultUpdateOptions {
+      tool: 'reshape';
+    }
+    const updateOptions: CustomUpdateOptions = {
       tool: 'reshape',
       enableRotation: false,
       toggleToolOnClick: false,

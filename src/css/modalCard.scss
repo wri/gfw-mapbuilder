@@ -184,6 +184,12 @@
     }
   }
 
+  &.planet-info {
+    width: 30rem;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
   &.pen-widget {
     height: 30rem;
     top: 30%;

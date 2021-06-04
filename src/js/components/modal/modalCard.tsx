@@ -12,6 +12,7 @@ import SubscriptionContent from '../../../js/components/dataPanel/subscribeToAle
 import SaveAOI from '../leftPanel/dataPanel/subscribeToAlerts/SaveAOI';
 import InfoContent from '../../../js/components/sharedComponents/InfoContent';
 import EditProfile from '../../../js/components/gfwContent/EditProfile';
+import PlanetInfo from '../../../js/components/leftPanel/layersPanel/PlanetInfo';
 
 import { renderModal } from '../../../js/store/appState/actions';
 
@@ -56,6 +57,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <InfoContent />;
       case 'EditProfile':
         return <EditProfile />;
+      case 'PlanetInfo':
+        return <PlanetInfo />;
       default:
         break;
     }
@@ -85,6 +88,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'saveAOI';
       case 'EditProfile':
         return 'edit-profile';
+      case 'PlanetInfo':
+        return 'planet-info';
       default:
         return '';
     }
