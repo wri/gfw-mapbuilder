@@ -24,7 +24,8 @@ import {
   SET_MODIS_START,
   SET_MODIS_END,
   SET_RENDER_POPUP,
-  SET_AREA_IMAGES
+  SET_AREA_IMAGES,
+  SET_VERSIONED_LAYER
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -201,6 +202,13 @@ export function setRenderPopup(payload: AppState['renderPopup']) {
 export function setAreaImages(payload: string) {
   return {
     type: SET_AREA_IMAGES as typeof SET_AREA_IMAGES,
+    payload: payload
+  };
+}
+
+export function setVersionedLayer(payload: any) {
+  return {
+    type: SET_VERSIONED_LAYER as typeof SET_VERSIONED_LAYER,
     payload: payload
   };
 }

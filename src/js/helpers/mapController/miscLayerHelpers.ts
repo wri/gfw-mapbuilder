@@ -107,7 +107,7 @@ export async function extractWebmapLayerObjects(
       const legendInfo = await fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
-        const sublayerLegendInfo = legendInfo?.layers.find(
+        const sublayerLegendInfo = legendInfo?.layers?.find(
           (l: any) => l.layerId === sub.id
         );
         sub.opacity = sub.opacity ? sub.opacity : 1;

@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
 import { createTCL } from '../../js/layers/TreeCoverLossLayer';
+import { createTreeCover } from '../../js/layers/TreeCoverLayer';
 import { createGlad } from '../../js/layers/GladLayer';
 import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
@@ -28,6 +29,7 @@ export async function LayerFactory(
     FeatureLayer,
     MapImageLayer,
     WebTileLayer,
+    VectorTileLayer,
     MosaicRule,
     RasterFunction
   ] = await loadModules([
@@ -35,6 +37,7 @@ export async function LayerFactory(
     'esri/layers/FeatureLayer',
     'esri/layers/MapImageLayer',
     'esri/layers/WebTileLayer',
+    'esri/layers/VectorTileLayer',
     'esri/layers/support/MosaicRule',
     'esri/layers/support/RasterFunction'
   ]);
@@ -109,8 +112,8 @@ export async function LayerFactory(
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
       layerConfig.url = layerConfig.url.replace(
-        /(tc)(?:[^\/]+)/,
-        `tc${densityValue}`
+        /(tcd_)(?:[^\/]+)/,
+        `tcd_${densityValue}`
       );
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
@@ -126,6 +129,20 @@ export async function LayerFactory(
       esriLayer.maxYear = yearRange[1];
       esriLayer.refresh();
       break;
+    case 'tree-cover':
+      const dVal = markValueMap[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(/{thresh}/, `${dVal}`);
+      const treeCoverConstructor = await createTreeCover();
+      const treeCoverL = new treeCoverConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+        config: layerConfig
+      });
+      esriLayer = treeCoverL;
+      break;
     case 'gain':
       const gainConstructor = await createGain();
       const gainLayer = new gainConstructor({
@@ -137,6 +154,7 @@ export async function LayerFactory(
       });
       esriLayer = gainLayer;
       break;
+    case 'primed':
     case 'webtiled':
       esriLayer = new WebTileLayer({
         id: layerConfig.id,
@@ -177,17 +195,6 @@ export async function LayerFactory(
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
       break;
-    case 'primed':
-      const primaryConstructor = await createPrimary();
-      const primaryLayer = new primaryConstructor({
-        id: layerConfig.id,
-        title: layerConfig.title,
-        visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
-        view: mapView
-      });
-      esriLayer = primaryLayer;
-      break;
     case 'MASK':
       const { appSettings } = store.getState();
       const countryISOCode = appSettings?.iso;
@@ -212,6 +219,13 @@ export async function LayerFactory(
           layerConfig.url,
           layerConfig.visible
         );
+      } else {
+        esriLayer = new VectorTileLayer({
+          id: layerConfig.id,
+          url: layerConfig.url,
+          visible: layerConfig.visible,
+          opacity: layerConfig.opacity
+        });
       }
       break;
     default:

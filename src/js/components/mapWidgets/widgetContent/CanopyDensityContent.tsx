@@ -59,12 +59,15 @@ const CanopyDensityContent = (): JSX.Element => {
 
   const { directions } = canopyDensityContentConfig[selectedLanguage];
 
-  function handleSliderChange(value: number): void {
+  async function handleSliderChange(value: number): Promise<void> {
     dispatch(setCanopyDensity(value));
     //send % value to modify the layer
     mapController.updateDensityValue(markValueMap[value]);
     mapController.updateBiodensityValue(value);
-    mapController.updateTreeCoverValue(markValueMap[value]);
+    const eventHandler = await mapController.updateTreeCoverValue(
+      markValueMap[value]
+    );
+    eventHandler.remove();
   }
 
   return (

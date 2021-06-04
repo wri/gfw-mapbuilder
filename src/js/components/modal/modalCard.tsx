@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from '../../../js/components/mapWidgets/widgetContent/printContent';
+import { PrintModal } from '../../../js/components/mapWidgets/widgetContent/printModal';
 import ShareContent from '../../../js/components/mapWidgets/widgetContent/shareContent';
 import PenContent from '../../../js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from '../../../js/components/mapWidgets/widgetContent/searchContent';
@@ -36,7 +36,7 @@ const ModalCard: FunctionComponent<{}> = () => {
   const returnContent = () => {
     switch (modalType) {
       case 'PrintWidget':
-        return <PrintContent />;
+        return <PrintModal />;
       case 'ShareWidget':
         return <ShareContent />;
       case 'PenWidget':

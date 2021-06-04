@@ -7,7 +7,10 @@ describe('Main App E2E Test Suite', () => {
     const header = cy.get('[data-cy=header]');
     header.contains(resources.title, { matchCase: false });
     //Only run this part if alternative language is in the config
-    if (resources?.alternativeLanguage !== '') {
+    if (
+      resources?.alternativeLanguage !== '' &&
+      resources?.alternativeWebmap !== ''
+    ) {
       cy.wait(5000); //wait for app/esri resources to be loaded
       cy.get('[data-cy=lang-dropdown]');
       const languageButton = cy.get(

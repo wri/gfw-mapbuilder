@@ -5,6 +5,7 @@ import { RootState } from '../../../../js/store';
 import { mapController } from '../../../../js/controllers/mapController';
 import { fetchLegendInfo } from '../../../../js/helpers/legendInfo';
 import { loadModules } from 'esri-loader';
+import { setVersionedLayer } from '../../../store/appState/actions';
 
 interface LayerVersionPickerProps {
   layerInfo: any;
@@ -27,10 +28,20 @@ export const LayerVersionPicker = (
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
-  const { layerInfo, selectedLanguage } = props;
-  const [activeVersion, setActiveVersion] = React.useState(
-    layerInfo.versions[0].label[selectedLanguage]
+  const versionedState = useSelector(
+    (store: RootState) => store.appState.leftPanel.versionedLayer
   );
+  const { layerInfo, selectedLanguage } = props;
+
+  function checkForVersion(): string {
+    if (versionedState.hasOwnProperty(layerInfo.id)) {
+      return versionedState[layerInfo.id];
+    } else {
+      return layerInfo.versions[0].label[selectedLanguage];
+    }
+  }
+
+  const [activeVersion, setActiveVersion] = React.useState(checkForVersion());
 
   async function swapLayersAndSyncMap(
     layerInfo: any,
@@ -102,6 +113,9 @@ export const LayerVersionPicker = (
       swapLayersAndSyncMap(layerInfo, e.target.value);
       setActiveVersion(e.target.value);
     }
+    //sync to redux
+    const newVal = { [layerInfo.id]: e.target.value };
+    dispatch(setVersionedLayer(newVal));
   }
 
   const versionOptions = layerInfo.versions.map((version: any, i: number) => {

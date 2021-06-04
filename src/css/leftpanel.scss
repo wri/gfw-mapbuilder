@@ -486,8 +486,8 @@
 .layer-version-picker-container {
   display: grid;
   grid-template-columns: 1fr;
-  justify-items: center;
-  margin-bottom: 10px;
+  justify-items: left;
+  margin: 5px 0px 10px 10px;
   font-size: 11px;
   p {
     margin: 0;
@@ -634,7 +634,6 @@
     }
 
     .title-wrapper {
-      max-width: 12rem;
       .layer-label {
         font-size: 0.8rem;
         margin-left: 0.5rem;

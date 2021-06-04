@@ -8,6 +8,8 @@ export const allowedLayers = [
   'imagery',
   'glad',
   'primed',
+  'tree-cover',
+  'co2_emissions',
   'Vector.Layer'
 ]; //To be: tiled, webtiled, image, dynamic, feature, graphic, and custom (loss, gain, glad, etc)
 

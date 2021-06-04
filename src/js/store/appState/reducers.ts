@@ -26,7 +26,8 @@ import {
   SET_VIIRS_START,
   SET_VIIRS_END,
   SET_RENDER_POPUP,
-  SET_AREA_IMAGES
+  SET_AREA_IMAGES,
+  SET_VERSIONED_LAYER
 } from './types';
 
 const initialState: AppState = {
@@ -53,7 +54,8 @@ const initialState: AppState = {
     modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
-    viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd')
+    viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
+    versionedLayer: {}
   },
   measureContent: {
     activeButton: '',
@@ -210,6 +212,18 @@ export function appStateReducer(
           viirsEnd: action.payload
         }
       };
+    case SET_VERSIONED_LAYER: {
+      const versionedState = state.leftPanel.versionedLayer;
+      const val = Object.values(action.payload)[0] as string;
+      versionedState[Object.keys(action.payload)[0]] = val;
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          versionedLayer: versionedState
+        }
+      };
+    }
     case SET_RENDER_POPUP:
       return {
         ...state,
