@@ -1705,8 +1705,8 @@ export class MapController {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
         layer.urlTemplate = layer.urlTemplate.replace(
-          /(tc)(?:[^\/]+)/,
-          `tc${value}`
+          /(tcd_)(?:[^\/]+)/,
+          `tcd_${value}`
         );
         layer.refresh();
       }

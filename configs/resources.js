@@ -102,7 +102,7 @@ export default {
           startParamName: 'period',
           combineParams: true,
           valueSeparator: ',',
-          bounds: [2001, 2018],
+          bounds: [2001, 2019],
           valueType: 'date',
           label: {
             en: 'Select range for analysis',

@@ -4,7 +4,7 @@ import { mapController } from '../../../../js/controllers/mapController';
 import { printContent } from '../../../../../configs/translations/modal.tanslations';
 import { RootState } from '../../../../js/store/index';
 
-const PrintContent: FunctionComponent = () => {
+export const PrintModal: FunctionComponent = () => {
   const [pdfLoading, setPDFLoading] = useState(false);
   const [url, setURL] = useState('');
 
@@ -21,7 +21,9 @@ const PrintContent: FunctionComponent = () => {
   const printMap = async (printType: string): Promise<void> => {
     setPDFLoading(true);
     setURL('');
+
     const { url } = await mapController.generateMapPDF(printType);
+
     setURL(url);
     setPDFLoading(false);
   };
@@ -56,5 +58,3 @@ const PrintContent: FunctionComponent = () => {
     </div>
   );
 };
-
-export default PrintContent;
