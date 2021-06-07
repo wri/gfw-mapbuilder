@@ -184,6 +184,12 @@
     }
   }
 
+  &.planet-info {
+    width: 30rem;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
   &.pen-widget {
     height: 30rem;
     top: 30%;
@@ -279,8 +285,11 @@
   }
 
   &.print-widget {
+    border-radius: 3px;
+    overflow: hidden;
     p {
       font-size: 1.25rem;
+      text-align: center;
     }
 
     a {

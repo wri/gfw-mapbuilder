@@ -1,7 +1,12 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
-import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
+import {
+  setOpenLayerGroup,
+  renderModal
+} from '../../../../js/store/appState/actions';
+import { InfoIcon } from '../../../../images/infoIcon';
 import {
   landsatBaselayerYears,
   customBasemapIcon
@@ -9,6 +14,7 @@ import {
 import { mapController } from '../../../../js/controllers/mapController';
 import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
 import { LayerProps } from '../../../../js/store/mapview/types';
+import { format } from 'date-fns';
 
 interface DefaultBasemapProps {
   layerInfo: {
@@ -23,6 +29,10 @@ interface BaseLayerControlLandsatProps {
   layerInfo: LayerProps;
   selectedLanguage: string;
   customColorTheme?: string;
+}
+
+interface BaseLayerPlanet extends BaseLayerControlLandsatProps {
+  url: string;
 }
 
 const WebmapOriginal = (props: DefaultBasemapProps): JSX.Element => {
@@ -51,6 +61,130 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
   );
 };
 
+const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
+  const { title, url, apiKey } = props.layerInfo;
+  const [planetColor, setPlanetColor] = useState('rgb');
+  const [planetTiles, setPlanetTiles] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
+  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState<
+    string
+  >('2021-02');
+
+  const activeBasemap = useSelector(
+    (store: RootState) => store.mapviewState.activeBasemap
+  );
+
+  const customColorTheme = useSelector(
+    (store: RootState) => store.appSettings.customColorTheme
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
+    fetch(tileInfoURL)
+      .then(res => res.json())
+      .then(data => {
+        const planetDateRanges: Array<string> =
+          data?.components?.schemas?.PlanetDateRange?.enum;
+        const planetTilesFormat = planetDateRanges.reverse().map(d => {
+          const label = d
+            .split('_')
+            .map(date => format(new Date(date), 'MMM yyyy'))
+            .join('-');
+          return { value: d, label };
+        });
+        setPlanetTiles(planetTilesFormat);
+        setSelectedPlanetTileLayer(planetTilesFormat[0].value);
+      })
+      .catch(e => console.log(e));
+  }, []);
+
+  function handlePlanetTileChange(name: string): void {
+    setSelectedPlanetTileLayer(name);
+    mapController.addPlanetTileLayer(url, planetColor, name, apiKey);
+  }
+
+  function handlePlanetColorChange(val: string): void {
+    setPlanetColor(val);
+    mapController.addPlanetTileLayer(url, val, selectedPlanetTileLayer, apiKey);
+  }
+
+  function handlePlanetTileClick() {
+    mapController.addPlanetTileLayer(
+      url,
+      planetColor,
+      selectedPlanetTileLayer,
+      apiKey
+    );
+  }
+
+  const tileOptions = planetTiles?.map(tileInfo => {
+    return (
+      <option value={tileInfo.value} key={tileInfo.value}>
+        {tileInfo.label}
+      </option>
+    );
+  });
+
+  const TileColors = () => {
+    return (
+      <select
+        onChange={e => handlePlanetColorChange(e.target.value)}
+        value={planetColor}
+        style={{ border: `1px solid ${props.customColorTheme}` }}
+        className="landsat-years"
+      >
+        <option key={'rgb'} value={'rgb'}>
+          Natural color
+        </option>
+        <option key={'cir'} value={'cir'}>
+          False color
+        </option>
+      </select>
+    );
+  };
+
+  return (
+    <div
+      className={`layer-basemap landsat ${
+        activeBasemap === 'planet' ? 'selected' : ''
+      }`}
+    >
+      <span
+        className="planet-thumb"
+        onClick={() => handlePlanetTileClick()}
+      ></span>
+      <span onClick={() => handlePlanetTileClick()}>
+        {title && title[props.selectedLanguage]}
+      </span>
+      <div className="planet-selectors">
+        <select
+          onChange={e => handlePlanetTileChange(e.target.value)}
+          value={selectedPlanetTileLayer}
+          style={{ border: `1px solid ${props.customColorTheme}` }}
+          className="landsat-years"
+        >
+          {planetTiles && tileOptions}
+        </select>
+        <TileColors />
+      </div>
+      <div
+        onClick={() => dispatch(renderModal('PlanetInfo'))}
+        className="info-icon-container"
+        style={{
+          marginLeft: 25,
+          marginBottom: 30,
+          backgroundColor: `${customColorTheme}`
+        }}
+      >
+        <InfoIcon width={10} height={10} fill={'#fff'} />
+      </div>
+    </div>
+  );
+};
+
 const BaseLayerControlLandsat = (
   props: BaseLayerControlLandsatProps
 ): JSX.Element => {
@@ -60,12 +194,16 @@ const BaseLayerControlLandsat = (
     years[years.length - 1]
   );
 
+  const activeBasemap = useSelector(
+    (store: RootState) => store.mapviewState.activeBasemap
+  );
+
   function handleYearSelection(e: any): void {
     setSelectedYear(e.target.value);
     mapController.addLandsatLayer(props.layerInfo, e.target.value);
   }
 
-  function handleBasemapSectionClick(e: any): void {
+  function handleBasemapSectionClick(): void {
     mapController.addLandsatLayer(props.layerInfo, String(selectedYear));
   }
 
@@ -84,7 +222,11 @@ const BaseLayerControlLandsat = (
   };
 
   return (
-    <div className="layer-basemap landsat">
+    <div
+      className={`layer-basemap ${
+        activeBasemap.includes('landsat') ? 'selected' : ''
+      }`}
+    >
       <span
         onClick={handleBasemapSectionClick}
         className="landsat-thumb"
@@ -153,6 +295,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const basemapsToRender = layerGroupConfig.layers.filter(
     (baselayer: any) =>
       baselayer.id === 'landsat' ||
+      baselayer.id === 'planet' ||
       baselayer.id === 'wri_mono' ||
       baselayer.id === 'wri_contextual'
   );
@@ -165,6 +308,21 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
       return (
         <BaseLayerControlLandsat
           key={baselayer.id}
+          layerInfo={baselayer}
+          selectedLanguage={selectedLanguage}
+          customColorTheme={customColorTheme}
+        />
+      );
+    }
+    if (
+      baselayer.id === 'planet' &&
+      baselayer?.url &&
+      baselayer.url.length !== 0
+    ) {
+      return (
+        <PlanetBasemap
+          key={baselayer.id}
+          url={baselayer.url}
           layerInfo={baselayer}
           selectedLanguage={selectedLanguage}
           customColorTheme={customColorTheme}

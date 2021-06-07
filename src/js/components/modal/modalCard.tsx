@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PrintContent from '../../../js/components/mapWidgets/widgetContent/printContent';
+import { PrintModal } from '../../../js/components/mapWidgets/widgetContent/printModal';
 import ShareContent from '../../../js/components/mapWidgets/widgetContent/shareContent';
 import PenContent from '../../../js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from '../../../js/components/mapWidgets/widgetContent/searchContent';
@@ -12,6 +12,7 @@ import SubscriptionContent from '../../../js/components/dataPanel/subscribeToAle
 import SaveAOI from '../leftPanel/dataPanel/subscribeToAlerts/SaveAOI';
 import InfoContent from '../../../js/components/sharedComponents/InfoContent';
 import EditProfile from '../../../js/components/gfwContent/EditProfile';
+import PlanetInfo from '../../../js/components/leftPanel/layersPanel/PlanetInfo';
 
 import { renderModal } from '../../../js/store/appState/actions';
 
@@ -35,7 +36,7 @@ const ModalCard: FunctionComponent<{}> = () => {
   const returnContent = () => {
     switch (modalType) {
       case 'PrintWidget':
-        return <PrintContent />;
+        return <PrintModal />;
       case 'ShareWidget':
         return <ShareContent />;
       case 'PenWidget':
@@ -56,6 +57,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <InfoContent />;
       case 'EditProfile':
         return <EditProfile />;
+      case 'PlanetInfo':
+        return <PlanetInfo />;
       default:
         break;
     }
@@ -85,6 +88,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'saveAOI';
       case 'EditProfile':
         return 'edit-profile';
+      case 'PlanetInfo':
+        return 'planet-info';
       default:
         return '';
     }
