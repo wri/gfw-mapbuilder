@@ -42,6 +42,7 @@ export interface AppSettings {
   customColorTheme: string;
   aboutLinkUrl?: string;
   downloadLinkUrl?: string;
+  esriPopup?: boolean;
   footerLinks: FooterLink[];
 }
 

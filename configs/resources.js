@@ -51,6 +51,7 @@ export default {
   includeCartoTemplateLayers: false,
   cartoUser: 'wri-01',
   cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',
+  esriPopup: false,
   cartoApiKey: 'your key here',
   cartoGroupLabel: {
     en: 'Carto Layers',
