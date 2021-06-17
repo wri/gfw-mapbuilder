@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { PrintModal } from '../../../js/components/mapWidgets/widgetContent/printModal';
@@ -11,6 +11,7 @@ import CanopyDensityContent from '../../../js/components/mapWidgets/widgetConten
 import SubscriptionContent from '../../../js/components/dataPanel/subscribeToAlerts/SubscriptionContent';
 import SaveAOI from '../leftPanel/dataPanel/subscribeToAlerts/SaveAOI';
 import InfoContent from '../../../js/components/sharedComponents/InfoContent';
+import LayerDash from '../../../js/components/sharedComponents/LayerDash';
 import EditProfile from '../../../js/components/gfwContent/EditProfile';
 import PlanetInfo from '../../../js/components/leftPanel/layersPanel/PlanetInfo';
 
@@ -26,12 +27,20 @@ const ModalCard: FunctionComponent<{}> = () => {
   );
   const dispatch = useDispatch();
 
-  const handleEscapeKey = (e: React.KeyboardEvent): void => {
-    if (e.keyCode === 27) {
-      // * NOTE ESC button has a keyCode of 27
+  const handleEscapeKey = (key: string) => {
+    if (key === 'Escape') {
       dispatch(renderModal(''));
     }
   };
+
+  useEffect(() => {
+    window.addEventListener('keydown', e => {
+      handleEscapeKey(e.key);
+    });
+    return () => {
+      window.removeEventListener('keydown', _ => handleEscapeKey('Escape'));
+    };
+  }, []);
 
   const returnContent = () => {
     switch (modalType) {
@@ -59,6 +68,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <EditProfile />;
       case 'PlanetInfo':
         return <PlanetInfo />;
+      case 'LayerDash':
+        return <LayerDash />;
       default:
         break;
     }
@@ -90,6 +101,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return 'edit-profile';
       case 'PlanetInfo':
         return 'planet-info';
+      case 'LayerDash':
+        return 'layer-dashboard';
       default:
         return '';
     }
@@ -102,7 +115,6 @@ const ModalCard: FunctionComponent<{}> = () => {
           <div
             className={`dim-container ${setClassName()}`}
             onClick={() => dispatch(renderModal(''))}
-            onKeyDown={() => dispatch(renderModal(''))}
             role="button"
             tabIndex={0}
           ></div>
@@ -111,7 +123,6 @@ const ModalCard: FunctionComponent<{}> = () => {
               style={{ color: '#555' }}
               className="exit-button"
               onClick={() => dispatch(renderModal(''))}
-              onKeyDown={(e): void => handleEscapeKey(e)}
             >
               <svg className="svg-icon">
                 <svg id="shape-close" viewBox="0 0 25 25">

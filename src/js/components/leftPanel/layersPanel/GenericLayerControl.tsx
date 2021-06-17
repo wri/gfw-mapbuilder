@@ -24,6 +24,7 @@ import { LayerProps } from '../../../../js/store/mapview/types';
 import { mapController } from '../../../../js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
+import { GearIcon } from '../../../../images/gearIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
@@ -302,6 +303,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
+  const layerDashboards = useSelector(
+    (store: RootState) => store.appSettings.layerDashboards
+  );
+  const layerDashboard = layerDashboards?.find(
+    d => d.layerTitle?.toLowerCase() === layer?.title?.toLowerCase()
+  );
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -319,6 +326,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     if (layer) {
       dispatch(renderModal('InfoContent'));
       dispatch(setInfoModalLayerID(layer.id));
+    }
+    return;
+  };
+
+  const openDashModal = (title?: string): void => {
+    if (layer) {
+      dispatch(renderModal('LayerDash'));
+      dispatch(setInfoModalLayerID(title!));
     }
     return;
   };
@@ -401,12 +416,23 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
           {returnSubtitle()}
         </div>
-        <div
-          className="info-icon-container"
-          style={{ backgroundColor: `${customColorTheme}` }}
-          onClick={(): void => openInfoModal()}
-        >
-          <InfoIcon width={10} height={10} fill={'#fff'} />
+        <div style={{ display: 'flex', gap: 3, flexDirection: 'column' }}>
+          <div
+            className="info-icon-container"
+            style={{ backgroundColor: `${customColorTheme}` }}
+            onClick={(): void => openInfoModal()}
+          >
+            <InfoIcon width={10} height={10} fill={'#fff'} />
+          </div>
+          {layerDashboard && (
+            <div
+              className="info-icon-container"
+              style={{ backgroundColor: `${customColorTheme}` }}
+              onClick={(): void => openDashModal(layer?.title)}
+            >
+              <GearIcon width={10} height={10} fill={'#fff'} />
+            </div>
+          )}
         </div>
       </div>
       {layer?.visible && returnTimeSlider(props.id)}

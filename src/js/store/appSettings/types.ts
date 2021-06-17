@@ -43,6 +43,10 @@ export interface AppSettings {
   aboutLinkUrl?: string;
   downloadLinkUrl?: string;
   footerLinks: FooterLink[];
+  layerDashboards?: {
+    layerTitle: string;
+    dashboardURL: string;
+  }[];
 }
 
 type FooterLink = { label: string; link: string };

@@ -35,6 +35,7 @@ const initialState: AppState = {
   renderModal: '',
   renderGFWDropdown: false,
   infoModalLayerID: '',
+  layerDashboards: [],
   hideWidgetActive: false,
   isLoggedIn: false,
   selectedSearchWidgetLayer: {

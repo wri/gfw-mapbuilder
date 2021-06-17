@@ -44,6 +44,11 @@ interface SelectedSearchWidgetLayer {
   layerTitle: string;
 }
 
+interface LayerDashboard {
+  layerTitle: string;
+  dashboardURL: string;
+}
+
 export interface AppState {
   leftPanel: LeftPanel;
   renderModal: string;
@@ -56,6 +61,7 @@ export interface AppState {
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
   renderPopup: boolean;
   areaImages: string[];
+  layerDashboards: LayerDashboard[];
 }
 
 //Action names available
