@@ -24,7 +24,7 @@ import { LayerProps } from '../../../../js/store/mapview/types';
 import { mapController } from '../../../../js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
-import { GearIcon } from '../../../../images/gearIcon';
+import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
@@ -416,7 +416,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
           {returnSubtitle()}
         </div>
-        <div style={{ display: 'flex', gap: 3, flexDirection: 'column' }}>
+        <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
           <div
             className="info-icon-container"
             style={{ backgroundColor: `${customColorTheme}` }}
@@ -424,15 +424,29 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           >
             <InfoIcon width={10} height={10} fill={'#fff'} />
           </div>
-          {layerDashboard && (
-            <div
-              className="info-icon-container"
-              style={{ backgroundColor: `${customColorTheme}` }}
-              onClick={(): void => openDashModal(layer?.title)}
-            >
-              <GearIcon width={10} height={10} fill={'#fff'} />
-            </div>
-          )}
+          {layerDashboard &&
+            layerDashboard.layerTitle.toLowerCase() === 'tree cover gain' && (
+              <div
+                className="info-icon-container"
+                style={{ backgroundColor: `${customColorTheme}` }}
+                onClick={(): void => openDashModal(layer?.title)}
+              >
+                <DashboardIcon width={10} height={10} fill={'#fff'} />
+              </div>
+            )}
+          {layerDashboard &&
+            layerDashboard.layerTitle.toLowerCase() === 'tree cover loss' && (
+              <a
+                className="info-icon-container"
+                style={{ backgroundColor: `${customColorTheme}` }}
+                onClick={(): void => openDashModal(layer?.title)}
+                href={layerDashboard.dashboardURL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <DashboardIcon width={10} height={10} fill={'#fff'} />
+              </a>
+            )}
         </div>
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
