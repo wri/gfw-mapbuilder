@@ -395,6 +395,7 @@ export class MapController {
 
                 newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
                 newRemoteLayerObject.label = remoteLayerObject.label;
+                newRemoteLayerObject.sublabel = remoteLayerObject.sublabel;
                 newRemoteLayerObject.parentID = undefined;
                 newRemoteLayerObject.filterLabel =
                   remoteLayerObject.filterLabel;
