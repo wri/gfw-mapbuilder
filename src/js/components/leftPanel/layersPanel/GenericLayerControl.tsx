@@ -24,6 +24,7 @@ import { LayerProps } from '../../../../js/store/mapview/types';
 import { mapController } from '../../../../js/controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
+import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
@@ -323,6 +324,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     return;
   };
 
+  const openDashModal = (): void => {
+    if (layer && layer.dashboardURL) {
+      dispatch(renderModal('LayerDash'));
+      dispatch(setInfoModalLayerID(layer.dashboardURL));
+    }
+    return;
+  };
+
   const returnSubtitle = (): JSX.Element | undefined => {
     let subTitle = '';
     if (layer?.sublabel) {
@@ -401,12 +410,23 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
           {returnSubtitle()}
         </div>
-        <div
-          className="info-icon-container"
-          style={{ backgroundColor: `${customColorTheme}` }}
-          onClick={(): void => openInfoModal()}
-        >
-          <InfoIcon width={10} height={10} fill={'#fff'} />
+        <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
+          <div
+            className="info-icon-container"
+            style={{ backgroundColor: `${customColorTheme}` }}
+            onClick={(): void => openInfoModal()}
+          >
+            <InfoIcon width={10} height={10} fill={'#fff'} />
+          </div>
+          {layer.dashboardURL && (
+            <div
+              className="info-icon-container"
+              style={{ backgroundColor: `${customColorTheme}` }}
+              onClick={(): void => openDashModal()}
+            >
+              <DashboardIcon width={10} height={10} fill={'#fff'} />
+            </div>
+          )}
         </div>
       </div>
       {layer?.visible && returnTimeSlider(props.id)}

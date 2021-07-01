@@ -11,7 +11,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
     'plugin:react/recommended'
-    // 'plugin:jsx-a11y/recommended'
   ],
   rules: {
     semi: 'warn',
@@ -22,6 +21,7 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 0,
     'react/prop-types': 0,
     'no-prototype-builtins': 0,
-    '@typescript-eslint/explicit-function-return-type': 0
+    '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/camelcase': 0
   }
 };

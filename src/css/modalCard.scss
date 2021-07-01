@@ -190,6 +190,16 @@
     overflow: hidden;
   }
 
+  &.layer-dashboard {
+    width: 90vw;
+    height: 90vh;
+    top: 11rem;
+    left: 0%;
+    margin-left: 5vw;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
   &.pen-widget {
     height: 30rem;
     top: 30%;

@@ -364,6 +364,8 @@ export class MapController {
                 newRemoteLayerObject.parentID = undefined;
                 newRemoteLayerObject.legendInfo =
                   remoteLayerObject.layer.metadata.legendConfig;
+                newRemoteLayerObject.dashboardURL =
+                  remoteLayerObject.dashboardURL;
               } else {
                 if (
                   remoteLayerObject.versions &&
@@ -406,6 +408,8 @@ export class MapController {
                   remoteLayerObject.versionIndex;
                 newRemoteLayerObject.versionHeaderText =
                   remoteLayerObject.versionHeaderText;
+                newRemoteLayerObject.dashboardURL =
+                  remoteLayerObject?.dashboardURL;
               }
               remoteLayerObjects.push(newRemoteLayerObject);
             }
@@ -649,7 +653,10 @@ export class MapController {
               const intConfig = layer.attributes?.interactionConfig;
               const itemGroup = item.group;
               item.layer = layer.attributes.layerConfig;
-
+              item.dashboardURL =
+                item.dataLayer?.dashboardURL?.length !== 0
+                  ? item.dataLayer.dashboardURL
+                  : null;
               item.group = itemGroup;
               item.layer.metadata = {
                 metadata,
