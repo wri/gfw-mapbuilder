@@ -303,12 +303,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
-  const layerDashboards = useSelector(
-    (store: RootState) => store.appSettings.layerDashboards
-  );
-  const layerDashboard = layerDashboards?.find(
-    d => d.layerTitle?.toLowerCase() === layer?.title?.toLowerCase()
-  );
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -330,10 +324,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     return;
   };
 
-  const openDashModal = (title?: string): void => {
-    if (layer) {
+  const openDashModal = (): void => {
+    if (layer && layer.dashboardURL) {
       dispatch(renderModal('LayerDash'));
-      dispatch(setInfoModalLayerID(title!));
+      dispatch(setInfoModalLayerID(layer.dashboardURL));
     }
     return;
   };
@@ -424,29 +418,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           >
             <InfoIcon width={10} height={10} fill={'#fff'} />
           </div>
-          {layerDashboard &&
-            layerDashboard.layerTitle.toLowerCase() === 'tree cover gain' && (
-              <div
-                className="info-icon-container"
-                style={{ backgroundColor: `${customColorTheme}` }}
-                onClick={(): void => openDashModal(layer?.title)}
-              >
-                <DashboardIcon width={10} height={10} fill={'#fff'} />
-              </div>
-            )}
-          {layerDashboard &&
-            layerDashboard.layerTitle.toLowerCase() === 'tree cover loss' && (
-              <a
-                className="info-icon-container"
-                style={{ backgroundColor: `${customColorTheme}` }}
-                onClick={(): void => openDashModal(layer?.title)}
-                href={layerDashboard.dashboardURL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <DashboardIcon width={10} height={10} fill={'#fff'} />
-              </a>
-            )}
+          {layer.dashboardURL && (
+            <div
+              className="info-icon-container"
+              style={{ backgroundColor: `${customColorTheme}` }}
+              onClick={(): void => openDashModal()}
+            >
+              <DashboardIcon width={10} height={10} fill={'#fff'} />
+            </div>
+          )}
         </div>
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
