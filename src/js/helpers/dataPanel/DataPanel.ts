@@ -206,6 +206,9 @@ export async function queryLayersForFeatures(
   map: __esri.Map | undefined,
   event: __esri.MapViewClickEvent
 ): Promise<void> {
+  //Figure out if we have custom popup from the config or not
+  const { mapviewState, appState } = store.getState();
+  const lang = appState.selectedLanguage;
   const layerFeatureResults: LayerFeatureResult[] = [];
   //TODO: This is where we would add exceptions to layers (e.g. TREE_COVER_LOSS/GAIN should not be querable etc)
   // we need exhaustive list here!
@@ -227,7 +230,6 @@ export async function queryLayersForFeatures(
         for (const sublayer of layer.sublayers.items) {
           if (!sublayer.visible) continue;
           //sublayers do not have a type, so it always defaults to QueryTask
-          //use generic QueryTask approach
           const { features, fieldNames, displayField } = await fetchQueryTask(
             sublayer,
             mapview,
@@ -273,8 +275,6 @@ export async function queryLayersForFeatures(
           layer.type === 'vector-tile' &&
           layer.id === 'VIIRS_ACTIVE_FIRES'
         ) {
-          const { mapviewState, appState } = store.getState();
-          const lang = appState.selectedLanguage;
           const viirsConfig = mapviewState.allAvailableLayers.find(
             l => l.id === 'VIIRS_ACTIVE_FIRES'
           );
@@ -338,7 +338,7 @@ export async function queryLayersForFeatures(
   store.dispatch(setActiveFeatures(layerFeatureResults));
 
   //Open data tab
-  const { appState } = store.getState();
+  // const { appState } = store.getState();
   if (appState.leftPanel.activeTab !== 'data') {
     store.dispatch(selectActiveTab('data'));
   }
