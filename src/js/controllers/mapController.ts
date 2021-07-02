@@ -338,8 +338,8 @@ export class MapController {
                 )
               } as LayerProps;
 
+              //dealing with GFW API layers
               if (remoteLayerObject.dataLayer) {
-                //dealing with GFW API layers
                 newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
                 newRemoteLayerObject.sublabel =
                   remoteLayerObject.layer.sublabel;
@@ -366,6 +366,7 @@ export class MapController {
                   remoteLayerObject.layer.metadata.legendConfig;
                 newRemoteLayerObject.dashboardURL =
                   remoteLayerObject.dashboardURL;
+                newRemoteLayerObject.popup = remoteLayerObject.popup;
               } else {
                 if (
                   remoteLayerObject.versions &&
@@ -410,6 +411,7 @@ export class MapController {
                   remoteLayerObject.versionHeaderText;
                 newRemoteLayerObject.dashboardURL =
                   remoteLayerObject?.dashboardURL;
+                newRemoteLayerObject.popup = remoteLayerObject.popup;
               }
               remoteLayerObjects.push(newRemoteLayerObject);
             }
@@ -1584,12 +1586,7 @@ export class MapController {
   // }
 
   generateMapPDF = async (layoutType: string): Promise<any> => {
-    const [
-      PrintTask,
-      PrintTemplate,
-      PrintParameters,
-      GraphicsLayer
-    ] = await loadModules([
+    const [PrintTask, PrintTemplate, PrintParameters] = await loadModules([
       'esri/tasks/PrintTask',
       'esri/tasks/support/PrintTemplate',
       'esri/tasks/support/PrintParameters',

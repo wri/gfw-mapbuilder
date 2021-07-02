@@ -74,7 +74,7 @@ export interface LayerProps {
   minScale?: number;
   sublayer?: boolean;
   parentID?: string;
-  popup?: Popup;
+  popup?: any | null;
   sublabel?: object;
   layerIds?: any[] | null;
   label?: any;
