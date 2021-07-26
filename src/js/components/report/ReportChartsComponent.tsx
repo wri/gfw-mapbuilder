@@ -21,6 +21,7 @@ import {
   fetchDownloadInfo,
   fetchWCSAnalysis
 } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
+import { analysisSQLConfigs } from '../../../../configs/layer-config';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -37,6 +38,8 @@ const selectAnalysisModules = createSelector(
 );
 
 function generateWidgetURL(
+  viirsStart: string,
+  viirsEnd: string,
   uiParams: any,
   widgetID: string,
   geostoreID: string,
@@ -44,6 +47,7 @@ function generateWidgetURL(
   endDate: string,
   analysisYearRange: number[] | null,
   canopyDensity: number,
+  analysisId: string,
   queryParams?: { name: string; value: string }[]
 ): string {
   let baseURL = 'https://api.resourcewatch.org/v1/widget/';
@@ -78,7 +82,15 @@ function generateWidgetURL(
   }
 
   //Add Geostore ID
-  baseURL = baseURL.concat(`&geostore=${geostoreID}`);
+  baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
+
+  //VIIRS SQL
+  if (analysisId === 'VIIRS_FIRES') {
+    let sqlQuery = analysisSQLConfigs[analysisId];
+    sqlQuery = sqlQuery.replace('{startDate}', `'${viirsStart}'`);
+    sqlQuery = sqlQuery.replace('{endDate}', `'${viirsEnd}'`);
+    baseURL = baseURL.concat(`&sql=${sqlQuery}`);
+  }
 
   //Check for query Params and append if they exist
   if (queryParams) {
@@ -141,6 +153,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const customColorTheme = useSelector(
     (store: RootState) => store.appSettings.customColorTheme
   );
+  const viirsStart = useSelector(
+    (store: RootState) => store.appState.leftPanel.viirsStart
+  );
+  const viirsEnd = useSelector(
+    (store: RootState) => store.appState.leftPanel.viirsEnd
+  );
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
@@ -180,7 +198,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   }
 
   const renderInputComponent = (
-    props: UIParams
+    props: UIParams,
+    analysisId
   ): JSX.Element | null | undefined => {
     const {
       multi,
@@ -209,8 +228,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             multi={multi}
             minDate={minDate}
             maxDate={maxDate}
-            defaultStartDate={defaultStartDate}
-            defaultEndDate={defaultEndDate}
+            defaultStartDate={
+              analysisId === 'VIIRS_FIRES' ? viirsStart : defaultStartDate
+            }
+            defaultEndDate={
+              analysisId === 'VIIRS_FIRES' ? viirsEnd : defaultEndDate
+            }
             sendDateValue={updateDatePickerValues}
             customColorTheme={customColorTheme}
           />
@@ -225,6 +248,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     if (props.moduleInfo.widgetId) {
       // GFW WIDGET
       const widgetURL = generateWidgetURL(
+        viirsStart,
+        viirsEnd,
         uiParams,
         props.moduleInfo.widgetId,
         props.geostoreID,
@@ -232,6 +257,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         endDate,
         yearRangeValue,
         density,
+        props.moduleInfo.analysisId,
         props.moduleInfo.params
       );
 
@@ -386,7 +412,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                     <p>{uiParam.label[language]}</p>
                   </div>
                   <div className="analysis-input">
-                    {renderInputComponent(uiParam)}
+                    {renderInputComponent(uiParam, currentAnalysis.analysisId)}
                   </div>
                 </div>
               );

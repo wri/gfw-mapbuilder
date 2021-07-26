@@ -29,6 +29,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { AnalysisModule } from '../../../../js/store/appSettings/types';
+import { analysisSQLConfigs } from '../../../../../configs/layer-config';
 import {
   fetchGFWWidgetConfig,
   fetchDownloadInfo,
@@ -133,52 +134,63 @@ const BaseAnalysis = (): JSX.Element => {
   }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
   function generateWidgetURL(
-    uiParams: any,
+    analysisId: string,
+    uiParams: 'none' | unknown[],
     widgetID: string,
-    geostoreID?: string,
-    queryParams?: { name: string; value: string }[]
+    geostoreID?: string
   ): string {
     let baseURL = 'https://api.resourcewatch.org/v1/widget/';
-    //Add Widget ID
+    //1. Add Widget ID
     baseURL = baseURL.concat(`${widgetID}?`);
-    //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
-    for (const param of uiParams) {
-      if (param.inputType === 'datepicker') {
-        let datePickerString = `${param.startParamName}=`;
-        if (param.combineParams) {
-          const start = analysisDateRange[0];
-          const end = analysisDateRange[1];
-          datePickerString = datePickerString.concat(
-            `${start}${param.valueSeparator}${end}`
-          );
-          baseURL = baseURL.concat(datePickerString);
-        }
-      } else if (param.inputType === 'rangeSlider') {
-        let yearRangeString = `${param.startParamName}=`;
-        if (param.combineParams) {
-          const start = `${analysisYearRange[0]}-01-01`;
-          const end = `${analysisYearRange[1]}-12-31`;
-          yearRangeString = yearRangeString.concat(
-            `${start}${param.valueSeparator}${end}`
-          );
-          baseURL = baseURL.concat(yearRangeString);
-        }
-      } else if (param.inputType === 'tcd') {
-        const threshold = `&thresh=${markValueMap[canopyDensity]}`;
-        baseURL = baseURL.concat(threshold);
-        //&thresh=20
-      }
-    }
 
-    //Add Geostore ID
-    baseURL = baseURL.concat(`&geostore=${geostoreID}`);
+    // baseURL = baseURL.concat('query/json/');
+    //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
+    //for (const param of uiParams) {
+    //  if (param.inputType === 'datepicker') {
+    //    let datePickerString = `${param.startParamName}=`;
+    //    if (param.combineParams) {
+    //      const start = analysisDateRange[0];
+    //      const end = analysisDateRange[1];
+    //      datePickerString = datePickerString.concat(
+    //        `${start}${param.valueSeparator}${end}`
+    //      );
+    //      baseURL = baseURL.concat(datePickerString);
+    //    }
+    //  } else if (param.inputType === 'rangeSlider') {
+    //    let yearRangeString = `${param.startParamName}=`;
+    //    if (param.combineParams) {
+    //      const start = `${analysisYearRange[0]}-01-01`;
+    //      const end = `${analysisYearRange[1]}-12-31`;
+    //      yearRangeString = yearRangeString.concat(
+    //        `${start}${param.valueSeparator}${end}`
+    //      );
+    //      baseURL = baseURL.concat(yearRangeString);
+    //    }
+    //  } else if (param.inputType === 'tcd') {
+    //    const threshold = `&thresh=${markValueMap[canopyDensity]}`;
+    //    baseURL = baseURL.concat(threshold);
+    //    //&thresh=20
+    //  }
+    //}
+
+    //2. Add Geostore ID
+    baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
+
+    //3. Add SQL Query if it is defined in the configuration
+    if (analysisId === 'VIIRS_FIRES') {
+      let sqlQuery = analysisSQLConfigs[analysisId];
+      console.log(analysisDateRange);
+      sqlQuery = sqlQuery.replace('{startDate}', `'${analysisDateRange[0]}'`);
+      sqlQuery = sqlQuery.replace('{endDate}', `'${analysisDateRange[1]}'`);
+      baseURL = baseURL.concat(`&sql=${sqlQuery}`);
+    }
 
     //Check for query Params and append if they exist
-    if (queryParams) {
-      queryParams.forEach(param => {
-        baseURL = baseURL.concat(`&${param.name}=${param.value}`);
-      });
-    }
+    // if (queryParams) {
+    //   queryParams.forEach(param => {
+    //     baseURL = baseURL.concat(`&${param.name}=${param.value}`);
+    //   });
+    // }
     return baseURL;
   }
 
@@ -190,73 +202,63 @@ const BaseAnalysis = (): JSX.Element => {
     const mod = analysisModules.find(
       module => module.analysisId === selectedAnalysis
     );
+    if (!mod) return;
     setBaseConfig(mod);
-    if (mod) {
-      const activeLayer = activeFeatures[activeFeatureIndex[0]];
-      const activeFeature = activeLayer.features[activeFeatureIndex[1]];
-      let widgetURL = '';
+    const activeLayer = activeFeatures[activeFeatureIndex[0]];
+    const activeFeature = activeLayer.features[activeFeatureIndex[1]];
 
-      if (mod.widgetId) {
-        //Generate GFW Widget URL for the request
-        widgetURL = generateWidgetURL(
-          mod.uiParams,
-          mod.widgetId,
-          activeFeature.attributes.geostoreId,
-          mod.params
+    //Generate GFW Widget URL for the request
+    if (mod.widgetId) {
+      const widgetURL = generateWidgetURL(
+        mod.analysisId,
+        mod.uiParams,
+        mod.widgetId,
+        activeFeature.attributes.geostoreId
+      );
+      fetchGFWWidgetConfig(widgetURL).then(res => {
+        //Send attributes over for processing
+        res.attributes = activeFeature.attributes;
+        setVegaSpec(res);
+        //grab download urls if they exist
+        const widgetConfigData = res.data;
+        const downloadUrl = widgetConfigData.find(
+          (e: any) => e.name === 'data'
         );
-        fetchGFWWidgetConfig(widgetURL).then(res => {
-          //Send attributes over for processing
-          res.attributes = activeFeature.attributes;
-          setVegaSpec(res);
-          //grab download urls if they exist
-          const widgetConfigData = res.data;
-          const downloadUrl = widgetConfigData.find(
-            (e: any) => e.name === 'data'
-          );
-          if (!downloadUrl) return;
-          fetchDownloadInfo(downloadUrl.url).then((res: any) => {
+        if (!downloadUrl) return;
+        fetchDownloadInfo(downloadUrl.url).then((res: any) => {
           setChartDownTitle(res?.chartTitle ? res.chartTitle : '');
           setChartDownloadURL(res?.downloadUrl ? res.downloadUrl : '');
-          });
         });
-      } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
-        widgetURL = mod.analysisUrl;
-        fetchWCSAnalysis(
-          mod,
-          mod.analysisUrl,
-          activeFeature,
-          analysisYearRange,
-          selectedLanguage
-        ).then((res: any) => {
-          //Title value overwrite
-          fragmentationSpec.marks[1].encode.enter.text!.value = `${res.data.title}`;
-          //Year sublaybel overwrite
-          fragmentationSpec.marks[2].encode.enter.text!.value = `${res.data.startYear} - ${res.data.endYear}`;
-          //Computed value overwrite
-          fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
-            3
-          );
+      });
+    } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
+      fetchWCSAnalysis(
+        mod,
+        mod.analysisUrl,
+        activeFeature,
+        analysisYearRange,
+        selectedLanguage
+      ).then((res: any) => {
+        //Title value overwrite
+        fragmentationSpec.marks[1].encode.enter.text!.value = `${res.data.title}`;
+        //Year sublaybel overwrite
+        fragmentationSpec.marks[2].encode.enter.text!.value = `${res.data.startYear} - ${res.data.endYear}`;
+        //Computed value overwrite
+        fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
+          3
+        );
 
-          //@ts-ignore ts is not liking my hand crafted base spec for some reason
-          setVegaSpec(fragmentationSpec);
-          setChartDownTitle('');
-          setChartDownloadURL('');
-        });
-      }
+        //@ts-ignore ts is not liking my hand crafted base spec for some reason
+        setVegaSpec(fragmentationSpec);
+        setChartDownTitle('');
+        setChartDownloadURL('');
+      });
     }
   }
 
   const renderInputComponent = (
     props: UIParams
   ): JSX.Element | null | undefined => {
-    const {
-      multi,
-      minDate,
-      maxDate,
-      defaultStartDate,
-      defaultEndDate,
-      bounds
-    } = props;
+    const { bounds } = props;
     switch (props.inputType) {
       case 'rangeSlider':
         if (bounds) return <MemoRangeSlider yearRange={bounds} />;
@@ -265,13 +267,38 @@ const BaseAnalysis = (): JSX.Element => {
         return <CanopyDensityPicker />;
       case 'datepicker':
         return (
-          <MemoDatePicker
-            multi={multi}
-            minDate={minDate}
-            maxDate={maxDate}
-            defaultStartDate={defaultStartDate}
-            defaultEndDate={defaultEndDate}
-          />
+          <div className="calendar-wrapper">
+            <div className="date-section-wrapper">
+              <label htmlFor="start-date">Start </label>
+              <DatePicker
+                placeholderText="select a day"
+                onChange={(date: any) =>
+                  dispatch(
+                    setAnalysisDateRange([
+                      format(date, 'yyyy-MM-dd'),
+                      analysisDateRange[1]
+                    ])
+                  )
+                }
+                selected={new Date(analysisDateRange[0])}
+              />
+            </div>
+            <div className="date-section-wrapper">
+              <label htmlFor="end-date">End </label>
+              <DatePicker
+                placeholderText="select a day"
+                onChange={(date: any) =>
+                  dispatch(
+                    setAnalysisDateRange([
+                      analysisDateRange[0],
+                      format(date, 'yyyy-MM-dd')
+                    ])
+                  )
+                }
+                selected={new Date(analysisDateRange[1])}
+              />
+            </div>
+          </div>
         );
       default:
         return null;
