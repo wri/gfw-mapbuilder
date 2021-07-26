@@ -6,13 +6,17 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatures } from '../../../../js/store/mapview/actions';
-import { setRenderPopup } from '../../../../js/store/appState/actions';
+import { format } from 'date-fns';
+import {
+  setAnalysisDateRange,
+  setRenderPopup
+} from '../../../../js/store/appState/actions';
 
 import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
-import { MemoRangeSlider, MemoDatePicker } from './InputComponents';
+import { MemoRangeSlider } from './InputComponents';
 import CanopyDensityPicker from '../../../../js/components/sharedComponents/CanopyDensityPicker';
 import { markValueMap } from '../../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import { DownloadIcon } from '../../../../images/downloadIcon';
@@ -20,6 +24,9 @@ import { DownloadOptions } from '../../../../js/components/sharedComponents/Down
 import Loader from '../../../../js/components/sharedComponents/Loader';
 import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { AnalysisModule } from '../../../../js/store/appSettings/types';
 import {
@@ -208,8 +215,8 @@ const BaseAnalysis = (): JSX.Element => {
           );
           if (!downloadUrl) return;
           fetchDownloadInfo(downloadUrl.url).then((res: any) => {
-            setChartDownTitle(res.chartTitle ? res.chartTitle : '');
-            setChartDownloadURL(res.downloadUrl ? res.downloadUrl : '');
+          setChartDownTitle(res?.chartTitle ? res.chartTitle : '');
+          setChartDownloadURL(res?.downloadUrl ? res.downloadUrl : '');
           });
         });
       } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
@@ -322,7 +329,7 @@ const BaseAnalysis = (): JSX.Element => {
         );
       }
     },
-    [analysisModules, selectedAnalysis, selectedLanguage]
+    [analysisModules, selectedAnalysis, selectedLanguage, analysisDateRange]
   );
 
   const AnalysisOptions = (): JSX.Element => {
@@ -483,6 +490,18 @@ const BaseAnalysis = (): JSX.Element => {
                     closeCB={handleCloseDownloadOptions}
                   />
                 )}
+              </div>
+              <div
+                style={{
+                  textAlign: 'center',
+                  marginTop: 15,
+                  marginBottom: -20
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>From: </span>
+                <span>{analysisDateRange[0]}</span>
+                <span style={{ fontWeight: 600 }}> to: </span>
+                <span>{analysisDateRange[1]}</span>
               </div>
               <VegaChart
                 spec={vegaSpec}

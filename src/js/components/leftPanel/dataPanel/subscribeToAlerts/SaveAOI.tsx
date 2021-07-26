@@ -53,7 +53,12 @@ const SaveAOI = (): JSX.Element => {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [language, setLanguage] = useState('en');
   const [fireAlerts, setFireAlerts] = useState(false);
-  const { register, handleSubmit, errors, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm();
 
   const iso = useSelector((state: RootState) => state.appSettings.iso);
 
@@ -132,7 +137,7 @@ const SaveAOI = (): JSX.Element => {
   };
 
   const onDefaultSubmit = async (data: any): Promise<void> => {
-    let geostoreID;
+    let geostoreID: any;
     //if feature is drawn by user, it will have geostoreID already, if it is poly from a layer, it will not and we will have to register it
     if (activeFeature.attributes.geostoreId) {
       geostoreID = activeFeature.attributes.geostoreId;
@@ -334,13 +339,13 @@ const SaveAOI = (): JSX.Element => {
                     {saveAOIText[selectedLanguage].nameLabel}
                   </label>
                   <input
+                    {...register('name', { required: true })}
                     className="input-text"
                     type="name"
                     placeholder=""
                     name="name"
                     value={subscriptionName}
                     onChange={(e): void => setSubscriptionName(e.target.value)}
-                    ref={register({ required: true })}
                   />
                   {errors.name && (
                     <p className="input-error">
@@ -386,12 +391,12 @@ const SaveAOI = (): JSX.Element => {
                     {saveAOIText[selectedLanguage].email} *
                   </label>
                   <input
+                    {...register('email', { required: true })}
                     defaultValue={userEmail}
                     className="input-text"
                     type="email"
                     placeholder="example@globalforestwatch.com"
                     name="email"
-                    ref={register({ required: true })}
                   />
                   {errors.email && (
                     <p className="input-error">
@@ -405,21 +410,27 @@ const SaveAOI = (): JSX.Element => {
                   </label>
                   <section>
                     <Controller
-                      as={Checkbox}
-                      color="default"
-                      icon={<span className={classes.icon} />}
-                      className={classes.root}
-                      checkedIcon={
-                        <span
-                          className={clsx(classes.icon, classes.checkedIcon)}
-                        />
-                      }
-                      disableRipple
                       name="fireAlerts"
-                      checked={Boolean(fireAlerts)}
-                      onChange={(e: any) => {
-                        setFireAlerts(e[1]);
-                      }}
+                      render={() => (
+                        <Checkbox
+                          className={classes.root}
+                          checked={Boolean(fireAlerts)}
+                          onChange={(e: any) => {
+                            setFireAlerts(e[1]);
+                          }}
+                          disableRipple
+                          color="default"
+                          icon={<span className={classes.icon} />}
+                          checkedIcon={
+                            <span
+                              className={clsx(
+                                classes.icon,
+                                classes.checkedIcon
+                              )}
+                            />
+                          }
+                        />
+                      )}
                       control={control}
                     />
                     <label style={{ fontSize: '0.8rem' }}>
@@ -428,20 +439,26 @@ const SaveAOI = (): JSX.Element => {
                   </section>
                   <section>
                     <Controller
-                      color="default"
-                      icon={<span className={classes.icon} />}
-                      className={classes.root}
-                      checkedIcon={
-                        <span
-                          className={clsx(classes.icon, classes.checkedIcon)}
-                        />
-                      }
-                      as={Checkbox}
-                      disableRipple
                       name="deforestationAlerts"
                       control={control}
-                      checked={Boolean(deforestation)}
-                      onChange={(e: any) => setDeforestationAlerts(e[1])}
+                      render={() => (
+                        <Checkbox
+                          color="default"
+                          icon={<span className={classes.icon} />}
+                          className={classes.root}
+                          checkedIcon={
+                            <span
+                              className={clsx(
+                                classes.icon,
+                                classes.checkedIcon
+                              )}
+                            />
+                          }
+                          disableRipple
+                          checked={Boolean(deforestation)}
+                          onChange={(e: any) => setDeforestationAlerts(e[1])}
+                        />
+                      )}
                     />
                     <label style={{ fontSize: '0.8rem' }}>
                       {saveAOIText[selectedLanguage].forestChange}
@@ -449,20 +466,26 @@ const SaveAOI = (): JSX.Element => {
                   </section>
                   <section>
                     <Controller
-                      color="default"
-                      icon={<span className={classes.icon} />}
-                      className={classes.root}
-                      checkedIcon={
-                        <span
-                          className={clsx(classes.icon, classes.checkedIcon)}
-                        />
-                      }
-                      as={Checkbox}
-                      disableRipple
                       name="monthlySummary"
                       control={control}
-                      checked={Boolean(monthlySummary)}
-                      onChange={(e: any) => setMonthlySummary(e[1])}
+                      render={() => (
+                        <Checkbox
+                          color="default"
+                          icon={<span className={classes.icon} />}
+                          className={classes.root}
+                          checkedIcon={
+                            <span
+                              className={clsx(
+                                classes.icon,
+                                classes.checkedIcon
+                              )}
+                            />
+                          }
+                          disableRipple
+                          checked={Boolean(monthlySummary)}
+                          onChange={(e: any) => setMonthlySummary(e[1])}
+                        />
+                      )}
                     />
                     <label style={{ fontSize: '0.8rem' }}>
                       {saveAOIText[selectedLanguage].monthly}

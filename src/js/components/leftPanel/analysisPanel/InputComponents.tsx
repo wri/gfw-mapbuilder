@@ -17,6 +17,7 @@ interface DatePickerProps {
 }
 const getTodayDate = new Date().toISOString().split('T')[0];
 
+//TODO: I think this is no longer used, confirm and delete if that is the case
 const DatePicker = (props: DatePickerProps): JSX.Element => {
   const dispatch = useDispatch();
 
@@ -78,7 +79,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
   );
 };
 
-export const MemoDatePicker = React.memo(DatePicker);
+export const MemoDatePicker = DatePicker;
 
 function generateMarks(range: number[]): any[] | {} {
   const marksObject = {};
