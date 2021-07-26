@@ -8,13 +8,13 @@ import viirsLayer, {
   getMaxDateForViirsTiles
 } from '../../../../js/helpers/viirsLayerUtil';
 import { format, subDays, parse, differenceInDays } from 'date-fns';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import {
   setViirsStart,
   setViirsEnd
 } from '../../../../js/store/appState/actions';
 
-import './datepicker.scss';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface DateRangeProps {
   layer: LayerProps;
@@ -74,7 +74,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   ); //this should come from url if at all?
   const dispatch = useDispatch();
 
-  const updateStartDate = (day: Date): void => {
+  const updateStartDate = (day): void => {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
@@ -94,7 +94,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     dispatch(setViirsStart(String(dFormat)));
   };
 
-  const updateEndDate = (day: Date): void => {
+  const updateEndDate = (day): void => {
     const dFormat = format(day, 'yyyy-MM-dd');
     setEndDate(dFormat);
 
@@ -158,27 +158,12 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     getMaxDate();
   }, []);
 
-  const fEndDate = parse(endDate, 'yyyy-MM-dd', new Date());
   const fMaxDate = parse(maxDate, 'yyyy-MM-dd', new Date());
   const fMinDate = parse(startDate, 'yyyy-MM-dd', new Date());
-  const ninetyDaysAgo = format(subDays(fEndDate, 90), 'yyyy-MM-dd');
-  const fNine = parse(ninetyDaysAgo, 'yyyy-MM-dd', new Date());
-
-  const startDateProps = {
-    disabledDays: { after: fMaxDate, before: fNine }
-  };
-
-  const endDateProps = {
-    disabledDays: { after: fMaxDate, before: fMinDate }
-  };
 
   return (
     <>
-      <div
-        className={`daterange-wrapper ${
-          renderCustomRange ? 'expanded-date-section' : ''
-        } `}
-      >
+      <div className={'daterange-wrapper'}>
         <select
           className="date-time-toggle"
           style={{ border: `1px solid ${customColorTheme}` }}
@@ -200,23 +185,22 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         {renderCustomRange && (
           <div className="calendar-wrapper">
             <div className="date-section-wrapper">
-              <label htmlFor="start-date">Start:</label>
-              <DayPickerInput
-                placeholder="select a day"
-                showOverlay={false}
-                onDayChange={day => updateStartDate(day)}
-                dayPickerProps={startDateProps}
-                value={startDate}
+              <label htmlFor="start-date">Start </label>
+              <DatePicker
+                placeholderText="select a day"
+                onChange={date => updateStartDate(date)}
+                selected={new Date(startDate)}
+                maxDate={fMaxDate}
               />
             </div>
             <div className="date-section-wrapper">
-              <label htmlFor="end-date">End:</label>
-              <DayPickerInput
-                placeholder="select a day"
-                showOverlay={false}
-                onDayChange={day => updateEndDate(day)}
-                dayPickerProps={endDateProps}
-                value={endDate}
+              <label htmlFor="end-date">End </label>
+              <DatePicker
+                placeholderText="select a day"
+                onChange={date => updateEndDate(date)}
+                selected={new Date(endDate)}
+                minDate={fMinDate}
+                maxDate={fMaxDate}
               />
             </div>
           </div>
