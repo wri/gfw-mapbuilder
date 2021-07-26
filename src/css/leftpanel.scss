@@ -674,10 +674,6 @@
     width: auto;
     margin-top: 1rem;
 
-    &.expanded-date-section {
-      height: 8rem;
-    }
-
     select.date-time-toggle {
       padding: 5px 5px 5px 10px;
     }
@@ -1334,6 +1330,15 @@
     label {
       font-size: 0.75rem;
       margin-right: 5px;
+    }
+    input {
+      border-radius: 50px;
+      color: #555;
+      border-width: 1px;
+      width: 83px;
+      padding: 5px 5px 5px 10px;
+      border: 1px solid rgb(240, 171, 0);
+      font-size: 11px;
     }
   }
 }
