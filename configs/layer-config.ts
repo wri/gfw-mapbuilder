@@ -37,5 +37,5 @@ export const customBasemapIcon =
 
 export const analysisSQLConfigs = {
   VIIRS_FIRES:
-    'select sum(alert__count) from nasa_viirs_fire_alerts where alert__date >= {startDate} and alert__date<= {endDate}'
+    'select COALESCE(sum(alert__count), 0)  as "sum" from nasa_viirs_fire_alerts where alert__date >= {startDate} and alert__date <= {endDate}'
 };
