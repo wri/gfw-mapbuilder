@@ -10,7 +10,6 @@ import TimeSlider from '../../../../js/components/sharedComponents/TimeSlider';
 import DateRangeModis from './DateRangeModis';
 import DateRangeViirs from './DateRangeVIIRS';
 import { format } from 'date-fns';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { esriQuery } from '../../../../js/helpers/dataPanel/esriQuery';
 import {
   renderModal,
@@ -28,7 +27,9 @@ import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
-import './datepicker.scss';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -67,7 +68,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   const [startDate, setStartDate] = React.useState(String(gladStart));
   const [endDate, setEndDate] = React.useState(gladEnd);
 
-  function handleStartDateChange(day: Date): void {
+  function handleStartDateChange(day: any): void {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
     //@ts-ignore
@@ -89,7 +90,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     dispatch(setGladEnd(endDate));
   }
 
-  function handleEndDateChange(day: Date): void {
+  function handleEndDateChange(day: any): void {
     const dFormat = format(day, 'yyyy-MM-dd');
     setEndDate(dFormat);
     //@ts-ignore
@@ -150,11 +151,10 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
           <label htmlFor="start-date">
             {layerControlsTranslations[props.selectedLanguage].timeStart}
           </label>
-          <DayPickerInput
-            placeholder="select a day"
-            showOverlay={false}
-            onDayChange={day => handleStartDateChange(day)}
-            value={startDate}
+          <DatePicker
+            placeholderText="select a day"
+            onChange={date => handleStartDateChange(date)}
+            selected={new Date(startDate)}
           />
         </div>
 
@@ -162,11 +162,10 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
           <label htmlFor="end-date">
             {layerControlsTranslations[props.selectedLanguage].timeEnd}
           </label>
-          <DayPickerInput
-            placeholder="select a day"
-            showOverlay={false}
-            onDayChange={day => handleEndDateChange(day)}
-            value={endDate}
+          <DatePicker
+            placeholderText="select a day"
+            onChange={date => handleEndDateChange(date)}
+            selected={new Date(endDate)}
           />
         </div>
       </div>

@@ -41,7 +41,12 @@ const EditProfile = (): JSX.Element => {
     userID: null | string;
     profileURL: null | string;
   }>({ userToken: null, userID: null, profileURL: null });
-  const { register, handleSubmit, errors, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm();
 
   React.useEffect(() => {
     const userID = localStorage.getItem('userID');
@@ -308,12 +313,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].fName}
                   </label>
                   <input
+                    {...register('firstName', { required: false })}
                     defaultValue={existingProfileInfo?.firstName}
                     className="input-text"
                     type="firstName"
                     placeholder="First Name"
                     name="firstName"
-                    ref={register({ required: false })}
                   />
                   {errors.fname && (
                     <p className="input-error">
@@ -326,12 +331,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].lName} *
                   </label>
                   <input
+                    {...register('lastName', { required: true })}
                     defaultValue={existingProfileInfo?.lastName || ''}
                     className="input-text"
                     type="lastName"
                     placeholder="Last Name"
                     name="lastName"
-                    ref={register({ required: true })}
                   />
                   {errors.lname && (
                     <p className="input-error">
@@ -344,12 +349,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].email} *
                   </label>
                   <input
+                    {...register('email', { required: true })}
                     defaultValue={existingProfileInfo?.email || ''}
                     className="input-text"
                     type="email"
                     placeholder="example@globalforestwatch.com"
                     name="email"
-                    ref={register({ required: true })}
                   />
                   {errors.email && (
                     <p className="input-error">
@@ -381,21 +386,21 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].role}
                   </p>
                   <Controller
-                    as={
+                    name="subsector"
+                    control={control}
+                    render={() => (
                       <RadioGroup aria-label="subsector">
                         {subSectors()}
                       </RadioGroup>
-                    }
-                    name="subsector"
-                    control={control}
+                    )}
                   />
                   {activeSubsector === 'Other: ' && (
                     <input
+                      {...register('subsectorOther', { required: false })}
                       className="input-text"
                       type="subsectorOther"
                       placeholder=""
                       name="subsectorOther"
-                      ref={register({ required: false })}
                     />
                   )}
                 </div>
@@ -404,12 +409,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].jobTitle}
                   </label>
                   <input
+                    {...register('jobTitle', { required: false })}
                     defaultValue={existingProfileInfo?.jobTitle}
                     className="input-text"
                     type="jobTitle"
                     placeholder="Job Title"
                     name="jobTitle"
-                    ref={register({ required: false })}
                   />
                 </div>
                 <div className="form-section">
@@ -417,12 +422,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].company}
                   </label>
                   <input
+                    {...register('company', { required: true })}
                     defaultValue={existingProfileInfo?.company}
                     className="input-text"
                     type="company"
                     placeholder="Company / Organization"
                     name="company"
-                    ref={register({ required: true })}
                   />
                   {errors.company && (
                     <p className="input-error">
@@ -444,12 +449,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].city}
                   </label>
                   <input
+                    {...register('city', { required: false })}
                     defaultValue={existingProfileInfo?.city}
                     className="input-text"
                     type="city"
                     placeholder="City"
                     name="city"
-                    ref={register({ required: false })}
                   />
                 </div>
                 <div className="form-section">
@@ -457,12 +462,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].state}
                   </label>
                   <input
+                    {...register('state', { required: false })}
                     defaultValue={existingProfileInfo?.state}
                     className="input-text"
                     type="state"
                     placeholder="State / Department / Province"
                     name="state"
-                    ref={register({ required: false })}
                   />
                 </div>
                 <h4>{editProfileTranslations[selectedLanguage].interest}</h4>
@@ -480,12 +485,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].city}
                   </label>
                   <input
+                    {...register('aoiCity', { required: false })}
                     defaultValue={existingProfileInfo?.aoiCity}
                     className="input-text"
                     type="aoiCity"
                     placeholder="City"
                     name="aoiCity"
-                    ref={register({ required: false })}
                   />
                 </div>
                 <div className="form-section">
@@ -493,12 +498,12 @@ const EditProfile = (): JSX.Element => {
                     {editProfileTranslations[selectedLanguage].state}
                   </label>
                   <input
+                    {...register('aoiState', { required: false })}
                     defaultValue={existingProfileInfo?.aoiState}
                     className="input-text"
                     type="aoiState"
                     placeholder="State / Department / Province"
                     name="aoiState"
-                    ref={register({ required: false })}
                   />
                 </div>
                 <div className="form-section">
@@ -558,11 +563,11 @@ const EditProfile = (): JSX.Element => {
                   </select>
                   {activeUsage!.includes('Other') && (
                     <input
+                      {...register('usageOther', { required: false })}
                       className="input-text"
                       type="usageOther"
                       placeholder=""
                       name="usageOther"
-                      ref={register({ required: false })}
                     />
                   )}
                 </div>

@@ -333,20 +333,6 @@
         padding-top: 10px;
         padding-bottom: 10px;
       }
-      .calendar-wrapper {
-        .date-section-wrapper {
-          display: grid;
-          grid-template-columns: 40px 1fr;
-          margin-bottom: 4px;
-          label {
-            margin-right: 5px;
-          }
-          input {
-            width: auto;
-            height: auto;
-          }
-        }
-      }
     }
     .ui-description {
       display: grid;
@@ -686,12 +672,7 @@
     justify-content: space-evenly;
     font-family: $fira-sans;
     width: auto;
-    height: 2rem;
     margin-top: 1rem;
-
-    &.expanded-date-section {
-      height: 8rem;
-    }
 
     select.date-time-toggle {
       padding: 5px 5px 5px 10px;
@@ -701,21 +682,6 @@
       &.input {
         width: 7.5rem;
         height: 1rem;
-      }
-    }
-
-    .calendar-wrapper {
-      display: flex;
-      margin-left: 5px;
-      flex-wrap: wrap;
-      .date-section-wrapper {
-        display: grid;
-        grid-template-columns: 35px auto;
-        align-items: center;
-        label {
-          font-size: 0.75rem;
-          margin-right: 5px;
-        }
       }
     }
   }
@@ -1341,6 +1307,38 @@
       h2 {
         font-size: 0.95rem;
       }
+    }
+  }
+}
+
+.calendar-wrapper {
+  display: flex;
+  margin-left: 5px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  flex-direction: row;
+  gap: 33px;
+  .date-section-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    gap: 3px;
+    margin-bottom: 5px;
+    label {
+      font-size: 0.75rem;
+      margin-right: 5px;
+    }
+    input {
+      border-radius: 50px;
+      color: #555;
+      border-width: 1px;
+      width: 83px;
+      padding: 5px 5px 5px 10px;
+      border: 1px solid rgb(240, 171, 0);
+      font-size: 11px;
     }
   }
 }

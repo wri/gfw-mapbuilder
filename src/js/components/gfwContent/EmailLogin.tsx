@@ -34,7 +34,11 @@ export const EmailLogin = () => {
     (store: RootState) => store.appState.selectedLanguage
   );
 
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
   type FormType = 'register' | 'default' | 'forgot';
 
@@ -161,11 +165,11 @@ export const EmailLogin = () => {
                 {emailLoginTranslations[selectedLanguage].email} *
               </label>
               <input
+                {...register('email', { required: true })}
                 className="input-text"
                 type="email"
                 placeholder="example@globalforestwatch.com"
                 name="email"
-                ref={register({ required: true })}
               />
               {errors.password && (
                 <p className="input-error">
@@ -178,11 +182,11 @@ export const EmailLogin = () => {
                 {emailLoginTranslations[selectedLanguage].password} *
               </label>
               <input
+                {...register('password', { required: true })}
                 className="input-text"
                 type="password"
                 placeholder="********"
                 name="password"
-                ref={register({ required: true })}
               />
               {errors.password && (
                 <p className="input-error">
@@ -230,11 +234,11 @@ export const EmailLogin = () => {
                   {emailLoginTranslations[selectedLanguage].email} *
                 </label>
                 <input
+                  {...register('email', { required: true })}
                   type="email"
                   className="input-text"
                   placeholder="example@globalforestwatch.com"
                   name="email"
-                  ref={register({ required: true })}
                 />
                 {errors.password && (
                   <p className="input-error">
@@ -247,11 +251,11 @@ export const EmailLogin = () => {
                   {emailLoginTranslations[selectedLanguage].password} *
                 </label>
                 <input
+                  {...register('password', { required: true })}
                   className="input-text"
                   type="password"
                   placeholder="********"
                   name="password"
-                  ref={register({ required: true })}
                 />
                 {errors.password && (
                   <p className="input-error">
@@ -264,11 +268,11 @@ export const EmailLogin = () => {
                   {emailLoginTranslations[selectedLanguage].repeatPassword} *
                 </label>
                 <input
+                  {...register('repeatPassword', { required: true })}
                   className="input-text"
                   type="password"
                   placeholder="********"
                   name="repeatPassword"
-                  ref={register({ required: true })}
                 />
                 {errors.password && (
                   <p className="input-error">
@@ -333,11 +337,11 @@ export const EmailLogin = () => {
                     {emailLoginTranslations[selectedLanguage].email} *
                   </label>
                   <input
+                    {...register('email', { required: true })}
                     className="input-text"
                     type="email"
                     placeholder="example@globalforestwatch.com"
                     name="email"
-                    ref={register({ required: true })}
                   />
                   {errors.password && (
                     <p className="input-error">

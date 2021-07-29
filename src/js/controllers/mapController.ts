@@ -686,7 +686,7 @@ export class MapController {
 
     const legendInfoObject = await fetchLegendInfo(layerObject.url);
     if (legendInfoObject && !legendInfoObject.error) {
-      legendResult = legendInfoObject?.layers.filter((l: any) =>
+      legendResult = legendInfoObject?.layers?.filter((l: any) =>
         layerObject.layerIds?.includes(l.layerId)
       );
     }
