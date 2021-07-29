@@ -37,6 +37,7 @@ import {
 } from './analysisUtils';
 
 import '../../../../css/leftpanel.scss';
+import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
 
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
 export interface UIParams {
@@ -268,43 +269,10 @@ const BaseAnalysis = (): JSX.Element => {
     }
 
     if (
-      props.inputType === 'datepicker' ||
-      analysisConfig.analysisId === 'VIIRS_FIRES'
+      props.inputType === 'datepicker' &&
+      analysisConfig.analysisId !== 'VIIRS_FIRES'
     ) {
-      return (
-        <div className="calendar-wrapper">
-          <div className="date-section-wrapper">
-            <label htmlFor="start-date">Start </label>
-            <DatePicker
-              placeholderText="select a day"
-              onChange={(date: any) =>
-                dispatch(
-                  setAnalysisDateRange([
-                    format(date, 'yyyy-MM-dd'),
-                    analysisDateRange[1]
-                  ])
-                )
-              }
-              selected={new Date(analysisDateRange[0])}
-            />
-          </div>
-          <div className="date-section-wrapper">
-            <label htmlFor="end-date">End </label>
-            <DatePicker
-              placeholderText="select a day"
-              onChange={(date: any) =>
-                dispatch(
-                  setAnalysisDateRange([
-                    analysisDateRange[0],
-                    format(date, 'yyyy-MM-dd')
-                  ])
-                )
-              }
-              selected={new Date(analysisDateRange[1])}
-            />
-          </div>
-        </div>
-      );
+      return <DateRangePicker />;
     }
 
     return null;
@@ -340,8 +308,9 @@ const BaseAnalysis = (): JSX.Element => {
             </p>
             <div>
               {currentAnalysis?.uiParams &&
-                currentAnalysis?.uiParams !== 'none' &&
-                currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+                currentAnalysis.uiParams !== 'none' &&
+                currentAnalysis.analysisId !== 'VIIRS_FIRES' &&
+                currentAnalysis.uiParams.map((uiParam: any, i: number) => {
                   return (
                     <div className="ui-analysis-wrapper" key={i}>
                       <div className="ui-description">
@@ -356,6 +325,22 @@ const BaseAnalysis = (): JSX.Element => {
                     </div>
                   );
                 })}
+              {currentAnalysis?.uiParams &&
+                currentAnalysis.analysisId === 'VIIRS_FIRES' && (
+                  <div>
+                    <div className="ui-analysis-wrapper">
+                      <div className="ui-description">
+                        <div className="number">
+                          <p>{1}</p>
+                        </div>
+                        <p>Select range for analysis</p>
+                      </div>
+                      <div className="analysis-input">
+                        <DateRangePicker />
+                      </div>
+                    </div>
+                  </div>
+                )}
             </div>
           </>
         );
