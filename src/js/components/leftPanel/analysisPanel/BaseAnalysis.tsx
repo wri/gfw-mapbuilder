@@ -179,7 +179,6 @@ const BaseAnalysis = (): JSX.Element => {
     //3. Add SQL Query if it is defined in the configuration
     if (analysisId === 'VIIRS_FIRES') {
       let sqlQuery = analysisSQLConfigs[analysisId];
-      console.log(analysisDateRange);
       sqlQuery = sqlQuery.replace('{startDate}', `'${analysisDateRange[0]}'`);
       sqlQuery = sqlQuery.replace('{endDate}', `'${analysisDateRange[1]}'`);
       baseURL = baseURL.concat(`&sql=${sqlQuery}`);
@@ -256,53 +255,59 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   const renderInputComponent = (
-    props: UIParams
+    props: UIParams,
+    analysisConfig: AnalysisModule
   ): JSX.Element | null | undefined => {
     const { bounds } = props;
-    switch (props.inputType) {
-      case 'rangeSlider':
-        if (bounds) return <MemoRangeSlider yearRange={bounds} />;
-        break;
-      case 'tcd':
-        return <CanopyDensityPicker />;
-      case 'datepicker':
-        return (
-          <div className="calendar-wrapper">
-            <div className="date-section-wrapper">
-              <label htmlFor="start-date">Start </label>
-              <DatePicker
-                placeholderText="select a day"
-                onChange={(date: any) =>
-                  dispatch(
-                    setAnalysisDateRange([
-                      format(date, 'yyyy-MM-dd'),
-                      analysisDateRange[1]
-                    ])
-                  )
-                }
-                selected={new Date(analysisDateRange[0])}
-              />
-            </div>
-            <div className="date-section-wrapper">
-              <label htmlFor="end-date">End </label>
-              <DatePicker
-                placeholderText="select a day"
-                onChange={(date: any) =>
-                  dispatch(
-                    setAnalysisDateRange([
-                      analysisDateRange[0],
-                      format(date, 'yyyy-MM-dd')
-                    ])
-                  )
-                }
-                selected={new Date(analysisDateRange[1])}
-              />
-            </div>
-          </div>
-        );
-      default:
-        return null;
+    if (props.inputType === 'rangeSlider') {
+      if (bounds) return <MemoRangeSlider yearRange={bounds} />;
     }
+
+    if (props.inputType === 'tcd') {
+      return <CanopyDensityPicker />;
+    }
+
+    if (
+      props.inputType === 'datepicker' ||
+      analysisConfig.analysisId === 'VIIRS_FIRES'
+    ) {
+      return (
+        <div className="calendar-wrapper">
+          <div className="date-section-wrapper">
+            <label htmlFor="start-date">Start </label>
+            <DatePicker
+              placeholderText="select a day"
+              onChange={(date: any) =>
+                dispatch(
+                  setAnalysisDateRange([
+                    format(date, 'yyyy-MM-dd'),
+                    analysisDateRange[1]
+                  ])
+                )
+              }
+              selected={new Date(analysisDateRange[0])}
+            />
+          </div>
+          <div className="date-section-wrapper">
+            <label htmlFor="end-date">End </label>
+            <DatePicker
+              placeholderText="select a day"
+              onChange={(date: any) =>
+                dispatch(
+                  setAnalysisDateRange([
+                    analysisDateRange[0],
+                    format(date, 'yyyy-MM-dd')
+                  ])
+                )
+              }
+              selected={new Date(analysisDateRange[1])}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   const AnalysisInstructions = React.useMemo(
@@ -346,7 +351,7 @@ const BaseAnalysis = (): JSX.Element => {
                         <p>{uiParam.label[selectedLanguage]}</p>
                       </div>
                       <div className="analysis-input">
-                        {renderInputComponent(uiParam)}
+                        {renderInputComponent(uiParam, currentAnalysis)}
                       </div>
                     </div>
                   );
