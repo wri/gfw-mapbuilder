@@ -88,13 +88,16 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
       .then(data => {
         const planetDateRanges: Array<string> =
           data?.components?.schemas?.PlanetDateRange?.enum;
-        const planetTilesFormat = planetDateRanges.reverse().map(d => {
-          const label = d
-            .split('_')
-            .map(date => format(new Date(date), 'MMM yyyy'))
-            .join('-');
-          return { value: d, label };
-        });
+        const planetTilesFormat = planetDateRanges
+          .reverse()
+          .filter(label => label.length > 4)
+          .map(d => {
+            const label = d
+              .split('_')
+              .map(date => format(new Date(date), 'MMM yyyy'))
+              .join('-');
+            return { value: d, label };
+          });
         setPlanetTiles(planetTilesFormat);
         setSelectedPlanetTileLayer(planetTilesFormat[0].value);
       })
