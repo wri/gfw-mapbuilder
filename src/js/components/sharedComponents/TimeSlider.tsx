@@ -31,7 +31,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     },
     '2003': {
       label: '2003',
-      style: {}
+      style: { display: 'none' }
     },
     '2004': {
       label: '2004',
@@ -39,11 +39,11 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     },
     '2005': {
       label: '2005',
-      style: { display: 'none' }
+      style: {}
     },
     '2006': {
       label: '2006',
-      style: {}
+      style: { display: 'none' }
     },
     '2007': {
       label: '2007',
@@ -55,11 +55,11 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     },
     '2009': {
       label: '2009',
-      style: {}
+      style: { display: 'none' }
     },
     '2010': {
       label: '2010',
-      style: { display: 'none' }
+      style: {}
     },
     '2011': {
       label: '2011',
@@ -67,7 +67,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     },
     '2012': {
       label: '2012',
-      style: {}
+      style: { display: 'none' }
     },
     '2013': {
       label: '2013',
@@ -95,6 +95,10 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     },
     '2019': {
       label: '2019',
+      style: { display: 'none' }
+    },
+    '2020': {
+      label: '2020',
       style: {}
     }
   };
@@ -205,8 +209,8 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       )}
       <SliderWithTooltip
         min={2000}
-        max={2019}
-        defaultValue={[2000, 2019]}
+        max={2020}
+        defaultValue={[2000, 2020]}
         value={range}
         allowCross={false}
         tipFormatter={(val: number): number => val}
