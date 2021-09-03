@@ -148,7 +148,6 @@ async function fetchQueryTask(
 
 async function fetchQueryFeatures(
   layer: __esri.FeatureLayer,
-  mapview: __esri.MapView,
   event: __esri.MapViewClickEvent
 ): Promise<any> {
   let featureResult = [] as FeatureResult[];
@@ -156,10 +155,7 @@ async function fetchQueryFeatures(
   const queryParams: any = {
     where: '1=1',
     outFields: ['*'],
-    units: 'miles',
-    distance: 0.01 * mapview.resolution,
     geometry: event.mapPoint,
-    geometryPrecision: 1,
     returnGeometry: true
   };
   const attributesToFetch = getAttributesToFetch(layer);
@@ -261,7 +257,7 @@ export async function queryLayersForFeatures(
             features,
             fieldNames,
             displayField
-          } = await fetchQueryFeatures(layer, mapview, event);
+          } = await fetchQueryFeatures(layer, event);
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
