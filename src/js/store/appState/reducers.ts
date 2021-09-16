@@ -27,7 +27,8 @@ import {
   SET_VIIRS_END,
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
-  SET_VERSIONED_LAYER
+  SET_VERSIONED_LAYER,
+  SET_TREE_HEIGHT
 } from './types';
 
 const initialState: AppState = {
@@ -58,7 +59,8 @@ const initialState: AppState = {
     modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
-    versionedLayer: {}
+    versionedLayer: {},
+    treeHeight: 3
   },
   measureContent: {
     activeButton: '',
@@ -213,6 +215,14 @@ export function appStateReducer(
         leftPanel: {
           ...state.leftPanel,
           viirsEnd: action.payload
+        }
+      };
+    case SET_TREE_HEIGHT:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          treeHeight: action.payload
         }
       };
     case SET_VERSIONED_LAYER: {
