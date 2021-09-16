@@ -66,14 +66,14 @@ const GFWLoginOptions = (props: any) => {
             {loginReq}
             <a href="mailto:gfw@wri.org">{contactUs}</a>
           </p>
-          <li className="subscribe-method twitter-box">
+          {/* <li className="subscribe-method twitter-box">
             <a
               href={`https://api.resourcewatch.org/auth/twitter?applications=gfw&token=true&callbackUrl=${baseURL}`}
               className="-twitter"
             >
               {twitter}
             </a>
-          </li>
+          </li> */}
 
           <li className="subscribe-method facebook-box">
             <a
